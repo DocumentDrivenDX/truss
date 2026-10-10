@@ -919,3 +919,86 @@ CI workflow are in Architecture; no remote CI pass is claimed. TypeScript and
 native dependency enforcement plus reflection/runtime visibility review remain
 open and are not qualified by this Python-only result. These are development
 checks; they neither import the toolkit nor install/start a database.
+
+
+### TypeScript module inventory and remediation handoff
+
+The compiler-AST/resolver inventory observes70 source files and232 imports in
+this worktree, using TypeScript5.9.3/Bun1.4.2. All local import targets resolve;
+15 imports cross package boundaries and12 directly reach PostgreSQL implementation
+files from the UMF adapter. Two computed dynamic imports in `umf-bun/src/index.ts`
+require semantic review. This is an inventory, not a debt baseline, API adoption,
+whole-program typecheck or dependency gate; it includes current peer candidates.
+The [receipt](evidence/design-audit/typescript-module-inventory.json) binds source
+and compiler/producer hashes. Its [three real-scanner controls](evidence/design-audit/typescript-module-inventory-controls.json)
+verify public/private resolution, literal versus computed loading, ignoring import
+text in comments/strings, and nonzero refusal for unresolved local imports.
+
+Reproduce from the repo root with an explicitly supplied adopted compiler API:
+
+```sh
+TRUSS_TYPESCRIPT_API=/path/to/typescript5.9.3/lib/typescript.js bun scripts/inspect-typescript-boundaries.ts /tmp/truss-ts-inventory.json
+TRUSS_TYPESCRIPT_API=/path/to/typescript5.9.3/lib/typescript.js python3 scripts/check-typescript-inventory-controls.py
+```
+
+The following exact edges need a shared ownership resolution before a TypeScript
+boundary gate can qualify them. Integration ownership is Truss catalog/native
+assembly, with the active catalog implementation owner responsible for applying
+moves; this handoff does not edit or approve their unfinished APIs.
+
+| UMF adapter source | Current PostgreSQL target | Remediation / removal trigger |
+| --- | --- | --- |
+| `packages/umf-bun/src/acceptance-input.ts` | `packages/postgresql/src/acceptance-json.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/canonical-report-handoff.ts` | `packages/postgresql/src/acceptance-json.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/canonical-report-handoff.ts` | `packages/postgresql/src/canonical-wire-tree.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-asserted-origin-basis.ts` | `packages/postgresql/src/asserted-origin-map.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-captured-origin-basis.ts` | `packages/postgresql/src/captured-origin-context.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-captured-origin-basis.ts` | `packages/postgresql/src/acceptance-json.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-epoch-context-basis.ts` | `packages/postgresql/src/captured-origin-context.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-epoch-context-basis.ts` | `packages/postgresql/src/acceptance-json.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-execution-report-candidate.ts` | `packages/postgresql/src/asserted-origin-map.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-input.ts` | `packages/postgresql/src/acceptance-json.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-original-execution-basis.ts` | `packages/postgresql/src/acceptance-json.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+| `packages/umf-bun/src/catalog-report-correspondence.ts` | `packages/postgresql/src/acceptance-json.ts` | Extract pure shared translation into a core-owned module with a reviewed public contract; remove this edge before packaged preview qualification. |
+
+Preserve the exact acceptance numeric/size refusal grammar, original byte/context
+custody and asserted-versus-authenticated origin semantics during extraction;
+CONTRACT-003, CONTRACT-007 and CONTRACT-010 govern those meanings. Do not simply
+re-export every internal helper or add adapter-directory exceptions. Keep native
+capture/enforcement in PostgreSQL and upstream assertion semantics with UMF.
+Choose actual packaging/exports only after separating pure translation from native
+authority; existing six-package declarations alone do not establish that split.
+Retain original consumer and invalid-input tests across the move.
+
+Then enforce the reviewed package graph through the real compiler resolver,
+including portable `weft` rejecting native/host dependencies, native assembly
+rejecting runtime/tooling/conformance imports, and adapters using reviewed public
+interfaces. Prove allowed and forbidden/private edges plus cycles through actual
+checker controls. Dynamic UMF loaders need exact integrity/containment review;
+a compiler inventory cannot authenticate loaded code. Existing source hashes are
+observations, not permission to baseline later changes. Remote CI enforcement
+remains open until the actual check and measured controls exist.
+
+### Upstream coordination checkpoint — 2026-10-09
+
+Read-only origin queries now identify UMF `main` at
+`6a2929d52d23b4587c9913aa87b3a265cf43ed1e` and Weft `main` at
+`764d9fa1c4aef68358a5c77c85b051d6d7bf0495`. UMF's reviewed recent range includes
+research-tool distribution and a default/deployment branch rename to `main`;
+future alignment checks must use that actual branch. This checkpoint does not
+replace the previously qualified Truss adoption pins or imply numeric/native
+admission changes.
+
+The two new Weft commits add explicitly selected Databricks required/optional
+String COUNT DISTINCT, IN and narrow HAVING compositions in the0.3 candidate
+family. Review of runtime registration, backend admission and its exact-arithmetic
+contract shows distinct backend/profile identities with candidate fences. Keep
+Truss's adopted `f05f2df` compiler/compile-sql0.2 tuple unchanged; no new feature
+is silently inherited and no Truss SQL compiler fork is required. A future adoption
+needs its own whole-vector source/artifact/native compatibility evidence.
+
+The security owner's live task is still working on installation physical-profile
+comparison and its pre-commit observation harness. Its latest snapshot reports a
+harness lock/deadlock correction, not a completed admission profile. Native profile
+comparison remains with that owner; this work neither duplicates it nor adopts
+unfinished source. These snapshots are coordination evidence, not qualification.

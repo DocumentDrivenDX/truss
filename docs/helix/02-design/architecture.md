@@ -293,3 +293,10 @@ SQL dependencies, runtime private-object visibility and purity beyond imports
 remain semantic review obligations. This Python AST pass does not establish those
 properties or overall composition qualification. Existing declaration compilation
 is not the TypeScript dependency gate.
+
+
+The current compiler-resolved TypeScript inventory and exact cross-adapter
+remediation handoff are recorded in the local runtime/install/migration plan.
+Twelve UMF-to-PostgreSQL implementation-file imports require a core-owned shared
+translation seam before the TypeScript boundary gate can qualify the graph.
+This is explicit adoption debt, not a broad existing-directory exception.
