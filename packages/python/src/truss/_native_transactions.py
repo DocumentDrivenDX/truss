@@ -253,7 +253,9 @@ class NativeTransactionPort:
         return self._observe()
 
     def _observe_for_adoption(self, claim):
-        return self._observe(claim)
+        from ._native_adoption import profile_precheck
+        refusal = profile_precheck(claim, self)
+        return refusal if refusal is not None else self._observe(claim)
 
     def _observe(self, claim=None):
         t = self._tracker

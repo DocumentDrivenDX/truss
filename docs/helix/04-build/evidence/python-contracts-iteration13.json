@@ -1,0 +1,75 @@
+{
+  "iteration": 13,
+  "scope": "Private snapshot-neutral caller adoption profile refusal; original driver profile extraction",
+  "baseCommit": "431e4385",
+  "review": "Astra Ultra approved plan, completed source and final installed artifact; approval recorded in conversation",
+  "wheelSha256": "a7e47ab2f330aa24fe78cb089a32a64e9c1d44dc661f9e8513db44473ed89890",
+  "regressionSuite": {
+    "tests": 301,
+    "passed": true,
+    "seconds": 37.137,
+    "installedWheelOutsideCheckout": true,
+    "logSha256": "9febb4c6de56f0f5afc8e44aaccc25a937403d8243f21d9a8ee9c82001ff929f"
+  },
+  "nativeAdoptionTests": 22,
+  "snapshotVisibilitySubcases": 4,
+  "runtime": {
+    "python": "3.11.17",
+    "postgres": "16.15",
+    "pgserver": "0.1.4+truss.pg16.15",
+    "pg8000": "1.31.5"
+  },
+  "bug": "SELECT-based profile mismatch refusal could acquire the first repeatable-read or serializable snapshot, changing what subsequent host queries could see.",
+  "correction": "Two fixed SHOW prechecks retain original claim, calls, values, token, generation and ordered revisions. Only actual complete unchanged SHOW-only mismatch refunds its exact original claim. Matching checks proceed the original full SELECT producer; subsequent disagreement is unresolved.",
+  "nativeCases": [
+    "Repeatable-read and serializable isolation mismatch: an independent committed insert remains visible to the first host SELECT after refusal",
+    "Repeatable-read and serializable access-mode mismatch: same visibility proof",
+    "Actual matching adoption succeeds afterward in the same original generation; duplicate adoption submits no new SQL",
+    "Lost second SHOW retains both original check descriptors and unknown native call; no subsequent adoption SQL",
+    "Actual SET TRANSACTION READ ONLY after matching SHOW checks makes full SELECT disagree; claim stays unresolved without refundable history",
+    "Existing lost terminal-refusal publication reply reconciles the original refusal; intervening revision, capacity and duplicate-claim cases pass"
+  ],
+  "sourceQualification": {
+    "showSnapshotExemption": "PostgreSQL REL_16_15 PlannedStmtRequiresSnapshot explicitly exempts VariableShowStmt",
+    "primarySource": "https://raw.githubusercontent.com/postgres/postgres/REL_16_15/src/backend/tcop/pquery.c",
+    "profileExtractionASTIdentical": true,
+    "resourceFreeProfileSubset": "Existing selected text-operation profile only; no general host resource qualification claimed"
+  },
+  "identicalSourceWheelInstalledModules": 45,
+  "identicalPackagedOwnerAssets": 6,
+  "moduleBoundaryImports": 200,
+  "publicExportsChanged": false,
+  "C02Complete": false,
+  "installerReady": false,
+  "remaining": [
+    "Original composed control ledger and bounded Context detachment producer",
+    "Public adoption cancellation and selected host recovery qualification",
+    "ReferenceAssembly and protected catalog/apply/read workflow"
+  ],
+  "limitations": [
+    "Trusted cooperative original producer: exact one-write capture plus port/generation/token/revision correspondence remains the authority boundary",
+    "SHOW-only evidence contains no authenticated person, role or xid and cannot publish a handle",
+    "Successful adoption continues the existing full SELECT observation; this correction proves snapshot-neutral mismatched refusal, not snapshot-neutral successful adoption",
+    "No public adoption, E06 semantic lease, protected graph operation or installed readiness added"
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_native_adoption.py": "33250104dd68592782252f04e42d0636e0b57f03227aba40574f980d206afadb",
+    "packages/python/src/truss/_native_transactions.py": "e413651f97a8e19e134ddb059462881aa2b9fc6d66dfe5151cf7e549b56b1ae4",
+    "packages/python/src/truss/_native_driver_profile.py": "0b59771a582d1e0b4fa43d338fe3e1585f74939e890bedd4c3da079a961935bb",
+    "packages/python/src/truss/_native_operation.py": "c05026b4cfbcd48b572a3b608f938bd7fe036ce888530ce39a732a22ec2501f3",
+    "packages/python/tests/test_native_adoption.py": "aa7b70a118538cc2b4d49e68f6b6c785c4f8f53503bc0b6f366e2ca2940fedd1",
+    "scripts/check-module-boundaries.py": "811bf7d5be056814490c604ce1a9ae2aad4e74bb0a0ceb2fc6b6b377791514f1"
+  },
+  "securitySync": "Assess security control support is active, correcting role-reachability fixture baseline/ACL restoration. No newly qualified protected owner capture/writer implementation adopted.",
+  "astraIndependentReview": {
+    "planApproved": true,
+    "sourceApproved": true,
+    "finalArtifactApproved": true,
+    "installedNativeAdoptionTests": 22,
+    "seconds": 2.61,
+    "verifiedFullSuiteTests": 301,
+    "identicalModules": 45,
+    "identicalOwnerAssets": 6,
+    "profileExtractionASTIdentical": true
+  }
+}

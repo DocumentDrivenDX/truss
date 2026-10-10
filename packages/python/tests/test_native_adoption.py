@@ -312,3 +312,78 @@ class NativeAdoptionTests(NativeBoundaryFixture, unittest.TestCase):
         self.assertIsNot(record.native_observation, unrelated[0])
         self.assertGreater(record.native_observation.revision, unrelated[0].revision)
         self.assertEqual(record.claim.capture.probe_revision, record.native_observation.revision)
+
+    def test_snapshot_neutral_isolation_and_access_refusals(self):
+        from uuid import uuid4
+        observer=self.Connection(**self.kwargs)
+        table='adoption_snapshot_'+uuid4().hex
+        observer.run('CREATE TABLE '+table+'(value int)')
+        try:
+            for actual in ('repeatable_read','serializable'):
+                for mismatch in ('isolation','access_mode'):
+                    with self.subTest(actual=actual,mismatch=mismatch):
+                        self.t.rollback(token=self.token)
+                        self.t.begin(token=self.token,isolation=actual)
+                        self.port=self.t.port(self.token)
+                        executor=HostExecutor()
+                        expected='serializable' if actual=='repeatable_read' else 'repeatable_read'
+                        result=executor.adopt_transaction(self.port,
+                            isolation=expected if mismatch=='isolation' else actual,
+                            access_mode='read_only' if mismatch=='access_mode' else 'read_write')
+                        self.assertEqual(result.error.code,'invalid_transaction')
+                        root=self.t._state.generation.adoption
+                        self.assertIsNone(root.current)
+                        refusal=root.retained[-1].native_observation
+                        self.assertIsInstance(refusal,claims._ProfileRefusalObservation)
+                        self.assertFalse(hasattr(refusal,'person'))
+                        self.assertEqual(tuple(c.setting for c in refusal.checks),
+                            ('transaction_isolation','transaction_read_only'))
+                        self.assertEqual(tuple(e.payload for c in refusal.checks for e in c.call.events if e.code==b'C'),
+                            (b'SHOW\0',b'SHOW\0'))
+                        before=observer.run('SELECT count(*) FROM '+table)[0][0]
+                        observer.run('INSERT INTO '+table+' VALUES(1)')
+                        self.assertEqual(self.boundary.run('SELECT count(*) FROM '+table,token=self.token),[[before+1]])
+                        accepted=executor.adopt_transaction(self.port,isolation=actual,access_mode='read_write')
+                        self.assertIsInstance(accepted,Ok)
+                        last=self.boundary.last_call
+                        self.assertIsInstance(executor.adopt_transaction(self.t.port(self.token),
+                            isolation=actual,access_mode='read_write'),Error)
+                        self.assertIs(self.boundary.last_call,last)
+        finally:
+            self.t.rollback(token=self.token)
+            observer.run('DROP TABLE '+table);observer.close()
+
+    def test_second_neutral_profile_call_unknown_retains_both_checks(self):
+        original=self.connection.execute_simple
+        def fail_second(sql):
+            if sql=='SHOW transaction_read_only':raise OSError('Lost second SHOW')
+            return original(sql)
+        with patch.object(self.connection,'execute_simple',side_effect=fail_second):
+            result=self.adopt(HostExecutor(),isolation='serializable')
+        self.assertEqual(result.error.code,'transaction_unusable')
+        record=self.t._state.generation.adoption.current
+        self.assertEqual(record.phase,'unresolved')
+        checks=record.claim.capture.profile_checks
+        self.assertEqual(len(checks),2)
+        self.assertTrue(checks[0].call.capture_complete)
+        self.assertIsNone(checks[1].value)
+        last=self.boundary.last_call
+        self.assertIsInstance(self.adopt(HostExecutor()),Error)
+        self.assertIs(self.boundary.last_call,last)
+
+    def test_full_select_profile_disagreement_cannot_refund_snapshot_probe(self):
+        original=self.connection.run
+        def changed_profile(sql,*args,**kwargs):
+            if sql.startswith("SELECT pg_catalog.current_setting('transaction_isolation')"):
+                original('SET TRANSACTION READ ONLY')
+            return original(sql,*args,**kwargs)
+        with patch.object(self.connection,'run',side_effect=changed_profile):
+            result=self.adopt(HostExecutor())
+        self.assertEqual(result.error.code,'transaction_unusable')
+        root=self.t._state.generation.adoption
+        self.assertEqual(root.current.phase,'unresolved')
+        self.assertEqual(root.retained,())
+        self.assertEqual(root.current.claim.capture.native.observation.access_mode,'read_only')
+        last=self.boundary.last_call
+        self.assertIsInstance(self.adopt(HostExecutor()),Error)
+        self.assertIs(self.boundary.last_call,last)
