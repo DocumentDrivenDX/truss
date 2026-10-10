@@ -600,3 +600,25 @@ initializer membership, original subject/attempt/current authority/coherent cut,
 whole accounting, termination/recovery custody and publication remain required.
 The existing observer matrix now distinguishes these executed components from
 its still-not_run complete acceptance schedules. installerReady remains false.
+
+
+### Missing initializer versus unavailable observation
+
+[Native88](evidence/design-audit/installation-initializer-missing-native.json)
+adds six checks to the preceding82 component observations. An enabled original
+capacity trigger refuses deletion55000; disabling only that trigger still hits
+the memo's native foreign key23503. Both initial failed fixture producers/results
+are retained separately. The completed absence fixture explicitly disables user
+triggers on capacity/memo and removes the memo inside one administrative rollback-
+only transaction; internal FK enforcement remains enabled. A successful complete
+empty read of the required initializer yields integrity_refusal without a payload,
+rather than match or observation_unavailable. Native denied SELECT remains its
+separate earlier unavailable control.
+
+Rollback restores exact initializer bytes, the full original native memo bytes and
+both trigger inventories without rerunning initialization. Absence is observed
+on the original administrative connection inside the fixture transaction; this
+is not committed external deletion recovery, ordinary-role DDL support or a
+complete status/verify observer. Full archive membership/removal, original owner
+cut/authority, all managed inventory and final publication remain unqualified.
+The drift fixture cannot become an installer repair/reset recipe.

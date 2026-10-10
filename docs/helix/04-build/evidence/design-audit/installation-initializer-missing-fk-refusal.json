@@ -1,0 +1,10 @@
+{
+  "scope": "Administrative trigger drift alone still cannot remove initializer while its memo references it; not a completed observer receipt",
+  "producerPath": "docs/helix/04-build/evidence/design-audit/check_installation_initializer_missing_fk_native.py",
+  "producerSha256": "beb23d0098ce6a83627526fbba02dcebf452e834450c92c67d8432d4c55620e6",
+  "nativeVersion": "16.15",
+  "observedSqlstate": "23503",
+  "constraint": "capacity_check_memo_singleton_id_fkey",
+  "nextControl": "Explicit rollback-only memo removal plus trigger drift; restore full original memo bytes and trigger inventory",
+  "installerReady": false
+}

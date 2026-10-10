@@ -1992,3 +1992,12 @@ matching the event's bytes alone cannot establish the retained parent's origin.
 The control is a corrupted host projection, not an admitted native capture or
 an ordinary-role permission bypass. No additional live-parent lookup or competing
 security policy is introduced.
+
+
+[Missing initializer88](evidence/design-audit/installation-initializer-missing-native.json)
+now distinguishes a successful required-row absence from denied observation:
+absence is integrity refusal; rights failure remains unavailable. Original trigger
+and memo FK protections were observed before the explicit rollback-only admin
+drift fixture. Exact initializer/memo bytes and both trigger inventories restore
+without reinitialization. Full archive removal and complete PKG02/08 observer/
+publication remain open; fixture DDL is not an ordinary-consumer or repair path.

@@ -1,0 +1,11 @@
+{
+  "scope": "Initial missing-initializer fixture could not delete through the installed guard; not a completed missing-row observer qualification",
+  "producerPath": "docs/helix/04-build/evidence/design-audit/check_installation_initializer_missing_initial_native.py",
+  "producerSha256": "5f7ebb94c01b02d1c5813dcba96ea6b3b9e1d6f721a0e5617f176626095ee952",
+  "nativeVersion": "16.15",
+  "observedSqlstate": "55000",
+  "observedMessage": "original capacity update required; deletion/truncation unavailable",
+  "function": "truss.capacity_cache_invalidate_original()",
+  "nextControl": "Separate administrative trigger drift within rollback-only fixture; preserve original trigger inventory",
+  "installerReady": false
+}
