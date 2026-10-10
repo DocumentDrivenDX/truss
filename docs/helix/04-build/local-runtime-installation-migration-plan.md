@@ -841,3 +841,67 @@ dependencies; it is not a new clean dependency-resolution claim. The private
 custody registry does not supply native transaction authority or correct the four
 native ordinal admission families. Complete installation, migration execution and
 whole-engine qualification remain open.
+
+
+## HELIX0.15.4 adoption in the accelerated queue
+
+The [concern selection](../01-frame/concerns.md) and
+[Architecture module map](../02-design/architecture.md#module-boundaries) record
+the newer committed source separately from installed HELIX0.15.0. Apply the
+following work inside P0/P1/P2, not after public preview. Existing evidence stays
+historical; none of these gates is satisfied by document edits.
+
+- **Modularity / P0–P1:** implement the architecture boundary-check command and
+  inventory exact existing violations with owners/remediation. Prove allowed-edge
+  success and forbidden-edge rejection through the real checker; add the same
+  command to local and CI checks. Baseline/checker adoption may proceed immediately;
+  dependent source work needs this gate. Keep Python custody private, Weft/UMF
+  translation adapter-owned, and security work with its current owner.
+- **Configuration / P1:** define exact configuration ownership/validation in
+  embedding/installation Contracts. Build one typed immutable object in the
+  composition root before effects. Distinguish required host-injected connection,
+  credentials and operational handles from reviewed non-secret defaults; no
+  scattered environment reads or committed managed endpoints. Embedded callers
+  inject objects directly; environment layering belongs to the reference runner.
+  Migrations use the same release/configuration as install; startup stays DDL-free.
+  Test invalid/unknown inputs, precedence and secret-safe fingerprints.
+- **Observability / P1–P2:** contract safe lifecycle/admission/refusal/recovery
+  event names and typed attributes, optional real trace context, per-source
+  sequencing and bounded retrieval. Use Python logging through an adopted OTel
+  bridge when export is enabled; require actual receiver/mapping evidence before
+  claiming OTel support. Keep CLI result stdout clean and diagnostics on stderr;
+  the development runner owns safe JSONL manifests/rotation/retention. Declare
+  record/queue/flush limits, exporter-outage/drop behavior and measured overhead
+  budget. Test sensitive-value absence in every sink, capture failure, oversized
+  records and shutdown deadlines. Do not log SQL values, consumer documents or
+  asserted origin text. Diagnostic failure cannot replace or authorize durable
+  journal/receipt settlement; never add an internal write retry loop.
+- **Formal analysis / P0–P2:** owning technical designs specify admission ticket
+  lifecycle/non-rewinding ordinals, commit_unknown/reconciliation and atomic
+  installed readiness as separate affected slices. Derive stable property IDs
+  from existing requirements/Contracts. Name states, guards, actual lock/transaction
+  boundaries, crash/retry transitions, safety versus liveness and environmental
+  assumptions. Start at precise specification with explicit semantic review;
+  select an established bounded analyzer for admission and recovery after the
+  host/native trust assumption is resolved. Record exact model/config/tool/source
+  revisions, bounds, reachable successful and recovery witnesses and deliberately
+  broken-mechanism counterexamples. Map model elements to actual enforcing code
+  and running-system tests. Timeout/unknown/model-green is not implementation
+  proof. Recheck on mapped source/config/assumption changes; carry observable
+  assumptions and recovery symptoms into the runbook. Unaffected slices record
+  a reasoned non-applicability disposition rather than running empty analysis.
+
+### Corrected-runtime origin checkpoint
+
+[The independent origin probe](../../../scripts/check-corrected-pgserver-origin.py)
+and [receipt](evidence/design-audit/pgserver-corrected-origin.json) pass two actual
+non-superuser captures on the private PostgreSQL16.15 candidate: authenticated
+login, then SET ROLE. Original admission captures independently checked session
+and acting role identities/OIDs and exact asserted-origin/profile bytes. Each
+operation is rolled back and no registry row survives; committed setup exists
+only in the disposable fixture removed by runtime cleanup. Fixture grants are
+not a production grant inventory. The probe does not qualify installed R5,
+R4, native ordinal issuance, a public mutation path or admission-object authority.
+The original SQL ordinal allocator remains incompatible. These observed cases
+are useful implementation witnesses for the later model/code correspondence,
+not formal analysis or proof of the unresolved embedding-host trust boundary.

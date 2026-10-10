@@ -248,3 +248,35 @@ Catalog retirement preserves original property value/presence/source custody in 
 The reference protocol adapter selects complete-frame forwarding before the driver parser, with explicit versioned no-residual checks before and after every forward. Original descriptors/cells/completion/status are captured before driver conversion and correlated to the original serialized command cycle. This fixes the integration algorithm, while exact driver/runtime/ingress/build and backing/copy/containment accounting remain required composition inputs. An instrumented residual-parser design is a separately versioned alternative, not an automatic fallback. Core remains independent of these server-runtime hooks.
 
 Atomic groups preserve original semantic operation/result/history order while admitting a complete native dependency order for their final graph. For the independent Account/Item relationship replacement, immediate marker constraints may require removing AB before inserting AD even when creation is operation zero. Complete protected observation/finalization and original effect attribution must establish the same admitted final graph without an over-capacity physical intermediate state. Caller flags or constraint-mode changes cannot grant exemptions. CONTRACT-009 and the reference relationship handoff retain full lock, authority, result, history and outer-transaction obligations; no native support follows from this selected procedure alone.
+
+
+## Module Boundaries
+
+**Source Applicability**: source; Truss ships handwritten Python, TypeScript and
+native PostgreSQL implementations. This map adopts HELIX0.15.4 guidance; existing
+export/dependency contracts continue to own normative signatures.
+
+| Module | Responsibility / Owned Types | Public API | Allowed Dependencies | Forbidden Dependencies |
+| --- | --- | --- | --- | --- |
+| `packages/core` | Portable values, contracts and operation rules | Contract-defined core types/conveniences | Driver-free portable libraries and adopted UMF core | Native drivers, tooling, conformance runner, host globals |
+| `packages/python/src/truss` pure value/planning and private custody modules | Exact carriers, migration plans, original admission/ordinal custody | Current documented conveniences; private custody remains private | Python standard library and core-owned contracts | pgserver/driver construction, telemetry export, CLI side effects |
+| `packages/python/src/truss/local_runtime.py` and CLI | Explicit local server lifetime and directory custody | LocalPostgres and local runtime CLI | Selected pgserver tuple and lifecycle dependencies | Catalog installation/migration on startup, pool provisioning |
+| `packages/python/src/truss/weft.py` | Translate pinned compiler artifacts to Truss-owned immutable boundaries | CompilerBoundary | Host-supplied adopted Weft compiler and core contracts | Compiler fork, implicit native query execution |
+| `packages/postgresql`, `packages/pg-runtime` | Native storage, authority and host connection translation | Existing PostgreSQL/embedding Contracts; candidates remain private | Core contracts, adopted UMF/security outputs, explicit host driver | Tooling/conformance imports in application execution; unreviewed security-owner APIs |
+| Tooling and conformance scripts/tests | Explicit generation/install/migration and independent qualification | Contract-defined tooling and test commands | Public adapters, frozen inputs, owned evidence producers | Runtime core importing test/tooling implementations |
+
+**Integration Owners**: UMF -> catalog/DDL adapter; Weft -> compiler boundary;
+PostgreSQL -> native/runtime adapter; security owner -> native authority composition.
+Translation occurs in those adapters, preserving upstream meaning and source pins.
+
+**Construction Policy**: explicit host/reference composition root wires concrete
+adapters and captures validated configuration. Import and construction are inert;
+operations alone acquire native effects. Host connection/pool ownership remains
+unchanged. No service split is required for the embeddable toolkit.
+
+**Boundary Check**: planned project-local command `python3 scripts/check-module-boundaries.py`.
+It is not implemented or passed yet. Establish it before dependent feature
+readiness: inspect actual Python AST and TypeScript resolved imports, baseline only
+named existing violations, and run the real checker on allowed and forbidden
+fixtures. Record unsupported native/dynamic/private-access checks as semantic
+review obligations. Existing declaration compilation is not this dependency gate.

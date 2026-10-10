@@ -40,6 +40,27 @@ interfaces (APIs) mark the portable-core boundary below.
 | `umf-fidelity` | project-local | `area:catalog`, `area:storage`, `area:constraints`, `area:query` | truss inherits UMF's rule that meaning is never silently lost. | Retain UMF documents verbatim per revision; retain data with no bound field; record per assertion whether the database, the engine, or nothing enforces it; support `strict` and `report` loss modes; carry gaps upstream to UMF instead of forking semantics. Per ADR-002: unknown data kept in the `retained` map and re-bound, with a report, when a revision defines it; truss-owned binding vocabulary carried as a UMF extension and proposed upstream. |
 | `sql-exactness` | project-local | `area:storage`, `area:query`, `area:constraints`, `area:dialects` | SQL defaults silently change values and comparisons unless storage is chosen deliberately. | Exact equality through `COLLATE "C"` or canonical byte encodings for keys; exact decimals; explicit temporal bindings (`timestamptz` discards the original offset); integer range checks; cross-row constraints under an explicit isolation strategy; differential tests between `generic` and `shaped` storage. Per ADR-002: JSONB read as text and parsed exactly (no default driver decoding); no implicit decimal rounding; key indexes cast to the declared type; `FOR NO KEY UPDATE` for ordinary mutations and `FOR UPDATE` for deletion; cross-row rules lock the parent or run SERIALIZABLE, and a deferred trigger alone under READ COMMITTED is not reported as database enforcement. |
 
+### HELIX guidance adoption — 2026-10-09
+
+The installed router is HELIX0.15.0. This update also reads the committed
+HELIX0.15.4 source at `0a55a2f021b279ca4eb05db308d0f14585338016`;
+it does not claim the installed plugin has been upgraded. Sources are
+`workflows/concerns/{modularity-and-encapsulation,twelve-factor,o11y-otel,formal-methods}`
+and `workflows/references/formal-methods.md` in the HELIX repository. Resolve these
+from HELIX rather than copying the methodology catalog into Truss.
+
+| Concern | Source | Areas | Why Active | Key Practices |
+| --- | --- | --- | --- | --- |
+| `modularity-and-encapsulation` | HELIX0.15.4 source; handwritten-source baseline | all | Python/TypeScript/native integration must remain embeddable with minimal exports. | Architecture owns the module map; establish an actual dependency checker, existing-debt inventory and allowed/forbidden negative controls before dependent feature readiness. |
+| `twelve-factor` | HELIX0.15.4 source; configuration/admin/lifecycle sections only | all | Reference runtime and explicit installation/migration need reproducible configuration. | One validated configuration object at the composition root; host owns connections, credentials and pools. No service/stateless-process requirement is imposed on the embedded library or retained local development database. |
+| `o11y-otel` | HELIX0.15.4 source; library, CLI and development-runner sections | all | Diagnose failed admission, installation and recovery without disclosing consumer data. | Safe structured events, bounded capture/export and explicit loss; Contracts own exact mappings. Journals/receipts remain durable product records independent of diagnostic export. No HTTP SLO or mandatory collector sidecar for this library. |
+| `formal-methods` | HELIX0.15.4 source; explicitly scoped adoption | all | Admission ordinals, uncertain commit and installation readiness have failure-sensitive transitions. | Precise specification first; bounded executable analysis targeted to custody/non-rewind and commit/recovery before their integrated readiness claims. Name requirements, assumptions, success/recovery witnesses, broken-mechanism controls and code correspondence. Numeric conveniences/site rendering have no applicable temporal analysis obligation. |
+
+The local runtime/install/migration plan owns adoption sequencing and evidence
+gaps. These additions do not establish machine-checked assurance or a working
+telemetry exporter. Formal properties cannot decide the still-open embedding-host
+trust boundary; record that assumption explicitly rather than silently selecting it.
+
 Slots not filled: `architecture-style` (no signal yet). `frontend-framework`,
 `e2e-framework`, `auth-provider` and `deploy-target` do not apply to a library
 with no UI or hosted service. Not active yet: a Rust core with Python and Node

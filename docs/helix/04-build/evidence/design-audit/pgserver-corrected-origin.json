@@ -1,0 +1,60 @@
+{
+  "scope": "Two native0.16 asserted-origin captures from an actual non-superuser authenticated local connection; fixture grants and bytes only",
+  "serverVersion": "16.15",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "capturedContexts": [
+    {
+      "xid": "731",
+      "ordinal": "0",
+      "database": "postgres",
+      "actingUser": "truss_origin_person",
+      "backendPid": "92087",
+      "sessionUser": "truss_origin_person",
+      "actorRoleOid": "17341",
+      "sessionRoleOid": "17341",
+      "interfaceVersion": "truss-native-operation-context/0.3",
+      "assertedOriginUtf8Hex": "65787465726e616c206f726967696e3a20cea9",
+      "assertedOriginCaptureProfileHex": "666978747572652d6e6f742d61646d6974746564"
+    },
+    {
+      "xid": "732",
+      "ordinal": "0",
+      "database": "postgres",
+      "actingUser": "truss_origin_role",
+      "backendPid": "92089",
+      "sessionUser": "truss_origin_person",
+      "actorRoleOid": "17342",
+      "sessionRoleOid": "17341",
+      "interfaceVersion": "truss-native-operation-context/0.3",
+      "assertedOriginUtf8Hex": "65787465726e616c206f726967696e3a20cea9",
+      "assertedOriginCaptureProfileHex": "666978747572652d6e6f742d61646d6974746564"
+    }
+  ],
+  "independentNativeRoleOids": {
+    "truss_origin_person": "17341",
+    "truss_origin_role": "17342"
+  },
+  "fixtureGrantsSql": "\nCREATE ROLE truss_origin_person LOGIN NOSUPERUSER NOBYPASSRLS;\nCREATE ROLE truss_origin_role NOLOGIN NOSUPERUSER NOBYPASSRLS;\nGRANT truss_origin_role TO truss_origin_person;\nGRANT USAGE ON SCHEMA truss TO truss_origin_person,truss_origin_role;\nGRANT SELECT,UPDATE ON truss.schema_head TO truss_origin_person,truss_origin_role;\nGRANT SELECT,INSERT ON truss.row_home_operation TO truss_origin_person,truss_origin_role;\nGRANT EXECUTE ON FUNCTION truss.runtime_admit_operation_with_asserted_origin(text,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) TO truss_origin_person,truss_origin_role;\n",
+  "callSql": "SELECT convert_from(decode(context_hex,'hex'),'UTF8') FROM truss.runtime_admit_operation_with_asserted_origin('mutation',decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'),decode('05','hex'),decode('06','hex'),convert_to('external origin: \u03a9','UTF8'),convert_to('fixture-not-admitted','UTF8'));",
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "packages/postgresql/native/operation-asserted-origin-admission.sql",
+      "sha256": "7fefe615b0d296e627e18f187c52e4d47f890852b5ca5c0d8e225133b5a5efec"
+    }
+  ],
+  "producerSha256": "a4593816631acf43a9069fd056e2ebaa166714a20961d44e65da767fcfdc489e",
+  "registryRowsAfterCallerRollback": 0,
+  "r5Qualified": false,
+  "nativeIssuerQualified": false,
+  "limitations": [
+    "Disposable local trust authentication only; no TLS or deployment grants",
+    "Fixture grants include head UPDATE and are not an installed security profile",
+    "Fixture asserted/profile bytes are not original admitted UMF/application evidence",
+    "No public Python mutation, journal/action correspondence or completion proof",
+    "Original row-derived ordinal allocator remains incompatible"
+  ]
+}
