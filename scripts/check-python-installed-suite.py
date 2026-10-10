@@ -34,6 +34,20 @@ dependencies = {n:importlib.metadata.version(n) for n in ['truss-toolkit','pgser
 for name,version in {'pgserver':'0.1.4+truss.pg16.15' if corrected else '0.1.4','fasteners':'0.20','platformdirs':'4.12.4','psutil':'7.2.2'}.items():
  if dependencies[name] != version: raise RuntimeError('Local dependency drift: '+name)
 command = [sys.executable,'-W','error','-m','unittest','discover','-s',str(root/'packages/python/tests'),'-v']
+fixture_paths = [
+ 'tests/fixtures/layout-migration-planning.json',
+ 'tests/fixtures/operation-ordinal-issuer.json',
+ 'docs/helix/03-test/acceptance-outer-json-expected.proposal.json',
+ 'docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json',
+ 'docs/helix/02-design/contracts/bindings/bootstrap-permit-arithmetic-v0.1.proposal.json',
+ 'docs/helix/03-test/python-exact-value-vectors.proposal.json',
+ 'docs/helix/04-build/evidence/receipt-position-locator-vectors.json',
+ 'docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql',
+]
+def pin_inputs():
+ paths = sorted((root/'packages/python/tests').glob('test_*.py')) + [root/p for p in fixture_paths]
+ return [{'path':str(p.relative_to(root)), 'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in paths]
+input_basis = pin_inputs()
 def save_failure(status, stdout, stderr, returncode=None):
  def captured(value):
   return value.decode('utf-8', errors='replace') if isinstance(value, bytes) else (value or '')
@@ -41,6 +55,7 @@ def save_failure(status, stdout, stderr, returncode=None):
   'status':status,'timeoutSeconds':180,'returncode':returncode,'command':command,
   'stdout':captured(stdout),'stderr':captured(stderr),'expectedTests':71,
   'modules':modules,'dependencies':dependencies,'loadedPackage':str(loaded),
+  'originalTestAndFixtureInputs':input_basis,
   'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),
   'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
   'testSources':[{'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted((root/'packages/python/tests').glob('test_*.py'))],
@@ -54,10 +69,15 @@ except subprocess.TimeoutExpired as error:
 if result.returncode or 'Ran 71 tests' not in result.stderr or not result.stderr.rstrip().endswith('OK'):
  save_failure('failed', result.stdout, result.stderr, result.returncode)
  raise SystemExit('Installed suite failed; original output retained in '+filename)
+if pin_inputs() != input_basis:
+ save_failure('test_or_fixture_input_drift', result.stdout, result.stderr, result.returncode)
+ raise SystemExit('Test/fixture input drift; original basis and output retained in '+filename)
 receipt = {'scope':'Installed current wheel full existing component suite; four native lifecycle tests plus synthetic/pure controls',
  'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),'python':sys.version,
  'loadedPackage':str(loaded),'modules':modules,'dependencies':dependencies,
  'environmentReused':True,'correctedPgserverCandidate':corrected,'tests':71,'command':command,'output':result.stdout+result.stderr,
+ 'originalTestAndFixtureInputs':input_basis,'testAndFixtureInputsUnchanged':True,
+ 'inputPinScope':'Selected test files and eight explicit checked-in inputs, compared before/after execution; not hermetic or host-tamper proof',
  'testSources':[{'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted((root/'packages/python/tests').glob('test_*.py'))],
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
  'completeEngineQualified':False,'installationQualified':False,'migrationExecutionQualified':False,

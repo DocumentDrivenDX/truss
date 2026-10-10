@@ -610,10 +610,18 @@ the separation.
 CONTRACT-008 now requires one digest per complete recipe identity and per
 procedure identity/version within the entire manifest. Both planners refuse
 conflicts before route selection, including at-target and unselected-step cases;
-identical pin reuse remains valid. The shared corpus has20 independently expected
-cases. Python consumes all20; Bun passes31 migration tests/60 assertions and
+identical pin reuse remains valid. The shared corpus had20 independently expected
+cases at that checkpoint. The current corpus has23 cases, including positive
+identical-recipe reuse, separate procedure versions and separate artifact roles.
+Python consumes all23; Bun passes34 migration tests/63 assertions and
 strict TypeScript passes for the planner. The installed wheel matches17 modules
 and passes71 component tests in
-[the current receipt](evidence/design-audit/python-migration-pins-installed-suite.json).
+[the current receipt](evidence/design-audit/python-migration-fixture-pinned-installed-suite.json).
 These checks establish metadata consistency only. Actual registered bytes,
 complete M1 pair, native administrative authority and M2–M5 execution remain open.
+
+The current installed-suite producer pins its test files and eight explicit
+checked-in fixtures/source inputs before execution and compares them afterward.
+This includes the complete migration corpus; prior receipts omitted its hash.
+That improves selected-input correspondence, not hermetic build or host-tamper
+assurance. The earlier compatibility run remains retained separately.
