@@ -2555,3 +2555,39 @@ must account for all simultaneous allocations, work/row/deadline dimensions and
 preallocated containment/recovery permits. This scalar component must not become
 a second account per facade or replace unavoidable native accounting. SQL
 savepoint rollback has no transition that resets its spent or outstanding state.
+
+
+### Pinned resource byte-capture component
+
+Private `_installation_resources.py:capture_resource` now consumes a trusted
+registered resource handle, independently pinned exact length/digest, selected
+maximum and original byte account/producer. Before opening the resource it
+reserves/draws down `expectedLength + 1` bytes, including an EOF sentinel. A single
+complete bounded binary read must return exactly the pinned bytes; incomplete,
+appended, missing or changed content refuses. SHA-256 compares original bytes,
+without normalization, repair or replacement reads. The handle must implement
+complete bounded binary reads; unsupported short reads refuse rather than retry.
+
+Success retains immutable original bytes and original allocation/account custody
+for use by the future installer. The account conservatively charges the entire
+read bound until the trusted producer confirms no consumer retains the output.
+Error, close failure or uncertain termination closes ordinary account admission
+and retains the charge; no destructor/exception path claims release. Construction
+and import remain inert; neither resource model content nor a file path can grant
+SQL execution authority through this component.
+
+The [real-file receipt](../04-build/evidence/design-audit/python-pinned-resource-capture.json)
+records three component tests: exact original retention after filesystem change,
+missing/changed/truncated/appended refusal, and reserve-before-open/invalid-pin
+controls. Explicit import mapping permits only dataclasses, hashlib and the
+private host account; the Python boundary checker passes56 imports. This is not
+complete PKG-01–08 or installed-wheel evidence.
+
+Declared read-byte bookkeeping does not bound actual file/zip buffering, Python
+object overhead, hash/decode workspace, CPU work or deadlines. Those producers and
+profile bounds still require original account integration. Next implement closed
+index decoding, independent release-pin and complete membership selection, trusted
+installed-package path containment and aggregate retained input ownership. Then
+compose the real reader with archive/use and complete native installation. No
+public installer export, release index, new compiler registration or ready marker
+is introduced by these capture tests.
