@@ -365,3 +365,21 @@ same-label substituted host registration, reserved-looking ordinary JSON keys an
 resource exhaustion before copies/comparisons. These are integration exit cases,
 not completed native evidence. Owner work is still in progress; no API/profile,
 backend acceptance case or Truss installer readiness is promoted.
+
+## Published owner capability scope refresh — 2026-10-10
+
+Weft 530ae35 publishes a separate explicit Paths corpus producer and removes
+key.uniqueStable from its initial 0.4 Paths backend declaration. The
+[original source/isolated-unit review](../../04-build/evidence/design-audit/weft-paths-publication-refresh-2026-10-10.json)
+records 47 unique declared capabilities and 23 passing producer tests, not native
+query results. Truss does not adopt that Databricks target or change its pinned
+ordinary 0.2 compiler route.
+
+For IR business-key paging, retain original complete key, unique/stable ordering,
+codec, catalog and same-snapshot/security evidence independently of emitted SQL.
+A positioned output, order clause or compiler capability label cannot replace
+that proof. Conformance publication must reconcile the exact original declared
+capability set with independent accepted/refused case coverage; never infer the
+set from successful cases or import the Paths count into the Truss backend.
+Missing or changed capability/profile evidence leaves the affected interactive
+shape unavailable. Existing IR and full consumer acceptance exits remain intact.

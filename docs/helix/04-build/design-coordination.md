@@ -1153,3 +1153,25 @@ integration gap in this scope. Public compiler/parsed ABI, SQL lowering and nati
 qualification remain separate; Truss's compiler pin is unchanged. No cross-chat
 message or new owner API adoption was made. The consumer handoff supplies the
 required next original-contract and distribution/native evidence.
+
+## Published Paths qualification producer refresh — 2026-10-10
+
+Fresh owner fetch advances Weft main from f823aee to
+530ae3511a4a50364d3d7e26195d3883952601df; UMF main remains 322b193.
+The [source/test review](evidence/design-audit/weft-paths-publication-refresh-2026-10-10.json)
+pins five published owner files and 23 passing producer tests run from a clean
+original git archive, excluding peer dirty security work. The explicit
+ashlar.databricks.paths/0.4.0-paths-candidate Backend03 profile now has 47 unique
+capabilities and no key.uniqueStable declaration. Its corpus producer requires
+an independently explicit bounded capability count, exact declared coverage,
+original source/binary/schema/case pins and bounded transport/cleanup controls.
+Unit fixtures and original 463-case extraction do not qualify the real compiler
+binary, native Spark/Delta behavior or Truss PostgreSQL.
+
+Truss's adopted f05f2df compile/SQL0.2 tuple is unchanged. Do not import Paths's 47
+capability count or target/profile labels into it. Apply the ownership lesson to
+Truss corpus planning: exact original declared capability membership must match
+independent case coverage; a count alone or compiled SQL cannot certify native
+key stability/uniqueness. Keep business-key paging proof under its actual admitted
+catalog/native/authority profile. This published source review adopts no unfinished
+security lineage API and promotes no acceptance case.

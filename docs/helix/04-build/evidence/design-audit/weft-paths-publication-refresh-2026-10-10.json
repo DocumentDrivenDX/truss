@@ -1,0 +1,47 @@
+{
+  "scope": "Published owner source/profile delta and isolated original corpus-producer unit tests; no Truss adoption or native/compiler-binary qualification",
+  "weftPublishedCommit": "530ae3511a4a50364d3d7e26195d3883952601df",
+  "previousPublishedCommit": "f823aeea527ba48c1be630df7a4b8ceedd14b9f1",
+  "umfPublishedCommit": "322b193cef7c940d07b741860cf0170272628868",
+  "sourceSha256": {
+    "crates/weft-databricks/src/paths.rs": "3c6ebc5f201c80256109a55e7acf9b9c1c31a045650d5cecc5e32cd096b98b6a",
+    "crates/weft-databricks/tests/paths.rs": "501ec02b19ac86b945ffcf80b6d33e9aa19f5a5a1b10de952513afe7021594ac",
+    "scripts/distribution/check-paths-cli.py": "2cad04baacb843f22306d0ca1554bd375e70d77e3be0bc85123be56eb923c088",
+    "tests/distribution-paths-corpus/test_corpus.py": "13fef008d21e669ace93052023f2e66a41c46124bba8ee5a67e83c6e3b71d8f6",
+    ".github/workflows/conformance.yml": "da906d9aee47ba91b15bd1a35297219a084466ad9a0899c8a93ad8247331bdac"
+  },
+  "reviewedProfile": {
+    "backendId": "ashlar.databricks.paths",
+    "backendVersion": "0.4.0-paths-candidate",
+    "backendInterface": "weft-backend/0.3.0",
+    "dialect": "weft-sql/0.4.0",
+    "ir": "weft-ir/0.4.0",
+    "target": "spark4-delta4-paths-candidate",
+    "declaredCapabilityCount": 47,
+    "declaresKeyUniqueStable": false
+  },
+  "producerChanges": [
+    "Explicit immutable declared capability count with bounded exact membership/coverage checks",
+    "Original pinned source/binary/schema/expected-case inputs and before/after drift checks",
+    "Bounded one-shot process input/output/deadline/cleanup and constant transport refusal controls"
+  ],
+  "tests": {
+    "command": "python3.11 tests/distribution-paths-corpus/test_corpus.py",
+    "source": "Clean git archive of exact published commit; peer dirty files excluded",
+    "passed": 23,
+    "exitCode": 0,
+    "logPath": "docs/helix/04-build/evidence/design-audit/weft-paths-publication-refresh-2026-10-10.tests.log",
+    "logSha256": "4c2a40959f5c79d30968523ff39ed0bf8e4aca78e4d02e6bc7250964db2b6422",
+    "scope": "Synthetic producer/transport/correspondence controls plus original 463-case extraction; no compiled/native execution result"
+  },
+  "trussAdoptedCompilerCommit": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "trussAdoptionChanged": false,
+  "nativeQualified": false,
+  "acceptanceCasesPromoted": [],
+  "requiredTrussContinuation": [
+    "Keep ordinary compile/SQL0.2 separate from explicit Paths0.4 entrypoint and target",
+    "Bind exact original declared capability inventory to corpus coverage under each selected Truss profile; do not copy Paths count47",
+    "Business-key stable/unique proof remains original installed catalog/native/owner obligation; positional/runnable SQL does not prove it",
+    "Security obligation lineage work is unfinished and is not adopted by this owner publication review"
+  ]
+}
