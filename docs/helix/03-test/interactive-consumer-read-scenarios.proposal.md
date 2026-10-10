@@ -2,6 +2,44 @@
 
 Independent planned native cases for [consumer read integration](../02-design/contracts/consumer-read-integration.proposal.md), R8 and SD-005/STP-009/020/021/022/039. None is an executed native receipt. Supply the original consumer UMF model, exact native homes and current-person policies; don't replace it with a sales fixture to avoid unsupported domains.
 
+## Installed Python preview composition schedule
+
+This is the P1/P2 integration path through the existing IR cases and consumer
+R2–R9, not a reduced replacement corpus. Run from a clean installed Python package
+outside the checkout on the selected complete local installation. Independently
+register the original revised consumer document/model/corpus bytes, complete
+release/native/security/driver/account tuple and expected logical records/errors.
+Expected IDs/epochs are symbolic case references bound to actual returned originals;
+do not synthesize accepted report IDs, role authority or installation facts.
+
+| Ordered action through public APIs | Required independent result / evidence |
+| --- | --- |
+| Explicit fresh install and complete verify through the administrative tooling | Actual atomic installation readiness and full native inventory; ordinary runtime start/import did no DDL. Preserve PKG-02/08 evidence separately. |
+| Accept the original document-qualified consumer catalog and enumerate revisions | Actual accepted identities and immutable complete report correspond to original source. A second document with overlapping local names remains distinct. Unsupported required semantics refuse rather than producing a synthetic accepted revision. |
+| Open separately authenticated writer, reader and non-member person connections | Actual native login/acting-role and selected membership observations; host supplies no role map or SET ROLE workaround. Missing authenticated identity refuses before dispatch. |
+| Dry-run one original module-scoped action, then apply it with its preconditions | Dry-run and apply use the same admitted plan semantics. Dry-run leaves graph, keys, edges, journal and request receipts unchanged. Apply produces the complete independently expected group, exact values and origin; failed precondition preserves prior caller work. |
+| Inspect direct key/edge results and execute each original R8 SQL shape | Use actual accepted mapping/IDs and exact Weft artifacts, read-only transaction and current-person disclosure. Run IR-01–12 as applicable with complete logical absence/null/empty, integer/decimal/timestamp/JSON evidence and independent native plan/bound observations. |
+| Repeat the same mutation request and try a changed request with the same idempotency key | Original receipt/result returns without a second effect; changed request conflicts. Retain native submission/effect and original receipt correspondence, not just equal output values. |
+| Attempt a reader write, a non-member read and an origin mismatch | Exact selected refusals with no unauthorized result or effect; independently verify graph/key/journal/receipt state and origin bytes under an authorized observer. Do not infer authorization from a successfully authenticated socket. |
+| Run provenance import in atomic and per-item modes, then repeat eligible input | Preserve original input-index outcomes, provenance and committed/never-submitted distinctions. Exercise correction/deletion controls so import identity repetition is not mistaken for exact request-receipt replay. |
+| Roll back a caller-owned transaction after a successful pending group | The same caller sees pending effects; an independent observer sees none after confirmed rollback. No Truss-owned outer COMMIT, lost earlier caller work or reused ordinal. |
+
+Capture returned originals through registered corpus references and retain full
+independent before/after inventories and native role/transaction observations.
+Every result passes complete decoding and final security publication drain before
+release. No prefix, cursor, count, key existence or diagnostic payload bypasses
+that boundary. Instrument original native submission/effect evidence separately
+from the API under test; returned counts are not their own oracle.
+
+If an original required R8 shape remains refused, retain that exact refusal and
+mark consumer-ready acceptance incomplete. Passing direct reads does not replace
+relationship predicates, parsed-input ownership or complete note projection.
+P3 adds actual feed/ACK/reached, restart and durable retry schedules on this same
+installed path. Full R2 language-neutral publication and Python/TypeScript committed
+interchange, R3 stable layout/Lakebase and R10 published dependency remain separate
+release exits. This composed schedule is not_run; private wheel and administrative
+admission probes are not evidence that these public operations exist.
+
 | Case | Original fixture/action | Required result and native observation |
 | --- | --- | --- |
 | IR-01 typed ID/key parity | Two types with distinct business identities and overlapping local key numbers; ID and complete-key lookup | Same exact logical record only in the correct type/namespace; signed catalog IDs and large object IDs preserved; native lookup/index/domain identity independently checked |
