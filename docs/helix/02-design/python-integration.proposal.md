@@ -3051,3 +3051,16 @@ policy change between fact/query capture, hidden population, wrong salary native
 type, selfjoin scope substitution and empty-result authorization. All composed
 Truss controls remain not_run. Owner backend acceptance stays26/132; this fixed
 fixture evidence selects neither public lowering nor production release.
+
+
+The query result freezer now rejects dictionary subclasses before invoking their
+custom iteration/items callbacks. The independent late-row control places a
+callback-bearing map beneath a second decoded row after a valid exact first row;
+it requires complete result refusal, zero mapping callbacks and exactly one
+original query/cleanup. Exact builtin dict and the existing host-produced
+MappingProxyType carrier remain supported. A mapping proxy does not independently
+prove its underlying source immutable/bounded; original host producer and held-cut
+qualification remain necessary. This is no general hostile-Python sandbox claim.
+The [installed map control](../04-build/evidence/design-audit/python-query-map-installed-suite.json)
+passes71 tests/17 module correspondences and64 allowed imports. Wheel SHA256 is
+75843c83e91181984bbc7e90a46508ab27cb235cd04805cee16b2fef4e60d374.

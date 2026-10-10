@@ -73,6 +73,24 @@ class QueryExecutionTests(unittest.TestCase):
             self.assertEqual(events.count('cleanup'),1)
             self.assertLessEqual(sum(isinstance(e,tuple) and e[0]=='query' for e in events),1)
 
+        callbacks=[]
+        class CustomMap(dict):
+            def __iter__(self):
+                callbacks.append('iteration')
+                return super().__iter__()
+            def items(self):
+                callbacks.append('items')
+                return super().items()
+        events=[]
+        decoded=[{'integerToken':'9007199254740993'},
+                 {'nested':CustomMap(integerToken='1')}]
+        engine,plan=coordinator(self.host(events,decode=decoded))
+        with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+        self.assertEqual(error.exception.code,'decoder')
+        self.assertEqual(callbacks,[])
+        self.assertEqual(events.count('cleanup'),1)
+        self.assertEqual(sum(isinstance(e,tuple) and e[0]=='query' for e in events),1)
+
     def test_disposal_and_reentrancy_do_not_repeat_native_work(self):
         events=[];host=self.host(events)
         def check(*_):

@@ -69,7 +69,7 @@ def _freeze_result(value):
         return value
     if type(value) in (tuple, list):
         return tuple(_freeze_result(child) for child in value)
-    if isinstance(value, (dict, MappingProxyType)):
+    if type(value) in (dict, MappingProxyType):
         if any(type(key) is not str for key in value):
             raise CompileRefusal('decoder', 'Exact string member names required')
         for key in value:
