@@ -2296,3 +2296,28 @@ isolation/origin, original authority/driver closure, all seven semantic bodies,
 complete installation and migration/public APIs remain separate missing gates.
 Do not transfer prior broader native results to this new wheel by version alone,
 or mark it published/default-supported from these component passes.
+
+
+## Clean offline-resolved rebuilt runtime environment
+
+[Clean environment evidence](evidence/design-audit/pgserver-fresh-offline-component-20261010.json)
+creates a previously absent virtual environment and performs normal dependency
+resolution with --no-index over the fresh candidate wheel directory and pinned
+local dependency wheelhouse. All five resolved artifact hashes match independent
+original receipts: current Truss, rebuilt pgserver, fasteners0.20, platformdirs
+4.12.4 and psutil7.2.2. The [original pip report](evidence/design-audit/pgserver-fresh-offline-install-report-20261010.json)
+and compressed installation/test logs are retained.
+
+Both pgserver and Truss load from this new environment;1620 runtime payloads and
+29 toolkit modules match original wheel receipt bytes. All132 warnings-as-errors
+component tests pass from /private/tmp. This closes the earlier shared-runtime-
+environment dependency gap for the current private macOS27 arm64/Python3.11
+candidate. Tests still use original checked-in fixtures; no full hermetic corpus
+or actual checkout-free public installer is qualified.
+
+The private wheelhouse explicitly selects the corrected local version. Public
+pgserver==0.1.4 can still deliver PostgreSQL16.2, so ordinary public default delivery
+remains unresolved. Native security/driver composition, all seven semantic bodies,
+complete install/migration and managed targets retain their existing gates.
+Earlier installed-target receipts keep their narrower scopes; no release flag or
+package dependency is changed by clean private resolution.

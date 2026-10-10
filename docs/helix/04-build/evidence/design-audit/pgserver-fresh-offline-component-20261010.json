@@ -1,0 +1,63 @@
+{
+  "scope": "Clean venv normal offline dependency resolution and full installed Truss component suite using rebuilt runtime; not public default or complete installation",
+  "precreationDirectoryAbsent": true,
+  "environment": "/private/tmp/truss-fresh-offline-runtime-env-20261010",
+  "basePrefix": "/Users/erik/.local/share/uv/python/cpython-3.11-macos-aarch64-none",
+  "resolved": {
+    "truss-toolkit": {
+      "version": "0.0.1.dev0",
+      "wheelSha256": "16c19007780294db605f7a9abc3ff3980bcb9afc502d2d6572609dad6099ee2f",
+      "wheel": "/private/tmp/truss-fresh-wheel-qcnck6lx/wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl"
+    },
+    "fasteners": {
+      "version": "0.20",
+      "wheelSha256": "9422c40d1e350e4259f509fb2e608d6bc43c0136f79a00db1b49046029d0b3b7",
+      "wheel": "/private/tmp/truss-local-resolver-dependency-wheels/fasteners-0.20-py3-none-any.whl"
+    },
+    "pgserver": {
+      "version": "0.1.4+truss.pg16.15",
+      "wheelSha256": "a7b637a77556b2d33919f1d9ac0ebf2d67f1a1004b923e503bf534164e375ff7",
+      "wheel": "/private/tmp/truss-pgserver-fresh-wheel-20261010/pgserver-0.1.4+truss.pg16.15-cp311-cp311-macosx_27_0_arm64.whl"
+    },
+    "platformdirs": {
+      "version": "4.12.4",
+      "wheelSha256": "78bfb9db2a8471ed7eebe3c3c932da413911042994e699b384fbb4493fa872d7",
+      "wheel": "/private/tmp/truss-local-resolver-dependency-wheels/platformdirs-4.12.4-py3-none-any.whl"
+    },
+    "psutil": {
+      "version": "7.2.2",
+      "wheelSha256": "1a7b04c10f32cc88ab39cbf606e117fd74721c831c98a27dc04578deb0c16979",
+      "wheel": "/private/tmp/truss-local-resolver-dependency-wheels/psutil-7.2.2-cp36-abi3-macosx_11_0_arm64.whl"
+    }
+  },
+  "loaded": {
+    "pgserver": "/private/tmp/truss-fresh-offline-runtime-env-20261010/lib/python3.11/site-packages/pgserver/__init__.py",
+    "truss": "/private/tmp/truss-fresh-offline-runtime-env-20261010/lib/python3.11/site-packages/truss/__init__.py"
+  },
+  "payloadMembersMatched": 1620,
+  "trussModulesMatched": 29,
+  "componentTestsPassed": 132,
+  "suiteExitCode": 0,
+  "cwd": "/private/tmp",
+  "logs": {
+    "install": {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-fresh-offline-install-20261010.log.gz",
+      "originalSha256": "47f38a976037367fb4fe070b246b93c2034b7c912bbc027bebb347222725932d",
+      "compressedSha256": "ff5b231b0348989cdb7e5be387d20f20ff85b206eeb48b260d3e6e0422602e1c"
+    },
+    "tests": {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-fresh-offline-tests-20261010.log.gz",
+      "originalSha256": "56942071bcacc1091df97ea02cf852e966bf588ab36f961d402f52b84c882f7e",
+      "compressedSha256": "eea70c0c54a615c966f6376ed76ddd358afd68f833cb13e9bccc969bf40548b2"
+    }
+  },
+  "reportSha256": "5d6d08294c7dd78fb1f8a1b7277b6343a6a6f699a620e8b481f0460d77ba9c23",
+  "publishedDefault": false,
+  "completeEngineQualified": false,
+  "limitations": [
+    "Private explicitly selected wheelhouse; plain pgserver==0.1.4 also accepts public16.2 candidate",
+    "Current macOS27 arm64 Python3.11 tuple only",
+    "Tests read checked-in external fixtures; not hermetic full corpus or public checkout-free install API",
+    "Complete driver/security/native body/installation/migration qualification remains missing"
+  ]
+}
