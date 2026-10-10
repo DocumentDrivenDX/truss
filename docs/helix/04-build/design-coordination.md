@@ -1341,3 +1341,19 @@ explicit human cross-chat authorization; that is an operational authorization,
 not reopening product decisions or granting native/runtime authority. Truss must
 continue independently owned composition/installation work and cannot substitute
 unfinished owner APIs or a local policy walker for the missing closed interface.
+
+
+### Owner-approved resumption and qualified handoff boundary
+
+The owner instructed adopting the recommendations and resuming work. Continue
+under ADR-008's trusted embedding host/registered adapter, keeping authenticated
+connecting person distinct from privileged writer and asserted origin. Require
+closed versioned original authority/context/freshness/publication contracts and
+exact native qualification before protected admission; preserve one-refusal
+stale behavior and avoid a second compiler or policy resolver.
+
+The attempted prepared request to “Assess security control support” was rejected
+by automatic approval review because explicit destination/payload authorization
+was not established. No message was sent, no owner acknowledgement or interface
+adoption occurred, and the original unsent artifact remains unchanged. A specific
+approval question is pending. Local Truss work continues independently.

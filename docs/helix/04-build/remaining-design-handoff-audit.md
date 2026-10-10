@@ -3,8 +3,8 @@
 ## Current execution frontier — 2026-10-10
 
 The current [Python source checkpoint](evidence/design-audit/python-capture-receive-source.json)
-passes119 tests. A [fresh separately installed wheel](evidence/design-audit/python-capture-receive-installed-suite.json)
-also passes119 tests, including resource registration and native capture receive, with all26
+passes119 tests. The current [fresh separately installed wheel](evidence/design-audit/python-row-tree-installed-suite.json)
+passes124 tests, including resource registration, native capture receive and physical tree validation, with all27
 modules matching original source/wheel/installed bytes. Build/install/import/test
 logs are retained alongside the receipt. The earlier114/112-test wheels remain
 historical evidence rather than the current distribution checkpoint.
@@ -2019,3 +2019,30 @@ Current source and fresh installed-wheel suites pass119 with26 matching modules;
 input-cell limits do not prove complete selected scope, original capture origin,
 current authority or whole receive/work/account lifetime. The substitution
 counterexample remains an explicit PA05 prerequisite, not closed by this decoder.
+
+
+## Physical row-home tree validation — 2026-10-10
+
+The private Python `_row_image_tree` validator consumes bounded retained captures
+and checks exactly one declared root per state, same-state parent membership,
+connected acyclic reachability, parent-kind/slot correspondence, unique child
+slots, contiguous zero-based sequence ordinals and scalar payload membership.
+Its iterative walk avoids recursive traversal. Five focused tests cover valid
+scalar/null/empty containers and malformed parents, cycles, extra roots, sequence
+gaps, duplicate slots and missing/extra payloads.
+
+The [fresh installed wheel](evidence/design-audit/python-row-tree-installed-suite.json)
+passes124 tests with27 byte-identical source/wheel/installed modules; its actual
+build gate checks104 imports. Original build/install/import/test logs accompany
+the receipt. This supersedes119/26 as the installed component checkpoint; older
+receipts retain their historical scopes. The source-only full run hit three
+pgserver cache-directory permission errors in the sandbox; the fresh installed
+run used the authorized native runtime environment and passed.
+
+This is physical structure validation, not UMF definition/member interpretation,
+scalar codec validation, original capture authentication or native commit
+enforcement. Empty captures do not establish authorized absence. It does not
+close the retained-state substitution counterexample. The next native test must
+retain an original malformed graph admitted by table constraints, demonstrate
+structural refusal, and restore the original fixture. All seven complete native
+semantic bodies and protected publication remain pending.

@@ -1846,3 +1846,30 @@ cut/authority correspondence is still required before semantic contribution or
 publication. This introduces no public export, policy resolver or SQL compiler.
 The explicit26-module/102-edge map retains driver-free decoding;16 real boundary
 controls include private-capture export and driver refusal.
+
+
+## Physical row-home tree validation — 2026-10-10
+
+The private Python `_row_image_tree` validator consumes bounded retained captures
+and checks exactly one declared root per state, same-state parent membership,
+connected acyclic reachability, parent-kind/slot correspondence, unique child
+slots, contiguous zero-based sequence ordinals and scalar payload membership.
+Its iterative walk avoids recursive traversal. Five focused tests cover valid
+scalar/null/empty containers and malformed parents, cycles, extra roots, sequence
+gaps, duplicate slots and missing/extra payloads.
+
+The [fresh installed wheel](evidence/design-audit/python-row-tree-installed-suite.json)
+passes124 tests with27 byte-identical source/wheel/installed modules; its actual
+build gate checks104 imports. Original build/install/import/test logs accompany
+the receipt. This supersedes119/26 as the installed component checkpoint; older
+receipts retain their historical scopes. The source-only full run hit three
+pgserver cache-directory permission errors in the sandbox; the fresh installed
+run used the authorized native runtime environment and passed.
+
+This is physical structure validation, not UMF definition/member interpretation,
+scalar codec validation, original capture authentication or native commit
+enforcement. Empty captures do not establish authorized absence. It does not
+close the retained-state substitution counterexample. The next native test must
+retain an original malformed graph admitted by table constraints, demonstrate
+structural refusal, and restore the original fixture. All seven complete native
+semantic bodies and protected publication remain pending.
