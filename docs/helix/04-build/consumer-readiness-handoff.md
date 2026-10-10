@@ -68,3 +68,16 @@ full corpus/interchange/stable-layout/populated migration and independent manage
 target qualification. Ashlar may continue independent lanes with its own qualified
 compiler/storage profile; its local Delta corpus is not Truss acceptance evidence.
 No cross-chat delivery or adoption of an unfinished security API occurred here.
+
+
+## Fresh candidate installation observation
+
+The [fresh install receipt](evidence/design-audit/corrected-runtime-clean-consumer-install.json)
+now verifies the corrected dependency composition in a newly created Python3.11
+environment: exact private Truss/pgserver wheels plus pinned fasteners0.20,
+platformdirs4.12.4 and psutil7.2.2 resolved from pip cache. No reused environment
+or local-extra pin supplies this observation. Actual installed metadata matches,
+and the CLI probe reports16.15 and exits successfully on its own data directory.
+The wheels and actual probe output are retained by hash/evidence. This closes
+clean local candidate dependency installation on the one macOS27 arm64 tuple;
+no full suite, Truss schema installation or public distribution is claimed.

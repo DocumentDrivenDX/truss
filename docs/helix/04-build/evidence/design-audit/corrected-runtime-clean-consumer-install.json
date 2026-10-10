@@ -1,0 +1,23 @@
+{
+  "scope": "Fresh Python environment corrected local runtime dependency installation and actual CLI probe only",
+  "environment": "/private/tmp/truss-corrected-clean-consumer-env",
+  "environmentReused": false,
+  "dependencies": {
+    "truss-toolkit": "0.0.1.dev0",
+    "pgserver": "0.1.4+truss.pg16.15",
+    "fasteners": "0.20",
+    "platformdirs": "4.12.4",
+    "psutil": "7.2.2"
+  },
+  "trussWheelSha256": "ef6ad4fed381c129ec901362c8d51ce0e4438a618b3d95b2eb39eda73fa1b9f1",
+  "pgserverWheelSha256": "706ab843c9e8d8613a2a6cde6cf8156d8b83fa1921237e883c0aa878cfac88d9",
+  "probeCommand": "/private/tmp/truss-corrected-clean-consumer-env/bin/truss-local-postgres --data-dir /private/tmp/truss-corrected-clean-consumer-data --probe",
+  "probeOutput": "{\"runtime\": \"pgserver\", \"runtimeVersion\": \"0.1.4+truss.pg16.15\", \"serverVersion\": \"16.15\", \"dataDirectory\": \"/private/tmp/truss-corrected-clean-consumer-data\", \"connectionUri\": \"postgresql://postgres:@/postgres?host=/private/tmp/truss-corrected-clean-consumer-data\", \"trussInstallation\": \"not_checked\", \"scope\": \"local_postgresql_only\"}\n",
+  "probeExitCode": 0,
+  "dependencySource": "Previously verified private local Truss/pgserver wheels; pinned lifecycle packages resolved from pip cache",
+  "platformScope": "macOS27 arm64 Python3.11",
+  "fullSuiteRun": false,
+  "completeEngineQualified": false,
+  "installationQualified": false,
+  "publicDistributionQualified": false
+}
