@@ -155,3 +155,12 @@ mandatory native guards and assemble a complete verified installation bundle,
 then exercise a registered populated migration and fresh-process recovery. See
 [the Python installation/migration handoff](../../docs/helix/04-build/python-migration-installation-handoff.md)
 for entrypoint contracts, connection ownership and preservation/failure gates.
+
+
+A subsequent source correction rejects asynchronous compiler functions/callable
+objects at construction and closes unexecuted coroutine results from synchronous
+wrappers before refusal, including disposal during the callback. Six compiler
+boundary source tests pass with warnings treated as errors. This correction is
+newer than the recorded ten-module wheel and34-test installed-suite evidence;
+that wheel remains historical until rebuilt. No asynchronous compiler execution
+or automatic retry is introduced.

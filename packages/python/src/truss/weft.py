@@ -6,6 +6,7 @@ source/build must be verified separately; a callable or artifact cannot prove it
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 import hashlib
+import inspect
 import json
 from threading import Lock
 from types import MappingProxyType
@@ -98,7 +99,10 @@ class CompilerBoundary:
     or native heap qualification. Do not turn a CompiledQuery into a SQL authority.
     """
     def __init__(self, compile_json: Callable[[str], str]):
-        if not callable(compile_json):
+        if (not callable(compile_json) or inspect.iscoroutinefunction(compile_json)
+            or inspect.isasyncgenfunction(compile_json)
+            or inspect.iscoroutinefunction(getattr(compile_json, '__call__', None))
+            or inspect.isasyncgenfunction(getattr(compile_json, '__call__', None))):
             _refuse('compiler', 'Original compiler function required')
         self._compile = compile_json
         self._disposed = False
@@ -135,6 +139,11 @@ class CompilerBoundary:
             with self._lock:
                 if self._disposed: _refuse('disposed', 'Compiler boundary disposed')
             raw = self._compile(text)
+            # A synchronous wrapper can still return a coroutine. Close an
+            # unexecuted coroutine before disposal/refusal so it cannot leak.
+            if inspect.iscoroutine(raw):
+                raw.close()
+                _refuse('compiler', 'Synchronous compiler text required')
             with self._lock:
                 if self._disposed: _refuse('disposed', 'Compiler boundary disposed')
             if type(raw) is not str:

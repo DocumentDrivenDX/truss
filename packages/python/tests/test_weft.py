@@ -94,5 +94,39 @@ class CompilerBoundaryTests(unittest.TestCase):
         engine.compile_request(original)
         self.assertEqual(events,['busy'])
 
+    def test_async_compilers_refuse_without_execution_or_coroutine_leak(self):
+        request, response = fixture()
+        original = json.dumps(request).encode()
+        calls = []
+        async def asynchronous(_):
+            calls.append('executed')
+            return json.dumps(response)
+        class AsyncCallable:
+            async def __call__(self, value):
+                return await asynchronous(value)
+        async def asynchronous_generator(_):
+            yield json.dumps(response)
+        for callback in [asynchronous, AsyncCallable(), asynchronous_generator]:
+            with self.subTest(callback=callback), self.assertRaises(CompileRefusal):
+                CompilerBoundary(callback)
+        created = []
+        def wrapped(value):
+            pending = asynchronous(value)
+            created.append(pending)
+            return pending
+        engine = CompilerBoundary(wrapped)
+        with self.assertRaises(CompileRefusal):
+            engine.compile_request(original)
+        self.assertIsNone(created[0].cr_frame)
+        def wrapped_disposal(value):
+            pending = wrapped(value)
+            engine.dispose()
+            return pending
+        engine = CompilerBoundary(wrapped_disposal)
+        with self.assertRaises(CompileRefusal):
+            engine.compile_request(original)
+        self.assertIsNone(created[1].cr_frame)
+        self.assertEqual(calls, [])
+
 
 if __name__=='__main__':unittest.main()
