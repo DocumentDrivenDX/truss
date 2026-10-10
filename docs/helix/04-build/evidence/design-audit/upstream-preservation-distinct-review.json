@@ -1,0 +1,49 @@
+{
+  "scope": "Committed upstream source review; no new compiler or transaction authority adoption",
+  "umf": {
+    "revision": "b51c300d99a2764184beb9c516547736e437a7e4",
+    "sources": [
+      {
+        "path": "src/domain-packs/preservation.ts",
+        "sha256": "9dd4ca767cf8d252a110e1bb81a84bc0528262a0a184d3e07257383dbe3358ed"
+      },
+      {
+        "path": "src/index.ts",
+        "sha256": "e04cb3d6b1baee9a5c5064671a117c2f1aa996a067d94b34f73e75df13d71b04"
+      },
+      {
+        "path": "docs/helix/05-deploy/document-preservation.md",
+        "sha256": "362d5b3cfd123bf486c8539191c0c15ad7dc9bd1fdf7f71b92f472da9e3a333f"
+      }
+    ]
+  },
+  "weft": {
+    "revision": "9fbbbabca37e38c60f06dade3d7316e7ef7bc9bc",
+    "sources": [
+      {
+        "path": "docs/helix/02-design/contracts/exact-arithmetic-v0.3.md",
+        "sha256": "55f7ac1e8ab84dbd014d0bc97095a555b321f6d2afda89133b9525514afe1213"
+      },
+      {
+        "path": "crates/weft-core/src/arithmetic_plan.rs",
+        "sha256": "11481d665cc2b6b15b7366d2eae5d3edf75e3fc053b3b899ba61ea84523ea2f2"
+      },
+      {
+        "path": "crates/weft-core/src/backend.rs",
+        "sha256": "07453c0c59fa55df109df9c16f00a20e8783538f93ac159180e5b8d216ea03a6"
+      },
+      {
+        "path": "crates/weft-postgresql/src/native_profile.rs",
+        "sha256": "dd03d79bb4fe0072bd0b81e4bfd826db8cfc4781fbd2e32c25cc7e604b25a9ff"
+      },
+      {
+        "path": "crates/weft-postgresql/src/qualified_profile.rs",
+        "sha256": "ee93032d4e787330ba41b0a72b5ed3686c26c8d9326bda868bf0b2e670c75993"
+      }
+    ],
+    "postgresqlProfileSourcesUnchangedFrom": "1a8a3445302aa44a93167ef340dbcfb306805254"
+  },
+  "adoptedCompilerRevision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "distinctPostgresqlQualified": false,
+  "preservationIsTrussRecoveryProtocol": false
+}

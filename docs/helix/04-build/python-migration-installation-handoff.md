@@ -346,3 +346,26 @@ Other tests retain their pure/synthetic component scope. Earlier base-wheel
 receipts intentionally describe the environment before this extra installation.
 This is no cross-platform/process-crash, full installation, migration-execution
 or protected-engine qualification.
+
+
+## Committed preservation and DISTINCT alignment
+
+The [upstream source review](evidence/design-audit/upstream-preservation-distinct-review.json)
+pins UMFb51c300d and Weft9fbbbab separately from Truss's adopted compilerf05f2df.
+UMF's document preservation guidance selects TableSpec Python for source-document
+loading and BagIt transfer of originals/history, with scoped PREMIS/PROV metadata.
+Those acquisition artifacts do not supply Truss transaction settlement, migration
+receipts, original issuer authority or fresh-process database reconciliation.
+Reuse retained immutable source bytes through admitted consumer inputs; do not
+replace Truss recovery custody with a loader handoff or checksum.
+
+Weft's new0.3 DISTINCT subset applies to complete projected tuples of required
+non-null scalar Strings under exact UTF8_BINARY semantics. Ordering requires an
+exact projected Field/scan occurrence and lowers through projected carrier aliases.
+Numeric, optional/tagged, aggregate, computed, structured and page-profile DISTINCT
+remain refused in this subset. It is a Spark candidate, not a Truss PostgreSQL
+qualification: original PostgreSQL native/qualified profile source bytes are
+unchanged. Keep the adopted0.2 compiler refusal until an exact owner-admitted
+PostgreSQL composition is selected and qualified. DISTINCT must never repair the
+native parallel-edge limitation by silently deduplicating relationship inputs;
+source guards and original occurrence identities remain independently required.
