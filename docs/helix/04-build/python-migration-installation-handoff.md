@@ -142,7 +142,13 @@ The review-only source-epoch0.16 composition cannot be promoted to an admitted
 source just to obtain a passing route: all four original operation admission
 families reissue an ordinal after savepoint rollback. See the
 [issuer integration handoff](operation-ordinal-issuer-handoff.md). Repairing that
-composition is prerequisite installation work. If a deployed historical source
+composition is prerequisite installation work. The four corrected host-issued
+admission candidates now have scoped PostgreSQL16.15 shared-registry evidence:
+issued ordinals0/1/3 survive host custody while native savepoint rollback removes
+the corresponding rows and rejected ordinal2 remains burned. This closes the
+observed allocation behavior in those candidates, not complete installation,
+original driver/security authority or an admitted migration source. Do not install
+the legacy allocator overloads beside them. If a deployed historical source
 actually contains the defect, its upgrade needs a separately admitted recovery
 route with explicit defective-source preconditions; it cannot inherit normal
 source verification. No such deployed-source claim or recovery route is selected.
@@ -469,3 +475,49 @@ actual timings/profile bounds, native status/control observations and independen
 ready/archive/receipt/source-target facts. These schedules are execution gates,
 not passed cases; original driver/account/security/recovery producers are still
 missing. Synthetic exceptions and component schemas cannot close them.
+
+## Settlement classification implementation table
+
+Implement the existing binding variants in the order below. Each decision uses
+the original admitted producer's correlated observations for this attempt, not
+an exception class or a current layout label. Preserve the original immutable
+request, ordered submitted steps, command/transaction evidence and recovery
+reference before publishing any uncertain result. This table introduces no new
+wire variants or authority service.
+
+| Original evidence at return boundary | Existing result | Required custody and publication behavior |
+| --- | --- | --- |
+| Admission fails before native submission | refused, containment pre_native | Return once without an administrative transaction or recipe effect; do not fabricate an original native attempt. |
+| Preflight ran, no recipe effects submitted, and original correlated termination is confirmed | refused, containment preflight_terminated | Retain originalAttempt and terminationEvidence. A refusal after native preflight must not be labeled pre_native. |
+| Recipe effects were submitted and original correlated complete rollback is confirmed | rolled_back | Retain failedStage and terminationEvidence; no target marker, committed inventory or commit field. An SQL error alone is insufficient. |
+| Recipe application or cancellation completion is unknown before any COMMIT submission | recovery_required, application_unknown | Retain original evidence/reference; quarantine unresolved connection and charges. Do not relabel this commit_unknown when COMMIT was never submitted. |
+| COMMIT was submitted and its original settlement is unknown | commit_unknown | Preserve original attempt/cycle custody. Neither target equality nor missing receipt proves settlement. |
+| COMMIT is confirmed, but complete committed readiness/preservation observation is unavailable or drifted | committed_unverified | Preserve commitObservation and the existing reason/reference; withhold the complete commit projection. Later rollback/cleanup failure cannot erase confirmed commit. |
+| Original COMMIT and complete independently collected installation/inventory/preservation correspondence are confirmed | migrated | Publish the full LayoutMigrationCommit with its exact receipt and original commit observation. Prepared receipt visibility before commit is insufficient. |
+| Read-only reconciliation proves the same original committed attempt and complete current verification | already_applied | Return its original commit plus currentVerification; execute no recipe or publication effect. |
+| Reconciliation cannot obtain an authorized complete observation | observation_unavailable | Return only the allowed opaque reason; retain the undisclosed original attempt/evidence in trusted recovery custody. No originalAttempt or commit fields leak through this branch. |
+
+Unknown cleanup before confirmed commit uses recovery_required/cleanup_unknown
+when the admitted original settlement protocol selects that branch; retain its
+failedStage. Unknown cleanup after confirmed commit keeps the confirmed commit
+fact and uses committed_unverified/custody when complete publication cannot be
+qualified. Do not prioritize a later cleanup exception over an earlier confirmed
+commit. An admitted full commit may be returned only if its complete evidence and
+publication obligations remain satisfied; otherwise retain recovery custody.
+
+Status and verify cannot choose already_applied or rolled_back: their binding
+scope is current installation only. Reconcile requires original attempt
+correspondence even if a different attempt installed the same target. A confirmed
+rollback result still requires complete original termination evidence when the
+receipt lookup is empty. Conflicting authenticated observations refuse disclosure
+under integrity and preserve both originals for recovery; no latest-result wins.
+
+Qualification must inject each boundary into the complete native route: before
+submission, after terminated preflight, after a real first recipe effect, before
+COMMIT, after COMMIT submission, after confirmed commit and during independent
+verification/cleanup. For each case, compare the exact variant and permitted
+fields, original recovery reference, recipe-call count, retained charges and
+independent source/target/archive/marker facts. Restart a separate process for
+the same original recovery reference; test both authorized resolution and opaque
+observation_unavailable without a recipe replay. These schedules remain not_run;
+component planner/registry tests do not qualify settlement classification.
