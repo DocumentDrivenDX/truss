@@ -166,6 +166,22 @@ The environments were reused/prepared earlier; these are not new clean-resolutio
 claims. Corrected CLI signal checks remain outstanding. No default dependency,
 complete Truss installer or R4/R5 readiness is published by this lifecycle change.
 
+The [corrected CLI signal receipt](evidence/design-audit/python-corrected-runtime-cli-signals.json)
+now verifies actual installed command startup, SIGTERM and SIGINT shutdown,
+absent postmaster markers and retained-directory restart on16.15. Each signal
+targets only the probe's original child PID. Reproduce with
+`scripts/check-python-installed-cli-signals.py --corrected-pgserver` in the
+installed candidate environment; its separate output preserves historical16.2
+signal evidence. This closes the graceful corrected CLI component check, not
+process-crash/forced-kill recovery or complete installation.
+
+Read-only coordination observed the security workstream actively addressing
+captured-versus-current native physical-profile correspondence for installer
+admission. Keep that exact source/interface work with its existing owner; do not
+copy its in-progress implementation or infer complete readiness. Truss's original
+operation issuer/native-admission integration remains the next owned engineering
+task after this corrected-runtime component work.
+
 ## Ownership and profile selection
 
 Truss owns the Python package in this repository, installation bundles, migration

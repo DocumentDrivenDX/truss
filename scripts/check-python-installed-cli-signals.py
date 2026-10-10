@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Owned installed CLI signal checks; preserve data on uncertain cleanup."""
 import hashlib
+import importlib.metadata
 import json
 from pathlib import Path
 import selectors
@@ -11,6 +12,13 @@ import sys
 import tempfile
 import truss.cli
 root = Path(__file__).resolve().parents[1]
+if sys.argv[1:] not in ([], ['--corrected-pgserver']):
+ raise SystemExit('usage: check-python-installed-cli-signals.py [--corrected-pgserver]')
+corrected = bool(sys.argv[1:])
+expected_package = '0.1.4+truss.pg16.15' if corrected else '0.1.4'
+expected_server = '16.15' if corrected else '16.2'
+if importlib.metadata.version('pgserver') != expected_package:
+ raise RuntimeError('Selected original runtime package mismatch')
 loaded = Path(truss.cli.__file__).resolve()
 if not loaded.is_relative_to(Path(sys.prefix).resolve()) or loaded.is_relative_to(root):
  raise RuntimeError('Installed CLI outside checkout required')
@@ -28,7 +36,7 @@ for signum in [signal.SIGTERM,signal.SIGINT]:
    if not selector.select(timeout=60): raise RuntimeError('CLI readiness unavailable; retain '+str(parent))
    original = process.stdout.readline()
   observed = json.loads(original)
-  if observed['serverVersion'] != '16.2' or observed['trussInstallation'] != 'not_checked':
+  if observed['serverVersion'] != expected_server or observed['runtimeVersion'] != expected_package or observed['trussInstallation'] != 'not_checked':
    raise RuntimeError('Unexpected local runtime profile')
   if not (directory/'postmaster.pid').exists(): raise RuntimeError('Native postmaster marker missing before signal')
   process.send_signal(signum)
@@ -41,11 +49,13 @@ for signum in [signal.SIGTERM,signal.SIGINT]:
   # This is only our recorded child command; never terminate other processes.
   if process.poll() is None: process.terminate()
   raise
-receipt = {'scope':'Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on macOS arm64 PostgreSQL16.2; no crash/installer qualification',
+receipt = {'scope':'Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on '+('macOS27 arm64 PostgreSQL16.15' if corrected else 'macOS arm64 PostgreSQL16.2')+'; no crash/installer qualification',
+ 'correctedPgserverCandidate':corrected,
  'loadedCli':str(loaded),'cliSha256':hashlib.sha256(loaded.read_bytes()).hexdigest(),
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'runs':runs,
  'originalCustody':'Signals sent only to the subprocess PIDs started by this probe',
  'completeEngineQualified':False,'processCrashQualified':False}
-(root/'docs/helix/04-build/evidence/design-audit/python-installed-cli-signals.json').write_text(json.dumps(receipt,indent=2)+'\n')
+filename = 'python-corrected-runtime-cli-signals.json' if corrected else 'python-installed-cli-signals.json'
+(root/'docs/helix/04-build/evidence/design-audit'/filename).write_text(json.dumps(receipt,indent=2)+'\n')
 shutil.rmtree(parent)
 print(json.dumps({'signals':[r['signal'] for r in runs],'completeEngineQualified':False}))
