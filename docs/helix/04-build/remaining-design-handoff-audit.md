@@ -1824,3 +1824,10 @@ preflight, not complete resource accounting or filesystem drift/unavailable
 classification. Missing initializers/archives still need the independent complete
 observer and protected observation rights/cut. Prior112 installed wheel evidence
 remains pinned to its earlier exact source bytes.
+
+The [execution priority](design-decision-queue.md#execution-priority--2026-10-10)
+now orders existing PA01–PA05, PKG-02/08 and M1–M5 by their actual dependencies.
+Passed private components remain integration inputs; the next substantive work
+is protected native capture/installed correspondence and complete semantic bodies.
+The unselected supported migration pair cannot be replaced with the historical
+review-model comparison or an unchanged-DDL reinstall. All original scope remains.

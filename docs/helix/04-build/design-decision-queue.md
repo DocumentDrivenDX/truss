@@ -15,6 +15,31 @@ ddx:
 
 # Remaining semantic decision queue
 
+## Execution priority — 2026-10-10
+
+The current [frontier](remaining-design-handoff-audit.md#current-execution-frontier--2026-10-10)
+separates verified private components from release gates. The source suite
+passes114; the independently pinned installed wheel passes112 and predates the
+resource registration preflight. Generation/typed image/touch/cohort components
+exist, but do not establish a protected callable engine or accepted installation.
+Prioritize the following existing work; do not reopen accepted product choices.
+
+| Priority | Existing packet and concrete output | Dependency and exit |
+| --- | --- | --- |
+| 1 | PA01/PA02: actual four-family original caller/capture/writer routes and installed identity/ACL/dependency correspondence | Truss can implement native inventory/denial controls now. Protected original capture/context binding consumes the security owner's admitted subject/cut protocol; nested DEFINER refusal and ordinary registry denial stay intact. Source call labels alone do not close this item. |
+| 2 | PA03/PA04: exact owner-issued authority/artifact obligations and one-use submission per family | Await the closed owner interface, preserving independently complete kind/occurrence/site/case requirements. Bind current subject/authority and original physical connection; no Truss policy walker or capability fragment union. |
+| 3 | PA05: complete row/edge/feed observer and validator bodies, contributor/guard/capacity/finalization/journal/settlement composition | All seven routines still lack body/native binding. Existing private generation trigger and host correspondence are inputs, not replacements. Execute full ordinary-role native cases before APIs. |
+| 4 | PKG-02/08: complete independent installation observer and release bundle | Freeze exact complete release membership after actual native bodies exist. Qualify read-only rights, owner cut/final freshness and every drift/unavailable control; finite helper/trigger probes supply only their named evidence. |
+| 5 | M1–M5: first populated migration and packaged deployment flow | Select an actual supported source and required physical target change; no currently admitted pair exists. Historical0.15/0.16 comparison is an input, not a supported route. Bind recipes/preservation/recovery to the same complete profiles before transactional apply. |
+
+This is engineering scheduling under the existing plans, not another owner vote
+or a new release scope. Closed shared semantics are dependencies; uncommitted
+owner prototypes cannot be adopted merely to unblock a local fixture. Independent
+inventory implementation and complete native body design can progress while
+those dependencies remain open. Repeat a passed component experiment only for a
+changed source, failure or new integration obligation. Carry new work into the
+complete protected path rather than accumulating isolated source probes.
+
 ## Owner decisions — 2026-10-09 (supersedes pending language below)
 
 Truss ships and maintains a tested embeddable Python implementation in this
