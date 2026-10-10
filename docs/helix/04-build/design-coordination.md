@@ -1251,3 +1251,28 @@ must not implement a blanket catalog-revoke policy, duplicate requirement issuer
 or expose private inventory diagnostics as a shortcut to support. Current public
 protected-engine readiness remains closed; generation/inventory probes confer
 no B10 privacy proof.
+
+### Published Paths530 compiler distribution — 2026-10-10
+
+Fresh origin fetch finds Weft mainc8d8258, publishing indexed realization
+weft-530ae35-paths-aarch64-apple-darwin-candidate. The [distribution review](evidence/design-audit/weft-paths530-published-distribution-review.json)
+independently verifies exact indexed manifest, executable and assembly-custody
+length/digest against the committed owner tree. Its owner conformance review
+records512 responses (29 compiled/483 blocked),30 Paths cases,19 controls and
+47 declared capabilities with exact original coverage correspondence. These are
+owner-reported compiler/package checks; Truss has not executed the compiler or
+replayed that corpus, and the review explicitly infers no native backend support.
+
+This updates the earlier mock-only assembly observation: a concrete independently
+reviewed owner distribution now exists. Its Ashlar/Databricks Paths profile is
+not Truss PostgreSQL support. Truss's f05f2df compile/SQL0.2 adoption remains
+unchanged; ordinary Python compile_json is not silently replaced with a Paths
+CLI. Consume a matching published Truss realization only after exact binding/
+ABI/schema/layout/original artifact and native/current-authority qualification.
+The distribution provides a shared package-custody pattern, not permission to
+copy capability claims into another backend or adopt dirty security APIs.
+
+UMF origin/main remains322b193, already used by the current schema-browser assets.
+The owner checkout remains16c35e8 with experimental defaults/properties; neither
+checkout is changed. Both fetches preserve local unfinished owner work. No schema
+browser upgrade or reusable DDL generator fork is needed for this checkpoint.

@@ -1899,3 +1899,9 @@ epoch helper boundary, with actor/asserted/configuration distinctions preserved.
 It guides actual installed identity/effective-right/indirect closure work and
 keeps unavailable owner subject/cut/diagnostic semantics separate. This source
 review does not qualify a complete dependency collector or production grants.
+
+The [published Weft distribution review](evidence/design-audit/weft-paths530-published-distribution-review.json)
+verifies exact indexed artifact bytes at freshly fetchedc8d8258. A real Paths530
+owner distribution supersedes the earlier mock-only packaging observation, but
+its Databricks profile does not qualify Truss's PostgreSQL adoption or security
+bridge. UMF browser origin322b193 remains synchronized; no dependency pin changes.
