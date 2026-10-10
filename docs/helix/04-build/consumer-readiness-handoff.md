@@ -105,3 +105,37 @@ evidence, not a rewritten earlier clean-install receipt.
 This updates isolated current-wheel consumption and scoped local lifecycle tests,
 not a released package, complete Truss schema installation or mutation/read/feed
 API. The availability table and P1–P4 obligations above remain in force.
+
+## Consumer dependency-resolution release gate
+
+The private candidate installs explicitly select wheel paths and use `--no-deps`.
+Their installed inventory and passing tests qualify that selected composition;
+they do not test the normal resolver path declared by the distributed package.
+R10/PKG-01 release preparation must close both observations separately. Do not
+publish the current local extra as the corrected default while its exact
+pgserver0.1.4 requirement still selects the historical16.2 payload.
+
+Before publication, run the intended documented consumer install command against
+the actual staged release artifacts with dependency resolution enabled in a
+new isolated environment outside the checkout. Retain the original command,
+package-index/artifact source profile, resolver report, wheel bytes/digests,
+platform/interpreter tags and complete installed distribution inventory. Record
+actual selected PostgreSQL payload/version separately from Python distribution
+version. Run `pip check`, the installed CLI lifecycle and required complete
+consumer/native acceptance on that resolved tuple. `pip check` alone proves
+metadata dependency consistency, not the server payload's security behavior.
+
+| Required resolver schedule | Release assertion |
+| --- | --- |
+| Documented base package install | Declared base dependencies and supported public import behavior match the release profile; no implicit local server startup or undeclared development-checkout dependency. |
+| Documented local-runtime extra install | The resolver obtains the admitted corrected payload and lifecycle dependencies without manually overriding declared requirements or disabling resolution. Unsupported wheel/platform combinations refuse rather than silently selecting a different PostgreSQL build. |
+| Add the documented extra after a previously installed candidate | Re-resolution cannot downgrade to the known-defective payload while reporting the admitted runtime profile. Inspect actual installed files and server behavior after the transition. |
+| Upgrade from each advertised prior release | The resolved tuple meets its declared runtime/layout/corpus compatibility; installing a package does not execute a database migration or erase original recovery custody. |
+| Missing admitted artifact or incompatible version constraint | Installation or capability admission fails explicitly; no replacement download/source build is advertised as equivalent without its own exact qualification. |
+
+These schedules are `not_run` release requirements. A corrected published
+pgserver dependency, an explicitly shipped Truss-owned runtime distribution or
+another owner-approved release arrangement must provide the actual resolvable
+artifact; this gate does not select that packaging decision or silently rewrite
+upstream package ownership. Preserve exact interim commit/wheel attribution and
+platform restrictions until the normal consumer command is qualified.
