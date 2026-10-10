@@ -2313,3 +2313,33 @@ native dependency closure. Then compose the semantic bodies and qualify actual
 ordinary-role operations. Administrative fixture grants and the synthetic read-only
 wrapper establish only the tested native boundary; they do not qualify installation,
 current authorization, or any of the seven required semantic routines.
+
+## Joint private callable inventory — 2026-10-10
+
+The [native callable inventory receipt](evidence/design-audit/private-callable-inventory-native.json)
+installs the original eight UMF-owned export groups together with the original
+source-epoch0.16/reservation inputs on PostgreSQL16.15. It retains actual native
+routine/namespace/owner OIDs, full `pg_get_functiondef` bytes and digests, ACLs and
+all original source/export/capture pins for the seventeen helpers. Seventy-three
+observations pass: exact newly added routine membership, every selected signature
+and result type, INVOKER/plpgsql/VOLATILE/UNSAFE/called-on-null/non-leakproof/search
+path attributes, PUBLIC/ordinary denial, administrator execution, and seventeen
+actual ordinary-role direct-call refusals with SQLSTATE42501.
+
+An explicit extra EXECUTE grant through an inherited role changes effective access
+even with no grant to the login itself; revocation restores denial. A PUBLIC grant
+has the same observable effect. Installer reconciliation therefore must compare
+effective rights through role membership alongside direct ACL entries. Names and
+an apparently private direct ACL are insufficient. Reproduce with
+`check_private_callable_inventory_native.py <fresh-receipt-basename.json>` using
+the corrected pgserver0.1.4+truss.pg16.15 and pg8000 1.31.5 environments.
+
+This establishes a jointly installed component inventory for PA01/PA-N04, not a
+full protected callable closure. The native owner is the administrative fixture's
+postgres role, and OIDs belong only to that isolated database. Do not copy them
+into the original source handoff's unresolved production registration fields.
+Complete indirect dependencies, effective data rights, trigger/bypass paths,
+protected admission/owner authority and the seven semantic bodies remain required.
+The receipt does not qualify ready publication, a public installer, migration or
+any consumer operation, and promotes no acceptance criteria. Continue with the
+protected admission packet rather than treating this component as a release gate.

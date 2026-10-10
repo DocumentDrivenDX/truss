@@ -1553,3 +1553,18 @@ full semantic/journal/feed completion. PA01–PA04 remain release-incomplete unt
 actual capture/writer and owner authority contracts exist; the authored matrix is
 an implementation handoff, not twelve passed checks. Work on this protected chain
 now takes priority over additional isolated capacity-helper demonstrations.
+
+### Joint native helper inventory checkpoint
+
+The [joint native callable receipt](evidence/design-audit/private-callable-inventory-native.json)
+passes 73 observations across all 17 original capacity helpers on PostgreSQL16.15.
+It supplies actual fixture identities/full definitions and verifies selected
+attributes, exact new-routine membership, effective execute denial and actual
+ordinary direct-call refusal. Native membership and PUBLIC grant controls detect
+access that a direct login ACL inspection would miss. Installation reconciliation
+must retain that effective-rights check.
+
+PA01/PA-N04 gain this explicitly scoped component evidence. Their full protected
+call-map/private/data/dependency closure exits are still incomplete; fixture OIDs
+and postgres owner are not adopted registrations. All 49 required binding fields
+for the seven missing semantic bodies remain unresolved. No criterion is promoted.
