@@ -16,7 +16,7 @@ engineering requirements. TD-020 now selects full-byte bucket lookup for the
 Python preview without baseline fallback. Actual codec/account/privilege and
 publication admission remains open.
 
-The installed Python61-test/16-module checkpoint and four native admission-family
+The installed Python70-test/17-module checkpoint and four native admission-family
 complete-cell/lifetime schedules provide scoped component evidence. They do not
 produce the original driver adoption/framing/account port, current native security
 handoff, seven guard/validator bodies or complete release resources. The executable
@@ -24,6 +24,19 @@ standalone Identity oracle and actual frozen Python compiler feature graph close
 their named source-byte observations only; native writer/reader encoding remains
 unqualified. These observations must not create another round of identical source
 probes in place of completing installation.
+
+The [current installed Python suite](evidence/design-audit/python-accounted-core-installed-suite.json)
+matches all17 source/wheel/installed module payloads and passes70 component tests.
+The [accounted driver seam](evidence/design-audit/pg8000-core-accounted-control-native.json)
+preserves ten original fixed control frames on16.15 with shared frame/slice and
+conservative core-copy charges. This advances receive/account composition, but
+does not independently observe complete allocations or qualify original actor,
+adoption, control, containment or publication. The complete installation observer
+now has an explicit [coherent-cut and inventory schedule](../03-test/migration-inspection-contract-walkthrough.proposal.md#independent-complete-installation-observer-schedule).
+Its native implementation, independent release membership and required rights
+remain outputs before PKG-02/08. Security-owner requirements derivation is reviewed
+as uncommitted source only; no compiler/backend pin changes or parallel policy
+walker are authorized by that observation.
 
 Continue the existing P0/P1 composition: original bounded driver/account integration,
 minimum exact current security-owner packet, complete native callable/trigger/grant

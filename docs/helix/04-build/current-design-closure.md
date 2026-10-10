@@ -17,6 +17,34 @@ ddx:
 
 # Current design closure
 
+## Updated composition checkpoint — 2026-10-10
+
+The [installed Python wheel](evidence/design-audit/python-accounted-core-installed-suite.json)
+now passes70 tests with17 exact source/wheel/installed module payloads. This
+supersedes the61/16 package checkpoint below. The private receive path now shares
+the original byte account across header/frame/slice payloads and conservative
+pinned-core copy charges before ingress/driver return. The [native seam](evidence/design-audit/pg8000-core-accounted-control-native.json)
+matches ten independently expected control frames on16.15. Complete actual
+allocation/work/containment, original adoption/actor/control authority and ready
+publication remain unqualified; none of the seven composition boundaries closes.
+The Python source boundary gate now passes64 imports; broader TypeScript/native
+boundary gates remain open.
+
+The installation tests now specify a separately registered [complete inventory
+observer](../03-test/migration-inspection-contract-walkthrough.proposal.md#independent-complete-installation-observer-schedule)
+with original coherent-cut/freshness custody, bidirectional membership,
+routine/trigger/effective-right/initializer coverage and unavailable-observation
+rules. Its concrete release inventory, implementation and rights remain P0/P1
+outputs. Installation cannot publish ready from a marker or known-selector count.
+
+The [Weft requirements review](evidence/design-audit/weft-security-requirements-working-review.json)
+records uncommitted owner-derived scan/action/operator/output requirements and
+continued physical/result/dependency refusal. It supplies no stable backend ABI
+or current native security handoff. Truss retains its frozen f05f2df compiler and
+lets the owner finish its requirements/correspondence work. The broader45-story/
+167-criterion, migration, consumer, feed, interchange and managed-target scope
+remains required.
+
 ## Owner decisions — 2026-10-09 (supersedes pending language below)
 
 Truss ships and maintains a tested embeddable Python implementation in this

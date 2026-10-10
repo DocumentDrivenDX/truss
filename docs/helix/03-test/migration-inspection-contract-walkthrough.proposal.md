@@ -161,3 +161,51 @@ no complete-release case verdict. The earlier timeout is retained in the Python
 handoff; failure output is now preserved for future diagnostics. New package
 qualification must rerun the selected cases with the actual original admitted
 release inputs and platform, rather than copying component verdicts into PKG rows.
+
+## Independent complete-installation observer schedule
+
+PKG-02/08 require a separately registered observer implementation and expected
+inventory, not the installer's verify result or a second invocation of its
+collector as the sole oracle. Register exact observer source/build, finite
+input/result/work/time limits, complete original release bytes and observation
+rights before effects. The observer remains read-only and has no install, repair,
+finalization or fixture-mutation authority. Its connection/account/cycles and
+diagnostics remain separate from the installer's submitted attempt and recovery.
+
+Use the security-owner's admitted observation/exclusion procedure to retain one
+coherent cut across the complete inventory. Do not invent an advisory lock or
+assume a transaction isolation name alone fences catalog, role, configuration
+and publication changes. Record the original cut and its final freshness check;
+loss of required custody makes the observation unavailable rather than a match
+assembled from earlier fragments. Observe only after original settlement permits
+the selected committed-state comparison; an installer-private provisional marker
+is not committed readiness evidence.
+
+| Inventory surface | Required independent correspondence |
+| --- | --- |
+| Managed objects and dependency closure | Exact qualified object identity, kind, definitions, columns/types/collations/defaults, constraints, indexes, sequences and complete declared/observed dependencies. Check both expected-to-actual and actual-to-expected membership within the admitted managed scope, with explicitly admitted external dependencies. No namespace prefix or object count supplies closure. |
+| Native routines and callable paths | Exact signatures, return kinds, languages, bodies, owners, security attributes, settings and complete invocation/dependency paths. Check all seven mandatory observer/validator bodies and the complete public/private/admin closure; the16-selector subset is not the expected release inventory. Dynamic references require their admitted declared meaning and independent behavioral coverage rather than assuming pg_depend enumerates them. |
+| Trigger coverage | Exact parent/partition relation, event, timing, level, deferral, enabled state, target routine and firing scope. Include inherited/partition routes and ordinary writer paths. Compare actual firing/refusal observations separately from catalog declarations; a trigger count does not prove coverage. |
+| Roles and effective rights | Exact owners, grants, membership paths, effective callable/column/sequence rights and selected policy/current-actor admission. Inspect under the independently admitted observer identity; successful superuser collection does not prove ordinary R4/R5 enforcement. Preserve actual allow/deny schedules as separate evidence. |
+| Initialization, archives and readiness | Complete required singleton/configuration/profile/epoch/archive bytes and original incarnation/bundle/inventory correspondence, plus every selected initialization obligation. Compare committed readiness with the complete inventory and current security publication state. Marker/version equality alone cannot match. |
+| Preserved application and recovery state | For populated routes include the full independently expected graph, exact values/presence/keys, history, receipts, feed positions and recovery custody. For fresh-install rollback compare the complete original absence inventory. No empty application table or absent marker settles an unknown attempt. |
+
+Every required observation contributes its exact original result or an explicit
+unavailable disposition. Do not publish a partial difference list as complete
+drift when a required surface is inaccessible, truncated or over budget. Complete
+correspondence can produce matches; complete observed differences can produce
+drift. Neither verdict commits, repairs, retries or settles an earlier unknown
+installation/migration attempt. Reconciliation retains its original separate
+protocol even when this observer sees the target version.
+
+Required controls add one unexpected managed object, alter a routine body without
+changing its signature/version, disable a required trigger, alter an effective
+grant, remove an initializer/archive, and revoke one required observation right.
+The first five must produce complete drift under the admitted cut; the last must
+produce observation_unavailable without partial native/correspondence payload.
+Also change configuration/authority during collection and require the selected
+freshness refusal. Restore through the separate harness, confirm settlement, then
+obtain a fresh complete match without reusing the earlier result. These observer
+controls and all PKG-02/08 installed schedules remain not_run. Exact release
+membership, observer implementation and security cut/rights are required
+integration outputs, not invented test identities.
