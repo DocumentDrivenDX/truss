@@ -1762,3 +1762,50 @@ confirms latest observed origin/main322b193 and unchanged owner browser assets.
 This updates current schema-browser assets only; Hugo rebuild/deployment and
 native installation were not performed. The reservation producer/guard/resource/
 physical-ID/native closure remains the next execution work.
+
+
+## Native capacity accounting implementation — 2026-10-10
+
+Three [private actual native accounting functions](../../../packages/postgresql/native/capacity-reservation/README.md)
+now implement reservation, transfer and unused-only release on the original
+extended singleton. Reserve derives the already assigned actual xid, compares
+full original installation/resource bytes, enters head then ledger exclusion,
+and refuses occupied or incompatible surviving-operation scope. Transfer selects
+exactly one unfinished actual-transaction operation with original context/ordinal
+correspondence; it spends remaining row/positive-growth capacity and never refunds
+remaining budget on shrink. Release requires the matched finalized operation and
+no unfinished transaction operation, clears only remaining capacity and preserves
+retained totals. PUBLIC EXECUTE is revoked for all three functions.
+
+[The latest native receipt](evidence/design-audit/capacity-accounting-issued-gap-native.json)
+passes34 observations on PostgreSQL16.15. It executes
+[UMF's original owner export](evidence/design-audit/capacity-accounting-source.owner-export.sql),
+not a locally rewritten body. Native controls include reservation before registry
+insertion, exact admission context, overrun/negative/foreign input refusals with
+complete ledger rollback, unused-only release, a later-unfinished-operation
+release refusal, finalized A surviving B rollback, prior caller data, full host
+rollback and actual ordinary-role42501 denial. The administrative schedule burns
+fault ordinal1 before submitting B at2; actual original host issuer composition
+remains separate. Earlier24/31/34 receipts retain their archived producer bytes;
+the earlier34 schedule reused a fault ordinal and is superseded for issuance
+ordering, not silently treated as nonreuse proof.
+
+[UMF source capture](evidence/design-audit/capacity-accounting-source.json)
+preserves archive/reload/export of six original CREATE/REVOKE statements. Its
+partial declaration extractor reports zero declarations/six unhandled statements,
+complete=false. It does not interpret PL/pgSQL or register physical routine IDs.
+This adds no layout version, public API, accepted compiler/security profile or
+ready installer inventory.
+
+The fixture uses six synthetic artifact bytes, supplied carrier-only deltas and
+an explicit administrative application_finalized row. Those facts qualify native
+helper arithmetic/preconditions, not an accepted plan, protected finalizer,
+complete retained-byte/overhead parity, ordinary graph authority or CR-01–07
+refinement. Before protected use, the original event/finalizer must derive exact
+complete OLD/NEW effects/deltas, authenticate issuer/account/security/context,
+validate per-row/aggregate/native work and compare every retained operation/touch
+counter. Register complete helper identities, attributes, owners/private ACL and
+call dependencies; compose all seven mandatory bodies/guards and replay actual
+ordinary-role/commit/uncertainty schedules. Unknown containment still quarantines
+original work, never resets or refunds it. Native full reservation qualification
+and installer readiness remain false; no acceptance criterion is promoted.
