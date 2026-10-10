@@ -154,3 +154,36 @@ bounded execution profile; no stock-driver API or successful local fixture can
 weaken those requirements. Other Python platforms and Aurora/Lakebase must retain
 separate target admission. Do not change published package dependencies or claim
 usable installation merely from this engineering target selection.
+
+
+### Frozen Python receive allocation placements
+
+The [source allocation review](../../04-build/evidence/design-audit/pg8000-receive-allocation-source-review.json)
+verifies pg8000 core SHA256cac1e505 against the original1.31.5 experiment pin.
+The existing FrameFile/Receiver seam is a candidate, not a bounded adapter:
+its wire counters neither issue original allocation permits nor charge all copies.
+
+| Source placement | Required original account action before allocation |
+| --- | --- |
+| Receiver header bytearray(5), memoryviews and read attempts | Reserve header backing and selected view/metadata/read work; each repeated recv_into remains cumulatively charged. |
+| Admitted whole frame bytearray(F) and bytes(source) | After original header/length admission, reserve both live frame backing and immutable copy before constructing either; retain original lifetime association. |
+| FrameFile header/body slicing | Reserve the new immutable slice backing before slicing. Clearing pending does not prove the original frame is dead or refund cumulative allocation. |
+| pg8000 _read bytearray(read-result), extend and bytes(buff) | Reserve bytearray capacity/growth and final immutable copy before the core allocations. A complete-frame shim avoids partial read extension only under its qualified original consumption invariant. |
+| Message handler, descriptor/cell parser and public conversion | Admit selected complete message/cell grammar and conservative object/string/list/decoder overlap before dispatch; raw frame length does not bound their object count or retained capacity. |
+
+For body length B=F-5, the existing seam can create whole-frame mutable and
+immutable storage plus body slice, core bytearray and final body bytes. Charge
+each actual allocation and performed copy even when an earlier reference may
+already have died; reconcile live occupancy from original lifetime observations.
+This enumeration is not an exact heap formula: allocator overhead/capacity,
+header slices, views, metadata, parser products and outbound/control/recovery
+buffers require their selected profiles too. Never promote 5+2F+3B to a complete
+heap guarantee or assume garbage collection releases occupancy.
+
+Integrate reservation/drawdown at these actual producer placements and retain
+original account tokens across callbacks and failure. Refuse before allocation
+when forward capacity is unavailable; after submission preserve containment
+reserves and original possible effects. Qualify exact-at/one-over, fragmented
+reads, parser exception, retained-view lifetime and cancellation using independent
+allocation/dispatch observations. Source inspection and the private scalar byte
+ledger do not execute or qualify these integration schedules.

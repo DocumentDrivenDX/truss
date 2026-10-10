@@ -1,0 +1,27 @@
+{
+  "scope": "Frozen receive allocation source review only; no instrumentation or heap/native qualification",
+  "driver": "pg8000 1.31.5",
+  "sources": [
+    {
+      "path": "/private/tmp/truss-pg8000-runtime-env/lib/python3.11/site-packages/pg8000/core.py",
+      "sha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/python_pg_receive_candidate.py",
+      "sha256": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/design-audit/pg8000_instance_candidate.py",
+      "sha256": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de"
+    }
+  ],
+  "placements": [
+    "Receiver header bytearray before recv_into",
+    "Receiver whole frame bytearray then immutable bytes",
+    "FrameFile header and body bytes slices",
+    "core._read bytearray over supplied read result then final bytes copy",
+    "core message handler/parser/public conversion allocations remain separate"
+  ],
+  "completeHeapBound": false,
+  "nativeQualified": false
+}
