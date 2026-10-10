@@ -391,3 +391,35 @@ Run the actual packed public helper in Chromium and selected server runtimes wit
 
 
 The [numeric view oracle](numeric-number-view-expected.proposal.json) now authors sixteen original wrapper/outcome cases, including representable-but-unsafe integer refusal, decimal binary loss, overflow/underflow and signed-zero/source preservation. Expected numberMeaning strings label exact intended results; they are not formatted-number equality witnesses. Native/Field admission is outside this pure helper. Resource/profile prerequisite failures remain explicit rather than passing a semantic case; remaining subnormal/finite-boundary/resource/browser scenarios are listed and still required. The oracle is not_run and must not be regenerated from the converter's output.
+
+
+## Formal-methods adoption: Python original ordinal/admission slice
+
+The owning [Python technical design](../02-design/python-integration.proposal.md#formal-specification--original-ordinal-and-admission-custody)
+defines PY-ORD-001/002, PY-ADM-001–005 and the unqualified PY-NATIVE-001 obligation.
+Current assurance is author-reviewed precise specification plus component tests;
+there is no executable analyzer/proof claim. Run existing component evidence with:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/src python3.11 -W error -m unittest discover -s packages/python/tests -p 'test_operation_*.py' -v
+```
+
+Expected: two ordinal and six custody test methods; shared six ordinal scenarios,
+original successful dispatch, consumed/copied/foreign/refund refusal, failure
+closure, reentrant/verification-time-close refusal and deferred-port refusal.
+The [source-bound checkpoint](../04-build/evidence/design-audit/python-formal-correspondence.json)
+records actual command/version/source hashes and results. Tests are implementation evidence, not machine-checked formal analysis.
+No local method tests the full authenticated/native issuer/account protocol.
+
+Before integrated readiness, the bounded analysis spike must choose the analyzer,
+model/configuration and bounds described by the design. Require reachable success,
+external recovery/unknown controls and targeted broken-mechanism counterexamples;
+replay supported traces. Check model/code correspondence at actual lock, callback,
+transaction and native authority boundaries. Specifically inject close/cancel
+between the Python close gate and native effects: local ticket consumption alone
+must not be reported as fencing those effects. Preserve original outcome/recovery
+when native dispatch has happened but return/cleanup fails. PY-NATIVE-001 remains
+open until actual producer/arbitration/security/native integration evidence exists.
+Unrelated rendering/numeric convenience slices record non-applicability rather
+than run empty models. Unchecked bounds, timeout/error and stale mapped source
+invalidate the corresponding assurance claim without rewriting historical receipts.

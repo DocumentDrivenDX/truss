@@ -1,0 +1,54 @@
+{
+  "observedAt": "2026-10-10T01:29:01.156317+00:00",
+  "scope": "Python local ordinal/admission component correspondence",
+  "assurance": "author-reviewed precise specification plus component tests; no analyzer/proof",
+  "pythonVersion": "3.11.17",
+  "command": [
+    "/Users/erik/.local/bin/python3.11",
+    "-W",
+    "error",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "packages/python/tests",
+    "-p",
+    "test_operation_*.py",
+    "-v"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "packages/python/src"
+  },
+  "exitStatus": 0,
+  "testMethods": 8,
+  "output": "test_async_or_nonvoid_verification_cannot_dispatch (test_operation_admission.AdmissionCustodyTests.test_async_or_nonvoid_verification_cannot_dispatch) ... ok\ntest_close_and_reentrant_verification_prevent_dispatch (test_operation_admission.AdmissionCustodyTests.test_close_and_reentrant_verification_prevent_dispatch) ... ok\ntest_deferred_admission_never_escapes_custody (test_operation_admission.AdmissionCustodyTests.test_deferred_admission_never_escapes_custody) ... ok\ntest_failure_never_restores_permission (test_operation_admission.AdmissionCustodyTests.test_failure_never_restores_permission) ... ok\ntest_foreign_custody_and_invalid_capacity_refuse (test_operation_admission.AdmissionCustodyTests.test_foreign_custody_and_invalid_capacity_refuse) ... ok\ntest_one_use_and_original_input_correspondence (test_operation_admission.AdmissionCustodyTests.test_one_use_and_original_input_correspondence) ... ok\ntest_native_maximum_and_exact_argument_types (test_operation_ordinal.OperationOrdinalTests.test_native_maximum_and_exact_argument_types) ... ok\ntest_shared_custody_corpus (test_operation_ordinal.OperationOrdinalTests.test_shared_custody_corpus) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.001s\n\nOK\n",
+  "sourceSha256": {
+    "packages/python/src/truss/_operation_ordinal.py": "9be8b93fbdaa7595e8330b9e8edd3d048fbff25b1b670c1587647ef1908ddcd3",
+    "packages/python/src/truss/_operation_admission.py": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30",
+    "packages/python/tests/test_operation_ordinal.py": "98b6d693e61d81f59e731e9ee1b35ac7610d29d3a178cd5af52cfa3d04a0a1b0",
+    "packages/python/tests/test_operation_admission.py": "50ed2a3ebbd82e02f7e1a055ba66d38db347ec8c27965052d3cecfe68b1f98b7",
+    "tests/fixtures/operation-ordinal-issuer.json": "f1165353472bc4537d94b34e7c032fd34edd34dcd120333f45f2bc71460cb38b",
+    "docs/helix/02-design/python-integration.proposal.md": "78805d18d033161cb66cca044d89dae75ed1904f41efbf44a6d4b431aeab1e5c",
+    "docs/helix/03-test/test-plan.md": "4d8b66beecacdc2af4e58f4603da0efd78630f5a1891a90ba8330005923b1e56",
+    "docs/helix/02-design/contracts/bindings/truss-operation-control-v0.1.proposal.py": "4e018cfa6254513cbb7fe0529a47b4bff4f02d3e2d56798bd3b9944545136a33"
+  },
+  "properties": [
+    "PY-ORD-001",
+    "PY-ORD-002",
+    "PY-ADM-001",
+    "PY-ADM-002",
+    "PY-ADM-003",
+    "PY-ADM-004",
+    "PY-ADM-005"
+  ],
+  "nativeQualified": false,
+  "analysisCompleted": false,
+  "gaps": [
+    "PY-NATIVE-001 remains unmapped",
+    "Close gate and native dispatch are separate boundaries",
+    "Embedding-host/native trust assumption unresolved",
+    "No native original producer/account integration",
+    "No model/analyzer/configuration selected"
+  ]
+}

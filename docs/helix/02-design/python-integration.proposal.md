@@ -2115,3 +2115,124 @@ published owner suite for these logical controls instead of duplicating its
 compiler oracle. Truss still supplies independent Python transport, zero-native-
 submission and actual protected native endpoint/domain/ordered-byte comparisons.
 Uncommitted source progress does not admit a release or resolve the package owner.
+
+
+## Formal Specification — original ordinal and admission custody
+
+### Scope, authority and assurance
+
+This section adopts HELIX0.15.4 formal-methods guidance for a precise specification
+of the existing private Python counter and admission registry. Authority remains
+CONTRACT-007's original issuer/transaction/arbitration obligations and the
+[Python operation-control declaration](contracts/bindings/truss-operation-control-v0.1.proposal.py),
+with CONTRACT-004 governing mutation outcomes. This specification does not create
+an API, supply a native producer or select the still-open embedding-host trust
+boundary. Truss engineering owns the component and correspondence; native authority
+and security integration remain with their existing owners.
+
+Chosen current level: **precise specification with author semantic review**,
+not executable formal analysis or deductive proof. The whole original
+reserve/bind/submit/confirm/admit/native protocol remains an affected slice for
+later bounded analysis and integrated qualification. No analyzer is selected or
+passed here. Pure numeric conveniences, browser rendering and unrelated catalog
+metadata are outside this temporal slice, with no analysis obligation from it.
+
+### State and initial conditions
+
+Ordinal component state is `(owner, maximum, next, closed)`: original owner object,
+exact integer maximum in `[0, 2^63-1]`, `next = 0`, `closed = false`. Owner is
+compared by Python object identity. `next` may become `maximum + 1` to represent
+exhaustion; an issued ordinal is an exact base-ten string, never a JS number.
+
+Admission state is `(producer, capacity, entries, originals, closed, busy, phase)`:
+original producer object, exact integer capacity at least1, empty retained maps,
+`closed = busy = false`, phase idle. Each entry retains original ticket identity,
+original confirmation identity and a monotonic consumed bit. Originals remain
+strongly referenced, so their Python IDs cannot be reused while this registry
+exists. Tickets have identity equality, not field/content equality. Native/context
+truth is not represented by those object identities.
+
+Abstract phases for a successful call are idle -> consumed/verifying -> verified
+-> gate-checked -> native-callback -> returning -> idle. Failure after consumption
+transitions to closed/idle after cleanup. Rejected calls before consumption do not
+enter a callback. These labels describe code control flow, not new stored/public
+fields. The native effect may already have occurred when its callback raises or
+returns a deferred object; no rollback or committed-outcome inference follows.
+
+### Transitions and linearization boundaries
+
+| Transition | Guard / original actor | Atomic effect and rejected case |
+| --- | --- | --- |
+| Issue | Under ordinal lock; exact owner, open, `next <= maximum` | Return current ordinal and increment next in the same lock. Foreign/closed/exhausted returns refusal without increment. No SQL occurs in this component. |
+| Close issuer | Under ordinal lock; exact owner | Set closed permanently. Foreign owner raises and leaves state unchanged. |
+| Register confirmation | Under registry lock; exact producer, non-null original, open, not busy, new original, entries below capacity | Retain original and create one original ticket. Duplicate/foreign/busy/closed/exhausted refuses without allocation. This event assumes the external admitted producer already confirmed; it does not establish that confirmation. |
+| Begin admission | Under registry lock; open, not busy, exact retained unconsumed ticket | Mark consumed and busy before releasing lock or invoking verification. Copied/foreign/consumed/closed/busy refuses before callbacks. |
+| Verify | Outside registry lock; original confirmation and original input | Synchronous callback must return None or raise. Deferred/nonvoid result is refusal. Port failure closes registry; consumed stays true. |
+| Check close gate | Under registry lock after verification | Closed raises before dispatch; otherwise release lock and enter callback path. This is not atomic with the native callback or native effects. |
+| Dispatch | Original synchronous admit callback, outside registry lock | Invoke at most once for this ticket with the original confirmation/input. Returning a generator/awaitable refuses; supported deferred bodies are closed where implemented. No safe native outcome is inferred from that refusal. |
+| Finish | Finally under registry lock | Clear busy; preserve consumed bits, originals, capacity expenditure and closed flag. No retry, reset or refund. |
+| Escaped port failure | Exception/BaseException after consumption | Set closed, preserve original exception and clear busy in finally. External original recovery custody, not this registry, resolves native outcome. |
+| Close registry | Under registry lock; exact producer | Set closed permanently. It cannot cancel an already running callback or prove a pending effect was fenced. Foreign producer refuses. |
+| Host savepoint rollback / failed native admission | External events, not ordinal component transitions | Never change this instance's next/consumed/capacity state. Losing the original instance means unavailable original custody, not permission to construct a replacement at zero. |
+
+### Safety properties and code correspondence
+
+| Property | Authority / precise statement | Existing enforcement and evidence | Residual obligation |
+| --- | --- | --- | --- |
+| PY-ORD-001 | Operation-control issued ordinals remain burnt: successful reservations on one original issuer are strictly increasing, unique and bounded by maximum. | `_operation_ordinal.py:OperationOrdinalIssuer.reserve`; shared six-scenario corpus and native-maximum/type tests in `test_operation_ordinal.py`. Increment occurs under Lock. | Original physical connection/epoch association and all-path counter lifetime are not implemented by this component. Native old MAX-row allocator remains nonconformant. |
+| PY-ORD-002 | Original issuer closure is irreversible; foreign owners cannot reserve/close. | `reserve` / `close`, identity checks and shared corpus. No transition decrements next. | Actual end/cancel/unknown controls must close the original issuer through the admitted producer; an interface cannot prove that wiring. |
+| PY-ADM-001 | Admission permission is consumed before verification or native invocation; no ticket invokes native twice, including after failure. | `_operation_admission.py:AdmissionCustody.admit_once`; one-use, copied/foreign, reentrant and failure tests. | Native producer/control observations and actual native one-operation correspondence remain open. |
+| PY-ADM-002 | Capacity and original-confirmation uniqueness are cumulative; consumption/failure/rollback cannot refund them. | `register_confirmed`, retained maps, no removal transition; duplicate/capacity tests. | Original account reserves selected enclosing/native resource bounds independently; arbitrary construction cannot establish that account. |
+| PY-ADM-003 | Escaped verification/admission failure closes later registry admission without retry. | `except BaseException` / `finally`; failure/deferred/nonvoid tests. | No native rollback, connection termination or recovery observation is supplied. Invalid pre-consumption ticket refusal alone need not close an otherwise valid registry. |
+| PY-ADM-004 | Verification-time close and reentrant work cannot pass the post-verification close gate. | busy guard / close gate; `test_close_and_reentrant_verification_prevent_dispatch`. | Closure after this gate can precede callback entry/effects. The original native port must arbitrate authority/cancellation; a Python lock alone is insufficient. |
+| PY-ADM-005 | Async/generator ports are refused; supported returned deferred bodies cannot be resumed as a later admission. | Constructor inspection and `_sync`; deferred/async tests observe closed generator/coroutine and no body execution. | An ordinary callback can act before returning an unsupported result. This property neither promises no earlier effect nor contains malicious callback/reflection. |
+| PY-NATIVE-001 | CONTRACT-007 requires original issuer/epoch/account/cycle/actor/configuration/native authority before effects. | Declared control/admission ports only; local origin/reset observations cover separate native facts. | **Unmapped end-to-end enforcement**: actual registered producer, native issuer/account, all-path arbitration and trust assumption remain unresolved. No formal or implementation claim is made for this property. |
+
+### Liveness, assumptions and exclusions
+
+Under a live original host, available lock scheduling, callbacks that terminate
+synchronously and a native port that supplies its required original observations,
+a valid ticket can complete or produce a terminal local refusal. No bounded
+completion guarantee follows for an arbitrary callback, dead process or unavailable
+native observation. Weak fairness of lock acquisition is an environmental assumption;
+Python Lock does not establish a service latency SLO. Registry close is a local
+admission boundary, not a cancellation or recovery protocol.
+
+The specification assumes ordinary execution of the authored classes and retained
+original instances. It excludes hostile in-process mutation/reflection, process
+crash durability, fork/serialization, multiple wrappers over an unmediated physical
+connection, native resource charging and settlement recovery. Those exclusions
+cannot become support claims: their required composition remains open. A native
+transaction rollback does not roll back Python state, but neither does Python
+state authenticate a database issuer. The host trust question remains explicitly
+unresolved and must be fixed before selecting the integrated abstraction.
+
+### Witnesses, review and later analysis
+
+Reachable success is original registration -> consume -> verify -> native callback
+-> return, followed by consumed refusal. Failure witnesses include verify failure,
+admit failure and deferred-return refusal with later ticket denial. The shared
+ordinal corpus includes host rollback/failed-admission events followed by a fresh
+higher ordinal, and control_unknown/cancel/end followed by closure. Recovery is
+external: a closed component has no reopening transition. A later original
+transaction requires a independently admitted new epoch, not reuse of old tickets.
+
+Author semantic review on2026-10-09 checked guards, lock boundaries, retained
+identities and failure/finally paths against actual source and named tests. The
+post-gate close/native race is deliberately retained as a correspondence gap, not
+hidden by modeling verification+dispatch as one atomic action. Source-bound
+component execution evidence belongs in the test-plan checkpoint. This is a
+reviewed precise specification only; no state-space exploration result is inferred
+from tests or prose.
+
+Before bounded executable analysis, choose an established analyzer and finite
+bounds for issuer/epoch count, confirmations, capacity, concurrent callers and
+failure points, with an explicit abstraction argument. Model the gate-check and
+native admission separately, including close/cancel/control-loss between them.
+Require successful and failure/recovery reachable witnesses and negative controls
+for ordinal rewind, ticket permission restoration, copied-token acceptance and
+unguarded native effects. Map counterexamples into native/adapter regression cases.
+Record tool/config/model/source revisions, complete command, explored bounds and
+unknown/error outcomes. Recheck after affected source, contract, assumptions or
+configuration changes. Native all-path integration and deployment assumptions
+still require running-system verification even after a model passes.

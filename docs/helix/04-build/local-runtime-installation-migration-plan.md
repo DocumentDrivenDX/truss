@@ -1002,3 +1002,22 @@ comparison and its pre-commit observation harness. Its latest snapshot reports a
 harness lock/deadlock correction, not a completed admission profile. Native profile
 comparison remains with that owner; this work neither duplicates it nor adopts
 unfinished source. These snapshots are coordination evidence, not qualification.
+
+
+### Formal specification checkpoint: ordinal/admission components
+
+The owning Python design now specifies original identity/capacity/consumption,
+lock boundaries and failure transitions with stable PY-ORD/PY-ADM property IDs.
+The test plan maps those properties to the existing two ordinal/six admission
+methods; [source-bound execution](evidence/design-audit/python-formal-correspondence.json)
+passes all eight with warnings treated as errors. The component-level assurance
+is author-reviewed precise specification plus implementation tests, not bounded
+formal analysis or proof. No analyzer/model/configuration has been selected.
+
+The review makes the post-verification close gate/native-dispatch gap explicit:
+local closure cannot fence native effects by itself. PY-NATIVE-001 still needs
+original native producer/account/arbitration/security integration and a resolved
+embedding-host trust assumption. Preserve separate gate/dispatch/native-effect
+transitions in the later bounded model, with rewind/restored-permission/copied-token
+and unfenced-effect negative controls. This checkpoint does not substitute another
+component receipt for the required P0 integrated native admission experiment.
