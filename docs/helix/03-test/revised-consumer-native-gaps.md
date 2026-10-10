@@ -138,3 +138,15 @@ returns before startup and preserves the original receipt hash. The first exact
 harness source is archived separately as python_dry_run_savepoint_native_original.py;
 its original receipt is unchanged. Preflight is a trusted local harness check,
 not a hostile filesystem-race guarantee or Truss transaction/security qualification.
+
+
+The [named timing restoration witness](../04-build/evidence/design-audit/python-dry-run-native-timing-restoration.json)
+extends fresh native observation after ROLLBACK TO SAVEPOINT. A new duplicate
+pair inserts successfully with SQLSTATE00000, proving the named constraint is
+again deferred rather than left immediate. Its explicit named validation then
+produces23505; rollback to the second savepoint removes that probe before outer
+rollback. All six independent observations pass on16.15. The preceding fresh
+harness is archived as python_dry_run_savepoint_fresh_original.py so its receipt
+source hash remains reproducible. No ALL-constraint change or guessed restoration
+is used. This establishes the fixture's native timing behavior, not automatic
+admission of Truss guard/finalizer timing or a Python transaction adapter.
