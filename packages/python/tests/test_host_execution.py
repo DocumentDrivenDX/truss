@@ -57,6 +57,18 @@ class HostExecutionTests(unittest.TestCase):
         self.assertEqual(e.savepoint(h).error.code,'transaction_unusable')
         self.assertEqual(p.commands,[])
 
+    def test_original_custody_lookup_is_inert_and_survives_quarantine(self):
+        e=HostExecutor();p=Port();h=self.adopt(e,p)
+        original=e._original_custody(h)
+        def forbidden(): raise AssertionError('Preparation performed native observation')
+        p.observe=forbidden
+        self.assertIs(e._original_custody(h),original)
+        self.assertIsNone(HostExecutor()._original_custody(h))
+        original.usable=False;e.dispose()
+        self.assertIs(e._original_custody(h),original)
+        self.assertEqual(p.commands,[])
+        self.assertIsInstance(e.savepoint(h),Error)
+
     def test_disposal_never_ends_host_transaction(self):
         e=HostExecutor();p=Port();h=self.adopt(e,p);e.dispose()
         self.assertIsInstance(e.savepoint(h),Error);self.assertEqual(p.commands,[])

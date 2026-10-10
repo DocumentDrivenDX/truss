@@ -71,3 +71,40 @@ Repeat with caller rollback/dry run, changed input under the same key, dropped c
 Truss owns Python contracts, executor composition, installed native engine, receipts/feed/import and examples. UMF owns metadata/value/check semantics and reusable DDL; Weft owns logical SQL compilation; the security owner owns shared subject/authority/resolver contracts. Do not fork these meanings to meet the schedule. The approved security handoff is now sent; its closed contract remains pending.
 
 Merge each reviewed work item into main with its scoped tests and support statement. Preserve ongoing owner changes. Verify the complete implementation and consumer workflow before advertising APIs as ready. The first planning/type-binding deliverables can land immediately; behavioral delivery dates are not credible until PA01–PA05 and complete installation scope are closed. Measure progress by the milestone exits above, not growing private component test counts.
+
+## PY-C02 arbitration implementation sequence — Astra Ultra review
+
+The original HostOperationArbitration binding and CONTRACT-007 E06 govern this
+implementation. First supply a pure exact-issued-handle custody lookup for
+registration/preparation and recovery. It performs no native observation or
+acquisition, and cannot be used as command authority. Current native observation
+remains after operation acquisition under its separate native-call guard.
+
+Then implement one explicitly shared registry with a shared lock and
+exception-safe atomic state publication. Never run host callbacks/native probes
+inside that lock. Register assemblies and prepare opaque original attempts
+inertly; preserve exact executor issuer and original transaction generation.
+Acquire records a single original decision; observation never acquires. Busy,
+abandoned and closed decisions are terminal and cannot become admitted later.
+Closing one assembly atomically abandons its prepared attempts while preserving
+other assemblies and acquired/unresolved custody. Test close/acquire races and
+lost acquire replies, rather than relying on the GIL or per-assembly maps.
+
+Completion requires original producer custody plus the complete original native
+and resource ledger. Distinguish restored caller_idle from transaction_ended;
+a failed/unusable active caller or unknown cleanup stays unresolved. Preserve
+commit_unknown recovery independently of cleanup. Duplicate matching completion
+reconciles the original result; conflicting completion and an old released lease
+cannot release a newer operation. Test before/after-publication faults.
+
+Enforce all conjunctive selected profile ceilings: assemblies, prepared/retained
+attempts, active/unresolved leases, actual and reserved registry/evidence bytes,
+single attempt/completion buffers and terminal retention. Reserve worst-case
+decision and containment metadata before publishing preparation/acquisition;
+uncertain completion does not refund capacity. Count-only limits or estimated
+Python object sizes cannot establish the full bounded-memory support claim.
+
+Only after these transitions, native host-command exclusion and generation
+recognition are qualified may C02 publish driver-backed adoption. The current
+pure lookup and trusted-port tests are prerequisites, not registry/native
+completion or a substitute for the first real consumer workflow.

@@ -62,11 +62,20 @@ class HostExecutor:
         self._transactions[key] = _Adoption(port, observed, handle)
         return Ok(handle)
 
-    def _admission(self, handle, allow_failed=False):
-        if self._closed or type(handle) is not TransactionHandle or handle._issuer is not self._issuer:
+    def _original_custody(self, handle):
+        """Pure issuer lookup for private preparation/recovery, never admission.
+
+        Retained entries remain recognizable after quarantine/disposal. This does
+        not observe native state, acquire exclusion or grant command authority.
+        """
+        if type(handle) is not TransactionHandle or handle._issuer is not self._issuer:
             return None
         a = self._transactions.get(handle._key)
-        if a is None or a.handle is not handle or not a.usable:
+        return a if a is not None and a.handle is handle else None
+
+    def _admission(self, handle, allow_failed=False):
+        a = self._original_custody(handle)
+        if self._closed or a is None or not a.usable:
             return None
         try:
             observed = a.port.observe()
