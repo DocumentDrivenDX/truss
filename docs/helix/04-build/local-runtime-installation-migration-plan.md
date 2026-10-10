@@ -1432,3 +1432,44 @@ qualified; do not transplant its17.9 fixture or moving APIs into the16.15 defaul
 P3/P4 feed/reached, complete corpus/interchange, stable layout, populated migration
 and managed qualification remain in the original queue. None of these component
 observations changes the full45-story/167-criterion objective or marks P0/P1 done.
+
+
+### Native operation resolver implementation split
+
+Implement two private resolver paths within the existing protected body/account
+composition; these are internal responsibilities, not new public APIs. The unique
+unfinished-operation index proves only an upper bound. It supplies neither an
+original operation/account nor authority to infer one from the newest row.
+
+For observer dispatch, derive the actual assigned native writer transaction and
+trusted installation/incarnation context from the admitted original producer.
+Under its original exclusions enumerate the protected current transaction
+registry, requiring exactly one unfinished operation with its exact admitted
+phase, generation, producer/context and pre-reserved event capacity. Zero rows,
+two candidates, foreign context, unavailable complete observation or finalized
+operation refuse before canonical/touch/marker effects. Caller xid/ordinal,
+custom session text, an RLS-filtered registry, MAX(ordinal), last-issued host
+counter or constraint-name equality cannot select that operation. Bind each
+actual trigger event's original relation and OLD/NEW contribution to this same
+operation/account before consuming its existing reservation. No nested observer
+opens a replacement account or changes phase to make attribution available.
+
+For commit/final-state validators, enumerate every original surviving operation
+and its complete contributions, including earlier finalized operations and
+no-op operations with empty effect sets. Use the established OC/RF/FV/EL generation
+and scope rules. Absence of an unfinished row cannot prove no required effects;
+absence of feed registration cannot certify an empty transaction. An observer's
+unique-current-operation result is not the validator's complete inventory.
+Savepoint rollback removes native surviving contributions under its original
+procedure but cannot reset host ordinal/cumulative work or erase unknown custody.
+
+The first installed resolver controls independently cover zero current operation,
+two unfinished candidates, stale phase/generation, finalized-only registry,
+RLS-hidden sibling, foreign transaction/installation and exhausted earlier
+reservation. Validate a transaction with finalized A followed by current B,
+then B rollback with A surviving, and a genuine all-no-op admitted operation.
+Check full original contribution/phase/account inventories and effects before
+and after each failure. Both registry-index and genuine business-key violations
+may emit23505; classify only through original admitted native failure provenance,
+not a name/text heuristic. Actual protected resolver procedures, grants, account
+producer and enabled body execution remain unimplemented qualification outputs.
