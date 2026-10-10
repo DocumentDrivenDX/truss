@@ -912,7 +912,15 @@ stand in for those results or relax the0.01ms requirement.
 [Native67](evidence/design-audit/row-image-tree-native.json) proves existing
 foreign keys admit a disconnected two-node sequence cycle. Original typed
 capture decodes; the private Python physical-tree check refuses and savepoint
-rollback restores exact original bytes. Implement complete RF04 native
-root/reachability/acyclicity enforcement in the semantic commit validator;
+rollback restores exact original bytes. Implement complete RF03 native
+root/reachability/acyclicity enforcement before protected sealing;
 foreign keys cannot substitute for it. Full definitions, original origin, current
 authority, resource and publication composition remain separate PA05 gates.
+
+
+The [native row-finalization execution packet](row-finalization-native-execution-handoff.md)
+separates nonsealing journal capture, effects readiness, RF01–RF06 sealing,
+application finalization and deferred closure. It corrects the recent RF04/commit
+attribution: root reachability/acyclicity is RF03 before protected sealing; the
+deferred check cannot manufacture a seal. It records independently expected
+native negatives and the remaining owner interfaces without selecting a fake body.

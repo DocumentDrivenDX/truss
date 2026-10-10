@@ -1889,9 +1889,12 @@ all malformed original images. Rollback restores the original8 images exactly.
 The existing21-image nested cascade and rollback observations also pass.
 
 This closes the finite actual native structural counterexample test identified
-in the preceding checkpoint. It establishes why the complete RF04 native
-`row_touch_commit_check` must enforce root reachability and acyclicity in addition
-to table constraints. The Python function is a private host check, not a native
+in the preceding checkpoint. It establishes why RF03 in the protected
+RF01–RF06 finalizer must enforce root reachability and acyclicity before native
+sealing; table constraints cannot supply this proof. The deferred
+`row_touch_commit_check` verifies complete current touch/seal/application/capacity
+closure and selected validators rather than creating seals. The Python function
+is a private host check, not a native
 COMMIT callback; no native semantic body was supplied by this probe. Native
 commit qualification must additionally cover complete original event/current
 state correspondence, admitted definitions/member/scalar semantics, held guards,
@@ -1927,3 +1930,11 @@ retain16 actual allowed/forbidden subprocess controls. Original logs accompany
 the receipt. Earlier124/119 checkpoints and native67 producers remain unchanged.
 Public exports remain local runtime lifecycle only; installation, protected
 mutation/query, migration, journal/feed and native authority remain unqualified.
+
+
+The [native row-finalization execution packet](row-finalization-native-execution-handoff.md)
+separates nonsealing journal capture, effects readiness, RF01–RF06 sealing,
+application finalization and deferred closure. It corrects the recent RF04/commit
+attribution: root reachability/acyclicity is RF03 before protected sealing; the
+deferred check cannot manufacture a seal. It records independently expected
+native negatives and the remaining owner interfaces without selecting a fake body.

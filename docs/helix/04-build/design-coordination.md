@@ -1357,3 +1357,27 @@ by automatic approval review because explicit destination/payload authorization
 was not established. No message was sent, no owner acknowledgement or interface
 adoption occurred, and the original unsent artifact remains unchanged. A specific
 approval question is pending. Local Truss work continues independently.
+
+
+### Published Weft Paths-Keys implementation review — 2026-10-10
+
+Authorized upstream fetch observes Weft origin/main3a2a79c; UMF origin/main
+remains322b193. The separate ashlar.databricks.paths-keys backend/version
+0.4.0-paths-keys-candidate/profile spark4-delta4-paths-keys-candidate now has
+committed implementation and candidate CLI. [Immutable review evidence](evidence/design-audit/weft-paths-keys-implementation-review.json)
+verifies12 independently reviewed source files and20 retained original compiler
+request/response cases (10 compiled,10 refused). The owner verdict is
+approved-source-only; this review does not rerun native SQL or qualify a release.
+
+The candidate keeps required-root complete exact String keys, separate explicit
+backend/feature dispatch, edge-occurrence bag multiplicity, complete-source null/
+duplicate edge guards, and full DECIMAL38 occurrence-prefix capacity before
+returned-bound filtering. Group/aggregate/expansion/LEFT-root and unsupported key
+profiles refuse. RelatedKeys retains its descriptor-selected carrier; old Paths
+registration remains separate. Native source/schema, current authority, coherent
+guard observation and publication/ACK closure are host obligations.
+
+Do not apply Databricks SQL/profile/CLI to Truss PostgreSQL or replace its adopted
+f05f2df/compile-sql0.2 tuple. This supersedes the earlier design-only state for
+this separate upstream candidate while retaining the same Truss adoption gate.
+No security chat message was sent and no incomplete owner API was adopted.
