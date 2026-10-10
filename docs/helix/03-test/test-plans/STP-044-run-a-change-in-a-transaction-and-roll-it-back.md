@@ -266,3 +266,32 @@ Retain actual host command/state, original operation membership, independent
 lock observations and capture/public-result refusal evidence. This is an
 adopted-transaction lifetime case under CONTRACT-007, not a new rollback API.
 It remains `not_run` until the selected adapter/native profile is implemented.
+
+
+## One-use confirmed native admission — planned DH-02/DH-05 extension
+
+Apply the [original producer binding](../../02-design/contracts/reference-driver-producer-port.proposal.md)
+without adding a public confirmation constructor. Instrument native admission
+entry independently of the producer registry and count control submissions and
+admission submissions separately. A successful control does not itself prove that
+admission occurred or that any effects remain after rollback.
+
+| Schedule | Independent expected observation |
+| --- | --- |
+| Invoke admission twice with one original confirmation | Exactly one native admission invocation at most; second call refuses before native entry |
+| First admission refuses or throws after permission consumption; invoke again | Original ordinal remains consumed and original recovery custody retained; no second native invocation |
+| Lose the first admission result; invoke or reconcile with the old confirmation | No replacement native submission; original attempt remains unresolved until authoritative reconciliation |
+| Roll back or release the confirmed savepoint before first admission | Zero native admission invocations; expired lifetime refuses under original arbitration |
+| Admit then roll back the operation savepoint; reuse the old confirmation | Rolled-back registry row remains absent, ordinal remains burnt, and no second native invocation |
+| Copy confirmation or substitute issuer, adopted transaction epoch, account or control cycle | Zero native admission invocations, even when visible ordinal/backend labels match |
+| Cancellation/profile change wins arbitration before permission consumption | No dependent native effects; permission cannot be revived by a later profile or cancellation reset |
+
+Use real native savepoints and independent registry/business-row observations on
+the same selected driver/security/installation tuple. Retain an unrelated caller
+sentinel and verify that refusal never commits or ends an adopted transaction.
+Where a later operation is permitted, it uses a fresh reserved control and next
+independently expected ordinal; it does not resurrect the earlier confirmation.
+Source-only identity tickets, fake successful callbacks and typed brands cannot
+qualify these schedules. Status remains not_run pending original producer/native
+verification integration; the four current rollback probes demonstrate the
+row-derived allocator defect rather than this required correction.
