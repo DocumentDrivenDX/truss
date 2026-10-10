@@ -1544,3 +1544,12 @@ private dependency closure or installer qualification. Implement the original
 protected admission handoff and native role/ACL registration before advertising
 ordinary-role mutation; retain the seven missing body registrations and full
 45-story/167-criterion frontier.
+
+The [protected admission execution packet](operation-ordinal-issuer-handoff.md#protected-admission-execution-packet--2026-10-10)
+now sequences PA01–PA05 and twelve independent native scenarios. It names the
+four-family destination boundary, shared-owner inputs, caller/owner/origin
+separation, private ACL and original control/rollback obligations, and the later
+full semantic/journal/feed completion. PA01–PA04 remain release-incomplete until
+actual capture/writer and owner authority contracts exist; the authored matrix is
+an implementation handoff, not twelve passed checks. Work on this protected chain
+now takes priority over additional isolated capacity-helper demonstrations.

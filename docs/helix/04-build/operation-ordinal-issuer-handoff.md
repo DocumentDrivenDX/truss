@@ -620,3 +620,92 @@ publication. Driver qualification and installer readiness remain false; no
 acceptance criteria are promoted. The next implementation composition must add
 original artifact/authority admission and the protected native guard inventory
 before exposing an installed mutation API.
+
+## Protected admission execution packet — 2026-10-10
+
+The [actual admission/elevation receipt](evidence/design-audit/admission-elevation-native.json)
+qualifies the current invoker guard and original context preservation, with ten
+PostgreSQL16.15 observations. It does not qualify ordinary protected admission.
+Use this packet as the next integration item rather than further treating capacity
+helper coverage as progress toward a usable mutation API.
+
+### Destination and ownership
+
+Keep host attempt/ordinal/confirmation custody in the existing private Python
+`_operation_admission` boundary and original driver adapter. Keep installed native
+admission realization under `packages/postgresql/native/issued-operation-admission/`.
+Preserve all four original source families and their separate artifact carriers.
+The protected realization must be a distinct explicitly versioned profile when its
+actor-capture or callable contract differs; do not replace the 0.2 invoker source
+or weaken its nested-DEFINER refusal. No new public operation API is implied.
+
+Truss owns physical-connection affinity, original attempts and byte carriers,
+installed identities/ACL reconciliation, native operation effects and containment.
+The security owner owns authenticated subject mapping, old/new write authority,
+current-fact admission and protected publication lifetime. UMF owns the admitted
+metadata/key/value semantics; Weft owns compiler obligations and lowering. Consume
+exact original owner artifacts at these seams, without a second resolver/parser.
+
+### Ordered implementation outputs
+
+| Order | Concrete output | Exit evidence |
+| --- | --- | --- |
+| PA01 | An original entry/capture/writer call map for each of the four families, showing the actor before capture, every elevation and the actual installed owner at every native write | Actual function bodies/signatures, original context-version meanings, native role OIDs and effective grants; reconcile intended and installed routes in both directions under the protected-access closure algorithm. A source-only graph leaves this item incomplete. |
+| PA02 | A protected capture-to-writer protocol that retains original invoker context and binds it to the original attempt, actual xid/session/database/backend, installed generation and admitted subject | Demonstrate that caller JSON/GUC labels, copied context, another attempt or a different installed wrapper cannot authorize registry insertion. Native registration and trusted-host custody have distinct evidence; neither substitutes for the other. No direct consumer INSERT/UPDATE grants. |
+| PA03 | Original owner authority/artifact admission before business effects, with all applicable epoch/configuration/profile checks | Exact owner interface/build/policy/mapping/target pins, complete original obligation inventory and immutable backend declaration/parameter correspondence. Unsupported or unfinished owner paths refuse; equal names/version labels are insufficient. |
+| PA04 | One original submission through Python confirmation and one-use custody into each protected family | Preserve issued gaps and original result/context bytes, complete registry/configuration parity and actual physical connection; source-family artifact semantics remain distinct. No advanced-family fallback to the base routine. |
+| PA05 | Protected native observation/finalization and full transaction completion | Implement all seven registered semantic bodies, full original contributors, reservation/release/cache composition, journal and current feed union. Native ordinary-role complete effects, denial/rollback and acknowledged/unknown settlement evidence precede API publication. |
+
+PA01–PA04 are not yet execution-ready for a public release: the original protected
+capture/writer protocol and actual owner subject/current-authority contract are
+missing. Implementing the installed inventory and tests can proceed without
+selecting policy semantics. PA05 retains the complete story/criterion scope and
+cannot be replaced with a successful synthetic artifact insertion.
+
+### Independent native acceptance matrix
+
+Run against the actual installed candidate using separate ordinary login and
+integrity-owner roles, the original Python physical-connection adapter and all four
+families. Administrative setup is allowed only outside the measured operation.
+Retain complete source/profile pins and actual effects before/after each case.
+These are planned scenarios, not passed receipts.
+
+| Case | Original scenario | Required observable outcome |
+| --- | --- | --- |
+| PA-N01 | Ordinary login performs an authorized protected operation | Caller identity remains original; registry/business writes execute only through the registered private chain; complete result remains pending until host commit acknowledgement. |
+| PA-N02 | Host uses an explicitly granted native SET ROLE before admission | Preserve distinct session and acting-role names/OIDs; owner mapping must admit the subject interpretation. RESET ROLE or a role change cannot reuse earlier original admission. |
+| PA-N03 | Execute from a distinct unregistered DEFINER wrapper, including one with the same apparent name | Refuse before registry/business effects; no caller or owner substitution. Retain the already issued ordinal and original error. |
+| PA-N04 | Call every private writer/helper directly as the ordinary role; attempt direct registry/configuration/touch writes | Native effective privileges deny all unadmitted routes. Matching source function names or synthetic bytes do not bypass the boundary. |
+| PA-N05 | Copy an admitted context into another attempt, transaction or physical connection | Refuse before effects; neither context bytes nor a digest alone authenticate original attempt custody. |
+| PA-N06 | Change body, owner, private ACL, search path, dependency or installation generation | Reject the affected original profile before publication; missing and extra reachable dependencies are independently detected. |
+| PA-N07 | Change epoch/configuration after capture; submit each advanced family | One refusal, zero business effects, no silent base-family delegation and no internal retry; original issued ordinal stays burned. |
+| PA-N08 | Deny old-state, new-state or individual field-write authority | Entire operation refuses under the original owner interpretation. No partial canonical/key/edge/journal/feed/receipt effect or protected diagnostic disclosure. |
+| PA-N09 | Admit, roll back the original savepoint, then submit another operation through another facade | Native rows roll back; all facades share the issuer and next ordinal advances. Earlier successful outer work and original xid survive confirmed local containment. |
+| PA-N10 | Lose ready/commit acknowledgement or cancel while native completion is unavailable | Close new admission, preserve original recovery/settlement custody and avoid retry; do not classify unknown completion as success or confirmed rollback. |
+| PA-N11 | Repeat early constraint checking, then mutate again and commit | Every final contributor is checked under the current full scope; no first-check cache bypass, unfinished reservation or partial journal/feed union. |
+| PA-N12 | Spoof asserted origin; exercise legitimate original origin independently of native caller | Preserve exact original asserted-origin bytes/profile, qualify attribution authority separately, and never substitute origin for authenticated person or installed owner. |
+
+Use the existing ten-check receipt only as PA-N03 boundary evidence for the actual
+invoker prototype and read-only context preservation. It does not pass these full
+matrix cases. Shared B001–B015, all 45 stories/167 criteria, native corpus,
+interchange and deployment profile gates remain mandatory.
+
+### Configuration, diagnostics and analysis
+
+Select the complete immutable installation/owner/codec/resource tuple once per
+original admitted operation; no mid-operation configuration reload or permissive
+fallback. Public configuration must not expose arbitrary native callable names or
+SQL. Original profile drift is an explicit refusal, not an automatic repair.
+
+Report bounded stage/refusal identifiers and correlation under the existing
+observability contract. Keep actor/context/policy/original input bytes out of
+ordinary telemetry and errors; retain protected evidence only under its governing
+authority and retention profile. Measure each repeated native check and cleanup
+against the original account; coalescing does not erase actual work.
+
+Formal analysis should distinguish original caller, installed execution owner and
+asserted origin as separate identities, and show attempted transitions cannot
+create authority or reuse an ordinal after rollback. Connect each model transition
+to the actual installed source/native matrix case. An abstract invariant or an
+owner's compiler lineage proof cannot establish the missing protected native
+handoff, write authority or publication lifetime.
