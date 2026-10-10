@@ -662,3 +662,13 @@ The immediate Truss-owned task remains original issuer/native admission integrat
 The runtime/CLI wheel is usable component infrastructure, not a substitute for that
 work. Record a precise unavailable owner input when encountered; broad statements
 that security must finish first cannot close, defer or reassign Truss's own work.
+
+The current installed-wheel component check now covers all12 Python modules and
+41 tests, including the five private admission-custody controls. The
+[installed-suite receipt](evidence/design-audit/python-current-installed-suite.json)
+verifies installed/wheel/source payload correspondence outside the checkout, with
+warnings treated as errors. This reused environment contains the pinned local
+dependencies; it is not a new clean dependency-resolution claim. The private
+custody registry does not supply native transaction authority or correct the four
+native ordinal admission families. Complete installation, migration execution and
+whole-engine qualification remain open.
