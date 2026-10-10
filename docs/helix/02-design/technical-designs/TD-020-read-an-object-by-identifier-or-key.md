@@ -48,6 +48,31 @@ No DDL. ID reads include type identity to avoid wrong-type matches. Baseline key
 
 Host authentication/policy controls both key and object visibility. An invisible record cannot leak through key existence or its ID. Parameterize key text, including quote/injection-looking strings. Baseline primary/key indexes and proposed bucket routing have distinct native capacity/work obligations; exact full-byte equality remains required after bucket routing. Capture native plans and latency per qualified target rather than inventing a new SLA. No prepared-statement requirement is inferred.
 
+### Python preview key-profile selection
+
+Select the existing full-byte bucket candidate as the P2 reference key-read
+implementation target. Use its fixed read-only lookup descriptor with original
+namespace/key bytes, qualified key definition and typed object join. Digest routing
+narrows candidates only; complete byte equality and original context/source
+correspondence determine the result. This is an engineering target selection,
+not native profile admission or a released layout claim.
+
+Do not fall back to baseline text lookup when bucket mapping, index readiness,
+source interpretation, authority or resource admission is unavailable. Return the
+existing unavailable/refusal outcome once. Baseline text remains a separately
+qualified legacy route requiring its own explicit installation/profile binding;
+it is not another encoding of this selected bucket request. Embedded callers
+cannot choose the physical store with a request field or unregistered SQL.
+
+Before preview qualification, compose complete bucket writer/guard/read privileges,
+original UMF key encoding and document-qualified catalog mapping, selected decoder,
+finite native candidate/work bounds and final security publication drain. Run
+STP-020's exact-key/collision/hidden-holder/duplicate-row controls and compare
+original key bytes, typed holders and native plans independently. Missing selected
+support blocks the key capability; it cannot return not_found from an incomplete
+scan. All complete installed cases remain not_run. ADR-004 already settles
+document qualification; no D-04 product decision remains pending.
+
 ## Testing
 
 STP-020 owns allocation. Independently seed metadata/values, exercise scalar/composite keys and exact large numerics/null/absence. Accept a new catalog revision without modifying the record and assert the returned last-written revision remains old while read pin is new. Missing and hidden records return qualified not-found behavior, never fabricated empty records. Supplement with concurrent key update/deletion in a consistent read snapshot.
