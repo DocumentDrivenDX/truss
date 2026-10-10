@@ -1035,3 +1035,26 @@ acceptance ladder. It preserves the existing public result variants: a complete
 qualified mismatch is verify drift; unavailable/incomplete collection yields
 observation_unavailable without partial payload. Component integrity terminology
 does not create a new public result type.
+
+
+## Native Python archive correspondence composition — 2026-10-10
+
+[Archive21 with independently expected verdicts](evidence/design-audit/installation-archive-correspondence-expected-native.json)
+passes actual PostgreSQL16.15 seven-cell archive rows to the private Python
+checker. It observes original pg8000 column names, OIDs25/17, text formats and
+COMMAND_COMPLETE bytes before decoding. Complete original fixture membership
+matches; missing/duplicate/changed/extra schedules independently expect false;
+restoration independently expects true. Retained original row tuples/byte cells
+supply the existing exact restoration checks. The ordinary observer read-right
+revocation/restoration controls remain separately observed; Python composition
+in this receipt uses administrative fixture collection.
+
+The first21-observation producer retained correspondence verdicts without an
+explicit separately selected expected boolean; it is preserved as
+[initial component evidence](evidence/design-audit/installation-archive-correspondence-native.json).
+The separate expected-verdict producer strengthens that check without altering
+completed producer bytes. Current Python source and installed132-test wheel are
+unchanged. Driver subclass instrumentation qualifies this finite harness, not
+a public receive/account/settlement adapter. Original complete release membership,
+observer authority/current cut, whole resource accounting and public verifier
+remain absent; no installation/readiness claim is promoted.
