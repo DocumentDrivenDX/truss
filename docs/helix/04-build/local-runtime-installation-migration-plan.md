@@ -1104,14 +1104,23 @@ generation authority, followed by complete observer/validator/finalizer bodies a
 atomic inventory/ready publication. No new product decision between handler
 languages or invoker/definer is needed.
 
-Read-only inspection of the security owner's completed verification turn reports
-scoped routine-definition guard success and altered-definition/signature refusals;
-full acceptance remains26/132. Its next active slice is B09 unsupported-policy
-activation/report-mode weakening. Those observations are coordination evidence,
-not Truss profile adoption. Keep native routine/profile comparison with that owner,
-retain the Truss original issuer/account and seven-body handoff separately, and do
-not wait for unrelated security backends or interpret a routine lock as policy
-activation or complete R4/R5 qualification.
+Read-only inspection previously reported scoped routine-definition guard success
+and altered-definition/signature refusals; full acceptance at that checkpoint was
+26/132. The latest observed security turn, `01a12379-c34d-7a43-b8fa-c568d229a726`,
+is failed and its thread status is systemError: the platform flagged possible
+cybersecurity risk. This is a terminal turn observation, not an active process to
+wait for or permission to restart/message the owner. Its last commentary reported
+197 native bridge observations, but this handoff has not independently inspected
+a corresponding receipt and makes no qualification claim from that count.
+
+Keep native routine/profile comparison, unsupported-policy activation and report
+weakening with that owner. Retain Truss's original issuer/account and seven-body
+handoff separately. Complete installation needs the exact adopted security subset,
+original producer/profile artifacts and independent native evidence; unavailable
+owner outputs remain explicit dependencies. Independent Python/runtime/packaging
+work can continue. Do not wait for unrelated security backends, fork authorization,
+or interpret a routine lock or compiler-refusal bridge as policy activation or
+complete R4/R5 qualification.
 
 
 ### Administrative ordering and bounded-recovery correction
