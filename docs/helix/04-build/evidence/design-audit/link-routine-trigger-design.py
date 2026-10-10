@@ -46,4 +46,5 @@ if counts!={'row_touch_observe':3,'row_touch_commit_check':3,'edge_limit_observe
 if sys.argv[1:] == ['--check']:
  if json.loads(p.read_text())!=manifest:raise SystemExit('stale trigger-to-handler design links')
 else:p.write_text(json.dumps(manifest,indent=2)+'\n')
-print(json.dumps({'originalTriggerIdentities':len(seen),'handlerReferences':counts,'nativeQualified':False},indent=2))
+missing={name:[field for field,value in routine['unresolvedNativeBinding'].items() if value is None] for name,routine in byname.items()}
+print(json.dumps({'scope':'Selected incomplete design/source correspondence only', 'designLinksConsistent':True,'originalTriggerIdentities':len(seen),'handlerReferences':counts,'nativeQualified':False,'installerReady':False,'missingNativeBindings':missing,'missingBindingCount':sum(map(len,missing.values()))},indent=2))
