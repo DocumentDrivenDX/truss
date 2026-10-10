@@ -1,0 +1,353 @@
+{
+  "scope": "Selected admission family with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification",
+  "registryDecoderObservations": [
+    {
+      "boundary": "first-admission",
+      "actualXid": "730",
+      "originalRows": [
+        [
+          "730",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022373330222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "decodedRows": [
+        [
+          "730",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022373330222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "boundary": "first-savepoint-rollback",
+      "actualXid": "730",
+      "originalRows": [],
+      "decodedRows": []
+    },
+    {
+      "boundary": "second-admission",
+      "actualXid": "730",
+      "originalRows": [
+        [
+          "730",
+          "1",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022373330222c20226f7264696e616c223a202231222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "decodedRows": [
+        [
+          "730",
+          "1",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022373330222c20226f7264696e616c223a202231222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "boundary": "second-savepoint-rollback",
+      "actualXid": "730",
+      "originalRows": [],
+      "decodedRows": []
+    },
+    {
+      "boundary": "third-admission",
+      "actualXid": "730",
+      "originalRows": [
+        [
+          "730",
+          "3",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022373330222c20226f7264696e616c223a202233222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "decodedRows": [
+        [
+          "730",
+          "3",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022373330222c20226f7264696e616c223a202233222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    },
+    {
+      "boundary": "new-top-level-transaction",
+      "actualXid": "736",
+      "originalRows": [
+        [
+          "736",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022373336222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ],
+      "decodedRows": [
+        [
+          "736",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "7b22786964223a2022373336222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          null
+        ]
+      ]
+    }
+  ],
+  "registryObservationSql": "SELECT json_build_object('xid',pg_current_xact_id_if_assigned()::text,'rows',COALESCE((SELECT json_agg(json_build_array(r.original_writer_xid,r.operation_ordinal,r.operation_kind,r.phase,r.effect_generation,r.readiness_generation,r.sealed_generation,r.application_generation,r.original_context_bytes_hex,r.original_definition_bytes_hex,r.original_input_bytes_hex,r.original_prestate_bytes_hex,r.admitted_candidate_bytes_hex,r.effect_obligation_bytes_hex,r.original_group_custody_bytes_hex,r.application_result_bytes_hex)) FROM (SELECT\n  o.original_writer_xid::pg_catalog.text AS original_writer_xid,\n  o.operation_ordinal::pg_catalog.text AS operation_ordinal,\n  o.operation_kind::pg_catalog.text AS operation_kind,\n  o.phase::pg_catalog.text AS phase,\n  o.effect_generation::pg_catalog.text AS effect_generation,\n  o.readiness_generation::pg_catalog.text AS readiness_generation,\n  o.sealed_generation::pg_catalog.text AS sealed_generation,\n  o.application_generation::pg_catalog.text AS application_generation,\n  pg_catalog.encode(o.original_context_bytes, 'hex') AS original_context_bytes_hex,\n  pg_catalog.encode(o.original_definition_bytes, 'hex') AS original_definition_bytes_hex,\n  pg_catalog.encode(o.original_input_bytes, 'hex') AS original_input_bytes_hex,\n  pg_catalog.encode(o.original_prestate_bytes, 'hex') AS original_prestate_bytes_hex,\n  pg_catalog.encode(o.admitted_candidate_bytes, 'hex') AS admitted_candidate_bytes_hex,\n  pg_catalog.encode(o.effect_obligation_bytes, 'hex') AS effect_obligation_bytes_hex,\n  pg_catalog.encode(o.original_group_custody_bytes, 'hex') AS original_group_custody_bytes_hex,\n  pg_catalog.encode(o.application_result_bytes, 'hex') AS application_result_bytes_hex\nFROM truss.row_home_operation AS o\nWHERE o.original_writer_xid = pg_catalog.pg_current_xact_id_if_assigned()) r),'[]'::json));",
+  "transactionReuse": {
+    "samePsqlProcess": true,
+    "confirmedPriorEndObservation": {
+      "assignedXid": null,
+      "namespaceAbsent": true
+    },
+    "oldIssuerRefused": "closed",
+    "oldBindingRetained": true,
+    "newOriginalToken": true,
+    "newAdmission": {
+      "writerXid": "736",
+      "ordinal": "0",
+      "contextHex": "7b22786964223a2022373336222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "context": {
+        "xid": "736",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "79534",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    }
+  },
+  "nativeInputControls": [
+    {
+      "ordinalInput": "NULL",
+      "sqlstate": "22023",
+      "message": "invalid host-issued operation ordinal",
+      "completeObservedStoresUnchanged": true
+    },
+    {
+      "ordinalInput": "-1",
+      "sqlstate": "22023",
+      "message": "invalid host-issued operation ordinal",
+      "completeObservedStoresUnchanged": true
+    },
+    {
+      "ordinalInput": "0",
+      "sqlstate": "55000",
+      "message": "unfinished operation",
+      "completeObservedStoresUnchanged": true
+    },
+    {
+      "ordinalInput": "9",
+      "sqlstate": "55000",
+      "message": "unfinished operation",
+      "completeObservedStoresUnchanged": true
+    }
+  ],
+  "originalSurvivingSnapshot": {
+    "registry": [
+      {
+        "phase": "admitted",
+        "operation_kind": "mutation",
+        "effect_generation": 0,
+        "operation_ordinal": 0,
+        "sealed_generation": null,
+        "original_writer_xid": "730",
+        "original_input_bytes": "\\x02",
+        "readiness_generation": null,
+        "application_generation": null,
+        "original_context_bytes": "\\x7b22786964223a2022373330222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+        "effect_obligation_bytes": "\\x05",
+        "original_prestate_bytes": "\\x03",
+        "admitted_candidate_bytes": "\\x04",
+        "application_result_bytes": null,
+        "original_definition_bytes": "\\x01",
+        "original_group_custody_bytes": "\\x06"
+      }
+    ]
+  },
+  "family": "base",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "writerXid": "730",
+      "ordinal": "0",
+      "contextHex": "7b22786964223a2022373330222c20226f7264696e616c223a202230222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "context": {
+        "xid": "730",
+        "ordinal": "0",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "79534",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    },
+    {
+      "writerXid": "730",
+      "ordinal": "1",
+      "contextHex": "7b22786964223a2022373330222c20226f7264696e616c223a202231222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "context": {
+        "xid": "730",
+        "ordinal": "1",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "79534",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    },
+    {
+      "writerXid": "730",
+      "ordinal": "3",
+      "contextHex": "7b22786964223a2022373330222c20226f7264696e616c223a202233222c20226461746162617365223a2022706f737467726573222c2022616374696e6755736572223a2022706f737467726573222c20226261636b656e64506964223a20223739353334222c202273657373696f6e55736572223a2022706f737467726573222c20226163746f72526f6c654f6964223a20223130222c202273657373696f6e526f6c654f6964223a20223130222c2022696e7465726661636556657273696f6e223a202274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e32227d",
+      "context": {
+        "xid": "730",
+        "ordinal": "3",
+        "database": "postgres",
+        "actingUser": "postgres",
+        "backendPid": "79534",
+        "sessionUser": "postgres",
+        "actorRoleOid": "10",
+        "sessionRoleOid": "10",
+        "interfaceVersion": "truss-native-operation-context/0.2"
+      }
+    }
+  ],
+  "refusedIssuedOrdinal": "2",
+  "nativeRefusalSqlstate": "22023",
+  "configurationObservations": [],
+  "rollbackRegistryRows": 0,
+  "rollbackRemovedNamespace": true,
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+    },
+    {
+      "path": "packages/postgresql/native/issued-operation-admission/operation-admission.sql",
+      "sha256": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_ordinal.py",
+      "sha256": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_registry.py",
+      "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql",
+      "sha256": "29d1a6647aedae69bda2276d6a0f6173b50a5a9e89a79b3cc4076f504b5125ca"
+    }
+  ],
+  "producerSha256": "d0f7041aac645e1b2e42700698528777e05e26d09a3ff5e5e637f858ccbea69c",
+  "psqlSha256": "564f8a86c5670d522fbb478393fae48ca3de536d74d1fa5dd6017fc87f5300da",
+  "completeDriverQualified": false,
+  "allFourFamiliesQualified": false,
+  "readyInstallation": false
+}

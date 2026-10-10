@@ -59,7 +59,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
         with tempfile.TemporaryFile(mode='w+t') as errors:
             process = subprocess.Popen([str(psql), server.get_uri(), '-X', '-qAt', '-v', 'ON_ERROR_STOP=1'],
                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=errors, text=True)
-            registry = OperationOrdinalRegistry(producer, process, 1, 9223372036854775807)
+            registry = OperationOrdinalRegistry(producer, process, 2, 9223372036854775807)
             issuer = registry.bind(producer, process, custody)
             def send(sql):
                 process.stdin.write(sql + '\n')
@@ -187,6 +187,24 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             decode_current_registry('third-admission', ['3'])
             assert third['writerXid'] == first['writerXid']
             assert third['ordinal'] == '3'
+            send("ROLLBACK; SELECT json_build_object('assignedXid',pg_current_xact_id_if_assigned()::text,'namespaceAbsent',to_regnamespace('truss') IS NULL);")
+            ended = observe()
+            assert ended == {'assignedXid': None, 'namespaceAbsent': True}
+            registry.end(producer, process, custody)
+            closed_result = issuer.reserve(custody)
+            assert closed_result.outcome == 'refused' and closed_result.reason == 'closed'
+            replacement_custody = object()
+            replacement_issuer = registry.bind(producer, process, replacement_custody)
+            assert replacement_issuer is not issuer
+            assert registry.bind(producer, process, custody) is issuer
+            send('BEGIN;\n' + setup + ';\n' + originals[1].decode() + '\n')
+            replacement = admit(replacement_issuer.reserve(replacement_custody))
+            assert replacement['ordinal'] == '0' and replacement['writerXid'] != first['writerXid']
+            decode_current_registry('new-top-level-transaction', ['0'])
+            assert issuer.reserve(custody).reason == 'closed'
+            transaction_reuse = {'samePsqlProcess': True, 'confirmedPriorEndObservation': ended,
+                'oldIssuerRefused': closed_result.reason, 'oldBindingRetained': True,
+                'newOriginalToken': True, 'newAdmission': replacement}
             send('ROLLBACK;')
             process.stdin.close()
             assert process.wait(timeout=30) == 0
@@ -205,6 +223,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
 receipt = {'scope': 'Selected admission family with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification',
            'registryDecoderObservations': decoded_registries,
            'registryObservationSql': registry_observation_sql,
+           'transactionReuse': transaction_reuse,
            'nativeInputControls': native_controls, 'originalSurvivingSnapshot': before_refusals,
            'family': family, 'pgserver': importlib.metadata.version('pgserver'), 'serverVersion': version,
            'observations': [first, second, third], 'refusedIssuedOrdinal': '2', 'nativeRefusalSqlstate': '22023', 'configurationObservations': configurations, 'rollbackRegistryRows': 0, 'rollbackRemovedNamespace': True,

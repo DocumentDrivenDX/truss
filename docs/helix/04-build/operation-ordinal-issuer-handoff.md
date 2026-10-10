@@ -417,3 +417,29 @@ Complete driver integration must independently validate the original descriptor,
 command/completion, byte/work limits and same transaction/cut before using these
 cells for operation selection. Native account/security/finalizer composition and
 atomic installer readiness remain required; no result here supplies a commit proof.
+
+## Same connection, distinct top-level transaction fixture
+
+The `issued-operation-ordinal-{base,asserted,epoch,configuration}-transaction-reuse-native.json`
+receipts extend the native schedules on the same psql process/connection. After
+the first transaction's explicit ROLLBACK, an actual observation returns an
+unassigned xid and absent fixture namespace. The trusted fixture then ends the
+original registry binding. Its old issuer refuses with closed, and rebinding the
+old token returns that same permanently closed issuer.
+
+A distinct fixture token receives a different issuer, while native BEGIN/setup
+and admission on the same connection produce a different actual xid with ordinal0.
+The complete registry projection decodes that new row; the earlier issuer still
+refuses. A final rollback and independent connection verify namespace absence.
+The original0/1/3 and burned2 schedule, refusal controls and exact context captures
+remain in each receipt. The registry's finite cumulative binding capacity is two;
+ending the first binding does not refund it.
+
+This is a trusted administrative lifetime fixture, not an implementation of the
+original adapter adoption protocol. Its host constructs the new token, and its
+psql JSON wrapper supplies command metadata; no complete descriptor/control-cycle,
+account, ordinary-role authority or unknown-settlement observation is inferred.
+In particular, the post-rollback unassigned xid alone does not authorize production
+connection reuse. Qualified driver confirmation, original cleanup/recovery and
+framing must establish the full reuse gate from the producer handoff. Lost COMMIT,
+backend replacement and unresolved prior attempts remain separate unrun exits.
