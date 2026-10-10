@@ -1506,3 +1506,25 @@ phase/generation label cannot certify effects when the installed producer drifte
 Rollback restores both native trigger inventory and canonical value. Complete
 ordinary/admin privilege and installation publication enforcement remain open;
 this probe is not that enforcement. Existing21-check cascade receipt is retained.
+
+### All four original invoker families reject elevated capture (2026-10-10)
+
+The [four-family elevation receipt](evidence/design-audit/four-family-elevation-native.json)
+passes22 PostgreSQL16.15 observations. Alongside the earlier base-family original
+actor/context preservation controls, asserted-origin, epoch-context and
+configuration-context candidates are actually installed and invoked through
+separate SQL DEFINER wrappers owned by integrity_probe. All three retain native
+INVOKER/search-path attributes, raise55000 at the original invoker guard, restore
+the original actor after confirmed savepoint containment and leave no surviving
+registry row. The earlier10-case producer/receipt remains unchanged.
+
+This confirms the original actor boundary applies across every family, rather
+than silently treating an advanced context as a protected owner-aware route.
+It does not realize PA01/PA02's protected capture: a separately versioned original
+caller/capture/writer protocol must retain actual subject/attempt/connection/
+installed authority across elevation. Broad administrative base fixture grants
+and synthetic wrapper inputs remain explicitly unadopted. Advanced family
+artifact admission is not exercised because the guard refuses first; complete
+native OID/owner/ACL/dependency closure and original accounted controls remain
+separate outputs. No guard removal, direct consumer registry grants, public API
+or semantic-body readiness change is authorized by this experiment.

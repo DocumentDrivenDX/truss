@@ -1831,3 +1831,10 @@ Passed private components remain integration inputs; the next substantive work
 is protected native capture/installed correspondence and complete semantic bodies.
 The unselected supported migration pair cannot be replaced with the historical
 review-model comparison or an unchanged-DDL reinstall. All original scope remains.
+
+The [four-family elevation check](evidence/design-audit/four-family-elevation-native.json)
+passes22 observations and confirms nested-DEFINER refusal/native INVOKER attributes
+for every original admission family. This closes the family coverage gap in the
+existing guard experiment, not protected capture or advanced artifact authority.
+PA01/PA02 still require a separate versioned original actor handoff and complete
+installed identity/ACL/dependency qualification; the current guards stay intact.
