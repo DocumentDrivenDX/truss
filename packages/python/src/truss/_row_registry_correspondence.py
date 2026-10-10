@@ -28,18 +28,7 @@ def _original(hex_cell):
     return bytes.fromhex(hex_cell)
 
 
-def check_registry_correspondence(body, installation, actual_xid, rows, maximum_rows, maximum_bytes):
-    """Match all manifest contributors, retaining every supplied registry operation.
-
-    The original descriptor/cycle/completion/row visibility/account and native
-    installation/current subject authority must be admitted externally. Supplied
-    rows or labels cannot prove that a database capture was complete. Noncontributors
-    remain in the returned cohort for independent readiness/finalization/settlement;
-    this check never selects a newest operation or treats a phase as admission.
-    """
-    if type(body) is not CustodyBody:
-        raise ValueError('Original manifest projection required')
-    addresses = check_custody_addresses(body, installation, actual_xid)
+def _decode_cohort(installation, actual_xid, profile, layout, rows, maximum_rows, maximum_bytes):
     if type(rows) not in (tuple, list):
         raise ValueError('Original registry rows required')
     cells = decode_operation_registry(actual_xid, COLUMNS, rows, 'SELECT', str(len(rows)),
@@ -50,15 +39,22 @@ def check_registry_correspondence(body, installation, actual_xid, rows, maximum_
         group = decode_row_group_custody(_original(row[14]))
         if (context.address.installation != installation or context.address.writer_xid != row[0]
                 or context.address.operation_ordinal != row[1]
-                or context.profile != body.profile or context.profile != group.profile
+                or context.profile != profile or context.profile != group.profile
                 or context.address.original != group.address.original or group.kind != row[2]
-                or context.artifacts[1] != body.layout
+                or context.artifacts[1] != layout
                 or context.artifacts[3].original != _original(row[9])
                 or context.artifacts[8] != group.admission):
             raise ValueError('Original registry context/group mismatch')
         operation = RegistryOperation(row, context, group)
         cohort.append(operation)
         by_ordinal[row[1]] = operation
+    return tuple(cohort), by_ordinal
+
+
+def _match_manifest(body, installation, actual_xid, cohort, by_ordinal):
+    if type(body) is not CustodyBody:
+        raise ValueError('Original manifest projection required')
+    addresses = check_custody_addresses(body, installation, actual_xid)
     contributors = []
     for position, address in enumerate(addresses):
         original = by_ordinal.get(address.operation_ordinal)
@@ -72,6 +68,57 @@ def check_registry_correspondence(body, installation, actual_xid, rows, maximum_
                 raise ValueError('Original registry contributor artifact mismatch')
         contributors.append(original)
     return RegistryCorrespondence(tuple(cohort),tuple(contributors))
+
+
+
+def check_registry_correspondence(body, installation, actual_xid, rows, maximum_rows, maximum_bytes):
+    """Complete supplied cohort and one manifest; native capture/authority external."""
+    if type(body) is not CustodyBody:
+        raise ValueError('Original manifest projection required')
+    cohort, index = _decode_cohort(installation, actual_xid, body.profile, body.layout,
+                                  rows, maximum_rows, maximum_bytes)
+    return _match_manifest(body, installation, actual_xid, cohort, index)
+
+
+@dataclass(frozen=True)
+class TouchOperationCorrespondence:
+    cohort: tuple[RegistryOperation, ...]
+    touches: tuple[tuple[object, RegistryCorrespondence], ...]
+
+
+def check_touch_operation_correspondence(touches, installation, actual_xid, profile, layout,
+                                         rows, maximum_touches, maximum_rows, maximum_bytes):
+    """Decode all supplied operations once, including when no touch exists.
+
+    Profile/layout are independently supplied projections, not authenticated
+    installation evidence. Complete native touch/operation visibility and same cut,
+    authority, owner codec, resource accounting and readiness are external.
+    Returned touch contributors share retained original cohort objects; no phase
+    or noncontributor is discarded and this performs no mutation or finalization.
+    """
+    from ._row_touch_registry import RegistryTouch
+    from ._row_operation_custody import Profile, Artifact
+    if (type(profile) is not Profile or type(layout) is not Artifact
+            or type(maximum_touches) is not int or not 0<=maximum_touches<=9007199254740991
+            or type(touches) not in (tuple,list) or len(touches)>maximum_touches):
+        raise ValueError('Original touch cohort/profile required')
+    cohort, index = _decode_cohort(installation, actual_xid, profile, layout,
+                                  rows, maximum_rows, maximum_bytes)
+    output=[];seen=set()
+    for touch in touches:
+        if (type(touch) is not RegistryTouch or type(touch.cells) is not tuple
+                or len(touch.cells)!=12 or type(touch.custody) is not CustodyBody
+                or touch.cells[0]!=actual_xid
+                or touch.cells[8:12]!=tuple(v.hex() for v in
+                    (touch.custody.layout.original,touch.custody.home.original,
+                     touch.custody.owner_property.original,touch.custody.original))
+                or touch.cells[:6] in seen or touch.custody.profile!=profile
+                or touch.custody.layout!=layout):
+            raise ValueError('Original touch cohort correspondence mismatch')
+        seen.add(touch.cells[:6])
+        matched = _match_manifest(touch.custody,installation,actual_xid,cohort,index)
+        output.append((touch,matched))
+    return TouchOperationCorrespondence(cohort,tuple(output))
 
 
 def resolve_unfinished_operation(correspondence):

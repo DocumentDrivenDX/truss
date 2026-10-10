@@ -1423,3 +1423,35 @@ composition, not semantic owner-codec admission, original protected visibility/
 coherent cut/current authority, full contributor operation correspondence or
 complete accounting. Those inputs remain mandatory for commit finalization and
 publication. Seven-body readiness and public exports remain unchanged.
+
+### Shared complete operation cohort and every touch manifest (2026-10-10)
+
+Private `check_touch_operation_correspondence` now decodes the complete supplied
+operation cohort once under independently supplied profile/layout projections,
+then matches every touch's original contributor manifest against that cohort.
+All phases/noncontributors remain retained. Each touch's raw original carriers
+must match its retained custody projection, actual xid/profile/layout must agree
+and complete touch identities cannot duplicate. Contributor objects share the
+original decoded cohort rather than recreating separate native context/group
+projections per touch. Existing single-manifest correspondence uses the same
+decoder/matcher. Empty touch input still validates all original operation
+contexts/groups, retaining catalog or other non-row operations.
+
+`python-touch-operation-source.json` pins111 passing Python source tests. Four
+focused methods check shared object identity, finalized noncontributors and
+manifest ordering, missing/substituted contributors, foreign/raw custody,
+duplicate touch identities, empty-touch malformed registry refusal and touch
+count boundaries. Multiple unfinished entries and older seals remain structural
+data in this commit-cohort check; observer OC02 remains separate. This does not
+qualify a native state permitting overlapping operations or prove readiness.
+
+The concrete next integration sequence is: original complete native operation
+and touch captures under one independently protected coherent cut; this shared
+correspondence; admitted semantic owner/home codec and current subject/authority
+for every retained original obligation; held guards/head/capacity and full
+resource accounting; complete registered native validation/finalization/journal/
+feed/settlement. Profile/layout arguments alone do not authenticate an installed
+profile. Syntax/row/byte ceilings do not account for repeated per-manifest matching
+work or temporary copies. The new composition is private, performs no DML and
+changes no installed-wheel/public API or seven-body readiness claim. Earlier
+source/native checkpoints remain historical to their exact pinned module bytes.

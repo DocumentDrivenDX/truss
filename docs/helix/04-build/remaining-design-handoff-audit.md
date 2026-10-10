@@ -1698,3 +1698,11 @@ older seals survive complete-cell Python decoding. This closes the finite query
 composition gap; independently protected complete visibility/cut, owner-codec
 meaning, operation correspondence, authority and finalization remain open.
 The earlier point lookup remains a separate selected-tuple observation.
+
+The [shared touch/operation correspondence checkpoint](evidence/design-audit/python-touch-operation-source.json)
+passes111 source tests. Complete operation decoding is shared by all retained
+touch manifests and still runs for an empty touch set; noncontributors and
+original phases are preserved. The missing integration now begins with actual
+protected same-cut captures, semantic owner-codec/current authority and full
+accounting, followed by complete native validation/finalization. Private
+structural correspondence is not a public operation or readiness gate.
