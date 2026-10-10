@@ -1086,3 +1086,24 @@ only private candidate tuple evidenced; Linux and managed targets stay open.
 The private candidate version/wheel remains unpublished, and no dependency or
 public supported-runtime claim changes. The prior input/build/package/native
 receipts retain their original scopes.
+
+
+## Fresh corrected native source build — 2026-10-10
+
+A new local checkout at the pinned pgserver3b227607 revision used materialized
+exact candidate recipe bytes and the independently checked PostgreSQL16.15
+source archive. `make -C pgbuild postgres` completed, followed by the existing
+pinned corrected-wheel packager. [Fresh build evidence](evidence/design-audit/pgserver-fresh-source-build-20261010.json)
+retains toolchain/OS, source/recipe hashes, actual exit results, payload comparison
+and compressed original build/package logs. [Packaging evidence](evidence/design-audit/pgserver-fresh-wheel-packaging-20261010.json)
+retains all1620 original wheel/source payload comparisons.
+
+The new wheel hash isa7b637a7;60 payload paths differ from the prior candidate.
+This proves repeatable source/recipe build procedure on the current macOS27
+arm64 toolchain, not byte-for-byte binary reproducibility. No unsupported cause
+for the differences is inferred. Native version is16.15, but prior installed
+caller-reset/issuer/engine results cannot be transferred solely by version/hash
+shape: install the new wheel into a fresh environment, verify relocated payload
+and rerun applicable native controls before adoption. Complete driver/security/
+installation gates and published default delivery remain open. No wheel binary
+is published or included as a supported package by these receipts.
