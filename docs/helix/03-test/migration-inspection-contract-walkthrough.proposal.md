@@ -111,7 +111,20 @@ never execute the changed bytes. Install a separate test package outside checkou
 and instrument database dispatch; each pre-effect refusal must observe zero calls.
 A callback that merely asserts its own dispatch count is insufficient evidence.
 
-These controls remain not_run. They refine PKG-03–06 without satisfying complete
-PKG-01 membership, PKG-02 native installation, PKG-07 preservation or PKG-08 late
-settlement. The eventual installed suite must keep both component and actual
+The private component variants now execute: the installed58-test suite includes
+index duplicate/pin/membership/path/numeric controls, real-file changed/truncated/
+appended refusal, original-byte retention, descriptor symlink/hardlink/nonregular
+refusal and actual reader composition. Their inputs are synthetic registration
+fixtures. Complete altered installed-package cases with independently registered
+real release membership and native dispatch observations remain not_run. These
+component results refine PKG-03–06 without satisfying complete PKG-01 membership,
+PKG-02 native installation, PKG-07 preservation or PKG-08 late settlement. The eventual installed suite must keep both component and actual
 installer observations, with original source/package/profile hashes.
+
+
+Installed reader evidence: [full suite](../04-build/evidence/design-audit/python-resource-reader-full-suite-diagnostic.json)
+retains current wheel/module/test identities and complete output. It supersedes
+no complete-release case verdict. The earlier timeout is retained in the Python
+handoff; failure output is now preserved for future diagnostics. New package
+qualification must rerun the selected cases with the actual original admitted
+release inputs and platform, rather than copying component verdicts into PKG rows.

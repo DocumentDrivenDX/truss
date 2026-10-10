@@ -1202,11 +1202,13 @@ Truss conformance or changing the consumer's source files.
 ## P1 installed-resource implementation handoff
 
 Use the [Python installed-resource selection boundary](../02-design/python-integration.proposal.md#python-installed-resource-selection-boundary)
-for the next packaging implementation. Implement the private inert reader with
-independently pinned original index bytes, closed unique membership, exact byte
-length/hash checks, original account reservations and retained use-time bytes.
-This work can proceed while native routine/security composition is unfinished;
-its success must remain component evidence. Then package the complete admitted
+for packaging composition. Private index decoding, descriptor-relative directory
+resolution and complete declared-byte capture now exist, with independently pinned
+index bytes, closed unique membership, exact length/hash checks, original scalar
+byte reservations and retained use-time bytes. The current installed wheel passes
+58 tests; this remains component evidence. Complete precharged heap/work/deadline
+accounting and independently registered real release membership still require
+integration. Then package the complete admitted
 CONTRACT-008 bundle and integrate IM01–IM05 with explicit install/verify and
 unknown-outcome reconciliation. Do not publish installation readiness from a
 resource-reader result, current candidate inventory or a recomputed local pin.
@@ -1227,11 +1229,35 @@ it is not a complete native account or proof of actual Python heap containment.
 The reused environment remains corrected private pgserver0.1.4+truss.pg16.15 on
 macOS arm64/Python3.11; no published default pin or managed-target claim changes.
 
-Next implement the reader's actual bounded read/decode/hash/retain adapter against
-this original account, with independent precharged allocation/work bounds and
-trusted release/termination observations. Reader construction stays inert. A
+The subsequent reader implements bounded byte capture, closed index membership
+and original-root directory resolution against this account. Next qualify complete
+precharged allocation/work bounds and trusted release/termination observations
+across read/decode/hash/retain and native archive/use. Reader construction stays inert. A
 reader failure closes ordinary account admission as applicable and preserves
 original permit/allocation ownership until confirmed release; returning an error
 or deleting a local reference cannot refund the unresolved charge. Use the existing
 altered-package controls and installed-package gates. Still require full native
 routine/security/grant/inventory composition before public installer readiness.
+
+
+### P1 continuation after installed reader composition
+
+The [full installed component run](evidence/design-audit/python-resource-reader-full-suite-diagnostic.json)
+passes58 tests on15 original module payloads. Preserve the preceding180-second
+timeout and unverified cleanup; the successful later run does not explain them.
+All complete-release/native cases below remain unqualified.
+
+| Remaining delivery | Original output required | Exit evidence |
+| --- | --- | --- |
+| Account composition | One selected original allocation/work/deadline profile and actual read/decode/hash/buffer/archive producers, retaining containment/recovery reserves. | Exact-at/one-over and cancellation/unknown ownership across the same account; scalar declared bytes cannot qualify heap/native work. |
+| Release resource registration | Independently reviewed complete release index and original model/generated/native/grant/initialization/verifier/profile/recipe inventory, with bootstrap bundle/inventory pins. | PKG-01 clean wheel and sdist membership. Neither a test inventory nor recomputed package hash supplies expected release authority. |
+| Installed package realization | Explicit trusted installed-directory root selection on an actually qualified platform, followed by the current composed reader. | Execute altered/missing/foreign package cases with original release registration and independent pre-effect native observations. Zip/Windows require separate support; no fallback realization. |
+| Protected native composition | Original issuer/account and seven mandatory routine bodies, security-owner adopted subset, role/grant/initialization/complete inventory procedures. | Actual ordinary-role effects/refusals and rollback/finalization; exclude legacy executable ordinal allocators. No synthetic seals or no-op bodies. |
+| Installer and verification | Explicit public install/status/verify/reconcile preserving host connection ownership and original attempt/recovery. | CONTRACT-008 IM01–IM05 and PKG-02/08 through actual native publication; late failure/unknown must retain original custody. |
+
+These are dependencies for one complete installer, not five independently usable
+installation APIs. Account and resource implementation remain Truss-owned;
+UMF supplies original schema interpretation/generation, Weft its separately
+admitted compiler realization, and the security owner authority semantics.
+Populated migration PKG-07 and full Python/TypeScript interchange remain required
+P4 exits; neither is silently removed to claim the P1 preview complete.
