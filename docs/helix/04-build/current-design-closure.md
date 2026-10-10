@@ -25,7 +25,7 @@ variants and the expected local-close/native-fence counterexample. STP-044 maps
 that trace to original native barrier, effect and recovery schedules with an
 independent observer; they remain not_run. The component result supersedes only
 the earlier no-executable-analysis checkpoint, not native authority, refinement,
-liveness or independent-review gaps. The [current full allocation check](evidence/design-audit/current-story-allocation-after-formal-replay-mapping.json)
+liveness or independent-review gaps. The [current full allocation check](evidence/design-audit/current-story-allocation-after-weft-two-hop-review.json)
 retains all45 stories/167 criteria with zero structural errors.
 
 Fresh fetch now identifies UMF main322b193 and Weft mainb8867c9, superseding the

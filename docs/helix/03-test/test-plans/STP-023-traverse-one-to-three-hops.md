@@ -53,6 +53,20 @@ Resource exhaustion must explicitly refuse or return contract-qualified truncati
 
 ## Build Handoff
 
+Weft e810335 adds a committed draft for two-hop occurrence bags and grouped
+counts, as reviewed in TD-023. It supplies no executed compiler/native evidence
+for this plan. Independent interoperability controls must distinguish six paths
+from one terminal for parallel 2×3 edges, and distinguish legal draft self-loop
+and forward/inverse return paths from the direct candidate's cycle exclusions.
+Verify full document/type/revision continuity when equal local IDs occur across
+scopes. Preserve complete path/count capacity before HAVING or outer LIMIT,
+ordered-prefix/lookahead correctness, and absent-root versus present-empty
+results under original authorization and cleanup. Run these against an actual
+future admitted PostgreSQL path realization separately from direct traversal.
+No compiled bag is deduplicated or filtered by host SQL to pass US-023; one-hop,
+three-hop, stage continuation and performance exits remain independently required.
+All new interoperability controls are `not_run`.
+
 Finalize traversal contract, independently define corpus/baseline and sampling, implement red correctness tests, then native templates/benchmarks. All three criteria plus correctness/resource prerequisites block closeout. Performance-only success cannot qualify semantic support.
 
 Traversal wire check: `bun docs/helix/04-build/evidence/design-audit/check-direct-traversal.ts <Ajv Draft 2020-12 module path>` passes 24 shape witnesses. Native schedules must independently reject forged/stale stage custody, smaller-than-consumed bounds, conflicting expected work versions, expired snapshots, wrong full query despite matching digest and empty-more; these intentionally cannot be established by schema. Verify path-local cycles and terminal dedup using independent graphs, no partial frontier disclosure on limits, stable replayed sealed pages and host transaction ownership during cleanup. Stage-release ABI is authored; host/native resource profile remains pending; no shape pass qualifies resumability.

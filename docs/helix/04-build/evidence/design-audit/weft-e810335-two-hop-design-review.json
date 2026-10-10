@@ -1,0 +1,74 @@
+{
+  "schema": "truss-weft-two-hop-design-review/0.1",
+  "weftCommit": "e810335788eacf351f6f86c3f63dba8832724fcb",
+  "umfOriginMain": "322b193cef7c940d07b741860cf0170272628868",
+  "sources": [
+    {
+      "repository": "https://github.com/DocumentDrivenDX/weft.git",
+      "commit": "e810335788eacf351f6f86c3f63dba8832724fcb",
+      "path": "docs/helix/02-design/contracts/CONTRACT-005-authored-two-hop-paths.md",
+      "sha256": "1506c4cf09b05a4ca93941358e38b50f4cfb7c9b6b1ee1de8c76dc6a1840e891"
+    },
+    {
+      "repository": "https://github.com/DocumentDrivenDX/weft.git",
+      "commit": "e810335788eacf351f6f86c3f63dba8832724fcb",
+      "path": "docs/helix/02-design/technical-designs/TD-007-authored-two-hop-paths.md",
+      "sha256": "4256d8c7919e84dfd11975ad9c51540a40dc680450f46102b820493f39111b69"
+    }
+  ],
+  "changedPaths": [
+    "docs/helix/02-design/contracts/CONTRACT-001-weft-sql-and-logical-plan.md",
+    "docs/helix/02-design/contracts/CONTRACT-002-backend-interface.md",
+    "docs/helix/02-design/contracts/CONTRACT-003-compile-and-host-boundary.md",
+    "docs/helix/02-design/contracts/CONTRACT-004-application-reads.md",
+    "docs/helix/02-design/contracts/CONTRACT-005-authored-two-hop-paths.md",
+    "docs/helix/02-design/technical-designs/TD-007-authored-two-hop-paths.md",
+    "docs/helix/04-build/evidence/authored-two-hop-design-20261010/independent-review.json",
+    "docs/helix/04-build/evidence/authored-two-hop-design-20261010/source-fingerprints.json"
+  ],
+  "assessment": {
+    "committedDraftOnly": true,
+    "compilerImplementationChanged": false,
+    "newVersionOrSyntaxAdopted": false,
+    "trussFrozenCompilerChanged": false,
+    "oneToThreeHopDirectTraversalQualified": false
+  },
+  "semanticWitnesses": [
+    {
+      "case": "parallel_edges",
+      "firstHopOccurrences": 2,
+      "secondHopOccurrences": 3,
+      "pathOccurrences": 6,
+      "distinctTerminals": 1,
+      "meaning": "Path bag and unique terminal output are different contracts"
+    },
+    {
+      "case": "self_loop_twice",
+      "authoredEdges": [
+        "a->a"
+      ],
+      "weftDraftOrderedPairs": [
+        [
+          "a->a",
+          "a->a"
+        ]
+      ],
+      "trussProposedDirectPaths": [],
+      "meaning": "Weft draft permits edge reuse; proposed direct traversal excludes repeated nodes"
+    },
+    {
+      "case": "forward_inverse_return",
+      "authoredEdges": [
+        "a->b"
+      ],
+      "weftDraftPath": [
+        "a",
+        "b",
+        "a"
+      ],
+      "trussProposedDirectPaths": [],
+      "meaning": "An authored inverse return is legal in the Weft draft, excluded by direct path-local cycle rule"
+    }
+  ],
+  "evidenceScope": "Committed source review and independently authored finite semantic expectations; no parser, compiler, wrapper or native execution evidence"
+}

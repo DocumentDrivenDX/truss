@@ -32,6 +32,34 @@ Implement bounded explicit relationship-hop execution over the fixed typed edge 
 
 Components are new. Weft retains source compiler ownership; these direct templates cannot grow into a duplicate parser/optimizer.
 
+## Current upstream two-hop boundary — 2026-10-10
+
+The [committed Weft e810335 review](../../04-build/evidence/design-audit/weft-e810335-two-hop-design-review.json)
+records draft CONTRACT-005/TD-007 for exactly two authored hops, path occurrence
+collections, bag expansion and distinct-terminal grouped counts. The commit
+changes documents and review evidence, not compiler implementation. Proposed
+0.4 versions, spellings and closed IR schemas remain review inputs; Truss's
+frozen 0.2 compiler and original wrapper are unchanged.
+
+Weft's draft preserves ordered edge pairs, permits self-loops and forward/inverse
+edge reuse, and separates path counts from distinct terminal counts. Truss's
+pending direct profile excludes repeated typed objects within each path and
+returns unique terminals. Even a distinct-terminal aggregate over Weft paths
+does not implement that cycle rule. Two first-hop and three second-hop parallel
+edges yield six Weft occurrences and one terminal; a self-loop twice or inverse
+return to the start is legal in the draft but excluded by the direct candidate.
+These are independently authored semantic witnesses, not executed owner tests.
+
+Keep the compiled path and direct traversal capabilities separate. Future Truss
+adoption requires the actual reviewed Weft interface/realization, PostgreSQL
+edge-token encoding/order, complete document/type/revision identity continuity,
+current security and held-cut/resource/cleanup admission. Databricks signed-BIGINT
+token declarations do not qualify Truss storage identities. Two-hop support
+cannot close one/three-hop coverage, staged continuation, cycle interpretation
+or US-023 performance criteria. No host SQL rewrite, collection deduplication or
+count over truncated collections bridges the difference. The pending human
+direct-output choice remains pending; this upstream draft does not decide it.
+
 ## API/Interface Design
 
 CONTRACT-004 now proposes a concrete hop/work-limit/result declaration, path-local cycle exclusion and terminal object uniqueness. Consume it as a candidate rather than implementing global visited pruning or conflating output limit with expanded work. Owner cycle interpretation, staged work/result protocol and native budget enforcement remain review boundaries.
