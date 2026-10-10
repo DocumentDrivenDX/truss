@@ -1,0 +1,116 @@
+{
+  "scope": "Installed current resource-reader components outside checkout; synthetic release inputs in temporary directories",
+  "modules": [
+    {
+      "path": "truss/__init__.py",
+      "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+    },
+    {
+      "path": "truss/_acceptance_json.py",
+      "sha256": "fba890deb660bf461e6bcf4eeef0c0704962f0c1814d879c9509e2f994842f77"
+    },
+    {
+      "path": "truss/_directory_resources.py",
+      "sha256": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48"
+    },
+    {
+      "path": "truss/_installation_resources.py",
+      "sha256": "2564e6daf785109d910c62ce849cca708e33ca4515f96436ec946dbe0c6ed50b"
+    },
+    {
+      "path": "truss/_operation_admission.py",
+      "sha256": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+    },
+    {
+      "path": "truss/_operation_ordinal.py",
+      "sha256": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977"
+    },
+    {
+      "path": "truss/_query_execution.py",
+      "sha256": "8209768fe1f78b6234bae24545a221beca6b2ff60f22d9f3be501834604342e7"
+    },
+    {
+      "path": "truss/_receipt_position.py",
+      "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+    },
+    {
+      "path": "truss/_resource_account.py",
+      "sha256": "640d37b2f517339b2a0ff0a7438ff17dd717644d5464f1af1cce732370b99a2a"
+    },
+    {
+      "path": "truss/cli.py",
+      "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+    },
+    {
+      "path": "truss/local_runtime.py",
+      "sha256": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9"
+    },
+    {
+      "path": "truss/migration_planning.py",
+      "sha256": "12fabf2bd14a6af133f70488e704ff7a7fe8aded3158695655ba26acfb69fcce"
+    },
+    {
+      "path": "truss/numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "truss/timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "truss/weft.py",
+      "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+    }
+  ],
+  "wheelSha256": "51476932d932ded11f9c9e1eb0b06e2b5527a99f27bb93a33b343d5d08bce4e5",
+  "loadedPackage": "/private/tmp/truss-pgserver-corrected-test-env/lib/python3.11/site-packages/truss",
+  "tests": 10,
+  "results": [
+    {
+      "command": [
+        "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+        "-W",
+        "error",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/Users/erik/Projects/truss/packages/python/tests",
+        "-p",
+        "test_directory_resources.py",
+        "-v"
+      ],
+      "output": "test_descriptor_resolver_composes_with_pinned_bundle_capture (test_directory_resources.DirectoryResourceTests.test_descriptor_resolver_composes_with_pinned_bundle_capture) ... ok\ntest_original_root_survives_path_replacement_and_close_refuses (test_directory_resources.DirectoryResourceTests.test_original_root_survives_path_replacement_and_close_refuses) ... ok\ntest_symlink_parent_leaf_and_nonregular_refuse (test_directory_resources.DirectoryResourceTests.test_symlink_parent_leaf_and_nonregular_refuse) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.044s\n\nOK\n",
+      "testSourceSha256": "928878bb47c12c90ee9f98033dda36e9838cce80c0de83c5e3ee25140494f7d4"
+    },
+    {
+      "command": [
+        "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+        "-W",
+        "error",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/Users/erik/Projects/truss/packages/python/tests",
+        "-p",
+        "test_installation_resources.py",
+        "-v"
+      ],
+      "output": "test_complete_bundle_retains_one_account_and_late_failure_quarantines (test_installation_resources.ResourceBundleTests.test_complete_bundle_retains_one_account_and_late_failure_quarantines) ... ok\ntest_missing_changed_truncated_appended_resources_quarantine_once (test_installation_resources.ResourceCaptureTests.test_missing_changed_truncated_appended_resources_quarantine_once) ... ok\ntest_real_file_capture_retains_verified_bytes_after_change (test_installation_resources.ResourceCaptureTests.test_real_file_capture_retains_verified_bytes_after_change) ... ok\ntest_reservation_refusal_precedes_open_and_invalid_pin_is_inert (test_installation_resources.ResourceCaptureTests.test_reservation_refusal_precedes_open_and_invalid_pin_is_inert) ... ok\ntest_duplicate_and_unsafe_closed_entries (test_installation_resources.ResourceIndexTests.test_duplicate_and_unsafe_closed_entries) ... ok\ntest_original_bounds_and_duplicate_membership (test_installation_resources.ResourceIndexTests.test_original_bounds_and_duplicate_membership) ... ok\ntest_original_closed_membership_and_independent_pin (test_installation_resources.ResourceIndexTests.test_original_closed_membership_and_independent_pin) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.037s\n\nOK\n",
+      "testSourceSha256": "eb6ce55d074ea69042c40215a02b0c69156c31883bf8b261e86c08c90e775e22"
+    }
+  ],
+  "environmentReused": true,
+  "fullSuite": {
+    "status": "timeout",
+    "expectedTests": 58,
+    "timeoutSeconds": 180,
+    "producerSha256": "eba8ceba853c93457140d3888b6451a13926b3640d7f5a75eb0b74a7cf3e8c8c",
+    "partialOutputUnavailable": true,
+    "nativeCleanupConfirmed": false
+  },
+  "fullSuiteQualified": false,
+  "installationQualified": false,
+  "completeResourceAccountingQualified": false
+}

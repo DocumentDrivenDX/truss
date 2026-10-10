@@ -2672,3 +2672,24 @@ mutation require their selected host profile, with exact byte capture still
 mandatory. Next compose this resolver with installed wheel resources and complete
 bundle capture outside checkout, then execute the unchanged native installation
 gates. Actual buffering/decoder/hash/work bounds remain unqualified.
+
+
+### Installed reader composition and unresolved suite timeout
+
+The rebuilt wheel contains15 current modules, each byte-matched against source
+and loaded installation. From the reused external environment and unrelated
+working directory, all10 directory/capture/index/bundle tests pass, including
+actual descriptor resolver composition and a later symlink replacement refusing
+without changing previously captured bytes. The
+[installed component receipt](../04-build/evidence/design-audit/python-installed-resource-reader-components.json)
+retains exact wheel/module/test hashes and complete component output.
+
+The full58-test installed suite terminated at its180-second deadline; no pass
+receipt was produced. Its captured partial output was not preserved by the
+current checker, so neither the failing test nor complete owned native cleanup
+is established. An attempted process inspection hit an approval-review timeout,
+not a security verdict. Do not relabel earlier48-test evidence as current or
+infer a resource-reader regression from this observation. Next improve bounded
+failure-output/owned cleanup observability and diagnose the native lifecycle run
+before qualifying the full current wheel. Complete installed release resources,
+accounting and native installation gates remain open.
