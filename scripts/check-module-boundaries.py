@@ -13,8 +13,18 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_host_contracts': {'dataclasses', 'truss.execution'},
+    '_host_execution': {'dataclasses', 'threading', 'truss._host_contracts', 'truss._native_adoption', 'truss._native_transactions', 'truss.execution', 'uuid'},
+    '_native_adoption': {'dataclasses', 'truss._host_contracts', 'truss._native_pg8000', 'truss.execution', 'uuid'},
+    '_native_arbitration': {'dataclasses', 'threading', 'truss._host_execution', 'truss._native_adoption', 'truss._native_pg8000', 'truss._native_transactions', 'truss._operation_arbitration', 'uuid'},
+    '_native_operation': {'dataclasses', 'pg8000.converters', 'pg8000.core', 'pg8000.native', 'threading', 'truss._native_arbitration', 'truss._native_pg8000', 'truss._native_result_custody', 'truss._native_transactions', 'truss._operation_arbitration', 'truss.execution', 'uuid'},
+    '_native_pg8000': {'dataclasses', 'importlib.metadata', 'pg8000.native', 'threading'},
+    '_native_result_custody': {'dataclasses', 'pg8000.converters', 're', 'struct', 'truss._accounted_receive', 'truss._native_pg8000', 'truss._resource_account'},
+    '_native_transactions': {'dataclasses', 're', 'truss._native_adoption', 'truss._native_pg8000', 'truss.execution', 'uuid'},
+    '_operation_arbitration': {'dataclasses', 'threading', 'truss._host_execution', 'uuid'},
+    'execution': {'dataclasses', 'typing'},
     '_installation_archive': {'dataclasses', 'hashlib'},
-    '__init__': {'truss.local_runtime'},
+    '__init__': {'truss.local_runtime', 'truss.execution'},
     '_acceptance_json': {'json'},
     '_directory_resources': {'os', 'stat', 'threading', 'truss._installation_resources'},
     '_installation_resources': {'dataclasses', 'hashlib', 'json', 'truss._resource_account'},

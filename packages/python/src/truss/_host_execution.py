@@ -3,29 +3,15 @@
 Unit-test ports provide component evidence only. Never advertise these handles
 as admitted protected transactions or expose this executor as a public capability.
 """
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from uuid import uuid4
 from threading import Lock
+from ._host_contracts import TransactionHandle, _Adoption
 from .execution import HostTransactionPort, TransactionObservation, Isolation, AccessMode, Outcome, Ok, Error, ExecutionFailure
-
-class TransactionHandle:
-    """Issuer-bound opaque lifetime handle. Public properties are descriptive."""
-    def __init__(self, issuer, key, isolation, access_mode):
-        self._issuer, self._key = issuer, key
-        self.isolation, self.access_mode = isolation, access_mode
-        self.ownership = 'caller'
 
 class SavepointHandle:
     def __init__(self, issuer, key):
         self._issuer, self._key = issuer, key
-
-@dataclass
-class _Adoption:
-    port: HostTransactionPort
-    observation: TransactionObservation
-    handle: TransactionHandle
-    usable: bool = True
-    refusal_code: str = "transaction_unusable"
 
 class HostExecutor:
     """One synchronous executor over explicit trusted ports; no connection pool."""

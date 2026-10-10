@@ -6,7 +6,7 @@ outside the cooperative host contract. No SQL classification or transaction
 identity is inferred here. Operation tokens are internal exclusion, not receipts
 or verified arbitration completion. Native lifecycle integration remains pending.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from importlib.metadata import version
 from threading import Lock
 
@@ -32,6 +32,15 @@ class NativeCall:
     original_control: object = None
     revision: int = 0
     original_resource: object = None
+    original_cleanup: object = None
+
+
+@dataclass(frozen=True, eq=False)
+class _Ownership:
+    operation: object = None
+    ledger: object = None
+    pending: object = None
+    completed: tuple = ()
 
 
 class NativeBoundary:
@@ -46,13 +55,11 @@ class NativeBoundary:
         self._resources = ()
         self._prepared_limit = prepared_limit
         self._active_resource = None
-        self._operation_ledger = None
-        self._pending_operation_ledger = None
         self._native_arbitration_sessions = ()
         self._native_arbitration_bindings = ()
         self._connection = connection
         self._lock = Lock()
-        self._operation = None
+        self._ownership = _Ownership()
         self._calling = False
         self._quarantined = False
         self._events = []
@@ -67,18 +74,24 @@ class NativeBoundary:
         with _attachment_lock:
             if connection._transaction_status != b'I' or hasattr(connection, '_truss_native_boundary'):
                 raise NativeBoundaryRefusal('Requires original idle, unattached connection')
+            self._original_driver_handlers = dict(connection.message_types)
             originals = {code: connection.message_types[code] for code in (b'C', b'E', b'Z', b'1', b'3')}
             hooks = {code: self._hook(code, handler) for code, handler in originals.items()}
             connection.message_types.update(hooks)
+            self._original_handlers = dict(connection.message_types)
             connection._truss_native_boundary = self
             original_parse = connection.send_PARSE
+            self._original_parse = original_parse
             original_close = connection.close_prepared_statement
+            self._original_close = original_close
             def parse(name, *args, **kwargs):
                 self._resource_name('prepare', name)
                 return original_parse(name, *args, **kwargs)
             def close_prepared(name, *args, **kwargs):
                 self._resource_name('close', name)
                 return original_close(name, *args, **kwargs)
+            self._parse_entry = parse
+            self._close_entry = close_prepared
             connection.send_PARSE = parse
             connection.close_prepared_statement = close_prepared
 
@@ -88,6 +101,8 @@ class NativeBoundary:
         with self._lock:
             descriptor = self._active_resource
             if not self._calling or descriptor is None:
+                return
+            if descriptor[0] == 'probe' and kind == 'prepare' and name == b'\0':
                 return
             if descriptor[0] != kind:
                 self._quarantined = True
@@ -104,6 +119,20 @@ class NativeBoundary:
             elif name != resource.name:
                 self._quarantined = True
                 raise NativeBoundaryRefusal('Original close name mismatch')
+
+    @property
+    def _operation(self): return self._ownership.operation
+    @_operation.setter
+    def _operation(self, value): self._ownership = replace(self._ownership, operation=value)
+    @property
+    def _operation_ledger(self): return self._ownership.ledger
+    @_operation_ledger.setter
+    def _operation_ledger(self, value): self._ownership = replace(self._ownership, ledger=value)
+    @property
+    def _pending_operation_ledger(self): return self._ownership.pending
+    @_pending_operation_ledger.setter
+    def _pending_operation_ledger(self, value): self._ownership = replace(self._ownership, pending=value)
+    def _publish_ownership(self, root): self._ownership = root
 
     def _hook(self, code, original):
         def capture(data, context):
@@ -141,7 +170,7 @@ class NativeBoundary:
                 raise NativeBoundaryRefusal('Original operation cannot be released')
             self._operation = None
 
-    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None):
+    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None, cleanup=None):
         with self._lock:
             if (self._quarantined or self._calling or
                     (self._operation is not None and token is not self._operation) or
@@ -153,14 +182,14 @@ class NativeBoundary:
             if self._revision >= 18446744073709551615:
                 raise NativeBoundaryRefusal('Native coordination revision exhausted')
             if self._operation_ledger is not None:
-                self._operation_ledger._check_call(self, token)
+                self._operation_ledger._check_call(self, token, cleanup)
             if self._transaction_tracker is not None:
                 self._transaction_tracker._before(lifecycle)
             if preflight is not None:
                 preflight()
             call_entry = None
             if self._operation_ledger is not None:
-                call_entry = self._operation_ledger._reserve_call(self, token, resource, lifecycle)
+                call_entry = self._operation_ledger._reserve_call(self, token, resource, lifecycle, cleanup)
             self._revision += 1
             self._active_control = lifecycle
             self._active_resource = resource
@@ -186,7 +215,7 @@ class NativeBoundary:
                 # only return/raise settles the call, never the first Ready.
                 ready = bool(events) and events[-1].code == b'Z'
                 complete = self._complete and ready and not self._quarantined and (not raised or native_error)
-                self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control, self._revision, self._active_resource)
+                self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control, self._revision, self._active_resource, cleanup)
                 if call_entry is not None:
                     call_entry.native_call = self.last_call
                 if closing or not complete:
@@ -204,9 +233,9 @@ class NativeBoundary:
                 finally:
                     self._calling = False
 
-    def run(self, sql, *, token=None, **params):
+    def run(self, sql, *, token=None, cleanup=None, **params):
         """Trusted host SQL; lifecycle classification is not provided here."""
-        return self._call(lambda: self._connection.run(sql, **params), token)
+        return self._call(lambda: self._connection.run(sql, **params), token, cleanup=cleanup)
 
     def prepare(self, sql, *, token=None):
         prepared = _Prepared(self)
@@ -266,7 +295,10 @@ class _Prepared:
                 raise
         else:
             resource.phase = 'unknown'
-            self._boundary._quarantined = True
+            session = self._boundary._operation_ledger
+            gate = getattr(session, 'result_custody', None)
+            if gate is None or not gate.normal_native_error(call):
+                self._boundary._quarantined = True
 
     def _publish_live(self):
         self._resource.phase = 'live'
@@ -296,12 +328,12 @@ class _Prepared:
             resource.phase = 'unknown'
             self._boundary._quarantined = True
 
-    def close(self, *, token=None):
+    def close(self, *, token=None, cleanup=None):
         descriptor = ('close', self._resource)
         try:
             return self._boundary._call(self._original.close, token,
                                         preflight=lambda: self._closing(descriptor), resource=descriptor,
-                                        on_settled=self._close_settled)
+                                        on_settled=self._close_settled, cleanup=cleanup)
         except BaseException:
             with self._boundary._lock:
                 if self._resource.phase == 'closing' and self._resource.close_attempt is descriptor:

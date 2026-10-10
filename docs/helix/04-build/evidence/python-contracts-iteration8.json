@@ -1,0 +1,93 @@
+{
+  "iteration": "Private original completion and reusable parameter-text operation",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "task": "/root/astra_plan_review",
+    "planDisposition": "Approved narrow pure parameter SELECT; DML deferred pending semantic dependency closure",
+    "completedDisposition": "Approved final source, tests, docs, import map and artifact evidence; hashes/counts and all39 source/wheel/installed modules independently verified",
+    "independentEvidence": "17 native/fault checks plus9 final-split checks;173 imports and16 checker controls passed",
+    "fixedFindings": [
+      "Busy refusal preserves winning owner",
+      "Pending native guard republishes before registry acquisition after allocation failure",
+      "Probe portal and unnamed statement receive separate original close acknowledgements",
+      "Cleanup has separate preallocated ingress/account/context capacity",
+      "Original text and NULL codecs checked again after acquiring token",
+      "Retry admission closes before native ownership handback",
+      "Lost completion and handback replies reconcile retained original outcome",
+      "Restoration-only host context/error references cleared after restoration",
+      "Opaque lifetime contracts split removes actual dependency cycle without checker exemption"
+    ]
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_host_contracts.py": "6f8bc85989bea1249b8b66ddb90009da2cd41c631887f839d87282e707dd3413",
+    "packages/python/src/truss/_host_execution.py": "2312226836ccb2901ecd77ad7ba5b10a25fa23c956b481c313ce70be4ff8f4e6",
+    "packages/python/src/truss/_native_adoption.py": "78128bff2db05716b8e3caaae368f23317069faf373c7ea2495920b01d7340e7",
+    "packages/python/src/truss/_native_arbitration.py": "024a89ba0eb6d639e9f9d1ddb6628c9d2e0a5cbd8c20a132df84c463bf142cb5",
+    "packages/python/src/truss/_native_operation.py": "f0b4f282e98e45b0a1a9be73f688b36c3a4576d7aeb54184668954eaf62aa55f",
+    "packages/python/src/truss/_native_pg8000.py": "ff3d5381138574bf1938f6940e3fc8d27f30eb2fc2fb80218d85cc65fd7e39c0",
+    "packages/python/src/truss/_native_result_custody.py": "f3f8202ff82a3c5e8ed03dce9cade773965c560d8f92ea7f7eb2531bd10590ca",
+    "packages/python/src/truss/_native_transactions.py": "ad7544969e78888fd2483018bbb13ad823c7205ca2b79cfef9089b100df2fa87",
+    "packages/python/tests/test_native_operation.py": "ab6fa9a27454a3146176491705419a7dd832483bb90f48c359297f9707c0b6d8",
+    "scripts/check-module-boundaries.py": "c4ebd08deedac4ced84f501db6462b613841c5d235d22db2a9d9ed6eab4d29cf",
+    "packages/python/README.md": "86ccbbb2737b920f40c2cbbcb182a0990b1a27b4fc9048f639d59a73f47b5548",
+    "docs/helix/04-build/python-consumer-integration-plan.md": "9f446130c69a7f479db436f56a54cdc95754366943eb5f0a2c3a0de90f48da6d"
+  },
+  "nativeProfile": {
+    "driver": "pg8000 1.31.5 native",
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "runtime": "pgserver 0.1.4+truss.pg16.15 corrected private candidate"
+  },
+  "fullSourceSuite": {
+    "tests": 244,
+    "result": "passed",
+    "logSha256": "e32d9133300e4946cd6f03f61f1302735d2badc82f3f03fe7bbea4ddaf0f1790",
+    "log": "/private/tmp/truss-iteration8-approved-full-tests.log"
+  },
+  "finalInstalledTests": {
+    "tests": 112,
+    "nativeTests": 87,
+    "result": "passed",
+    "sourceInstalledByteMatchingModules": 39,
+    "cwd": "/private/tmp",
+    "logSha256": "a9b32fc79bba824b15a26886b6dccb9c734386f881e69c4228a7b65f7578c8c3",
+    "log": "/private/tmp/truss-iteration8-approved-installed-tests.log",
+    "scope": "Selected installed component suite with source test fixtures and existing dependencies; no clean distribution qualification"
+  },
+  "wheelSha256": "0ec86112c4753fa9179dbc6589ca5f04719bb142649d4ca35cb054a7883df00e",
+  "wheel": "/private/tmp/truss-python-iteration8-approved-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+  "importBoundary": {
+    "passed": true,
+    "imports": 173,
+    "controls": 16,
+    "checkerSha256": "c4ebd08deedac4ced84f501db6462b613841c5d235d22db2a9d9ed6eab4d29cf",
+    "cycleDetectionUnchanged": true
+  },
+  "scope": "Private cooperative original parameter SELECT operation, exact Unicode/NULL, actual savepoint/state restoration, original bounded result context custody and terminal completion/handback. Administrative native fixtures only; no protected authority, DML or public capability release. Connection-owned buffered ingress/notices/notifications preserved; no socket-empty or total-heap claim.",
+  "remainingGates": [
+    "Public native adoption and ReferenceAssembly",
+    "Installed protected ordinary-person security and semantic dependency closure",
+    "Catalog/install/status, apply/import, direct/compiled logical reads, reached and feed/ACK workflow",
+    "Capability-specific DML/result-type/resource qualification",
+    "Native40001/40P01 capability scenarios; defensive retry precedence in pure text fixture is not their qualification",
+    "Default runtime distribution and complete shared consumer corpus"
+  ],
+  "ownerAlignment": {
+    "securityOwner": "Latest owner issuer/design evidence reviewed and progressing on bounded bridge; no unfinished security runtime adopted"
+  },
+  "completeExternalInterface": false,
+  "formattingOnlyFinalArtifact": {
+    "scope": "After full source and installed tests, remove one trailing blank line from inert contracts; no other source module changed",
+    "testedContractsSha256": "01d43b20c127d1596e32756c5cb9b6267b6cac4bd21c9ec79d43c4f18559485b",
+    "committedContractsSha256": "6f8bc85989bea1249b8b66ddb90009da2cd41c631887f839d87282e707dd3413",
+    "exactDelta": "tested bytes equal committed bytes plus one newline",
+    "astIdentical": true,
+    "unchangedOtherModules": 38,
+    "sourceWheelInstalledByteMatchingModules": 39,
+    "wheel": "/private/tmp/truss-python-iteration8-commit-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+    "wheelSha256": "dce894857519f4344eb8d67796d7e901a90d3247d5f5524a8481ba9d18339b50",
+    "installed": "/private/tmp/truss-python-iteration8-commit-installed",
+    "runtimeTestBasis": "Full244 and installed112 used retained original wheel above; no runtime rerun for EOF-only formatting change"
+  }
+}

@@ -1,7 +1,7 @@
 """Original native operation ledger composed with private arbitration.
 
-Successful release remains disabled: buffers, restoration and containment do
-not yet have qualified producers. Original facts never substitute for them.
+Successful release requires the exact registered original completion producer.
+Without one, native facts and locators cannot establish resource restoration.
 """
 from dataclasses import dataclass
 from uuid import uuid4
@@ -16,7 +16,12 @@ class _OperationCall:
     revision: int
     resource: object
     lifecycle: object
+    cleanup: object = None
     native_call: object = None
+
+@dataclass(frozen=True, eq=False)
+class _CleanupPermit:
+    session: object
 
 @dataclass(eq=False)
 class NativeOperationSession:
@@ -29,23 +34,41 @@ class NativeOperationSession:
     call_limit: int
     calls: tuple = ()
     admission_closed: bool = False
+    cleanup_limit: int = 16
+    cleanup_calls: tuple = ()
+    cleanup_permit: object = None
+    cleanup_closed: bool = False
+    result_custody: object = None
+    completion: object = None
+    released: bool = False
 
-    def _check_call(self, boundary, token):
-        # Nonmutating preflight under the original call-admission guard.
+    def _check_call(self, boundary, token, cleanup=None):
         if (boundary is not self.boundary or token is not self.token
                 or boundary._operation is not self.token
                 or boundary._operation_ledger is not self
-                or self.admission_closed
-                or self.owner._executor._closed or not self.context.custody.usable
                 or self.generation.ended
                 or boundary._transaction_tracker._state.generation is not self.generation):
             raise NativeBoundaryRefusal('Original native operation correspondence lost')
-        if len(self.calls) >= self.call_limit:
-            raise NativeBoundaryRefusal('Native operation call custody exhausted')
-    def _reserve_call(self, boundary, token, resource, lifecycle):
-        self._check_call(boundary, token)
-        entry = _OperationCall(boundary._revision + 1, resource, lifecycle)
-        self.calls = (*self.calls, entry)
+        if cleanup is not None:
+            if (type(cleanup) is not _CleanupPermit or cleanup is not self.cleanup_permit
+                    or cleanup.session is not self or self.cleanup_closed):
+                raise NativeBoundaryRefusal('Original cleanup permit required')
+            if len(self.cleanup_calls) >= self.cleanup_limit:
+                raise NativeBoundaryRefusal('Reserved native cleanup capacity exhausted')
+        else:
+            if (self.admission_closed or self.owner._executor._closed
+                    or not self.context.custody.usable):
+                raise NativeBoundaryRefusal('Ordinary native admission closed')
+            if len(self.calls) >= self.call_limit:
+                raise NativeBoundaryRefusal('Native operation call custody exhausted')
+
+    def _reserve_call(self, boundary, token, resource, lifecycle, cleanup=None):
+        self._check_call(boundary, token, cleanup)
+        entry = _OperationCall(boundary._revision + 1, resource, lifecycle, cleanup)
+        if cleanup is None:
+            self.calls = (*self.calls, entry)
+        else:
+            self.cleanup_calls = (*self.cleanup_calls, entry)
         return entry
 
 @dataclass(eq=False)
@@ -108,6 +131,16 @@ class NativeArbitration:
                     self._bindings = retained
                     boundary._native_arbitration_bindings = original_retained
                     boundary._pending_operation_ledger = binding
+                # Root allocation can fail after binding retention. Every retry
+                # must re-establish the exact pending guard before admission.
+                if binding.session is None:
+                    if (boundary._operation is not binding.token or boundary._calling
+                            or boundary._quarantined or binding.generation.ended
+                            or port._tracker._state.generation is not binding.generation
+                            or boundary._operation_ledger is not None
+                            or boundary._pending_operation_ledger not in (None, binding)):
+                        return Refused('invalid_transaction')
+                    boundary._pending_operation_ledger = binding
             # A lost acquire reply or allocation failure leaves the original
             # pending guard held. Retry reconciles this exact original attempt.
             admitted = self.registry.acquire(attempt)
@@ -143,8 +176,10 @@ class NativeArbitration:
                 return session
 
     def _make_session(self, context, binding):
-        return NativeOperationSession(self, context, binding.boundary, binding.generation,
+        session = NativeOperationSession(self, context, binding.boundary, binding.generation,
                                       binding.token, uuid4().hex.encode('ascii'), self._call_limit)
+        session.cleanup_permit = _CleanupPermit(session)
+        return session
 
     def _publish_binding(self, boundary, session):
         boundary._operation_ledger = session
@@ -159,11 +194,10 @@ class NativeArbitration:
                 return None
             with session.boundary._lock:
                 session.admission_closed = True
-            if evidence != session.locator:
+            producer = getattr(self, '_completion_producer', None)
+            if producer is None:
                 return None
-            # Native acknowledgements cannot establish buffer closure, caller
-            # restoration or containment. No successful release is produced.
-            return None
+            return producer.verify_completion(session, evidence)
 
     def release(self, session):
         with self._lock:
@@ -173,4 +207,12 @@ class NativeArbitration:
             raise ValueError('Original native operation session required')
         with session.boundary._lock:
             session.admission_closed = True
-        return self.registry.release(session.context.lease, session.locator)
+        completion = session.completion
+        evidence = session.locator if completion is None else completion.artifact
+        result = self.registry.release(session.context.lease, evidence)
+        if result == 'released':
+            producer = getattr(self, '_completion_producer', None)
+            if producer is None:
+                return Unresolved(('arbitration:original-producer-unavailable',))
+            return producer.handback(session)
+        return result

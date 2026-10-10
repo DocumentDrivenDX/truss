@@ -147,7 +147,7 @@ def is_published(generation, custody):
 
 
 def adopt(executor, port, *, isolation, access_mode):
-    from ._host_execution import TransactionHandle, _Adoption
+    from ._host_contracts import TransactionHandle, _Adoption
     from ._native_pg8000 import NativeBoundaryRefusal
     # Allocate the issued handle, original custody and success result before any
     # native observation or final publication. Unpublished custody is inert.

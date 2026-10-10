@@ -407,7 +407,22 @@ All failed creation paths conservatively quarantine; there is no qualified
 known-failed resource recovery yet. Retention limits count original records,
 including closed records, and do not qualify heap or driver buffer usage.
 
-Successful arbitration release remains disabled in this composition. Even exact
-original evidence with all observed prepared resources closed cannot establish
-buffer closure, caller-state restoration or containment. The original session,
-lease and guard stay retained as unresolved; public adoption remains unavailable.
+Without a registered original completion producer, successful arbitration
+release remains disabled. Observed prepared-resource closure alone cannot prove
+buffer closure, caller-state restoration or containment.
+
+Iteration 8 adds a private `_native_operation` producer for exactly
+`SELECT :value::pg_catalog.text` on the pinned synchronous driver profile. It
+preserves Unicode/NULL values, owns bounded response frames and original result
+contexts, and reserves a separate cleanup lane. Explicit portal/statement close
+acknowledgements and actual caller-state/savepoint restoration precede original
+completion publication and atomic ownership handback. Native 22021 failures are
+contained without committing or rolling back the host transaction. Lost completion
+or handback replies reconcile original retained outcomes without replay.
+
+This profile accepts no arbitrary SQL, DML, streams or custom codecs. Its native
+tests use administrative connections; they provide no protected person/origin
+qualification. Buffering/notices/notifications owned by the host connection are
+preserved; counts and conservative payload charges are not a total heap bound.
+Public adoption, ReferenceAssembly and the catalog-to-feed workflow remain open.
+See [iteration 8 evidence](../../docs/helix/04-build/evidence/python-contracts-iteration8.json).

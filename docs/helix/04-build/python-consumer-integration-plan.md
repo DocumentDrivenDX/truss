@@ -197,3 +197,26 @@ unknown leases and native guards remain retained. C02 is still open. Continue by
 implementing the selected result/buffer custody and cleanup producers, then
 qualify native operation restoration/recovery against these retained ledgers.
 Evidence: [evidence/python-contracts-iteration7.json](evidence/python-contracts-iteration7.json).
+
+
+Iteration 8 qualifies a narrow private operation producer for exactly
+`SELECT :value::pg_catalog.text` on pg8000 native1.31.5/PostgreSQL16.15.
+Astra Ultra approved narrowing the plan to pure parameter text; DML requires
+its own semantic dependency qualification. Native success, host writes,
+contained 22021 failure and subsequent success use the same adopted generation.
+Original frame/context/result custody, separate cleanup ingress/account/context
+capacity, explicit named/unnamed resource acknowledgements and actual
+caller-state/savepoint restoration precede completion and atomic handback.
+Lost publication replies reconcile the original completion without replay;
+unresolved transport/cleanup/bounds failures retain custody and quarantine.
+
+This closes only the selected private fixture operation. C02 remains open for
+public construction/adoption, complete installed security/profile closure and
+capability-specific semantic operations. There is no released catalog, mutation,
+import, reached or feed implementation. Whole-transaction retry precedence is
+implemented defensively; this pure text fixture does not qualify real native
+40001/40P01 capability scenarios. Host aliases/custom native callbacks remain
+unsupported, and payload/count limits do not establish a whole-process heap bound.
+The explicit Python import map now includes the execution/native modules from
+iterations 2–8 without a directory-wide exemption.
+Evidence: [evidence/python-contracts-iteration8.json](evidence/python-contracts-iteration8.json).
