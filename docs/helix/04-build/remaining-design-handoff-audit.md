@@ -1662,3 +1662,10 @@ All paths invalidate operation proofs; same-route events deduplicate guard
 advancement and route moves affect both routes. Protected key derivation,
 original event/current-authority custody, held guards, capacity, concurrency and
 full installation remain open. No public API or seven-body gate is promoted.
+
+The [security owner kind-instance review](evidence/design-audit/security-kind-instance-owner-review.json)
+updates the shared handoff criteria: one candidate must cover every independently
+issued kind/occurrence within a scope; source-level coverage or unions of fragments
+are insufficient. The current private matcher is observed, not adopted. Complete
+production issuance, authenticated original Truss native assignments and a closed
+published bridge remain missing. Preserve B10 confidentiality separately.

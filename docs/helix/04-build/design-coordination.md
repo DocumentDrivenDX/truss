@@ -1196,3 +1196,30 @@ authenticated subject/current authority and complete publication remain required
 Keep the existing owner interface and original source-byte retention until the
 owner publishes a closed qualified handoff. The Truss native registry/OC02 checks
 are separate integrity correspondence and grant no security authority.
+
+### Security owner kind/occurrence boundary — 2026-10-10
+
+The read-only [kind-instance review](evidence/design-audit/security-kind-instance-owner-review.json)
+records unfinished private Weft owner source at HEAD94b2de5 and the independently
+authored issuer design. `DemandInstance` distinguishes source, actual scope, kind
+and occurrence. `match_instances` uses a separate required-instances0.2 premise
+with the existing source-level matcher underneath. It checks represented source
+edges/semantic atoms, shared declaration meaning and a complete single candidate
+for every represented instance in each scope. These are current source facts,
+not a published bridge or independently complete production requirement issuer.
+The owner turn was in progress; Truss neither reruns owner tests nor adopts it.
+
+Truss's integration acceptance must retain independently issued full typed
+requirements. A codec-capable declaration and a different privacy-capable
+declaration cannot be combined to claim one complete scan/action or application
+capability. Separate scopes may select distinct complete candidates. Repeated
+occurrences, all enforcement sites/cases and private authorization-fact isolation
+(B10) remain in the expected inventory. Count equality and source-ID coverage do
+not prove that inventory complete. Original exact Truss layout/codec/native
+role/subject/current-authority assignment evidence remains mandatory.
+
+Keep old source-level0.1 and new instance0.2 claims distinct; do not derive kinds
+by decoding source IDs, extend an old interface silently or implement a competing
+requirement issuer/resolver. Await the closed published owner interface before
+implementation binding. This updates the existing security handoff criteria;
+Truss private generation/row-image checks confer no policy or authority proof.
