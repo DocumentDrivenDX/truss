@@ -374,3 +374,23 @@ Under the fixed full-slot text-cast source, independently admit true/false paylo
 
 
 Retired-state classification controls use the concrete STP-004 R-A/R-B/R-C sources. Preserve the complete typed-owner header including retired Item.note states; independently derive active projection and original retained custody. Valid null/empty retired states are classified privately before active-member omission, not treated as absent/foreign or moved into unknown-name content. Corrupt a retired root, remove its original definition/home, add a duplicate or misowned state and require complete integrity-qualified read refusal. Introduce a fresh same-name Field and prove its own absence cannot consume the original retired state. Reintroduce the exact original lineage and require its preserved original values after admitted acceptance. Explicit complete DirectRecord versus active-schema projection meanings and disclosure authority remain profile-bound; these planned controls do not change the public result wire or grant compiler lifecycle support.
+
+
+### Frozen Python compiler serializer feature graph
+
+The [actual cargo feature observation](../../04-build/evidence/design-audit/weft-f05-python-serde-feature-graph.json)
+uses frozen f05f2df, explicit installed Rust1.90.0, --locked --offline and the
+actual weft-python/truss-postgresql-qualified build selection. Effective
+serde_json features include arbitrary_precision and raw_value and exclude
+preserve_order. Original dependency manifests, Cargo.lock and Identity source
+hashes plus complete command/output are retained. This closes the effective
+Python build-feature observation separately from the three standalone byte
+fixtures; it does not qualify a different CLI/TypeScript/WASM feature graph,
+writer/native identity storage or the complete selected codec profile.
+
+The initial implicit rustup invocation attempted channel synchronization and
+failed DNS before Cargo inspected dependencies. Explicit installed toolchain
+selection then completed offline; no dependency upgrade, download or owner
+working-source adoption was needed. Recheck this feature closure after any
+selected feature, dependency, source or build tuple change. Native writer/read
+byte correspondence and full Unicode/boundary/refusal cases remain not_run.
