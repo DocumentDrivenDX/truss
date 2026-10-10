@@ -30,9 +30,23 @@ The explicit corrected candidate `pgserver==0.1.4+truss.pg16.15` is now accepted
 by LocalPostgres only when the native server reports16.15. RuntimeInfo and CLI
 output retain that actual package version. The paired published0.1.4/16.2 check
 remains separate; arbitrary package/server versions refuse. The corrected wheel
-is a private macOS27 arm64/Python3.11 build, not a published dependency. Install
-the verified wheel explicitly before the local extra; default package resolution
-still selects published0.1.4. Neither tuple installs Truss or qualifies R4/R5.
+is a private macOS27 arm64/Python3.11 build, not a published dependency. For that
+candidate, install the base Truss package, the independently verified corrected
+wheel and explicit lifecycle dependencies together; do not install `[local]`,
+whose exact pgserver0.1.4 pin can replace the corrected candidate:
+
+```sh
+.venv/bin/pip install ./packages/python fasteners==0.20 platformdirs==4.12.4 psutil==7.2.2 /path/to/admitted/pgserver-0.1.4+truss.pg16.15-cp311-cp311-macosx_27_0_arm64.whl
+.venv/bin/python -c 'from importlib.metadata import version; assert version("pgserver") == "0.1.4+truss.pg16.15"'
+.venv/bin/truss-local-postgres --data-dir .local/truss-postgres-corrected --probe
+```
+
+The wheel path is a placeholder for the separately admitted private artifact,
+not a published download or a clean-install qualification claim. Verify its
+original hash/platform before installation; the retained wheel receipt is linked
+from the runtime plan. Check the actual CLI serverVersion16.15 as well as package
+metadata. Ordinary `[local]` resolution still selects published0.1.4/16.2.
+Neither tuple installs Truss or qualifies complete R4/R5 enforcement.
 
 See the [installation and migration execution plan](../../docs/helix/04-build/local-runtime-installation-migration-plan.md)
 for the complete delivery scope and independent acceptance scenarios.
