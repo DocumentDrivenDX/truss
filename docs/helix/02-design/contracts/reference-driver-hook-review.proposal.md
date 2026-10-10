@@ -148,10 +148,15 @@ control/adoption/one-use dispatch second, complete current security/native
 installation third, then public operations and lost-result/cleanup/reconciliation
 schedules. Freeze original source/build/dependency hashes and the actual mode at
 each boundary. Independent STP-044 controls and complete PKG-02/08 installed
-observations, including the missing whole-transaction lifetime mechanism on16.15,
-remain required. Until they pass, the adapter is unavailable for an advertised
-bounded execution profile; no stock-driver API or successful local fixture can
-weaken those requirements. Other Python platforms and Aurora/Lakebase must retain
+observations remain required for the controlled-operation profile. Qualify its
+actual statement/lock/control observation and containment mechanisms separately
+from an entire host-owned transaction lifetime guarantee, following the
+[accepted claim domains](reference-local-deployment.proposal.md#controlled-work-versus-native-guarantees--accepted-scope-reconciliation).
+PostgreSQL16.15's missing transaction_timeout excludes that hard lifetime claim;
+it does not by itself exclude a qualified controlled-operation adapter. Until the
+controlled-operation gates pass, that adapter remains unavailable. No stock-driver
+API or successful local fixture can weaken those gates. A capability explicitly
+requiring the unavailable native guarantee still refuses. Other Python platforms and Aurora/Lakebase must retain
 separate target admission. Do not change published package dependencies or claim
 usable installation merely from this engineering target selection.
 

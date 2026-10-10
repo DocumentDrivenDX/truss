@@ -454,8 +454,14 @@ attempt/cycle/transaction evidence, use the admitted cancellation/containment
 path, and return the original uncertain/recovery variant when confirmation is
 unavailable. A timeout cannot fabricate rollback, clean connection return or
 ready publication. Native statement_timeout is one selected component, not an
-end-to-end deadline or a substitute for resource/native transaction-lifetime
-qualification.16.15's missing transaction_timeout remains a profile limitation.
+end-to-end deadline or proof of whole-transaction termination. Follow the
+[accepted claim domains](../02-design/contracts/reference-local-deployment.proposal.md#controlled-work-versus-native-guarantees--accepted-scope-reconciliation):
+qualify finite Truss-controlled work and the selected native observation and
+containment mechanisms. PostgreSQL16.15's missing transaction_timeout prevents a
+hard whole-transaction lifetime claim; it is not an unconditional prerequisite
+for every administrative operation. An operation whose admitted contract
+explicitly requires that unavailable mechanism still refuses before effects.
+All integrity, isolation, origin, settlement and recovery requirements remain.
 
 Reconciliation is one explicit caller invocation against the same original
 attempt, bounded by the admitted observation profile. It performs no polling
