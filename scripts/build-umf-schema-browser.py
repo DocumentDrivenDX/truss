@@ -10,11 +10,11 @@ def upstream(name):
 outputs={name:upstream(name) for name in ['explorer.js','explorer.css','style.css','logo.svg']}
 html=upstream('explorer.html').decode()
 main=html[html.index('<main'):html.index('</main>')+7]
-main=main.replace('Explore the shape<br><em>and the meaning.</em>','Explore the Truss storage schema.').replace('Browse domain packs, follow their references, and inspect the details that travel with each schema.','Inspect native layout 0.16 plus the uncomposed configuration and migration adjuncts: tables, columns, keys, relationships, and retained native metadata.')
-main=main.replace('</main>','<p style="padding:1rem;overflow-wrap:anywhere">Review candidate: installation and complete native semantics remain unqualified. <a href="truss-layout.native.umf.json" download>Download retained native source</a>. <a href="truss-operation-configuration.native.umf.json" download>Download configuration adjunct source</a>. <a href="truss-layout-migration.native.umf.json" download>Download migration adjunct source</a>.</p></main>')
+main=main.replace('Explore the shape<br><em>and the meaning.</em>','Explore the Truss storage schema.').replace('Browse domain packs, follow their references, and inspect the details that travel with each schema.','Inspect native layout 0.16 plus the uncomposed configuration, migration, capacity reservation and commit cache adjuncts: tables, columns, keys, relationships, and retained native metadata.')
+main=main.replace('</main>','<p style="padding:1rem;overflow-wrap:anywhere">Review candidate: installation and complete native semantics remain unqualified. <a href="truss-layout.native.umf.json" download>Download retained native source</a>. <a href="truss-operation-configuration.native.umf.json" download>Download configuration adjunct source</a>. <a href="truss-layout-migration.native.umf.json" download>Download migration adjunct source</a>. <a href="truss-capacity-reservation.native.umf.json" download>Download reservation adjunct source</a>. <a href="truss-capacity-cache.native.umf.json" download>Download commit cache adjunct source</a>.</p></main>')
 outputs['index.html']=('''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Truss schema browser</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explorer.css"></head><body>'''+main+'<script type="module" src="explorer.js"></script></body></html>\n').encode()
-source=root/'docs/helix/02-design/models/truss-layout-core-structural-0.6.proposal.umf.json'
-outputs['schema-catalog.json']=(json.dumps({'version':1,'entries':[{'id':'truss-layout','title':'Truss storage layout','category':'domain','path':'truss-layout.umf.json','text':source.read_text(),'format':'json','description':'Structural projection 0.6 of native layout 0.16 plus the uncomposed configuration and migration adjuncts. Native-only semantics are retained; inspection does not certify installation or complete DDL equivalence.'}]},indent=2)+'\n').encode()
+source=root/'docs/helix/02-design/models/truss-layout-core-structural-0.8.proposal.umf.json'
+outputs['schema-catalog.json']=(json.dumps({'version':1,'entries':[{'id':'truss-layout','title':'Truss storage layout','category':'domain','path':'truss-layout.umf.json','text':source.read_text(),'format':'json','description':'Structural projection 0.8 of native layout 0.16 plus uncomposed configuration, migration, reservation and commit-cache adjuncts. Native-only semantics remain retained; inspection does not certify installation or complete DDL equivalence.'}]},indent=2)+'\n').encode()
 outputs['truss-layout.umf.json']=source.read_bytes()
 provenance=json.loads(source.read_text())['extensions']['truss.layout.native']
 native=root/provenance['sourceModel']
@@ -26,7 +26,13 @@ outputs['truss-operation-configuration.native.umf.json']=adjunct.read_bytes()
 migration=root/provenance['migrationSourceModel']
 assert hashlib.sha256(migration.read_bytes()).hexdigest()==provenance['migrationSourceSha256']
 outputs['truss-layout-migration.native.umf.json']=migration.read_bytes()
+for prefix, name in [('reservation', 'truss-capacity-reservation.native.umf.json'), ('cache', 'truss-capacity-cache.native.umf.json')]:
+ adjunct_source=root/provenance[prefix+'SourceModel']
+ data=adjunct_source.read_bytes()
+ assert hashlib.sha256(data).hexdigest()==provenance[prefix+'SourceSha256']
+ outputs[name]=data
 manifest={'owner':'DocumentDrivenDX/umf','revision':revision,'model':str(source.relative_to(root)),'assets':{k:hashlib.sha256(v).hexdigest() for k,v in outputs.items()},'scope':'Unmodified UMF browser JS/CSS; Truss HTML shell and exact current schema catalog. No production deployment.'}
+manifest.update(coreProjection='0.8', nativeBaseline='0.16', interpretationComplete=False, installerReady=False)
 outputs['manifest.json']=(json.dumps(manifest,indent=2)+'\n').encode()
 out=root/'website/static/schema';out.mkdir(parents=True,exist_ok=True)
 for name,data in outputs.items():
