@@ -127,6 +127,20 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                     assert bytes.fromhex(context['sourceEpochProfileHex']) == b'fixture-profile'
                     assert bytes.fromhex(context['sourceEpochEvidenceHex']) == b'fixture-evidence'
 
+            failed_issued = issuer.reserve(custody)
+            assert failed_issued.ordinal == '2'
+            send('SAVEPOINT refused_attempt;')
+            refusal_call = "PERFORM * FROM truss." + function + "(" + failed_issued.ordinal + ", 'invalid-kind',decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'),decode('05','hex'),decode('06','hex')" + tail + ");"
+            send("DO $$ BEGIN " + refusal_call + " RAISE EXCEPTION 'expected invalid-kind refusal'; EXCEPTION WHEN SQLSTATE '22023' THEN NULL; END $$; SELECT json_build_object('surviving',count(*),'ordinal',min(operation_ordinal)::text) FROM truss.row_home_operation;")
+            assert observe() == {'surviving': 1, 'ordinal': '1'}
+            send("ROLLBACK TO SAVEPOINT operation_second; SELECT json_build_object('surviving',count(*)) FROM truss.row_home_operation;")
+            assert observe() == {'surviving': 0}
+            issued_third = issuer.reserve(custody)
+            assert issued_third.ordinal == '3'
+            send('SAVEPOINT operation_third;')
+            third = admit(issued_third)
+            assert third['writerXid'] == first['writerXid']
+            assert third['ordinal'] == '3'
             send('ROLLBACK;')
             process.stdin.close()
             assert process.wait(timeout=30) == 0
@@ -143,11 +157,11 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
         server.cleanup()
 receipt = {'scope': 'Selected admission family with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification',
            'family': family, 'pgserver': importlib.metadata.version('pgserver'), 'serverVersion': version,
-           'observations': [first, second], 'configurationObservations': configurations, 'rollbackRegistryRows': 0, 'rollbackRemovedNamespace': True,
+           'observations': [first, second, third], 'refusedIssuedOrdinal': '2', 'nativeRefusalSqlstate': '22023', 'configurationObservations': configurations, 'rollbackRegistryRows': 0, 'rollbackRemovedNamespace': True,
            'sources': [{'path': p, 'sha256': hashlib.sha256(b).hexdigest()} for p, b in zip(paths, originals)],
            'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
            'psqlSha256': hashlib.sha256(psql.read_bytes()).hexdigest(),
            'completeDriverQualified': False, 'allFourFamiliesQualified': False, 'readyInstallation': False}
 with destination.open('x') as stream:
     stream.write(json.dumps(receipt, indent=2) + '\n')
-print(json.dumps({'family': family, 'ordinals': ['0', '1'], 'sameNativeTransaction': True, 'readyInstallation': False}))
+print(json.dumps({'family': family, 'ordinals': ['0', '1', '3'], 'sameNativeTransaction': True, 'readyInstallation': False}))
