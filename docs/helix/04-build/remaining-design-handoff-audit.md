@@ -1516,3 +1516,31 @@ Next integration batches are concrete:
 Known source realization is now reviewable without inventing native registrations.
 Exact role/dependency/native full-system outputs remain implementation work. No
 acceptance criterion is promoted or shared-owner API adopted by this handoff.
+
+### Original actor context across privileged execution
+
+The [native admission elevation receipt](evidence/design-audit/admission-elevation-native.json)
+records ten passing checks on PostgreSQL 16.15 using the actual original admission
+source. A distinct SECURITY DEFINER owner calling that INVOKER admission routine
+receives `55000` before registry effects. Direct invoker admission captures the
+original session/acting role and native role OIDs; a subsequent read-only DEFINER
+wrapper observes the same session person, a different execution owner, and the
+byte-identical stored context. Returning restores the invoker role, preserves the
+transaction ID, and host rollback removes the admitted registry entry.
+
+Adopt the separation: original authenticated caller context must remain in its
+original custody; privileged execution owner is a separately qualified installed
+identity. Never regenerate caller context from `current_user` inside a DEFINER
+routine, reinterpret the existing 0.2 carrier as execution-owner context, or remove
+the original nested-elevation refusal to make composition pass. The protected
+admission boundary must compose original host admission with the security owner's
+admitted subject and original installed wrapper/owner identity. Any changed carrier
+requires explicit versioned adoption, source correspondence and native evidence.
+
+This administrative test deliberately grants direct table access to exercise the
+invoker prototype. Those fixture grants are not the ordinary consumer privilege
+plan. The read-only wrapper is not a semantic body, authorization proof, full
+private dependency closure or installer qualification. Implement the original
+protected admission handoff and native role/ACL registration before advertising
+ordinary-role mutation; retain the seven missing body registrations and full
+45-story/167-criterion frontier.

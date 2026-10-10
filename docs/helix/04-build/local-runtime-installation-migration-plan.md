@@ -2296,3 +2296,20 @@ Next integration batches are concrete:
 Known source realization is now reviewable without inventing native registrations.
 Exact role/dependency/native full-system outputs remain implementation work. No
 acceptance criterion is promoted or shared-owner API adopted by this handoff.
+
+### Privileged admission integration prerequisite
+
+The [native actor/elevation evidence](evidence/design-audit/admission-elevation-native.json)
+passes ten PostgreSQL 16.15 checks: original admission rejects a distinct nested
+DEFINER owner before registry effects, while an admitted invoker context survives
+later read-only elevation byte-for-byte. Installation must preserve original
+caller custody separately from its registered execution owner. Do not manufacture
+caller identity from elevated `current_user`, silently change context 0.2 meaning,
+or grant consumers direct registry writes as an integration shortcut.
+
+Next implement the protected original admission handoff with the security owner's
+admitted subject, exact wrapper/owner registration, private caller ACL and complete
+native dependency closure. Then compose the semantic bodies and qualify actual
+ordinary-role operations. Administrative fixture grants and the synthetic read-only
+wrapper establish only the tested native boundary; they do not qualify installation,
+current authorization, or any of the seven required semantic routines.
