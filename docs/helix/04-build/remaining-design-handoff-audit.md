@@ -1654,3 +1654,11 @@ partial generation producer with complete OLD-image attribution, while preservin
 the protected observer, touch/contributor/current-authority/guard/capacity and
 full installation/resource gaps. The defensive multi-operation trigger branch
 and key/reservation paths are not covered by this fixture.
+
+The [key/reservation generation receipt](evidence/design-audit/key-event-generation-native.json)
+adds10 native checks across INSERT, same-route UPDATE, route move and DELETE for
+both stores, exhausted-guard insertion refusal and whole rollback restoration.
+All paths invalidate operation proofs; same-route events deduplicate guard
+advancement and route moves affect both routes. Protected key derivation,
+original event/current-authority custody, held guards, capacity, concurrency and
+full installation remain open. No public API or seven-body gate is promoted.

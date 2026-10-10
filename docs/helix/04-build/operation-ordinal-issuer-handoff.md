@@ -1297,3 +1297,25 @@ held guards, full touch/contributor/family/scope/capacity composition, callable
 role/DDL closure and whole resource qualification remain independent. Native
 pg8000 calls in this probe do not qualify the accounted original-control seam.
 No public API, installed-wheel claim or seven-body readiness field changes.
+
+### Native key/reservation generation paths (2026-10-10)
+
+`key-event-generation-native.json` pins10 PostgreSQL16.15 observations against
+the original UMF-exported native0.16 layout and existing private generation
+trigger. Both actual key and reservation INSERT/UPDATE/DELETE paths clear
+operation proofs. Same-route UPDATE advances one distinct guard once; moving
+the namespace advances both old and new route guards. Eight actual events leave
+operation generation8 and route generations6/4. An exhausted destination guard
+raises54000 on reservation INSERT; confirmed rollback leaves no inserted row
+and restores prior route/operation generations. Whole savepoint rollback restores
+the original two guards and operation phase/generation/proofs under the same xid.
+
+An initial fixture attempt failed the original key-definition source-completeness
+constraint; the completed producer includes its required accepted-document
+columns. No constraint was bypassed and no completed receipt overwritten.
+Native driver result cells are retained; this experiment does not qualify the
+accounted original-control seam, native protected subject/authority, full key
+derivation/collision/concurrency/event custody, guard ownership/lock admission,
+touch/capacity or installed privilege closure. Exhausted insertion does not
+qualify partial two-route failure ordering. This closes the previously untested
+finite key/reservation generation paths, not complete observer readiness.
