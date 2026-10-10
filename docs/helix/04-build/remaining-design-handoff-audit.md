@@ -1838,3 +1838,10 @@ for every original admission family. This closes the family coverage gap in the
 existing guard experiment, not protected capture or advanced artifact authority.
 PA01/PA02 still require a separate versioned original actor handoff and complete
 installed identity/ACL/dependency qualification; the current guards stay intact.
+
+The [security occurrence/diagnostic review](evidence/design-audit/security-occurrences-diagnostics-owner-review.json)
+updates the shared handoff with completed private occurrence evidence and an
+owner-reproduced17.9 private-fact diagnostic counterexample. Complete backend
+requirements/authentication and diagnostic closure remain owner dependencies.
+Truss local16.15 and managed tuples require their own exact evidence; neither
+ordinary table denial nor successful privileged inventory qualifies B10.

@@ -1223,3 +1223,31 @@ by decoding source IDs, extend an old interface silently or implement a competin
 requirement issuer/resolver. Await the closed published owner interface before
 implementation binding. This updates the existing security handoff criteria;
 Truss private generation/row-image checks confer no policy or authority proof.
+
+### Typed occurrences and private-fact diagnostics — 2026-10-10
+
+The [owner review](evidence/design-audit/security-occurrences-diagnostics-owner-review.json)
+records the private typed rule-occurrence source, owner test/review receipts and
+a retained PostgreSQL17.9 diagnostic counterexample. The owner reports131 Rust
+tests and33 independent formal replays for ordered condition/operand/disclosure
+occurrences, false branches and repeated positions. Truss observes those reports
+without rerunning them or adopting a published bridge. Independent backend
+requirement mappings and profile authentication remain missing.
+
+The diagnostic receipt is counterexample-reproduced, not B10 acceptance. Private
+Assignment changes alter ordinary-visible statistics despite unchanged authorized
+rows. Restricting direct catalog tables alone leaves public view/function paths;
+selected broader restrictions still do not establish complete diagnostic closure.
+This is an exact17.9 fixture result, not a verified finding on Truss's local16.15
+profile, Aurora or Lakebase. The owner is testing planner diagnostics separately;
+that in-progress work is not adopted evidence.
+
+Truss release integration must preserve private authorization-fact confidentiality
+across supported ordinary diagnostics, not just result masking or direct table
+ACLs. Bind the owner's admitted diagnostic/role/configuration profile and verify
+the exact deployment tuple. The installation observer's legitimate privileged
+inventory rights are separate from ordinary consumer disclosure rights. Truss
+must not implement a blanket catalog-revoke policy, duplicate requirement issuer
+or expose private inventory diagnostics as a shortcut to support. Current public
+protected-engine readiness remains closed; generation/inventory probes confer
+no B10 privacy proof.
