@@ -258,7 +258,7 @@ export/dependency contracts continue to own normative signatures.
 
 | Module | Responsibility / Owned Types | Public API | Allowed Dependencies | Forbidden Dependencies |
 | --- | --- | --- | --- | --- |
-| `packages/core` | Portable values, contracts and operation rules | Contract-defined core types/conveniences | Driver-free portable libraries and adopted UMF core | Native drivers, tooling, conformance runner, host globals |
+| Planned core package; current declarations in `docs/helix/02-design/contracts/bindings` and portable `packages/weft` | Portable values, contracts and operation rules | Contract-defined core types/conveniences | Driver-free portable libraries and adopted UMF core | Native drivers, tooling, conformance runner, host globals |
 | `packages/python/src/truss` pure value/planning and private custody modules | Exact carriers, migration plans, original admission/ordinal custody | Current documented conveniences; private custody remains private | Python standard library and core-owned contracts | pgserver/driver construction, telemetry export, CLI side effects |
 | `packages/python/src/truss/local_runtime.py` and CLI | Explicit local server lifetime and directory custody | LocalPostgres and local runtime CLI | Selected pgserver tuple and lifecycle dependencies | Catalog installation/migration on startup, pool provisioning |
 | `packages/python/src/truss/weft.py` | Translate pinned compiler artifacts to Truss-owned immutable boundaries | CompilerBoundary | Host-supplied adopted Weft compiler and core contracts | Compiler fork, implicit native query execution |
@@ -274,9 +274,22 @@ adapters and captures validated configuration. Import and construction are inert
 operations alone acquire native effects. Host connection/pool ownership remains
 unchanged. No service split is required for the embeddable toolkit.
 
-**Boundary Check**: planned project-local command `python3 scripts/check-module-boundaries.py`.
-It is not implemented or passed yet. Establish it before dependent feature
-readiness: inspect actual Python AST and TypeScript resolved imports, baseline only
-named existing violations, and run the real checker on allowed and forbidden
-fixtures. Record unsupported native/dynamic/private-access checks as semantic
-review obligations. Existing declaration compilation is not this dependency gate.
+**Boundary Check**: `python3 scripts/check-module-boundaries.py` enforces the
+Python-only map using AST inspection, including nested imports, relative/absolute
+local references, unknown modules, wildcard imports, direct dynamic execution and
+import cycles. Exact allowed imports live in the checker and require review on
+change; there is no existing-debt exclusion. Current source has51 allowed imports
+and no static violations. `python3 scripts/check-module-boundaries-controls.py`
+executes the real checker against nine disposable allowed/forbidden controls.
+The same commands are configured in `.github/workflows/python-boundaries.yml`;
+remote CI execution is not yet observed. The pure/planning map explicitly permits
+private shared acceptance decoding and query custody's compiler boundary; CLI/root
+cannot import private custody. `_query_execution.py` owns query lifecycle and the
+host-supplied compiler interface, without constructing a runtime/driver.
+
+TypeScript resolved-import enforcement and exact existing-debt inventory remain
+open before dependent TypeScript readiness. Reflection/indirect execution, native
+SQL dependencies, runtime private-object visibility and purity beyond imports
+remain semantic review obligations. This Python AST pass does not establish those
+properties or overall composition qualification. Existing declaration compilation
+is not the TypeScript dependency gate.

@@ -905,3 +905,17 @@ R4, native ordinal issuance, a public mutation path or admission-object authorit
 The original SQL ordinal allocator remains incompatible. These observed cases
 are useful implementation witnesses for the later model/code correspondence,
 not formal analysis or proof of the unresolved embedding-host trust boundary.
+
+
+### Python module-boundary gate — observed adoption
+
+The actual AST checker passes the twelve Python source modules/51 imports with
+no baseline exceptions. Nine real-checker controls include an allowed nested
+import and rejection of a driver in pure code, private custody imports (relative
+and absolute), package escape, direct dynamic loading, a cycle, unmapped source
+and wildcard import. The [receipt](evidence/design-audit/python-module-boundaries.json)
+records checker/producer/source hashes and Python version. Local commands and the
+CI workflow are in Architecture; no remote CI pass is claimed. TypeScript and
+native dependency enforcement plus reflection/runtime visibility review remain
+open and are not qualified by this Python-only result. These are development
+checks; they neither import the toolkit nor install/start a database.

@@ -247,3 +247,10 @@ without executing its body. This component is not exported as a supported writer
 or native confirmation factory. The ten/eleven-module checks above are historical
 delivery evidence. Original driver/control/issuer integration and native SQL
 correction remain open;42 component tests do not qualify installed public operations.
+
+
+Run `python3 scripts/check-module-boundaries.py` from the repository root for the
+Python source import gate, and `python3 scripts/check-module-boundaries-controls.py`
+for its real-checker allowed/forbidden controls. CI runs the same commands. New
+modules/imports require a reviewed checker map change. This AST check is scoped
+to Python imports; it does not qualify native behavior or runtime object privacy.
