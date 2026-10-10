@@ -343,3 +343,17 @@ native implementation; producer/ledger correspondence, native command exclusion
 and driver generation recognition remain required before E06/native adoption
 publication. No public capability or runtime support claim follows from these
 component tests.
+
+The private `_native_pg8000` slice wraps cooperative host calls on an original
+pg8000 1.31.5 native connection after an explicit host idle probe. It captures
+bounded original CommandComplete/ErrorResponse/ReadyForQuery evidence across
+all cycles of a complete driver call, guards prepared run/close, and preserves
+native completion when the driver raises the original native context error.
+Transport failure after an earlier ready cycle quarantines the boundary.
+Calls through retained raw/core aliases, cancellation, driver mutation and
+arbitrary host concurrency are outside this profile; observed unowned responses
+quarantine after effects and do not establish effect-free refusal. Capture limits
+cover retained events only, not driver buffers or total resource usage. Operation
+release here establishes exclusion only, not verified native cleanup. Typed
+lifecycle/generation history, arbitration completion production and public host
+adoption remain required; these components do not yet provide a consumer API.

@@ -1,0 +1,44 @@
+{
+  "iteration": "Private original pg8000 native-call boundary",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "task": "/root/astra_plan_review",
+    "disposition": "Approved; no remaining blockers; independently passed eleven native tests",
+    "fixedFindings": [
+      "Actual idle probe required; constructor unknown state not accepted",
+      "Original Context.error correspondence distinguishes native completion from later transport uncertainty",
+      "Prepared lifetime validation and closed publication occur inside call admission",
+      "Capture allocation failure quarantines original boundary"
+    ]
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_native_pg8000.py": "9482c03994ea95b3b7d3e7098be097ef191456914d1893a307d4de9c49a7ba80",
+    "packages/python/tests/test_native_pg8000.py": "e755f2d123a3991a0c6cb3a5d15aa61048e1c9e9e8607a297a0806b55f517f81"
+  },
+  "nativeProfile": {
+    "driver": "pg8000 1.31.5 native",
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "runtime": "pgserver 0.1.4+truss.pg16.15 corrected candidate"
+  },
+  "fullSourceSuite": {
+    "tests": 168,
+    "result": "passed",
+    "logSha256": "a96a237ce1716e93b6e8628a861c311c120be3db782e6081ab643ef76f04a4b9"
+  },
+  "installedNativeTests": {
+    "tests": 11,
+    "result": "passed",
+    "cwd": "/private/tmp",
+    "sourceInstalledByteMatchingModules": 33,
+    "logSha256": "3db886eed350b31033df706276e8a508b6116b22336b2867dc19efe2b4f48a2a",
+    "scope": "Installed wheel with source test fixtures and existing native dependencies; not clean distribution or consumer workflow qualification"
+  },
+  "wheelSha256": "09eb7afb6243e8d4cbf2b13cef5d9cf42ecea822df3560d2907a83823be05f08",
+  "scope": "Private cooperative host original-call exclusion and bounded retained C/E/Z evidence only. No lifecycle/generation/adoption, public capabilities, protected authority, verified native cleanup or full resource profile qualification. Raw aliases/core calls/cancellation/driver mutation remain unsupported.",
+  "securityOwner": {
+    "thread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+    "state": "Active ontology field custody iteration; no newly closed public authority contract adopted"
+  }
+}

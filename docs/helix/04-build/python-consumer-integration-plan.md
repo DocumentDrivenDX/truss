@@ -111,3 +111,32 @@ completion or a substitute for the first real consumer workflow.
 
 
 Python arbitration progress: the [Astra Ultra-reviewed private registry iteration](evidence/python-contracts-iteration3.json) implements one original executor domain, shared atomic operation-slot transitions, exact completion context, terminal decision retention, publication-fault reconciliation and bounded encoded recovery admission. Native completion production/ledger verification, host-command exclusion, driver transaction generation and whole resource qualification remain C02 gates. This is an implementation prerequisite, not a public adoption release.
+
+## PY-C02 native boundary sequence — Astra Ultra review
+
+The next native milestone selects synchronous pg8000 native 1.31.5 over a
+host-owned PostgreSQL connection. Attachment requires an original idle cycle
+before host BEGIN: the driver's constructor resets its status to unknown after
+startup, and unknown must not be treated as idle. Attaching midtransaction cannot
+infer original savepoint history and must refuse.
+
+First capture original command/error/ready evidence for the entire original
+native call and guard returned prepared execution/close under the same operation
+boundary. Extended execution has multiple ready cycles; a later send/receive
+failure after an earlier ready remains unresolved. Preserve an original native
+rollback even when the driver synthesizes an exception. Refuse competing
+supported calls before driver invocation and quarantine incomplete capture or
+unowned events. This reviewed private slice is recorded in
+[evidence/python-contracts-iteration4.json](evidence/python-contracts-iteration4.json).
+
+Then supply explicit host lifecycle controls and original generation/savepoint
+history: repeated BEGIN preserves generation, chained end creates another, and
+shadowed savepoint rollback/release uses original ordered history. Use a separate
+issuer epoch and nonallocating xid observation where applicable; do not assign an
+xid merely to observe a read transaction. Recover failed-state savepoints using
+original cached generation evidence, then verify native state after rollback.
+
+Finally integrate the original native call/resource ledger with shared operation
+arbitration and adoption. Trusted host SQL and cooperative routing are explicit
+profile assumptions, not arbitrary raw-alias exclusion or malicious-host safety.
+Only qualified supported paths may publish public adoption. C02 remains open.
