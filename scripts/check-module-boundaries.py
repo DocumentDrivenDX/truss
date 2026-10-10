@@ -15,6 +15,7 @@ import sys
 ALLOWED = {
     '__init__': {'truss.local_runtime'},
     '_acceptance_json': {'json'},
+    '_directory_resources': {'os', 'stat', 'threading', 'truss._installation_resources'},
     '_installation_resources': {'dataclasses', 'hashlib', 'json', 'truss._resource_account'},
     '_operation_admission': {'dataclasses', 'inspect', 'threading'},
     '_operation_ordinal': {'dataclasses', 'threading'},

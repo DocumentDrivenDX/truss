@@ -2646,3 +2646,29 @@ release-registration qualification. No database effect, compiler selection,
 installation marker or public API is introduced. Next qualify a concrete installed
 package resolver and the same complete capture outside checkout before integration
 with CONTRACT-008 IM01–IM05 and the original security/native profile.
+
+
+### Descriptor-relative directory resolver checkpoint
+
+Private `DirectoryResourceResolver` is inert until explicit `start` opens the
+trusted host-selected original package root with directory/no-follow flags.
+Resolution validates the admitted entry path; actual open walks each segment
+relative to the retained original descriptor, refusing intermediate/final
+symlinks. The final descriptor must identify a single-link regular file;
+nonblocking open prevents a FIFO from blocking before type refusal. Root/path
+walking and close serialize under one lock. Already-open resource streams own
+their descriptors independently; resolver close prevents new opens but does not
+claim cancellation of those streams. No database or server is touched.
+
+The [actual directory receipt](../04-build/evidence/design-audit/python-directory-resource-resolver.json)
+records original-root retention after pathname replacement, inert pre-start and
+post-close refusal, leaf/parent symlink, hardlink/nonregular and path traversal
+controls. The Python import gate passes61 edges with the explicit os/stat/threading
+and private entry-module mapping. This is macOS component evidence, not clean
+installed-package or Windows/zip support. Trusted root selection/ancestors and
+host filesystem administration remain ADR-008 host obligations; no malicious
+same-process/root-admin threat is qualified. Mount changes and concurrent content
+mutation require their selected host profile, with exact byte capture still
+mandatory. Next compose this resolver with installed wheel resources and complete
+bundle capture outside checkout, then execute the unchanged native installation
+gates. Actual buffering/decoder/hash/work bounds remain unqualified.
