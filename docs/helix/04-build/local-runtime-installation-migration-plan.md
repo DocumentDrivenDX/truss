@@ -1266,11 +1266,38 @@ P4 exits; neither is silently removed to claim the P1 preview complete.
 ## Seven-body implementation packet: next native installation work
 
 Read `reference-routine-design-v0.1.proposal.json` and its original trigger
-references alongside current CONTRACT-001 OC/RF, CONTRACT-005 EL and CONTRACT-006
-FV algorithms. The frozen manifest chooses attributes/signatures, not executable
+references alongside current CONTRACT-001 OC/RF/EL, CONTRACT-005 privilege
+boundaries and CONTRACT-006 FV algorithms. The frozen manifest chooses attributes/signatures, not executable
 bodies. Its original governing hashes must retain their historical scope; compare
 current contract changes semantically before producing a newly registered packet.
 The16-selector security worklist is a known subset, not complete callable closure.
+
+Bind the packet's exact counting meaning before implementing edge bodies. The
+existing EL03 per-edge multiset is an occurrence cap; the
+[distinct-neighbor candidate](../02-design/contracts/distinct-neighbor-participation.proposal.md)
+instead groups proved typed endpoint pairs and derives representative markers.
+An owning UMF participation claim requires the latter meaning and its complete
+qualified mapping, not an old occurrence-cap body with a renamed profile.
+The packet must freeze the original accepted definition/binding, counting
+interpretation, marker algorithm and source/build/profile version together.
+Absent or ambiguous interpretation refuses even with zero edge rows. Neither an
+application count-mode flag nor a caller marker can select native semantics.
+
+| Affected body/producer | Additional distinct-neighbor integration exit |
+| --- | --- |
+| Canonical edge writer and edge_limit_observe | Retain complete old/new occurrence membership, including representative deletion, FK cascade attribution, imported lower IDs and both endpoint directions. Observe all original effects; only the writer derives/replaces markers. |
+| edge_limit_catalog_observe | Full populated degree and representative-marker derivation for definition tightening; zero-owner minimum checks use original complete owner roots. Preserve separate retirement/reactivation provenance. |
+| edge_limit_verify_current_scope | Read-only complete pair grouping, canonical minimum representative and bidirectional marker correspondence under the selected interpretation. No repair, marker insertion or count-mode fallback. |
+| effects_ready, row_touch_commit_check and feed validators | Complete edge/marker operation contributions and current generations after representative changes; occurrence IDs/history/feed bags remain unchanged by degree grouping. Existing finalized results remain immutable. |
+| Installer/verify and explicit conversion | Independently compare the exact counting-profile/body/trigger/grant/configuration bundle. Convert the complete populated marker interpretation atomically under original administrative exclusion; a changed profile label or empty marker table does not establish conversion. |
+
+The eight mathematical marker vectors are supplemental design inputs, not native
+exit evidence. Independently run parallel/different-neighbor concurrency,
+representative/nonrepresentative/last deletion, incoming/self-edge limits,
+definition-only tightening, hidden siblings, bypass and early-check/savepoint
+failure against actual enabled bodies and ordinary roles. Until those schedules
+and complete release closure pass, owning UMF participation remains unavailable;
+existing explicit occurrence-cap behavior and its qualified scope remain separate.
 
 | Body | Required original inputs and behavior | Independent native exit |
 | --- | --- | --- |

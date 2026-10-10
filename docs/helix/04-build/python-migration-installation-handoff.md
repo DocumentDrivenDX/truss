@@ -439,6 +439,30 @@ their existing owner. CFG-01–12 are qualification cases, not passed implementa
 
 ## Bounded administrative execution and recovery
 
+### Counting-profile correspondence in the installation bundle
+
+The [distinct-neighbor candidate](../02-design/contracts/distinct-neighbor-participation.proposal.md)
+and [seven-body packet](local-runtime-installation-migration-plan.md#seven-body-implementation-packet-next-native-installation-work)
+now distinguish owning UMF participation from explicit Truss occurrence caps.
+Installation/verify must admit exact definition/binding/counting-profile bytes
+and compatible writer/observer/verifier/trigger/grant/configuration dependencies
+as one complete bundle. Zero graph or marker rows do not excuse a missing
+interpretation. The public Python caller does not supply a boolean that chooses
+count semantics; the original admitted bundle determines the procedure.
+
+Same-layout column correspondence cannot prove semantic migration between those
+profiles. An explicit populated route must retain all original occurrence IDs,
+properties/history/receipt/feed/recovery facts and independently compare old
+versus target marker interpretation. Profile and readiness publication are
+atomic with the complete admitted conversion. Reverse conversion refuses when
+parallel occurrences violate the target cap; no deduplication is allowed.
+Retained immutable request results keep their original profile/meaning and cannot
+be relabeled as new-profile qualification. Existing unknown-attempt reconciliation
+remains read-only under its original custody. No conversion route is implemented
+or qualified by these design instructions.
+
+### Administrative bounds and settlement
+
 Use the existing original resource/cancellation/settlement profiles, not a new
 migration retry policy. The selected composition must name finite bounds for
 artifact input/validation, statement and result bytes/work, exclusion acquisition,
