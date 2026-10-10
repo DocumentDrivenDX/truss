@@ -53,6 +53,26 @@ The next full-scope audit must test semantic agreement among requirements, contr
 
 ## Compiler security registration integration dependency
 
+### Completed owner string-cell checkpoint — 2026-10-10
+
+The [retained checkpoint review](evidence/design-audit/security-native-string-cell-checkpoint-review.json)
+pins the security owner's completed original-use receipt and scoped independent
+review. Six PostgreSQL17.9 fixture samples (predicate/order/join and empty
+variants) preserve exact binary stdout through strict UTF-8 into fresh owner
+cell checks. Truss independently checked captured-byte hashes, row/column counts,
+six correspondence-only reports with zero released rows, and twelve recorded
+null/wrong-width refusal diagnostics. Truss did not rerun native acquisition.
+
+This is relevant progress for original returned-cell interpretation, not the
+minimum deployable security handoff. The owner's review explicitly retains
+nativeImplementationQualified=false; compilation still refuses backend
+activation. Protected/numeric/aggregate codecs, policy-selected mask truth,
+authenticated current authority, complete original dependencies/held-cut/resource
+and cleanup custody, guarded release and the full installed tuple remain open.
+The inspection example and working interface are not adopted into Truss's frozen
+compiler/Python ABI. No owner acceptance case or Truss story is promoted by this
+receipt audit, and unrelated owner backend work remains independent.
+
 ### Committed LEFT JOIN and distribution review — 2026-10-10
 
 Fresh origin checks retain UMF322b193 and advance Weft to be49fff. The

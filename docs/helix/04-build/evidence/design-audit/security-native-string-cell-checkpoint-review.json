@@ -1,0 +1,82 @@
+{
+  "schema": "truss-security-cell-checkpoint-review/0.1",
+  "ownerThread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "completedOwnerTurn": "01a12437-ab45-7bd2-a6fa-03ca77410875",
+  "sources": [
+    {
+      "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/truss-original-use.json",
+      "sha256": "5b8fc4163d89a917ed0169252f376d000f74387f7f02cdb8df52f5c76e73ce88"
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/original-cell-bridge-astra-review.json",
+      "sha256": "3b9c683f702569ed621deea1394d4329232e43a59c794076c40a436eddc7071f"
+    }
+  ],
+  "checks": [
+    {
+      "id": "predicate",
+      "capturedByteCount": 10,
+      "sha256": "1188eef6223391d9ac7ccdd996c6b225f457d16ec1ecefcd6b0db5e542d6859d",
+      "rowCount": 1,
+      "columnCount": 1,
+      "releasedRows": 0,
+      "refusalControlCount": 2
+    },
+    {
+      "id": "predicate-empty",
+      "capturedByteCount": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "rowCount": 0,
+      "columnCount": 1,
+      "releasedRows": 0,
+      "refusalControlCount": 2
+    },
+    {
+      "id": "order",
+      "capturedByteCount": 18,
+      "sha256": "ddf082494ec9244cd23f09fd03598c28b595d8aabc8bf8b3fb47c0cc540273bb",
+      "rowCount": 2,
+      "columnCount": 1,
+      "releasedRows": 0,
+      "refusalControlCount": 2
+    },
+    {
+      "id": "order-empty",
+      "capturedByteCount": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "rowCount": 0,
+      "columnCount": 1,
+      "releasedRows": 0,
+      "refusalControlCount": 2
+    },
+    {
+      "id": "join",
+      "capturedByteCount": 18,
+      "sha256": "ddf082494ec9244cd23f09fd03598c28b595d8aabc8bf8b3fb47c0cc540273bb",
+      "rowCount": 2,
+      "columnCount": 1,
+      "releasedRows": 0,
+      "refusalControlCount": 2
+    },
+    {
+      "id": "join-empty",
+      "capturedByteCount": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "rowCount": 0,
+      "columnCount": 1,
+      "releasedRows": 0,
+      "refusalControlCount": 2
+    }
+  ],
+  "scope": "Independent retained-receipt byte/hash/count/refusal audit only; owner native execution and review are attributed, not independently rerun",
+  "trussSecurityHandoffAdopted": false,
+  "nativeImplementationQualified": false,
+  "remaining": [
+    "authenticated original actor/current authority",
+    "complete protected native/result dependency closure",
+    "numeric/aggregate/protected codecs",
+    "policy-selected masking truth",
+    "original held-cut/resource/control/cleanup correspondence",
+    "guarded result release and complete installation tuple"
+  ]
+}
