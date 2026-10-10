@@ -19,6 +19,7 @@ ALLOWED = {
     '_installation_resources': {'dataclasses', 'hashlib', 'json', 'truss._resource_account'},
     '_operation_admission': {'dataclasses', 'inspect', 'threading'},
     '_operation_registry': set(),
+    '_accounted_receive': {'struct', 'threading', 'truss._resource_account'},
     '_operation_ordinal': {'dataclasses', 'threading'},
     '_query_execution': {'dataclasses', 'inspect', 'threading', 'types', 'weakref', 'truss.weft'},
     '_resource_account': {'dataclasses', 'threading'},

@@ -193,6 +193,30 @@ reads, parser exception, retained-view lifetime and cancellation using independe
 allocation/dispatch observations. Source inspection and the private scalar byte
 ledger do not execute or qualify these integration schedules.
 
+### Python shared-account receive integration
+
+The private Python AccountedReceiver now composes the existing BytePermitAccount
+with the synchronous recv_into frame producer. It reserves header plus both
+maximum whole-frame payloads before the first read, draws down before each
+bytearray/bytes allocation, and terminates only the successful receive's unused
+reservation. Header, mutable-frame and immutable-frame charges remain retained;
+it supplies no allocation release or native settlement evidence. Receivers on
+the same account share live/cumulative denial rather than separate byte ledgers.
+Partial ingress, malformed length and budget failure close new admission while
+retaining the original account's allocations and reservation. Reentrant receives
+submit no additional read.
+
+The [installed component receipt](../../04-build/evidence/design-audit/python-accounted-receive-body-fault-installed-suite.json)
+records the rebuilt wheel and source/installed payload correspondence. Its five
+new synthetic tests independently check payload arithmetic, pre-read refusal,
+partial header/body and read-budget failure, shared-account exhaustion, original
+producer identity and reentry. They are not native driver admission evidence.
+This is the first receive/account composition, not a replacement for the frozen
+historical experiment or a qualified pg8000 adapter. Integrate FrameFile slicing,
+core _read copies, descriptor/cell parsing, object/view overhead, transport/TLS,
+outbound and containment reservations before claiming the complete profile.
+No public export or dependency change accompanies this private component.
+
 
 ### Corrected local control-frame compatibility
 

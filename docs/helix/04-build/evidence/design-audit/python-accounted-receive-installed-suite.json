@@ -1,0 +1,166 @@
+{
+  "scope": "Installed current wheel full existing component suite; four native lifecycle tests plus synthetic/pure controls",
+  "wheelSha256": "98de3e41bbca79cdbc5e7b20caebb93223f3df0faebb05a3276ca329d11e9068",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "loadedPackage": "/private/tmp/truss-pgserver-corrected-test-env/lib/python3.11/site-packages/truss",
+  "modules": [
+    {
+      "path": "truss/__init__.py",
+      "sha256": "e9d7aacb2f5a5da077ffc24500422876892c3f68a7f595f059fd4189f25a83b5"
+    },
+    {
+      "path": "truss/_acceptance_json.py",
+      "sha256": "fba890deb660bf461e6bcf4eeef0c0704962f0c1814d879c9509e2f994842f77"
+    },
+    {
+      "path": "truss/_accounted_receive.py",
+      "sha256": "0542d03f8d295d891c402846f2efdc0e1116ba5a432fd1868a2a18714eeac6d9"
+    },
+    {
+      "path": "truss/_directory_resources.py",
+      "sha256": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48"
+    },
+    {
+      "path": "truss/_installation_resources.py",
+      "sha256": "2564e6daf785109d910c62ce849cca708e33ca4515f96436ec946dbe0c6ed50b"
+    },
+    {
+      "path": "truss/_operation_admission.py",
+      "sha256": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+    },
+    {
+      "path": "truss/_operation_ordinal.py",
+      "sha256": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977"
+    },
+    {
+      "path": "truss/_operation_registry.py",
+      "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+    },
+    {
+      "path": "truss/_query_execution.py",
+      "sha256": "8209768fe1f78b6234bae24545a221beca6b2ff60f22d9f3be501834604342e7"
+    },
+    {
+      "path": "truss/_receipt_position.py",
+      "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+    },
+    {
+      "path": "truss/_resource_account.py",
+      "sha256": "640d37b2f517339b2a0ff0a7438ff17dd717644d5464f1af1cce732370b99a2a"
+    },
+    {
+      "path": "truss/cli.py",
+      "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+    },
+    {
+      "path": "truss/local_runtime.py",
+      "sha256": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9"
+    },
+    {
+      "path": "truss/migration_planning.py",
+      "sha256": "12fabf2bd14a6af133f70488e704ff7a7fe8aded3158695655ba26acfb69fcce"
+    },
+    {
+      "path": "truss/numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "truss/timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "truss/weft.py",
+      "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+    }
+  ],
+  "dependencies": {
+    "truss-toolkit": "0.0.1.dev0",
+    "pgserver": "0.1.4+truss.pg16.15",
+    "fasteners": "0.20",
+    "platformdirs": "4.12.4",
+    "psutil": "7.2.2",
+    "weft-sql": "0.1.0"
+  },
+  "environmentReused": true,
+  "correctedPgserverCandidate": true,
+  "tests": 66,
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "-W",
+    "error",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "/Users/erik/Projects/truss/packages/python/tests",
+    "-v"
+  ],
+  "output": "test_depth_members_bytes_work_and_node_limits (test_acceptance_json.AcceptanceJsonTests.test_depth_members_bytes_work_and_node_limits) ... ok\ntest_original_shared_vectors (test_acceptance_json.AcceptanceJsonTests.test_original_shared_vectors) ... ok\ntest_shared_capacity_input (test_acceptance_json.AcceptanceJsonTests.test_shared_capacity_input) ... ok\ntest_failed_partial_ingress_retains_reservation_and_allocations (test_accounted_receive.AccountedReceiveTests.test_failed_partial_ingress_retains_reservation_and_allocations) ... ok\ntest_foreign_producer_and_reentry_cannot_start_another_read (test_accounted_receive.AccountedReceiveTests.test_foreign_producer_and_reentry_cannot_start_another_read) ... ok\ntest_pre_read_cumulative_refusal_is_irreversible (test_accounted_receive.AccountedReceiveTests.test_pre_read_cumulative_refusal_is_irreversible) ... ok\ntest_reservation_precedes_ingress_and_payload_copies_stay_charged (test_accounted_receive.AccountedReceiveTests.test_reservation_precedes_ingress_and_payload_copies_stay_charged) ... ok\ntest_shared_capacity_denial_reads_nothing_and_retains_prior_custody (test_accounted_receive.AccountedReceiveTests.test_shared_capacity_denial_reads_nothing_and_retains_prior_custody) ... ok\ntest_descriptor_resolver_composes_with_pinned_bundle_capture (test_directory_resources.DirectoryResourceTests.test_descriptor_resolver_composes_with_pinned_bundle_capture) ... ok\ntest_original_root_survives_path_replacement_and_close_refuses (test_directory_resources.DirectoryResourceTests.test_original_root_survives_path_replacement_and_close_refuses) ... ok\ntest_symlink_parent_leaf_and_nonregular_refuse (test_directory_resources.DirectoryResourceTests.test_symlink_parent_leaf_and_nonregular_refuse) ... ok\ntest_original_numeric_vectors (test_exact_numeric.ExactNumericCandidateTests.test_original_numeric_vectors) ... ok\ntest_refusals_and_explicit_bounds (test_exact_numeric.ExactNumericCandidateTests.test_refusals_and_explicit_bounds) ... ok\ntest_lossless_precision_and_unavailable_views (test_exact_timestamp.ExactTimestampCandidateTests.test_lossless_precision_and_unavailable_views) ... ok\ntest_offset_components_cannot_be_normalized_by_python (test_exact_timestamp.ExactTimestampCandidateTests.test_offset_components_cannot_be_normalized_by_python) ... ok\ntest_original_timestamp_vectors (test_exact_timestamp.ExactTimestampCandidateTests.test_original_timestamp_vectors) ... ok\ntest_complete_bundle_retains_one_account_and_late_failure_quarantines (test_installation_resources.ResourceBundleTests.test_complete_bundle_retains_one_account_and_late_failure_quarantines) ... ok\ntest_missing_changed_truncated_appended_resources_quarantine_once (test_installation_resources.ResourceCaptureTests.test_missing_changed_truncated_appended_resources_quarantine_once) ... ok\ntest_real_file_capture_retains_verified_bytes_after_change (test_installation_resources.ResourceCaptureTests.test_real_file_capture_retains_verified_bytes_after_change) ... ok\ntest_reservation_refusal_precedes_open_and_invalid_pin_is_inert (test_installation_resources.ResourceCaptureTests.test_reservation_refusal_precedes_open_and_invalid_pin_is_inert) ... ok\ntest_duplicate_and_unsafe_closed_entries (test_installation_resources.ResourceIndexTests.test_duplicate_and_unsafe_closed_entries) ... ok\ntest_original_bounds_and_duplicate_membership (test_installation_resources.ResourceIndexTests.test_original_bounds_and_duplicate_membership) ... ok\ntest_original_closed_membership_and_independent_pin (test_installation_resources.ResourceIndexTests.test_original_closed_membership_and_independent_pin) ... ok\ntest_constructor_failure_with_postmaster_marker_retains_custody (test_local_runtime.LocalRuntimeTests.test_constructor_failure_with_postmaster_marker_retains_custody) ... ok\ntest_failed_cleanup_retains_lease_until_explicit_recovery (test_local_runtime.LocalRuntimeTests.test_failed_cleanup_retains_lease_until_explicit_recovery) ... ok\ntest_nested_directory_custody_and_independent_servers (test_local_runtime.LocalRuntimeTests.test_nested_directory_custody_and_independent_servers) ... ok\ntest_nonempty_and_wrong_version_directories_refuse_unchanged (test_local_runtime.LocalRuntimeTests.test_nonempty_and_wrong_version_directories_refuse_unchanged) ... ok\ntest_retained_commit_and_exception_cleanup (test_local_runtime.LocalRuntimeTests.test_retained_commit_and_exception_cleanup) ... ok\ntest_direct_input_refusals (test_migration_planning.MigrationPlanningTests.test_direct_input_refusals) ... ok\ntest_shared_original_expected_results (test_migration_planning.MigrationPlanningTests.test_shared_original_expected_results) ... ok\ntest_async_or_nonvoid_verification_cannot_dispatch (test_operation_admission.AdmissionCustodyTests.test_async_or_nonvoid_verification_cannot_dispatch) ... ok\ntest_close_and_reentrant_verification_prevent_dispatch (test_operation_admission.AdmissionCustodyTests.test_close_and_reentrant_verification_prevent_dispatch) ... ok\ntest_deferred_admission_never_escapes_custody (test_operation_admission.AdmissionCustodyTests.test_deferred_admission_never_escapes_custody) ... ok\ntest_failure_never_restores_permission (test_operation_admission.AdmissionCustodyTests.test_failure_never_restores_permission) ... ok\ntest_foreign_custody_and_invalid_capacity_refuse (test_operation_admission.AdmissionCustodyTests.test_foreign_custody_and_invalid_capacity_refuse) ... ok\ntest_one_use_and_original_input_correspondence (test_operation_admission.AdmissionCustodyTests.test_one_use_and_original_input_correspondence) ... ok\ntest_foreign_custody_and_connection_close (test_operation_ordinal.OperationOrdinalRegistryTests.test_foreign_custody_and_connection_close) ... ok\ntest_shared_facades_and_ended_transaction_cannot_reset (test_operation_ordinal.OperationOrdinalRegistryTests.test_shared_facades_and_ended_transaction_cannot_reset) ... ok\ntest_native_maximum_and_exact_argument_types (test_operation_ordinal.OperationOrdinalTests.test_native_maximum_and_exact_argument_types) ... ok\ntest_shared_custody_corpus (test_operation_ordinal.OperationOrdinalTests.test_shared_custody_corpus) ... ok\ntest_all_phases_and_full_unordered_surviving_multiset (test_operation_registry.OperationRegistryTests.test_all_phases_and_full_unordered_surviving_multiset) ... ok\ntest_independent_numeric_null_phase_and_carrier_refusals (test_operation_registry.OperationRegistryTests.test_independent_numeric_null_phase_and_carrier_refusals) ... ok\ntest_original_descriptor_completion_and_exact_byte_bounds (test_operation_registry.OperationRegistryTests.test_original_descriptor_completion_and_exact_byte_bounds) ... ok\ntest_async_and_nonvoid_checks_cannot_permit_sql (test_query_execution.QueryExecutionTests.test_async_and_nonvoid_checks_cannot_permit_sql) ... ok\ntest_async_context_exit_cannot_publish_or_enter (test_query_execution.QueryExecutionTests.test_async_context_exit_cannot_publish_or_enter) ... ok\ntest_async_context_verification_cannot_permit_sql (test_query_execution.QueryExecutionTests.test_async_context_verification_cannot_permit_sql) ... ok\ntest_disposal_and_reentrancy_do_not_repeat_native_work (test_query_execution.QueryExecutionTests.test_disposal_and_reentrancy_do_not_repeat_native_work) ... ok\ntest_disposal_during_context_exit_withholds_buffered_result (test_query_execution.QueryExecutionTests.test_disposal_during_context_exit_withholds_buffered_result) ... ok\ntest_drift_cleanup_and_numeric_transport_withhold_results (test_query_execution.QueryExecutionTests.test_drift_cleanup_and_numeric_transport_withhold_results) ... ok\ntest_missing_host_foreign_plan_and_unknown_obligation_never_acquire (test_query_execution.QueryExecutionTests.test_missing_host_foreign_plan_and_unknown_obligation_never_acquire) ... ok\ntest_obligations_and_publication_recheck_have_original_order (test_query_execution.QueryExecutionTests.test_obligations_and_publication_recheck_have_original_order) ... ok\ntest_original_host_functions_are_captured_at_construction (test_query_execution.QueryExecutionTests.test_original_host_functions_are_captured_at_construction) ... ok\ntest_suppressed_host_failure_cannot_become_empty_success (test_query_execution.QueryExecutionTests.test_suppressed_host_failure_cannot_become_empty_success) ... ok\ntest_wrapped_async_cleanup_withholds_buffered_result (test_query_execution.QueryExecutionTests.test_wrapped_async_cleanup_withholds_buffered_result) ... ok\ntest_canonicality_bounds_domains_and_closed_members (test_receipt_position.ReceiptPositionTests.test_canonicality_bounds_domains_and_closed_members) ... ok\ntest_original_wire_vectors (test_receipt_position.ReceiptPositionTests.test_original_wire_vectors) ... ok\ntest_original_arithmetic_witnesses (test_resource_account.BytePermitTests.test_original_arithmetic_witnesses) ... ok\ntest_original_tokens_and_atomic_cumulative_refusal (test_resource_account.BytePermitTests.test_original_tokens_and_atomic_cumulative_refusal) ... ok\ntest_retained_record_capacity_never_refunded (test_resource_account.BytePermitTests.test_retained_record_capacity_never_refunded) ... ok\ntest_spent_and_unknown_custody_survive_release_and_close (test_resource_account.BytePermitTests.test_spent_and_unknown_custody_survive_release_and_close) ... ok\ntest_async_compilers_refuse_without_execution_or_coroutine_leak (test_weft.CompilerBoundaryTests.test_async_compilers_refuse_without_execution_or_coroutine_leak) ... ok\ntest_bad_input_refuses_before_compiler (test_weft.CompilerBoundaryTests.test_bad_input_refuses_before_compiler) ... ok\ntest_blocked_exception_and_disposal_publish_no_plan (test_weft.CompilerBoundaryTests.test_blocked_exception_and_disposal_publish_no_plan) ... ok\ntest_changed_and_new_artifacts_refuse_without_retry (test_weft.CompilerBoundaryTests.test_changed_and_new_artifacts_refuse_without_retry) ... ok\ntest_reentrant_compilation_is_refused (test_weft.CompilerBoundaryTests.test_reentrant_compilation_is_refused) ... ok\ntest_retains_originals_and_freezes_nested_artifacts (test_weft.CompilerBoundaryTests.test_retains_originals_and_freezes_nested_artifacts) ... ok\n\n----------------------------------------------------------------------\nRan 66 tests in 11.515s\n\nOK\n",
+  "testSources": [
+    {
+      "path": "packages/python/tests/test_acceptance_json.py",
+      "sha256": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2"
+    },
+    {
+      "path": "packages/python/tests/test_accounted_receive.py",
+      "sha256": "97c895d1e6d2fcd61096838e7a1e7e63701aeaf4da58d1f641255b2d644ef706"
+    },
+    {
+      "path": "packages/python/tests/test_directory_resources.py",
+      "sha256": "928878bb47c12c90ee9f98033dda36e9838cce80c0de83c5e3ee25140494f7d4"
+    },
+    {
+      "path": "packages/python/tests/test_exact_numeric.py",
+      "sha256": "1b7753e6692cd19575e401612056159dae06df6c2769589800ce0429a165c458"
+    },
+    {
+      "path": "packages/python/tests/test_exact_timestamp.py",
+      "sha256": "8d9d1c2364d474d98f1ab63ad586a8c3c11148ff12950e94bef424f1e997379f"
+    },
+    {
+      "path": "packages/python/tests/test_installation_resources.py",
+      "sha256": "eb6ce55d074ea69042c40215a02b0c69156c31883bf8b261e86c08c90e775e22"
+    },
+    {
+      "path": "packages/python/tests/test_local_runtime.py",
+      "sha256": "9c690fa7be8839eca9d95663e3af2dae1289ba01909adbdf693e5a5dc7a176f5"
+    },
+    {
+      "path": "packages/python/tests/test_migration_planning.py",
+      "sha256": "f967bffffefc22e62378e8410f19c5f5ddd6b84895c53c0a9fccb0c65388e8d6"
+    },
+    {
+      "path": "packages/python/tests/test_operation_admission.py",
+      "sha256": "50ed2a3ebbd82e02f7e1a055ba66d38db347ec8c27965052d3cecfe68b1f98b7"
+    },
+    {
+      "path": "packages/python/tests/test_operation_ordinal.py",
+      "sha256": "a5fa4ede8f756767c7916e9e4cfba35496c43114247d82ebea914f186af3293a"
+    },
+    {
+      "path": "packages/python/tests/test_operation_registry.py",
+      "sha256": "bb210a0e1ca1428ece5b63fbdae0a02ff09ad9807e0f6400c04da73e8e995db3"
+    },
+    {
+      "path": "packages/python/tests/test_query_execution.py",
+      "sha256": "9c922c0657d372377d44188e8c8f2e45270ce5ae9a9f5fc9719c025152e7eacf"
+    },
+    {
+      "path": "packages/python/tests/test_receipt_position.py",
+      "sha256": "deb2f95c0dc04bb6f615f680aadcf88bc7d707e0dabebb407f2d4212af4068a7"
+    },
+    {
+      "path": "packages/python/tests/test_resource_account.py",
+      "sha256": "e34911a586d21f91311de0bc356e85de1ad674c30c4c93207eb414a2c1e2e7e8"
+    },
+    {
+      "path": "packages/python/tests/test_weft.py",
+      "sha256": "7ff2541d371c16c8d8d84b573f20a7961c4cbb2f5d434db3ce45d207e83d7591"
+    }
+  ],
+  "producerSha256": "0fa22eb3930180147ddb0397f8664de4f1e535172e4f1b3b247fa0698ed9be7d",
+  "completeEngineQualified": false,
+  "installationQualified": false,
+  "migrationExecutionQualified": false,
+  "platformScope": "macOS27 arm64 Python3.11 pgserver0.1.4+truss.pg16.15 PostgreSQL16.15; no process-crash or cross-platform qualification"
+}

@@ -211,9 +211,9 @@ is not general process-crash qualification. This source change is newer than the
 recorded rebuilt wheel and requires a later package rebuild.
 
 
-The [current installed-suite receipt](../../docs/helix/04-build/evidence/design-audit/python-current-installed-suite.json)
-now covers a rebuilt wheel containing both subsequent fixes. All ten installed
-module payloads match wheel/source, and all36 current component tests pass with
+The [historical installed-suite receipt](../../docs/helix/04-build/evidence/design-audit/python-current-installed-suite.json)
+covers a rebuilt wheel containing both subsequent fixes. All ten installed
+module payloads match that wheel/source checkpoint, and all36 component tests pass with
 warnings treated as errors outside the checkout. This reuses the previously
 resolved local-extra environment; it is not a new dependency-resolution claim.
 Four tests exercise native PostgreSQL16.2 lifecycle; constructor fault injection
@@ -221,6 +221,16 @@ and query/compiler host controls retain their synthetic scope. Reproduce with
 `scripts/check-python-installed-suite.py TRUSS_WHEEL` using that wheel's installed
 Python environment. Full installation, migration execution and protected engine
 qualification remain unfinished.
+
+The [latest installed component suite](../../docs/helix/04-build/evidence/design-audit/python-accounted-receive-body-fault-installed-suite.json)
+verifies all17 current module payloads against the rebuilt wheel and installed
+package, with66 tests passing outside the checkout. It uses the reused corrected
+pgserver0.1.4+truss.pg16.15 environment; four tests exercise local native lifecycle.
+The new private AccountedReceiver shares BytePermitAccount, reserves maximum
+header/frame payload overlap before ingress, and retains charges after failure.
+Its accounting/fault controls are synthetic. Transport, parser, object overhead
+and containment integration remain required before this becomes a supported
+database adapter. Public mutation/query/installation APIs remain unreleased.
 
 
 The [installed console-command receipt](../../docs/helix/04-build/evidence/design-audit/python-installed-local-cli.json)
