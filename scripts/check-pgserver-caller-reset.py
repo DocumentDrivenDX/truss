@@ -7,9 +7,16 @@ import json
 from pathlib import Path
 import subprocess
 import tempfile
+import argparse
 import pgserver
 
 root = Path(__file__).resolve().parents[1]
+parser = argparse.ArgumentParser()
+parser.add_argument('--receipt', default='pgserver-caller-reset.json')
+parser.add_argument('--require-matches', action='store_true')
+arguments = parser.parse_args()
+if Path(arguments.receipt).name != arguments.receipt or not arguments.receipt.endswith('.json'):
+    raise RuntimeError('Receipt must be a JSON filename in the design-audit directory')
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
 
 def observation(label):
@@ -64,9 +71,12 @@ receipt = {'scope': 'Role/session reset observations on disposable pgserver; no 
         for name in ('psql', 'postgres')},
     'expectedSource': 'https://www.postgresql.org/docs/16/release-16-5.html',
     'comparisons': comparisons, 'mismatches': sum(not item['matches'] for item in comparisons),
+    'callerResetSchedulePassed': all(item['matches'] for item in comparisons),
     'correctedBuildProvenanceVerified': False, 'r4Qualified': False, 'r5Qualified': False,
     'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
-(root / 'docs/helix/04-build/evidence/design-audit/pgserver-caller-reset.json').write_text(
+(root / 'docs/helix/04-build/evidence/design-audit' / arguments.receipt).write_text(
     json.dumps(receipt, indent=2) + '\n')
 print(json.dumps({'serverVersion': version, 'observations': len(comparisons),
     'mismatches': receipt['mismatches'], 'r4Qualified': False, 'r5Qualified': False}))
+if arguments.require_matches and receipt['mismatches']:
+    raise SystemExit('Caller-reset schedule failed; corrected candidate not qualified')

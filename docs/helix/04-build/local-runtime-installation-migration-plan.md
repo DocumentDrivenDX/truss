@@ -103,6 +103,18 @@ extension requirement or an identical upstream wheel. The planned local version
 These are build inputs, not build success or a shipped dependency change. Do not
 alter the default package pin until installed wheel/native checks qualify it.
 
+After that original native build completes, use
+`scripts/package-corrected-pgserver.py SOURCE_CHECKOUT NEW_WHEEL_DIRECTORY` from
+the pinned wheel-build environment. The packager verifies source/archive/recipe
+pins and allowed tracked changes, emits the distinguished local version without
+publishing it, and compares packaged pgserver payloads with the original build
+directory. Its output receipt still declares installed/full-runtime qualification
+false. Install into a separate environment, then run
+`scripts/check-pgserver-caller-reset.py --receipt pgserver-corrected-caller-reset.json --require-matches`
+so corrected observations cannot overwrite the historical16.2 failure receipt.
+Only after this succeeds continue the full R4/R5 matrix and local lifecycle/loader
+qualification; a packaging command or source parse is not those exits.
+
 ## Ownership and profile selection
 
 Truss owns the Python package in this repository, installation bundles, migration
