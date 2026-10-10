@@ -762,3 +762,42 @@ installed-wheel interchange or semantic body readiness follows from this source
 suite. Next compose original registry lookup and owner-authority correspondence
 under the protected installed chain, without treating this decoded view as a seal
 or allowing caller-supplied identities to authorize effects.
+
+## Original address-to-registry integration sequence
+
+CONTRACT-001 already selects the proposed four-string address
+`["truss-row-operation-address/0.1.0", installationIdentity, originalWriterXid, operationOrdinal]`.
+Under that exact profile, each manifest entry's operationIdentity and
+nativeGroupCustodyIdentity must carry the same complete original address string.
+Do not invent UUID aliases, derive identity from touch-local position, or parse an
+arbitrary label into an executor ordinal. The closed Python body validator does
+not yet enforce this profile; its native-7/group-0 fixtures are body controls only.
+
+Implement the remaining integration in this order:
+
+| Step | Original input and concrete output | Independent check |
+| --- | --- | --- |
+| RC01 address codec | Original registered installation identity and native xid/issued ordinal strings; exact compact four-string JSON address under an explicitly pinned scalar spelling procedure | Domain/arity/type/native integer-domain/canonical-byte checks, Unicode/control escaping and no whitespace/BOM/newline. Preserve exact strings and full bytes; no JS number or digest-only identity. The encoder does not authenticate its inputs. |
+| RC02 original scope | Original installed generation, current physical connection/transaction and registered operation/authority admission | Confirm actual assigned xid, session/database/backend, original installation/profile and current authority before address lookup. A caller address cannot choose a foreign scope; no name-only or copied profile admission. |
+| RC03 complete native capture | Full original operation registry for that admitted actual xid, through the original descriptor/cycle/completion/account boundary | Reuse `_operation_registry.COLUMNS` and its sixteen-cell decoder; retain every phase and operation, including finalized and no-touch operations. Do not select MAX, newest, manifest-only ordinals or an RLS-visible subset as the complete cohort. Direct table access remains unavailable to ordinary consumers. |
+| RC04 entry correspondence | Each original manifest address and complete registry row, in original execution order | Both identity fields equal the same address. Resolve native ordinal independently of local position; compare original definition/input/prestate/candidate/obligation and complete context/group-admission bytes. Missing/extra contributor, reordered operation or wrong native group refuses. Noncontributing operations still remain in the complete transaction cohort. |
+| RC05 readiness and seal | Actual registered effect readiness, original complete candidate/prestate attribution and canonical effect observation | Resolve generation/phase and actual effects independently before sealing. A decoded row or matching address does not prove readiness; no future digest embedded into its own producer input. |
+| RC06 completion | Complete surviving operation/touch/reservation scope plus journal/current feed union and host outcome | All required semantic bodies and finalizers check the actual full scope. Retain original acknowledged/unknown settlement and bounded recovery; no receipt/publication from parsing or registry shape alone. |
+
+The existing issued admission context0.2 and advanced fixture contexts are scoped
+native producer observations, not the complete governed
+truss-row-operation-context/0.1.0 semantic carrier. Original installation/layout/
+resource/definition/execution/acting-role/catalog-cut/owner-union/group artifacts
+must enter a deliberately versioned complete producer profile. Never relabel the
+existing minimal context or fill its missing fields with synthetic artifacts.
+Likewise, six fixture bytes and shape-valid original_group_custody_bytes cannot
+establish the original address/family-group admission correspondence.
+
+RC01 and RC03 have concrete source destinations: the private Python custody
+boundary and original registered PostgreSQL adapter. RC02/RC04–RC06 depend on the
+protected admission and security-owner handoff, original complete artifact
+producer and seven semantic bodies. The sixteen-cell decoder is a structural
+component, not a scope/current-authority factory. Actual callable identities,
+private ACL, complete indirect dependencies and native receipts must qualify the
+installed path. None of these six integration steps is passed by the current
+parser tests; keep all consumer/corpus/interchange/release exits in scope.

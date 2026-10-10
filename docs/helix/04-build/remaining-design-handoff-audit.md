@@ -1568,3 +1568,21 @@ PA01/PA-N04 gain this explicitly scoped component evidence. Their full protected
 call-map/private/data/dependency closure exits are still incomplete; fixture OIDs
 and postgres owner are not adopted registrations. All 49 required binding fields
 for the seven missing semantic bodies remain unresolved. No criterion is promoted.
+
+### Custody parser and original registry handoff
+
+The private Python closed-body parser now has 79 passing source tests, retaining
+immutable original bytes, nested views and artifact/hash/local-order checks. The
+[original address-to-registry sequence](operation-ordinal-issuer-handoff.md#original-address-to-registry-integration-sequence)
+now makes RC01–RC06 explicit: existing four-string address codec, original native
+scope, complete sixteen-cell registry capture, entry/artifact correspondence,
+actual readiness/seal and full completion. Under the selected address proposal,
+both identity fields use the same complete original address; arbitrary fixture
+labels do not pass that profile.
+
+Minimal native admission context0.2 cannot substitute for the full governed
+operation-context carrier. Complete original artifact/profile production and
+protected owner/current-authority integration remain required; do not silently
+relabel or manufacture fields. The new parser closes a structural component gap,
+not a native body or release criterion. All seven bodies/49 binding fields and
+full 45-story/167-criterion acceptance scope remain open.
