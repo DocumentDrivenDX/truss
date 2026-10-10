@@ -9,10 +9,11 @@ For local PostgreSQL:
 ```sh
 python3.11 -m venv .venv
 .venv/bin/pip install './packages/python[local]'
-.venv/bin/python scripts/local-postgres.py --data-dir .local/truss-postgres
+.venv/bin/truss-local-postgres --data-dir .local/truss-postgres
 ```
 
-Run from the repository root. Stop with Ctrl-C; data survives. `--probe` starts,
+The installation command uses the repository root; the installed `truss-local-postgres`
+command runs without the checkout. Stop with Ctrl-C; data survives. `--probe` starts,
 checks readiness and stops. This component uses pgserver0.1.4 with its actual
 bundled PostgreSQL16.2 on the qualified macOS arm64 tuple. It performs no Truss
 installation or migration. Use a host-supplied connection for external PostgreSQL;
@@ -190,3 +191,13 @@ and query/compiler host controls retain their synthetic scope. Reproduce with
 `scripts/check-python-installed-suite.py TRUSS_WHEEL` using that wheel's installed
 Python environment. Full installation, migration execution and protected engine
 qualification remain unfinished.
+
+
+The [installed console-command receipt](../../docs/helix/04-build/evidence/design-audit/python-installed-local-cli.json)
+verifies a subsequently rebuilt wheel's `truss-local-postgres --data-dir PATH --probe`
+entrypoint outside the checkout: two actual PostgreSQL16.2 start/probe/stop runs
+reuse retained data and leave no postmaster marker. The CLI delegates to the same
+LocalPostgres lifecycle and restores prior signal handlers on exit. Signal-driven
+termination itself remains separately unqualified by this probe. Startup performs
+no Truss installation or migration; the repository script now delegates to this
+packaged implementation rather than carrying a second launcher.
