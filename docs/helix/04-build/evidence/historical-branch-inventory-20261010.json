@@ -1,0 +1,313 @@
+{
+  "baseMain": "27ca114e3aff5b2f1970e4602ca5a592e0f3d281",
+  "scope": "Historical branch inventory; not patch equivalence, semantic completion or runtime qualification",
+  "branches": {
+    "spec/storage-layout-and-contracts": "bd519ec5f141e2ae1b8f610261b4d44942e10920",
+    "spec/import-idempotency": "70f022bf4b302abe414f67d3a6e4d8be3469cf01",
+    "spec/change-feed-and-groups": "6d87fce53d04b876ec8ca37fb5eab0a949f1d320"
+  },
+  "commits": [
+    {
+      "commit": "165b2cf75c30342bb650a9452b7563e57d9ec542",
+      "subject": "Remove references to a specific consumer",
+      "branches": [
+        "spec/storage-layout-and-contracts",
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md",
+        "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "7bca692077bbe46027e67b55e8a74d34f5386dbe",
+      "subject": "Draft the product requirements document",
+      "branches": [
+        "spec/storage-layout-and-contracts",
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "ad8e47b2ef511ca93202feced825a371d0df7c12",
+      "subject": "Draft the feature specifications, user stories and feature registry",
+      "branches": [
+        "spec/storage-layout-and-contracts",
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/feature-registry.md",
+        "docs/helix/01-frame/features/FEAT-001-catalog-and-revisions.md",
+        "docs/helix/01-frame/features/FEAT-002-storage-identity-and-exactness.md",
+        "docs/helix/01-frame/features/FEAT-003-mutation-and-concurrency.md",
+        "docs/helix/01-frame/features/FEAT-004-journal-and-history.md",
+        "docs/helix/01-frame/features/FEAT-005-reads-and-traversal.md",
+        "docs/helix/01-frame/features/FEAT-006-enforcement-reporting.md",
+        "docs/helix/01-frame/features/FEAT-007-conformance-and-portability.md",
+        "docs/helix/01-frame/features/FEAT-008-host-integration.md",
+        "docs/helix/01-frame/user-stories/US-001-accept-a-umf-revision-as-a-whole.md",
+        "docs/helix/01-frame/user-stories/US-002-import-documents-that-depend-on-each-other.md",
+        "docs/helix/01-frame/user-stories/US-003-decide-what-happens-to-an-unknown-entity-type.md",
+        "docs/helix/01-frame/user-stories/US-004-keep-identifiers-stable-across-revisions.md",
+        "docs/helix/01-frame/user-stories/US-005-see-every-violator-before-a-tightening-is-accepted.md",
+        "docs/helix/01-frame/user-stories/US-006-add-a-type-without-ddl.md",
+        "docs/helix/01-frame/user-stories/US-007-store-and-read-objects-and-edges-exactly.md",
+        "docs/helix/01-frame/user-stories/US-008-keep-what-the-schema-does-not-define.md",
+        "docs/helix/01-frame/user-stories/US-009-find-an-object-by-its-key.md",
+        "docs/helix/01-frame/user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md",
+        "docs/helix/01-frame/user-stories/US-011-limit-an-edges-multiplicity.md",
+        "docs/helix/01-frame/user-stories/US-012-write-with-one-protocol-and-report-every-violation.md",
+        "docs/helix/01-frame/user-stories/US-013-refuse-a-write-against-a-stale-catalog.md",
+        "docs/helix/01-frame/user-stories/US-014-keep-cross-row-rules-honest.md",
+        "docs/helix/01-frame/user-stories/US-015-journal-every-change-atomically.md",
+        "docs/helix/01-frame/user-stories/US-016-journal-plain-sql-changes-too.md",
+        "docs/helix/01-frame/user-stories/US-017-read-the-journal-incrementally-without-missing-a-change.md",
+        "docs/helix/01-frame/user-stories/US-018-reconstruct-a-record-as-of-a-version.md",
+        "docs/helix/01-frame/user-stories/US-019-trim-the-journal-by-dropping-partitions.md",
+        "docs/helix/01-frame/user-stories/US-020-read-an-object-by-id-or-key.md",
+        "docs/helix/01-frame/user-stories/US-021-list-a-types-objects-in-pages.md",
+        "docs/helix/01-frame/user-stories/US-022-list-an-objects-edges-bounded.md",
+        "docs/helix/01-frame/user-stories/US-023-traverse-one-to-three-hops.md",
+        "docs/helix/01-frame/user-stories/US-024-enumerate-the-types-of-the-catalog.md",
+        "docs/helix/01-frame/user-stories/US-025-report-the-enforcement-layer-of-every-assertion.md",
+        "docs/helix/01-frame/user-stories/US-026-back-every-support-claim-with-evidence.md",
+        "docs/helix/01-frame/user-stories/US-027-build-an-implementation-from-the-contracts.md",
+        "docs/helix/01-frame/user-stories/US-028-pass-the-corpus-and-the-interchange-check.md",
+        "docs/helix/01-frame/user-stories/US-029-declare-the-layout-version-and-check-the-ddl.md",
+        "docs/helix/01-frame/user-stories/US-030-extend-the-layout-from-a-host.md",
+        "docs/helix/01-frame/user-stories/US-031-govern-writes-by-role-grants.md",
+        "docs/helix/01-frame/user-stories/US-032-work-behind-a-transaction-mode-pooler.md",
+        "docs/helix/01-frame/user-stories/US-033-run-the-layout-on-an-embedded-postgres.md",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "bd519ec5f141e2ae1b8f610261b4d44942e10920",
+      "subject": "SPIKE-003 F8: row-level security keyed on the type's module; allow policies on any truss table",
+      "branches": [
+        "spec/storage-layout-and-contracts",
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/e4_rls.py",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4.done",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4.jsonl",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4.log",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/run_e4.sh"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "af862df5d5e665a4283fde3bd7347332f48aaef3",
+      "subject": "Import identity and provenance: key_tombstone and record_source, layout 0.2",
+      "branches": [
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "AGENTS.md",
+        "docs/helix/01-frame/feature-registry.md",
+        "docs/helix/01-frame/features/FEAT-002-storage-identity-and-exactness.md",
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/01-frame/user-stories/US-034-repeat-an-import-and-change-nothing.md",
+        "docs/helix/01-frame/user-stories/US-035-keep-the-source-facts-of-an-imported-record.md",
+        "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+        "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+        "docs/helix/02-design/contracts/CONTRACT-002-journal.md",
+        "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md",
+        "docs/helix/02-design/contracts/storage-layout.check.sql",
+        "docs/helix/02-design/contracts/storage-layout.sql",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "5f31838cabe87d581702b2dea63607c34b97147d",
+      "subject": "PRD: key reservation is decided",
+      "branches": [
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/prd.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "7ccf912184a7893c3eae8c77775b11f025cd44da",
+      "subject": "Edges are unique by relationship, source and target: edge_out becomes unique; SPIKE-003 F9",
+      "branches": [
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/features/FEAT-002-storage-identity-and-exactness.md",
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/01-frame/user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md",
+        "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+        "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+        "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md",
+        "docs/helix/02-design/contracts/storage-layout.check.sql",
+        "docs/helix/02-design/contracts/storage-layout.sql",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/e5_pairs.py",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e5.done",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e5.jsonl",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e5.log",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/run_e5.sh"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "c8573565195081098b68d6bd21f8505af328ecd0",
+      "subject": "Catalog revisions record who accepted them: schema_rev.origin",
+      "branches": [
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/feature-registry.md",
+        "docs/helix/01-frame/features/FEAT-001-catalog-and-revisions.md",
+        "docs/helix/01-frame/features/FEAT-002-storage-identity-and-exactness.md",
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/01-frame/user-stories/US-010-refuse-bad-edges-and-protect-connected-objects.md",
+        "docs/helix/01-frame/user-stories/US-036-record-who-accepted-a-revision.md",
+        "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+        "docs/helix/02-design/contracts/CONTRACT-003-catalog-revision.md",
+        "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md",
+        "docs/helix/02-design/contracts/storage-layout.check.sql",
+        "docs/helix/02-design/contracts/storage-layout.sql",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "377e71b869d4c334ace02cb78e41792669f4dd09",
+      "subject": "Optional module isolation: module_access, module-isolation.sql, CONTRACT-005; cross-module edges",
+      "branches": [
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/feature-registry.md",
+        "docs/helix/01-frame/features/FEAT-007-conformance-and-portability.md",
+        "docs/helix/01-frame/features/FEAT-008-host-integration.md",
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/01-frame/user-stories/US-037-give-roles-access-to-modules-only.md",
+        "docs/helix/01-frame/user-stories/US-038-link-modules-and-see-the-link-only-with-both.md",
+        "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+        "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+        "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md",
+        "docs/helix/02-design/contracts/module-isolation.check.sql",
+        "docs/helix/02-design/contracts/module-isolation.sql",
+        "docs/helix/02-design/contracts/storage-layout.sql",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/e4_rls.py",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4_layer.done",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4_layer.jsonl",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4_layer.log",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4_layer2.done",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4_layer2.jsonl",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e4_layer2.log",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "70f022bf4b302abe414f67d3a6e4d8be3469cf01",
+      "subject": "UMF reading conformance: umf corpus cases, FR-50, CNF-06, US-039",
+      "branches": [
+        "spec/import-idempotency",
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/feature-registry.md",
+        "docs/helix/01-frame/features/FEAT-007-conformance-and-portability.md",
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/01-frame/user-stories/US-039-read-umf-the-same-way-as-the-reference.md",
+        "docs/helix/02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md",
+        "docs/helix/02-design/contracts/CONTRACT-003-catalog-revision.md",
+        "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "c08492a0c4716dbcb4db523009fd6744c2183b5c",
+      "subject": "Change feed contract, feed consumers and grouped operations",
+      "branches": [
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/feature-registry.md",
+        "docs/helix/01-frame/features/FEAT-003-mutation-and-concurrency.md",
+        "docs/helix/01-frame/features/FEAT-004-journal-and-history.md",
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/01-frame/user-stories/US-040-apply-operations-as-one-atomic-group.md",
+        "docs/helix/01-frame/user-stories/US-041-publish-the-journal-without-losing-or-reordering-a-change.md",
+        "docs/helix/01-frame/user-stories/US-042-read-how-far-behind-a-downstream-copy-is.md",
+        "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+        "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md",
+        "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md",
+        "docs/helix/02-design/contracts/CONTRACT-006-change-feed.md",
+        "docs/helix/02-design/contracts/storage-layout.check.sql",
+        "docs/helix/02-design/contracts/storage-layout.sql",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "9754c7c7ee4adfa0cbebbf970c2c56f1333df85c",
+      "subject": "Idempotent groups by request id in the journal origin, with no table",
+      "branches": [
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/feature-registry.md",
+        "docs/helix/01-frame/features/FEAT-003-mutation-and-concurrency.md",
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/01-frame/user-stories/US-043-make-a-group-safe-to-repeat.md",
+        "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+        "docs/helix/02-design/contracts/CONTRACT-002-journal.md",
+        "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md",
+        "docs/helix/02-design/contracts/storage-layout.check.sql",
+        "docs/helix/02-design/contracts/storage-layout.sql",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements.md",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/e6_request_ids.py",
+        "docs/helix/02-design/spikes/SPIKE-003-partitioning-locks-and-prepared-statements/out/e6.jsonl",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    },
+    {
+      "commit": "6d87fce53d04b876ec8ca37fb5eab0a949f1d320",
+      "subject": "Caller-controlled transactions: run any operation or group in a caller's transaction and roll it back",
+      "branches": [
+        "spec/change-feed-and-groups"
+      ],
+      "changedPaths": [
+        "docs/helix/01-frame/feature-registry.md",
+        "docs/helix/01-frame/features/FEAT-003-mutation-and-concurrency.md",
+        "docs/helix/01-frame/prd.md",
+        "docs/helix/01-frame/user-stories/US-044-run-a-change-in-a-transaction-and-roll-it-back.md",
+        "docs/helix/02-design/adr/ADR-002-storage-strategy.md",
+        "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md",
+        "docs/helix/README.md"
+      ],
+      "missingCurrentPaths": []
+    }
+  ]
+}
