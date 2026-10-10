@@ -380,6 +380,21 @@ the route's required interruption and exclusions explicitly, without claiming
 online upgrade support. These cases extend the existing LM-T06/08 obligations;
 they are not executed evidence or a selection of a populated release pair.
 
+### Deployment stop and cancellation qualification
+
+M3/M4 and LM-T05/08 must exercise deployment cancellation at actual native barriers on the same selected populated M1 route. A framework deadline, process exit or cancellation request alone cannot classify the original database attempt. Use the existing executor and recovery outcomes; this matrix adds no automatic retry or separate cancellation authority.
+
+| Original stop point | Required deployment evidence and action |
+| --- | --- |
+| Before any native submission | No submitted work or migration effects; retain the original request and the permitted pre-native refusal. No target readiness. |
+| During source inspection or exclusion acquisition, before effect submission | Confirm original native termination and actual transaction disposition before classifying preflight containment. An expired observation allowance retains unresolved custody; it is not pre-native refusal. |
+| After the first migration step has effects, before commit dispatch | Observe cancellation through the original executor. Only confirmed complete rollback and termination establish rolled_back; preserve unresolved original recovery otherwise. Independently inspect all populated preservation inventories, not merely absence of the target marker. |
+| During commit dispatch or after the server may have committed | Preserve commit_unknown/original recovery until admitted observation determines settlement. No second apply, down route, source rebootstrap or framework-history success flag substitutes for that observation. |
+| After confirmed commit, during target verification or cleanup | The upgrade remains committed. Keep runtime readiness closed while required verification or cleanup is unresolved; cancellation cannot convert committed_unverified into rolled_back. |
+| After successful readiness, during deployment response delivery | Lost response reconciles the original immutable result and performs required fresh current verification. It does not execute the route again or treat an old verification as current authority. |
+
+For each stop point retain original request/attempt identity, barrier evidence, actual dispatched statement inventory, qualified termination/commit observation, independent before/after preservation facts and current readiness outcome. Inject a late successful native response after local admission closes: it must not reopen dispatch or erase original unresolved obligations. Check that the deployment adapter submits no automatic replacement transaction and retains original recovery custody across restart. These are planned native controls, not executed migration evidence; exact cancellation, containment and authority mechanisms remain owned by the admitted executor/security services.
+
 ### Security enrollment/exclusion ordering dependency
 
 The security owner’s active 2026-10-09 review identified a possible circular
