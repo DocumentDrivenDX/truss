@@ -275,6 +275,27 @@ independently of producer-issued ledger events. Freeze the full source/runtime
 tuple and original cycle with the result. All six exits remain not_run; the
 successful control-frame/account probe cannot stand in for them.
 
+The [five-byte phase-alias witness](../../04-build/evidence/design-audit/pg8000-read-phase-alias.json)
+executes the actual pinned core `_read` against the local accounted file and
+two synthetic frames. Header5/body5 followed by another read5 consumes the next
+frame header; length validation alone cannot distinguish a duplicate body request
+from a legitimate next-header request. This is a manually scheduled call sequence,
+not an observed failure of `CoreConnection` or a native operation. ADR-008's
+trusted embedding boundary remains accepted; this result does not introduce
+authentication of arbitrary Python callers.
+
+The duplicate-body exit must include this equal-length case, alongside unequal
+length rejection. Qualify original frozen-core control flow and complete frame
+dispatch so only the intended next-header transition is reachable, or bind the
+adapter to an original core-issued phase/cycle producer before allowing that
+transition. A caller-supplied phase string, resettable counter or guessed length
+cannot supply that correspondence. Preserve zero-body and five-byte-body cases,
+handler failure before the next header, and reentry/overlap controls in the
+independent integration schedule. Until original sequence custody is established,
+the local seam's length checks prove neither duplicate detection nor complete
+core consumption. The witness retains conservative account charges but does not
+qualify the full dependency closure, allocation placements or native cycle.
+
 The [installed core-copy component suite](../../04-build/evidence/design-audit/python-accounted-core-installed-suite.json)
 passes70 tests across17 exact wheel/source/installed modules. Two new synthetic
 controls check the165-byte maximum reservation for a32-byte frame ceiling,
