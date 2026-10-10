@@ -1528,3 +1528,26 @@ artifact admission is not exercised because the guard refuses first; complete
 native OID/owner/ACL/dependency closure and original accounted controls remain
 separate outputs. No guard removal, direct consumer registry grants, public API
 or semantic-body readiness change is authorized by this experiment.
+
+### Four-family original native registration correspondence (2026-10-10)
+
+The [39-check registration receipt](evidence/design-audit/four-family-registration-native.json)
+extends all-family elevation controls with exact original stored body comparison
+against each frozen SQL source. It retains complete native function definitions,
+definition digests, actual routine/namespace/owner OIDs, exact source selectors
+and original ACL cells. All four selected routines share the fixture namespace
+and owner while retaining four distinct native identities. Native language,
+security mode, volatility/parallel/null/leakproof/search-path attributes, result
+type and effective actor/integrity/PUBLIC EXECUTE rights match independently
+selected expectations. The earlier22-check producer/receipt remains unchanged.
+
+Fixture rights intentionally differ: the base ordinary actor is broadly granted
+for its original invoker experiment; advanced routines are executable by the
+fixture integrity owner for the nested-DEFINER refusal controls. None is an
+adopted production privilege plan. These exact ephemeral registrations advance
+PA01's identity/body correspondence component, not complete public/private/admin
+callable/data/DDL/transitive closure, protected actor capture, owner authority or
+installed publication. Complete dependency inventory cannot be inferred from
+matching function bodies or regprocedure resolution. Native definitions retain
+original source meaning; current context versions are not reinterpreted as
+protected owner-aware contexts. No public API or seven-body gate changes.

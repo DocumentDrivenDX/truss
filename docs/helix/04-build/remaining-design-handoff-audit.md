@@ -1845,3 +1845,10 @@ owner-reproduced17.9 private-fact diagnostic counterexample. Complete backend
 requirements/authentication and diagnostic closure remain owner dependencies.
 Truss local16.15 and managed tuples require their own exact evidence; neither
 ordinary table denial nor successful privileged inventory qualifies B10.
+
+The [four-family registration receipt](evidence/design-audit/four-family-registration-native.json)
+passes39 native observations with exact source-body/native-definition/OID/owner/
+attribute/result/effective-fixture-right correspondence across all four routines.
+PA01 now has this finite registration component alongside elevation refusal.
+Full installed dependency/data/DDL closure and protected original actor/capture/
+authority remain missing; temporary fixture identities and grants are unadopted.
