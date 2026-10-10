@@ -113,3 +113,44 @@ For each complete frame, reserve capture and driver-overlap capacity; retain ori
 Ready/status observation closes only its corresponding admitted command cycle after all original required messages and result sets are complete. It cannot settle a different command, release a still-owned adopted host transaction or prove outer commit from an unrelated idle message. Gate closure on disposal/cancellation stops new forwarding and retains unresolved original custody. The implementation must supply the exact build-level assertions and ingress producer evidence; this selection is a design choice, not a qualified installed adapter or a claim that stock node-postgres exposes the required interface.
 
 The [private producer port](reference-driver-producer-port.proposal.md) selects original reservation/backing/span/frame consumption interfaces for this complete-frame candidate. It requires runtime issuer registries and actual allocation/consumption observations; tickets and producer receipts do not independently prove native qualification.
+
+
+## Python first integration target — 2026-10-10
+
+Select synchronous pg8000 1.31.5 as the first Python P0/P1 adapter implementation
+target. This supersedes an open-ended Python driver comparison, not the separate
+TypeScript frozen-parser target or any release qualification gate. Reuse the
+original instance-control experiments and producer port; their historical16.2
+observations are not corrected16.15 support. The target composition is Python3.11,
+the private corrected pgserver16.15 local tuple and explicit host-supplied physical
+connection. No pool, asynchronous callback port, reconnect fallback or managed
+TLS target is selected by this local integration decision.
+
+Build one versioned Truss adapter integration with original instance-scoped
+command/frame handlers and the selected socket/read producer boundary. Do not
+install process-global monkeypatches or use a user event listener as the producer.
+Reserve actual ingress backing, capture/parse/decode/copy and containment capacity
+before their allocations; the existing post-receive frame hook alone cannot pass.
+Capture original ordered descriptor/cells/completion/control state before pg8000
+public conversion. The application supplies the actual connection and trusted
+registered adapter, not an issuer token reconstructed from a status property.
+
+Implement the original producer-port operations and transaction lifetime registry
+on that connection under exclusive dispatch. Bind confirmed control to one native
+admission, preserve burned ordinals and original unknown-outcome recovery, and
+reject unsupported driver/source/transport modes before native effects. Use exact
+registered parameterized statement descriptors; no text interpolation or stock
+conversion through floats/dates/JSON supplies the exact result grammar. Driver
+selection does not authorize Truss to commit a caller-owned transaction.
+
+Qualification order is original ingress/account and framing first, original
+control/adoption/one-use dispatch second, complete current security/native
+installation third, then public operations and lost-result/cleanup/reconciliation
+schedules. Freeze original source/build/dependency hashes and the actual mode at
+each boundary. Independent STP-044 controls and complete PKG-02/08 installed
+observations, including the missing whole-transaction lifetime mechanism on16.15,
+remain required. Until they pass, the adapter is unavailable for an advertised
+bounded execution profile; no stock-driver API or successful local fixture can
+weaken those requirements. Other Python platforms and Aurora/Lakebase must retain
+separate target admission. Do not change published package dependencies or claim
+usable installation merely from this engineering target selection.
