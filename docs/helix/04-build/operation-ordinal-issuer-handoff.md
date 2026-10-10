@@ -462,3 +462,41 @@ new-transaction0, plus both empty savepoint rollback observations. Swapped paylo
 columns can no longer pass merely because ordinal, phase and hex shape match.
 Original descriptor/completion, bounded ingress/account, ordinary authority and
 full installer/finalizer qualification remain unchanged open obligations.
+
+
+## Original connection/control producer candidate — 2026-10-10
+
+The private [producer source](evidence/design-audit/pg8000_original_control_candidate.py)
+now composes the existing installed Python issuer/account with original pg8000
+1.31.5 instance handlers on actual PostgreSQL 16.15. It adopts an already assigned
+transaction, verifies original exact xid text and CommandComplete/ReadyForQuery
+frames, reserves outgoing savepoint payload capacity before permanent ordinal
+issuance, and publishes only its own confirmed savepoint object. A nonblocking
+invocation lock rejects overlapping calls. Exclusive physical-connection custody
+is still a trusted host premise, not a sandbox against direct host SQL.
+
+Attempt records retain ordinal, actual xid, fixed control SQL and phase before
+submission. Confirmed rollback retains the original record and spent ordinal;
+uncertain control completion closes issuer/account admission and retains
+completion_unknown. A copied confirmation cannot dispatch. Closure deliberately
+does not assert native termination or roll back the host's adopted transaction.
+
+The [current native receipt](evidence/design-audit/pg8000-original-control-custody-native.json)
+passes fifteen independent observations across four actual connections: caller
+work preservation, ordinals0/1 across savepoint rollback, retained prior attempt,
+copied-object refusal with no submission, exhaustion before another savepoint,
+changed actual transaction refusal, uncertain handoff/no retry and independently
+observed live backend after quarantine. The post-execution handoff injection is
+not arbitrary network loss. The initial thirteen-observation receipt and both
+original source versions are preserved separately; their archived bytes match
+the original pins. No test or qualification count is summed across versions.
+
+This moves original control/issuer composition beyond separately supplied numeric
+arguments, but is not the released driver or native operation authority. Next
+consume these exact confirmations through the existing one-use admission custody
+and all four issued native context families, preserving their full artifact/actor/
+epoch/configuration checks. Qualify failure/cancellation, original account/work/
+containment, registry attribution, security-owned current authority and original
+recovery/settlement before the seven bodies and complete installer can publish
+readiness. Do not install this evidence-directory candidate as a public API or
+replace the owner's security interface with its administrative fixture.

@@ -742,3 +742,17 @@ for these sequences; the earlier synthetic phase alias is not a demonstrated
 native failure. Full original phase/connection authority and failure/settlement
 qualification remain open. This narrow result does not supply protected routine
 bodies or change the forty-nine missing installation bindings.
+
+
+### Original control producer composition checkpoint
+
+The [current control/ordinal receipt](evidence/design-audit/pg8000-original-control-custody-native.json)
+now retains fifteen native observations from the private original-connection
+producer: actual assigned xid and fixed completion frames, caller-work preservation,
+nonrewinding issuance, original/foreign confirmation distinction, exhaustion,
+changed transaction and uncertain handoff/no retry with retained attempt records.
+An independent backend observation remains live after quarantine. This is a
+Truss-owned P0 implementation advance under ADR-008, not public driver/security
+or installation qualification. Its [handoff](operation-ordinal-issuer-handoff.md#original-connectioncontrol-producer-candidate--2026-10-10)
+assigns one-use confirmation consumption and all four native admission families
+next, retaining complete authority/resource/recovery and seven-body gates.

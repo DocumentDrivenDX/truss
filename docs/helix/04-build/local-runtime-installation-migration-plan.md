@@ -1473,3 +1473,19 @@ and after each failure. Both registry-index and genuine business-key violations
 may emit23505; classify only through original admitted native failure provenance,
 not a name/text heuristic. Actual protected resolver procedures, grants, account
 producer and enabled body execution remain unimplemented qualification outputs.
+
+
+### P0 original control/issuer composition implemented as a private candidate
+
+The [original issuer handoff](operation-ordinal-issuer-handoff.md#original-connectioncontrol-producer-candidate--2026-10-10)
+now has an actual pg8000/16.15 control producer rather than separate numeric
+issuance and caller-labelled savepoint observations. Fifteen current native
+controls preserve caller work, nonrewinding ordinals and explicit uncertain
+attempt custody while independently observing that quarantine leaves a live
+backend. Source, installed module and historical original pins are retained.
+
+Continue P0/P1 by binding its original confirmations to one-use admission and
+all four issued context families, then protected attribution/account and the
+seven mandatory bodies. Current authority still comes from the security owner;
+no unfinished capability/binding grammar is adopted. Actual recovery containment,
+full resource composition and complete installed ready publication remain open.
