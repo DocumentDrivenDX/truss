@@ -1750,3 +1750,34 @@ owner/property/catalog codecs, current subject/authority and publication freshne
 whole resource accounting and complete installed dependency/role closure remain
 external. A stable old snapshot does not prove current authorization or permit
 result release. No seven-body binding, public API or installerReady is promoted.
+
+
+## Nested and exact-carrier prestate schedule — 2026-10-10
+
+[Native60](evidence/design-audit/row-image-nested-prestate-native.json) expands
+actual stored capture/cascade coverage beyond the earlier three-row/string
+fixtures. On original UMF-exported PostgreSQL16.15 tables and existing codecs,
+an object property has record→map→sequence parents and integer/decimal leaves;
+an edge property has a sequence with Boolean, binary, timestamp, opaque, null-node
+and empty-string members. The integer exceeds JavaScript's safe range; the decimal
+retains a distinct exponent/leading-zero token; binary/opaque payloads contain
+zero and high bytes; timestamp retains original offset/microsecond text and its
+native instant separately. No floating-point conversion or JSON-number carrier
+is introduced by capture/attribution.
+
+The complete snapshot holds2 states,12 nodes and7 scalars. Independent full
+native codec observations are compared with bounded capture bytes for each
+state. The two actual owner deletions produce21 complete OLD images after their
+live state/node parents are unavailable; every image retains the correct kind,
+owner/discriminator and property-owner/property association. Existing missing-
+state/conflicting-node controls, exhausted row/byte allowance, invalid/unavailable
+capture and exact savepoint restoration remain checked. All21 images and native
+counts restore, including each scalar's original bytes.
+
+This is structural native byte correspondence and parent attribution, not
+catalog-admitted nested semantics, independently proved numeric/temporal logical
+interpretation or complete row-touch orchestration. Definition/source fixture
+bytes are administrative inputs. Complete original owner/property/catalog codecs,
+authority/scope/driver exclusion, full accounting and publication remain external.
+Earlier30/36/39-check fixtures and receipts remain unchanged; no seven-body
+binding, corpus verdict or public API is promoted.

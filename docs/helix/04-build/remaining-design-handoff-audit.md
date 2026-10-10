@@ -1972,3 +1972,12 @@ modes. A real separately committed writer is invisible to the established snapsh
 and visible to a new transaction. The old producer/profile remains separate;
 protected original scope/authority/driver exclusion, same-cut publication facts,
 owner codecs and complete native dependency/account closure remain unfinished.
+
+
+[Nested prestate60](evidence/design-audit/row-image-nested-prestate-native.json)
+now supplies actual21-row record/map/sequence/null-node and seven-scalar-family
+capture/cascade/rollback evidence, including exact unsafe-range integer, original
+decimal token, timestamp text/instant and binary/opaque bytes. This closes the
+finite simple-root/string-only capture coverage gap; independently admitted
+logical owner/property/catalog interpretation, complete protected prestate,
+whole-account and semantic observer/publication qualification remain missing.
