@@ -137,7 +137,7 @@ CH-01/02 must resolve these fields against the original authored catalogs and fu
 The routine manifest now links all thirteen original trigger identities from their existing three catalogs to the five handler selectors (3/3/2/1/4), retaining original parent IDs, catalog hashes and complete model locators. Reproduce with `python3 docs/helix/04-build/evidence/design-audit/link-routine-trigger-design.py`; `--check` refuses stale links. The source traversal verifies original captured model hashes/nodes and original callable parts. Neither validator is a trigger target. These are source dependency edges, not new routine physical identities, native trigger OIDs or an adopted installation. Complete event/partition/enabled/security/body/dependency admission remains required.
 
 
-The routine-design check now also verifies the selected seven-routine membership, exact signatures, shared attributes, responsibility ownership, private invocation kinds, validator edges, four governing source pins and explicit unqualified/unresolved state. [Sixteen normal/optimized controls](../../04-build/evidence/design-audit/routine-design-controls.json) admit the original and refuse wrong attributes, signatures, owner responsibilities, missing validator dependency, substituted governing pin, duplicate routine and false native qualification. Reproduce with `python3 docs/helix/04-build/evidence/design-audit/check-routine-design-controls.py`. This check is scoped to the selected draft manifest and source links; it does not inspect an installed database or prove native semantic correctness. A future resolved native profile requires explicit version/review rather than editing this unresolved manifest into an unsupported readiness claim.
+The routine-design check now also verifies the selected seven-routine membership, exact signatures, shared attributes, responsibility ownership, private invocation kinds, validator edges, four governing source pins and explicit unqualified/unresolved state. [Current sixteen normal/optimized controls](../../04-build/evidence/design-audit/routine-design-current-source-controls.json) admit the original and refuse wrong attributes, signatures, owner responsibilities, missing validator dependency, substituted governing pin, duplicate routine and false native qualification. Reproduce with `python3 docs/helix/04-build/evidence/design-audit/check-routine-design-controls.py NEW_RECEIPT_BASENAME.json`. This check is scoped to the selected draft manifest and source links; it does not inspect an installed database or prove native semantic correctness. A future resolved native profile requires explicit version/review rather than editing this unresolved manifest into an unsupported readiness claim.
 
 
 ## Selected reference complete-history installation order
@@ -367,3 +367,22 @@ require original shared-executor issuance/custody before adopting those routines
 as observer dependencies. Query-submission ordinals are a different domain.
 The missing canonical handler bodies cannot be closed by reusing this allocator
 or accepting an untrusted ordinal argument.
+
+### Routine governing-source refresh — 2026-10-10
+
+The current seven-routine manifest now pins the reviewed architecture and storage
+contracts after Python delivery and distinct-neighbor versus occurrence-cap
+reconciliation. Existing signatures, attributes, owner responsibilities, validator
+edges and13 original trigger references remain unchanged. All native body/role/
+ACL/dependency/qualification fields remain null; installerReady/nativeQualified
+remain false. This refresh does not select equivalent UMF participation
+enforcement from existing occurrence-cap guards.
+
+The [original c45aa9f manifest](../../04-build/evidence/design-audit/reference-routine-design-c45aa9f.original.json)
+is retained byte-for-byte with SHA256
+dffb160751ce983bb503ac5f24f0f9236bc9c7c8c846b99ef4210c74d1309ae2. Its
+[earlier controls](../../04-build/evidence/design-audit/routine-design-controls.json)
+remain historical evidence. The current checker refuses receipt replacement;
+use a fresh basename for reproduction. Sixteen current source/design controls
+pass. Complete enabled-body, ordinary-role, combined-finalization and independent
+installation inventory tests remain required and unexecuted.

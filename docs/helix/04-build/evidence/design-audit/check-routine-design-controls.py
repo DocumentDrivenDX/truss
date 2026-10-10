@@ -4,6 +4,10 @@ import copy, hashlib, json, shutil, subprocess, sys, tempfile
 here=Path(__file__).resolve().parent
 repo=here.parents[4]
 root=repo/'docs/helix'
+if len(sys.argv)!=2 or Path(sys.argv[1]).name!=sys.argv[1] or not sys.argv[1].endswith('.json'):
+ raise SystemExit('usage: check-routine-design-controls.py NEW_RECEIPT_BASENAME.json')
+destination=here/sys.argv[1]
+if destination.exists():raise SystemExit('refusing to replace existing receipt')
 relative=Path('02-design/contracts/reference-routine-design-v0.1.proposal.json')
 original=json.loads((root/relative).read_text())
 checker=here/'link-routine-trigger-design.py'
@@ -34,5 +38,5 @@ with tempfile.TemporaryDirectory(prefix='truss-routine-design-') as temporary:
    results.append({'control':control,'optimized':optimized,'passed':passed})
    if not passed:raise SystemExit(run.stdout+run.stderr)
 receipt={'scope':'Selected design manifest/source correspondence and seven corruption refusals only; no native bodies, privileges, effects or support qualification','checkerSha256':hashlib.sha256(checker.read_bytes()).hexdigest(),'manifestSha256':hashlib.sha256((root/relative).read_bytes()).hexdigest(),'controls':len(results),'failures':[r for r in results if not r['passed']],'results':results}
-(here/'routine-design-controls.json').write_text(json.dumps(receipt,indent=2)+'\n')
+with destination.open('x') as output:output.write(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({k:receipt[k] for k in ['scope','controls','failures']},indent=2))
