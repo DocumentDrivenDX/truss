@@ -1035,3 +1035,16 @@ custody, unchanged receipt meanings, account non-refund and native drift.
 Implement these at the actual composition/launcher boundary during P1; do not
 introduce a generic loader or configuration file merely to make these declarations
 look implemented. No new config API or qualification is claimed.
+
+
+### Observability contract checkpoint
+
+The [diagnostic contract](../02-design/contracts/diagnostics.proposal.md) specifies
+phase/refusal/failure/unknown/quarantine event ownership, OTel field projection,
+privacy-before-sink, bounded queue/record/flush and development capture policy.
+The [test plan](../03-test/diagnostics-test-plan.md) defines OBS-01–09 actual receiver,
+privacy/failure/loss/cursor/overhead qualification. These are P1/P2 integration
+requirements, not an implemented logger or telemetry adoption. Actual SDK/bridge
+pins, carrier schema, overhead budget and receiver evidence remain open. Keep
+receipt/journal settlement authoritative and independent of diagnostic delivery;
+never ingest local CLI connection results wholesale as safe telemetry.
