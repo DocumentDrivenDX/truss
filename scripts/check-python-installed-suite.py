@@ -30,15 +30,15 @@ for name,version in {'pgserver':'0.1.4','fasteners':'0.20','platformdirs':'4.12.
  if dependencies[name] != version: raise RuntimeError('Local dependency drift: '+name)
 command = [sys.executable,'-W','error','-m','unittest','discover','-s',str(root/'packages/python/tests'),'-v']
 result = subprocess.run(command,cwd=Path(sys.prefix),capture_output=True,text=True,timeout=180)
-if result.returncode or 'Ran 36 tests' not in result.stderr or not result.stderr.rstrip().endswith('OK'):
+if result.returncode or 'Ran 41 tests' not in result.stderr or not result.stderr.rstrip().endswith('OK'):
  raise RuntimeError(result.stdout+result.stderr)
 receipt = {'scope':'Installed current wheel full existing component suite; four native lifecycle tests plus synthetic/pure controls',
  'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),'python':sys.version,
  'loadedPackage':str(loaded),'modules':modules,'dependencies':dependencies,
- 'environmentReused':True,'tests':36,'command':command,'output':result.stdout+result.stderr,
+ 'environmentReused':True,'tests':41,'command':command,'output':result.stdout+result.stderr,
  'testSources':[{'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted((root/'packages/python/tests').glob('test_*.py'))],
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
  'completeEngineQualified':False,'installationQualified':False,'migrationExecutionQualified':False,
  'platformScope':'macOS arm64 Python3.11 pgserver0.1.4 PostgreSQL16.2; no process-crash or cross-platform qualification'}
 (root/'docs/helix/04-build/evidence/design-audit/python-current-installed-suite.json').write_text(json.dumps(receipt,indent=2)+'\n')
-print(json.dumps({'modules':len(modules),'tests':36,'completeEngineQualified':False}))
+print(json.dumps({'modules':len(modules),'tests':41,'completeEngineQualified':False}))

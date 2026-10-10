@@ -252,3 +252,32 @@ All four allocator families now have native conflict evidence; none is corrected
 or qualified by these reproductions. The implementation handoff remains to bind
 original issuer custody and correct all four families together, preserving their
 individual capture requirements and the separate configuration row.
+
+
+## Python one-use admission custody component
+
+Private `_operation_admission.AdmissionCustody` now captures the original
+producer and synchronous verify/admit callbacks. Registration retains original
+confirmation object identity under a caller-selected finite enclosing capacity;
+it supplies no native confirmation factory. A ticket is recognized only by this
+registry. Original confirmations cannot register twice; capacity is cumulative
+and never refunded. Dispatch consumes permission before verification/native
+callback and rejects copied, foreign, consumed, closed or reentrant entries.
+
+Verification must complete synchronously with no value or raise; asynchronous
+functions/callable objects and returned awaitables cannot grant permission.
+Unexecuted coroutine results close before refusal. Escaped verification/admission
+failure closes this custody and retains all original entries for the enclosing
+host recovery protocol; no reset/retry method is exposed. Cancellation/expiry can
+close custody through the original producer. Actual native authority/lifetime,
+account and outcome classification still belong to the original qualified port.
+
+Five synthetic Python test methods verify original input correspondence, repeated/
+copied/foreign ticket refusal, no repeat after either callback failure, closure of
+pre-registered later tickets, reentrancy, finite capacity and async/nonvoid check
+refusal. They establish host registry behavior only, not native authority or an
+implemented protected writer. Binding this component to original control/ordinal
+and native verification remains required; the four SQL allocator corrections are
+still outstanding. The source change adds a twelfth package module; earlier
+installed eleven-module/36-test receipts remain historical until rebuilding and
+running the expanded41-test suite.

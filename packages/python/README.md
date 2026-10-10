@@ -221,3 +221,10 @@ installed local-extra dependencies rather than hardcoding their absence. The
 coordinator receipt is refreshed against the new delivery hash. This uses the
 existing qualified local environment; no fresh resolution or complete-engine
 claim is added.
+
+
+A subsequent private one-use admission custody component is source-tested in five
+synthetic test methods. It is not exported as a supported writer or native
+confirmation factory. The package now has twelve source modules and41 component
+test methods; the eleven-module installed-wheel evidence predates this addition.
+Original driver/control/issuer integration and native SQL correction remain open.
