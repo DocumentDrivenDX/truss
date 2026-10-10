@@ -1276,3 +1276,18 @@ UMF origin/main remains322b193, already used by the current schema-browser asset
 The owner checkout remains16c35e8 with experimental defaults/properties; neither
 checkout is changed. Both fetches preserve local unfinished owner work. No schema
 browser upgrade or reusable DDL generator fork is needed for this checkpoint.
+
+
+### Security owner execution status — 2026-10-10
+
+A fresh read-only [owner status observation](evidence/design-audit/security-owner-run-status-2026-10-10.json)
+shows “Assess security control support” stopped: latest turn failed with a
+platform content-risk error, rather than completing its announced prepared-call
+diagnostic checks. Earlier wording above records historical in-progress
+observations, not a live job now. Do not wait on that failed turn, rerun it as
+Truss-owned policy work or treat its announced checks as evidence. The closed
+subject/current-authority/diagnostic profile remains an owner dependency.
+Truss can continue native identity/ACL/dependency qualification, installation
+observation and bounded original-capture composition independently; this is
+not a whole-goal blocker. No cross-chat message or unfinished API adoption was
+performed.

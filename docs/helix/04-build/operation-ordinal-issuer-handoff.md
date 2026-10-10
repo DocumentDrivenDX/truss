@@ -1703,3 +1703,18 @@ Owner/property/catalog original semantics are not captured by these row images.
 The earlier generic JSON prestate producer remains separate, and its full
 protected replacement schedules remain not_run. No seven-body binding,
 installerReady flag or ordinary-consumer API is promoted by this component.
+
+
+### Typed prestate ordinary-role boundary
+
+[Native access evidence](evidence/design-audit/row-image-prestate-acl-native.json)
+adds nine checks to the unchanged30 capture/cascade cases. Actual pg_proc rows
+retain OIDs, INVOKER flags, volatility, search paths and ACLs for all four new
+routines. A role with only schema USAGE has no effective EXECUTE privilege and
+receives42501 from each routine without a result. Granting EXECUTE only on the
+capture root still receives42501 without native data privileges; the root does
+not elevate its caller. The test revokes that grant before capture/cascade
+checks. This finite ordinary role is not a complete deployment role hierarchy,
+inherited-grant audit, protected owner route or dependency inventory. The
+original30-check producer/receipt remain unchanged; the separate39-check
+producer/receipt pin their own bytes and the same source artifacts.
