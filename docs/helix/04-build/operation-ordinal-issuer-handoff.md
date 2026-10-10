@@ -1204,3 +1204,40 @@ codec receipt, not a new native producer or installed-wheel run. Full original
 OLD/NEW/prestate/candidate/allocation, current authority and semantic wrapper/
 resource composition remain required. Public exports and seven-body readiness
 fields are unchanged.
+
+### Full OLD/NEW image correspondence and owner attribution (2026-10-10)
+
+Private `_row_event_attribution.py` now requires complete event-image byte equality
+against the separately supplied original prestate/candidate map. State attribution
+uses the full direct owner/property branch; node/scalar requires retained state,
+and scalar requires retained node, without live parent lookup. Duplicate map keys,
+conflicting state associations for globally unique native node IDs, missing/foreign
+association, mixed owner branches or altered complete originals refuse. OLD/NEW
+side availability is explicit for INSERT/UPDATE/DELETE. Both original images and
+attributed tuples are retained; only event-local touch owners are deduplicated.
+Signed native owner/catalog IDs are preserved exactly. Edge property owner is not
+substituted with its relationship discriminator.
+
+`evidence/design-audit/python-row-event-attribution-source.json` pins103 passing
+Python source tests, including existing local-runtime tests and four focused
+methods covering all three image kinds/event sides, separate changed UPDATE
+associations, original/mapping/side/bound corruptions and immutability. Changed
+ownership/reparenting projection does not qualify an operation profile permitting
+those effects; original scope/guards/authority admission remains required first.
+
+`row-event-attribution-conflict-native.json` adds16 observations on PostgreSQL16.15
+through the original UMF-exported layout/codecs and retained observation probe.
+Six actual cascade OLD images match all original prestate bytes and project the
+expected distinct object/edge association after live parents disappear. Complete
+removal/confirmed rollback checks remain; actual native-input missing-state and
+corrupted conflicting-node projection controls refuse. The latter is explicitly a
+projection corruption, not an impossible conflicting native row or native constraint
+proof. The initial14-observation receipt/checker remain untouched; the archived
+initial Python module matches that historical native source digest.
+
+The probe's prestate/candidate and catalog labels remain administrative fixtures,
+not original protected admission/family/subject authority. The current component
+performs no database lookup/DML, touch or operation generation update, authorization
+resolution or finalization. Complete native event/routine/role/DDL/cut/codec/scope,
+held guards/capacity and full resource/settlement composition remain outstanding.
+No public API, installed-wheel claim or seven-body readiness field changes.

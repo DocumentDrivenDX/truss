@@ -41,3 +41,19 @@ OLD/NEW/prestate/candidate/allocation source and current scope/subject/role evid
 must be independently bound before the observer compares these images or advances
 operation/touch generation. Missing retained OLD association after cascade cannot
 be repaired by a live parent lookup or by matching image hashes.
+
+The private event-attribution component now consumes separately supplied immutable
+prestate/candidate image collections under explicit count/byte bounds. It requires
+complete byte equality for the actual event image, resolves node/scalar ownership
+through retained state/node images, and refuses duplicate keys or conflicting
+state associations for the native globally unique node identity. It retains OLD
+and NEW images and associations separately, then deduplicates only the event-local
+owner/property touch set. Owner/catalog IDs preserve their signed native domains;
+edge property-owner type remains independent of relationship discriminator.
+
+Original INSERT/UPDATE/DELETE side availability is explicit. Changed ownership or
+reparenting projections do not grant support: the governing original operation
+must independently permit the complete old/new scope and already hold all required
+guards. Mapping completeness, native provenance, semantic codecs/tree grammar,
+current authority and resource admission remain external. The component performs
+no live lookup, native DML, generation advance or permission resolution.
