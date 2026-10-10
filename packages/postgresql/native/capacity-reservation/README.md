@@ -49,3 +49,13 @@ actual original issuer/account and semantic plan/event producer, derive complete
 custody bytes plus native overhead, implement full retained-parity/commit guards,
 and replay formal traces against ordinary-role real effects. All seven mandatory
 native bodies and complete installation/publication gates remain required.
+
+`custody-codec.sql` adds four private candidate functions for complete operation
+and touch row framing. The profile includes every column, identity, generation,
+presence marker and original carrier, with a preflighted8MiB output bound and an
+exact column-profile refusal. Its12-check native receipt compares actual stored
+rows and framing boundaries against an independent Python oracle. UMF retains
+and exports all eight CREATE/REVOKE statements; declaration coverage is incomplete.
+See the installation plan's “Complete-row custody accounting codec” section for
+its grammar, counter-conversion obligation and remaining native work/overhead
+and protected-producer gaps. This codec is not yet bound to ledger transfers.

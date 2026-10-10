@@ -1029,3 +1029,53 @@ call dependencies; compose all seven mandatory bodies/guards and replay actual
 ordinary-role/commit/uncertainty schedules. Unknown containment still quarantines
 original work, never resets or refunds it. Native full reservation qualification
 and installer readiness remain false; no acceptance criterion is promoted.
+
+## Complete-row custody accounting codec — 2026-10-10
+
+The [private native codec](../../../packages/postgresql/native/capacity-reservation/custody-codec.sql)
+now frames every original operation column (16) and touch column (12), in physical
+column order. The candidate profiles are `truss.custody.operation/0.1` and
+`truss.custody.touch/0.1`. Each frame starts with its UTF-8 profile name, a NUL
+separator and a two-byte big-endian field count. Each cell has a one-byte presence
+marker and eight-byte big-endian payload length, followed by its complete payload.
+NULL has marker zero and length zero; a present empty value has marker one and
+length zero. Native integers/xid/generations use their canonical PostgreSQL text
+image encoded as UTF-8; original byte carriers remain unchanged, including bytes
+that are not UTF-8. Identical carriers in different cells are charged separately.
+
+The exact size is `UTF8(profile).length + 3 + 9 * fieldCount + sum(payloadLengths)`.
+The codec preflights the complete output before constructing its frame and refuses
+above 8 MiB. Column names, order, native types, nullability and type modifiers are
+checked against the original layout, including dropped columns. This is a byte
+accounting candidate, not a complete installed-object, semantic or authority
+validator; CHECKs, defaults, collation, triggers, physical identity, dependencies
+and current security still require original installation qualification.
+
+[Native evidence](evidence/design-audit/custody-codec-native.json) passes 12 checks
+on PostgreSQL16.15 against an independent Python framing oracle: complete stored
+operation/touch images, null versus empty/non-UTF-8 carriers, exact8MiB internal
+length/hash, one-over refusal, malformed arrays, absent rows and an unexpected
+native column. It executes [UMF's owner export](evidence/design-audit/custody-codec-source.owner-export.sql).
+[The pinned owner capture](evidence/design-audit/custody-codec-source.json) preserves
+archive/reload/export exactly; its declaration extractor reports zero declarations
+and eight unhandled statements, complete=false. No compiler or parser is forked.
+Synthetic administrative values establish codec correspondence only.
+
+Before binding the transfer helper, the protected original producer must derive
+membership changes and complete OLD/NEW frame sizes itself. Count new retained
+members separately; charge positive byte growth and remove shrink bytes without
+refunding reserved growth. Phase, generation and result changes also affect size.
+Recompute parity over every retained operation/touch member in the installation,
+not only the current transaction, last ordinal or a filtered/RLS view. A frame hash
+does not establish complete membership. Native tuple/index/WAL overhead is a
+separate resource obligation. The earlier accounting fixture used carrier-only
+deltas and remains evidence for that scope; it does not prove framed-byte parity.
+Adopting framed counters requires an explicit registered resource profile and
+conversion of existing counters, never a silent interpretation switch or reset.
+
+Native argument allocation, repeated-copy work and cancellation remain unqualified.
+The8MiB check returns only internal length/hash, not an8MiB driver payload; the
+current original driver frame ceiling is1MiB. A native length-only accounting path
+or a separately qualified bounded transport is needed before composition. All
+four codec functions revoke PUBLIC EXECUTE. Complete native reservation,
+protected guards, installer readiness and acceptance promotion remain false.
