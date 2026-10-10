@@ -3199,3 +3199,15 @@ same-label substituted host registration, reserved-looking ordinary JSON keys an
 resource exhaustion before copies/comparisons. These are integration exit cases,
 not completed native evidence. Owner work is still in progress; no API/profile,
 backend acceptance case or Truss installer readiness is promoted.
+
+## Original capability/evidence assignment dependency
+
+Consume the [capability-specific correspondence handoff](contracts/consumer-read-integration.proposal.md#capability-specific-enforcement-and-evidence-correspondence)
+for the Python original query/operation boundary. Retain each selected capability,
+original source occurrence, enforcement site and applicable evidence case together
+with its immutable owner/target registration and opaque parameters. A complete
+union of names cannot justify swapped assignments or dropped shared provenance.
+Deployment requirements come from a separately trusted owner profile; a compiler
+manifest cannot mint its own native evidence authority. The six authored negative
+controls are unexecuted integration exits, and the reviewed owner gate remains
+unfinished. No public Python support claim or alternate resolver is introduced.

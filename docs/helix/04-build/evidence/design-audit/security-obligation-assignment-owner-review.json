@@ -1,0 +1,60 @@
+{
+  "scope": "Read-only unfinished owner correspondence review and authored integration counterexample; no owner gate or Truss runtime execution",
+  "ownerThread": {
+    "id": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+    "title": "Assess security control support",
+    "turnId": "01a12536-48d7-79b1-be82-257c3a664957",
+    "status": "inProgress"
+  },
+  "ownerSourceSha256": {
+    "crates/weft-core/src/security_obligation_custody.rs": "881ee322e3ba861c08ab2f96268f486fbb265c57872c02a5fdff6b9da13c8c12",
+    "crates/weft-core/src/security_obligation_sources.rs": "109f6f5f527dd34bbbd16c1278c5400d42f3ef11272680bb9aba22919b42948e"
+  },
+  "ownerWorkingStatus": [
+    "?? crates/weft-core/src/security_obligation_custody.rs",
+    "?? crates/weft-core/src/security_obligation_sources.rs"
+  ],
+  "observedSourceGate": "project_for_context derives complete source IDs and compares a union of declared semantic sources; this is not per-capability/site/evidence-case native admission",
+  "authoredCounterexample": {
+    "requiredAssociations": [
+      [
+        "lookup",
+        "scan-a",
+        "database",
+        "case-a"
+      ],
+      [
+        "projection",
+        "output-b",
+        "host",
+        "case-b"
+      ]
+    ],
+    "substitutedAssociations": [
+      [
+        "lookup",
+        "scan-a",
+        "host",
+        "case-b"
+      ],
+      [
+        "projection",
+        "output-b",
+        "database",
+        "case-a"
+      ]
+    ],
+    "observation": "Every individual label remains present in each union, but lookup and projection have substituted enforcement/evidence assignments",
+    "requiredOutcome": "Refuse original operation before native submission/publication under an independently admitted owner/target requirement; no union-only acceptance",
+    "scope": "Illustrative semantic associations, not an owner wire format or real backend case IDs"
+  },
+  "requiredOwnerInputs": [
+    "Original per-capability semantic source requirements",
+    "Separately trusted deployment enforcement/evidence profile under exact backend/target registration",
+    "Complete source/site/evidence-case association and owner/failure/parameter correspondence",
+    "Qualified native receipts for each assigned applicable case"
+  ],
+  "trussAdoptionChanged": false,
+  "installerReady": false,
+  "acceptanceCasesPromoted": []
+}

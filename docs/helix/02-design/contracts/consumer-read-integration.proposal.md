@@ -383,3 +383,40 @@ capability set with independent accepted/refused case coverage; never infer the
 set from successful cases or import the Paths count into the Truss backend.
 Missing or changed capability/profile evidence leaves the affected interactive
 shape unavailable. Existing IR and full consumer acceptance exits remain intact.
+
+## Capability-specific enforcement and evidence correspondence
+
+The [current read-only owner review](../../04-build/evidence/design-audit/security-obligation-assignment-owner-review.json)
+records unfinished work in “Assess security control support”: complete source-set
+coverage alone does not preserve assignments of enforcement sites and evidence
+cases to selected capabilities. Truss admission must consume the original owner's
+semantic requirement and independently admitted deployment/target profile, then
+preserve capability, source occurrence, enforcement site and applicable evidence
+case together through host/native discharge. Labels present somewhere in a union
+cannot establish correspondence for the operation that uses them.
+
+For example, a required lookup/database/case-A and projection/host/case-B pair
+cannot be replaced with lookup/host/case-B and projection/database/case-A. All
+capability, site and case labels remain present, but the assignments differ. This
+is an authored negative scenario, not an invented owner wire or accepted native
+case. A declaration cannot select its own deployment requirements or qualify its
+own evidence merely by naming existing cases. Retain owner/failure-code/opaque
+parameter and every selected-origin correspondence as already required above.
+
+Add these controls to the original read and Python owner-integration schedule:
+
+| Control | Required result |
+| --- | --- |
+| Exchange evidence cases or enforcement sites between two selected capabilities, preserving each union | Refuse before submission/publication; compare original assignments rather than union coverage. |
+| Reuse a source from another scan/action occurrence over the same qualified entity/field | Refuse; same entity/field labels do not erase distinct original source occurrences. |
+| Substitute a deployment profile with matching backend labels but another original registration or target | Refuse; semantic source coverage does not authenticate deployment requirements. |
+| Declare a real case ID whose receipt qualifies another site/profile/version | Refuse; inspect original receipt scope and its assignment, not case-ID existence. |
+| Drop one selected-capability occurrence of a shared obligation | Refuse; retained union membership does not cover missing provenance. |
+| Exhaust the selected association/parameter/evidence verification account | Refuse the whole operation; no partial obligation discharge or result publication. |
+
+The compiler owner derives semantic dependencies; separately trusted deployment
+profiles supply native/host case and site requirements. Truss consumes those
+outputs and owns its installed composition. It does not invent a replacement
+security registry, normalize unknown parameters or accept an unfinished gate.
+The reviewed source gate and these authored controls provide no native authority,
+passed integration case or installer readiness.
