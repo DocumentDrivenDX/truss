@@ -1,0 +1,1108 @@
+{
+  "scope": "Original native PostgreSQL16.15 captures through Python physical-tree and family-exclusive scalar shape validation; original nested cascade and disconnected-cycle refusal/restoration, administrative fixture",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "native-family-exclusive-scalar-shape-501",
+      "families": [
+        "integer",
+        "decimal"
+      ],
+      "codecMeaningQualified": false
+    },
+    {
+      "id": "native-connected-tree-501",
+      "rows": 8,
+      "physicalStructurePassed": true
+    },
+    {
+      "id": "original-native-capture-receive-501",
+      "originalCompletionHex": "53454c454354203800",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "image_kind"
+        },
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "original_image"
+        }
+      ],
+      "rows": 8,
+      "originalBytesRetained": true
+    },
+    {
+      "id": "complete-bounded-capture-501",
+      "rows": 8,
+      "bytes": 1302,
+      "images": [
+        [
+          "state",
+          "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f500000019000000066f626a6563740000001400000008000000000000006400000017000000040000000100000014ffffffff00000017ffffffff00000017000000040000000100000017000000040000006500000014000000080000000000000259000000110000000101000000110000000102000000110000000103000000110000000104"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000025900000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067265636f7264000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f5000000140000000800000000000002630000001400000008000000000000025900000019000000067265636f726400000014ffffffff00000019ffffffff00000011000000010a00000019000000036d6170000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f5000000140000000800000000000002640000001400000008000000000000026300000019000000036d617000000014ffffffff00000019000000046c69737400000011ffffffff000000190000000873657175656e6365000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000026500000014000000080000000000000264000000190000000873657175656e63650000001400000008000000000000000000000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000026600000014000000080000000000000264000000190000000873657175656e63650000001400000008000000000000000100000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002650000001900000007696e746567657200000019ffffffff00000010ffffffff000006a4000000100004000300000000232f07c8156203e100000019000000103930303731393932353437343039393300000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002660000001900000007646563696d616c00000019ffffffff00000010ffffffff000006a40000000a0001000000000004007b000000190000000e2b303030312e32333030652b303200000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ]
+      ]
+    },
+    {
+      "id": "bounded-refusal-501-7-1302",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "bounded-refusal-501-8-1301",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "bounded-refusal-501-0-0",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "native-family-exclusive-scalar-shape-502",
+      "families": [
+        "boolean",
+        "binary",
+        "timestamp",
+        "opaque",
+        "string"
+      ],
+      "codecMeaningQualified": false
+    },
+    {
+      "id": "native-connected-tree-502",
+      "rows": 13,
+      "physicalStructurePassed": true
+    },
+    {
+      "id": "original-native-capture-receive-502",
+      "originalCompletionHex": "53454c45435420313300",
+      "descriptor": [
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 25,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "image_kind"
+        },
+        {
+          "table_oid": 0,
+          "column_attrnum": 0,
+          "type_oid": 17,
+          "type_size": -1,
+          "type_modifier": -1,
+          "format": 0,
+          "name": "original_image"
+        }
+      ],
+      "rows": 13,
+      "originalBytesRetained": true
+    },
+    {
+      "id": "complete-bounded-capture-502",
+      "rows": 13,
+      "bytes": 2105,
+      "images": [
+        [
+          "state",
+          "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f600000019000000046564676500000014ffffffff00000017ffffffff0000001400000008000000000000006400000017000000040000000a00000017000000040000000300000017000000040000012d0000001400000008000000000000025a000000110000000101000000110000000102000000110000000103000000110000000104"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000025a00000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff000000190000000873657175656e6365000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000026d0000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000000000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000026e0000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000100000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000026f0000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000200000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f6000000140000000800000000000002700000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000300000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f6000000140000000800000000000002710000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000400000019ffffffff00000011ffffffff00000019000000046e756c6c000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f6000000140000000800000000000002720000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000500000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000026d0000001900000007626f6f6c65616e00000019ffffffff000000100000000100000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000026e000000190000000662696e61727900000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011000000040000ff8000000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000026f000000190000000974696d657374616d7000000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff0000001900000020323033302d30312d30325430333a30343a30352e3132333435362b30353a3330000004a00000000800035d276d11cf8000000011ffffffff000000110000000107000000110000000108"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000027000000019000000066f706171756500000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff0000001100000004ff000180000000110000000107000000110000000108"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f6000000140000000800000000000002720000001900000006737472696e67000000190000000000000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ]
+      ]
+    },
+    {
+      "id": "bounded-refusal-502-12-2105",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "bounded-refusal-502-13-2104",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "bounded-refusal-502-0-0",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "invalid-capture-999-3-100000",
+      "sqlstate": "55000"
+    },
+    {
+      "id": "invalid-capture-None-3-100000",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "invalid-capture-501--1-100000",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "invalid-capture-501-3--1",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "native-foreign-keys-admit-disconnected-cycle",
+      "rows": 10,
+      "originalCompletionHex": "53454c45435420313000",
+      "images": [
+        [
+          "state",
+          "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f500000019000000066f626a6563740000001400000008000000000000006400000017000000040000000100000014ffffffff00000017ffffffff00000017000000040000000100000017000000040000006500000014000000080000000000000259000000110000000101000000110000000102000000110000000103000000110000000104"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000025900000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067265636f7264000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f5000000140000000800000000000002630000001400000008000000000000025900000019000000067265636f726400000014ffffffff00000019ffffffff00000011000000010a00000019000000036d6170000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f5000000140000000800000000000002640000001400000008000000000000026300000019000000036d617000000014ffffffff00000019000000046c69737400000011ffffffff000000190000000873657175656e6365000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000026500000014000000080000000000000264000000190000000873657175656e63650000001400000008000000000000000000000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000026600000014000000080000000000000264000000190000000873657175656e63650000001400000008000000000000000100000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000032100000014000000080000000000000322000000190000000873657175656e63650000001400000008000000000000000000000019ffffffff00000011ffffffff000000190000000873657175656e6365000000110000000105000000110000000106"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000032200000014000000080000000000000321000000190000000873657175656e63650000001400000008000000000000000000000019ffffffff00000011ffffffff000000190000000873657175656e6365000000110000000105000000110000000106"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002650000001900000007696e746567657200000019ffffffff00000010ffffffff000006a4000000100004000300000000232f07c8156203e100000019000000103930303731393932353437343039393300000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002660000001900000007646563696d616c00000019ffffffff00000010ffffffff000006a40000000a0001000000000004007b000000190000000e2b303030312e32333030652b303200000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ]
+      ],
+      "constraintsCheckedImmediately": true
+    },
+    {
+      "id": "actual-native-disconnected-cycle-tree-refusal",
+      "refused": true,
+      "authorityQualified": false
+    },
+    {
+      "id": "disconnected-cycle-rollback-original-bytes",
+      "originalBytesExact": true,
+      "rows": 8
+    },
+    {
+      "id": "501/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "501",
+        "611",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f5000000140000000800000000000002630000001400000008000000000000025900000019000000067265636f726400000014ffffffff00000019ffffffff00000011000000010a00000019000000036d6170000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "501",
+        "612",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f5000000140000000800000000000002640000001400000008000000000000026300000019000000036d617000000014ffffffff00000019000000046c69737400000011ffffffff000000190000000873657175656e6365000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "501",
+        "613",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000026500000014000000080000000000000264000000190000000873657175656e63650000001400000008000000000000000000000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "501",
+        "614",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000026600000014000000080000000000000264000000190000000873657175656e63650000001400000008000000000000000100000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "501",
+        "601",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000025900000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067265636f7264000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "736",
+        "501",
+        "613",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002650000001900000007696e746567657200000019ffffffff00000010ffffffff000006a4000000100004000300000000232f07c8156203e100000019000000103930303731393932353437343039393300000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "736",
+        "501",
+        "614",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002660000001900000007646563696d616c00000019ffffffff00000010ffffffff000006a40000000a0001000000000004007b000000190000000e2b303030312e32333030652b303200000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_state",
+      "actualRelationOid": "16742",
+      "originalEvent": [
+        "row_home_state",
+        "16742",
+        "DELETE",
+        "736",
+        "501",
+        null,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101",
+        false,
+        null,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f500000019000000066f626a6563740000001400000008000000000000006400000017000000040000000100000014ffffffff00000017ffffffff00000017000000040000000100000017000000040000006500000014000000080000000000000259000000110000000101000000110000000102000000110000000103000000110000000104"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_state",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "502",
+        "602",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000025a00000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff000000190000000873657175656e6365000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "502",
+        "621",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000026d0000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000000000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "502",
+        "624",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f6000000140000000800000000000002700000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000300000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "502",
+        "622",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000026e0000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000100000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "502",
+        "623",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000026f0000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000200000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "502",
+        "626",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f6000000140000000800000000000002720000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000500000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "736",
+        "502",
+        "625",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f6000000140000000800000000000002710000001400000008000000000000025a000000190000000873657175656e63650000001400000008000000000000000400000019ffffffff00000011ffffffff00000019000000046e756c6c000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "736",
+        "502",
+        "623",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000026f000000190000000974696d657374616d7000000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff0000001900000020323033302d30312d30325430333a30343a30352e3132333435362b30353a3330000004a00000000800035d276d11cf8000000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "736",
+        "502",
+        "621",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000026d0000001900000007626f6f6c65616e00000019ffffffff000000100000000100000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "736",
+        "502",
+        "622",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000026e000000190000000662696e61727900000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011000000040000ff8000000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "736",
+        "502",
+        "624",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000027000000019000000066f706171756500000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff0000001100000004ff000180000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "736",
+        "502",
+        "626",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f6000000140000000800000000000002720000001900000006737472696e67000000190000000000000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_state",
+      "actualRelationOid": "16742",
+      "originalEvent": [
+        "row_home_state",
+        "16742",
+        "DELETE",
+        "736",
+        "502",
+        null,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301",
+        false,
+        null,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f600000019000000046564676500000014ffffffff00000017ffffffff0000001400000008000000000000006400000017000000040000000a00000017000000040000000300000017000000040000012d0000001400000008000000000000025a000000110000000101000000110000000102000000110000000103000000110000000104"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_state",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "actual-old-image-missing-retained-state-refusal",
+      "refused": true
+    },
+    {
+      "id": "native-input-projection-conflicting-node-state-refusal",
+      "refused": true,
+      "control": "corrupted projection, not a native row or constraint violation"
+    },
+    {
+      "id": "complete-state-node-scalar-cascade",
+      "remainingRows": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "restored-native-producer-501",
+      "originalBytesExact": true
+    },
+    {
+      "id": "restored-native-producer-502",
+      "originalBytesExact": true
+    },
+    {
+      "id": "confirmed-savepoint-restoration",
+      "restoredRows": [
+        2,
+        12,
+        7
+      ],
+      "writerXid": "736",
+      "eventRows": 0
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/row-event-image-attribution-probe.sql": "78a72bc36838562cb52123247e4cf2180c56f5a87219fec633995b0dd61eb030",
+    "docs/helix/04-build/evidence/design-audit/row-image-codec-preflight-source.owner-export.sql": "cf3926a6d1447eb0e5d21353252b7f5a43ef868d2f759d0ecd3b39784e348549",
+    "docs/helix/04-build/evidence/design-audit/row-image-prestate.owner-export.sql": "577229d7581f7dc30bc618af617d7347e36fff04e086f4abdb8601ed634426e8",
+    "packages/postgresql/native/row-image/prestate.sql": "3006ae27a2f189be92f5261aa9f9e40f447acce861e31556ecc331cf6d2c6bc0",
+    "docs/helix/02-design/contracts/row-image-prestate-v0.1.proposal.umf.json": "c0b11794ee15352b1e4f40bd0e03f2af2e4bcf0e72420dcde7dc5aa7d90f16fd",
+    "docs/helix/04-build/evidence/design-audit/row-image-snapshot-prestate.owner-export.sql": "573a843e2059b8592b7eaa4f66a09849af88531c5d7c81ff86f23557efedd54d",
+    "packages/postgresql/native/row-image/snapshot-prestate.sql": "15176991272eddf2db6d6d552af9830a64d0e5362e3eb3c6e96e3d54aa835b42",
+    "packages/python/src/truss/_row_image_scalar_shape.py": "1e639bfed2680ce589d8af65fe255b4498a61246384fb593e3313d673fbdccdc",
+    "docs/helix/02-design/contracts/row-home-scalar-v0.1.proposal.sql": "95a6ed245d05abbbac6288d73c548855f3adfcfc8e4b789a224a01cf70c898f7",
+    "packages/python/src/truss/_row_image_tree.py": "8ff76ee2a95ec60db0bdfecded4e1f35bc302d711be0f71f14d42178cabb5386",
+    "packages/python/src/truss/_row_image_capture.py": "377bb631b3dd939436dc89c50b6ca4f188a99e5352e8a18d8f6a30037f593125",
+    "packages/python/src/truss/_row_image.py": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9",
+    "packages/python/src/truss/_row_event_attribution.py": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b"
+  },
+  "producerSha256": "308b64f514cfabc3cb72ceb51018f70bf57c57343c83a625bcb228acda2637a5",
+  "rowTouchObserverQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Host tree validation is not native commit enforcement or original capture/authority authentication; all seven semantic bodies remain pending",
+    "Probe captures complete native OLD images plus typed association fields; underlying native numeric/temporal logical semantics remain independently admitted",
+    "Retained prestate comes from bounded native typed-image component; selected state is administrative fixture input, not independently admitted protected scope/cut/authority. Native repeatable-read snapshot is selected by this fixture; original scope/authority/driver exclusion and same-cut publication facts remain external",
+    "Both object and edge IDs100 retain distinct kind/discriminator/property owner; edge discriminator10 is not property owner3",
+    "Private capture decoder retains complete observed result metadata/cells, not original producer/scope/authority; driver text conversion and receive allocation remain externally qualified",
+    "No touch/capacity generation update, native callable role/ACL closure, full resources or seven semantic body realization",
+    "Finite PostgreSQL16.15 nested record/map/sequence/null-node fixture with all seven stored scalar families; exact native bytes/tokens only, not logical numeric/temporal/catalog interpretation or all cascade/reparenting/type/deployment profiles"
+  ]
+}

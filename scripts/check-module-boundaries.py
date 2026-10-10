@@ -21,6 +21,7 @@ ALLOWED = {
     '_operation_registry': set(),
     '_row_image': {'dataclasses', 'struct'},
     '_row_image_capture': {'dataclasses', 'truss._row_image', 'truss._row_event_attribution'},
+    '_row_image_scalar_shape': {'truss._row_image'},
     '_row_image_tree': {'truss._row_image_capture', 'truss._row_event_attribution'},
     '_row_event_attribution': {'dataclasses', 'struct', 'truss._row_image'},
     '_row_operation_custody': {'base64', 'dataclasses', 'hashlib', 're', 'truss._acceptance_json'},

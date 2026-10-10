@@ -278,9 +278,9 @@ unchanged. No service split is required for the embeddable toolkit.
 Python-only map using AST inspection, including nested imports, relative/absolute
 local references, unknown modules, wildcard imports, direct dynamic execution and
 import cycles. Exact allowed imports live in the checker and require review on
-change; there is no existing-debt exclusion. Current source has104 observed allowed imports
-and no static violations across27 modules. The explicit map includes the nine
-row-image/capture/custody/address/context/group/touch/correspondence modules; their
+change; there is no existing-debt exclusion. Current source has105 observed allowed imports
+and no static violations across28 modules. The explicit map includes the
+row-image/capture/tree/scalar-shape/custody/address/context/group/touch/correspondence modules; their
 standard-library and internal decoder dependencies are individually enumerated. `python3 scripts/check-module-boundaries-controls.py`
 executes the real checker against16 disposable allowed/forbidden controls,
 including private row-image/capture/touch access, driver rejection and a reverse

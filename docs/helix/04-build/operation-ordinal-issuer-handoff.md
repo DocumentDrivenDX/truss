@@ -1898,3 +1898,32 @@ state correspondence, admitted definitions/member/scalar semantics, held guards,
 current authority, capacity/freshness and same-transaction publication. Do not
 claim that valid binary framing or this physical shape check authenticates a
 retained state's origin. Earlier62/64/60 receipts and producers remain unchanged.
+
+
+## Native scalar carrier shape — 2026-10-10
+
+The private `_row_image_scalar_shape` check validates the physical family-exclusive
+columns of the original scalar image profile: string, boolean, integer, decimal,
+binary, timestamp and opaque. It requires the selected columns, rejects all
+other payload columns, retains optional timestamp instant separately, and requires
+nonempty numeric token and codec/source byte carriers. Present empty string,
+binary and opaque payloads remain present; optional instant absence is allowed.
+No numeric cell/token parsing, finite/integral comparison, token/value equality,
+timestamp spelling/instant equality, source facets or logical codec meaning is
+inferred. Those remain separately admitted native/UMF codec obligations.
+
+Four focused tests consume all seven original native family images and cover
+missing/extra cells, unknown family, empty token and empty original metadata.
+[Native69](evidence/design-audit/row-image-scalar-shape-native.json) runs both
+actual captures through tree validation and scalar shape validation, retaining
+the native67 disconnected-cycle refusal/restoration and21-image cascade checks.
+The two checks are explicit private composition inputs; neither authenticates
+original source/scope or implements the native semantic commit validator.
+
+The [fresh installed wheel](evidence/design-audit/python-scalar-shape-installed-suite.json)
+passes128 tests with28 matching source/wheel/installed modules and105 checked
+imports. [Boundary controls](evidence/design-audit/python-scalar-shape-boundary-controls.json)
+retain16 actual allowed/forbidden subprocess controls. Original logs accompany
+the receipt. Earlier124/119 checkpoints and native67 producers remain unchanged.
+Public exports remain local runtime lifecycle only; installation, protected
+mutation/query, migration, journal/feed and native authority remain unqualified.
