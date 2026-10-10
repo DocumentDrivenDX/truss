@@ -1342,3 +1342,33 @@ correspondence. Concrete memo storage/DDL and complete installed invalidation/
 callback identity remain a bounded implementation spike. Original capacity closeout
 and all seven semantic guards remain required. No criterion is promoted or
 installer/resource profile adopted by these synthetic scheduling traces.
+
+## Owned constraint scheduling at operation entry — 2026-10-10
+
+The [coalescing design](../02-design/contracts/capacity-commit-coalescing-v0.1.proposal.md#original-accounting-constraint-mode-correspondence--2026-10-10)
+now includes an original operation-entry constraint command. [The14-check native
+probe](evidence/design-audit/capacity-constraint-modes-native.json) combines actual
+original capacity functions with a synthetic deferred callback: finalized/released
+A passes a forced early check, but immediate mode makes the next reservation
+invoke closeout while active and refuse55000. Containment preserves A; the fault
+burns fixture ordinal1. Named-only Truss deferral permits B at2 and complete
+closeout/COMMIT, observed independently, without changing a host-owned immediate
+constraint. The host guard still refuses its own invalid value.
+
+Reassert only the original registered Truss-owned deferrable commit constraints
+after original boundary recognition and before reservation/lower effects. Qualify
+exact pg_constraint/trigger identity and qualified-name/namespace/ownership closure;
+name-based SQL cannot authenticate OIDs or distinguish unregistered name collisions.
+Do not defer ALL constraints or guess/restore host engine-constraint modes. The
+connection/invocation contract must declare Truss ownership of its constraint
+scheduling, and original cumulative control/account/unknown containment must cover
+the extra command. Host-owned modes remain unchanged. No guard disabling or retry
+is introduced.
+
+The probe does four full scans per operation, not qualified coalescing. Its callback,
+markers, administrative phase changes and manual ordinal-gap schedule are fixture
+controls, not an installed finalizer/security/issuer or accepted layout. Exact
+source pins and the native counterexample change the next integration action;
+dirty-generation storage, complete invalidation and unavoidable bounded original
+callback registration remain open. All seven mandatory semantic bodies and full
+installer/publication qualification remain required, with no criterion promoted.
