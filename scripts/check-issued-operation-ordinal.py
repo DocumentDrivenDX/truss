@@ -105,6 +105,23 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             issued_first = issuer.reserve(custody)
             send('SAVEPOINT operation_probe;')
             first = admit(issued_first)
+            snapshot_sql = "SELECT json_build_object('registry',(SELECT jsonb_agg(to_jsonb(o) ORDER BY operation_ordinal) FROM truss.row_home_operation o)"
+            if family == 'configuration':
+                snapshot_sql += ",'configuration',(SELECT jsonb_agg(to_jsonb(c) ORDER BY operation_ordinal) FROM truss.operation_configuration c)"
+            snapshot_sql += ");"
+            send(snapshot_sql)
+            before_refusals = observe()
+            native_controls = []
+            for value, state, message in [('NULL', '22023', 'invalid host-issued operation ordinal'),
+                                           ('-1', '22023', 'invalid host-issued operation ordinal'),
+                                           ('0', '55000', 'unfinished operation'),
+                                           ('9', '55000', 'unfinished operation')]:
+                probe = "PERFORM * FROM truss." + function + "(" + value + ", 'mutation',decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'),decode('05','hex'),decode('06','hex')" + tail + ");"
+                send("DO $$ BEGIN " + probe + " RAISE EXCEPTION 'expected native refusal'; EXCEPTION WHEN SQLSTATE '" + state + "' THEN IF SQLERRM <> '" + message + "' THEN RAISE; END IF; END $$; " + snapshot_sql)
+                after_refusal = observe()
+                assert after_refusal == before_refusals
+                native_controls.append({'ordinalInput': value, 'sqlstate': state, 'message': message,
+                                        'completeObservedStoresUnchanged': True})
             send("ROLLBACK TO SAVEPOINT operation_probe; SELECT json_build_object('surviving',count(*)) FROM truss.row_home_operation;")
             assert observe() == {'surviving': 0}
             if family == 'configuration':
@@ -156,6 +173,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                 process.wait(timeout=5)
         server.cleanup()
 receipt = {'scope': 'Selected admission family with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification',
+           'nativeInputControls': native_controls, 'originalSurvivingSnapshot': before_refusals,
            'family': family, 'pgserver': importlib.metadata.version('pgserver'), 'serverVersion': version,
            'observations': [first, second, third], 'refusedIssuedOrdinal': '2', 'nativeRefusalSqlstate': '22023', 'configurationObservations': configurations, 'rollbackRegistryRows': 0, 'rollbackRemovedNamespace': True,
            'sources': [{'path': p, 'sha256': hashlib.sha256(b).hexdigest()} for p, b in zip(paths, originals)],
