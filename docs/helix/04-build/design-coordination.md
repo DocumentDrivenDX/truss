@@ -15,6 +15,43 @@ ddx:
 
 # Design coordination and remaining work
 
+
+## Current owner refresh: browser and compiler distribution
+
+Fresh fetches resolve UMF main to `322b193cef7c940d07b741860cf0170272628868`
+and Weft main to `ee90571a5aa67b6d2e6069220f6e1cc0eec3822c`. Older
+“current” checkpoints below retain their original revision scope. The Truss
+browser builder now consumes the latest committed UMF explorer assets, including
+responsive workspace and readable-label search changes, while preserving the
+original structural0.6/native0.16 inputs and uncomposed adjunct warnings.
+The [fresh Chromium receipt](evidence/design-audit/schema-browser-322b193-search-site.json)
+verifies532 definitions, exact qualified field/FK navigation and all original
+download bytes, readable-label search and390px layout without page errors.
+Hugo generation and pinned asset correspondence pass. The initial checker used
+old underscore headings and timed out; it now accepts readable headings while
+retaining exact definition-URL checks. No production deployment occurred.
+
+The [Weft source review](evidence/design-audit/weft-ee90571-distribution-source-review.json)
+records its closed inert `weft-distribution/0.1` manifest and bounded CLI byte
+transport. The Python `compile_json` bridge source is unchanged from Truss's
+adopted f05f2df baseline. An unchanged function signature does not establish
+unchanged compiler semantics, qualified backend support or a new Python wheel.
+The first owner distribution composition explicitly targets an Ashlar Databricks
+candidate CLI, not the Truss PostgreSQL/Python runtime. Truss's compiler pin
+remains unchanged.
+
+For the next compiler packaging iteration, consume the owner's trusted index and
+exact produced-byte/source/features/target/schema/corpus correspondence; do not
+create a competing Truss distribution-registration protocol or infer authority
+from the new manifest schema. Python realization and Truss backend qualification
+require their own owner-qualified packet. The Truss installed-resource index
+selects Truss installation resources and references the separately admitted Weft
+realization; it does not promote a compiler build or replace Weft's index.
+CLI input bounds and stderr transport codes apply only when a CLI adapter is
+selected. They do not imply Python string-call containment or change current
+Python callback/compiler response semantics. Public parsed input, required R8
+shapes, authorization and native host obligations remain separate exits.
+
 ## Additive Weft owning-core0.8 admission — 2026-10-09
 
 Subsequent Truss integration builds exact committed `f05f2df` in isolation and

@@ -1,5 +1,9 @@
 import {createRequire} from 'node:module';
 const {chromium}=createRequire('/Users/erik/Projects/umf/package.json')('playwright');
+const receiptName=Bun.argv[2]??'schema-browser-site.json';
+if(!/^[a-z0-9-]+\.json$/.test(receiptName))throw Error('Receipt basename required');
+const receiptPath='docs/helix/04-build/evidence/design-audit/'+receiptName;
+if(await Bun.file(receiptPath).exists())throw Error('Receipt already exists; supply a new name');
 const ownerManifest=await Bun.file('website/static/schema/manifest.json').json();
 if(ownerManifest.owner!=='DocumentDrivenDX/umf'||!(/^[a-f0-9]{40}$/).test(ownerManifest.revision))throw Error('Original UMF browser owner pin required');
 for(const [name,expected] of Object.entries(ownerManifest.assets)){
@@ -20,12 +24,12 @@ try{
  await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','prop_def'])}));
  await page.locator('.definition-heading').waitFor();
  if(!(await page.locator('table').innerText()).includes('declaration_module'))throw Error('Current layout field missing');
- await page.locator('table a').filter({hasText:'declaration_module'}).click();
- await page.locator('.definition-heading').filter({hasText:'declaration_module'}).waitFor();
+ await page.locator('table a').filter({hasText:/declaration[ _]module/i}).click();
+ await page.locator('.definition-heading').filter({hasText:/declaration[ _]module/i}).waitFor();
  const downloadEvent=page.waitForEvent('download');await page.getByText('Download source',{exact:true}).click();const download=await downloadEvent;
  const downloaded=await Bun.file((await download.path())!).text();const original=await Bun.file('website/static/schema/truss-layout.umf.json').text();if(downloaded!==original)throw Error('Download changed source');
  await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','source_epoch_registry'])}));
- await page.locator('.definition-heading').filter({hasText:'source_epoch_registry'}).waitFor();
+ await page.locator('.definition-heading').filter({hasText:/source[ _]epoch[ _]registry/i}).waitFor();
  if(!(await page.locator('table').innerText()).includes('predecessor_epoch'))throw Error('Epoch candidate columns missing');
  const nativeEvent=page.waitForEvent('download');await page.getByText('Download retained native source',{exact:true}).click();const nativeDownload=await nativeEvent;
  const nativeBytes=new Uint8Array(await Bun.file((await nativeDownload.path())!).arrayBuffer());
@@ -33,22 +37,22 @@ try{
  const nativeExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].sourceModel).arrayBuffer());
  if(nativeBytes.length!==nativeExpected.length||nativeBytes.some((b,i)=>b!==nativeExpected[i]))throw Error('Native archive download changed original bytes');
  await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','operation_configuration'])}));
- await page.locator('.definition-heading').filter({hasText:'operation_configuration'}).waitFor();
+ await page.locator('.definition-heading').filter({hasText:/operation[ _]configuration/i}).waitFor();
  const captureTable=await page.locator('table').innerText();
  for(const name of ['original_writer_xid','original_context_sha256','configuration_generation','admission_profile_bytes','installed_inventory_sha256'])if(!captureTable.includes(name))throw Error('Configuration capture column missing: '+name);
  const adjunctEvent=page.waitForEvent('download');await page.getByText('Download configuration adjunct source',{exact:true}).click();const adjunctDownload=await adjunctEvent;
  const adjunctBytes=new Uint8Array(await Bun.file((await adjunctDownload.path())!).arrayBuffer()),adjunctExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].additionalSourceModel).arrayBuffer());
  if(adjunctBytes.length!==adjunctExpected.length||adjunctBytes.some((b,i)=>b!==adjunctExpected[i]))throw Error('Adjunct archive changed original bytes');
  await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','layout_migration_receipt'])}));
- await page.locator('.definition-heading').filter({hasText:'layout_migration_receipt'}).waitFor();
+ await page.locator('.definition-heading').filter({hasText:/layout[ _]migration[ _]receipt/i}).waitFor();
  const migrationTable=await page.locator('table').innerText();
  for(const name of ['storage_row_id','original_attempt_identity_bytes','original_request_bytes','original_receipt_bytes','original_receipt_sha256'])if(!migrationTable.includes(name))throw Error('Migration receipt column missing: '+name);
  const migrationEvent=page.waitForEvent('download');await page.getByText('Download migration adjunct source',{exact:true}).click();const migrationDownload=await migrationEvent;
  const migrationBytes=new Uint8Array(await Bun.file((await migrationDownload.path())!).arrayBuffer()),migrationExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].migrationSourceModel).arrayBuffer());
  if(migrationBytes.length!==migrationExpected.length||migrationBytes.some((b,i)=>b!==migrationExpected[i]))throw Error('Migration archive changed original bytes');
  const fkRole='physical-fk:migration-physical-fk-13:';
- await page.locator('#inspector > p').filter({hasText:fkRole}).getByRole('link',{name:'source_epoch_registry',exact:true}).click();
- await page.locator('.definition-heading').filter({hasText:'source_epoch_registry'}).waitFor();
+ await page.locator('#inspector > p').filter({hasText:fkRole}).getByRole('link',{name:/^source[ _]epoch[ _]registry$/i}).click();
+ await page.locator('.definition-heading').filter({hasText:/source[ _]epoch[ _]registry/i}).waitFor();
  if(new URL(page.url()).hash!== '#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','source_epoch_registry'])}))throw Error('Migration parent reference resolved to wrong definition');
  for(const [sourceField,targetField,targetName] of [
   ['layout_migration_receipt.installation_id','source_epoch_registry.installation_id','installation_id'],
@@ -56,12 +60,17 @@ try{
  ]){
   await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout',sourceField])}));
   await page.locator('.definition-heading').waitFor();
-  await page.locator('#inspector > p').filter({hasText:fkRole}).getByRole('link',{name:targetName,exact:true}).click();
-  await page.locator('.definition-heading').filter({hasText:targetName}).waitFor();
+  await page.locator('#inspector > p').filter({hasText:fkRole}).getByRole('link',{name:new RegExp('^'+targetName.replaceAll('_','[ _]')+'$','i')}).click();
+  await page.locator('.definition-heading').filter({hasText:new RegExp(targetName.replaceAll('_','[ _]'),'i')}).waitFor();
   if(new URL(page.url()).hash!=='#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout',targetField])}))throw Error('Migration field reference resolved to wrong definition');
  }
  await page.setViewportSize({width:390,height:844});await page.goto(base+'schema/');await page.locator('.definition-list').waitFor();
+ await page.locator('#search').fill('source epoch registry');
+ const readableLink=page.locator('.definition-list a').filter({hasText:/^source[ _]epoch[ _]registry$/i});
+ await readableLink.waitFor();await readableLink.click();
+ if(new URL(page.url()).hash!=='#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','source_epoch_registry'])}))throw Error('Readable label search selected wrong definition');
+ await page.locator('#search').fill('');
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);if(overflow)throw Error('Mobile page overflow');if(errors.length)throw Error(errors.join('\n'));
- const receipt={browser:browser.version(),ownerRevision:ownerManifest.revision,definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','configuration capture columns browse and adjunct download is byte-exact','migration receipt columns browse and adjunct download is byte-exact','migration core parent and both ordered FK field references navigate to exact qualified definitions','390px mobile browser has no horizontal page overflow','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
- await Bun.write('docs/helix/04-build/evidence/design-audit/schema-browser-site.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
+ const receipt={browser:browser.version(),ownerRevision:ownerManifest.revision,definitions,checks:['Hugo Model page embeds working owner browser','current structural model validates','prop_def deep link and declaration_module field navigation','download is byte-identical UTF-8 source','epoch registry and predecessor columns browse correctly','retained native source download is byte-exact','configuration capture columns browse and adjunct download is byte-exact','migration receipt columns browse and adjunct download is byte-exact','migration core parent and both ordered FK field references navigate to exact qualified definitions','390px mobile browser has no horizontal page overflow','readable-label search resolves to exact source_epoch_registry definition','no browser errors'],scope:'Actual generated site under /truss/ in Chromium; structural inspection only, no deployment or native runtime qualification.'};
+ await Bun.write(receiptPath,JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
 }finally{await browser.close();server.stop(true)}
