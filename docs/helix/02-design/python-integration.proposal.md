@@ -247,7 +247,7 @@ process identity, transport retry count and current role must not accidentally
 create a fresh retry namespace after a committed attempt. Preserve the original
 scope through restart/reconciliation; changed semantic action/source/preconditions/
 effects/origin stay in the complete original request comparison. This does not
-select the pending global catalog ownership policy or grant caller-named scopes.
+alter the accepted document-qualified catalog ownership policy (ADR-004) or grant caller-named scopes.
 
 Consume Truss's registered canonical request preparation and complete receipt
 lookup/current replay authorization. A host plan digest or `repr` is not proof
@@ -639,8 +639,9 @@ Two tests pass on Python 3.11, covering all seven
 numeric proposal vectors plus finite-value, host-type, UTF-8 and bound refusals.
 At this numeric-only checkpoint, timestamp, recursive/presence/raw-JSON codecs, original upstream admission,
 whole-operation resource accounting, native storage and public packaging were
-separate PY-01a/PY-01b work. This candidate lives outside a public package while
-package ownership is pending; its green results do not qualify the Python runtime.
+separate PY-01a/PY-01b work. This historical candidate lived outside the public package. ADR-003 subsequently
+settled Truss-owned Python delivery; numeric component results still do not
+qualify the complete Python runtime.
 
 The subsequent private `python_exact_timestamp_candidate.py` adds original-token
 retention with an optional aware datetime view for its explicit offset/precision
@@ -714,9 +715,10 @@ JSON decoder still owns syntax validation. Controlled over-limit cases prove
 the decoder is never called, and exact-at-bound arrays/objects still decode.
 Immutable projection rechecks node count. These finite source/tree bounds do not
 establish complete precharged heap/copy accounting, including decoded member names,
-source/text copies and simultaneous trees. Original semantic/profile admission, public package ownership,
-qualified native transport and integrated whole-operation resource accounting
-remain required. No parser success claims native JSONB fidelity or UMF support.
+source/text copies and simultaneous trees. Original semantic/profile admission,
+complete public package delivery, qualified native transport and integrated
+whole-operation resource accounting remain required. Truss package ownership is
+settled by ADR-003. No parser success claims native JSONB fidelity or UMF support.
 
 ## Host transaction adapter
 
@@ -1756,8 +1758,9 @@ or downloaded replacement may substitute for the original bundle.
 
 Author setup/call/expected-result/error/journal fixtures before collecting observations. Reuse the existing conformance manifest's separate fixture/input/expected/identity-alias artifacts. Opaque identities are saved aliases, not fixed generated IDs. Complete selected accepted reports and original source epochs remain native outputs; no fixture accepted revision or invented epoch enables these slices. The combined reference uses the existing nineteen-field 0.3 lifecycle/history report, including lifecycleProfile/reactivations and 0.2 rebind events. A Python baseline 0.1 codec may preserve its separately qualified seventeen-field subset but cannot claim combined lifecycle compatibility by dropping fields or relabeling versions. Consume the same original selected schema/profile tuple as the TypeScript implementation; report version numbers alone are insufficient.
 
-Start PY-01a and the reproducible PY-02 build/unsupported-input checks while
-package ownership and driver qualification are being selected. These activities
+Continue PY-01a and the reproducible PY-02 build/unsupported-input checks under
+the accepted Truss-owned Python delivery direction while completing driver
+qualification. These activities
 need no fabricated installed identities or security authority. Author independent
 exact-value and report-version vectors before either implementation emits results;
 retain Python and TypeScript observations against the same expectations. Native
@@ -2035,8 +2038,9 @@ Proceed through the existing implementation rows with these concrete exits:
 | PY-04 / A4–A7 | Wire complete report persistence and atomic catalog/head settlement into owned/adopted transaction handling. | Full rollback on late encoding/persistence failure; pending versus confirmed committed result, lost acknowledgment and original-attempt reconciliation. Codec success grants no finalization authority. |
 | PY-07 | Execute TS writes/Python reads and Python writes/TS reads using the same qualified installed tuple and independently expected corpus. | Actual committed database contents, full exact values/history/receipts/feed outcomes and fresh authorization on retry. Native codec parity is only a prerequisite. |
 
-Package ownership and registered release/driver/resource profiles remain explicit
-unresolved selections. The carrier implementation can be reused once selected;
+Package ownership is settled by accepted ADR-003. Registered release/driver/
+resource profiles remain explicit unadmitted engineering selections. The carrier
+implementation can be reused under a selected qualified composition;
 it does not activate public packaging or bypass those exits. Weft retains SQL
 lowering and its Rust/Python packaging, UMF retains schema semantics and reusable
 SQL generation, and the current security owner retains authorization meaning.

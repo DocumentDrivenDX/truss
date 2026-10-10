@@ -46,10 +46,16 @@ The [accelerated installation/Python queue](local-runtime-installation-migration
 is the current sequencing authority. Its first usable slice includes document
 qualification, R4 isolation and R5 origin. Actual original native issuer/account/
 arbitration and the seven observer/validator/finalizer bodies still precede atomic
-complete inventory/ready publication. The embedding-host trust assumption remains
-unresolved; local Python object custody cannot independently authenticate a native
-issuer or fence effects after a separate close check. Do not substitute caller
-ordinal strings, seal flags, dummy guards or profile-shaped metadata for these gates.
+complete inventory/ready publication. Accepted
+[ADR-008](../02-design/adr/ADR-008-trusted-embedding-host.md) settles the embedding
+host and registered adapter as trusted. Original connection/adoption tokens,
+exclusive dispatch and shared issuer/account custody are their obligations;
+PostgreSQL checks actual transaction, current authority and protected effects.
+Local Python object custody does not independently authenticate a native issuer
+or fence effects after a separate close check. No further trust-boundary product
+vote is pending. Driver/account/native composition and the accepted minimum
+security-owner handoff remain implementation gates. Do not substitute caller
+ordinal strings, seal flags, dummy guards or profile-shaped metadata for them.
 
 HELIX0.15.4 adoption now has linked scope and qualification work: Architecture's
 Python AST gate passes51 current imports with nine real-checker controls;
@@ -58,9 +64,15 @@ remediation, not an enforced dependency pass. The process configuration contract
 and CFG-01–12 plan distinguish host injection from native configuration admission.
 Diagnostic/OBS-01–09 contracts specify safe events, OTel projection and bounded
 capture/export, without qualifying an actual bridge/receiver. Python ordinal/
-admission formal specification maps stable properties to eight passing component
+admission formal specification maps stable properties to ten passing component
 methods, with precise author review only; executable formal analysis and native
-correspondence remain open. Entry links are in the HELIX README and runtime plan.
+correspondence remain open. Entry links are in the HELIX README and runtime plan. The
+[installed shared-registry suite](evidence/design-audit/python-shared-registry-installed-suite.json)
+passes44 tests with12 module payloads matched against source/wheel/installation.
+The [issuer handoff](operation-ordinal-issuer-handoff.md#shared-registry-across-four-native-families)
+now retains all four administrative native shared-registry rollback/refusal
+schedules. These receipts qualify those components only; they do not close the
+seven composition boundaries or admit public install/apply/read/feed operations.
 
 The corrected private pgserver16.15 tuple passes caller-reset, historical isolation,
 origin captures and the current UMF structural/populated immutable-guard probes
