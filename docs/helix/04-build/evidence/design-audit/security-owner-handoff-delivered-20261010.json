@@ -1,0 +1,18 @@
+{
+  "scope": "Authorized delivery of the original prepared security handoff; no owner interface adoption",
+  "approvedBy": "User explicitly approved sending the prepared handoff to Assess security control support",
+  "destinationThreadId": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "destinationTitle": "Assess security control support",
+  "originalRequest": "docs/helix/04-build/evidence/design-audit/security-owner-resumption-request.json",
+  "originalRequestSha256": "37728e69dea529d49c2118587def0c2f61d1688a9317e9c429f350fa04e874fa",
+  "messageSha256": "b07916e4ecaac5e6741c49bf3733409403b833a12e55de90315dadd0087fa164",
+  "sent": true,
+  "sendToolSucceeded": true,
+  "observedOwnerTurn": "01a12782-0e52-7f51-a15e-5875d0b51da1",
+  "observedOwnerStatus": "inProgress",
+  "observedAtUtc": "2026-10-10T20:30:50.304538+00:00",
+  "ownerInterfaceAdopted": false,
+  "currentTrussMain": "ae642a46",
+  "historicalMessageCheckpoint": "28d0786c",
+  "qualification": "Exact approved historical message delivered unchanged. Current main includes newer runtime/merge evidence; original message component counts are historical, not current support claims."
+}
