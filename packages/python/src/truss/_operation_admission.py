@@ -19,6 +19,9 @@ class _Confirmation:
 
 
 def _sync(value):
+    if inspect.isgenerator(value):
+        value.close()
+        raise AdmissionRefusal('Deferred admission execution is unavailable')
     if inspect.isawaitable(value) or inspect.isasyncgen(value):
         if inspect.iscoroutine(value):
             value.close()
@@ -37,8 +40,10 @@ class AdmissionCustody:
         if producer is None or type(maximum) is not int or maximum < 1:
             raise AdmissionRefusal('Original producer and finite capacity required')
         if any(not callable(f) or inspect.iscoroutinefunction(f) or inspect.isasyncgenfunction(f)
+               or inspect.isgeneratorfunction(f)
                or inspect.iscoroutinefunction(getattr(f,'__call__',None))
                or inspect.isasyncgenfunction(getattr(f,'__call__',None))
+               or inspect.isgeneratorfunction(getattr(f,'__call__',None))
                for f in (verify,admit)):
             raise AdmissionRefusal('Synchronous original port required')
         self._producer = producer

@@ -266,16 +266,20 @@ callback and rejects copied, foreign, consumed, closed or reentrant entries.
 
 Verification must complete synchronously with no value or raise; asynchronous
 functions/callable objects and returned awaitables cannot grant permission.
+Generator functions/callable objects and returned generator objects also refuse:
+the port cannot defer native work until iteration after the admitted call. Returned
+generators close without executing their suspended bodies.
 Unexecuted coroutine results close before refusal. Escaped verification/admission
 failure closes this custody and retains all original entries for the enclosing
 host recovery protocol; no reset/retry method is exposed. Cancellation/expiry can
 close custody through the original producer. Actual native authority/lifetime,
 account and outcome classification still belong to the original qualified port.
 
-Five synthetic Python test methods verify original input correspondence, repeated/
+Six synthetic Python test methods verify original input correspondence, repeated/
 copied/foreign ticket refusal, no repeat after either callback failure, closure of
 pre-registered later tickets, reentrancy, finite capacity and async/nonvoid check
-refusal. They establish host registry behavior only, not native authority or an
+refusal, plus deferred admission refusal with no deferred native effect. They
+establish host registry behavior only, not native authority or an
 implemented protected writer. Binding this component to original control/ordinal
 and native verification remains required; the four SQL allocator corrections are
 still outstanding. The source change adds a twelfth package module; earlier

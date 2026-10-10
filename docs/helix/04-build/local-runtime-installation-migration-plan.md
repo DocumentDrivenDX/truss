@@ -664,7 +664,7 @@ work. Record a precise unavailable owner input when encountered; broad statement
 that security must finish first cannot close, defer or reassign Truss's own work.
 
 The current installed-wheel component check now covers all12 Python modules and
-41 tests, including the five private admission-custody controls. The
+42 tests, including the six private admission-custody controls. The
 [installed-suite receipt](evidence/design-audit/python-current-installed-suite.json)
 verifies installed/wheel/source payload correspondence outside the checkout, with
 warnings treated as errors. This reused environment contains the pinned local

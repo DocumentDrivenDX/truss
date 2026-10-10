@@ -50,6 +50,29 @@ class AdmissionCustodyTests(unittest.TestCase):
         self.assertEqual(events,[])
         with self.assertRaises(AdmissionRefusal):custody.register_confirmed(producer,object())
 
+    def test_deferred_admission_never_escapes_custody(self):
+        producer=object();events=[];pending=[]
+        def deferred(*args):
+            events.append('deferred native effect')
+            yield 'native result'
+        class DeferredPort:
+            def __call__(self,*args):
+                yield from deferred(*args)
+        for callback in [deferred,DeferredPort()]:
+            with self.assertRaises(AdmissionRefusal):
+                AdmissionCustody(producer,1,lambda *args:None,callback)
+        def wrapped(*args):
+            result=deferred(*args);pending.append(result);return result
+        custody=AdmissionCustody(producer,2,lambda *args:None,wrapped)
+        ticket=custody.register_confirmed(producer,object())
+        later=custody.register_confirmed(producer,object())
+        with self.assertRaises(AdmissionRefusal):custody.admit_once(ticket,b'original')
+        self.assertIsNone(pending[0].gi_frame)
+        self.assertEqual(list(pending[0]),[])
+        with self.assertRaises(AdmissionRefusal):custody.admit_once(later,b'later')
+        self.assertEqual(events,[])
+        with self.assertRaises(AdmissionRefusal):custody.register_confirmed(producer,object())
+
     def test_foreign_custody_and_invalid_capacity_refuse(self):
         producer=object();custody=AdmissionCustody(producer,1,lambda *args:None,lambda *args:None)
         for value in [0,-1,True,1.0]:
