@@ -1,0 +1,610 @@
+{
+  "scope": "actual native generation trigger registration/disable drift plus cascade OLD images and proof invalidation/refusal/rollback; original UMF-exported tables/codecs, administrative fixture",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "actual-cascade-no-unfinished-operation-refusal",
+      "sqlstate": "55000",
+      "confirmedEffectRestoration": true
+    },
+    {
+      "id": "native-unfinished-operation-unique-index-refusal",
+      "sqlstate": "23505",
+      "constraint": "row_home_operation_unfinished_xid",
+      "restoredOriginalOperation": true
+    },
+    {
+      "id": "actual-cascade-exhausted-generation-refusal",
+      "sqlstate": "54000",
+      "confirmedEffectRestoration": true
+    },
+    {
+      "id": "complete-five-generation-trigger-native-registration",
+      "originalRows": [
+        [
+          "17361",
+          "runtime_key_generation",
+          "16919",
+          "object_key_bucket",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17362",
+          "runtime_reservation_generation",
+          "16951",
+          "object_key_reservation_bucket",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17359",
+          "runtime_node_generation",
+          "16772",
+          "row_home_node",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17360",
+          "runtime_scalar_generation",
+          "16805",
+          "row_home_scalar",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17358",
+          "runtime_state_generation",
+          "16742",
+          "row_home_state",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ]
+      ]
+    },
+    {
+      "id": "disabled-original-generation-trigger-drift",
+      "originalRows": [
+        [
+          "17361",
+          "runtime_key_generation",
+          "16919",
+          "object_key_bucket",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17362",
+          "runtime_reservation_generation",
+          "16951",
+          "object_key_reservation_bucket",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17359",
+          "runtime_node_generation",
+          "16772",
+          "row_home_node",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17360",
+          "runtime_scalar_generation",
+          "16805",
+          "row_home_scalar",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "D",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17358",
+          "runtime_state_generation",
+          "16742",
+          "row_home_state",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ]
+      ]
+    },
+    {
+      "id": "disabled-trigger-actual-write-leaves-operation-proofs-stale",
+      "originalScalarCells": [
+        [
+          "independent-disabled-trigger-control"
+        ]
+      ],
+      "originalOperationCells": [
+        [
+          "row_sealed",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "control": "administrative trigger disable; drift must close publication"
+    },
+    {
+      "id": "confirmed-trigger-and-canonical-value-restoration",
+      "originalRows": [
+        [
+          "17361",
+          "runtime_key_generation",
+          "16919",
+          "object_key_bucket",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17362",
+          "runtime_reservation_generation",
+          "16951",
+          "object_key_reservation_bucket",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17359",
+          "runtime_node_generation",
+          "16772",
+          "row_home_node",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17360",
+          "runtime_scalar_generation",
+          "16805",
+          "row_home_scalar",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ],
+        [
+          "17358",
+          "runtime_state_generation",
+          "16742",
+          "row_home_state",
+          "17357",
+          "runtime_observe_operation_generation",
+          "29",
+          "A",
+          false,
+          false,
+          false,
+          "0",
+          "",
+          "0",
+          "0",
+          null
+        ]
+      ]
+    },
+    {
+      "id": "501/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "735",
+        "501",
+        "601",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000025900000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "735",
+        "501",
+        "601",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002590000001900000006737472696e67000000190000000c6f626a6563742d76616c756500000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_state",
+      "actualRelationOid": "16742",
+      "originalEvent": [
+        "row_home_state",
+        "16742",
+        "DELETE",
+        "735",
+        "501",
+        null,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101",
+        false,
+        null,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f500000019000000066f626a6563740000001400000008000000000000006400000017000000040000000100000014ffffffff00000017ffffffff00000017000000040000000100000017000000040000006500000014000000080000000000000259000000110000000101000000110000000102000000110000000103000000110000000104"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_state",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "735",
+        "502",
+        "602",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000025a00000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "735",
+        "502",
+        "602",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000025a0000001900000006737472696e67000000190000000a656467652d76616c756500000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_state",
+      "actualRelationOid": "16742",
+      "originalEvent": [
+        "row_home_state",
+        "16742",
+        "DELETE",
+        "735",
+        "502",
+        null,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301",
+        false,
+        null,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f600000019000000046564676500000014ffffffff00000017ffffffff0000001400000008000000000000006400000017000000040000000a00000017000000040000000300000017000000040000012d0000001400000008000000000000025a000000110000000101000000110000000102000000110000000103000000110000000104"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_state",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "actual-old-image-missing-retained-state-refusal",
+      "refused": true
+    },
+    {
+      "id": "native-input-projection-conflicting-node-state-refusal",
+      "refused": true,
+      "control": "corrupted projection, not a native row or constraint violation"
+    },
+    {
+      "id": "complete-state-node-scalar-cascade",
+      "remainingRows": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "six-native-cascade-events-reset-operation-proofs",
+      "originalReturnedCells": [
+        [
+          "7",
+          "admitted",
+          "6",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "confirmed-operation-generation-proof-restoration",
+      "originalReturnedCells": [
+        [
+          "row_sealed",
+          "0",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "id": "confirmed-savepoint-restoration",
+      "restoredRows": [
+        2,
+        2,
+        2
+      ],
+      "writerXid": "735",
+      "eventRows": 0
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/row-event-image-attribution-probe.sql": "78a72bc36838562cb52123247e4cf2180c56f5a87219fec633995b0dd61eb030",
+    "docs/helix/04-build/evidence/design-audit/row-image-codec-preflight-source.owner-export.sql": "cf3926a6d1447eb0e5d21353252b7f5a43ef868d2f759d0ecd3b39784e348549",
+    "packages/python/src/truss/_row_image.py": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9",
+    "packages/python/src/truss/_row_event_attribution.py": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b",
+    "packages/postgresql/native/operation-generation-observer.sql": "ee808418b7e5d9f3f6943ce8c9873a92a20f4accd6116dc1d79e1a807b9fa37f"
+  },
+  "producerSha256": "1241998993f417c16c67b2dd63fd1fb340017e652136b1608c388d6801782035",
+  "rowTouchObserverQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Probe captures complete native OLD images plus typed association fields; underlying native numeric/temporal logical semantics remain independently admitted",
+    "Retained prestate is manually snapshotted fixture data, not original protected prestate/admission/authority producer",
+    "Both object and edge IDs100 retain distinct kind/discriminator/property owner; edge discriminator10 is not property owner3",
+    "Existing operation generation trigger composed with six actual cascade events; no touch/capacity update, native callable role/ACL closure, full resources or seven semantic body realization",
+    "Finite PostgreSQL16.15 fixture, not all cascade/reparenting/type/deployment profiles"
+  ]
+}

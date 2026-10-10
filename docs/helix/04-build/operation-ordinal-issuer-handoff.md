@@ -1494,3 +1494,15 @@ these complete identities/definitions and compare both membership directions;
 matching selector/version labels alone is insufficient. The finite administrative
 helper subset remains separate from complete installed public/private/admin
 closure, dynamic dependency admission and security-owner coherent-cut authority.
+
+### Generation trigger inventory and drift consequence (2026-10-10)
+
+The [25-check native trigger experiment](evidence/design-audit/generation-trigger-drift-native.json)
+retains exact five-trigger native registration and actual disable drift. With
+the scalar generation trigger disabled administratively, a canonical UPDATE
+leaves old operation proofs unchanged. This validates PA01/PA05's requirement
+for independent complete trigger coverage and protected cut/final freshness: a
+phase/generation label cannot certify effects when the installed producer drifted.
+Rollback restores both native trigger inventory and canonical value. Complete
+ordinary/admin privilege and installation publication enforcement remain open;
+this probe is not that enforcement. Existing21-check cascade receipt is retained.

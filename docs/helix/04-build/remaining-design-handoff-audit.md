@@ -1786,3 +1786,24 @@ Wheel digest, full module/test source pins and retained test log distinguish thi
 0.0.1.dev0 checkpoint from historical wheels of the same experimental version.
 The wheel remains unpublished and public exports remain lifecycle-only; full
 engine/installation/managed profile release gates are unchanged.
+
+### Native generation trigger drift — 2026-10-10
+
+The [generation trigger receipt](evidence/design-audit/generation-trigger-drift-native.json)
+passes25 observations. It checks all five selected native generation triggers:
+exact relation/routine OIDs and names, row AFTER INSERT/UPDATE/DELETE flags29,
+ALWAYS enabled state, no internal/deferrable/initially-deferred flags, zero
+arguments/constraint/parent identities and no WHEN expression. The actual
+administrative disable control is visible as modeD. A canonical scalar UPDATE
+then succeeds while operation proofs remain stale, demonstrating the required
+publication refusal consequence of that installed drift. Confirmed rollback
+restores exact trigger inventory and original scalar value; the existing cascade
+invalidation/refusal/rollback controls still pass afterward.
+
+This is deliberate administrative bypass evidence, not an ordinary-consumer
+permission flaw or proof that current production publication detects it. The
+selected temporary five-trigger subset is not complete release trigger/partition/
+indirect callable coverage. Protected coherent-cut/freshness, effective DDL
+rights/exclusions and complete independent installation observer remain missing.
+A cached marker, version or proof generation cannot override trigger drift.
+No public readiness or seven-body acceptance gate changes.
