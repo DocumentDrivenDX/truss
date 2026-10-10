@@ -1,0 +1,40 @@
+{
+  "scope": "Read-only unfinished owner working-source review; no execution or API adoption",
+  "ownerHead": "94b2de5e303fe53f0c9432458119b6fe1eef187c",
+  "ownerStatus": " M crates/weft-core/src/compile.rs\n?? crates/weft-core/src/security_backend.rs\n?? crates/weft-core/tests/security_admission.rs\n",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_backend.rs",
+      "sha256": "0ec9dc25e46481dc809c8e410af820e55456251c8b22a6914f4cbd4dbe5dee56"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/compile.rs",
+      "sha256": "0f895dbdd722305b258323955edfe440581e0c4698edce0f7f256588e4395523"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/tests/security_admission.rs",
+      "sha256": "644cfc83961aa9154e311e013b8b8c0d5c5b38e37099efc1732720c52468a0a6"
+    }
+  ],
+  "observations": [
+    "Explicit SecurityRegistry distinct from ordinary SQL emitters",
+    "Context constructor private; immutable original catalog/plan/query/profile references",
+    "Exact security source tuple and backend/version/target registration checks",
+    "Compile0.4 factory follows source/query admission; lowering remains WFT-SECURITY-LOWERING-UNSUPPORTED",
+    "SecurityBackend.lower is declared but inspected compile path does not invoke it"
+  ],
+  "ownerThreadSnapshot": {
+    "threadId": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+    "turnId": "01a123ee-ac94-7191-b75e-a0964eaf0991",
+    "status": "inProgress",
+    "cursor": "d97d7a08-f43f-4536-ba32-a413dd7db783:69"
+  },
+  "nativeQualified": false,
+  "independentTestsRun": false,
+  "adopted": false,
+  "remaining": [
+    "Complete physical/result/dependency coverage validation",
+    "Exact committed owner source/build/public Python and TypeScript embedding interfaces",
+    "Current Truss installed native authority/publication/account qualification"
+  ]
+}

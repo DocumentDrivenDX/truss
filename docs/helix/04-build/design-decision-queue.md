@@ -51,6 +51,35 @@ This table distinguishes unresolved selection from future execution evidence. It
 
 The next full-scope audit must test semantic agreement among requirements, contracts, story designs and planned independent scenarios, not merely refresh source hashes. The current reconciliations cover catalog identity/reporting, write ownership, journal producer ownership, feed freshness, history retention, paging consistency, pooling and import recovery. Other governed surfaces remain to be checked. No component count, schema browser rendering or unexecuted test schedule proves complete design or release qualification.
 
+## Compiler security registration integration dependency
+
+The [working-source review](evidence/design-audit/weft-security-registration-working-source-review.json)
+observes Weft's unfinished compile0.4 security registration separately from its
+ordinary SQL emitter registry. The exact source tuple, original immutable
+catalog/policy/query/profile context and explicit backend/version/target lookup
+are owner responsibilities. Truss must consume that eventual public embedding
+contract rather than insert policy lowering into its frozen f05f2df adapter or
+register a generic emitter as a security backend.
+
+The inspected path admits original source/query context and invokes the registry
+factory, but deliberately returns WFT-SECURITY-LOWERING-UNSUPPORTED before calling
+the backend's lower method. A declared lower trait, valid manifest or factory
+invocation therefore supplies no executable secure SQL. The source is dirty and
+untracked owner work, not a committed release or adopted Truss compiler tuple.
+No independent tests were run during this read-only review.
+
+Before the compiled security path is scheduled as executable, require a committed
+owner interface/build and complete physical source, result and dependency coverage
+validation, plus public Python/TypeScript embedding qualification. Truss then
+binds the same original program to its installed authority cut, finite account,
+native execution and final publication drain. Test invalid source never dispatches,
+valid source dispatches once, foreign registration/context refuses, incomplete
+coverage returns no executable SQL, and no ordinary-emitter fallback occurs.
+These are integration exit schedules, not passing tests. Direct key/edge work
+continues against the existing security-owned read protocol and minimum native
+handoff; this compiler draft does not introduce a new product decision or require
+waiting for unrelated backend support.
+
 ## Acceptance decision versus producer work reconciliation — 2026-10-09
 
 The owner selected separate immutable acceptance reports. That product choice is
