@@ -26,6 +26,14 @@ bundled PostgreSQL16.2 on the qualified macOS arm64 tuple. It performs no Truss
 installation or migration. Use a host-supplied connection for external PostgreSQL;
 pool configuration/operation belongs to the host.
 
+The explicit corrected candidate `pgserver==0.1.4+truss.pg16.15` is now accepted
+by LocalPostgres only when the native server reports16.15. RuntimeInfo and CLI
+output retain that actual package version. The paired published0.1.4/16.2 check
+remains separate; arbitrary package/server versions refuse. The corrected wheel
+is a private macOS27 arm64/Python3.11 build, not a published dependency. Install
+the verified wheel explicitly before the local extra; default package resolution
+still selects published0.1.4. Neither tuple installs Truss or qualifies R4/R5.
+
 See the [installation and migration execution plan](../../docs/helix/04-build/local-runtime-installation-migration-plan.md)
 for the complete delivery scope and independent acceptance scenarios.
 
@@ -57,7 +65,8 @@ caller exception. Use a new context to restart. Same-directory contexts refuse
 immediately through process-local and interprocess leases. Existing postmaster
 custody, nonempty non-PostgreSQL directories and incompatible major versions
 refuse without automatic retry, takeover or migration. The local candidate admits
-bundled16.2; other platform/version tuples still require qualification.
+bundled16.2 or the explicit corrected16.15 candidate; other platform/version
+tuples still require qualification.
 
 The experimental truss-toolkit0.0.1.dev0 wheel exposes this lifecycle component;
 it does not yet expose the complete Truss engine, catalog acceptance, mutation,

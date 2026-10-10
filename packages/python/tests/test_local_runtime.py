@@ -1,5 +1,6 @@
 """Native component tests: owned lifecycle, refusal custody, retained commit."""
 from pathlib import Path
+import importlib.metadata
 import subprocess
 import sys
 import tempfile
@@ -22,7 +23,10 @@ class LocalRuntimeTests(unittest.TestCase):
             runtime = LocalPostgres(directory)
             with self.assertRaisesRegex(ValueError, 'caller failure'):
                 with runtime:
-                    self.assertEqual(runtime.info.server_version, '16.2')
+                    package_version = importlib.metadata.version('pgserver')
+                    expected = {'0.1.4': '16.2', '0.1.4+truss.pg16.15': '16.15'}[package_version]
+                    self.assertEqual(runtime.info.server_version, expected)
+                    self.assertEqual(runtime.info.runtime_version, package_version)
                     self.assertEqual(runtime.info.truss_installation, 'not_checked')
                     self.assertEqual(query(runtime, "SELECT to_regnamespace('truss') IS NULL"), 't')
                     query(runtime, "CREATE TABLE persistence_probe(value text); INSERT INTO persistence_probe VALUES ('9223372036854775807');")

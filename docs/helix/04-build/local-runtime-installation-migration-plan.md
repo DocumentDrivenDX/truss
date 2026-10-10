@@ -153,6 +153,19 @@ implicit substitute. Continue the current original security composition and
 local runtime lifecycle/package integration rather than relabeling these passes
 as R4/R5 completion.
 
+LocalPostgres now recognizes exact package/server pairs0.1.4/16.2 and the explicit
+candidate0.1.4+truss.pg16.15/16.15. RuntimeInfo records the actual package version;
+unknown packages or mismatched native versions refuse. The
+[corrected installed-suite receipt](evidence/design-audit/python-corrected-runtime-installed-suite.json)
+passes all42 component tests with12 installed modules on macOS27 arm64/Python3.11,
+including the four native lifecycle tests and synthetic constructor-fault control.
+The same rebuilt Truss wheel also passes42 tests on the original published tuple
+in the separately retained
+[default component receipt](evidence/design-audit/python-current-installed-suite.json).
+The environments were reused/prepared earlier; these are not new clean-resolution
+claims. Corrected CLI signal checks remain outstanding. No default dependency,
+complete Truss installer or R4/R5 readiness is published by this lifecycle change.
+
 ## Ownership and profile selection
 
 Truss owns the Python package in this repository, installation bundles, migration

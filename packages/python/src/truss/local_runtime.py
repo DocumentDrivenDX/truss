@@ -57,8 +57,10 @@ class LocalPostgres:
         try:
             import pgserver
             import fasteners
-            if importlib.metadata.version('pgserver') != '0.1.4':
-                raise LocalRuntimeError('Expected pgserver0.1.4; install truss-toolkit[local]')
+            runtime_version = importlib.metadata.version('pgserver')
+            expected_server = {'0.1.4': '16.2', '0.1.4+truss.pg16.15': '16.15'}.get(runtime_version)
+            if expected_server is None:
+                raise LocalRuntimeError('Expected published pgserver0.1.4 or explicit corrected candidate')
         except (ImportError, importlib.metadata.PackageNotFoundError) as error:
             raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
         self.directory.parent.mkdir(parents=True, exist_ok=True)
@@ -89,9 +91,9 @@ class LocalPostgres:
                 [str(self.psql_path), self._server.get_uri(), '-X', '-A', '-t',
                  '-v', 'ON_ERROR_STOP=1', '-c', 'SHOW server_version'],
                 text=True, timeout=30).strip()
-            if version != '16.2':
+            if version != expected_server:
                 raise LocalRuntimeError(f'Unqualified bundled PostgreSQL version: {version}')
-            self._info = RuntimeInfo(self._server.get_uri(), self.directory, version)
+            self._info = RuntimeInfo(self._server.get_uri(), self.directory, version, runtime_version)
             return self
         except BaseException:
             self.close()
