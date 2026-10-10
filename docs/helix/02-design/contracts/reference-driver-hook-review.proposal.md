@@ -208,3 +208,27 @@ directory on the import path. The runtime tuple, source hashes and original fram
 bytes are retained; driverPortQualified remains false. Pre-ingress/account and
 original adoption/permission/cancellation/settlement integration still precede
 public driver support.
+
+
+### Corrected native failure and rejection observations
+
+The [post-capture failure](../../04-build/evidence/design-audit/pg8000-corrected-local-control-failure-native.json)
+and [server rejection](../../04-build/evidence/design-audit/pg8000-corrected-local-control-rejection-native.json)
+now run on the same selected pg8000 1.31.5/actual16.15 local tuple. Injected failure
+at original SAVEPOINT CommandComplete capture leaves the backend idle in transaction;
+the malformed negative control returns SQLSTATE42601 and ReadyForQuery E, leaving
+it idle in transaction (aborted). Both independently observe the pending write
+as uncommitted, enforce quarantine without another send, explicitly close the
+fixture socket, then separately observe backend termination and absent pending
+write. Client failure/quarantine therefore does not imply native termination.
+
+Historical16.2 receipts remain unchanged. Both checkers accept a corrected tuple
+and fresh receipt basename and refuse existing output before runtime startup.
+The same reused environment/driver-path composition as the successful control
+probe applies; no clean installed adapter claim follows. The callback injection
+is not arbitrary network loss and the malformed control is not a registered
+original savepoint. Original issuer/account/control authority, unknown COMMIT,
+durable recovery and complete deadline/containment profiles remain unqualified.
+Use these distinct actual states when implementing producer settlement rather
+than mapping every exception to rollback or treating a captured command as complete
+savepoint confirmation. Independent full driver/native integration remains required.
