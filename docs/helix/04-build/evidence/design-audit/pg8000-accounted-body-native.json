@@ -1,0 +1,316 @@
+{
+  "scope": "Original local control submissions plus native five-byte and empty-body messages with original command/ready frames captured at instance handlers; shared frame/slice payload account and conservative two core-copy charges exercised; no complete account, original savepoint authority or unknown-outcome qualification",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "serverVersion": "16.15",
+  "driver": "pg8000 1.31.5",
+  "driverCoreSha256": "cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26",
+  "controls": [
+    "CREATE PROCEDURE original_probe() LANGUAGE SQL AS $$ SELECT 1 $$",
+    "CALL original_probe()",
+    "BEGIN",
+    "SAVEPOINT original_probe",
+    "ROLLBACK TO SAVEPOINT original_probe",
+    "RELEASE SAVEPOINT original_probe",
+    "ROLLBACK"
+  ],
+  "frames": [
+    {
+      "cycle": "startup",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    },
+    {
+      "cycle": "0",
+      "kind": "C",
+      "hex": "43000000154352454154452050524f43454455524500"
+    },
+    {
+      "cycle": "0",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    },
+    {
+      "cycle": "1",
+      "kind": "C",
+      "hex": "430000000943414c4c00"
+    },
+    {
+      "cycle": "1",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    },
+    {
+      "cycle": "2",
+      "kind": "C",
+      "hex": "430000000a424547494e00"
+    },
+    {
+      "cycle": "2",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "3",
+      "kind": "C",
+      "hex": "430000000e53415645504f494e5400"
+    },
+    {
+      "cycle": "3",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "4",
+      "kind": "C",
+      "hex": "430000000d524f4c4c4241434b00"
+    },
+    {
+      "cycle": "4",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "5",
+      "kind": "C",
+      "hex": "430000000c52454c4541534500"
+    },
+    {
+      "cycle": "5",
+      "kind": "Z",
+      "hex": "5a0000000554"
+    },
+    {
+      "cycle": "6",
+      "kind": "C",
+      "hex": "430000000d524f4c4c4241434b00"
+    },
+    {
+      "cycle": "6",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    },
+    {
+      "cycle": "extended",
+      "kind": "1",
+      "hex": "3100000004"
+    },
+    {
+      "cycle": "extended",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    },
+    {
+      "cycle": "extended",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    },
+    {
+      "cycle": "extended",
+      "kind": "2",
+      "hex": "3200000004"
+    },
+    {
+      "cycle": "extended",
+      "kind": "C",
+      "hex": "430000000943414c4c00"
+    },
+    {
+      "cycle": "extended",
+      "kind": "Z",
+      "hex": "5a0000000549"
+    }
+  ],
+  "independentExpectedControlFrames": 20,
+  "nativeFiveByteBody": true,
+  "nativeEmptyBodies": [
+    "ParseComplete",
+    "BindComplete"
+  ],
+  "messageSizes": [
+    [
+      "R",
+      9
+    ],
+    [
+      "S",
+      24
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "S",
+      31
+    ],
+    [
+      "S",
+      28
+    ],
+    [
+      "S",
+      21
+    ],
+    [
+      "S",
+      23
+    ],
+    [
+      "S",
+      39
+    ],
+    [
+      "S",
+      27
+    ],
+    [
+      "S",
+      24
+    ],
+    [
+      "S",
+      36
+    ],
+    [
+      "S",
+      36
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "S",
+      26
+    ],
+    [
+      "K",
+      13
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      22
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      10
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      11
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      15
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      14
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      13
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "C",
+      14
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "1",
+      5
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "t",
+      7
+    ],
+    [
+      "n",
+      5
+    ],
+    [
+      "Z",
+      6
+    ],
+    [
+      "2",
+      5
+    ],
+    [
+      "C",
+      10
+    ],
+    [
+      "Z",
+      6
+    ]
+  ],
+  "driverPortQualified": false,
+  "payloadAccountAfterClose": [
+    3255,
+    0,
+    3255,
+    true
+  ],
+  "payloadAccountLimits": {
+    "live": 134217728,
+    "cumulative": 268435456,
+    "records": 1024
+  },
+  "installedTrussModuleSha256": {
+    "_accounted_receive.py": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78",
+    "_resource_account.py": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1"
+  },
+  "sourceSha256": {
+    "check_pg8000_accounted_body_native.py": "b92773ec5a3d56d057bb004059435e4187789bbd7637398a0710032e987f2e98",
+    "pg8000_instance_candidate.py": "0e3a6fb3860e9f2315711cc44957e841f54640c18214955f57c87a3c6fd437de",
+    "pg8000_accounted_instance_candidate.py": "ad4415635d2643dbd8cb48b34c85621444f9240334d9b5f020b726a0b226ee68",
+    "python_pg_receive_candidate.py": "fd9c23e3da2358cf56abc6b561c893e5d56dd9c95756fe18ec7510f52a55f4bb",
+    "python_pg_frame_candidate.py": "ed92bfc5240f17f3447f868fb88e3647cc4bd9583e21ed18ad88eb7de1eb9968"
+  },
+  "limitations": [
+    "Local trust only; no TLS/current-person admission",
+    "Probe cycle labels are not original issuer authority",
+    "No lost-response/cancellation/cleanup evidence",
+    "Payload account excludes transport/object overhead, core/parser/outbound and containment; no native preservation qualification"
+  ]
+}

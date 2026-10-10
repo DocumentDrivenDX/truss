@@ -373,3 +373,24 @@ durable recovery and complete deadline/containment profiles remain unqualified.
 Use these distinct actual states when implementing producer settlement rather
 than mapping every exception to rollback or treating a captured command as complete
 savepoint confirmation. Independent full driver/native integration remains required.
+
+
+### Native five-byte and empty-body compatibility
+
+The [native body receipt](../../04-build/evidence/design-audit/pg8000-accounted-body-native.json)
+uses the original pg8000 1.31.5 core on corrected local PostgreSQL 16.15. Seven
+simple submissions and one original `execute_unnamed` submission match twenty
+independently authored command/ready/parse/bind frames. `CALL` returns the actual
+five-byte `CALL\0` command body; extended execution returns empty ParseComplete
+and BindComplete bodies. The adapter's existing pending-header/body state handles
+these actual original-driver sequences, including the intervening empty NoData
+message. No length-only adapter correction was necessary.
+
+This qualifies compatibility for those sequences, not the six complete driver
+exits. The synthetic five-byte phase-alias observation remains historical evidence
+that length alone cannot establish original request authority; it does not prove
+a native driver failure. Probe cycle labels still grant no authority. The receipt
+retains original core/module/checker hashes, exact bytes and account closure
+`[3255, 0, 3255, true]`; `driverPortQualified` remains false. Original connection
+custody, phase/cycle binding, reentry refusal, loss/cancellation containment and
+settlement qualification remain required before public installation support.

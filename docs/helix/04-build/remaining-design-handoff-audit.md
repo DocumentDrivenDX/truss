@@ -724,3 +724,21 @@ is now retained as its own PY-03/04 negative case, alongside authenticated nativ
 actor and preserved action-extension positives. Mere actor/metadata separation
 cannot replace that required refusal. Exact claim surface and origin admission
 remain security-owner profile outputs; no working security files were changed.
+
+
+### Accepted trust boundary: resumed native driver work
+
+The owner's renewed approval retains ADR-008's trusted embedding host/registered
+adapter and minimum original security handoff. It does not require waiting for
+unrelated security capabilities, nor permit replacing authenticated actor/current
+authority with supplied metadata. P1 installation and initial Python operations
+continue against that boundary.
+
+The [native body probe](evidence/design-audit/pg8000-accounted-body-native.json)
+now checks actual original pg8000 simple/extended execution on PostgreSQL 16.15:
+twenty independent frame expectations pass, including five-byte CommandComplete
+and empty ParseComplete/BindComplete bodies. Existing pending-body state works
+for these sequences; the earlier synthetic phase alias is not a demonstrated
+native failure. Full original phase/connection authority and failure/settlement
+qualification remain open. This narrow result does not supply protected routine
+bodies or change the forty-nine missing installation bindings.
