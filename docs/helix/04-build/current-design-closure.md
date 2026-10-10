@@ -76,6 +76,17 @@ boundary remains incomplete; neither source capture nor schema compilation
 adopts a release profile. Its reproducible checkers refuse changed original
 membership and unsupported schema reference scopes.
 
+The current capture has now been refreshed for two inspected changes:
+CONTRACT-008's confirmed-commit/unverified-readiness branch, and the consumer read
+handoff's traversal necessity and committed Weft0.3 reviews. Nine review-shape
+controls, twenty-eight membership controls, complete captured-source byte
+comparison and the same local schema closures (11/8/2/1) pass again. Python
+package ownership is recorded as settled in this inventory; complete language,
+driver, security, resource and committed consumer interchange remain incomplete.
+All seven authoring/review/native dispositions retain their original incomplete
+states. This is current inventory fidelity, not complete transitive composition
+or successful native installation.
+
 The inventory's remaining-work wording now separates authored semantic/profile
 selection from implementation and native qualification. Existing A2 and M2–M5
 procedures are not missing designs merely because their producers/executors are
