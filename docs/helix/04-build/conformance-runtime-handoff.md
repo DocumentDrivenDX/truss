@@ -354,6 +354,23 @@ controls or changes to the consumer runner.
 
 ### Consumer reached-result compatibility gap
 
+**Current source resolution:** the frozen2026-10-09 revised corpus renames the
+old case to `freshness.unissued-token-is-invalid`. Its two original inputs remain
+`$foreign` and `garbage`, and each now expects `error: Invalid`. Retain the revised
+case identity and bytes; do not preserve the old ID by silently rewriting source.
+The [revision snapshot](evidence/consumer-revision-2026-10-09/README.md) is current
+input authority for this mapping, while the original review below is historical.
+The expectation conflict is resolved in source, not qualified by native execution.
+Malformed/proven-never-issued classification, unavailable evidence, security-safe
+projection and qualified valid false-to-true remain separate native cases under
+[the reached contract](../02-design/contracts/receipt-position-and-reached.proposal.md).
+A missing receipt row alone cannot prove never-issued or not-yet-included. Map
+semantic Invalid without erasing an execution-unknown/recovery outcome; complete
+consumer/native corpus execution is still required.
+
+The following paragraphs retain the previous source mismatch and proposal for
+historical review; their request for source-owner resolution is superseded above.
+
 The [original source review](evidence/design-audit/consumer-reached-compatibility-source-review.json)
 shows that `freshness.unissued-token-is-not-reached-by-a-replica` expects
 `false` for both `$foreign` and literal `garbage`. The reviewed harness supplies
