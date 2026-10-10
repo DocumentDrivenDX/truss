@@ -92,6 +92,17 @@ P0 has identified a concrete prerequisite, not completed native admission/securi
 integration. Corrected packaging is Truss-owned work and can proceed without a
 new product decision or completion of every security-owner case.
 
+The [corrected build inputs](evidence/design-audit/pgserver-corrected-build-inputs.json)
+pin pgserver upstream3b227607 and the official PostgreSQL16.15 source archive,
+including its independently fetched published SHA256. A disposable native build
+has started using the upstream source-only postgres target, with explicit
+--without-readline/--without-icu configuration. It does not include pgvector;
+that is an explicit candidate distribution difference, not an inferred Truss
+extension requirement or an identical upstream wheel. The planned local version
+0.1.4+truss.pg16.15 distinguishes Truss's candidate package from published0.1.4.
+These are build inputs, not build success or a shipped dependency change. Do not
+alter the default package pin until installed wheel/native checks qualify it.
+
 ## Ownership and profile selection
 
 Truss owns the Python package in this repository, installation bundles, migration
