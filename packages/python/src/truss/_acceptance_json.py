@@ -13,9 +13,26 @@ class AcceptanceJsonError(ValueError):
 
 
 def decode_acceptance_json(original: bytes):
+    """Original 1-MiB acceptance grammar/work profile; unchanged limits."""
+    return _decode_numeric_free(original, 1_048_576, 2_000_000)
+
+
+def decode_row_operation_json(original: bytes):
+    """Private proposed 8-MiB custody syntax profile; not body/native admission.
+
+    Shares strict Unicode, duplicate-member and numeric-free grammar. The fixed
+    40-million logical work bound permits the full byte ceiling, including token
+    decoding charges. Existing node/depth/array limits remain unchanged. Actual
+    allocator/decoder/hash workspace and original resource-account custody are
+    separate qualification obligations. The caller retains original bytes.
+    """
+    return _decode_numeric_free(original, 8_388_608, 40_000_000)
+
+
+def _decode_numeric_free(original: bytes, maximum_bytes: int, maximum_work: int):
     if type(original) is not bytes:
         raise AcceptanceJsonError("grammar")
-    if len(original) > 1_048_576:
+    if len(original) > maximum_bytes:
         raise AcceptanceJsonError("resource")
     index, nodes, work = 0, 0, len(original)
     stack = []
@@ -27,7 +44,7 @@ def decode_acceptance_json(original: bytes):
 
     def charge(amount):
         nonlocal work
-        if work > 2_000_000 - amount:
+        if work > maximum_work - amount:
             refuse("resource")
         work += amount
 

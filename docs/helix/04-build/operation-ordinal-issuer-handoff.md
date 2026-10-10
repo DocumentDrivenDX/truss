@@ -709,3 +709,30 @@ create authority or reuse an ordinal after rollback. Connect each model transiti
 to the actual installed source/native matrix case. An abstract invariant or an
 owner's compiler lineage proof cannot establish the missing protected native
 handoff, write authority or publication lifetime.
+
+## Python contributing-operation syntax profile
+
+The private `_acceptance_json.decode_row_operation_json` now provides an explicit
+proposed 8-MiB numeric-free syntax profile for the original touch contributing-
+operation carrier. It shares the strict duplicate-key/Unicode scanner with the
+unchanged 1-MiB acceptance profile, with a fixed 40-million logical-work ceiling;
+node/depth/array limits remain 100,000/128/4,096. The
+[source regression receipt](evidence/design-audit/python-row-operation-json-source.json)
+records 76 passing Python source tests, including five focused full-byte-bound,
+profile-separation, ordered-identity, hostile-grammar and array/input controls.
+
+Syntax decoding does not admit the closed body, profile/artifact hashes, unique
+operation identities, contiguous touch-local positions or full original native
+registry/effect/authority correspondence. The ordered-identity witness deliberately
+uses an incomplete body to prove only that syntax preserves positions 0/1 and
+identities representing native 7/11; it is not a valid admitted custody manifest.
+The host retains original immutable bytes rather than reserializing the decoded
+projection. Caller-supplied identity strings remain unauthenticated.
+
+Next compose the closed original body validator and actual original registry
+resolution at the canonical observer boundary. Retain independent full-row native
+framing limits: an 8-MiB JSON body does not imply the entire row fits the 8-MiB codec
+ceiling after its other cells and framing overhead. Logical scanner work does not
+qualify actual allocator/decoder workspace, deadline or original account admission.
+No public API, installed-wheel result or seven-body readiness follows from this
+private source component.
