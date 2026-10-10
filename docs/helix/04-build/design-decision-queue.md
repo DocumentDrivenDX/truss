@@ -53,6 +53,32 @@ The next full-scope audit must test semantic agreement among requirements, contr
 
 ## Compiler security registration integration dependency
 
+### Committed LEFT JOIN and distribution review — 2026-10-10
+
+Fresh origin checks retain UMF322b193 and advance Weft to be49fff. The
+[committed review](evidence/design-audit/weft-be49fff-left-join-distribution-review.json)
+verifies the public index's three manifest/executable/assembly-custody length and
+hash pins against original committed payloads without executing the binary.
+The shipped realization remains an explicitly selected candidate target; its
+index membership is not Truss PostgreSQL/Python installation authority.
+
+Weft's new LEFT JOIN contract keeps unmatched relational absence distinct from
+original source absence and matched explicit null. Preserve that distinction in
+Truss's complete logical-value contract: an absent Item.note cannot be inferred
+from an unmatched join or coerced into null. Its sentinel comes from an originally
+proven non-null physical identity, and full match-integrity/source/publication
+obligations apply even when no right output is selected. Duplicate occurrences
+remain a bag; no deduplication repairs unsupported relationship semantics.
+
+This profile is Ashlar/Databricks0.3. The committed PostgreSQL changes set the new
+representation member to None and do not activate LEFT JOIN. The Python bridge
+source is unchanged; availability of a new Rust feature does not select a Truss
+wheel/build. Retain adopted f05f2df and the original consumer80/10 frontier until
+an exact Truss mapping/result/account/security/native composition qualifies.
+Required relationship predicates and complete note projection remain implementation
+and owner-interface exits; this upstream candidate does not close them. Secure
+registration below is separate unfinished working-source evidence.
+
 The [working-source review](evidence/design-audit/weft-security-registration-working-source-review.json)
 observes Weft's unfinished compile0.4 security registration separately from its
 ordinary SQL emitter registry. The exact source tuple, original immutable
