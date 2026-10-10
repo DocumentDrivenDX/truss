@@ -830,3 +830,46 @@ publication. Driver qualification and installer readiness remain false; no
 acceptance criteria are promoted. The next implementation composition must add
 original artifact/authority admission and the protected native guard inventory
 before exposing an installed mutation API.
+
+
+## Native capacity-ledger exclusion checkpoint — 2026-10-10
+
+The [original-ledger native receipt](evidence/design-audit/capacity-ledger-native-exclusion.json)
+passes six observations on corrected local PostgreSQL16.15. The checker executes
+both original table and parameterized fresh-initialization sources, retaining the
+complete layout-definition and resource-profile bytes and comparing every
+returned ledger cell. Two actual connections demonstrate that a singleton
+`FOR UPDATE` lock acquired before a child savepoint survives rollback of that
+child. The contender receives native55P03 under a250ms local lock timeout,
+restores its savepoint without automatic resubmission, and reads unchanged
+counters. Only after explicit owner transaction rollback does a separately
+submitted contender statement acquire the ledger. Complete original ledger
+bytes and counters remain unchanged. A2s statement timeout bounds the fixture
+statement; these fixture wait limits do not select release runtime defaults.
+
+This confirms CONTRACT-009's documented serialization cost at the proposed
+ledger: an operation-local rollback cannot release an earlier ledger lock.
+The host controls the remaining transaction lifetime, so caller-owned idle time
+cannot be advertised as bounded by an operation deadline. Writer scheduling must
+allow the first admitted transaction to terminate before waiting writers can
+acquire capacity; do not place a barrier requiring all writers to hold this
+singleton concurrently. Refusal recovery must preserve prior caller work and
+charge the original account, without internal retry.
+
+The isolated administrative fixture does not prove fresh complete touch scope,
+head-before-capacity ordering, private ownership/grants, native reservation
+identity, operation attribution, exact consumption/settlement or whole-workload
+performance. The original table explicitly lacks the reservation registry and
+procedures. P1 must implement that registry and its original transaction/issued
+ordinal/profile custody before observers can consume capacity. Native guards
+cannot replace it with process-local counters, an unlocked COUNT, or acquisition
+of the ledger after lower owner/key locks. Keep original capacity and operation
+proof changes inside the same confirmed operation containment; preserve spent
+host work across rollback. Installer readiness and native reservation
+qualification remain false, with no promoted acceptance cases.
+
+Reproduce with the corrected local environment and pg8000 dependency path used
+by the original admission checker, running
+`check_capacity_ledger_native.py <fresh-receipt-basename.json>` from the evidence
+directory on an isolated server. The receipt pins every original source and the
+checker; it introduces no installed schema/profile version or new public API.
