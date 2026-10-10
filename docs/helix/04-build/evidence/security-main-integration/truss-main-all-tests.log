@@ -1,0 +1,719 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/catalog-extension-inventory.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
+3 | import {collectCatalogExtensionInventory} from '../packages/umf-bun/src/catalog-extension-inventory';
+4 | import {collectCatalogExtensionArtifacts} from '../packages/umf-bun/src/catalog-extension-artifacts';
+5 | const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original producer required');
+                                                                       ^
+error: Original producer required
+      at /private/tmp/truss-security-main-integration/tests/catalog-extension-inventory.test.ts:5:68
+-------------------------------
+
+
+tests/catalog-execution-report-custody.test.ts:
+(pass) unissued execution report candidates refuse before any native query [0.32ms]
+
+tests/umf-field-assertion-producer.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {loadUmfProducer,loadUmfFieldAssertionProducer} from '../packages/umf-bun/src/index';
+3 | const recordDir=process.env.TRUSS_UMF_PRODUCER,fieldDir=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;
+4 | if(!recordDir||!fieldDir)throw Error('Both original producer directories required');
+                                   ^
+error: Both original producer directories required
+      at /private/tmp/truss-security-main-integration/tests/umf-field-assertion-producer.test.ts:4:32
+-------------------------------
+
+
+tests/catalog-transition-correspondence.test.ts:
+(pass) complete source and interpretation target correspond independently [0.32ms]
+(pass) restored original does not admit a later edited target [0.09ms]
+(pass) every original source occurrence remains exact including unknown content [0.11ms]
+
+tests/catalog-core-assertion-identities.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+58 |  return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
+59 |   inspectSchemaProperties:captured.inspectCoreSchemaProperties,
+60 |   inspectKeys:captured.inspectCoreKeys,inspectRelationships:captured.inspectCoreRelationships}),'declarations');
+61 | }
+62 | async function loadPinnedFunctions(directory:string,revision:string,mode:string,names:readonly string[]){
+63 |  const root=resolve(directory);const manifest=await Bun.file(root+'/producer-manifest.json').json();
+                 ^
+TypeError: The "paths[0]" property must be of type string, got undefined
+ code: "ERR_INVALID_ARG_TYPE"
+
+      at loadPinnedFunctions (/private/tmp/truss-security-main-integration/packages/umf-bun/src/index.ts:63:13)
+      at loadUmfProducer (/private/tmp/truss-security-main-integration/packages/umf-bun/src/index.ts:12:30)
+      at createCatalogInputPreparation (/private/tmp/truss-security-main-integration/packages/umf-bun/src/catalog-input.ts:15:94)
+-------------------------------
+
+
+tests/decode-budget.test.ts:
+(pass) individually valid fields exhaust shared budget before second materialization [1.08ms]
+(pass) shared node cap and immutable snapshots [0.34ms]
+(pass) routine custody and projections consume one caller-owned ledger [0.28ms]
+
+tests/acceptance-json.test.ts:
+(pass) empty object [0.86ms]
+(pass) null boolean string array [0.43ms]
+(pass) legal whitespace [0.16ms]
+(pass) inert prototype name [0.13ms]
+(pass) valid escaped surrogate pair [0.07ms]
+(pass) distinct normalization forms [0.05ms]
+(pass) escaped equivalent duplicate [0.15ms]
+(pass) unpaired high surrogate [0.02ms]
+(pass) unpaired low surrogate [0.01ms]
+(pass) overlong utf8 [0.16ms]
+(pass) surrogate utf8 [0.04ms]
+(pass) out of range utf8 [0.02ms]
+(pass) outer number [0.02ms]
+(pass) trailing data [0.04ms]
+(pass) trailing comma [0.02ms]
+(pass) bom [0.03ms]
+(pass) comment [0.02ms]
+(pass) opaque numeric artifact base64 [0.02ms]
+(pass) complete original input fixture preserves all native and converted custody [14.77ms]
+(pass) selected depth and container limits refuse before an over-limit output [3.83ms]
+(pass) raw byte and cumulative duplicate-name work are conjunctive ceilings [8.05ms]
+(pass) exact node ceiling counts containers and every scalar occurrence [35.86ms]
+
+tests/catalog-report-document-basis.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {collectCatalogReportDocumentBasis} from '../packages/umf-bun/src/catalog-report-document-basis';
+3 | import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
+4 | const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original producer required');
+                                                                       ^
+error: Original producer required
+      at /private/tmp/truss-security-main-integration/tests/catalog-report-document-basis.test.ts:4:68
+-------------------------------
+
+
+tests/composed-report-handoff.test.ts:
+(pass) explicit composed codec preserves nineteen fields and full original bytes [15.58ms]
+(pass) baseline and composed versions cannot silently substitute for each other [3.06ms]
+(pass) rebind-only selected event version and exact owner-local key shape remain closed [1.54ms]
+(pass) codec scope cannot establish completeness or native transition meaning [0.91ms]
+(pass) every selected field is mandatory and unknown claims refuse [8.09ms]
+(pass) prepared byte custody survives caller mutation and rejects oversized wire [1.95ms]
+
+tests/catalog-endpoint-intent-basis.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {createCatalogEndpointRecords} from '../packages/umf-bun/src/catalog-endpoint-records';
+3 | import {createCatalogEndpointDocumentOrder} from '../packages/umf-bun/src/catalog-endpoint-document-order';
+4 | import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
+5 | import {createCatalogEndpointIntentBasis} from '../packages/umf-bun/src/catalog-endpoint-intent-basis';
+6 | const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original Record producer directory required');
+                                                                       ^
+error: Original Record producer directory required
+      at /private/tmp/truss-security-main-integration/tests/catalog-endpoint-intent-basis.test.ts:6:68
+-------------------------------
+
+
+tests/engine-executor.test.ts:
+(pass) engine commit, exact cells and ended handle refusal [4.54ms]
+(pass) original callback exception follows confirmed rollback [0.18ms]
+(pass) unknown commit retains quarantined resource and never rolls back or releases [0.10ms]
+(pass) foreign adapter handle and unsupported adoption never touch native ports [0.07ms]
+(pass) invalid carrier domains refuse before native execution [0.33ms]
+(pass) native retry SQLSTATE cannot be cleared by a savepoint [0.24ms]
+(pass) confirmed commit rejection returns classified outcome after release [0.28ms]
+(pass) released savepoint refusal preserves the valid outer transaction [0.21ms]
+
+tests/operation-registry.test.ts:
+(pass) original registry row preserves exact numeric and byte carriers [0.42ms]
+(pass) foreign/duplicate/unassigned identities and malformed phases refuse [0.28ms]
+
+tests/pg-wire.test.ts:
+(pass) original command count text beyond host precision remains exact [0.60ms]
+(pass) raw data preserves NULL/empty/binary distinctions and frame boundaries [0.13ms]
+(pass) fragmented original frame forwards once only after full admission [0.41ms]
+(pass) oversized header refuses before body allocation or forwarding and remains closed [0.20ms]
+(pass) invalid text row refuses before forwarding to original parser [0.16ms]
+(pass) query completion requires original command then ready and matching SELECT rows [0.15ms]
+(pass) error response retains ordered fields and ends only on original ready [0.20ms]
+(pass) notice is retained without replacing original command completion [0.10ms]
+(pass) unnamed extended response requires parse/bind before no-data completion [0.12ms]
+(pass) matching command cannot conceal wrong original transaction status [0.12ms]
+
+tests/security-graph-source-lowering.test.ts:
+(pass) candidate association lowering carries local source validity and same-row field test [1.19ms]
+(pass) copied source or source metadata accessor cannot enter lowering [0.34ms]
+
+tests/canonical-report-handoff.test.ts:
+(pass) all seventeen report fields reach the native codec carrier without accepted authority [9.33ms]
+(pass) each missing complete-report field and extra acceptance claims refuse [3.34ms]
+(pass) numeric counts and projected assertion scope cannot become complete report codec input [0.68ms]
+(pass) shape-valid source and effect forgeries remain visibly codec-only [0.96ms]
+(pass) pinned 0.1 codec refuses proposed or guessed report versions without conversion [1.52ms]
+
+tests/layout-migration-corpus.test.ts:
+(pass) shared migration planning: declared-upgrade [0.93ms]
+(pass) shared migration planning: no-synthesized-intermediate-route [0.12ms]
+(pass) shared migration planning: at-target-is-metadata-only [0.09ms]
+(pass) shared migration planning: source-hash-mismatch [0.07ms]
+(pass) shared migration planning: foreign-document-family [0.07ms]
+(pass) shared migration planning: unregistered-target [0.07ms]
+(pass) shared migration planning: no-guessed-downgrade [0.08ms]
+(pass) shared migration planning: nontransactional-refusal [0.07ms]
+(pass) shared migration planning: broken-chain [0.19ms]
+(pass) shared migration planning: ambiguous-route [0.11ms]
+(pass) shared migration planning: duplicate-wire-member [0.03ms]
+(pass) shared migration planning: closed-members [0.04ms]
+(pass) shared migration planning: numeric-node
+(pass) shared migration planning: unselected-invalid-direction [0.06ms]
+(pass) shared migration planning: exact-large-version-components [0.07ms]
+(pass) shared migration planning: declared-complete-downgrade [0.10ms]
+(pass) shared migration planning: contradictory-recipe [0.05ms]
+(pass) shared migration planning: contradictory-procedure [0.04ms]
+(pass) shared migration planning: contradictory-procedure-at-target [0.05ms]
+(pass) shared migration planning: contradictory-recipe-unselected [0.05ms]
+(pass) shared migration planning: identical-recipe-reuse [0.06ms]
+(pass) shared migration planning: distinct-procedure-versions [0.08ms]
+(pass) shared migration planning: separate-artifact-roles [0.07ms]
+
+tests/artifacts.test.ts:
+(pass) original opaque UMF and unknown numeric meaning stay exact across asynchronous snapshot [1.16ms]
+(pass) original digest/canonical encoding and complete shared byte bounds refuse before success [0.67ms]
+
+tests/security-candidate-endpoint.test.ts:
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","elementId":"Ownership"},"resource"] [0.90ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","relationshipId":"WorksOn"},"staff"] [0.42ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","relationshipId":"WorksOn"},"project"] [0.22ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","elementId":"Ownership"},"project"] [0.29ms]
+(pass) ordered compound member and column carriers stay ordered [0.25ms]
+(pass) reflection refuses accessors without invoking them [0.03ms]
+(pass) Unicode scalar limits preserve supplementary characters [1.40ms]
+(pass) deep copied snapshots survive mutations of original inputs [0.12ms]
+(pass) dense array and native UTF8 column boundaries [0.99ms]
+(pass) nested data and array accessors refuse without invocation [0.11ms]
+
+tests/inert-assembly.test.ts:
+(pass) construction and selection preserve unverified status without touching injected native ports [1.50ms]
+(pass) invalid configuration and accessor metadata refuse before host calls or getter execution [0.20ms]
+(pass) source mutation cannot alter held configuration; incompatible recovery and unsupported assembly profiles refuse [0.48ms]
+
+tests/relationship-planning-ratio.test.ts:
+(pass) two-times threshold is inclusive and one exact unit above fails [1.37ms]
+(pass) nearest-rank p95 uses the 950th ordered value without mutating samples [0.68ms]
+(pass) missing, incomparable and below-resolution baselines cannot pass [0.58ms]
+(pass) sparse arrays refuse instead of skipping missing observations [0.48ms]
+
+tests/native-vector.test.ts:
+(pass) original independent CONTRACT-008 vectors [0.25ms]
+(pass) bounded exact parsing and immutable original spelling [0.20ms]
+
+tests/catalog-endpoint-source-references.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
+3 | import {resolveCatalogEndpointSuppliedSources} from '../packages/umf-bun/src/catalog-endpoint-source-references';
+4 | const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original Record producer directory required');
+                                                                       ^
+error: Original Record producer directory required
+      at /private/tmp/truss-security-main-integration/tests/catalog-endpoint-source-references.test.ts:4:68
+-------------------------------
+
+
+tests/native-array.test.ts:
+(pass) all original independent array vectors [0.23ms]
+(pass) escaping, complete shape, original scalar and budgets [0.26ms]
+
+tests/security-graph-source.test.ts:
+(pass) opaque edges explicitly omit association record and property fields [1.48ms]
+(pass) source issuance survives caller mutation and refuses copied source [0.11ms]
+(pass) metadata accessors never execute [0.04ms]
+(pass) custom collection iterators never execute [0.03ms]
+(pass) native metadata identifiers retain exact domain limits [0.12ms]
+(pass) unsupported domains, conflicting aliases and hidden metadata refuse [0.19ms]
+(pass) sparse or excessive candidate fields refuse [0.10ms]
+(pass) array proxy cannot grow captured length or invoke a length getter [0.13ms]
+(pass) endpoint keys refuse unissued sources and malformed exact namespace metadata [0.31ms]
+(pass) endpoint validity checks original typed object existence and live record metadata [0.08ms]
+(pass) endpoint key metadata is captured without accessor execution [0.04ms]
+
+tests/conformance-observation-coverage.test.ts:
+(pass) complete coverage permits ordering differences [0.24ms]
+(pass) empty expectations do not prove an empty native inventory [0.02ms]
+(pass) extra observations and duplicates cannot replace required checks [0.04ms]
+(pass) surface, step and boundary all participate in coverage [0.05ms]
+(pass) explicitly admitted no-observation procedure has empty coverage [0.01ms]
+(pass) performance evidence cannot be omitted or replaced by behavioral evidence [0.05ms]
+
+tests/acceptance-input-inspector.test.ts:
+(pass) complete original wire and all converted artifact bytes survive inspection [2.69ms]
+(pass) missing conversion source [0.50ms]
+(pass) damaged source digest [0.43ms]
+(pass) noncanonical identical artifact [0.25ms]
+(pass) duplicate original document [0.48ms]
+(pass) host number [0.21ms]
+(pass) documents-only input cannot become complete original admission [0.09ms]
+(pass) concurrently shared raw custody cannot enter inspection [0.02ms]
+
+tests/catalog-input-preparation.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
+3 | import {createAcceptanceProfileResolver} from '../packages/umf-bun/src/acceptance-profiles';
+4 | import {prepareDefaultCatalogHomes} from '../packages/umf-bun/src/catalog-default-homes';
+5 | const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original Record producer directory required');
+                                                                       ^
+error: Original Record producer directory required
+      at /private/tmp/truss-security-main-integration/tests/catalog-input-preparation.test.ts:5:68
+-------------------------------
+
+
+tests/operation-ordinal-issuer.test.ts:
+(pass) rollback-does-not-reuse [0.25ms]
+(pass) finite-exhaustion-does-not-wrap [0.01ms]
+(pass) unknown-control-closes-admission [0.01ms]
+(pass) cancellation-closes-admission
+(pass) wrong-custody-consumes-nothing
+(pass) ended-epoch-cannot-resume
+(pass) native maximum and exact argument types [0.06ms]
+
+tests/report-response-json-candidate.test.ts:
+(pass) frozen complete report response boundary preserves nineteen fields and request refusal [47.44ms]
+(pass) numeric nodes, duplicate keys and Unicode refusals remain [0.30ms]
+(pass) logical work exhaustion refuses distinct long keys below byte and member caps [5.60ms]
+(pass) complete response schema integration refuses every missing field and retains copied bytes [761.07ms]
+
+tests/module-policy-overhead.test.ts:
+(pass) exact threshold passes every original block without float conversion [1.62ms]
+(pass) one nanosecond over fails even with a passing pooled mean [0.95ms]
+(pass) negative differences are retained and results frozen [1.01ms]
+(pass) missing samples, extra fields and invalid exact durations invalidate [3.58ms]
+
+tests/security-graph-locator.test.ts:
+(pass) candidate exact graph key resolution @covers US-056-AC2 > joins full native typed owner without treating locator as business key [0.58ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > selects full namespace and bytes in exact type/key definition [0.29ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses missing materialization and unresolved typed owners [0.15ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses ambiguous full key ownership and duplicate storage/owner rows [0.22ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses malformed exact byte and native key carriers [0.26ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > retains exact native byte limits and refuses one byte over on either side [5.79ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > accepts 4096 complete bucket rows and rejects 4097 [19.59ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > bounds aggregate native key bytes before returning a selected match [50.82ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses caller bucket iterators/accessors without executing them [0.16ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > selects exact relationship and retains independently declared foreign edges [0.30ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > declared empty association is empty; missing selection is refusal [0.04ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses undeclared edge relationship and reversed endpoint roles [0.11ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > declared alternative endpoint types are preserved independently [0.04ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses duplicate, missing and malformed declarations [0.07ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses declaration iterators and accessors without invoking them [2.79ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > bounds dense original rows at exactly 4096 objects and edges [18.61ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses custom collection iterators without invoking them [0.20ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses sparse, accessor and extended collection carriers [0.17ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > normalizes absent input and rejects top-level accessors [0.09ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > retains exact large IDs and distinguishes equal IDs in different types [0.06ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > preserves directional roles rather than sorting endpoints [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > accepts signed native limits without rounding [0.02ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID -0 [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 01
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID +1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1.0
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1e3
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID  1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 9223372036854775808
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID -9223372036854775809
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1 [0.01ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1 [0.01ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID null
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type 2147483648 [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type -2147483649
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type 1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type null
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses unresolved typed endpoint despite a matching bare ID [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses duplicate objects and duplicate edge IDs [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > distinct edges with identical endpoints remain distinct [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > separate relationship IDs remain distinct [0.02ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > rejects accessors without invoking them [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > rejects extra meaning and oversized collections [0.07ms]
+
+tests/umf-value-runtime.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {loadUmfValueProducer,UMF_VALUE_SOURCE} from '../packages/umf-bun/src/index';
+3 | const directory=process.env.TRUSS_UMF_VALUE_PRODUCER;if(!directory)throw Error('Pinned original UMF value producer required');
+                                                                             ^
+error: Pinned original UMF value producer required
+      at /private/tmp/truss-security-main-integration/tests/umf-value-runtime.test.ts:3:74
+-------------------------------
+
+
+tests/catalog-document-order.test.ts:
+(pass) cycle_then_dependent [2.08ms]
+(pass) newly_ready_precedes_old_ready [2.44ms]
+(pass) shared_dependency [3.75ms]
+(pass) utf8_not_utf16 [0.19ms]
+(pass) normalization_and_prefix [0.35ms]
+(pass) emit_complete_component [0.16ms]
+(pass) duplicate_identity [0.04ms]
+(pass) missing_dependency
+(pass) bounds charge duplicate edges; exact UTF-8 refuses malformed identity [0.12ms]
+(pass) long chain uses checked work stacks and dependency-first output [6.86ms]
+(pass) oversized node and edge identities refuse before scanning or hashing their content [0.19ms]
+
+tests/layout-migration-plan.test.ts:
+(pass) explicit inert layout migration plans > preserves original declared recipe order and exact source/target [3.26ms]
+(pass) explicit inert layout migration plans > does not synthesize a route from compatible intermediate steps [0.19ms]
+(pass) explicit inert layout migration plans > at-target metadata issues no steps and claims no installation authority [0.36ms]
+(pass) explicit inert layout migration plans > refuses changed source fingerprints and foreign layout family [0.28ms]
+(pass) explicit inert layout migration plans > refuses duplicate routes and broken ordered chains [0.20ms]
+(pass) explicit inert layout migration plans > downgrades require an explicit complete reverse route [0.19ms]
+(pass) explicit inert layout migration plans > refuses nontransactional routes in the default planner profile [0.07ms]
+(pass) explicit inert layout migration plans > version components never round through JavaScript numbers [0.18ms]
+(pass) explicit inert layout migration plans > closed wire rejects duplicate members, numbers, extras and unbounded bytes [0.21ms]
+(pass) explicit inert layout migration plans > route direction must be an exact string even for unselected or at-target routes [1.07ms]
+(pass) explicit inert layout migration plans > direct target text observes the finite byte bound before version selection [0.32ms]
+
+tests/conformance-diagnostic-multiset.test.ts:
+(pass) order is informative while duplicate multiplicity remains normative [0.12ms]
+(pass) root and empty member paths remain different [0.01ms]
+(pass) equal paths cannot merge different sources, profiles or stages [0.02ms]
+(pass) severity, code and escaped pointer content cannot be rewritten [0.02ms]
+
+tests/catalog-report-preparation.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+4 | import {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer} from '../packages/umf-bun/src/index';
+5 | import {collectCatalogReportPreparation} from '../packages/umf-bun/src/catalog-report-preparation';
+6 | import {createCatalogReportCorrespondence} from '../packages/umf-bun/src/catalog-report-correspondence';
+7 | import {createAcceptanceProfileResolver} from '../packages/umf-bun/src/acceptance-profiles';
+8 | import {collectCatalogOriginalExecutionBasis} from '../packages/umf-bun/src/catalog-original-execution-basis';
+9 | const recordDir=process.env.TRUSS_UMF_PRODUCER,ownerDir=process.env.TRUSS_UMF_DECLARATION_PRODUCER,fieldDir=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;if(!recordDir||!ownerDir||!fieldDir)throw Error('All original owner directories required');
+                                                                                                                                                                                                         ^
+error: All original owner directories required
+      at /private/tmp/truss-security-main-integration/tests/catalog-report-preparation.test.ts:9:198
+-------------------------------
+
+
+tests/routine-carriers.test.ts:
+(pass) routine carriers preserve original opaque row and compare text semantics [3.02ms]
+(pass) mismatched original projections and vector bounds refuse [0.20ms]
+
+tests/source-json-preflight.test.ts:
+(pass) source numerical lexemes remain opaque even beyond JavaScript precision and range [0.19ms]
+(pass) strict numeric grammar rejects incomplete and non-JSON spellings [0.12ms]
+(pass) duplicate decoded names and malformed Unicode cannot reach the owner parser [0.10ms]
+(pass) source preflight retains structural bounds for numeric-heavy documents [1.87ms]
+
+tests/security-candidate-condition.test.ts:
+(pass) actual mixed compiler condition retains outer Project correlation [2.70ms]
+(pass) source negation retains three valued quantifier SQL [0.67ms]
+(pass) unknown profiles and substituted endpoint mappings refuse [4.01ms]
+(pass) lexical slot collisions refuse and unsupported terms do not disappear [0.63ms]
+(pass) array method substitution cannot turn False into True [0.06ms]
+(pass) packet, nested scan, identity and array getters never run [0.44ms]
+(pass) unused ambiguous endpoint declarations refuse eagerly [0.50ms]
+(pass) same nominal compound Key cannot cross ordered components [0.68ms]
+(pass) original Record Key metadata and all intrinsic mappings are checked [1.04ms]
+(pass) supplied falsy intrinsic carriers are never omissions [0.12ms]
+(pass) shared homes require disjoint compatible typed selectors [5.13ms]
+(pass) selector bounds and malformed unused carriers refuse eagerly [3.10ms]
+(pass) scalar channels retain field ownership, context separation and exact text equality [1.49ms]
+(pass) record scalar fields remain on the bound witness; opaque scalar access refuses [1.82ms]
+(pass) scalar declarations cannot contradict Key carriers or qualified field domains [1.55ms]
+(pass) numeric constants normalize exactly without value-number conversion [1.26ms]
+(pass) binary constants retain exact octets and empty value [0.27ms]
+(pass) native validity guards enclose negation and successful disjunctions [0.27ms]
+(pass) rule fold retains all matching effects and unknown precedence [0.75ms]
+(pass) splitting a qualified-field domain contradiction across rules refuses [0.19ms]
+(pass) disclosure SQL applies protected defaults and withhold before mask conflicts [5.26ms]
+(pass) disclosure SQL preserves ordered fields beyond the PostgreSQL function argument limit [3.98ms]
+(pass) issued opaque sources preserve local validity outside negation and successful siblings [0.61ms]
+(pass) copied graph SQL and home accessors cannot enter candidate condition lowering [0.24ms]
+(pass) native population identity survives keyed and property projection wrappers [0.29ms]
+
+tests/umf-source-numeric-admission.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {loadUmfProducer} from '../packages/umf-bun/src/index';
+3 | import {preflightSourceJson} from '../packages/postgresql/src/acceptance-json';
+4 | const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original Record producer directory required');
+                                                                       ^
+error: Original Record producer directory required
+      at /private/tmp/truss-security-main-integration/tests/umf-source-numeric-admission.test.ts:4:68
+-------------------------------
+
+
+tests/acceptance-profiles.test.ts:
+(pass) every complete input profile occurrence resolves to original bytes by role [0.75ms]
+(pass) changed hash and borrowed role cannot use same-name registration [0.20ms]
+(pass) original registration snapshots cannot be changed after startup [0.13ms]
+(pass) duplicate and hash-mismatched registration refuse startup [3.34ms]
+(pass) borrowed resolver method cannot impersonate original startup byte custody [0.44ms]
+(pass) report profile resolves in its own role and cannot borrow acceptance bytes [0.23ms]
+(pass) report startup bytes are frozen independently and duplicate report registrations refuse [0.05ms]
+
+tests/trigger-arguments.test.ts:
+(pass) all twelve independent original trigger argument vectors [0.64ms]
+(pass) exact encoding and allocation controls [0.28ms]
+
+tests/umf-declaration-producer.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {loadUmfProducer,loadUmfDeclarationProducer} from '../packages/umf-bun/src/index';
+3 | import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
+4 | import {collectCatalogAssertionObservations} from '../packages/umf-bun/src/catalog-assertion-observations';
+5 | const recordDirectory=process.env.TRUSS_UMF_PRODUCER;const metadataDirectory=process.env.TRUSS_UMF_DECLARATION_PRODUCER;
+6 | if(!recordDirectory||!metadataDirectory)throw Error('Both original pinned owner producer directories required');
+                                                  ^
+error: Both original pinned owner producer directories required
+      at /private/tmp/truss-security-main-integration/tests/umf-declaration-producer.test.ts:6:47
+-------------------------------
+
+
+tests/umf-numeric-runtime.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {loadUmfNumericProducer,loadUmfValueProducer,UMF_NUMERIC_SOURCE} from '../packages/umf-bun/src/index';
+3 | const directory=process.env.TRUSS_UMF_NUMERIC_PRODUCER;
+4 | if(!directory)throw Error('Pinned original UMF numeric producer required');
+                        ^
+error: Pinned original UMF numeric producer required
+      at /private/tmp/truss-security-main-integration/tests/umf-numeric-runtime.test.ts:4:21
+-------------------------------
+
+
+tests/query-journal.test.ts:
+(pass) retains exact request, original frame and outcome across journal reconstruction [40.09ms]
+(pass) bounded inspection retains incomplete/unknown originals without granting replay authority [70.03ms]
+
+tests/asserted-origin-map.test.ts:
+(pass) asserted origin candidate mapping > preserves exact numeric-looking strings, tagged authored objects, null and sequence [0.55ms]
+(pass) asserted origin candidate mapping > orders unsigned UTF8 keys and preserves NUL/prototype names [0.11ms]
+(pass) asserted origin candidate mapping > refuses numbers, duplicates and invalid role text [0.08ms]
+
+tests/catalog-declarations.test.ts:
+(pass) equal Field IDs preserve declaring module, independent key order and unknown content [0.31ms]
+(pass) key component cannot substitute equal unowned Field ID in another module [0.13ms]
+(pass) missing original Field correspondence is explicit [0.03ms]
+
+tests/umf-runtime.test.ts:
+
+# Unhandled error between tests
+-------------------------------
+1 | import {test,expect} from 'bun:test';
+2 | import {loadUmfProducer} from '../packages/umf-bun/src/index';
+3 | const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Pinned UMF producer required');
+                                                                       ^
+error: Pinned UMF producer required
+      at /private/tmp/truss-security-main-integration/tests/umf-runtime.test.ts:3:68
+-------------------------------
+
+
+tests/canonical-wire-tree.test.ts:
+(pass) original source spelling and scalar UTF-8 remain separate from canonical codec carrier [0.33ms]
+(pass) empty containers and inert prototype/member names preserve native member arrays [0.57ms]
+(pass) outer numeric nodes duplicate decoded names and malformed Unicode never reach native codec [0.10ms]
+(pass) native task ceiling is checked before carrier construction [7.35ms]
+(pass) shared backing cannot impersonate original immutable source custody [0.06ms]
+(pass) preflight exact ASCII length covers scalar encodings and nested empty containers [0.24ms]
+
+tests/weft/query.test.ts:
+(pass) actual pinned Rust compiler compiles count and retains original artifact [75.88ms]
+(pass) binding and model byte substitution refuse before compiler invocation [1.63ms]
+(pass) actual compiler rejects unavailable layout/profile without executing SQL [54.56ms]
+(pass) unknown obligations refuse before any native acquisition [60.14ms]
+(pass) foreign plan and source parameter injection fail without SQL [107.02ms]
+(pass) host checks precede SQL; publication recheck failure releases no result [137.83ms]
+(pass) real queries exercise exact numeric, whole record, presence and logical-key parameters [470.20ms]
+(pass) owner binding serializer refuses fixture catalog and altered embedded artifact [1.22ms]
+(pass) unsupported aggregate filter is an explicit compiler refusal, never host rewrite [25.59ms]
+(pass) dispose refuses retained plans and new compiler calls [61.51ms]
+(pass) dispose during compilation prevents plan publication [0.95ms]
+(pass) registered compiler and host functions cannot be replaced after construction [132.30ms]
+(pass) disposal during a native check stops data SQL without settling host transaction [179.78ms]
+(pass) disposal during host settlement withholds its buffered result [118.13ms]
+(pass) new positional metadata cannot enter an old-profile plan or acquire native context [232.62ms]
+
+tests/weft-probe/protocol.test.ts:
+10 |   socket.on('data',chunk=>{buffer=Buffer.concat([buffer,chunk as Buffer]);
+11 |    if(!started){if(buffer.length<4||buffer.length<buffer.readInt32BE())return;buffer=buffer.subarray(buffer.readInt32BE());started=true;socket.write(Buffer.concat([frame('R',n32(auth)),frame('Z',Buffer.from('I'))]));}
+12 |    while(buffer.length>=5){const size=buffer.readInt32BE(1);if(buffer.length<size+1)return;const tag=String.fromCharCode(buffer[0]);buffer=buffer.subarray(size+1);if(tag==='S')onQuery(socket)}
+13 |   });
+14 |  });
+15 |  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+               ^
+error: Failed to listen at 127.0.0.1
+ syscall: "listen",
+   errno: 1,
+ address: "127.0.0.1",
+    port: 0,
+    code: "EPERM"
+
+      at <anonymous> (node:net:2115:30)
+      at listenInCluster (node:net:2192:24)
+      at listen (node:net:2066:20)
+      at new Promise (1:11)
+      at fixture (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:15:8)
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:24:21)
+(fail) exact text frames and native OID25 Bind are retained without numeric decoding [1.56ms]
+10 |   socket.on('data',chunk=>{buffer=Buffer.concat([buffer,chunk as Buffer]);
+11 |    if(!started){if(buffer.length<4||buffer.length<buffer.readInt32BE())return;buffer=buffer.subarray(buffer.readInt32BE());started=true;socket.write(Buffer.concat([frame('R',n32(auth)),frame('Z',Buffer.from('I'))]));}
+12 |    while(buffer.length>=5){const size=buffer.readInt32BE(1);if(buffer.length<size+1)return;const tag=String.fromCharCode(buffer[0]);buffer=buffer.subarray(size+1);if(tag==='S')onQuery(socket)}
+13 |   });
+14 |  });
+15 |  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+               ^
+error: Failed to listen at 127.0.0.1
+ syscall: "listen",
+   errno: 1,
+ address: "127.0.0.1",
+    port: 0,
+    code: "EPERM"
+
+      at <anonymous> (node:net:2115:30)
+      at listenInCluster (node:net:2192:24)
+      at listen (node:net:2066:20)
+      at new Promise (1:11)
+      at fixture (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:15:8)
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:33:21)
+(fail) native SELECT count mismatch closes original connection [0.25ms]
+10 |   socket.on('data',chunk=>{buffer=Buffer.concat([buffer,chunk as Buffer]);
+11 |    if(!started){if(buffer.length<4||buffer.length<buffer.readInt32BE())return;buffer=buffer.subarray(buffer.readInt32BE());started=true;socket.write(Buffer.concat([frame('R',n32(auth)),frame('Z',Buffer.from('I'))]));}
+12 |    while(buffer.length>=5){const size=buffer.readInt32BE(1);if(buffer.length<size+1)return;const tag=String.fromCharCode(buffer[0]);buffer=buffer.subarray(size+1);if(tag==='S')onQuery(socket)}
+13 |   });
+14 |  });
+15 |  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+               ^
+error: Failed to listen at 127.0.0.1
+ syscall: "listen",
+   errno: 1,
+ address: "127.0.0.1",
+    port: 0,
+    code: "EPERM"
+
+      at <anonymous> (node:net:2115:30)
+      at listenInCluster (node:net:2192:24)
+      at listen (node:net:2066:20)
+      at new Promise (1:11)
+      at fixture (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:15:8)
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:38:21)
+(fail) password authentication refuses without credentials or fallback [0.17ms]
+10 |   socket.on('data',chunk=>{buffer=Buffer.concat([buffer,chunk as Buffer]);
+11 |    if(!started){if(buffer.length<4||buffer.length<buffer.readInt32BE())return;buffer=buffer.subarray(buffer.readInt32BE());started=true;socket.write(Buffer.concat([frame('R',n32(auth)),frame('Z',Buffer.from('I'))]));}
+12 |    while(buffer.length>=5){const size=buffer.readInt32BE(1);if(buffer.length<size+1)return;const tag=String.fromCharCode(buffer[0]);buffer=buffer.subarray(size+1);if(tag==='S')onQuery(socket)}
+13 |   });
+14 |  });
+15 |  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+               ^
+error: Failed to listen at 127.0.0.1
+ syscall: "listen",
+   errno: 1,
+ address: "127.0.0.1",
+    port: 0,
+    code: "EPERM"
+
+      at <anonymous> (node:net:2115:30)
+      at listenInCluster (node:net:2192:24)
+      at listen (node:net:2066:20)
+      at new Promise (1:11)
+      at fixture (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:15:8)
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:49:22)
+(fail) malformed protocol order refuses: Bind before Parse [0.16ms]
+10 |   socket.on('data',chunk=>{buffer=Buffer.concat([buffer,chunk as Buffer]);
+11 |    if(!started){if(buffer.length<4||buffer.length<buffer.readInt32BE())return;buffer=buffer.subarray(buffer.readInt32BE());started=true;socket.write(Buffer.concat([frame('R',n32(auth)),frame('Z',Buffer.from('I'))]));}
+12 |    while(buffer.length>=5){const size=buffer.readInt32BE(1);if(buffer.length<size+1)return;const tag=String.fromCharCode(buffer[0]);buffer=buffer.subarray(size+1);if(tag==='S')onQuery(socket)}
+13 |   });
+14 |  });
+15 |  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+               ^
+error: Failed to listen at 127.0.0.1
+ syscall: "listen",
+   errno: 1,
+ address: "127.0.0.1",
+    port: 0,
+    code: "EPERM"
+
+      at <anonymous> (node:net:2115:30)
+      at listenInCluster (node:net:2192:24)
+      at listen (node:net:2066:20)
+      at new Promise (1:11)
+      at fixture (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:15:8)
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:49:22)
+(fail) malformed protocol order refuses: nonempty Parse completion [0.07ms]
+10 |   socket.on('data',chunk=>{buffer=Buffer.concat([buffer,chunk as Buffer]);
+11 |    if(!started){if(buffer.length<4||buffer.length<buffer.readInt32BE())return;buffer=buffer.subarray(buffer.readInt32BE());started=true;socket.write(Buffer.concat([frame('R',n32(auth)),frame('Z',Buffer.from('I'))]));}
+12 |    while(buffer.length>=5){const size=buffer.readInt32BE(1);if(buffer.length<size+1)return;const tag=String.fromCharCode(buffer[0]);buffer=buffer.subarray(size+1);if(tag==='S')onQuery(socket)}
+13 |   });
+14 |  });
+15 |  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+               ^
+error: Failed to listen at 127.0.0.1
+ syscall: "listen",
+   errno: 1,
+ address: "127.0.0.1",
+    port: 0,
+    code: "EPERM"
+
+      at <anonymous> (node:net:2115:30)
+      at listenInCluster (node:net:2192:24)
+      at listen (node:net:2066:20)
+      at new Promise (1:11)
+      at fixture (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:15:8)
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:49:22)
+(fail) malformed protocol order refuses: duplicate Parse completion [0.16ms]
+10 |   socket.on('data',chunk=>{buffer=Buffer.concat([buffer,chunk as Buffer]);
+11 |    if(!started){if(buffer.length<4||buffer.length<buffer.readInt32BE())return;buffer=buffer.subarray(buffer.readInt32BE());started=true;socket.write(Buffer.concat([frame('R',n32(auth)),frame('Z',Buffer.from('I'))]));}
+12 |    while(buffer.length>=5){const size=buffer.readInt32BE(1);if(buffer.length<size+1)return;const tag=String.fromCharCode(buffer[0]);buffer=buffer.subarray(size+1);if(tag==='S')onQuery(socket)}
+13 |   });
+14 |  });
+15 |  await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));
+               ^
+error: Failed to listen at 127.0.0.1
+ syscall: "listen",
+   errno: 1,
+ address: "127.0.0.1",
+    port: 0,
+    code: "EPERM"
+
+      at <anonymous> (node:net:2115:30)
+      at listenInCluster (node:net:2192:24)
+      at listen (node:net:2066:20)
+      at new Promise (1:11)
+      at fixture (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:15:8)
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/weft-probe/protocol.test.ts:49:22)
+(fail) malformed protocol order refuses: command before description [0.20ms]
+
+20 tests failed:
+(fail) exact text frames and native OID25 Bind are retained without numeric decoding [1.56ms]
+(fail) native SELECT count mismatch closes original connection [0.25ms]
+(fail) password authentication refuses without credentials or fallback [0.17ms]
+(fail) malformed protocol order refuses: Bind before Parse [0.16ms]
+(fail) malformed protocol order refuses: nonempty Parse completion [0.07ms]
+(fail) malformed protocol order refuses: duplicate Parse completion [0.16ms]
+(fail) malformed protocol order refuses: command before description [0.20ms]
+
+ 286 pass
+ 20 fail
+ 13 errors
+ 1657 expect() calls
+Ran 306 tests across 51 files. [6.13s]

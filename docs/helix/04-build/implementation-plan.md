@@ -2816,3 +2816,8 @@ bundle is supplied and qualified. No old-layout fallback, placeholder native
 guard, fixture catalog registration, native source mutation or Truss feed is
 installed by this package. Continue the selected required native composition
 and public schema/mutation/feed paths; the full end-to-end goal remains open.
+
+
+## Security component main integration — 2026-10-10
+
+The private candidate PostgreSQL condition, disclosure, graph locator/source, endpoint and key components are integrated against main42c2458c. Tests now use local imports and a commit-pinned UMF formal fixture. The focused replay passes 91 tests/386 assertions; the configured broader Bun replay passes 384 tests/2,176 assertions. `bun run typecheck:security` checks these private modules explicitly. The retained [checkpoint](evidence/security-main-integration/checkpoint.json) records source/log hashes, the two configuration/sandbox failed attempts, and the scoped Astra ultra review. No package/public export or protected ordinary admission is added. Native execution, installed role/dependency closure, original subject authority, final publication and the original security acceptance cases remain open.

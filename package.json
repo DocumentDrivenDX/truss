@@ -8,6 +8,7 @@
   "scripts": {
     "test": "bun test",
     "typecheck": "bun scripts/typecheck-weft.ts",
+    "typecheck:security": "bun scripts/typecheck-security.ts",
     "build": "bun scripts/build.ts",
     "build:weft": "bun scripts/build-weft.ts",
     "build:host": "bun scripts/build-pg-runtime.ts"

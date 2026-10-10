@@ -1,0 +1,107 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/security-graph-source-lowering.test.ts:
+(pass) candidate association lowering carries local source validity and same-row field test [1.12ms]
+(pass) copied source or source metadata accessor cannot enter lowering [0.37ms]
+
+tests/security-candidate-endpoint.test.ts:
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","elementId":"Ownership"},"resource"] [0.99ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","relationshipId":"WorksOn"},"staff"] [3.22ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","relationshipId":"WorksOn"},"project"] [0.22ms]
+(pass) actual original mixed endpoint [{"documentId":"domain","moduleId":"m","elementId":"Ownership"},"project"] [0.29ms]
+(pass) ordered compound member and column carriers stay ordered [0.26ms]
+(pass) reflection refuses accessors without invoking them [0.03ms]
+(pass) Unicode scalar limits preserve supplementary characters [1.50ms]
+(pass) deep copied snapshots survive mutations of original inputs [0.12ms]
+(pass) dense array and native UTF8 column boundaries [0.97ms]
+(pass) nested data and array accessors refuse without invocation [0.12ms]
+
+tests/security-graph-source.test.ts:
+(pass) opaque edges explicitly omit association record and property fields [0.18ms]
+(pass) source issuance survives caller mutation and refuses copied source [0.06ms]
+(pass) metadata accessors never execute [0.06ms]
+(pass) custom collection iterators never execute [0.02ms]
+(pass) native metadata identifiers retain exact domain limits [0.28ms]
+(pass) unsupported domains, conflicting aliases and hidden metadata refuse [0.36ms]
+(pass) sparse or excessive candidate fields refuse [0.12ms]
+(pass) array proxy cannot grow captured length or invoke a length getter [0.13ms]
+(pass) endpoint keys refuse unissued sources and malformed exact namespace metadata [0.31ms]
+(pass) endpoint validity checks original typed object existence and live record metadata [0.17ms]
+(pass) endpoint key metadata is captured without accessor execution [0.08ms]
+
+tests/security-graph-locator.test.ts:
+(pass) candidate exact graph key resolution @covers US-056-AC2 > joins full native typed owner without treating locator as business key [0.34ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > selects full namespace and bytes in exact type/key definition [0.20ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses missing materialization and unresolved typed owners [0.14ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses ambiguous full key ownership and duplicate storage/owner rows [0.28ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses malformed exact byte and native key carriers [0.14ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > retains exact native byte limits and refuses one byte over on either side [6.45ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > accepts 4096 complete bucket rows and rejects 4097 [17.17ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > bounds aggregate native key bytes before returning a selected match [46.46ms]
+(pass) candidate exact graph key resolution @covers US-056-AC2 > refuses caller bucket iterators/accessors without executing them [0.20ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > selects exact relationship and retains independently declared foreign edges [0.36ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > declared empty association is empty; missing selection is refusal [0.04ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses undeclared edge relationship and reversed endpoint roles [0.10ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > declared alternative endpoint types are preserved independently [0.04ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses duplicate, missing and malformed declarations [0.07ms]
+(pass) candidate declared relationship projection @covers US-056-AC2 > refuses declaration iterators and accessors without invoking them [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > bounds dense original rows at exactly 4096 objects and edges [18.06ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses custom collection iterators without invoking them [0.24ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses sparse, accessor and extended collection carriers [0.12ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > normalizes absent input and rejects top-level accessors [0.18ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > retains exact large IDs and distinguishes equal IDs in different types [0.09ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > preserves directional roles rather than sorting endpoints [0.05ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > accepts signed native limits without rounding [0.02ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID -0 [0.06ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 01
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID +1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1.0
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1e3
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID  1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 9223372036854775808
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID -9223372036854775809
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1 [0.01ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID 1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses malformed or overflowing object ID null
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type 2147483648 [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type -2147483649 [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type 1
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses invalid endpoint type null [0.01ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses unresolved typed endpoint despite a matching bare ID [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > refuses duplicate objects and duplicate edge IDs [0.12ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > distinct edges with identical endpoints remain distinct [0.05ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > separate relationship IDs remain distinct [0.03ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > rejects accessors without invoking them [0.04ms]
+(pass) candidate typed graph locator boundary @covers US-056-AC2 > rejects extra meaning and oversized collections [0.11ms]
+
+tests/security-candidate-condition.test.ts:
+(pass) actual mixed compiler condition retains outer Project correlation [2.50ms]
+(pass) source negation retains three valued quantifier SQL [0.94ms]
+(pass) unknown profiles and substituted endpoint mappings refuse [1.67ms]
+(pass) lexical slot collisions refuse and unsupported terms do not disappear [0.48ms]
+(pass) array method substitution cannot turn False into True [3.17ms]
+(pass) packet, nested scan, identity and array getters never run [0.46ms]
+(pass) unused ambiguous endpoint declarations refuse eagerly [0.24ms]
+(pass) same nominal compound Key cannot cross ordered components [0.38ms]
+(pass) original Record Key metadata and all intrinsic mappings are checked [1.04ms]
+(pass) supplied falsy intrinsic carriers are never omissions [0.11ms]
+(pass) shared homes require disjoint compatible typed selectors [2.37ms]
+(pass) selector bounds and malformed unused carriers refuse eagerly [3.27ms]
+(pass) scalar channels retain field ownership, context separation and exact text equality [1.79ms]
+(pass) record scalar fields remain on the bound witness; opaque scalar access refuses [2.49ms]
+(pass) scalar declarations cannot contradict Key carriers or qualified field domains [1.14ms]
+(pass) numeric constants normalize exactly without value-number conversion [3.99ms]
+(pass) binary constants retain exact octets and empty value [0.25ms]
+(pass) native validity guards enclose negation and successful disjunctions [0.39ms]
+(pass) rule fold retains all matching effects and unknown precedence [0.72ms]
+(pass) splitting a qualified-field domain contradiction across rules refuses [0.18ms]
+(pass) disclosure SQL applies protected defaults and withhold before mask conflicts [2.17ms]
+(pass) disclosure SQL preserves ordered fields beyond the PostgreSQL function argument limit [4.57ms]
+(pass) issued opaque sources preserve local validity outside negation and successful siblings [0.77ms]
+(pass) copied graph SQL and home accessors cannot enter candidate condition lowering [0.27ms]
+(pass) native population identity survives keyed and property projection wrappers [0.27ms]
+
+ 91 pass
+ 0 fail
+ 386 expect() calls
+Ran 91 tests across 5 files. [273.00ms]
