@@ -905,3 +905,14 @@ statistic or renewed product question is required. Security-owner admission of
 a lawful no-layer baseline, sealed exact environment/profile inputs and actual
 runner/native measurements remain separate outputs. A protocol selection cannot
 stand in for those results or relax the0.01ms requirement.
+
+
+### PA05 physical-tree native prerequisite
+
+[Native67](evidence/design-audit/row-image-tree-native.json) proves existing
+foreign keys admit a disconnected two-node sequence cycle. Original typed
+capture decodes; the private Python physical-tree check refuses and savepoint
+rollback restores exact original bytes. Implement complete RF04 native
+root/reachability/acyclicity enforcement in the semantic commit validator;
+foreign keys cannot substitute for it. Full definitions, original origin, current
+authority, resource and publication composition remain separate PA05 gates.

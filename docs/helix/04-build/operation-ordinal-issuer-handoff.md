@@ -1873,3 +1873,28 @@ close the retained-state substitution counterexample. The next native test must
 retain an original malformed graph admitted by table constraints, demonstrate
 structural refusal, and restore the original fixture. All seven complete native
 semantic bodies and protected publication remain pending.
+
+
+## Native disconnected-cycle counterexample and validation — 2026-10-10
+
+[Native67](evidence/design-audit/row-image-tree-native.json) runs the original
+UMF-exported0.16 tables and typed snapshot producer on PostgreSQL16.15. Both
+original object/edge captures pass the physical-tree validator (8 and13 images).
+Inside a savepoint, two sequence nodes801/802 in state501 each name the other
+as parent. `SET CONSTRAINTS ALL IMMEDIATE` succeeds: complete existing foreign
+keys and native slot constraints admit this disconnected cycle. The original
+producer returns all10 state501 images with actual native descriptor/completion
+bytes; capture decode succeeds and tree validation refuses. The receipt retains
+all malformed original images. Rollback restores the original8 images exactly.
+The existing21-image nested cascade and rollback observations also pass.
+
+This closes the finite actual native structural counterexample test identified
+in the preceding checkpoint. It establishes why the complete RF04 native
+`row_touch_commit_check` must enforce root reachability and acyclicity in addition
+to table constraints. The Python function is a private host check, not a native
+COMMIT callback; no native semantic body was supplied by this probe. Native
+commit qualification must additionally cover complete original event/current
+state correspondence, admitted definitions/member/scalar semantics, held guards,
+current authority, capacity/freshness and same-transaction publication. Do not
+claim that valid binary framing or this physical shape check authenticates a
+retained state's origin. Earlier62/64/60 receipts and producers remain unchanged.
