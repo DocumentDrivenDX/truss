@@ -949,3 +949,33 @@ verifies current native/module/test-source correspondence and retains49 missing
 native fields across all seven semantic routines. Advance PA01–PA04 original
 authority/caller composition and PA05 full RF/effect closure; do not classify
 physical shape components as completed logical/native finalization.
+
+
+## RF05 token/native projection counterexamples — 2026-10-10
+
+[Native74](evidence/design-audit/row-image-projection-native.json) retains the
+previous native70 RLS/tree/cascade controls and adds two actual scalar updates
+inside independent savepoints. Integer node613 retains numeric9007199254740993
+but its token becomes9007199254740992. Timestamp node623 retains the original
+2030 instant but authored text becomes2031-01-02T03:04:05.123456+05:30. Native
+constraints checked immediately succeed; original snapshot capture, tree and
+scalar-family shape checks pass. Native comparison of each known valid fixture
+lexeme independently confirms disagreement. The receipt retains changed original
+scalar bytes, and each rollback restores its entire original state capture.
+
+These are RF05 negative-fixture inputs, not accepted logical values or qualified
+codec refusals: the full native codec guard remains absent. The independently
+admitted finalizer must refuse each mismatch before sealing or journal/result
+publication, restoring all dependent effects. Numeric token/native comparison
+must be exact across the shared original grammar/domain/facet corpus, including
+large integers and decimals; a JavaScript number cannot mediate equality.
+Timestamp projection is optional and queryable only under its qualified
+precision/instant profile; when present it must agree with the retained authored
+spelling without rounding. Known fixture casts here do not authorize SQL casts
+as a generic UMF token parser or timestamp codec. UMF remains semantic owner.
+
+The existing [native execution packet](row-finalization-native-execution-handoff.md)
+assigns these checks to RF05 before protected sealing. The current physical
+components and source-pinned installed128-test wheel remain unchanged; no public
+API, semantic body, installed profile or support claim is promoted. Earlier70/69
+receipts and producers remain intact.
