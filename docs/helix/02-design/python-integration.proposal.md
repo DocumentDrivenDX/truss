@@ -2365,3 +2365,17 @@ batch coverage cannot qualify atomic import. Full corpus adds separate atomic/
 per-item import and deferred-only dry-run violations while retaining original
 semantic indices/provenance and non-refunded issuer/account custody. This is
 reviewed required coverage, not executed native tests or a consumer API change.
+
+
+### Numeric dependency source checkpoint
+
+The [committed-source review](../04-build/evidence/design-audit/umf-numeric-dependency-review.json)
+compares the previously reviewed owner revision with observed `origin/main`
+953aa38c. The JavaScript numeric adapter is byte-identical; its schema-literal
+and field-validation dependencies changed to shared/tracked evaluators. This
+source comparison does not replay validation, qualify resource accounting or
+adopt the new runtime. Keep the existing exact numeric carrier/conversion contract
+and pinned runtime. Before any owner-version update, replay the selected numeric
+registration and contextual Field controls against the complete new dependency
+tuple, including original diagnostic/refusal correspondence and native/driver
+checks where claimed. Do not implement competing conversion semantics in Truss.
