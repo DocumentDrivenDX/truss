@@ -1,0 +1,185 @@
+{
+  "scope": "Native deferred-trigger scheduling/coalescing fixture and intentional first-only counterexample; not original Truss inventory/semantic guards",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "first_only-early-full-scan",
+      "expected": [
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "observed": [
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "broken-first-only-commits-invalid-row",
+      "expected": [
+        [
+          -1
+        ]
+      ],
+      "observed": [
+        [
+          -1
+        ]
+      ]
+    },
+    {
+      "id": "generation-early-full-scan",
+      "expected": [
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "observed": [
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "generation-rechecks-later-write-at-commit",
+      "expected": "23514",
+      "observed": "23514"
+    },
+    {
+      "id": "failed-commit-restores-original-empty-inventory",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "id": "failed-commit-rolls-back-memo-and-work",
+      "expected": [
+        [
+          0,
+          -1,
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0,
+          -1,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "valid-early-check-and-later-write-two-scans",
+      "expected": [
+        [
+          2,
+          2,
+          2
+        ]
+      ],
+      "observed": [
+        [
+          2,
+          2,
+          2
+        ]
+      ]
+    },
+    {
+      "id": "valid-later-write-committed",
+      "expected": [
+        [
+          2
+        ]
+      ],
+      "observed": [
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "id": "three-deferred-events-one-additional-full-scan",
+      "expected": [
+        [
+          5,
+          5,
+          3
+        ]
+      ],
+      "observed": [
+        [
+          5,
+          5,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "forced-check-child-failure",
+      "expected": "23514",
+      "observed": "23514"
+    },
+    {
+      "id": "child-rollback-restores-generation-and-proof",
+      "expected": [
+        [
+          5,
+          5,
+          3
+        ]
+      ],
+      "observed": [
+        [
+          5,
+          5,
+          3
+        ]
+      ]
+    },
+    {
+      "id": "surviving-child-followup-rechecked",
+      "expected": [
+        [
+          6,
+          6,
+          4
+        ]
+      ],
+      "observed": [
+        [
+          6,
+          6,
+          4
+        ]
+      ]
+    }
+  ],
+  "producerSha256": "299e07c2c32cea97208d15e38f60abee96b56204d9708047c326d11b59186968",
+  "nativeTrussCorrespondenceReviewed": false,
+  "installerReady": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Fixture counter/generation is not installed Truss authority, issuer/security or cumulative native account",
+    "Committed memo scans roll back with PostgreSQL; original cumulative work must never refund on rollback",
+    "Generation invalidation must cover every original relevant write and be unforgeable before adoption",
+    "No concurrency/native work/overflow/cleanup/unknown-outcome or seven-body qualification",
+    "Truss resource-profile/layout extension and native invocation registration remain unresolved"
+  ]
+}

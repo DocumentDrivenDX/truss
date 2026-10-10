@@ -1316,3 +1316,29 @@ reservation and installer readiness remain false; no acceptance criterion is
 promoted. The next composition still needs an unavoidable bounded commit invocation
 and all seven mandatory semantic bodies, without repeated per-row whole-inventory
 scans being presented as a qualified work profile.
+
+## Commit-check coalescing scheduling decision — 2026-10-10
+
+[The candidate invocation design](../02-design/contracts/capacity-commit-coalescing-v0.1.proposal.md)
+rejects a first-only transaction Boolean and selects a conditional original native
+dirty/proof-generation cache for capacity parity only. Early forced deferred
+checks must not suppress later writes. Complete original mutation invalidation,
+actual epoch/profile custody, finite generation/queue/work accounting and an
+unavoidable final surviving invocation remain adoption prerequisites. Cache state
+never supplies semantic/security/finalizer authority or replaces complete cohorts.
+
+[The12-observation native scheduling experiment](evidence/design-audit/capacity-coalescing-native.json)
+reproduces an unsafe first-only cache: after SET CONSTRAINTS IMMEDIATE then another
+write, it commits an invalid fixture row. The generation candidate instead refuses
+at COMMIT and rolls back original fixture inventory/memo. Success controls cover
+valid early/later writes, several deferred events coalescing into one additional
+scan, and failed forced child checking followed by rollback and a surviving write.
+The fixture's rollbackable scan counter is not original cumulative work and must
+not be copied into Truss's account. All original work stays spent after rollback.
+
+The owning design gives precise conditional laws CC-01–06 and native integration
+exit cases; it claims neither deductive/exhaustive proof nor native Truss
+correspondence. Concrete memo storage/DDL and complete installed invalidation/
+callback identity remain a bounded implementation spike. Original capacity closeout
+and all seven semantic guards remain required. No criterion is promoted or
+installer/resource profile adopted by these synthetic scheduling traces.
