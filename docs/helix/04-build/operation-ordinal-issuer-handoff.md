@@ -1075,3 +1075,40 @@ This realizes OC02's host-side selection component without filling the seven
 semantic wrappers' native body/owner/ACL/dependency registrations. Complete
 protected producer/context/authority, OC03–OC07 actual effect/settlement/account
 composition and ordinary-role installation remain outstanding.
+
+### Native cascade attribution prerequisite for row_touch_observe (2026-10-10)
+
+The original `source-epoch-layout-0.16.owner-export.sql` now has a separate native
+cascade observation packet: `evidence/design-audit/check_row_cascade_attribution_native.py`,
+`row-cascade-attribution-probe.sql` and `row-cascade-attribution-native.json`.
+Eight observations pass on PostgreSQL16.15: three actual DELETE events each for
+object and edge property homes, complete state/node/scalar removal, and confirmed
+savepoint restoration under the same native xid. Fixture setup includes the current
+qualified property-module and complete catalog source columns; no CHECK or FK is
+disabled to populate the generated tables.
+
+At each node/scalar AFTER DELETE observation, both the live state and node are
+absent. The original state OLD image still directly carries its owner association;
+node/scalar OLD retains state/node identity, and separately retained prestate
+supplies the owner/property tuple. The packet preserves distinct object100 and
+edge100 associations; edge relationship discriminator10 is separate from property
+owner type3. All six original event tuples and actual relation OIDs are retained.
+Savepoint rollback restores both homes, their two nodes/scalars and the empty
+observation log. No particular relative trigger event order is claimed.
+
+This executes a native attribution prerequisite, not row_touch_observe. The probe
+captures selected typed attribution fields only and manually snapshots prestate;
+it cannot qualify complete image/payload fidelity, original prestate producer,
+family/subject authority, admission/cascade scope, actual touch/generation/capacity
+updates or installed routine/role/ACL/dependency closure. Fixture catalog/source
+labels are administrative data, not accepted catalog semantics. No criterion or
+seven-body registration is promoted.
+
+The row_touch_observe implementation must consume independently admitted retained
+OLD association before deletion, validate complete typed images against that
+custody and the original operation's effect scope, and retain every actual cascade
+contribution before event-local tuple deduplication. A live parent lookup is only
+corroboration: absence cannot produce skipped events, guessed owner identity or
+zero-property attribution. Next native realization is the protected prestate/image
+producer plus complete scope checks; copying this observation probe into the
+semantic wrapper would omit those obligations.

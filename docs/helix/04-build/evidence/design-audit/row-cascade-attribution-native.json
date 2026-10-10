@@ -1,0 +1,182 @@
+{
+  "scope": "native OLD state identity and retained association versus deleted live parents under actual cascades; original UMF-exported tables, administrative observation fixture",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "501/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "733",
+        "501",
+        "601",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "733",
+        "501",
+        "601",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_state",
+      "actualRelationOid": "16742",
+      "originalEvent": [
+        "row_home_state",
+        "16742",
+        "DELETE",
+        "733",
+        "501",
+        null,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101",
+        false,
+        null,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "733",
+        "502",
+        "602",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "733",
+        "502",
+        "602",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_state",
+      "actualRelationOid": "16742",
+      "originalEvent": [
+        "row_home_state",
+        "16742",
+        "DELETE",
+        "733",
+        "502",
+        null,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301",
+        false,
+        null,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "complete-state-node-scalar-cascade",
+      "remainingRows": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "confirmed-savepoint-restoration",
+      "restoredRows": [
+        2,
+        2,
+        2
+      ],
+      "writerXid": "733",
+      "eventRows": 0
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/row-cascade-attribution-probe.sql": "f4490b1bcabdb743651ac66ab58802a9a8c559c67569df42bae8c76686f352b2"
+  },
+  "producerSha256": "a58cbd3c8ecd788e3504394de4b9a03186bea08661a774ae8ef8c060caafea7c",
+  "rowTouchObserverQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Probe captures selected typed attribution fields only, not complete state/node/scalar image or payload fidelity",
+    "Retained prestate is manually snapshotted fixture data, not original protected prestate/admission/authority producer",
+    "Both object and edge IDs100 retain distinct kind/discriminator/property owner; edge discriminator10 is not property owner3",
+    "No touch/capacity generation update, native callable role/ACL closure, full resources or seven semantic body realization",
+    "Finite PostgreSQL16.15 fixture, not all cascade/reparenting/type/deployment profiles"
+  ]
+}

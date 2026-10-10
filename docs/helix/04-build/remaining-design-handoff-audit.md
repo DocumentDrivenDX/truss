@@ -1597,3 +1597,18 @@ are not qualified. Unsupported native identity text must refuse under the origin
 admission profile, without silent escaping/replacement or inferring authority from
 host JSON representability. Complete registry resolution, owner authority and all
 seven semantic bodies remain unfinished.
+
+### Current row-home observer attribution evidence — 2026-10-10
+
+The [native cascade receipt](evidence/design-audit/row-cascade-attribution-native.json)
+passes eight PostgreSQL16.15 observations on the original UMF-exported native0.16
+tables. Actual node/scalar DELETE observation sees neither live parent; retained
+prestate supplies distinct object/edge association despite equal numeric IDs and
+independent edge discriminator/property-owner type. Confirmed savepoint rollback
+restores native rows and clears the probe log. This qualifies the finite native
+visibility/association experiment only. Full typed-image/prestate/protected producer,
+original authority/scope, touch/capacity updates and all seven bodies remain missing.
+The [issuer handoff](operation-ordinal-issuer-handoff.md#native-cascade-attribution-prerequisite-for-row_touch_observe-2026-10-10)
+records the concrete implementation consequence: never skip or invent cascade
+attribution when the live parent is gone. No additional parallel observer or
+security/UMF/Weft semantics are selected by the experiment.
