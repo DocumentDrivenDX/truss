@@ -35,9 +35,10 @@ Truss endpoint. These temporary artifacts are local qualification inputs; anothe
 machine needs the exact independently admitted wheel/dependency/platform tuple.
 There is no published corrected package or portable consumer install command yet.
 
-The ordinary repository local extra still resolves pgserver0.1.4/16.2, which has
-the observed role-reset defect and cannot qualify R4/R5. Installing that extra
-after a corrected wheel can select the published pin again. Use the explicit
+The ordinary repository local extra names pgserver==0.1.4, whose published
+payload is16.2 with the observed role-reset defect and cannot qualify R4/R5.
+That equality also accepts the corrected local-version candidate; it does not
+distinguish the two native payloads. Use the explicit
 corrected dependency composition for candidate testing; do not advertise the
 ordinary extra as the corrected target. See the runtime plan and retained wheel
 receipts for original hashes and platform restrictions.
@@ -113,7 +114,7 @@ Their installed inventory and passing tests qualify that selected composition;
 they do not test the normal resolver path declared by the distributed package.
 R10/PKG-01 release preparation must close both observations separately. Do not
 publish the current local extra as the corrected default while its exact
-pgserver0.1.4 requirement still selects the historical16.2 payload.
+pgserver==0.1.4 requirement still admits the historical16.2 payload.
 
 Before publication, run the intended documented consumer install command against
 the actual staged release artifacts with dependency resolution enabled in a
@@ -139,3 +140,18 @@ another owner-approved release arrangement must provide the actual resolvable
 artifact; this gate does not select that packaging decision or silently rewrite
 upstream package ownership. Preserve exact interim commit/wheel attribution and
 platform restrictions until the normal consumer command is qualified.
+
+### Existing-environment resolver observation
+
+The [actual offline resolver dry run](evidence/design-audit/python-local-extra-existing-resolver.json)
+uses pip24.0, Python3.11.17 and the current wheel with `[local]`, with ordinary
+dependency resolution enabled. The corrected0.1.4+truss.pg16.15 distribution
+satisfies pgserver==0.1.4; pip proposes zero installs. Independent use of that
+pip's specifier implementation confirms the same requirement accepts both0.1.4
+and0.1.4+truss.pg16.15. Thus adding the extra in this observed existing environment
+does not downgrade. The earlier implication of an automatic replacement was too
+broad and is corrected above. This observation does not exercise fresh resolution,
+upgrade/force-reinstall, public-index availability or native qualification. The
+release gate still requires a resolvable, identifiable admitted server payload
+and actual post-resolution inspection rather than assuming distribution equality
+identifies native bytes.

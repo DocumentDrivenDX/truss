@@ -1,0 +1,44 @@
+{
+  "schema": "truss-local-extra-resolver-observation/0.1",
+  "command": [
+    "/private/tmp/truss-current-clean-consumer-env/bin/python",
+    "-m",
+    "pip",
+    "install",
+    "--dry-run",
+    "--no-index",
+    "--report",
+    "/private/tmp/truss-local-extra-resolver-observation.json",
+    "/private/tmp/truss-migration-pin-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl[local]"
+  ],
+  "exitCode": 0,
+  "stdout": "Processing /private/tmp/truss-migration-pin-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl (from truss-toolkit==0.0.1.dev0)\nRequirement already satisfied: pgserver==0.1.4 in /private/tmp/truss-current-clean-consumer-env/lib/python3.11/site-packages (from truss-toolkit==0.0.1.dev0->truss-toolkit==0.0.1.dev0) (0.1.4+truss.pg16.15)\nRequirement already satisfied: fasteners==0.20 in /private/tmp/truss-current-clean-consumer-env/lib/python3.11/site-packages (from truss-toolkit==0.0.1.dev0->truss-toolkit==0.0.1.dev0) (0.20)\nRequirement already satisfied: platformdirs==4.12.4 in /private/tmp/truss-current-clean-consumer-env/lib/python3.11/site-packages (from truss-toolkit==0.0.1.dev0->truss-toolkit==0.0.1.dev0) (4.12.4)\nRequirement already satisfied: psutil==7.2.2 in /private/tmp/truss-current-clean-consumer-env/lib/python3.11/site-packages (from truss-toolkit==0.0.1.dev0->truss-toolkit==0.0.1.dev0) (7.2.2)\ntruss-toolkit is already installed with the same version as the provided wheel. Use --force-reinstall to force an installation of the wheel.\n",
+  "stderr": "WARNING: The directory '/Users/erik/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.\n",
+  "wheelSha256": "3d9eb6c2581a893e2d01bb06217f4b7d8e097f142cc694267072ee1fdb24acd8",
+  "resolverReport": {
+    "version": "1",
+    "pip_version": "24.0",
+    "install": [],
+    "environment": {
+      "implementation_name": "cpython",
+      "implementation_version": "3.11.17",
+      "os_name": "posix",
+      "platform_machine": "arm64",
+      "platform_release": "27.0.0",
+      "platform_system": "Darwin",
+      "platform_version": "Darwin Kernel Version 27.0.0: Tue Aug 11 21:06:40 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T6050",
+      "python_full_version": "3.11.17",
+      "platform_python_implementation": "CPython",
+      "python_version": "3.11",
+      "sys_platform": "darwin"
+    }
+  },
+  "resolverReportSha256": "a22cd54f78754be818691f7675759504d7e19c7b951735e3a8041d02d93c30b8",
+  "installedEnvironment": "existing isolated current consumer environment",
+  "specifierAcceptedVersions": {
+    "0.1.4": true,
+    "0.1.4+truss.pg16.15": true
+  },
+  "scope": "Offline dry-run over an already installed corrected candidate; no installation, artifact download, native lifecycle or fresh public dependency-resolution qualification",
+  "conclusion": "Plain equality accepts both public and local pgserver versions. Existing candidate is retained; declaration alone does not distinguish corrected native payload."
+}
