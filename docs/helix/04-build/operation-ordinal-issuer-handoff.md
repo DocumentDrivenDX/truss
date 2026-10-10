@@ -952,3 +952,16 @@ context/manifest/group comparison and semantic refusal scenarios remain
 unexecuted. Historical synthetic native context and group bytes are not relabeled
 as this carrier; the seven mandatory semantic bodies and their native evidence
 remain outstanding.
+
+The private Python `_row_group_custody.py` now decodes this proposed carrier into
+frozen projections while retaining the original immutable bytes. It checks the
+closed protocol fields, all six kinds, canonical address spelling and exact
+family-artifact digest correspondence. Four focused test methods exercise six
+kinds, thirteen carrier mutations, three syntax refusals and an empty artifact
+whose shape/digest acceptance explicitly does not establish family admission.
+`evidence/design-audit/python-row-group-custody-source.json` pins source and test
+bytes; its retained log records all 87 Python source tests passing on Python3.11,
+including the existing local runtime tests. This is source evidence, not a rebuilt
+installed wheel or native group-producer qualification. Original context/manifest/
+registry correspondence, full family semantics, accounting and completion remain
+unexecuted integration gates. Public exports are unchanged.
