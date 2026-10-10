@@ -785,6 +785,46 @@ same language-neutral expectations used for TypeScript, then separately qualify
 runtime allocations, destruction/hook behavior, native custody and public staged
 reads. Candidate equality or model exploration alone cannot close these exits.
 
+#### Contention and original recovery correspondence
+
+The Python binding must preserve the existing method outcome unions. Nonblocking
+lock denial is a resource admission fact, not proof of a changed version, lost
+native response or completed cleanup. It performs no root transition, native
+command, worker launch, permit consumption or charge refund. The original
+invocation inputs and any unresolved work stay retained. Do not add a generic
+busy/retry result or automatically call the method again.
+
+| Existing method | Contention correspondence |
+| --- | --- |
+| `open` | `unavailable/resource`, with no lease. |
+| `reserveWork` | `unavailable/resource`, with no new permit and unchanged original ledger. |
+| `publish` | `conflict`, with zero replacement; it conveys no version mismatch or permission to redo already spent expansion work. |
+| `validateDisclosure` | `unavailable`; no payload release or validation evidence. |
+| `observePublication` | `unavailable/observation`; an earlier original attempt remains unresolved, not absent. |
+| `settleWork` | `unresolved` only through the original permit/accounting recovery custody; no accounted result or refund. |
+| `closeLease` | `unresolved` through original lease-close custody; no assertion that workers or buffers are gone. |
+| `release` | Use the existing unresolved cleanup outcome and original generation/resource custody; admission remains closed once invalidation is confirmed. |
+
+For methods with unresolved outcomes, the selected producer must bind the
+original recovery reference and observation procedure before the associated work
+can create an unresolved obligation. Reserve/lease issuance must retain that
+original association, including pending completion/cleanup evidence and its
+capacity. A contention branch cannot mint a replacement reference, register a
+new accounting attempt outside the root lock or claim that a pending transition
+occurred. Missing prior original recovery correspondence makes this profile
+unavailable before work admission. Explicit later reconciliation observes the
+same obligation; it is not blind settlement/publication replay.
+
+Add independent controls for each method's actual contention branch: prove
+that the denied invocation adds no root/ledger transition, native submission,
+lease, permit or evidence. Independently attribute the competing invocation's
+actual transition; a globally unchanged root is not expected when it succeeds.
+For settle/close/release, verify exact original
+reference equality and retained unresolved charges, then observe actual original
+completion separately. A handler that merely returns an authored `unresolved`
+fixture cannot supply recovery authority. These controls remain `not_run` and
+complete original recovery-producer realization remains open.
+
 Use the semantic Executor operations of CONTRACT-007 rather than a language-specific second transaction protocol. The adapter accepts the caller's actual live connection/transaction object, validates ownership/lifetime, and retains it internally. No transaction identifier is accepted as a substitute. Initial delivery selects one driver/transaction mode and qualifies it; sync and async modes cannot share a support claim without separate evidence. Driver selection remains explicit.
 
 - Owned execution begins on one connection, commits after complete native finalization, and publishes durable results only after observed commit. Failed or unknown commit preserves recovery state.
