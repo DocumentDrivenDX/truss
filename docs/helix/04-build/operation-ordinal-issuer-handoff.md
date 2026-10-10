@@ -391,3 +391,29 @@ full-family-qualification and readiness flags remain deliberate: running each
 family does not establish complete original authority/account/finalizer wiring,
 ordinary-role execution or all-path admission. The Python design now includes
 the registry state transitions, local lock order and remaining adoption obligations.
+
+## Native registry projection through the Python decoder
+
+The four `issued-operation-ordinal-{base,asserted,epoch,configuration}-registry-decoder-native.json`
+receipts now retain five original observations per family on PostgreSQL16.15:
+admission0, rollback to an empty registry, admission1, a second empty rollback,
+and admission3 after invalid-kind ordinal2 was burned. Each actual xid and complete
+16-cell row is passed through the private Python structural decoder. Original and
+decoded rows are retained without reconstruction of context or byte carriers.
+Existing exact context/configuration and native refusal controls still pass.
+
+The checker wraps the original second SELECT from the documented
+[registry projection](../02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql)
+in a JSON aggregation for the actual psql fixture transport. It retains the exact
+wrapper SQL and original projection/decoder/source hashes. Column order comes
+from the declared decoder columns; SELECT command and affected-row metadata are
+fixture-supplied, not original PostgreSQL protocol descriptor/completion evidence.
+This therefore establishes native cell/projection compatibility across the four
+families, not original positional driver framing, complete observation termination,
+ordinary-role access or OC02/OC06 authorization. Empty assigned registries remain
+structural observations and cannot grant a write or classify transaction settlement.
+
+Complete driver integration must independently validate the original descriptor,
+command/completion, byte/work limits and same transaction/cut before using these
+cells for operation selection. Native account/security/finalizer composition and
+atomic installer readiness remain required; no result here supplies a commit proof.

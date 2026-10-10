@@ -14,6 +14,7 @@ import pgserver
 root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(root / 'packages/python/src'))
 from truss._operation_ordinal import OperationOrdinalRegistry
+from truss._operation_registry import COLUMNS, decode_operation_registry
 family = sys.argv[1] if len(sys.argv) >= 2 else 'base'
 assert len(sys.argv) <= 3
 receipt_name = sys.argv[2] if len(sys.argv) == 3 else 'issued-operation-ordinal-' + family + '-native.json'
@@ -22,12 +23,15 @@ destination = root / 'docs/helix/04-build/evidence/design-audit' / receipt_name
 if destination.exists():
     raise SystemExit('refusing to replace an existing receipt')
 configurations = []
+decoded_registries = []
 assert family in ('base', 'asserted', 'epoch', 'configuration')
 filename = {'base':'operation-admission.sql','asserted':'operation-asserted-origin-admission.sql','epoch':'operation-epoch-context-admission.sql','configuration':'operation-configuration-context-admission.sql'}[family]
 function = {'base':'runtime_admit_operation','asserted':'runtime_admit_operation_with_asserted_origin','epoch':'runtime_admit_operation_with_epoch_context','configuration':'runtime_admit_operation_with_configuration_context'}[family]
 paths = ['docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
          'packages/postgresql/native/issued-operation-admission/' + filename,
-         'packages/python/src/truss/_operation_ordinal.py']
+         'packages/python/src/truss/_operation_ordinal.py',
+         'packages/python/src/truss/_operation_registry.py',
+         'docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql']
 
 extras = []
 if family in ('epoch', 'configuration'):
@@ -68,6 +72,21 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                     errors.seek(0)
                     raise RuntimeError(errors.read())
                 return json.loads(line)
+            projection = originals[4].decode().split('SELECT\n', 1)[1].split(';', 1)[0]
+            registry_observation_sql = (
+                "SELECT json_build_object('xid',pg_current_xact_id_if_assigned()::text,'rows',"
+                "COALESCE((SELECT json_agg(json_build_array(" +
+                ','.join('r.' + name for name in COLUMNS) +
+                ")) FROM (SELECT\n" + projection + ") r),'[]'::json));")
+            def decode_current_registry(label, expected_ordinals):
+                send(registry_observation_sql)
+                raw = observe()
+                rows = decode_operation_registry(raw['xid'], COLUMNS, raw['rows'],
+                    'SELECT', str(len(raw['rows'])), 8, 65536)
+                assert sorted(row[1] for row in rows) == expected_ordinals
+                assert all(row[0] == raw['xid'] and row[2:5] == ('mutation','admitted','0') for row in rows)
+                decoded_registries.append({'boundary': label, 'actualXid': raw['xid'],
+                    'originalRows': raw['rows'], 'decodedRows': [list(row) for row in rows]})
             tail = ''
             if family != 'base':
                 tail += ",convert_to('original asserted fixture','UTF8'),convert_to('original capture profile fixture','UTF8')"
@@ -108,6 +127,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             issued_first = issuer.reserve(custody)
             send('SAVEPOINT operation_probe;')
             first = admit(issued_first)
+            decode_current_registry('first-admission', ['0'])
             snapshot_sql = "SELECT json_build_object('registry',(SELECT jsonb_agg(to_jsonb(o) ORDER BY operation_ordinal) FROM truss.row_home_operation o)"
             if family == 'configuration':
                 snapshot_sql += ",'configuration',(SELECT jsonb_agg(to_jsonb(c) ORDER BY operation_ordinal) FROM truss.operation_configuration c)"
@@ -127,6 +147,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                                         'completeObservedStoresUnchanged': True})
             send("ROLLBACK TO SAVEPOINT operation_probe; SELECT json_build_object('surviving',count(*)) FROM truss.row_home_operation;")
             assert observe() == {'surviving': 0}
+            decode_current_registry('first-savepoint-rollback', [])
             if family == 'configuration':
                 send("SELECT json_build_object('survivingConfigurations',count(*)) FROM truss.operation_configuration;")
                 assert observe() == {'survivingConfigurations': 0}
@@ -135,6 +156,7 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             issued_second = second_facade_issuer.reserve(custody)
             send('SAVEPOINT operation_second;')
             second = admit(issued_second)
+            decode_current_registry('second-admission', ['1'])
             assert first['writerXid'] == second['writerXid']
             assert [first['ordinal'], second['ordinal']] == ['0', '1']
             for observation in (first, second):
@@ -157,10 +179,12 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             assert observe() == {'surviving': 1, 'ordinal': '1'}
             send("ROLLBACK TO SAVEPOINT operation_second; SELECT json_build_object('surviving',count(*)) FROM truss.row_home_operation;")
             assert observe() == {'surviving': 0}
+            decode_current_registry('second-savepoint-rollback', [])
             issued_third = issuer.reserve(custody)
             assert issued_third.ordinal == '3'
             send('SAVEPOINT operation_third;')
             third = admit(issued_third)
+            decode_current_registry('third-admission', ['3'])
             assert third['writerXid'] == first['writerXid']
             assert third['ordinal'] == '3'
             send('ROLLBACK;')
@@ -179,6 +203,8 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
                 process.wait(timeout=5)
         server.cleanup()
 receipt = {'scope': 'Selected admission family with actual source Python counter and native savepoint rollback only; synthetic artifact inputs, administrative local-trust fixture, no original driver/security/resource/finalizer qualification',
+           'registryDecoderObservations': decoded_registries,
+           'registryObservationSql': registry_observation_sql,
            'nativeInputControls': native_controls, 'originalSurvivingSnapshot': before_refusals,
            'family': family, 'pgserver': importlib.metadata.version('pgserver'), 'serverVersion': version,
            'observations': [first, second, third], 'refusedIssuedOrdinal': '2', 'nativeRefusalSqlstate': '22023', 'configurationObservations': configurations, 'rollbackRegistryRows': 0, 'rollbackRemovedNamespace': True,
