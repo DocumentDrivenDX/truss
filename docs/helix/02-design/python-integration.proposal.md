@@ -2202,7 +2202,7 @@ returns a deferred object; no rollback or committed-outcome inference follows.
 
 | Property | Authority / precise statement | Existing enforcement and evidence | Residual obligation |
 | --- | --- | --- | --- |
-| PY-ORD-001 | Operation-control issued ordinals remain burnt: successful reservations on one original issuer are strictly increasing, unique and bounded by maximum. | `_operation_ordinal.py:OperationOrdinalIssuer.reserve`; shared six-scenario corpus and native-maximum/type tests in `test_operation_ordinal.py`. Increment occurs under Lock. | Original physical connection/epoch association and all-path counter lifetime are not implemented by this component. Native old MAX-row allocator remains nonconformant. |
+| PY-ORD-001 | Operation-control issued ordinals remain burnt: successful reservations on one original issuer are strictly increasing, unique and bounded by maximum. | `_operation_ordinal.py:OperationOrdinalIssuer.reserve`; shared six-scenario corpus and native-maximum/type tests in `test_operation_ordinal.py`. Increment occurs under Lock. | The shared registry now retains one issuer per original host transaction token on a selected connection/producer. Actual native transaction adoption, epoch association and all-path dispatch wiring remain unqualified. Legacy native MAX-row overloads must be excluded from the complete installation. |
 | PY-ORD-002 | Original issuer closure is irreversible; foreign owners cannot reserve/close. | `reserve` / `close`, identity checks and shared corpus. No transition decrements next. | Actual end/cancel/unknown controls must close the original issuer through the admitted producer; an interface cannot prove that wiring. |
 | PY-ADM-001 | Admission permission is consumed before verification or native invocation; no ticket invokes native twice, including after failure. | `_operation_admission.py:AdmissionCustody.admit_once`; one-use, copied/foreign, reentrant and failure tests. | Native producer/control observations and actual native one-operation correspondence remain open. |
 | PY-ADM-002 | Capacity and original-confirmation uniqueness are cumulative; consumption/failure/rollback cannot refund them. | `register_confirmed`, retained maps, no removal transition; duplicate/capacity tests. | Original account reserves selected enclosing/native resource bounds independently; arbitrary construction cannot establish that account. |
@@ -2470,3 +2470,43 @@ package controls; then integrate it with the complete installer and actual
 installed-resource archive; finally run PKG-01–06/08 with checkout unavailable.
 PKG-07 still requires the complete populated source/target migration route. No
 reader, index schema or executable resource index exists yet at this checkpoint.
+
+
+### Shared issuer registry: state and evidence correspondence
+
+The original trusted host creates one registry for its physical connection and
+producer. Registry state is `(closed, bindings, maximumBindings)`, where each
+binding strongly retains the original transaction token and issuer. Strong
+retention prevents a token's object identity from being recycled while its
+binding remains. Native transaction identity is still an independent driver fact.
+
+| Transition | Linearization point and invariant | Current evidence and remaining obligation |
+| --- | --- | --- |
+| Bind original transaction | Under the registry lock, return the existing issuer or insert exactly one new binding before returning; new insertion requires unused cumulative capacity. | Sequential shared-facade component test and all four native fixture schedules. No actual driver adoption or native concurrency qualification. |
+| End original transaction | Under registry lock, close the retained issuer; never remove its binding. Rebind returns that same closed issuer, never a new zero counter. | End/rebind/capacity component test. The registered driver must call end on confirmed termination and retain original unknown-outcome custody. |
+| Close original connection registry | Under registry lock, set closed and close every retained issuer before return; later bind refuses. | Original/foreign closure component test. This does not terminate an in-flight database statement or establish connection settlement. |
+| Reserve from shared issuer | Original issuer lock increments its counter; registry end/close acquires that issuer lock to close it. | Source correspondence and rollback/refusal schedules; these locks serialize local state, not PostgreSQL effects. Reservation before concurrent close may return an ordinal that must still pass native admission. |
+
+There is no issuer-to-registry lock acquisition in these methods; registry
+end/close acquires registry then issuer. This source inspection is a local lock
+order assessment, not a model-checker result, race schedule proof or latency
+bound. Distinct registries constructed by the same host can still produce
+conflicting counters. ADR-008 makes original registry sharing a trusted adapter
+obligation; a Python constructor or PostgreSQL bigint argument does not prove it.
+
+All four selected native families now preserve actual same-transaction ordinals
+0/1/3 through savepoint rollback and invalid-kind refusal at ordinal2 using the
+shared registry. NULL/negative and unfinished-operation controls preserve the
+full observed stores. Exact asserted origin and epoch captures remain covered;
+configuration's separate store/digest has its separately retained receipt. These
+administrative synthetic-input runs do not grant ordinary-role authority, qualify
+resource reservations, provide finalization or admit a complete installed tuple.
+
+For the installation resource reader, first bind the existing enclosing account's
+actual reservation/use/release interface and selected bounds across index decode,
+entry read, hash, retained references and installer archive. Current Python
+components only consume capacities selected externally; none exposes a qualified
+account implementation. Implementing a local byte counter and claiming complete
+containment would duplicate or bypass that boundary. The private reader can be
+implemented against an explicit unqualified port, but its component tests must
+retain that limitation until original account/native composition is exercised.

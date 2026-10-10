@@ -376,3 +376,18 @@ module/test hashes, dependency versions and original suite output. Earlier
 42-test wheel receipts remain historical. This establishes packaged component
 behavior on macOS arm64/Python3.11/PostgreSQL16.15; it does not qualify clean
 dependency resolution, public installation/migration APIs or a complete engine.
+
+
+## Shared registry across four native families
+
+The three new `issued-operation-ordinal-{base,asserted,epoch}-shared-registry-native.json`
+receipts run the current unchanged producer and shared registry on corrected
+PostgreSQL16.15. Each observes the same actual transaction with issued0/1/3,
+ordinal2 burnt by native invalid-kind refusal, rollback removal and full-store
+preservation for NULL/negative/unfinished controls. Together with
+`issued-operation-ordinal-shared-registry-native.json` for configuration, these
+cover all four administrative component schedules. Their false full-driver,
+full-family-qualification and readiness flags remain deliberate: running each
+family does not establish complete original authority/account/finalizer wiring,
+ordinary-role execution or all-path admission. The Python design now includes
+the registry state transitions, local lock order and remaining adoption obligations.
