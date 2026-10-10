@@ -85,6 +85,39 @@ class LocalRuntimeTests(unittest.TestCase):
             finally:
                 runtime.close()
 
+    def test_constructor_failure_with_postmaster_marker_retains_custody(self):
+        # Synthetic constructor fault; this creates no native server/process.
+        with tempfile.TemporaryDirectory(prefix='truss-python-startup-fault-') as parent:
+            directory = Path(parent) / 'data'
+            runtime = LocalPostgres(directory)
+            def fail_startup(*args, **kwargs):
+                directory.mkdir()
+                (directory / 'PG_VERSION').write_text('16\n')
+                (directory / 'postmaster.pid').write_text('synthetic unresolved marker\n')
+                raise OSError('injected constructor failure')
+            try:
+                with patch('pgserver.get_server', side_effect=fail_startup) as startup:
+                    with self.assertRaisesRegex(LocalRuntimeError, 'startup stop unconfirmed'):
+                        runtime.__enter__()
+                    self.assertEqual(startup.call_count, 1)
+                with self.assertRaises(LocalRuntimeError):
+                    _ = runtime.info
+                with self.assertRaisesRegex(LocalRuntimeError, 'already in use'):
+                    LocalPostgres(directory).__enter__()
+                with self.assertRaisesRegex(LocalRuntimeError, 'lease retained'):
+                    runtime.close()
+                # Model explicit host recovery of the synthetic marker, not a
+                # production rule to delete a live postmaster's custody file.
+                (directory / 'postmaster.pid').unlink()
+                runtime.close()
+                with patch('pgserver.get_server', side_effect=OSError('before native startup')):
+                    with self.assertRaisesRegex(OSError, 'before native startup'):
+                        LocalPostgres(directory).__enter__()
+            finally:
+                if (directory / 'postmaster.pid').exists():
+                    (directory / 'postmaster.pid').unlink()
+                runtime.close()
+
     def test_nonempty_and_wrong_version_directories_refuse_unchanged(self):
         with tempfile.TemporaryDirectory(prefix='truss-python-refusal-') as parent:
             directory = Path(parent) / 'foreign'

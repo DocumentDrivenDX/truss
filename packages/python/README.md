@@ -168,3 +168,13 @@ compiler plus eleven coordinator regression tests outside the checkout, in the
 existing local-extra environment. Native lifecycle tests were not repeated for
 this compiler-only correction. No asynchronous compiler execution
 or automatic retry is introduced.
+
+
+The subsequent source lifecycle fix retains directory custody when pgserver's
+constructor fails without returning a handle but leaves a postmaster marker.
+Connection information stays unavailable and a second context refuses. Truss
+neither takes over nor terminates that unknown process; the host must establish
+recovery before explicitly closing again. A synthetic constructor-fault test
+checks this branch without starting a native process. Marker disappearance alone
+is not general process-crash qualification. This source change is newer than the
+recorded rebuilt wheel and requires a later package rebuild.

@@ -38,6 +38,7 @@ class LocalPostgres:
         self._info = None
         self._used = False
         self._registered = False
+        self._startup_pending = False
 
     @property
     def info(self) -> RuntimeInfo:
@@ -81,7 +82,9 @@ class LocalPostgres:
                     raise LocalRuntimeError('Local profile requires PostgreSQL16; no automatic upgrade')
                 if (self.directory / 'postmaster.pid').exists():
                     raise LocalRuntimeError('Existing postmaster custody requires explicit host recovery')
+            self._startup_pending = True
             self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+            self._startup_pending = False
             version = subprocess.check_output(
                 [str(self.psql_path), self._server.get_uri(), '-X', '-A', '-t',
                  '-v', 'ON_ERROR_STOP=1', '-c', 'SHOW server_version'],
@@ -109,6 +112,12 @@ class LocalPostgres:
             if (self.directory / 'postmaster.pid').exists():
                 raise LocalRuntimeError('Local PostgreSQL stop unconfirmed; directory lease retained')
             self._server = None
+        if self._startup_pending:
+            # Constructor failure supplies no owned server handle. Never take
+            # over a possible postmaster or let another context borrow custody.
+            if (self.directory / 'postmaster.pid').exists():
+                raise LocalRuntimeError('Local PostgreSQL startup stop unconfirmed; directory lease retained')
+            self._startup_pending = False
         if self._lease is not None:
             self._lease.release()
             self._lease = None
