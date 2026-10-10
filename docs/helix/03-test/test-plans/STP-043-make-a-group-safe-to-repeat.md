@@ -184,6 +184,24 @@ cannot generate the expected replay. These cases remain `not_run`.
 Capture actual native commit/rollback/recovery independently of client transport
 status. Inspect complete before/after graph, journal, receipt and protection
 inventories, plus callback/body/log disclosure and connection disposition.
+
+CLIENT-05 additionally changes the admitted disclosure policy while preserving
+ordinary membership: the new profile permits only a mask/withheld view, not full
+original receipt bytes. Independently confirm the first application committed,
+then retry the identical request. Require disclosure refusal, no payload in any
+callback/body/log/cache, unchanged original receipt/input/protection and zero new
+mutation/journal effects. A domain-valid masked response must not be accepted as
+byte-identical replay. Unknown receipt-policy interpretation refuses separately;
+query-field selection alone supplies no receipt authority.
+
+Restore full receipt disclosure through an explicitly admitted later policy cut.
+Retry unchanged and require the exact original ordered bytes, including no-op
+members, despite intervening record edits. The refusal must not expire identity,
+refund protection or reinterpret the original commit as rollback. Observe actual
+current-authority exclusion and final release/cleanup, including a change after
+receipt lookup but before delivery. These schedules remain `not_run` and consume
+the security owner's eventual original disclosure capability, not supplied truth
+fixtures or a Truss-owned mask implementation.
 Request-free operations receive no invented idempotent recovery. Client intent
 persistence is an explicitly selected host/application producer; a restart
 with missing original request custody must not reconstruct intent from current

@@ -85,6 +85,27 @@ Hash operation order, typed aliases/references, exact values, expected versions,
 
 Retention removes eligible expired full payloads under the lifecycle proposal above, retaining the compact identity within its namespace. Receipt expiry does not erase journal audit. A new trusted namespace is required for a new request identity after retirement; silent reuse inside the old namespace is forbidden. Journal retention cannot break a still-retained receipt because complete results are self-contained. Sensitive results need replay authorization and retention disclosure controls.
 
+### Replay disclosure versus transformed read output
+
+The selected replay authorization profile must authorize disclosure of the whole
+original receipt under current authority. A query policy permitting only Mask
+or Withheld output is not automatically such permission; receipt disclosure
+requires its own explicit owner-admitted correspondence. If complete original
+bytes cannot be disclosed, refuse replay without replacing, truncating, masking
+or recomputing the immutable semantic result. Unknown policy applicability or
+unsupported receipt disclosure interpretation refuses the affected capability.
+This preserves the existing exact-replay decision rather than adding transformed
+retry results or a second mask resolver.
+
+The original commit remains committed and its retry identity/protection remains
+intact. Refusal of later disclosure cannot report application rollback or allow
+the effect to run again. Any error/transport envelope must expose only facts
+permitted by the current profile; it cannot leak protected receipt identity,
+content or actor through diagnostics. If full disclosure is explicitly admitted
+later, observe the same original receipt; current rows, changed policy and new
+configuration cannot author a replacement semantic result. Normal authorized
+reads may use their separately selected masked result contract.
+
 ## Alternatives
 
 A complete journal receipt record could also carry the outcome, but would expand journal operation semantics, include all-no-op events and require whole-receipt protection across partitions/feed/history. It is a viable separately reviewed alternative; property-change rows alone are insufficient. An in-memory cache cannot survive crash or supply native cross-process serialization. Recomputing results from current state violates original-result replay.
