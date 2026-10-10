@@ -71,6 +71,16 @@ export function planLayoutMigration(manifestBytes:Uint8Array,observationBytes:Ui
    if(from===to||!layouts.has(from)||!layouts.has(to)||typeof s.transactional!=='boolean')return fail();
    return Object.freeze({id:text(s.id),from,to,recipe:artifact(s.recipe),procedure:profile(s.procedure),transactional:s.transactional});
   }),s=>s.id);
+  const recipePins=new Map<string,string>(),procedurePins=new Map<string,string>();
+  for(const step of steps.values()){
+   const entries:[Map<string,string>,string,string][]=[
+    [recipePins,step.recipe.identity,step.recipe.sha256],
+    [procedurePins,JSON.stringify([step.procedure.identity,step.procedure.version]),step.procedure.sha256]];
+   for(const [pins,key,digest] of entries){
+    if(pins.has(key)&&pins.get(key)!==digest)return fail();
+    pins.set(key,digest);
+   }
+  }
   const routes=unique(m.routes.map(value=>{
    const o=object(value,['id','from','to','direction','steps']);
    const from=version(o.from),to=version(o.to),direction=o.direction;

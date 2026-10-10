@@ -137,6 +137,13 @@ def plan_layout_migration(manifest_bytes: bytes, observation_bytes: bytes, targe
         family = _text(manifest['family'])
         layouts = _unique(map(_pin, _list(manifest['layouts'])), lambda pin: pin.version)
         steps = _unique((_step(value, layouts) for value in _list(manifest['steps'], False)), lambda step: step.id)
+        recipe_pins, procedure_pins = {}, {}
+        for step in steps.values():
+            for pins, key, digest in ((recipe_pins, step.recipe.identity, step.recipe.sha256),
+                                     (procedure_pins, (step.procedure.identity, step.procedure.version), step.procedure.sha256)):
+                if key in pins and pins[key] != digest:
+                    raise ValueError('Contradictory original artifact pin')
+                pins[key] = digest
         routes, route_ids = {}, set()
         for value in _list(manifest['routes'], False):
             value = _object(value, ('id', 'from', 'to', 'direction', 'steps'))

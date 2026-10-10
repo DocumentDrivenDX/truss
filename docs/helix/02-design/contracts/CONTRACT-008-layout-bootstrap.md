@@ -108,6 +108,13 @@ The internal pure planner implements proposed `truss-layout-migrations/0.1.0` me
 
 Each step has id, from, to, recipe (identity/sha256), procedure (identity/version/sha256) and transactional boolean. Each route has id, from, to, direction (upgrade/downgrade) and a nonempty ordered list of step IDs. Route IDs and source/target pairs are unique. Every complete route must chain declared layouts in its stated direction with no repeated step. Only the explicitly requested source/target route can be selected; available intermediate steps do not imply a supported path. A selected nontransactional route is unavailable in this default planner profile.
 
+Within one complete manifest, a recipe identity denotes one exact content pin,
+and a procedure identity/version pair denotes one exact procedure pin. Reuse of
+the same pin is allowed; conflicting digests refuse before route or at-target
+selection, including unselected steps. Versioned recipe content needs distinct
+qualified identity text; procedure versions remain separate. These consistency
+checks do not establish original bytes, installation authority or executability.
+
 The supplied observation has interfaceVersion `truss-layout-observation/0.1.0`, family and layout pin. Exact source bundle/inventory fingerprints must match the manifest. This is caller-supplied metadata at this stage, not native observation authority. The planner returns plan, no_steps or refused under scope declared_metadata_only. Frozen output retains exact source/target and ordered recipe/procedure pins; it contains no executable SQL or callback. no_steps cannot qualify already-applied migration or current installation readiness.
 
 Reuse the existing closed numeric-free decoder's one-MiB UTF-8, duplicate-member, Unicode, depth/node/work limits. Each metadata collection is limited to 1,024 entries and each nonempty identifier/profile text to 256 UTF-8 bytes; routes/steps/layouts validate as a complete manifest before selection. Version comparison uses exact integers, never JavaScript numbers. These limits bound this controlled component's metadata work; they do not establish native migration budgets or a universal heap guarantee.

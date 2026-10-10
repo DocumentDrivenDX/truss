@@ -25,7 +25,7 @@ their named source-byte observations only; native writer/reader encoding remains
 unqualified. These observations must not create another round of identical source
 probes in place of completing installation.
 
-The [current installed Python suite](evidence/design-audit/python-resource-length-installed-suite-cache-access.json)
+The [current installed Python suite](evidence/design-audit/python-migration-pins-installed-suite.json)
 matches all17 source/wheel/installed module payloads and passes71 component tests.
 The resource-index gate now refuses Boolean/float registered lengths before
 Python dataclass equality can alias them to integer lengths. The new independent

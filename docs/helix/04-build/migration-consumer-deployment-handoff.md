@@ -604,3 +604,16 @@ rebind, restore provider or new migration result variant is selected here.
 These cases become executable with M1/M2/M4's actual registered services and
 independent restore identity evidence; copied fixture labels alone do not qualify
 the separation.
+
+### Complete manifest artifact-pin consistency — 2026-10-10
+
+CONTRACT-008 now requires one digest per complete recipe identity and per
+procedure identity/version within the entire manifest. Both planners refuse
+conflicts before route selection, including at-target and unselected-step cases;
+identical pin reuse remains valid. The shared corpus has20 independently expected
+cases. Python consumes all20; Bun passes31 migration tests/60 assertions and
+strict TypeScript passes for the planner. The installed wheel matches17 modules
+and passes71 component tests in
+[the current receipt](evidence/design-audit/python-migration-pins-installed-suite.json).
+These checks establish metadata consistency only. Actual registered bytes,
+complete M1 pair, native administrative authority and M2–M5 execution remain open.

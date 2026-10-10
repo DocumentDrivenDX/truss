@@ -304,6 +304,50 @@
           }
         ]
       }
+    },
+    {
+      "id": "contradictory-recipe",
+      "manifestText": "{\"interfaceVersion\":\"truss-layout-migrations/0.1.0\",\"family\":\"truss-postgresql\",\"layouts\":[{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"1.1.0\",\"bundleSha256\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"2.0.0\",\"bundleSha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}],\"steps\":[{\"id\":\"one\",\"from\":\"1.0.0\",\"to\":\"1.1.0\",\"recipe\":{\"identity\":\"one\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true},{\"id\":\"two\",\"from\":\"1.1.0\",\"to\":\"2.0.0\",\"recipe\":{\"identity\":\"one\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true}],\"routes\":[{\"id\":\"upgrade\",\"from\":\"1.0.0\",\"to\":\"2.0.0\",\"direction\":\"upgrade\",\"steps\":[\"one\",\"two\"]}]}",
+      "observationText": "{\"interfaceVersion\":\"truss-layout-observation/0.1.0\",\"family\":\"truss-postgresql\",\"layout\":{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}}",
+      "targetVersion": "2.0.0",
+      "expected": {
+        "reason": "invalid_input",
+        "outcome": "refused",
+        "scope": "declared_metadata_only"
+      }
+    },
+    {
+      "id": "contradictory-procedure",
+      "manifestText": "{\"interfaceVersion\":\"truss-layout-migrations/0.1.0\",\"family\":\"truss-postgresql\",\"layouts\":[{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"1.1.0\",\"bundleSha256\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"2.0.0\",\"bundleSha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}],\"steps\":[{\"id\":\"one\",\"from\":\"1.0.0\",\"to\":\"1.1.0\",\"recipe\":{\"identity\":\"one\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true},{\"id\":\"two\",\"from\":\"1.1.0\",\"to\":\"2.0.0\",\"recipe\":{\"identity\":\"two\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"},\"transactional\":true}],\"routes\":[{\"id\":\"upgrade\",\"from\":\"1.0.0\",\"to\":\"2.0.0\",\"direction\":\"upgrade\",\"steps\":[\"one\",\"two\"]}]}",
+      "observationText": "{\"interfaceVersion\":\"truss-layout-observation/0.1.0\",\"family\":\"truss-postgresql\",\"layout\":{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}}",
+      "targetVersion": "2.0.0",
+      "expected": {
+        "reason": "invalid_input",
+        "outcome": "refused",
+        "scope": "declared_metadata_only"
+      }
+    },
+    {
+      "id": "contradictory-procedure-at-target",
+      "manifestText": "{\"interfaceVersion\":\"truss-layout-migrations/0.1.0\",\"family\":\"truss-postgresql\",\"layouts\":[{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"1.1.0\",\"bundleSha256\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"2.0.0\",\"bundleSha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}],\"steps\":[{\"id\":\"one\",\"from\":\"1.0.0\",\"to\":\"1.1.0\",\"recipe\":{\"identity\":\"one\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true},{\"id\":\"two\",\"from\":\"1.1.0\",\"to\":\"2.0.0\",\"recipe\":{\"identity\":\"two\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"},\"transactional\":true}],\"routes\":[{\"id\":\"upgrade\",\"from\":\"1.0.0\",\"to\":\"2.0.0\",\"direction\":\"upgrade\",\"steps\":[\"one\",\"two\"]}]}",
+      "observationText": "{\"interfaceVersion\":\"truss-layout-observation/0.1.0\",\"family\":\"truss-postgresql\",\"layout\":{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}}",
+      "targetVersion": "1.0.0",
+      "expected": {
+        "reason": "invalid_input",
+        "outcome": "refused",
+        "scope": "declared_metadata_only"
+      }
+    },
+    {
+      "id": "contradictory-recipe-unselected",
+      "manifestText": "{\"interfaceVersion\":\"truss-layout-migrations/0.1.0\",\"family\":\"truss-postgresql\",\"layouts\":[{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"1.1.0\",\"bundleSha256\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"},{\"version\":\"2.0.0\",\"bundleSha256\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}],\"steps\":[{\"id\":\"one\",\"from\":\"1.0.0\",\"to\":\"1.1.0\",\"recipe\":{\"identity\":\"one\",\"sha256\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true},{\"id\":\"two\",\"from\":\"1.1.0\",\"to\":\"2.0.0\",\"recipe\":{\"identity\":\"one\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"},\"procedure\":{\"identity\":\"transactional-layout-migration\",\"version\":\"0.1.0\",\"sha256\":\"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"},\"transactional\":true}],\"routes\":[{\"id\":\"upgrade\",\"from\":\"1.0.0\",\"to\":\"2.0.0\",\"direction\":\"upgrade\",\"steps\":[\"one\",\"two\"]},{\"id\":\"first-only\",\"from\":\"1.0.0\",\"to\":\"1.1.0\",\"direction\":\"upgrade\",\"steps\":[\"one\"]}]}",
+      "observationText": "{\"interfaceVersion\":\"truss-layout-observation/0.1.0\",\"family\":\"truss-postgresql\",\"layout\":{\"version\":\"1.0.0\",\"bundleSha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"inventorySha256\":\"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"}}",
+      "targetVersion": "1.1.0",
+      "expected": {
+        "reason": "invalid_input",
+        "outcome": "refused",
+        "scope": "declared_metadata_only"
+      }
     }
   ]
 }
