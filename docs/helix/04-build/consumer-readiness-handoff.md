@@ -6,6 +6,17 @@ released support manifest or an admitted installation. The complete Truss goal,
 45 stories and consumer R2–R10 remain required. Artifact-only updates after this
 checkpoint do not create executable engine capability.
 
+## Current implementation checkpoint — 2026-10-10
+
+The source checkpoint above is historical. Current implementation evidence at
+5800e07b includes114 source and fresh installed-wheel tests with25 matching
+Python modules, bounded typed native prestate capture/cascade/access checks,
+original initializer byte/right-refusal checks and an enforced Python module map.
+These are private component advances; every public engine operation in the table
+below remains pending. The old4–6/6–8/8–12 week targets are superseded by the
+runtime plan's measured reforecast gate. Migration source/target and preservation
+preparation starts alongside installation, without a P4 calendar delay.
+
 ## Available versus pending operations
 
 | Surface | Actual availability and qualification |
@@ -175,3 +186,32 @@ fresh public-index resolution, upgrade/force-reinstall schedules, complete
 installed tests or engine/schema/security acceptance. The retained resolver
 report records actual artifact hashes; the corrected private wheelhouse remains
 an interim engineering input rather than a published consumer dependency.
+
+
+## First complete consumer path and implementation exits
+
+Use the existing PA01–PA05, PKG02/08 and conformance service packets to realize
+this sequence on one original installed profile. It is a concrete integration
+acceptance order, not a reduced release scope, new API or replacement corpus.
+Existing bindings own method names and complete request/result signatures.
+The original consumer41 cases and all45 Truss stories remain required.
+
+| Ordered consumer step | Required concrete result and independent evidence | Current implementation dependency |
+| --- | --- | --- |
+| Start and explicitly install | The selected pgserver runtime starts without implicit DDL; separate fresh installation verifies complete original model/generated native/routine/grant/initializer/archive/profile inventory and publishes readiness atomically. Late installation failure publishes no ready installation; unknown commit retains original recovery custody. | Local lifecycle works; complete bodies, original owner authority, installer/observer and normal published runtime delivery are pending. |
+| Accept the original consumer catalog | Submit the original admitted UMF document through the existing acceptance contract; return actual document-qualified IDs, original accepted report and head. Independently observe retained source/unknown extensions, enforcement dispositions and exact installed effects before the consumer lists modules. | UMF meaning and catalog/report components exist; complete acceptance/native/security composition is pending. Model parsing or an assigned fixture ID is insufficient. |
+| Apply one authenticated atomic group | A connecting writer applies real create/update/key/edge effects with preconditions and a durable idempotent receipt; reader write and nonmember access refuse with no effects. Original connecting person and action provenance appear in the journal. Late failure restores full state/keys/edges/journal/receipt/head facts. | PA01–PA05, origin/isolation and seven complete semantic bodies remain pending. No caller role map, actor string or direct fixture SQL bypass. |
+| Read the committed result | Direct key/edge reads and the selected compiled read return complete logical values under the person's read-only transaction, with exact values and bounded/indexed shape claims independently observed. Wrong/unavailable authority, codecs or scope refuse; cleanup or freshness failure withholds publication. | Qualified original mapping/driver/account/current authority and closing checks are pending. Keep the adopted compiler pin; new Databricks design is not PostgreSQL support. |
+| Dry-run and import | Caller-owned dry-run evaluates the same plan/violations and rolls back without journal or request residue. Import preserves original identity/provenance and its selected atomic/per-item outcomes with full observers. Host transaction lifetime stays with the host. | Existing contracts own these semantics; native adoption/containment and complete mutation/import composition are pending. |
+| Retry and consume the feed | Lost acknowledgement retries the same original request without duplicate effects; durable receipts honor the selected at-least24-hour protection. Complete transaction feed, restart/replay, durable ACK and issued position/reached preserve epoch/installation meaning. Malformed/unissued tokens refuse rather than returning not-yet. | Original durable issuance/journal/feed/settlement and observer implementation are pending. Short journal retention cannot shorten required retry protection. |
+| Publish the dependency | A normal clean consumer install resolves the advertised runtime, layout and corpus tuple; Python and TypeScript conformance/interchange and each advertised native service tuple have independent evidence. Shipped infrequent migration tooling uses a supported same-pair route. | Published corrected runtime/package, stable layout/corpus and complete native/interchange/migration qualification remain pending. Private wheel delivery is interim evidence only. |
+
+Do not expose an entry point by filling a missing semantic body with a stub,
+returning a fixture report, falling back to another compiler/profile or skipping
+an unavailable observation. Each integration step closes its original evidence
+before the next dependent step; negative cases remain part of that same slice.
+Independent observers compare complete original expected facts, rather than
+checking only the returned success flag. Record unresolved shared-owner interface
+facts separately from Truss-owned implementation tasks; no further product vote
+is needed to start the latter. Retain failure and uncertain-outcome evidence for
+recovery, with safe bounded diagnostics separate from commit authority.

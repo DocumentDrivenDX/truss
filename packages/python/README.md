@@ -7,9 +7,10 @@ candidate, not released mutation/query/installation APIs.
 The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
 prioritizes complete installation, catalog acceptance, apply/import and direct
 key/edge reads, with per-person isolation and origin capture included in the
-first usable Python preview. Its provisional planning target is4–6 focused weeks;
-feed/retry follows at6–8 and stable layout/full qualification at8–12. These are
-estimates with unresolved native integration prerequisites, not release dates.
+first usable Python preview. The earlier week estimates are historical; there is
+no verified delivery ETA yet. Reforecast follows a complete protected ordinary-
+consumer transaction on one installed profile and measured fresh install/verify.
+See the plan’s forecast checkpoint for exact prerequisites and current evidence.
 
 For local PostgreSQL:
 
