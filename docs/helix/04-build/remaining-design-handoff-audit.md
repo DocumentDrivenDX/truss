@@ -1676,3 +1676,10 @@ second native-ordered guard and complete projection restoration after54000.
 This closes finite partial two-route failure containment for reservation moves,
 with no retries. Original held-lock/current-authority/capacity and concurrency
 qualification remain required; the key-row partial-failure path is not covered.
+
+The [Python touch registry checkpoint](evidence/design-audit/python-touch-registry-source.json)
+passes107 source tests, including four focused complete12-cell/native-vector
+methods. Supplied touch decoding and original manifest correspondence now exist;
+complete same-cut native capture and full operation-registry/owner-codec/current
+authority composition remain the next inputs. Older stored seals are retained
+without a readiness claim. No installed-wheel, public API or body gate is promoted.

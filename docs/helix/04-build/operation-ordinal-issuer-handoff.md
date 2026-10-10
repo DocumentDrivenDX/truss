@@ -1343,3 +1343,31 @@ mid-statement observation. The experiment tests reservation movement; key-row
 movement success is covered separately, but its partial-failure path is not
 claimed. All administrative-custody, native profile/role, protected authority,
 full resource and seven-body gaps remain unchanged.
+
+### Complete Python touch registry decoding (2026-10-10)
+
+Private `_row_touch_registry.py` retains the entire supplied12-cell touch cohort
+and immutable decoded custody. It checks exact selected columns/count/completion,
+original actual xid, canonical signed native owner/catalog integer domains,
+positive bounded dirty/seal generations, seal<=dirty, unique full touch identities,
+strict original hex carriers and complete layout/home/owner-property byte
+correspondence to the retained operation manifest. Manifest native addresses must
+match the selected installation/xid. Older seals remain retained rather than
+being normalized into current readiness. No undocumented positive catalog-ID
+constraint is invented. Duplicate rows refuse rather than collapse.
+
+`python-touch-registry-source.json` pins107 passing source tests and four focused
+methods replaying all four nonempty touch vectors from the retained18-observation
+native transition receipt. Controls cover signed boundaries, older seal, duplicate
+identities/distinct owner kinds, malformed cells/custody, installation mismatch,
+exact logical byte/row bounds and incomplete descriptor/completion. This replays
+retained native bytes; it is not a new native capture or installed-wheel run.
+
+The next composition consumes original native SELECT control/descriptors under
+the complete same-cut capture schedule, then checks each retained manifest against
+the complete operation registry via existing correspondence. Semantic owner/home
+codec admission must independently bind the typed tuple to original artifact
+meaning; opaque byte equality cannot do so. Full subject/current-authority,
+held guards/capacity, event provenance, finalization and whole resource/settlement
+qualification remain outstanding. The decoder performs no DML and changes no
+public exports, layout/UMF schema or seven-body readiness field.
