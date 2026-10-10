@@ -1,0 +1,396 @@
+{
+  "scope": "fixed-snapshot bounded native typed prestate -> complete original native OLD image -> Python byte correspondence during actual cascades; original UMF-exported tables/codecs, administrative fixture",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "unsupported-snapshot-READ COMMITTED",
+      "sqlstate": "55000",
+      "resultReturned": false
+    },
+    {
+      "id": "unsupported-snapshot-READ UNCOMMITTED",
+      "sqlstate": "55000",
+      "resultReturned": false
+    },
+    {
+      "id": "original-readonly-snapshot-REPEATABLE READ",
+      "rows": 3,
+      "readOnlyPreserved": true,
+      "isolationPreserved": true
+    },
+    {
+      "id": "original-readonly-snapshot-SERIALIZABLE",
+      "rows": 3,
+      "readOnlyPreserved": true,
+      "isolationPreserved": true
+    },
+    {
+      "id": "committed-concurrent-writer-excluded-from-original-snapshot",
+      "originalBytesExact": true,
+      "writerValue": "concurrent-update",
+      "isolation": "repeatable read"
+    },
+    {
+      "id": "new-transaction-observes-committed-writer",
+      "originalSnapshotNotReused": true
+    },
+    {
+      "id": "complete-bounded-capture-501",
+      "rows": 3,
+      "bytes": 488,
+      "images": [
+        [
+          "state",
+          "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f500000019000000066f626a6563740000001400000008000000000000006400000017000000040000000100000014ffffffff00000017ffffffff00000017000000040000000100000017000000040000006500000014000000080000000000000259000000110000000101000000110000000102000000110000000103000000110000000104"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000025900000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002590000001900000006737472696e67000000190000000c6f626a6563742d76616c756500000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ]
+      ]
+    },
+    {
+      "id": "bounded-refusal-501-2-488",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "bounded-refusal-501-3-487",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "bounded-refusal-501-0-0",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "complete-bounded-capture-502",
+      "rows": 3,
+      "bytes": 484,
+      "images": [
+        [
+          "state",
+          "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f600000019000000046564676500000014ffffffff00000017ffffffff0000001400000008000000000000006400000017000000040000000a00000017000000040000000300000017000000040000012d0000001400000008000000000000025a000000110000000101000000110000000102000000110000000103000000110000000104"
+        ],
+        [
+          "node",
+          "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000025a00000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+        ],
+        [
+          "scalar",
+          "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000025a0000001900000006737472696e67000000190000000a656467652d76616c756500000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+        ]
+      ]
+    },
+    {
+      "id": "bounded-refusal-502-2-484",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "bounded-refusal-502-3-483",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "bounded-refusal-502-0-0",
+      "sqlstate": "54000",
+      "resultReturned": false
+    },
+    {
+      "id": "invalid-capture-999-3-100000",
+      "sqlstate": "55000"
+    },
+    {
+      "id": "invalid-capture-None-3-100000",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "invalid-capture-501--1-100000",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "invalid-capture-501-3--1",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "501/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "738",
+        "501",
+        "601",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000025900000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "738",
+        "501",
+        "601",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002590000001900000006737472696e67000000190000000c6f626a6563742d76616c756500000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "501/row_home_state",
+      "actualRelationOid": "16742",
+      "originalEvent": [
+        "row_home_state",
+        "16742",
+        "DELETE",
+        "738",
+        "501",
+        null,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101",
+        false,
+        null,
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f500000019000000066f626a6563740000001400000008000000000000006400000017000000040000000100000014ffffffff00000017ffffffff00000017000000040000000100000017000000040000006500000014000000080000000000000259000000110000000101000000110000000102000000110000000103000000110000000104"
+    },
+    {
+      "id": "complete-image-attribution-501/row_home_state",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "object",
+        "100",
+        "1",
+        "1",
+        "101"
+      ]
+    },
+    {
+      "id": "502/row_home_node",
+      "actualRelationOid": "16772",
+      "originalEvent": [
+        "row_home_node",
+        "16772",
+        "DELETE",
+        "738",
+        "502",
+        "602",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f60000001400000008000000000000025a00000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_node",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_scalar",
+      "actualRelationOid": "16805",
+      "originalEvent": [
+        "row_home_scalar",
+        "16805",
+        "DELETE",
+        "738",
+        "502",
+        "602",
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        false,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f60000001400000008000000000000025a0000001900000006737472696e67000000190000000a656467652d76616c756500000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_scalar",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "502/row_home_state",
+      "actualRelationOid": "16742",
+      "originalEvent": [
+        "row_home_state",
+        "16742",
+        "DELETE",
+        "738",
+        "502",
+        null,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301",
+        false,
+        null,
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ],
+      "originalImageHex": "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f600000019000000046564676500000014ffffffff00000017ffffffff0000001400000008000000000000006400000017000000040000000a00000017000000040000000300000017000000040000012d0000001400000008000000000000025a000000110000000101000000110000000102000000110000000103000000110000000104"
+    },
+    {
+      "id": "complete-image-attribution-502/row_home_state",
+      "originalByteCorrespondence": true,
+      "ownerProperty": [
+        "edge",
+        "100",
+        "10",
+        "3",
+        "301"
+      ]
+    },
+    {
+      "id": "actual-old-image-missing-retained-state-refusal",
+      "refused": true
+    },
+    {
+      "id": "native-input-projection-conflicting-node-state-refusal",
+      "refused": true,
+      "control": "corrupted projection, not a native row or constraint violation"
+    },
+    {
+      "id": "complete-state-node-scalar-cascade",
+      "remainingRows": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "restored-native-producer-501",
+      "originalBytesExact": true
+    },
+    {
+      "id": "restored-native-producer-502",
+      "originalBytesExact": true
+    },
+    {
+      "id": "confirmed-savepoint-restoration",
+      "restoredRows": [
+        2,
+        2,
+        2
+      ],
+      "writerXid": "738",
+      "eventRows": 0
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/row-event-image-attribution-probe.sql": "78a72bc36838562cb52123247e4cf2180c56f5a87219fec633995b0dd61eb030",
+    "docs/helix/04-build/evidence/design-audit/row-image-codec-preflight-source.owner-export.sql": "cf3926a6d1447eb0e5d21353252b7f5a43ef868d2f759d0ecd3b39784e348549",
+    "docs/helix/04-build/evidence/design-audit/row-image-prestate.owner-export.sql": "577229d7581f7dc30bc618af617d7347e36fff04e086f4abdb8601ed634426e8",
+    "packages/postgresql/native/row-image/prestate.sql": "3006ae27a2f189be92f5261aa9f9e40f447acce861e31556ecc331cf6d2c6bc0",
+    "docs/helix/02-design/contracts/row-image-prestate-v0.1.proposal.umf.json": "c0b11794ee15352b1e4f40bd0e03f2af2e4bcf0e72420dcde7dc5aa7d90f16fd",
+    "docs/helix/04-build/evidence/design-audit/row-image-snapshot-prestate.owner-export.sql": "573a843e2059b8592b7eaa4f66a09849af88531c5d7c81ff86f23557efedd54d",
+    "packages/postgresql/native/row-image/snapshot-prestate.sql": "15176991272eddf2db6d6d552af9830a64d0e5362e3eb3c6e96e3d54aa835b42",
+    "docs/helix/02-design/contracts/row-image-snapshot-prestate-v0.1.proposal.umf.json": "25707433f04e40226088444d4ed7a5bd5eef943c00df43d5cc5b8126f6906f09",
+    "packages/python/src/truss/_row_image.py": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9",
+    "packages/python/src/truss/_row_event_attribution.py": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b"
+  },
+  "producerSha256": "411ab96595a724f8c33bb63d91e44d0a24e43bfbff0817ab2b04e6d40e8f5bd7",
+  "rowTouchObserverQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Probe captures complete native OLD images plus typed association fields; underlying native numeric/temporal logical semantics remain independently admitted",
+    "Retained prestate comes from bounded native typed-image component; selected state is administrative fixture input, not independently admitted protected scope/cut/authority. Fixed native transaction snapshot is enforced for this variant; original authority/scope/driver exclusion and same-cut correspondence to other publication facts remain external",
+    "Both object and edge IDs100 retain distinct kind/discriminator/property owner; edge discriminator10 is not property owner3",
+    "No touch/capacity generation update, native callable role/ACL closure, full resources or seven semantic body realization",
+    "Finite PostgreSQL16.15 fixture, not all cascade/reparenting/type/deployment profiles"
+  ]
+}

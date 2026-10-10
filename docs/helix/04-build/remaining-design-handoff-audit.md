@@ -1963,3 +1963,12 @@ separate distinct-neighbor degree, whole-bag ordinal capacity and exact carrier
 selection before release. This does not add Truss traversal scope, upgrade the
 adopted compiler or qualify PostgreSQL from Databricks design evidence. UMF's
 published head/browser remain synchronized and unchanged.
+
+
+[Fixed-snapshot prestate36](evidence/design-audit/row-image-snapshot-prestate-native.json)
+now composes bounded original typed-image capture with an actual native isolation
+gate, preserving read-only REPEATABLE READ/SERIALIZABLE state and refusing unfixed
+modes. A real separately committed writer is invisible to the established snapshot
+and visible to a new transaction. The old producer/profile remains separate;
+protected original scope/authority/driver exclusion, same-cut publication facts,
+owner codecs and complete native dependency/account closure remain unfinished.

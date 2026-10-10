@@ -1718,3 +1718,35 @@ checks. This finite ordinary role is not a complete deployment role hierarchy,
 inherited-grant audit, protected owner route or dependency inventory. The
 original30-check producer/receipt remain unchanged; the separate39-check
 producer/receipt pin their own bytes and the same source artifacts.
+
+
+## Fixed-snapshot typed prestate variant — 2026-10-10
+
+The distinct private `row-image/snapshot-prestate.sql` wrapper composes the
+existing bounded typed-image producer only when the actual native transaction
+is REPEATABLE READ or SERIALIZABLE. Other isolation levels refuse with55000;
+it never changes the host's isolation, read-only mode or transaction lifetime.
+This preserves an already established native snapshot or allows its normal first
+read to establish one, without inventing continuity with an earlier cut. The
+original unfixed producer remains unchanged for independently qualified external
+cut mechanisms; the new variant does not remove CONTRACT-007's general host
+READ COMMITTED support or claim this capture supports that mode.
+
+[UMF source evidence](evidence/design-audit/row-image-snapshot-prestate-source.json)
+retains exact CREATE/REVOKE bytes through source archive, serialized JSON reload
+and owner export, with two explicit unhandled statements and no complete DDL
+coverage claim. [Native36](evidence/design-audit/row-image-snapshot-prestate-native.json)
+retains the original30 finite capture/cascade/budget/rollback checks and six new
+isolation/concurrency controls. Both supported modes run in native read-only
+transactions. READ COMMITTED/READ UNCOMMITTED refuse. An independently connected
+writer commits a scalar change after the reader establishes its snapshot; repeated
+full capture returns identical original bytes, while a new transaction observes
+the committed change. The writer restores the fixture before cascade checks.
+
+This qualifies the finite native snapshot mechanism for the selected16.15
+component profile, not complete protected prestate. Administrative selected-state
+input, actual original connection/transaction lifetime and host statement exclusion,
+owner/property/catalog codecs, current subject/authority and publication freshness,
+whole resource accounting and complete installed dependency/role closure remain
+external. A stable old snapshot does not prove current authorization or permit
+result release. No seven-body binding, public API or installerReady is promoted.
