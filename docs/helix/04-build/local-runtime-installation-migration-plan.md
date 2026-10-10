@@ -1386,3 +1386,49 @@ authority. An assigned empty registry is structurally valid; its permission to
 perform an operation still requires the native OC02/OC06 selection rules and the
 complete original transaction observation. Continue with original driver/account
 composition and the complete installation gates above.
+
+
+## Integrated continuation after current component evidence — 2026-10-10
+
+The [fresh offline resolver installation](evidence/design-audit/python-offline-resolved-local-install.json)
+now closes the explicit private wheelhouse's normal dependency-resolution and
+local lifecycle observation. PKG-01 still requires public resolvable artifact
+availability, actual payload identity, advertised upgrade/platform paths and
+complete consumer acceptance. The ordinary pgserver==0.1.4 constraint accepts
+both public and corrected local versions; do not infer native bytes from that
+requirement or claim adding the extra necessarily downgrades an installed build.
+
+The [native timing witness](evidence/design-audit/python-dry-run-native-timing-restoration.json)
+closes six named deferred-UNIQUE/savepoint observations only. Feed it into PY-04's
+concrete R6 relationship-limit/caller-sentinel test after the actual installed
+guards/executor exist. Do not add another generic PostgreSQL savepoint probe in
+place of that integrated test. Preserve transaction_unusable until original local
+rollback is confirmed, retain earlier caller work, and independently observe
+explicit outer rollback. Complete journal/receipt/account/actor validation is
+still required; administrative fixture evidence cannot waive it.
+
+For P1, implement original protected operation attribution and account wiring,
+then the seven actual bodies and complete native trigger/call/grant closure.
+The [current routine semantic reconciliation](evidence/design-audit/routine-feed-disclosure-source-review.json)
+and sixteen damaged-manifest controls keep source selection reproducible but
+supply no executable guard or ready marker. Use the existing complete installer
+observer and PKG-08 settlement schedules on the same candidate. No partial body
+packet, synthetic seal or copied source hash opens public readiness.
+
+For P2, attach the concrete R6 and [finite writer workload](../03-test/catalog-writer-workload-v0.1.proposal.json)
+to actual public operations on that installation. The workload's observation
+windows must be enforced by the original runner/executor, with full1024 planned
+outcomes and unknown custody intact. The [acceptance scaling procedure](../03-test/acceptance-scaling-experiment.proposal.md)
+measures fresh complete committed acceptance; its proposed ratio still requires
+profile selection and native execution. These are existing criterion exits,
+not additional milestone prerequisites detached from usable operations.
+
+UMF remains the schema/DDL/semantics owner. Weft's committed f3208b2 private
+path frontend is recorded in the [source review](evidence/design-audit/weft-f3208b2-path-foundation-review.json);
+public0.4 lowering and the Truss result/authority/account tuple are not adopted.
+Security's completed evaluated-fact checkpoint stays distinct from its active
+native bridge iteration. Consume the minimum exact completed owner packet when
+qualified; do not transplant its17.9 fixture or moving APIs into the16.15 default.
+P3/P4 feed/reached, complete corpus/interchange, stable layout, populated migration
+and managed qualification remain in the original queue. None of these component
+observations changes the full45-story/167-criterion objective or marks P0/P1 done.
