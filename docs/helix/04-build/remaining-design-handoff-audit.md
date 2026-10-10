@@ -2,7 +2,7 @@
 
 ## Current structural and implementation frontier — 2026-10-10
 
-The [fresh full allocation check](evidence/design-audit/current-story-allocation-after-weft-two-hop-review.json)
+The [fresh full allocation check](evidence/design-audit/current-story-allocation-after-traversal-sampling.json)
 passes45 stories and167 criteria with zero structural errors against all current
 registered US/TD/STP source hashes. It supersedes older structural source-freshness
 and allocation observations below; it does not establish semantic adequacy,
