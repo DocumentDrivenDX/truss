@@ -908,3 +908,28 @@ LM-V02/05 is separate from inspection effects. Retain actual transaction/role,
 original request, selected profile and complete result artifacts; counters and
 method stubs alone cannot pass. All six controls remain `not_run` until a genuine
 registered inspection adapter and independent native observers exist.
+
+
+## Python pgserver delivery versus installed readiness
+
+These scenarios extend US-045 using the Truss-maintained Python distribution and
+[installation handoff](../../04-build/python-migration-installation-handoff.md).
+Run from a fresh consumer environment outside the checkout, with no PYTHONPATH
+source fallback. Pin the actual built wheel, declared local extra and observed
+PostgreSQL version. Resolve installed module bytes against that wheel independently.
+
+| Scenario | Independent expectation and evidence status |
+| --- | --- |
+| Resolve the wheel's declared local extra and start a retained local directory | Installed imports work; actual server version matches the selected runtime tuple; startup does not create Truss objects or publish readiness. Local lifecycle component evidence exists for macOS arm64/Python3.11/pgserver0.1.4/PG16.2. |
+| Explicitly bootstrap through the installed Python tooling | Original installation attempt owns one complete qualified bundle/transaction; independent full inventory and required behavior precede ready publication. Not_run: no Python installer implementation yet. |
+| Restart an existing local directory with an older installation or unsupported compiler profile | No automatic migration, recipe replay or compiler-profile substitution. Local directory/version refusal has component evidence; full installed-profile and compiler compatibility remain not_run. |
+| Installed tooling encounters late failure, lost COMMIT acknowledgement or failed readiness verification after confirmed commit | Original outcome/recovery variants and durable custody survive process restart; reconciliation repeats no initialization or migration effects. Not_run pending installer/driver/recovery composition. |
+
+The historical installed-wheel34-test receipt includes four native lifecycle
+tests, not bootstrap execution. The later compiler-corrected wheel's17-test
+receipt covers six compiler and eleven synthetic coordinator tests; it does not
+requalify native installation or merge into an unsupported fresh35-test claim.
+A connection URI, `truss_installation=not_checked`, valid source projection,
+successful server restart or matching module hashes must never pass the complete
+US-045 bootstrap gate. Unsupported selected tuples return one refusal before
+dependent effects, without a retry loop or starting a different database runtime.
