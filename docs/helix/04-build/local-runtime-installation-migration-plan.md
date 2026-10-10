@@ -1261,3 +1261,50 @@ UMF supplies original schema interpretation/generation, Weft its separately
 admitted compiler realization, and the security owner authority semantics.
 Populated migration PKG-07 and full Python/TypeScript interchange remain required
 P4 exits; neither is silently removed to claim the P1 preview complete.
+
+
+## Seven-body implementation packet: next native installation work
+
+Read `reference-routine-design-v0.1.proposal.json` and its original trigger
+references alongside current CONTRACT-001 OC/RF, CONTRACT-005 EL and CONTRACT-006
+FV algorithms. The frozen manifest chooses attributes/signatures, not executable
+bodies. Its original governing hashes must retain their historical scope; compare
+current contract changes semantically before producing a newly registered packet.
+The16-selector security worklist is a known subset, not complete callable closure.
+
+| Body | Required original inputs and behavior | Independent native exit |
+| --- | --- | --- |
+| row_touch_observe | Exact installed relation/event and complete OLD/NEW; actual transaction and unique admitted unfinished operation; original cascade/contribution and pre-reserved capacity. Retain complete contributing operations and advance dirty generation. | INSERT/UPDATE/DELETE each canonical home; multiple effects/operations retain all contributions; foreign event, absent/ambiguous attribution and overrun refuse without partial graph/touch effects. |
+| edge_limit_observe | Exact edge event and both original/current typed endpoints; admitted operation and complete affected definition/owner scope under prescribed exclusion/account. | Add/remove/change both endpoint directions; repeated edges and changed definitions preserve full multiplicities; omitted affected owner or unsupported scope refuses. |
+| edge_limit_catalog_observe | Original catalog event, admitted catalog operation and full old/new affected relationship definitions/owners, including populated existing edges. | Definition-only limit change with unchanged edge rows; invalid populated scope refuses whole catalog transition; no fabricated empty edge inventory. |
+| row_touch_commit_check | Original native event plus all actual-transaction operation/touch/capacity records, complete coverage, generation equality and application finalization; invoke ordinary feed validator when selected. | Unsealed/missing contribution, unfinished operation, stale generation and unresolved reservation refuse early checking/commit; complete finalized scope validates without mutation or repair. |
+| feed_current_union_check | Exact installed feed-store INSERT/UPDATE/DELETE and OLD/NEW attribution; retain original transaction/cut/account and dispatch ordinary validator. | Every event on all four stores; late delete/alter/omission and repeated deferred firing; scope includes independently required effects even when feed registration was omitted. |
+| feed_union_validate_current_scope | Actual transaction and complete protected producer scope; execute FV01–FV07 under original authority/cut/account. No caller scope/xid/ordinal and no latest-row inference. | Full member/catalog/configuration prerequisite union, missing/extra/duplicate/mismatched facts, complete allowed no-op transaction; absence of registered feed rows cannot establish empty required effects. |
+| edge_limit_verify_current_scope | Actual protected definition/edge/marker scope under original same-cut exclusions; derive/compare complete required multiset. | Valid and invalid full scope, marker omitted/altered, both endpoint directions and definition-only effects; return has no seal/finalization/publication authority. |
+
+The body packet must include original source/model/generated statement identities,
+exact argument/result/native attributes, role ownership, private call graph and
+complete dependencies, original trigger parent/event/partition/enablement mapping,
+plus selected operation/account/security/profile pins. Register real expected
+scope/effects independently before execution. Preserve ordinary caller denial and
+integrity observation independently of caller disclosure; administrative fixture
+rights cannot qualify ordinary authorization. Actual installed OIDs and effect
+receipts are observations, not authored fixture identities.
+
+Implement protected attribution/account wiring before admitting positive body
+execution. Observers consume earlier reservations and cannot acquire earlier
+capacity locks after owner/key locks. Validators perform no sealing, repair,
+registration, counter reset, commit or constraint-mode changes. Both trigger
+handlers call the separately bound ordinary feed validator; never SELECT a
+trigger-returning handler as a helper. Every repeated check charges actual work;
+no cached completion flag supplies a bypass.
+
+Run each exit against actual enabled installed triggers and the selected ordinary
+roles, then exercise the complete combined transaction through savepoint rollback,
+SET CONSTRAINTS early checking, failed finalization and actual commit. Keep all
+original spent charges across rollback and quarantine unknown settlement. A body
+source/count or individual guard refusal cannot pass combined installation.
+Only after full call/trigger/privilege closure and independent complete inventory
+verification may IM01–IM05 publish ready. The accepted security minimum handoff
+remains required; it does not require unrelated security backends or authorize a
+Truss-owned policy resolver. These schedules are not_run and confer no support.
