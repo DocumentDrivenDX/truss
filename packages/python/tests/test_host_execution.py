@@ -1,6 +1,6 @@
 import unittest
 from dataclasses import replace
-from truss.execution import TransactionObservation, ExecutionFailure, Ok, Error
+from truss.execution import TransactionObservation, ExecutionFailure, TransactionHandle, Ok, Error
 from truss._host_execution import HostExecutor
 
 class Port:
@@ -78,3 +78,10 @@ class HostExecutionTests(unittest.TestCase):
         self.assertEqual(ExecutionFailure('retry','retry','whole_transaction').retry_scope,'whole_transaction')
         with self.assertRaises(TypeError):Ok(1,status='error')
         with self.assertRaises(TypeError):Error(ExecutionFailure('cancelled','cancelled'),status='ok')
+
+    def test_public_shape_cannot_duplicate_original_registered_handle(self):
+        executor = HostExecutor(); port = Port(); original = self.adopt(executor, port)
+        forged = TransactionHandle(original._issuer, original._key, original.isolation, original.access_mode)
+        self.assertEqual(executor.savepoint(forged).error.code, 'invalid_transaction')
+        self.assertEqual(port.commands, [])
+        self.assertIsInstance(executor.savepoint(original), Ok)

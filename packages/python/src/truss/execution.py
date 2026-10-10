@@ -7,9 +7,32 @@ status and command completion. This module does not grant graph capabilities.
 from dataclasses import dataclass, field
 from typing import Generic, Literal, Protocol, TypeVar
 
-T = TypeVar('T')
+T = TypeVar('T', covariant=True)
 Isolation = Literal['read_committed', 'repeatable_read', 'serializable']
 AccessMode = Literal['read_only', 'read_write']
+
+class TransactionHandle:
+    """Opaque caller-lifetime type. Construction never registers an adoption.
+
+    Only the original executor registry can admit an issued instance. There is
+    no public native executor/adoption factory in this contracts-only slice.
+    """
+    def __init__(self, issuer: object, key: str, isolation: Isolation, access_mode: AccessMode) -> None:
+        self._issuer, self._key = issuer, key
+        self._isolation, self._access_mode = isolation, access_mode
+
+    @property
+    def isolation(self) -> Isolation:
+        return self._isolation
+
+    @property
+    def access_mode(self) -> AccessMode:
+        return self._access_mode
+
+    @property
+    def ownership(self) -> Literal['caller']:
+        return 'caller'
+
 
 @dataclass(frozen=True)
 class ExecutionFailure:
@@ -19,7 +42,7 @@ class ExecutionFailure:
     retry_scope: Literal['none', 'whole_transaction', 'qualified_request_lookup'] = 'none'
     sql_state: str | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         scopes = {'retry': {'whole_transaction'},
                   'commit_unknown': {'none', 'qualified_request_lookup'}}
         if self.code not in {'invalid_transaction', 'retry', 'transaction_unusable',

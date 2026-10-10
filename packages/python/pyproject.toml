@@ -17,3 +17,6 @@ local = ["pgserver==0.1.4", "fasteners==0.20", "platformdirs==4.12.4", "psutil==
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+truss = ["py.typed"]

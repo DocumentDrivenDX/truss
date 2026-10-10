@@ -426,3 +426,12 @@ qualification. Buffering/notices/notifications owned by the host connection are
 preserved; counts and conservative payload charges are not a total heap bound.
 Public adoption, ReferenceAssembly and the catalog-to-feed workflow remain open.
 See [iteration 8 evidence](../../docs/helix/04-build/evidence/python-contracts-iteration8.json).
+
+## Draft public group contracts
+
+`truss.contracts` supplies immutable exact-value, profile and document-qualified
+identity carriers. `truss.groups` supplies the grouped-operation input/result
+carriers and synchronous `GroupCapability` Protocol, including request-free
+return narrowing. The package includes `py.typed`; these modules provide types
+and shape checks, not a callable mutation provider or an adoption factory. See
+[the consumer mapping and limits](../../docs/helix/04-build/python-group-contracts.md).

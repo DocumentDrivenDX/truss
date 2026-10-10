@@ -1,0 +1,80 @@
+{
+  "iteration": "PY-C01 first public group contract slice",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "planDisposition": "Approved narrow contract slice; C01/C02 and runtime delivery remain open",
+    "completedDisposition": "Approved corrected source/docs/type surface and exact installed artifact; independently passed installed15, typing positive0/negative10, 181 imports, all41 matching modules, py.typed, original binding/source/log/wheel hashes",
+    "fixedFindings": [
+      "Readonly caller-only transaction metadata",
+      "Required nested replay evidence",
+      "Nonempty tuple static and runtime checks",
+      "Explicit runtime-only execution retry-scope correlation"
+    ]
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/contracts.py": "ee443994583fb3b8f9e71b610214bd84969c6f1b8d2f18864687f8c519336b9c",
+    "packages/python/src/truss/groups.py": "e6911d22e53fde65a6e9ebb441ab7d3a1428a312b8342e9e2e3c9e07b0228c00",
+    "packages/python/src/truss/execution.py": "0df49d51e760bfa36a814dd0cca31b8d266ae3378d46f63b9e94f2ef63cdcff5",
+    "packages/python/src/truss/_host_contracts.py": "97e464504590447190510200cef27519e812a7cc871d330c63b7846478e87ada",
+    "packages/python/tests/test_public_contracts.py": "6e6eadada4c82a74988d9f3f42dba21fba888ebba769fa171bffec94b9482d5c",
+    "scripts/check-python-contract-types.py": "2fcb9b9d9a27fc7d10d6036c218be6a94956537a070c03982d21ca3751985758",
+    "scripts/check-module-boundaries.py": "d4eaeab98036bc9352c7ddf020bffd85416d3e4bbd8e82883077f175b75956c3",
+    "packages/python/tests/typing/group_consumer.py": "dad05d6083ba9f392d8559a91a78749471e2877ed2728eecda8bab073e9ce0f7",
+    "packages/python/tests/typing/group_consumer_invalid.py": "62e8d2a0641631e79e721258c777da160863ff8b87447d83ff76a1b40dbab7d2",
+    "packages/python/tests/test_host_execution.py": "2e8aac90abcc3c34cc8fa21d7e90e9a74d237f1a451795863550c08dbc063d7f"
+  },
+  "bindingSha256": {
+    "truss-execution-v0.1.d.ts": "b6d6d30d9a4804ae5d8c2ae34028edb8abeb6d36909bee658e3b5da6ec2270df",
+    "truss-history-v0.1.d.ts": "c9514718cb22ad0645ab32b81666de95fd952ca40396f762ea2529ba33bb7549",
+    "truss-acceptance-input-v0.1.d.ts": "bde6c1a386b41efc24cee68495ee878656e35bca1072ff0fdd3ad14179b48db3",
+    "truss-capability-readiness-v0.1.d.ts": "7b6e14f9aa62080b0eecdb2a66d6c2951f5f4c49f6c47132385d11a88d76b15d",
+    "truss-group-input-v0.1.d.ts": "d8ad7048124b09dd953628ea3f70b2e55935db54243a9a3264743d9c14be8506",
+    "truss-group-result-v0.1.d.ts": "ff23c481198d60c1531933a4721275f420c33ca4f1a5d4dd1ca49a6b65ea2481",
+    "truss-group-capability-v0.1.d.ts": "470481e1789cfd9eb3463843d177cae4fc34c6c3ec9d4c0ce946e03d3b32d471"
+  },
+  "fullSourceSuite": {
+    "tests": 249,
+    "result": "passed",
+    "log": "/private/tmp/truss-iteration9-tests.log",
+    "logSha256": "aa0f176e063684ee437932f52313d8eadec16c01292b19d5883324ed4505ff40",
+    "scope": "249-test earlier basis with five public/eight host tests. Shared-vector and forged-handle tests were added after this run; installed15 verifies all final six public/nine host tests against byte-identical runtime."
+  },
+  "installedPublicSuite": {
+    "tests": 15,
+    "result": "passed",
+    "log": "/private/tmp/truss-iteration9-installed-tests.log",
+    "logSha256": "df8ab258fc6c5a0618dfe44162bc53860c5b21da3360c5bb626651c485209fe5",
+    "scope": "Nine host-lifetime tests and six public carrier tests; source test fixtures against installed wheel"
+  },
+  "typing": {
+    "mypy": "1.18.2",
+    "positiveErrors": 0,
+    "negativeExpectedErrors": 10,
+    "installedTarget": "/private/tmp/truss-iteration9-installed",
+    "marker": "py.typed",
+    "executionScopeCorrelation": "Runtime-only; no equivalent static negative claim"
+  },
+  "wheel": "/private/tmp/truss-iteration9-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+  "wheelSha256": "1373e0d5fb0eb81f3c9c79b746ddb403398df59f7a65f01305388ec005d77aca",
+  "sourceWheelInstalledMatchingModules": 41,
+  "importBoundary": {
+    "imports": 181,
+    "controls": 16,
+    "passed": true,
+    "controlLogSha256": "7e904efcae818924be62a5a2ba1a9b1bfa0ad5c54ce81d678cb4302b0dd43398"
+  },
+  "completeExternalInterface": false,
+  "scope": "Immutable draft exact value/profile/identity/selection/group carriers and synchronous Protocol; no provider, factory, native adoption release, profile verification or authority creation",
+  "remainingGates": [
+    "Remaining C01 facade contracts and result closure",
+    "C02 original registration and safe diagnostic construction",
+    "Security semantic/native dependency closure and protected consumer workflow",
+    "Install/catalog/apply/import/direct/compiled reads/reached/feed/ACK",
+    "Default distribution and complete shared native consumer corpus"
+  ],
+  "ownerAlignment": "Security owner composing separately authored deployment duties; backend evidence remains pending and no unfinished runtime API adopted",
+  "sharedVectorSha256": {
+    "docs/helix/03-test/fixtures/python-group-contract-values.json": "17c7fcce44b59447db74d29f4b56bb2c1f7b497f65375c164ff1bdc9a51a8d28"
+  }
+}

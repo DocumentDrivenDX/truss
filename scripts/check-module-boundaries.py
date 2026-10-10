@@ -13,6 +13,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    'contracts': {'dataclasses', 'enum', 'types', 'typing'},
+    'groups': {'dataclasses', 'typing', 'truss.contracts', 'truss.execution'},
     '_host_contracts': {'dataclasses', 'truss.execution'},
     '_host_execution': {'dataclasses', 'threading', 'truss._host_contracts', 'truss._native_adoption', 'truss._native_transactions', 'truss.execution', 'uuid'},
     '_native_adoption': {'dataclasses', 'truss._host_contracts', 'truss._native_pg8000', 'truss.execution', 'uuid'},

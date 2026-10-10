@@ -220,3 +220,30 @@ unsupported, and payload/count limits do not establish a whole-process heap boun
 The explicit Python import map now includes the execution/native modules from
 iterations 2–8 without a directory-wide exemption.
 Evidence: [evidence/python-contracts-iteration8.json](evidence/python-contracts-iteration8.json).
+
+## PY-C01 public contracts sequence — Astra Ultra review
+
+Iteration 9 starts the public Python contract surface from the original
+versioned TypeScript bindings, not a new semantic engine. Publish exact-value,
+profile, document-qualified identity, capability selection, request and complete
+group input/result carriers. The group Protocol is synchronous for the selected
+Python embedding direction; every transitive carrier it advertises must exist.
+Request-free overloads exclude replay, request conflict and receipt availability
+reasons. Preserve outer execution failure separately from semantic failure and
+pending durability; constructor/type conformance proves no native authority.
+
+Use explicit absence for optional fields, distinct null/presence carriers,
+immutable tuple members and exact numeric/timestamp/source spelling. Shape
+checking does not admit UMF domains, verify original artifact registration,
+prove receipt durability or issue accepted IDs. Verify language-neutral
+positive/negative shape vectors, complete outcome mapping, static typing and
+installed `py.typed` imports outside the checkout. Pin the original binding bytes.
+
+Astra Ultra approved this sequence. Remaining C01 work includes Import's separate
+progress-preserving execution union and all catalog/direct/compiled/mutation/
+history/feed carrier closures; receipt visibility remains its own proposal
+capability. C01 is not complete from the first group slice. C02's factory requires
+original registered profile/service admission and a packaged release-owned safe
+construction diagnostic artifact; an unverified readiness label is no substitute.
+PA01–PA05 and C04–C07 remain the operational critical path. No callable protected
+engine capability or assembly factory follows from these public data contracts.
