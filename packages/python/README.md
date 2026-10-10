@@ -211,3 +211,13 @@ the retained directory between runs. Reproduce with
 `scripts/check-python-installed-cli-signals.py` in the installed local-extra
 environment. This supersedes the earlier probe-only signal limitation without
 claiming crash, forced-kill or complete installation recovery.
+
+
+The current installed-suite and Rust delivery receipts have been refreshed for
+the eleven-module wheel, now including `truss.cli`. All36 component tests pass,
+and the frozen original Rust extension's five compiler cases/five transport
+refusals retain full CLI correspondence. Delivery evidence now observes the
+installed local-extra dependencies rather than hardcoding their absence. The
+coordinator receipt is refreshed against the new delivery hash. This uses the
+existing qualified local environment; no fresh resolution or complete-engine
+claim is added.

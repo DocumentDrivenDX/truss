@@ -393,3 +393,13 @@ property/graph support. The owner reports full security acceptance26/132 and
 dependent replay still outstanding. Python must consume the selected eventual
 owner composition, not port this draft renderer into a second compiler/resolver
 or activate it from the receipt alone.
+
+
+The linked compiler/coordinator delivery receipts are subsequently refreshed for
+the eleven-module wheel including the local console command. Their current payload
+and dependency inventories supersede earlier ten-module/base-only captures, whose
+original bytes remain in Git history. The [current installed suite](evidence/design-audit/python-current-installed-suite.json)
+passes all36 component tests against this wheel. Environment reuse and installed
+local-extra presence are explicit; earlier clean-resolution evidence remains its
+separate historical scope. These refreshed receipts supply no installer/migration
+or native authority qualification.

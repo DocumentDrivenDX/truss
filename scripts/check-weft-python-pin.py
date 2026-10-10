@@ -118,7 +118,12 @@ if len(sys.argv) == 4:
   'installedDistributions':sorted(
    [{'name':d.metadata['Name'],'version':d.version} for d in importlib.metadata.distributions()],
    key=lambda d:d['name']),
-  'localExtraInstalled':False,'nativeInstallationQualified':False,
+  'localExtraInstalled':all(
+   any(d.metadata['Name'].lower()==name and d.version==version
+       for d in importlib.metadata.distributions())
+   for name,version in [('pgserver','0.1.4'),('fasteners','0.20'),
+                        ('platformdirs','4.12.4'),('psutil','7.2.2')]),
+  'nativeInstallationQualified':False,
  }
 receipt = {
  'scope':'Embedded Rust Python extension pinned to the same source/features as the Truss CLI; focused independent compiler expectations and complete cross-binding response correspondence only',

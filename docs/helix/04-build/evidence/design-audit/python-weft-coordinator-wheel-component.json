@@ -96,12 +96,12 @@
   "testOnlyExportAbsent": true,
   "nativeDatabaseExecuted": false,
   "qualifiedTrussPythonRuntime": false,
-  "pythonBoundarySourceSha256": "1b4720589a66c5d6a922ec9b7894d4b602b4cfe17764c71f4a4c1a9404792ded",
+  "pythonBoundarySourceSha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
   "pythonBoundarySourceOnly": false,
   "trussWheelDelivery": {
     "wheel": {
-      "path": "/private/tmp/truss-python-coordinator-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
-      "sha256": "f680536ed512e8fc2edba76116d0366d52a2044548d1a34a2826e1788d0cbfec"
+      "path": "/private/tmp/truss-python-cli-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+      "sha256": "43ef23897b831ad637eb5502997a7b8cfa86df1eeabfc56a4f9f1d977296445b"
     },
     "loadedBoundary": "/private/tmp/truss-python-coordinator-env/lib/python3.11/site-packages/truss/weft.py",
     "modules": [
@@ -126,8 +126,12 @@
         "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
       },
       {
+        "path": "truss/cli.py",
+        "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+      },
+      {
         "path": "truss/local_runtime.py",
-        "sha256": "e0f983625af50cf61a6bea8f79134723de97263e5f553581cf0b15892f001ea5"
+        "sha256": "b17d3f5174a4c100a635012f7b6228d9151e1b2a2174fb36f75b331f365bb808"
       },
       {
         "path": "truss/migration_planning.py",
@@ -143,7 +147,7 @@
       },
       {
         "path": "truss/weft.py",
-        "sha256": "1b4720589a66c5d6a922ec9b7894d4b602b4cfe17764c71f4a4c1a9404792ded"
+        "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
       }
     ],
     "allModulePayloadsMatch": true,
@@ -156,8 +160,24 @@
     ],
     "installedDistributions": [
       {
+        "name": "fasteners",
+        "version": "0.20"
+      },
+      {
+        "name": "pgserver",
+        "version": "0.1.4"
+      },
+      {
         "name": "pip",
         "version": "24.0"
+      },
+      {
+        "name": "platformdirs",
+        "version": "4.12.4"
+      },
+      {
+        "name": "psutil",
+        "version": "7.2.2"
       },
       {
         "name": "setuptools",
@@ -172,8 +192,8 @@
         "version": "0.1.0"
       }
     ],
-    "localExtraInstalled": false,
+    "localExtraInstalled": true,
     "nativeInstallationQualified": false
   },
-  "producerSha256": "3dae3b149e721c8ff3ed019daf5a7a14776e8802209724fd978b691606097eab"
+  "producerSha256": "f4e8cf6d3d3f50133e53877ab0b8408255d95ec557b5c80d9065af22f5ce3180"
 }

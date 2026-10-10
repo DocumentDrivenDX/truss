@@ -21,7 +21,7 @@ assert result.returncode == 0, result.stdout + result.stderr
 assert 'Ran 11 tests' in result.stderr and result.stderr.rstrip().endswith('OK')
 sources = ['packages/python/tests/test_query_execution.py', 'packages/python/tests/test_weft.py']
 receipt = {
- 'scope': 'Installed ten-module base wheel and synthetic-host coordinator controls only',
+ 'scope': 'Installed current base wheel and synthetic-host coordinator controls only',
  'loadedCoordinator': str(loaded), 'coordinatorSha256': expected,
  'deliveryReceiptSha256': hashlib.sha256(delivery_path.read_bytes()).hexdigest(),
  'python': sys.version, 'tests': 11, 'output': result.stdout + result.stderr,
