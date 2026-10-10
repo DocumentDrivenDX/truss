@@ -365,3 +365,14 @@ the boundary checker still passes51 imports. The native configuration schedule
 now shares this registry over the actual psql process and preserves0/1/3 issuance
 and exact captures. This is source-component/local native fixture evidence, not
 a rebuilt-wheel claim, qualified driver port or complete original admission.
+
+## Installed shared-registry wheel checkpoint
+
+The rebuilt Python wheel contains all12 current modules, including the shared
+registry. Installed/wheel/source module bytes match, and all44 tests pass with
+execution outside the checkout using the reused corrected pgserver environment.
+The separate `python-shared-registry-installed-suite.json` receipt preserves
+module/test hashes, dependency versions and original suite output. Earlier
+42-test wheel receipts remain historical. This establishes packaged component
+behavior on macOS arm64/Python3.11/PostgreSQL16.15; it does not qualify clean
+dependency resolution, public installation/migration APIs or a complete engine.
