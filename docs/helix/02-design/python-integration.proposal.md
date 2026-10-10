@@ -2623,3 +2623,26 @@ installed-package reader with original containment evidence. Then integrate all
 required models/generated/native/grant/initialization/verifier/profile/recipe
 members with archive/use and complete installer verification. No complete release
 membership, public install/verify operation or ready marker is asserted here.
+
+
+### Composed resource capture checkpoint
+
+Private `capture_resource_bundle` now captures the original pinned index, admits
+closed complete release membership, then resolves/captures every declared entry
+through an original trusted registered-handle resolver under the same account.
+It returns one immutable bundle only after all captures pass. Index or member
+failure closes ordinary admission and retains accumulated original charges; no
+partial bundle, retry or replacement resource is returned. The resolver receives
+an admitted immutable entry, never a caller-supplied arbitrary pathname.
+
+The [seven-test component receipt](../04-build/evidence/design-audit/python-resource-bundle-capture.json)
+includes actual two-file complete capture, original retained bytes after mutation,
+late second-member mismatch with exact accumulated charge, and membership refusal
+before any member resolver call. Earlier index/capture receipts remain historical.
+This composes the selected byte gates, not a qualified installed-package resolver
+or complete PKG release. Explicitly retain containment, aggregate decoded/retained
+object and hash/parse work, deadline/cancellation, archive ownership and original
+release-registration qualification. No database effect, compiler selection,
+installation marker or public API is introduced. Next qualify a concrete installed
+package resolver and the same complete capture outside checkout before integration
+with CONTRACT-008 IM01–IM05 and the original security/native profile.

@@ -93,3 +93,42 @@ class ResourceIndexTests(unittest.TestCase):
         entry = self.ORIGINAL[self.ORIGINAL.index(b'[{')+1:-2]
         duplicate = self.ORIGINAL[:-2]+b','+entry+b']}'
         with self.assertRaises(ValueError): self.decode(duplicate, maximum_entries=2, maximum_total_bytes=20)
+
+
+class ResourceBundleTests(unittest.TestCase):
+    def test_complete_bundle_retains_one_account_and_late_failure_quarantines(self):
+        import json
+        from truss._installation_resources import ResourceEntry, capture_resource_bundle
+        producer = object()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            a = b'first'; b = b'second'
+            entries = (ResourceEntry('a', 'resources/a', 'storage', len(a), sha256(a).hexdigest()),
+                       ResourceEntry('b', 'resources/b', 'verifier', len(b), sha256(b).hexdigest()))
+            index = json.dumps({'interface':'truss-python-resources/0.1.0','releaseId':'test-release',
+                                'entries':[{'id':e.id,'path':e.path,'role':e.role,'byteLength':e.byte_length,'sha256':e.sha256} for e in entries]}).encode()
+            (root/'index').write_bytes(index); (root/'a').write_bytes(a); (root/'b').write_bytes(b)
+            calls = []
+            def resolve(entry):
+                calls.append(entry.id)
+                return {'a':root/'a', 'b':root/'b'}[entry.id]
+            def run(account, expected=entries):
+                return capture_resource_bundle(root/'index', len(index), sha256(index).hexdigest(),
+                                               'test-release', expected, resolve, 4096, 2, 100,
+                                               account, producer)
+            account = BytePermitAccount(producer, 8192, 8192, 20)
+            captured = run(account)
+            self.assertEqual([r.original for r in captured.resources], [a,b])
+            self.assertTrue(all(r.account is account for r in (captured.index,)+captured.resources))
+            (root/'b').write_bytes(b'changed')
+            self.assertEqual(captured.resources[1].original, b)
+            failed = BytePermitAccount(producer, 8192, 8192, 20)
+            with self.assertRaises(ValueError): run(failed)
+            self.assertEqual(calls, ['a','b','a','b'])
+            charge = len(index)+1+len(a)+1+len(b)+1
+            self.assertEqual(failed.snapshot(producer), (charge,0,charge,True))
+            calls.clear()
+            bad_inventory = BytePermitAccount(producer, 8192, 8192, 20)
+            with self.assertRaises(ValueError): run(bad_inventory, entries[:1])
+            self.assertEqual(calls, [])
+            self.assertEqual(bad_inventory.snapshot(producer), (len(index)+1,0,len(index)+1,True))

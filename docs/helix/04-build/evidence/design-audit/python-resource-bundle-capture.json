@@ -1,0 +1,34 @@
+{
+  "scope": "Private complete declared resource capture using real files and trusted synthetic registration/resolver; no admitted release",
+  "command": [
+    "/private/tmp/truss-pgserver-corrected-test-env/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "packages/python/tests",
+    "-p",
+    "test_installation_resources.py",
+    "-v"
+  ],
+  "output": "test_complete_bundle_retains_one_account_and_late_failure_quarantines (test_installation_resources.ResourceBundleTests.test_complete_bundle_retains_one_account_and_late_failure_quarantines) ... ok\ntest_missing_changed_truncated_appended_resources_quarantine_once (test_installation_resources.ResourceCaptureTests.test_missing_changed_truncated_appended_resources_quarantine_once) ... ok\ntest_real_file_capture_retains_verified_bytes_after_change (test_installation_resources.ResourceCaptureTests.test_real_file_capture_retains_verified_bytes_after_change) ... ok\ntest_reservation_refusal_precedes_open_and_invalid_pin_is_inert (test_installation_resources.ResourceCaptureTests.test_reservation_refusal_precedes_open_and_invalid_pin_is_inert) ... ok\ntest_duplicate_and_unsafe_closed_entries (test_installation_resources.ResourceIndexTests.test_duplicate_and_unsafe_closed_entries) ... ok\ntest_original_bounds_and_duplicate_membership (test_installation_resources.ResourceIndexTests.test_original_bounds_and_duplicate_membership) ... ok\ntest_original_closed_membership_and_independent_pin (test_installation_resources.ResourceIndexTests.test_original_closed_membership_and_independent_pin) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.147s\n\nOK\n",
+  "tests": 7,
+  "sources": [
+    {
+      "path": "packages/python/src/truss/_installation_resources.py",
+      "sha256": "2564e6daf785109d910c62ce849cca708e33ca4515f96436ec946dbe0c6ed50b"
+    },
+    {
+      "path": "packages/python/src/truss/_resource_account.py",
+      "sha256": "640d37b2f517339b2a0ff0a7438ff17dd717644d5464f1af1cce732370b99a2a"
+    },
+    {
+      "path": "packages/python/tests/test_installation_resources.py",
+      "sha256": "eb6ce55d074ea69042c40215a02b0c69156c31883bf8b261e86c08c90e775e22"
+    }
+  ],
+  "installedPackageContainmentQualified": false,
+  "completeResourceAccountingQualified": false,
+  "nativeInstallationQualified": false,
+  "wheelRebuilt": false
+}

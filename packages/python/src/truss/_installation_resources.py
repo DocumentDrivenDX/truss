@@ -134,3 +134,36 @@ def _text(value):
 
 def _digest(value):
     return type(value) is str and len(value) == 64 and all(c in '0123456789abcdef' for c in value)
+
+
+@dataclass(frozen=True, eq=False)
+class ResourceBundleCapture:
+    index: ResourceCapture
+    entries: tuple
+    resources: tuple
+
+
+def capture_resource_bundle(index_resource, index_length, index_sha256,
+                            release, expected_entries, resolve_registered,
+                            maximum_index_bytes, maximum_entries,
+                            maximum_total_bytes, account, producer):
+    """Private composition with a trusted original registered-handle resolver.
+
+    Resolver owns installed-package containment; no caller path/fallback is used.
+    Byte/entry bookkeeping is not complete decoder/allocator/work containment.
+    """
+    index = capture_resource(index_resource, index_length, index_sha256,
+                             maximum_index_bytes, account, producer)
+    try:
+        entries = decode_resource_index(index.original, index_sha256, release,
+                                        expected_entries, maximum_index_bytes,
+                                        maximum_entries, maximum_total_bytes)
+        resources = []
+        for entry in entries:
+            handle = resolve_registered(entry)
+            resources.append(capture_resource(handle, entry.byte_length, entry.sha256,
+                                              maximum_total_bytes, account, producer))
+        return ResourceBundleCapture(index, entries, tuple(resources))
+    except BaseException:
+        account.close(producer)
+        raise
