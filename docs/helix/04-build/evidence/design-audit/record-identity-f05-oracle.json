@@ -1,0 +1,33 @@
+{
+  "scope": "Actual standalone frozen Weft Identity serializer agreement; no native or complete compiler feature qualification",
+  "revision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "command": [
+    "/private/tmp/weft-toolchain/cargo/bin/cargo",
+    "run",
+    "--offline",
+    "--manifest-path",
+    "/private/tmp/truss-record-identity-f05-oracle/Cargo.toml",
+    "--target-dir",
+    "/private/tmp/truss-record-identity-f05-target"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "error: rustup could not choose a version of cargo to run, because one wasn't specified explicitly, and no default is configured.\nhelp: run 'rustup default stable' to download the latest stable release of Rust and set it as your default toolchain.\n",
+  "sources": [
+    {
+      "path": "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/record-identity-oracle/Cargo.toml",
+      "sha256": "2d98c6a13a7fb8ddd659787f24d81b6f6ebb4299df27d165b8a7e857c9d812b8"
+    },
+    {
+      "path": "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/record-identity-oracle/fixtures.json",
+      "sha256": "3e2c935e8b712d2635455872e966695453ab5c7d5af6b65ffc22ee4984d0a89e"
+    },
+    {
+      "path": "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/record-identity-oracle/src/main.rs",
+      "sha256": "12adb2b40ba728283519d547449597ae946ef90854cfd41db212c8404c4f1c88"
+    }
+  ],
+  "selectedManifest": "[package]\nname = \"truss-record-identity-design-oracle\"\nversion = \"0.1.0\"\nedition = \"2021\"\npublish = false\n\n[dependencies]\nweft-core = { path = \"/private/tmp/truss-weft-f05f2df/crates/weft-core\" }\nserde_json = { version = \"=1.0.145\", features = [\"arbitrary_precision\", \"raw_value\"] }\n",
+  "nativeQualified": false,
+  "completeFeatureGraphQualified": false
+}

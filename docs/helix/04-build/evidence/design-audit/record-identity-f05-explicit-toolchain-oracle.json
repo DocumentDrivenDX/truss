@@ -1,0 +1,47 @@
+{
+  "scope": "Actual explicit Rust1.90 standalone frozen Weft Identity serializer; no native or complete compiler feature qualification",
+  "revision": "f05f2df09e9c2494ac8c6d703dfe38413dbc4181",
+  "command": [
+    "/private/tmp/weft-toolchain/cargo/bin/cargo",
+    "+1.90.0",
+    "run",
+    "--offline",
+    "--manifest-path",
+    "/private/tmp/truss-record-identity-f05-oracle/Cargo.toml",
+    "--target-dir",
+    "/private/tmp/truss-record-identity-f05-target"
+  ],
+  "returncode": 0,
+  "stdout": "{\"cases\":3,\"scope\":\"Selected Identity/serde_json byte agreement only; not actual compiler build feature graph, native storage or Truss adoption\"}\n",
+  "stderr": "     Locking 96 packages to latest compatible versions\n   Compiling proc-macro2 v1.0.107\n   Compiling unicode-ident v1.0.26\n   Compiling quote v1.0.47\n   Compiling version_check v0.9.5\n   Compiling serde_core v1.0.228\n   Compiling libc v0.2.190\n   Compiling autocfg v1.5.1\n   Compiling cfg-if v1.0.5\n   Compiling memchr v2.8.3\n   Compiling getrandom v0.3.4\n   Compiling zerocopy v0.8.59\n   Compiling ref-cast v1.0.27\n   Compiling equivalent v1.0.2\n   Compiling allocator-api2 v0.2.21\n   Compiling foldhash v0.2.0\n   Compiling parking_lot_core v0.9.12\n   Compiling once_cell v1.21.4\n   Compiling serde v1.0.228\n   Compiling hashbrown v0.17.1\n   Compiling itoa v1.0.18\n   Compiling ryu v1.0.23\n   Compiling borrow-or-share v0.2.4\n   Compiling ahash v0.8.12\n   Compiling smallvec v1.16.2\n   Compiling num-traits v0.2.19\n   Compiling scopeguard v1.2.0\n   Compiling regex-syntax v0.8.11\n   Compiling generic-array v0.14.7\n   Compiling aho-corasick v1.1.5\n   Compiling serde_json v1.0.145\n   Compiling lock_api v0.4.14\n   Compiling winnow v1.0.4\n   Compiling indexmap v2.14.2\n   Compiling bit-vec v0.8.0\n   Compiling typenum v1.20.1\n   Compiling percent-encoding v2.3.2\n   Compiling micromap v0.3.0\n   Compiling toml_datetime v1.1.1+spec-1.1.0\n   Compiling bit-set v0.8.0\n   Compiling zmij v1.0.23\n   Compiling heck v0.5.0\n   Compiling toml_parser v1.1.3+spec-1.1.0\n   Compiling unicode-general-category v1.1.0\n   Compiling regex-automata v0.4.18\n   Compiling toml_edit v0.25.15+spec-1.1.0\n   Compiling syn v2.0.119\n   Compiling syn v3.0.6\n   Compiling parking_lot v0.12.5\n   Compiling jsonschema-regex v0.56.0\n   Compiling block-buffer v0.10.4\n   Compiling crypto-common v0.1.7\n   Compiling outref v0.5.2\n   Compiling num-cmp v0.1.0\n   Compiling num-integer v0.1.47\n   Compiling num-complex v0.4.6\n   Compiling proc-macro-crate v3.5.0\n   Compiling vsimd v0.8.0\n   Compiling bytecount v0.6.9\n   Compiling digest v0.10.7\n   Compiling cpufeatures v0.2.17\n   Compiling num-bigint v0.4.8\n   Compiling num-iter v0.1.46\n   Compiling data-encoding v2.11.1\n   Compiling uuid-simd v0.8.0\n   Compiling sha2 v0.10.9\n   Compiling ref-cast-impl v1.0.27\n   Compiling fancy-regex v0.19.2\n   Compiling regex v1.13.1\n   Compiling num-rational v0.4.2\n   Compiling serde_derive v1.0.228\n   Compiling strum_macros v0.28.0\n   Compiling fluent-uri v0.4.1\n   Compiling num v0.4.3\n   Compiling fraction v0.17.0\n   Compiling referencing v0.56.0\n   Compiling jsonschema-macros-core v0.56.0\n   Compiling strum v0.28.0\n   Compiling email_address v0.2.9\n   Compiling jsonschema-value v0.56.0\n   Compiling jsonschema-macros v0.56.0\n   Compiling jsonschema v0.56.0\n   Compiling weft-core v0.1.0 (/private/tmp/truss-weft-f05f2df/crates/weft-core)\nwarning: method `finish` is never used\n   --> /private/tmp/truss-weft-f05f2df/crates/weft-core/src/syntax.rs:243:19\n    |\n206 | impl Parser {\n    | ----------- method in this implementation\n...\n243 |     pub(crate) fn finish(&mut self) -> Result<()> {\n    |                   ^^^^^^\n    |\n    = note: `#[warn(dead_code)]` on by default\n\nwarning: `weft-core` (lib) generated 1 warning\n   Compiling truss-record-identity-design-oracle v0.1.0 (/private/tmp/truss-record-identity-f05-oracle)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 12.97s\n     Running `/private/tmp/truss-record-identity-f05-target/debug/truss-record-identity-design-oracle`\n",
+  "sources": [
+    {
+      "path": "/private/tmp/truss-record-identity-f05-oracle/Cargo.toml",
+      "sha256": "933a73d2d5098d58ae55db916647252c14a212469e3ce56c9f349592fa8465db"
+    },
+    {
+      "path": "/private/tmp/truss-record-identity-f05-oracle/fixtures.json",
+      "sha256": "3e2c935e8b712d2635455872e966695453ab5c7d5af6b65ffc22ee4984d0a89e"
+    },
+    {
+      "path": "/private/tmp/truss-record-identity-f05-oracle/src/main.rs",
+      "sha256": "12adb2b40ba728283519d547449597ae946ef90854cfd41db212c8404c4f1c88"
+    }
+  ],
+  "nativeQualified": false,
+  "completeFeatureGraphQualified": false,
+  "selectedLockSha256": "53b18643af5a348361cd0866cc55d2d8d3047892a2e9f9e4e8e3e503ba4728aa",
+  "selectedManifest": "[package]\nname = \"truss-record-identity-design-oracle\"\nversion = \"0.1.0\"\nedition = \"2021\"\npublish = false\n\n[dependencies]\nweft-core = { path = \"/private/tmp/truss-weft-f05f2df/crates/weft-core\" }\nserde_json = { version = \"=1.0.145\", features = [\"arbitrary_precision\", \"raw_value\"] }\n",
+  "retainedLock": "docs/helix/04-build/evidence/design-audit/record-identity-oracle/frozen-f05.Cargo.lock",
+  "selectedCoreSources": [
+    {
+      "path": "/private/tmp/truss-weft-f05f2df/crates/weft-core/src/ir.rs",
+      "sha256": "ec75a449cd52b95930c1aed95e201cd3317e4171f482d8d17be111e28f559f9f"
+    },
+    {
+      "path": "/private/tmp/truss-weft-f05f2df/crates/weft-core/Cargo.toml",
+      "sha256": "fee97599e261ef413b9850a03f45130308e87eeaa7b73ea393f4f3b359fbb549"
+    }
+  ],
+  "rustVersion": "rustc 1.90.0 (1159e78c4 2025-09-14)"
+}
