@@ -1691,3 +1691,30 @@ resource registration before adoption. Actual procedures, ordinary-role guards,
 physical IDs, complete generated/native inventory, source/core browser update,
 security integration and installer readiness remain open. No criterion is
 promoted by these structural observations.
+
+
+## Capacity transfer formal design checkpoint — 2026-10-10
+
+TD-007 now owns CR-01–07's precise capacity-transfer specification and STP-007
+owns model and actual-procedure replay obligations. The
+[current bounded receipt](evidence/design-audit/capacity-reservation-transfer-model.json)
+explores2386 states/4770 transitions with three reachable witnesses and seven
+broken-mechanism controls failing their intended properties. Original retained
+inventory, remaining versus initial reservation, spent work/ordinal and unknown
+quarantine are separate state. Confirmed rollback preserves finalized A after B
+has registered actual abstract custody; the initial model/receipt's weaker
+prepared-B witness is retained separately and superseded for that example.
+
+This evidence qualifies the finite abstract transfer rules only. It cannot prove
+native full-byte/semantic inventory, authority, atomicity, work/cancellation,
+exclusion, complete guard coverage or delivery/liveness. Native procedure
+correspondence remains false, not silently assumed from SQL CHECKs. Implement
+actual protected reserve/consume/finalize/rollback/commit procedures next and
+independently replay the exact success/recovery/counterexample traces.
+
+The [fresh full allocation receipt](evidence/design-audit/current-story-allocation-after-reservation-formal.json)
+retains45 stories/167 criteria, zero structural errors and135 current US/TD/STP
+source hashes after the owning design/test edits. It supersedes the earlier
+writer-deadline allocation receipt for source freshness; it does not close
+semantic or native criteria. Full original release scope and current security
+handoff remain required.

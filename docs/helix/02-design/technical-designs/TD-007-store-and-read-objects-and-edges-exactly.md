@@ -98,3 +98,57 @@ JSONB preserves numeric value but is not a general original-token archive. CONTR
 ### Journal-stage cleanup integration
 
 For a selected journal child-store profile, CONTRACT-001's original stage cohort/snapshot/pending-result and paired observation/DELETE sources participate in RT01–RT06 retention. Whole-operation closure preserves exact original values and allocator/recovery dependencies: child rows cannot be independently evicted, split to fit resources or used as commit proof. Independently admit full original parent/stage membership and current eligibility, reobserve under exclusions, compare complete returned snapshots, prove child/parent absence and publish pending capacity/effect evidence atomically. Existing operation/touch cleanup wires remain a separate profile. STP-007's stage-cleanup supplements below specify native race/rollback/uncertainty controls; installer/routines/resource/privilege/descriptor profile selection and actual native runs remain open.
+
+
+## Formal Specification: capacity reservation transfer
+
+Affected slice: native operation/touch custody capacity under CONTRACT-001 and
+CONTRACT-009, supporting US-007-AC1/AC2's complete atomic storage and exact
+readback. Truss owns this transfer protocol; UMF owns metadata semantics and the
+security owner supplies current authority. Chosen level is precise specification
+plus bounded executable transition analysis, pending native implementation
+correspondence. This extends the existing formal-methods concern; it does not
+strengthen a model-only result into a protected-engine support claim.
+
+The state contains the complete abstract retained-row inventory and its observed
+row/byte counters, one active reservation's immutable initial and remaining
+budgets, original rollback inventory, issued-attempt count, cumulative application
+work and unknown-containment quarantine. Start with one previously retained unit
+row and no reservation. Reserve atomically enters prepared custody before registry
+insertion; registration consumes one row/byte unit and enters active custody.
+New touch/growth consumes remaining budget; shrink changes retained bytes without
+refunding spent growth. Finalization clears only remaining capacity. Confirmed
+rollback restores the original native inventory but leaves issued ordinals and
+spent work unchanged. Unknown containment permits no new work. Host commit is
+allowed only after reservation clearance. Original full operation/guard validation
+is an assumption at these abstract transitions, not an algorithm supplied here.
+
+| Property | Required invariant and authority |
+| --- | --- |
+| CR-01 retained parity | Observed retained counters equal the complete inventory, including prior finalized custody; CONTRACT-001 persistent parity/RT and US-007-AC1/AC2. |
+| CR-02 capacity conservation | Nonnegative retained plus remaining reservation never exceeds original row/byte caps; CONTRACT-001 capacity admission. |
+| CR-03 cleared slot | Cleared custody has no remaining/initial/consumption/snapshot state; empty slot is not complete commit authority; CONTRACT-001 OC and capacity protocol. |
+| CR-04 no spend refund | Remaining equals immutable initial budget minus consumed positive deltas; shrink cannot recharge the operation; CONTRACT-001 accounting and CONTRACT-009 original operation budgets. |
+| CR-05 work monotonic | Local rollback cannot refund cumulative application work; CONTRACT-007/009 original enclosing account. |
+| CR-06 ordinal monotonic | Rolled-back attempts retain issued ordinal gaps; ADR-008 and original issuer custody. |
+| CR-07 unknown quarantine | Unresolved containment cannot resume ordinary work; CONTRACT-007 recovery. |
+
+The [Python finite model](../../04-build/evidence/design-audit/capacity_reservation_model.py)
+exhaustively explores three retained/reserved rows, five byte units, two issued
+attempts and twelve application-work steps. Units abstract original exact byte
+lengths; complete semantic identity, per-row codec/native overhead, issuer/security,
+lock order and atomic native effects are assumptions outside this graph. Separate
+containment remains possible after the application budget is spent; this model
+proves no real cancellation/containment deadline. No fairness or liveness guarantee
+is claimed. Reachable commit and recovery witnesses establish non-vacuity only.
+
+The current receipt records2386 states/4770 transitions and seven negative
+controls violating their intended properties. Its recovery witness includes
+registered B effects before B rollback with finalized A surviving. The earlier
+model/receipt are retained as initial evidence; their B witness stopped before
+registry insertion and cannot supply that stronger recovery example. There is no
+reviewed correspondence to enforcing native procedures yet. The reservation SQL
+CHECKs and34 native schema observations cover structural shape only. Implement
+and independently map original reserve/consume/finalize/rollback/commit procedures
+and enabled guards, then replay concrete witnesses/fault controls before claiming
+native enforcement. The full45-story/167-criterion scope remains unchanged.

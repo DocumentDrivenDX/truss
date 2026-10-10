@@ -268,3 +268,32 @@ Extend LC-04 in the same planned reference scalar codec test file and existing U
 ### Reference definition-batch admission controls (planned)
 
 Extend LC-04 under its existing US-007-AC1 allocation: independently substitute Account.code’s original definition for Item.code despite equal scalar rules; bind decimal(21,3) codec to a string field; replace the exact row-home presence artifact with the historical JSONB presence definition; and change note nullAdmission to refusal while requesting the complete original M03 fixture. Each complete batch refuses activation without exposing any partial field facade. Separately damage original bytes/hash/profile correspondence and resource/native tuple membership. Schema-valid placeholder artifacts remain semantic refusals. Successful admission must retain all four original fields and exact original source pointers; tests cannot redefine expected membership from candidate registry output. Native and compiled activation cases remain not_run.
+
+
+## Capacity reservation transfer analysis and native correspondence
+
+CR-01–07 in TD-007 qualify only the named original custody transfer slice of
+US-007-AC1/AC2. Run `python3 docs/helix/04-build/evidence/design-audit/capacity_reservation_model.py <fresh-receipt-basename.json>`
+from the Truss checkout. Require complete finite graph exploration, all three
+reachable success/recovery witnesses and each of seven broken mechanisms failing
+its named property. Error, incomplete exploration or a different negative-control
+property is not a pass. Preserve original model/config/source/tool pins and traces.
+
+Replay the model witnesses against actual protected procedures: reserve registry
+storage before inserting it; commit finalized retained custody; finalize A, admit
+and change B, then roll B back with complete A counters/bytes intact; shrink and
+regrow with the original remaining budget strictly spent. Inspect every actual
+operation/touch/slot/counter and original account charge, rather than only returned
+status. Replay initial-budget subtraction, missing transfer, cleared-but-reserved,
+work refund, ordinal rewind and unknown-resume counterexamples as native negative
+controls under the original authority/exclusion profile. Confirmed rollback and
+unknown containment are different expected outcomes. No implicit retry is allowed.
+
+Current bounded analysis passes2386 states/4770 transitions and seven targeted
+negative controls. Current native schema evidence separately passes34 shape/size/
+exclusion observations. Protected procedure refinement, ordinary-role effects,
+complete guard/capacity inventory, cancellation and actual commit/recovery runs
+remain not_run. Neither component result closes US-007-AC1/AC2 or proves all
+installation/readiness conditions; full exact value/codec/native coverage remains
+required. Recheck affected analysis and source correspondence after protocol,
+model, tool/config or enforcing procedure changes.
