@@ -1628,3 +1628,41 @@ owner supplies subject/current-authority, exclusion/freshness and diagnostic
 privacy meaning; UMF supplies admitted metadata/value/DDL semantics. Missing
 owner publication remains a named integration dependency, not permission to
 create an alternate resolver or reinterpret the current invoker contexts.
+
+### Typed prestate producer replacement — 2026-10-10
+
+The existing `packages/postgresql/native/row-prestate-capture.sql` is a predecessor
+component, not the complete original typed prestate producer. It captures owner/
+property/state/node/scalar snapshots via generic to_jsonb. Retaining those JSON
+bytes does not establish original stored datum/codec correspondence for complete
+OLD/NEW images, exact numeric/temporal/opaque values or unknown extension content.
+Do not bind that snapshot artifact as the original-image input merely because
+it carries matching state/owner IDs. Existing callers/evidence remain historical;
+no silent replacement of their carrier meaning is permitted.
+
+Implement a distinct versioned private producer using the current original
+state/node/scalar image codecs and exact admitted native column/type profile.
+It must retain complete state plus every node/scalar original image, including
+parents needed after cascade deletion, under the original protected scope/cut.
+Owner/property/catalog semantics require their independently admitted exact
+original codecs; replacing them with identifiers or display JSON is insufficient.
+No JSON-number carrier, normalization, absent-row fallback, LIMIT prefix or live
+parent lookup after deletion may substitute for original retained prestate.
+
+Before source submission, bind the original operation/actor/current authority,
+complete typed scope and pre-reserved row/byte/control/work/deadline/copy account.
+Preflight exact selected counts/lengths before whole image retention; codec
+per-record ceilings alone do not qualify aggregate materialization. Consume the
+existing UMF source representation/export path for new native statements and
+retain explicit unhandled declarations rather than writing a DDL generator.
+Keep this producer separate from the seven semantic orchestration bodies until
+its original native event/lifetime/role/dependency closure is qualified.
+
+Acceptance must compare independently expected complete native prestate images
+for object and edge homes, nested parents and all exact scalar carriers; perform
+actual cascades and compare every original OLD image after live parents vanish;
+reject missing/extra/duplicate/foreign original images, profile/column drift and
+whole-account exhaustion; prove late failure restores all native effects and
+retains original recovery custody. Unsupported owner/property codec/profile
+meaning refuses before business effects. These schedules remain not_run for
+the replacement; the earlier finite cascade/image experiments are inputs only.

@@ -1912,3 +1912,10 @@ and complete seven-body integration. It names the missing closed security-owner
 subject/attempt/authority/cut/publication interface and the remaining Truss-owned
 realization separately. Reforecast requires full integrated ordinary-role evidence
 on one installed profile; repeated component probes cannot restart the old ETA.
+
+The [prestate producer gap review](evidence/design-audit/prestate-producer-gap-review.json)
+identifies the current generic to_jsonb snapshot predecessor as insufficient for
+original typed image correspondence. The [replacement packet](operation-ordinal-issuer-handoff.md#typed-prestate-producer-replacement--2026-10-10)
+selects distinct versioned complete native-image capture, aggregate preflight,
+owner-codec/current authority and actual cascade/rollback controls. Implementation
+and full replacement acceptance remain open; old carriers are not reinterpreted.
