@@ -57,6 +57,41 @@ released until the corresponding installed public exports and preview corpus
 actually pass. Current twelve-module/42-test component evidence provides no
 calendar or capability-completion evidence for these estimates.
 
+### P0 native caller checkpoint: corrected binary required
+
+The [caller-reset experiment](../../../scripts/check-pgserver-caller-reset.py)
+now executes18 independently expected role/session observations on a disposable
+pgserver0.1.4 PostgreSQL16.2 server. Its
+[receipt](evidence/design-audit/pgserver-caller-reset.json) records three mismatches:
+full transaction rollback loses the previously selected role; savepoint rollback
+also loses it; subsequent outer rollback restores current_user but leaves
+current_setting('role') at none. These are real native observations, not an
+installed RLS/origin test. The fixture authenticates administratively to exercise
+session authorization; it does not qualify an ordinary actor or nested definer.
+
+[PostgreSQL's16.5 release notes](https://www.postgresql.org/docs/16/release-16-5.html)
+describe this rollback defect, and the
+[advisory](https://www.postgresql.org/support/security/CVE-2024-10978/)
+requires correction from16.5 onward in that major. CONTRACT-005 already excludes
+known incorrect reset behavior. Therefore the existing16.2 binary cannot qualify
+the selected R4/R5 profile. Do not reset the host role after each call, substitute
+asserted origin for authenticated identity, or disable per-person isolation.
+
+The immediate implementation queue now includes a reproducibly built corrected
+PostgreSQL distribution inside the pgserver runtime packaging, with exact original
+source/build/binary/dependency pins and platform loader evidence. The installed
+pgserver0.1.4 candidate resolves commands from its packaged pginstall directory;
+an ambient system binary or monkeypatched executable path is not a shipped fix.
+Preserve existing16.2 evidence as historical component scope. Run the same reset
+experiment plus the full prepared/unprepared, role/reset/rollback, non-superuser
+definer, RLS and current-authority schedules on the corrected tuple before adoption.
+Updating a patch number alone does not qualify the complete profile.
+
+The provisional P1–P4 estimates are conditional on this corrected-binary work;
+P0 has identified a concrete prerequisite, not completed native admission/security
+integration. Corrected packaging is Truss-owned work and can proceed without a
+new product decision or completion of every security-owner case.
+
 ## Ownership and profile selection
 
 Truss owns the Python package in this repository, installation bundles, migration
