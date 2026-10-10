@@ -98,6 +98,39 @@ this plan does not invent an executable installer or count absent cases as passe
 PKG-01–06/08 belong to fresh-package P1/P2 qualification; PKG-07's complete populated
 migration is P4. Full PY-07 publication also retains bidirectional native interchange.
 
+### PKG-08 independent failure and settlement schedule
+
+Use a registered complete fresh-install bundle and a disposable namespace whose
+original absence is independently observed. The failure-injection profile is a
+separately reviewed test composition, never an arbitrary public SQL callback.
+Before running, record its exact boundary, original expected resources/native
+inventory and finite observer/driver/containment limits. The installed public
+entrypoint is the action under test; fixture DDL executed outside it cannot pass.
+
+| Boundary / action | Independent observations and exact outcome distinction |
+| --- | --- |
+| Fail after a real required DDL effect but before initialization | Within the original effects transaction retain evidence that the selected object existed. After correlated confirmed rollback, independently verify original namespace/object absence and no archive, marker or ready installation. A zero marker count alone does not prove complete rollback. |
+| Fail after initialization/archive preparation but before provisional readiness | Retain exact provisional singleton/archive evidence and full original attempt. After confirmed rollback independently verify all selected object/data/publication effects absent; nontransactional identity consumption may remain burned under the selected profile. |
+| Fail after provisional marker and successful in-transaction target verification but before COMMIT submission | Prove provisional state existed, no COMMIT was submitted and confirmed rollback restored the complete original state. Do not return ready from a prior successful verifier. |
+| Submit COMMIT and lose the original acknowledgement | Retain submitted cycle and recovery reference; return commit_unknown without guessing from marker absence or a diagnostic event. Once settlement is independently observable, a fresh process reconciles the same attempt read-only with zero install/DDL submissions. |
+| Confirm COMMIT, then fail committed verification or original cleanup | Retain confirmed commit evidence; return the binding's committed-unverified branch when complete readiness publication is unavailable. Independently observe committed contents and reconcile without reinstalling; never rewrite confirmed commit as rolled_back. |
+
+The independent observer uses a separately admitted connection and complete
+selected catalog/data/grant/routine/trigger inventory. Do not let an observer's
+blocking query become the installer timeout: use its own finite observation
+profile and report unavailable when a cut or lock cannot be obtained. During
+uncertain live settlement, absence/invisibility does not classify termination.
+Only the original correlated settlement protocol may permit the post-termination
+inventory comparison. Keep its evidence separate from the observer's state facts.
+
+For every boundary retain original wheel/bundle/test-profile hashes, invocation
+and actual native submission order, outcome grammar, attempt/reference, original
+account charges, settlement/containment evidence and complete independent state.
+Repeat recovery with denied authority: preserve private attempt custody and return
+the existing opaque observation-unavailable variant, with no retry or install
+effect. All five schedules remain not_run until the complete installer executes
+them; existing rollback-only admission fixtures do not supply this qualification.
+
 
 ### Resource-reader controls before complete installation
 
