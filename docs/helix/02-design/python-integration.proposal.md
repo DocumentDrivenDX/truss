@@ -2591,3 +2591,35 @@ installed-package path containment and aggregate retained input ownership. Then
 compose the real reader with archive/use and complete native installation. No
 public installer export, release index, new compiler registration or ready marker
 is introduced by these capture tests.
+
+
+### Closed resource-index decoder checkpoint
+
+The private capture module now also defines immutable `ResourceEntry` and pure
+`decode_resource_index`. The exact wire keys are `interface`, `releaseId` and
+`entries`; `interface` equals `truss-python-resources/0.1.0`. Entries retain the
+previously specified exact keys and ordered inventory. No bootstrap wire or
+Weft distribution format changes. Decode first compares the independently pinned
+original index byte digest, then strict UTF-8 JSON with duplicate-key rejection.
+Noninteger/nonfinite numeric nodes refuse; booleans cannot supply byte lengths.
+Closed shape, exact release, unique IDs/paths, lexical relative POSIX paths,
+aggregate byte/entry limits and complete independently registered entry equality
+all precede returning an immutable tuple. No decoder-derived inventory supplies
+the expected membership or expected index pin.
+
+The [component receipt](../04-build/evidence/design-audit/python-resource-index-decoder.json)
+records six capture/index tests, including original-pin and full membership
+correspondence, duplicate key/entry, path traversal/absolute/backslash/control,
+foreign role/release, unknown fields and numeric/aggregate/entry bounds. The
+Python module gate passes57 imports. Test inventories are synthetic registration
+controls, not an admitted Truss release or complete physical installation packet.
+The earlier capture receipt retains its original source hashes and scope.
+
+Lexical paths cannot prove filesystem/zip symlink containment. JSON byte/entry
+bounds do not qualify decoder heap/work/deadline admission; parser nesting failure
+refuses without claiming contained allocation. Next retain the index capture and
+complete entry captures under the same original release/account and select an
+installed-package reader with original containment evidence. Then integrate all
+required models/generated/native/grant/initialization/verifier/profile/recipe
+members with archive/use and complete installer verification. No complete release
+membership, public install/verify operation or ready marker is asserted here.
