@@ -880,6 +880,30 @@ authenticated fact evaluation, original row/value correspondence, complete nativ
 cuts, query-wide authorization and result release unqualified. No working owner
 API, caller truth vector or acceptance count is adopted as Truss authority.
 
+The subsequent [completed evaluated-facts checkpoint](../04-build/evidence/design-audit/security-evaluated-facts-checkpoint.json)
+advances conditional correspondence: the owner's finite Record evaluator derives
+actual required scan/action/rule truths from a supplied fact population, checks
+Original cells against their scoped normalized values, and rejects conflicting
+same-identity assignments across rows, subject and association populations.
+It also charges generated truth-map identifiers before cloning. The review's
+Rust tests are owner-attributed; Truss's observation pins the retained review and
+checks its original source/parent-receipt hashes without rerunning those tests.
+The owner's active next iteration may change those sources; this checkpoint is
+historical evidence, not a moving API adoption. Supplied trust, coverage and
+generation still cannot authenticate a native cut. Actual query/join provenance,
+complete enumeration, empty-result query-wide permission and guarded release
+remain integration gates.
+
+Python must retain original scan occurrences when assembling the eventual owner
+input. Coherent repeated identities in a bag or self-join remain distinct rows;
+identity-coherence checks cannot deduplicate query results. Missing projected
+values or coverage cannot be filled from identity keys. Consume owner diagnostics
+without collapsing literal/source, cell, selection and evaluation failures into a
+successful empty result. Add independent integration controls for equivalent
+numeric spellings, conflicting non-policy fields, missing Original field versus
+missing coverage, empty-batch dependency failure and identifier-expansion
+exhaustion. All remain `not_run` for the composed Truss native/Python profile.
+
 Truss must consume the eventual exact owner selection/evaluation capability rather
 than implement a second mask resolver. Admission requires correspondence among
 the original ordered output, its scan occurrence, source Field, selected policy
