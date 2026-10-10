@@ -235,3 +235,30 @@ final freshness check; publish only the qualified observer verdict. The separate
 installer/migration executor retains mutation/settlement/recovery ownership.
 Source membership or a version marker cannot substitute for missing seven
 semantic bodies, owner subject/current authority or complete native closure.
+
+
+## Native archive membership component — 2026-10-10
+
+[Archive9](../04-build/evidence/design-audit/installation-archive-membership-native.json)
+executes the original UMF-exported0.16 installation tables on PostgreSQL16.15.
+Five opaque administrative fixture artifacts cover the allowed role labels;
+original full role/identity/bytes and both native digests are compared independently.
+Separate savepoints remove a member, duplicate a full identity, change bytes,
+and add an unexpected identity. Native constraints checked immediately succeed
+and the marker remains present in each case. The complete fixture membership
+comparison fails, then rollback restores exact original membership and bytes.
+
+The protected independent verifier must compare both expected-to-actual and
+actual-to-expected full original release membership, retain duplicate observations,
+and compare exact original role/identity/bytes. Generated digest correspondence
+can pass after changed bytes, and a nonunique identity route cannot establish
+exactly-one membership. A marker or artifact count cannot replace this proof.
+Missing/duplicate/changed/extra archive content is an integrity refusal under
+complete authorized observation; unavailable observation remains unavailable.
+
+This is a table/fixture component, not complete registered release or installed
+inventory, native status/verifier implementation, original authority/cut/resource
+qualification, or an ordinary-writer bypass. Fixture artifact contents are
+explicitly opaque and must not be promoted to installer evidence. Full PKG-01/02/08
+and original populated migration remain not_run. Security-owner closure is still
+absent; the latest chat read remains systemError/failed with no live handle.
