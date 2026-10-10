@@ -72,6 +72,9 @@ export interface OperationControlProducer {
 /** Only this confirmed registry entry can enter the existing native admission
  * dispatcher. It must additionally verify original issuer/native authority,
  * full actor/epoch/configuration context and inventory before registry effects.
+ * Consume its one admission permission before invocation under original arbitration.
+ * Failure, unknown completion or savepoint rollback never restores permission.
+ * Repeated/copied/foreign/expired confirmations refuse without native invocation.
  * This boundary does not expose ordinal-bearing SQL or grant an EXECUTE right.
  */
 export interface ConfirmedOperationAdmission<OriginalAdmissionInput, NativeAdmissionResult> {

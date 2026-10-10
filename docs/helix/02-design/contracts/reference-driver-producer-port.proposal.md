@@ -72,7 +72,7 @@ retains original attempt/control/account/cleanup custody and follows the existin
 recovery procedure without creating a replacement counter or savepoint.
 
 Native head/capacity admission, registry insertion and canonical effects follow
-only confirmed containment. They must consume original issuer evidence through
+only confirmed savepoint creation in the original adopted transaction. They must consume original issuer evidence through
 the selected private native admission composition, rather than trusting a numeric
 argument. The four row-derived native allocation candidates remain incompatible
 until that verification is implemented. No successful reservation proves current
@@ -88,3 +88,29 @@ forward/control counts, burnt/nonreused ordinals, complete original custody and
 whether native registry effects were permitted. A fake successful control callback
 cannot author the expected native confirmation. Python and TypeScript must satisfy
 these same controls on their own selected driver tuples before sharing support.
+
+
+## One-use native admission after control confirmation
+
+A confirmed savepoint control is an original registry entry with one native
+admission permission. The dispatcher rechecks original transaction epoch, issuer,
+account, selected control cycle and current cancellation/profile state under the
+same arbitration, then consumes that permission before invoking admission. A
+copied token, repeated invocation, ended transaction or rolled-back/released
+savepoint refuses before registry/business effects. Control success is not later
+rollback or backend-containment evidence.
+
+Failed native admission, callback failure or unavailable completion cannot restore
+that permission. Retain the burnt ordinal and original attempt/recovery custody;
+rollback may remove registry rows but never reactivates confirmation. Any permitted
+later operation uses a separately reserved control and fresh ordinal on the same
+original surviving transaction. Reconciliation reads the original attempt and
+cannot invoke admission with its old confirmation. An uncertain transaction or
+savepoint lifetime closes new admission until the original recovery procedure
+establishes an admissible state; public driver status alone cannot reopen it.
+
+Qualification must independently count native admission submissions, not merely
+control submissions: two calls with one confirmation produce at most one native
+invocation, including after refusal, exception, savepoint rollback and lost result.
+Foreign/copy/current-state controls must produce zero. These are required producer
+integration schedules, not capabilities supplied by static brands.
