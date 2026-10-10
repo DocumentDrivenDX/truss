@@ -55,6 +55,20 @@ public equality pin. The [installed matcher evidence](../../docs/helix/04-build/
 checks these version matches only, not index resolution or installation.
 Neither tuple installs Truss or qualifies complete R4/R5 enforcement.
 
+For corrected-candidate development, use the explicit repository constraint:
+
+```sh
+.venv/bin/pip install --no-index --find-links /path/to/verified/wheels --constraint packages/python/constraints/local-corrected.txt './packages/python[local]'
+```
+
+The wheelhouse must contain the separately verified corrected pgserver and the
+three pinned lifecycle dependency wheels. The exact local-version constraint
+excludes public pgserver0.1.4; package version still does not prove original native
+payload correspondence. The current rebuilt candidate has clean offline resolver,
+payload and132-test evidence in the runtime plan. This optional development
+constraint does not publish the private wheel or change the default public extra.
+
+
 See the [installation and migration execution plan](../../docs/helix/04-build/local-runtime-installation-migration-plan.md)
 for the complete delivery scope and independent acceptance scenarios.
 

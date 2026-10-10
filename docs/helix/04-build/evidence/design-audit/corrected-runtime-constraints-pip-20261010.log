@@ -1,0 +1,8 @@
+WARNING: The directory '/Users/erik/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Looking in links: /private/tmp/truss-pgserver-fresh-wheel-20261010, /private/tmp/truss-local-resolver-dependency-wheels
+Processing /private/tmp/truss-fresh-wheel-qcnck6lx/wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl (from truss-toolkit==0.0.1.dev0)
+Processing /private/tmp/truss-pgserver-fresh-wheel-20261010/pgserver-0.1.4+truss.pg16.15-cp311-cp311-macosx_27_0_arm64.whl (from truss-toolkit==0.0.1.dev0->truss-toolkit==0.0.1.dev0)
+Processing /private/tmp/truss-local-resolver-dependency-wheels/fasteners-0.20-py3-none-any.whl (from truss-toolkit==0.0.1.dev0->truss-toolkit==0.0.1.dev0)
+Processing /private/tmp/truss-local-resolver-dependency-wheels/platformdirs-4.12.4-py3-none-any.whl (from truss-toolkit==0.0.1.dev0->truss-toolkit==0.0.1.dev0)
+Processing /private/tmp/truss-local-resolver-dependency-wheels/psutil-7.2.2-cp36-abi3-macosx_11_0_arm64.whl (from truss-toolkit==0.0.1.dev0->truss-toolkit==0.0.1.dev0)
+Would install fasteners-0.20 pgserver-0.1.4+truss.pg16.15 platformdirs-4.12.4 psutil-7.2.2 truss-toolkit-0.0.1.dev0

@@ -2589,3 +2589,21 @@ remains unresolved. Native security/driver composition, all seven semantic bodie
 complete install/migration and managed targets retain their existing gates.
 Earlier installed-target receipts keep their narrower scopes; no release flag or
 package dependency is changed by clean private resolution.
+
+
+## Explicit corrected-runtime development constraints
+
+`packages/python/constraints/local-corrected.txt` selects the exact private
+pgserver0.1.4+truss.pg16.15 candidate with the existing pinned lifecycle dependencies.
+Unlike the plain local-extra equality pin, its exact version specifier excludes
+public0.1.4. [Actual resolver dry-run](evidence/design-audit/corrected-runtime-constraints-resolver-20261010.json)
+ignores installed distributions and resolves all five artifacts from the verified
+private wheelhouse; original hashes match the clean environment receipt. Original
+pip report/log are retained. No public-index failure/native install is inferred
+from this dry-run. README now documents this deliberate candidate-selection path.
+
+This is repository development configuration, not a registered engine release
+profile or wheel artifact identity. Independently verify original payloads; the
+constraint cannot authenticate bytes or admit native authority. The public extra
+and lifecycle support scope remain unchanged. Corrected default publication and
+complete installer/engine gates still require their full selected profile.

@@ -1,0 +1,16 @@
+{
+  "scope": "Actual pip dry-run ignoring installed distributions over a separately verified private wheelhouse; no install/public default",
+  "constraintsSha256": "ebf9204d5ca6ce0d9023ff3b57b3d28acfc086a9dbf2c159a3ed91ea56d85a05",
+  "selected": {
+    "truss-toolkit": "0.0.1.dev0",
+    "fasteners": "0.20",
+    "pgserver": "0.1.4+truss.pg16.15",
+    "platformdirs": "4.12.4",
+    "psutil": "7.2.2"
+  },
+  "reportSha256": "5d6d08294c7dd78fb1f8a1b7277b6343a6a6f699a620e8b481f0460d77ba9c23",
+  "exactCandidateSpecifierAcceptsCorrected": true,
+  "exactCandidateSpecifierAcceptsPublic014": false,
+  "publicResolverFailureTested": false,
+  "publishedDefault": false
+}
