@@ -133,6 +133,10 @@ and concurrent/async correlation, sensitive marker absence in every sink,
 oversize/full queues/exporter outage/capture failure, shutdown deadline and cursor
 rotation/expiry. Measure instrumented versus uninstrumented actual preview runs
 and select the overhead acceptance budget before claiming delivery readiness.
+The [OBS-09 measurement packet](../../03-test/diagnostics-test-plan.md#obs-09-measurement-packet)
+defines paired public-call measurements, equivalent fresh-write fixtures, outage
+arms and independent outcome checks. Its release-specific overhead and retrieval
+limits remain unselected and must be registered before qualification sampling.
 No universal OTel overhead percentage is inherited. A failed-run retrieval pilot
 must identify cause and cite source/sequence/loss accurately with bounded tool
 calls and context; quiet console alone is not success. Native state and durable

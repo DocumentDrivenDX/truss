@@ -59,3 +59,54 @@ result, durable receipt/recovery custody and native submissions with diagnostics
 disabled. Neither optional telemetry loss nor exporter recovery may discard
 required result/conformance evidence or retry a Truss write. These extend existing
 OBS-01/05/06/08 controls; no new case is passed by the source review.
+
+## OBS-09 measurement packet
+
+Register one actual installed public read and one actual installed public write
+with independently expected complete results. The write fixture must use fresh
+original request identities and equivalent initial state for every observation;
+a replay receipt or growing journal is not an equivalent fresh-write sample.
+Keep the same layout, actor, policy, exact values, connection route, native
+obligations and resource profile in both arms. Diagnostics-disabled execution
+retains all mandatory receipt, recovery and conformance evidence. Until these
+public operations exist, a private decoder or control-statement probe cannot
+qualify this experiment.
+
+Compare diagnostics disabled with the selected bounded emission/delivery profile
+enabled. Pin identical production code except for that explicit configuration
+choice; retain the original enabled/disabled configuration fingerprints and
+complete fixture differences. Measure public-call elapsed time with a pinned
+monotonic clock in integer nanoseconds, from entry to returned result/refusal.
+Do not subtract queue admission, emission or cleanup time from that interval.
+Separately report delivery latency, loss, queue/account high-water observations
+and retained in-flight custody; asynchronous delivery does not make its resource
+cost disappear. Native Planning Time is a different metric and cannot substitute
+for public-call overhead.
+
+For each operation, run three blocks of 30 warm-up pairs and 1,000 measured pairs,
+alternating enabled/disabled order. Register fixture restoration outside each
+measured interval, and verify complete independent product results and native
+submission counts before accepting each pair. Preserve all raw ordered samples;
+an error, missing result, changed installation/configuration or fixture drift
+invalidates its block. No discarded outliers, replacement blocks or automatic
+retries. Report nearest-rank p50 (500th), p95 (950th), maximum and enabled-minus-
+disabled differences using exact integer arithmetic. A clock-resolution or zero
+baseline problem makes ratios unavailable rather than manufacturing a pass.
+
+Repeat the same registered workload with the delivery consumer unavailable and
+with a full queue. These arms must preserve product outcomes and bounded emission
+behavior while reporting incomplete capture; they cannot satisfy successful
+delivery merely by dropping everything. Concurrent-attempt correlation and
+failed-run retrieval remain separate OBS-03/09 controls, with predeclared maximum
+retrieval calls/context and an independent authored cause/evidence answer.
+
+The release owner must register explicit integer absolute overhead limits and,
+where the baseline permits it, exact rational relative limits for each operation
+and outage arm **before collecting qualification samples**. Both applicable limits
+must hold in all three original blocks. Those limits and retrieval limits remain
+unselected; this procedure deliberately supplies no invented universal percentage.
+Record the original budget authority, target, workload, clock resolution and
+complete source/package/SDK/bridge/receiver pins. Independently exercise a
+one-unit-over-budget result, missing sample, wrong product outcome and absent
+budget as failing/unavailable controls. The runner, budget selection and all
+native observations are `not_run`; this document is only the measurement handoff.
