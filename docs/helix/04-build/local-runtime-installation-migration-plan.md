@@ -133,6 +133,26 @@ or public application operations. Continue full security/role/prepared/lifecycle
 qualification and deliberate packaging/profile adoption before changing the
 default0.1.4/16.2 component pin.
 
+The [corrected isolation experiment](../../../scripts/check-corrected-pgserver-isolation.py)
+now passes the original historical0.2 storage/module-isolation/check sources on
+that installed16.15 candidate. Five additional independent observations run a
+SECURITY DEFINER function owned by the non-superuser shared-reader role: unprepared
+writer-a/writer-b calls and one prepared statement reused under writer-a,
+writer-b and an ungranted caller. Returned exact object-ID arrays match
+[101,102,104], [103], [101,102,104], [103] and [], respectively, while the
+effective function owner remains iso_ra. The
+[receipt](evidence/design-audit/pgserver-corrected-isolation.json) retains full
+fixture SQL, original source hashes and independent expected/actual rows. All
+fixture DDL/data/roles roll back, and namespace absence is checked afterward.
+
+This adds actual nested-definer/prepared policy observations to P0; it does not
+install isolation on0.16, authenticate a public Python request, validate origin
+capture/journal correspondence or qualify current revocation/publication. The
+historical0.2 storage and grants cannot enter the new installation bundle as an
+implicit substitute. Continue the current original security composition and
+local runtime lifecycle/package integration rather than relabeling these passes
+as R4/R5 completion.
+
 ## Ownership and profile selection
 
 Truss owns the Python package in this repository, installation bundles, migration

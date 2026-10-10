@@ -1,0 +1,106 @@
+{
+  "scope": "Original historical0.2 module isolation and five nested non-superuser definer observations on corrected candidate only",
+  "serverVersion": "16.15",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "historicalCheckPassed": true,
+  "observed": [
+    {
+      "acting": "iso_wa",
+      "effective": "iso_ra",
+      "ids": [
+        101,
+        102,
+        104
+      ]
+    },
+    {
+      "acting": "iso_wb",
+      "effective": "iso_ra",
+      "ids": [
+        103
+      ]
+    },
+    {
+      "acting": "iso_wa",
+      "effective": "iso_ra",
+      "ids": [
+        101,
+        102,
+        104
+      ]
+    },
+    {
+      "acting": "iso_wb",
+      "effective": "iso_ra",
+      "ids": [
+        103
+      ]
+    },
+    {
+      "acting": "iso_none",
+      "effective": "iso_ra",
+      "ids": []
+    }
+  ],
+  "expected": [
+    {
+      "acting": "iso_wa",
+      "effective": "iso_ra",
+      "ids": [
+        101,
+        102,
+        104
+      ]
+    },
+    {
+      "acting": "iso_wb",
+      "effective": "iso_ra",
+      "ids": [
+        103
+      ]
+    },
+    {
+      "acting": "iso_wa",
+      "effective": "iso_ra",
+      "ids": [
+        101,
+        102,
+        104
+      ]
+    },
+    {
+      "acting": "iso_wb",
+      "effective": "iso_ra",
+      "ids": [
+        103
+      ]
+    },
+    {
+      "acting": "iso_none",
+      "effective": "iso_ra",
+      "ids": []
+    }
+  ],
+  "preparedObservationCount": 3,
+  "unpreparedObservationCount": 2,
+  "fixtureSql": "\nCREATE FUNCTION truss.caller_probe() RETURNS json LANGUAGE sql STABLE SECURITY DEFINER\nSET search_path=pg_catalog,pg_temp AS $$\nSELECT json_build_object('acting',truss.acting_role(),'effective',current_user,\n 'ids',coalesce((SELECT json_agg(id ORDER BY id) FROM truss.object),'[]'::json))\n$$;\nALTER FUNCTION truss.caller_probe() OWNER TO iso_ra;\nREVOKE ALL ON FUNCTION truss.caller_probe() FROM PUBLIC;\nGRANT EXECUTE ON FUNCTION truss.caller_probe() TO iso_wa,iso_wb,iso_none;\nSET ROLE iso_wa; SELECT truss.caller_probe(); RESET ROLE;\nSET ROLE iso_wb; SELECT truss.caller_probe(); RESET ROLE;\nPREPARE caller_probe AS SELECT truss.caller_probe();\nSET ROLE iso_wa; EXECUTE caller_probe; RESET ROLE;\nSET ROLE iso_wb; EXECUTE caller_probe; RESET ROLE;\nSET ROLE iso_none; EXECUTE caller_probe; RESET ROLE;\nDEALLOCATE caller_probe;\n",
+  "fixtureSqlSha256": "da55eef27963e9469ac32544bdaccf48852e4bc12574377e8c995c61c57c0829",
+  "sources": [
+    {
+      "path": "docs/helix/02-design/contracts/storage-layout.sql",
+      "sha256": "8b6978ae29e22c0f961b586a2a9b312a0e9d20bf3c7ef920159f7946902d7145"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/module-isolation.sql",
+      "sha256": "242c1f9f6287ef083ac0699c0753730365a984b85f8e2b9b0beea6962f9d2e5e"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/module-isolation.check.sql",
+      "sha256": "aff04b1449ea5e5b4bc834f1028c92cc22cd6a7fa856bf3ca6c73757aa812c59"
+    }
+  ],
+  "producerSha256": "572312521a09c98916eae6b7a04cc3cb7c5ffeb32c9f2592e57970860177431a",
+  "current016InstallationQualified": false,
+  "r4Qualified": false,
+  "r5Qualified": false
+}
