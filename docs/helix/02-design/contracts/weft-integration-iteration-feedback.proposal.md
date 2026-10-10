@@ -17,3 +17,41 @@ Retained [receipt](../../04-build/evidence/weft-integration-native-component.jso
 ## Explicit compiler subset refusal
 
 `SELECT SUM(o.total) AS total FROM Orders o WHERE o.id < :cursor` with cursor integer token0 refuses WFT-UNSUPPORTED at the comparison in weft-sql0.2. Truss retains that result and does not rewrite the query, choose another dialect or fall back to physical SQL. The independent empty-dataset SUM test does not establish support for the refused filter. Future language support belongs in Weft with its own version/subset/evidence; this is a concrete use-derived case for that review.
+
+
+## Revised consumer relationship-predicate feedback — 2026-10-09
+
+[Fresh frontend receipt](../../04-build/evidence/design-audit/consumer-revised-frontend.json)
+uses frozen Weftf05f2df and both revised owner-authored models, with no inserted
+names or SQL rewriting. All original archive files compare byte-exactly before
+execution; Cargo runs locked/offline with Rust1.90.0. Ninety query observations
+resolve80 and refuse10: these are the following five original steps on each model.
+All refusals are WFT-NAME-MISSING in resolve, reporting a property absent from
+Record members. This is test-frontend evidence, not SQL lowering/native execution
+or a public parsed-input ABI qualification.
+
+| Original consumer step | Required logical predicate |
+| --- | --- |
+| `read.relationship-filter-both-directions:0` | `s.addresses = 'uc-1'` |
+| `read.relationship-filter-both-directions:1` | `u.addressedBy = 'sol-1'` |
+| `read.relationship-filter-both-directions:2` | `u.addressedBy = 'nobody'` |
+| `read.repeated-relationship-predicates-mean-both:2` | `s.addresses = 'uc-1' AND s.addresses = 'uc-2'` |
+| `read.repeated-relationship-predicates-mean-both:3` | `s.addresses = 'uc-1' AND s.addresses = 'nope'` |
+
+The consumer expects directed relationship-key membership, including separate
+members satisfying both conjuncts and empty output for the unmatched key. These
+are not scalar Field equalities over a stored physical object ID. Adding core
+Record/Field names closes the earlier naming-input mismatch but does not make
+relationship endpoints scalar members. Full original SQL and expectations remain
+in the frozen corpus; preserve its relationship/key selectors and exact parameter
+meaning, multiplicity, authorization and disclosure semantics.
+
+Weft owns selecting/resolving/lowering this logical capability and its parsed-input
+boundary. Truss supplies accepted original model/binding and actual native mapping,
+then qualifies original parameters/obligations/ordered output under the installed
+security profile. Do not patch queries into joins in Truss, pretend incident-edge
+reads satisfy arbitrary predicates, silently add fake scalar Fields or declare
+R8 complete from the other80 frontend outcomes. A future owner composition needs
+these positive/unmatched/repeated-predicate cases and backend/native bounds,
+source validation and exact result evidence. This local packet is not a cross-chat
+message or adoption of an unfinished Weft API.

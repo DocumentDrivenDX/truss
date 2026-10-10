@@ -1143,3 +1143,15 @@ Next PY-02/PY-05 work consumes these actual authored bytes and reruns original
 compiler/name-resolution controls; P3 reached/replay cases preserve issuance and
 no-op distinctions. The first release still needs all R1–R10, not just this input
 alignment.
+
+
+### Revised-source query frontend execution
+
+The original consumer bytes now have fresh frozen-f05f2df frontend execution:
+90 model/query observations,80 resolved and10 original directed-relationship
+predicate refusals. Full backend/index/native/resource and parsed-input admission
+remain unqualified. The local Weft iteration packet identifies the five exact
+consumer steps and required key-membership/conjunction semantics; Weft remains
+compiler owner. Do not substitute direct edge enumeration or rewrite consumer SQL
+to close these R8 cases. A failed compiler fixture produces no new success receipt;
+actual run metadata must correspond to its output/input/harness hashes.

@@ -2304,3 +2304,29 @@ new source pins, then map original compiler results/descriptors and native cases
 Five relationship-predicate query steps previously refused name resolution remain
 separate expected checks, not silently repaired SQL. Weft still owns the parsed
 input/compile boundary; consumer source changes add no Truss compiler/resolver.
+
+
+### Actual revised-source frontend checkpoint
+
+The [fresh source-bound receipt](../04-build/evidence/design-audit/consumer-revised-frontend.json)
+runs90 original query/model combinations against frozen adopted-source Weftf05f2df:
+80 resolve and10 retain the five relationship-predicate refusals. Resolved output
+retains original document bytes/pins; it emits no SQL. The owning
+[iteration feedback](contracts/weft-integration-iteration-feedback.proposal.md#revised-consumer-relationship-predicate-feedback--2026-10-09)
+records required directed key-membership/conjunction semantics and the Weft/native
+ownership split. It does not repair original query strings or infer parsed-input,
+backend/native/index/resource qualification from the test frontend. R8 remains open.
+
+Reproduce with a fresh frozen f05f2df source extraction and the selected toolchain:
+
+```sh
+python3 scripts/check-revised-consumer-frontend.py prepare /path/to/frozen-weft /path/to/weft-repository /path/to/toolchain
+python3 scripts/check-revised-consumer-frontend.py run /path/to/frozen-weft /path/to/weft-repository /path/to/toolchain
+```
+
+The run deletes only its own earlier output/run marker, executes locked/offline
+Cargo with a60-second test deadline and checks actual status/results. Raw subprocess
+capture is disabled; run metadata hashes input/harness/output and records toolchain
+versions. Assess refuses absent or mismatched original run evidence. Every original
+archive file is checked; prepared harness paths cannot overwrite an existing file.
+The deadline bounds this fixture run only, not production query resource budgets.
