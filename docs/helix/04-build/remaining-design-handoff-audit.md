@@ -1623,3 +1623,14 @@ statements with complete=false. Original protected event/prestate/allocation,
 association/family/current authority and complete resource admission remain the
 next composition inputs. The postserialization eight-MiB ceiling cannot qualify
 native pre-materialization/copy/work/heap limits or whole retained-row accounting.
+
+The current [row-image preflight receipt](evidence/design-audit/row-image-preflight-native.json)
+passes31 native observations with exact output length checked before whole-record
+serialization and independent eight-MiB/full-byte boundary verification. This
+supersedes the current codec's earlier postserialization ceiling, while the
+[history mapping](evidence/design-audit/row-image-preflight-history.json) retains
+that earlier source/evidence unchanged. Five private routines now compose this
+codec component. Numeric length measurement still serializes one cell; full native
+materialization/detoast/copy/work/account/deadline qualification, original protected
+prestate/event binding and seven semantic body realization remain outstanding.
+Source artifact revision0.2 changes no row-image wire domain or native table layout.

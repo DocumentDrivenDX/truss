@@ -8,15 +8,18 @@ text and source bytes remain independent cells. No generic JSON or display-strin
 conversion supplies the image.
 
 The original column validator checks full ordered membership, native types,
-nullability, typmods, collation, dropped/array fields and inheritance. Four private
+nullability, typmods, collation, dropped/array fields and inheritance. Five private
 INVOKER routines have PUBLIC EXECUTE revoked. They are data codecs: constructed
 composites or matching profile labels do not authenticate an original trigger,
 prestate, candidate, installation, subject or operation. Complete deployed routine/
 builtin/cast/codec dependency and private role/ACL/DDL closure remain required.
 
-The output ceiling is checked **after** native serialization. This candidate does
-not qualify pre-materialization/native detoast/record-send/copy/allocator/deadline
-bounds. The original admission profile must establish those independently before
+The exact complete frame length is checked before whole-record serialization.
+Native text/bytea lengths, fixed-width payload sizes and the original numeric binary
+length supply the preflight; serialized output must match that length exactly.
+Numeric length measurement still serializes that numeric cell. This candidate does
+not qualify pre-materialization/native detoast/numeric-send/record-send/copy/allocator/
+deadline bounds. The original admission profile must establish those independently before
 using these images for protected effects. An 8-MiB returned image does not mean its
 containing retained operation/touch row or all copies fit a resource budget.
 

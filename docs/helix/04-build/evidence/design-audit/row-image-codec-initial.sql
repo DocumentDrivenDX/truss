@@ -41,72 +41,38 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.row_image_columns_original(text) FROM PUBLIC;
 
-CREATE FUNCTION truss.row_image_size_original(kind text,lengths integer[]) RETURNS bigint
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE count integer;item integer;total bigint;
-BEGIN
- IF kind IN ('state','scalar') THEN count:=13;
- ELSIF kind='node' THEN count:=10;
- ELSE RAISE EXCEPTION 'original row image kind required' USING ERRCODE='22023';END IF;
- IF lengths IS NULL OR array_ndims(lengths) IS DISTINCT FROM 1 OR array_lower(lengths,1) IS DISTINCT FROM 1
-  OR cardinality(lengths)<>count THEN RAISE EXCEPTION 'complete row image lengths required' USING ERRCODE='22023';END IF;
- -- Domain+NUL, field count, then OID and signed length for each field. NULL
- -- contributes its frame header but no payload, independently of empty bytes.
- total:=octet_length(convert_to('truss.row-image.'||kind||'/0.1','UTF8'))+5+8*count;
- FOREACH item IN ARRAY lengths LOOP
-  IF item<0 THEN RAISE EXCEPTION 'nonnegative row image length required' USING ERRCODE='22023';END IF;
-  IF coalesce(item,0)>8388608-total THEN RAISE EXCEPTION 'original row image output bound' USING ERRCODE='54000';END IF;
-  total:=total+coalesce(item,0);
- END LOOP;
- RETURN total;
-END;
-$$;
-REVOKE ALL ON FUNCTION truss.row_image_size_original(text,integer[]) FROM PUBLIC;
-
 CREATE FUNCTION truss.row_image_state_original(value truss.row_home_state) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE result bytea;expected bigint;
+DECLARE result bytea;
 BEGIN
  IF value IS NULL THEN RAISE EXCEPTION 'original state image required' USING ERRCODE='22023';END IF;
  PERFORM truss.row_image_columns_original('state');
- expected:=truss.row_image_size_original('state',ARRAY[8,octet_length(value.owner_kind),CASE WHEN value.object_id IS NULL THEN NULL ELSE 8 END,
-  CASE WHEN value.object_type_id IS NULL THEN NULL ELSE 4 END,CASE WHEN value.edge_id IS NULL THEN NULL ELSE 8 END,
-  CASE WHEN value.relationship_type_id IS NULL THEN NULL ELSE 4 END,4,4,8,octet_length(value.definition_bytes),
-  octet_length(value.home_profile_bytes),octet_length(value.value_profile_bytes),octet_length(value.source_bytes)]);
  result:=convert_to('truss.row-image.state/0.1','UTF8')||decode('00','hex')||pg_catalog.record_send(value);
- IF octet_length(result)<>expected THEN RAISE EXCEPTION 'original row image size mismatch' USING ERRCODE='55000';END IF;
+ IF octet_length(result)>8388608 THEN RAISE EXCEPTION 'original row image output bound' USING ERRCODE='54000';END IF;
  RETURN result;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.row_image_state_original(truss.row_home_state) FROM PUBLIC;
 CREATE FUNCTION truss.row_image_node_original(value truss.row_home_node) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE result bytea;expected bigint;
+DECLARE result bytea;
 BEGIN
  IF value IS NULL THEN RAISE EXCEPTION 'original node image required' USING ERRCODE='22023';END IF;
  PERFORM truss.row_image_columns_original('node');
- expected:=truss.row_image_size_original('node',ARRAY[8,8,CASE WHEN value.parent_node_id IS NULL THEN NULL ELSE 8 END,octet_length(value.slot_kind),
-  CASE WHEN value.sequence_ordinal IS NULL THEN NULL ELSE 8 END,octet_length(value.map_key),
-  octet_length(value.record_field_identity_bytes),octet_length(value.value_kind),octet_length(value.definition_bytes),octet_length(value.source_bytes)]);
  result:=convert_to('truss.row-image.node/0.1','UTF8')||decode('00','hex')||pg_catalog.record_send(value);
- IF octet_length(result)<>expected THEN RAISE EXCEPTION 'original row image size mismatch' USING ERRCODE='55000';END IF;
+ IF octet_length(result)>8388608 THEN RAISE EXCEPTION 'original row image output bound' USING ERRCODE='54000';END IF;
  RETURN result;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.row_image_node_original(truss.row_home_node) FROM PUBLIC;
 CREATE FUNCTION truss.row_image_scalar_original(value truss.row_home_scalar) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE result bytea;expected bigint;
+DECLARE result bytea;
 BEGIN
  IF value IS NULL THEN RAISE EXCEPTION 'original scalar image required' USING ERRCODE='22023';END IF;
  PERFORM truss.row_image_columns_original('scalar');
- expected:=truss.row_image_size_original('scalar',ARRAY[8,8,octet_length(value.scalar_kind),octet_length(value.text_value),
-  CASE WHEN value.boolean_value IS NULL THEN NULL ELSE 1 END,octet_length(pg_catalog.numeric_send(value.numeric_value)),
-  octet_length(value.numeric_token),octet_length(value.binary_value),octet_length(value.temporal_text),
-  CASE WHEN value.temporal_instant IS NULL THEN NULL ELSE 8 END,octet_length(value.opaque_bytes),
-  octet_length(value.codec_definition_bytes),octet_length(value.original_source_bytes)]);
  result:=convert_to('truss.row-image.scalar/0.1','UTF8')||decode('00','hex')||pg_catalog.record_send(value);
- IF octet_length(result)<>expected THEN RAISE EXCEPTION 'original row image size mismatch' USING ERRCODE='55000';END IF;
+ IF octet_length(result)>8388608 THEN RAISE EXCEPTION 'original row image output bound' USING ERRCODE='54000';END IF;
  RETURN result;
 END;
 $$;

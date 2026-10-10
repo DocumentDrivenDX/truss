@@ -1,7 +1,4 @@
--- Private candidate native composite binary images. Data fidelity only, not
--- original event/prestate authority, semantic codecs or resource admission.
-CREATE FUNCTION truss.row_image_columns_original(kind text) RETURNS void
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+CREATE FUNCTION truss.row_image_columns_original(kind text) RETURNS void LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path TO pg_catalog, pg_temp AS $$
 DECLARE target regclass; names text[]; types oid[]; required boolean[]; collations oid[];
  actual_names text[]; actual_types oid[]; actual_required boolean[]; actual_collations oid[];
  actual_modifiers int[]; dropped boolean[]; dimensions int[]; c oid:='pg_catalog."C"'::regcollation;
@@ -38,11 +35,7 @@ BEGIN
   OR (SELECT relkind FROM pg_class WHERE oid=target)<>'r' THEN
   RAISE EXCEPTION 'original complete row image column profile required' USING ERRCODE='55000';END IF;
 END;
-$$;
-REVOKE ALL ON FUNCTION truss.row_image_columns_original(text) FROM PUBLIC;
-
-CREATE FUNCTION truss.row_image_size_original(kind text,lengths integer[]) RETURNS bigint
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+$$; REVOKE ALL ON FUNCTION truss.row_image_columns_original(text) FROM public; CREATE FUNCTION truss.row_image_size_original(kind text, lengths int[]) RETURNS bigint LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path TO pg_catalog, pg_temp AS $$
 DECLARE count integer;item integer;total bigint;
 BEGIN
  IF kind IN ('state','scalar') THEN count:=13;
@@ -60,11 +53,7 @@ BEGIN
  END LOOP;
  RETURN total;
 END;
-$$;
-REVOKE ALL ON FUNCTION truss.row_image_size_original(text,integer[]) FROM PUBLIC;
-
-CREATE FUNCTION truss.row_image_state_original(value truss.row_home_state) RETURNS bytea
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+$$; REVOKE ALL ON FUNCTION truss.row_image_size_original(text, int[]) FROM public; CREATE FUNCTION truss.row_image_state_original(value truss.row_home_state) RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path TO pg_catalog, pg_temp AS $$
 DECLARE result bytea;expected bigint;
 BEGIN
  IF value IS NULL THEN RAISE EXCEPTION 'original state image required' USING ERRCODE='22023';END IF;
@@ -77,10 +66,7 @@ BEGIN
  IF octet_length(result)<>expected THEN RAISE EXCEPTION 'original row image size mismatch' USING ERRCODE='55000';END IF;
  RETURN result;
 END;
-$$;
-REVOKE ALL ON FUNCTION truss.row_image_state_original(truss.row_home_state) FROM PUBLIC;
-CREATE FUNCTION truss.row_image_node_original(value truss.row_home_node) RETURNS bytea
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+$$; REVOKE ALL ON FUNCTION truss.row_image_state_original(truss.row_home_state) FROM public; CREATE FUNCTION truss.row_image_node_original(value truss.row_home_node) RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path TO pg_catalog, pg_temp AS $$
 DECLARE result bytea;expected bigint;
 BEGIN
  IF value IS NULL THEN RAISE EXCEPTION 'original node image required' USING ERRCODE='22023';END IF;
@@ -92,10 +78,7 @@ BEGIN
  IF octet_length(result)<>expected THEN RAISE EXCEPTION 'original row image size mismatch' USING ERRCODE='55000';END IF;
  RETURN result;
 END;
-$$;
-REVOKE ALL ON FUNCTION truss.row_image_node_original(truss.row_home_node) FROM PUBLIC;
-CREATE FUNCTION truss.row_image_scalar_original(value truss.row_home_scalar) RETURNS bytea
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+$$; REVOKE ALL ON FUNCTION truss.row_image_node_original(truss.row_home_node) FROM public; CREATE FUNCTION truss.row_image_scalar_original(value truss.row_home_scalar) RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path TO pg_catalog, pg_temp AS $$
 DECLARE result bytea;expected bigint;
 BEGIN
  IF value IS NULL THEN RAISE EXCEPTION 'original scalar image required' USING ERRCODE='22023';END IF;
@@ -109,5 +92,4 @@ BEGIN
  IF octet_length(result)<>expected THEN RAISE EXCEPTION 'original row image size mismatch' USING ERRCODE='55000';END IF;
  RETURN result;
 END;
-$$;
-REVOKE ALL ON FUNCTION truss.row_image_scalar_original(truss.row_home_scalar) FROM PUBLIC;
+$$; REVOKE ALL ON FUNCTION truss.row_image_scalar_original(truss.row_home_scalar) FROM public

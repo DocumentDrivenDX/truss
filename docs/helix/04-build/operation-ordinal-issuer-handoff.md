@@ -1149,3 +1149,33 @@ not portable canonical UMF value encoding. The README preserves these limits.
 No touch observer registration or seven semantic body field is filled by these
 codecs. Next composition must bind original event/prestate/native allocation
 custody, full effect scope and actual resource admission before semantic updates.
+
+### Native row-image exact output preflight (2026-10-10)
+
+The current codec source adds private `row_image_size_original` and checks exact
+whole-frame length before state/node/scalar record serialization. Typed text/bytea
+lengths, fixed-width datum lengths, explicit NULL handling and original numeric
+binary length determine domain/header/payload size. Actual serialized output must
+match that independent length. The numeric length measurement still serializes its
+numeric cell; native datum materialization/detoasting/copies/work/deadline and
+whole-account admission remain separate obligations. This does not qualify a
+full pre-materialization memory or time bound.
+
+The new `row-image-codec-v0.2.proposal.umf.json` is a Truss source artifact revision;
+the row-image wire domains remain0.1 and existing complete image bytes are unchanged.
+`row-image-codec-preflight-source.json` records exact existing-UMF archive/reload/
+export with zero declarations/ten unhandled CREATE/REVOKE statements, complete=false.
+The actual exported five-routine component passes31 native observations in
+`row-image-preflight-native.json`: all original21 fidelity/profile/private-call
+checks, three exact row-kind length parities, four invalid length-array refusals,
+exact eight-MiB independent byte equality, one-byte overflow refusal and actual
+ordinary-role denial of the new private size helper. The receipt does not claim
+an allocator/record-send instrumentation proof or protected touch observation.
+
+`row-image-preflight-history.json` verifies the retained initial codec source
+matches both historical source/native receipt digests. Initial models, exports,
+checkers and receipts remain intact. The README now describes the current exact
+output preflight and its remaining native resource limits. Original protected
+prestate/event/association/family/current-authority, complete native dependency/
+private role closure, full resource admission and seven semantic bodies remain
+required before installation/public effects; no readiness field is promoted.

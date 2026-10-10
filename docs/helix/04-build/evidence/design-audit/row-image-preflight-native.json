@@ -1,0 +1,160 @@
+{
+  "scope": "actual private native state/node/scalar binary codecs and exact length preflight against independent complete field/OID/null/byte payload expectations; original UMF-exported tables and codec",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "complete-stored-state",
+      "cells": 13,
+      "originalHex": "74727573732e726f772d696d6167652e73746174652f302e31000000000d000000140000000800000000000001f500000019000000066f626a6563740000001400000008000000000000006400000017000000040000000100000014ffffffff00000017ffffffff00000017000000040000000100000017000000040000006500000014000000080000000000000259000000110000000101000000110000000102000000110000000103000000110000000104",
+      "independentByteEquality": true
+    },
+    {
+      "id": "length-parity-state",
+      "bytes": 180
+    },
+    {
+      "id": "complete-stored-node",
+      "cells": 10,
+      "originalHex": "74727573732e726f772d696d6167652e6e6f64652f302e31000000000a000000140000000800000000000001f50000001400000008000000000000025900000014ffffffff0000001900000004726f6f7400000014ffffffff00000019ffffffff00000011ffffffff00000019000000067363616c6172000000110000000105000000110000000106",
+      "independentByteEquality": true
+    },
+    {
+      "id": "length-parity-node",
+      "bytes": 137
+    },
+    {
+      "id": "complete-stored-scalar",
+      "cells": 13,
+      "originalHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002590000001900000006737472696e67000000190000000c6f626a6563742d76616c756500000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108",
+      "independentByteEquality": true
+    },
+    {
+      "id": "length-parity-scalar",
+      "bytes": 171
+    },
+    {
+      "id": "scalar-string",
+      "originalHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002590000001900000006737472696e670000001900000002c3a900000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108",
+      "independentByteEquality": true
+    },
+    {
+      "id": "scalar-false",
+      "originalHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002590000001900000007626f6f6c65616e00000019ffffffff000000100000000100000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108",
+      "independentByteEquality": true
+    },
+    {
+      "id": "scalar-decimal",
+      "originalHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f5000000140000000800000000000002590000001900000007646563696d616c00000019ffffffff00000010ffffffff000006a400000014000600040000000404d2162e23340d801ed204d2000000190000001b303031323334353637383930313233343536373839302e3132333400000011ffffffff00000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108",
+      "independentByteEquality": true
+    },
+    {
+      "id": "scalar-empty-binary",
+      "originalHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f500000014000000080000000000000259000000190000000662696e61727900000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff000000110000000000000019ffffffff000004a0ffffffff00000011ffffffff000000110000000107000000110000000108",
+      "independentByteEquality": true
+    },
+    {
+      "id": "scalar-temporal",
+      "originalHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f500000014000000080000000000000259000000190000000974696d657374616d7000000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff0000001900000016313939392d31322d33312031393a30303a30302d3035000004a000000008000000000000000000000011ffffffff000000110000000107000000110000000108",
+      "independentByteEquality": true
+    },
+    {
+      "id": "scalar-lexical-only-temporal",
+      "originalHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f500000014000000080000000000000259000000190000000974696d657374616d7000000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019000000186f726967696e616c206c65786963616c2063617272696572000004a0ffffffff00000011ffffffff000000110000000107000000110000000108",
+      "independentByteEquality": true
+    },
+    {
+      "id": "scalar-opaque",
+      "originalHex": "74727573732e726f772d696d6167652e7363616c61722f302e31000000000d000000140000000800000000000001f50000001400000008000000000000025900000019000000066f706171756500000019ffffffff00000010ffffffff000006a4ffffffff00000019ffffffff00000011ffffffff00000019ffffffff000004a0ffffffff000000110000000300ff80000000110000000107000000110000000108",
+      "independentByteEquality": true
+    },
+    {
+      "id": "null-state",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "null-node",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "null-scalar",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "unknown-kind",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "extra-column",
+      "sqlstate": "55000"
+    },
+    {
+      "id": "collation-change",
+      "sqlstate": "55000"
+    },
+    {
+      "id": "nullable-change",
+      "sqlstate": "55000"
+    },
+    {
+      "id": "null-lengths",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "wrong-length-count",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "negative-length",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "two-dimensional-lengths",
+      "sqlstate": "22023"
+    },
+    {
+      "id": "exact-eight-mib-image",
+      "bytes": 8388608,
+      "sha256": "7b4aff59310ced60191c5474f65f7e8e14aa4a45c4ccf2b5d0886b1a897141c8",
+      "fullIndependentByteEquality": true
+    },
+    {
+      "id": "one-byte-over-image-refusal",
+      "sqlstate": "54000"
+    },
+    {
+      "id": "ordinary-private-state",
+      "sqlstate": "42501"
+    },
+    {
+      "id": "ordinary-private-node",
+      "sqlstate": "42501"
+    },
+    {
+      "id": "ordinary-private-scalar",
+      "sqlstate": "42501"
+    },
+    {
+      "id": "ordinary-private-column-validator",
+      "sqlstate": "42501"
+    },
+    {
+      "id": "ordinary-private-size",
+      "sqlstate": "42501"
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/row-image-codec-preflight-source.owner-export.sql": "cf3926a6d1447eb0e5d21353252b7f5a43ef868d2f759d0ecd3b39784e348549",
+    "packages/postgresql/native/row-image/codec.sql": "580876ef61326fc8458f0b226c4136aeb6b6f3f64c2b3ca4d83157f4c02d5006"
+  },
+  "producerSha256": "9b6535082269542de1795c0e1ac02293ff6f5994af0110494c7833ce01063738",
+  "rowTouchObserverQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Stored administrative fixture plus constructed native scalar composites; no protected OLD/NEW/prestate producer",
+    "Native binary values qualify finite PostgreSQL16.15 datum correspondence, not portable UMF value semantics",
+    "Complete output length checked before record serialization; numeric cell length measurement and full pre-materialization/detoast/copy/work/heap/deadline qualification remain independent",
+    "Current profile/DDL/native callable dependency and full role/ACL closure missing",
+    "No complete association/family/current authority or seven-body realization"
+  ]
+}
