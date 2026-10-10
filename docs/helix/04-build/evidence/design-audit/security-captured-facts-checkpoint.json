@@ -1,0 +1,327 @@
+{
+  "schema": "truss-security-captured-facts-checkpoint/0.1",
+  "ownerThread": "01a11b8b-06bb-7091-a11a-b7eba0a432eb",
+  "completedOwnerTurn": "01a1245f-5a80-7fc0-b264-eaacc5650bd3",
+  "originalReview": {
+    "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/owner-fact-bridge-astra-review.json",
+    "sha256": "b45381c8ad9aaed4a833386ac28597e01ff1872d9512ece1914941bc859e2402",
+    "status": "clean-within-conditional-fact-inspection-scope",
+    "scope": "Six fixed native raw-fixture captures and twelve malformed-carrier actual owner executable replays. Caller trust, generation, coverage and native-to-model mappings are fixture premises; separate native connections do not establish an authenticated coherent cut. No query-compiler refinement, issuer/current-authority protocol, physical completeness in production, native release, or backend acceptance is established."
+  },
+  "originalNativeReceipt": {
+    "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/pg-owner-fact-selection.json",
+    "sha256": "8962356d6c48cff2f0198a95d39cd8591c15007baf9c27a7230ae9d042d5a4c7",
+    "observationCount": 63,
+    "uniqueIds": true,
+    "allExpectedObservedEqual": true
+  },
+  "attributedIndependentReview": {
+    "nativeExecution": "Parent-executed native PostgreSQL receipt audited; reviewer did not acquire a database or rerun native SQL.",
+    "nativeReceiptAudit": {
+      "observations": 63,
+      "uniqueIds": 63,
+      "allMatch": true,
+      "sourcePins": 236,
+      "selectedBuildInputPins": 208,
+      "completeAuthoredCensusMatched": true,
+      "exactTypedSalaryMatched": true,
+      "exactNativeStringMutationMatched": true,
+      "sixByteCapturesMatched": true,
+      "contractHashesIndependentlyDerived": true,
+      "distinctPairScopeSwapsRetained": true
+    },
+    "independentOwnerExecutions": [
+      {
+        "id": "umf_sec_alicesingle:object-positive",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "e92139523a6fd0a1882283f7faa202d850064cdbe69857f4c97ecd5d113c0cd6",
+        "exitCode": 0,
+        "stdout": "{\"columnCount\":1,\"cutSha256\":\"b3f021c514fd18498db34b5a825aa22f0b8b8508caf13a8e2eae638fd837962c\",\"nativeRowsSha256\":\"ddf082494ec9244cd23f09fd03598c28b595d8aabc8bf8b3fb47c0cc540273bb\",\"releasedRows\":0,\"resultContractSha256\":\"ba5f316509d10c765d3b9f2023905b96bb5beb2f3110cb6de010be2a5bc03bf5\",\"rowCount\":2,\"scans\":[{\"scan\":\"s0\",\"target\":{\"documentId\":\"domain\",\"elementId\":\"Resource\",\"moduleId\":\"m\"}}],\"scopedRowsSha256\":\"1c6258631b6170273a9833e728d44238c1b8bf56c4bc5c38085b048ac0fcf5e8\",\"status\":\"conditional-fact-correspondence\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "umf_sec_alicejoin:object-positive",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "dc63adbab59e689a37e3ddc320bfe6358936f73c70fc46fed63f5ee41a9c2199",
+        "exitCode": 0,
+        "stdout": "{\"columnCount\":2,\"cutSha256\":\"b3f021c514fd18498db34b5a825aa22f0b8b8508caf13a8e2eae638fd837962c\",\"nativeRowsSha256\":\"e2aa572dd7cc5ad032dd890b588d3422a840aa64d874f80bf35663a0dfb19f2a\",\"releasedRows\":0,\"resultContractSha256\":\"2c38cb8ace4f0f1709ee207c261f3431c3f1b9eed9112368c8a364a60896f704\",\"rowCount\":4,\"scans\":[{\"scan\":\"s0\",\"target\":{\"documentId\":\"domain\",\"elementId\":\"Resource\",\"moduleId\":\"m\"}},{\"scan\":\"s1\",\"target\":{\"documentId\":\"domain\",\"elementId\":\"Resource\",\"moduleId\":\"m\"}}],\"scopedRowsSha256\":\"1d64a68f43a1511c367a79a4cc41ed88410c48d5eb47af97a8ae8c38a2c2548d\",\"status\":\"conditional-fact-correspondence\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "umf_sec_alicesingle-empty:object-positive",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "f2e835899872949ac151a22583845ae157c821d5f6d7bd5311689e39ee479a6f",
+        "exitCode": 0,
+        "stdout": "{\"columnCount\":1,\"cutSha256\":\"b3f021c514fd18498db34b5a825aa22f0b8b8508caf13a8e2eae638fd837962c\",\"nativeRowsSha256\":\"37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570\",\"releasedRows\":0,\"resultContractSha256\":\"ba5f316509d10c765d3b9f2023905b96bb5beb2f3110cb6de010be2a5bc03bf5\",\"rowCount\":0,\"scans\":[{\"scan\":\"s0\",\"target\":{\"documentId\":\"domain\",\"elementId\":\"Resource\",\"moduleId\":\"m\"}}],\"scopedRowsSha256\":\"18307e88b9ce35e7eb920b1d78f1ebf69a7bc37383c948a644795221e2565968\",\"status\":\"conditional-fact-correspondence\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "umf_sec_bobsingle:object-positive",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "fd1e735a1f33db6de9c0ba608e63b5580c1a5f1f6cc1c4ea7fcd6acd2bde9d8e",
+        "exitCode": 0,
+        "stdout": "{\"columnCount\":1,\"cutSha256\":\"3836eaba999918e2971f7567d126097acf11c3394d061831f381c75103732649\",\"nativeRowsSha256\":\"68f58baa9a7ee79946a9432e3e556c112c0af7cfbacdc330825e71a763c1ea9b\",\"releasedRows\":0,\"resultContractSha256\":\"ba5f316509d10c765d3b9f2023905b96bb5beb2f3110cb6de010be2a5bc03bf5\",\"rowCount\":2,\"scans\":[{\"scan\":\"s0\",\"target\":{\"documentId\":\"domain\",\"elementId\":\"Resource\",\"moduleId\":\"m\"}}],\"scopedRowsSha256\":\"69d6e6fd6fa5bb3c5c9eb665b8dcc656f503635f0918255d249f75dbf14b4033\",\"status\":\"conditional-fact-correspondence\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "umf_sec_bobjoin:object-positive",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "f0ea97014885a0ab859262edb1a3318e794c6308a76b7101d698ae7d2eb247a5",
+        "exitCode": 0,
+        "stdout": "{\"columnCount\":2,\"cutSha256\":\"3836eaba999918e2971f7567d126097acf11c3394d061831f381c75103732649\",\"nativeRowsSha256\":\"42a6d5caba39e5717f81a1ec6e52240736758b2316fa9479854615ab5879c965\",\"releasedRows\":0,\"resultContractSha256\":\"2c38cb8ace4f0f1709ee207c261f3431c3f1b9eed9112368c8a364a60896f704\",\"rowCount\":4,\"scans\":[{\"scan\":\"s0\",\"target\":{\"documentId\":\"domain\",\"elementId\":\"Resource\",\"moduleId\":\"m\"}},{\"scan\":\"s1\",\"target\":{\"documentId\":\"domain\",\"elementId\":\"Resource\",\"moduleId\":\"m\"}}],\"scopedRowsSha256\":\"217d6d7b837fdead55844f29d9dc7430283a60bb96c96c94e16342e534c855c6\",\"status\":\"conditional-fact-correspondence\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "umf_sec_bobsingle-empty:object-positive",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "15b1dbeea0acefb9eca91b40ca2708fd69ed30d293076d30bf39c14612c4729b",
+        "exitCode": 0,
+        "stdout": "{\"columnCount\":1,\"cutSha256\":\"3836eaba999918e2971f7567d126097acf11c3394d061831f381c75103732649\",\"nativeRowsSha256\":\"37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570\",\"releasedRows\":0,\"resultContractSha256\":\"ba5f316509d10c765d3b9f2023905b96bb5beb2f3110cb6de010be2a5bc03bf5\",\"rowCount\":0,\"scans\":[{\"scan\":\"s0\",\"target\":{\"documentId\":\"domain\",\"elementId\":\"Resource\",\"moduleId\":\"m\"}}],\"scopedRowsSha256\":\"18307e88b9ce35e7eb920b1d78f1ebf69a7bc37383c948a644795221e2565968\",\"status\":\"conditional-fact-correspondence\"}\n",
+        "stderr": ""
+      },
+      {
+        "id": "carrier:outer",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "38bf0d0f68c616945c4d980785f067b370b52a831665ab32941ca1f09b849df9",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-FACT-INSPECTION\",\"severity\":\"error\",\"message\":\"Fact inspection refused\",\"phase\":\"input\"}\n"
+      },
+      {
+        "id": "carrier:scoped-root",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "e8ebdb43431b64343f0b5d33acc1ea0051ff9eaae1f68bb0908ce90edf2635a1",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:cut-root",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "adeb38bf9e9478407a62ffabf3b51c20379562bd79b78514b41538b122710a29",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:scoped-fact",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "eb2ccae4915b99f854ec24f79e92ed573ea9eb93e4e40070d2b4dd133edfa00d",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:field-value",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "ec8ee230db4d04477314e4f913b131cad47bc620c5d45821dcb2028b05d0d413",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:subject-fact",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "b1a07f62e2afbd3dc94cc4ed91c83eedc9b6c94fa0d9b521ff9d30fb38b4866e",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:population-fact",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "c95054e902a14f641e9f6f79ced625ec39bb19892c9df3895d2774815a8cd783",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:coverage",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "ddf88f0b9aba4f9ff4bd9c2e2525b65bf1faa7bbb1b5672123f4c49d6f73f003",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:coverage-type",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "03615a5bc94035924db47ffd70924e8871a1f8abf37caad94f39e063b329493e",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:fact-type",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "692d9e37a29053da5b4298c5612bf11e50f14cd750b0c495631e2faf30f0a8d4",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:coverage-field",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "fe7cc118ada203889f8dac8548e5c538d5d430a80c2bd63a81a20117bf48ebd2",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      },
+      {
+        "id": "carrier:fact-field",
+        "command": [
+          "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+        ],
+        "inputSha256": "50c6f223a32c300ebe8cc12284c1e3e466b1fa7129e66fc50251a0cc08d28115",
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "{\"code\":\"WFT-SECURITY-EVALUATION\",\"severity\":\"error\",\"message\":\"Security logical evaluation refused\",\"phase\":\"model\"}\n"
+      }
+    ],
+    "sourceReview": [
+      "Both examples require object roots before Serde; the new fact entry additionally guards cut/scoped roots and every nested Fact, FieldValue, Coverage and qualified reference carrier before struct decoding. The legacy standalone simulator is unchanged.",
+      "Native helper execution uses frozen bytes and SQL with the exact declared helper closure checked before acquisition. Selected build inventory/config-presence and byte checks do not constitute a hermetic build.",
+      "Fixture Resource salary decoding preserves native JSON type and exact text; complete expected fixture rows and a real native string-valued mutation distinguish type before integer normalization.",
+      "Cartesian selfjoin rows contain distinct identities; retained swaps change scoped resources but not native cells, isolating output scan occurrence correspondence."
+    ]
+  },
+  "currentReviewPinObservations": [
+    {
+      "path": "/private/tmp/owner-fact-bridge-astra-review.py",
+      "expectedSha256": "a0887d5f19a4ce55ec3ec73332473a804c19de84e2d27d2e554a4588d46e8a87",
+      "currentSha256": "a0887d5f19a4ce55ec3ec73332473a804c19de84e2d27d2e554a4588d46e8a87",
+      "resolvedPath": "/private/tmp/owner-fact-bridge-astra-review.py"
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/1598/umf/tools/security/pg-owner-fact-selection.py",
+      "expectedSha256": "2d4fbd6cbc5ce27eed15f3882465627bb8aa4ea7b68cf4d2f1718dd80d8cb0a1",
+      "currentSha256": "2d4fbd6cbc5ce27eed15f3882465627bb8aa4ea7b68cf4d2f1718dd80d8cb0a1",
+      "resolvedPath": "/Users/erik/.codex/worktrees/1598/umf/tools/security/pg-owner-fact-selection.py"
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/pg-owner-fact-selection.json",
+      "expectedSha256": "8962356d6c48cff2f0198a95d39cd8591c15007baf9c27a7230ae9d042d5a4c7",
+      "currentSha256": "8962356d6c48cff2f0198a95d39cd8591c15007baf9c27a7230ae9d042d5a4c7",
+      "resolvedPath": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/pg-owner-fact-selection.json"
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/weft-original-use.json",
+      "expectedSha256": "7ab1836381505cc039acac6e3dce51674db2f3c9dd0bbc331b3ba35976d19034",
+      "currentSha256": "9396393e43efeeeabc9416e1d9c24b896d4fe2ca2b81731070cc1f744d6adc1f",
+      "resolvedPath": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/weft-original-use.json"
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/03-test/security/cases.json",
+      "expectedSha256": "71eb930c78ad5e63e35c2b343a276ee5d78e9a38fe3ce78b840f81384fe4d2aa",
+      "currentSha256": "71eb930c78ad5e63e35c2b343a276ee5d78e9a38fe3ce78b840f81384fe4d2aa",
+      "resolvedPath": "/Users/erik/.codex/worktrees/1598/umf/docs/helix/03-test/security/cases.json"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/examples/security_fact_inspection.rs",
+      "expectedSha256": "f1fd8cd10244dd5724192fb87d5f8b3940c350d8f2b03c9deaef3356626caeeb",
+      "currentSha256": "f1fd8cd10244dd5724192fb87d5f8b3940c350d8f2b03c9deaef3356626caeeb",
+      "resolvedPath": "/Users/erik/Projects/weft/crates/weft-core/examples/security_fact_inspection.rs"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_evaluation.rs",
+      "expectedSha256": "92206b2bb19679a365be8030d1dd1e412a9ade3aa21ed10aa94801792e3a1005",
+      "currentSha256": "92206b2bb19679a365be8030d1dd1e412a9ade3aa21ed10aa94801792e3a1005",
+      "resolvedPath": "/Users/erik/Projects/weft/crates/weft-core/src/security_evaluation.rs"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_result_selection.rs",
+      "expectedSha256": "67ba1894fa681cca7b66779f799a0f6a75d5496b29a9f7238f257dff48e47cc8",
+      "currentSha256": "67ba1894fa681cca7b66779f799a0f6a75d5496b29a9f7238f257dff48e47cc8",
+      "resolvedPath": "/Users/erik/Projects/weft/crates/weft-core/src/security_result_selection.rs"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_result_cells.rs",
+      "expectedSha256": "2d75f65f3831562574a43403597731b7bfef9f3e27eb99a579be06d07b697c23",
+      "currentSha256": "2d75f65f3831562574a43403597731b7bfef9f3e27eb99a579be06d07b697c23",
+      "resolvedPath": "/Users/erik/Projects/weft/crates/weft-core/src/security_result_cells.rs"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_result_check.rs",
+      "expectedSha256": "168a09338fc736cc34b1e72c27ecc73f3dc8cdbb398e9f2e4140942ad39d264a",
+      "currentSha256": "168a09338fc736cc34b1e72c27ecc73f3dc8cdbb398e9f2e4140942ad39d264a",
+      "resolvedPath": "/Users/erik/Projects/weft/crates/weft-core/src/security_result_check.rs"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/crates/weft-core/src/security_ontology.rs",
+      "expectedSha256": "a1e19a2605a2d247b6c58f252886d0ab45077cd2e3d53f0bffb995a2ae2a7d19",
+      "currentSha256": "a1e19a2605a2d247b6c58f252886d0ab45077cd2e3d53f0bffb995a2ae2a7d19",
+      "resolvedPath": "/Users/erik/Projects/weft/crates/weft-core/src/security_ontology.rs"
+    },
+    {
+      "path": "/Users/erik/Projects/weft/docs/helix/02-design/contracts/CONTRACT-005-security-compilation.md",
+      "expectedSha256": "a06ad9eb7899b97aecbfa4cd4b5f42f2e449e38b653f02ebb9894626fbee2897",
+      "currentSha256": "a06ad9eb7899b97aecbfa4cd4b5f42f2e449e38b653f02ebb9894626fbee2897",
+      "resolvedPath": "/Users/erik/Projects/weft/docs/helix/02-design/contracts/CONTRACT-005-security-compilation.md"
+    },
+    {
+      "path": "tests/security/native/pg-raw-membership-oracle.json",
+      "expectedSha256": "1b04b8a2fe0de4f72ca2926398ff2717909bdbdee9d53e4284e4f4bd2fc5acee",
+      "currentSha256": "1b04b8a2fe0de4f72ca2926398ff2717909bdbdee9d53e4284e4f4bd2fc5acee",
+      "resolvedPath": "/Users/erik/.codex/worktrees/1598/umf/tests/security/native/pg-raw-membership-oracle.json"
+    },
+    {
+      "path": "tests/security/native/pg-raw-membership.py",
+      "expectedSha256": "19a062f5cb18532b9da3925d6444faa78f2a92c2bfe8bfaedfd78887ef9d29ab",
+      "currentSha256": "19a062f5cb18532b9da3925d6444faa78f2a92c2bfe8bfaedfd78887ef9d29ab",
+      "resolvedPath": "/Users/erik/.codex/worktrees/1598/umf/tests/security/native/pg-raw-membership.py"
+    },
+    {
+      "path": "tests/security/native/pg-raw-membership.sql",
+      "expectedSha256": "ac5640077786e81b80e536acc7c5d89d8f6747e1d8f425f17c4e3dfc3b37daf6",
+      "currentSha256": "ac5640077786e81b80e536acc7c5d89d8f6747e1d8f425f17c4e3dfc3b37daf6",
+      "resolvedPath": "/Users/erik/.codex/worktrees/1598/umf/tests/security/native/pg-raw-membership.sql"
+    },
+    {
+      "path": "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection",
+      "expectedSha256": "26f32ac64304aef4ed8f274109c9e9d4e8200acb4974823d9adc1dded2d57565",
+      "currentSha256": "26f32ac64304aef4ed8f274109c9e9d4e8200acb4974823d9adc1dded2d57565",
+      "resolvedPath": "/private/tmp/umf-security-weft-bridge-target/debug/examples/security_fact_inspection"
+    }
+  ],
+  "staleCurrentReviewPins": [
+    "/Users/erik/.codex/worktrees/1598/umf/docs/helix/04-build/evidence/security/weft-original-use.json"
+  ],
+  "trussNativeExecution": false,
+  "nativeImplementationQualified": false,
+  "trussInterfaceAdopted": false,
+  "scope": "Independent retained-byte and 63 observation integrity check; owner/Astra native and executable evidence remains attributed. No new native acquisition or current moving ABI qualification."
+}

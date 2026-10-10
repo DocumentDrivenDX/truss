@@ -3021,3 +3021,33 @@ passes71 tests/17 matching modules and64 allowed imports; wheel SHA256 is
 8878e258541e6019e673384f8fc6c23e8543f9222c149f6f3b7a844d721255c5.
 The bounded custody model's original ordinal/admission source pins are unchanged;
 query/deferred-object and byte-account semantics remain outside that model.
+
+
+### Completed captured-native-fact checkpoint — 2026-10-10
+
+The [retained fact checkpoint](../04-build/evidence/design-audit/security-captured-facts-checkpoint.json)
+records the completed owner/Astra17.9 fixture work, with63 unique independently
+expected observations all matching. Six exact captures include single scans,
+Cartesian selfjoins with distinct identities and empty outputs. The owner now
+checks captured typed fact census, policy evaluation, exact Original values and
+scan occurrence correspondence; native string-valued salary mutation and object
+versus positional-array carriers are explicitly distinguished. Astra's executable
+replays remain attributed; Truss independently checked original receipt bytes and
+observation integrity, without native acquisition or ABI adoption.
+
+The current source-pin observation is separate from the completed review. One
+referenced owner foundation receipt has changed during the active next iteration;
+that does not rewrite the original review or qualify moving sources. Relative
+pins resolve against the actual owner worktree. Preserve both original expected
+hashes and observed current drift in the checkpoint.
+
+Separate fact/query connections do not prove one authenticated coherent cut or
+exclude ABA changes. PY-01/03/04 must consume a qualified original single-cut
+fact/result/context/census procedure with current authority, full dependency and
+account custody, and guarded cleanup/release on the actual16.15 target. Reuse the
+owner's strict object decoding and evaluator; do not build a competing Python
+policy parser. Required integration controls include same-valued ABA replacement,
+policy change between fact/query capture, hidden population, wrong salary native
+type, selfjoin scope substitution and empty-result authorization. All composed
+Truss controls remain not_run. Owner backend acceptance stays26/132; this fixed
+fixture evidence selects neither public lowering nor production release.
