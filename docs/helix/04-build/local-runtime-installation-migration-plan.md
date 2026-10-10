@@ -1606,3 +1606,88 @@ by the original admission checker, running
 `check_capacity_ledger_native.py <fresh-receipt-basename.json>` from the evidence
 directory on an isolated server. The receipt pins every original source and the
 checker; it introduces no installed schema/profile version or new public API.
+
+
+## Reservation producer implementation packet — 2026-10-10
+
+Use the existing installation singleton for the proposed serialized capacity
+profile. The [six-column reservation extension](../02-design/contracts/row-home-capacity-reservation-v0.1.proposal.sql)
+binds one active native transaction/issued operation to complete original context
+and plan bytes plus immutable initial row/byte bounds. It extends the existing
+ledger; it introduces neither another aggregate counter nor a process-local
+capacity authority. This candidate is not in native0.16, core0.6, a release index
+or an installed layout. Its ALTER source still requires owner UMF capture/export,
+physical IDs, complete protected native composition and core browser projection.
+
+The singleton's transaction-held exclusion permits one active reservation across
+participating writers. A finalized operation clears its active slot before a
+later operation in the same transaction reserves; prior retained operations and
+touches remain counted. A foreign/orphan active slot is unavailable, not expired
+or repaired by a new caller. No operation FK is required before insertion: the
+producer reserves its own future registry storage before that registry row exists.
+The observer subsequently proves exact current-operation/slot correspondence.
+
+| Private phase | Concrete native implementation and independent check |
+| --- | --- |
+| Reserve | Under original head then singleton exclusion, compare complete installed layout/resource/epoch and original account/issuer authority. Derive actual assigned xid and issued ordinal; validate the complete bounded original plan. Require no existing active slot and exact complete retained-counter parity. Check proposed additions using subtraction from fixed caps before addition. Atomically set original binding/initial budgets and remaining counters, then insert the operation and consume its exact registry custody. Capture any duplicated slot bytes under the original account; reserve native slot/index/WAL overhead through the registered profile. |
+| Consume | Before each registered original event, resolve the one unfinished operation and exact slot under the held exclusion. Compare full original context/plan, phase and generation; enumerate all OLD/NEW contributions. Compute actual new rows and positive custody growth, including repeated/duplicated carriers and result/generation updates. Precheck the entire event against remaining capacity and every per-row cap. Atomically transfer actual positive deltas from reserved to retained counters with canonical/touch/operation changes. Never allocate an earlier capacity lock from the observer. |
+| Shrink | Independently prove exact removed byte membership before reducing retained bytes. Do not return spent growth to this operation's remaining budget; later regrowth spends remaining capacity again. Ordinary operations cannot delete retained operation/touch custody to obtain capacity. Administrative RT01–RT06 deletion remains separately governed. |
+| Finalize | Verify complete original operation/contribution/result/generation scope and all required guards. Release only actual remaining reserved rows/bytes, clear all six active fields, and preserve actual retained totals. Do not subtract immutable initial budgets: consumed capacity is now retained. Finalization is pending until host commit and does not unlock the singleton. |
+| Roll back | Confirm the original native operation boundary. Native rollback restores the slot, counters and every corresponding effect together; do not manually subtract again. The original host ordinal and cumulative work remain spent. Unknown containment preserves original unresolved custody and quarantines handles. |
+| Check commit | Enumerate all surviving operations/touches and native capacity facts under original authority. Require no active reservation, zero remaining counters, exact independently recomputed retained totals, and complete generation/finalization/contribution coverage. An empty slot alone cannot prove a complete transaction. Never repair counters or clear a slot in a validator. |
+
+An active slot with zero remaining rows/bytes is valid before finalization; a
+cleared identity with nonzero counters or any partial identity is invalid. The
+SQL uses `IS TRUE` so unknown CHECK truth cannot admit a partial binding.
+Structural bounds do not prove actual xid, issuer, plan semantics or authority.
+The original resource profile currently budgets operation/touch custody; adoption
+must register the additional bounded slot custody/native overhead explicitly,
+without silently treating duplicate bytes as free or enlarging existing caps.
+
+Run native exact-bound/one-over and partial/null binding controls first, then
+reserve before registry insertion; consume multiple rows and repeated growth;
+shrink/regrow without refund; release only remaining capacity; finalize A then
+reserve B; roll B back with A intact; refuse foreign/unfinished/hidden/oversized
+scope; compare complete counters/bytes after every failure. Finally run enabled
+observer/commit guards, early constraint checks and actual host commit/rollback
+under ordinary roles and cross-connection exclusion. All producer/body schedules
+remain not_run. Source schema checks alone cannot promote P1 or any acceptance
+criterion; no competing UMF validator or security resolver is introduced.
+
+
+## Reservation schema/source checkpoint — 2026-10-10
+
+The reservation implementation packet now chooses an extension of the existing
+singleton rather than another aggregate ledger: six nullable columns retain
+actual writer/issued ordinal, complete original context/plan bytes and immutable
+initial budgets. Cleared identity requires zero reserved counters; a complete
+active binding may have zero remaining counters until finalization. Native
+producer/observer procedures must establish authority and consume the original
+remaining capacity; structural CHECKs cannot do so.
+
+[UMF source capture](evidence/design-audit/capacity-reservation-source.json)
+retains exact original ALTER source and archive/reload/export correspondence
+through the owning PostgreSQL adapter. The adapter reports one declaration and
+zero unhandled statements with complete=false. This is native extension custody,
+not a core structural ER projection or an accepted installed model. The generated
+owner export is the source executed by the native checker.
+
+[Native size/shape evidence](evidence/design-audit/capacity-reservation-native-size-shape.json)
+passes34 observations, including exact/one-over context and combined-slot byte
+limits, complete/partial/null/negative bindings, zero-remaining active custody,
+remaining budgets over initial limits and cleared identity with nonzero counters.
+Each administrative corruption schedule rolls back and re-observes all six
+original binding cells; the original two-connection ledger exclusion and complete
+byte/counter initialization remain verified. The earlier26-observation receipt
+and its exact before-size-controls producer remain archived.
+
+This packet clarifies implementation: reserve future operation storage before
+registry insertion; transfer actual positive deltas into retained totals; do not
+refund spent growth after shrink; release only unused remaining budget; rollback
+native effects/counters together without double subtraction; retain host ordinal
+and cumulative work; require a complete empty-reservation and retained parity
+check at commit. Additional bounded slot custody/native overhead needs original
+resource registration before adoption. Actual procedures, ordinary-role guards,
+physical IDs, complete generated/native inventory, source/core browser update,
+security integration and installer readiness remain open. No criterion is
+promoted by these structural observations.

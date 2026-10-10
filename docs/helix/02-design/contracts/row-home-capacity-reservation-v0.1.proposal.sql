@@ -1,0 +1,42 @@
+-- Unadopted extension of the original singleton ledger; no executable producer.
+-- One active reservation per installation under the transaction-held ledger.
+-- No FK to an operation that must be reserved before it can be inserted.
+ALTER TABLE truss.row_home_capacity
+  ADD COLUMN reservation_writer_xid xid8,
+  ADD COLUMN reservation_operation_ordinal bigint,
+  ADD COLUMN reservation_context_bytes bytea,
+  ADD COLUMN reservation_plan_bytes bytea,
+  ADD COLUMN reservation_initial_rows bigint,
+  ADD COLUMN reservation_initial_custody_bytes bigint,
+  ADD CONSTRAINT row_home_capacity_reservation_complete CHECK ((
+    (reservation_writer_xid IS NULL
+      AND reservation_operation_ordinal IS NULL
+      AND reservation_context_bytes IS NULL
+      AND reservation_plan_bytes IS NULL
+      AND reservation_initial_rows IS NULL
+      AND reservation_initial_custody_bytes IS NULL
+      AND reserved_rows = 0 AND reserved_custody_bytes = 0)
+    OR
+    (reservation_writer_xid IS NOT NULL
+      AND reservation_operation_ordinal IS NOT NULL
+      AND reservation_operation_ordinal >= 0
+      AND reservation_context_bytes IS NOT NULL
+      AND octet_length(reservation_context_bytes) BETWEEN 1 AND 1048576
+      AND reservation_plan_bytes IS NOT NULL
+      AND octet_length(reservation_plan_bytes) BETWEEN 1 AND 8388608
+      AND octet_length(reservation_context_bytes)
+        + octet_length(reservation_plan_bytes) <= 8388608
+      AND reservation_initial_rows IS NOT NULL
+      AND reservation_initial_rows BETWEEN 1 AND 65536
+      AND reservation_initial_custody_bytes IS NOT NULL
+      AND reservation_initial_custody_bytes BETWEEN 1 AND 536870912
+      AND reserved_rows <= reservation_initial_rows
+      AND reserved_custody_bytes <= reservation_initial_custody_bytes)
+  ) IS TRUE);
+-- Zero remaining capacity may retain active identity until finalization.
+-- Initial bounds never reset/refund consumed capacity within the operation.
+-- Original actual xid/issued ordinal/context/plan authority comes from protected
+-- producers, complete same-cut inventory and native account/exclusion admission.
+-- No caller-selected reservation, expired-slot takeover or counter repair.
+-- Full-byte slot custody/native overhead needs the registered resource profile;
+-- these CHECKs do not qualify budgets, freshness, consumption or installation.

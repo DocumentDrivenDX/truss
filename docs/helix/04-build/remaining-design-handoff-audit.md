@@ -873,3 +873,41 @@ by the original admission checker, running
 `check_capacity_ledger_native.py <fresh-receipt-basename.json>` from the evidence
 directory on an isolated server. The receipt pins every original source and the
 checker; it introduces no installed schema/profile version or new public API.
+
+
+## Reservation schema/source checkpoint — 2026-10-10
+
+The reservation implementation packet now chooses an extension of the existing
+singleton rather than another aggregate ledger: six nullable columns retain
+actual writer/issued ordinal, complete original context/plan bytes and immutable
+initial budgets. Cleared identity requires zero reserved counters; a complete
+active binding may have zero remaining counters until finalization. Native
+producer/observer procedures must establish authority and consume the original
+remaining capacity; structural CHECKs cannot do so.
+
+[UMF source capture](evidence/design-audit/capacity-reservation-source.json)
+retains exact original ALTER source and archive/reload/export correspondence
+through the owning PostgreSQL adapter. The adapter reports one declaration and
+zero unhandled statements with complete=false. This is native extension custody,
+not a core structural ER projection or an accepted installed model. The generated
+owner export is the source executed by the native checker.
+
+[Native size/shape evidence](evidence/design-audit/capacity-reservation-native-size-shape.json)
+passes34 observations, including exact/one-over context and combined-slot byte
+limits, complete/partial/null/negative bindings, zero-remaining active custody,
+remaining budgets over initial limits and cleared identity with nonzero counters.
+Each administrative corruption schedule rolls back and re-observes all six
+original binding cells; the original two-connection ledger exclusion and complete
+byte/counter initialization remain verified. The earlier26-observation receipt
+and its exact before-size-controls producer remain archived.
+
+This packet clarifies implementation: reserve future operation storage before
+registry insertion; transfer actual positive deltas into retained totals; do not
+refund spent growth after shrink; release only unused remaining budget; rollback
+native effects/counters together without double subtraction; retain host ordinal
+and cumulative work; require a complete empty-reservation and retained parity
+check at commit. Additional bounded slot custody/native overhead needs original
+resource registration before adoption. Actual procedures, ordinary-role guards,
+physical IDs, complete generated/native inventory, source/core browser update,
+security integration and installer readiness remain open. No criterion is
+promoted by these structural observations.
