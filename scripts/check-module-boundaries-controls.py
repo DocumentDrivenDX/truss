@@ -37,6 +37,11 @@ def main():
         ('import-cycle', 'local_runtime.py', '\nfrom . import cli\n', 'Python import cycle'),
         ('unmapped-source', 'new_runtime.py', 'import subprocess\n', 'unmapped module'),
         ('wildcard', 'numeric.py', '\nfrom decimal import *\n', 'wildcard import'),
+        ('allowed-private-image-dependency', '_row_event_attribution.py', '\nfrom ._row_image import NativeRowImage\n', None),
+        ('row-image-forbidden-driver', '_row_image.py', '\nimport pgserver\n', 'forbidden import pgserver'),
+        ('root-private-image-export', '__init__.py', '\nfrom ._row_image import NativeRowImage\n', 'forbidden import truss._row_image'),
+        ('cli-private-touch-access', 'cli.py', '\nfrom ._row_touch_registry import decode_touch_registry\n', 'forbidden import truss._row_touch_registry'),
+        ('row-image-reverse-cycle', '_row_image.py', '\nfrom ._row_event_attribution import attribute_row_event\n', 'Python import cycle'),
     ]
     observed = []
     for label, filename, addition, expected in cases:

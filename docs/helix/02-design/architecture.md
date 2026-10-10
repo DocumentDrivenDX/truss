@@ -278,9 +278,14 @@ unchanged. No service split is required for the embeddable toolkit.
 Python-only map using AST inspection, including nested imports, relative/absolute
 local references, unknown modules, wildcard imports, direct dynamic execution and
 import cycles. Exact allowed imports live in the checker and require review on
-change; there is no existing-debt exclusion. Current source has51 allowed imports
-and no static violations. `python3 scripts/check-module-boundaries-controls.py`
-executes the real checker against nine disposable allowed/forbidden controls.
+change; there is no existing-debt exclusion. Current source has99 observed allowed imports
+and no static violations across25 modules. The explicit map includes the eight
+row-image/custody/address/context/group/touch/correspondence modules; their
+standard-library and internal decoder dependencies are individually enumerated. `python3 scripts/check-module-boundaries-controls.py`
+executes the real checker against14 disposable allowed/forbidden controls,
+including private row-image/touch access, driver rejection and a reverse
+image/attribution cycle. [Current source/control evidence](../04-build/evidence/design-audit/python-row-module-boundary-controls.json)
+retains the actual earlier eight-unmapped-module failure and corrected run.
 The same commands are configured in `.github/workflows/python-boundaries.yml`;
 remote CI execution is not yet observed. The pure/planning map explicitly permits
 private shared acceptance decoding and query custody's compiler boundary; CLI/root

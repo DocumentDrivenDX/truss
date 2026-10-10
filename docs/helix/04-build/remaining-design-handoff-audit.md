@@ -1929,3 +1929,27 @@ The one-shot harness refuses without a row payload, and a later explicit read
 succeeds after rights restoration without initialization replay. This advances
 two observer controls at component scope; complete PKG02/08 inventory/publication,
 archive removal, owner subject/cut and status/verify/reconcile remain unfinished.
+
+
+## Current HELIX Python boundary adoption — 2026-10-10
+
+The HELIX0.15.4 modularity practice requires a real enforced module map and
+allowed/forbidden controls. Re-running the existing gate found eight newer
+row-image/custody modules absent from its map. The corrected explicit map now
+covers all25 Python modules and99 AST import edges without a blanket exclusion.
+[Fourteen actual checker controls](evidence/design-audit/python-row-module-boundary-controls.json)
+pass their expected positive/negative outcomes, including allowed internal image
+translation, forbidden driver dependencies, root/CLI private decoder access and
+reverse import-cycle detection. The existing CI workflow invokes both real
+commands; a remote CI pass is not inferred. Architecture now reflects this
+current map rather than its historical51-import/nine-control checkpoint.
+
+The configuration and diagnostic contracts remain composition requirements:
+original typed configuration/refusal/secret-safe fingerprinting, safe emission
+before every sink, bounded queues/loss/flush and owning-boundary failure events
+must be exercised at actual installation/migration entry points. AST imports and
+local test logs do not implement CFG-01–12 or OBS-01–09. Existing bounded formal
+custody/capacity models retain their stated assumptions and counterexamples;
+new native capture/initializer experiments are not refinement proofs. Complete
+original scope/cut/authority and settlement correspondence remain required before
+promoting assurance or publication claims. No HELIX catalog is copied into Truss.
