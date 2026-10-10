@@ -1,0 +1,48 @@
+{
+  "driver": "pg/8.16.3",
+  "loader": "bun/1.4.2",
+  "originalJournalDirectory": "/private/tmp/truss-unknown-commit-GpSm7X",
+  "result": {
+    "status": "error",
+    "error": {
+      "code": "commit_unknown",
+      "message": "commit_unknown",
+      "retryScope": "none"
+    }
+  },
+  "quarantined": 1,
+  "closeRefused": true,
+  "healthyShutdownRefused": true,
+  "localTransportShutdown": true,
+  "uncertaintyRetained": true,
+  "admissionRefused": true,
+  "independentCommittedRows": "1",
+  "publicOfflineInspection": true,
+  "requests": 3,
+  "commitSubmissions": 1,
+  "rollbackSubmissions": 0,
+  "retained": [
+    {
+      "sha256": "921f8606879641ddab36cd9949edcda80a0d3dbd240d72e35eaa47bd4f6a6723",
+      "outcome": {
+        "kind": "outcome",
+        "outcome": "response_complete"
+      }
+    },
+    {
+      "sha256": "73491da2ba5163a6b0b1389fa04e81d400e709609f50e65081f7fa4f98c8a9c8",
+      "outcome": {
+        "kind": "outcome",
+        "outcome": "uncertain"
+      }
+    },
+    {
+      "sha256": "79fd391e1aa7f14a0e525c3e134545bd2551a98dafa6f92966b9cb10ba79dfe6",
+      "outcome": {
+        "kind": "outcome",
+        "outcome": "response_complete"
+      }
+    }
+  ],
+  "qualification": "Actual local PostgreSQL 17.9 commit effect independently observed after deliberate driver completion loss at retained original CommandComplete before parser forwarding. Adapter reports commit_unknown/no retry and keeps quarantine. Private originals retained; explicit local transport shutdown retains original uncertainty and closes admission after fixture removal. This is not natural packet-loss/crash testing, general uncertainty settlement, protected Truss installation or source ACK authority."
+}

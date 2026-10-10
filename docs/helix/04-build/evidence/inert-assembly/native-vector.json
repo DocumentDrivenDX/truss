@@ -1,0 +1,30 @@
+{
+  "profile": "truss-bootstrap-native-vector-decoder/0.1.0",
+  "sql": "SELECT json_build_object('server_version',current_setting('server_version'),'oid_empty', ''::oidvector::text,'oid_empty_dims', array_dims(''::oidvector),'oid_extremes','0 4294967295'::oidvector::text,'oid_dims',array_dims('0 4294967295'::oidvector),'int2_extremes','-32768 0 32767'::int2vector::text,'int2_dims',array_dims('-32768 0 32767'::int2vector));",
+  "originalStdout": "{\"server_version\" : \"17.9 (Debian 17.9-1.pgdg13+1)\", \"oid_empty\" : \"\", \"oid_empty_dims\" : \"[0:-1]\", \"oid_extremes\" : \"0 4294967295\", \"oid_dims\" : \"[0:1]\", \"int2_extremes\" : \"-32768 0 32767\", \"int2_dims\" : \"[0:2]\"}\n",
+  "decoded": [
+    {
+      "family": "oidvector",
+      "originalText": "",
+      "tokens": []
+    },
+    {
+      "family": "oidvector",
+      "originalText": "0 4294967295",
+      "tokens": [
+        "0",
+        "4294967295"
+      ]
+    },
+    {
+      "family": "int2vector",
+      "originalText": "-32768 0 32767",
+      "tokens": [
+        "-32768",
+        "0",
+        "32767"
+      ]
+    }
+  ],
+  "qualification": "Three read-only constant vector observations on existing local PostgreSQL 17.9. No layout installation, catalog signature/index field semantics, complete native collector or database support qualification."
+}

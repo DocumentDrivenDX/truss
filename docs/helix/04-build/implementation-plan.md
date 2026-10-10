@@ -2801,3 +2801,18 @@ CH-03/PY-01 now have the shared twelve-column native pre-effect snapshot protoco
 ### Historical configuration closure — 2026-10-09
 
 CH-03/05/06 and PY-04/06 now have a private custody locator and complete report/receipt/feed/unknown/transition/archive dependency matrix. Order implementation as original capsule→report/receipt/prerequisite correspondence, current-independent historical resolution, complete protection inventory, qualified operation-artifact export/retrieval where selected, then atomic whole-operation cleanup. Existing per-record archive v0.2 and S3 candidate cannot alone cover no-op/unknown operations; preserve local custody until explicit complete coverage is admitted. CC-T01–09 specify independent historical retry, revision-only, conflicting shared configuration, protection race, private disclosure and enclosing-wire resource cases. Locator declarations pass strict TypeScript; historical/cleanup native schedules remain unexecuted. Security and provider interpretation stay with their governing workstreams.
+## Ashlar-directed runtime implementation start — 2026-10-08
+
+The human Ashlar goal explicitly requests standing up Truss and real UMF/schema,
+mutation/feed/ACK integration. Work starts in an isolated `codex/ashlar-runtime`
+checkout; the Truss Impl planning checkout remains untouched. The first actual
+package is the governed inert construction/lifetime surface under ADR-001,
+CONTRACT-007 and package delivery. [Evidence](evidence/inert-assembly/README.md)
+records the strict ESM/declaration build, three focused tests and packed consumer.
+
+This is implementation movement, not native readiness. CONTRACT-008 IM01/PI01
+remain closed until the selected 0.12 complete body/security/codec/driver/resource
+bundle is supplied and qualified. No old-layout fallback, placeholder native
+guard, fixture catalog registration, native source mutation or Truss feed is
+installed by this package. Continue the selected required native composition
+and public schema/mutation/feed paths; the full end-to-end goal remains open.

@@ -1,0 +1,50 @@
+{
+  "sourceQuerySha256": "6a012977584a5e549c704ad61c2fc4b90108ff7d3f6f0cafe93899a90b6786ca",
+  "sql": "BEGIN;\nCREATE TEMP TABLE truss_routine_probe_marker(id integer);\nCREATE FUNCTION pg_temp.truss_routine_probe(x integer,y text) RETURNS text LANGUAGE sql SET search_path='pg_catalog' AS $$ SELECT y $$;\nWITH observed AS (-- Unexecuted raw PostgreSQL 17 routine observation proposal.\n-- $1 is the independently admitted original namespace OID, not a display name.\n-- No expected-name/prokind/security filter may hide unexpected routines.\n-- Full raw catalog JSON retains nulls and array order; qualified exact parser,\n-- transport, resource/complete-cut and referenced native-definition closure remain required.\nSELECT p.tableoid::pg_catalog.oid::pg_catalog.text AS catalog_class_oid,\n       p.oid::pg_catalog.text AS object_oid,\n       p.pronamespace::pg_catalog.text AS namespace_oid,\n       p.prosupport::pg_catalog.oid::pg_catalog.text AS prosupport_oid,\n       p.proallargtypes::pg_catalog.text AS proallargtypes_native_text,\n       pg_catalog.array_dims(p.proallargtypes) AS proallargtypes_native_dimensions,\n       p.proargmodes::pg_catalog.text AS proargmodes_native_text,\n       pg_catalog.array_dims(p.proargmodes) AS proargmodes_native_dimensions,\n       p.proargnames::pg_catalog.text AS proargnames_native_text,\n       pg_catalog.array_dims(p.proargnames) AS proargnames_native_dimensions,\n       p.protrftypes::pg_catalog.text AS protrftypes_native_text,\n       pg_catalog.array_dims(p.protrftypes) AS protrftypes_native_dimensions,\n       p.proconfig::pg_catalog.text AS proconfig_native_text,\n       pg_catalog.array_dims(p.proconfig) AS proconfig_native_dimensions,\n       p.proacl::pg_catalog.text AS proacl_native_text,\n       pg_catalog.array_dims(p.proacl) AS proacl_native_dimensions,\n       p.proargtypes::pg_catalog.text AS proargtypes_native_vector_text,\n       pg_catalog.array_dims(p.proargtypes) AS proargtypes_native_vector_dimensions,\n       pg_catalog.encode(pg_catalog.float4send(p.procost),'hex') AS cost_float4_send_hex,\n       pg_catalog.encode(pg_catalog.float4send(p.prorows),'hex') AS rows_float4_send_hex,\n       pg_catalog.to_jsonb(p)::pg_catalog.text AS original_catalog_row_json\nFROM pg_catalog.pg_proc AS p\nWHERE p.pronamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE oid=pg_my_temp_schema())\nORDER BY p.oid) SELECT json_agg(json_build_object(\n'originalCatalogRowJson', original_catalog_row_json,\n'inputCount',original_catalog_row_json::jsonb->>'pronargs',\n'inputTypesText',proargtypes_native_vector_text,'inputTypesDimensions',proargtypes_native_vector_dimensions,\n'names',json_build_object('text',proargnames_native_text,'dimensions',proargnames_native_dimensions,'rawJson',(original_catalog_row_json::jsonb->'proargnames')::text),\n'modes',json_build_object('text',proargmodes_native_text,'dimensions',proargmodes_native_dimensions,'rawJson',(original_catalog_row_json::jsonb->'proargmodes')::text),\n'settings',json_build_object('text',proconfig_native_text,'dimensions',proconfig_native_dimensions,'rawJson',(original_catalog_row_json::jsonb->'proconfig')::text))) FROM observed;\nROLLBACK;",
+  "originalStdout": "[{\"originalCatalogRowJson\" : \"{\\\"oid\\\": \\\"18968\\\", \\\"proacl\\\": null, \\\"probin\\\": null, \\\"prosrc\\\": \\\" SELECT y \\\", \\\"procost\\\": 100, \\\"prokind\\\": \\\"f\\\", \\\"prolang\\\": \\\"14\\\", \\\"proname\\\": \\\"truss_routine_probe\\\", \\\"prorows\\\": 0, \\\"pronargs\\\": 2, \\\"proowner\\\": \\\"10\\\", \\\"proconfig\\\": [\\\"search_path=pg_catalog\\\"], \\\"proretset\\\": false, \\\"prosecdef\\\": false, \\\"prorettype\\\": \\\"25\\\", \\\"prosqlbody\\\": null, \\\"prosupport\\\": \\\"-\\\", \\\"proargmodes\\\": null, \\\"proargnames\\\": [\\\"x\\\", \\\"y\\\"], \\\"proargtypes\\\": [\\\"23\\\", \\\"25\\\"], \\\"proisstrict\\\": false, \\\"proparallel\\\": \\\"u\\\", \\\"protrftypes\\\": null, \\\"provariadic\\\": \\\"0\\\", \\\"provolatile\\\": \\\"v\\\", \\\"proleakproof\\\": false, \\\"pronamespace\\\": \\\"18963\\\", \\\"proallargtypes\\\": null, \\\"proargdefaults\\\": null, \\\"pronargdefaults\\\": 0}\", \"inputCount\" : \"2\", \"inputTypesText\" : \"23 25\", \"inputTypesDimensions\" : \"[0:1]\", \"names\" : {\"text\" : \"{x,y}\", \"dimensions\" : \"[1:2]\", \"rawJson\" : \"[\\\"x\\\", \\\"y\\\"]\"}, \"modes\" : {\"text\" : null, \"dimensions\" : null, \"rawJson\" : \"null\"}, \"settings\" : {\"text\" : \"{search_path=pg_catalog}\", \"dimensions\" : \"[1:1]\", \"rawJson\" : \"[\\\"search_path=pg_catalog\\\"]\"}}]\n",
+  "decoded": [
+    {
+      "originalCatalogRowJson": "{\"oid\": \"18968\", \"proacl\": null, \"probin\": null, \"prosrc\": \" SELECT y \", \"procost\": 100, \"prokind\": \"f\", \"prolang\": \"14\", \"proname\": \"truss_routine_probe\", \"prorows\": 0, \"pronargs\": 2, \"proowner\": \"10\", \"proconfig\": [\"search_path=pg_catalog\"], \"proretset\": false, \"prosecdef\": false, \"prorettype\": \"25\", \"prosqlbody\": null, \"prosupport\": \"-\", \"proargmodes\": null, \"proargnames\": [\"x\", \"y\"], \"proargtypes\": [\"23\", \"25\"], \"proisstrict\": false, \"proparallel\": \"u\", \"protrftypes\": null, \"provariadic\": \"0\", \"provolatile\": \"v\", \"proleakproof\": false, \"pronamespace\": \"18963\", \"proallargtypes\": null, \"proargdefaults\": null, \"pronargdefaults\": 0}",
+      "inputTypes": {
+        "family": "oidvector",
+        "originalText": "23 25",
+        "tokens": [
+          "23",
+          "25"
+        ]
+      },
+      "names": {
+        "kind": "array",
+        "originalText": "{x,y}",
+        "bounds": [
+          [
+            "1",
+            "2"
+          ]
+        ],
+        "elements": [
+          "x",
+          "y"
+        ]
+      },
+      "modes": {
+        "kind": "native-null",
+        "originalText": null
+      },
+      "settings": {
+        "kind": "array",
+        "originalText": "{search_path=pg_catalog}",
+        "bounds": [
+          [
+            "1",
+            "1"
+          ]
+        ],
+        "elements": [
+          "search_path=pg_catalog"
+        ]
+      }
+    }
+  ],
+  "qualification": "Original proposal query executed for one temporary routine on local PostgreSQL 17.9. Input vector bounds/count and text names/modes/settings JSON correspond. Full raw catalog row retained opaque; other fields, authority, implicit dependencies, full collector budget/cut and Truss installation unqualified. Probe rolled back."
+}

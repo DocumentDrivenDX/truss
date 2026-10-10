@@ -1,0 +1,8 @@
+{
+  "compiler": "typescript/7.0.2",
+  "loader": "bun/1.4.2",
+  "driver": "pg/8.16.3",
+  "jsSha256": "d824ec70f2839b464c8ab1c5493ebf9e3d6fa9ab74da95c192fde5c789d50dfb",
+  "declarationsSha256": "7612230798238b7a2faaa251d39552d7e18472e583a6c12211ed451c2d19346e",
+  "qualification": "Built host package; exact canonical public Truss type imports. No release, Node/pooler, native bootstrap or complete executor support."
+}

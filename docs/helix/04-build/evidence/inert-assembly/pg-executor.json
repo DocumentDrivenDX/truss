@@ -1,0 +1,298 @@
+{
+  "driver": "pg/8.16.3",
+  "loader": "bun/1.4.2",
+  "result": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "value": {
+          "columns": [
+            "duplicate",
+            "duplicate",
+            "absent"
+          ],
+          "rows": [
+            [
+              {
+                "state": "text",
+                "text": "9007199254740993123"
+              },
+              {
+                "state": "text",
+                "text": "12345678901234567890.123456789"
+              },
+              {
+                "state": "null"
+              }
+            ]
+          ],
+          "affectedRows": "1",
+          "command": "SELECT"
+        },
+        "empty": {
+          "columns": [
+            "retained_name"
+          ],
+          "rows": [],
+          "affectedRows": "0",
+          "command": "SELECT"
+        }
+      },
+      "durability": "committed"
+    }
+  },
+  "writes": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "insert": {
+          "columns": [],
+          "rows": [],
+          "affectedRows": "1",
+          "command": "INSERT"
+        },
+        "retained": {
+          "columns": [
+            "id",
+            "value"
+          ],
+          "rows": [
+            [
+              {
+                "state": "text",
+                "text": "9007199254740993123"
+              },
+              {
+                "state": "text",
+                "text": "{\"large\": 9007199254740993123456789, \"unknown\": null}"
+              }
+            ]
+          ],
+          "affectedRows": "1",
+          "command": "SELECT"
+        }
+      },
+      "durability": "committed"
+    }
+  },
+  "rollback": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "columns": [
+          "absent"
+        ],
+        "rows": [
+          [
+            {
+              "state": "null"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "durability": "committed"
+    }
+  },
+  "deadlock": [
+    {
+      "status": "error",
+      "error": {
+        "code": "retry",
+        "message": "Native transaction must retry",
+        "retryScope": "whole_transaction",
+        "sqlState": "40P01"
+      }
+    },
+    {
+      "status": "ok",
+      "value": {
+        "value": {
+          "status": "ok",
+          "value": {
+            "columns": [
+              "locked"
+            ],
+            "rows": [
+              [
+                {
+                  "state": "text",
+                  "text": ""
+                }
+              ]
+            ],
+            "affectedRows": "1",
+            "command": "SELECT"
+          }
+        },
+        "durability": "committed"
+      }
+    }
+  ],
+  "commitRejection": {
+    "status": "error",
+    "error": {
+      "code": "transaction_unusable",
+      "message": "Native commit rejected",
+      "retryScope": "none",
+      "sqlState": "23503"
+    }
+  },
+  "rejectionRollback": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "columns": [
+          "parent",
+          "child"
+        ],
+        "rows": [
+          [
+            {
+              "state": "null"
+            },
+            {
+              "state": "null"
+            }
+          ]
+        ],
+        "affectedRows": "1",
+        "command": "SELECT"
+      },
+      "durability": "committed"
+    }
+  },
+  "registry": {
+    "status": "ok",
+    "value": {
+      "value": {
+        "actual": {
+          "columns": [
+            "original_writer_xid"
+          ],
+          "rows": [
+            [
+              {
+                "state": "text",
+                "text": "876"
+              }
+            ]
+          ],
+          "affectedRows": "1",
+          "command": "SELECT"
+        },
+        "original": {
+          "columns": [
+            "original_writer_xid",
+            "operation_ordinal",
+            "operation_kind",
+            "phase",
+            "effect_generation",
+            "readiness_generation",
+            "sealed_generation",
+            "application_generation",
+            "original_context_bytes_hex",
+            "original_definition_bytes_hex",
+            "original_input_bytes_hex",
+            "original_prestate_bytes_hex",
+            "admitted_candidate_bytes_hex",
+            "effect_obligation_bytes_hex",
+            "original_group_custody_bytes_hex",
+            "application_result_bytes_hex"
+          ],
+          "rows": [
+            [
+              {
+                "state": "text",
+                "text": "876"
+              },
+              {
+                "state": "text",
+                "text": "0"
+              },
+              {
+                "state": "text",
+                "text": "mutation"
+              },
+              {
+                "state": "text",
+                "text": "admitted"
+              },
+              {
+                "state": "text",
+                "text": "0"
+              },
+              {
+                "state": "null"
+              },
+              {
+                "state": "null"
+              },
+              {
+                "state": "null"
+              },
+              {
+                "state": "text",
+                "text": "61"
+              },
+              {
+                "state": "text",
+                "text": "62"
+              },
+              {
+                "state": "text",
+                "text": "63"
+              },
+              {
+                "state": "text",
+                "text": "64"
+              },
+              {
+                "state": "text",
+                "text": "65"
+              },
+              {
+                "state": "text",
+                "text": "66"
+              },
+              {
+                "state": "text",
+                "text": "67"
+              },
+              {
+                "state": "null"
+              }
+            ]
+          ],
+          "affectedRows": "1",
+          "command": "SELECT"
+        },
+        "decoded": [
+          [
+            "876",
+            "0",
+            "mutation",
+            "admitted",
+            "0",
+            null,
+            null,
+            null,
+            "61",
+            "62",
+            "63",
+            "64",
+            "65",
+            "66",
+            "67",
+            null
+          ]
+        ]
+      },
+      "durability": "committed"
+    }
+  },
+  "registryDdlSha256": "cda531af7e04c1da98b90dc000689de5cbed5ea665243b8584532337fd14b89f",
+  "registryObservationSha256": "29d1a6647aedae69bda2276d6a0f6173b50a5a9e89a79b3cc4076f504b5125ca",
+  "qualification": "Actual engine executor + direct pg driver on existing local PostgreSQL 17.9. Exact native numeric text cells, duplicate/empty column descriptions, savepoints, confirmed read-only/write commit, exact parameterized write, uniqueness-error savepoint containment preserving prior work and independently observed callback rollback and one actual advisory-lock deadlock with whole-transaction retry outcome; actual deferred-FK commit rejection with confirmed rollback and independent absent-table observation; exact sixteen-field operation-registry decoder against temporary copy of original table/query. Opaque fixture custody bytes are unqualified. No caller adoption/cancellation, lost-commit native containment, pooler/Node or full Truss bootstrap qualification."
+}
