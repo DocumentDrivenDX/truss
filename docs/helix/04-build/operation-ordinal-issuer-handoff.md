@@ -1319,3 +1319,27 @@ derivation/collision/concurrency/event custody, guard ownership/lock admission,
 touch/capacity or installed privilege closure. Exhausted insertion does not
 qualify partial two-route failure ordering. This closes the previously untested
 finite key/reservation generation paths, not complete observer readiness.
+
+### Ordered two-route failure containment (2026-10-10)
+
+The separate `key-event-atomic-generation-native.json` adds12 native observations
+and preserves the earlier10-check producer/receipt unchanged. The checker reads
+actual native bytea route order, inserts an original reservation on the first
+route and exhausts the second. An actual namespace move reaches the ordered
+guard loop, whose first UPDATE is eligible and whose second guard raises54000
+(`original key guard exhausted`). Confirmed rollback restores the complete
+returned route/key/generation, operation phase/generation/proof/result and
+reservation identity/value/generated-route projections byte for byte. Setup
+rollback then restores prior6/4 guard generations and operation generation8;
+whole rollback restores the original guards and operation proofs. Original xid
+is unchanged throughout.
+
+This closes the previously explicit finite partial two-route failure experiment.
+It supports atomic refusal containment under the existing single-attempt policy;
+it does not replace independent held-guard/head/capacity admission or prove
+concurrent deadlock behavior. The intermediate first UPDATE is established by
+original loop order and eligible fixture state, not an independently exposed
+mid-statement observation. The experiment tests reservation movement; key-row
+movement success is covered separately, but its partial-failure path is not
+claimed. All administrative-custody, native profile/role, protected authority,
+full resource and seven-body gaps remain unchanged.

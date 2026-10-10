@@ -1669,3 +1669,10 @@ issued kind/occurrence within a scope; source-level coverage or unions of fragme
 are insufficient. The current private matcher is observed, not adopted. Complete
 production issuance, authenticated original Truss native assignments and a closed
 published bridge remain missing. Preserve B10 confidentiality separately.
+
+The [ordered route failure receipt](evidence/design-audit/key-event-atomic-generation-native.json)
+adds12 observations, including actual reservation movement toward an exhausted
+second native-ordered guard and complete projection restoration after54000.
+This closes finite partial two-route failure containment for reservation moves,
+with no retries. Original held-lock/current-authority/capacity and concurrency
+qualification remain required; the key-row partial-failure path is not covered.

@@ -1,0 +1,287 @@
+{
+  "scope": "actual native key/reservation route generation invalidation and operation proof reset/refusal/rollback; original UMF-exported tables/codecs, administrative fixture",
+  "serverVersion": "16.15",
+  "observations": [
+    {
+      "id": "object_key_bucket-insert",
+      "routeGenerations": [
+        "1",
+        "0"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "1",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "object_key_bucket-same-route-update-deduplicated",
+      "routeGenerations": [
+        "2",
+        "0"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "2",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "object_key_bucket-route-move-invalidates-both",
+      "routeGenerations": [
+        "3",
+        "1"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "3",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "object_key_bucket-delete",
+      "routeGenerations": [
+        "3",
+        "2"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "4",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "object_key_reservation_bucket-insert",
+      "routeGenerations": [
+        "4",
+        "2"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "5",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "object_key_reservation_bucket-same-route-update-deduplicated",
+      "routeGenerations": [
+        "5",
+        "2"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "6",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "object_key_reservation_bucket-route-move-invalidates-both",
+      "routeGenerations": [
+        "6",
+        "3"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "7",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "object_key_reservation_bucket-delete",
+      "routeGenerations": [
+        "6",
+        "4"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "8",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "exhausted-guard-refusal-restores-operation-and-routes",
+      "routeGenerations": [
+        "6",
+        "4"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "8",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "ordered-first-route-update-second-route-exhaustion-atomic-refusal",
+      "sqlstate": "54000",
+      "actualNativeOrderedRoutes": [
+        [
+          "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+          "62"
+        ],
+        [
+          "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+          "61"
+        ]
+      ],
+      "originalProjectionBefore": [
+        [
+          [
+            "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "8254c329a92850f6d539dd376f4816ee2764517da5e0235514af433164480d7a",
+            "5"
+          ],
+          [
+            "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "8254c329a92850f6d539dd376f4816ee2764517da5e0235514af433164480d7a",
+            "9223372036854775807"
+          ]
+        ],
+        [
+          [
+            "7",
+            "admitted",
+            "9",
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        [
+          [
+            "704",
+            "62",
+            "6b",
+            "01",
+            "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "8254c329a92850f6d539dd376f4816ee2764517da5e0235514af433164480d7a"
+          ]
+        ]
+      ],
+      "originalProjectionAfter": [
+        [
+          [
+            "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "8254c329a92850f6d539dd376f4816ee2764517da5e0235514af433164480d7a",
+            "5"
+          ],
+          [
+            "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+            "8254c329a92850f6d539dd376f4816ee2764517da5e0235514af433164480d7a",
+            "9223372036854775807"
+          ]
+        ],
+        [
+          [
+            "7",
+            "admitted",
+            "9",
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        [
+          [
+            "704",
+            "62",
+            "6b",
+            "01",
+            "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d",
+            "8254c329a92850f6d539dd376f4816ee2764517da5e0235514af433164480d7a"
+          ]
+        ]
+      ],
+      "writerXid": "734"
+    },
+    {
+      "id": "two-route-fixture-restores-prior-generations",
+      "routeGenerations": [
+        "6",
+        "4"
+      ],
+      "originalOperationCells": [
+        [
+          "admitted",
+          "8",
+          null,
+          null,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "id": "confirmed-original-guard-operation-restoration",
+      "routeGenerations": [
+        "0",
+        "0"
+      ],
+      "writerXid": "734"
+    }
+  ],
+  "sourceSha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/design-audit/row-event-image-attribution-probe.sql": "78a72bc36838562cb52123247e4cf2180c56f5a87219fec633995b0dd61eb030",
+    "docs/helix/04-build/evidence/design-audit/row-image-codec-preflight-source.owner-export.sql": "cf3926a6d1447eb0e5d21353252b7f5a43ef868d2f759d0ecd3b39784e348549",
+    "packages/python/src/truss/_row_image.py": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9",
+    "packages/python/src/truss/_row_event_attribution.py": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b",
+    "packages/postgresql/native/operation-generation-observer.sql": "ee808418b7e5d9f3f6943ce8c9873a92a20f4accd6116dc1d79e1a807b9fa37f"
+  },
+  "producerSha256": "5b9c08088e25239840f7adf743defa74fa80e9dc18e604c856bdb0ec66802ae4",
+  "rowTouchObserverQualified": false,
+  "acceptanceCasesPromoted": [],
+  "limitations": [
+    "Exact namespace/key bytes are administrative fixture values, not independently admitted logical key derivation",
+    "Administrative catalog and operation registry writes do not qualify protected admission or current authority",
+    "Finite two-route key/reservation fixture; no digest-collision, concurrency or complete original event custody qualification",
+    "Actual key/reservation INSERT/UPDATE/DELETE generation component only; no complete logical key derivation, protected custody, touch/capacity or native role/DDL closure",
+    "Finite PostgreSQL16.15 fixture, not all cascade/reparenting/type/deployment profiles"
+  ]
+}
