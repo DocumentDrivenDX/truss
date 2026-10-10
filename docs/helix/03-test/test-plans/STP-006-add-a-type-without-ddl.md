@@ -58,3 +58,14 @@ Use sixteen ordinary-role connections, independently identifiable operation inpu
 Report every submitted operation, admission attempt, stale refusal, retry, wait and confirmed/unknown outer outcome. Reconcile full original graph and journal membership, not only aggregate counts. Measure catalog-head waiting separately from declared fixed-work processing; unexpected data-table/DDL locks, missing operations or unrelated refusals cannot be relabeled as expected catalog delay. Host deadlines, pool pressure and arbitrary competing workloads remain separate profiles.
 
 CW-01–04 are planned, not_run. They provide concrete independent fault/overlap schedules under the selected public pre-effect refusal policy. US-006-AC2 cannot pass until a finite workload/deadline profile is selected and every original submitted operation is accounted for. There is no automatic pre-effect retry loop; effects-started, adopted transaction restart and uncertain commit recovery retain their existing separate classifications.
+
+
+## Acceptance scaling execution candidate
+
+The [add-only scaling procedure](../acceptance-scaling-experiment.proposal.md)
+now supplies matched10/1000-type fixtures, complete public acceptance through
+confirmed commit, fresh source state for every invocation, independent full
+outcome checks and three blocks of1000 measured pairs. The proposed2x p95
+comparison remains a release-profile selection; no native sample or runner is
+implemented. Repeated accepted revisions and catalog-INSERT-only timing cannot
+pass US-006-AC3. Exact fixture/runtime/resource/caching registration remains open.
