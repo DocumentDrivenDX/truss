@@ -1936,3 +1936,49 @@ delta derivation and actual guard/finalizer membership. All seven mandatory bodi
 complete resource/security installation and ready publication remain required;
 full native reservation/installer qualification remain false, with no acceptance
 criterion promoted.
+
+## Native event-derived capacity observation — 2026-10-10
+
+[Two private native observer functions and eight triggers](../../../packages/postgresql/native/capacity-reservation/observation.sql)
+now derive operation/touch membership and complete OLD/NEW byte deltas from actual
+trigger rows. AFTER INSERT counts the new retained member once the original
+unfinished registry row exists. BEFORE UPDATE measures the complete proposed row
+while the stored operation is still unfinished, including finalization phase,
+generation and result-byte growth. Operation xid/ordinal/context must match the
+actual held reservation and remain immutable; finalized operation rewrites are
+refused. Touch xid must match the actual reservation, and its member key is
+immutable. Shrink reduces retained bytes without refunding remaining capacity.
+DELETE and TRUNCATE refuse until a qualified cleanup path exists.
+
+[The latest32-check PostgreSQL16.15 receipt](evidence/design-audit/capacity-observation-constraint-native.json)
+composes actual reserve, original native admission, the observer owner export,
+length-only sizing and full retained parity. Independent Python complete-frame
+sizes predict operation/touch inserts, growth/shrink, administrative finalization
+and unused-only release. Native controls refuse identity/context changes,
+finalized rewrites, missing reservation, over-budget growth, deletion and
+truncation, with complete ledger rollback. A native row CHECK fails after its
+BEFORE observer has charged growth; statement containment restores the earlier
+ledger as well. Host rollback restores empty inventory and counters. The earlier
+30-check receipt retains its exact archived producer. The initial operation
+TRUNCATE control hit FK rejection first; isolated CASCADE now reaches the observer
+refusal without changing the FK or deleting retained data.
+
+[UMF source capture](evidence/design-audit/capacity-observation-source.json) retains/
+reloads/exports all twelve CREATE/REVOKE/TRIGGER statements exactly. The native
+checker executes the owner export; declaration extraction remains zero
+declarations/twelve unhandled, complete=false. These are additional capacity
+observers, not replacements or evidence for the seven mandatory semantic bodies.
+They confer no source meaning, current authorization, actual finalizer authority,
+original host issuer/account qualification or ready installation.
+
+Before protected use, close every trigger identity/order/dependency and private
+caller ACL. Later BEFORE triggers must not change the measured NEW row outside
+that registered dependency set; original complete parity must be checked before
+commit/publication. Original reservation must already own head/ledger exclusion,
+with no lower-lock acquisition preceding it. Framed resource-profile adoption and
+counter conversion remain explicit; the fixture's existing resource marker is an
+administrative input, not an accepted new counting profile. The explicit phase
+update qualifies capacity arithmetic only, not a guard-complete finalizer. Native
+argument/copy/work/cancellation/physical overhead, qualified cleanup, complete
+commit cohorts, ordinary-role graph effects and all seven bodies remain required.
+Full reservation/installer qualification remain false; no criterion is promoted.

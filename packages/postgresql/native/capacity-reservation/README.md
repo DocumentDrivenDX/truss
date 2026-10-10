@@ -74,3 +74,12 @@ with retained counters. The14-check native receipt establishes administrative
 membership/parity controls and rollback restoration. Original protected writers,
 registered objects/resource profile and bounded native work remain prerequisites;
 this verifier is not yet composed with protected event/finalizer producers.
+
+`observation.sql` binds native operation/touch INSERT and UPDATE events to the
+complete OLD/NEW size helpers and private transfer routine. DELETE/TRUNCATE
+refuse. The32-check native composition receipt verifies independent framed totals,
+shrink without refund, finalization capacity, event/constraint rollback and host
+rollback. This is administrative component evidence; trigger/dependency inventory,
+protected semantic/finalizer authority, resource adoption and all seven mandatory
+bodies remain uninstalled. Its BEFORE UPDATE ordering requires closed original
+trigger dependencies and complete parity before commit/publication.
