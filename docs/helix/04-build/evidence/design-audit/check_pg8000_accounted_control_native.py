@@ -70,7 +70,7 @@ with tempfile.TemporaryDirectory(prefix='truss-python-control-') as directory:
    if not account_after_close[3] or account_after_close[0]<=0 or account_after_close[1]!=0:
     raise ValueError('Original payload custody missing after close')
  finally:server.cleanup()
-receipt={'scope':'Five fixed local control submissions with original command/ready frames captured at instance handlers; shared frame/slice payload account exercised; no complete account, original savepoint authority or unknown-outcome qualification',
+receipt={'scope':'Five fixed local control submissions with original command/ready frames captured at instance handlers; shared frame/slice payload account and conservative two core-copy charges exercised; no complete account, original savepoint authority or unknown-outcome qualification',
  'pgserver':pgserver_version,'serverVersion':version,'driver':'pg8000 1.31.5','driverCoreSha256':CORE_SHA,
  'controls':[s for s,_,_ in controls],'frames':connection.control_frames,
  'independentExpectedControlFrames':10,'driverPortQualified':False,

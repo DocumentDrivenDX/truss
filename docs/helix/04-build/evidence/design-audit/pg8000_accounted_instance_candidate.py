@@ -17,7 +17,7 @@ class AccountedFrameFile(FrameFile):
             if self.pending is None:
                 if type(size) is not int or size != 5:
                     raise ValueError('Original five-byte header request required')
-                self.header, self.pending = self.receiver.receive_parts()
+                self.header, self.pending = self.receiver.receive_core_parts()
                 self.message_sizes.append([self.header[:1].decode('ascii'),5+len(self.pending)])
                 return self.header
             if type(size) is not int or size != len(self.pending):

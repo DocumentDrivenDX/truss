@@ -49,7 +49,15 @@ class AccountedReceiver:
         """Return the original header/body with their slice payloads charged."""
         return self._receive(True)
 
-    def _receive(self, split):
+    def receive_core_parts(self):
+        """Precharge two downstream copies per part for pinned complete _read.
+
+        Only the trusted, source-pinned adapter can select this path. Precharges
+        are conservative custody, not observations that downstream copies ran.
+        """
+        return self._receive(True, core_copies=2)
+
+    def _receive(self, split, core_copies=0):
         if not self._gate.acquire(blocking=False):
             raise ValueError('Concurrent or reentrant receive refused')
         try:
@@ -62,7 +70,7 @@ class AccountedReceiver:
             # Header/body slices together require one additional whole-frame
             # payload. Reserve it before ingress, not after receiving the frame.
             permit = self._account.reserve(self._producer,
-                5 + (3 if split else 2) * self._frame_bytes)
+                5 + ((3 if split else 2) + core_copies) * self._frame_bytes)
             self._messages -= 1
             self._remaining_bytes -= 5
             self._account.allocate(self._producer, permit, 5)
@@ -86,6 +94,11 @@ class AccountedReceiver:
                 original_header = result[:5]
                 self._account.allocate(self._producer, permit, body_size)
                 original_body = result[5:]
+                # Draw down before either part escapes into the pinned core.
+                # Unexecuted downstream copies remain conservatively charged.
+                for amount in (5, body_size):
+                    for _ in range(core_copies):
+                        self._account.allocate(self._producer, permit, amount)
                 result = (original_header, original_body)
             # This synchronous receive cannot consume more of its reservation.
             # No allocation charge is released, including local temporary bytes.

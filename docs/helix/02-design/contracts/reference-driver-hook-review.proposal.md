@@ -252,12 +252,15 @@ unexpected second read for the same part must refuse and retain custody rather
 than supply another frame as continuation. This remains an implementation exit,
 not a property established by source inspection alone.
 
-Before enabling ingress for a frame, the next producer integration must reserve
+Before enabling ingress for a frame, the producer integration must reserve
 both core payload copies of its header and body in the same original account,
 in addition to the receive/slice payload reservation. Draw down those copy
 charges before the original read returns bytes to _read; retain them if _read,
 its handler or a later part fails. With frame payload F, those two additional
-copies total2F. The current receive_parts reservation does not include them.
+copies total2F. The receive_parts reservation does not include them; the new
+receive_core_parts path now does and precharges them before returning either
+part into the selected instance file. Unexecuted copies stay conservatively
+charged, without claiming an observed allocation or releasing custody.
 The resulting payload subtotal5+5F still excludes object/capacity overhead,
 views, parser products, frame reconstruction, transport, outbound and separately
 reserved containment; it is not a complete heap or work ceiling.
@@ -271,6 +274,19 @@ resubmission. Observe core entry/read counts and actual allocation placements
 independently of producer-issued ledger events. Freeze the full source/runtime
 tuple and original cycle with the result. All six exits remain not_run; the
 successful control-frame/account probe cannot stand in for them.
+
+The [installed core-copy component suite](../../04-build/evidence/design-audit/python-accounted-core-installed-suite.json)
+passes70 tests across17 exact wheel/source/installed modules. Two new synthetic
+controls check the165-byte maximum reservation for a32-byte frame ceiling,
+one-byte-short zero-ingress refusal, the35-byte charged subtotal for the six-byte
+fixture and retained reservation after partial body ingress. This proves those
+accounting transitions, not independently observed core allocations.
+The [updated native control receipt](../../04-build/evidence/design-audit/pg8000-core-accounted-control-native.json)
+uses that installed path through the frozen core on PostgreSQL16.15. All ten
+expected control frames match; the original account retains2725 conservative
+payload bytes with zero unused reservation and closed admission after close.
+The prior slice-only native receipt remains historical. Full original driver,
+parser, containment, authority and publication qualification remain open.
 
 ### Current security-owner requirements boundary
 

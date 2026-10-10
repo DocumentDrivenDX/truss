@@ -222,17 +222,19 @@ and query/compiler host controls retain their synthetic scope. Reproduce with
 Python environment. Full installation, migration execution and protected engine
 qualification remain unfinished.
 
-The [latest installed component suite](../../docs/helix/04-build/evidence/design-audit/python-accounted-parts-installed-suite.json)
+The [latest installed component suite](../../docs/helix/04-build/evidence/design-audit/python-accounted-core-installed-suite.json)
 verifies all17 current module payloads against the rebuilt wheel and installed
-package, with68 tests passing outside the checkout. It uses the reused corrected
+package, with70 tests passing outside the checkout. It uses the reused corrected
 pgserver0.1.4+truss.pg16.15 environment; four tests exercise local native lifecycle.
 The new private AccountedReceiver shares BytePermitAccount, reserves maximum
 header/frame and optional header/body slice payload overlap before ingress, and retains charges after failure.
+Its source-pinned core path additionally reserves and precharges two downstream
+copies per part. These conservative charges do not prove the copies executed.
 Its accounting/fault controls are synthetic. Transport, parser, object overhead
 and containment integration remain required before this becomes a supported
 database adapter. Public mutation/query/installation APIs remain unreleased.
 
-The [local accounted-driver probe](../../docs/helix/04-build/evidence/design-audit/pg8000-accounted-control-native.json)
+The [local accounted-driver probe](../../docs/helix/04-build/evidence/design-audit/pg8000-core-accounted-control-native.json)
 uses the installed receiver's header/body path through the frozen pg8000 seam.
 Five fixed controls produce ten independently expected command/ready frames on
 PostgreSQL16.15. This verifies that particular payload-account integration;

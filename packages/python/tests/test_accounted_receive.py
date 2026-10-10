@@ -23,6 +23,23 @@ class Transport:
 
 
 class AccountedReceiveTests(unittest.TestCase):
+    def test_core_copies_reserved_before_ingress_and_charged_before_return(self):
+        producer, account, transport, receiver, observed = self.setup_receiver(capacity=165,cumulative=165)
+        self.assertEqual(receiver.receive_core_parts(), (FRAME[:5],FRAME[5:]))
+        self.assertEqual(observed, [(5,160,5,False)] * 3 + [(11,154,11,False)])
+        # Prior23 + two header5 copies + two body1 copies.
+        self.assertEqual(account.snapshot(producer), (35,0,35,False))
+
+    def test_core_copy_shortfall_reads_nothing_and_partial_read_keeps_reserve(self):
+        producer, account, transport, receiver, _ = self.setup_receiver(capacity=164,cumulative=165)
+        with self.assertRaises(ValueError): receiver.receive_core_parts()
+        self.assertEqual(transport.calls, 0)
+        self.assertEqual(account.snapshot(producer), (0,0,0,True))
+        producer, account, transport, receiver, _ = self.setup_receiver(data=FRAME[:5],capacity=165,cumulative=165)
+        with self.assertRaises(ValueError): receiver.receive_core_parts()
+        self.assertEqual(account.snapshot(producer), (11,154,11,True))
+        self.assertEqual(transport.calls, 4)
+
     def test_complete_header_body_slices_share_pre_ingress_reservation(self):
         producer, account, transport, receiver, observed = self.setup_receiver(capacity=101,cumulative=101)
         self.assertEqual(receiver.receive_parts(), (FRAME[:5],FRAME[5:]))
