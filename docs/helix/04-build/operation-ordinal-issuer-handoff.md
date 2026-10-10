@@ -346,3 +346,22 @@ pins, actual roles/routines/installation procedure and original case receipts.
 Truss owns adapter composition and native issuer wiring, while the owner retains
 policy meaning, authority/current-fact resolution and protected publication.
 No cross-chat message was sent and no unfinished API was adopted by this review.
+
+
+## Shared Python issuer registry
+
+Private `OperationOrdinalRegistry` now binds one retained issuer per original
+transaction token within one trusted physical-connection/producer registry. A
+second facade receives the identical issuer. Ended transactions retain the closed
+issuer; rebinding cannot restart at zero, and retained bindings never refund the
+explicit enclosing capacity. Connection closure closes every issuer. The trusted
+adapter must create/share the original registry and supply genuine adoption
+tokens; the component does not discover or authenticate native transaction state.
+
+Two new component methods cover shared facades, ended/rebound custody, distinct
+transaction lifetime, cumulative capacity, foreign connection/producer and close.
+All44 current source Python tests pass in the corrected local runtime environment;
+the boundary checker still passes51 imports. The native configuration schedule
+now shares this registry over the actual psql process and preserves0/1/3 issuance
+and exact captures. This is source-component/local native fixture evidence, not
+a rebuilt-wheel claim, qualified driver port or complete original admission.

@@ -29,4 +29,40 @@ class OperationOrdinalTests(unittest.TestCase):
                 OperationOrdinalIssuer(custody,maximum)
 
 
+
+
+class OperationOrdinalRegistryTests(unittest.TestCase):
+    def test_shared_facades_and_ended_transaction_cannot_reset(self):
+        from truss._operation_ordinal import OperationOrdinalRegistry
+        producer, connection, transaction = object(), object(), object()
+        registry = OperationOrdinalRegistry(producer, connection, 2, 10)
+        first = registry.bind(producer, connection, transaction)
+        self.assertEqual(first.reserve(transaction).ordinal, '0')
+        second = registry.bind(producer, connection, transaction)
+        self.assertIs(first, second)
+        self.assertEqual(second.reserve(transaction).ordinal, '1')
+        registry.end(producer, connection, transaction)
+        rebound = registry.bind(producer, connection, transaction)
+        self.assertIs(rebound, first)
+        self.assertEqual(rebound.reserve(transaction).reason, 'closed')
+        later = object()
+        self.assertEqual(registry.bind(producer, connection, later).reserve(later).ordinal, '0')
+        with self.assertRaises(ValueError):
+            registry.bind(producer, connection, object())
+
+    def test_foreign_custody_and_connection_close(self):
+        from truss._operation_ordinal import OperationOrdinalRegistry
+        producer, connection, transaction = object(), object(), object()
+        registry = OperationOrdinalRegistry(producer, connection, 1, 0)
+        for arguments in [(object(), connection, transaction), (producer, object(), transaction)]:
+            with self.assertRaises(ValueError):
+                registry.bind(*arguments)
+        issuer = registry.bind(producer, connection, transaction)
+        with self.assertRaises(ValueError):
+            registry.close(object())
+        registry.close(producer)
+        self.assertEqual(issuer.reserve(transaction).reason, 'closed')
+        with self.assertRaises(ValueError):
+            registry.bind(producer, connection, transaction)
+
 if __name__=='__main__':unittest.main()

@@ -41,3 +41,54 @@ class OperationOrdinalIssuer:
             if original is not self._custody:
                 raise ValueError('Original issuer custody required')
             self._closed = True
+
+
+class OperationOrdinalRegistry:
+    """Trusted adapter registry for original physical connection/transaction tokens.
+
+    Bindings are cumulative and retained, including ended transactions. The host
+    must construct one registry per original connection custody; this component
+    does not discover native connections, authenticate tokens or reserve accounts.
+    """
+    def __init__(self, producer, connection, maximum_bindings, maximum_ordinal):
+        if producer is None or connection is None or type(maximum_bindings) is not int or maximum_bindings < 1:
+            raise ValueError('Original producer, connection and finite binding capacity required')
+        if type(maximum_ordinal) is not int or not 0 <= maximum_ordinal <= 9223372036854775807:
+            raise ValueError('Native ordinal bound required')
+        self._producer = producer
+        self._connection = connection
+        self._maximum_bindings = maximum_bindings
+        self._maximum_ordinal = maximum_ordinal
+        self._bindings = {}
+        self._closed = False
+        self._lock = Lock()
+
+    def bind(self, producer, connection, transaction):
+        with self._lock:
+            if producer is not self._producer or connection is not self._connection or transaction is None or self._closed:
+                raise ValueError('Original open connection/producer custody required')
+            existing = self._bindings.get(id(transaction))
+            if existing is not None:
+                return existing[1]
+            if len(self._bindings) >= self._maximum_bindings:
+                raise ValueError('Cumulative transaction binding capacity exhausted')
+            issuer = OperationOrdinalIssuer(transaction, self._maximum_ordinal)
+            self._bindings[id(transaction)] = (transaction, issuer)
+            return issuer
+
+    def end(self, producer, connection, transaction):
+        with self._lock:
+            if producer is not self._producer or connection is not self._connection:
+                raise ValueError('Original connection/producer custody required')
+            existing = self._bindings.get(id(transaction))
+            if existing is None:
+                raise ValueError('Original transaction binding required')
+            existing[1].close(existing[0])
+
+    def close(self, producer):
+        with self._lock:
+            if producer is not self._producer:
+                raise ValueError('Original producer custody required')
+            self._closed = True
+            for transaction, issuer in self._bindings.values():
+                issuer.close(transaction)

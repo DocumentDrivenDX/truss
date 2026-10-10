@@ -13,7 +13,7 @@ import pgserver
 
 root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(root / 'packages/python/src'))
-from truss._operation_ordinal import OperationOrdinalIssuer
+from truss._operation_ordinal import OperationOrdinalRegistry
 family = sys.argv[1] if len(sys.argv) >= 2 else 'base'
 assert len(sys.argv) <= 3
 receipt_name = sys.argv[2] if len(sys.argv) == 3 else 'issued-operation-ordinal-' + family + '-native.json'
@@ -41,7 +41,8 @@ originals = [(root / p).read_bytes() for p in paths]
 assert importlib.metadata.version('pgserver') == '0.1.4+truss.pg16.15'
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
 custody = object()
-issuer = OperationOrdinalIssuer(custody)
+producer = object()
+issuer = None
 with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
     server = pgserver.get_server(Path(directory) / 'data', cleanup_mode='stop')
     def query(sql):
@@ -54,6 +55,8 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
         with tempfile.TemporaryFile(mode='w+t') as errors:
             process = subprocess.Popen([str(psql), server.get_uri(), '-X', '-qAt', '-v', 'ON_ERROR_STOP=1'],
                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=errors, text=True)
+            registry = OperationOrdinalRegistry(producer, process, 1, 9223372036854775807)
+            issuer = registry.bind(producer, process, custody)
             def send(sql):
                 process.stdin.write(sql + '\n')
                 process.stdin.flush()
@@ -127,7 +130,9 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             if family == 'configuration':
                 send("SELECT json_build_object('survivingConfigurations',count(*)) FROM truss.operation_configuration;")
                 assert observe() == {'survivingConfigurations': 0}
-            issued_second = issuer.reserve(custody)
+            second_facade_issuer = registry.bind(producer, process, custody)
+            assert second_facade_issuer is issuer
+            issued_second = second_facade_issuer.reserve(custody)
             send('SAVEPOINT operation_second;')
             second = admit(issued_second)
             assert first['writerXid'] == second['writerXid']
@@ -163,7 +168,8 @@ with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
             assert process.wait(timeout=30) == 0
             assert query("SELECT to_regnamespace('truss') IS NULL;") == 't'
     finally:
-        issuer.close(custody)
+        if issuer is not None:
+            registry.close(producer)
         if process is not None and process.poll() is None:
             process.terminate()
             try:
