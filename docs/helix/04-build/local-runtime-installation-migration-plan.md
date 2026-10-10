@@ -54,7 +54,7 @@ removed from the full goal.
 
 The README must continue stating that mutation/query/installation APIs are not
 released until the corresponding installed public exports and preview corpus
-actually pass. Current twelve-module/42-test component evidence provides no
+actually pass. Current sixteen-module/61-test component evidence provides no
 calendar or capability-completion evidence for these estimates.
 
 ### P0 native caller checkpoint: corrected binary required

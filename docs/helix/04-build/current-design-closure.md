@@ -68,9 +68,13 @@ capture/export, without qualifying an actual bridge/receiver. Python ordinal/
 admission formal specification maps stable properties to ten passing component
 methods, with precise author review only; executable formal analysis and native
 correspondence remain open. Entry links are in the HELIX README and runtime plan. The
-[latest installed resource-reader suite](evidence/design-audit/python-resource-reader-full-suite-diagnostic.json)
-passes58 tests with15 module payloads matched against source/wheel/installation.
-Earlier48-test/13-module and44-test/12-module receipts remain historical. The
+[latest installed suite](evidence/design-audit/python-registry-current-installed-suite.json)
+passes61 tests with16 module payloads matched against source/wheel/installation,
+including the new private registry decoder. The environment is reused and the
+corrected pgserver binary remains a private candidate, not the published default.
+The separate17-vector Python/TypeScript registry replay proves structural decoding
+parity only. Earlier58-test/15-module,48-test/13-module and44-test/12-module receipts
+remain historical. The
 preceding full-suite run timed out at180 seconds without retained partial output;
 its cause and cleanup remain unverified. The new diagnostic run passed without
 extending that deadline. Future failure/timeout receipts preserve original output.
@@ -90,15 +94,26 @@ not an installed authorized engine, managed-target qualification, public default
 binary distribution or migration readiness. Preserve the original16.2 receipts as
 historical; do not relabel them.16.15 still lacks transaction_timeout.
 
-Latest read-only origin checks identify UMF `main` at
-`6a2929d52d23b4587c9913aa87b3a265cf43ed1e` and Weft `main` at
-`764d9fa1c4aef68358a5c77c85b051d6d7bf0495`. Recent Weft changes select separate
-Databricks0.3 candidates; Truss retains its adopted f05f2df compile/SQL0.2 tuple.
-UMF's recent research distribution/default-branch changes do not introduce a
-Truss prerequisite or justify silently replacing adopted pins. The live security
-owner reports scoped routine/profile verification, with full acceptance still26/132,
-and is working on unsupported-policy activation/report-mode weakening. Keep those
-interfaces with their owner and unadopted until the exact Truss subset qualifies.
+Current locally retained origin/main refs identify UMF at
+`322b193cef7c940d07b741860cf0170272628868` and Weft at
+`ee90571a5aa67b6d2e6069220f6e1cc0eec3822c`; this is not a fresh remote fetch.
+The [UMF browser replay](evidence/design-audit/schema-browser-322b193-search-site.json)
+qualifies the selected original assets and readable-label navigation on the
+generated site, without deployment or native qualification. The
+[Weft original consumer replay](evidence/design-audit/consumer-revised-frontend-ee90571.json)
+retains all90 inputs with80 logical resolutions and10 relationship-predicate
+refusals. Its independently registered distribution work is reviewed in the
+[source handoff](evidence/design-audit/weft-ee90571-distribution-source-review.json),
+not adopted as a Truss Python release. Truss retains f05f2df compile/SQL0.2.
+
+The [security graph-stage review](evidence/design-audit/security-resumed-graph-stage-review.json)
+records88 scoped native candidate observations and nativeImplementationQualified=false.
+It observed an in-progress owner turn at that checkpoint; it does not assert
+current process status. The owner tuple includes qualified-property0.15 and legacy
+ordinal admission, unlike Truss's current source-epoch0.16/host-issued candidates.
+Keep ownership with the security resolver and require the exact minimum current
+installation/authority/publication packet before integration. Neither old acceptance
+counts nor this candidate receipt qualifies ordinary R4/R5 enforcement.
 
 ## Current closure classification — 2026-10-09
 
