@@ -28,6 +28,17 @@ records workspace and committed UMF contract bytes, which differ; normative
 comparison uses the committed source. No published package, Truss PostgreSQL
 lowering or adopted f05f2df compiler changes from this upstream review.
 
+The [distinct-neighbor engineering candidate](../02-design/contracts/distinct-neighbor-participation.proposal.md)
+now specifies grouped representative markers in the existing fixed table,
+complete final-state ordering, parallel/representative deletion, incoming bounds,
+minimum-zero-root checks and explicit populated conversion. Eight independent
+synthetic marker expectations pass their mathematical checks. CONTRACT-001 now
+corrects its earlier equivalent-UMF claim: the existing per-edge EL03 multiset
+is an occurrence cap. The candidate needs versioned writer/observer/verifier and
+complete native qualification before adoption; existing guards and US-011
+behavior are unchanged. No new table, extension or per-relationship index is
+selected by this design.
+
 The [installed Python wheel](evidence/design-audit/python-accounted-core-installed-suite.json)
 now passes70 tests with17 exact source/wheel/installed module payloads. This
 supersedes the61/16 package checkpoint below. The private receive path now shares
