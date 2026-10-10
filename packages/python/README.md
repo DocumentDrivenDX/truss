@@ -178,3 +178,15 @@ recovery before explicitly closing again. A synthetic constructor-fault test
 checks this branch without starting a native process. Marker disappearance alone
 is not general process-crash qualification. This source change is newer than the
 recorded rebuilt wheel and requires a later package rebuild.
+
+
+The [current installed-suite receipt](../../docs/helix/04-build/evidence/design-audit/python-current-installed-suite.json)
+now covers a rebuilt wheel containing both subsequent fixes. All ten installed
+module payloads match wheel/source, and all36 current component tests pass with
+warnings treated as errors outside the checkout. This reuses the previously
+resolved local-extra environment; it is not a new dependency-resolution claim.
+Four tests exercise native PostgreSQL16.2 lifecycle; constructor fault injection
+and query/compiler host controls retain their synthetic scope. Reproduce with
+`scripts/check-python-installed-suite.py TRUSS_WHEEL` using that wheel's installed
+Python environment. Full installation, migration execution and protected engine
+qualification remain unfinished.
