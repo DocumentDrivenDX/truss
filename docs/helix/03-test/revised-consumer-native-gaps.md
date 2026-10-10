@@ -109,3 +109,22 @@ original exact input, pending identities, full surviving operation inventory,
 constraint timing, cumulative resource use and actual native containment in the
 receipt. All composed native/Python cases remain not_run; no public dry-run API
 or installed guard support follows from this fixture.
+
+
+### Native transaction-state component witness
+
+The [original native receipt](../04-build/evidence/design-audit/python-dry-run-native-savepoint.json)
+on corrected PostgreSQL16.15 verifies a separate deferred UNIQUE fixture. Actual
+validation produces23505, and a read before savepoint rollback produces25P02.
+Confirmed ROLLBACK TO SAVEPOINT restores access to the caller's earlier pending
+sentinel with zero preview rows; explicit outer rollback restores the committed
+sentinel. Four independently authored observations match. The retained harness
+uses an administrative disposable fixture, not Truss guards or security APIs.
+
+The composed R6 runner must therefore inspect earlier caller work only after
+qualified operation-local containment restores native usability. Before that,
+retain transaction_unusable/original native diagnostics and submit no ordinary
+read. Lost containment cannot be replaced by an independent unchanged row count.
+This native component supports the ordering requirement only; the concrete
+Truss relationship violation, complete journals/receipts/accounts and actual
+Python dry-run API remain not_run.

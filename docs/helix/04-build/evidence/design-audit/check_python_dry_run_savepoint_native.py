@@ -1,0 +1,27 @@
+import json, subprocess, hashlib
+from pathlib import Path
+from truss import LocalPostgres
+sql="""\\set ON_ERROR_STOP off
+CREATE TABLE dry_run_probe(id integer, label text, CONSTRAINT dry_run_unique UNIQUE(id) DEFERRABLE INITIALLY DEFERRED);
+INSERT INTO dry_run_probe VALUES(0,'committed-before-preview');
+BEGIN;
+UPDATE dry_run_probe SET label='caller-pending-before-preview' WHERE id=0;
+SAVEPOINT preview;
+INSERT INTO dry_run_probe VALUES(1,'first'),(1,'second');
+SET CONSTRAINTS dry_run_unique IMMEDIATE;
+\\echo validator_sqlstate :SQLSTATE
+SELECT label FROM dry_run_probe WHERE id=0;
+\\echo aborted_read_sqlstate :SQLSTATE
+ROLLBACK TO SAVEPOINT preview;
+SELECT json_build_object('label',(SELECT label FROM dry_run_probe WHERE id=0),'previewRows',(SELECT count(*) FROM dry_run_probe WHERE id=1))::text;
+ROLLBACK;
+SELECT json_build_object('label',(SELECT label FROM dry_run_probe WHERE id=0),'previewRows',(SELECT count(*) FROM dry_run_probe WHERE id=1))::text;
+"""
+with LocalPostgres(Path('/private/tmp/truss-dry-run-savepoint-native-data')) as runtime:
+ cmd=[str(runtime.psql_path),runtime.info.connection_uri,'-X','-q','-A','-t']
+ r=subprocess.run(cmd,input=sql,text=True,capture_output=True,timeout=30)
+ expected=['validator_sqlstate 23505','aborted_read_sqlstate 25P02','{"label" : "caller-pending-before-preview", "previewRows" : 0}','{"label" : "committed-before-preview", "previewRows" : 0}']
+ assert r.returncode==0 and r.stdout.splitlines()==expected,(r.returncode,r.stdout,r.stderr)
+ x={'schema':'truss-dry-run-native-savepoint-witness/0.1','serverVersion':runtime.info.server_version,'runtimeVersion':runtime.info.runtime_version,'command':cmd,'sql':sql,'exitCode':r.returncode,'stdout':r.stdout,'stderr':r.stderr,'independentExpectedLines':expected,'scriptSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'scope':'Native PostgreSQL deferred unique validation and savepoint/outer rollback only; administrative fixture, not Truss guard, ordinary-role security, driver containment or dry-run API qualification'}
+ p=Path('/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/python-dry-run-native-savepoint.json');assert not p.exists();p.write_text(json.dumps(x,indent=2)+'\n')
+print('Native deferred violation, aborted read, local containment and outer rollback matched four independent observations')
