@@ -21,8 +21,8 @@ returns0 again. The [receipt](evidence/design-audit/pgserver-operation-ordinal-f
 records contractConformant=false. Successful reproduction is evidence of a gap,
 not a supported operation. Synthetic nonempty input bytes exercise allocation
 only and establish no original artifact or mutation admission. That base reproduction does not execute the other families. Separate asserted-origin
-and epoch-context reproductions below establish the same native conflict; the
-configuration-context family still has source inspection only.
+epoch-context and configuration-context reproductions below establish the same
+native conflict across all four families.
 
 ## Corrected composition requirements
 
@@ -230,5 +230,25 @@ Both returned contexts preserve the expected installation, epoch and incarnation
 original profile/evidence bytes, and asserted-origin/capture-profile bytes. These
 checks constrain the all-family allocator correction: replacing allocation must
 retain the advanced context capture. They do not admit those fixture bytes as
-trusted installation authority or qualify a protected producer. The configuration
-family's native rollback/capture reproduction remains outstanding.
+trusted installation authority or qualify a protected producer. The configuration reproduction below extends these controls to its separate row.
+
+
+## Configuration-context rollback reproduction
+
+The [configuration probe](../../../scripts/check-pgserver-configuration-operation-ordinal-frontier.py)
+adds the original operation-configuration storage and configuration admission
+routine to the same rollback-only PostgreSQL16.2 administrative epoch fixture.
+An explicit installation-admission fixture contains generation7, forbid/engine
+modes, binary configuration bytes including NUL and FF, and distinct binding and
+inventory bytes. These are synthetic capture inputs, not accepted installation
+artifacts or registered configuration meaning.
+
+The [receipt](evidence/design-audit/pgserver-configuration-operation-ordinal-frontier.json)
+shows ordinal0 reissued after rollback in the same native xid. Both separate
+configuration rows retain every fixture value and the exact admission-profile
+bytes. Their context digests independently match SHA-256 of returned original
+context bytes, without JSON reserialization. Full rollback removes the namespace.
+All four allocator families now have native conflict evidence; none is corrected
+or qualified by these reproductions. The implementation handoff remains to bind
+original issuer custody and correct all four families together, preserving their
+individual capture requirements and the separate configuration row.
