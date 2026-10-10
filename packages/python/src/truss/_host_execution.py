@@ -5,6 +5,7 @@ as admitted protected transactions or expose this executor as a public capabilit
 """
 from dataclasses import dataclass, replace
 from uuid import uuid4
+from threading import Lock
 from .execution import HostTransactionPort, TransactionObservation, Isolation, AccessMode, Outcome, Ok, Error, ExecutionFailure
 
 class TransactionHandle:
@@ -34,6 +35,8 @@ class HostExecutor:
         self._savepoints = {}
         self._closed = False
         self._ordinal = 0
+        self._arbitration_service = None
+        self._arbitration_registration_lock = Lock()
 
     @staticmethod
     def _error(code, message):

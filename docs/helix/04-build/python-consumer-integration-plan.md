@@ -108,3 +108,6 @@ Only after these transitions, native host-command exclusion and generation
 recognition are qualified may C02 publish driver-backed adoption. The current
 pure lookup and trusted-port tests are prerequisites, not registry/native
 completion or a substitute for the first real consumer workflow.
+
+
+Python arbitration progress: the [Astra Ultra-reviewed private registry iteration](evidence/python-contracts-iteration3.json) implements one original executor domain, shared atomic operation-slot transitions, exact completion context, terminal decision retention, publication-fault reconciliation and bounded encoded recovery admission. Native completion production/ledger verification, host-command exclusion, driver transaction generation and whole resource qualification remain C02 gates. This is an implementation prerequisite, not a public adoption release.

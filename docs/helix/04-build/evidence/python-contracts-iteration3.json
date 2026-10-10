@@ -1,0 +1,39 @@
+{
+  "iteration": "Private shared operation arbitration state machine",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "task": "/root/astra_plan_review",
+    "disposition": "Approved for private state-machine iteration; no remaining blocking findings",
+    "fixedFindings": [
+      "One exact registered domain per executor",
+      "Original immutable context prevents prior completion replay",
+      "Immutable root publication prevents partial acquire ownership",
+      "Verification marker reconciles both release publication windows",
+      "Explicit restored verifier reconciliation retains original slot",
+      "Ended transaction closes resources while retaining commit-unknown recovery",
+      "Complete bounded recovery admission rejects invalid Unicode/oversized payload before retention"
+    ]
+  },
+  "targetedTests": 17,
+  "sourceSha256": {
+    "packages/python/src/truss/_operation_arbitration.py": "8077672c71406e30ba9885627374b9d415ee76dfea166c264730059a9ca25b42",
+    "packages/python/src/truss/_host_execution.py": "1f29a8762b6fd608c74712ae36c92f4415a20592909c1cca5bdec2d199a8a267",
+    "packages/python/tests/test_operation_arbitration.py": "2293196112e5a7c48b4a85c6f928c9b610b68b3c5cfd03ba061312dd15fa1088"
+  },
+  "scope": "Private process-lifetime state transitions and encoded metadata/evidence reservations only. No native completion verifier, host-command exclusion, driver generation, full Python heap/resource qualification or public E06/native adoption support.",
+  "fullSourceSuite": {
+    "tests": 157,
+    "result": "passed",
+    "logSha256": "a7e53e83c8807f04e135e426ccb008261effde4ca2a0ae6c80f02c5acfadea35",
+    "scope": "Full source suite before final verifier-marker synchronization delta; final delta separately reviewed and targeted tests rerun"
+  },
+  "finalInstalledTargetedTests": {
+    "tests": 17,
+    "result": "passed",
+    "cwd": "/private/tmp",
+    "scope": "Installed wheel, source test module fixtures; not standalone native external workflow"
+  },
+  "wheelSha256": "0652849268c494f1aa2fd24fb83d675b2468f3f0b2437b6867693ebbee3da614",
+  "sourceInstalledByteMatchingModules": 32
+}

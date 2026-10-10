@@ -324,3 +324,22 @@ arbitration, host-command exclusion, generation and cross-assembly custody must
 be integrated and qualified before publication. Unresolved original custody
 blocks re-adoption and survives executor disposal. No public catalog/mutation/
 feed/ACK or ReferenceAssembly is supplied by this iteration.
+
+The private `_operation_arbitration` component supplies one registered operation
+registry per exact executor, shared across assembly registrations. It retains
+original attempts/leases, terminal decisions and uncertainty across admission
+closure. Completion verification runs outside the transition lock and must
+return correspondence to the immutable original registry/assembly/attempt/lease/
+transaction context. Root state publishes atomically; completed verifier results
+survive publication faults. Explicit reconciliation may restore a quarantined
+slot without changing original evidence or admitting concurrent verification.
+Confirmed transaction termination can close operation resources while retaining
+commit-outcome recovery separately.
+
+Its counters reserve encoded metadata/completion capacity and retain terminal
+attempts. These checks do not qualify total Python heap or native resource usage.
+The completion verifier is a required trusted host integration, not a supplied
+native implementation; producer/ledger correspondence, native command exclusion
+and driver generation recognition remain required before E06/native adoption
+publication. No public capability or runtime support claim follows from these
+component tests.
