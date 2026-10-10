@@ -115,6 +115,45 @@ pgserver/Python lifecycle wheel is useful local infrastructure, not evidence tha
 any stage above is implemented. No traversal API decision or pool performance
 benchmark gates this sequence.
 
+## First populated route selection and acceptance matrix
+
+M1 is not a version-number exercise. Select an actual supported source bundle and
+an actual required target change before authoring the recipe. Pin both complete
+inventories and original artifacts; identify the product requirement that requires
+physical migration rather than ordinary catalog acceptance. A second installation
+of unchanged DDL does not satisfy the populated upgrade requirement.
+
+The review-only source-epoch0.16 composition cannot be promoted to an admitted
+source just to obtain a passing route: all four original operation admission
+families reissue an ordinal after savepoint rollback. See the
+[issuer integration handoff](operation-ordinal-issuer-handoff.md). Repairing that
+composition is prerequisite installation work. If a deployed historical source
+actually contains the defect, its upgrade needs a separately admitted recovery
+route with explicit defective-source preconditions; it cannot inherit normal
+source verification. No such deployed-source claim or recovery route is selected.
+
+The recipe's independent preservation fixture must cover every populated family
+below. Record explicit independently expected originals before migration and compare
+the same originals after commit; counts or regenerated digests alone are insufficient.
+
+| Populated source family | Required target observation | Refusal/failure control |
+| --- | --- | --- |
+| Document-qualified catalog, definitions and accepted reports | Complete document/module/element identities, original accepted bytes and report correspondence | Same names across two documents remain distinct; missing source member refuses before effects |
+| Objects, keys and exact scalar/property values | Full keys and absence/null/value distinctions; exact large integer, decimal and timestamp carriers | No JavaScript rounding, key merging or coercion; byte-modified source refuses |
+| Relationship occurrences and ordering | Original occurrence identities, endpoints, relationship types and declared ordering semantics | Existing same-endpoint uniqueness limitations are explicit; no deduplication or unsupported parallel occurrence qualification |
+| Journal, transaction receipts and feed positions | Original records and externally retained receipt/feed interpretation across the selected epoch transition | Do not reconstruct original bytes, recycle identities or treat xid visibility alone as proof of commit |
+| Installation, configuration and source epochs | Original predecessor identity and selected registered target transition, including configuration generation/modes | Stale original source/configuration refuses once; no inferred route or silent epoch rewrite |
+| Unresolved attempts and recovery custody | Original attempt identity/evidence remains resolvable with its actual outcome | Refuse migration when original recovery/exclusion policy cannot preserve unresolved custody; never replay attempts |
+| Roles, grants, guards and security dependencies | Complete selected inventory and independently verified mandatory integrity/authorization behavior | Missing routines or wrong grants cannot publish readiness even when table/column projection matches |
+
+Run the same selected populated fixture through success, late recipe failure,
+lost COMMIT acknowledgement and confirmed commit with failed readiness verification.
+For late failure, prove source preservation and absence of target publication from
+an independent connection after settlement. For uncertain/committed outcomes,
+retain the original recovery identity; a fresh process must reconcile without
+executing a recipe again. The existing binding supplies the result distinctions.
+These controls are required acceptance evidence, not current passing tests.
+
 ## Rust compiler embedding alignment
 
 The [frozen Python extension receipt](evidence/design-audit/weft-python-f05f2df-component.json)
