@@ -309,3 +309,40 @@ nonreuse after rollback. Legacy sources remain historical; a complete selected
 installer must exclude executable legacy allocator overloads. Native execution
 and actual Python/driver binding are not yet qualified. Run the original rollback/
 prior-finalized/epoch/configuration/uncertain controls on corrected16.15 next.
+
+
+## Current issued-ordinal execution checkpoint
+
+The four separate issued candidates now run on corrected16.15 with actual source
+Python counter issuance before savepoint submission. Each retains successful
+ordinals0/1 in the same native transaction across rollback, burns ordinal2 on
+actual22023 admission refusal, and next admits3 after rollback. Separate
+configuration capture independently observes exact original fixture bytes and
+context digest, with removed configuration rows after rollback. Original row-MAX
+reproductions above remain historical; candidate implementation is no longer
+wholly absent. These administrative/synthetic-artifact component receipts do not
+qualify original driver/security/resource/finalizer composition or readiness.
+
+## Minimum security owner handoff for initial operations
+
+The [read-only interface review](evidence/design-audit/minimum-security-owner-interface-review.json)
+pins current owner worktree exports and procedural source, including dirty-status
+flags. Policy evaluation/read registration/authority guard/write evaluation/
+disclosure exports are owner APIs, not proof of an adopted native PostgreSQL port.
+Use existing owner case IDs to specify the exact required subset:
+
+| Initial capability | Required owner handoff and evidence |
+| --- | --- |
+| Administrative installation | Exact installer/excluded-assessor identity, protected routine/role/grant inventory and ordinary-role separation; B05/B06/B09/B11/B12/B14 plus activation rollback L12. No application authority from an administrative fixture. |
+| Key/edge and compiled reads | Authenticated subject mapping, complete native owner/fact mapping, original registration and authority lifetime, protected output; applicable B01–B04/B10/B13/B15 and L03–L06/L11/L13/L14. Actual same-local-name/document qualification and empty/hidden cases remain required. |
+| Apply/import/dry-run | Registered old/new-state and field-write authority with effect/publication lifetime; L01/L02/L03/L11/L12 and relevant bypass/inventory cases. Retain denied-operation zero effects and native actor versus asserted-origin separation. |
+| Unsupported masks/history/streaming | Explicit pre-effect refusal under B07–B09/L04/L07–L10 until exact supported interpretation/native subset is adopted. An unsupported profile cannot weaken reports or expose protected facts. |
+
+This table stages the first installed capabilities; it does not delete any owner
+acceptance case or Truss full-release obligation. Applicable resource/performance
+B16 and complete custody B12 remain required for every advertised profile.
+The concrete packet must name interface/build/model/policy/mapping/native profile
+pins, actual roles/routines/installation procedure and original case receipts.
+Truss owns adapter composition and native issuer wiring, while the owner retains
+policy meaning, authority/current-fact resolution and protected publication.
+No cross-chat message was sent and no unfinished API was adopted by this review.
