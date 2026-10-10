@@ -1,0 +1,58 @@
+{
+  "iteration": "Original prepared-resource custody and native operation arbitration composition",
+  "reviewer": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "task": "/root/astra_plan_review",
+    "planDisposition": "Approved private integration slice; successful release disabled pending qualified producers",
+    "completedDisposition": "Approved final private prerequisite composition; no remaining blockers in scoped source",
+    "fixedFindings": [
+      "Exact close-attempt cleanup cannot quarantine refused contender",
+      "Confirmed creation survives failed live publication",
+      "Capacity checks precede mutating resource preflight",
+      "Original pending binding reserves guard before registry acquisition and session allocation",
+      "Shared service locking prevents cross-boundary retention overwrite",
+      "Completion attempt freezes ordinary call admission; locator is not completion artifact",
+      "Only definitive original nonacquisition, including abandoned attempts, clears pending ownership"
+    ],
+    "independentEvidence": "18 final native arbitration cases and 20 resource/boundary cases passed independently on PostgreSQL16.15/pg8000native1.31.5"
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_native_pg8000.py": "c871a2e77aec0d68ed2434d4782043baf85cc1176b904338cfecfccafe27a44d",
+    "packages/python/src/truss/_native_arbitration.py": "ea38f4480368e8d250b3d8072f086c5c4e778c0360c2393d4d095da74085c7ce",
+    "packages/python/tests/test_native_resources.py": "5979cf9acd42e5e5003b2f262ed06384061dca7a887cb4f5b8c7b1046dfdc2e8",
+    "packages/python/tests/test_native_arbitration.py": "980ec7fb51bce827b864610ae4a5966692bddaf65c89f977832a828accec2158"
+  },
+  "nativeProfile": {
+    "driver": "pg8000 1.31.5 native",
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "runtime": "pgserver 0.1.4+truss.pg16.15 corrected candidate"
+  },
+  "fullSourceSuite": {
+    "tests": 229,
+    "result": "passed",
+    "logSha256": "b3092a6d1c03607ef2de2fa6036fcd47b53036c3682c1a1be0d76e60cbd2b309"
+  },
+  "finalInstalledTests": {
+    "tests": 97,
+    "result": "passed",
+    "nativeTests": 72,
+    "sourceInstalledByteMatchingModules": 36,
+    "cwd": "/private/tmp",
+    "logSha256": "4f11f0646c3c6aed88f2ae83b50e07241e25755f901921f492eeae7b293f33ba",
+    "scope": "Installed wheel with source fixtures and existing dependencies; not clean distribution or public consumer workflow"
+  },
+  "wheelSha256": "d0ca92304288e275f60563d023685a079b872fb5f415bf97abd9b511fe0b151d",
+  "scope": "Private cooperative native/arbitration composition with original call and prepared resource custody. Successful release disabled; locators provide no completion authority. Native tests use administrative connections, not protected ordinary-role admission.",
+  "remainingGates": [
+    "Qualified buffer/result custody and cleanup producers",
+    "Qualified caller-state restoration and containment/recovery",
+    "Successful original completion publication and arbitration release",
+    "Complete selected resource profile and default runtime packaging",
+    "Public ReferenceAssembly and capabilities; accepted catalog-to-feed workflow"
+  ],
+  "ownerAlignment": {
+    "securityOwner": "Native metadata custody and drift/refusal evidence progressed; atomic check-to-use and dependency closure remain open. No new protected authority contract adopted."
+  }
+}

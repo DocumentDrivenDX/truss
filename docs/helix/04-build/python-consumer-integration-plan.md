@@ -176,3 +176,24 @@ Astra Ultra independently passed all 19 adoption tests and approved this private
 iteration. See [evidence/python-contracts-iteration6.json](evidence/python-contracts-iteration6.json).
 C02 remains open for shared arbitration/native resource-ledger integration and
 containment/recovery qualification before public adoption.
+
+
+Iteration 7 composes native execution with the original private arbitration
+registry rather than creating another operation owner. One retained session binds
+the original admitted attempt/lease/context, generation and guard. Calls register
+before native submission; pending binding reserves the original guard before
+registry acquisition and prevents release across lost replies or allocation
+failure. Completion attempts freeze ordinary submission; the session locator
+identifies custody and does not manufacture a completion artifact. Shared service locking preserves sessions across multiple native
+boundaries. Prepared resources preallocate custody before SQL and retain actual
+original statement-name arguments and ParseComplete/CloseComplete events.
+Driver exceptions and Python publication failures do not erase native facts.
+Count exhaustion checks precede mutating resource preflight.
+
+This is prerequisite composition, not completed operation release. All failed
+creation paths conservatively quarantine. Successful release stays disabled until
+buffer, restoration and containment obligations have qualified original producers;
+unknown leases and native guards remain retained. C02 is still open. Continue by
+implementing the selected result/buffer custody and cleanup producers, then
+qualify native operation restoration/recovery against these retained ledgers.
+Evidence: [evidence/python-contracts-iteration7.json](evidence/python-contracts-iteration7.json).

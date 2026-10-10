@@ -383,3 +383,31 @@ reconcile lost replies. Custody survives executor disposal and garbage collectio
 Retention bounds cover claim counts, not total heap usage. Shared arbitration,
 native resource-ledger verification and containment/recovery remain required
 before exposing public host adoption.
+
+
+The private `_native_arbitration` composition now binds the original admitted
+lease/context, transaction generation and native operation guard to one retained
+session. Every submitted call is registered before native invocation; original
+completion survives later lifecycle/publication failure. Pending binding reserves the guard before registry acquisition, including
+lost acquisition replies and session-allocation faults. A service lock preserves sessions across
+concurrent connections. Disposal and exact call-count exhaustion refuse before
+submission without changing existing resource state.
+
+Prepared wrappers and resource records are retained before preparation SQL.
+The selected driver supplies the exact statement-name argument before PARSE;
+original ParseComplete and CloseComplete acknowledgements distinguish native
+creation/closure from driver return and wrapper publication. A creation followed
+by Describe failure and a closure followed by bookkeeping failure retain those
+native facts. False acknowledgement flags mean unconfirmed, never proven absence.
+Only supported prepared calls after attachment are tracked; pre-existing host
+resources and driver buffers remain unqualified. The session locator identifies
+custody and is not a completion artifact. A completion attempt freezes ordinary
+submission while preserving in-flight calls and unresolved ownership.
+All failed creation paths conservatively quarantine; there is no qualified
+known-failed resource recovery yet. Retention limits count original records,
+including closed records, and do not qualify heap or driver buffer usage.
+
+Successful arbitration release remains disabled in this composition. Even exact
+original evidence with all observed prepared resources closed cannot establish
+buffer closure, caller-state restoration or containment. The original session,
+lease and guard stay retained as unresolved; public adoption remains unavailable.

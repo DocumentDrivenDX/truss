@@ -31,15 +31,25 @@ class NativeCall:
     final_status: bytes | None
     original_control: object = None
     revision: int = 0
+    original_resource: object = None
 
 
 class NativeBoundary:
-    def __init__(self, connection, *, event_bytes=65536, event_count=256):
+    def __init__(self, connection, *, event_bytes=65536, event_count=256, prepared_limit=256):
         from pg8000.native import Connection
         if version('pg8000') != '1.31.5' or type(connection) is not Connection:
             raise NativeBoundaryRefusal('Unselected original driver')
         if type(event_bytes) is not int or event_bytes < 1 or type(event_count) is not int or event_count < 1:
             raise ValueError('Positive exact capture limits required')
+        if type(prepared_limit) is not int or prepared_limit < 1:
+            raise ValueError('Positive exact prepared custody limit required')
+        self._resources = ()
+        self._prepared_limit = prepared_limit
+        self._active_resource = None
+        self._operation_ledger = None
+        self._pending_operation_ledger = None
+        self._native_arbitration_sessions = ()
+        self._native_arbitration_bindings = ()
         self._connection = connection
         self._lock = Lock()
         self._operation = None
@@ -57,10 +67,43 @@ class NativeBoundary:
         with _attachment_lock:
             if connection._transaction_status != b'I' or hasattr(connection, '_truss_native_boundary'):
                 raise NativeBoundaryRefusal('Requires original idle, unattached connection')
-            originals = {code: connection.message_types[code] for code in (b'C', b'E', b'Z')}
+            originals = {code: connection.message_types[code] for code in (b'C', b'E', b'Z', b'1', b'3')}
             hooks = {code: self._hook(code, handler) for code, handler in originals.items()}
             connection.message_types.update(hooks)
             connection._truss_native_boundary = self
+            original_parse = connection.send_PARSE
+            original_close = connection.close_prepared_statement
+            def parse(name, *args, **kwargs):
+                self._resource_name('prepare', name)
+                return original_parse(name, *args, **kwargs)
+            def close_prepared(name, *args, **kwargs):
+                self._resource_name('close', name)
+                return original_close(name, *args, **kwargs)
+            connection.send_PARSE = parse
+            connection.close_prepared_statement = close_prepared
+
+    def _resource_name(self, kind, name):
+        # Original driver argument retained before native submission; no inferred
+        # name from set differences or caller-created statement inventory.
+        with self._lock:
+            descriptor = self._active_resource
+            if not self._calling or descriptor is None:
+                return
+            if descriptor[0] != kind:
+                self._quarantined = True
+                raise NativeBoundaryRefusal('Foreign resource submission')
+            resource = descriptor[1]
+            if type(name) is not bytes or not name or not name.endswith(b'\0'):
+                self._quarantined = True
+                raise NativeBoundaryRefusal('Original statement name unavailable')
+            if kind == 'prepare':
+                if resource.name is not None:
+                    self._quarantined = True
+                    raise NativeBoundaryRefusal('Repeated resource creation')
+                resource.name = name
+            elif name != resource.name:
+                self._quarantined = True
+                raise NativeBoundaryRefusal('Original close name mismatch')
 
     def _hook(self, code, original):
         def capture(data, context):
@@ -94,24 +137,33 @@ class NativeBoundary:
 
     def release_operation(self, token):
         with self._lock:
-            if token is not self._operation or token is None or self._calling or self._quarantined:
+            if token is not self._operation or token is None or self._calling or self._quarantined or self._operation_ledger is not None or self._pending_operation_ledger is not None:
                 raise NativeBoundaryRefusal('Original operation cannot be released')
             self._operation = None
 
-    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None):
+    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None):
         with self._lock:
             if (self._quarantined or self._calling or
                     (self._operation is not None and token is not self._operation) or
                     (token is not None and token is not self._operation)):
                 raise NativeBoundaryRefusal('Native boundary unavailable or busy')
+            if (self._pending_operation_ledger is not None
+                    and self._operation_ledger is not self._pending_operation_ledger):
+                raise NativeBoundaryRefusal('Original native binding remains unresolved')
             if self._revision >= 18446744073709551615:
                 raise NativeBoundaryRefusal('Native coordination revision exhausted')
+            if self._operation_ledger is not None:
+                self._operation_ledger._check_call(self, token)
             if self._transaction_tracker is not None:
                 self._transaction_tracker._before(lifecycle)
             if preflight is not None:
                 preflight()
+            call_entry = None
+            if self._operation_ledger is not None:
+                call_entry = self._operation_ledger._reserve_call(self, token, resource, lifecycle)
             self._revision += 1
             self._active_control = lifecycle
+            self._active_resource = resource
             self._calling = True
             self._ready_error = None
             self._events, self._bytes, self._complete = [], 0, True
@@ -134,12 +186,16 @@ class NativeBoundary:
                 # only return/raise settles the call, never the first Ready.
                 ready = bool(events) and events[-1].code == b'Z'
                 complete = self._complete and ready and not self._quarantined and (not raised or native_error)
-                self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control, self._revision)
+                self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control, self._revision, self._active_resource)
+                if call_entry is not None:
+                    call_entry.native_call = self.last_call
                 if closing or not complete:
                     self._quarantined = True
                 try:
                     if self._transaction_tracker is not None:
                         self._transaction_tracker._after(lifecycle, self.last_call)
+                    if on_settled is not None:
+                        on_settled(self.last_call, result)
                     if on_complete is not None and not raised:
                         on_complete(self.last_call, result)
                 except BaseException:
@@ -153,30 +209,102 @@ class NativeBoundary:
         return self._call(lambda: self._connection.run(sql, **params), token)
 
     def prepare(self, sql, *, token=None):
-        prepared = self._call(lambda: self._connection.prepare(sql), token)
-        return _Prepared(self, prepared)
+        prepared = _Prepared(self)
+        descriptor = ('prepare', prepared._resource)
+        def reserve():
+            if len(self._resources) >= self._prepared_limit:
+                raise NativeBoundaryRefusal('Prepared custody exhausted')
+            self._resources = (*self._resources, prepared)
+        def invoke():
+            prepared._original = self._connection.prepare(sql)
+            return prepared._original
+        try:
+            self._call(invoke, token, preflight=reserve, resource=descriptor,
+                       on_settled=prepared._created)
+            return prepared
+        except BaseException:
+            with self._lock:
+                if prepared in self._resources and prepared._resource.phase == 'reserved':
+                    prepared._resource.phase = 'unknown'
+                    self._quarantined = True
+            raise
 
     def close(self, *, token=None):
         return self._call(self._connection.close, token, closing=True)
 
 
+@dataclass
+class _PreparedResource:
+    name: bytes | None = None
+    phase: str = 'reserved'
+    create_call: NativeCall | None = None
+    close_call: NativeCall | None = None
+    native_created: bool = False
+    native_closed: bool = False
+    close_attempt: object = None
+
+
 class _Prepared:
-    def __init__(self, boundary, original):
-        self._boundary, self._original = boundary, original
+    def __init__(self, boundary):
+        self._boundary = boundary
+        self._original = None
+        self._resource = _PreparedResource()
         self._closed = False
 
+    def _created(self, call, result):
+        resource = self._resource
+        resource.create_call = call
+        parsed = [e for e in call.events if e.code == b'1']
+        resource.native_created = len(parsed) == 1 and parsed[0].payload == b'' and resource.name is not None
+        if (call.capture_complete and not call.driver_raised and resource.native_created
+                and result is self._original and self._original is not None
+                and self._original.name_bin == resource.name):
+            try:
+                self._publish_live()
+            except BaseException:
+                resource.phase = 'unknown'
+                raise
+        else:
+            resource.phase = 'unknown'
+            self._boundary._quarantined = True
+
+    def _publish_live(self):
+        self._resource.phase = 'live'
+
     def _open(self):
-        if self._closed:
-            raise NativeBoundaryRefusal('Original prepared statement closed')
+        if self._resource.phase != 'live' or self._closed:
+            raise NativeBoundaryRefusal('Original prepared statement unavailable')
 
     def run(self, *, token=None, **params):
         return self._boundary._call(lambda: self._original.run(**params), token,
-                                    preflight=self._open)
+                                    preflight=self._open, resource=('execute', self._resource))
+
+    def _closing(self, descriptor):
+        self._open()
+        self._resource.close_attempt = descriptor
+        self._resource.phase = 'closing'
+
+    def _close_settled(self, call, result):
+        resource = self._resource
+        resource.close_call = call
+        closed = [e for e in call.events if e.code == b'3']
+        resource.native_closed = len(closed) == 1 and closed[0].payload == b''
+        if call.capture_complete and not call.driver_raised and resource.native_closed:
+            self._closed = True
+            resource.phase = 'closed'
+        else:
+            resource.phase = 'unknown'
+            self._boundary._quarantined = True
 
     def close(self, *, token=None):
-        def close_original():
-            result = self._original.close()
+        descriptor = ('close', self._resource)
+        try:
+            return self._boundary._call(self._original.close, token,
+                                        preflight=lambda: self._closing(descriptor), resource=descriptor,
+                                        on_settled=self._close_settled)
+        except BaseException:
             with self._boundary._lock:
-                self._closed = True
-            return result
-        return self._boundary._call(close_original, token, preflight=self._open)
+                if self._resource.phase == 'closing' and self._resource.close_attempt is descriptor:
+                    self._resource.phase = 'unknown'
+                    self._boundary._quarantined = True
+            raise
