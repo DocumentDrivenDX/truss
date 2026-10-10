@@ -1852,3 +1852,23 @@ attribute/result/effective-fixture-right correspondence across all four routines
 PA01 now has this finite registration component alongside elevation refusal.
 Full installed dependency/data/DDL closure and protected original actor/capture/
 authority remain missing; temporary fixture identities and grants are unadopted.
+
+### Minimal ordinary admission rights and missing dependency control (2026-10-10)
+
+The [49-observation receipt](evidence/design-audit/four-family-ordinary-denial-native.json)
+extends native registration/elevation evidence with a separate ordinary login
+receiving only schema USAGE and admission EXECUTE. Base and asserted-origin
+entry refuse42501; direct registry SELECT/UPDATE/DELETE refuse42501. Confirmed
+containment leaves no registry rows. Epoch/configuration entries instead
+refuse42883 for original runtime_lock_source_epoch missing from this intentionally
+registration-only fixture. Their original native messages are retained separately:
+this is a missing fixture dependency, not ordinary permission-closure proof or
+a claim that no helper implementation exists in the repository.
+
+The initial harness incorrectly expected42501 for every family; the actual result
+changed the experiment's classification. No completed receipt was overwritten.
+Next jointly install the original epoch/configuration dependencies and qualify
+full original native invocation/data/ACL closure before asserting advanced
+ordinary-role denial. Current same-source registration and nested-DEFINER guard
+checks cannot certify those unexecuted paths. Public protected APIs and all
+semantic body gates remain closed. Broad earlier fixture grants are not adopted.
