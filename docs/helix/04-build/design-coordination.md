@@ -1321,3 +1321,23 @@ current authority/coherent cut and publication closing checks. Databricks DECIMA
 lowering does not select Truss's native ordinal strategy. Truss must not implement
 its own relationship lowerer, policy walker or result-prefix proof. No cross-chat
 message or unfinished API adoption occurred.
+
+
+### Prepared security-owner resumption handoff
+
+A fresh read of “Assess security control support” still reports latest turn
+01a125c2 failed and thread status systemError; no live run or new closed interface
+is observed. The [prepared request](evidence/design-audit/security-owner-resumption-request.json)
+records the exact destination and message bytes at Truss28d0786c. It asks for
+original connecting-person/physical connection/attempt correspondence, complete
+requirement instances and old/new authority, exclusion/freshness/settlement/
+publication closing, and exact native diagnostic/role/configuration qualification.
+It names PA01–PA04's concrete next joint exit and the retained-state origin
+counterexample, preserving PA05 and all seven semantic bodies as Truss work.
+
+This request is prepared, not sent or acknowledged. The chat remains stopped;
+no waiting handle or owner delivery date is inferred. Sending a prompt requires
+explicit human cross-chat authorization; that is an operational authorization,
+not reopening product decisions or granting native/runtime authority. Truss must
+continue independently owned composition/installation work and cannot substitute
+unfinished owner APIs or a local policy walker for the missing closed interface.
