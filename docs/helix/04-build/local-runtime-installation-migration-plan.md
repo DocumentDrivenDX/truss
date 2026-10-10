@@ -1332,3 +1332,20 @@ native ordinary-role allowed/denied paths on the same complete installation.
 Graph source/key/endpoint and supplied-dataset components remain reusable candidates
 under their exact owner meaning; Truss owns composition and does not fork their
 policy resolver. The seven-body/account/ready-publication gates remain open.
+
+## Shared structural registry decoder evidence
+
+The [Python/TypeScript replay](evidence/design-audit/python-typescript-operation-registry-parity.json)
+passes 17 independently authored vectors through both original decoders. It covers
+all four phase shapes, exact native integer maxima, duplicate/foreign ordinals,
+noncanonical and overflowing integers, malformed byte carriers, and the exact byte
+limit versus one byte over. Accepted rows retain the complete original cell values.
+The fixture and checker are retained under tests/fixtures/operation-registry-decoder.json
+and scripts/check-operation-registry-parity.py, with original source fingerprints.
+
+This is private source-component parity, not installed-wheel qualification,
+the full shared consumer corpus, native observation completeness, or transaction
+authority. An assigned empty registry is structurally valid; its permission to
+perform an operation still requires the native OC02/OC06 selection rules and the
+complete original transaction observation. Continue with original driver/account
+composition and the complete installation gates above.

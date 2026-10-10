@@ -1,0 +1,445 @@
+{
+  "interfaceVersion": "truss-operation-registry-decoder-vectors/0.1.0",
+  "scope": "Independent structural cell vectors; no native completeness/authority or commit proof",
+  "cases": [
+    {
+      "id": "admitted-original",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "admitted"
+    },
+    {
+      "id": "effects_ready",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "effects_ready",
+          "0",
+          "0",
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "admitted"
+    },
+    {
+      "id": "row_sealed",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "row_sealed",
+          "0",
+          "0",
+          "0",
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "admitted"
+    },
+    {
+      "id": "application_finalized",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "application_finalized",
+          "0",
+          "0",
+          "0",
+          "0",
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          "ff"
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "admitted"
+    },
+    {
+      "id": "native-integer-maxima",
+      "actualXid": "18446744073709551615",
+      "rows": [
+        [
+          "18446744073709551615",
+          "9223372036854775807",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "admitted"
+    },
+    {
+      "id": "assigned-empty-structural-only",
+      "actualXid": "123",
+      "rows": [],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "admitted"
+    },
+    {
+      "id": "unassigned-empty",
+      "actualXid": null,
+      "rows": [],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "duplicate-original-ordinal",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ],
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "foreign-xid",
+      "actualXid": "124",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "premature-readiness",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          "0",
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "empty-byte-carrier",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "uppercase-byte-carrier",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "FF",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "noncanonical-ordinal",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "01",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "ordinal-overflow",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "9223372036854775808",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "unknown-phase",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "unknown",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 4096,
+      "expected": "refused"
+    },
+    {
+      "id": "exact-byte-limit",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 35,
+      "expected": "admitted"
+    },
+    {
+      "id": "one-byte-over",
+      "actualXid": "123",
+      "rows": [
+        [
+          "123",
+          "0",
+          "mutation",
+          "admitted",
+          "0",
+          null,
+          null,
+          null,
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          null
+        ]
+      ],
+      "maxRows": 8,
+      "maxBytes": 34,
+      "expected": "refused"
+    }
+  ]
+}
