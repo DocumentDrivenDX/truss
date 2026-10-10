@@ -868,3 +868,36 @@ replacement, truncation or generic shape-success may silently widen the native
 profile. Refuse unsupported identity under the original selected native profile
 before lookup/submission. The generic host syntax/codec remains data interpretation,
 not permission to manufacture or submit an installation identity.
+
+## Actual native address encoder component
+
+`packages/postgresql/native/operation-address/encoder.sql` now provides the private
+candidate operation_address_original(text,xid8,bigint) -> bytea. It is INVOKER,
+VOLATILE, PARALLEL UNSAFE, called on null input with explicit refusal, and has
+fixed pg_catalog/pg_temp search path and PUBLIC EXECUTE revoked. Native UTF8
+identity text and typed unsigned64 xid/nonnegative bigint ordinal produce the
+existing compact four-string address; input data never creates registry authority.
+
+The encoder preflights framing/native integer strings and original UTF8 bytes,
+then counts escape expansion before constructing JSON output. It checks final
+native bytes against that preflight. Native text rejects NUL; no replacement or
+widened host-string support is inferred. Complete native allocator/work/account/
+deadline qualification remains required beyond the bounded loop/output procedure.
+
+The [UMF source receipt](evidence/design-audit/operation-address-source.json) proves
+exact archive/reload/guarded export with existing owner APIs. Declaration coverage
+remains partial (zero declarations/two unhandled statements); UMF does not interpret
+PL/pgSQL authority semantics. The
+[native encoder receipt](evidence/design-audit/operation-address-encoder-native.json)
+executes that actual owner export on PostgreSQL16.15 and passes 19 observations:
+eight Python scalar-byte correspondences, actual fixture identity/attributes/ACL,
+NUL refusal/confirmed same-xid containment, null/negative refusals, exact 8-MiB
+output, one-byte/escape-expansion overflow, native maximum domains and actual
+ordinary-role direct-call denial.
+
+RC01 gains an actual native encoder component, separate from the seventeen
+capacity helpers. Do not replace the seven semantic bodies or their 49 unresolved
+bindings with this codec, adopt the administrative postgres owner/OID as production
+registration, or use callable success as authority to resolve a caller address.
+Original registered owner/dependency/profile/resource adoption and RC02–RC06 remain
+incomplete. No installer, public operation or managed-service gate is promoted.
