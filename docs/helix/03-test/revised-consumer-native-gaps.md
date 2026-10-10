@@ -128,3 +128,13 @@ read. Lost containment cannot be replaced by an independent unchanged row count.
 This native component supports the ordering requirement only; the concrete
 Truss relationship violation, complete journals/receipts/accounts and actual
 Python dry-run API remain not_run.
+
+
+The [fresh-state replay](../04-build/evidence/design-audit/python-dry-run-native-savepoint-fresh.json)
+uses the revised witness with explicit fresh data-directory/receipt arguments.
+Both must be absent before native startup; receipt creation is exclusive.
+All four native observations pass again. The [reuse refusal](../04-build/evidence/design-audit/python-dry-run-savepoint-reuse-refusal.json)
+returns before startup and preserves the original receipt hash. The first exact
+harness source is archived separately as python_dry_run_savepoint_native_original.py;
+its original receipt is unchanged. Preflight is a trusted local harness check,
+not a hostile filesystem-race guarantee or Truss transaction/security qualification.

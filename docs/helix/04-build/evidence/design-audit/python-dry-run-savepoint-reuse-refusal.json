@@ -1,0 +1,9 @@
+{
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "Refuse existing data directory or receipt before native startup\n",
+  "originalReceiptSha256": "c885560f43476d034650c629b48c8d02c5cdbd6b5d87c1bf2329a8fefcd947be",
+  "receiptUnchanged": true,
+  "scope": "Preflight reuse refusal; no native startup path invoked",
+  "scriptSha256": "13b8716dba3ed01c889ad8358aa65e8fa77c0801cd7335c8dddb1608f61dc642"
+}
