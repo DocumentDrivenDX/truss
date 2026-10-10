@@ -20,9 +20,9 @@ removes its registry row; the next admission in the same actual top-level xid
 returns0 again. The [receipt](evidence/design-audit/pgserver-operation-ordinal-frontier.json)
 records contractConformant=false. Successful reproduction is evidence of a gap,
 not a supported operation. Synthetic nonempty input bytes exercise allocation
-only and establish no original artifact or mutation admission. The other three
-families have the same inspected source expression; they were not executed by
-this reproduction.
+only and establish no original artifact or mutation admission. That base reproduction does not execute the other families. Separate asserted-origin
+and epoch-context reproductions below establish the same native conflict; the
+configuration-context family still has source inspection only.
 
 ## Corrected composition requirements
 
@@ -214,3 +214,21 @@ driver dependencies; driverPortQualified remains false. It supplies neither
 original account/control permits nor lost-COMMIT/durable recovery qualification.
 Complete producer integration must preserve these distinct outcomes rather than
 classifying every exception as an unknown result or an already settled rollback.
+
+
+## Epoch-context rollback reproduction
+
+The [epoch-context probe](../../../scripts/check-pgserver-epoch-operation-ordinal-frontier.py)
+executes the original source-epoch0.16 layout, source-epoch lock and epoch admission
+routine against pgserver0.1.4 PostgreSQL16.2. It seeds an explicitly administrative
+marker/epoch fixture before the operation savepoint. Both admissions observe the
+same actual top-level xid and return ordinal0 after rollback removes the first
+operation. The [receipt](evidence/design-audit/pgserver-epoch-operation-ordinal-frontier.json)
+records contractConformant=false and verifies complete rollback removes the namespace.
+
+Both returned contexts preserve the expected installation, epoch and incarnation,
+original profile/evidence bytes, and asserted-origin/capture-profile bytes. These
+checks constrain the all-family allocator correction: replacing allocation must
+retain the advanced context capture. They do not admit those fixture bytes as
+trusted installation authority or qualify a protected producer. The configuration
+family's native rollback/capture reproduction remains outstanding.
