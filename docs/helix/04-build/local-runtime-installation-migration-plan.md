@@ -2441,3 +2441,32 @@ acceptance ladder. It preserves the existing public result variants: a complete
 qualified mismatch is verify drift; unavailable/incomplete collection yields
 observation_unavailable without partial payload. Component integrity terminology
 does not create a new public result type.
+
+
+## Private Python archive correspondence — 2026-10-10
+
+The private `_installation_archive` component retains immutable original seven-cell
+rows after whole retained-input count/byte preflight, exact descriptor names,
+canonical positive signed64 row IDs, supported roles and primitive carrier checks.
+It checks both native SHA byte columns against original artifact/identity bytes,
+refuses foreign installation IDs or duplicated physical row IDs, and compares
+full role/identity/bytes in both directions without collapsing duplicate identities.
+Order does not change correspondence; changed content with a recomputed digest
+remains a mismatch. Its frozen result retains original tuples/byte objects.
+
+Four focused tests cover original custody and missing/extra/duplicate/changed
+content, invalid IDs/digests/mutable values, bounds and contradictory expected
+registration. [Fresh installed132](evidence/design-audit/python-archive-installed-suite.json)
+retains29 source/wheel/installed matching modules and the actual107-import build
+gate. [Boundary controls](evidence/design-audit/python-archive-boundary-controls.json)
+retain16 allowed/forbidden subprocess controls. Original logs accompany evidence.
+
+This is private declared correspondence only, not current observer authority,
+original native producer/completion/cut admission, whole heap/work accounting or
+public matches/drift/unavailable classification. Registered expected artifacts
+remain independently trusted inputs. Empty results cannot prove absence or prior
+attempt settlement. Archive12 is existing native table/observer evidence; this
+new Python component has not yet been composed with actual native descriptors/
+completions/rows. Complete release, native observer and installation APIs remain
+unimplemented. Earlier132-predecessor128 and readiness-audit28-module snapshots
+retain their original scopes and do not enumerate the new module.

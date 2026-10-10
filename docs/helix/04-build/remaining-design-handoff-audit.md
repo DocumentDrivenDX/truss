@@ -3,8 +3,8 @@
 ## Current execution frontier — 2026-10-10
 
 The historical [Python source checkpoint](evidence/design-audit/python-capture-receive-source.json)
-passes119 tests. The current [fresh separately installed wheel](evidence/design-audit/python-scalar-shape-installed-suite.json)
-passes128 tests, including resource registration, native capture receive, physical tree and scalar carrier validation, with all28
+passes119 tests. The current [fresh separately installed wheel](evidence/design-audit/python-archive-installed-suite.json)
+passes132 tests, including resource registration, native capture receive, physical tree and scalar carrier and archive correspondence validation, with all29
 modules matching original source/wheel/installed bytes. Build/install/import/test
 logs are retained alongside the receipt. The earlier114/112-test wheels remain
 historical evidence rather than the current distribution checkpoint.
@@ -2096,8 +2096,8 @@ the native67 disconnected-cycle refusal/restoration and21-image cascade checks.
 The two checks are explicit private composition inputs; neither authenticates
 original source/scope or implements the native semantic commit validator.
 
-The [fresh installed wheel](evidence/design-audit/python-scalar-shape-installed-suite.json)
-passes128 tests with28 matching source/wheel/installed modules and105 checked
+The [fresh installed wheel](evidence/design-audit/python-archive-installed-suite.json)
+passes132 tests with28 matching source/wheel/installed modules and105 checked
 imports. [Boundary controls](evidence/design-audit/python-scalar-shape-boundary-controls.json)
 retain16 actual allowed/forbidden subprocess controls. Original logs accompany
 the receipt. Earlier124/119 checkpoints and native67 producers remain unchanged.
@@ -2222,3 +2222,32 @@ This is fixture-role/component evidence, not the actual public status API,
 complete registered release, selected effective-rights/dependency/security profile
 or installed qualification. Original Archive9 producer/evidence remain unchanged;
 complete PKG-01/02/08 and populated migration gates remain open.
+
+
+## Private Python archive correspondence — 2026-10-10
+
+The private `_installation_archive` component retains immutable original seven-cell
+rows after whole retained-input count/byte preflight, exact descriptor names,
+canonical positive signed64 row IDs, supported roles and primitive carrier checks.
+It checks both native SHA byte columns against original artifact/identity bytes,
+refuses foreign installation IDs or duplicated physical row IDs, and compares
+full role/identity/bytes in both directions without collapsing duplicate identities.
+Order does not change correspondence; changed content with a recomputed digest
+remains a mismatch. Its frozen result retains original tuples/byte objects.
+
+Four focused tests cover original custody and missing/extra/duplicate/changed
+content, invalid IDs/digests/mutable values, bounds and contradictory expected
+registration. [Fresh installed132](evidence/design-audit/python-archive-installed-suite.json)
+retains29 source/wheel/installed matching modules and the actual107-import build
+gate. [Boundary controls](evidence/design-audit/python-archive-boundary-controls.json)
+retain16 allowed/forbidden subprocess controls. Original logs accompany evidence.
+
+This is private declared correspondence only, not current observer authority,
+original native producer/completion/cut admission, whole heap/work accounting or
+public matches/drift/unavailable classification. Registered expected artifacts
+remain independently trusted inputs. Empty results cannot prove absence or prior
+attempt settlement. Archive12 is existing native table/observer evidence; this
+new Python component has not yet been composed with actual native descriptors/
+completions/rows. Complete release, native observer and installation APIs remain
+unimplemented. Earlier132-predecessor128 and readiness-audit28-module snapshots
+retain their original scopes and do not enumerate the new module.

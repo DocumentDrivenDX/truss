@@ -13,6 +13,7 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_installation_archive': {'dataclasses', 'hashlib'},
     '__init__': {'truss.local_runtime'},
     '_acceptance_json': {'json'},
     '_directory_resources': {'os', 'stat', 'threading', 'truss._installation_resources'},

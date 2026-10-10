@@ -20,8 +20,8 @@ ddx:
 The current [frontier](remaining-design-handoff-audit.md#current-execution-frontier--2026-10-10)
 separates verified private components from release gates. The source suite
 has119-test historical source evidence; the current fresh independently pinned
-installed wheel passes128 with all28 source/wheel/installed modules matching,
-including resource preflight, typed-image receive, physical tree and scalar carrier validation. Generation/typed image/touch/cohort components
+installed wheel passes132 with all29 source/wheel/installed modules matching,
+including resource preflight, typed-image receive, physical tree, scalar carrier and archive correspondence validation. Generation/typed image/touch/cohort components
 exist, but do not establish a protected callable engine or accepted installation.
 Prioritize the following existing work; do not reopen accepted product choices.
 
