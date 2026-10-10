@@ -843,3 +843,28 @@ Output preflight is not complete peak-heap/work/deadline or original resource-
 account admission. Existing input strings, serializer overhead and native encoder/
 text domain remain independently qualified responsibilities; no installed authority,
 public API or RC02–RC06 completion is inferred.
+
+### Native scalar-spelling correspondence checkpoint
+
+The [native address oracle receipt](evidence/design-audit/operation-address-native.json)
+compares the Python candidate against PostgreSQL16.15's original builtin to_json
+string spelling, composed with fixed compact array framing and convert_to UTF8.
+Eight independent samples cover ordinary identifiers, quote/backslash/control
+escapes, Latin text, Unicode line separators, scalar encoding boundaries and
+supplementary characters. Complete native bytes match the Python encoder and
+strict decoder while preserving the actual assigned native xid and manually
+selected ordinal gaps. Two additional observations verify SQLSTATE22021 for NUL
+in native text and unchanged xid after confirmed savepoint containment.
+
+This is actual primitive correspondence, not an installed registered encoder.
+The full statement and original Python/checker pins are retained; no source routine
+identity/owner/private ACL/dependency or complete native domain qualification is
+supplied. Manually chosen ordinals are not original host issuer evidence. All
+RC02–RC06 and full semantic/current-authority/resource installation exits remain.
+
+Native installation-identity admission must preserve the supported text domain.
+A host JSON string can represent NUL, while PostgreSQL text refuses it; no escaping,
+replacement, truncation or generic shape-success may silently widen the native
+profile. Refuse unsupported identity under the original selected native profile
+before lookup/submission. The generic host syntax/codec remains data interpretation,
+not permission to manufacture or submit an installation identity.

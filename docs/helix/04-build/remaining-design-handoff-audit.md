@@ -1586,3 +1586,14 @@ protected owner/current-authority integration remain required; do not silently
 relabel or manufacture fields. The new parser closes a structural component gap,
 not a native body or release criterion. All seven bodies/49 binding fields and
 full 45-story/167-criterion acceptance scope remain open.
+
+### Native address primitive correspondence
+
+The [native scalar oracle](evidence/design-audit/operation-address-native.json)
+passes ten PostgreSQL16.15 observations, with eight full-byte Python/native address
+comparisons and native text-NUL refusal/confirmed same-xid containment. RC01 gains
+finite primitive correspondence; an installed encoder and original native profile
+are not qualified. Unsupported native identity text must refuse under the original
+admission profile, without silent escaping/replacement or inferring authority from
+host JSON representability. Complete registry resolution, owner authority and all
+seven semantic bodies remain unfinished.
