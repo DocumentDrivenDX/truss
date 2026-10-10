@@ -155,3 +155,23 @@ upgrade/force-reinstall, public-index availability or native qualification. The
 release gate still requires a resolvable, identifiable admitted server payload
 and actual post-resolution inspection rather than assuming distribution equality
 identifies native bytes.
+
+### Fresh offline normal-resolution checkpoint
+
+The [resolved local install receipt](evidence/design-audit/python-offline-resolved-local-install.json)
+now records a new isolated environment whose absence was checked before creation.
+Normal pip dependency resolution, with no `--no-deps`, installed the current
+Truss wheel with `[local]` from explicitly supplied private corrected and pinned
+dependency wheel directories. All five runtime distributions match the selected
+versions; pip/setuptools are recorded separately. `pip check` passes. The installed
+CLI starts PostgreSQL16.15 on its own data directory, reports installation
+not_checked/local_postgresql_only and exits successfully. An earlier dry run
+against the incomplete wheelhouse correctly failed for missing fasteners; it
+selected the corrected pgserver rather than rejecting its local version.
+
+This closes fresh offline resolution and local lifecycle for this supplied
+macOS27 arm64/Python3.11 tuple. It does not close public artifact availability,
+fresh public-index resolution, upgrade/force-reinstall schedules, complete
+installed tests or engine/schema/security acceptance. The retained resolver
+report records actual artifact hashes; the corrected private wheelhouse remains
+an interim engineering input rather than a published consumer dependency.
