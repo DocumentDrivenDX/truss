@@ -3731,3 +3731,44 @@ successful acquisition. All44 methods/boundaries pass;109 current/archive source
 pins match,1614 native payload pins and both named independent cleanup receipts
 remain retained. Typed-edgeffb76425 is the earlier source-qualified predecessor.
 No additional acceptance promotion or independent review is claimed.
+
+
+### Native graph fact projection and unrelated business writes — 2026-10-11
+
+Previous turn published whole-table flat/edge fact cuts directly to main0a804ed5.
+That read component rejects every own edge write, including unrelated business
+relationships. The separate native association-projection candidate implements
+immutable native-xid selected-type scope, original context/evidence correspondence,
+monotonic union/cap32, actual epoch/graph lock prerequisites, selected OLD/NEW row
+exclusion and separate TRUNCATE exclusion. A fixed private scope storage fragment
+is retained through the UMF PostgreSQL owner with exact saved-model reload/export;
+it is not a new core layout/profile or reference binding. No per-type storage or
+policy-revision trigger DDL, PUBLIC grant, ordinary mutation API or support flag.
+
+Pre-merge native packet `evidence/python-psycopg-epoch-cut/bbc770ef-7be9-4975-b19c-123377a0579a`
+passes55 tests (11 projection,10 whole-fact, eight epoch,26 adoption),116 frozen
+current/archive source pins,1614 native payload pins and three independently named
+stop0/status3/socket removals. Unrelated mentors edges can be inserted/updated/
+deleted while works_on membership stays equal. Selected rows and old/new type
+reclassification refuse; retained scope cannot shrink, wrong evidence/shape/
+missing definition/overflow and foreign xid refuse without partial rows. Original
+native rollback removes scope; replica mode preserves fencing. Omitted required
+association control permits membership deletion, demonstrating the incomplete
+producer-membership premise rather than admitting that path.
+
+Formal `evidence/graph-fact-projection-formal/4c383f74-41b5-484d-b355-0ffffd16a1ab`
+passes11 queries (four UNSAT/seven SAT), exact saved SMT and fresh-context replay.
+Required projection is preserved for arbitrary one-row changes when native scope
+contains every required type, actual OLD/NEW checks are complete and cut/scope
+remain live. Monotonic scope extension preserves prior required coverage, not
+newly added baseline equality. OLD/NEW omission, missing required membership,
+TRUNCATE omission and shrink retain witnesses. Initial625da1e6 records the earlier
+eight-test source tuple. No SQL/driver/savepoint/trigger, original dependency
+issuer, full atomic effects or final-disclosure refinement is claimed.
+
+Complete semantic dependency-to-physical provider membership, installed entry/
+role/body/ACL closure, ordinary authenticated admission, other property/entity/
+context facts and shared-role/configuration sources remain required. Registry
+history/retention and ordinary protected mutation publication are unqualified.
+Checkpoint remains26/132 with106 missing; no binding/criterion is promoted. The
+full objective stays active and direct-main integration remains authorized.

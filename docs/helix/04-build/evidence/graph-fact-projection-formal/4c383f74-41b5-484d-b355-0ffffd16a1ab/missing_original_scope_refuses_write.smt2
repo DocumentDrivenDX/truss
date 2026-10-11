@@ -1,0 +1,25 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-datatypes ((Row 0)) (((absent) (edge (rel Int) (source Int) (target Int) (payload Int)))))
+(declare-fun held () Bool)
+(declare-fun known () Bool)
+(declare-fun new () Row)
+(declare-fun native_scope () (Array Int Bool))
+(declare-fun new_guard () Bool)
+(declare-fun key () Int)
+(declare-fun before () (Array Int Row))
+(declare-fun old_guard () Bool)
+(assert
+ held)
+(assert
+ (not known))
+(assert
+ (let ((?x16 (select before key)))
+(let ((?x37 (rel ?x16)))
+(let (($x38 (select native_scope ?x37)))
+(let (($x29 ((_ is edge ) ?x16)))
+(let (($x39 (and $x29 $x38)))
+(let (($x36 (not known)))
+(let (($x45 (or $x36 (and old_guard $x39) (and new_guard (and ((_ is edge ) new) (select native_scope (rel new)))))))
+(not (and held $x45))))))))))
+(check-sat)

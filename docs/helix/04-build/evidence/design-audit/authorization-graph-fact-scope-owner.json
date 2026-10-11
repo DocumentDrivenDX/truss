@@ -1,0 +1,7 @@
+{
+  "scope": "Original owner SQL import and exact saved-model reload/export only; no core layout/installed authority/profile qualification",
+  "sourceSha256": "d892cfb61cae06d895dbbdaa54ef0a95f158de7933da57cb577bc0b7fe4f1d61",
+  "modelSha256": "1e74ede66331edd8497731b539db6ae1faa50e4d7bca94f46dffe271928348d7",
+  "ddlSha256": "21f1df783bd272230e156291dee0c0a2ef74c26742cacc872158e6045658b709",
+  "reloadExact": true
+}

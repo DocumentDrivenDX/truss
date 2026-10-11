@@ -1956,3 +1956,36 @@ final disclosure remain required. Ordinary roles must not receive metadata DML
 merely to acquire table locks. The same private cut mechanism can cover existing
 flat relational and generic graph stores without per-type storage DDL, but no
 public installer or backend acceptance binding is activated.
+
+
+### Graph association projection candidate — 2026-10-11
+
+Whole-table fact guards are a conservative read component: on the shared edge
+store they also reject unrelated business edge writes. The separate private
+association projection candidate retains selected relationship type IDs in an
+immutable original native-xid scope registry. Its fixed UMF-retained storage
+adjunct is not part of the core0.16 installed profile. Registration requires actual
+epoch/current registry and graph SHARE modes, original READ COMMITTED/read-write
+invoker, bounded distinct declared IDs/evidence, known association definitions and
+original native context correspondence. Record actor/session role OIDs alongside
+xid/database/backend/names. Union registration cannot remove earlier IDs;32 IDs
+per native transaction is the selected cap. PUBLIC registry and routine access is
+revoked. Native rollback across registration removes both scope and cut.
+
+With an actual held graph ShareLock, a row guard refuses missing scope and any
+INSERT/UPDATE/DELETE whose OLD or NEW association type belongs to that retained
+scope. Unrelated typed business edges remain writable by this guard; this is not
+business-write authorization. A separate ALWAYS statement guard excludes TRUNCATE.
+Scopes are immutable while retained; historical rows/retention and complete
+installed lifecycle remain unqualified. No per-type tables or policy-revision
+trigger DDL is introduced. Complete original dependency membership and installed
+all-entry/role/trigger/body closure remain mandatory: registering the wrong
+association set demonstrably permits a required fact change despite actual SHARE.
+
+This association-presence subset does not protect arbitrary property/endpoint/
+entity/context dependencies by inference. Their original dependency/provider
+bindings and appropriate projection cuts remain required. Row transitions may
+have other earlier side effects; complete mutation/finalization and disclosure
+are not established by row-guard exclusion. Keep the earlier whole-table read
+profile separate and do not activate ordinary mutation API or release capability
+from this candidate.

@@ -541,3 +541,27 @@ countervariant as admitted behavior. Run10 fact controls, eight epoch controls a
 independent named cleanup for epoch/fact fixtures. Component evidence does not
 prove hidden-fact nondisclosure, ordinary Staff authentication, complete provider
 coverage, accepted graph catalog, source/role closure or protected final handback.
+
+
+### Graph projection native/formal controls — 2026-10-11
+
+Under actual epoch/edge cuts and retained original native scope, require INSERT,
+UPDATE and DELETE of unrelated typed business edges to succeed while a required
+membership edge stays equal. Selected association INSERT/UPDATE/DELETE and any
+TRUNCATE refuse. Reclassification both into and out of a selected type refuses
+using actual NEW and OLD values. Missing scope refuses even unrelated writes.
+Observe original native context/evidence; reject immutable scope UPDATE/DELETE/
+TRUNCATE, changed evidence, malformed/duplicate/unknown type lists, union overflow
+and foreign native xid insertion without partial rows. Monotonic extension retains
+and protects earlier types. Rollback across registration under the same parent xid
+removes scope/cut; fresh registration is explicit. Replica mode preserves guards.
+An omitted required association must remain an unsafe success countercontrol.
+
+The conditional SMT model uses unbounded symbolic edge IDs, opaque typed rows and
+required/native scope sets. Require complete-superset row preservation, missing
+scope/TRUNCATE refusal and monotonic coverage laws, with SAT business-write,
+omitted OLD/NEW guard, missing required membership, omitted TRUNCATE and scope
+shrink controls. Finite-history induction assumes native faithful row effects,
+continuous cuts and complete required scope at each step; newly added scopes need
+fresh baselines. These are CONTRACT-063/STP-056 B09/B11/B12/L03 and US-056 AC2/AC7/
+AC9/AC10 plus US-057 AC2 prerequisites, not authorization/finalization acceptance.
