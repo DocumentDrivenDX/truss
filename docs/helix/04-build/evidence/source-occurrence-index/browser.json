@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "browser": "153.0.8010.12",
+  "observed": {
+    "values": [
+      [
+        "",
+        "object",
+        "{\"a/b\":[9007199254740993,-0,\"é\"],\"~\":{}}"
+      ],
+      [
+        "/a~1b",
+        "array",
+        "[9007199254740993,-0,\"é\"]"
+      ],
+      [
+        "/a~1b/0",
+        "number",
+        "9007199254740993"
+      ],
+      [
+        "/a~1b/1",
+        "number",
+        "-0"
+      ],
+      [
+        "/a~1b/2",
+        "string",
+        "\"é\""
+      ],
+      [
+        "/~0",
+        "object",
+        "{}"
+      ]
+    ],
+    "copied": true,
+    "refusals": [
+      true,
+      true,
+      true
+    ],
+    "hostGlobals": []
+  },
+  "externalRequests": 0,
+  "sourceDigests": {
+    "packages/postgresql/src/acceptance-json.ts": "e7f4623c4581ec9a0d5ad7da3cb186afab6d0f9a5d19a52c77f666088a96ee33",
+    "tests/source-occurrence-index.test.ts": "b059ff157758bb0830f9ee94385814df070d21063fd86574a1665211ee0e7107",
+    "scripts/check-source-occurrence-browser.ts": "371570bde20c8f8b8b0396f812f0f65082efb4a8a9620dc904fae81d9578d832"
+  },
+  "scope": "Original JSON value indexing only; no semantic assertion coverage or native enforcement",
+  "runtimePremise": "Local Bun and Playwright installation; not hermetic"
+}

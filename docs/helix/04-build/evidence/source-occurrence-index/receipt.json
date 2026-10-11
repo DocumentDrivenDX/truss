@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "bun": "1.4.2",
+  "hostTests": 31,
+  "hostAssertions": 113,
+  "strictTypecheck": {
+    "exitCode": 0,
+    "scope": "acceptance-json.ts and source-occurrence-index.test.ts",
+    "premise": "local TypeScript and Bun/Node ambient declarations; not hermetic"
+  },
+  "sourceDigests": {
+    "packages/postgresql/src/acceptance-json.ts": "e7f4623c4581ec9a0d5ad7da3cb186afab6d0f9a5d19a52c77f666088a96ee33",
+    "tests/acceptance-json.test.ts": "77780d466eb34d7df2ae44aa0fe2250de07dc7c992ca7601e9ca505fcd8d8f1e",
+    "tests/source-occurrence-index.test.ts": "b059ff157758bb0830f9ee94385814df070d21063fd86574a1665211ee0e7107",
+    "scripts/check-source-occurrence-browser.ts": "371570bde20c8f8b8b0396f812f0f65082efb4a8a9620dc904fae81d9578d832"
+  },
+  "scope": "structural JSON value positions only",
+  "acceptancePromoted": false,
+  "sharedMemoryPremise": "Copies capture the bytes observed during the copy; no atomic snapshot of a concurrently mutated SharedArrayBuffer is claimed."
+}

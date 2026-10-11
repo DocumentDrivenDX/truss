@@ -1,0 +1,41 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/acceptance-json.test.ts:
+(pass) empty object [0.54ms]
+(pass) null boolean string array [0.11ms]
+(pass) legal whitespace [0.05ms]
+(pass) inert prototype name [0.02ms]
+(pass) valid escaped surrogate pair [0.06ms]
+(pass) distinct normalization forms [0.02ms]
+(pass) escaped equivalent duplicate [0.13ms]
+(pass) unpaired high surrogate [0.03ms]
+(pass) unpaired low surrogate [0.02ms]
+(pass) overlong utf8 [0.04ms]
+(pass) surrogate utf8
+(pass) out of range utf8 [0.01ms]
+(pass) outer number
+(pass) trailing data
+(pass) trailing comma
+(pass) bom
+(pass) comment
+(pass) opaque numeric artifact base64 [0.02ms]
+(pass) complete original input fixture preserves all native and converted custody [0.72ms]
+(pass) selected depth and container limits refuse before an over-limit output [2.22ms]
+(pass) raw byte and cumulative duplicate-name work are conjunctive ceilings [1.23ms]
+(pass) exact node ceiling counts containers and every scalar occurrence [17.64ms]
+
+tests/source-occurrence-index.test.ts:
+(pass) every original value has an ordered pointer and exact lexical span [0.37ms]
+(pass) escaped member identity and unicode retain exact source bytes [0.07ms]
+(pass) captured bytes and returned slices are independent of caller mutation [0.06ms]
+(pass) root primitives and empty containers remain complete occurrences [0.03ms]
+(pass) source admission still refuses duplicates invalid unicode and malformed grammar [0.07ms]
+(pass) discarded preflight tree does not replace original number lexemes [0.03ms]
+(pass) occurrence indexing applies conjunctive source and pointer work bounds [3.94ms]
+(pass) source copying never invokes caller species or own length callbacks [0.08ms]
+(pass) non-byte typed arrays cannot be silently narrowed into source bytes [0.06ms]
+
+ 31 pass
+ 0 fail
+ 113 expect() calls
+Ran 31 tests across 2 files. [92.00ms]
