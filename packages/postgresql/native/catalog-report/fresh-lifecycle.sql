@@ -7,7 +7,7 @@ BEGIN
   AND NOT p.prosecdef AND p.provolatile='v' AND NOT p.proisstrict AND NOT p.proleakproof
   AND p.prorettype='pg_catalog.trigger'::regtype AND p.prolang=(SELECT l.oid FROM pg_language l WHERE l.lanname='plpgsql')
   AND p.proparallel='u' AND p.proconfig=ARRAY['search_path=pg_catalog, pg_temp']
-  AND encode(sha256(convert_to(p.prosrc,'UTF8')),'hex')='0667ae15087aa60407a9b131a3cb5760d6e85a2fc01dc7646c98f509632a7a10')
+  AND encode(sha256(convert_to(p.prosrc,'UTF8')),'hex')='50e70fa7cb99454c0104e5e9d14858ba0e8b664cecd3680281173fcdb3d1ca59')
   OR EXISTS(SELECT 1 FROM (VALUES ('schema_rev'),('schema_doc'),('type_def'),('prop_def'),('key_def'),('key_lifecycle_history'),('rel_def'),('rel_endpoint'),('relationship_lineage'),('schema_head'),('catalog_acceptance_report')) v(name)
    WHERE NOT EXISTS(SELECT 1 FROM pg_trigger t WHERE t.tgrelid=to_regclass('truss.'||v.name)
     AND t.tgname='runtime_catalog_generation' AND t.tgfoid=to_regprocedure('truss.runtime_observe_catalog_generation()')
