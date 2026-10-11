@@ -1,0 +1,55 @@
+{
+  "scope": "Private original transaction control retention capacity; no registered business admission, complete installed profile or public Truss data operations",
+  "profile": {
+    "python": "3.11.17",
+    "pg8000": "1.31.5",
+    "postgresql": "16.15",
+    "role": "administrative native fixture"
+  },
+  "source_sha256": {
+    "packages/python/src/truss/_native_arbitration.py": "a501b01ef36b5fed97089ad9b9271ca9edb2a5387b095ad10817fc8e5484be27",
+    "packages/python/src/truss/_native_transactions.py": "0eec3cec0c48c54a29c966833a9d185c57724300171b961ac2623efdfdc16c86",
+    "packages/python/tests/test_native_operation_ordinals.py": "f23002ba59d57852e273cc2c2ad2bc4aa1da245a01fe1d1b0b6693f1729b5ae8"
+  },
+  "native": {
+    "cases": 40,
+    "seconds": 18.924,
+    "process_exit": 0,
+    "log_sha256": "04ca4015ab473377d29ae71f21bc148c2128e9d9d8e3e0d7342c3510416c58e1"
+  },
+  "unit": {
+    "cases": 13,
+    "seconds": 0.004,
+    "process_exit": 0
+  },
+  "wheel": {
+    "sha256": "0d09003b82333dacec15666b6880236c5227195821771d2da429f871daa05c14",
+    "matched_source_wheel_installed_files": 84
+  },
+  "coverage": [
+    "port/tracker capacity exhaustion before ordinal",
+    "partial joint publication closes issuance",
+    "full owner retention preserves cleanup",
+    "lost slot-fill reply retains original invocation",
+    "direct tracker bypass refused",
+    "foreign tracker and initial port permits refused without mutation",
+    "unused rollback retained after settled release"
+  ],
+  "review": {
+    "model": "Astra Ultra",
+    "decision": "approved source/artifact task-only main push",
+    "independent_native_cases": 3,
+    "independent_native_seconds": 40.236,
+    "independent_native_process_exit": 0
+  },
+  "limits": [
+    "Immutable invocation allocation still occurs before cleanup submission",
+    "No accepted catalog, installer or mutation capability qualified"
+  ],
+  "installed_unit": {
+    "cases": 13,
+    "seconds": 0.003,
+    "process_exit": 0,
+    "log_sha256": "46c74e95e49409273cff5b0d474bb3f780e57977a4af5da2071b99cd4731838f"
+  }
+}

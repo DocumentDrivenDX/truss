@@ -1,0 +1,50 @@
+{
+  "scope": "Original retained attempt request preparation only; no SQL dispatch, installed producer authentication or forward business admission",
+  "source_sha256": {
+    "packages/python/src/truss/_native_operation_ordinals.py": "78a9009e6efd80bc3edd523c797806966fc747ccd2a4a4a6f6c7f829146ea801",
+    "packages/python/tests/test_native_admission_preparation.py": "94368cad54a3e59d819c90abaca86a2f2c4356eb182ab7bbf4683b02536605be",
+    "scripts/check-module-boundaries.py": "75569410d69ba4e4af803757c59df2f85b344d8a4ea9c21333fa514bef9b9c9f"
+  },
+  "profile": {
+    "python": "3.11.17",
+    "pg8000": "1.31.5",
+    "postgresql": "16.15",
+    "role": "administrative fixture"
+  },
+  "native_runs": [
+    {
+      "cases": 5,
+      "seconds": 5.314,
+      "process_exit": 0,
+      "log": "python-contracts-iteration33-request-custody-final-native.log",
+      "sha256": "db1d1fc0698846fb6ebb92938ccf31784afe3b23cffb9282435c19db7bb48680"
+    },
+    {
+      "cases": 1,
+      "seconds": 19.996,
+      "process_exit": 0,
+      "log": "python-contracts-iteration33-request-disposal-native.log",
+      "sha256": "d74b7f9f32c91e57d99492ef9c94efe6605de75b8e62db5eb940bc63c7f1ff9e"
+    }
+  ],
+  "unit": {
+    "cases": 20,
+    "seconds": 0.017,
+    "process_exit": 0
+  },
+  "boundaries": {
+    "imports": 327,
+    "passed": true
+  },
+  "astra_ultra": {
+    "source": "approved including disposal-during-encoding test",
+    "independent_unit_cases": 20,
+    "independent_unit_seconds": 0.024,
+    "final_evidence": "approved task-only main commit/push"
+  },
+  "remaining": [
+    "Authenticate registered original artifact/installed family producer",
+    "Bind original native dispatch/result to exact prepared request and reserved admission slot",
+    "Complete native finalization/installation then public catalog and data capabilities"
+  ]
+}

@@ -13,7 +13,7 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
-    '_native_operation_ordinals': {'dataclasses','truss._operation_ordinal','truss._native_pg8000','truss._native_adoption'},
+    '_native_operation_ordinals': {'dataclasses','truss._operation_ordinal','truss._native_pg8000','truss._native_adoption','truss._native_admission_request'},
     '_startup_custody': {'dataclasses','threading','importlib.metadata','io','socket','pg8000','truss._native_driver_profile','truss._native_deadline'},
     '_native_bootstrap': {'dataclasses', 'threading', 'importlib.metadata', 'io', 'socket', 'pg8000', 'truss._native_pg8000', 'truss._host_control_custody', 'truss._native_result_custody', 'truss._native_deadline', 'truss._startup_custody','truss._native_driver_profile'},
     '_adoption_cancellation': {'threading'},
@@ -52,6 +52,7 @@ ALLOWED = {
     '_security_association_binding': {'base64', 'dataclasses', 'hashlib', 'json'},
     '_directory_resources': {'os', 'stat', 'threading', 'truss._installation_resources'},
     '_installation_resources': {'dataclasses', 'hashlib', 'json', 'truss._resource_account'},
+    '_native_admission_request': {'dataclasses', 're', 'truss._operation_admission'},
     '_operation_admission': {'dataclasses', 'inspect', 'threading'},
     '_operation_registry': set(),
     '_row_image': {'dataclasses', 'struct'},

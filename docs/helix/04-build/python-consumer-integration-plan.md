@@ -1680,3 +1680,69 @@ session call slots, so later cleanup cannot exhaust those original counters.
 No complete containment reservation, registered family admission, installer or
 release qualification follows. Additional retirement-publication fault run16277
 is pending and is not included in the seven passed cases.
+
+
+### Iteration 31: original control retention capacity
+
+The private original operation reserves three port-control records and three
+tracker invocation slots before ordinal publication. Both owner roots are
+allocated before publication and retained on the session/attempt; partial
+publication closes issuance. Generic appends and reserved claims share the
+boundary lock. Exact registered permits precede namespace consumption; tracker
+submission requires the corresponding original claimed port record. Lost slot
+fill replies retain one-use custody. Confirmed success RELEASE retires an unused
+rollback slot without refunding capacity or inventing a native call.
+
+The corrected PostgreSQL16.15 administrative suite passes40 cases18.924s with
+terminal exit0;13 unit cases and322 module boundaries pass. Source, wheel and
+clean installed package match84 files. Astra Ultra approved source and final evidence; its independent three native
+cases pass40.236s with terminal exit0. See
+[evidence receipt](evidence/python-contracts-iteration31-retention.json).
+This establishes retained capacity, not allocation-free cleanup or full heap
+safety. Registered original admission and the complete installed profile still
+precede public install/register/apply/read qualification. No public data
+capability was enabled. Earlier iteration30 retirement run16277 is terminal:
+two cases pass11.237s, recorded in its updated receipt.
+
+
+### Iteration 32: fixed original admission request encoding
+
+The private encoder targets exactly the four issued native family signatures
+and six native operation kinds. Opaque artifacts preserve arbitrary bytes;
+PostgreSQL text preserves UTF8 and refuses NUL/surrogates. Native per-field and
+initial aggregate limits include asserted/capture bytes. Configuration profile
+and native-captured epoch/configuration additions retain their separate native
+accounting obligations. Exact hexadecimal SQL size is checked before expansion.
+The default1MiB SQL ceiling can refuse larger native-valid artifact payloads;
+selecting a larger encoding ceiling does not qualify a larger execution budget.
+
+Seven unit cases pass; one PostgreSQL16.15 expression-decoding test exercises all
+four families and exact binary/text values (3.995s, terminal exit0). Astra Ultra
+approved source and independently passed seven unit cases. Final evidence review
+is approved for the task-only main push. See [receipt](evidence/python-contracts-iteration32-encoding.json).
+This module is private and never submits SQL, issues ordinals, registers artifacts
+or enables forward admission. Next composition must bind the original retained
+issued attempt, request and reserved admission slot, validate installed original
+producer custody, and correlate the actual native admission result before business
+work. The full install/register/apply/read target remains unfinished.
+
+
+### Iteration 33: original issued-attempt request custody
+
+Private request preparation now derives the ordinal only from the exact retained
+issued attempt. It requires the original post-SAVEPOINT root, complete successful
+native call, published original port record and live original handle. Current
+transaction/adoption/token/session ownership, cancellation, deadline and disposal
+are checked before encoding and again before publication. One authoritative
+coordinator tuple retains each request; the attempt exposes a read-only identity
+projection. Publication faults close ordinary admission/issuance and preserve
+exact cleanup. Preparation sends no SQL and enables no forward business work.
+
+Five native custody cases pass5.314s; the separate disposal-during-encoding case
+passes19.996s. Both processes are terminal exit0 on PostgreSQL16.15. Twenty unit
+cases and327 import boundaries pass. Astra Ultra approved source and independently
+passed20 unit cases; final evidence review approved the task-only main push. See
+[receipt](evidence/python-contracts-iteration33-request.json).
+The opaque administrative test input grants no artifact authority. Original
+registered artifacts/installed family custody, native dispatch/result settlement
+and complete finalization remain required before install/register/apply/read.
