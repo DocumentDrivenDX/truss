@@ -248,9 +248,10 @@ CREATE FUNCTION truss.runtime_write_catalog_report_candidate(
  expected_writer text,expected_ordinal text,expected_generation text,
  registration_identity text,original_registration bytea,lifecycle_policy bytea,index_policy bytea)
 RETURNS TABLE(writer_xid text,operation_ordinal text,effect_generation text,
- report_utf8_hex text,scope text,accepted_report_qualified boolean)
+ report_utf8_hex text,scope text,accepted_report_qualified boolean,revision_payload_utf8_hex text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET bytea_output='hex' AS $$
 DECLARE op truss.row_home_operation%ROWTYPE; current_op truss.row_home_operation%ROWTYPE;
+ revision_row truss.schema_rev%ROWTYPE; revision_tree jsonb; revision_payload bytea; accepted_at_text text; report_identity text;
  context jsonb; input jsonb; registration jsonb; source record; before_graph record; after_graph record;
  revision int; documents jsonb; counts jsonb; lifecycle jsonb; indexes jsonb;
  origin jsonb; execution jsonb; execution_tree jsonb; origin_envelope jsonb; journal_envelope jsonb; fields jsonb; tree jsonb; members jsonb; assertion_tree jsonb;
@@ -344,6 +345,16 @@ BEGIN
   schema_registry:=schema_registry||jsonb_build_object(schema_value->>'$id',schema_value);
   identities:=array_append(identities,selected_artifact_identity);
  END LOOP;
+ -- The revision composition is independently selected source semantics, not authority.
+ selected_artifact_identity:='packages/python/src/truss/_profiles/catalog-revision-composition-candidate.json';
+ IF (SELECT count(*) FROM truss.installation_archive a WHERE a.installation_id=context->>'installationId'
+  AND a.artifact_role='input' AND a.artifact_identity=selected_artifact_identity)<>1 THEN
+  RAISE EXCEPTION 'unique original revision composition archive required' USING ERRCODE='55000'; END IF;
+ SELECT a.artifact_bytes INTO STRICT artifact FROM truss.installation_archive a
+  WHERE a.installation_id=context->>'installationId' AND a.artifact_role='input' AND a.artifact_identity=selected_artifact_identity
+   AND a.artifact_sha256=sha256(a.artifact_bytes) AND a.artifact_sha256=decode('6e22d1e2393935f8d15fcade4ca5ac22a6f81b3a0ff47836d24741068d215e57','hex')
+   AND a.artifact_identity_sha256=sha256(convert_to(a.artifact_identity,'UTF8')) FOR SHARE NOWAIT;
+ identities:=array_append(identities,selected_artifact_identity);
  SELECT jsonb_agg(to_jsonb(a) ORDER BY a.archive_row_id) INTO profile_rows FROM truss.installation_archive a
   WHERE a.installation_id=context->>'installationId' AND a.artifact_role='input' AND a.artifact_identity=ANY(identities);
  catalog_before:='{}'::jsonb;
@@ -434,6 +445,35 @@ BEGIN
   SELECT 1 FROM truss.catalog_acceptance_report r WHERE r.rev=revision AND r.report_bytes=original_report)
   OR (SELECT count(*) FROM truss.catalog_acceptance_report)<>1 THEN
   RAISE EXCEPTION 'original report insert and independent byte readback required' USING ERRCODE='55000'; END IF;
+ -- Build the revision wire from the same retained originals, never a later
+ -- caller-supplied report or a fresh acceptance clock.
+ SELECT r.* INTO STRICT revision_row FROM truss.schema_rev r WHERE r.rev=revision;
+ IF truss.runtime_canonical_tree_bytes(truss.runtime_catalog_report_native_tree(revision_row.origin))
+  IS DISTINCT FROM truss.runtime_canonical_tree_bytes(origin) THEN
+  RAISE EXCEPTION 'original revision parent origin correspondence required' USING ERRCODE='55000'; END IF;
+ IF NOT isfinite(revision_row.accepted_at)
+  OR extract(year FROM revision_row.accepted_at AT TIME ZONE 'UTC') NOT BETWEEN 1 AND 9999 THEN
+  RAISE EXCEPTION 'finite selected revision acceptance timestamp required' USING ERRCODE='22023'; END IF;
+ accepted_at_text:=to_char(revision_row.accepted_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"');
+ report_identity:='truss.candidate.catalog-report/'||encode(convert_to(context->>'installationId','UTF8'),'hex')
+  ||'/'||encode(convert_to(context->>'sourceEpoch','UTF8'),'hex')||'/'||revision::text;
+ IF ((octet_length(original_report)::bigint+2)/3)*4>65536 THEN
+  RAISE EXCEPTION 'revision report artifact scalar capacity' USING ERRCODE='54000'; END IF;
+ IF octet_length(original_report)>4194304 OR octet_length(op.original_input_bytes)>1048576
+  OR ((octet_length(original_report)::bigint+2)/3)*4+octet_length(op.original_input_bytes)>4194304 THEN
+  RAISE EXCEPTION 'revision wire expansion capacity' USING ERRCODE='54000'; END IF;
+ revision_tree:=truss.runtime_catalog_report_native_tree(jsonb_build_object(
+  'interfaceVersion','truss-feed-revision/0.1.0','revision',revision::text,'acceptedAt',accepted_at_text,
+  'input',input,'report',jsonb_build_object('identity',report_identity,
+   'bytesBase64',replace(encode(original_report,'base64'),chr(10),''),
+   'sha256',encode(sha256(original_report),'hex'))));
+ revision_tree:=jsonb_set(revision_tree,'{members}',revision_tree->'members'||jsonb_build_array(
+  jsonb_build_object('keyUtf8Hex','6f726967696e','node',journal_envelope)));
+ IF octet_length(revision_tree::text)>4194304 THEN
+  RAISE EXCEPTION 'revision tagged tree capacity' USING ERRCODE='54000'; END IF;
+ revision_payload:=truss.runtime_canonical_tree_bytes(revision_tree);
+ IF octet_length(revision_payload)>4194304 THEN
+  RAISE EXCEPTION 'revision payload capacity' USING ERRCODE='54000'; END IF;
  SELECT jsonb_agg(to_jsonb(a) ORDER BY a.archive_row_id) INTO final_profile_rows FROM truss.installation_archive a
   WHERE a.installation_id=context->>'installationId' AND a.artifact_role='input' AND a.artifact_identity=ANY(identities);
  catalog_after:='{}'::jsonb;
@@ -457,7 +497,7 @@ BEGIN
     AND a.artifact_bytes=original_registration AND a.artifact_sha256=sha256(original_registration)) THEN
   RAISE EXCEPTION 'original candidate report final source cut required' USING ERRCODE='55000'; END IF;
  RETURN QUERY SELECT op.original_writer_xid::text,op.operation_ordinal::text,current_op.effect_generation::text,
-  encode(original_report,'hex'),'administrative_rollback_only_report_write'::text,false;
+  encode(original_report,'hex'),'administrative_rollback_only_report_write'::text,false,encode(revision_payload,'hex');
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) FROM PUBLIC;
