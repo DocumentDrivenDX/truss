@@ -1,5 +1,7 @@
 # truss project documentation
 
+[Query and execution ownership](01-frame/prd.md#query-and-execution-ownership--owner-direction-2026-10-11): Truss exposes the full Weft query surface. Weft owns evolving SQL coverage; Truss owns table layout, query execution, actions and other executions. Direct read/traversal APIs are convenience operations, not SQL coverage limits.
+
 Native test execution now shares one owned pgserver17.11 Unix-socket cluster per
 suite/worker with fresh databases and roles, while lifecycle tests remain isolated.
 The [shared-worker checkpoint](04-build/local-runtime-installation-migration-plan.md#shared-native-test-workers--owner-direction-2026-10-11)

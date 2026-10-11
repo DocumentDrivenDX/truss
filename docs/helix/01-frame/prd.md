@@ -35,6 +35,10 @@ ADR-005 durable complete-result receipts, ADR-006 exact numeric carriers with lo
 
 Truss ships a versioned migration system for occasional changes to its own fixed physical layout, native routines, policy installation and storage/codec protocols. Normal consumer UMF schema evolution uses catalog acceptance and does not require physical migrations. The migration system is a first-release toolkit deliverable: inspect installed version, plan supported upgrades, explicitly apply them with original-attempt recovery, and verify the resulting installation. Consumers can invoke it from deployment/migration orchestration; importing Truss or opening an application connection never applies an upgrade automatically. Supported source/target layout pairs and any downtime requirements are published with the release. Unknown drift, unsupported upgrade/downgrade or incomplete native parity prevents runtime readiness.
 
+## Query and execution ownership — owner direction, 2026-10-11
+
+Truss exposes the full query surface exposed by Weft. Weft owns SQL language coverage, semantics, planning and lowering, and that coverage is expected to evolve. Truss owns the underlying table layout, query execution, actions and other executions. Truss documents the SQL capabilities required to implement its own actions and execution guarantees; it does not maintain a separate SQL feature allowlist or exclusions. Dependency versions and execution evidence qualify integration readiness, not a permanent limit on Weft SQL coverage.
+
 ## Summary
 
 truss stores connected data, typed by UMF (DocumentDrivenDX's machine-readable metamodel and schema interchange fabric) schemas, in a fixed set of PostgreSQL tables. A team adds an entity type, property or relationship by publishing a UMF schema revision, never by migrating tables. Every value is kept exactly, every change is journaled in the transaction that made it, nothing the schema does not define is dropped, and for every rule truss reports whether PostgreSQL enforces it, truss enforces it, or nothing does.
@@ -178,6 +182,8 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-53** — The lag of a downstream copy is observable: each consumer's position is recorded, and the age of the oldest change it has not applied can be read. *(P1)*
 
 ### Subsystem: Reads and traversal
+
+The direct read and traversal requirements below are convenience operations and performance targets. The query integration exposes the full Weft query surface, including future coverage through compatible Weft upgrades; these operations do not define a SQL subset.
 
 - **FR-28** — An object is read by identifier or by key, and the result carries its version and its catalog revision.
 - **FR-29** — Objects of one type are listed in keyset pages with a required limit and a marker that says whether more remain; the cost of a page does not depend on the number of other types.

@@ -31,7 +31,7 @@ ddx:
 
 ## Scope
 
-Provide exact low-level storage reads and a versioned mapping/read context for Weft. Weft supplies SQL language, logical planning and registered backend lowering.
+Provide the full Weft query surface, exact low-level storage reads and a versioned mapping/read context. Weft supplies evolving SQL language coverage, logical planning and registered backend lowering. Truss owns table layout, query execution, actions and other executions. Direct read shapes and traversal performance targets do not bound SQL coverage; required action capabilities belong to the action designs.
 
 ## Requirements Mapping
 
@@ -49,6 +49,7 @@ The table also owns feature-level traceability; exact per-criterion tests belong
 
 | Requirement | Design capability | Verification strategy |
 | --- | --- | --- |
+| RD-06 | Full Weft query surface through the registered storage mapping and Truss executor | Run the selected Weft query corpus through native Truss execution; preserve compiler diagnostics and exact results, with no Truss SQL feature filter. Repeat affected integration cases on compatible dependency upgrades. |
 | RD-01 | Parameterized id/key read plus exact decoder | Key/id identify same record with exact values, revision and version |
 | RD-02 | Type/id index and limit-plus-lookahead storage paging | No omission/duplicate at unchanged state; limit guard and exact more marker |
 | RD-03 | Qualified order-key/id tuple paging with native collation | Null order keys, equal keys and bounded edges have stable continuation |

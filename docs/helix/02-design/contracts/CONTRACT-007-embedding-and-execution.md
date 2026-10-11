@@ -21,6 +21,10 @@ ddx:
 
 # Contract: Embedding and execution
 
+## Query and execution ownership — owner direction, 2026-10-11
+
+Truss exposes the full query surface exposed by Weft. Weft owns SQL language coverage, semantics, planning and lowering, and that coverage is expected to evolve. Truss owns the underlying table layout, query execution, actions and other executions. Truss documents the SQL capabilities required to implement its own actions and execution guarantees; it does not maintain a separate SQL feature allowlist or exclusions. Dependency versions and execution evidence qualify integration readiness, not a permanent limit on Weft SQL coverage. Execution admission checks below enforce artifact compatibility, authority, transaction and resource guarantees; they must not become an independent SQL coverage policy.
+
 ## Owner decisions — 2026-10-07
 
 Selected execution boundary: engine-owned callback transactions commit before returning committed results; adopted transactions remain caller-owned and return explicit pending results. Pending object/edge IDs are usable only within the same live transaction. Only confirmed outer commit authorizes durable external publication; savepoint release and successful Truss operations do not. Unknown commit requires original recovery/receipt observation. No commit-by-string-ID or live cross-network transaction protocol is selected.
