@@ -48,6 +48,24 @@ class NativeCatalogReportTests(CatalogNativeFixture,unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Different native effects'):
             require_current_catalog_report_basis(result,self.connection,self.prepared)
 
+    def test_equal_cardinality_inventory_result_substitution_refuses(self):
+        # Inject a collector result fault; native tables and snapshot stay intact.
+        from unittest.mock import patch
+        import truss._catalog_report as report_module
+        result=self.report()
+        original_rows=report_module._rows
+        def substituted(connection,sql,**parameters):
+            rows=original_rows(connection,sql,**parameters)
+            if 'runtime_collect_new_catalog_inventory' in sql:
+                rows=[dict(row) for row in rows]
+                self.assertTrue(rows)
+                rows[0]['identity']='["substituted"]'
+            return rows
+        with patch.object(report_module,'_rows',side_effect=substituted):
+            with self.assertRaisesRegex(ValueError,'native inventory correspondence'):
+                require_current_catalog_report_basis(result,self.connection,self.prepared)
+        require_current_catalog_report_basis(result,self.connection,self.prepared)
+
     def test_erased_prior_graph_write_cannot_claim_empty_start(self):
         self.connection.run("INSERT INTO truss.key_bucket_guard VALUES(sha256('namespace'::bytea),sha256('key'::bytea),0)")
         self.connection.run('DELETE FROM truss.key_bucket_guard')

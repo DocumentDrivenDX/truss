@@ -86,7 +86,7 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
     if evidence['scope']!='original_owner_report_preparation_only' or evidence['ingress']['state']!='available':
         raise ValueError('Original owner report evidence required')
     choices=prepared.input()
-    inventory=_rows(connection,'SELECT family,identity::pg_catalog.text AS identity FROM truss.runtime_collect_new_catalog_inventory(CAST(:rev AS pg_catalog.int4))',rev=catalog.revision)
+    inventory=_rows(connection,'SELECT family,identity::pg_catalog.text AS identity FROM truss.runtime_collect_new_catalog_inventory(CAST(:rev AS pg_catalog.int4)) ORDER BY family COLLATE pg_catalog."C",identity::pg_catalog.text COLLATE pg_catalog."C"',rev=catalog.revision)
     if inventory!=json.loads(catalog.inventory_bytes):raise ValueError('Complete original native effect inventory required')
     counts=_rows(connection,'SELECT * FROM truss.runtime_collect_new_catalog_counts(CAST(:rev AS pg_catalog.int4))',rev=catalog.revision)
     if counts!=[json.loads(catalog.counts_bytes)]:raise ValueError('Original independent report counts required')
@@ -113,7 +113,7 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
     payload={'fields':fields,'nativeCut':{'writerXid':cut[0],'operationOrdinal':cut[1],'effectGeneration':cut[2]},
              'noRebindEvidence':{'profile':'administrative-empty-graph-and-empty-journal-root/0.1','emptyScope':json.loads(cut[3]),'preEffectGeneration':prior_cut[2]},
              'ownerEvidenceHex':prepared.report_evidence_bytes.hex(),'missingFields':list(MISSING_FIELDS),
-             'physicalSnapshotHex':physical.hex(),'nativeCounts':json.loads(catalog.counts_bytes),
+             'nativeInventory':inventory,'physicalSnapshotHex':physical.hex(),'nativeCounts':json.loads(catalog.counts_bytes),
              'fieldQualification':{'extensions':'partial_retention_only'},
              'acceptedReportQualified':False}
     result=CatalogReportBasis(json.dumps(payload,ensure_ascii=True,separators=(',',':')).encode())
@@ -140,7 +140,9 @@ def require_current_catalog_report_basis(basis,connection,prepared):
     # after host rollback/reapplication, so equality of counters is insufficient.
     if _physical_snapshot(connection).hex()!=payload['physicalSnapshotHex']:
         raise ValueError('Different native effects reused an original report cut')
-    inventory=_rows(connection,'SELECT family,identity::pg_catalog.text AS identity FROM truss.runtime_collect_new_catalog_inventory(CAST(:rev AS pg_catalog.int4))',rev=revision)
+    inventory=_rows(connection,'SELECT family,identity::pg_catalog.text AS identity FROM truss.runtime_collect_new_catalog_inventory(CAST(:rev AS pg_catalog.int4)) ORDER BY family COLLATE pg_catalog."C",identity::pg_catalog.text COLLATE pg_catalog."C"',rev=revision)
+    if inventory!=payload['nativeInventory']:
+        raise ValueError('Original current native inventory correspondence required')
     documents=_rows(connection,'SELECT * FROM truss.runtime_collect_report_documents(CAST(:rev AS pg_catalog.int4))',rev=revision)
     counts=_rows(connection,'SELECT * FROM truss.runtime_collect_new_catalog_counts(CAST(:rev AS pg_catalog.int4))',rev=revision)
     if documents!=payload['fields']['documents'] or len(counts)!=1 or _report_counts(counts[0])!=payload['fields']['counts']:

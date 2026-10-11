@@ -103,7 +103,7 @@ def stage_new_catalog(connection, prepared: PreparedAcceptance, *, origin_bytes:
                 if len(allocated)!=1:raise ValueError('Original allocated relationship required')
                 _id(allocated[0]['relationship_id'])
         connection.run('SELECT truss.runtime_verify_new_catalog_prestate(CAST(:rev AS pg_catalog.int4))',rev=revision)
-        inventory=rows('SELECT family,identity::pg_catalog.text AS identity FROM truss.runtime_collect_new_catalog_inventory(CAST(:rev AS pg_catalog.int4))',rev=revision)
+        inventory=rows('SELECT family,identity::pg_catalog.text AS identity FROM truss.runtime_collect_new_catalog_inventory(CAST(:rev AS pg_catalog.int4)) ORDER BY family COLLATE pg_catalog."C",identity::pg_catalog.text COLLATE pg_catalog."C"',rev=revision)
         documents=rows('SELECT * FROM truss.runtime_collect_report_documents(CAST(:rev AS pg_catalog.int4))',rev=revision)
         counts=rows('SELECT * FROM truss.runtime_collect_new_catalog_counts(CAST(:rev AS pg_catalog.int4))',rev=revision)
         if len(counts)!=1:raise ValueError('Original complete native counts required')

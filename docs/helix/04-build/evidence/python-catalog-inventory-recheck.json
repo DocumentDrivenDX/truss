@@ -1,0 +1,34 @@
+{
+  "scope": "private_catalog_report_basis_integrity_only",
+  "accepted_catalog_qualified": false,
+  "change": "Retain and compare full ordered native inventory on current basis recheck; preserve independent physical snapshot comparison.",
+  "plan_review": "Astra Ultra approved exact retained ordered comparison and result-substitution regression.",
+  "test": {
+    "command": "python -m unittest test_catalog_report -v",
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "tests": 12,
+    "elapsed_seconds": 5.603,
+    "exit_code": 0,
+    "result": "OK",
+    "regression_scope": "Injected inventory collector identity substitution at equal cardinality; native tables unchanged."
+  },
+  "source_sha256": {
+    "packages/python/src/truss/_catalog_report.py": "275f7dfa49c2f69e36223d0d160a8592104e6eb01967ddaf53a91aeca92a5a31",
+    "packages/python/src/truss/_catalog_staging.py": "b3f31ca08f95d5fab0114c76f98b238d94441f7f7b70b304a0f8398dd5b99143",
+    "packages/python/tests/test_catalog_report.py": "922a4b5012ed289a9bdc37835ed6c15bb17d70c1e159daa6b260775b487e0415"
+  },
+  "limitations": [
+    "Catalog acceptance/report publication and operation finalization remain unfinished.",
+    "Administrative native fixtures do not qualify ordinary-person protected admission."
+  ],
+  "completed_iteration_review": {
+    "reviewer": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "disposition": "approved_no_findings",
+    "independent_tests": 12,
+    "elapsed_seconds": 5.825,
+    "exit_code": 0,
+    "diff_check": "passed"
+  }
+}
