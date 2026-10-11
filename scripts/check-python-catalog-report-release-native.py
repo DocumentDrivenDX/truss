@@ -5,8 +5,9 @@ resource_countercontrol=sys.argv[1:]==['--countercontrol-no-resource-digest']
 archive_countercontrol=sys.argv[1:]==['--countercontrol-no-archive-lock']
 self_write_countercontrol=sys.argv[1:]==['--countercontrol-no-self-write-fence']
 self_write_profile=sys.argv[1:]==['--archive-self-write-fence'] or self_write_countercontrol
+report_write_profile=sys.argv[1:]==['--report-write-candidate']
 countercontrol=resource_countercontrol or archive_countercontrol or self_write_countercontrol
-if sys.argv[1:] and not countercontrol and not self_write_profile:raise ValueError('Explicit supported native control required')
+if sys.argv[1:] and not countercontrol and not self_write_profile and not report_write_profile:raise ValueError('Explicit supported native control required')
 root=Path.cwd();run_id=str(uuid.uuid4())
 folder=root/'docs/helix/04-build/evidence/python-catalog-report-release'/run_id
 folder.mkdir(parents=True);os.umask(0o077)
@@ -15,13 +16,13 @@ def retain(path):
     p=root/path;inputs[str(p)]=p.read_bytes()
 for p in (root/'packages/python/src/truss').rglob('*'):
     if p.is_file() and '__pycache__' not in p.parts:inputs[str(p)]=p.read_bytes()
-for name in ('test_archive_self_write_fence_native.py','test_catalog_report_release_native.py','test_catalog_configured_release_stage_native.py',
+for name in ('test_catalog_report_write_candidate_native.py','test_archive_self_write_fence_native.py','test_catalog_report_release_native.py','test_catalog_configured_release_stage_native.py',
              'test_catalog_staging.py','test_catalog_support.py','test_preparation.py','test_native_pg8000.py',
              'test_catalog_source_candidate.py','test_configured_catalog_stage.py','test_native_catalog_dispatch.py','test_native_operation_ordinals.py','test_native_arbitration.py'):
     retain('packages/python/tests/'+name)
 for name in ('source-epoch-lock','issued-operation-admission/operation-configuration-context-admission',
              'catalog-observation-recheck','catalog-epoch-context','operation-configuration-current',
-             'catalog-admission-configuration','catalog-report/archive-self-write-fence','catalog-report/release-selection',
+             'catalog-admission-configuration','catalog-report/report-write-candidate','catalog-report/archive-self-write-fence','catalog-report/release-selection',
              'canonical-string-bytes','canonical-tree-bytes','catalog-report/configured-graph','catalog-report/resource-selection','catalog-report/configured-stage','catalog-report/source-candidate','catalog-report/configured-metadata','catalog-stage-configured','catalog-stage-issued'):
     retain('packages/postgresql/native/'+name+'.sql')
 for path in ('docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
@@ -95,7 +96,7 @@ try:
     require(run([str(pgbin/'initdb'),'-D',str(pgdata),'-U','postgres','--auth=trust','--encoding=UTF8'],timeout=60))
     attempted=True
     require(run([str(pgbin/'pg_ctl'),'-D',str(pgdata),'-l',str(execution/'server.log'),'-w','-o',f"-h '' -k {socket}",'start'],timeout=60))
-    test=run([sys.executable,'-m','unittest','discover','-s',str(execution/'checkout/packages/python/tests'),'-p','test_archive_self_write_fence_native.py' if self_write_profile else 'test_catalog_*release*native.py','-v'],
+    test=run([sys.executable,'-m','unittest','discover','-s',str(execution/'checkout/packages/python/tests'),'-p','test_catalog_report_write_candidate_native.py' if report_write_profile else 'test_archive_self_write_fence_native.py' if self_write_profile else 'test_catalog_*release*native.py','-v'],
         cwd=execution/'checkout',env={**os.environ,'PYTHONPATH':str(execution/'checkout/packages/python/src')+os.pathsep+str(execution/'dependencies'),
         'TRUSS_NATIVE_TEST_SOCKET':str(socket/'.s.PGSQL.5432')},timeout=120)
     (folder/'tests.stdout.log').write_text(test.stdout);(folder/'tests.stderr.log').write_text(test.stderr)
@@ -104,7 +105,7 @@ try:
         if test.returncode!=1 or test.stderr.count('DatabaseError not raised')!=expected_failures or f'FAILED (failures={expected_failures})' not in test.stderr:
             raise RuntimeError('Expected exact native omission counterexamples required')
     else:require(test)
-    native_test_count=8 if self_write_profile else 20
+    native_test_count=15 if report_write_profile else 8 if self_write_profile else 20
     if f'Ran {native_test_count} tests' not in test.stderr or 'skipped' in test.stderr:raise RuntimeError('Complete selected native population required')
     # Execute each original catalog-dispatch regression method exactly once.
     original=ast.parse(inputs[str(root/'packages/python/tests/test_native_catalog_dispatch.py')])
@@ -133,9 +134,9 @@ try:
     (folder/'boundaries.stdout.log').write_text(boundary.stdout);(folder/'boundaries.stderr.log').write_text(boundary.stderr);require(boundary)
     if any(Path(p).read_bytes()!=raw for p,raw in inputs.items()):raise RuntimeError('Source changed during native execution')
     receipt={'status':'countercontrol-reproduced' if countercontrol else 'component-passed','countercontrol':countercontrol,'countercontrolKind':'self-write-fence' if self_write_countercontrol else 'resource-digest' if resource_countercontrol else 'archive-lock' if archive_countercontrol else None,'runId':run_id,'sourceDigests':pins,'nativeBinaryDigests':binaries,
-        'executedReleaseSqlSha256':sha((execution/'checkout/packages/postgresql/native/catalog-report/release-selection.sql').read_bytes()),'testCommand':test.args,'testExitCode':test.returncode,'nativeTests':native_test_count,'selfWriteFenceProfile':self_write_profile,'originalCatalogRegressions':methods,'incomingCatalogRegressions':auxiliary_methods,'python':sys.version,
+        'executedReleaseSqlSha256':sha((execution/'checkout/packages/postgresql/native/catalog-report/release-selection.sql').read_bytes()),'testCommand':test.args,'testExitCode':test.returncode,'nativeTests':native_test_count,'selfWriteFenceProfile':self_write_profile,'reportWriteCandidateProfile':report_write_profile,'originalCatalogRegressions':methods,'incomingCatalogRegressions':auxiliary_methods,'python':sys.version,
         'versions':{p:importlib.metadata.version(p) for p in ('pg8000','scramp','asn1crypto')},
-        'scope':('Native actual-lock same-backend archive write fence and acquisition/savepoint controls; separate from configured release installation. ' if self_write_profile else '')+('Deliberate omitted-resource-digest variant reproduces two exact integrity assertion failures. ' if resource_countercontrol else 'Deliberate omitted-archive-lock variant reproduces four exact exclusion assertion failures. ' if archive_countercontrol else '')+'Frozen original private release selector, configured catalog staging/metadata producer, Python candidate source composition and tests over owned installed PostgreSQL16.15 Unix fixture. SHARE table lock excludes concurrent archive writes; transaction/savepoint controls qualify only native archive cut lifetime. Administrative synthetic configuration/archive/capture fixtures do not establish authenticated caller, source issuer, complete installed source/authority cut, host held-use dispatcher, public installer, complete accepted report or final disclosure.'}
+        'scope':('Administrative rollback-only nineteen-field report construction, original tagged source/capture/profile correspondence, pre-insert archived-schema shape checks, INSERT/readback and final-cut failure controls. Current staging refuses NUL origins while retaining exact original context; standalone parser/mapping parity does not qualify that workflow. No accepted authority, head/feed publication or commit seal. ' if report_write_profile else '')+('Native actual-lock same-backend archive write fence and acquisition/savepoint controls; separate from configured release installation. ' if self_write_profile else '')+('Deliberate omitted-resource-digest variant reproduces two exact integrity assertion failures. ' if resource_countercontrol else 'Deliberate omitted-archive-lock variant reproduces four exact exclusion assertion failures. ' if archive_countercontrol else '')+'Frozen original private release selector, configured catalog staging/metadata producer, Python candidate source composition and tests over owned installed PostgreSQL16.15 Unix fixture. SHARE table lock excludes concurrent archive writes; transaction/savepoint controls qualify only native archive cut lifetime. Administrative synthetic configuration/archive/capture fixtures do not establish authenticated caller, source issuer, complete installed source/authority cut, host held-use dispatcher, public installer, complete accepted report or final disclosure.'}
 except BaseException as error:
     receipt={'status':'failed','runId':run_id,'sourceDigests':pins,'nativeBinaryDigests':binaries,'error':str(error)}
 finally:
