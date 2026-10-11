@@ -591,3 +591,47 @@ separately by UMF; native privilege observations do not supply a SQL refinement
 proof or authenticate production authority.
 
 UMF main `afc03d29` retains the [source-derived census/guard proof](https://github.com/DocumentDrivenDX/umf/blob/afc03d29/docs/helix/04-build/evidence/security/truss-definer-census-formal/cfa978ae-c2c9-4fef-b244-4495aab10da9/proof.json) and its independent Astra ultra replay: six exact SMT queries,64 actual-tail vectors and38 original native inventory tail replays. Native row completeness and privilege facts remain premises; this is not full SQL/Python/temporal or protected-admission refinement. All original acceptance obligations remain required.
+
+### Iteration 15: original host-call recovery and disposal admission
+
+Astra Ultra approved the plan before implementation. Reserve bounded opaque
+recovery references in the original executor domain and retain them at the native
+boundary before acquisition. Recovery must survive lost returns, BaseException,
+disposal and facade collection. Freeze every returned outcome, including acquisition
+refusal and commit_unknown, together with original call facts. Inspection publishes
+no native handles, runs no SQL and neither acquires nor retries cleanup/publication.
+Only the exact original release.published receipt proves historical handback;
+later generations and owners cannot replace this call's evidence. Linearize ordinary
+admission against shared executor disposal before token acquisition; keep disposal
+distinct from unresolved quarantine. Explicit host BEGIN/COMMIT/ROLLBACK remain
+available after disposal only while the original boundary and profile are healthy.
+Test publication faults, known COMMIT with unresolved handback, newer generations,
+forged/foreign references, facade collection and concurrent disposal/admission.
+This is a private recovery observation, not a recovery procedure. Active native
+cancellation and containment are the next mandatory C02 gate; public adoption,
+ReferenceAssembly and protected capabilities remain unfinished.
+
+
+Iteration 15 now implements private original-call recovery observations and shared
+ordinary-admission closure. References and nine fact slots are retained before
+acquisition; inspection uses the original synchronized release receipt and sealed
+facts, never a newer owner or native call. Astra Ultra independently passed all
+17 native recovery tests and approved the source/plan checkpoint. See
+[iteration 15 evidence](evidence/python-contracts-iteration15.json). Merge the latest
+reviewed SCRAM fixture work and validate the combined installed wheel before push.
+Active cancellation and native containment are the next transport implementation;
+public C02 and the complete external interface remain open.
+
+Combined validation integrates security commit bb5eb75a with checkpoint 3e6fb741.
+The installed wheel passed all 345 tests outside the checkout (43.744 seconds);
+47 Python modules, six owner assets and py.typed match source, wheel and install
+byte for byte. The module boundary check covers 216 imports. See
+[combined iteration 15 evidence](evidence/python-contracts-iteration15-combined.json).
+This completes the private recovery iteration; public C02 and installer readiness
+remain open pending cancellation, containment and the semantic interface.
+
+Concurrent security commit 71ba19f8 is also integrated: the rebuilt installed
+wheel passed 351 tests in 41.260 seconds, with all 54 packaged files verified.
+See [final combined evidence](evidence/python-contracts-iteration15-definer-combined.json).
+Astra Ultra approved integration and independently passed 17 inventory tests.
+The earlier 345-test artifact receipt remains historical.

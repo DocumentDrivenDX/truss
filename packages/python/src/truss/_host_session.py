@@ -43,6 +43,10 @@ class _Call:
     evidence: object = None
     control_ledger: object = None
     phase: str = 'reserved'
+    recovery_entry: object = None
+    acquired: bool = False
+    control_type: object = None
+    failures: object = None
 
 class NativeHostSession:
     def __init__(self, executor, tracker, service, *, retained_calls=4096, control_producer=None):
@@ -66,6 +70,23 @@ class NativeHostSession:
     def _error(code):
         return Error(ExecutionFailure(code,'Original host call unavailable'))
 
+    @property
+    def recovery(self):return self.executor._host_call_recovery
+
+    @property
+    def last_call_reference(self):
+        if not self._calls or self._calls[-1].recovery_entry is None:return None
+        return self._calls[-1].recovery_entry.reference
+
+    def _freeze(self,record,phase):
+        self.recovery.freeze(record,phase)
+
+    def _finish(self,record,phase,result):
+        record.result=result
+        record.phase=phase
+        self.recovery.publish(record,phase)
+        return result
+
     def _invoke(self,kind,callback,*,port=None):
         # Cooperative serialized handback; busy never waits or retries.
         if not self._lock.acquire(blocking=False): return self._error('execution_obligation')
@@ -73,23 +94,36 @@ class NativeHostSession:
         try:
             if self._closed: return self._error('transaction_unusable')
             if len(self._calls)>=self._limit: return self._error('execution_obligation')
-            record=_Call(kind,token=object())
+            with self.executor._lifecycle_lock:
+                if self.executor._closed and kind not in ('begin','commit','rollback'):
+                    return self._error('invalid_transaction')
+            record=_Call(kind,token=object(),control_type=_CONTROL_RESULT_TYPE)
+            record.failures={code:self._error(code) for code in ('transaction_unusable','execution_obligation','commit_unknown')}
             record.before=self._boundary.last_call
             if kind in ('begin','commit','rollback'):
                 record.evidence=_ControlEvidence()
                 record.settlements={state:(Ok(HostControlResult(state,record.evidence)),Ok(HostControlResult(state,record.evidence,'quarantined')))
                                     for state in ('active','committed','rolled_back','commit_failed')}
             self._calls=(*self._calls,record)
+            reserved=self.recovery.reserve(self._boundary,record)
+            if type(reserved) is Error:
+                self._calls=self._calls[:-1]
+                return reserved
             try:
+                self.recovery.publish(record,'acquiring')
                 self._boundary.acquire_operation(original_token=record.token)
+                record.acquired=True
+                self.recovery.publish(record,'in_flight')
             except BaseException as error:
                 if self._boundary._operation is record.token:
+                    record.acquired=True
                     record.phase='unresolved';self._closed=True
+                    result=self._finish(record,'unresolved',record.failures['transaction_unusable'])
                     if not isinstance(error,Exception): raise
-                    return self._error('transaction_unusable')
-                record.phase='refused'
+                    return result
+                result=self._finish(record,'refused',record.failures['execution_obligation'])
                 if not isinstance(error,Exception): raise
-                return self._error('execution_obligation')
+                return result
             record.before=self._boundary.last_call
             record.generation=self.tracker._state.generation
             try:
@@ -97,14 +131,18 @@ class NativeHostSession:
                 if self._control_producer is not None:
                     if not self._control_producer.preflight(self._boundary,kind):
                         record.result=self._error('execution_obligation')
+                        record.original=record.before
+                        record.original_frozen=True
+                        self._freeze(record,'refused')
                         self._boundary.release_operation(record.token,original_release=record.release)
-                        record.phase='refused'
-                        return record.result
+                        return self._finish(record,'refused',record.result)
                     if self._control_producer.attach(self._boundary,record) is None:
                         record.result=self._error('execution_obligation')
+                        record.original=record.before
+                        record.original_frozen=True
+                        self._freeze(record,'refused')
                         self._boundary.release_operation(record.token,original_release=record.release)
-                        record.phase='refused'
-                        return record.result
+                        return self._finish(record,'refused',record.result)
                 record.result=callback(record.token,record)
                 record.original=self._boundary.last_call
                 record.original_frozen=True
@@ -116,19 +154,19 @@ class NativeHostSession:
                 if (self._boundary._quarantined or self._boundary._calling
                     or record.token is not self._boundary._operation):
                     raise NativeBoundaryRefusal('Original native scope unsettled')
+                self._freeze(record,'in_flight')
                 if self._control_producer is None:
                     self._boundary.release_operation(record.token,original_release=record.release)
                 else:
                     self._control_producer.handback(record.control_ledger)
-                record.phase='settled'
-                return record.result
+                return self._finish(record,'settled',record.result)
             except BaseException as error:
                 if not record.original_frozen:
                     record.original=self._boundary.last_call
                     record.port_control=port._last_control if port is not None else None
                 # A lost release reply can reconcile only the exact known handback.
                 if record.release is not None and record.release.published and record.result is not None:
-                    record.phase='settled'
+                    self._finish(record,'settled',record.result)
                     if not isinstance(error,Exception): raise
                     return record.result
                 record.phase='unresolved'
@@ -150,14 +188,15 @@ class NativeHostSession:
                         elif call.capture_complete and kind=='commit' and call.final_status==b'I' and any(e.code==b'E' for e in call.events): known='rolled_back'
                         elif call.capture_complete and kind=='commit' and call.final_status in (b'T',b'E') and any(e.code==b'E' for e in call.events): known='commit_failed'
                 if known is not None:
-                    record.result=record.settlements[known][1]
+                    result=self._finish(record,'unresolved',record.settlements[known][1])
                     if not isinstance(error,Exception): raise
-                    return record.result
-                if not isinstance(error,Exception): raise
+                    return result
                 submitted=record.original is not record.before
                 known_end=(submitted and record.original.capture_complete and record.original.final_status==b'I'
                            and any(e.code in (b'C',b'E') for e in record.original.events))
-                return self._error('commit_unknown' if kind=='commit' and submitted and not known_end else 'transaction_unusable')
+                result=self._finish(record,'unresolved',record.failures['commit_unknown' if kind=='commit' and submitted and not known_end else 'transaction_unusable'])
+                if not isinstance(error,Exception): raise
+                return result
         except BaseException:
             if record is not None and record.token is self._boundary._operation:
                 record.phase='unresolved';self._closed=True

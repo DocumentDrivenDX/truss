@@ -1,0 +1,61 @@
+{
+  "iteration": 15,
+  "scope": "Private original host-call recovery observation and shared disposal admission",
+  "baseCommit": "3ba464b2",
+  "review": "Astra Ultra approved plan and completed source checkpoint; final combined artifact pending",
+  "focusedNativeTests": {
+    "tests": 17,
+    "passed": true,
+    "seconds": 4.447,
+    "logSha256": "4fd67a1fd1c36d2be283a676e61e17d4f8d3b6455ccda945139beeff16d79939"
+  },
+  "astraIndependentReview": {
+    "planApproved": true,
+    "sourceApproved": true,
+    "independentRecoveryTests": 17,
+    "seconds": 3.311,
+    "finalArtifactApproved": false
+  },
+  "factsReservation": {
+    "slotsPerOriginalCall": 9,
+    "maxRetainedCallsPerExecutor": 4096,
+    "maxRetainedCallsPerBoundary": 4096,
+    "beforeNativeAcquisition": true,
+    "totalHeapClaim": false
+  },
+  "moduleBoundaryImports": 216,
+  "publicExportsChanged": false,
+  "C02Complete": false,
+  "installerReady": false,
+  "cases": [
+    "Original facts unchanged after later transaction generations",
+    "Exact original references reject forged/subclass/foreign inputs",
+    "Registry and boundary retain references after facade collection and disposal",
+    "Disposed ordinary refusals preserve host rollback capacity",
+    "Disposal and ordinary reference reservation linearize without native IO under lock",
+    "Acquisition window reports conservative unresolved custody",
+    "Ready and complete native result do not establish unreleased handback",
+    "Diagnostic summary/snapshot allocation failures retain actual committed outcome",
+    "Before/after diagnostic publication failure and BaseException preserve original custody/outcome",
+    "Native send loss retains commit_unknown without retry",
+    "Effectfree refused call lost return does not inherit later host call",
+    "Known commit with unresolved restoration remains committed/unresolved",
+    "Busy boundary lock produces one observation refusal",
+    "Already admitted completion can handback after disposal"
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_host_call_recovery.py": "8766e4533cc67f5c8f38ecaeb6ae15951850ca21ed45be6a5c9118ea1c189dfe",
+    "packages/python/src/truss/_host_session.py": "12257cfbe56309e9249c68efb11e61e8d6a886be16dad7ac95f2393c50155a69",
+    "packages/python/src/truss/_host_execution.py": "f98a55df3db39331e9edab05ec35ee629166bab1226f97a95307f626e2d99a64",
+    "packages/python/src/truss/_native_pg8000.py": "e91ef4f4aaffe78c2dfc4ee479eb6743380d70d0b82b9e8024db05f6666f3832",
+    "packages/python/tests/test_host_call_recovery.py": "bef13442769461828a186c3ede5c2c9182bf1e45588fb7599d3a7b7ef7e2bbca",
+    "scripts/check-module-boundaries.py": "c288d224595aab9702057d309c0b3356fb8cd820e48a05af9cf7ed4c966a215d"
+  },
+  "limitations": [
+    "Observation does not acquire, release, detach, retry publication or perform recovery",
+    "Primitive immutable projection excludes native handles and secret-bearing native errors",
+    "Active cancellation and native containment remain mandatory next gates",
+    "Public ReferenceAssembly and semantic catalog/apply/read/import/feed capabilities remain unfinished"
+  ],
+  "securitySync": "Latest origin bb5eb75a includes reviewed native SCRAM fixture and four failure privacy/cleanup tests; integrate before final installed wheel."
+}

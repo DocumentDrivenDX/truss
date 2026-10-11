@@ -63,6 +63,7 @@ class NativeBoundary:
         self._resources = ()
         self._host_control_pending = None
         self._host_control_records = ()
+        self._host_call_records = ()
         self._resource_baseline = None
         self._unnamed_pending = True
         self._prepared_limit = prepared_limit

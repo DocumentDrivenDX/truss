@@ -37,6 +37,8 @@ class HostExecutor:
         self._arbitration_registration_lock = Lock()
         self._lifecycle_lock = Lock()
         self._host_control_producer = None
+        from ._host_call_recovery import HostCallRecovery
+        self._host_call_recovery = HostCallRecovery(self)
         self._native_claims = ()
         self._native_claim_limit = 4096
 
