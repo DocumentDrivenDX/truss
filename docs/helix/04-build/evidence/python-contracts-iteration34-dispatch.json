@@ -1,0 +1,49 @@
+{
+  "scope": "Private original-attempt native candidate dispatch and bounded response capture; administrative synthetic artifacts grant no protected or business authority",
+  "source_sha256": {
+    "packages/python/src/truss/_native_arbitration.py": "b342329e741a0fb96af6a3c301c4bb32d64de8faa437f6a86210633bd16ca295",
+    "packages/python/src/truss/_native_driver_profile.py": "942791295372ac96c4f7cf4753f2c3598084de9c136870a66bdd8239ddcb4266",
+    "packages/python/src/truss/_native_operation_ordinals.py": "cefcb22f2b5f1af47ae9ea8652cab901f34d6272275f5fac3c0691bcc8dd06c3",
+    "packages/python/src/truss/_native_admission_capture.py": "56f1f005f2308fff843ab522653dfad41cc69c7863182dbb310cbc033b856f55",
+    "packages/python/tests/test_native_admission_capture.py": "09ce60d6381e5a955a015d729210df6cc1e6891ee58fe9eb625f84c779cc6622",
+    "packages/python/tests/test_native_admission_dispatch.py": "062be486b3a2e6a39e7d813991c60250508cba0a2b9344fb889b45ed4e9113f1",
+    "scripts/check-module-boundaries.py": "d7c5a7ce7c9259dda7486c98686fcbf2bc70ff554aaa452c9a0f4f8126a206a3"
+  },
+  "profile": {
+    "python": "3.11.17",
+    "pg8000": "1.31.5",
+    "postgresql": "16.15",
+    "role": "administrative fixture",
+    "maximum_decoded_context_bytes": 4096,
+    "maximum_sql_protocol_bytes": 1048576
+  },
+  "native_runs": [
+    {
+      "cases": 23,
+      "seconds": 13.843,
+      "process_exit": 0,
+      "log": "python-contracts-iteration34-final-native.log",
+      "sha256": "ccb6c7ffbc4f4bb118691c5f43eebc8dac0cdeef43c4c47a82022b5cca15556e"
+    }
+  ],
+  "boundaries": {
+    "imports": 343,
+    "passed": true
+  },
+  "astra_ultra": {
+    "source": "approved private candidate scope; independent native rerun pending",
+    "plan": "approved narrow lazy source qualification",
+    "evidence": "seven source/test/checker hashes and final native log verified"
+  },
+  "remaining": [
+    "Registered original artifact and complete installed authority",
+    "Complete seven-body finalization and installation",
+    "Public install/register/apply/read then remaining full interface"
+  ],
+  "limitations": [
+    "No forward_ready or public data capability enabled",
+    "Reduced native result profile does not qualify full family input bounds",
+    "Driver source qualification is cooperative compatibility evidence, not arbitrary in-process tamper resistance"
+  ],
+  "source_basis_commit": "2c89856029c807d97fd49ec444336cfd978bf56f"
+}

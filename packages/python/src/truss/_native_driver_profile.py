@@ -3,6 +3,78 @@
 Pure inspection only. The selected resource-free subset refuses preexisting
 prepared statements rather than asserting release or borrowing their custody.
 """
+def original_admission_symbols():
+    """Selected cooperative pg8000 profile, independently checked before use.
+
+    Compile bounded, hash-qualified source without executing it. This is driver
+    compatibility evidence, not protection against arbitrary Python tampering.
+    """
+    import hashlib
+    import types
+    from importlib.metadata import version
+    import pg8000.core as core
+    try:
+        if version('pg8000') != '1.31.5':
+            return None
+        with open(core.__file__, 'rb') as source_file:
+            source = source_file.read(131073)
+        if (len(source) > 131072 or hashlib.sha256(source).hexdigest()
+                != 'cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26'):
+            return None
+        compiled = compile(source, core.__file__, 'exec', dont_inherit=True, optimize=0)
+        codes = {item.co_name:item for item in compiled.co_consts if type(item) is types.CodeType}
+        context_code = codes['Context']
+        init_code = next(item for item in context_code.co_consts
+                         if type(item) is types.CodeType and item.co_name == '__init__')
+        context, flush = core.Context, core._flush
+        if (type(context) is not type or context.__bases__ != (object,)
+                or set(context.__dict__) != {'__module__','__init__','__dict__','__weakref__','__doc__'}
+                or type(context.__module__) is not str or context.__module__ != core.__name__
+                or context.__new__ is not object.__new__
+                or context.__getattribute__ is not object.__getattribute__):
+            return None
+        for function, code, defaults in ((context.__init__, init_code, (None,None,None)),
+                                         (flush, codes['_flush'], None)):
+            if (type(function) is not types.FunctionType or function.__code__ != code
+                    or function.__globals__ is not core.__dict__
+                    or (defaults is None and function.__defaults__ is not None)
+                    or (defaults is not None and (type(function.__defaults__) is not tuple
+                        or len(function.__defaults__) != 3
+                        or any(value is not None for value in function.__defaults__)))
+                    or function.__kwdefaults__ is not None
+                    or function.__closure__ is not None):
+                return None
+        return context, flush
+    except (OSError, ValueError, KeyError, StopIteration, AttributeError):
+        return None
+
+def original_admission_snapshot():
+    symbols = original_admission_symbols()
+    if symbols is None:
+        return None
+    import pg8000.core as core
+    context, flush = symbols
+    return (core, context, context.__init__, context.__init__.__code__, flush, flush.__code__)
+
+def admission_snapshot_unchanged(snapshot):
+    """Pure in-memory recheck of the already source-qualified snapshot."""
+    core, context, init, init_code, flush, flush_code = snapshot
+    defaults = init.__defaults__
+    return (core.Context is context and core._flush is flush
+            and context.__new__ is object.__new__
+            and context.__getattribute__ is object.__getattribute__
+            and context.__bases__ == (object,)
+            and set(context.__dict__) == {'__module__','__init__','__dict__','__weakref__','__doc__'}
+            and type(context.__module__) is str and context.__module__ == core.__name__
+            and context.__init__ is init and init.__code__ is init_code
+            and flush.__code__ is flush_code
+            and init.__globals__ is core.__dict__ and flush.__globals__ is core.__dict__
+            and type(defaults) is tuple and len(defaults) == 3
+            and all(value is None for value in defaults)
+            and flush.__defaults__ is None and init.__kwdefaults__ is None
+            and flush.__kwdefaults__ is None and init.__closure__ is None
+            and flush.__closure__ is None)
+
 def original_driver_profile(boundary):
     from pg8000.converters import string_in, string_out, null_out
     from pg8000.core import CoreConnection

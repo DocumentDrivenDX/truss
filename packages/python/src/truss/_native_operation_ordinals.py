@@ -7,6 +7,10 @@ from dataclasses import dataclass
 from ._operation_ordinal import OperationOrdinalRegistry,OrdinalReservation
 from ._native_pg8000 import NativeBoundaryRefusal, NativeCall
 from ._native_admission_request import encode_admission_request
+from ._native_admission_capture import NativeAdmissionCapture
+from ._native_result_custody import NativeTextLimits
+from ._native_deadline import NativeOperationDeadline
+from ._native_driver_profile import original_control_profile, original_admission_snapshot, admission_snapshot_unchanged
 
 @dataclass(slots=True,eq=False)
 class IssuedOperationAttempt:
@@ -16,6 +20,7 @@ class IssuedOperationAttempt:
     reservation: OrdinalReservation
     issuer: object = None
     controls: object = None
+    deadline: object = None
 
     @property
     def admission_request(self):
@@ -33,6 +38,19 @@ class PreparedNativeAdmission:
     entry: object
     scope: str = 'original_attempt_request_only'
 
+@dataclass(frozen=True, slots=True, eq=False)
+class NativeAdmissionInvocation:
+    owner: object
+    request: PreparedNativeAdmission
+    sql: str
+    invoke: object
+    gate: object
+    context: object
+    sender: object
+    context_type: object
+    flush: object
+    symbols: object
+
 class NativeOperationOrdinals:
     def __init__(self,tracker,*,maximum_attempts=256,maximum_ordinal=9223372036854775807):
         if type(maximum_attempts) is not int or not 1<=maximum_attempts<=4096:
@@ -43,6 +61,7 @@ class NativeOperationOrdinals:
         self.registry=OperationOrdinalRegistry(self,self.boundary,tracker._adoption_limit,maximum_ordinal)
         self.attempts=()
         self.requests=()
+        self.admission_invocations=()
         self.closed=False
 
     def issue(self,session,*,reserve_controls=False):
@@ -74,7 +93,7 @@ class NativeOperationOrdinals:
                 or session.cleanup_limit-len(session.cleanup_calls)<2):
                 raise NativeBoundaryRefusal('Original operation attempt/control capacity exhausted')
             reservation=OrdinalReservation()
-            attempt=IssuedOperationAttempt(self,session,generation,reservation)
+            attempt=IssuedOperationAttempt(self,session,generation,reservation,deadline=session.deadline)
             issuer=self.registry.bind(self,b,generation)
             attempt.issuer=issuer
             self.attempts=(*self.attempts,attempt)
@@ -154,6 +173,117 @@ class NativeOperationOrdinals:
                 attempt.session.admission_closed = True
                 raise
             return request
+
+    def _check_admission_call_locked(self, session, boundary, token, invoke, resource, lifecycle, cleanup, invocation):
+        if (type(invocation) is not NativeAdmissionInvocation or invocation.owner is not self
+                or not any(item is invocation for item in self.admission_invocations)):
+            raise NativeBoundaryRefusal('Original retained admission invocation required')
+        request = invocation.request
+        attempt = request.attempt
+        self._check_request_attempt_locked(attempt)
+        if (attempt.session is not session or boundary is not self.boundary
+                or token is not session.token or invoke is not invocation.invoke
+                or resource is not None or lifecycle is not None or cleanup is not None
+                or attempt.admission_request is not request
+                or request.entry is not attempt.controls.admission_entry
+                or session.result_custody is not invocation.gate
+                or not invocation.gate.installed or invocation.gate.failed or invocation.gate.detached
+                or type(attempt.deadline) is not NativeOperationDeadline or session.deadline is not attempt.deadline
+                or invocation.gate.ingress_deadline is None or invocation.gate.outbound is None
+                or invocation.sender.__self__ is not boundary._connection
+                or not admission_snapshot_unchanged(invocation.symbols)
+                or type(invocation.context) is not invocation.context_type
+                or invocation.gate.boundary._connection._sock is not invocation.gate
+                or boundary._connection.handle_messages is not invocation.gate._original_messages_entry):
+            raise NativeBoundaryRefusal('Original request-bound admission call required')
+
+    def _reserve_admission_call_locked(self, session, boundary, token, invoke, resource, lifecycle, cleanup, invocation):
+        self._check_admission_call_locked(session, boundary, token, invoke, resource, lifecycle, cleanup, invocation)
+        entry = invocation.request.entry
+        entry.revision = boundary._revision + 1
+        session._publish_call_root(invocation.request.attempt.controls.admission_root)
+        return entry
+
+    def _publish_admission_invocations(self, root):
+        self.admission_invocations = root
+
+    def _send_admission(self, invocation):
+        gate = invocation.gate
+        gate.retain_context_before_send(invocation.context, invocation.request.entry)
+        invocation.sender(invocation.sql)
+        invocation.flush(gate.boundary._connection._sock)
+        gate.boundary._connection.handle_messages(invocation.context)
+        gate.boundary._connection._context = invocation.context
+        return invocation.context.rows
+
+    def dispatch_admission_candidate(self, request):
+        # Administrative original-driver composition only. No installed/artifact
+        # authority or public capability can be inferred from this result.
+        if not original_control_profile(self.boundary):
+            raise NativeBoundaryRefusal('Original admission driver profile required')
+        symbols = original_admission_snapshot()
+        if symbols is None:
+            raise NativeBoundaryRefusal('Original admission Context and flush required')
+        _, context_type, _, _, flush, _ = symbols
+        with self.boundary._lock:
+            if (type(request) is not PreparedNativeAdmission
+                    or not any(item is request for item in self.requests)):
+                raise NativeBoundaryRefusal('Original prepared admission request required')
+            attempt = request.attempt
+            self._check_request_attempt_locked(attempt)
+            if type(attempt.deadline) is not NativeOperationDeadline or attempt.session.deadline is not attempt.deadline:
+                raise NativeBoundaryRefusal('Original operation deadline required before admission dispatch')
+            if (any(item.request is request for item in self.admission_invocations)
+                    or len(self.admission_invocations) >= self.maximum_attempts):
+                raise NativeBoundaryRefusal('Original admission already retained or capacity exhausted')
+            prefix = ('SELECT admitted.writer_xid, admitted.ordinal, admitted.context_hex, '
+                      'pg_catalog.pg_current_xact_id()::pg_catalog.text AS actual_writer_xid FROM (')
+            suffix = ') AS admitted'
+            if request.encoded.encoded_bytes + len(prefix) + len(suffix) + 6 > 1048576:
+                raise NativeBoundaryRefusal('Full original admission SQL capacity exhausted')
+            sql = prefix + request.encoded.sql + suffix
+            session = attempt.session
+            if session.result_custody is not None:
+                raise NativeBoundaryRefusal('Original admission capture already retained')
+            sender = self.boundary._connection.send_QUERY
+            original_input = request.encoded.original_input
+            if original_input.family != 'base' and 2*(len(original_input.asserted) + len(original_input.capture_profile)) > 4096:
+                raise NativeBoundaryRefusal('Input exceeds selected reduced native context profile')
+        gate = NativeAdmissionCapture(session, NativeTextLimits(columns=4, rows=1), entry=request.entry)
+        try:
+            gate.install()
+            with self.boundary._lock:
+                self._check_request_attempt_locked(attempt)
+                context = context_type(sql)
+                invoke = lambda: self._send_admission(invocation)
+                invocation = NativeAdmissionInvocation(self, request, sql, invoke, gate, context, sender, context_type, flush, symbols)
+                root = (*self.admission_invocations, invocation)
+                try:
+                    self._publish_admission_invocations(root)
+                    if self.admission_invocations is not root:
+                        raise NativeBoundaryRefusal('Original admission invocation publication unavailable')
+                except BaseException:
+                    self.closed = True
+                    session.admission_closed = True
+                    raise
+        except BaseException:
+            with self.boundary._lock:
+                if session.result_custody is gate:
+                    session.admission_closed = True
+            raise
+        try:
+            rows = self.boundary._call(invoke, session.token, call_permit=invocation)
+            call = request.entry.native_call
+            result = gate.observe(rows, call, attempt.ordinal)
+            with self.boundary._lock:
+                if (session._call_root is not attempt.controls.admission_root
+                        or attempt.admission_request is not request
+                        or request.entry.native_call is not result.original_call):
+                    raise NativeBoundaryRefusal('Original admission settlement correspondence unavailable')
+            return result
+        finally:
+            with self.boundary._lock:
+                session.admission_closed = True
 
     def observe(self,attempt):
         with self.boundary._lock:
