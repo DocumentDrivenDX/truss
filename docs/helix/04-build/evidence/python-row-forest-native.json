@@ -1,0 +1,34 @@
+{
+  "interfaceVersion": "truss-component-evidence/0.1",
+  "component": "native-retained-physical-forest",
+  "baseCommit": "09e9434bea673e949f25ff97cbf83fcfcbb52e1c",
+  "database": "PostgreSQL16.15",
+  "python": "CPython3.11.17",
+  "driver": "pg8000 1.31.5",
+  "tests": {
+    "count": 104,
+    "seconds": "25.915",
+    "result": "PASS",
+    "scope": "Forest, inherited row-touch, Python tree and edge-event regressions"
+  },
+  "sources": {
+    "packages/postgresql/native/row-image/forest.sql": "9a613194c911488ad337e5d539099703c37676239a46001c1a930ea10bed9671",
+    "packages/python/tests/test_row_forest_native.py": "67d7758f5679ad359ed01ff133689b2a6aa435e4b77838eedad422d3cbb89aa6",
+    "packages/python/src/truss/_row_image_tree.py": "8ff76ee2a95ec60db0bdfecded4e1f35bc302d711be0f71f14d42178cabb5386",
+    "packages/postgresql/native/row-touch/observe.sql": "08ff69be623ef6f3df6a69311c7368f0dc547dd0c963b44c1658e3696091f1b3",
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/python-row-forest-native-tests.log": "45ba17445adde3ce11e2860d0e2a439955ecbe959d9ff5b6062db0be505fe654"
+  },
+  "limits": {
+    "originalScopeBytes": 8388608,
+    "images": 1024,
+    "work": "bounded quadratic scans, no full resource qualification"
+  },
+  "review": "Astra Ultra reviewed plan and corrected component source; no independent reviewer test execution",
+  "limitations": [
+    "Retained physical forest only, not complete native observation or authorized absence",
+    "Administrative actual-cycle fixture removes row observers transaction-locally; not protected admission",
+    "RF02 integrity visibility, logical definitions/codecs/candidate reconstruction remain open",
+    "No seal, publication, installed readiness or public Python capability"
+  ]
+}

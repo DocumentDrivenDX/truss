@@ -45,3 +45,28 @@ remain prerequisites; an RLS-visible subset cannot establish completeness. Image
 length bounds do not qualify aggregate scan work, detoast, allocation or deadlines.
 This selected singleton implementation supplies no general recursive definition,
 facet/history validation, readiness, seal, accepted authority or public mutation.
+
+`forest.sql` adds `row_image_forest_original(original_scope bytea) RETURNS void`,
+a private read-only physical forest check over the existing retained-image scope.
+The original decoder bounds UTF8 JSON to 8 MiB and at most 1,024 images, validates
+complete native cell framing and rejects duplicate identities. The forest body
+requires declared roots, same-state parents, exclusive child slots and permitted
+parent kinds, full-byte map/record identities, contiguous sequence ordinals and
+scalar payload parity. An iterative bounded traversal checks every retained node,
+including disconnected cycles. Array/index and child scans have bounded quadratic
+work; no linear-work or full native resource qualification is claimed.
+
+Native tests compare identical original codec bytes with Python's physical tree
+validator, including empty/scalar/null forests, nested containers, multiple states,
+a deep chain at the exact image ceiling, and malformed parent/slot/payload cases.
+An administrative fixture installs an actual disconnected cycle, successfully
+checks native foreign keys immediately, requires both validators to refuse, and
+verifies exact original-image restoration after savepoint rollback. It removes
+row observers transaction-locally to isolate this check from unfinished admission;
+this is not a protected writer route.
+
+Empty input proves an empty retained physical forest only. RF02 complete-scope
+integrity and visibility, original current authority, logical definition/member
+semantics, native scalar codecs, candidate reconstruction, seals and deferred
+commit closure remain separate. This component performs no writes, issues no
+proof token and enables no public Python capability. PUBLIC execution is revoked.
