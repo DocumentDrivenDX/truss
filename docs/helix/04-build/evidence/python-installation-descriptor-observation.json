@@ -1,0 +1,24 @@
+{
+  "scope": "rollback_only_selected_namespace_descriptor_collection",
+  "sourceHashes": {
+    "packages/python/src/truss/_catalog_installation.py": "910576211d89a1d6cd0ac8b9961f3c0f44426da66bfc18c4c88efc5b84086804",
+    "packages/python/tests/test_catalog_installation.py": "b71278c548aff5adccf1a66535ce3fcf337217ba65e8337509757894dd31be51"
+  },
+  "testLog": "docs/helix/04-build/evidence/python-installation-descriptor-observation.log",
+  "testLogSha256": "b43cf0e53e6b550c4ac86a9c63cd34755124c4b4fb068b30a3d9bc0288bc8953",
+  "testsPassed": 9,
+  "nativeRuntime": "PostgreSQL16.15 / pg8000 1.31.5 / corrected private pgserver",
+  "categories": [
+    "defaults_full_native_rows_and_expressions",
+    "sequence_full_native_rows",
+    "types_full_native_rows_including_generated",
+    "rewrite_full_native_rows_and_rules"
+  ],
+  "independentComparison": "Separate row_to_json catalog queries and deparser calls; exact arrays, membership and content; disposable transactional view rule control.",
+  "moduleBoundaryImports": 401,
+  "installationReady": false,
+  "limitations": [
+    "Collection evidence does not establish independently expected release correspondence.",
+    "Dependencies, effective authority closure, complete semantic bodies and publication remain unresolved."
+  ]
+}

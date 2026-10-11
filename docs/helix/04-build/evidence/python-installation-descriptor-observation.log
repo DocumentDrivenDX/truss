@@ -1,0 +1,14 @@
+test_caller_runtime_transaction_not_adopted (test_catalog_installation.CatalogInstallationInputTests.test_caller_runtime_transaction_not_adopted) ... ok
+test_statement_substitution_refuses_before_sql (test_catalog_installation.CatalogInstallationInputTests.test_statement_substitution_refuses_before_sql) ... ok
+test_exact_owner_construction_genesis_and_rollback (test_catalog_installation.CatalogInstallationNativeTests.test_exact_owner_construction_genesis_and_rollback) ... ok
+test_existing_namespace_preserved_without_overwrite (test_catalog_installation.CatalogInstallationNativeTests.test_existing_namespace_preserved_without_overwrite) ... ok
+test_failures_after_ddl_and_revocations_restore_absence (test_catalog_installation.CatalogInstallationNativeTests.test_failures_after_ddl_and_revocations_restore_absence) ... ok
+test_hostile_search_path_is_contained_and_restored (test_catalog_installation.CatalogInstallationNativeTests.test_hostile_search_path_is_contained_and_restored) ... ok
+test_lost_rollback_reply_retains_original_attempt_without_retry (test_catalog_installation.CatalogInstallationNativeTests.test_lost_rollback_reply_retains_original_attempt_without_retry) ... ok
+test_native_descriptor_membership_and_content (test_catalog_installation.CatalogInstallationNativeTests.test_native_descriptor_membership_and_content) ... ok
+test_public_bypass_denied_in_constructed_namespace (test_catalog_installation.CatalogInstallationNativeTests.test_public_bypass_denied_in_constructed_namespace) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 7.021s
+
+OK

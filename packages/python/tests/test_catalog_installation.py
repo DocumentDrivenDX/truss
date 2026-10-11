@@ -60,6 +60,34 @@ class CatalogInstallationNativeTests(NativeBoundaryFixture,unittest.TestCase):
             self.connection.run('RESET search_path')
             self.connection.run('DROP SCHEMA constructor_shadow CASCADE')
 
+    def test_native_descriptor_membership_and_content(self):
+        connection=self.connection;independent={}
+        class Port:
+            @property
+            def _transaction_status(self):return connection._transaction_status
+            def run(self,sql):
+                if sql.startswith('SELECT pg_catalog.jsonb_build_object(') and "'namespace'" in sql:
+                    # Transactional control makes the otherwise empty rule surface observable.
+                    connection.run('CREATE VIEW truss.constructor_rule_control AS SELECT 1 AS value')
+                    for category,table,join,identity,expression in (
+                        ('defaults','pg_attrdef','JOIN pg_catalog.pg_class c ON c.oid=x.adrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace','x.oid','pg_catalog.pg_get_expr(x.adbin,x.adrelid,false)'),
+                        ('sequences','pg_sequence','JOIN pg_catalog.pg_class c ON c.oid=x.seqrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace','x.seqrelid',None),
+                        ('types','pg_type','JOIN pg_catalog.pg_namespace n ON n.oid=x.typnamespace','x.oid',None),
+                        ('rules','pg_rewrite','JOIN pg_catalog.pg_class c ON c.oid=x.ev_class JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace','x.oid','pg_catalog.pg_get_ruledef(x.oid,false)'),
+                    ):
+                        query='SELECT pg_catalog.row_to_json(x)::text'+(','+expression if expression else '')+' FROM pg_catalog.'+table+' x '+join+" WHERE n.nspname='truss' ORDER BY "+identity
+                        rows=connection.run(query)
+                        independent[category]=[{'native':json.loads(row[0]),'definition':row[1]} if expression else json.loads(row[0]) for row in rows]
+                return connection.run(sql)
+        value=construct_provisional_catalog_layout(Port())
+        observed=json.loads(value.namespace_observation)
+        for category,expected in independent.items():
+            with self.subTest(category=category):
+                self.assertTrue(expected)
+                self.assertEqual(observed[category],expected)
+        self.assertTrue(value.rollback_confirmed)
+        self.assertEqual(connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
+
     def test_existing_namespace_preserved_without_overwrite(self):
         self.connection.run('CREATE SCHEMA truss')
         self.connection.run('CREATE TABLE truss.sentinel(value text)')
