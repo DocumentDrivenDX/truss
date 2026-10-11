@@ -4253,3 +4253,268 @@ CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10. Last full gate26/132 with
 106 missing; goal active. Next establish original ordinary-role administration
 exclusions and protect the selected barrier lifetime, then compose fixed fact
 capture and original semantic decoding before protected final release.
+
+
+### Original session/effective-role snapshot exclusion — 2026-10-11
+
+Implemented separate private unprivileged DDL-cut composition: exact installed
+barriers first, then native original session/effective role attributes and owner
+MEMBER reachability before callback. Both identities must lack superuser,
+CREATEROLE, BYPASSRLS and selected-owner membership. Real nonowner connection
+passes and PostgreSQL denies disabling the installed barrier with42501; native
+superuser, owner membership, CREATEROLE and BYPASSRLS cases refuse with no callback.
+Synthetic all-table/function grants serve isolated fixture setup only.
+
+Final `evidence/python-psycopg-epoch-cut/5db462c6-b7f9-4cee-ba6d-5c03a24c5083`
+passes118 methods (67 fact/dependency/identity/visibility/DDL/role,16 graph,nine
+epoch,26 adoption), module boundaries,131 current/archived Truss sources,363 UMF
+original source pins,1614 native payload pins and all three independent
+stop0/status3/socket-absent cleanups. Initialc2cbecf0 exceeded the90-second suite
+deadline; it retains an incomplete-attempt disposition, original preimages,
+completed named cleanup receipts and original diagnostic server log, not a pass.
+Exact owned fixture process inspection found no remaining fixture process. The
+runner now retains timeout output and uses a180-second whole-suite deadline;
+per-operation native deadlines are unchanged.
+
+Formal `evidence/security-role-snapshot-formal/50354147-d7c8-49c9-ba5d-b43c7d1d4807`
+passes five fresh-context queries (three UNSAT/two SAT) with three exact source
+preimages. Under unbounded role identities and abstract original native predicates,
+both-role exclusion prevents selected administrative flags and a lowered effective
+role cannot override session superuser; stable role sources preserve exclusion.
+Later role changes and reachable privileged definer paths have countermodels.
+No PostgreSQL membership-closure/catalog/SQL/Python refinement, role/source lifetime
+or authenticated authority theorem is claimed.
+
+Trace CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10. Full ordinary caller,
+issuer/mapping/definer/ACL closure, role/config lifetime and protected final release
+remain open. No public support flag or backend acceptance binding. Last full
+checkpoint26/132 with106 missing; goal active. Next compose original reachable-
+routine/ACL inventory and participating shared-role changes into authority
+admission, preserving the counterexamples as required negative controls.
+
+
+### Native definer bypass and direct-EXECUTE exclusion — 2026-10-11
+
+Implemented selected private invoker-only snapshot composition after original
+installed barrier and session/effective-role checks. A fixed native existence probe
+refuses any SECURITY DEFINER routine with EXECUTE available to either original
+identity, including candidates without current schema USAGE. No user decoder or
+caller-supplied list determines the native result.
+
+Actual nonowner bypass control calls an owned privileged definer to disable the
+ALWAYS barrier after the weaker role-only admission; the stronger snapshot refuses
+before callback. Positive invoker-only and revoked-EXECUTE cases pass. Actor setup
+explicitly excludes the two original administrative high-water definers. Initial
+`evidence/python-psycopg-epoch-cut/0aaf9728-96d4-429f-bdb8-4b7e1dd625fd` retains
+two positive-fixture failures: broad setup grants exposed those existing definers,
+and refusal was correct. It is not relabeled passing evidence.
+
+Final `evidence/python-psycopg-epoch-cut/c5ef24cc-f2e7-49e6-95cd-52f76643dfd4`
+passes121 methods (70 fact/dependency/identity/visibility/DDL/role/definer,16 graph,
+nine epoch,26 adoption), module boundaries,131 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-definer-exclusion-formal/e1dfc639-591f-4815-9c59-a40512ee3286`
+passes five fresh-context queries (three UNSAT/two SAT), retaining SMT/model
+receipts and three exact source preimages. Under abstract unbounded role/EXECUTE
+reachability predicates, selected strong exclusion prevents session/effective
+definer reachability and stable reachability preserves it; weaker admission and
+later ACL changes have countermodels. Initiald7268906 retains its earlier source
+tuple. No native privilege/call-graph/catalog/SQL/Python refinement or lifetime
+proof.
+
+Profiles permitting qualified definers remain required separate implementation
+work; the invoker-only subset does not replace the shared final objective. SET ROLE
+reachability, invoker privilege transitions, shared ACL/role/config changes,
+authenticated caller/issuer/mapping and protected final release remain open. Trace
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC5/AC9/AC10 prerequisites. No public
+support flag or backend acceptance binding changed; last full checkpoint26/132,
+106 missing. Goal active. Next qualify SET ROLE reachability and original routine
+inventories, then coordinate shared ACL/role changes through the authority cut.
+
+
+### Native SET ROLE reachability beyond inherited privileges — 2026-10-11
+
+Implemented stronger private snapshot over native SET reachability for original
+session/effective roles after prior installed barrier/direct-role/direct-EXECUTE
+checks. Reject any SET-reachable role with selected privileged attributes, barrier
+owner identity or definer EXECUTE. No caller-supplied membership graph.
+Five native controls distinguish MEMBER/USAGE/SET, exercise direct/transitive
+NOINHERIT escalation and actual CREATE ROLE effects, observe definer invocation
+after SET ROLE despite absent direct EXECUTE, and pass a SET-disabled membership
+while PostgreSQL denies its role transition. Owned CREATE ROLE effects disappear
+on rollback, independently checked before fixture role cleanup.
+
+Final `evidence/python-psycopg-epoch-cut/7f63dbb2-02af-43d5-9cc4-9054cbff0ff6`
+passes126 methods (75 fact/dependency/identity/visibility/DDL/role/definer/SET,16
+graph,nine epoch,26 adoption), module boundaries,131 current/archived Truss
+pins,363 original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Earlier4e908cf1 passes124 methods under its
+original source tuple; no relabeling.
+
+Formal `evidence/security-set-role-exclusion-formal/d4af259a-bbcc-4b2f-9406-109e63ec2c7b`
+passes five fresh-context queries (two UNSAT/three SAT) with three exact source
+preimages. Unbounded abstract roles distinguish inheritance from SET; complete
+selected unsafe-role exclusion prevents the modeled path and stable reachability
+preserves it. Safe direct identity, absent inheritance and later membership
+changes have countermodels. Initialf074e06a retains its earlier source tuple.
+No native SET/transitive-closure/SQL/Python refinement theorem.
+
+Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC5/AC9/AC10. Exact privileged
+predefined/user-role capabilities and original reachable routine/ACL inventories,
+qualified definers, concurrent shared-role/ACL/config lifetime, authenticated
+caller/issuer/mapping and protected final release remain open. No backend binding
+or public support flag promoted; last full checkpoint26/132,106 missing. Goal
+active. Next compose original capability/routine inventory and participating
+role/ACL changes; selected snapshot subsets do not replace the final objective.
+
+
+### Explicit shared-authority writer participation and retained-snapshot counter — 2026-10-11
+
+Implemented native invoker-only shared-authority writer acquisition, using the
+original epoch table-before-marker ordering and same-backend retained-reader
+refusal. Call before selected administrator role/ACL effects in one transaction;
+this is not role-DDL interception or a source-generation issuer.
+Actual excluded administrator ALTER ROLE changes CREATEROLE while the strongest
+reader cut remains held when participation is omitted. Native participant
+schedules refuse writer overlap, permit mutation after reader release, exclude
+admission while a role change is pending, restore role state on abort and refuse
+a same-backend reader-to-writer upgrade.
+
+Final `evidence/python-psycopg-epoch-cut/0d2d8de8-5e06-4764-a998-90ff5933f320`
+passes130 methods (79 fact/dependency/identity/visibility/DDL/role/lifetime,16 graph,
+nine epoch,26 adoption), module boundaries,132 current/archived Truss sources,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-shared-authority-writer-formal/4ab1bad4-e872-4359-8398-af2670415ffc`
+passes five fresh-context queries (three UNSAT/two SAT), retaining three source
+preimages and SMT/model receipts. Under faithful external native exclusion and
+role effects confined to the participating writer interval, unbounded half-open
+reader/writer intervals cannot overlap effects and pending writers exclude new
+admission. Same-backend guard refuses upgrade; missing participant/upgrade guard
+have countermodels. No native lock/catalog/SQL refinement, complete administrative
+path interception, epoch transition or final-release theorem.
+
+Shared roles affect the cluster, whereas these relation locks protect one
+database/installation. Complete multi-database administration coordination, exact
+installed helper/body/ACL custody, original capability/routine inventory, source
+generation transition and protected caller/mapping/final release remain open.
+Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10. No public support
+flag or backend acceptance binding; last full checkpoint26/132,106 missing. Goal
+active. Next qualify explicit writer installation and lifecycle/source-generation
+composition while preserving the uncoordinated administrator counterexample.
+
+
+### Atomic shared-role change and explicit authority generation — 2026-10-11
+
+Implemented separate private base0.16 reason adjunct and invoker-only authority
+epoch issuer. Actual role changes retain `authority-change`, not `restore`; source
+incarnation is preserved. The adjunct preflights original native reason-constraint
+identity/definition, then preserves old initial/restore rules while admitting the
+new noninitial reason. Original UMF owner import/saved reload/export produces
+`contracts/authority-epoch-reason-v0.1.proposal.umf.json` and retained owner DDL;
+ownerfc6265c7, exact hashes and reload equality recorded. This qualifies the selected
+owner API round trip, not its entire runtime/package dependency delivery.
+
+Native issuer composes explicit writer participation with original predecessor,
+bounded profile/evidence, same target incarnation, native UUID uniqueness and
+registry/pointer transition in the administrator's transaction. Four native methods
+prove commit invalidates old reads and admits exact successor, abort preserves role
+and old pointer while removing successor, and changed incarnation or missing/stale
+predecessor refuses with no committed role/pointer/registry effect.
+
+Final `evidence/python-psycopg-epoch-cut/2472b218-d963-454b-8144-4d8953796248`
+passes134 methods (83 fact/dependency/identity/visibility/DDL/role/generation,16
+graph,nine epoch,26 adoption), module boundaries,138 current/archived Truss sources,
+363 original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Earlieraaf76b49 passes133 methods under its
+original source tuple. The base-constraint probe is a separate original native
+name/definition observation only; it is not migration/admission proof.
+
+Formal `evidence/security-authority-generation-formal/42fb89e5-9cfb-4841-964f-8f243b6fe1ef`
+passes five fresh-context queries (three UNSAT/two SAT), retaining four exact
+source preimages and SMT/model receipts. Atomic visibility and distinct successor
+premises imply committed successor excludes old generation and abort preserves
+both original states; selected issuance preserves incarnation. Split commits and
+omitted fresh comparison admit countermodels. Earlierd28e271b retains the earlier
+source tuple and simpler unconditional-acceptance counter; final models captured
+generation explicitly. No PostgreSQL transaction/catalog/SQL/UUID issuer refinement
+or protected final-release theorem.
+
+Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10. Complete installed
+issuer/helper/ACL custody, qualified profile/evidence producer, all administrative
+paths and cluster-wide coordination, capability/routine inventory, original
+caller/mapping, uncertain-commit recovery and protected final release remain open.
+No shipped migration/public support flag or backend acceptance binding; last full
+checkpoint26/132,106 missing. Goal active. Next compose original issuer custody
+and generation/profile production with the protected operation lifetime.
+
+
+### Installed authority writer/issuer correspondence — 2026-10-11
+
+Private source verification now composes original epoch/DDL barrier readback with
+exact installed shared-authority writer and authority issuer OIDs, owners, names,
+plpgsql language, ordinary function kind, argument/return shapes, scalar return,
+non-STRICT/invoker/volatile flags, exact search_path/body and absent PUBLIC EXECUTE
+before callback. Comparisons are bounded original fixture metadata, not credentials.
+Four native controls pass: exact installed source pair; actual PUBLIC EXECUTE drift
+refuses; SECURITY DEFINER drift refuses; STRICT drift demonstrably returns NULL
+without null-predecessor validation, while the stronger source check refuses.
+
+Final `evidence/python-psycopg-epoch-cut/4a75f4b6-57c0-472a-adf8-f7ddf050f746`
+passes138 methods (87 fact/dependency/identity/visibility/DDL/role/issuer,16 graph,
+nine epoch,26 adoption), module boundaries,138 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three stop0/status3/socket-absent
+cleanups. Earlier16944e98 passes137 methods under its earlier source tuple.
+Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10 source-correspondence
+prerequisites only. No new formal refinement or backend acceptance binding.
+Complete language-handler/dependency and all-role ACL/lifetime closure, original
+issuer credentials, qualified profile/evidence production, ordinary caller/mapping
+and protected final release remain open. Last full checkpoint26/132,106 missing;
+goal active. Next compose qualified lifecycle producer and original profile sources
+with this source verification; installed comparison alone is not authority.
+
+
+### Original policy/resolution source-bound profile — 2026-10-11
+
+Private `truss-flat-fact-provider-fixture/0.2` retains policyUtf8/resolutionUtf8
+strings alongside the original requirement digest and provider declarations.
+Fixed capture requires a bounded original source bundle, snapshots its immutable
+bytes before validation, checks owner-artifact source-digest correspondence and
+exact native-profile inline UTF8 byte correspondence before host invocation.
+Original native epoch comparison still requires the same complete installed profile
+bytes; replacing all caller-side source/requirement/profile copies cannot match it.
+Semantic interpretation remains UMF-owned. Legacy0.1 remains its separately scoped
+subset and is not silently upgraded to exact inline-source correspondence.
+
+Five native methods prove original identity-cell capture, missing source-bundle
+refusal before xid assignment, policy/resolution byte-change refusals before xid,
+whole caller-copy replacement refused by actual retained native generation, and
+private snapshot stability despite later caller-carrier mutation. Source-artifact
+validation lives in the original artifact module, not native provider code.
+Final `evidence/python-psycopg-epoch-cut/d0767fa6-5104-4968-b8a2-21a352b3ba99`
+passes143 methods (92 fact/dependency/identity/visibility/DDL/role/source,16 graph,
+nine epoch,26 adoption), module boundaries,138 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Initial5d33494a passed142 native methods but
+correctly failed its module boundary for a misplaced hashing import; it remains
+nonqualifying evidence.
+
+Formal `evidence/security-source-profile-formal/b94c4652-0014-4ee8-913a-41d0fb5f2a5f`
+passes five fresh-context queries (three UNSAT/two SAT) with four exact source
+preimages. Under faithful original/selected/native byte correspondence, source
+substitution is excluded. Abstract finite-width digest equality alone and
+self-consistent replaced manifests without retained native comparison have
+countermodels; no hash injectivity assumed. Earlier123e8acb retains its simpler
+self-agreement counter and original source tuple. No UTF8/JSON/Python/PostgreSQL,
+epoch projection or SHA256 implementation refinement theorem.
+
+Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 provenance prerequisites.
+Source bytes/digests remain comparison premises, not authenticated issuer identity
+or physical mapping meaning. Qualified producer/caller authority, original mapping
+and decoder construction, complete source/role/ACL lifetime and protected final
+release remain open. No backend acceptance binding or public support flag promoted;
+last full checkpoint26/132 with106 missing. Goal active. Next bind original semantic
+and physical profile construction to qualified issuer custody and protected release.

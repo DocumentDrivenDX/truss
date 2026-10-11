@@ -1,0 +1,6 @@
+{
+  "status": "incomplete-timeout",
+  "suiteDeadlineSeconds": 90,
+  "scope": "No whole-suite qualification. Original runner did not retain captured unittest output on TimeoutExpired. Named completed fixture cleanup files retained. Exact owned fixture binary process inspection after terminal timeout found no running fixture process.",
+  "diagnosticServerLog": "diagnostic-server.log"
+}

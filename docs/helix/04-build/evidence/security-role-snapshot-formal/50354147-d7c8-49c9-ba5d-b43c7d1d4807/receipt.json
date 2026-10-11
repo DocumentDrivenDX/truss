@@ -1,0 +1,57 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-role-snapshot.py": "8851cb054a7d32c77943bfa3a025d8a421d2fb7bb35eeca1a36a87c07cc7a22f",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "5ffdc145c553073c6adf7c328537686eb895c3b8ef9718deddfeeed0d168f37b",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "ea504906ba43abe60b3af56f5861e4aede584236d13333341efa023a348de595"
+  },
+  "queries": [
+    {
+      "id": "both_original_role_exclusions_prevent_selected_admin_flags",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "c03a35814ac31e078df15d810972a6c1235c0a017e8f7c5685c6a983b63ec88e",
+      "model": null
+    },
+    {
+      "id": "lowered_effective_role_does_not_override_session_superuser",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "d0204e874a224d324c80af1bc2269f548ee10b80cb38b1a1c5d7c126c40ac857",
+      "model": null
+    },
+    {
+      "id": "concurrent_role_change_can_invalidate_snapshot",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "156dc76c03eeee4804a2dadc00d9e78b1bc0ed058d7aef3bf700d0263753849a",
+      "model": "[original_superuser = K(Int, False),\n original_effective_role = 3,\n original_session_role = 2,\n original_createrole = K(Int, False),\n original_owner_membership = K(Int, False),\n later_superuser = K(Int, True),\n original_bypassrls = K(Int, False)]"
+    },
+    {
+      "id": "role_snapshot_does_not_exclude_privileged_definer_path",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "d549fd7541a684773133515f7ebed5222548f1fffc6fc116f4cae45d1f06f23d",
+      "model": "[original_superuser = K(Int, False),\n original_effective_role = 3,\n original_session_role = 2,\n original_createrole = K(Int, False),\n original_owner_membership = K(Int, False),\n reachable_privileged_definer = K(Int, True),\n original_bypassrls = K(Int, False)]"
+    },
+    {
+      "id": "stable_role_sources_preserve_selected_exclusion",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "9f63df35b03367ab85b309d06a1d70e541733eb79058928ffe7a97274bc08c3f",
+      "model": null
+    }
+  ],
+  "scope": "Unbounded role identities with abstract original native attribute/membership predicates. Both session and effective identities must satisfy the selected exclusion. Stable original role sources preserve that exclusion; snapshot-only admission permits later privilege changes and says nothing about privileged definer paths.",
+  "limitations": [
+    "No PostgreSQL pg_has_role membership-closure, native catalog or SQL/Python refinement proof",
+    "Role/source lifetime and reachable routine/ACL closure remain unqualified",
+    "No authenticated caller/issuer, full authority admission or protected final release proof"
+  ]
+}

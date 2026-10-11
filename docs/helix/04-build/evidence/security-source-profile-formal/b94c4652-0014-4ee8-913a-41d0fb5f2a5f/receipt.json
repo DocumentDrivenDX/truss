@@ -1,0 +1,58 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-source-profile.py": "b4869dfe0dac6bee232b5adce151e5d5c1d76419f6064fd6f2fe78f196a2a6f9",
+    "packages/python/src/truss/_security_fact_coverage.py": "50bfd13be6b2ce0f82cc1e0d0ceffd2bc192020b2d4f5a96eaa27b72f2f34385",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "ec94cc971a16f67a57f3e8eb69d36a762a61bce8f525cef067ce9d003721abc0",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "e32bfb74616f93956630b17e97cf9c1a5d20cd789d8e8244a836fff27c3f9962"
+  },
+  "queries": [
+    {
+      "id": "digest_equality_alone_does_not_establish_byte_identity",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "b7513ed4d8c7d372f5370e9a7b43e20183ac9025935bcd1e38f079e59a494d1f",
+      "model": "[original_policy = \"!1!\",\n native_policy = \"!0!\",\n abstract_digest = [else -> 0]]"
+    },
+    {
+      "id": "exact_policy_correspondence_excludes_changed_native_policy",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "bb94dbad142ab2ba550490378ac8c5474ddd143b596535b167c94ce9f846474f",
+      "model": null
+    },
+    {
+      "id": "exact_resolution_correspondence_excludes_changed_native_resolution",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "11505ea5ae4f620bbba2539d80e9854b1cd93f2141a6437a4ae9d1be86a542c1",
+      "model": null
+    },
+    {
+      "id": "retained_native_source_excludes_replaced_caller_policy",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "c01fbf579d8b9adffc872e83851540bac0a53973bc05205882d7f58d12e7080c",
+      "model": null
+    },
+    {
+      "id": "omitted_retained_native_comparison_accepts_replaced_bundle",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "91fc5d4c568a8942838140d01605a4143dd932e1c071f65cc77d3e2087220390",
+      "model": "[original_policy = \"\",\n selected_policy = \"A\",\n weak_admitted = True,\n selected_manifest_policy_digest = 0,\n native_policy = \"\",\n abstract_digest = [else -> 0]]"
+    }
+  ],
+  "scope": "Unbounded source strings and abstract finite-width digests. Exact original/selected/native byte correspondence prevents source substitution. Digest equality alone and omitted retained native comparison have countermodels; no hash injectivity is assumed.",
+  "limitations": [
+    "No UTF8/JSON/Python/PostgreSQL/epoch-projection refinement or SHA256 implementation proof",
+    "Original source selection and faithful retained native comparison are premises, not authenticated issuer or mapping provenance",
+    "No authenticated caller/issuer, original writer installation/ACL closure, full authority admission or protected final release proof"
+  ]
+}

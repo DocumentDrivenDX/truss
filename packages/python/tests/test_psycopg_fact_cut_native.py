@@ -33,6 +33,9 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     oid,owner=c.execute("SELECT oid,relowner FROM pg_catalog.pg_class WHERE oid=%s::regclass",('truss.'+name,)).fetchone()
                     cls.semantic_relations[name]=_FactRelationComparison('truss',name,oid,owner,(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0])
                 cls.bindings={r[0]:_FactRelationComparison('truss',r[0],r[1],r[2],(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0]) for r in c.execute("SELECT relname,oid,relowner FROM pg_class WHERE oid IN ('truss.flat_assignment'::regclass,'truss.edge'::regclass)")}
+                c.execute((ROOT/'packages/postgresql/native/source-epoch-shared-authority-writer.sql').read_text())
+                c.execute((ROOT/'docs/helix/04-build/evidence/authority-epoch-reason.owner-export.sql').read_text())
+                c.execute((ROOT/'packages/postgresql/native/source-epoch-authority-issue.sql').read_text())
         except BaseException:
             epoch_tests.PsycopgEpochCutNativeTests.tearDownClass.__func__(cls)
             raise
@@ -519,3 +522,338 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         result=self.cut(t,lambda c:called.append(True),ddl_barrier=original)
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
         self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+
+    def with_unprivileged_actor(self, operation, grant_owner=False, attribute=None):
+        from truss.psycopg_host import PsycopgHost,PsycopgProfile
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        original=self.ddl_comparison()
+        self.connection.execute('CREATE ROLE fact_cut_actor LOGIN')
+        try:
+            self.connection.execute('GRANT USAGE ON SCHEMA truss TO fact_cut_actor; GRANT ALL ON ALL TABLES IN SCHEMA truss TO fact_cut_actor; GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA truss TO fact_cut_actor')
+            # Exact owned-layout administrative high-water routines are not
+            # part of this invoker-only actor fixture. PUBLIC is already revoked.
+            self.connection.execute('REVOKE ALL ON FUNCTION truss.catalog_global_high_water_v01(),truss.catalog_key_high_water_v01(integer) FROM fact_cut_actor')
+            if grant_owner:self.connection.execute('GRANT postgres TO fact_cut_actor')
+            if attribute:self.connection.execute('ALTER ROLE fact_cut_actor '+attribute)
+            with psycopg.connect(host=str(self.socket),user='fact_cut_actor',dbname='postgres',autocommit=True,options='-c statement_timeout=3s') as connection:
+                host=PsycopgHost(connection,profile=PsycopgProfile())
+                try:
+                    connection.execute('BEGIN');adopted=host.adopt_transaction();self.assertIsInstance(adopted,Ok)
+                    operation(host,adopted.value,original,connection)
+                    connection.execute('ROLLBACK')
+                finally:host.detach()
+        finally:
+            self.connection.execute('DROP OWNED BY fact_cut_actor; DROP ROLE fact_cut_actor; DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_selected_unprivileged_role_passes_and_cannot_disable_native_barrier(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.assertEqual(_run_unprivileged_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'excluded-administration'),Ok('excluded-administration'))
+            connection.execute('SAVEPOINT denied_admin')
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('ALTER EVENT TRIGGER truss_table_ddl_writer_barrier DISABLE')
+            connection.execute('ROLLBACK TO denied_admin')
+            self.assertEqual(connection.execute("SELECT evtenabled FROM pg_catalog.pg_event_trigger WHERE evtname='truss_table_ddl_writer_barrier'").fetchone(),('A',))
+        self.with_unprivileged_actor(operation)
+    def test_selected_superuser_role_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();t=self.begin();called=[]
+            result=_run_unprivileged_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_selected_owner_membership_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            called=[];result=_run_unprivileged_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        self.with_unprivileged_actor(operation,grant_owner=True)
+    def test_selected_createrole_and_bypassrls_refuse_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            called=[];result=_run_unprivileged_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        for attribute in ('CREATEROLE','BYPASSRLS'):
+            with self.subTest(attribute=attribute):self.with_unprivileged_actor(operation,attribute=attribute)
+
+    def test_no_reachable_definer_profile_passes_original_invoker_fixture(self):
+        from truss._psycopg_epoch_cut import _run_no_definer_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'invoker-only'),Ok('invoker-only'))
+        self.with_unprivileged_actor(operation)
+    def test_native_definer_can_disable_barrier_and_stronger_profile_refuses(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation,_run_no_definer_ddl_fenced_epoch_operation
+        self.connection.execute("CREATE FUNCTION truss.fixture_disable_barrier() RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$ BEGIN ALTER EVENT TRIGGER truss_table_ddl_writer_barrier DISABLE; END $$")
+        try:
+            def operation(host,t,original,connection):
+                self.assertEqual(connection.execute("SELECT pg_catalog.has_function_privilege(current_user,'truss.fixture_disable_barrier()','EXECUTE'),pg_catalog.has_function_privilege(current_user,'truss.catalog_global_high_water_v01()','EXECUTE'),pg_catalog.has_function_privilege(current_user,'truss.catalog_key_high_water_v01(integer)','EXECUTE')").fetchone(),(True,False,False))
+                called=[];result=_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+                # Actual nonowner role passes the weaker snapshot, then uses a
+                # reachable original SECURITY DEFINER routine to administer it.
+                def bypass(c):
+                    c.execute('SELECT truss.fixture_disable_barrier()')
+                    c.execute("SELECT evtenabled::pg_catalog.text FROM pg_catalog.pg_event_trigger WHERE evtname='truss_table_ddl_writer_barrier'")
+                    return c.fetchone()[0]
+                self.assertEqual(_run_unprivileged_ddl_fenced_epoch_operation(host,t,self.comparison(),original,bypass),Ok('D'))
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP FUNCTION truss.fixture_disable_barrier()')
+    def test_revoked_definer_execute_removes_native_reachability(self):
+        from truss._psycopg_epoch_cut import _run_no_definer_ddl_fenced_epoch_operation
+        self.connection.execute("CREATE FUNCTION truss.fixture_private_definer() RETURNS integer LANGUAGE sql SECURITY DEFINER AS $$ SELECT 1 $$; REVOKE ALL ON FUNCTION truss.fixture_private_definer() FROM PUBLIC")
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('REVOKE ALL ON FUNCTION truss.fixture_private_definer() FROM fact_cut_actor')
+                self.assertEqual(connection.execute("SELECT pg_catalog.has_function_privilege(current_user,'truss.fixture_private_definer()','EXECUTE')").fetchone(),(False,))
+                self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'not-reachable'),Ok('not-reachable'))
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP FUNCTION truss.fixture_private_definer()')
+
+    def test_set_reachable_createrole_without_inheritance_refuses_stronger_cut(self):
+        from truss._psycopg_epoch_cut import _run_no_definer_ddl_fenced_epoch_operation,_run_set_role_excluded_ddl_fenced_epoch_operation
+        self.connection.execute('CREATE ROLE fact_assumable CREATEROLE')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_assumable TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                self.assertEqual(connection.execute("SELECT pg_catalog.pg_has_role(current_user,'fact_assumable','USAGE'),pg_catalog.pg_has_role(current_user,'fact_assumable','SET')").fetchone(),(False,True))
+                self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'weak-snapshot'),Ok('weak-snapshot'))
+                called=[];result=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+                connection.execute('SET LOCAL ROLE fact_assumable')
+                self.assertEqual(connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(True,))
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP ROLE fact_assumable')
+    def test_set_reachable_definer_without_direct_execute_refuses_stronger_cut(self):
+        from truss._psycopg_epoch_cut import _run_no_definer_ddl_fenced_epoch_operation,_run_set_role_excluded_ddl_fenced_epoch_operation
+        self.connection.execute("CREATE ROLE fact_assumable; CREATE FUNCTION truss.fixture_assumed_definer() RETURNS integer LANGUAGE sql SECURITY DEFINER AS $$ SELECT 77 $$; REVOKE ALL ON FUNCTION truss.fixture_assumed_definer() FROM PUBLIC; GRANT USAGE ON SCHEMA truss TO fact_assumable; GRANT EXECUTE ON FUNCTION truss.fixture_assumed_definer() TO fact_assumable")
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('REVOKE ALL ON FUNCTION truss.fixture_assumed_definer() FROM fact_cut_actor; GRANT fact_assumable TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                self.assertEqual(connection.execute("SELECT pg_catalog.has_function_privilege(current_user,'truss.fixture_assumed_definer()','EXECUTE'),pg_catalog.pg_has_role(current_user,'fact_assumable','SET')").fetchone(),(False,True))
+                self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'weak-snapshot'),Ok('weak-snapshot'))
+                called=[];result=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+                connection.execute('SET LOCAL ROLE fact_assumable')
+                self.assertEqual(connection.execute('SELECT truss.fixture_assumed_definer()').fetchone(),(77,))
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP FUNCTION truss.fixture_assumed_definer(); DROP OWNED BY fact_assumable; DROP ROLE fact_assumable')
+    def test_set_reachable_profile_passes_original_invoker_actor(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'set-role-excluded'),Ok('set-role-excluded'))
+        self.with_unprivileged_actor(operation)
+
+    def test_transitive_set_role_chain_reaches_privileged_role(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        self.connection.execute('CREATE ROLE fact_assumable; CREATE ROLE fact_inner CREATEROLE; GRANT fact_inner TO fact_assumable WITH INHERIT FALSE, SET TRUE')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_assumable TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                self.assertEqual(connection.execute("SELECT pg_catalog.pg_has_role(current_user,'fact_inner','USAGE'),pg_catalog.pg_has_role(current_user,'fact_inner','SET')").fetchone(),(False,True))
+                called=[];result=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+                connection.execute('SET LOCAL ROLE fact_inner; CREATE ROLE fact_assumed_created')
+                self.assertEqual(connection.execute("SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname='fact_assumed_created'").fetchone(),(1,))
+            self.with_unprivileged_actor(operation)
+            self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname='fact_assumed_created'").fetchone(),(0,))
+        finally:self.connection.execute('DROP ROLE fact_assumable; DROP ROLE fact_inner')
+    def test_noninherited_membership_without_set_permission_does_not_refuse(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        self.connection.execute('CREATE ROLE fact_assumable CREATEROLE')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_assumable TO fact_cut_actor WITH INHERIT FALSE, SET FALSE')
+                self.assertEqual(connection.execute("SELECT pg_catalog.pg_has_role(current_user,'fact_assumable','MEMBER'),pg_catalog.pg_has_role(current_user,'fact_assumable','USAGE'),pg_catalog.pg_has_role(current_user,'fact_assumable','SET')").fetchone(),(True,False,False))
+                self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'no-set-path'),Ok('no-set-path'))
+                connection.execute('SAVEPOINT no_set_permission')
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('SET LOCAL ROLE fact_assumable')
+                connection.execute('ROLLBACK TO no_set_permission')
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP ROLE fact_assumable')
+
+    def test_uncoordinated_shared_role_change_invalidates_retained_snapshot(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            def change(c):
+                self.connection.execute('ALTER ROLE fact_cut_actor CREATEROLE')
+                c.execute("SELECT rolcreaterole::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname=current_user")
+                return c.fetchone()[0]
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,change),Ok('true'))
+        self.with_unprivileged_actor(operation)
+    def test_participating_shared_role_writer_refuses_until_reader_release(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            def read(c):
+                with self.assertRaises(psycopg.errors.LockNotAvailable):self.connection.execute('SELECT truss.runtime_fence_shared_authority_writer()')
+                self.assertEqual(self.connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname='fact_cut_actor'").fetchone(),(False,))
+                return 'writer-refused'
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,read),Ok('writer-refused'))
+            connection.execute('ROLLBACK')
+            try:
+                self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor CREATEROLE')
+                self.assertEqual(self.connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname='fact_cut_actor'").fetchone(),(True,))
+            finally:self.connection.execute('ROLLBACK')
+            self.assertEqual(self.connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname='fact_cut_actor'").fetchone(),(False,))
+        self.with_unprivileged_actor(operation)
+    def test_pending_shared_role_participant_excludes_reader_until_abort(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            try:
+                self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor CREATEROLE')
+                self.assertEqual(self.connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname='fact_cut_actor'").fetchone(),(True,))
+                called=[];result=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55P03');self.assertEqual(called,[])
+            finally:self.connection.execute('ROLLBACK')
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'fresh-after-abort'),Ok('fresh-after-abort'))
+        self.with_unprivileged_actor(operation)
+    def test_shared_authority_writer_refuses_same_backend_retained_reader(self):
+        t=self.begin();result=self.cut(t,lambda c:c.execute('SELECT truss.runtime_fence_shared_authority_writer()'))
+        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000');self.assertEqual(self.fact_shares(),0)
+
+    def test_authority_change_commit_invalidates_old_epoch_and_preserves_incarnation(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation,_EpochComparison
+        issued=[]
+        try:
+            def operation(host,t,original,connection):
+                predecessor=self.epoch
+                try:
+                    self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor NOINHERIT')
+                    successor=self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',%s,'target',%s,%s)",(predecessor,b'\x03',b'\x04')).fetchone()[0]
+                    self.connection.execute('COMMIT');issued.append(successor)
+                except BaseException:
+                    self.connection.execute('ROLLBACK');raise
+                self.assertEqual(connection.execute("SELECT rolinherit FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(False,))
+                called=[];old=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(old,Error);self.assertEqual(old.error.sql_state,'55000');self.assertEqual(called,[])
+                selected=_EpochComparison('fixture',successor,'target',b'\x03',b'\x04')
+                self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,selected,original,lambda c:'new-authority-epoch'),Ok('new-authority-epoch'))
+                self.assertEqual(self.connection.execute('SELECT predecessor_epoch,transition_reason,target_incarnation FROM truss.source_epoch_registry WHERE source_epoch=%s',(successor,)).fetchone(),(predecessor,'authority-change','target'))
+            self.with_unprivileged_actor(operation)
+        finally:
+            self.connection.execute('ROLLBACK')
+            if issued:
+                type(self).epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(issued[-1],b'\x01',b'\x02')).fetchone()[0]
+    def test_authority_change_abort_restores_role_pointer_and_registry(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            predecessor=self.epoch
+            try:
+                self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor NOINHERIT')
+                successor=self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',%s,'target',%s,%s)",(predecessor,b'\x03',b'\x04')).fetchone()[0]
+                self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(successor,))
+            finally:self.connection.execute('ROLLBACK')
+            self.assertEqual(connection.execute("SELECT rolinherit FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(True,))
+            self.assertEqual(connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(predecessor,))
+            self.assertEqual(connection.execute('SELECT count(*) FROM truss.source_epoch_registry WHERE source_epoch=%s',(successor,)).fetchone(),(0,))
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'original-after-abort'),Ok('original-after-abort'))
+        self.with_unprivileged_actor(operation)
+    def test_authority_change_cannot_silently_restore_different_incarnation(self):
+        def operation(host,t,original,connection):
+            try:
+                self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor NOINHERIT')
+                with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',%s,'different-target',%s,%s)",(self.epoch,b'\x03',b'\x04'))
+            finally:self.connection.execute('ROLLBACK')
+            self.assertEqual(connection.execute("SELECT rolinherit FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(True,))
+            self.assertEqual(connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(self.epoch,))
+        self.with_unprivileged_actor(operation)
+
+    def test_authority_change_missing_or_stale_predecessor_has_no_committed_effect(self):
+        def operation(host,t,original,connection):
+            before=connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone()
+            for predecessor in (None,'wrong-predecessor'):
+                with self.subTest(predecessor=predecessor):
+                    try:
+                        self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor NOINHERIT')
+                        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',%s,'target',%s,%s)",(predecessor,b'\x03',b'\x04'))
+                    finally:self.connection.execute('ROLLBACK')
+                    self.assertEqual(connection.execute("SELECT rolinherit FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(True,))
+                    self.assertEqual(connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(self.epoch,))
+                    self.assertEqual(connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),before)
+        self.with_unprivileged_actor(operation)
+
+    def issuer_comparison(self):
+        from truss._psycopg_epoch_cut import _AuthorityIssuerComparison
+        rows=self.connection.execute("SELECT proname,oid,proowner,prosrc FROM pg_catalog.pg_proc WHERE oid IN ('truss.runtime_fence_shared_authority_writer()'::regprocedure,'truss.runtime_issue_authority_epoch(text,text,text,bytea,bytea)'::regprocedure) ORDER BY proname").fetchall()
+        return _AuthorityIssuerComparison(rows[0][2],rows[0][1],rows[0][3],rows[1][1],rows[1][3])
+    def test_original_authority_issuer_installed_correspondence_passes(self):
+        from truss._psycopg_epoch_cut import _run_issuer_verified_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.issuer_comparison();barrier=self.ddl_comparison();t=self.begin()
+            self.assertEqual(_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:'original-issuer-source'),Ok('original-issuer-source'))
+        finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_public_execute_drift_on_authority_issuer_refuses(self):
+        from truss._psycopg_epoch_cut import _run_issuer_verified_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.issuer_comparison();barrier=self.ddl_comparison();t=self.begin()
+            self.connection.execute('GRANT EXECUTE ON FUNCTION truss.runtime_issue_authority_epoch(text,text,text,bytea,bytea) TO PUBLIC')
+            called=[];result=_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_definer_drift_on_authority_issuer_refuses(self):
+        from truss._psycopg_epoch_cut import _run_issuer_verified_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.issuer_comparison();barrier=self.ddl_comparison();t=self.begin()
+            self.connection.execute('ALTER FUNCTION truss.runtime_issue_authority_epoch(text,text,text,bytea,bytea) SECURITY DEFINER')
+            called=[];result=_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def test_strict_issuer_skips_null_validation_but_source_admission_refuses(self):
+        from truss._psycopg_epoch_cut import _run_issuer_verified_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.issuer_comparison();barrier=self.ddl_comparison();t=self.begin()
+            self.connection.execute('ALTER FUNCTION truss.runtime_issue_authority_epoch(text,text,text,bytea,bytea) STRICT')
+            self.assertEqual(self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',NULL,'target',%s,%s)",(b'\x03',b'\x04')).fetchone(),(None,))
+            called=[];result=_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def source_bound_profile(self):
+        from truss._psycopg_dependency_fact_cut import _OriginalFactSources
+        base=ROOT/'docs/helix/04-build/evidence/security-identity-requirements'
+        sources=_OriginalFactSources((base/'policy.json').read_bytes(),(base/'resolution.json').read_bytes())
+        raw=self.identity_raw()
+        profile=json.dumps({'kind':'truss-flat-fact-provider-fixture/0.2','requirementsSha256':hashlib.sha256(raw).hexdigest(),'policyUtf8':sources.policy.decode('utf8'),'resolutionUtf8':sources.resolution.decode('utf8'),'providers':[asdict(p) for p in self.identity_dependency_providers()]},sort_keys=True,separators=(',',':')).encode()
+        return raw,profile,sources
+    def test_source_bound_native_profile_captures_original_identity_cells(self):
+        t=self.begin();raw,profile,sources=self.source_bound_profile();comparison=self.issue_bound_profile(profile)
+        result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
+        self.assertIsInstance(result,Ok);self.assertEqual(len(result.value),5)
+    def test_source_bound_profile_requires_original_source_bundle(self):
+        t=self.begin();raw,profile,sources=self.source_bound_profile()
+        comparison=epoch_tests._EpochComparison('fixture',self.epoch,'target',profile,b'fixture')
+        with self.assertRaisesRegex(ValueError,'Original policy/resolution'):_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest())
+        self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+    def test_source_bound_profile_refuses_changed_policy_or_resolution_bytes(self):
+        from truss._psycopg_dependency_fact_cut import _OriginalFactSources
+        t=self.begin();raw,profile,sources=self.source_bound_profile()
+        comparison=epoch_tests._EpochComparison('fixture',self.epoch,'target',profile,b'fixture')
+        for wrong in (_OriginalFactSources(sources.policy+b' ',sources.resolution),_OriginalFactSources(sources.policy,sources.resolution+b' ')):
+            with self.subTest(source=wrong):
+                with self.assertRaisesRegex(ValueError,'requirement/source'):_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=wrong)
+        self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+    def test_replacing_all_source_bound_caller_copies_cannot_match_native_generation(self):
+        from truss._psycopg_dependency_fact_cut import _OriginalFactSources
+        t=self.begin();raw,profile,sources=self.source_bound_profile();comparison=self.issue_bound_profile(profile)
+        wrong_sources=_OriginalFactSources(sources.policy+b' ',sources.resolution)
+        wrong_raw=json.loads(raw);wrong_raw['policySha256']=hashlib.sha256(wrong_sources.policy).hexdigest();wrong_raw=json.dumps(wrong_raw).encode();wrong_digest=hashlib.sha256(wrong_raw).hexdigest()
+        replacement=json.loads(profile);replacement['policyUtf8']=wrong_sources.policy.decode();replacement['requirementsSha256']=wrong_digest
+        wrong=epoch_tests._EpochComparison(comparison.installation,comparison.epoch,comparison.incarnation,json.dumps(replacement).encode(),comparison.evidence)
+        result=_capture_epoch_bound_dependency_cells(self.host,t,wrong,wrong_raw,wrong_digest,sources=wrong_sources)
+        self.assertIsInstance(result,Error);self.assertEqual(self.fact_shares(),0)
+
+    def test_source_bundle_snapshot_ignores_later_caller_carrier_mutation(self):
+        import truss._psycopg_dependency_fact_cut as producer
+        from unittest.mock import patch
+        t=self.begin();raw,profile,sources=self.source_bound_profile();comparison=self.issue_bound_profile(profile)
+        validate=producer._inspect_original_fact_sources
+        def mutate(*args):
+            validate(*args)
+            object.__setattr__(sources,'policy',sources.policy+b' ')
+        with patch.object(producer,'_inspect_original_fact_sources',mutate):
+            result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
+        self.assertIsInstance(result,Ok);self.assertTrue(sources.policy.endswith(b' '))

@@ -4,7 +4,7 @@ UMF owns semantic traversal. This composes original dependency coverage with
 native recipes, not authenticated mapping/decoder qualification or policy execution.
 """
 from dataclasses import dataclass
-from ._security_fact_coverage import _FactBindingDeclaration, _inspect_fact_coverage
+from ._security_fact_coverage import _FactBindingDeclaration, _inspect_fact_coverage, _OriginalFactSources, _inspect_original_fact_sources
 from ._psycopg_fact_cut import _FactColumnComparison, _FactRelationComparison, _run_fenced_fact_operation
 
 
@@ -55,7 +55,7 @@ def _run_dependency_fact_operation(host, transaction, epoch, original_bytes,
     return _run_fenced_fact_operation(host,transaction,epoch,recipe,callback)
 
 
-def _epoch_dependency_recipe(epoch, expected_sha256):
+def _epoch_dependency_recipe(epoch, expected_sha256, sources=None):
     """Derive recipes from exact selected native epoch profile bytes.
 
     Lifecycle issuer, original semantic mapping and decoder/source closure remain
@@ -78,8 +78,18 @@ def _epoch_dependency_recipe(epoch, expected_sha256):
         return value
     try:profile=json.loads(raw,object_pairs_hook=unique)
     except (UnicodeError,RecursionError) as error:raise ValueError('Original provider profile JSON required') from error
-    closed(profile,('kind','requirementsSha256','providers'))
-    if profile['kind']!='truss-flat-fact-provider-fixture/0.1' or profile['requirementsSha256']!=expected_sha256:
+    if type(profile) is dict and profile.get('kind')=='truss-flat-fact-provider-fixture/0.2':
+        closed(profile,('kind','requirementsSha256','providers','policyUtf8','resolutionUtf8'))
+        if type(sources) is not _OriginalFactSources:
+            raise ValueError('Original policy/resolution sources required for source-bound profile')
+        for key,original in (('policyUtf8',sources.policy),('resolutionUtf8',sources.resolution)):
+            if type(original) is not bytes or not 1<=len(original)<=65536 or type(profile[key]) is not str:
+                raise ValueError('Bounded original policy/resolution bytes required')
+            if profile[key].encode('utf8')!=original:
+                raise ValueError('Exact native profile policy/resolution correspondence required')
+    else:
+        closed(profile,('kind','requirementsSha256','providers'))
+    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.1','truss-flat-fact-provider-fixture/0.2') or profile['requirementsSha256']!=expected_sha256:
         raise ValueError('Original requirement/profile correspondence required')
     values=profile['providers']
     if type(values) is not list or not 1<=len(values)<=8192:raise ValueError('Bounded original provider list required')
@@ -116,14 +126,19 @@ class _DependencyRelationCells:
     rows: tuple
 
 
-def _capture_epoch_bound_dependency_cells(host, transaction, epoch, original_bytes, expected_sha256):
+def _capture_epoch_bound_dependency_cells(host, transaction, epoch, original_bytes, expected_sha256, *, sources=None):
     """Fixed native raw-cell capture, without caller SQL/decoder callback.
 
     Selected ordinary bool/int8/text columns only. Raw data carries no trusted
     semantic fact, policy decision, final disclosure or authorization capability.
     """
     from psycopg import sql
-    selected,providers=_epoch_dependency_recipe(epoch,expected_sha256)
+    if sources is not None:
+        if type(sources) is not _OriginalFactSources:
+            raise ValueError('Original policy/resolution source bundle required')
+        sources=_OriginalFactSources(sources.policy,sources.resolution)
+        _inspect_original_fact_sources(original_bytes,expected_sha256,sources)
+    selected,providers=_epoch_dependency_recipe(epoch,expected_sha256,sources)
     groups={}
     for p in providers:
         group=groups.setdefault(p.relation.oid,{'relation':p.relation,'fields':[],'associations':[]})

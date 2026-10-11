@@ -810,3 +810,154 @@ Packetf764ff62 passes114 component methods and three independent cleanup checks.
 Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 correspondence
 prerequisites. Administrative fixtures do not establish ordinary caller authority,
 installed administration exclusions, whole source lifetime or final disclosure.
+
+
+### Original role exclusion and native event-trigger privilege — 2026-10-11
+
+Four native methods require: a real nonowner session passes selected original
+role exclusion and PostgreSQL refuses its ALTER EVENT TRIGGER with42501; the
+original superuser session refuses before callback; native membership in the
+barrier owner refuses; original CREATEROLE and BYPASSRLS fixtures refuse. Privilege
+failure is contained by a savepoint and the barrier remains ALWAYS. Each owned
+role/grant fixture is removed after closing the actor connection.
+Final5db462c6 passes118 methods; original source pins and three cleanup receipts
+are retained. Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
+prerequisites only. Formal50354147 separately retains three UNSAT properties and
+two SAT counterexamples for abstract role snapshots; no native membership
+algorithm, SQL/Python refinement, role lifetime or full authority proof.
+
+
+### Native reachable-definer bypass and selected refusal — 2026-10-11
+
+Three controls require: the original invoker-only actor fixture passes; an actual
+nonowner with EXECUTE on an owned SECURITY DEFINER routine can disable the native
+table barrier through the weaker role-only snapshot, while the selected stronger
+profile refuses without callback; removing direct and PUBLIC EXECUTE from another
+definer independently reports native false reachability and permits the stronger
+snapshot. Actor grants explicitly exclude the two exact layout administrative
+high-water definers. The bypass control observes its attack EXECUTE=true and both
+high-water EXECUTE=false, so refusal is attributed to the intended native path.
+Packetc5ef24cc passes121 methods; three native cleanups retained. Trace
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC5/AC9/AC10 prerequisites.
+Formale1dfc639 supplies three conditional UNSAT/two SAT results; no native
+EXECUTE implementation, SET ROLE closure, shared ACL lifetime or final-release
+refinement proof.
+
+
+### Native SET ROLE membership semantics — 2026-10-11
+
+Five controls require: original invoker actor passes; NOINHERIT but SET-enabled
+CREATEROLE membership passes the weaker snapshot and refuses stronger admission,
+while actual SET ROLE observes its privileged attribute; a definer unavailable to
+the original role becomes callable after native SET ROLE and stronger admission
+refuses; a transitive SET-enabled/noninherited chain refuses and actually creates
+an owned temporary role that transaction rollback removes; MEMBER=true with
+INHERIT=false/SET=false passes the selected stronger snapshot and PostgreSQL
+independently denies SET ROLE with42501 under a contained savepoint.
+Final7f63dbb2 passes126 methods and three independent native cleanups. Trace
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC5/AC9/AC10 prerequisites. Formal
+d4af259a separately models unbounded abstract SET/inheritance reachability: two
+UNSAT properties/three SAT counterexamples. It does not prove PostgreSQL's
+membership traversal, complete privileged capability inventory or role lifetime.
+
+
+### Shared-role lifetime counterexample and participating writers — 2026-10-11
+
+Four native controls require: an excluded administrator's uncoordinated ALTER
+ROLE commits CREATEROLE during the strongest retained snapshot and original actor
+observes true (counterexample); explicit participant refuses55P03 under a reader,
+then changes the role only after reader rollback and its writer rollback restores
+false; a pending participant changes its own role view but excludes fresh actor
+admission55P03 before callback, then abort permits a fresh read; same-backend
+retained reader attempting participant acquisition refuses55000 and operation
+rollback removes the acquired fact cut. Original native statements and outcomes
+are retained in final0d2d8de8,130 total methods, three fixture cleanups.
+Trace CONTRACT-063/STP-056 L03/B11/B12, US-056 AC9/AC10 lifecycle prerequisites.
+Formal4ab1bad4 models external exclusion and explicit participant effect intervals
+with three UNSAT/two SAT results; it does not prove all administrators participate,
+cluster-wide role safety, helper installation custody or final disclosure.
+
+
+### Native atomic authority-change generation controls — 2026-10-11
+
+Four controls require: committed role configuration and authority-change successor
+produce exact predecessor/reason/incarnation, old generation refuses55000 without
+callback and new exact comparison passes; abort restores role inheritance/current
+pointer and removes successor registry row; mismatched target incarnation refuses
+and rollback preserves original state; missing and stale predecessor cases refuse
+without committed role/pointer/registry effects. Restore cleanup issues a distinct
+original restore epoch after the committed fixture, preserving reason meaning.
+Final2472b218 passes134 methods and three independent native cleanups. The UMF
+owner adjunct round-trips saved-document export exactly. Trace
+CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10 lifecycle prerequisites.
+Formal42fb89e5 retains three UNSAT/two SAT results under atomic visibility and
+distinct successor premises; no native issuer, complete role/ACL installation,
+cluster-wide coordination, commit-uncertainty or final-release refinement proof.
+
+
+### Installed authority writer/issuer correspondence — 2026-10-11
+
+Private source verification now composes original epoch/DDL barrier readback with
+exact installed shared-authority writer and authority issuer OIDs, owners, names,
+plpgsql language, ordinary function kind, argument/return shapes, scalar return,
+non-STRICT/invoker/volatile flags, exact search_path/body and absent PUBLIC EXECUTE
+before callback. Comparisons are bounded original fixture metadata, not credentials.
+Four native controls pass: exact installed source pair; actual PUBLIC EXECUTE drift
+refuses; SECURITY DEFINER drift refuses; STRICT drift demonstrably returns NULL
+without null-predecessor validation, while the stronger source check refuses.
+
+Final `evidence/python-psycopg-epoch-cut/4a75f4b6-57c0-472a-adf8-f7ddf050f746`
+passes138 methods (87 fact/dependency/identity/visibility/DDL/role/issuer,16 graph,
+nine epoch,26 adoption), module boundaries,138 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three stop0/status3/socket-absent
+cleanups. Earlier16944e98 passes137 methods under its earlier source tuple.
+Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10 source-correspondence
+prerequisites only. No new formal refinement or backend acceptance binding.
+Complete language-handler/dependency and all-role ACL/lifetime closure, original
+issuer credentials, qualified profile/evidence production, ordinary caller/mapping
+and protected final release remain open. Last full checkpoint26/132,106 missing;
+goal active. Next compose qualified lifecycle producer and original profile sources
+with this source verification; installed comparison alone is not authority.
+
+
+### Original policy/resolution source-bound profile — 2026-10-11
+
+Private `truss-flat-fact-provider-fixture/0.2` retains policyUtf8/resolutionUtf8
+strings alongside the original requirement digest and provider declarations.
+Fixed capture requires a bounded original source bundle, snapshots its immutable
+bytes before validation, checks owner-artifact source-digest correspondence and
+exact native-profile inline UTF8 byte correspondence before host invocation.
+Original native epoch comparison still requires the same complete installed profile
+bytes; replacing all caller-side source/requirement/profile copies cannot match it.
+Semantic interpretation remains UMF-owned. Legacy0.1 remains its separately scoped
+subset and is not silently upgraded to exact inline-source correspondence.
+
+Five native methods prove original identity-cell capture, missing source-bundle
+refusal before xid assignment, policy/resolution byte-change refusals before xid,
+whole caller-copy replacement refused by actual retained native generation, and
+private snapshot stability despite later caller-carrier mutation. Source-artifact
+validation lives in the original artifact module, not native provider code.
+Final `evidence/python-psycopg-epoch-cut/d0767fa6-5104-4968-b8a2-21a352b3ba99`
+passes143 methods (92 fact/dependency/identity/visibility/DDL/role/source,16 graph,
+nine epoch,26 adoption), module boundaries,138 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Initial5d33494a passed142 native methods but
+correctly failed its module boundary for a misplaced hashing import; it remains
+nonqualifying evidence.
+
+Formal `evidence/security-source-profile-formal/b94c4652-0014-4ee8-913a-41d0fb5f2a5f`
+passes five fresh-context queries (three UNSAT/two SAT) with four exact source
+preimages. Under faithful original/selected/native byte correspondence, source
+substitution is excluded. Abstract finite-width digest equality alone and
+self-consistent replaced manifests without retained native comparison have
+countermodels; no hash injectivity assumed. Earlier123e8acb retains its simpler
+self-agreement counter and original source tuple. No UTF8/JSON/Python/PostgreSQL,
+epoch projection or SHA256 implementation refinement theorem.
+
+Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 provenance prerequisites.
+Source bytes/digests remain comparison premises, not authenticated issuer identity
+or physical mapping meaning. Qualified producer/caller authority, original mapping
+and decoder construction, complete source/role/ACL lifetime and protected final
+release remain open. No backend acceptance binding or public support flag promoted;
+last full checkpoint26/132 with106 missing. Goal active. Next bind original semantic
+and physical profile construction to qualified issuer custody and protected release.
