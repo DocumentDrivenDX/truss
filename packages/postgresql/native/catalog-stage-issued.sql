@@ -146,6 +146,9 @@ BEGIN
  END LOOP;
  PERFORM truss.runtime_verify_new_catalog_prestate(revision);
  PERFORM truss.edge_limit_verify_current_scope();
+ IF truss.runtime_require_empty_provisional_catalog(revision) IS DISTINCT FROM '0' THEN
+  RAISE EXCEPTION 'original empty provisional inventory required' USING ERRCODE='55000';
+ END IF;
  IF EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.since_rev=revision AND p.home IS DISTINCT FROM 'json')
   OR (SELECT count(*) FROM truss.prop_def p WHERE p.since_rev=revision)<>jsonb_array_length(properties) THEN
   RAISE EXCEPTION 'complete original JSON home allocation required' USING ERRCODE='55000';

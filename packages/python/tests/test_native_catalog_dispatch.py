@@ -75,6 +75,13 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
         self.assertEqual(native['counts']['properties_added'],'1')
         self.assertEqual(result.ordinal,issued.ordinal)
         self.assertFalse(native['accepted'])
+        assembly=json.loads(result.original_report_assembly)
+        self.assertEqual(len(assembly['requiredReportFields']),19)
+        self.assertEqual(assembly['producedFields']['rev'],native['revision'])
+        self.assertEqual(assembly['producedFields']['documents'],native['documents'])
+        self.assertEqual(assembly['missingReportFields'],['reportProfile','originalExecution','assertions'])
+        self.assertIsNone(assembly['completeReportBytes'])
+        self.assertIn('originalInstalledExecution',assembly['requiredSources'])
         self.assertFalse(issued.controls.forward_ready)
         before=self.boundary.last_call
         with self.assertRaises(NativeBoundaryRefusal):

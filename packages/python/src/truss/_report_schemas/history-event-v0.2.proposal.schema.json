@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:history-event:0.2.0",
+  "title": "Unadopted complete event version with retained additions",
+  "description": "Proposal only. All six prior operation shapes remain with a new exact event version; retain adds complete envelope custody to the standalone addition payload. Group digest, original kind/context resolution, native domains, complete metadata correspondence and consumer adoption remain semantic gates. Existing 0.1 event readers must refuse this version.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/common"
+    },
+    {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "create"
+            },
+            "after": {
+              "$ref": "urn:truss:draft:history-record:0.1.0"
+            }
+          },
+          "required": [
+            "operation",
+            "after"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "delete"
+            },
+            "before": {
+              "$ref": "urn:truss:draft:history-record:0.1.0"
+            }
+          },
+          "required": [
+            "operation",
+            "before"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "property"
+            },
+            "propertyId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "maxLength": 20
+            },
+            "definitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "before": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0"
+            },
+            "after": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0"
+            }
+          },
+          "required": [
+            "operation",
+            "propertyId",
+            "definitionPin",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "transform"
+            },
+            "propertyId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "maxLength": 20
+            },
+            "beforeDefinitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "afterDefinitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "before": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0"
+            },
+            "after": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0"
+            }
+          },
+          "required": [
+            "operation",
+            "propertyId",
+            "beforeDefinitionPin",
+            "afterDefinitionPin",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "rebind"
+            },
+            "retainedName": {
+              "type": "string"
+            },
+            "propertyId": {
+              "type": "string",
+              "pattern": "^(0|-?[1-9][0-9]*)$",
+              "maxLength": 20
+            },
+            "beforeDefinitionContext": {
+              "type": "string",
+              "minLength": 1
+            },
+            "afterDefinitionPin": {
+              "type": "string",
+              "minLength": 1
+            },
+            "retainedBefore": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0"
+            },
+            "retainedAfter": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0"
+            },
+            "propertyBefore": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0"
+            },
+            "propertyAfter": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0"
+            }
+          },
+          "required": [
+            "operation",
+            "retainedName",
+            "propertyId",
+            "beforeDefinitionContext",
+            "afterDefinitionPin",
+            "retainedBefore",
+            "retainedAfter",
+            "propertyBefore",
+            "propertyAfter"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "metadata"
+            },
+            "before": {
+              "$ref": "urn:truss:draft:history-record:0.1.0"
+            },
+            "after": {
+              "$ref": "urn:truss:draft:history-record:0.1.0"
+            }
+          },
+          "required": [
+            "operation",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "const": "retain"
+            },
+            "retainedChanges": {
+              "$ref": "urn:truss:proposal:history-retain-payload:0.1.0#/properties/retainedChanges"
+            }
+          },
+          "required": [
+            "operation",
+            "retainedChanges"
+          ]
+        }
+      ]
+    }
+  ],
+  "unevaluatedProperties": false,
+  "$defs": {
+    "common": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-history-event/0.2.0-proposal"
+        },
+        "sourceEpoch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "historyProfile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "xid": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "seq": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "identity": {
+          "$ref": "urn:truss:draft:history-record:0.1.0#/$defs/identity"
+        },
+        "eventVersion": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "maxLength": 20
+        },
+        "eventCatalogRevision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "mutationGroup": {
+          "type": "object",
+          "properties": {
+            "profile": {
+              "const": "truss-history-group/0.1.0"
+            },
+            "eventCount": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]*$",
+              "maxLength": 20
+            },
+            "orderedEventDigest": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "profile",
+            "eventCount",
+            "orderedEventDigest"
+          ],
+          "additionalProperties": false
+        },
+        "origin": {
+          "type": "object",
+          "properties": {
+            "asserted": {
+              "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+            },
+            "databaseRole": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "asserted",
+            "databaseRole"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "sourceEpoch",
+        "historyProfile",
+        "xid",
+        "seq",
+        "identity",
+        "eventVersion",
+        "eventCatalogRevision",
+        "mutationGroup",
+        "origin"
+      ]
+    }
+  }
+}
