@@ -1,0 +1,131 @@
+{
+  "status": "independent-retained-evidence-audit-passed",
+  "runId": "135d5e87-3de8-4cf8-b9c1-344d5e2b9608",
+  "observations": 91,
+  "uniqueTypeSensitiveMatches": true,
+  "sourcePins": 133,
+  "exactDuplicateFreeArchive": true,
+  "currentSourceMismatches": [],
+  "nativeBinaryDigests": 1614,
+  "currentBinaryMatches": true,
+  "moduleBoundaryImports": 479,
+  "hostTests": 9,
+  "originalProjection": [
+    "component-test-installation",
+    "c3e12fc3-0112-4a24-89e4-810831a23e59",
+    "component-test-incarnation",
+    "01",
+    "0203",
+    "ee9040f65c341855e070ff438eb0ea9d5b831b2a2c270fb7ef592d750408e3b3",
+    "738",
+    "5",
+    "20431",
+    "postgres",
+    "postgres",
+    "transaction_source_epoch_lock_only"
+  ],
+  "cleanup": {
+    "attempted": true,
+    "stopExitCode": 0,
+    "statusExitCode": 3,
+    "socketAbsent": true
+  },
+  "ownedUnixSocketAbsent": true,
+  "privateNativeArtifactPermissions": true,
+  "rawReconstruction": [
+    {
+      "label": "original-capture",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "4da2dbf331e374ba3e40e4454f5e8f3e62075c7b5c320b955a4178a7e0d44dd9",
+      "responseSha256": "45f777f3c10d92fc90c5d611a5b9317103f5b0a19e47d8c9f8eed39a7c90f92c",
+      "rowJsonSha256": "70d40c67f71333c78ae7c00078d3d1e0ca6d7e00a86bff0280db453c5f1e42b4"
+    },
+    {
+      "label": "lost-local-reply",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "4da2dbf331e374ba3e40e4454f5e8f3e62075c7b5c320b955a4178a7e0d44dd9",
+      "responseSha256": "c07dc08012f05e72f1f6b48323802dd04421b7645da3376af9cbdff113ccdde2",
+      "rowJsonSha256": "5e3991ba6a42483a0d6b7c0e90c3d39d41e39e5005ab9b8ddd896e93c8842cbd"
+    },
+    {
+      "label": "maximum-native-evidence",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 2228921,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 65536,
+      "evidenceBytes": 1048576,
+      "evidenceSha256": "2fa4430272111c7854b204001461e16f2c73725b07dde2b6d1dc4f2aa8fe18da",
+      "requestSha256": "efa8f29986217c171d965ac5abf92bfbbab2e9475bd2343794a3e2e2b9ca7ae2",
+      "responseSha256": "93e6ea0a7f6717500444c621393530cbaf7eb4095303e54b6a32e25f856ee26e",
+      "rowJsonSha256": "dc6c35b2400c82122d5de0f52e8fed0bbc4755814ba4d138ad91708997dbd87f"
+    }
+  ],
+  "completeRawResponses": true,
+  "artifactSha256": {
+    "original-capture.response.bin": "45f777f3c10d92fc90c5d611a5b9317103f5b0a19e47d8c9f8eed39a7c90f92c",
+    "native.stdout.log": "856c0285dc4789f5ab9ce9067b262005c13d3135c2e06411f4e194c9131f944d",
+    "maximum-native-evidence.request.bin": "efa8f29986217c171d965ac5abf92bfbbab2e9475bd2343794a3e2e2b9ca7ae2",
+    "maximum-native-evidence.response.bin": "93e6ea0a7f6717500444c621393530cbaf7eb4095303e54b6a32e25f856ee26e",
+    "host.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "boundaries.stdout.log": "39baf5506d17a760dc8c1bc0a1148e2fec4465234ed08b65f633af6de75fa67d",
+    "original-capture.row.json": "70d40c67f71333c78ae7c00078d3d1e0ca6d7e00a86bff0280db453c5f1e42b4",
+    "maximum-native-evidence.row.json": "dc6c35b2400c82122d5de0f52e8fed0bbc4755814ba4d138ad91708997dbd87f",
+    "native.json": "5d3ae0cc4894543c7e1f37ab21a6e98a79732eac4f51b282ce5b8b3be6c94f33",
+    "native.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lost-local-reply.request.bin": "4da2dbf331e374ba3e40e4454f5e8f3e62075c7b5c320b955a4178a7e0d44dd9",
+    "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lost-local-reply.response.bin": "c07dc08012f05e72f1f6b48323802dd04421b7645da3376af9cbdff113ccdde2",
+    "sources.zip": "96cbd654c85f90bf08521c24a61c7b8b16ad1783bd5a05d2ad11e7f9f9590fc8",
+    "host.stderr.log": "8afa09bc81cf31b75dc0829bc0c3a137a79f164a596183a846edc78c0f10b32d",
+    "server.log": "53f174085a2b6bbeae78c1ad1e25bd0a96c6d6be56b8bc00a95dfd8c6c1b7ba8",
+    "original-capture.request.bin": "4da2dbf331e374ba3e40e4454f5e8f3e62075c7b5c320b955a4178a7e0d44dd9",
+    "receipt.json": "2eebd1ea40747632fe086c4f3b3bd389e3bf1d1553d469cac090326a896772ba",
+    "lost-local-reply.row.json": "5e3991ba6a42483a0d6b7c0e90c3d39d41e39e5005ab9b8ddd896e93c8842cbd"
+  },
+  "qualification": "Private RC/read-write epoch projection and original response custody on owned PostgreSQL16.15; no live-lock capability, complete source/authority cut, protected final disclosure or backend acceptance. Raw-complete flag separately records whether complete T/D/C/Z was retained.",
+  "nativeAncestryControls": {
+    "release-child-retains-parent-lock": "55P03",
+    "rollback-parent-retains-original-xid": [
+      [
+        "752"
+      ]
+    ],
+    "same-name-depth-recreation-does-not-restore-lock": true,
+    "released-original-row-is-historical": "a6d95b50-dc7b-45e1-88ce-9b76f7b061fd",
+    "rollback-after-acquisition-preserves-lock": "55P03",
+    "release-later-scope-preserves-lock": "55P03",
+    "outer-rollback-releases-original-acquisition": true,
+    "rolled-back-original-row-is-historical": "65fb72ef-bd29-4d30-ba19-11a2fceac0ab"
+  }
+}

@@ -97,6 +97,30 @@ try:
  check('same-parent-writer-can-change-epoch',True,after_same!=after_savepoint)
  check('same-parent-writer-xid-unchanged',[[owned[6]]],reader.run('SELECT pg_current_xact_id()::text'))
  reader.run('ROLLBACK');pending=after_savepoint
+ # Native scope ancestry: RELEASE reparents; rollback to a later scope
+ # preserves an earlier acquisition; recreated depth cannot restore a lock.
+ reader.run('BEGIN ISOLATION LEVEL READ COMMITTED');parent_xid=reader.run('SELECT pg_current_xact_id()::text')[0][0]
+ reader.run('SAVEPOINT original_parent');reader.run('SAVEPOINT original_child')
+ released=reader.run(query,epoch=pending,incarnation='component-test-incarnation')[0]
+ reader.run('RELEASE SAVEPOINT original_child')
+ check('release-child-retains-parent-lock','55P03',error_code(lambda:writer.run(issue,prior=pending)))
+ reader.run('ROLLBACK TO SAVEPOINT original_parent')
+ check('rollback-parent-retains-original-xid',[[parent_xid]],reader.run('SELECT pg_current_xact_id()::text'))
+ reader.run('SAVEPOINT original_child')
+ successor=writer.run(issue,prior=pending)[0][0]
+ check('same-name-depth-recreation-does-not-restore-lock',True,successor!=pending)
+ check('released-original-row-is-historical',pending,released[1])
+ reader.run('ROLLBACK');pending=successor
+ reader.run('BEGIN ISOLATION LEVEL READ COMMITTED')
+ earlier=reader.run(query,epoch=pending,incarnation='component-test-incarnation')[0]
+ reader.run('SAVEPOINT later_scope');reader.run('ROLLBACK TO SAVEPOINT later_scope')
+ check('rollback-after-acquisition-preserves-lock','55P03',error_code(lambda:writer.run(issue,prior=pending)))
+ reader.run('RELEASE SAVEPOINT later_scope')
+ check('release-later-scope-preserves-lock','55P03',error_code(lambda:writer.run(issue,prior=pending)))
+ reader.run('ROLLBACK')
+ successor=writer.run(issue,prior=pending)[0][0]
+ check('outer-rollback-releases-original-acquisition',True,successor!=pending)
+ check('rolled-back-original-row-is-historical',pending,earlier[1]);pending=successor
  # A definer wrapper cannot manufacture original invoker correspondence.
  admin.run("CREATE ROLE fresh_epoch_definer; GRANT USAGE ON SCHEMA truss TO fresh_epoch_definer; GRANT EXECUTE ON FUNCTION truss.runtime_lock_fresh_source_epoch(text,text,text) TO fresh_epoch_definer; CREATE FUNCTION truss.fresh_epoch_definer_probe() RETURNS text LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog AS $$ SELECT cut_scope FROM truss.runtime_lock_fresh_source_epoch('component-test-installation', '"+pending+"', 'component-test-incarnation') $$; ALTER FUNCTION truss.fresh_epoch_definer_probe() OWNER TO fresh_epoch_definer")
  check('definer-invoker-elevation-refuses',{'code':'55000','message':'original invoker fresh epoch boundary required'},error_detail(lambda:admin.run('SELECT truss.fresh_epoch_definer_probe()')))
