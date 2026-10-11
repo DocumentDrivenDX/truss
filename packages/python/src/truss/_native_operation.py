@@ -12,6 +12,7 @@ from ._native_arbitration import NativeArbitration, NativeOperationSession
 from ._operation_arbitration import Prepared, CompletionDecision
 from ._native_result_custody import NativeResultCustody, NativeTextLimits
 from ._native_cancellation import NativeCancellation, CancellationUnavailable
+from ._native_deadline import NativeOperationDeadline, NativeDeadlineExpired
 
 @dataclass(frozen=True, eq=False)
 class RegisteredTextStatement:
@@ -33,6 +34,7 @@ class _Run:
     result: object = None
     completion: object = None
     acquisition_started: bool = False
+    deadline: object = None
 
 @dataclass(frozen=True, eq=False)
 class _Completion:
@@ -50,6 +52,7 @@ class _Completion:
     final_state: tuple
     result_owner: object
     artifact: bytes
+    deadline_basis: tuple
 
 class NativeOperationRunner:
     # Individually qualified fixture definitions only. Arbitrary registered SQL
@@ -112,6 +115,7 @@ class NativeOperationRunner:
             return handle
 
     def execute(self, transaction, statement, params=None, *, cancellation=None):
+        deadline = NativeOperationDeadline(self.limits.ordinary_ms, self.limits.settlement_ms)
         params = {} if params is None else params
         with self._lock:
             if cancellation is not None and (type(cancellation) is not NativeCancellation
@@ -139,7 +143,7 @@ class NativeOperationRunner:
             if encoded > self.limits.parameter_bytes:
                 return self._error('execution_obligation', 'Parameter payload exceeds bound')
             params = dict(params)
-            run = _Run(transaction, statement)
+            run = _Run(transaction, statement, deadline=deadline)
             if cancellation is not None and not cancellation._claim(self):
                 return self._error('execution_obligation', 'Original cancellation already claimed')
             self._runs = (*self._runs, run)
@@ -153,6 +157,7 @@ class NativeOperationRunner:
         boundary = port._tracker._boundary
         tracker = port._tracker
         try:
+            deadline.check()
             if cancellation is not None:
                 try:
                     requested = cancellation._bind(self, boundary)
@@ -164,11 +169,13 @@ class NativeOperationRunner:
                 return self._error('execution_obligation', 'Selected original text/resource profile unavailable')
             if cancellation is not None and not cancellation._admit():
                 return self._error('cancelled', 'Cancelled before original operation admission')
+            deadline.check()
             prepared = self.service.registry.prepare(self._assembly, transaction)
             if type(prepared) is not Prepared:
                 return self._error('invalid_transaction', 'Original operation preparation refused')
             run.attempt = prepared.attempt
             try:
+                deadline.check()
                 run.acquisition_started = True
                 run.token = boundary.acquire_operation()
             except NativeBoundaryRefusal:
@@ -193,6 +200,7 @@ class NativeOperationRunner:
                     return self._error('execution_obligation', 'Original operation binding refused')
                 return self._error('transaction_unusable', 'Original operation binding unavailable')
             session = run.session
+            session.deadline = deadline
             if cancellation is not None:
                 cancellation._attach(session)
             gate = NativeResultCustody(session, self.limits)
@@ -224,17 +232,24 @@ class NativeOperationRunner:
                         cancellation._settle()
                     run.result = Ok(gate.transfer(rows))
                     rows = None
+                    deadline.check()
             except Exception as error:
                 call = boundary.last_call
                 native = error is boundary._ready_error and gate.normal_native_error(call)
+                expired = (type(error) is NativeDeadlineExpired
+                           and not boundary._quarantined and not boundary._calling
+                           and call is not None and call.capture_complete
+                           and run.savepoint in tracker._state.savepoints)
                 unsubmitted = (type(error) is NativeBoundaryRefusal and call is before
                                and not boundary._quarantined and not boundary._calling)
-                if not native and not unsubmitted: raise
+                if not native and not unsubmitted and not expired: raise
                 state = next((field[1:].decode('ascii') for e in call.events if e.code == b'E'
                     for field in e.payload.split(b'\0') if field[:1] == b'C'), None) if native else None
                 if cancellation is not None:
                     cancellation._settle()
-                if state == '57014' and cancellation is not None and cancellation._is_requested():
+                if expired:
+                    failure = self._error('cancelled', 'Original scheduling deadline expired')
+                elif state == '57014' and cancellation is not None and cancellation._is_requested():
                     failure = self._error('cancelled', 'Original statement cancellation contained')
                 elif state in ('40001', '40P01'):
                     failure = Error(ExecutionFailure('retry', 'Caller transaction retry required',
@@ -245,6 +260,10 @@ class NativeOperationRunner:
                 error.__traceback__ = None
                 error.__cause__ = None
                 error.__context__ = None
+            if failure is not None:
+                deadline.begin_settlement()
+            else:
+                deadline.check()
             with boundary._lock:
                 session.admission_closed = True
             cleanup = session.cleanup_permit
@@ -267,6 +286,7 @@ class NativeOperationRunner:
             with boundary._lock:
                 session.cleanup_closed = True
             if failure is not None: run.result = failure
+            deadline.check()
             completion = self._produce(run, final)
             run.completion = completion
             session.completion = completion
@@ -277,6 +297,10 @@ class NativeOperationRunner:
             if not run.acquisition_started:
                 if not isinstance(error, Exception):
                     raise
+                if type(error) is NativeDeadlineExpired:
+                    if run.attempt is not None:
+                        self.service.registry.abandon_prepared(run.attempt)
+                    return self._error('cancelled', 'Original deadline expired before native acquisition')
                 return self._error('execution_obligation', 'Original pre-effect preparation unavailable')
             with boundary._lock:
                 known = run.session is not None and any(s is run.session for s in boundary._ownership.completed)
@@ -364,7 +388,7 @@ class NativeOperationRunner:
             artifact = b'truss-native-completion/1:' + session.locator + b':' + str(boundary._revision).encode('ascii')
             completion = _Completion(self, run, session, session.context, session.generation,
                 session.token, boundary._revision, calls, run.gate.inventory(), boundary._transaction_tracker._state,
-                run.baseline, final, run.gate.result_owner, artifact)
+                run.baseline, final, run.gate.result_owner, artifact, run.deadline.seal())
             self._completions = (*self._completions, completion)
             return completion
 
@@ -386,7 +410,8 @@ class NativeOperationRunner:
                 or boundary._transaction_tracker._state is not completion.native_state
                 or completion.native_state.generation is not session.generation
                 or completion.native_state.status != b'T' or session.generation.ended
-                or completion.baseline != completion.final_state or not completion.run.gate.detached):
+                or completion.baseline != completion.final_state or not completion.run.gate.detached
+                or completion.deadline_basis is not completion.run.deadline.accepted_basis):
             return None
         return CompletionDecision('caller_idle', session.context, True, True)
 

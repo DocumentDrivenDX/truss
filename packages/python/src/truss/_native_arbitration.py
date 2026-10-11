@@ -42,8 +42,11 @@ class NativeOperationSession:
     completion: object = None
     released: bool = False
     cancellation: object = None
+    deadline: object = None
 
-    def _check_call(self, boundary, token, cleanup=None):
+    def _check_call(self, boundary, token, cleanup=None, *, admission=True):
+        if admission and self.deadline is not None:
+            self.deadline.check()
         if (boundary is not self.boundary or token is not self.token
                 or boundary._operation is not self.token
                 or boundary._operation_ledger is not self
@@ -64,7 +67,7 @@ class NativeOperationSession:
                 raise NativeBoundaryRefusal('Native operation call custody exhausted')
 
     def _reserve_call(self, boundary, token, resource, lifecycle, cleanup=None):
-        self._check_call(boundary, token, cleanup)
+        self._check_call(boundary, token, cleanup, admission=False)
         entry = _OperationCall(boundary._revision + 1, resource, lifecycle, cleanup)
         if cleanup is None:
             self.calls = (*self.calls, entry)

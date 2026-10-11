@@ -12,6 +12,8 @@ from ._native_pg8000 import NativeBoundaryRefusal
 
 @dataclass(frozen=True)
 class NativeTextLimits:
+    ordinary_ms: int = 30000
+    settlement_ms: int = 5000
     frame_bytes: int = 65536
     wire_bytes: int = 1048576
     messages: int = 2048

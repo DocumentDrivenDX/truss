@@ -758,3 +758,43 @@ Security main15c8fcf9 was fast-forwarded before iteration17 integration. Its
 authority-row primitive; ontology resolution, admitted subject mapping and
 final publication custody remain open. Runtime source is unchanged, and no
 protected entry or actor mapping is adopted from this candidate.
+
+### Iteration18: original operation deadline scheduling custody
+
+Extend the original private runner with a retained monotonic start captured
+before parameter admission, a fixed ordinary cutoff, and one reserved settlement
+cutoff. Every original native scheduling decision checks the same record, even
+when baseline probes close resources with cleanup permits. Permit selection
+does not change time phase. Stop expired ordinary admission; only a fully settled
+original call may enter the operation-savepoint containment procedure. Preserve
+original error and native facts if recovery exceeds its separate allowance.
+
+Validate no-SQL pre-acquisition expiry, expired prepared execution with original
+savepoint restoration and prior host work, fixed phase transitions, restoration
+overrun quarantine and successful operation regressions. Astra reviews the plan,
+implementation and installed evidence before main integration. This scheduling
+prerequisite must not claim bounded pending I/O: original read timeout, buffered
+write/flush accounting, transport timeout restoration and full wall-clock C02
+qualification remain required follow-on work. No timer, callback retry or
+replacement connection establishes native termination.
+
+Iteration18 distinguishes expiry at the inner settled-statement checkpoint,
+where the original live savepoint supports reserved containment, from expiry
+while entering or performing normal success restoration. The latter conservatively
+quarantines even if a savepoint remains live; it does not claim every healthy
+pre-release expiry is contained. Completion seals its original clock basis
+before publication; lost replies reconcile that record without a new deadline
+or fresh SQL. Deadline admission runs once before mutating preflight, while
+repeat resource-reservation validation retains structural checks.
+
+Iteration18 passes392 separately installed tests in54.937 seconds. All56
+package files match original source, retained wheel and installation; all49
+test modules remain unchanged during the final run. Python module boundaries
+pass224 imports. See [receipt](evidence/python-contracts-iteration18.json) and
+[installed regression log](evidence/python-contracts-iteration18-installed.log).
+Next qualify original pending ingress and outbound deadline enforcement, without
+changing confirmed native facts or reconstructing a timed-out buffered stream.
+
+Astra Ultra independently passes all12 deadline tests in3.671 seconds and
+approves the integrated source and plan, including the conservative restoration
+edge. Final artifact verification remains separate from those focused checks.
