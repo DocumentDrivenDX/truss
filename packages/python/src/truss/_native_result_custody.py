@@ -10,9 +10,12 @@ from ._accounted_receive import AccountedReceiver
 from ._resource_account import BytePermitAccount
 from ._native_pg8000 import NativeBoundaryRefusal
 from ._native_ingress_deadline import NativeIngressDeadline
+from ._native_outbound import NativeOutbound
 
 @dataclass(frozen=True)
 class NativeTextLimits:
+    outbound_bytes: int = 1048576
+    outbound_records: int = 2048
     ordinary_ms: int = 30000
     settlement_ms: int = 5000
     frame_bytes: int = 65536
@@ -61,6 +64,8 @@ class NativeResultCustody:
         self.original_sock = con._sock
         self.ingress_deadline = (NativeIngressDeadline(self, session.deadline)
             if getattr(session, 'deadline', None) is not None else None)
+        self.outbound = (NativeOutbound(self, self.ingress_deadline, limits)
+            if self.ingress_deadline is not None else None)
         self.original_context = con._context
         self.original_handle_messages = con.handle_messages
         self.original_handlers = dict(con.message_types)
@@ -153,9 +158,10 @@ class NativeResultCustody:
             self.boundary._quarantined = True
             raise
 
-    def write(self, data): return self.original_sock.write(data)
+    def write(self, data):
+        return self.outbound.write(data) if self.outbound is not None else self.original_sock.write(data)
     def flush(self):
-        result = self.original_sock.flush()
+        result = self.outbound.flush() if self.outbound is not None else self.original_sock.flush()
         entry = self.boundary._active_cancellation
         if entry is not None and not entry.submitted:
             self.session.cancellation._submitted()

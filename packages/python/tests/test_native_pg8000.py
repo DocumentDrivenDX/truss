@@ -36,6 +36,7 @@ class NativeBoundaryFixture:
     def tearDown(self):
         # Test teardown deliberately uses the original host alias after evidence
         # collection; it is not supported cooperative-wrapper operation.
+        self.connection._sock = self.boundary._original_stream
         self.connection.close()
 
 

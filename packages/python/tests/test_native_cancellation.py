@@ -307,3 +307,50 @@ class NativeCancellationTests(NativeBoundaryFixture, unittest.TestCase):
         self.assertTrue(any(event.code==b'E' for event in handle._entry.native.events))
         self.assertTrue(handle._entry.failed);self.assertFalse(handle._entry.eof)
         self.assertIs(self.boundary._cancel_pending,handle._entry)
+
+    def test_request_after_execute_send_before_sync_stays_latched(self):
+        import socket
+        self.boundary.run("INSERT INTO truss_operation_fixture VALUES('host-before')")
+        handle=self.runner.cancellation();original=socket.socket.sendall;observed=[]
+        def send(sock,data,*args,**kwargs):
+            value=original(sock,data,*args,**kwargs)
+            resource=self.boundary._active_resource
+            if sock is self.connection._usock and resource is not None and resource[0]=='execute' and data[:1]==b'E':
+                observed.append(handle.request())
+                self.assertFalse(handle._entry.submitted)
+                self.assertFalse(handle._entry.reserved)
+            return value
+        with patch.object(socket.socket,'sendall',send):
+            result=self.runner.execute(self.tx,self.slow_statement(),{'value':'cancel'},cancellation=handle)
+        self.assertTrue(observed);self.assertEqual(result.error.code,'cancelled')
+        self.assertTrue(handle._entry.submitted);self.assertTrue(handle._entry.eof)
+        self.assertIsNone(self.boundary._operation)
+        self.assertEqual(self.boundary.run('SELECT value FROM truss_operation_fixture'),[['host-before']])
+    def test_sync_send_failure_after_execute_is_unknown_not_unsent(self):
+        import socket
+        handle=self.runner.cancellation();original=socket.socket.sendall
+        def send(sock,data,*args,**kwargs):
+            resource=self.boundary._active_resource
+            if sock is self.connection._usock and resource is not None and resource[0]=='execute':
+                if data[:1]==b'E':
+                    value=original(sock,data,*args,**kwargs);handle.request();return value
+                if data==b'S\x00\x00\x00\x04':raise OSError('Sync send failed')
+            return original(sock,data,*args,**kwargs)
+        with patch.object(socket.socket,'sendall',send):
+            result=self.runner.execute(self.tx,self.statement(),{'value':'unknown'},cancellation=handle)
+        self.assertEqual(result.error.code,'transaction_unusable')
+        self.assertFalse(handle._entry.submitted);self.assertFalse(handle._entry.reserved)
+        self.assertTrue(self.boundary._quarantined);self.assertIsNotNone(self.boundary._operation)
+        writer=self.runner._runs[-1].gate.outbound
+        writes=[w for w in writer.ordinary if w is not None and w.call is handle._entry.call]
+        self.assertTrue(any(w.data[:1]==b'E' and w.native_returned for w in writes))
+        self.assertFalse(writes[-1].native_returned);self.assertFalse(handle._entry.native.capture_complete)
+    def test_direct_submission_publication_loss_retains_sent_facts(self):
+        handle=self.runner.cancellation()
+        with patch.object(handle,'_submitted',side_effect=OSError('Submission publication lost')):
+            result=self.runner.execute(self.tx,self.statement(),{'value':'sent'},cancellation=handle)
+        self.assertEqual(result.error.code,'transaction_unusable')
+        writer=self.runner._runs[-1].gate.outbound
+        self.assertTrue(all(w.native_returned and w.settled for w in writer.barrier.writes))
+        self.assertEqual(writer.barrier.writes[-1].data,b'S\x00\x00\x00\x04')
+        self.assertFalse(handle._entry.submitted);self.assertTrue(self.boundary._quarantined)

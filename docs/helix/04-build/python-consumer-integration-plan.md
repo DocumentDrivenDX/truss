@@ -841,3 +841,43 @@ See [receipt](evidence/python-contracts-iteration19.json) and
 [installed log](evidence/python-contracts-iteration19-installed.log).
 Next qualify original outbound write/flush deadline enforcement, then compose
 public adoption/readiness only for the supported original executor profile.
+
+### Iteration20: original outbound deadline and submission ledger
+
+Select a direct original AF_UNIX `sendall` sink under the existing shared
+transport timeout/deadline custody. Preserve exact protocol bytes and order,
+retain a bounded original write record before each send, and quarantine any
+partial/failed send without retry. The original BufferedRWPair reader remains
+unchanged. Require a source-qualified successful final original driver return
+with current call/revision custody at gate installation to establish the empty
+writer baseline. A generic Ready or native-error complete call is insufficient:
+execute_unnamed may have queued Bind bytes while reading an intermediate error.
+Never flush unknown leftovers to initialize this sink. Untouched constructor,
+selected driver methods and cooperative exclusion of raw writes remain required.
+
+Use the same original clock and saved host timeout for sends and reads; restore
+the exact timeout in finally, including setter/send reply loss. The flush method
+is an original publication barrier after confirmed writes, not a new buffered
+I/O loop. Cancellation stays latched until the exact Execute+Sync sequence is
+confirmed; bytes can reach PostgreSQL before that barrier, so pre-barrier failure
+is unknown rather than unsent. Requalify these races, original EOF/drain custody,
+actual socket backpressure, byte ordering, bounded ledger and host reuse with
+Astra Ultra. Full public C02 and protected capability readiness remain open.
+
+[CPython3.11 sendall](https://docs.python.org/3.11/library/socket.html#socket.socket.sendall)
+uses one total timeout across its internal partial sends. The selected source
+version is3.11.17; no TLS, arbitrary socket injection or raw-alias profile is
+qualified by this work.
+
+Security mainfadc4890/e06dbeda was fast-forwarded before iteration20 installation
+checks. Same-policy graph/raw parity and protected graph capture add retained
+53/135-observation experimental evidence; no runtime/grant changes are adopted.
+Production subject/owner artifacts, admitted mutation/callable closure, four-family
+semantic bodies and final publication/drain remain open. Original exclusive host
+custody and the invoker gate remain Python assembly prerequisites.
+
+Iteration20 source/plan passed Astra Ultra review. The retained installed wheel
+passed416 tests in53.020s against PostgreSQL16.15; all58 package files match
+source/wheel/installation, four distribution metadata files match, and the51
+test-module snapshot remained unchanged. Python module boundaries passed235 imports.
+The evidence receipt retains exact hashes and the private-profile limitations.

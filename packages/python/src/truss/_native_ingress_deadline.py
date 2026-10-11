@@ -27,7 +27,7 @@ class NativeIngressDeadline:
         self.failure = None
         self.restoration_failure = None
 
-    def receive(self, original, view):
+    def _visit(self, original, invoke):
         try:
             if self.failure is not None or self.gate.failed:
                 raise NativeBoundaryRefusal('Failed original ingress retained')
@@ -41,7 +41,7 @@ class NativeIngressDeadline:
             # Cover the setter itself: a lost reply may follow its mutation.
             try:
                 self.socket.settimeout(timeout)
-                count = io.BufferedRWPair.readinto1(self.stream, view)
+                count = invoke()
             finally:
                 try:
                     self.socket.settimeout(self.host_timeout)
@@ -53,6 +53,31 @@ class NativeIngressDeadline:
         except BaseException as error:
             if self.failure is None:
                 self.failure = error
+            self.gate.failed = True
+            self.boundary._quarantined = True
+            raise
+
+    def receive(self, original, view):
+        return self._visit(original, lambda: io.BufferedRWPair.readinto1(self.stream, view))
+
+    def send(self, original, data, entry):
+        def submit():
+            socket.socket.sendall(self.socket, data)
+            entry.native_returned = True
+        return self._visit(original, submit)
+
+    def checkpoint(self):
+        # No I/O or timeout mutation at the direct sink's flush barrier.
+        try:
+            if (self.failure is not None or self.gate.failed
+                    or self.boundary._connection._sock is not self.gate
+                    or self.boundary._connection._usock is not self.socket
+                    or self.gate.original_sock is not self.stream
+                    or self.socket.gettimeout() != self.host_timeout):
+                raise NativeBoundaryRefusal('Original transport barrier unavailable')
+            self.deadline.check()
+        except BaseException as error:
+            if self.failure is None: self.failure = error
             self.gate.failed = True
             self.boundary._quarantined = True
             raise

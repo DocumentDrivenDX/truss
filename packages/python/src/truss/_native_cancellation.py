@@ -142,6 +142,16 @@ class NativeCancellation:
                     or boundary._operation_ledger is not self._session
                     or not any(call is entry.call for call in self._session.calls) or entry.native is not None):
                 raise CancellationUnavailable('Original submitted Execute required')
+            gate = self._session.result_custody
+            outbound = gate.outbound
+            barrier = outbound.barrier
+            if (barrier is None or barrier.owner is not outbound
+                    or barrier.call is not entry.call or barrier.resource is not entry.resource
+                    or barrier.revision != entry.revision
+                    or not any(b is barrier for b in outbound.barriers)
+                    or barrier.writes[-1].data != b'S\x00\x00\x00\x04'
+                    or not any(w.data[:1] == b'E' for w in barrier.writes)):
+                raise CancellationUnavailable('Original Execute and Sync sends required')
             entry.submitted = True
             with self._lock:
                 requested = self._requested
