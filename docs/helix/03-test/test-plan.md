@@ -605,3 +605,33 @@ integration. Authenticated owner handoff, actual field/provider bindings and cut
 installed role/body closure, protected mutation dispatch and final disclosure remain
 required. No new formal refinement or Astra review is claimed. The goal remains
 active at 26/132 bindings with 106 missing.
+
+
+### Semantic field/provider cut obligations — 2026-10-11
+
+Formal packet `evidence/security-field-cuts-formal/456a26c5-c5a3-4f80-b944-39ac77d34fb7`
+retains eight SMT2 queries and fresh-context replay (two UNSAT, six SAT), six source
+preimages and the original ten UMF dependency identities. The model admits
+unbounded facts/providers and opaque complete provider states. Complete required
+membership, actual/declared provider correspondence, continuous effective cuts and
+stable deterministic decoding imply one-step required-fact preservation. Induction
+requires these premises at every step. Opaque state equality abstracts complete
+rows/presence/nulls/values; this does not prove PostgreSQL or semantic decoding
+refinement, native source authenticity or policy authorization.
+
+Countermodels separately demonstrate omitted `active` membership, wrong provider
+mapping, missing provider cut, released/bypassed cuts and changed decoding despite
+all data cuts; unrelated uncut provider state may change under full premises.
+Physical admission must therefore qualify original mappings AND their decoding
+source/config/role dependencies, not just compare column names or lock declared
+tables. Expected artifact hashes do not qualify issuer or physical mapping.
+
+For backend tests tied to CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10,
+require each required field/association to resolve through an original qualified
+provider recipe; substitute a wrong but valid provider and demand refusal before
+callback; omit a required field or cut and demand refusal; change the installed
+decoder/source while preserving data and demand refusal. These are required native
+controls, not passed by symbolic countermodels. Flat columns and graph payloads
+must each prove decoding correspondence, including absence/null/type semantics.
+No public API, native admission or acceptance binding is promoted; checkpoint
+remains 26/132 with 106 missing and the objective stays active.
