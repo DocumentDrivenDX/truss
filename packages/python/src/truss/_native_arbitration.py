@@ -41,6 +41,7 @@ class NativeOperationSession:
     result_custody: object = None
     completion: object = None
     released: bool = False
+    cancellation: object = None
 
     def _check_call(self, boundary, token, cleanup=None):
         if (boundary is not self.boundary or token is not self.token

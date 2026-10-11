@@ -11,6 +11,7 @@ from ._native_pg8000 import NativeBoundaryRefusal, _Ownership
 from ._native_arbitration import NativeArbitration, NativeOperationSession
 from ._operation_arbitration import Prepared, CompletionDecision
 from ._native_result_custody import NativeResultCustody, NativeTextLimits
+from ._native_cancellation import NativeCancellation, CancellationUnavailable
 
 @dataclass(frozen=True, eq=False)
 class RegisteredTextStatement:
@@ -31,6 +32,7 @@ class _Run:
     stack: tuple = ()
     result: object = None
     completion: object = None
+    acquisition_started: bool = False
 
 @dataclass(frozen=True, eq=False)
 class _Completion:
@@ -72,6 +74,7 @@ class NativeOperationRunner:
         self._statements = ()
         self._runs = ()
         self._completions = ()
+        self._cancellations = ()
         self._lock = Lock()
         if service.registry.register(self._assembly) != 'registered':
             raise ValueError('Original assembly registration unavailable')
@@ -100,9 +103,21 @@ class NativeOperationRunner:
         from ._host_control_custody import selected_resource_entry
         return original_driver_profile(boundary) and (not boundary._host_control_records or selected_resource_entry(boundary))
 
-    def execute(self, transaction, statement, params=None):
+    def cancellation(self):
+        with self._lock:
+            if len(self._cancellations) >= self.service.registry._limits.attempts:
+                raise CancellationUnavailable('Original cancellation capacity exhausted')
+            handle = NativeCancellation(self)
+            self._cancellations = (*self._cancellations, handle)
+            return handle
+
+    def execute(self, transaction, statement, params=None, *, cancellation=None):
         params = {} if params is None else params
         with self._lock:
+            if cancellation is not None and (type(cancellation) is not NativeCancellation
+                    or not any(c is cancellation for c in self._cancellations)
+                    or cancellation._bound or cancellation._ended):
+                return self._error('execution_obligation', 'Original unused cancellation required')
             if not any(s is statement for s in self._statements):
                 return self._error('execution_obligation', 'Original registered statement required')
             if len(self._runs) >= self.service.registry._limits.attempts:
@@ -125,6 +140,8 @@ class NativeOperationRunner:
                 return self._error('execution_obligation', 'Parameter payload exceeds bound')
             params = dict(params)
             run = _Run(transaction, statement)
+            if cancellation is not None and not cancellation._claim(self):
+                return self._error('execution_obligation', 'Original cancellation already claimed')
             self._runs = (*self._runs, run)
         custody = self.service._executor._original_custody(transaction)
         if custody is None or not custody.usable or self.service._executor._closed:
@@ -136,19 +153,31 @@ class NativeOperationRunner:
         boundary = port._tracker._boundary
         tracker = port._tracker
         try:
+            if cancellation is not None:
+                try:
+                    requested = cancellation._bind(self, boundary)
+                except Exception:
+                    return self._error('execution_obligation', 'Selected cancellation profile unavailable')
+                if requested:
+                    return self._error('cancelled', 'Cancelled before native acquisition')
             if not self._profile(boundary):
                 return self._error('execution_obligation', 'Selected original text/resource profile unavailable')
+            if cancellation is not None and not cancellation._admit():
+                return self._error('cancelled', 'Cancelled before original operation admission')
             prepared = self.service.registry.prepare(self._assembly, transaction)
             if type(prepared) is not Prepared:
                 return self._error('invalid_transaction', 'Original operation preparation refused')
             run.attempt = prepared.attempt
             try:
+                run.acquisition_started = True
                 run.token = boundary.acquire_operation()
             except NativeBoundaryRefusal:
                 self.service.registry.abandon_prepared(run.attempt)
                 return self._error('execution_obligation', 'Original native boundary busy or unavailable')
             if not self._profile(boundary):
                 self.service.registry.abandon_prepared(run.attempt)
+                if cancellation is not None and not cancellation._close_channel():
+                    raise CancellationUnavailable('Original unused cancel channel closure unresolved')
                 boundary.release_operation(run.token)
                 return self._error('execution_obligation', 'Original profile changed before admission')
             with boundary._lock:
@@ -158,10 +187,14 @@ class NativeOperationRunner:
             if type(run.session) is not NativeOperationSession:
                 from ._operation_arbitration import Refused
                 if type(run.session) is Refused:
+                    if cancellation is not None and not cancellation._close_channel():
+                        raise CancellationUnavailable('Original unused cancel channel closure unresolved')
                     boundary.release_operation(run.token)
                     return self._error('execution_obligation', 'Original operation binding refused')
                 return self._error('transaction_unusable', 'Original operation binding unavailable')
             session = run.session
+            if cancellation is not None:
+                cancellation._attach(session)
             gate = NativeResultCustody(session, self.limits)
             run.gate = gate
             gate.install()
@@ -183,9 +216,14 @@ class NativeOperationRunner:
                 gate.expected_command = statement.command
                 p = boundary.prepare(statement.sql, token=run.token)
                 before = boundary.last_call
-                rows = p.run(token=run.token, **params)
-                run.result = Ok(gate.transfer(rows))
-                rows = None
+                if cancellation is not None and cancellation._is_requested():
+                    failure = self._error('cancelled', 'Original operation cancellation requested')
+                else:
+                    rows = p.run(token=run.token, **params)
+                    if cancellation is not None:
+                        cancellation._settle()
+                    run.result = Ok(gate.transfer(rows))
+                    rows = None
             except Exception as error:
                 call = boundary.last_call
                 native = error is boundary._ready_error and gate.normal_native_error(call)
@@ -194,9 +232,15 @@ class NativeOperationRunner:
                 if not native and not unsubmitted: raise
                 state = next((field[1:].decode('ascii') for e in call.events if e.code == b'E'
                     for field in e.payload.split(b'\0') if field[:1] == b'C'), None) if native else None
-                failure = (Error(ExecutionFailure('retry', 'Caller transaction retry required',
-                    'whole_transaction', state)) if state in ('40001', '40P01') else
-                    self._error('execution_obligation', 'Original statement failure contained'))
+                if cancellation is not None:
+                    cancellation._settle()
+                if state == '57014' and cancellation is not None and cancellation._is_requested():
+                    failure = self._error('cancelled', 'Original statement cancellation contained')
+                elif state in ('40001', '40P01'):
+                    failure = Error(ExecutionFailure('retry', 'Caller transaction retry required',
+                        'whole_transaction', state))
+                else:
+                    failure = self._error('execution_obligation', 'Original statement failure contained')
                 # Original ErrorResponse bytes remain in bounded native custody.
                 error.__traceback__ = None
                 error.__cause__ = None
@@ -217,6 +261,8 @@ class NativeOperationRunner:
             final = self._state(run, cleanup=True)
             if final != run.baseline or tracker._state.savepoints != run.stack:
                 raise NativeBoundaryRefusal('Original caller boundary not restored')
+            if cancellation is not None and not cancellation._close_channel():
+                raise CancellationUnavailable('Original cancel channel closure unresolved')
             gate.detach()
             with boundary._lock:
                 session.cleanup_closed = True
@@ -228,6 +274,10 @@ class NativeOperationRunner:
                 return self._error('transaction_unusable', 'Original completion remains unresolved')
             return run.result
         except BaseException as error:
+            if not run.acquisition_started:
+                if not isinstance(error, Exception):
+                    raise
+                return self._error('execution_obligation', 'Original pre-effect preparation unavailable')
             with boundary._lock:
                 known = run.session is not None and any(s is run.session for s in boundary._ownership.completed)
                 original = next((c for c in self._completions if c.run is run and c.session is run.session), None)
@@ -242,6 +292,11 @@ class NativeOperationRunner:
             if not isinstance(error, Exception): raise
             if known: return run.result
             return self._error('transaction_unusable', 'Original operation requires recovery')
+        finally:
+            if cancellation is not None:
+                if run.token is None:
+                    cancellation._close_channel()
+                cancellation._finish()
 
     def _state(self, run, *, cleanup):
         session = run.session
@@ -325,7 +380,7 @@ class NativeOperationRunner:
                 or completion.session is not session or completion.context is not session.context
                 or evidence != completion.artifact or completion.generation is not session.generation
                 or completion.token is not session.token or not session.admission_closed
-                or not session.cleanup_closed or boundary._calling or boundary._quarantined
+                or not session.cleanup_closed or boundary._calling or boundary._quarantined or boundary._cancel_pending is not None
                 or boundary._operation is not session.token or boundary._operation_ledger is not session
                 or boundary._revision != completion.revision or boundary.last_call is not completion.calls[-1]
                 or boundary._transaction_tracker._state is not completion.native_state

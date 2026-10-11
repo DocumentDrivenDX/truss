@@ -1,0 +1,18 @@
+{
+  "scope": "Historical disposable primitive feasibility only; no runner/race/deadline claim",
+  "sourceCheckpoint": "5213faea",
+  "scriptSha256": "e6e75cc6e07d6fa8be4a784f4b551aedf0ba1f45c06d2513d8a55176478fad8a",
+  "receiptSha256": "a5e98da865b91f17b49426aa2e3f43669724b43ce66a14474225253f680907ad",
+  "terminalExitCode": 0,
+  "python": "3.11.17",
+  "pgserver": "0.1.4+truss.pg16.15",
+  "pg8000": "1.31.5",
+  "serverVersion": "16.15",
+  "serverVersionEvidence": "The pinned original LocalPostgres startup runs SHOW server_version and requires16.15 for corrected candidate; the original primitive receipt does not contain an explicit version observation.",
+  "originalSourceSha256": {
+    "packages/python/src/truss/local_runtime.py": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9",
+    "packages/python/src/truss/_native_pg8000.py": "e91ef4f4aaffe78c2dfc4ee479eb6743380d70d0b82b9e8024db05f6666f3832",
+    "packages/python/tests/test_native_pg8000.py": "e5ece3a5a2a2dc4e3bb36f92aa6212c64d53e25e679255361f7c67064e9bd3f3"
+  },
+  "astraPrimitiveReview": true
+}

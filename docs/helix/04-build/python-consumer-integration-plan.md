@@ -635,3 +635,95 @@ wheel passed 351 tests in 41.260 seconds, with all 54 packaged files verified.
 See [final combined evidence](evidence/python-contracts-iteration15-definer-combined.json).
 Astra Ultra approved integration and independently passed 17 inventory tests.
 The earlier 345-test artifact receipt remains historical.
+
+
+### Iteration 16: active statement cancellation and native containment
+
+Astra Ultra approved this plan for the private prepared-Execute runner path. This
+continues PY-C02 under CONTRACT-007's original operation custody, cancellation
+and disposal requirements. The preceding iteration15 evidence remains unchanged.
+
+Select the existing synchronous pg8000 1.31.5 / PostgreSQL16.15 Unix-socket
+operation profile first. Reserve cancellation intent, original boundary/call
+references and bounded diagnostic results before native effects. Pre-admission
+cancellation performs no SQL. During preparation, retain cancellation intent
+rather than issuing a packet against an unrelated protocol phase. The prepared
+execution path must expose original Execute/Sync flush completion; `_calling`
+and a buffered send_EXECUTE alone cannot establish submission.
+
+Cancellation dispatch uses the original BackendKeyData and exact original Unix
+peer for one 16-byte CancelRequest. Protect the key and packet from repr, public
+observations, diagnostics and receipts. No SQL cancellation function, authenticated
+auxiliary session or automatic retry is introduced. A finite transport deadline
+covers connection, write, EOF observation and cleanup without reset per stage.
+
+Admit only one cancellation dispatch for the original call. Serialize its
+publication against original call completion; a stale/foreign reference never
+cancels a newer call. Until both cancel-socket EOF and the entire matching native
+call's terminal response are observed, block subsequent statements, operation
+rollback/release, resource cleanup and handback. Intermediate ReadyForQuery,
+packet write success and EOF do not prove statement cancellation or rollback.
+Transport uncertainty retains original custody and quarantines the context.
+Original confirmed result/COMMIT remains authoritative.
+
+Compose this with NativeOperationRunner: an active native cancellation must drain
+the actual ErrorResponse and ReadyForQuery, then roll back to the original
+operation savepoint, release it, restore original settings/resources and return
+`cancelled` only after confirmed operation containment. Earlier host writes and
+the outer transaction remain under host ownership. Failed containment returns
+transaction_unusable; no whole host rollback or callback replay occurs.
+
+Validation must include native long-running cancellation, preserved prior host
+writes, reuse only after confirmed containment, cancellation during preparation,
+late dispatch after original completion, duplicate/stale/foreign cancellation,
+concurrent release/cleanup refusal, timeout/reset/incomplete drain, lost return,
+disposal and original successful-result races. Retain actual native observations
+without key material. Review source and installed artifact with Astra Ultra,
+run applicable module-boundary and installed regression checks, then merge/push
+main. Public ReferenceAssembly and full C02 remain open until all required
+operation and recovery paths are qualified.
+
+Protocol authority: [PostgreSQL16 cancellation flow](https://www.postgresql.org/docs/16/protocol-flow.html#PROTOCOL-FLOW-CANCELING-REQUESTS)
+and [CancelRequest message format](https://www.postgresql.org/docs/16/protocol-message-formats.html#PROTOCOL-MESSAGE-FORMATS-CANCELREQUEST).
+The original PostgreSQL16.15 libpq EOF barrier and backend idle-cancel handling
+are source qualification inputs, not evidence that Truss already implements them.
+
+Astra's approved linearization: a completion can win against cancellation and
+retain a successful native result without ErrorResponse. Require the EOF barrier
+only when dispatch was actually reserved; an unsent cancelled operation follows
+its original savepoint cleanup. Keep dispatch settlement separate from original
+native response facts, so a transport quarantine never erases confirmed C/E/Z.
+The runner issues one-use private cancellation handles; foreign or reused handles
+refuse before native acquisition. A latched signal during preparation reaches
+the original prepared statement or stops ordinary scheduling before submission.
+The existing result stream's original flush return is the selected submission
+producer, checked against the exact execute resource/session/call/revision.
+
+Native drain policy for this private slice: the original host socket must already
+have an exact finite timeout greater than zero and at most two seconds. Selection
+refuses an unbounded timeout before SQL; Truss does not change it. Original gate
+read/message/byte budgets still apply. This bounds each blocking read, not an
+absolute operation wall-clock deadline; that stronger deadline and all other
+submission paths remain C02 qualification work. The cancellation socket has its
+own absolute two-second dispatch deadline with no per-stage reset. Native complete
+call settlement wins late intent; an earlier dispatch can still finish after a
+successful native result, and success is retained once both barriers complete.
+
+Iteration16 now implements the private prepared-Execute cancellation path. All
+22 native cancellation tests pass independently under Astra Ultra; the separately
+installed wheel passes375 tests in49.678 seconds. All55 packaged files match
+source/wheel/install, and the module boundary check covers221 imports. See
+[iteration16 evidence](evidence/python-contracts-iteration16.json) and the retained
+[installed regression log](evidence/python-contracts-iteration16-installed.log).
+The primitive feasibility fixture remains separately qualified by its original
+script/receipt hashes and startup-version provenance. Original-call absolute
+deadline enforcement, other native submission paths and public C02 remain open.
+Next: qualify bounded original ingress deadlines and recovery procedure, then
+compose the public ReferenceAssembly/adoption surface with truthful readiness.
+
+Security sync at6305b5d7 adds PA02 original pre-entry provenance requirements and
+the separately qualified UMF private capture candidate. Runtime bytes are
+unchanged. Preserve original trusted-host custody and the invoker elevation guard;
+the capture candidate does not qualify production actor mapping or seven semantic
+bodies. No supplied actor label or post-elevation tuple substitutes for that owner
+protocol in the Python assembly.

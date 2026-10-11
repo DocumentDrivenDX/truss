@@ -74,6 +74,8 @@ class NativeBoundary:
         self._lock = Lock()
         self._ownership = _Ownership()
         self._calling = False
+        self._cancel_pending = None
+        self._active_cancellation = None
         self._quarantined = False
         self._events = []
         self._bytes = 0
@@ -181,14 +183,14 @@ class NativeBoundary:
         if original_token is not None and type(original_token) is not object:
             raise NativeBoundaryRefusal('Original preallocated scope token required')
         with self._lock:
-            if self._quarantined or self._calling or self._operation is not None or self._host_control_pending is not None:
+            if self._quarantined or self._cancel_pending is not None or self._calling or self._operation is not None or self._host_control_pending is not None:
                 raise NativeBoundaryRefusal('Native boundary unavailable or busy')
             self._operation = object() if original_token is None else original_token
             return self._operation
 
     def reserve_operation_release(self, token):
         with self._lock:
-            if token is not self._operation or token is None or self._calling or self._quarantined or self._operation_ledger is not None or self._pending_operation_ledger is not None:
+            if token is not self._operation or token is None or self._calling or self._quarantined or self._cancel_pending is not None or self._operation_ledger is not None or self._pending_operation_ledger is not None:
                 raise NativeBoundaryRefusal('Original scope release reservation unavailable')
             return _OperationRelease(self,token,self._ownership,replace(self._ownership,operation=None))
 
@@ -197,7 +199,7 @@ class NativeBoundary:
             self._release_operation_locked(token, original_release=original_release)
 
     def _release_operation_locked(self, token, *, original_release=None, original_control=None):
-        if token is not self._operation or token is None or self._calling or self._quarantined or self._operation_ledger is not None or self._pending_operation_ledger is not None:
+        if token is not self._operation or token is None or self._calling or self._quarantined or self._cancel_pending is not None or self._operation_ledger is not None or self._pending_operation_ledger is not None:
             raise NativeBoundaryRefusal('Original operation cannot be released')
         pending = self._host_control_pending
         if pending is not None and (original_control is None or pending.completion is not original_control
@@ -222,7 +224,7 @@ class NativeBoundary:
 
     def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None, cleanup=None):
         with self._lock:
-            if (self._quarantined or self._calling or
+            if (self._quarantined or self._cancel_pending is not None or self._calling or
                     (self._operation is not None and token is not self._operation) or
                     (token is not None and token is not self._operation)):
                 raise NativeBoundaryRefusal('Native boundary unavailable or busy')
@@ -243,6 +245,11 @@ class NativeBoundary:
             call_entry = None
             if self._operation_ledger is not None:
                 call_entry = self._operation_ledger._reserve_call(self, token, resource, lifecycle, cleanup)
+            cancellation = getattr(self._operation_ledger, 'cancellation', None)
+            cancel_entry = None
+            if cancellation is not None and resource is not None and resource[0] == 'execute':
+                cancel_entry = cancellation._reserve_call(self, self._revision + 1, call_entry, resource)
+            self._active_cancellation = cancel_entry
             self._revision += 1
             self._active_control = lifecycle
             self._active_resource = resource
@@ -271,6 +278,8 @@ class NativeBoundary:
                 self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control, self._revision, self._active_resource, cleanup)
                 if call_entry is not None:
                     call_entry.native_call = self.last_call
+                if cancel_entry is not None:
+                    cancellation._drained(cancel_entry, self.last_call)
                 if any(e.code == b'C' and e.payload.split(b' ')[0].rstrip(b'\0') in
                        (b'PREPARE', b'DECLARE', b'DEALLOCATE', b'CLOSE') for e in events):
                     self._resource_baseline = None

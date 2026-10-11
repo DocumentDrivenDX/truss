@@ -135,7 +135,12 @@ class NativeResultCustody:
             raise
 
     def write(self, data): return self.original_sock.write(data)
-    def flush(self): return self.original_sock.flush()
+    def flush(self):
+        result = self.original_sock.flush()
+        entry = self.boundary._active_cancellation
+        if entry is not None and not entry.submitted:
+            self.session.cancellation._submitted()
+        return result
     def close(self): return self.original_sock.close()
 
     def _messages(self, context):
@@ -297,6 +302,7 @@ class NativeResultCustody:
         with self.boundary._lock:
             con = self.boundary._connection
             if (self.failed or self.pending_body is not None or self.boundary._calling
+                    or self.boundary._cancel_pending is not None
                     or self.boundary._quarantined or con._sock is not self
                     or not self.session.admission_closed
                     or self.session.result_custody is not self

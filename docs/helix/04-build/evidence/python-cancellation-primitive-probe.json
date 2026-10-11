@@ -1,0 +1,14 @@
+{
+  "scope": "PG16.15 Unix cancellation feasibility; manually coordinated native fixture, not Truss cancellation API",
+  "cancelSocketEOF": true,
+  "originalCallDrained": true,
+  "sqlState": "57014",
+  "failedTransactionStatus": "E",
+  "originalCallCaptureComplete": true,
+  "elapsedSeconds": 0.001486,
+  "operationRollbackConfirmed": true,
+  "earlierHostWritePreserved": true,
+  "hostCommitConfirmed": true,
+  "secretMaterialRetainedInReceipt": false,
+  "publicC02Complete": false
+}
