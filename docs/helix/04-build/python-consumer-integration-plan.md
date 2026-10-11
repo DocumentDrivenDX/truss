@@ -446,3 +446,23 @@ passes63 observations with29 inventories at20 unchanged source pins. The updated
 Python-only boundary checker passes200 edges. These records qualify the combined
 candidate; the earlier302-test wheel remains evidence only for its captured source.
 Complete protected admission and backend acceptance remain open.
+
+
+### Reviewed role-route guard laws, upstream main
+
+UMF main07357ead supplies [source-derived formal guard evidence](evidence/design-audit/role-paths-formal/integration.json)
+for the exact installed collector from Truss11f14e23. Five UNSAT violations,
+three SAT populations and three SAT erasures use the actual parsed predicate,
+complete unfiltered finite `any` fold and terminal classification. All32 Python
+predicate/fold vectors and29 original native predicate results match; Astra ultra
+independently replayed all11 exact saved formulas and verified their byte hashes
+and seven original source pins. Exact producer invocation controls also refuse.
+No collector implementation changed for this proof; source correspondence is
+explicitly rechecked in this integration receipt.
+
+Complete authentic current native rows are an explicit analysis premise, not
+provided by packet shape admission. This verifies the pure guard tail only,
+not the whole validator, PostgreSQL role graph, coherent cut, protected native
+admission or semantic operations. PA01–PA05 and complete installation/readiness
+remain open. No ordinary writer grant, invoker-guard removal or acceptance
+promotion follows from these laws.
