@@ -841,3 +841,20 @@ CONTRACT-063/STP-056 B11/B12/L03, US-056 AC5/AC9/AC10 prerequisites. Formal
 d4af259a separately models unbounded abstract SET/inheritance reachability: two
 UNSAT properties/three SAT counterexamples. It does not prove PostgreSQL's
 membership traversal, complete privileged capability inventory or role lifetime.
+
+
+### Shared-role lifetime counterexample and participating writers — 2026-10-11
+
+Four native controls require: an excluded administrator's uncoordinated ALTER
+ROLE commits CREATEROLE during the strongest retained snapshot and original actor
+observes true (counterexample); explicit participant refuses55P03 under a reader,
+then changes the role only after reader rollback and its writer rollback restores
+false; a pending participant changes its own role view but excludes fresh actor
+admission55P03 before callback, then abort permits a fresh read; same-backend
+retained reader attempting participant acquisition refuses55000 and operation
+rollback removes the acquired fact cut. Original native statements and outcomes
+are retained in final0d2d8de8,130 total methods, three fixture cleanups.
+Trace CONTRACT-063/STP-056 L03/B11/B12, US-056 AC9/AC10 lifecycle prerequisites.
+Formal4ab1bad4 models external exclusion and explicit participant effect intervals
+with three UNSAT/two SAT results; it does not prove all administrators participate,
+cluster-wide role safety, helper installation custody or final disclosure.

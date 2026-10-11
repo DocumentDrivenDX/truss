@@ -4337,3 +4337,40 @@ caller/issuer/mapping and protected final release remain open. No backend bindin
 or public support flag promoted; last full checkpoint26/132,106 missing. Goal
 active. Next compose original capability/routine inventory and participating
 role/ACL changes; selected snapshot subsets do not replace the final objective.
+
+
+### Explicit shared-authority writer participation and retained-snapshot counter — 2026-10-11
+
+Implemented native invoker-only shared-authority writer acquisition, using the
+original epoch table-before-marker ordering and same-backend retained-reader
+refusal. Call before selected administrator role/ACL effects in one transaction;
+this is not role-DDL interception or a source-generation issuer.
+Actual excluded administrator ALTER ROLE changes CREATEROLE while the strongest
+reader cut remains held when participation is omitted. Native participant
+schedules refuse writer overlap, permit mutation after reader release, exclude
+admission while a role change is pending, restore role state on abort and refuse
+a same-backend reader-to-writer upgrade.
+
+Final `evidence/python-psycopg-epoch-cut/0d2d8de8-5e06-4764-a998-90ff5933f320`
+passes130 methods (79 fact/dependency/identity/visibility/DDL/role/lifetime,16 graph,
+nine epoch,26 adoption), module boundaries,132 current/archived Truss sources,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-shared-authority-writer-formal/4ab1bad4-e872-4359-8398-af2670415ffc`
+passes five fresh-context queries (three UNSAT/two SAT), retaining three source
+preimages and SMT/model receipts. Under faithful external native exclusion and
+role effects confined to the participating writer interval, unbounded half-open
+reader/writer intervals cannot overlap effects and pending writers exclude new
+admission. Same-backend guard refuses upgrade; missing participant/upgrade guard
+have countermodels. No native lock/catalog/SQL refinement, complete administrative
+path interception, epoch transition or final-release theorem.
+
+Shared roles affect the cluster, whereas these relation locks protect one
+database/installation. Complete multi-database administration coordination, exact
+installed helper/body/ACL custody, original capability/routine inventory, source
+generation transition and protected caller/mapping/final release remain open.
+Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10. No public support
+flag or backend acceptance binding; last full checkpoint26/132,106 missing. Goal
+active. Next qualify explicit writer installation and lifecycle/source-generation
+composition while preserving the uncoordinated administrator counterexample.

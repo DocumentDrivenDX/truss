@@ -33,6 +33,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     oid,owner=c.execute("SELECT oid,relowner FROM pg_catalog.pg_class WHERE oid=%s::regclass",('truss.'+name,)).fetchone()
                     cls.semantic_relations[name]=_FactRelationComparison('truss',name,oid,owner,(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0])
                 cls.bindings={r[0]:_FactRelationComparison('truss',r[0],r[1],r[2],(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0]) for r in c.execute("SELECT relname,oid,relowner FROM pg_class WHERE oid IN ('truss.flat_assignment'::regclass,'truss.edge'::regclass)")}
+                c.execute((ROOT/'packages/postgresql/native/source-epoch-shared-authority-writer.sql').read_text())
         except BaseException:
             epoch_tests.PsycopgEpochCutNativeTests.tearDownClass.__func__(cls)
             raise
@@ -667,3 +668,42 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 connection.execute('ROLLBACK TO no_set_permission')
             self.with_unprivileged_actor(operation)
         finally:self.connection.execute('DROP ROLE fact_assumable')
+
+    def test_uncoordinated_shared_role_change_invalidates_retained_snapshot(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            def change(c):
+                self.connection.execute('ALTER ROLE fact_cut_actor CREATEROLE')
+                c.execute("SELECT rolcreaterole::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname=current_user")
+                return c.fetchone()[0]
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,change),Ok('true'))
+        self.with_unprivileged_actor(operation)
+    def test_participating_shared_role_writer_refuses_until_reader_release(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            def read(c):
+                with self.assertRaises(psycopg.errors.LockNotAvailable):self.connection.execute('SELECT truss.runtime_fence_shared_authority_writer()')
+                self.assertEqual(self.connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname='fact_cut_actor'").fetchone(),(False,))
+                return 'writer-refused'
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,read),Ok('writer-refused'))
+            connection.execute('ROLLBACK')
+            try:
+                self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor CREATEROLE')
+                self.assertEqual(self.connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname='fact_cut_actor'").fetchone(),(True,))
+            finally:self.connection.execute('ROLLBACK')
+            self.assertEqual(self.connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname='fact_cut_actor'").fetchone(),(False,))
+        self.with_unprivileged_actor(operation)
+    def test_pending_shared_role_participant_excludes_reader_until_abort(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            try:
+                self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor CREATEROLE')
+                self.assertEqual(self.connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname='fact_cut_actor'").fetchone(),(True,))
+                called=[];result=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55P03');self.assertEqual(called,[])
+            finally:self.connection.execute('ROLLBACK')
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'fresh-after-abort'),Ok('fresh-after-abort'))
+        self.with_unprivileged_actor(operation)
+    def test_shared_authority_writer_refuses_same_backend_retained_reader(self):
+        t=self.begin();result=self.cut(t,lambda c:c.execute('SELECT truss.runtime_fence_shared_authority_writer()'))
+        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000');self.assertEqual(self.fact_shares(),0)

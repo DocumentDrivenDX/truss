@@ -2329,3 +2329,21 @@ This covers selected role attributes and definer reachability, not every
 privileged predefined/user-defined capability or original routine/ACL inventory.
 Concurrent membership/role/ACL changes and their lifetime coordination remain
 required; this snapshot supplies no authenticated final-release authority.
+
+
+### Explicit shared-authority writer participant — 2026-10-11
+
+Private PostgreSQL16.15 `runtime_fence_shared_authority_writer()` returns void,
+is invoker/volatile with fixed pg_catalog/pg_temp search_path and revoked PUBLIC
+EXECUTE. A participating administrator MUST invoke it before selected shared-role
+or ACL mutation in the same transaction. It refuses original-operation reuse and
+a retained same-backend epoch SHARE reader with55000; otherwise acquires both
+epoch relations ROW EXCLUSIVE NOWAIT before the original installation marker
+FOR UPDATE NOWAIT, retained until transaction settlement. Pending incompatible
+readers/writers refuse55P03 without internal retries. Missing marker refuses55000.
+
+This is explicit database-local participation, not automatic interception of
+ALTER ROLE/GRANT/REVOKE, cluster-wide/multi-database exclusion or an epoch
+transition/acknowledgment API. Original helper/body/owner/ACL custody and complete
+administrative-path exclusions remain required. Calling this helper alone cannot
+qualify shared authority lifetime or a new accepted source generation.
