@@ -2313,3 +2313,19 @@ qualified definers require their own exact reachable-routine/ACL/dependency
 inventory, not this exclusion. SET ROLE transitions, invoker-to-privileged paths,
 concurrent ACL/role changes, complete call closure and final release remain
 unqualified. No comparison or result confers authenticated authority.
+
+
+### Selected SET-reachable role snapshot — 2026-10-11
+
+The private stronger invoker-only cut composes prior installed barrier, direct-role
+and direct-EXECUTE snapshots with native `pg_has_role(...,'SET')` reachability
+for both session and effective identities. Refuse when any SET-reachable role has
+superuser/CREATEROLE/BYPASSRLS, is the selected barrier owner, or has EXECUTE on a
+SECURITY DEFINER routine. A fixed native existence probe returns at most one OID;
+incomplete caller lists cannot establish absence. Native SET reachability MUST
+remain distinct from MEMBER and inherited USAGE privileges.
+
+This covers selected role attributes and definer reachability, not every
+privileged predefined/user-defined capability or original routine/ACL inventory.
+Concurrent membership/role/ACL changes and their lifetime coordination remain
+required; this snapshot supplies no authenticated final-release authority.

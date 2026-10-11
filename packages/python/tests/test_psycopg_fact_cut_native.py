@@ -605,3 +605,65 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'not-reachable'),Ok('not-reachable'))
             self.with_unprivileged_actor(operation)
         finally:self.connection.execute('DROP FUNCTION truss.fixture_private_definer()')
+
+    def test_set_reachable_createrole_without_inheritance_refuses_stronger_cut(self):
+        from truss._psycopg_epoch_cut import _run_no_definer_ddl_fenced_epoch_operation,_run_set_role_excluded_ddl_fenced_epoch_operation
+        self.connection.execute('CREATE ROLE fact_assumable CREATEROLE')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_assumable TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                self.assertEqual(connection.execute("SELECT pg_catalog.pg_has_role(current_user,'fact_assumable','USAGE'),pg_catalog.pg_has_role(current_user,'fact_assumable','SET')").fetchone(),(False,True))
+                self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'weak-snapshot'),Ok('weak-snapshot'))
+                called=[];result=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+                connection.execute('SET LOCAL ROLE fact_assumable')
+                self.assertEqual(connection.execute("SELECT rolcreaterole FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(True,))
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP ROLE fact_assumable')
+    def test_set_reachable_definer_without_direct_execute_refuses_stronger_cut(self):
+        from truss._psycopg_epoch_cut import _run_no_definer_ddl_fenced_epoch_operation,_run_set_role_excluded_ddl_fenced_epoch_operation
+        self.connection.execute("CREATE ROLE fact_assumable; CREATE FUNCTION truss.fixture_assumed_definer() RETURNS integer LANGUAGE sql SECURITY DEFINER AS $$ SELECT 77 $$; REVOKE ALL ON FUNCTION truss.fixture_assumed_definer() FROM PUBLIC; GRANT USAGE ON SCHEMA truss TO fact_assumable; GRANT EXECUTE ON FUNCTION truss.fixture_assumed_definer() TO fact_assumable")
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('REVOKE ALL ON FUNCTION truss.fixture_assumed_definer() FROM fact_cut_actor; GRANT fact_assumable TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                self.assertEqual(connection.execute("SELECT pg_catalog.has_function_privilege(current_user,'truss.fixture_assumed_definer()','EXECUTE'),pg_catalog.pg_has_role(current_user,'fact_assumable','SET')").fetchone(),(False,True))
+                self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'weak-snapshot'),Ok('weak-snapshot'))
+                called=[];result=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+                connection.execute('SET LOCAL ROLE fact_assumable')
+                self.assertEqual(connection.execute('SELECT truss.fixture_assumed_definer()').fetchone(),(77,))
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP FUNCTION truss.fixture_assumed_definer(); DROP OWNED BY fact_assumable; DROP ROLE fact_assumable')
+    def test_set_reachable_profile_passes_original_invoker_actor(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'set-role-excluded'),Ok('set-role-excluded'))
+        self.with_unprivileged_actor(operation)
+
+    def test_transitive_set_role_chain_reaches_privileged_role(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        self.connection.execute('CREATE ROLE fact_assumable; CREATE ROLE fact_inner CREATEROLE; GRANT fact_inner TO fact_assumable WITH INHERIT FALSE, SET TRUE')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_assumable TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                self.assertEqual(connection.execute("SELECT pg_catalog.pg_has_role(current_user,'fact_inner','USAGE'),pg_catalog.pg_has_role(current_user,'fact_inner','SET')").fetchone(),(False,True))
+                called=[];result=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+                connection.execute('SET LOCAL ROLE fact_inner; CREATE ROLE fact_assumed_created')
+                self.assertEqual(connection.execute("SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname='fact_assumed_created'").fetchone(),(1,))
+            self.with_unprivileged_actor(operation)
+            self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname='fact_assumed_created'").fetchone(),(0,))
+        finally:self.connection.execute('DROP ROLE fact_assumable; DROP ROLE fact_inner')
+    def test_noninherited_membership_without_set_permission_does_not_refuse(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        self.connection.execute('CREATE ROLE fact_assumable CREATEROLE')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_assumable TO fact_cut_actor WITH INHERIT FALSE, SET FALSE')
+                self.assertEqual(connection.execute("SELECT pg_catalog.pg_has_role(current_user,'fact_assumable','MEMBER'),pg_catalog.pg_has_role(current_user,'fact_assumable','USAGE'),pg_catalog.pg_has_role(current_user,'fact_assumable','SET')").fetchone(),(True,False,False))
+                self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'no-set-path'),Ok('no-set-path'))
+                connection.execute('SAVEPOINT no_set_permission')
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('SET LOCAL ROLE fact_assumable')
+                connection.execute('ROLLBACK TO no_set_permission')
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP ROLE fact_assumable')

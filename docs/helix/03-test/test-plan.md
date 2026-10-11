@@ -824,3 +824,20 @@ CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC5/AC9/AC10 prerequisites.
 Formale1dfc639 supplies three conditional UNSAT/two SAT results; no native
 EXECUTE implementation, SET ROLE closure, shared ACL lifetime or final-release
 refinement proof.
+
+
+### Native SET ROLE membership semantics — 2026-10-11
+
+Five controls require: original invoker actor passes; NOINHERIT but SET-enabled
+CREATEROLE membership passes the weaker snapshot and refuses stronger admission,
+while actual SET ROLE observes its privileged attribute; a definer unavailable to
+the original role becomes callable after native SET ROLE and stronger admission
+refuses; a transitive SET-enabled/noninherited chain refuses and actually creates
+an owned temporary role that transaction rollback removes; MEMBER=true with
+INHERIT=false/SET=false passes the selected stronger snapshot and PostgreSQL
+independently denies SET ROLE with42501 under a contained savepoint.
+Final7f63dbb2 passes126 methods and three independent native cleanups. Trace
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC5/AC9/AC10 prerequisites. Formal
+d4af259a separately models unbounded abstract SET/inheritance reachability: two
+UNSAT properties/three SAT counterexamples. It does not prove PostgreSQL's
+membership traversal, complete privileged capability inventory or role lifetime.

@@ -4301,3 +4301,39 @@ CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC5/AC9/AC10 prerequisites. No publi
 support flag or backend acceptance binding changed; last full checkpoint26/132,
 106 missing. Goal active. Next qualify SET ROLE reachability and original routine
 inventories, then coordinate shared ACL/role changes through the authority cut.
+
+
+### Native SET ROLE reachability beyond inherited privileges — 2026-10-11
+
+Implemented stronger private snapshot over native SET reachability for original
+session/effective roles after prior installed barrier/direct-role/direct-EXECUTE
+checks. Reject any SET-reachable role with selected privileged attributes, barrier
+owner identity or definer EXECUTE. No caller-supplied membership graph.
+Five native controls distinguish MEMBER/USAGE/SET, exercise direct/transitive
+NOINHERIT escalation and actual CREATE ROLE effects, observe definer invocation
+after SET ROLE despite absent direct EXECUTE, and pass a SET-disabled membership
+while PostgreSQL denies its role transition. Owned CREATE ROLE effects disappear
+on rollback, independently checked before fixture role cleanup.
+
+Final `evidence/python-psycopg-epoch-cut/7f63dbb2-02af-43d5-9cc4-9054cbff0ff6`
+passes126 methods (75 fact/dependency/identity/visibility/DDL/role/definer/SET,16
+graph,nine epoch,26 adoption), module boundaries,131 current/archived Truss
+pins,363 original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Earlier4e908cf1 passes124 methods under its
+original source tuple; no relabeling.
+
+Formal `evidence/security-set-role-exclusion-formal/d4af259a-bbcc-4b2f-9406-109e63ec2c7b`
+passes five fresh-context queries (two UNSAT/three SAT) with three exact source
+preimages. Unbounded abstract roles distinguish inheritance from SET; complete
+selected unsafe-role exclusion prevents the modeled path and stable reachability
+preserves it. Safe direct identity, absent inheritance and later membership
+changes have countermodels. Initialf074e06a retains its earlier source tuple.
+No native SET/transitive-closure/SQL/Python refinement theorem.
+
+Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC5/AC9/AC10. Exact privileged
+predefined/user-role capabilities and original reachable routine/ACL inventories,
+qualified definers, concurrent shared-role/ACL/config lifetime, authenticated
+caller/issuer/mapping and protected final release remain open. No backend binding
+or public support flag promoted; last full checkpoint26/132,106 missing. Goal
+active. Next compose original capability/routine inventory and participating
+role/ACL changes; selected snapshot subsets do not replace the final objective.

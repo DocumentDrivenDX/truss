@@ -172,3 +172,27 @@ def _run_no_definer_ddl_fenced_epoch_operation(host, transaction, comparison, ba
             raise ValueError('Selected no-reachable-definer profile required')
         return callback(cursor)
     return _run_unprivileged_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,exclude)
+
+
+def _run_set_role_excluded_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, callback):
+    """Selected SET-reachable role/definer snapshot, not shared-role lifetime.
+
+    PostgreSQL16 SET reachability differs from inherited privilege availability.
+    Qualified definer profiles and concurrent role/ACL changes remain separate.
+    """
+    if type(barrier) is not _DDLBarrierComparison or not callable(callback):
+        raise ValueError('Original barrier and callback required')
+    owner=barrier.owner_oid
+    def exclude(cursor):
+        cursor.execute("SELECT r.oid::pg_catalog.text FROM pg_catalog.pg_roles r "
+                       "WHERE (pg_catalog.pg_has_role(session_user,r.oid,'SET') OR pg_catalog.pg_has_role(current_user,r.oid,'SET')) "
+                       "AND (r.rolsuper OR r.rolcreaterole OR r.rolbypassrls OR r.oid OPERATOR(pg_catalog.=) %s::pg_catalog.oid "
+                       "OR EXISTS(SELECT 1 FROM pg_catalog.pg_proc p WHERE p.prosecdef "
+                       "AND pg_catalog.has_function_privilege(r.oid,p.oid,'EXECUTE'))) LIMIT 1",
+                       (str(owner),),prepare=False,binary=False)
+        rows=cursor.fetchmany(2)
+        if (cursor.description is None or len(cursor.description)!=1
+                or cursor.description[0].type_code!=25 or rows!=[]):
+            raise ValueError('Selected SET-reachable role exclusion required')
+        return callback(cursor)
+    return _run_no_definer_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,exclude)
