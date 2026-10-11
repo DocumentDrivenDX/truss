@@ -567,3 +567,25 @@ resolution, protected capture/current cuts and the seven semantic bodies remain
 unqualified. Existing source-derived role laws retain their historical module
 pins; no new whole-program or temporal proof is claimed. Original acceptance
 stays26/132.
+
+
+### Native operator implementation route
+
+[Final native operator evidence](evidence/design-audit/installed-operator-final-native.json)
+passes107 observations across38 inventories with21 frozen inputs. An accessible
+operator refers to a SECURITY DEFINER implementation in a distinct hidden schema.
+The ordinary SCRAM caller has no direct UPDATE right and no USAGE on the function
+schema, but invoking the operator commits an UPDATE, independently verified by
+changed native xmin. The existing census retains that implementation and rejects
+an identical unsafe baseline. Revoking implementation EXECUTE then produces42501
+and unchanged xmin, restoring scoped correspondence. No new permission bypass
+by ignoring EXECUTE was observed. Operator removal restores the original baseline.
+
+[Installed suite](evidence/design-audit/operator-paths-suite.json) passes336 tests
+on the unchanged53-source installed wheel. [Astra review](evidence/design-audit/operator-paths-astra-review.json) independently verifies current pins.
+These controls support the conservative separation of function EXECUTE and schema
+USAGE; they do not establish all operator support/selectivity, planner, type,
+trigger/default/RLS or extension routes, nor complete protected capture/current
+cuts. Original acceptance remains26/132. Source-derived proof scope is recorded
+separately by UMF; native privilege observations do not supply a SQL refinement
+proof or authenticate production authority.
