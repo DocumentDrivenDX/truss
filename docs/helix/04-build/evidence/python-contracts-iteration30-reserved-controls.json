@@ -54,6 +54,16 @@
     "public consumer operations"
   ],
   "additional_tests": {
-    "release_retirement_publication_faults": "pending session16277; no passed claim"
+    "release_retirement_publication_faults": {
+      "cases": 2,
+      "seconds": 11.237,
+      "process_exit": 0,
+      "log_sha256": "271978f23b517996d48ac2966ca357f639516868572ab09d10bb64d09e106823",
+      "coverage": [
+        "retirement root publication fails before assignment: ordinary admission closed, rollback slot retained",
+        "retirement root publication loses reply after assignment: ordinary admission closed, settled release retained"
+      ],
+      "scope": "Administrative native component evidence; no public operation qualification"
+    }
   }
 }
