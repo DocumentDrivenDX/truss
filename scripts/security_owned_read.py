@@ -86,4 +86,6 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
         from truss.execution import Ok
         if type(result) is not Ok:raise ValueError('Original executor operation refused')
         return result.value
-    return caller_host._run_operation(caller_transaction,capture)
+    from truss.psycopg_host import _HostPairReservation
+    with _HostPairReservation(caller_host,executor_host):
+        return caller_host._run_operation(caller_transaction,capture)

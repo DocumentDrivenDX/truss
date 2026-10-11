@@ -987,3 +987,38 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':role,'effectiveRoleOid':role,'subjectKey':[{'string':'s1'}]};value['executor']={'sessionRoleOid':role,'effectiveRoleOid':role}
         comparison=self.issue_bound_profile(json.dumps(value).encode())
         with self.assertRaisesRegex(ValueError,'delegated caller scope'):_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
+
+    def test_delegated_pair_reservation_blocks_executor_reuse_until_caller_publication(self):
+        import sys
+        from unittest.mock import patch
+        from threading import Thread
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_read=tool._run_owned_identity_read;observed=[]
+        def after_executor(*args,**kwargs):
+            result=original_read(*args,**kwargs)
+            attempts=[]
+            thread=Thread(target=lambda:attempts.append(self.host._run_operation(args[1],lambda c,o:'unexpected-reuse')))
+            thread.start();thread.join(1);self.assertFalse(thread.is_alive())
+            self.assertEqual(len(attempts),1);self.assertIsInstance(attempts[0],Error)
+            observed.append(True);return result
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',after_executor):result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit');self.assertEqual(observed,[True])
+                self.assertIsNone(self.host._custody.reservation);self.assertIsNone(host._custody.reservation)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+    def test_failed_pair_acquisition_preserves_executor_lease_and_releases_caller_lease(self):
+        from truss.psycopg_host import _HostPairReservation
+        def operation(host,t,original,connection):
+            self.assertTrue(self.host._custody.lease.acquire(blocking=False))
+            try:
+                with self.assertRaises(ValueError):
+                    with _HostPairReservation(host,self.host):pass
+                self.assertIsNone(host._custody.reservation)
+                self.assertTrue(host._custody.lease.acquire(blocking=False));host._custody.lease.release()
+                self.assertFalse(self.host._custody.lease.acquire(blocking=False))
+            finally:self.host._custody.lease.release()
+        self.with_unprivileged_actor(operation,catalog_only=True)
