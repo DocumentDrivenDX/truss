@@ -1,0 +1,59 @@
+{
+  "identity": "truss-administrative-revision-registration",
+  "version": "0.3.0-wide-report-candidate",
+  "scope": "administrative_single_original_operation_fresh_catalog_rollback_only",
+  "sources": {
+    "create": {
+      "path": "docs/helix/02-design/contracts/feed-transaction-create-v0.1.proposal.sql",
+      "sha256": "4c99efac297db762c7c95a82626cb6cd0c0e610d11feda3b2ea31cb9803192d7"
+    },
+    "reserve": {
+      "path": "docs/helix/02-design/contracts/feed-member-counter-reservation-v0.1.proposal.sql",
+      "sha256": "7b9040f135f4d9a68f4af6235f91959b852f0e57c8c243930b8d450cbb21a3a2"
+    },
+    "insert": {
+      "path": "docs/helix/02-design/contracts/feed-member-insert-v0.1.proposal.sql",
+      "sha256": "29d4948c87185d1480bb32aaceb079ad8762191e3c31f86ec3b40ac051ba87b4"
+    }
+  },
+  "transactionContext": "exact original admitted operation context; valid only for the one original fresh catalog operation, not a transaction-wide identity",
+  "ownerContext": "canonical envelope originalOperationRecordHexChunks, originalConfigurationRecordHexChunks captured before report production, originalContextHexChunks, originalRevisionRecordHexChunks, ordered originalDocumentRecordHexChunks; each array is consecutive native byte chunks encoded lowercase hex; exact full reconstruction; provenance only, not disclosure authority",
+  "manifestProfile": {
+    "identity": "truss-administrative-pending-manifest",
+    "version": "0.1.0-candidate",
+    "scope": "single original fresh catalog operation; no finalization"
+  },
+  "keyProfile": {
+    "identity": "truss-administrative-revision-key",
+    "version": "0.1.0-candidate",
+    "encoding": "truss-canonical/0.1.0 numeric-free object kind/revision"
+  },
+  "payloadProfile": {
+    "path": "packages/python/src/truss/_profiles/catalog-revision-wide-report-composition-candidate.json",
+    "sha256": "9269939c2151779c919826ef30beccfea51269f06da1d6241e8f6bb6d80e6253"
+  },
+  "clockProfile": {
+    "identity": "truss-administrative-original-member-clock",
+    "version": "0.1.0-candidate",
+    "basis": "server clock_timestamp immediately before first successful insertion",
+    "precision": "native PostgreSQL microseconds",
+    "commitTime": false,
+    "envelope": "profile plus finite UTC microsecond original-write timestamp; distinct from acceptance time"
+  },
+  "repeat": "single use; refuse before effects, no generic idempotent registrar claim",
+  "poststate": "one pending parent, one revision member, zero catalog/configuration prerequisites; head remains unpublished; delivery ordinal, manifest and finalized generation remain null",
+  "publication": "none; unconditional commit barrier retained",
+  "ownerResources": {
+    "aggregateOriginalByteCeiling": "786432",
+    "nativeBytesPerChunk": "32768",
+    "maxChunksPerRecord": "32",
+    "maxDocuments": "512",
+    "maxTotalChunks": "1024",
+    "maxTaggedTreeAndWireBytes": "4194304",
+    "qualification": "logical original/chunk/carrier bounds; not complete native allocation or work"
+  },
+  "reportComposition": {
+    "path": "packages/python/src/truss/_profiles/catalog-report-wide-composition-candidate.json",
+    "sha256": "d77cf6b399774166da481f0f0e7850271243e8911175b2bb225f9a628d418aba"
+  }
+}

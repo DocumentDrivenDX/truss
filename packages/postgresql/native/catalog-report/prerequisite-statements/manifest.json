@@ -1,0 +1,68 @@
+{
+  "scope": "UMF owner single-statement AST extraction and reload/export; no native execution or installed authority",
+  "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "ownerFiles": [
+    {
+      "path": "native/postgresql/runtime.ts",
+      "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+    },
+    {
+      "path": "src/adapters/postgresql/index.ts",
+      "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+    },
+    {
+      "path": "src/model/document.ts",
+      "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+    },
+    {
+      "path": "src/model/native-json.ts",
+      "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+    },
+    {
+      "path": "bun.lock",
+      "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "catalog-reserve",
+      "source": "docs/helix/02-design/contracts/feed-prerequisite-counter-reservation-v0.1.proposal.umf.json",
+      "sourceSha256": "b52a4a161e61e9c328fee046a46f83b8697a4c57bec7f419e12c11bbf4942702",
+      "ordinal": 0,
+      "modelPath": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-reserve.umf.json",
+      "modelSha256": "2221d51878a67374051d8466d95c5817e37696c44ffd5fc8fa4bad10b173123d",
+      "sqlPath": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-reserve.sql",
+      "sqlSha256": "fc83eb26cc5ad4da67b28fd3c25cb9941c904b9b4782a662ac22c34d35f1b70a"
+    },
+    {
+      "name": "configuration-reserve",
+      "source": "docs/helix/02-design/contracts/feed-prerequisite-counter-reservation-v0.1.proposal.umf.json",
+      "sourceSha256": "b52a4a161e61e9c328fee046a46f83b8697a4c57bec7f419e12c11bbf4942702",
+      "ordinal": 1,
+      "modelPath": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-reserve.umf.json",
+      "modelSha256": "22ce5d86a95c5191a753d7fca8261865768ee8e7d8129134128c2881320da467",
+      "sqlPath": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-reserve.sql",
+      "sqlSha256": "2994cc429921d16ba69d0c24ef9ecefaca14df45b994c24f83a77223fff38915"
+    },
+    {
+      "name": "catalog-insert",
+      "source": "docs/helix/02-design/contracts/feed-prerequisite-insert-v0.1.proposal.umf.json",
+      "sourceSha256": "cf9b753576f2938a18b61ee78f3eceb6d499ee00498ce7cf6624008ae63c2b81",
+      "ordinal": 0,
+      "modelPath": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-insert.umf.json",
+      "modelSha256": "2415b7bc84360253d52645a187c7adf8dff3ad287daaca4f262e28bca4b54c58",
+      "sqlPath": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-insert.sql",
+      "sqlSha256": "cf8f87254fb29f08688cc95148065f90f963fe47cc0617cacdf7d3f1ab5cee76"
+    },
+    {
+      "name": "configuration-insert",
+      "source": "docs/helix/02-design/contracts/feed-prerequisite-insert-v0.1.proposal.umf.json",
+      "sourceSha256": "cf9b753576f2938a18b61ee78f3eceb6d499ee00498ce7cf6624008ae63c2b81",
+      "ordinal": 1,
+      "modelPath": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-insert.umf.json",
+      "modelSha256": "b64a383c90b17fed4cde52ae349f4f6f381e7b3a65d49f8ddeec92166534ae4d",
+      "sqlPath": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-insert.sql",
+      "sqlSha256": "b580d38e70ede88c37232433b36372850890c88b5a3d563257bf672cdbb6de17"
+    }
+  ]
+}
