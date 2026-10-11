@@ -58,7 +58,17 @@ export async function createCatalogReportCorrespondence(dependenciesPackage:stri
   await recheckOriginalCatalogExecutionReportCandidate(candidate,connection,prepared,basis);
   return Object.freeze({...result,verifiedFields:Object.freeze([...result.verifiedFields,'originalExecution']),scope:'eleven_original_report_candidate_fields_only' as const});
  }});
- return Object.freeze({...paths,async verifyWithExecutionAndRegisteredReportProfile(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,candidate:Awaited<ReturnType<typeof composeCatalogExecutionReportCandidate>>,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
+ return Object.freeze({...paths,async verifyWithExecutionProfileAndUmfMembershipCandidates(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,execution:Awaited<ReturnType<typeof composeCatalogExecutionReportCandidate>>,membership:ReturnType<typeof composeCatalogUmfMembershipCandidate>,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
+  requireOriginalCatalogExecutionReportCandidate(execution,connection,prepared,basis);
+  requireOriginalCatalogUmfMembershipCandidate(membership,prepared);
+  const result=await paths.verifyWithRegisteredReportProfile(connection,prepared,basis,wire,resolver,selected);
+  const report=decodeAcceptanceJson(Buffer.from(result.originalUtf8Hex,'hex')) as Record<string,unknown>;
+  if(!same(report.originalExecution,execution.candidate))throw Error('Original report producer correspondence required: originalExecution');
+  if(!same(report.umf,membership.umf))throw Error('Original report producer correspondence required: umf');
+  await recheckOriginalCatalogExecutionReportCandidate(execution,connection,prepared,basis);
+  return Object.freeze({...result,verifiedFields:Object.freeze([...result.verifiedFields,'originalExecution','umf']),supportSemanticsQualified:false as const,
+   scope:'thirteen_original_report_candidate_fields_only' as const});
+ },async verifyWithExecutionAndRegisteredReportProfile(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,candidate:Awaited<ReturnType<typeof composeCatalogExecutionReportCandidate>>,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
   requireOriginalCatalogExecutionReportCandidate(candidate,connection,prepared,basis);
   const result=await paths.verifyWithRegisteredReportProfile(connection,prepared,basis,wire,resolver,selected);
   const report=decodeAcceptanceJson(Buffer.from(result.originalUtf8Hex,'hex')) as Record<string,unknown>;
