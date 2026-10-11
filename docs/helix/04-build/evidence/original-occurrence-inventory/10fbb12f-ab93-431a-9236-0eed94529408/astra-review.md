@@ -1,0 +1,11 @@
+# Astra refreshed merged-source audit
+
+No remaining scoped blocker. Independent read-only audit verifies final host `10fbb12f-ab93-431a-9236-0eed94529408` and native `b16bdbd6-e38d-435f-b01f-55ad67088351`. No host/native producer, Docker or Cargo command was executed by this reviewer.
+
+Host: all 733 current source pins and exact ZIP entries match, the independently enumerated selected input set matches, and raw logs show 118 tests / 1,468 assertions / 12 files with strict typing exit 0. Receipt SHA-256: `c311262bb2afcc520a18999ff3967b3ac36f3aa28e0adeb828ae081fc17bb2a1`.
+
+Native: all 821 current pins and exact ZIP entries match, including the refreshed host inputs/receipt. All 225 checks are unique and in exactly the same order as `bc33e2b9`. The independently audited declaration identities, parameters, generic correspondence, retained owner profiles/carriers, original bytes, mixed journal indices `[1,3]`, native observation and PostgreSQL17.9 evidence remain consistent. Exact owned container/cidfile/removal output agrees; cleanup exits 0 with empty stderr. Wrapper receipt SHA-256: `4c52a4f258c4a318c49684a01bf52455202cc3a9c86f955cbb16326c7d744dbb`; native JSON SHA-256: `342fc631380ad0699cfaf88ea01b92c06b415bd44f2d3754aea969d640cd6e96`.
+
+Against host `f3529a4f`, only the captured `packages/umf-bun/src/python-preparation.ts` bytes changed. Against native `bc33e2b9`, that same change plus the wrapper's host receipt/premise pointer and replacement host receipt are the complete changed-input set. Exact comparison confirms the wrapper has no other byte change. Both predecessor ZIPs remain valid against their original recorded pins. All four formal inputs remain unchanged, so the separately retained ten-query replay (six UNSAT/four SAT) still applies within its conditional tuple/gate scope.
+
+The previously resolved configured generic-owner observation requirement remains intact. This refresh qualifies the selected host tests and private native catalog/report composition against captured merged sources; it does not generally qualify concurrent Python owner/issuer paths. Record-valued literal semantics, authenticated issuer/current authority, native duty persistence/enforcement, accepted publication/finalizer and public admission remain unqualified. Full acceptance stays26/132. Historical receipts were not repinned or rewritten.

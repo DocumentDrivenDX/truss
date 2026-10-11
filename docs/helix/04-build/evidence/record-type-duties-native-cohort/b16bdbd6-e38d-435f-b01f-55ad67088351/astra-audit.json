@@ -1,0 +1,140 @@
+{
+  "status": "passed",
+  "method": "Independent read-only exact source/ZIP/native receipt/log/custody audit; no native execution",
+  "receiptSha256": "4c52a4f258c4a318c49684a01bf52455202cc3a9c86f955cbb16326c7d744dbb",
+  "nativeReceiptSha256": "342fc631380ad0699cfaf88ea01b92c06b415bd44f2d3754aea969d640cd6e96",
+  "nativeLogSha256": "ebad6b0dc91abf838692ff1208de5718b7a46ae4bef053ed2c72a43bb6c99bce",
+  "archiveSha256": "098ef023e59ac1cda581dd8b5ffd3042f80a2914dbf5e3ca2a8622cecbe133be",
+  "sourcePins": 821,
+  "includedHostPins": 733,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentInputInventoryMatches": true,
+  "uniqueNativeChecks": 225,
+  "allHistoricalChecksRetained": 222,
+  "newDeclarationDutyChecks": [
+    "native exact receipt allocates one original declaration duty without value promotion",
+    "native journal allocates two qualified original declaration occurrences without enforcement",
+    "native overlapping receipt protocols refuse duplicate declaration duties before SQL"
+  ],
+  "familyChecks": [
+    {
+      "composition": "typeReceiptComposition",
+      "ruleCount": 1,
+      "manifestSha256": "2f3409acf0d72010a028bfc1c86b29e106564985833b1c972781a6d00b59ac1d",
+      "protocol": "exact_current_receipt",
+      "qualifiedOccurrences": [
+        {
+          "sourceKind": "umf_document",
+          "documentId": "type-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "70bb78c93125a39292748d16eedf28018ce4d186b3b9dc26c82f361f5b325a19",
+          "owner": {
+            "module": "m",
+            "element": "v"
+          },
+          "sourcePointer": "/modules/0/elements/0/references/1"
+        }
+      ]
+    },
+    {
+      "composition": "typeJournalComposition",
+      "ruleCount": 2,
+      "manifestSha256": "2f3409acf0d72010a028bfc1c86b29e106564985833b1c972781a6d00b59ac1d",
+      "protocol": "transition_journal",
+      "qualifiedOccurrences": [
+        {
+          "sourceKind": "umf_document",
+          "documentId": "journal-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+          "owner": {
+            "module": "m",
+            "element": "v"
+          },
+          "sourcePointer": "/modules/0/elements/0/references/1"
+        },
+        {
+          "sourceKind": "umf_document",
+          "documentId": "journal-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+          "owner": {
+            "module": "m",
+            "element": "w"
+          },
+          "sourcePointer": "/modules/0/elements/1/references/0"
+        }
+      ]
+    }
+  ],
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "journalOwnerProfile": {
+    "identity": "umf-record-type-journal-inspection",
+    "version": "e71613d9c76bf7a4bf5476bf72ab4fd99059ff17",
+    "sha256": "88d68b176a3d2a5f8877332bbe332c116b87c57642f21f69932133599f521783"
+  },
+  "originalRequestSha256": "72ffaf8cc1992cf7dd1f4ffc976e289e390978fcc5e436e90eb1a8b0a13dc1dc",
+  "originalJournalSha256": "f073afdf0794e77809e6cd0e32f166fef9453d11c14d9febf6b001d8cb4a4155",
+  "originalSourceSha256": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+  "ownerEvidenceSha256": "16ce94e3142cf053a20cdf43440421baa4cfa8a41495b185a6247892d2795103",
+  "nativeObservation": {
+    "writerXid": "870",
+    "operationOrdinal": "0",
+    "effectGeneration": "7"
+  },
+  "exactJournalSourceMeaningAndPointerJoin": true,
+  "cleanup": {
+    "containerId": "aa3292986d1f1df2c2dee0ad0592fa3e40fb0b9013b6930d0ab15f72745e9132",
+    "exitCode": 0,
+    "stdout": "aa3292986d1f1df2c2dee0ad0592fa3e40fb0b9013b6930d0ab15f72745e9132",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "scope": "Refreshed existing private record-type declaration correspondence checkpoint only; no general qualification of concurrent Python integration or new issuer/enforcement/publication authority.",
+  "acceptancePromoted": false,
+  "postMergeComparison": [
+    {
+      "kind": "original-occurrence-inventory",
+      "old": "f3529a4f-4679-4ab6-a03c-b53a3466bf72",
+      "new": "10fbb12f-ab93-431a-9236-0eed94529408",
+      "changed": [
+        {
+          "path": "/private/tmp/truss-security-main-integration/packages/umf-bun/src/python-preparation.ts",
+          "oldSha256": "2b98bf403757bfa7eb58cb0a954677628c8c174a92b88b7bf85f8cc90d3776fb",
+          "newSha256": "fb02b3403e17451904524fbe04c4c17cb85e0a5d7a0d5a3e8252be8c4bb8fef6"
+        }
+      ],
+      "removed": [],
+      "added": [],
+      "oldZipAllHashesMatch": true
+    },
+    {
+      "kind": "record-type-duties-native-cohort",
+      "old": "bc33e2b9-8b3b-4cc2-9e68-4fb817ab1fb0",
+      "new": "b16bdbd6-e38d-435f-b01f-55ad67088351",
+      "changed": [
+        {
+          "path": "/private/tmp/truss-security-main-integration/packages/umf-bun/src/python-preparation.ts",
+          "oldSha256": "2b98bf403757bfa7eb58cb0a954677628c8c174a92b88b7bf85f8cc90d3776fb",
+          "newSha256": "fb02b3403e17451904524fbe04c4c17cb85e0a5d7a0d5a3e8252be8c4bb8fef6"
+        },
+        {
+          "path": "/private/tmp/truss-security-main-integration/scripts/check-record-type-duties-native-cohort.py",
+          "oldSha256": "0983dbc1cd11595dda0a40fd698ca09e986d3333db5ade020a425d1fba0783ec",
+          "newSha256": "18ef9f403f561af1f7aa15016c2fef540a20ad7f3b3d970f0f7c508165d961d5"
+        }
+      ],
+      "removed": [
+        "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/original-occurrence-inventory/f3529a4f-4679-4ab6-a03c-b53a3466bf72/receipt.json"
+      ],
+      "added": [
+        "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/original-occurrence-inventory/10fbb12f-ab93-431a-9236-0eed94529408/receipt.json"
+      ],
+      "oldZipAllHashesMatch": true
+    }
+  ],
+  "onlyNativeWrapperHostPointerAndPremiseChanged": true,
+  "formalFourInputsUnchanged": true,
+  "baseline225CheckOrderPreserved": true
+}

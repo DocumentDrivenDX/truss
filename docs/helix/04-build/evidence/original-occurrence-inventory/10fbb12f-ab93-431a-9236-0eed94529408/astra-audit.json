@@ -1,0 +1,101 @@
+{
+  "status": "passed",
+  "method": "Independent read-only current-source/exact-ZIP/retained-log audit; no host/browser/native rerun",
+  "receiptSha256": "c311262bb2afcc520a18999ff3967b3ac36f3aa28e0adeb828ae081fc17bb2a1",
+  "sourcePins": 733,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentSelectedInputInventoryMatches": true,
+  "archiveSha256": "c36131619d9689df83b5336eed4faff4f74baad5f66852b21ccda5fc78c4420d",
+  "hostLogSha256": "8260e1f78ebe606bd167c2f5ce1663dafeedb9fb914364a168bfec229b0704f4",
+  "typeLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "hostTests": 118,
+  "hostAssertions": 1468,
+  "testFiles": 12,
+  "strictTypecheckExit": 0,
+  "journalIngressTests": [
+    "original whole journal reconciles multiple typed Fields and exact source occurrences",
+    "whole journal packet refuses gaps crossed contexts mutations duplicates and unsupported profiles",
+    "journal original bytes reject duplicate members and numeric meaning loss",
+    "kind-only history retains imported bare type links without inventing duties",
+    "mixed kind events retain original type event indices and independent scanner bounds remain active",
+    "retained-evidence ledger enforces its independent exact byte bound",
+    "loaded journal output substitutions and argument mutation cannot change original meaning",
+    "journal issuance binds exact original preparation before private report SQL",
+    "record-type duties conserve exact qualified occurrences without value or enforcement promotion",
+    "receipt protocol is evidence: equal declaration identity and duplicate occurrence refusal",
+    "configured generic owner must observe every receipt-backed declaration before SQL"
+  ],
+  "journalOwnerDirectory": "/private/tmp/truss-umf-runtime-lb0q5l",
+  "journalOwner": {
+    "revision": "e71613d9c76bf7a4bf5476bf72ab4fd99059ff17",
+    "producerMode": "record-type-journals",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "8bd6ad5ee2824345e5b5e0dc9aad01d1d89453d2f77e784127f0b7e1a2e58ac0",
+    "bundleSha256": "88d68b176a3d2a5f8877332bbe332c116b87c57642f21f69932133599f521783",
+    "operations": [
+      "inspectCoreRecordTypeJournal",
+      "declareCoreElementKind",
+      "declareCoreRecordType"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "extraSourceArchiveCheck": "Temporary source.tar digest and Git commit comment match producer manifest; receipt owner module/schema match archived bytes. Not a fresh rebuild or authenticated bundle issuance.",
+  "remainingFindings": [],
+  "nativeExecution": false,
+  "acceptancePromoted": false,
+  "postMergeComparison": [
+    {
+      "kind": "original-occurrence-inventory",
+      "old": "f3529a4f-4679-4ab6-a03c-b53a3466bf72",
+      "new": "10fbb12f-ab93-431a-9236-0eed94529408",
+      "changed": [
+        {
+          "path": "/private/tmp/truss-security-main-integration/packages/umf-bun/src/python-preparation.ts",
+          "oldSha256": "2b98bf403757bfa7eb58cb0a954677628c8c174a92b88b7bf85f8cc90d3776fb",
+          "newSha256": "fb02b3403e17451904524fbe04c4c17cb85e0a5d7a0d5a3e8252be8c4bb8fef6"
+        }
+      ],
+      "removed": [],
+      "added": [],
+      "oldZipAllHashesMatch": true
+    },
+    {
+      "kind": "record-type-duties-native-cohort",
+      "old": "bc33e2b9-8b3b-4cc2-9e68-4fb817ab1fb0",
+      "new": "b16bdbd6-e38d-435f-b01f-55ad67088351",
+      "changed": [
+        {
+          "path": "/private/tmp/truss-security-main-integration/packages/umf-bun/src/python-preparation.ts",
+          "oldSha256": "2b98bf403757bfa7eb58cb0a954677628c8c174a92b88b7bf85f8cc90d3776fb",
+          "newSha256": "fb02b3403e17451904524fbe04c4c17cb85e0a5d7a0d5a3e8252be8c4bb8fef6"
+        },
+        {
+          "path": "/private/tmp/truss-security-main-integration/scripts/check-record-type-duties-native-cohort.py",
+          "oldSha256": "0983dbc1cd11595dda0a40fd698ca09e986d3333db5ade020a425d1fba0783ec",
+          "newSha256": "18ef9f403f561af1f7aa15016c2fef540a20ad7f3b3d970f0f7c508165d961d5"
+        }
+      ],
+      "removed": [
+        "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/original-occurrence-inventory/f3529a4f-4679-4ab6-a03c-b53a3466bf72/receipt.json"
+      ],
+      "added": [
+        "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/original-occurrence-inventory/10fbb12f-ab93-431a-9236-0eed94529408/receipt.json"
+      ],
+      "oldZipAllHashesMatch": true
+    }
+  ],
+  "onlyNativeWrapperHostPointerAndPremiseChanged": true,
+  "formalFourInputsUnchanged": true,
+  "baseline225CheckOrderPreserved": true,
+  "scope": "Refreshed existing private record-type declaration correspondence checkpoint only; no general qualification of concurrent Python integration or new issuer/enforcement/publication authority."
+}
