@@ -25,11 +25,13 @@ class _ReportStart:
 
 def begin_catalog_report(connection,prepared):
     _require_original_preparation(prepared)
+    from ._catalog_support import evaluate_catalog_support
+    support=evaluate_catalog_support(prepared)
     cut=_cut(connection)
     if cut[2]!='0':raise ValueError('Original pre-effect report cut required')
     lifecycle_start=begin_catalog_lifecycle(connection,prepared,cut)
     result=_ReportStart();key=id(result)
-    _original_starts[key]=(weakref.ref(result,lambda ref:_original_starts.pop(key,None)),connection,prepared,cut,lifecycle_start)
+    _original_starts[key]=(weakref.ref(result,lambda ref:_original_starts.pop(key,None)),connection,prepared,cut,lifecycle_start,support)
     return result
 
 def _rows(connection,sql,**parameters):
@@ -86,6 +88,9 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
     cut=_cut(connection)
     if cut[:2]!=prior_cut[:2] or cut[3]!=prior_cut[3]:
         raise ValueError('Mixed original report operation or scope')
+    from ._catalog_support import evaluate_catalog_support
+    support=evaluate_catalog_support(prepared)
+    if support!=original[5]:raise ValueError('Original pre-effect catalog support decision required')
     evidence=json.loads(prepared.report_evidence_bytes)
     if evidence['scope']!='original_owner_report_preparation_only' or evidence['ingress']['state']!='available':
         raise ValueError('Original owner report evidence required')
@@ -127,7 +132,7 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
              'ownerObservations':owner_observations,
              'observationCoverage':observation_coverage,
              'coreAssertionIdentities':core_assertions,
-             'supportSemanticsQualified':False,
+             'supportSemanticsQualified':False,'supportPolicyDecision':support,
              'nativeInventory':inventory,'physicalSnapshotHex':physical.hex(),'nativeCounts':json.loads(catalog.counts_bytes),
              'fieldQualification':{'extensions':'partial_retention_only',
                  'pending_indexes':'original_selected_immutable_declaration_policy_only',
