@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-jdwtpabd/worker.py", line 60, in <module>
+    if time.monotonic()>deadline:raise TimeoutError('Original pending native lock not observed')
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: Original pending native lock not observed

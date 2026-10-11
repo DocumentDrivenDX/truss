@@ -1,0 +1,22 @@
+2026-10-11 08:53:18.623 EDT [92872] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 08:53:18.623 EDT [92872] LOG:  listening on Unix socket "/private/tmp/pc-8obywn8o/.s.PGSQL.5432"
+2026-10-11 08:53:18.632 EDT [92875] LOG:  database system was shut down at 2026-10-11 08:53:17 EDT
+2026-10-11 08:53:18.635 EDT [92872] LOG:  database system is ready to accept connections
+2026-10-11 08:53:19.532 EDT [92894] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:53:19.532 EDT [92894] STATEMENT:  CREATE OR REPLACE FUNCTION census_probe.value() RETURNS bigint LANGUAGE sql IMMUTABLE AS 'SELECT 333::bigint'
+2026-10-11 08:53:19.683 EDT [92894] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:53:19.683 EDT [92894] STATEMENT:  GRANT census_group TO census_actor
+2026-10-11 08:53:19.835 EDT [92894] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:53:19.835 EDT [92894] STATEMENT:  ALTER ROLE census_actor SET search_path='census_probe'
+2026-10-11 08:53:19.987 EDT [92894] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:53:19.987 EDT [92894] STATEMENT:  ALTER FUNCTION census_probe.value() OWNER TO census_actor
+2026-10-11 08:53:20.140 EDT [92894] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:53:20.140 EDT [92894] STATEMENT:  ALTER TABLE census_probe.facts ADD COLUMN hidden text
+2026-10-11 08:53:20.291 EDT [92894] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:53:20.291 EDT [92894] STATEMENT:  CREATE POLICY census_policy ON census_probe.facts USING (true)
+2026-10-11 08:53:20.442 EDT [92894] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:53:20.442 EDT [92894] STATEMENT:  CREATE FOREIGN DATA WRAPPER census_foreign NO HANDLER
+2026-10-11 08:53:22.119 EDT [92894] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:53:22.119 EDT [92894] STATEMENT:  SELECT pg_catalog.pg_advisory_xact_lock($1)
+2026-10-11 08:53:22.605 EDT [92872] LOG:  received immediate shutdown request
+2026-10-11 08:53:22.607 EDT [92872] LOG:  database system is shut down

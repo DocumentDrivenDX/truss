@@ -1,0 +1,20 @@
+2026-10-11 08:42:08.108 EDT [88318] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 08:42:08.108 EDT [88318] LOG:  listening on Unix socket "/private/tmp/pc-eq85hhs6/.s.PGSQL.5432"
+2026-10-11 08:42:08.117 EDT [88321] LOG:  database system was shut down at 2026-10-11 08:42:07 EDT
+2026-10-11 08:42:08.120 EDT [88318] LOG:  database system is ready to accept connections
+2026-10-11 08:42:08.767 EDT [88331] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:42:08.767 EDT [88331] STATEMENT:  CREATE OR REPLACE FUNCTION census_probe.value() RETURNS bigint LANGUAGE sql IMMUTABLE AS 'SELECT 333::bigint'
+2026-10-11 08:42:08.918 EDT [88331] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:42:08.918 EDT [88331] STATEMENT:  GRANT census_group TO census_actor
+2026-10-11 08:42:09.069 EDT [88331] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:42:09.069 EDT [88331] STATEMENT:  ALTER ROLE census_actor SET search_path='census_probe'
+2026-10-11 08:42:09.221 EDT [88331] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:42:09.221 EDT [88331] STATEMENT:  ALTER FUNCTION census_probe.value() OWNER TO census_actor
+2026-10-11 08:42:09.373 EDT [88331] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:42:09.373 EDT [88331] STATEMENT:  ALTER TABLE census_probe.facts ADD COLUMN hidden text
+2026-10-11 08:42:09.524 EDT [88331] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:42:09.524 EDT [88331] STATEMENT:  CREATE POLICY census_policy ON census_probe.facts USING (true)
+2026-10-11 08:42:09.676 EDT [88331] ERROR:  canceling statement due to lock timeout
+2026-10-11 08:42:09.676 EDT [88331] STATEMENT:  CREATE FOREIGN DATA WRAPPER census_foreign NO HANDLER
+2026-10-11 08:42:13.606 EDT [88318] LOG:  received immediate shutdown request
+2026-10-11 08:42:13.610 EDT [88318] LOG:  database system is shut down

@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-h3bn62kx/worker.py", line 90, in <module>
+    check('unparticipating-administrative-writer-bypasses-barrier',[[666]],holder.run('SELECT census_probe.value()'))
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-h3bn62kx/worker.py", line 10, in check
+    if type(expected) is not type(observed) or expected!=observed:raise AssertionError(name)
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: unparticipating-administrative-writer-bypasses-barrier

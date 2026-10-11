@@ -1,0 +1,302 @@
+{
+  "status": "component-passed",
+  "observations": [
+    {
+      "id": "exact-engine",
+      "expected": [
+        [
+          "160015"
+        ]
+      ],
+      "observed": [
+        [
+          "160015"
+        ]
+      ]
+    },
+    {
+      "id": "all-covered-catalog-locks",
+      "expected": [
+        "pg_aggregate",
+        "pg_am",
+        "pg_amop",
+        "pg_amproc",
+        "pg_attrdef",
+        "pg_attribute",
+        "pg_auth_members",
+        "pg_authid",
+        "pg_cast",
+        "pg_class",
+        "pg_collation",
+        "pg_constraint",
+        "pg_conversion",
+        "pg_database",
+        "pg_db_role_setting",
+        "pg_default_acl",
+        "pg_depend",
+        "pg_enum",
+        "pg_event_trigger",
+        "pg_extension",
+        "pg_foreign_data_wrapper",
+        "pg_foreign_server",
+        "pg_foreign_table",
+        "pg_index",
+        "pg_inherits",
+        "pg_language",
+        "pg_namespace",
+        "pg_opclass",
+        "pg_operator",
+        "pg_opfamily",
+        "pg_parameter_acl",
+        "pg_partitioned_table",
+        "pg_policy",
+        "pg_proc",
+        "pg_range",
+        "pg_rewrite",
+        "pg_sequence",
+        "pg_shdepend",
+        "pg_statistic_ext",
+        "pg_transform",
+        "pg_trigger",
+        "pg_type",
+        "pg_user_mapping"
+      ],
+      "observed": [
+        "pg_aggregate",
+        "pg_am",
+        "pg_amop",
+        "pg_amproc",
+        "pg_attrdef",
+        "pg_attribute",
+        "pg_auth_members",
+        "pg_authid",
+        "pg_cast",
+        "pg_class",
+        "pg_collation",
+        "pg_constraint",
+        "pg_conversion",
+        "pg_database",
+        "pg_db_role_setting",
+        "pg_default_acl",
+        "pg_depend",
+        "pg_enum",
+        "pg_event_trigger",
+        "pg_extension",
+        "pg_foreign_data_wrapper",
+        "pg_foreign_server",
+        "pg_foreign_table",
+        "pg_index",
+        "pg_inherits",
+        "pg_language",
+        "pg_namespace",
+        "pg_opclass",
+        "pg_operator",
+        "pg_opfamily",
+        "pg_parameter_acl",
+        "pg_partitioned_table",
+        "pg_policy",
+        "pg_proc",
+        "pg_range",
+        "pg_rewrite",
+        "pg_sequence",
+        "pg_shdepend",
+        "pg_statistic_ext",
+        "pg_transform",
+        "pg_trigger",
+        "pg_type",
+        "pg_user_mapping"
+      ]
+    },
+    {
+      "id": "all-share-locks-granted",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "held-baseline:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "routine-body:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "role-membership:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "role-default:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "owner:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "column:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "policy:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "foreign-route:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "ordinary-data-not-source-write",
+      "expected": [
+        [
+          "changed"
+        ]
+      ],
+      "observed": [
+        [
+          "changed"
+        ]
+      ]
+    },
+    {
+      "id": "held-after-blocked-writes:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "held-source-stable",
+      "expected": "309f93cdffd118cd2531a2499008fa39777347374c384707b313d532e176e075",
+      "observed": "309f93cdffd118cd2531a2499008fa39777347374c384707b313d532e176e075"
+    },
+    {
+      "id": "held-native-execution",
+      "expected": [
+        [
+          1
+        ]
+      ],
+      "observed": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "id": "write-after-release",
+      "expected": [
+        [
+          333
+        ]
+      ],
+      "observed": [
+        [
+          333
+        ]
+      ]
+    },
+    {
+      "id": "old-snapshot:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "old-snapshot-after-lock:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "stale-snapshot-survives-lock",
+      "expected": "309f93cdffd118cd2531a2499008fa39777347374c384707b313d532e176e075",
+      "observed": "309f93cdffd118cd2531a2499008fa39777347374c384707b313d532e176e075"
+    },
+    {
+      "id": "native-execution-sees-new-routine",
+      "expected": [
+        [
+          333
+        ]
+      ],
+      "observed": [
+        [
+          333
+        ]
+      ]
+    },
+    {
+      "id": "lock-before-first-snapshot:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "fresh-cut-detects-body-change",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "fresh-cut-native-execution",
+      "expected": [
+        [
+          333
+        ]
+      ],
+      "observed": [
+        [
+          333
+        ]
+      ]
+    }
+  ],
+  "catalogs": [
+    "pg_aggregate",
+    "pg_am",
+    "pg_amop",
+    "pg_amproc",
+    "pg_attrdef",
+    "pg_attribute",
+    "pg_auth_members",
+    "pg_authid",
+    "pg_cast",
+    "pg_class",
+    "pg_collation",
+    "pg_constraint",
+    "pg_conversion",
+    "pg_database",
+    "pg_db_role_setting",
+    "pg_default_acl",
+    "pg_depend",
+    "pg_enum",
+    "pg_event_trigger",
+    "pg_extension",
+    "pg_foreign_data_wrapper",
+    "pg_foreign_server",
+    "pg_foreign_table",
+    "pg_index",
+    "pg_inherits",
+    "pg_language",
+    "pg_namespace",
+    "pg_opclass",
+    "pg_operator",
+    "pg_opfamily",
+    "pg_parameter_acl",
+    "pg_partitioned_table",
+    "pg_policy",
+    "pg_proc",
+    "pg_range",
+    "pg_rewrite",
+    "pg_sequence",
+    "pg_shdepend",
+    "pg_statistic_ext",
+    "pg_transform",
+    "pg_trigger",
+    "pg_type",
+    "pg_user_mapping"
+  ],
+  "scope": "Excluded administrative PostgreSQL16.15 catalog ShareLock feasibility and native stale-snapshot counterexample. Materialized pg8000 rows are not protected bounded original ingress. Same database, tested finite DDL set only; no all-writer/catalog/extension/runtime configuration completeness, provider authentication, final authority/data cut, cooperative handback or backend acceptance."
+}
