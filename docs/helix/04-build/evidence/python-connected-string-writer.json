@@ -1,0 +1,31 @@
+{
+  "scope": "Administrative pending native string effects; not public apply, registered family admission, accepted catalog or installed ordinary authority",
+  "result": {
+    "exit_code": 0,
+    "tests": 7,
+    "seconds": 7.555,
+    "postgresql": "16.15"
+  },
+  "verified": [
+    "exact original token and scalar OLD/NEW correspondence",
+    "same-value write advances object version and event generation",
+    "stale version and invalid token refuse without discarding prior host work",
+    "late foreign scalar event refuses",
+    "missing observer refuses before returning",
+    "unexpected object version rewrite refuses; complete planned object compared after UPDATE",
+    "operation savepoint rollback restores scalar/object and removes operation row",
+    "unconditional raw commit barrier remains",
+    "late object-trigger parent rewrite refuses; complete final state/node/scalar membership and candidate images independently compared"
+  ],
+  "limitations": [
+    "Native catalog fixtures satisfy physical source/FK constraints only; no accepted UMF evidence",
+    "No public host dispatcher or installation integration",
+    "Registered original family/context producer, capacity, complete touch contributions, key parity, journal, feed, authority and finalization unfinished",
+    "Images and object bytes serialize before admission-size refusal; no bounded collection/resource qualification"
+  ],
+  "sha256": {
+    "packages/postgresql/native/existing-string-writer/pending-effects.sql": "96d06d5c96e9a245263c8d699b68cc77814d4a925e1dddd51bb2c78b344306e9",
+    "packages/python/tests/test_native_connected_string_writer.py": "551285795d426f573e4add821e996bff2313c1219651bd491ebaa615b6e817e7",
+    "docs/helix/04-build/evidence/python-connected-string-writer.log": "a1dfe5cb70b6f9710a1e1412c41aa055c7e4c636216f35a190218643ee46bf8a"
+  }
+}

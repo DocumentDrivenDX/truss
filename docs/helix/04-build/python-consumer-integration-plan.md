@@ -1854,3 +1854,31 @@ produce and consume these meanings inside the connected writer/observer, proving
 unchanged complete keys, preserved state/node source meaning, checked version
 increment and all original effect correspondence. Complete installation/capture
 and finalization still gate ordinary positive execution and the public workflow.
+
+
+### Connected pending string effects — partial implementation
+
+The private native writer now performs a real scalar replacement and object
+version/timestamp update. Its ALWAYS scalar observer checks retained complete
+OLD/NEW scalar images and current state/node correspondence, then advances the
+original issued operation exactly once. Before returning, the writer independently
+requires generation one on that exact original operation and compares the complete
+resulting object bytes with its retained planned object, then rechecks complete
+final state/node/scalar membership and all candidate images. A late object-trigger
+parent rewrite refuses and rolls back. Equal-value writes still
+produce an event and version increment. The unconditional commit barrier remains.
+
+[Seven PostgreSQL16.15 regressions](evidence/python-connected-string-writer.json)
+pass, including disabled-observer omission, BEFORE-trigger object-version rewrite,
+invalid token/stale-version refusal, foreign late events and operation rollback
+preserving prior host work. These use administrative native catalog fixtures with
+physical constraints enabled; they do not establish accepted UMF identities.
+
+This is a partial physical pending-effects implementation. It does not yet produce
+the complete family artifacts above or row-context0.1, and does not supply registered
+source meaning, capacity/touch contributions, complete key parity, journal/feed,
+ordinary authority, finalization or public host dispatch. Image/object serialization
+precedes admission-size refusal, so bounded native collection is unqualified.
+Continue the same installed consumer workflow by completing those original
+producers and integrating installation/catalog authority; this component cannot
+be exposed as a public apply capability or used to claim installation readiness.

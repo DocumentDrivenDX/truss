@@ -1,0 +1,12 @@
+test_equal_value_still_records_event_and_version (test_native_connected_string_writer.NativeConnectedStringWriterTests.test_equal_value_still_records_event_and_version) ... ok
+test_late_foreign_scalar_event_refuses_and_rolls_back_writer (test_native_connected_string_writer.NativeConnectedStringWriterTests.test_late_foreign_scalar_event_refuses_and_rolls_back_writer) ... ok
+test_late_parent_rewrite_refuses_and_restores_attempt (test_native_connected_string_writer.NativeConnectedStringWriterTests.test_late_parent_rewrite_refuses_and_restores_attempt) ... ok
+test_missing_observer_refuses_and_restores_attempt (test_native_connected_string_writer.NativeConnectedStringWriterTests.test_missing_observer_refuses_and_restores_attempt) ... ok
+test_object_rewrite_refuses_and_restores_attempt (test_native_connected_string_writer.NativeConnectedStringWriterTests.test_object_rewrite_refuses_and_restores_attempt) ... ok
+test_real_pending_write_retains_old_new_and_exact_token (test_native_connected_string_writer.NativeConnectedStringWriterTests.test_real_pending_write_retains_old_new_and_exact_token) ... ok
+test_refusals_preserve_prior_host_work (test_native_connected_string_writer.NativeConnectedStringWriterTests.test_refusals_preserve_prior_host_work) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 7.555s
+
+OK
