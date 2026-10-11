@@ -417,10 +417,11 @@ BEGIN
  IF final_binding IS DISTINCT FROM original_binding OR final_documents IS DISTINCT FROM documents OR final_image IS DISTINCT FROM image THEN
   RAISE EXCEPTION 'pending association report basis captured source/value changed' USING ERRCODE='55000';
  END IF;
- body:=convert_to(jsonb_build_object('profile','truss-pending-association-report-basis-candidate/0.1.0',
+ body:=convert_to(jsonb_build_object('profile','truss-pending-association-report-basis-candidate/0.2.0',
   'writerXid',op.original_writer_xid::text,'operationOrdinal',op.operation_ordinal::text,
   'effectGeneration',final_op.effect_generation::text,'revision',original_revision::text,
   'originalInputHex',encode(op.original_input_bytes,'hex'),'originalBindingHex',encode(original_binding,'hex'),
+  'originalOperation',to_jsonb(op),
   'documents',documents,'metadataImage',image,'acceptedReportQualified',false)::text,'UTF8');
  IF octet_length(body)>8388608 THEN
   RAISE EXCEPTION 'pending association report basis component capacity exceeded' USING ERRCODE='54000';
