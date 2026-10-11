@@ -80,7 +80,7 @@ BEGIN
    FROM jsonb_array_elements(original_key->'fields') WITH ORDINALITY f(value,ordinality)
    JOIN truss.prop_def p ON p.type_id=item.type_id AND p.declaration_module=f.value->>'module' AND p.element=f.value->>'element';
   IF cardinality(original_properties) IS DISTINCT FROM jsonb_array_length(original_key->'fields') OR item.prop_ids IS DISTINCT FROM original_properties
-   OR item.is_primary IS DISTINCT FROM (original_key->>'primary')::boolean
+   OR item.is_primary IS DISTINCT FROM coalesce((original_key->>'primary')::boolean,false)
    OR item.definition_rev IS DISTINCT FROM original_revision OR item.definition_document_id IS DISTINCT FROM original_owner.document_id
    OR item.definition_doc_ord IS DISTINCT FROM original_owner.doc_ord THEN
    RAISE EXCEPTION 'stored original ordered Key definition correspondence' USING ERRCODE='55000';
