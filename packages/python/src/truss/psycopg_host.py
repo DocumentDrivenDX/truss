@@ -112,12 +112,17 @@ class PsycopgHost:
     Operation callbacks are private toolkit composition using guarded execute()
     only, not a public SQL API. executemany/copy/stream are outside this profile.
     """
-    def __init__(self, connection, *, statement_timeout_ms=2000, operation_timeout_ms=5000):
+    def __init__(self, connection, *, profile=PsycopgProfile(), statement_timeout_ms=2000, operation_timeout_ms=5000):
         import psycopg
         from psycopg import pq
+        if (type(profile) is not PsycopgProfile
+                or type(profile.psycopg) is not str or type(profile.implementation) is not str
+                or type(profile.libpq) is not int or type(profile.server) is not int
+                or profile not in (PsycopgProfile(), PsycopgProfile(server=170011))):
+            raise ValueError('Explicit supported psycopg profile required')
         if (type(connection) is not psycopg.Connection
-                or psycopg.__version__ != '3.3.6' or pq.__impl__ != 'binary'
-                or pq.version() != 180006 or connection.info.server_version != 160015):
+                or psycopg.__version__ != profile.psycopg or pq.__impl__ != profile.implementation
+                or pq.version() != profile.libpq or connection.info.server_version != profile.server):
             raise ValueError('Selected psycopg/libpq/PostgreSQL tuple required')
         if type(statement_timeout_ms) is not int or not 1 <= statement_timeout_ms <= 60000:
             raise ValueError('Statement timeout must be 1..60000 milliseconds')
@@ -127,7 +132,7 @@ class PsycopgHost:
             raise ValueError('Operation timeout must be 1..60000 milliseconds')
         self._deadline_ms = operation_timeout_ms
         self._connection = connection
-        self._profile = PsycopgProfile()
+        self._profile = profile
         self._timeout = statement_timeout_ms
         self._issuer = object()
         self._transactions = {}
@@ -394,6 +399,6 @@ class PsycopgHost:
         return self.detach()
 
 
-def adopt_psycopg_host(connection, *, statement_timeout_ms=2000, operation_timeout_ms=5000):
+def adopt_psycopg_host(connection, *, profile=PsycopgProfile(), statement_timeout_ms=2000, operation_timeout_ms=5000):
     """Attach without beginning, committing, rolling back or closing a host connection."""
-    return PsycopgHost(connection, statement_timeout_ms=statement_timeout_ms, operation_timeout_ms=operation_timeout_ms)
+    return PsycopgHost(connection, profile=profile, statement_timeout_ms=statement_timeout_ms, operation_timeout_ms=operation_timeout_ms)

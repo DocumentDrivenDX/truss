@@ -11,7 +11,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 import psycopg
-from truss import Ok, Error, adopt_psycopg_host
+from truss import Ok, Error, adopt_psycopg_host, PsycopgProfile
 from test_psycopg_host_native import PsycopgHostNativeTests
 from test_catalog_staging import COMPONENTS
 from test_catalog_support import selected
@@ -20,11 +20,11 @@ from truss._catalog_report_semantics import canonical_numeric_free
 ROOT=Path(__file__).resolve().parents[3]
 
 class PrerequisitePsycopgNativeTests(unittest.TestCase):
+    selected_profile=PsycopgProfile()
     run_pg=classmethod(PsycopgHostNativeTests.run_pg.__func__)
     @classmethod
     def setUpClass(cls):
-        cls.directory=tempfile.TemporaryDirectory(prefix='truss-prerequisite-',dir='/private/tmp')
-        cls.root=Path(cls.directory.name);cls.data=cls.root/'data';cls.socket=cls.root/'socket';cls.socket.mkdir()
+        cls.root=Path(tempfile.mkdtemp(prefix='truss-prerequisite-',dir='/private/tmp'));cls.data=cls.root/'data';cls.socket=cls.root/'socket';cls.socket.mkdir()
         cls.pgbin=Path(os.environ['TRUSS_CENSUS_POSTGRES_BIN'])
         cls.start_attempted=False
         cls.addClassCleanup(cls.cleanup_fixture)
@@ -51,24 +51,33 @@ class PrerequisitePsycopgNativeTests(unittest.TestCase):
             connection.execute("INSERT INTO truss.source_epoch_current VALUES(1,'guard-fixture','guard-fixture-epoch')")
     @classmethod
     def cleanup_fixture(cls):
+        import shutil
         receipt={'stop':None,'status':None,'socket_absent':False}
-        try:
-            if cls.start_attempted:
-                stop=subprocess.run([str(cls.pgbin/'pg_ctl'),'-D',str(cls.data),'-w','-m','immediate','stop'],capture_output=True,text=True,timeout=30)
-                status=subprocess.run([str(cls.pgbin/'pg_ctl'),'-D',str(cls.data),'status'],capture_output=True,text=True,timeout=10)
-                receipt.update(stop=stop.returncode,status=status.returncode,socket_absent=not (cls.socket/'.s.PGSQL.5432').exists())
-            folder=os.environ.get('TRUSS_PREREQUISITE_EVIDENCE_DIR')
-            if folder:
-                target=Path(folder);(target/'cleanup.json').write_text(json.dumps(receipt,indent=2)+'\n')
-                log=cls.root/'server.log'
-                if log.exists():(target/'server.log').write_bytes(log.read_bytes())
-            if cls.start_attempted and (receipt['stop']!=0 or receipt['status']!=3 or not receipt['socket_absent']):
-                raise RuntimeError('Owned prerequisite fixture shutdown unconfirmed')
-        finally:cls.directory.cleanup()
+        if cls.start_attempted:
+            try:
+                result=subprocess.run([str(cls.pgbin/'pg_ctl'),'-D',str(cls.data),'-w','-m','immediate','stop'],capture_output=True,text=True,timeout=30)
+                receipt['stop']=result.returncode
+            except Exception as error:receipt['stop_error']=repr(error)
+            try:
+                result=subprocess.run([str(cls.pgbin/'pg_ctl'),'-D',str(cls.data),'status'],capture_output=True,text=True,timeout=10)
+                receipt['status']=result.returncode
+            except Exception as error:receipt['status_error']=repr(error)
+        receipt['socket_absent']=not (cls.socket/'.s.PGSQL.5432').exists()
+        confirmed=not cls.start_attempted or (receipt['stop']==0 and receipt['status']==3 and receipt['socket_absent'])
+        receipt['directory_preserved']=not confirmed
+        folder=os.environ.get('TRUSS_PREREQUISITE_EVIDENCE_DIR')
+        if folder:
+            target=Path(folder);(target/'cleanup.json').write_text(json.dumps(receipt,indent=2)+'\n')
+            log=cls.root/'server.log'
+            if log.exists():(target/'server.log').write_bytes(log.read_bytes())
+        if confirmed:shutil.rmtree(cls.root)
+        else:raise RuntimeError('Owned prerequisite fixture shutdown unconfirmed; directory retained: '+str(cls.root))
 
     def setUp(self):
         self.connection=psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c statement_timeout=10000')
-        self.host=adopt_psycopg_host(self.connection,statement_timeout_ms=8000,operation_timeout_ms=15000)
+        self.addCleanup(self.connection.close)
+        self.host=adopt_psycopg_host(self.connection,profile=self.selected_profile,statement_timeout_ms=8000,operation_timeout_ms=15000)
+        self.addCleanup(self.host.detach)
         policy=(ROOT/'packages/python/src/truss/_profiles/catalog-report-release.json').read_bytes()
         configuration=json.dumps({'interfaceVersion':'truss-catalog-report-configuration/0.1','catalogReportRelease':{'artifactIdentity':'truss.catalog-report-release/0.1.0','sha256':hashlib.sha256(policy).hexdigest()}}).encode()
         self.connection.execute("INSERT INTO truss.installation_admission(head_id,installation_id_utf8,source_epoch_utf8,configuration_generation,key_reuse,journal_mode,configuration_bytes,selected_binding_bytes,installed_inventory_bytes) VALUES(1,convert_to('guard-fixture','UTF8'),convert_to('guard-fixture-epoch','UTF8'),7,'forbid','engine',%s,convert_to('binding fixture','UTF8'),convert_to('inventory fixture','UTF8'))",(configuration,))

@@ -7,10 +7,11 @@ from pathlib import Path
 import psycopg
 from psycopg import pq
 from truss.execution import Ok, Error, TransactionHandle
-from truss.psycopg_host import adopt_psycopg_host
+from truss.psycopg_host import adopt_psycopg_host, PsycopgProfile
 
 
 class PsycopgHostNativeTests(unittest.TestCase):
+    selected_profile = PsycopgProfile()
     @classmethod
     def setUpClass(cls):
         cls.directory = tempfile.TemporaryDirectory(prefix='truss-psy-', dir='/private/tmp')
@@ -35,7 +36,10 @@ class PsycopgHostNativeTests(unittest.TestCase):
     def setUp(self):
         self.connection = psycopg.connect(host=str(self.socket), user='postgres', dbname='postgres',
                                          autocommit=True, options='-c statement_timeout=3000')
-        self.host = adopt_psycopg_host(self.connection, statement_timeout_ms=1000)
+        self.addCleanup(self.connection.close)
+        self.host = adopt_psycopg_host(self.connection, profile=self.selected_profile, statement_timeout_ms=1000)
+
+        self.addCleanup(self.host.detach)
 
     def tearDown(self):
         self.host.detach()
@@ -89,7 +93,7 @@ class PsycopgHostNativeTests(unittest.TestCase):
         self.assertIsInstance(self.host.adopt_transaction(), Error)
         impostor = TransactionHandle(transaction._issuer, transaction._key, transaction.isolation, transaction.access_mode)
         self.assertIsInstance(self.scalar(impostor, 'SELECT 1'), Error)
-        with self.assertRaises(ValueError): adopt_psycopg_host(self.connection)
+        with self.assertRaises(ValueError): adopt_psycopg_host(self.connection,profile=self.selected_profile)
         self.assertEqual(self.scalar(transaction, 'SELECT 1::text'), Ok('1'))
 
     def test_host_completion_stales_handle_without_claiming_commit(self):
@@ -155,7 +159,7 @@ class PsycopgHostNativeTests(unittest.TestCase):
         self.assertIsInstance(result, Error)
         self.assertFalse(self.host.detach())
         self.connection.rollback()
-        with self.assertRaises(ValueError): adopt_psycopg_host(self.connection)
+        with self.assertRaises(ValueError): adopt_psycopg_host(self.connection,profile=self.selected_profile)
 
     def test_interrupt_after_write_is_contained_and_primary_preserved(self):
         self.connection.execute('BEGIN')

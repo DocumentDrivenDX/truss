@@ -1,0 +1,155 @@
+2026-10-11 15:53:41.470 EDT [98973] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 15:53:41.470 EDT [98973] LOG:  listening on Unix socket "/private/tmp/truss-prerequisite-yyttk3ko/socket/.s.PGSQL.5432"
+2026-10-11 15:53:41.478 EDT [98976] LOG:  database system was shut down at 2026-10-11 15:53:41 EDT
+2026-10-11 15:53:41.482 EDT [98973] LOG:  database system is ready to accept connections
+2026-10-11 15:53:45.298 EDT [98982] ERROR:  complete configured prerequisite registration delta required
+2026-10-11 15:53:45.298 EDT [98982] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 104 at RAISE
+2026-10-11 15:53:45.298 EDT [98982] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:53:48.616 EDT [99015] ERROR:  query returned no rows
+2026-10-11 15:53:48.616 EDT [99015] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 76 at EXECUTE
+2026-10-11 15:53:48.616 EDT [99015] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:53:49.963 EDT [99015] ERROR:  complete catalog reservation RETURNING correspondence required
+2026-10-11 15:53:49.963 EDT [99015] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 78 at RAISE
+2026-10-11 15:53:49.963 EDT [99015] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:53:51.268 EDT [99015] ERROR:  query returned no rows
+2026-10-11 15:53:51.268 EDT [99015] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 91 at EXECUTE
+2026-10-11 15:53:51.268 EDT [99015] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:53:52.627 EDT [99015] ERROR:  complete configuration reservation RETURNING correspondence required
+2026-10-11 15:53:52.627 EDT [99015] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 93 at RAISE
+2026-10-11 15:53:52.627 EDT [99015] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:53:54.063 EDT [99113] ERROR:  exact selected generation observer required
+2026-10-11 15:53:54.063 EDT [99113] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_lifecycle_observers() line 15 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_lifecycle_observers()"
+	PL/pgSQL function truss.runtime_collect_fresh_catalog_lifecycle(text,text,text,integer,bytea) line 28 at PERFORM
+	PL/pgSQL function truss.runtime_write_catalog_report_wide_candidate(text,text,text,text,bytea,bytea,bytea) line 130 at assignment
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_wide_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_report_register_revision_wide_candidate(text,text,text,text,bytea,bytea,bytea) line 65 at SQL statement
+	SQL statement "SELECT *                    FROM truss.runtime_write_report_register_revision_wide_candidate(w,o,g,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 40 at SQL statement
+	SQL statement "SELECT *                      FROM truss.runtime_register_catalog_prerequisites_candidate(w,o,g,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 7 at SQL statement
+2026-10-11 15:53:54.063 EDT [99113] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:53:55.346 EDT [99138] ERROR:  query returned no rows
+2026-10-11 15:53:55.346 EDT [99138] CONTEXT:  PL/pgSQL function truss.runtime_write_report_register_revision_wide_candidate(text,text,text,text,bytea,bytea,bytea) line 52 at SQL statement
+	SQL statement "SELECT *                    FROM truss.runtime_write_report_register_revision_wide_candidate(w,o,g,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 40 at SQL statement
+2026-10-11 15:53:55.346 EDT [99138] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:53:58.087 EDT [99143] ERROR:  complete runtime finalizer is not installed
+2026-10-11 15:53:58.087 EDT [99143] CONTEXT:  PL/pgSQL function truss.runtime_operation_commit_barrier() line 7 at RAISE
+2026-10-11 15:53:58.087 EDT [99143] STATEMENT:  COMMIT
+2026-10-11 15:53:59.497 EDT [99164] ERROR:  inheritance is outside fresh configured completion
+2026-10-11 15:53:59.497 EDT [99164] CONTEXT:  PL/pgSQL function truss.runtime_capture_configured_completion_state_candidate(text,text,text) line 32 at RAISE
+2026-10-11 15:53:59.497 EDT [99164] STATEMENT:  SELECT truss.runtime_capture_configured_completion_state_candidate($1,$2,$3)
+2026-10-11 15:54:03.150 EDT [99170] ERROR:  complete configured post-head correspondence required
+2026-10-11 15:54:03.150 EDT [99170] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 30 at RAISE
+2026-10-11 15:54:03.150 EDT [99170] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:05.762 EDT [99247] ERROR:  inheritance is outside fresh configured completion
+2026-10-11 15:54:05.762 EDT [99247] CONTEXT:  PL/pgSQL function truss.runtime_capture_configured_completion_state_candidate(text,text,text) line 32 at RAISE
+	PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 16 at assignment
+2026-10-11 15:54:05.762 EDT [99247] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:08.861 EDT [99252] ERROR:  catalog observation stale or unrelated
+2026-10-11 15:54:08.861 EDT [99252] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_observation(text,text,text) line 17 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_observation(w,o,g)"
+	PL/pgSQL function truss.runtime_capture_configured_completion_state_candidate(text,text,text) line 19 at PERFORM
+	PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 27 at assignment
+2026-10-11 15:54:08.861 EDT [99252] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:11.529 EDT [99270] ERROR:  complete configured prerequisite registration delta required
+2026-10-11 15:54:11.529 EDT [99270] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 104 at RAISE
+2026-10-11 15:54:11.529 EDT [99270] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:21.714 EDT [99302] ERROR:  injected prerequisite resource refusal
+2026-10-11 15:54:21.714 EDT [99302] CONTEXT:  PL/pgSQL function truss.fixture_prerequisite_effect() line 1 at RAISE
+	SQL statement "INSERT INTO truss.feed_prerequisite AS p (source_epoch, feed_profile, original_writer_xid, prerequisite_address, original_revision, original_artifact_identity_bytes, original_definition_bytes, original_definition_profile_bytes, original_definition_sha256, original_owner_context_bytes) SELECT t.source_epoch, t.feed_profile, t.original_writer_xid, $3::bigint, $5::bigint, $6::pg_catalog.bytea, $7::pg_catalog.bytea, $8::pg_catalog.bytea, $9::pg_catalog.bytea, $10::pg_catalog.bytea FROM truss.feed_tx t WHERE t.source_epoch = $1::pg_catalog.text AND t.feed_profile = $2::pg_catalog.text AND t.original_writer_xid = pg_catalog.pg_current_xact_id_if_assigned() AND t.prerequisite_registration_counter = $3::bigint AND t.membership_generation = $4::bigint AND t.original_context_bytes = $11::pg_catalog.bytea AND t.manifest_profile_bytes = $12::pg_catalog.bytea AND $3::bigint > 0 AND $4::bigint > 0 RETURNING p.source_epoch, p.feed_profile, p.original_writer_xid::pg_catalog.text AS original_writer_xid, p.prerequisite_address::pg_catalog.text AS prerequisite_address, p.original_revision::pg_catalog.text AS original_revision, pg_catalog.encode(p.original_artifact_identity_bytes, 'hex') AS original_artifact_identity_bytes_hex, pg_catalog.encode(p.original_definition_bytes, 'hex') AS original_definition_bytes_hex, pg_catalog.encode(p.original_definition_profile_bytes, 'hex') AS original_definition_profile_bytes_hex, pg_catalog.encode(p.original_definition_sha256, 'hex') AS original_definition_sha256_hex, pg_catalog.encode(p.original_owner_context_bytes, 'hex') AS original_owner_context_bytes_hex"
+	PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 80 at EXECUTE
+2026-10-11 15:54:21.714 EDT [99302] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:24.332 EDT [99316] ERROR:  current configuration differs from original admission capsule
+2026-10-11 15:54:24.332 EDT [99316] CONTEXT:  PL/pgSQL function truss.runtime_require_operation_configuration_current(text,text,text) line 36 at RAISE
+	SQL statement "SELECT truss.runtime_require_operation_configuration_current(w,o,g)"
+	PL/pgSQL function truss.runtime_capture_configured_prerequisite_state_candidate(text,text,text) line 5 at PERFORM
+	PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 98 at assignment
+2026-10-11 15:54:24.332 EDT [99316] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:26.957 EDT [99329] ERROR:  complete configured prerequisite registration delta required
+2026-10-11 15:54:26.957 EDT [99329] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 104 at RAISE
+2026-10-11 15:54:26.957 EDT [99329] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:28.335 EDT [99340] ERROR:  exact selected generation observer required
+2026-10-11 15:54:28.335 EDT [99340] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_lifecycle_observers() line 15 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_lifecycle_observers()"
+	PL/pgSQL function truss.runtime_collect_fresh_catalog_lifecycle(text,text,text,integer,bytea) line 28 at PERFORM
+	PL/pgSQL function truss.runtime_write_catalog_report_wide_candidate(text,text,text,text,bytea,bytea,bytea) line 130 at assignment
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_wide_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_report_register_revision_wide_candidate(text,text,text,text,bytea,bytea,bytea) line 65 at SQL statement
+	SQL statement "SELECT *                    FROM truss.runtime_write_report_register_revision_wide_candidate(w,o,g,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 40 at SQL statement
+	SQL statement "SELECT *                      FROM truss.runtime_register_catalog_prerequisites_candidate(w,o,g,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 7 at SQL statement
+2026-10-11 15:54:28.335 EDT [99340] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:31.201 EDT [99343] ERROR:  revision report artifact scalar capacity
+2026-10-11 15:54:31.201 EDT [99343] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 210 at RAISE
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 65 at SQL statement
+2026-10-11 15:54:31.201 EDT [99343] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:37.170 EDT [99372] ERROR:  head fault
+2026-10-11 15:54:37.170 EDT [99372] CONTEXT:  PL/pgSQL function truss.fixture_head_effect() line 1 at RAISE
+	SQL statement "UPDATE truss.schema_head h SET rev=planned_head.rev WHERE h.id=old_head.id AND h IS NOT DISTINCT FROM old_head RETURNING h.*"
+	PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 24 at SQL statement
+2026-10-11 15:54:37.170 EDT [99372] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:41.006 EDT [99398] ERROR:  complete runtime finalizer is not installed
+2026-10-11 15:54:41.006 EDT [99398] CONTEXT:  PL/pgSQL function truss.runtime_operation_commit_barrier() line 7 at RAISE
+2026-10-11 15:54:41.006 EDT [99398] STATEMENT:  COMMIT
+2026-10-11 15:54:49.845 EDT [99447] ERROR:  complete prerequisite INSERT RETURNING correspondence required
+2026-10-11 15:54:49.845 EDT [99447] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 82 at RAISE
+2026-10-11 15:54:49.845 EDT [99447] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:53.004 EDT [99454] ERROR:  current configuration differs from original admission capsule
+2026-10-11 15:54:53.004 EDT [99454] CONTEXT:  PL/pgSQL function truss.runtime_require_operation_configuration_current(text,text,text) line 36 at RAISE
+	SQL statement "SELECT truss.runtime_require_operation_configuration_current(w,o,g)"
+	PL/pgSQL function truss.runtime_capture_configured_completion_state_candidate(text,text,text) line 20 at PERFORM
+	PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 27 at assignment
+2026-10-11 15:54:53.004 EDT [99454] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:56.469 EDT [99501] ERROR:  complete configured post-head correspondence required
+2026-10-11 15:54:56.469 EDT [99501] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 30 at RAISE
+2026-10-11 15:54:56.469 EDT [99501] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:54:59.309 EDT [99553] ERROR:  catalog observation stale or unrelated
+2026-10-11 15:54:59.309 EDT [99553] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_observation(text,text,text) line 17 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_observation(w,o,g)"
+	PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 11 at PERFORM
+2026-10-11 15:54:59.309 EDT [99553] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:55:01.989 EDT [99601] ERROR:  query returned no rows
+2026-10-11 15:55:01.989 EDT [99601] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 80 at EXECUTE
+2026-10-11 15:55:01.989 EDT [99601] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:55:03.254 EDT [99601] ERROR:  complete prerequisite INSERT RETURNING correspondence required
+2026-10-11 15:55:03.254 EDT [99601] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 82 at RAISE
+2026-10-11 15:55:03.254 EDT [99601] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:55:04.551 EDT [99601] ERROR:  query returned no rows
+2026-10-11 15:55:04.551 EDT [99601] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 95 at EXECUTE
+2026-10-11 15:55:04.551 EDT [99601] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:55:05.840 EDT [99601] ERROR:  complete prerequisite INSERT RETURNING correspondence required
+2026-10-11 15:55:05.840 EDT [99601] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_prerequisites_candidate(text,text,text,text,bytea,bytea,bytea) line 97 at RAISE
+2026-10-11 15:55:05.840 EDT [99601] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_prerequisites_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:55:15.916 EDT [99778] ERROR:  wide original report capacity
+2026-10-11 15:55:15.916 EDT [99778] CONTEXT:  PL/pgSQL function truss.runtime_revision_report_tree_bytes_wide_candidate(jsonb,bytea) line 6 at RAISE
+2026-10-11 15:55:15.916 EDT [99778] STATEMENT:  SELECT truss.runtime_revision_report_tree_bytes_wide_candidate(truss.runtime_catalog_report_native_tree(CAST($1 AS jsonb)),$2)
+2026-10-11 15:55:15.919 EDT [99778] ERROR:  same original report base64 required
+2026-10-11 15:55:15.919 EDT [99778] CONTEXT:  PL/pgSQL function truss.runtime_revision_report_tree_bytes_wide_candidate(jsonb,bytea) line 38 at RAISE
+2026-10-11 15:55:15.919 EDT [99778] STATEMENT:  SELECT truss.runtime_revision_report_tree_bytes_wide_candidate(truss.runtime_catalog_report_native_tree(CAST($1 AS jsonb)),$2)
+2026-10-11 15:55:15.921 EDT [99778] ERROR:  string source capacity
+2026-10-11 15:55:15.921 EDT [99778] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL function truss.runtime_revision_report_tree_bytes_wide_candidate(jsonb,bytea) line 40 at assignment
+2026-10-11 15:55:15.921 EDT [99778] STATEMENT:  SELECT truss.runtime_revision_report_tree_bytes_wide_candidate(truss.runtime_catalog_report_native_tree(CAST($1 AS jsonb)),$2)
+2026-10-11 15:55:15.924 EDT [99778] ERROR:  string source capacity
+2026-10-11 15:55:15.924 EDT [99778] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	SQL statement "SELECT truss.runtime_canonical_string_bytes(decode(member->>'keyUtf8Hex','hex'))"
+	PL/pgSQL function truss.runtime_revision_report_tree_bytes_wide_candidate(jsonb,bytea) line 50 at PERFORM
+2026-10-11 15:55:15.924 EDT [99778] STATEMENT:  SELECT truss.runtime_revision_report_tree_bytes_wide_candidate(truss.runtime_catalog_report_native_tree(CAST($1 AS jsonb)),$2)
+2026-10-11 15:55:15.925 EDT [99778] ERROR:  one original revision report artifact slot required
+2026-10-11 15:55:15.925 EDT [99778] CONTEXT:  PL/pgSQL function truss.runtime_revision_report_tree_bytes_wide_candidate(jsonb,bytea) line 68 at RAISE
+2026-10-11 15:55:15.925 EDT [99778] STATEMENT:  SELECT truss.runtime_revision_report_tree_bytes_wide_candidate(truss.runtime_catalog_report_native_tree(CAST($1 AS jsonb)),$2)
+2026-10-11 15:55:15.949 EDT [99778] ERROR:  tree input capacity
+2026-10-11 15:55:15.949 EDT [99778] CONTEXT:  PL/pgSQL function truss.runtime_revision_report_tree_bytes_wide_candidate(jsonb,bytea) line 10 at RAISE
+2026-10-11 15:55:15.949 EDT [99778] STATEMENT:  SELECT truss.runtime_revision_report_tree_bytes_wide_candidate(truss.runtime_catalog_report_native_tree(CAST($1 AS jsonb)),$2)
+2026-10-11 15:55:19.328 EDT [99787] ERROR:  complete head RETURNING correspondence required
+2026-10-11 15:55:19.328 EDT [99787] CONTEXT:  PL/pgSQL function truss.runtime_register_catalog_and_head_candidate(text,text,text,text,bytea,bytea,bytea) line 26 at RAISE
+2026-10-11 15:55:19.328 EDT [99787] STATEMENT:  SELECT * FROM truss.runtime_register_catalog_and_head_candidate($1,$2,$3,$4,$5,$6,$7)
+2026-10-11 15:55:19.340 EDT [98973] LOG:  received immediate shutdown request
+2026-10-11 15:55:19.343 EDT [98973] LOG:  database system is shut down

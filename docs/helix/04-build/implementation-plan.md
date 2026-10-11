@@ -3678,6 +3678,47 @@ source hashes match current bytes and archives. Incoming prerequisite SQL/tests
 are preserved, not qualified by the epoch-cut test population. No backend
 acceptance binding or supported protected-engine status changes.
 
+### Configured provisional head completion — 2026-10-11
+
+CONTRACT-001's exact head transition/post-head obligation and CONTRACT-006's
+prerequisite closure govern this increment. Astra Ultra approved a new private
+configured collector and same-invocation head wrapper. Historical physical
+completion and pending manifest profiles remain unchanged. The wrapper obtains
+report and prerequisite originals from its own registration producer, admits the
+exact original generation observer and ALWAYS head/report wiring, captures all
+configured ONLY row images and complete relation/trigger/routine/constraint/
+index/policy/ACL descriptors, then independently plans only the singleton head
+and original operation generation/reset delta. Complete RETURNING and independent
+poststate must agree. Binding/promotion branches and inheritance refuse.
+
+This is administrative rollback-only provisional head execution through guarded
+PsycopgHost operations. The unconditional commit barrier remains installed, and
+accepted report/feed qualification remains false. The fixture does not install
+the security owner's routine-DDL gate; its merged-source pins do not qualify
+that gate, concurrent administrative DDL, transitive type/shared-authorization
+dependency closure, complete installed authority or ordinary-person execution.
+The retained-size ceiling is checked after materialization; it is not a proof of
+preallocation or whole-process peak-memory control.
+
+Required controls include original multi-document bytes, exact generation/reset,
+wrong head RETURNING, missing/changed original observer, external inheritance,
+late descriptor/configuration/feed substitutions, extra observed catalog effect,
+post-head failure preserving prior host work and continued raw COMMIT refusal.
+The subsequent commit path still requires new-profile independent feed producer
+custody, explicit clear/assign/publish finalization, full FV01–FV07 argument-free
+native validation and unavoidable original-operation scheduling. This increment
+does not provide those missing gates or activate the public catalog capability.
+
+Corrected merged-source packet `4924444b-8d72-4a61-9c3a-89195c52a7ce`
+passes all 32 native methods and the module boundary check, with 1281 unchanged
+project source pins, 1614 unchanged native files and unchanged external dependency/
+executable files. Owned shutdown confirms stop 0/status 3/socket absent. Earlier
+packets `ac9cf80c` and `261566f7` exposed test setup mistakes and supply no positive
+final qualification. The corrected external-child case reaches the wrapper after
+staging; the observer reset case uses a CHECK-valid row_sealed state. The complete
+late-failure state comparison includes original operation custody and staged
+catalog rows. UMF owner reload/export exactly reproduces the native SQL.
+
 
 ### Actual flat and Truss graph fact-cut composition — 2026-10-11
 
@@ -3772,3 +3813,36 @@ context facts and shared-role/configuration sources remain required. Registry
 history/retention and ordinary protected mutation publication are unqualified.
 Checkpoint remains26/132 with106 missing; no binding/criterion is promoted. The
 full objective stays active and direct-main integration remains authorized.
+### Explicit supported Python PostgreSQL 17.11 profile — 2026-10-11
+
+The owner-selected current integration target is PostgreSQL 17.11 from the
+private pgserver 0.1.4+truss.pg17.11 wheel. Astra Ultra approved explicit closed
+profile selection in PsycopgHost/adopt_psycopg_host: psycopg 3.3.6, binary
+implementation, libpq 180006 and selected server 160015 or 170011. Arbitrary
+profiles and version mismatch refuse before SQL or connection attachment.
+Historical default 16.15 selection and its receipts remain explicit; there is
+no automatic fallback. The PG16 installation-definition baseline remains
+unchanged. Passing private PG17 components cannot qualify that installer.
+
+The native replay covers original adoption and prerequisite cases, retained
+profile identity, wrong/unsupported tuple refusal and actual transaction_timeout
+termination. Require original/public SQLSTATE 25P04, transaction_unusable,
+retained failure custody, quarantine and no callback or connection reattachment
+after termination. Truss never resets the host transaction timer. Distinct
+fixture cleanup receipts cover startup uncertainty and post-start setup failure,
+with independent stop/status/socket/log observation and directory preservation
+when shutdown is unconfirmed. Per-test connection cleanup is registered before
+adoption. Exact verified wheel bytes and extracted native files are retained
+with project, dependency/executable and before/after native hashes. This is
+host-adoption/private-prerequisite evidence, not accepted catalog, protected
+installation, ordinary authority, finalization, commit or public activation.
+
+Astra Ultra approved final packet `55a413f7-3ff9-4e5f-b2a9-6180a0748e09`:
+49 native methods (29 adoption, 18 prerequisites, two fixture-failure controls)
+and the 543-import boundary check pass. Independent review matches 1284 project
+source pins, 1637 wheel-derived executed native files, 257 external input files
+and 11 evidence files. All four fixture shutdown/socket/directory checks pass.
+The wheel-to-executed-tree correspondence is exact. Packet `939366fd` passed its
+earlier 49-method source tuple but precedes the final harness corrections; it
+is not substituted for the final packet. No protected installer or public
+accepted catalog capability is promoted by this host profile checkpoint.

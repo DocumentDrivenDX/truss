@@ -632,3 +632,22 @@ readiness remains unverified. Assembly disposal does not dispose the shared host
 executor/session. Omitted configuration fields use `truss.contracts.ABSENT`.
 This entry point is composition groundwork for install/register/apply/read, not
 a usable graph implementation.
+
+### Explicit PostgreSQL 17.11 host profile
+
+The current integration target can be selected explicitly for a caller-owned
+psycopg 3.3.6 binary connection using libpq 18.6:
+
+```python
+from truss import PsycopgProfile, adopt_psycopg_host
+
+host = adopt_psycopg_host(connection, profile=PsycopgProfile(server=170011))
+```
+
+Only the exact selected tuple is accepted. There is no automatic version
+fallback. The default profile continues to select the historical PostgreSQL
+16.15 tuple, preserving existing explicit component receipts. This host profile
+does not qualify the PG16-specific installer or activate graph capabilities.
+The host owns transaction start/end, connection lifecycle and pooling. Truss
+does not change PostgreSQL 17's transaction_timeout; native timeout termination
+retains the original failure, quarantines the connection and refuses reuse.

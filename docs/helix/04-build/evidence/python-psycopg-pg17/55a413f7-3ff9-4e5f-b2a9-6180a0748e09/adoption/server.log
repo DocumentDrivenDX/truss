@@ -1,0 +1,21 @@
+2026-10-11 16:04:39.488 EDT [5078] LOG:  starting PostgreSQL 17.11 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 16:04:39.489 EDT [5078] LOG:  listening on Unix socket "/private/tmp/truss-prerequisite-mmg3jedr/socket/.s.PGSQL.5432"
+2026-10-11 16:04:39.497 EDT [5081] LOG:  database system was shut down at 2026-10-11 16:04:39 EDT
+2026-10-11 16:04:39.501 EDT [5078] LOG:  database system is ready to accept connections
+2026-10-11 16:04:40.011 EDT [5096] ERROR:  canceling statement due to user request
+2026-10-11 16:04:40.011 EDT [5096] STATEMENT:  SELECT pg_sleep(1)
+2026-10-11 16:04:40.017 EDT [5099] ERROR:  division by zero
+2026-10-11 16:04:40.017 EDT [5099] STATEMENT:  SELECT 1/0
+2026-10-11 16:04:40.047 EDT [5107] ERROR:  division by zero
+2026-10-11 16:04:40.047 EDT [5107] STATEMENT:  SELECT 1/0
+2026-10-11 16:04:40.059 EDT [5110] ERROR:  retry
+2026-10-11 16:04:40.059 EDT [5110] CONTEXT:  PL/pgSQL function inline_code_block line 1 at RAISE
+2026-10-11 16:04:40.059 EDT [5110] STATEMENT:  DO $$ BEGIN RAISE EXCEPTION 'retry' USING ERRCODE='40001'; END $$
+2026-10-11 16:04:40.100 EDT [5113] ERROR:  canceling statement due to statement timeout
+2026-10-11 16:04:40.100 EDT [5113] STATEMENT:  SELECT pg_sleep(1)
+2026-10-11 16:04:41.104 EDT [5114] FATAL:  terminating connection due to transaction timeout
+2026-10-11 16:04:41.104 EDT [5114] STATEMENT:  SELECT pg_sleep(2)
+2026-10-11 16:04:41.124 EDT [5143] ERROR:  savepoint "truss_op_03def60df6e14762a6e566489c412f15" does not exist
+2026-10-11 16:04:41.124 EDT [5143] STATEMENT:  ROLLBACK TO SAVEPOINT "truss_op_03def60df6e14762a6e566489c412f15"
+2026-10-11 16:04:41.131 EDT [5078] LOG:  received immediate shutdown request
+2026-10-11 16:04:41.135 EDT [5078] LOG:  database system is shut down
