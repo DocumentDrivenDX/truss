@@ -44,3 +44,10 @@ class AssemblyDisposed:
     state: Literal['disposed'] = field(default='disposed',init=False)
     owned_resources_released: Literal[True] = field(default=True,init=False)
 
+
+
+@dataclass(frozen=True,slots=True,kw_only=True)
+class InstallationInspectionConfiguration:
+    assembly_id: str
+    assembly_profile: ProfilePin
+    interface_version: Literal['truss-installation-inspection-assembly/0.1.0'] = field(default='truss-installation-inspection-assembly/0.1.0',init=False)

@@ -10,7 +10,9 @@ const model=securityFixture(),transport=securityIdentityTransportDependencies(mo
 const base='docs/helix/04-build/evidence/security-identity-requirements';
 for(const [name,value] of [['policy',model.policy],['resolution',model.resolution],['transport',transport]] as const)
  if(await Bun.file(base+'/'+name+'.json').text()!==JSON.stringify(value)+'\n')throw Error('Original identity source correspondence required');
-const raw=await Bun.stdin.text();if(raw.length>1048576)throw Error('Bounded original captured fixture required');const cells=JSON.parse(raw);
+const raw=await Bun.stdin.text();if(raw.length>1048576)throw Error('Bounded original captured fixture required');const input=JSON.parse(raw);const bound=typeof input==='object'&&input!==null&&!Array.isArray(input);
+if(bound&&(JSON.stringify(Object.keys(input).sort())!==JSON.stringify(['cells','subjectKey'])||!Array.isArray(input.subjectKey)))throw Error('Closed original caller fixture input required');
+const cells=bound?input.cells:input;
 if(!Array.isArray(cells)||cells.length!==transport.records.length)throw Error('Complete selected record captures required');
 const id=(r:{documentId:string;moduleId:string;elementId:string})=>JSON.stringify([r.documentId,r.moduleId,r.elementId]);
 const required=new Set(transport.fields.map(id));const types=[...model.resolution.ontology.entities,...model.resolution.ontology.associations];
@@ -46,7 +48,15 @@ for(const record of transport.records){
  groups.set(id(record.type),facts);coverage.push({type:record.type,complete:true,fields:owned});
 }
 if(used.size!==cells.length)throw Error('Foreign captured record group');
-const subject=groups.get(id(model.resolution.ontology.subject))!;const resources=groups.get(id(ref('Resource')))!;
+let subject=groups.get(id(model.resolution.ontology.subject))!;
+if(bound){
+ const record=transport.records.find(r=>id(r.type)===id(model.resolution.ontology.subject))!;
+ const doc=model.resolution.documents.find(d=>d.document.id===record.type.documentId)!.document;
+ const key=encodeCoreKeyTuple(doc,{module:record.type.moduleId,element:record.type.elementId,key:record.keyId},input.subjectKey).values;
+ subject=subject.filter(f=>JSON.stringify(f.key)===JSON.stringify(key));
+ if(subject.length!==1)throw Error('Unique original mapped subject required');
+}
+const resources=groups.get(id(ref('Resource')))!;
 if(resources.length!==1)throw Error('Selected fixture resource required');
 const cut:SecurityFactCut={trusted:true,generation:'owned-identity-fixture',expectedGeneration:'owned-identity-fixture',policyId:model.policy.id,policyRevision:model.policy.revision,ontologyDocumentId:model.resolution.ontology.documentId,ontologyRevision:model.resolution.ontology.revision,subjects:subject,facts:[...groups].filter(([key])=>key!==id(model.resolution.ontology.subject)&&key!==id(ref('Resource'))).flatMap(([,rows])=>rows),coverage,context:[],maxFacts:100,maxSteps:10000};
 const decision=evaluateSecurityAccess(model.policy,model.resolution,cut,{action:'read',output:[ref('salary')]},resources[0]!);

@@ -21,6 +21,9 @@ ROOT=Path(__file__).resolve().parents[3]
 
 class PrerequisitePsycopgNativeTests(unittest.TestCase):
     selected_profile=PsycopgProfile()
+    additional_install_paths=()
+    stage_recipe_path=None
+    stage_function="runtime_stage_catalog_with_release"
     run_pg=classmethod(PsycopgHostNativeTests.run_pg.__func__)
     @classmethod
     def setUpClass(cls):
@@ -51,6 +54,7 @@ class PrerequisitePsycopgNativeTests(unittest.TestCase):
                    'catalog-report/revision-registration-candidate','catalog-report/revision-report-tree-wide-candidate','catalog-report/report-write-wide-candidate','catalog-report/revision-registration-wide-candidate','catalog-completion/configured-prerequisite-state-candidate',
                    'catalog-report/prerequisite-registration-candidate')
             paths.extend(f'packages/postgresql/native/{name}.sql' for name in names)
+            paths.extend(cls.additional_install_paths)
             for path in paths: connection.execute((ROOT/path).read_text(),prepare=False)
             fixture=(ROOT/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql').read_text()
             connection.execute(fixture.partition('INSERT INTO truss.row_home_operation')[0],prepare=False)
@@ -120,6 +124,8 @@ class PrerequisitePsycopgNativeTests(unittest.TestCase):
             if getattr(self,'changed_wide_profile',False) and path.endswith('catalog-revision-wide-report-composition-candidate.json'):raw+=b' '
             self.archive(path,raw);seen.add(path)
         recipe_path='packages/python/src/truss/_profiles/catalog-report-composition-candidate.json' if getattr(self,'use_old',False) else 'packages/python/src/truss/_profiles/catalog-report-wide-composition-candidate.json'
+        recipe_path=self.stage_recipe_path or recipe_path
+        if recipe_path not in seen:self.archive(recipe_path,(ROOT/recipe_path).read_bytes())
         composition=json.loads((ROOT/recipe_path).read_bytes())
         registration={'interfaceVersion':'truss-catalog-report-candidate-registration/0.1','scope':'administrative_rollback_only_report_write','layoutProfile':self.prepared.input()['layoutProfile'],'composition':{'identity':recipe_path,'sha256':hashlib.sha256((ROOT/recipe_path).read_bytes()).hexdigest()}}
         for field,ref in composition['profileArtifacts'].items():
@@ -131,7 +137,7 @@ class PrerequisitePsycopgNativeTests(unittest.TestCase):
         pre=bytes.fromhex(self.query('SELECT truss.runtime_capture_catalog_prestate()').fetchone()[0])
         self.writer,self.ordinal,context=self.query("SELECT * FROM truss.runtime_admit_operation_with_configuration_context(0,'catalog-acceptance',decode('01','hex'),%s,%s,%s,decode('05','hex'),decode('06','hex'),convert_to('{}','UTF8'),%s,'guard-fixture','guard-fixture-epoch','guard-fixture-incarnation',%s)",(p.input_bytes,pre,candidate,(ROOT/composition['profileArtifacts']['captureProfile']['path']).read_bytes(),profile)).fetchone()
         context=bytes.fromhex(context)
-        result=self.query("SELECT * FROM truss.runtime_stage_catalog_with_release(0,decode('01','hex'),%s,%s,decode('05','hex'),decode('06','hex'),%s,%s,convert_to('{}','UTF8'),%s,%s,%s)",(p.input_bytes,candidate,p.archive_documents_bytes,p.declarations_bytes,pre,context,profile)).fetchone()
+        result=self.query(f"SELECT * FROM truss.{self.stage_function}(0,decode('01','hex'),%s,%s,decode('05','hex'),decode('06','hex'),%s,%s,convert_to('{{}}','UTF8'),%s,%s,%s)",(p.input_bytes,candidate,p.archive_documents_bytes,p.declarations_bytes,pre,context,profile)).fetchone()
         self.generation=json.loads(bytes.fromhex(result[3]))['effectGeneration']
     def register(self):
         def execute(cursor,observed):

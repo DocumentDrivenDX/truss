@@ -1,0 +1,9 @@
+test_suppressed_original_publication_step_rolls_back (__main__.Suppressed_clear_parent.test_suppressed_original_publication_step_rolls_back) ... ok
+test_suppressed_original_publication_step_rolls_back (__main__.Suppressed_clear_member.test_suppressed_original_publication_step_rolls_back) ... ok
+test_suppressed_original_publication_step_rolls_back (__main__.Suppressed_assign_ordinal.test_suppressed_original_publication_step_rolls_back) ... ok
+test_suppressed_original_publication_step_rolls_back (__main__.Suppressed_publish_manifest.test_suppressed_original_publication_step_rolls_back) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 63.456s
+
+OK

@@ -8,7 +8,8 @@ snapshot and is not a stable installation marker.
 from dataclasses import dataclass
 from typing import Literal
 from .host import HostConnection
-from .execution import Ok, Error, Outcome, ExecutionFailure
+from .execution import Ok, Error, Outcome, ExecutionFailure, TransactionHandle
+from .psycopg_host import PsycopgHost
 
 _RELATIONS=('schema_head','schema_rev','schema_doc','catalog_acceptance_report',
             'installation_admission','row_home_operation')
@@ -45,6 +46,10 @@ def inspect_installation(connection: HostConnection) -> Outcome[InstallationObse
     if type(connection) is not HostConnection:
         return Error(ExecutionFailure('execution_obligation','Public HostConnection required'))
     rows=connection.run_non_lifecycle(_QUERY)
+    return _decode_observation(rows)
+
+
+def _decode_observation(rows: object) -> Outcome[InstallationObservation]:
     if (type(rows) is not list or len(rows)!=1 or type(rows[0]) not in (list,tuple)
             or len(rows[0])!=1+len(_RELATIONS)
             or type(rows[0][0]) is not str or rows[0][0] not in ('true','false')
@@ -56,3 +61,27 @@ def inspect_installation(connection: HostConnection) -> Outcome[InstallationObse
         return Error(ExecutionFailure('execution_obligation','Inconsistent installation footprint response'))
     return Ok(InstallationObservation(namespace_present=present,relations=tuple(
         InstallationRelationObservation(name,kind) for name,kind in zip(_RELATIONS,rows[0][1:],strict=True))))
+
+
+def inspect_installation_in_transaction(
+    host: PsycopgHost, transaction: TransactionHandle,
+) -> Outcome[InstallationObservation]:
+    """Observe the footprint inside the caller's adopted psycopg transaction.
+
+    Uses the host's guarded operation boundary. The host retains connection and
+    transaction ownership. This snapshot observation never establishes readiness,
+    validates installation definitions, or reads Truss application records.
+    """
+    if type(host) is not PsycopgHost:
+        return Error(ExecutionFailure('execution_obligation', 'Public PsycopgHost required'))
+
+    def observe(cursor, observed):
+        cursor.execute(_QUERY, prepare=False, binary=False)
+        if tuple(column.type_code for column in cursor.description) != (25,) * (1 + len(_RELATIONS)):
+            raise ValueError('Installation observation requires text columns')
+        return _decode_observation(cursor.fetchmany(2))
+
+    result = host._run_operation(transaction, observe)
+    if isinstance(result, Error):
+        return result
+    return result.value

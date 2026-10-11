@@ -58,6 +58,15 @@ Before custom PostgreSQL wire handling, private driver hooks, a fork or driver r
 
 ## Immediate Python delivery sequence — 2026-10-11
 
+Owner update: use practical stock-PostgreSQL logical limits, bounded queries and
+supported deadlines (CONTRACT-006 resource profile 0.2). Remove exact backend
+allocation instrumentation, rollback-resistant cumulative-meter work and their
+qualification runs from the release queue. Remove custom tracing, metrics, OpenTelemetry/exporter dependencies and their qualification work. Keep basic logs and focused correctness,
+authorization, rollback/retry and observable-limit tests. Deliver the public
+install/accept/commit/report workflow; an instrumentation project is not a prerequisite.
+Production target is Lakebase PostgreSQL 18.6; PostgreSQL 17 evidence is historical
+and cannot qualify the new target.
+
 The consumer-facing milestone is an installed-wheel workflow using ordinary
 credentials: fresh installation → catalog registration → host commit → original
 report retrieval → create/update → exact read → reconnect and replay the same
@@ -448,7 +457,7 @@ This is an integration checkpoint across B-002/003/004/005/008/012/014/015, not 
 
 Before the integrated native run, the milestone owner records one exact selected tuple: PostgreSQL build, adapter/driver and transaction profile, namespace/roles/grants, reconciled layout inventory, original UMF source/API selection, value/key/comparator definitions, resource limits, host service composition and Weft binding/ABI. Candidates cannot become selected merely by appearing in a draft. Choose a schema fixture within the selected capabilities; unsupported recursive, map or structured value capabilities remain explicit rather than silently collapsed to JSON strings. Baseline 0.2 and row-home additions require explicit composition/adoption, not concatenated fragments.
 
-Native helper selection follows the architecture’s responsibility matrix: assess pinned SQL/protected PL/pgSQL sequencing first, separately review byte-level semantics and rollback-resistant cumulative accounting, and propose a compiled helper only against a demonstrated unmet invariant. Produce actual entrypoint/source/type/security/resource manifests before selecting the deployment; neither source-only nor compiled packaging alone qualifies enforcement.
+Native helper selection follows the architecture’s responsibility matrix: assess pinned SQL/protected PL/pgSQL sequencing first, review exact byte semantics and practical observable limits; do not add compiled allocation/work instrumentation to the selected stock-PostgreSQL release. Produce actual entrypoint/source/type/security/resource manifests before selecting the deployment; neither source-only nor compiled packaging alone qualifies enforcement.
 
 ### Design closure versus implementation qualification
 
@@ -1919,7 +1928,7 @@ Use the following dependency order to turn the authored feed sources into a sele
 
 | Unit / prerequisites | Concrete remaining design deliverable | Planned implementation evidence |
 | --- | --- | --- |
-| F01 / selected integration tuple | Exact native language/helper/type/security/role/namespace/resource and original transaction/account/event lifetime declarations; complete ordinary/administrative writer classification | Isolated installed inventory, raw-role/helper/partition bypass and rollback-resistant usage/termination controls |
+| F01 / selected integration tuple | Exact native language/helper/type/security/role/namespace/resource and original transaction/account/event lifetime declarations; complete ordinary/administrative writer classification | Isolated installed inventory, raw-role/helper/partition bypass and observable-limit and supported-deadline controls |
 | F02 / F01 | Five original fact and two prerequisite extractor bodies/decoders with full descriptors, original archive authority and bounded complete collection | Independently authored positive/omission/substitution corpus per family; hidden/deleted owner and zero-graph-change facts |
 | F03 / F01,F02 | Compose the authored counter-reservation and member-insertion sources with actual full-key duplicate/conflict comparison, original clock/context capture, event scheduling, resource admission and atomic containment bodies; prerequisite/configuration registration remains separate | Nineteen three-statement registration source corruption controls precede native identical/conflicting/colliding registrations, savepoint rollback/address liveness, exact-limit/exhaustion, descriptor/command parity and missing upstream registration |
 | F04 / F01,F02,F03 | Selected original manifest profile definition binding typed order, canonical/domain/archive/hash rules and resource producers; native comparator/encoder/hash bodies | Original four byte vectors plus complete actual payload/prerequisite cases, noncanonical/domain/direct-hash substitutions and repeated-prefix resource proof |
@@ -4255,6 +4264,12 @@ exclusions and protect the selected barrier lifetime, then compose fixed fact
 capture and original semantic decoding before protected final release.
 
 
+The 2026-10-11 owner resource/diagnostics decision also supersedes the OTel bridge,
+receiver and exporter gates in the local runtime installation/migration plan,
+including P1/P2 and its current qualification summary. Those gates are removed
+from the release path; basic safe logging and ordinary correctness checks remain.
+No custom tracing/metrics implementation or exporter qualification is required.
+
 ### Original session/effective-role snapshot exclusion — 2026-10-11
 
 Implemented separate private unprivileged DDL-cut composition: exact installed
@@ -4518,3 +4533,143 @@ and decoder construction, complete source/role/ACL lifetime and protected final
 release remain open. No backend acceptance binding or public support flag promoted;
 last full checkpoint26/132 with106 missing. Goal active. Next bind original semantic
 and physical profile construction to qualified issuer custody and protected release.
+
+
+### Owned within-host capture, semantic evaluation and decision projection — 2026-10-11
+
+An owned flat-table read spike now composes source-bound0.2 profile validation,
+native dependency/fact cuts, shared fixed raw-cell capture and the original UMF
+identity decoder/evaluator inside one host operation/savepoint. Semantic ownership
+stays in UMF; Python does not interpret policy or Keys. The tool emits only the
+original determinate decision/dispositions, excluding raw cells/private identities
+and subprocess diagnostics. An indeterminate or malformed evaluation refuses.
+The original evaluator's trusted=true, issuer/mapping and subject assumptions are
+explicit administrative fixture premises, not ordinary-user authority.
+
+Four native methods prove active assignment permits with salary withheld, inactive
+assignment denies without raw output, duplicate identity/indeterminate evaluation
+rolls back the operation while preserving earlier caller work, and original UMF
+evaluation runs with all seven required native fact/epoch SHARE locks. Independent
+competing fact UPDATE and explicit shared-authority writer acquisition refuse
+during that actual evaluator invocation. Private fixed capture is shared between
+the existing raw-cell profile and this owned tool; no public user SQL/decoder
+callback was added to fixed capture.
+
+Final `evidence/python-psycopg-epoch-cut/01992ea3-7088-472c-9ca1-fb66a52f73af`
+passes147 methods (96 fact/dependency/identity/visibility/DDL/role/semantic,16 graph,
+nine epoch,26 adoption), module boundaries,139 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Initial49f139f4 retains17 failed capture
+regressions from a missing SQL import during helper extraction; it is not a pass.
+
+Trace CONTRACT-063/STP-056 B01/B07/B10/L03/B11/B12 and US-056 AC1/AC6/AC8/AC9/AC10
+composition prerequisites only. Native lock observation and owned source checks
+do not prove executed bundle/dependency provenance or full semantic/SQL refinement.
+No new formal theorem or backend acceptance binding. Qualified ordinary caller,
+issuer/mapping/decoder and packaged evaluator custody, complete source/role/ACL
+lifetime, graph decoding and protected final release remain required. Last full
+checkpoint26/132 with106 missing; goal active. Next qualify original operation
+context and mapping/producer custody before turning this pipeline into ordinary
+protected disclosure.
+
+
+### Requalified against concurrently advanced main — 2026-10-11
+
+Preserved concurrent public assembly/resource simplification and PostgreSQL18.6
+main history through a merge. The runner retains the added147-case security scope
+and current runtime metadata; exact runtime profile JSON and shared-fixture source
+are now retained inputs. Final
+`evidence/python-psycopg-epoch-cut/ab9d3789-a230-46c2-be8e-c4c2a9f475cd` passes147
+methods on pgserver-pg18 18.6.0/PostgreSQL18.6 with stock psycopg3.3.6 binary/libpq
+18.6, module boundaries and three independent stop0/status3/socket-absent cleanups.
+Earlier01992ea3 remains its separate PostgreSQL16.15/source tuple, not current-main
+qualification. Initial5a38c4e4 stopped during input discovery due to a wrong fixture
+source path; no native fixture launched and no qualification claimed.
+The owned within-host evaluator remains an administrative flat-table spike;
+ordinary caller, full original issuer/mapping/package custody, complete role/ACL
+lifetime, graph decoder and protected final release remain open. No new backend
+acceptance binding; last full checkpoint26/132,106 missing. Goal active.
+
+
+### Native caller-bound subject selection — 2026-10-11
+
+Private source-bound provider profile0.3 adds exact session/effective role OIDs
+and original typed Core subject-key values. Native role correspondence is observed
+inside the original host/fact cut before raw capture in both fixed capture and
+the owned semantic tool. UMF's original key encoder validates/normalizes the
+selected key; the evaluator receives exactly one matching subject, not all Staff
+rows. Missing/ambiguous subject or role mismatch refuses without semantic output.
+Legacy0.1/0.2 remain explicitly scoped subsets, not authenticated caller profiles.
+
+Five native methods exercise real nonowner session with multiple Staff records:
+assigneds1 permits with original withholding, unassigneds2 denies, mismatched
+native role refuses, missing subject refuses, and fixed raw capture cannot skip
+caller correspondence. Fixture-issued generations are restored after actor
+connection/role cleanup. Initial499b30da retains generation-contamination failures;
+c4df45ef retains two positive failures from plain strings instead of original
+Core typed key literals. Neither is qualification evidence.
+Final `evidence/python-psycopg-epoch-cut/d5a5b6ef-39f7-4ef8-9181-cc3f2f9e8982`
+passes152 methods on PostgreSQL18.6 (101 fact/dependency/role/caller,16 graph,nine
+epoch,26 adoption), module boundaries,142 current/archived Truss pins,363 original
+UMF sources,1705 native payload pins and three independent
+stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-caller-binding-formal/41315cae-22d0-4128-a0dc-45542dd20b46`
+passes five fresh-context queries (three UNSAT/two SAT), retaining four source
+preimages and SMT/model receipts. Under faithful native identity capture and
+retained canonical subject selection, session/effective mismatches and subject
+substitution refuse. Caller claims without capture and unauthorized issuer
+semantic mappings have countermodels. No database authentication/Core key
+encoding/JSON/Python/PostgreSQL refinement or full authority theorem.
+
+Trace CONTRACT-063/STP-056 B01/B05/B10/B11/B12 and US-056 AC1/AC5/AC8/AC9/AC10
+prerequisites only. Actor fixtures retain broad native grants and administrator-
+issued subject mapping/trusted=true premises. Direct private-fact protection,
+issuer/mapping authority, full reachable-role/routine/ACL/lifetime closure, graph
+decoding and ordinary protected final release remain open. No backend acceptance
+binding; last full checkpoint26/132,106 missing. Goal active. Next qualify original
+subject-mapping issuer custody and remove ordinary direct private-fact bypasses
+before exposing protected reads.
+
+
+### Privilege-separated owned read service boundary — 2026-10-11
+
+Private profile0.4 retains separate original caller and executor session/effective
+role OIDs. Caller subject selection remains original typed Core keys. A trusted
+owned application holds both host references: the ordinary caller host operation
+captures actual native caller identity; its scope encloses a separate executor
+host operation holding epoch/fact cuts and original UMF evaluation. Executor
+identity and observed database OID must correspond, alongside configured endpoint
+parameters. These comparisons are not independent server authentication. Neither
+existing invoker elevation guards nor fixed raw-capture caller checks are removed;
+raw capture cannot consume0.4 without the original delegated caller scope.
+
+Four native methods use a catalog-only caller with schema USAGE and no private
+table/internal function grants. Actual direct SELECT, COUNT and writer helper
+EXECUTE refuse42501 under caller savepoint containment, while original delegated
+evaluation permits assigneds1 with withholding and denies unassigneds2. Wrong
+executor identity refuses; raw-capture shortcut refuses before execution. Only
+original determinate decisions/dispositions leave the trusted service spike.
+Final `evidence/python-psycopg-epoch-cut/da76c214-655b-4a04-aeca-24916d4307ce`
+passes156 methods on PostgreSQL18.6 (105 fact/dependency/role/delegation,16 graph,
+nine epoch,26 adoption), module boundaries,142 current/archived Truss pins,363
+original UMF sources,1705 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Earlierb069e2cd passes155 methods under its
+original source tuple, without the final database/raw-shortcut controls.
+
+Formal `evidence/security-delegated-read-formal/95a73d81-b266-4cc0-8aa0-a5ff35234eee`
+passes five fresh-context queries (three UNSAT/two SAT), retaining four exact
+source preimages and SMT/model receipts. Abstract original caller/executor
+verification plus live release guard exclude missing custody and retirement;
+trusted delegation can evaluate without caller private-table privilege. Omitting
+release guard admits publication after retirement. No native privilege/host lease/
+SQL/JSON/UMF/connection authentication refinement theorem.
+
+Trace CONTRACT-063/STP-056 B01/B04/B10/B11/B12/L03 and US-056 AC1/AC5/AC8/AC9/AC10
+prerequisites. This is an owned service architecture spike, not a database grant
+of executor authority or a public request API. Trusted application credential/
+target custody, original issuer/mapping/package provenance, all-role/ACL/source
+lifetime, graph decoding and protected final release remain open. No backend
+acceptance binding; last full checkpoint26/132,106 missing. Goal active. Next
+qualify trusted service caller/target/credential custody and complete reachable
+privilege inventory before admitting ordinary protected disclosure.

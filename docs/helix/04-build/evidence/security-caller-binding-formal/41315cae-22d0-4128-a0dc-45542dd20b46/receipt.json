@@ -1,0 +1,58 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-caller-binding.py": "a5f62b0acaf2ed831597b20d5d42cb7fed5d280ccf14b79546cd84e1ec1578d2",
+    "packages/python/src/truss/_security_fact_coverage.py": "50bfd13be6b2ce0f82cc1e0d0ceffd2bc192020b2d4f5a96eaa27b72f2f34385",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "772cc6287ab2e941c153cb11902838e09e72473ad72cfec9068d4a1567bb1ae6",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "cf8f1602ef0baac45b27c679cc03b4e36f62b820a7b387d709203152b53902cb"
+  },
+  "queries": [
+    {
+      "id": "native_session_mismatch_refuses",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "ff7aa983e1e89af1d6fa938d01c5f819f929da64c5d1a184aeef988ee972281a",
+      "model": null
+    },
+    {
+      "id": "native_effective_role_mismatch_refuses",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "f5985dac097d38d6e497e67f45cf3c99dbead14d8fdfb39ded29dc832bb1ce59",
+      "model": null
+    },
+    {
+      "id": "caller_claim_without_native_capture_can_impersonate",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "3801f5ca349eba49f23f0a292ee0196e10cbe25a5c72daffd54711ab7d39f60d",
+      "model": "[mapped_session = 1,\n actual_session = 0,\n mapped_effective = 0,\n actual_effective = 0,\n claimed_session = 1]"
+    },
+    {
+      "id": "retained_mapping_prevents_caller_subject_substitution",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "940337c659cadb6fbb33da900358a65fb078bfc6f2df1a3ed85fc8441193ec4f",
+      "model": null
+    },
+    {
+      "id": "native_role_match_does_not_authenticate_semantic_mapping",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "08a5a2bb5f6c4fd6f46b933852883b54928cfd04f894ae6795eab6c9a2d244a1",
+      "model": "[independently_authorized_subject = \"!1!\",\n native_mapped_subject = \"!0!\",\n selected_subject = \"!0!\",\n mapped_effective = 0,\n actual_effective = 0,\n mapped_session = 0,\n actual_session = 0]"
+    }
+  ],
+  "scope": "Unbounded native role identities and abstract canonical subject keys under faithful native capture and retained-profile key selection. Session/effective mismatches and subject replacement refuse. Caller claims and unauthenticated semantic mappings have countermodels.",
+  "limitations": [
+    "No database authentication, JSON/Python/PostgreSQL or original Core key-encoding refinement proof",
+    "Native capture and retained mapping are premises; semantic mapping authorization and source/role lifetime remain unqualified",
+    "No authenticated caller/issuer, original writer installation/ACL closure, full authority admission or protected final release proof"
+  ]
+}

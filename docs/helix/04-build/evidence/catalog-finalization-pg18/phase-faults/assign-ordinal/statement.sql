@@ -1,0 +1,1 @@
+UPDATE truss.feed_member m SET delivery_ordinal = $5::bigint WHERE false RETURNING m.source_epoch, m.feed_profile, m.original_writer_xid::pg_catalog.text AS original_writer_xid, m.registration_address::pg_catalog.text AS registration_address, m.delivery_ordinal::pg_catalog.text AS delivery_ordinal

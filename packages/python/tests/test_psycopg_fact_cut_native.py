@@ -523,13 +523,15 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
         self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
 
-    def with_unprivileged_actor(self, operation, grant_owner=False, attribute=None):
+    def with_unprivileged_actor(self, operation, grant_owner=False, attribute=None, catalog_only=False):
         from truss.psycopg_host import PsycopgHost,PsycopgProfile
         self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
         original=self.ddl_comparison()
         self.connection.execute('CREATE ROLE fact_cut_actor LOGIN')
         try:
-            self.connection.execute('GRANT USAGE ON SCHEMA truss TO fact_cut_actor; GRANT ALL ON ALL TABLES IN SCHEMA truss TO fact_cut_actor; GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA truss TO fact_cut_actor')
+            self.connection.execute('GRANT USAGE ON SCHEMA truss TO fact_cut_actor')
+            if not catalog_only:
+                self.connection.execute('GRANT ALL ON ALL TABLES IN SCHEMA truss TO fact_cut_actor; GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA truss TO fact_cut_actor')
             # Exact owned-layout administrative high-water routines are not
             # part of this invoker-only actor fixture. PUBLIC is already revoked.
             self.connection.execute('REVOKE ALL ON FUNCTION truss.catalog_global_high_water_v01(),truss.catalog_key_high_water_v01(integer) FROM fact_cut_actor')
@@ -544,6 +546,10 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 finally:host.detach()
         finally:
             self.connection.execute('DROP OWNED BY fact_cut_actor; DROP ROLE fact_cut_actor; DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+            pending=getattr(self,'_caller_generation_pending',None)
+            if pending is not None:
+                type(self).epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(pending,b'\x01',b'\x02')).fetchone()[0]
+                self._caller_generation_pending=None
     def test_selected_unprivileged_role_passes_and_cannot_disable_native_barrier(self):
         from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
         def operation(host,t,original,connection):
@@ -857,3 +863,127 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         with patch.object(producer,'_inspect_original_fact_sources',mutate):
             result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
         self.assertIsInstance(result,Ok);self.assertTrue(sources.policy.endswith(b' '))
+
+    def owned_identity_read(self,t):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_owned_read import run_owned_identity_read
+        raw,profile,sources=self.source_bound_profile();comparison=self.issue_bound_profile(profile)
+        return run_owned_identity_read(self.host,t,comparison,raw,sources)
+    def test_owned_semantic_read_permits_with_original_withholding_inside_host(self):
+        t=self.begin();result=self.owned_identity_read(t)
+        self.assertEqual(result,Ok({'decision':'permit','output':[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}]}))
+        self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.sec_staff'::regclass,'truss.sec_project'::regclass,'truss.sec_resource'::regclass,'truss.sec_assignment'::regclass,'truss.sec_ownership'::regclass)").fetchone(),(5,))
+    def test_owned_semantic_read_denies_inactive_assignment_without_raw_output(self):
+        t=self.begin();self.connection.execute('UPDATE truss.sec_assignment SET active=false')
+        result=self.owned_identity_read(t);self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'deny')
+        self.assertNotIn('identities',result.value)
+    def test_owned_semantic_indeterminate_rolls_back_operation_preserving_caller_work(self):
+        t=self.begin();self.connection.execute("CREATE TEMP TABLE read_prior(v text); INSERT INTO read_prior VALUES('keep'); INSERT INTO truss.sec_assignment VALUES('a1','s1','p1',true)")
+        result=self.owned_identity_read(t);self.assertIsInstance(result,Error)
+        self.assertEqual(self.connection.execute('TABLE read_prior').fetchall(),[('keep',)])
+        self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_backend_pid() AND mode='ShareLock' AND granted AND relation='truss.sec_assignment'::regclass").fetchone(),(0,))
+
+    def test_owned_umf_evaluation_holds_original_fact_and_authority_cuts(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_run=tool.subprocess.run;observed=[]
+        def during(command,*args,**kwargs):
+            if command[0]=='/opt/homebrew/bin/bun' and str(command[1]).endswith('evaluate-security-captured-identity-fixture.ts'):
+                self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.sec_staff'::regclass,'truss.sec_project'::regclass,'truss.sec_resource'::regclass,'truss.sec_assignment'::regclass,'truss.sec_ownership'::regclass,'truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)").fetchone(),(7,))
+                with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as writer:
+                    for statement in ('UPDATE truss.sec_assignment SET active=false','SELECT truss.runtime_fence_shared_authority_writer()'):
+                        with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(statement)
+                observed.append(True)
+            return original_run(command,*args,**kwargs)
+        t=self.begin()
+        with patch.object(tool.subprocess,'run',during):result=self.owned_identity_read(t)
+        self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit');self.assertEqual(observed,[True])
+
+    def caller_bound_owned_read(self,host,t,subject='s1',wrong_role=False):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_owned_read import run_owned_identity_read
+        raw,profile,sources=self.source_bound_profile();value=json.loads(profile)
+        roles=host._connection.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
+        value['kind']='truss-flat-fact-provider-fixture/0.3';value['caller']={'sessionRoleOid':str(int(roles[0])+1) if wrong_role else roles[0],'effectiveRoleOid':roles[1],'subjectKey':[{'string':subject}]}
+        comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
+        self._caller_generation_pending=comparison.epoch
+        return run_owned_identity_read(host,t,comparison,raw,sources)
+    def test_native_caller_bound_subject_selects_one_of_multiple_staff(self):
+        self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
+        try:
+            def operation(host,t,original,connection):
+                result=self.caller_bound_owned_read(host,t,'s1');self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit')
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute("DELETE FROM truss.sec_staff WHERE staff_id='s2'")
+    def test_native_caller_bound_unassigned_staff_denies(self):
+        self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
+        try:
+            def operation(host,t,original,connection):
+                result=self.caller_bound_owned_read(host,t,'s2');self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'deny')
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute("DELETE FROM truss.sec_staff WHERE staff_id='s2'")
+    def test_native_caller_role_mismatch_refuses_before_semantic_output(self):
+        def operation(host,t,original,connection):
+            result=self.caller_bound_owned_read(host,t,wrong_role=True);self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
+        self.with_unprivileged_actor(operation)
+    def test_native_caller_binding_missing_subject_refuses_without_output(self):
+        def operation(host,t,original,connection):
+            result=self.caller_bound_owned_read(host,t,'missing');self.assertIsInstance(result,Error)
+        self.with_unprivileged_actor(operation)
+
+    def test_fixed_raw_capture_cannot_skip_native_caller_binding(self):
+        t=self.begin();raw,profile,sources=self.source_bound_profile();value=json.loads(profile)
+        value['kind']='truss-flat-fact-provider-fixture/0.3';value['caller']={'sessionRoleOid':'1','effectiveRoleOid':'1','subjectKey':[{'string':'s1'}]}
+        comparison=self.issue_bound_profile(json.dumps(value).encode())
+        result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
+        self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
+
+    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_owned_read import run_delegated_owned_identity_read
+        raw,profile,sources=self.source_bound_profile();value=json.loads(profile)
+        def roles(c):return c.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
+        caller=roles(caller_host.connection);executor=roles(self.connection)
+        value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':subject}]};value['executor']={'sessionRoleOid':str(int(executor[0])+1) if wrong_executor else executor[0],'effectiveRoleOid':executor[1]}
+        comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
+        return run_delegated_owned_identity_read(caller_host,caller_t,self.host,executor_t,comparison,raw,sources)
+    def test_catalog_only_caller_cannot_read_private_facts_but_delegated_read_permits(self):
+        def operation(host,t,original,connection):
+            for query in ('SELECT * FROM truss.sec_assignment','SELECT count(*) FROM truss.sec_assignment','SELECT truss.runtime_fence_shared_authority_writer()'):
+                connection.execute('SAVEPOINT private_denied')
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute(query)
+                connection.execute('ROLLBACK TO private_denied')
+            executor_t=self.begin()
+            try:
+                result=self.delegated_owned_read(host,t,executor_t);self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit');self.assertNotIn('identities',result.value)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+    def test_catalog_only_caller_unassigned_subject_denies_through_executor(self):
+        self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
+        try:
+            def operation(host,t,original,connection):
+                executor_t=self.begin()
+                try:
+                    result=self.delegated_owned_read(host,t,executor_t,'s2');self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'deny')
+                finally:self.connection.execute('ROLLBACK')
+            self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute("DELETE FROM truss.sec_staff WHERE staff_id='s2'")
+    def test_delegated_executor_role_mismatch_refuses_without_output(self):
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                result=self.delegated_owned_read(host,t,executor_t,wrong_executor=True);self.assertIsInstance(result,Error)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_profile_cannot_use_raw_capture_without_original_caller_scope(self):
+        t=self.begin();raw,profile,sources=self.source_bound_profile();value=json.loads(profile)
+        role=self.connection.execute('SELECT oid::text FROM pg_roles WHERE rolname=current_user').fetchone()[0]
+        value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':role,'effectiveRoleOid':role,'subjectKey':[{'string':'s1'}]};value['executor']={'sessionRoleOid':role,'effectiveRoleOid':role}
+        comparison=self.issue_bound_profile(json.dumps(value).encode())
+        with self.assertRaisesRegex(ValueError,'delegated caller scope'):_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)

@@ -30,12 +30,12 @@ Exercise all declared precedence combinations and duplicate keys within one
 layer, not legitimate overrides across layers. Record exact input/profile/package
 pins and safe results; do not serialize original host objects for evidence.
 
-CFG-06/10 use synthetic sensitive markers across every sink: console, file,
-bridge/export receiver, exception text, repr and fingerprint inputs. A hash of a
-secret does not satisfy absence. Change visibility while verifying unchanged
-structured event meaning and durable request outcome. Include a hostile repr
-fixture to prove no host-handle stringification. Actual OTel receive/mapping and
-bounded outage/drop tests remain part of the observability qualification.
+CFG-06/10 use synthetic sensitive markers across basic console/file logging,
+exception text, repr and fingerprint inputs. A hash of a secret does not satisfy
+absence. Change logging visibility while verifying unchanged durable request
+outcomes. Include a hostile repr fixture to prove no host-handle stringification.
+Custom tracing, metrics, OTel receivers and exporter outage/drop qualification
+are removed by the owner decision of 2026-10-11.
 
 CFG-09 runs on the selected actual pgserver tuple with owned disposable/retained
 directories and independently observes runtime custody refusal. CFG-11/12 need

@@ -34,3 +34,11 @@ __all__ += ["BorrowedHost", "BorrowedHostAttachmentFailure", "adopt_pg8000_host"
 
 from .psycopg_host import PsycopgHost, PsycopgProfile, adopt_psycopg_host
 __all__ += ["PsycopgHost", "PsycopgProfile", "adopt_psycopg_host"]
+
+from .assembly_contracts import InstallationInspectionConfiguration
+from .assembly import (InstallationInspectionAssembly, INSPECTION_ASSEMBLY_PROFILE,
+                       INSPECTION_CONSTRUCTION_DIAGNOSTIC_PROFILE)
+from .installation import inspect_installation_in_transaction
+__all__ += ["InstallationInspectionConfiguration", "InstallationInspectionAssembly",
+            "INSPECTION_ASSEMBLY_PROFILE", "INSPECTION_CONSTRUCTION_DIAGNOSTIC_PROFILE",
+            "inspect_installation_in_transaction"]

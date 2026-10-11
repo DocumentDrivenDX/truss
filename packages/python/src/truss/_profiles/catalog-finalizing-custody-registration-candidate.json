@@ -1,0 +1,286 @@
+{
+  "identity": "truss-administrative-catalog-prerequisite-custody-registration",
+  "version": "0.2.0-finalization-candidate",
+  "scope": "one original fresh catalog operation; administrative rollback only; no committed feed authority",
+  "sources": {
+    "create": {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/create.sql",
+      "sha256": "bbde69b129fc23a4bf13f1fbbd5f526625f77498ae4afbcc9bbd2fde969bf8f6",
+      "authoredProposal": {
+        "path": "docs/helix/02-design/contracts/feed-transaction-create-v0.1.proposal.sql",
+        "sha256": "4c99efac297db762c7c95a82626cb6cd0c0e610d11feda3b2ea31cb9803192d7"
+      },
+      "ownerModel": {
+        "path": "docs/helix/02-design/contracts/feed-transaction-create-v0.1.proposal.umf.json",
+        "sha256": "977e5338a835b3930a1dd60ebe25ae10e130ef16a5f022451374b5e3329984bf"
+      },
+      "exportedModelSha256": "120a85a801ea772b9b1d71f038117ae8a7c31975dd57d3df0c2f64001a4a1e6b"
+    },
+    "reserve": {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/reserve.sql",
+      "sha256": "213e936ced1bd774b73d7c382f296a02e140bb6b462835c6134d2f470b6ade77",
+      "authoredProposal": {
+        "path": "docs/helix/02-design/contracts/feed-member-counter-reservation-v0.1.proposal.sql",
+        "sha256": "7b9040f135f4d9a68f4af6235f91959b852f0e57c8c243930b8d450cbb21a3a2"
+      },
+      "ownerModel": {
+        "path": "docs/helix/02-design/contracts/feed-member-counter-reservation-v0.1.proposal.umf.json",
+        "sha256": "9e5198305687fa598c1dc70e142b8813c6b4120b4c2ead4ca695555b0f86eebd"
+      },
+      "exportedModelSha256": "2aabb1a26af455d9436a838f01c0a57da64313e4549108d19e64b340f4d249f1"
+    },
+    "insert": {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/insert.sql",
+      "sha256": "4c91dd0261a76767de4cd84b4987b9aab449964378bad98e1fcd96c0a5ad4370",
+      "authoredProposal": {
+        "path": "docs/helix/02-design/contracts/feed-member-insert-v0.1.proposal.sql",
+        "sha256": "29d4948c87185d1480bb32aaceb079ad8762191e3c31f86ec3b40ac051ba87b4"
+      },
+      "ownerModel": {
+        "path": "docs/helix/02-design/contracts/feed-member-insert-v0.1.proposal.umf.json",
+        "sha256": "979681daf4e8301c572618fef536e3db0600202a514af8985c6f1e4c6e0ddfd4"
+      },
+      "exportedModelSha256": "a53f90f3da2b4685ca206d2a2fd8216076a3e8e56a9e76ce8a033e41c24afcc7"
+    }
+  },
+  "custodyProducer": {
+    "path": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-capture-candidate.json",
+    "selection": "exact original producer profile bytes from retained custody equal the originally archived selected producer; selected before operation admission",
+    "sha256": "b582d6d36b9498551d082a52de89493ca0b32f19413a15f23833c67b5cc4bbe1"
+  },
+  "clockProfile": {
+    "identity": "truss-administrative-original-catalog-custody-clock",
+    "version": "0.1.0-candidate",
+    "basis": "one server clock_timestamp sample immediately before original custody insertion",
+    "precision": "native PostgreSQL microseconds",
+    "commitTime": false,
+    "envelope": "profile plus finite UTC microsecond original-write timestamp; copied unchanged by subsequent feed registration"
+  },
+  "memberConstruction": "copy original key/key-profile/payload/payload-profile/owner/write_at/clock bytes from custody; derive only payload SHA256",
+  "manifestProfile": {
+    "identity": "truss-administrative-single-catalog-manifest",
+    "version": "0.4.0-original-artifact-codec-candidate",
+    "interfaceVersion": "truss-feed-transaction/0.2.0",
+    "domain": "truss-feed-manifest/0.2.0",
+    "canonicalProfile": "truss-canonical/0.1.0",
+    "digestPreimage": "ASCII canonical profile, LF, exact domain, LF, canonical numeric-free tree bytes excluding manifestSha256",
+    "archiveProfile": "truss-feed-manifest-artifact/0.2.0",
+    "scope": "one actual original fresh catalog operation; original operation context is not a multi-operation transaction context",
+    "supportedMemberKinds": [
+      "revision"
+    ],
+    "memberOrder": "numeric original revision, contiguous canonical decimal ordinals from zero; arbitrary kinds refuse this selected scope",
+    "catalogPrerequisites": "every ordered original accepted UMF document, exact original definition bytes/profile and original revision identity; no current definition reconstruction",
+    "configurationPrerequisites": "generation-stable configuration projection excluding writerXid, operationOrdinal, contextDigest and clock; exact original epoch/installation/generation/profile/value/producer inventory; the full admitted capsule remains separate owner/source custody",
+    "producerProfile": "original retained custody producer profile bytes admitted by selected independent reference composition",
+    "clockProfile": {
+      "identity": "truss-administrative-original-catalog-custody-clock",
+      "version": "0.1.0-candidate",
+      "basis": "one server clock_timestamp sample immediately before original custody insertion",
+      "precision": "native PostgreSQL microseconds",
+      "commitTime": false,
+      "envelope": "profile plus finite UTC microsecond original-write timestamp; copied unchanged by subsequent feed registration"
+    },
+    "finalization": "separate independently validated finalizer; current registrar leaves manifest/finalized-generation/delivery-ordinal NULL",
+    "profilePin": {
+      "identity": "definition.identity",
+      "version": "definition.version",
+      "sha256": "lowercase SHA256 of exact archived canonical numeric-free bytes of this complete manifestProfile definition; no embedded self digest",
+      "storage": "feed_tx.manifest_profile_bytes copies these exact canonical bytes"
+    },
+    "feedContext": {
+      "sourceEpoch": "original admitted operation context.sourceEpoch, independently matched to current epoch/configuration",
+      "feedProfile": "this registration recipe identity; exact feed_tx.feed_profile",
+      "scopeIdentity": "administrative_single_original_operation_fresh_catalog_rollback_only",
+      "scopeIdentityQualification": "fixed candidate scope only; not an ordinary-person disclosure or authorization claim"
+    },
+    "sourceProfiles": {
+      "key": "exact canonical numeric-free keyProfile bytes from selected custody producer; retained custody field must equal those bytes",
+      "payload": "exact archived bytes and sha256 at payloadProfile; retained custody field must equal those bytes",
+      "producer": "exact archived selected custody producer profile bytes; independent reference roster admits producer before capture"
+    },
+    "documentMapping": {
+      "source": "original accepted input.documents in order, corresponding exactly to schema_doc.ord/documentId/documentRevision",
+      "artifactIdentity": "UTF8 original document.artifact.identity",
+      "definitionBytes": "decoded original document.artifact.bytesBase64; exact equality with UTF8 schema_doc.document and stored content_sha256",
+      "definitionProfile": "canonical numeric-free original document.umfProfile bytes",
+      "revision": "original retained custody revision",
+      "duplicates": "keep first artifact identity in original document order when bytes and profile are identical; conflicting bytes/profile refuse",
+      "ordering": "first occurrence order for registration; final manifest prerequisite sorting follows selected canonical archive identity UTF8 bytes",
+      "recipe": "packages/postgresql/native/catalog-report/prerequisite-registration-candidate.sql generation artifact and document mapping; no call to its old report-producing entry point"
+    },
+    "keyDefinition": {
+      "identity": "truss-administrative-revision-key",
+      "version": "0.1.0-candidate",
+      "encoding": "truss-canonical/0.1.0 numeric-free object kind/revision"
+    },
+    "payloadDefinitionArtifact": {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-wide-report-composition-candidate.json",
+      "sha256": "9269939c2151779c919826ef30beccfea51269f06da1d6241e8f6bb6d80e6253"
+    },
+    "producerDefinitionArtifact": {
+      "path": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-capture-candidate.json",
+      "sha256": "b582d6d36b9498551d082a52de89493ca0b32f19413a15f23833c67b5cc4bbe1"
+    },
+    "resourceDefinition": {
+      "ownerResources": {
+        "aggregateOriginalByteCeiling": "786432",
+        "nativeBytesPerChunk": "32768",
+        "maxChunksPerRecord": "32",
+        "maxDocuments": "512",
+        "maxTotalChunks": "1024",
+        "maxTaggedTreeAndWireBytes": "4194304",
+        "qualification": "logical original/chunk/carrier bounds; not complete native allocation or work"
+      },
+      "resourceLimits": {
+        "statementBytes": "16384",
+        "profileBytes": "65536",
+        "payloadBytes": "4194304",
+        "custodyAggregateByteFields": "16777216",
+        "referenceManifestBytes": "4194304",
+        "referenceAndAdjunctBytes": "16777216",
+        "qualification": "logical byte and inventory ceilings only; native allocation and work accounting remain unqualified"
+      }
+    },
+    "generationConfigurationDefinition": {
+      "recipeArtifact": {
+        "path": "packages/postgresql/native/catalog-report/prerequisite-registration-candidate.sql",
+        "sha256": "bd8f47661a09d84edec3b6cf7ca3b2462e6dd2d03171b3426010ffa90b70f3e6"
+      },
+      "encoding": "truss-canonical/0.1.0 numeric-free tree",
+      "fields": [
+        "installation",
+        "sourceEpoch",
+        "targetIncarnation",
+        "generation",
+        "keyReuse",
+        "journalMode",
+        "admissionProfileHexChunks",
+        "configurationHexChunks",
+        "bindingHexChunks",
+        "inventoryHexChunks"
+      ],
+      "exclusions": [
+        "writerXid",
+        "operationOrdinal",
+        "contextDigest",
+        "clock"
+      ],
+      "qualification": "generation-stable projection only; the selected old recipe entry point is not executed"
+    },
+    "configurationArtifactIdentity": {
+      "prefix": "truss.candidate.generation-configuration/0.1.0",
+      "coordinates": [
+        "sourceEpochUtf8LowerHex",
+        "installationIdUtf8LowerHex",
+        "canonicalNonnegativeInt8Generation"
+      ],
+      "separator": "/",
+      "bytes": "exact original retained generation-stable configuration artifact bytes",
+      "digest": "direct SHA256 of those original artifact bytes",
+      "conflicts": "same epoch/installation/generation with conflicting profile/value/inventory refuses; no alternate identity",
+      "selection": "new complete manifest definition pin before parent creation; no historical reinterpretation"
+    },
+    "manifestArtifactEncoder": {
+      "routine": "truss.runtime_manifest_artifact_tree_bytes_candidate(jsonb,bytea[],bytea)",
+      "source": {
+        "path": "packages/postgresql/native/catalog-finalization/manifest-encoder.sql",
+        "sha256": "83826fe8654d70817e58328b4d128da1cd4833e7771e5ca8ba0a40f278447ee9"
+      },
+      "ownerModel": {
+        "path": "packages/postgresql/native/catalog-finalization/manifest-encoder.umf.json",
+        "sha256": "3b4ec4ace11ecaaa44c90a42d59076a3d064989a8e31c70ba12dcce5a2cd08d4"
+      },
+      "ownerExport": {
+        "path": "packages/postgresql/native/catalog-finalization/manifest-encoder.owner-export.sql",
+        "sha256": "8e00f69eadd1c160000b1e8015818eab0d6537edcd0ad0579e1526dbb960e10e"
+      },
+      "dependency": {
+        "path": "packages/postgresql/native/canonical-string-bytes.sql",
+        "sha256": "fe943bfd4397325ed3dff16cec7436070653f6ad6c19fbe67e853348c508dbc1"
+      },
+      "tree": "closed numeric-free tagged tree; exact UTF8 key ordering; CONTRACT-009 escaping",
+      "originalDocuments": "final deduplicated prerequisite order sorted by original artifact identity UTF8 bytes; exact raw original artifact bytes; conflicting same identity bytes/profile refuse before encoding",
+      "originalConfiguration": "one exact generation-stable original configuration artifact byte sequence",
+      "widenedPaths": [
+        "prerequisites[i].artifact.bytesBase64",
+        "configurationPrerequisites[0].artifact.bytesBase64"
+      ],
+      "correspondence": "exact base64 of original raw arguments; one required string slot per document and one configuration slot; exact array cardinality and object path kinds; no other scalar exemptions",
+      "logicalLimits": {
+        "documents": "512",
+        "documentAggregateBytes": "1048576",
+        "configurationBytes": "4194304",
+        "taggedInputBytes": "25165824",
+        "completeOutputBytes": "8388608",
+        "ordinaryScalarBytes": "65536",
+        "treeSteps": "32768",
+        "liveTasks": "16384",
+        "depth": "256",
+        "containerEntries": "4096"
+      },
+      "selection": "complete new definition selected before feed parent creation; no old-parent reinterpretation",
+      "qualification": "rollback-only codec component; no finalization, accepted catalog, ordinary-person authorization or public runtime claim",
+      "excludedGuarantees": [
+        "exact hidden native allocation",
+        "rollback-resistant cumulative backend work"
+      ]
+    }
+  },
+  "poststate": "planned one pending parent with member counter=1, membership generation=1, prerequisite/configuration counters=0; one copied revision member; all other full snapshot stores/descriptors/resources unchanged",
+  "repeat": "refuse before effects; no counters or original clock change",
+  "publication": "none; unconditional native commit barrier remains",
+  "keyProfile": {
+    "identity": "truss-administrative-revision-key",
+    "version": "0.1.0-candidate",
+    "encoding": "truss-canonical/0.1.0 numeric-free object kind/revision"
+  },
+  "payloadProfile": {
+    "path": "packages/python/src/truss/_profiles/catalog-revision-wide-report-composition-candidate.json",
+    "sha256": "9269939c2151779c919826ef30beccfea51269f06da1d6241e8f6bb6d80e6253"
+  },
+  "ownerResources": {
+    "aggregateOriginalByteCeiling": "786432",
+    "nativeBytesPerChunk": "32768",
+    "maxChunksPerRecord": "32",
+    "maxDocuments": "512",
+    "maxTotalChunks": "1024",
+    "maxTaggedTreeAndWireBytes": "4194304",
+    "qualification": "logical original/chunk/carrier bounds; not complete native allocation or work"
+  },
+  "resourceLimits": {
+    "statementBytes": "16384",
+    "profileBytes": "65536",
+    "payloadBytes": "4194304",
+    "custodyAggregateByteFields": "16777216",
+    "referenceManifestBytes": "4194304",
+    "referenceAndAdjunctBytes": "16777216",
+    "qualification": "logical byte and inventory ceilings only; native allocation and work accounting remain unqualified"
+  },
+  "executionProvenance": {
+    "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "ownerFiles": [
+      {
+        "path": "native/postgresql/runtime.ts",
+        "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+      },
+      {
+        "path": "src/adapters/postgresql/index.ts",
+        "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+      },
+      {
+        "path": "src/model/document.ts",
+        "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+      },
+      {
+        "path": "src/model/native-json.ts",
+        "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+      },
+      {
+        "path": "bun.lock",
+        "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+      }
+    ],
+    "rule": "execute only retained owner-exported single-statement units; authored SQL pins are provenance, not interchangeable execution bytes"
+  }
+}
