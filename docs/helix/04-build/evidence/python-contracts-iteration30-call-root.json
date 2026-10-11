@@ -1,0 +1,33 @@
+{
+  "scope": "Private routing and combined call-root checkpoint; no usable admission permits or installer",
+  "source_sha256": {
+    "packages/python/src/truss/_native_pg8000.py": "4a357389f4dd3107b7cdfe087df3d2d4fa7770ecc1bf9fddf22a0190668846e6",
+    "packages/python/src/truss/_native_transactions.py": "fe5eb278bc2a532fa8a43d5c0ae154320b026366768718c1af3b3b2d8ad8d81d",
+    "packages/python/src/truss/_native_arbitration.py": "c23ed944a053c84e9f784bbc2c55d87b9aa2080c07cb71dcd02d7e5beded06a4",
+    "packages/python/tests/test_native_pg8000.py": "a1a1ef82fdbd8ffac1f3b9aa5ab3035e46040157aa4dc630f49da9ae9429ef32",
+    "packages/python/tests/test_native_call_root.py": "4c703a3a95cf936885dcb175412eec847307d3b348f35473f04f364fe05b6e42"
+  },
+  "unit_boundary_tests": {
+    "cases": 6,
+    "seconds": 0.002,
+    "result": "passed"
+  },
+  "independent_astra_ultra": {
+    "cases": 6,
+    "seconds": 0.001,
+    "decision": "approved corrected setup guard and combined root"
+  },
+  "native_regression": {
+    "cases": 3,
+    "seconds": 100.751,
+    "unittest_result": "OK",
+    "process_exit": "pending session57829",
+    "scope": "ordinary call-root paths before widened pre-invoke fault guard"
+  },
+  "remaining": [
+    "complete preallocated permit root transitions",
+    "original registered four-family admission",
+    "seven native semantic bodies and complete installation",
+    "public consumer operations"
+  ]
+}

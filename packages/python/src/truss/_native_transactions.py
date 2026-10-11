@@ -173,7 +173,7 @@ class NativeTransactions:
                 keep = index + (1 if control.kind == 'rollback_to' else 0)
                 self._state = replace(state, status=b'T', savepoints=state.savepoints[:keep])
 
-    def _control(self, kind, sql, *, token=None, savepoint=None, chain=False, cleanup=None, prepared_savepoint=None):
+    def _control(self, kind, sql, *, token=None, savepoint=None, chain=False, cleanup=None, prepared_savepoint=None, call_permit=None):
         with self._boundary._lock:
             state = self._state
             if kind in ('commit', 'rollback') and state.generation is None:
@@ -196,7 +196,7 @@ class NativeTransactions:
                 self._next_epoch += 1  # Reservations never rewind on refusal/uncertainty.
                 candidate = _Generation(str(epoch))
             control = _Control(kind, state, candidate, savepoint, chain)
-        self._boundary._call(lambda: self._boundary._run_simple(sql), token, lifecycle=control, cleanup=cleanup)
+        self._boundary._call(lambda: self._boundary._run_simple(sql), token, lifecycle=control, cleanup=cleanup, call_permit=call_permit)
         return savepoint if kind == 'savepoint' else None
 
     @staticmethod
@@ -231,13 +231,13 @@ class NativeTransactions:
             raise NativeBoundaryRefusal('Reserved Truss savepoint namespace')
         return self._control('savepoint', 'SAVEPOINT ' + self._name(name), token=token, savepoint=name)
 
-    def rollback_to(self, savepoint, *, token=None, cleanup=None):
+    def rollback_to(self, savepoint, *, token=None, cleanup=None, call_permit=None):
         if type(savepoint) is not _Savepoint: raise NativeBoundaryRefusal('Original savepoint required')
-        return self._control('rollback_to', 'ROLLBACK TO SAVEPOINT ' + self._name(savepoint.name), token=token, savepoint=savepoint, cleanup=cleanup)
+        return self._control('rollback_to', 'ROLLBACK TO SAVEPOINT ' + self._name(savepoint.name), token=token, savepoint=savepoint, cleanup=cleanup, call_permit=call_permit)
 
-    def release(self, savepoint, *, token=None, cleanup=None):
+    def release(self, savepoint, *, token=None, cleanup=None, call_permit=None):
         if type(savepoint) is not _Savepoint: raise NativeBoundaryRefusal('Original savepoint required')
-        return self._control('release', 'RELEASE SAVEPOINT ' + self._name(savepoint.name), token=token, savepoint=savepoint, cleanup=cleanup)
+        return self._control('release', 'RELEASE SAVEPOINT ' + self._name(savepoint.name), token=token, savepoint=savepoint, cleanup=cleanup, call_permit=call_permit)
 
     def port(self, token):
         with self._boundary._lock:

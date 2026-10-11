@@ -41,6 +41,16 @@ class NativeBoundaryFixture:
 
 
 class NativeBoundaryTests(NativeBoundaryFixture, unittest.TestCase):
+    def test_unregistered_call_permit_refuses_before_submission(self):
+        before = self.boundary.last_call
+        revision = self.boundary._revision
+        invoked = []
+        with self.assertRaises(NativeBoundaryRefusal):
+            self.boundary._call(lambda: invoked.append(True), call_permit=object())
+        self.assertEqual(invoked, [])
+        self.assertEqual(self.boundary._revision, revision)
+        self.assertIs(self.boundary.last_call, before)
+
     def test_extended_call_keeps_all_ready_cycles(self):
         self.assertEqual(self.boundary.run('SELECT :value::text', value='exact'), [['exact']])
         call = self.boundary.last_call
@@ -199,3 +209,29 @@ class NativeBoundaryTests(NativeBoundaryFixture, unittest.TestCase):
         with self.assertRaises(NativeBoundaryRefusal): prepared.run()
         self.assertIs(self.boundary.last_call, completion)
         self.assertEqual(self.boundary.run('SELECT 2'), [[2]])
+
+
+class ReservedCallDispatchTests(unittest.TestCase):
+    def test_foreign_ledger_callbacks_cannot_supply_permits(self):
+        from threading import Lock
+        callbacks = []
+        class ForeignLedger:
+            def _check_call_permit(self, *args): callbacks.append('check')
+            def _reserve_call_permit(self, *args): callbacks.append('reserve')
+        from truss._native_pg8000 import _Ownership
+        boundary = object.__new__(NativeBoundary)
+        boundary._ownership = _Ownership()
+        boundary._lock = Lock()
+        boundary._quarantined = False
+        boundary._cancel_pending = None
+        boundary._calling = False
+        boundary._operation = None
+        boundary._host_control_pending = None
+        boundary._revision = 0
+        boundary._operation_ledger = ForeignLedger()
+        boundary._pending_operation_ledger = boundary._operation_ledger
+        boundary._native_arbitration_sessions = ()
+        with self.assertRaises(NativeBoundaryRefusal):
+            boundary._call(lambda: callbacks.append('invoke'), call_permit=object())
+        self.assertEqual(callbacks, [])
+        self.assertEqual(boundary._revision, 0)

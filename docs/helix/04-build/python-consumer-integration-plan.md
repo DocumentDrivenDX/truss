@@ -1583,3 +1583,45 @@ private scope; its independent rerun passed five unit tests and six native cases
 call permits and original artifact admission remain mandatory before business
 use. Preserve the existing92-observation original-driver candidate as historical
 component evidence; this checkpoint integrates the shipped native classes.
+
+
+Iteration30 continuation: the reviewed issuer checkpoint was pushed to main as
+`d80b50b3`, rebased over security metadata verification `28013124`. The wheel
+matched all63 Python sources and installed successfully into a clean target.
+An explicit native `call_permit` routing draft now passes through the original
+boundary guard and transaction controls. Missing permit issuers refuse before
+submission; legacy calls retain their route. This is not a usable admission
+producer. Native refusal/rollback tests and Astra routing review are pending.
+
+Production containment must span admission, semantic writes and finalization.
+Confirmed admission alone cannot justify releasing the sole business savepoint.
+Astra found that freezing generic cleanup would break original probe resource
+closure. Use one authoritative session call root instead: each generic cleanup
+reservation preallocates its entry and all replacement containment branch roots,
+then publishes them atomically before sending. Allocation failure preserves the
+previous usable containment roots. Retirement still requires exact RELEASE
+completion and tracker publication. The explicit dispatcher requires retained
+original session identity and exact current/pending ledger before invoking permit
+checks; matching callback metadata alone cannot confer admission authority. The complete installer and consumer
+workflow remain unfinished.
+
+
+Combined call-root draft: ordinary call and cleanup records now share one
+authoritative publication. Generic cleanup preallocates all containment branch
+roots before sending; held rollback/release slots reduce generic cleanup capacity.
+Six unit/boundary cases pass, including prepublication allocation failure, lost
+publication and postreservation/preinvoke setup failure. If a root changed before
+setup escaped, the native boundary retains unsent records and closes submission;
+it never fabricates NativeCall completion. Astra identified and drove the widened
+setup fault guard; final source review remains pending. Three real native
+prepared-execution/transport/cleanup-limit cases report OK in100.751s, but their
+process57829 still has interpreter cleanup outstanding. Earlier routing process
+64009 remains live with two assertions passed; it is not terminal evidence.
+
+Astra Ultra approved the corrected routing and call-root checkpoint after
+independently reproducing the postreservation fault: unsent record retained,
+revision0, quarantine/admission closure, no fabricated NativeCall. Its six
+independent unit/boundary cases passed0.001s. Permit activation still requires
+complete preallocated root transitions, held-capacity exclusion and both
+retirement branches under actual native custody. Native process exit remains
+unverified and the ordinary-path regression predates the widened fault guard.

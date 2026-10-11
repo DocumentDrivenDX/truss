@@ -253,7 +253,7 @@ class NativeBoundary:
         self._host_control_pending = None
         original_release.published=True
 
-    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None, cleanup=None, host_simple=None):
+    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None, cleanup=None, host_simple=None, call_permit=None):
         with self._lock:
             if (self._quarantined or self._cancel_pending is not None or self._calling or
                     (self._operation is not None and token is not self._operation) or
@@ -267,35 +267,57 @@ class NativeBoundary:
                 raise NativeBoundaryRefusal('Original native binding remains unresolved')
             if self._revision >= 18446744073709551615:
                 raise NativeBoundaryRefusal('Native coordination revision exhausted')
-            if self._operation_ledger is not None:
+            if call_permit is not None:
+                ledger = self._operation_ledger
+                if (ledger is None or self._pending_operation_ledger is not ledger
+                        or not any(item is ledger for item in self._native_arbitration_sessions)):
+                    raise NativeBoundaryRefusal('Original registered operation session required')
+                check = getattr(ledger, '_check_call_permit', None)
+                reserve = getattr(ledger, '_reserve_call_permit', None)
+                if check is None or reserve is None:
+                    raise NativeBoundaryRefusal('Original reserved call permit unavailable')
+                check(self, token, resource, lifecycle, cleanup, call_permit)
+            elif self._operation_ledger is not None:
                 self._operation_ledger._check_call(self, token, cleanup)
             if self._transaction_tracker is not None:
                 self._transaction_tracker._before(lifecycle)
             if preflight is not None:
                 preflight()
             call_entry = None
-            if self._operation_ledger is not None:
-                call_entry = self._operation_ledger._reserve_call(self, token, resource, lifecycle, cleanup)
-            cancellation = getattr(self._operation_ledger, 'cancellation', None)
-            cancel_entry = None
-            if cancellation is not None and resource is not None and resource[0] == 'execute':
-                cancel_entry = cancellation._reserve_call(self, self._revision + 1, call_entry, resource)
-            self._active_cancellation = cancel_entry
-            simple_witness = None
-            simple_run = self._connection.run
-            simple_invocation = (host_simple if type(host_simple) is _HostSimpleInvocation
-                                 and type(host_simple.sql) is str else None)
-            if simple_invocation is not None:
-                from ._native_driver_profile import original_simple_source_profile
-                if original_simple_source_profile(self):
-                    simple_witness = HostSimpleWitness(self, self._revision + 1)
-            self._host_simple_witness = simple_witness
-            self._revision += 1
-            self._active_control = lifecycle
-            self._active_resource = resource
-            self._calling = True
-            self._ready_error = None
-            self._events, self._bytes, self._complete = [], 0, True
+            ledger = self._operation_ledger
+            before_root = getattr(ledger, '_call_root', None)
+            try:
+                if call_permit is not None:
+                    call_entry = reserve(self, token, resource, lifecycle, cleanup, call_permit)
+                elif ledger is not None:
+                    call_entry = ledger._reserve_call(self, token, resource, lifecycle, cleanup)
+                cancellation = getattr(self._operation_ledger, 'cancellation', None)
+                cancel_entry = None
+                if cancellation is not None and resource is not None and resource[0] == 'execute':
+                    cancel_entry = cancellation._reserve_call(self, self._revision + 1, call_entry, resource)
+                self._active_cancellation = cancel_entry
+                simple_witness = None
+                simple_run = self._connection.run
+                simple_invocation = (host_simple if type(host_simple) is _HostSimpleInvocation
+                                     and type(host_simple.sql) is str else None)
+                if simple_invocation is not None:
+                    from ._native_driver_profile import original_simple_source_profile
+                    if original_simple_source_profile(self):
+                        simple_witness = HostSimpleWitness(self, self._revision + 1)
+                self._host_simple_witness = simple_witness
+                self._revision += 1
+                self._active_control = lifecycle
+                self._active_resource = resource
+                self._calling = True
+                self._ready_error = None
+                self._events, self._bytes, self._complete = [], 0, True
+            except BaseException:
+                # A lost publication reply may retain an unsent entry. Never let
+                # a later call borrow that entry's cleanup correspondence.
+                if before_root is not None and ledger._call_root is not before_root:
+                    self._quarantined = True
+                    ledger.admission_closed = True
+                raise
         result = None
         raised = True
         native_error = False

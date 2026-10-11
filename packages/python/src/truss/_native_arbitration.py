@@ -20,6 +20,32 @@ class _OperationCall:
     native_call: object = None
 
 @dataclass(frozen=True, eq=False)
+class _OperationCallRoot:
+    calls: tuple = ()
+    cleanup_calls: tuple = ()
+    rollback_entry: object = None
+    release_entry: object = None
+    rollback_root: tuple = ()
+    rollback_release_root: tuple = ()
+    release_root: tuple = ()
+
+    @classmethod
+    def build(cls, calls, cleanup_calls, rollback_entry=None, release_entry=None):
+        # Allocate every possible containment publication before native send.
+        rollback_root = ((*cleanup_calls, rollback_entry)
+                         if rollback_entry is not None else ())
+        rollback_release_root = ((*rollback_root, release_entry)
+                                 if rollback_entry is not None and release_entry is not None else ())
+        release_root = ((*cleanup_calls, release_entry)
+                        if release_entry is not None else ())
+        return cls(calls, cleanup_calls, rollback_entry, release_entry,
+                   rollback_root, rollback_release_root, release_root)
+
+    @property
+    def held_cleanup(self):
+        return int(self.rollback_entry is not None) + int(self.release_entry is not None)
+
+@dataclass(frozen=True, eq=False)
 class _CleanupPermit:
     session: object
 
@@ -32,10 +58,9 @@ class NativeOperationSession:
     token: object
     locator: bytes
     call_limit: int
-    calls: tuple = ()
+    _call_root: object = None
     admission_closed: bool = False
     cleanup_limit: int = 16
-    cleanup_calls: tuple = ()
     cleanup_permit: object = None
     cleanup_closed: bool = False
     result_custody: object = None
@@ -43,6 +68,20 @@ class NativeOperationSession:
     released: bool = False
     cancellation: object = None
     deadline: object = None
+
+    def __post_init__(self):
+        self._call_root = _OperationCallRoot.build((), ())
+
+    @property
+    def calls(self):
+        return self._call_root.calls
+
+    @property
+    def cleanup_calls(self):
+        return self._call_root.cleanup_calls
+
+    def _publish_call_root(self, root):
+        self._call_root = root
 
     def _check_call(self, boundary, token, cleanup=None, *, admission=True):
         if admission and self.deadline is not None:
@@ -57,7 +96,7 @@ class NativeOperationSession:
             if (type(cleanup) is not _CleanupPermit or cleanup is not self.cleanup_permit
                     or cleanup.session is not self or self.cleanup_closed):
                 raise NativeBoundaryRefusal('Original cleanup permit required')
-            if len(self.cleanup_calls) >= self.cleanup_limit:
+            if len(self.cleanup_calls) + self._call_root.held_cleanup >= self.cleanup_limit:
                 raise NativeBoundaryRefusal('Reserved native cleanup capacity exhausted')
         else:
             if (self.admission_closed or self.owner._executor._closed
@@ -71,10 +110,12 @@ class NativeOperationSession:
     def _reserve_call(self, boundary, token, resource, lifecycle, cleanup=None):
         self._check_call(boundary, token, cleanup, admission=False)
         entry = _OperationCall(boundary._revision + 1, resource, lifecycle, cleanup)
-        if cleanup is None:
-            self.calls = (*self.calls, entry)
-        else:
-            self.cleanup_calls = (*self.cleanup_calls, entry)
+        previous = self._call_root
+        calls = (*previous.calls, entry) if cleanup is None else previous.calls
+        cleanup_calls = previous.cleanup_calls if cleanup is None else (*previous.cleanup_calls, entry)
+        candidate = _OperationCallRoot.build(calls, cleanup_calls,
+                                            previous.rollback_entry, previous.release_entry)
+        self._publish_call_root(candidate)
         return entry
 
 @dataclass(eq=False)
