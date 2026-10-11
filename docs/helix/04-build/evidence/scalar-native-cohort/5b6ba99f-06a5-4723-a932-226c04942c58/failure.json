@@ -1,0 +1,13 @@
+{
+  "failure": "Owned fixture creation failed: controlled-lost-create-50272c798a2e4315a20d631453920103\n",
+  "nativeFixture": null,
+  "cleanup": {
+    "containerId": "6f29a9bd97da2bf930f1f844422791d962fe68f8bd1b78b585f7a172db518dc4",
+    "exitCode": 0,
+    "stdout": "6f29a9bd97da2bf930f1f844422791d962fe68f8bd1b78b585f7a172db518dc4",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "ownedName": "truss-scalar-cohort-682646d180584be988fa1fe078f63f0b",
+  "cidfile": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/scalar-native-cohort/5b6ba99f-06a5-4723-a932-226c04942c58/container.cid"
+}

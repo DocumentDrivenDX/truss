@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "method": "Independent read-only exact current-source/archive and retained actual fault/effect audit; no Docker execution",
+  "receiptSha256": "299d88c2e28d82518959100b8ca32f038b7823977d96b5035e2928707982dd2f",
+  "sourcePins": 795,
+  "exactArchiveEntrySet": true,
+  "currentExactPreimages": true,
+  "archiveSha256": "d572ea3d3c68d6ed2fdecd8e5b8a37b453ac113fab5a1dfeaf0308a18a663f83",
+  "fixtureFailureSha256": "9e89fe8f9737c0b836e32ca340482ac70eb9c4ac69ca2b4d7b1ac8fb35d9734a",
+  "shimSha256": "bd0920d00248c5bb711a9c1e0d65bb88babc2fbc99c1d78b0585e6e6c8c5597a",
+  "controlLogSha256": "667fe32aaa2661654f4574da188e1f6d3e55714494ac90ab1454746c8c7bcdae",
+  "createdContainerId": "0c438b7c07d7c8a2d5f1f789ead70d43a3014faab7c58c71f061c06c0a78196d",
+  "retainedCleanup": {
+    "containerId": "0c438b7c07d7c8a2d5f1f789ead70d43a3014faab7c58c71f061c06c0a78196d",
+    "exitCode": 0,
+    "stdout": "0c438b7c07d7c8a2d5f1f789ead70d43a3014faab7c58c71f061c06c0a78196d",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "independentInspect": {
+    "exitCode": 1,
+    "stdout": "[]\n",
+    "stderr": "error: no such object: 0c438b7c07d7c8a2d5f1f789ead70d43a3014faab7c58c71f061c06c0a78196d\n"
+  },
+  "acceptancePromoted": false
+}

@@ -15,13 +15,13 @@ type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation
 type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
 export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collection:Collection){
  requireOriginalCatalogPreparation(prepared);requireOriginalCatalogObservationCollection(prepared,collection);
- const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.3.0',producers:{fields:collection.fieldProfile,declarations:collection.profile},
-  operations:['kind','nullability','cardinality','facets','keys','relationships','schema_properties'],basis:'original',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
- const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.3.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
- const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.3.0',sha256:manifest.sha256});
+ const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.4.0',producers:{fields:collection.fieldProfile,scalar:collection.scalarProfile,declarations:collection.profile},
+  operations:['kind','nullability','cardinality','facets','scalarType','keys','relationships','schema_properties'],basis:'original',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
+ const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.4.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
+ const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.4.0',sha256:manifest.sha256});
  const entries=[];const declarationMeanings=[];const fieldMeanings=[];const absent=[];const deferred=[];const identities=new Set<string>();
  for(const observed of collection.observations){
-  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','keys','relationships','schema_properties'].includes(observed.operation)){deferred.push(observed);continue}
+  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','scalarType','keys','relationships','schema_properties'].includes(observed.operation)){deferred.push(observed);continue}
   const result=observed.result as any;if(result.state!=='observed'){deferred.push(observed);continue}
   const original=result.observation,meaning=original.meaning;
   if(observed.operation==='schema_properties'){
@@ -41,6 +41,16 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
     entries.push(Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,kind:'source' as const,sourceIdentityProfile:profile}),source,ruleName:'core.schema_properties.'+key,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence}));
    }
    continue;
+  }
+  if(observed.operation==='scalarType'){
+   const document=prepared.documents.find(d=>d.documentId===observed.documentId),requested=observed.identity as any;
+   if(!document||document.umfVersion!=='0.7.0'||!collection.scalarProfile)throw Error('Original scalarType owner context correspondence required');
+   const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module),ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
+   if(mi<0||ei<0)throw Error('Original scalarType owner context correspondence required');
+   const element=source.modules[mi]!.elements[ei]!,present=Object.hasOwn(element,'scalarType'),value=element.scalarType;
+   const known=['boolean','integer','decimal','float','string','binary','date','time','timestamp'];
+   const expected=element.kind!=='field'?{state:'inapplicable',...(present?{authoredScalarType:value}:{})}:!present?{state:'missing'}:known.includes(value!)?{state:'known',scalarType:value}:{state:'unknown',value};
+   if(!sameOriginalMeaning(original,{operation:'inspect-core-scalar-type',version:'0.1.0',source,identity:requested,path:'/modules/'+mi+'/elements/'+ei+'/scalarType',meaning:expected,provenance:'unverified'}))throw Error('Original scalarType full result correspondence required');
   }
   // Validate selected original 0.7 Field families before state filtering.
   // Opaque item-type qualifiers and optional-member presence remain significant.
@@ -106,8 +116,8 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
    const entry=Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,...identity}),
     source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence});
    entries.push(entry);
-   if(['kind','nullability','cardinality','facets'].includes(observed.operation)&&original.source.umf==='0.7.0')fieldMeanings.push(Object.freeze({assertion:entry,
-    ownerProfile:collection.fieldProfile!,ownerState:meaning.state as 'known'|'partial',originalMeaning:meaning,
+   if(['kind','nullability','cardinality','facets','scalarType'].includes(observed.operation)&&original.source.umf==='0.7.0')fieldMeanings.push(Object.freeze({assertion:entry,
+    ownerProfile:(observed.operation==='scalarType'?collection.scalarProfile:collection.fieldProfile)!,ownerState:meaning.state as 'known'|'partial',originalMeaning:meaning,
     meaningCorrespondence:true as const,interpretationQualified:false as const,scope:`original_${observed.operation}_owner_meaning_only` as const}));
    if(declaration)declarationMeanings.push(Object.freeze({assertion:entry,ownerProfile:collection.profile,
     ownerState:meaning.state as 'known'|'partial',originalMeaning:ownerNodes[index],

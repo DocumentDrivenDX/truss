@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "method": "Independent read-only byte/archive/receipt audit; no native execution",
+  "receiptSha256": "5e218a72e98d4e82180fb087a83729d53eb7680840ac842cf06055305e234118",
+  "nativeReceiptSha256": "b10f99f7723d9eb3e43f66bb21eb8d64a5e23fda84d33c884e5a804a6651fe92",
+  "nativeLogSha256": "b0c1539ba040529313731da75ed0ae14775fca9f9708c56fa2290841c8a9e570",
+  "archiveSha256": "f3e3c22bf614d9f0c0dbf39ff53b00cbb9d43254a627a7372a20e3ea91ff308e",
+  "sourcePins": 793,
+  "currentExactPreimages": true,
+  "exactArchiveEntrySet": true,
+  "hostPinsIncluded": 712,
+  "absentConfigurationsVerified": [
+    "/private/tmp/truss-security-main-integration/tsconfig.json",
+    "/private/tmp/truss-security-main-integration/bunfig.toml"
+  ],
+  "producerDirectories": {
+    "TRUSS_UMF_PRODUCER": "/private/tmp/truss-umf-runtime-LmpSsH",
+    "TRUSS_UMF_DECLARATION_PRODUCER": "/private/tmp/truss-umf-runtime-vKoRzl",
+    "TRUSS_UMF_FIELD_ASSERTION_PRODUCER": "/private/tmp/truss-umf-runtime-xZQtaP",
+    "TRUSS_UMF_SCALAR_TYPE_PRODUCER": "/private/tmp/truss-umf-runtime-xGVLBZ"
+  },
+  "scalarProfile": {
+    "identity": "umf-scalar-type-inspection",
+    "version": "94d0a99e4d1e9eb39278f38d6cd6bcba51e46db8",
+    "sha256": "29168de4927fc440d4025babd765f4ddd8ad125bf6b6c5ed0e62bd88d6d1be04"
+  },
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "uniqueNativeChecks": 199,
+  "requiredScalarChecks": [
+    "actual native report retains both original scalar family duties",
+    "actual native report retains independent scalar owner revision and bundle",
+    "actual native report ordered coverage includes every scalar element observation",
+    "native scalar composition preserves original artifact and explicit unqualified status"
+  ],
+  "retainedCleanup": {
+    "containerId": "8d1cd51efea086aa926ed95e48fe911aa39ba7973c671364f2913a92c86391a9",
+    "exitCode": 0,
+    "stdout": "8d1cd51efea086aa926ed95e48fe911aa39ba7973c671364f2913a92c86391a9",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "acceptancePromoted": false
+}

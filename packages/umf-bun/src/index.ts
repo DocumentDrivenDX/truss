@@ -1,10 +1,10 @@
 /** Trusted host-only original producer registration. No alternate UMF validation. */
 import {resolve} from 'node:path';
 import {requireUnchangedCatalogTransition} from './catalog-transition-correspondence';
-const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'>();
-function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'):T{assertionOwners.set(owner,mode);return owner;}
+const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'|'scalar-types'>();
+function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'|'scalar-types'):T{assertionOwners.set(owner,mode);return owner;}
 /** Private loaded-instance recognition; no external issuer or native qualification. */
-export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'):void{
+export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'|'scalar-types'):void{
  if(assertionOwners.get(owner)!==mode)throw Error('Original loaded assertion owner required');
 }
 export const UMF_RUNTIME_SOURCE='c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3';
@@ -75,4 +75,12 @@ export async function loadUmfFieldAssertionProducer(directory:string){
  return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
   inspectKind:captured.inspectCoreElementKind,inspectNullability:captured.inspectCoreNullability,
   inspectCardinality:captured.inspectCoreCardinality,inspectFacets:captured.inspectCoreFacets}),'assertion-fields');
+}
+
+/** Separate current scalar owner; historical Record preparation remains independently pinned. */
+export const UMF_SCALAR_TYPE_SOURCE='94d0a99e4d1e9eb39278f38d6cd6bcba51e46db8';
+export async function loadUmfScalarTypeProducer(directory:string){
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_SCALAR_TYPE_SOURCE,'scalar-types',['inspectCoreScalarType']);
+ return registerAssertionOwner(Object.freeze({sourceRevision:UMF_SCALAR_TYPE_SOURCE,bundleSha256:hash,
+  inspectScalarType:captured.inspectCoreScalarType}),'scalar-types');
 }

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/scripts/check-scalar-native-cohort.py", line 78, in <module>
+    if failure:raise RuntimeError(failure)
+RuntimeError: Owned fixture creation failed: controlled-lost-create-f2ce6c17a1694d72a88170291c143e25
+

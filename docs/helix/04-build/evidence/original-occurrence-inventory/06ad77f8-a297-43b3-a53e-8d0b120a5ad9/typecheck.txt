@@ -1,0 +1,1 @@
+tests/catalog-scalar-type-correspondence.test.ts(69,22): error TS2540: Cannot assign to 'artifact' because it is a read-only property.
