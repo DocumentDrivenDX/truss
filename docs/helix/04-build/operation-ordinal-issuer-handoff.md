@@ -2024,3 +2024,37 @@ savepoint rollback. These supplement PA-N01–PA-N12; they do not replace them.
 PA01–PA04 owner/capture inputs and all seven semantic bodies remain unfinished.
 No registry grant, public API, protected profile or acceptance case is promoted;
 UMF's original 132-case goal remains at its historical 26/132 checkpoint.
+
+
+## PA02 experimental private capture capability — 2026-10-10
+
+UMF main `79421488` implements an isolated native candidate and retains the
+[23-observation receipt](https://github.com/DocumentDrivenDX/umf/blob/79421488/docs/helix/04-build/evidence/security/truss-protected-capture-candidate/90e12409-3a54-466f-8184-2a54c961669d/native.json),
+[requirement mapping](https://github.com/DocumentDrivenDX/umf/blob/79421488/docs/helix/04-build/evidence/security/truss-protected-capture-candidate/90e12409-3a54-466f-8184-2a54c961669d/acceptance-map.json)
+and [Astra review](https://github.com/DocumentDrivenDX/umf/blob/79421488/docs/helix/04-build/evidence/security/truss-protected-capture-candidate/90e12409-3a54-466f-8184-2a54c961669d/astra-review.json).
+An INVOKER capture observes actual actor/person OIDs, database, backend PID and
+xid. A separately privileged trusted registrar binds a private random capability
+to those facts, attempt and exact synthetic input. Fixed original host dispatch
+passes an INVOKER actor gate into a DEFINER capability-consuming writer.
+Ordinary private-table access, wrapper invocation, forged/copied public context,
+changed attempt/input and other connection/login routes refuse. Installed routine
+identities/owners/settings/bodies and seven frozen source pins are retained.
+
+Actual effects and absence are inspected in the original transaction using a
+fixture-only temporary SELECT grant, revoked immediately and checked absent at
+exit. Native capability reuse refuses before rollback, but direct native replay
+after savepoint rollback succeeds and its actual effect is retained. Existing
+AdmissionCustody, executed from its captured original source bytes, refuses the
+host resubmission; native consumption alone is not rollback-resistant custody.
+Two independently replayed failure controls prove synthetic secret text and
+exception chaining remain suppressed even when the evidence sink is unwritable.
+Astra's three harness findings were applied and the final reviewed run is pinned.
+
+This candidate targets PA-N01/03/04/05/09 development within ADR-008's trusted
+exclusive adapter boundary. It is not an admitted SQL-only route or production
+subject mapping. Replace synthetic registrar facts with original owner authority,
+artifact/current-cut checks; qualify installed closure, private carrier lifecycle,
+resource admission and all four family-specific bindings before adopting it.
+PA01–PA04, PA-N01–PA-N12 and the seven native semantic bodies remain unfinished.
+No Truss runtime/public API or registry grant changes are made by this handoff;
+UMF's full132-case acceptance checkpoint remains26/132.
