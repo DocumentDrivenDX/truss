@@ -1,5 +1,7 @@
 # truss project documentation
 
+[Query and execution ownership](01-frame/prd.md#query-and-execution-ownership--owner-direction-2026-10-11): Truss exposes the full Weft query surface. Weft owns evolving SQL coverage; Truss owns table layout, query execution, actions and other executions. Direct read/traversal APIs are convenience operations, not SQL coverage limits.
+
 ## Current Python driver and resource decision — 2026-10-11
 
 [ADR-003](02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md#accepted-owner-amendment--python-driver-baseline-2026-10-11) selects maintained stock psycopg 3 through supported APIs as the Python baseline. [The PRD](01-frame/prd.md#owner-decision--proportional-resource-controls-2026-10-11) requires practical workload limits and transaction safety; strict transport allocation accounting is optional and cannot block baseline release. Custom PostgreSQL wire/private-hook/fork/replacement work requires hard documented proof of a necessary deficiency and an owner-approved ADR. Historical pg8000/strict-parser receipts remain scoped experiments. Driver/package/Lakebase qualification remains pending.
