@@ -4589,3 +4589,44 @@ The owned within-host evaluator remains an administrative flat-table spike;
 ordinary caller, full original issuer/mapping/package custody, complete role/ACL
 lifetime, graph decoder and protected final release remain open. No new backend
 acceptance binding; last full checkpoint26/132,106 missing. Goal active.
+
+
+### Native caller-bound subject selection — 2026-10-11
+
+Private source-bound provider profile0.3 adds exact session/effective role OIDs
+and original typed Core subject-key values. Native role correspondence is observed
+inside the original host/fact cut before raw capture in both fixed capture and
+the owned semantic tool. UMF's original key encoder validates/normalizes the
+selected key; the evaluator receives exactly one matching subject, not all Staff
+rows. Missing/ambiguous subject or role mismatch refuses without semantic output.
+Legacy0.1/0.2 remain explicitly scoped subsets, not authenticated caller profiles.
+
+Five native methods exercise real nonowner session with multiple Staff records:
+assigneds1 permits with original withholding, unassigneds2 denies, mismatched
+native role refuses, missing subject refuses, and fixed raw capture cannot skip
+caller correspondence. Fixture-issued generations are restored after actor
+connection/role cleanup. Initial499b30da retains generation-contamination failures;
+c4df45ef retains two positive failures from plain strings instead of original
+Core typed key literals. Neither is qualification evidence.
+Final `evidence/python-psycopg-epoch-cut/d5a5b6ef-39f7-4ef8-9181-cc3f2f9e8982`
+passes152 methods on PostgreSQL18.6 (101 fact/dependency/role/caller,16 graph,nine
+epoch,26 adoption), module boundaries,142 current/archived Truss pins,363 original
+UMF sources,1705 native payload pins and three independent
+stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-caller-binding-formal/41315cae-22d0-4128-a0dc-45542dd20b46`
+passes five fresh-context queries (three UNSAT/two SAT), retaining four source
+preimages and SMT/model receipts. Under faithful native identity capture and
+retained canonical subject selection, session/effective mismatches and subject
+substitution refuse. Caller claims without capture and unauthorized issuer
+semantic mappings have countermodels. No database authentication/Core key
+encoding/JSON/Python/PostgreSQL refinement or full authority theorem.
+
+Trace CONTRACT-063/STP-056 B01/B05/B10/B11/B12 and US-056 AC1/AC5/AC8/AC9/AC10
+prerequisites only. Actor fixtures retain broad native grants and administrator-
+issued subject mapping/trusted=true premises. Direct private-fact protection,
+issuer/mapping authority, full reachable-role/routine/ACL/lifetime closure, graph
+decoding and ordinary protected final release remain open. No backend acceptance
+binding; last full checkpoint26/132,106 missing. Goal active. Next qualify original
+subject-mapping issuer custody and remove ordinary direct private-fact bypasses
+before exposing protected reads.

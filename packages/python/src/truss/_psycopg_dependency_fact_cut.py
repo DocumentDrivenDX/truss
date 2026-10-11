@@ -78,8 +78,15 @@ def _epoch_dependency_recipe(epoch, expected_sha256, sources=None):
         return value
     try:profile=json.loads(raw,object_pairs_hook=unique)
     except (UnicodeError,RecursionError) as error:raise ValueError('Original provider profile JSON required') from error
-    if type(profile) is dict and profile.get('kind')=='truss-flat-fact-provider-fixture/0.2':
-        closed(profile,('kind','requirementsSha256','providers','policyUtf8','resolutionUtf8'))
+    if type(profile) is dict and profile.get('kind') in ('truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3'):
+        closed(profile,('kind','requirementsSha256','providers','policyUtf8','resolutionUtf8')+(('caller',) if profile['kind'].endswith('/0.3') else ()))
+        if profile['kind'].endswith('/0.3'):
+            caller=closed(profile['caller'],('sessionRoleOid','effectiveRoleOid','subjectKey'))
+            for value in (caller['sessionRoleOid'],caller['effectiveRoleOid']):
+                if type(value) is not str or not value.isascii() or not value.isdigit() or not 0<int(value)<=4294967295:
+                    raise ValueError('Original native caller role identities required')
+            if type(caller['subjectKey']) is not list or not 1<=len(caller['subjectKey'])<=32:
+                raise ValueError('Bounded original subject key carrier required')
         if type(sources) is not _OriginalFactSources:
             raise ValueError('Original policy/resolution sources required for source-bound profile')
         for key,original in (('policyUtf8',sources.policy),('resolutionUtf8',sources.resolution)):
@@ -89,7 +96,7 @@ def _epoch_dependency_recipe(epoch, expected_sha256, sources=None):
                 raise ValueError('Exact native profile policy/resolution correspondence required')
     else:
         closed(profile,('kind','requirementsSha256','providers'))
-    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.1','truss-flat-fact-provider-fixture/0.2') or profile['requirementsSha256']!=expected_sha256:
+    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.1','truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3') or profile['requirementsSha256']!=expected_sha256:
         raise ValueError('Original requirement/profile correspondence required')
     values=profile['providers']
     if type(values) is not list or not 1<=len(values)<=8192:raise ValueError('Bounded original provider list required')
@@ -150,7 +157,10 @@ def _capture_epoch_bound_dependency_cells(host, transaction, epoch, original_byt
         else:group['associations'].append(p.reference)
     if len(groups)>32 or any(len(g['fields'])>32 for g in groups.values()):
         raise ValueError('Bounded selected raw capture profile required')
-    return _run_dependency_fact_operation(host,transaction,selected,original_bytes,expected_sha256,providers,lambda cursor:_capture_dependency_relation_cells(cursor,groups))
+    def capture(cursor):
+        _verify_native_profile_caller(cursor,selected.profile)
+        return _capture_dependency_relation_cells(cursor,groups)
+    return _run_dependency_fact_operation(host,transaction,selected,original_bytes,expected_sha256,providers,capture)
 
 
 def _capture_dependency_relation_cells(cursor, groups):
@@ -185,3 +195,14 @@ def _capture_dependency_relation_cells(cursor, groups):
             captured.append(tuple(values))
         results.append(_DependencyRelationCells((r.schema,r.name,oid),tuple((ref,c.number,c.type_oid) for ref,c in fields),tuple(group['associations']),tuple(captured)))
     return tuple(results)
+
+
+def _verify_native_profile_caller(cursor, profile_bytes):
+    import json
+    caller=json.loads(profile_bytes).get('caller')
+    if caller is None:return
+    cursor.execute("SELECT s.oid::pg_catalog.text AS session_role_oid,c.oid::pg_catalog.text AS effective_role_oid FROM pg_catalog.pg_roles s CROSS JOIN pg_catalog.pg_roles c WHERE s.rolname OPERATOR(pg_catalog.=) session_user AND c.rolname OPERATOR(pg_catalog.=) current_user",prepare=False,binary=False)
+    roles=cursor.fetchmany(2)
+    if (cursor.description is None or tuple(d.name for d in cursor.description)!=('session_role_oid','effective_role_oid')
+            or any(d.type_code!=25 for d in cursor.description) or roles!=[(caller['sessionRoleOid'],caller['effectiveRoleOid'])]):
+        raise ValueError('Original native caller/profile correspondence required')
