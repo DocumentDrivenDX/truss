@@ -52,6 +52,7 @@ ALLOWED = {
     '_security_association_binding': {'base64', 'dataclasses', 'hashlib', 'json'},
     '_directory_resources': {'os', 'stat', 'threading', 'truss._installation_resources'},
     '_installation_resources': {'dataclasses', 'hashlib', 'json', 'truss._resource_account'},
+    '_native_admission_request': {'dataclasses', 're', 'truss._operation_admission'},
     '_operation_admission': {'dataclasses', 'inspect', 'threading'},
     '_operation_registry': set(),
     '_row_image': {'dataclasses', 'struct'},

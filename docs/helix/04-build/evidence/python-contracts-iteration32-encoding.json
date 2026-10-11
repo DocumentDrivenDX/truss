@@ -1,0 +1,51 @@
+{
+  "scope": "Private admission argument encoding and actual PostgreSQL expression decoding only; no admission dispatch, artifact registration or accepted identity",
+  "source_sha256": {
+    "packages/python/src/truss/_native_admission_request.py": "77282e24877e1f93a0afb04fa88840c8766195969ddc6986f615fd04c7645f27",
+    "packages/python/tests/test_native_admission_request.py": "8436b1108199a8fbf7695f2dc070f4ea9cde53c2496401630b0fa3dcdd723f68",
+    "packages/python/tests/test_native_admission_request_postgresql.py": "7180f53f00ecb963ea469d9e6187b35b12807df4628e6e519b3da9bb0791bddb",
+    "scripts/check-module-boundaries.py": "6c781c02523ac507652890d427df6de65884863e71192384163f44424f1effda",
+    "packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql": "aed1fde52b149f6e973c289d0917d1442dd4059d2a0a6e1031bcc06de050c529",
+    "packages/postgresql/native/issued-operation-admission/operation-asserted-origin-admission.sql": "4eb696139c90da5aae36d889f7bb46964f6ecb7b883f250cea1d7f90038cea8c",
+    "packages/postgresql/native/issued-operation-admission/operation-admission.sql": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335",
+    "packages/postgresql/native/issued-operation-admission/operation-epoch-context-admission.sql": "7cd28926d2dc34a81ef1ed35b44031e70f0e2bc9c2446e2fd7c52930cb6ccd95"
+  },
+  "profile": {
+    "python": "3.11.17",
+    "pg8000": "1.31.5",
+    "postgresql": "16.15"
+  },
+  "unit": {
+    "cases": 7,
+    "seconds": 0.013,
+    "process_exit": 0
+  },
+  "native": {
+    "cases": 1,
+    "family_subcases": 4,
+    "seconds": 3.995,
+    "process_exit": 0,
+    "log_sha256": "93268b103269f74a9aa188a1f13df454a92a5b87b573c3961c6ed16642700119"
+  },
+  "boundaries": {
+    "imports": 325,
+    "passed": true
+  },
+  "astra_ultra": {
+    "source": "approved",
+    "independent_unit_cases": 7,
+    "independent_unit_seconds": 0.011,
+    "final_evidence": "approved task-only main commit/push"
+  },
+  "remaining": [
+    "Bind request to original retained issued attempt and exact reserved admission slot",
+    "Authenticate original artifact producers and installed family inventory",
+    "Observe native admission result and captured epoch/configuration additions",
+    "Full installation/finalization and public catalog/mutation/read workflows"
+  ],
+  "limitations": [
+    "Default encoded SQL ceiling1MiB can refuse payloads otherwise within native artifact bounds",
+    "Explicit larger encoding ceiling does not enlarge execution budget",
+    "Native test evaluates argument expressions, never invokes protected admission"
+  ]
+}

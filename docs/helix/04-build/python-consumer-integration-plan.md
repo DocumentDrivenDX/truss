@@ -1703,3 +1703,25 @@ safety. Registered original admission and the complete installed profile still
 precede public install/register/apply/read qualification. No public data
 capability was enabled. Earlier iteration30 retirement run16277 is terminal:
 two cases pass11.237s, recorded in its updated receipt.
+
+
+### Iteration 32: fixed original admission request encoding
+
+The private encoder targets exactly the four issued native family signatures
+and six native operation kinds. Opaque artifacts preserve arbitrary bytes;
+PostgreSQL text preserves UTF8 and refuses NUL/surrogates. Native per-field and
+initial aggregate limits include asserted/capture bytes. Configuration profile
+and native-captured epoch/configuration additions retain their separate native
+accounting obligations. Exact hexadecimal SQL size is checked before expansion.
+The default1MiB SQL ceiling can refuse larger native-valid artifact payloads;
+selecting a larger encoding ceiling does not qualify a larger execution budget.
+
+Seven unit cases pass; one PostgreSQL16.15 expression-decoding test exercises all
+four families and exact binary/text values (3.995s, terminal exit0). Astra Ultra
+approved source and independently passed seven unit cases. Final evidence review
+is approved for the task-only main push. See [receipt](evidence/python-contracts-iteration32-encoding.json).
+This module is private and never submits SQL, issues ordinals, registers artifacts
+or enables forward admission. Next composition must bind the original retained
+issued attempt, request and reserved admission slot, validate installed original
+producer custody, and correlate the actual native admission result before business
+work. The full install/register/apply/read target remains unfinished.
