@@ -344,6 +344,37 @@ See [iteration 12 evidence](evidence/python-contracts-iteration12.json).
 The public C02/E06 and protected owner gates above remain open; prioritize their
 completion before promoting the facade or declaring the consumer workflow ready.
 
+
+### Private installed inventory: role transition paths
+
+PA01/PA02 now require eleven retained sections, including native PostgreSQL16.15
+MEMBER, USAGE, SET and ADMIN reachability for the ordinary invoker. Direct effective
+ACLs alone miss INHERIT FALSE / SET TRUE authority. The fixed invoker profile
+refuses any distinct SET-capable or ADMIN-capable role even when the supplied
+baseline matches the unsafe observation. Membership without INHERIT, SET or ADMIN
+is observed as drift against the former baseline and may match a fresh scoped
+baseline. Ten-section historical packets refuse instead of silently omitting
+this new authority dimension.
+
+The [reviewed native receipt](evidence/design-audit/installed-role-paths-reviewed-native.json)
+retains63 matching observations and29 inventories. Real ordinary local-socket
+sessions demonstrate direct and indirect SET ROLE registry writes and ADMIN-only
+self-grant escalation, each denied by the observer; revocation restores the
+original scoped match. The exact479-row budget succeeds and478 refuses at the
+last role-reachability read. Twenty original source pins and preimages remain
+unchanged. The independently staged wheel matches50 Python/SQL/JSON source files.
+[Astra ultra review](evidence/design-audit/role-paths-astra-review.md) required
+execution from frozen producer SQL, now applied and rerun; earlier development
+failures and the pre-review passing run remain historical at their own sources.
+
+This component does not provide authenticated production admission, a coherent
+protected cut, arbitrary role-mutator closure or the seven missing semantic
+operation bodies. Native fixture routines are the four admission helpers, epoch
+helper and two catalog high-water helpers; they are not those semantic bodies.
+Installer readiness, PA01/PA02 completion and full backend acceptance remain open.
+
+The original candidate installed wheel passes302 tests; the [suite receipt](evidence/design-audit/role-paths-installed-suite.json) retains test-source pins and terminal output.
+
 ## PY-C02 original control ledger and bounded detachment — next planned work
 
 The next transport implementation must retain every native call and simple-query
@@ -404,6 +435,39 @@ The planned composed control ledger above remains unfinished; this corrective
 iteration does not promote the public adapter or complete C02.
 
 
+### Combined-main validation of role reachability
+
+Concurrent main iteration13 was integrated without replacing its snapshot-neutral
+adoption correction. A fresh [combined wheel](evidence/design-audit/role-paths-merged-wheel.json)
+matches all45 Python modules, six packaged SQL/JSON owner assets and py.typed.
+Its [full installed suite](evidence/design-audit/role-paths-merged-suite.json)
+passes305 tests. The [fresh native rerun](evidence/design-audit/installed-role-paths-merged-native.json)
+passes63 observations with29 inventories at20 unchanged source pins. The updated
+Python-only boundary checker passes200 edges. These records qualify the combined
+candidate; the earlier302-test wheel remains evidence only for its captured source.
+Complete protected admission and backend acceptance remain open.
+
+
+### Reviewed role-route guard laws, upstream main
+
+UMF main07357ead supplies [source-derived formal guard evidence](evidence/design-audit/role-paths-formal/integration.json)
+for the exact installed collector from Truss11f14e23. Five UNSAT violations,
+three SAT populations and three SAT erasures use the actual parsed predicate,
+complete unfiltered finite `any` fold and terminal classification. All32 Python
+predicate/fold vectors and29 original native predicate results match; Astra ultra
+independently replayed all11 exact saved formulas and verified their byte hashes
+and seven original source pins. Exact producer invocation controls also refuse.
+No collector implementation changed for this proof; source correspondence is
+explicitly rechecked in this integration receipt.
+
+Complete authentic current native rows are an explicit analysis premise, not
+provided by packet shape admission. This verifies the pure guard tail only,
+not the whole validator, PostgreSQL role graph, coherent cut, protected native
+admission or semantic operations. PA01–PA05 and complete installation/readiness
+remain open. No ordinary writer grant, invoker-guard removal or acceptance
+promotion follows from these laws.
+
+
 ### Iteration 14: compose original host control custody
 
 Astra Ultra reviews this plan and the completed implementation before main publication.
@@ -428,3 +492,12 @@ The installed wheel passes 320 tests, including 19 control-custody scenarios; al
 approved the source, plan and original installed artifact. Integration with newly
 landed security inventory changes and combined validation precede publication. This advances the control
 ledger prerequisite; public adoption/recovery and the external interface remain open.
+
+
+Combined iteration 14 integrates security main20c78c8c, preserving its role-path
+inventory and source-derived guard evidence. The fresh combined installed wheel
+passes 324 tests outside the checkout; all 46 modules, six owner assets and the
+typing marker match source exactly. The Python boundary checker passes 212 imports.
+See [combined artifact evidence](evidence/python-contracts-iteration14-combined.json).
+This combined validation supersedes the original 320-test wheel for publication;
+complete public interface and protected admission readiness remain open.
