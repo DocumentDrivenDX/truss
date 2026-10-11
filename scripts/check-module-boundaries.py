@@ -13,6 +13,7 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_native_source_census': {'dataclasses','hashlib','re','struct','truss._native_pg8000','truss._native_arbitration','truss._native_result_custody','truss._native_driver_profile','truss._native_deadline'},
     '_native_operation_ordinals': {'truss._native_catalog_request','truss._native_catalog_capture','truss.preparation','truss._native_string_request','dataclasses','truss._operation_ordinal','truss._native_pg8000','truss._native_adoption','truss._native_admission_request','truss._native_admission_capture','truss._native_result_custody','truss._native_deadline','truss._native_driver_profile','pg8000.core'},
     '_startup_custody': {'dataclasses','threading','importlib.metadata','io','socket','pg8000','truss._native_driver_profile','truss._native_deadline'},
     '_native_bootstrap': {'dataclasses', 'threading', 'importlib.metadata', 'io', 'socket', 'pg8000', 'truss._native_pg8000', 'truss._host_control_custody', 'truss._native_result_custody', 'truss._native_deadline', 'truss._startup_custody','truss._native_driver_profile'},

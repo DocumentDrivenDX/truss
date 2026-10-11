@@ -1,0 +1,35 @@
+{
+  "status": "failed",
+  "observations": [
+    {
+      "id": "native-engine",
+      "expected": [
+        [
+          "160015"
+        ]
+      ],
+      "observed": [
+        [
+          "160015"
+        ]
+      ]
+    },
+    {
+      "id": "baseline:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "baseline:prepared",
+      "expected": true,
+      "observed": true
+    }
+  ],
+  "captures": [],
+  "error": "Original ingress transport required"
+}

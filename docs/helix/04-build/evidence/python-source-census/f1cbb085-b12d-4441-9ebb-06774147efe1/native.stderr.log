@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-e68tc8nk/worker.py", line 71, in <module>
+    baseline=capture('baseline');check('baseline:greater-than-default-text-wire',True,len(baseline)>1048576)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-e68tc8nk/worker.py", line 29, in capture
+    session=service.bind(prepared.attempt);gate=NativeSourceCensusCapture(session,source)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-e68tc8nk/modules/truss/_native_source_census.py", line 63, in __init__
+    super().__init__(session,CENSUS_LIMITS)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-e68tc8nk/modules/truss/_native_result_custody.py", line 65, in __init__
+    self.ingress_deadline = (NativeIngressDeadline(self, session.deadline)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-e68tc8nk/modules/truss/_native_ingress_deadline.py", line 23, in __init__
+    raise NativeBoundaryRefusal('Original ingress transport required')
+truss._native_pg8000.NativeBoundaryRefusal: Original ingress transport required
