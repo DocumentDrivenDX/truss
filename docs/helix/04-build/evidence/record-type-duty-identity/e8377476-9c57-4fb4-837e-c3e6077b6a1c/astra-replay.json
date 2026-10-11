@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "method": "Independent read-only source/preimage/hash audit and fresh-context replay of every exact retained SMT string; producer not executed",
+  "proofSha256": "cd05673f874bafe5aaf60f8c33f01e1b6ae7909c222f4f1133aa8237701a8360",
+  "sourcePins": 4,
+  "allCurrentSourcesAndPreimagesMatch": true,
+  "z3Version": "4.15.4",
+  "queryCount": 10,
+  "unsat": 6,
+  "sat": 4,
+  "results": [
+    {
+      "name": "equal coordinates cannot split duty identity",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smtSha256": "ace4c02648b87075ae3612fe5fb9e8e18724cf8ad511e023321ccce2c1e59ac6",
+      "freshContext": true,
+      "witness": null
+    },
+    {
+      "name": "distinct qualified occurrence cannot collapse duty identity",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smtSha256": "9c23c98c2582cc0f26732a1d5bcc4c60b931090c30c0e2710f66996de3f93820",
+      "freshContext": true,
+      "witness": null
+    },
+    {
+      "name": "protocol difference with equal occurrence remains one duty",
+      "expected": "sat",
+      "observed": "sat",
+      "smtSha256": "925faed2df721f775f69e3d7dfc0265a93500721cf9732f7543522e1e2727e90",
+      "freshContext": true,
+      "witness": "[protocol_a = \"exact_current_receipt\",\n b_profile = \"truss-record-type-rule-family-candidate/0.1.0\",\n a_field = \"v\",\n a_digest = \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n b_field = \"v\",\n b_document = \"journal-doc\",\n b_family = \"record_type_declaration\",\n b_revision = \"r1\",\n b_digest = \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n a_family = \"record_type_declaration\",\n a_pointer = \"/modules/0/elements/0/references/1\",\n b_module = \"m\",\n a_module = \"m\",\n protocol_b = \"transition_journal\",\n b_pointer = \"/modules/0/elements/0/references/1\",\n a_document = \"journal-doc\",\n a_revision = \"r1\",\n a_profile = \"truss-record-type-rule-family-candidate/0.1.0\"]"
+    },
+    {
+      "name": "different qualified Field module remains a distinguishable duty",
+      "expected": "sat",
+      "observed": "sat",
+      "smtSha256": "ccfa00901551ea3de3889f94db063df27321b672b9b2a1767467ed854156a47e",
+      "freshContext": true,
+      "witness": "[b_profile = \"truss-record-type-rule-family-candidate/0.1.0\",\n a_field = \"v\",\n a_digest = \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n b_field = \"v\",\n b_document = \"journal-doc\",\n b_family = \"record_type_declaration\",\n b_revision = \"r1\",\n b_digest = \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n a_family = \"record_type_declaration\",\n a_pointer = \"/modules/0/elements/0/references/1\",\n b_module = \"other\",\n a_module = \"m\",\n b_pointer = \"/modules/0/elements/0/references/1\",\n a_document = \"journal-doc\",\n a_revision = \"r1\",\n a_profile = \"truss-record-type-rule-family-candidate/0.1.0\"]"
+    },
+    {
+      "name": "configured unavailable observation cannot allocate",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smtSha256": "8968244706b2eadfb34925fbb2262d1deac26c3bb2c913dac3d6c5a43a1048b3",
+      "freshContext": true,
+      "witness": null
+    },
+    {
+      "name": "configured mismatched meaning cannot allocate",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smtSha256": "d01ec27f28d2746dae40fd7e7f9515fe1bc76d952be8009c3c41bdbc500619f9",
+      "freshContext": true,
+      "witness": null
+    },
+    {
+      "name": "unissued receipt cannot allocate",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smtSha256": "3763ada49967f5c7d9965528eef6c100c6792790191608301cd655ab9ffb86c8",
+      "freshContext": true,
+      "witness": null
+    },
+    {
+      "name": "duplicate receipt-backed occurrence cannot allocate",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smtSha256": "48cdc857c52674923dd1ad1138363b4026dc48831f63ee268cdc47a8d0b906ac",
+      "freshContext": true,
+      "witness": null
+    },
+    {
+      "name": "no generic owner may retain explicitly unavailable correspondence",
+      "expected": "sat",
+      "observed": "sat",
+      "smtSha256": "fe9f6f39016fc0e4bf008bb54a41af887efa1aed473b9884f6fa4a292d4286cf",
+      "freshContext": true,
+      "witness": "[configured = False,\n duplicate = False,\n issued = True,\n observed = False,\n meaning = False]"
+    },
+    {
+      "name": "issued matching nonduplicate occurrence may allocate",
+      "expected": "sat",
+      "observed": "sat",
+      "smtSha256": "b6ed1dadc10de9f28f261164307f24d1cde76432939903865782ac260c3049e3",
+      "freshContext": true,
+      "witness": "[configured = True,\n duplicate = False,\n issued = True,\n observed = True,\n meaning = True]"
+    }
+  ],
+  "scope": "Constructor injectivity and stated Boolean gate sanity only, conditional on faithful coordinates and actual issued/correspondence/duplicate facts. SAT tuple populations are algebraic, not proofs that both tuples can arise at those positions in one admitted document. No guard-erasure necessity, actual JS/SHA/native refinement, nested-value semantics or issuer authentication proof.",
+  "acceptancePromoted": false
+}

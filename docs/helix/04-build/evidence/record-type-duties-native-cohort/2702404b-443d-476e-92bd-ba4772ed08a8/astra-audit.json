@@ -1,0 +1,97 @@
+{
+  "status": "passed",
+  "method": "Independent read-only exact source/ZIP/native receipt/log/custody audit; no native execution",
+  "receiptSha256": "05f091f5496549d1ab1bfeff26167bae7ec6beceeca4ae6839277aacdc70ab14",
+  "nativeReceiptSha256": "b7ca70c88ca073c5599103a21a29cbfab42bff0b6d2c7a4fcee9b6082c39752b",
+  "nativeLogSha256": "ebad6b0dc91abf838692ff1208de5718b7a46ae4bef053ed2c72a43bb6c99bce",
+  "archiveSha256": "c05aee28f9b8e10c767c5f8820d430f483819025d03b11880799e52d0d6061ec",
+  "sourcePins": 821,
+  "includedHostPins": 733,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentInputInventoryMatches": true,
+  "uniqueNativeChecks": 225,
+  "allHistoricalChecksRetained": 222,
+  "newDeclarationDutyChecks": [
+    "native exact receipt allocates one original declaration duty without value promotion",
+    "native journal allocates two qualified original declaration occurrences without enforcement",
+    "native overlapping receipt protocols refuse duplicate declaration duties before SQL"
+  ],
+  "familyChecks": [
+    {
+      "composition": "typeReceiptComposition",
+      "ruleCount": 1,
+      "manifestSha256": "2f3409acf0d72010a028bfc1c86b29e106564985833b1c972781a6d00b59ac1d",
+      "protocol": "exact_current_receipt",
+      "qualifiedOccurrences": [
+        {
+          "sourceKind": "umf_document",
+          "documentId": "type-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "70bb78c93125a39292748d16eedf28018ce4d186b3b9dc26c82f361f5b325a19",
+          "owner": {
+            "module": "m",
+            "element": "v"
+          },
+          "sourcePointer": "/modules/0/elements/0/references/1"
+        }
+      ]
+    },
+    {
+      "composition": "typeJournalComposition",
+      "ruleCount": 2,
+      "manifestSha256": "2f3409acf0d72010a028bfc1c86b29e106564985833b1c972781a6d00b59ac1d",
+      "protocol": "transition_journal",
+      "qualifiedOccurrences": [
+        {
+          "sourceKind": "umf_document",
+          "documentId": "journal-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+          "owner": {
+            "module": "m",
+            "element": "v"
+          },
+          "sourcePointer": "/modules/0/elements/0/references/1"
+        },
+        {
+          "sourceKind": "umf_document",
+          "documentId": "journal-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+          "owner": {
+            "module": "m",
+            "element": "w"
+          },
+          "sourcePointer": "/modules/0/elements/1/references/0"
+        }
+      ]
+    }
+  ],
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "journalOwnerProfile": {
+    "identity": "umf-record-type-journal-inspection",
+    "version": "e71613d9c76bf7a4bf5476bf72ab4fd99059ff17",
+    "sha256": "88d68b176a3d2a5f8877332bbe332c116b87c57642f21f69932133599f521783"
+  },
+  "originalRequestSha256": "72ffaf8cc1992cf7dd1f4ffc976e289e390978fcc5e436e90eb1a8b0a13dc1dc",
+  "originalJournalSha256": "f073afdf0794e77809e6cd0e32f166fef9453d11c14d9febf6b001d8cb4a4155",
+  "originalSourceSha256": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+  "ownerEvidenceSha256": "16ce94e3142cf053a20cdf43440421baa4cfa8a41495b185a6247892d2795103",
+  "nativeObservation": {
+    "writerXid": "870",
+    "operationOrdinal": "0",
+    "effectGeneration": "7"
+  },
+  "exactJournalSourceMeaningAndPointerJoin": true,
+  "cleanup": {
+    "containerId": "e66fbb4995234e469bdbb8ae35650f14b5eed2d39646815f992f5aff58bf146d",
+    "exitCode": 0,
+    "stdout": "e66fbb4995234e469bdbb8ae35650f14b5eed2d39646815f992f5aff58bf146d",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "scope": "Private declaration-duty identity/parameter/byte correspondence composed with actual catalog source staging and native report/cut observations; no native duty persistence/type enforcement, authenticated issuer or accepted publication/finalizer authority.",
+  "acceptancePromoted": false,
+  "declarationDutyAllocationCorrespondence": true
+}

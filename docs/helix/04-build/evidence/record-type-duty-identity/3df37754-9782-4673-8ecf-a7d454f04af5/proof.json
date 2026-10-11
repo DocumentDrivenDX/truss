@@ -1,0 +1,114 @@
+{
+  "status": "passed",
+  "z3Version": "4.15.4",
+  "queries": [
+    {
+      "name": "equal coordinates cannot split duty identity",
+      "expected": "unsat",
+      "result": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-datatypes ((DeclarationDuty 0)) (((duty (profile String) (document String) (revision String) (digest String) (module String) (field String) (pointer String) (family String)))))\n(declare-fun b_family () String)\n(declare-fun b_pointer () String)\n(declare-fun b_field () String)\n(declare-fun b_module () String)\n(declare-fun b_digest () String)\n(declare-fun b_revision () String)\n(declare-fun b_document () String)\n(declare-fun b_profile () String)\n(declare-fun a_family () String)\n(declare-fun a_pointer () String)\n(declare-fun a_field () String)\n(declare-fun a_module () String)\n(declare-fun a_digest () String)\n(declare-fun a_revision () String)\n(declare-fun a_document () String)\n(declare-fun a_profile () String)\n(assert\n (let ((?x22 (duty b_profile b_document b_revision b_digest b_module b_field b_pointer b_family)))\n(let ((?x21 (duty a_profile a_document a_revision a_digest a_module a_field a_pointer a_family)))\n(let (($x30 (= a_family b_family)))\n(let (($x29 (= a_pointer b_pointer)))\n(let (($x28 (= a_field b_field)))\n(let (($x27 (= a_module b_module)))\n(let (($x26 (= a_digest b_digest)))\n(let (($x25 (= a_revision b_revision)))\n(let (($x24 (= a_document b_document)))\n(let (($x23 (= a_profile b_profile)))\n(let (($x31 (and $x23 $x24 $x25 $x26 $x27 $x28 $x29 $x30)))\n(and $x31 (and (distinct ?x21 ?x22) true))))))))))))))\n(check-sat)\n",
+      "witness": null
+    },
+    {
+      "name": "distinct qualified occurrence cannot collapse duty identity",
+      "expected": "unsat",
+      "result": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-datatypes ((DeclarationDuty 0)) (((duty (profile String) (document String) (revision String) (digest String) (module String) (field String) (pointer String) (family String)))))\n(declare-fun b_family () String)\n(declare-fun b_pointer () String)\n(declare-fun b_field () String)\n(declare-fun b_module () String)\n(declare-fun b_digest () String)\n(declare-fun b_revision () String)\n(declare-fun b_document () String)\n(declare-fun b_profile () String)\n(declare-fun a_family () String)\n(declare-fun a_pointer () String)\n(declare-fun a_field () String)\n(declare-fun a_module () String)\n(declare-fun a_digest () String)\n(declare-fun a_revision () String)\n(declare-fun a_document () String)\n(declare-fun a_profile () String)\n(assert\n (let ((?x22 (duty b_profile b_document b_revision b_digest b_module b_field b_pointer b_family)))\n(let ((?x21 (duty a_profile a_document a_revision a_digest a_module a_field a_pointer a_family)))\n(let (($x30 (= a_family b_family)))\n(let (($x29 (= a_pointer b_pointer)))\n(let (($x28 (= a_field b_field)))\n(let (($x27 (= a_module b_module)))\n(let (($x26 (= a_digest b_digest)))\n(let (($x25 (= a_revision b_revision)))\n(let (($x24 (= a_document b_document)))\n(let (($x23 (= a_profile b_profile)))\n(let (($x31 (and $x23 $x24 $x25 $x26 $x27 $x28 $x29 $x30)))\n(let (($x63 (not $x31)))\n(and $x63 (= ?x21 ?x22)))))))))))))))\n(check-sat)\n",
+      "witness": null
+    },
+    {
+      "name": "protocol difference with equal occurrence remains one duty",
+      "expected": "sat",
+      "result": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-datatypes ((DeclarationDuty 0)) (((duty (profile String) (document String) (revision String) (digest String) (module String) (field String) (pointer String) (family String)))))\n(declare-fun b_family () String)\n(declare-fun b_pointer () String)\n(declare-fun b_field () String)\n(declare-fun b_module () String)\n(declare-fun b_digest () String)\n(declare-fun b_revision () String)\n(declare-fun b_document () String)\n(declare-fun b_profile () String)\n(declare-fun a_family () String)\n(declare-fun a_pointer () String)\n(declare-fun a_field () String)\n(declare-fun a_module () String)\n(declare-fun a_digest () String)\n(declare-fun a_revision () String)\n(declare-fun a_document () String)\n(declare-fun a_profile () String)\n(declare-fun protocol_b () String)\n(declare-fun protocol_a () String)\n(assert\n (let ((?x22 (duty b_profile b_document b_revision b_digest b_module b_field b_pointer b_family)))\n(let ((?x21 (duty a_profile a_document a_revision a_digest a_module a_field a_pointer a_family)))\n(let (($x30 (= a_family b_family)))\n(let (($x29 (= a_pointer b_pointer)))\n(let (($x28 (= a_field b_field)))\n(let (($x27 (= a_module b_module)))\n(let (($x26 (= a_digest b_digest)))\n(let (($x25 (= a_revision b_revision)))\n(let (($x24 (= a_document b_document)))\n(let (($x23 (= a_profile b_profile)))\n(let (($x31 (and $x23 $x24 $x25 $x26 $x27 $x28 $x29 $x30)))\n(and $x31 (and (distinct protocol_a protocol_b) true) (= ?x21 ?x22))))))))))))))\n(check-sat)\n",
+      "witness": "[protocol_a = \"!0!\",\n protocol_b = \"!1!\",\n b_field = \"\",\n a_field = \"\",\n b_digest = \"\",\n a_digest = \"\",\n b_module = \"\",\n a_module = \"\",\n b_family = \"\",\n a_family = \"\",\n b_document = \"\",\n a_document = \"\",\n b_pointer = \"\",\n a_pointer = \"\",\n b_revision = \"\",\n a_revision = \"\",\n b_profile = \"\",\n a_profile = \"\"]"
+    },
+    {
+      "name": "different qualified Field module remains a distinguishable duty",
+      "expected": "sat",
+      "result": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-datatypes ((DeclarationDuty 0)) (((duty (profile String) (document String) (revision String) (digest String) (module String) (field String) (pointer String) (family String)))))\n(declare-fun b_family () String)\n(declare-fun b_pointer () String)\n(declare-fun b_field () String)\n(declare-fun b_module () String)\n(declare-fun b_digest () String)\n(declare-fun b_revision () String)\n(declare-fun b_document () String)\n(declare-fun b_profile () String)\n(declare-fun a_family () String)\n(declare-fun a_pointer () String)\n(declare-fun a_field () String)\n(declare-fun a_module () String)\n(declare-fun a_digest () String)\n(declare-fun a_revision () String)\n(declare-fun a_document () String)\n(declare-fun a_profile () String)\n(assert\n (let ((?x22 (duty b_profile b_document b_revision b_digest b_module b_field b_pointer b_family)))\n(let ((?x21 (duty a_profile a_document a_revision a_digest a_module a_field a_pointer a_family)))\n(and (and (distinct a_module b_module) true) (and (distinct ?x21 ?x22) true)))))\n(check-sat)\n",
+      "witness": "[a_module = \"\", b_module = \"A\"]"
+    },
+    {
+      "name": "configured unavailable observation cannot allocate",
+      "expected": "unsat",
+      "result": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun observed () Bool)\n(declare-fun configured () Bool)\n(declare-fun meaning () Bool)\n(declare-fun duplicate () Bool)\n(declare-fun issued () Bool)\n(assert\n (let (($x48 (not observed)))\n(let (($x40 (or (not configured) (and observed meaning))))\n(let (($x37 (not duplicate)))\n(let (($x41 (and issued $x37 $x40)))\n(and $x41 configured $x48))))))\n(check-sat)\n",
+      "witness": null
+    },
+    {
+      "name": "configured mismatched meaning cannot allocate",
+      "expected": "unsat",
+      "result": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun meaning () Bool)\n(declare-fun configured () Bool)\n(declare-fun observed () Bool)\n(declare-fun duplicate () Bool)\n(declare-fun issued () Bool)\n(assert\n (let (($x55 (not meaning)))\n(let (($x40 (or (not configured) (and observed meaning))))\n(let (($x37 (not duplicate)))\n(let (($x41 (and issued $x37 $x40)))\n(and $x41 configured $x55))))))\n(check-sat)\n",
+      "witness": null
+    },
+    {
+      "name": "unissued receipt cannot allocate",
+      "expected": "unsat",
+      "result": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun issued () Bool)\n(declare-fun meaning () Bool)\n(declare-fun observed () Bool)\n(declare-fun configured () Bool)\n(declare-fun duplicate () Bool)\n(assert\n (let (($x41 (and issued (not duplicate) (or (not configured) (and observed meaning)))))\n(and $x41 (not issued))))\n(check-sat)\n",
+      "witness": null
+    },
+    {
+      "name": "duplicate receipt-backed occurrence cannot allocate",
+      "expected": "unsat",
+      "result": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun duplicate () Bool)\n(declare-fun meaning () Bool)\n(declare-fun observed () Bool)\n(declare-fun configured () Bool)\n(declare-fun issued () Bool)\n(assert\n (let (($x41 (and issued (not duplicate) (or (not configured) (and observed meaning)))))\n(and $x41 duplicate)))\n(check-sat)\n",
+      "witness": null
+    },
+    {
+      "name": "no generic owner may retain explicitly unavailable correspondence",
+      "expected": "sat",
+      "result": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun observed () Bool)\n(declare-fun configured () Bool)\n(declare-fun meaning () Bool)\n(declare-fun duplicate () Bool)\n(declare-fun issued () Bool)\n(assert\n (let (($x58 (not observed)))\n(let (($x38 (not configured)))\n(let (($x40 (or $x38 (and observed meaning))))\n(let (($x37 (not duplicate)))\n(let (($x41 (and issued $x37 $x40)))\n(and $x41 $x38 $x58)))))))\n(check-sat)\n",
+      "witness": "[configured = False,\n duplicate = False,\n issued = True,\n observed = False,\n meaning = False]"
+    },
+    {
+      "name": "issued matching nonduplicate occurrence may allocate",
+      "expected": "sat",
+      "result": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun duplicate () Bool)\n(declare-fun issued () Bool)\n(declare-fun meaning () Bool)\n(declare-fun observed () Bool)\n(declare-fun configured () Bool)\n(assert\n (let (($x37 (not duplicate)))\n(let (($x40 (or (not configured) (and observed meaning))))\n(let (($x41 (and issued $x37 $x40)))\n(and $x41 configured observed meaning issued $x37)))))\n(check-sat)\n",
+      "witness": "[configured = True,\n duplicate = False,\n issued = True,\n observed = True,\n meaning = True]"
+    }
+  ],
+  "sourcePreimages": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/prove-record-type-duty-identity.py",
+      "archive": "0-prove-record-type-duty-identity.py",
+      "sha256": "5724ff37fb6a3580c1f26092768cac7c6758bbfff73750e5b150bc1c451262da"
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/umf-bun/src/catalog-record-type-rule-families.ts",
+      "archive": "1-catalog-record-type-rule-families.ts",
+      "sha256": "7cacf010800021101d198ef7f5e56a7d1d82475069876c77d5692d14371d5c58"
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/umf-bun/src/catalog-report-preparation.ts",
+      "archive": "2-catalog-report-preparation.ts",
+      "sha256": "d6c8167d7f5557931b8d80e9d2a6ef091db38f2ca2e0636a9bb473ead2d8c2a9"
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/tests/catalog-type-journals.test.ts",
+      "archive": "3-catalog-type-journals.test.ts",
+      "sha256": "ec644cc6aefbbbfd99be332544bcfdb0e3a1d5a595c9216f5e9c8cbf393cbd14"
+    }
+  ],
+  "scope": "Conditional tuple injectivity and Boolean admission-gate algebra only",
+  "premises": [
+    "Actual issued collections supply original coordinates and complete meaning; tested independently, not proved here",
+    "Strings faithfully stand for original profile/doc/revision/digest/qualified Field/pointer/family; no hash collision proof",
+    "Protocol is evidence outside duty identity",
+    "Duplicate detection and configured correspondence map to the displayed Boolean gate; no code correspondence theorem"
+  ],
+  "excluded": [
+    "JavaScript execution",
+    "JSON parsing",
+    "issuer authentication",
+    "nested record-valued literals",
+    "native data enforcement",
+    "unbounded runtime resource analysis"
+  ],
+  "acceptancePromoted": false
+}

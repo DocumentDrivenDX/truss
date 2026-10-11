@@ -72,3 +72,48 @@ test('journal issuance binds exact original preparation before private report SQ
  for(const invalid of [{...c},false,0,'',null])await expect(collectCatalogReportPreparation(connection,s.prepared,'1',declarations,fields,undefined,undefined,undefined,undefined,invalid as any)).rejects.toThrow('collection custody');await expect(collectCatalogReportPreparation(connection,other,'1',declarations,fields,undefined,undefined,undefined,undefined,c)).rejects.toThrow('collection custody');expect(calls).toBe(0);
  const report=await collectCatalogReportPreparation(connection,s.prepared,'1',declarations,fields,undefined,undefined,undefined,undefined,c);expect(report.typeJournals).toBe(c);expect(report.typeReceipts).toBeNull();const noRecordType=(entries:readonly {ruleName:string}[])=>entries.every(e=>e.ruleName!=='core.recordType');expect(noRecordType(report.coreAssertionIdentities.entries)).toBe(true);expect(noRecordType([...report.coreAssertionIdentities.entries,{ruleName:'core.recordType'}])).toBe(false);expect(report.coreAssertionIdentities.complete).toBe(false);expect(calls).toBeGreaterThan(0);
 });
+
+import {collectCatalogAssertionObservations} from '../packages/umf-bun/src/catalog-assertion-observations';
+import {collectCatalogRecordTypeRuleFamilies,requireOriginalCatalogRecordTypeRuleFamilies} from '../packages/umf-bun/src/catalog-record-type-rule-families';
+import {loadUmfReferenceLinksProducer} from '../packages/umf-bun/src/index';
+const linksOwner=await loadUmfReferenceLinksProducer(process.env.TRUSS_UMF_REFERENCE_LINKS_PRODUCER!);
+function observations(s:ReturnType<typeof setup>,withLinks=true){return collectCatalogAssertionObservations(s.prepared,declarations,fields,undefined,undefined,withLinks?linksOwner:undefined)}
+test('record-type duties conserve exact qualified occurrences without value or enforcement promotion',()=>{
+ const s=setup(),start=author.declareCoreElementKind(s.base,{module:'m',element:'v'},'field'),between=author.declareCoreElementKind(s.first.target,{module:'m',element:'w'},'field');
+ const journal=collectCatalogTypeJournals(s.prepared,owner,changedArtifact(s,{...s.journal,events:[start,s.first,between,s.second]}));
+ const candidate=collectCatalogRecordTypeRuleFamilies(s.prepared,observations(s),undefined,journal);
+ expect(candidate.rules.length).toBe(2);expect(candidate.rules.map(r=>r.parameters.record)).toEqual([{module:'other',element:'R'},{module:'m',element:'R'}]);
+ expect(candidate.rules.map(r=>(r.carrier as any).eventIndex)).toEqual([1,3]);expect(candidate.linksWithoutReceipt).toEqual([]);
+ for(const [i,r] of candidate.rules.entries()){
+  expect(r.identity.family).toBe('record_type_declaration');expect(r.identity.occurrence.owner).toEqual(journal.entries[i]!.identity);expect(r.identity.occurrence.definitionPin).toBe(s.prepared.original.input.documents[0]!.artifact.sha256);
+  expect(r.identity.occurrence.sourcePointer).toBe(journal.entries[i]!.sourcePointer);expect(r.originalReferenceBytesBase64).toBe(journal.entries[i]!.originalReferenceBytesBase64);expect(r.ownerEvidence).toBe(journal.entries[i]!.ownerEvidence);
+  expect(r).toMatchObject({protocol:'transition_journal',receiptConsistency:'verified',valueSemantics:'unavailable',issuerAuthority:'unverified',enforcement:'none',interpretationQualified:false});
+ }
+ expect(candidate.complete).toBe(false);expect(candidate.genericLinkOwnerAvailability).toBe('configured');expect(()=>(candidate.rules as any).reverse()).toThrow();
+ requireOriginalCatalogRecordTypeRuleFamilies(s.prepared,candidate);expect(()=>requireOriginalCatalogRecordTypeRuleFamilies(s.prepared,{...candidate})).toThrow('custody');expect(()=>requireOriginalCatalogRecordTypeRuleFamilies(preparation.prepare(packet(s.input)),candidate)).toThrow('custody');
+ const unavailable=collectCatalogRecordTypeRuleFamilies(s.prepared,observations(s,false),undefined,journal);expect(unavailable.rules.length).toBe(2);expect(unavailable.genericLinkOwnerAvailability).toBe('unavailable');expect(unavailable.complete).toBe(false);
+});
+test('receipt protocol is evidence: equal declaration identity and duplicate occurrence refusal',async()=>{
+ const s=setup(),receipt=collectCatalogTypeReceipts(s.prepared,exactOwner,packet({version:'0.1.0',receipts:[{documentId:'journal-doc',documentRevision:'r1',field:{module:'m',element:'w'},artifact:artifact('last-receipt',packet(s.second))}]}));
+ const journal=collectCatalogTypeJournals(s.prepared,owner,s.wire),observed=observations(s);
+ const exact=collectCatalogRecordTypeRuleFamilies(s.prepared,observed,receipt),history=collectCatalogRecordTypeRuleFamilies(s.prepared,observed,undefined,journal);
+ expect(exact.rules[0]!.identity).toEqual(history.rules[1]!.identity);expect(exact.rules[0]!.protocol).toBe('exact_current_receipt');expect(history.rules[1]!.protocol).toBe('transition_journal');
+ expect(()=>collectCatalogRecordTypeRuleFamilies(s.prepared,observed,receipt,journal)).toThrow('Duplicate original');
+ let sqlCalls=0;const noSql={unsafe:async()=>{sqlCalls++;throw Error('SQL must not run')}};await expect(collectCatalogReportPreparation(noSql,s.prepared,'1',declarations,fields,undefined,undefined,linksOwner,receipt,journal)).rejects.toThrow('Duplicate original');expect(sqlCalls).toBe(0);
+ for(const invalid of [null,false,0,'',{...receipt}])expect(()=>collectCatalogRecordTypeRuleFamilies(s.prepared,observed,invalid as any)).toThrow('custody');
+ for(const invalid of [null,false,0,'',{...journal}])expect(()=>collectCatalogRecordTypeRuleFamilies(s.prepared,observed,undefined,invalid as any)).toThrow('custody');
+ const bare=collectCatalogRecordTypeRuleFamilies(s.prepared,observed);expect(bare.rules).toEqual([]);expect(bare.linksWithoutReceipt.length).toBe(2);expect(bare.linksWithoutReceipt.map(e=>(e.originalMeaning as any).typeAssertion)).toEqual(['unverified','unverified']);
+ const event=author.declareCoreElementKind(s.second.target,{module:'m',element:'w'},'field');const imported=collectCatalogTypeJournals(s.prepared,owner,changedArtifact(s,{version:'0.1.0',base:s.second.target,events:[event]}));
+ const noAuthorship=collectCatalogRecordTypeRuleFamilies(s.prepared,observed,undefined,imported);expect(noAuthorship.rules).toEqual([]);expect(noAuthorship.linksWithoutReceipt.length).toBe(2);
+});
+
+ test('configured generic owner must observe every receipt-backed declaration before SQL',async()=>{
+ const s=setup(),journal=collectCatalogTypeJournals(s.prepared,owner,s.wire),temp=await mkdtemp(join(tmpdir(),'truss-record-type-links-refusal-'));
+ try{
+  const script=`import * as base from ${JSON.stringify(resolve(process.env.TRUSS_UMF_REFERENCE_LINKS_PRODUCER!,'producer.js'))}; export function inspectCoreReferenceLinks(model,identity){if(identity.element==='v')throw Error('unavailable typed Field');return base.inspectCoreReferenceLinks(model,identity)}`;
+  await writeFile(join(temp,'producer.js'),script);await writeFile(join(temp,'producer-manifest.json'),JSON.stringify({revision:linksOwner.sourceRevision,producerMode:'reference-links',bundleSha256:hash(script)}));
+  const unavailable=await loadUmfReferenceLinksProducer(temp),observed=collectCatalogAssertionObservations(s.prepared,declarations,fields,undefined,undefined,unavailable);
+  expect(()=>collectCatalogRecordTypeRuleFamilies(s.prepared,observed,undefined,journal)).toThrow('correspondence required');
+  let calls=0;await expect(collectCatalogReportPreparation({unsafe:async()=>{calls++;throw Error('SQL must not run')}},s.prepared,'1',declarations,fields,undefined,undefined,unavailable,undefined,journal)).rejects.toThrow('correspondence required');expect(calls).toBe(0);
+ }finally{await rm(temp,{recursive:true,force:true})}
+});
