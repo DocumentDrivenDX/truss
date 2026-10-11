@@ -13,6 +13,7 @@ from ._catalog_owner_evidence import require_catalog_owner_evidence
 from ._catalog_support import evaluate_catalog_support
 from ._catalog_report_assembly import assemble_catalog_report_sources
 from ._catalog_report_semantics import canonical_numeric_free, compose_catalog_report_semantics
+from ._native_catalog_metadata import validate_configured_metadata
 
 MISSING_FIELDS=('interfaceVersion','reportProfile','originalExecution','umf','assertions','extensions')
 
@@ -23,7 +24,7 @@ class CapturedReportSources:
     assembly_bytes: bytes
 
 
-def compose_captured_catalog_sources(encoded, result):
+def compose_captured_catalog_sources(encoded, result, original_context=None):
     prepared=encoded.original_input.prepared
     _require_original_preparation(prepared)
     sources=result['reportSources']
@@ -51,8 +52,17 @@ def compose_captured_catalog_sources(encoded, result):
         'complete_feed_administration_receipt','complete_feed_seed_attempt',
         'complete_feed_seed_artifact','key_lifecycle_history','key_migration_receipt',
         'request_receipt_route_guard','request_receipt','request_receipt_protection','schema_change']
-    if scope!=expected and scope!=expected+['source_epoch_registry','source_epoch_current']:
-        raise ValueError('Selected complete empty graph scope required')
+    if encoded.original_configuration is None:
+        if scope!=expected and scope!=expected+['source_epoch_registry','source_epoch_current']:
+            raise ValueError('Selected complete empty graph scope required')
+    else:
+        if (type(scope) is not dict or set(scope)!={'interfaceVersion','businessRelations','metadataUtf8Hex'}
+                or scope['interfaceVersion']!='truss-configured-empty-graph/0.1'
+                or scope['businessRelations']!=expected or type(scope['metadataUtf8Hex']) is not str):
+            raise ValueError('Selected configured empty graph scope required')
+        from ._native_catalog_metadata import _hex
+        validate_configured_metadata(encoded,original_context,result['writerXid'],result['ordinal'],
+                                    _hex(scope['metadataUtf8Hex'],32768))
     cut=(end['writer_xid'],end['operation_ordinal'],end['effect_generation'])
     validate_lifecycle(sources['lifecycle'],prepared,result['revision'],cut,encoded.lifecycle_policy)
     validate_indexes(sources['indexDeclarations'],prepared,result['revision'],cut,encoded.index_policy)

@@ -104,7 +104,7 @@ class NativeCatalogCapture(NativeAdmissionCapture):
         # Preserve original native sources even if Python composition refuses.
         self.original_observation=NativeCatalogStageObservation(call,writer,ordinal,context,original)
         try:
-            snapshot=compose_captured_catalog_sources(self.encoded,result)
+            snapshot=compose_captured_catalog_sources(self.encoded,result,context)
         except ValueError as error:
             raise NativeBoundaryRefusal('Original report source correspondence required') from error
         if type(snapshot) is not CapturedReportSources:

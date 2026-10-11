@@ -53,8 +53,16 @@ now executes original UMF preparation → retained source envelope → actual co
 complete marker/epoch/configuration/release observations and rejects changed
 metadata, duplicate archive membership and a second asserted origin. The legacy
 context 0.2 route remains separate. This is administrative component evidence;
-Python configured dispatch, complete native report construction and accepted
-publication are still unfinished. The metadata response limit is checked after
+The [Python configured dispatch checkpoint](evidence/design-audit/python-configured-catalog-dispatch.json)
+now connects that source envelope to one original adopted-host call: epoch lock,
+prestate capture, actual configuration admission, bounded context and provisional
+staging. Python validates the retained selection, native context, capsule digest,
+complete captured metadata row correspondence and sole exact packaged release.
+Native metadata rendering uses hexadecimal bytea and UTC; original raw response
+bytes survive composition or publication failure, and cleanup remains usable
+without redispatch. A 4,096-byte context succeeds; one further evidence byte
+refuses before catalog DML and rolls back admission. Complete native report
+construction and accepted publication are still unfinished. The metadata response limit is checked after
 materialization and does not establish a complete native allocation budget.
 Continue into report construction and the installer/provider composition below;
 this checkpoint does not satisfy the public workflow milestone.

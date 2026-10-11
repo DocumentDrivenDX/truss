@@ -4,14 +4,14 @@ from unittest.mock import patch
 from test_native_operation_ordinals import ReservedNativeOperationOrdinalTests
 from test_catalog_staging import ROOT, COMPONENTS
 from test_catalog_support import selected
-from truss._native_catalog_request import NativeCatalogStageInput
+from truss._native_catalog_request import NativeCatalogStageInput,ConfiguredCatalogSelection
 from truss._native_catalog_capture import NativeCatalogCapture
 from truss._native_deadline import NativeOperationDeadline
 from truss._native_pg8000 import NativeBoundaryRefusal
 
 
 class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
-    def _prepare_catalog(self, *, bad_response=False, prepared=None):
+    def _prepare_catalog(self, *, bad_response=False, prepared=None, configured=False):
         setup=(ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text()
         for name in COMPONENTS:
             if name!='operation-admission':
@@ -27,6 +27,30 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
         try:
             fixture.run('DROP SCHEMA IF EXISTS truss CASCADE')
             fixture.run(setup)
+            if configured:
+                import hashlib
+                fixture.run((ROOT/'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql').read_text())
+                for name in ('source-epoch-lock','issued-operation-admission/operation-configuration-context-admission',
+                    'catalog-epoch-context','operation-configuration-current','catalog-admission-configuration',
+                    'canonical-string-bytes','canonical-tree-bytes','catalog-report/source-candidate',
+                    'catalog-report/release-selection','catalog-report/configured-metadata','catalog-stage-configured'):
+                    fixture.run((ROOT/f'packages/postgresql/native/{name}.sql').read_text())
+                guard=(ROOT/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql').read_text()
+                fixture.run(guard.split('INSERT INTO truss.row_home_operation')[0])
+                fixture.run("INSERT INTO truss.source_epoch_current VALUES(1,'guard-fixture','guard-fixture-epoch')")
+                policy=(ROOT/'packages/python/src/truss/_profiles/catalog-report-release.json').read_bytes()
+                configuration_profile=(ROOT/'packages/python/src/truss/_profiles/catalog-report-configuration.json').read_bytes()
+                configuration=json.dumps({'interfaceVersion':'truss-catalog-report-configuration/0.1',
+                    'catalogReportRelease':{'artifactIdentity':'truss.catalog-report-release/0.1.0',
+                    'sha256':hashlib.sha256(policy).hexdigest()}}).encode()
+                fixture.run("""INSERT INTO truss.installation_admission(head_id,installation_id_utf8,
+                    source_epoch_utf8,configuration_generation,key_reuse,journal_mode,configuration_bytes,
+                    selected_binding_bytes,installed_inventory_bytes) VALUES(1,convert_to('guard-fixture','UTF8'),
+                    convert_to('guard-fixture-epoch','UTF8'),7,'forbid','engine',:configuration,
+                    convert_to('binding fixture','UTF8'),convert_to('inventory fixture','UTF8'))""",configuration=configuration)
+                fixture.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
+                    artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
+                    'truss.catalog-report-release/0.1.0',:raw,sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')))""",raw=policy)
         finally:fixture.close()
         setup=''
         if bad_response:
@@ -54,9 +78,38 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
         issued=self.service.issue_operation(session,reserve_controls=True)
         issued.controls.run_control('savepoint')
         original=NativeCatalogStageInput(selected() if prepared is None else prepared,b'{"x-action":"test"}',b'fixture definition',
-            b'fixture obligations',b'fixture group')
+            b'fixture obligations',b'fixture group',
+            ConfiguredCatalogSelection('guard-fixture','guard-fixture-epoch','guard-fixture-incarnation',
+                b'original capture fixture',configuration_profile) if configured else None)
         request=issued.owner.prepare_catalog_stage(issued,original)
         return session,issued,request
+
+    def test_configured_original_host_dispatch_and_cleanup(self):
+        session,issued,request=self._prepare_catalog(configured=True)
+        result=issued.owner.dispatch_catalog_stage_candidate(request)
+        self.assertIs(result.original_call,request.entry.native_call)
+        self.assertEqual(json.loads(result.original_context)['interfaceVersion'],'truss-native-operation-context/0.4')
+        self.assertEqual(json.loads(result.original_report_assembly)['missingReportFields'],
+                         ['reportProfile','originalExecution','assertions'])
+        before=self.boundary.last_call
+        with self.assertRaises(NativeBoundaryRefusal):issued.owner.dispatch_catalog_stage_candidate(request)
+        self.assertIs(self.boundary.last_call,before)
+        self._restore_catalog(session,issued)
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.operation_configuration'),[[0]])
+
+    def test_configured_lost_publication_preserves_original_cleanup(self):
+        session,issued,request=self._prepare_catalog(configured=True)
+        original=NativeCatalogCapture.observe
+        def lost(gate,rows,call,ordinal):
+            original(gate,rows,call,ordinal)
+            raise MemoryError('lost configured publication')
+        with patch.object(NativeCatalogCapture,'observe',lost),self.assertRaises(MemoryError):
+            issued.owner.dispatch_catalog_stage_candidate(request)
+        observed=session.result_custody.original_observation
+        self.assertIs(observed.original_call,request.entry.native_call)
+        self.assertIsNotNone(observed.original_report_source_snapshot)
+        with self.assertRaises(NativeBoundaryRefusal):issued.owner.dispatch_catalog_stage_candidate(request)
+        self._restore_catalog(session,issued)
 
     def _restore_catalog(self,session,issued):
         issued.controls.run_control('rollback_to')

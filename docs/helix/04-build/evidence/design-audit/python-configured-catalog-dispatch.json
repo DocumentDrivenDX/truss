@@ -1,0 +1,56 @@
+{
+  "scope": "provisional_configured_catalog_staging_and_original_response_correspondence_only",
+  "acceptedPublicationQualified": false,
+  "ordinaryPersonAdmissionQualified": false,
+  "publicCatalogCapabilityAvailable": false,
+  "sourceSha256": {
+    "packages/postgresql/native/catalog-stage-configured.sql": "86d8c67f2ebf2cf35805736e4c6b2fa4f94d125bafb9c8506bcc8089c80c8aa9",
+    "packages/postgresql/native/catalog-report/configured-metadata.sql": "56de705d1b0a4c120218eaf043b3688c9383a25e4c1104ceedda46b27d6ccb10",
+    "packages/python/src/truss/_native_catalog_metadata.py": "07e4ae42b19ce475dce6efc747811c347269a2fd93ef097317cf14cfa7b62cbe",
+    "packages/python/src/truss/_native_catalog_capture.py": "276fe65a734b19af4fa6905d21ca14a3d222ba7c846df6c45d6896d5998c77a1",
+    "packages/python/src/truss/_native_catalog_report_sources.py": "4695b746e91b36acc8b5505bf86325cace4bad2c8fafc994319f08e83bf16bda",
+    "packages/python/src/truss/_native_catalog_request.py": "93c87c2605764504e6e160a3180616a219e5e9bbc947f63bcb9c553a7bfd0c82",
+    "packages/python/tests/test_native_catalog_dispatch.py": "c4e76fd96f9a329d464a9573fefe1345868bc1000bfbf19bce17674b7723fd7e",
+    "packages/python/tests/test_configured_catalog_stage.py": "fb9f9003071ab50aefe8b52aabdfa40451ba7e6981817e44f92895bdac630aeb",
+    "packages/python/tests/test_configured_catalog_request.py": "f8f7e2967d1271e08b9c76be3db82319109640b8107dae7c56cab8ef14002a28",
+    "packages/python/src/truss/_profiles/catalog-report-release.json": "2d4ab361c53fba2ecbe10a57c181aef3887edd2751ff37796e5d03d6514996e4",
+    "packages/python/src/truss/_profiles/catalog-report-configuration.json": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+    "scripts/check-module-boundaries.py": "e10c596b9b04281232ee595a3954809061b0315ae1d086ec6c1ca1510c75e1af"
+  },
+  "verification": {
+    "command": "python -m unittest test_native_catalog_dispatch test_configured_catalog_stage.ConfiguredCatalogStageTests test_configured_catalog_request test_catalog_report_semantics",
+    "tests": 114,
+    "seconds": 49.052,
+    "result": "passed",
+    "log": "docs/helix/04-build/evidence/design-audit/python-configured-catalog-dispatch-tests.log",
+    "logSha256": "33d3c7211c78003bd52c73f185a83837c6b9cb91571bbfc4af5de3559d64ead2",
+    "pythonModuleBoundaryImports": 499,
+    "nativeRuntime": "corrected private pgserver0.1.4+truss.pg16.15 / PostgreSQL16.15 / pg8000 1.31.5 / Python3.11.17"
+  },
+  "review": {
+    "model": "Astra Ultra",
+    "sourceApproved": true,
+    "findingsCorrected": [
+      "strict UTF8 metadata",
+      "native text NUL refusal",
+      "backend PID domain",
+      "JSON escaped identity expansion in earlier request checkpoint"
+    ],
+    "testsIndependentlyRerunByReviewer": false
+  },
+  "proven": [
+    "one original adopted-host configured call and issued ordinal",
+    "retained selection/context/capsule/epoch/admission/exact release byte correspondence",
+    "hex and UTC native metadata rendering with caller settings restored",
+    "4096-byte context stages; one additional evidence byte refuses before catalog DML",
+    "lost result publication retains original observation and cleanup; redispatch refused",
+    "prior host work preserved after configured cleanup"
+  ],
+  "remaining": [
+    "complete installed execution and admitted layout authority",
+    "complete report construction and report insertion",
+    "head/feed/finalization/commit gates",
+    "public install/catalog/read/write/import/receipt/feed/acknowledgement workflow",
+    "installed-wheel and ordinary-role full-runtime qualification"
+  ]
+}
