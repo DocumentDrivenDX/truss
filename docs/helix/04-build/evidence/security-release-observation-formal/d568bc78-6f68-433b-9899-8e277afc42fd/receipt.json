@@ -1,0 +1,58 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-release-observation.py": "d7e32b32270eeeb54332db338ad7f507c03658b54c8cc8d1d916e2f96e2896d3",
+    "scripts/security_owned_read.py": "40d2e6c3d852ffbeddf4494b8cfaece6ee6c7661fe278e4dab6ed0dfe5ef67c4",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "31000ae911067480d8b4ad40f073e580ab780866172d522ec70c1de3252fec29",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "b8f2e8e6f712685006c618202a971fab1fe004a868601b317520b1bf8807066c"
+  },
+  "queries": [
+    {
+      "id": "missing_observed_guard_refuses_release",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "832c85a69d3affb0cd62ea20c91f86c827f9a82fa7ca4614b8e46e0752319da9",
+      "model": null
+    },
+    {
+      "id": "lost_guard_without_reacquisition_refuses_release",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "3ba7a251d39e925dcfff211ef1c0e9e1b7f296857a3667cfce81ee66fab8b54d",
+      "model": null
+    },
+    {
+      "id": "no_guard_loss_preserves_original_cut",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "dffdbf98164e24d9d2d73ab42a09be9a15a4a5748016190274c6ce7043cad85f",
+      "model": null
+    },
+    {
+      "id": "same_xid_alone_does_not_preserve_guard",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "34487d979e732c5068d095b0fc403a89113906872a3bc3f9c0297285b4e46263",
+      "model": "[captured_guard = True,\n same_native_xid = True,\n reacquired_guard = False,\n observed_guard = False,\n lost_guard = True]"
+    },
+    {
+      "id": "loss_reacquisition_can_pass_observation_without_continuity",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "eb5b6b9e7d8501ffc08fee3ef42880273f968b6ecb90ce9bf3bdf74de5c3c6d9",
+      "model": "[captured_guard = True,\n observed_guard = True,\n reacquired_guard = True,\n same_native_xid = True,\n lost_guard = True,\n permit = True,\n release = True]"
+    }
+  ],
+  "scope": "Abstract capture/loss/reacquisition/check transition. Existing-lock observation refuses unavailable guards, including loss without reacquisition. Same native transaction ID does not entail guard retention. Loss/reacquisition admits release with no uninterrupted original cut.",
+  "limitations": [
+    "No native PostgreSQL lock/transaction, host lease, SQL, JSON or UMF refinement proof",
+    "No-loss is a premise under the exclusive host/raw-alias contract, not proved by endpoint observations",
+    "No authenticated issuer/mapping/target/credential, complete source/role/ACL lifetime or protected final-release qualification"
+  ]
+}
