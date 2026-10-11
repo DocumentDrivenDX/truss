@@ -298,6 +298,10 @@ class NativeOperationSession:
         return '"' + name + '"'
 
     def _check_call_permit(self, boundary, token, invoke, resource, lifecycle, cleanup, permit):
+        from ._native_operation_ordinals import NativeAdmissionInvocation
+        if type(permit) is NativeAdmissionInvocation:
+            return self.boundary._transaction_tracker._operation_ordinals._check_admission_call_locked(
+                self, boundary, token, invoke, resource, lifecycle, cleanup, permit)
         if self.deadline is not None:
             self.deadline.check()
         controls = self._reserved_controls
@@ -337,6 +341,10 @@ class NativeOperationSession:
                 raise NativeBoundaryRefusal('Original release reservation unavailable')
 
     def _reserve_call_permit(self, boundary, token, invoke, resource, lifecycle, cleanup, permit):
+        from ._native_operation_ordinals import NativeAdmissionInvocation
+        if type(permit) is NativeAdmissionInvocation:
+            return self.boundary._transaction_tracker._operation_ordinals._reserve_admission_call_locked(
+                self, boundary, token, invoke, resource, lifecycle, cleanup, permit)
         self._check_call_permit(boundary, token, invoke, resource, lifecycle, cleanup, permit)
         controls = self._reserved_controls
         candidate = (controls.savepoint_root if permit.kind == 'savepoint' else
