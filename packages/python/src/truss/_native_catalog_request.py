@@ -5,6 +5,8 @@ from .preparation import PreparedAcceptance, _require_original_preparation
 from ._acceptance_json import decode_acceptance_json
 from ._catalog_support import evaluate_catalog_support
 from ._native_pg8000 import NativeBoundaryRefusal
+from ._catalog_lifecycle import _policy_bytes as lifecycle_policy_bytes
+from ._catalog_index_declarations import _policy_bytes as index_policy_bytes
 
 
 @dataclass(frozen=True, slots=True)
@@ -23,6 +25,8 @@ class EncodedCatalogStage:
     sql: str
     encoded_bytes: int
     expected_documents: tuple[tuple[str, str, str, str], ...]
+    lifecycle_policy: bytes
+    index_policy: bytes
 
 
 def encode_catalog_stage(value, ordinal):
@@ -37,6 +41,10 @@ def encode_catalog_stage(value, ordinal):
             or int(ordinal)>9223372036854775807):
         raise NativeBoundaryRefusal('Canonical original operation ordinal required')
     p = value.prepared
+    if len(p.input_bytes)>16384:
+        raise NativeBoundaryRefusal('Selected report input capacity exceeded')
+    lifecycle_policy=lifecycle_policy_bytes()
+    index_policy=index_policy_bytes()
     artifacts = (value.definition, p.input_bytes, p.declarations_bytes,
                  value.obligations, value.group, p.archive_documents_bytes,
                  p.declarations_bytes, value.origin)
@@ -61,4 +69,4 @@ def encode_catalog_stage(value, ordinal):
     expected=tuple((d['documentId'],d['documentRevision'],d['artifact']['sha256'],str(position))
         for position,d in enumerate(p.input()['documents']))
     _require_original_preparation(p)
-    return EncodedCatalogStage(value, ordinal, sql, size, expected)
+    return EncodedCatalogStage(value, ordinal, sql, size, expected,lifecycle_policy,index_policy)

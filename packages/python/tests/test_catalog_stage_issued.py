@@ -11,6 +11,7 @@ class NativeIssuedCatalogStageTests(CatalogNativeFixture, unittest.TestCase):
         c = cls.Connection(**cls.kwargs)
         try:
             c.run((ROOT/'packages/postgresql/native/issued-operation-admission/operation-admission.sql').read_text())
+            c.run((ROOT/'packages/postgresql/native/catalog-report/empty-graph.sql').read_text())
             c.run((ROOT/'packages/postgresql/native/catalog-stage-issued.sql').read_text())
         finally:
             c.close()
@@ -55,6 +56,81 @@ class NativeIssuedCatalogStageTests(CatalogNativeFixture, unittest.TestCase):
         self.assertEqual(self.connection.run('SELECT value FROM catalog_host'), [['preserve']])
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'), [[0]])
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'), [[0]])
+
+    def test_missing_lifecycle_observer_refuses_before_effects(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run('ALTER TABLE truss.prop_def DISABLE TRIGGER runtime_catalog_generation')
+        self.connection.run('SAVEPOINT stage')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.connection.run('ROLLBACK TO SAVEPOINT stage')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.schema_doc'),[[0]])
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'),[[0]])
+
+    def test_incomplete_source_epoch_pair_refuses_before_effects(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run('CREATE TABLE truss.source_epoch_current(value text)')
+        self.connection.run('SAVEPOINT stage')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.connection.run('ROLLBACK TO SAVEPOINT stage')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.schema_doc'),[[0]])
+
+    def test_populated_source_epoch_pair_needs_original_authority(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run('CREATE TABLE truss.source_epoch_current(value text)')
+        self.connection.run('CREATE TABLE truss.source_epoch_registry(value text)')
+        self.connection.run("INSERT INTO truss.source_epoch_registry VALUES ('installed')")
+        # Prior graph writes themselves cannot become the original empty cut.
+        self.connection.run('SAVEPOINT stage')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.connection.run('ROLLBACK TO SAVEPOINT stage')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.schema_doc'),[[0]])
+
+    def test_preexisting_populated_epoch_pair_refuses_without_prior_host_writes(self):
+        from pg8000.exceptions import DatabaseError
+        fixture=self.Connection(**self.kwargs)
+        try:
+            fixture.run("CREATE TABLE truss.source_epoch_current(value text); "
+                        "CREATE TABLE truss.source_epoch_registry(value text); "
+                        "INSERT INTO truss.source_epoch_registry VALUES ('installed')")
+            self.connection.run('SAVEPOINT stage')
+            with self.assertRaises(DatabaseError) as caught:self.invoke()
+            self.assertEqual(caught.exception.args[0]['C'],'0A000')
+            self.connection.run('ROLLBACK TO SAVEPOINT stage')
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.schema_doc'),[[0]])
+        finally:
+            # Failed measured staging must release its post-savepoint locks.
+            self.connection.run('ROLLBACK')
+            fixture.run('DROP TABLE truss.source_epoch_current,truss.source_epoch_registry')
+            fixture.close()
+
+    def test_late_report_collector_failure_restores_host_work(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run("""CREATE OR REPLACE FUNCTION truss.runtime_collect_fresh_catalog_lifecycle(
+          expected_writer text,expected_ordinal text,expected_generation text,revision int,original_policy bytea) RETURNS jsonb LANGUAGE plpgsql AS $$
+          BEGIN RAISE EXCEPTION 'late collector refusal' USING ERRCODE='55000'; END $$""")
+        self.connection.run('CREATE TEMP TABLE report_host(value text)')
+        self.connection.run("INSERT INTO report_host VALUES ('preserve')")
+        self.connection.run('SAVEPOINT stage')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.connection.run('ROLLBACK TO SAVEPOINT stage')
+        self.assertEqual(self.connection.run('SELECT value FROM report_host'),[['preserve']])
+        for table in ('schema_doc','type_def','prop_def','row_home_operation'):
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.'+table),[[0]])
+
+    def test_oversized_native_report_source_refuses_without_truncation(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run("""CREATE OR REPLACE FUNCTION truss.runtime_collect_fresh_catalog_lifecycle(
+          expected_writer text,expected_ordinal text,expected_generation text,revision int,original_policy bytea) RETURNS jsonb LANGUAGE sql AS $$
+          SELECT jsonb_build_object('oversized',repeat('x',131073)) $$""")
+        self.connection.run('SAVEPOINT stage')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'54000')
+        self.connection.run('ROLLBACK TO SAVEPOINT stage')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.schema_doc'),[[0]])
 
     def test_commit_barrier_remains_closed(self):
         from pg8000.exceptions import DatabaseError

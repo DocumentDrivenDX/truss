@@ -11,20 +11,32 @@ from truss._native_pg8000 import NativeBoundaryRefusal
 
 
 class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
-    def _prepare_catalog(self, *, bad_response=False):
+    def _prepare_catalog(self, *, bad_response=False, prepared=None):
         setup=(ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text()
         for name in COMPONENTS:
             if name!='operation-admission':
                 setup+=';\n'+(ROOT/f'packages/postgresql/native/{name}.sql').read_text()
         for name in ('issued-operation-admission/operation-admission',
-                     'edge-limit/verify-current-scope','catalog-stage-issued'):
+                     'edge-limit/verify-current-scope','catalog-report/empty-graph',
+                     'catalog-report/fresh-lifecycle','catalog-report/absent-binding-index-declarations',
+                     'catalog-stage-issued'):
             setup+=';\n'+(ROOT/f'packages/postgresql/native/{name}.sql').read_text()
+        # Install development fixture components outside the adopted host
+        # transaction. DDL locks cannot masquerade as a fresh graph start cut.
+        fixture=self.Connection(**self.kwargs)
+        try:
+            fixture.run('DROP SCHEMA IF EXISTS truss CASCADE')
+            fixture.run(setup)
+        finally:fixture.close()
+        setup=''
         if bad_response:
             original="convert_from(decode(provisional_result_hex,'hex'),'UTF8')::jsonb"
-            expressions={True: "jsonb_build_object('interfaceVersion','truss-native-provisional-catalog/0.1',"
+            expressions={True: "jsonb_build_object('interfaceVersion','truss-native-provisional-catalog/0.2',"
                 "'writerXid',writer_xid,'ordinal',ordinal,'accepted',false)",
                 'documents': "jsonb_set("+original+",'{documents,0,content_sha256}',to_jsonb(repeat('0',64)))",
                 'extra': original+"||jsonb_build_object('extra',true)",
+                'cut': "jsonb_set("+original+",'{reportSources,start,effect_generation}','\"1\"'::jsonb)",
+                'policy': "jsonb_set("+original+",'{reportSources,lifecycle,policyHex}','\"00\"'::jsonb)",
                 'counts': "jsonb_set("+original+",'{counts,types_added}','\"9\"'::jsonb)"}
             setup += """ALTER FUNCTION truss.runtime_stage_catalog_issued(
           bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) RENAME TO fixture_stage_original;
@@ -41,7 +53,7 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
         session.deadline=NativeOperationDeadline(30000,5000)
         issued=self.service.issue_operation(session,reserve_controls=True)
         issued.controls.run_control('savepoint')
-        original=NativeCatalogStageInput(selected(),b'{"x-action":"test"}',b'fixture definition',
+        original=NativeCatalogStageInput(selected() if prepared is None else prepared,b'{"x-action":"test"}',b'fixture definition',
             b'fixture obligations',b'fixture group')
         request=issued.owner.prepare_catalog_stage(issued,original)
         return session,issued,request
@@ -69,6 +81,43 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
             issued.owner.dispatch_catalog_stage_candidate(request)
         self.assertIs(self.boundary.last_call,before)
         self._restore_catalog(session,issued)
+
+    def test_combined_sources_and_large_result_complete_ready_and_cleanup(self):
+        import copy
+        from test_preparation import CONFIG,prepare
+        from test_catalog_staging import native_document
+        from truss._catalog_support import PROFILE
+        config=copy.deepcopy(CONFIG);config['supportProfile']=dict(PROFILE)
+        prepared=prepare((native_document('document-'+('x'*2500)),),config)
+        session,issued,request=self._prepare_catalog(prepared=prepared)
+        result=issued.owner.dispatch_catalog_stage_candidate(request)
+        self.assertGreater(len(result.original_provisional_result),16384)
+        snapshot=json.loads(result.original_report_source_snapshot)
+        self.assertFalse(snapshot['acceptedReportQualified'])
+        self.assertFalse(snapshot['currentStateRevalidated'])
+        self.assertEqual(snapshot['nativeSources']['start']['effect_generation'],'0')
+        self.assertEqual(snapshot['nativeSources']['lifecycle']['inputHex'],prepared.input_bytes.hex())
+        self.assertEqual(snapshot['nativeSources']['indexDeclarations']['declaredJobs'],[])
+        self.assertEqual(snapshot['semanticSourceFields']['state'],'source_fields_ready')
+        self.assertTrue(request.entry.native_call.capture_complete)
+        self._restore_catalog(session,issued)
+
+    def test_python_composition_failure_retains_original_native_sources(self):
+        session,issued,request=self._prepare_catalog()
+        with patch('truss._native_catalog_capture.compose_captured_catalog_sources',side_effect=ValueError('refuse composition')):
+            with self.assertRaises(NativeBoundaryRefusal):
+                issued.owner.dispatch_catalog_stage_candidate(request)
+        observed=session.result_custody.original_observation
+        self.assertIs(observed.original_call,request.entry.native_call)
+        self.assertIn('reportSources',json.loads(observed.original_provisional_result))
+        self.assertIsNone(observed.original_report_source_snapshot)
+        self._restore_catalog(session,issued)
+
+    def test_changed_source_cut_refuses(self):
+        self._assert_substituted_response('cut')
+
+    def test_changed_lifecycle_policy_refuses(self):
+        self._assert_substituted_response('policy')
 
     def test_lost_observation_preserves_original_result_without_replay(self):
         session,issued,request=self._prepare_catalog()
@@ -118,7 +167,12 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
         session,issued,request=self._prepare_catalog(bad_response=kind)
         with self.assertRaises(NativeBoundaryRefusal):
             issued.owner.dispatch_catalog_stage_candidate(request)
-        self.assertIsNone(session.result_custody.original_observation)
+        observed=session.result_custody.original_observation
+        if kind in ('cut','policy'):
+            self.assertIs(observed.original_call,request.entry.native_call)
+            self.assertIsNone(observed.original_report_source_snapshot)
+        else:
+            self.assertIsNone(observed)
         self.assertTrue(request.entry.native_call.capture_complete)
         self._restore_catalog(session,issued)
 
