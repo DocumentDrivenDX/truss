@@ -119,3 +119,53 @@ class NativeConnectedStringWriterTests(NativeBoundaryFixture, unittest.TestCase)
         self.assertEqual(self.connection.run('SELECT ver::text FROM truss.object'), [['1']])
         self.assertEqual(self.connection.run('SELECT text_value FROM truss.row_home_scalar'), [['value']])
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'), [[0]])
+
+    def _seed_selected_keys(self):
+        for number in (1,2):
+            self.connection.run("INSERT INTO truss.key_def(type_id,key_id,key_num,prop_ids,is_primary,since_rev,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id) VALUES(2,:name,:number,ARRAY[302],false,0,'accepted_document',0,0,'native-fixture')",name=str(number),number=number)
+        self.connection.run("INSERT INTO truss.key_bucket_guard VALUES(sha256(decode('01','hex')),sha256(decode('02','hex')),0)")
+        self.connection.run("INSERT INTO truss.object_key_bucket(storage_row_id,type_id,key_num,object_id,namespace_bytes,key_bytes,original_context_bytes) VALUES(1,2,1,100,decode('01','hex'),decode('02','hex'),decode('03','hex'))")
+
+    def test_nonempty_selected_keys_are_retained_and_preserved(self):
+        self._seed_selected_keys()
+        row=self._write()
+        before,after=(json.loads(bytes(value)) for value in row[2:4])
+        for name in ('selectedKeyRows','selectedKeyDefinitions','selectedGuardRows','selectedSourceDocuments'):
+            self.assertTrue(before[name]);self.assertEqual(before[name],after[name])
+
+    def test_late_selected_key_changes_refuse_and_restore_host_work(self):
+        from pg8000.exceptions import DatabaseError
+        self._seed_selected_keys()
+        self.connection.run("CREATE TEMP TABLE key_host_sentinel(value text); INSERT INTO key_host_sentinel VALUES('prior')")
+        original=self.connection.run('SELECT record_send(k) FROM truss.object_key_bucket k')
+        statements=(
+            "DELETE FROM truss.object_key_bucket WHERE storage_row_id=1",
+            "UPDATE truss.object_key_bucket SET original_context_bytes=decode('99','hex') WHERE storage_row_id=1",
+            "INSERT INTO truss.object_key_bucket(storage_row_id,type_id,key_num,object_id,namespace_bytes,key_bytes,original_context_bytes) VALUES(2,2,2,100,decode('01','hex'),decode('02','hex'),decode('03','hex'))",
+            "DELETE FROM truss.object_key_bucket WHERE storage_row_id=1; INSERT INTO truss.object_key_bucket(storage_row_id,type_id,key_num,object_id,namespace_bytes,key_bytes,original_context_bytes) VALUES(99,2,1,100,decode('01','hex'),decode('02','hex'),decode('03','hex'))",
+            "UPDATE truss.key_def SET is_primary=true WHERE type_id=2 AND key_num=1",
+            "UPDATE truss.key_bucket_guard SET generation=generation+1",
+            "INSERT INTO truss.key_def(type_id,key_id,key_num,prop_ids,is_primary,since_rev,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id) VALUES(2,'extra',3,ARRAY[302],false,0,'accepted_document',0,0,'native-fixture')")
+        for statement in statements:
+            self.connection.run('SAVEPOINT operation')
+            self.connection.run('CREATE FUNCTION public.change_key() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN '+statement+'; RETURN NULL; END $$')
+            self.connection.run('CREATE TRIGGER change_key AFTER UPDATE ON truss.object FOR EACH ROW EXECUTE FUNCTION public.change_key()')
+            with self.assertRaises(DatabaseError):self._write()
+            self.connection.run('ROLLBACK TO SAVEPOINT operation');self.connection.run('RELEASE SAVEPOINT operation')
+            self.assertEqual(self.connection.run('SELECT record_send(k) FROM truss.object_key_bucket k'),original)
+            self.assertEqual(self.connection.run('SELECT value FROM key_host_sentinel'),[['prior']])
+            self.assertEqual(self.connection.run('SELECT ver::text FROM truss.object'),[['1']])
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'),[[0]])
+
+    def test_same_identity_source_changes_refuse(self):
+        from pg8000.exceptions import DatabaseError
+        for statement in ("UPDATE truss.prop_def SET name='changed' WHERE prop_id=301",
+                          "UPDATE truss.type_def SET element='changed' WHERE type_id=2",
+                          "UPDATE truss.schema_doc SET document='changed' WHERE rev=0 AND ord=0"):
+            self.connection.run('SAVEPOINT operation')
+            self.connection.run('CREATE FUNCTION public.change_source() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN '+statement+'; RETURN NULL; END $$')
+            self.connection.run('CREATE TRIGGER change_source AFTER UPDATE ON truss.object FOR EACH ROW EXECUTE FUNCTION public.change_source()')
+            with self.assertRaises(DatabaseError):self._write()
+            self.connection.run('ROLLBACK TO SAVEPOINT operation');self.connection.run('RELEASE SAVEPOINT operation')
+            self.assertEqual(self.connection.run('SELECT ver::text FROM truss.object'),[['1']])
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'),[[0]])

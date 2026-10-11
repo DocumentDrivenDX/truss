@@ -61,6 +61,7 @@ DECLARE state_row truss.row_home_state%ROWTYPE; node_row truss.row_home_node%ROW
  property_row truss.prop_def%ROWTYPE; type_row truss.type_def%ROWTYPE;
  images record; before_scope bytea; after_scope bytea; original_input bytea;
  definition bytea; obligations bytea; original_group bytea; admitted record;
+ key_rows bytea[]; key_definitions bytea[]; guard_rows bytea[]; source_documents bytea[];
  token jsonb; actual_xid xid8; head_revision integer;
 BEGIN
  IF current_user::text IS DISTINCT FROM (CASE WHEN current_setting('role')='none'
@@ -83,6 +84,29 @@ BEGIN
  -- no capacity lock after an owner lock and cannot issue ready/finalized state.
  SELECT s.* INTO STRICT state_row FROM truss.row_home_state s WHERE s.state_id=selected_state;
  IF state_row.owner_kind<>'object' THEN RAISE EXCEPTION 'existing object state required' USING ERRCODE='22023';END IF;
+ SELECT p.* INTO STRICT property_row FROM truss.prop_def p WHERE p.prop_id=state_row.property_id FOR SHARE;
+ SELECT t.* INTO STRICT type_row FROM truss.type_def t WHERE t.type_id=state_row.object_type_id FOR SHARE;
+ -- Closed native document-source branch. Binding/report sources need their
+ -- actual producer; never replace them with historical since_rev/doc_ord.
+ IF property_row.definition_source_kind IS DISTINCT FROM 'accepted_document'
+    OR type_row.definition_source_kind IS DISTINCT FROM 'accepted_document'
+    OR EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=state_row.object_type_id
+      AND k.definition_source_kind IS DISTINCT FROM 'accepted_document')
+    OR NOT EXISTS(SELECT 1 FROM truss.schema_doc d WHERE (d.rev,d.ord,d.doc_id)=
+      (property_row.definition_rev,property_row.definition_doc_ord,property_row.definition_document_id))
+    OR NOT EXISTS(SELECT 1 FROM truss.schema_doc d WHERE (d.rev,d.ord,d.doc_id)=
+      (type_row.definition_rev,type_row.definition_doc_ord,type_row.definition_document_id))
+    OR EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=state_row.object_type_id
+      AND NOT EXISTS(SELECT 1 FROM truss.schema_doc d WHERE (d.rev,d.ord,d.doc_id)=
+       (k.definition_rev,k.definition_doc_ord,k.definition_document_id))) THEN
+  RAISE EXCEPTION 'original document source branch required' USING ERRCODE='55000';END IF;
+ PERFORM 1 FROM truss.key_def k WHERE k.type_id=state_row.object_type_id ORDER BY k.key_num FOR SHARE;
+ PERFORM 1 FROM truss.schema_doc d WHERE
+   (d.rev,d.ord,d.doc_id)=(property_row.definition_rev,property_row.definition_doc_ord,property_row.definition_document_id)
+   OR (d.rev,d.ord,d.doc_id)=(type_row.definition_rev,type_row.definition_doc_ord,type_row.definition_document_id)
+   OR EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=state_row.object_type_id
+     AND (d.rev,d.ord,d.doc_id)=(k.definition_rev,k.definition_doc_ord,k.definition_document_id))
+   ORDER BY d.rev,d.ord FOR SHARE;
  SELECT o.* INTO STRICT object_row FROM truss.object o
   WHERE o.id=state_row.object_id AND o.type_id=state_row.object_type_id FOR UPDATE;
  IF object_row.ver<>expected_version THEN RAISE EXCEPTION 'stale object version' USING ERRCODE='40001';END IF;
@@ -90,9 +114,8 @@ BEGIN
  IF state_row.owner_kind<>'object' OR state_row.object_id IS DISTINCT FROM object_row.id
     OR state_row.object_type_id IS DISTINCT FROM object_row.type_id THEN
   RAISE EXCEPTION 'original owner changed' USING ERRCODE='55000';END IF;
- SELECT p.* INTO STRICT property_row FROM truss.prop_def p WHERE p.prop_id=state_row.property_id;
- SELECT t.* INTO STRICT type_row FROM truss.type_def t WHERE t.type_id=object_row.type_id;
- IF state_row.property_owner_type_id<>object_row.type_id OR property_row.type_id<>object_row.type_id
+ IF state_row.property_id IS DISTINCT FROM property_row.prop_id
+    OR state_row.property_owner_type_id<>object_row.type_id OR property_row.type_id<>object_row.type_id
     OR property_row.home<>'row' OR property_row.scalar_type IS DISTINCT FROM 'string'
     OR property_row.facets IS NOT NULL AND property_row.facets<>'{}'::jsonb
     OR property_row.retired_rev IS NOT NULL OR type_row.retired_rev IS NOT NULL
@@ -106,10 +129,26 @@ BEGIN
  SELECT c.* INTO STRICT images FROM truss.row_image_existing_string_candidate_original(
   state_row,node_row,scalar_row,truss.row_image_state_original(state_row),
   truss.row_image_node_original(node_row),truss.row_image_scalar_original(scalar_row),replacement,replacement_token) c;
+ SELECT array_agg(record_send(k) ORDER BY k.key_num,k.storage_row_id) INTO key_rows
+  FROM truss.object_key_bucket k WHERE k.object_id=object_row.id AND k.type_id=object_row.type_id;
+ SELECT array_agg(record_send(k) ORDER BY k.key_num) INTO key_definitions
+  FROM truss.key_def k WHERE k.type_id=object_row.type_id;
+ SELECT array_agg(record_send(g) ORDER BY g.namespace_sha256,g.key_sha256) INTO guard_rows
+  FROM truss.key_bucket_guard g WHERE EXISTS(SELECT 1 FROM truss.object_key_bucket k
+   WHERE k.object_id=object_row.id AND k.type_id=object_row.type_id
+     AND k.namespace_sha256=g.namespace_sha256 AND k.key_sha256=g.key_sha256);
+ SELECT array_agg(record_send(d) ORDER BY d.rev,d.ord) INTO source_documents FROM truss.schema_doc d WHERE
+   (d.rev,d.ord,d.doc_id)=(property_row.definition_rev,property_row.definition_doc_ord,property_row.definition_document_id)
+   OR (d.rev,d.ord,d.doc_id)=(type_row.definition_rev,type_row.definition_doc_ord,type_row.definition_document_id)
+   OR EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=object_row.type_id
+     AND (d.rev,d.ord,d.doc_id)=(k.definition_rev,k.definition_doc_ord,k.definition_document_id));
  before_scope:=convert_to(jsonb_build_object('interfaceVersion','truss-existing-string-pending-effects/0.1.0',
   'stateId',selected_state::text,'nodeId',node_row.node_id::text,'objectId',object_row.id::text,
   'typeId',object_row.type_id::text,'version',object_row.ver::text,
   'documentId',type_row.document_id,'propertyId',property_row.prop_id::text,
+  'selectedKeyRows',key_rows,'selectedKeyDefinitions',key_definitions,'selectedGuardRows',guard_rows,
+  'selectedSourceDocuments',source_documents,'typeDefinitionHex',encode(record_send(type_row),'hex'),
+  'propertyDefinitionHex',encode(record_send(property_row),'hex'),
   'stateHex',encode(images.old_state_image,'hex'),'nodeHex',encode(images.old_node_image,'hex'),
   'scalarHex',encode(images.old_scalar_image,'hex'),'objectHex',encode(record_send(object_row),'hex'))::text,'UTF8');
  planned_object:=object_row;
@@ -119,6 +158,9 @@ BEGIN
   'stateId',selected_state::text,'nodeId',node_row.node_id::text,'objectId',object_row.id::text,
   'typeId',object_row.type_id::text,'version',(object_row.ver+1)::text,
   'documentId',type_row.document_id,'propertyId',property_row.prop_id::text,
+  'selectedKeyRows',key_rows,'selectedKeyDefinitions',key_definitions,'selectedGuardRows',guard_rows,
+  'selectedSourceDocuments',source_documents,'typeDefinitionHex',encode(record_send(type_row),'hex'),
+  'propertyDefinitionHex',encode(record_send(property_row),'hex'),
   'stateHex',encode(images.new_state_image,'hex'),'nodeHex',encode(images.new_node_image,'hex'),
   'scalarHex',encode(images.new_scalar_image,'hex'),'objectHex',encode(record_send(planned_object),'hex'))::text,'UTF8');
  original_input:=convert_to(jsonb_build_object('expectedVersion',expected_version::text,
@@ -154,6 +196,22 @@ BEGIN
     OR NOT EXISTS(SELECT 1 FROM truss.row_home_scalar c WHERE c.state_id=selected_state
       AND c.node_id=node_row.node_id AND truss.row_image_scalar_original(c)=images.new_scalar_image) THEN
   RAISE EXCEPTION 'complete final candidate correspondence required' USING ERRCODE='55000';END IF;
+ IF key_rows IS DISTINCT FROM (SELECT array_agg(record_send(k) ORDER BY k.key_num,k.storage_row_id)
+   FROM truss.object_key_bucket k WHERE k.object_id=object_row.id AND k.type_id=object_row.type_id)
+ OR key_definitions IS DISTINCT FROM (SELECT array_agg(record_send(k) ORDER BY k.key_num)
+   FROM truss.key_def k WHERE k.type_id=object_row.type_id)
+ OR guard_rows IS DISTINCT FROM (SELECT array_agg(record_send(g) ORDER BY g.namespace_sha256,g.key_sha256)
+   FROM truss.key_bucket_guard g WHERE EXISTS(SELECT 1 FROM truss.object_key_bucket k
+     WHERE k.object_id=object_row.id AND k.type_id=object_row.type_id
+       AND k.namespace_sha256=g.namespace_sha256 AND k.key_sha256=g.key_sha256))
+ OR NOT EXISTS(SELECT 1 FROM truss.type_def t WHERE t.type_id=type_row.type_id AND record_send(t)=record_send(type_row))
+ OR NOT EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.prop_id=property_row.prop_id AND record_send(p)=record_send(property_row))
+ OR source_documents IS DISTINCT FROM (SELECT array_agg(record_send(d) ORDER BY d.rev,d.ord) FROM truss.schema_doc d WHERE
+   (d.rev,d.ord,d.doc_id)=(property_row.definition_rev,property_row.definition_doc_ord,property_row.definition_document_id)
+   OR (d.rev,d.ord,d.doc_id)=(type_row.definition_rev,type_row.definition_doc_ord,type_row.definition_document_id)
+   OR EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=object_row.type_id
+     AND (d.rev,d.ord,d.doc_id)=(k.definition_rev,k.definition_doc_ord,k.definition_document_id))) THEN
+  RAISE EXCEPTION 'selected native key/source preservation required' USING ERRCODE='55000';END IF;
  RETURN QUERY SELECT actual_xid::text,issued_ordinal::text,before_scope,after_scope,admitted.context_hex;
 END;
 $$;

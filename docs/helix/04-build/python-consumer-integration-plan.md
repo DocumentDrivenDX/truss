@@ -1908,3 +1908,31 @@ capacity/touch contributions, journal/feed/finalization and the public installed
 consumer path are still required. The earlier raw-writer receipt retains its
 historical source hashes; this new receipt covers the added context output and
 factored fixture at their current bytes.
+
+
+### Selected native key/source preservation inside pending writes
+
+The pending writer retains complete ordered native object_key_bucket rows,
+selected type key_def rows, their selected digest guard rows and actual source
+document rows, plus complete type/property definition bytes. Original native
+source references follow the closed definition_source accepted_document branch;
+other branches refuse rather than substituting since_rev/doc_ord. Referenced
+original rows must exist. Catalog/source exclusions precede owner exclusion;
+no key guard lock is added after the owner. The same typed property association
+is independently rechecked after owner/state acquisition.
+
+[Current native evidence](evidence/python-selected-key-source-preservation.json)
+passes 56 PostgreSQL16.15 tests: ten raw writer cases plus existing Python host
+and containment cases. Seven late-key changes and three same-ID source rewrites
+refuse and roll back; positive nonempty native membership is retained unchanged.
+This closes a reproduced AFTER object-trigger key-definition change that previously
+returned successfully. Full rows and every selected occurrence are compared;
+counts or digests do not replace the retained bytes.
+
+The claim is selected native endpoint-row preservation only. Complete starting
+membership, coherent concurrent key cut, reservation closure, key/source semantic
+authority and erased intermediate event history remain unqualified. Arrays and
+record serialization have no complete native collection/resource qualification.
+The native accepted_document enum does not convert administrative fixtures into
+accepted UMF evidence. Complete family/context/authority and public installation
+remain required before exposing apply or finalization.

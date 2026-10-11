@@ -1,0 +1,34 @@
+{
+  "scope": "Selected native before/after key and source row preservation in private pending writer",
+  "result": {
+    "exit_code": 0,
+    "tests": 56,
+    "raw_writer_tests": 10,
+    "seconds": 17.168,
+    "postgresql": "16.15"
+  },
+  "verified": [
+    "full ordered object_key_bucket/key_def/selected key_bucket_guard/native source document rows retained without DISTINCT or hash-only comparison",
+    "native definition_source document branch and exact source tuple presence required",
+    "same typed property identity rechecked after owner/state locks",
+    "late added/removed/mutated/same-count substituted key rows refuse",
+    "late key definition and selected guard changes refuse",
+    "same-ID native type/property/document source rewrite refuses",
+    "nonempty selected rows preserved on positive pending write",
+    "operation rollback restores rows and retains prior host work",
+    "original Python host dispatch regression suite passes"
+  ],
+  "limitations": [
+    "No coherent concurrent key cut or complete starting key membership",
+    "No reservation scope closure or semantic key/source authority",
+    "Equal endpoints do not prove event history preservation",
+    "Native arrays/record serialization not bounded collection or resource qualification",
+    "Administrative source-kind fixture values are not accepted UMF evidence",
+    "Complete family/context/capacity/touch/journal/feed/finalization/public installer remain unfinished"
+  ],
+  "sha256": {
+    "packages/postgresql/native/existing-string-writer/pending-effects.sql": "49951c4c42a233e74c005c5e5b926b10cd22c511abeb1e429a6fd8cab5c80b2c",
+    "packages/python/tests/test_native_connected_string_writer.py": "f3096252d37049be2e226882ab4f037c2c361751a71e5b085931dfc071f56580",
+    "docs/helix/04-build/evidence/python-selected-key-source-preservation.log": "e871f9bfa25c8ebfd4092f674a28469c64dd72d29c05fccd46908b701724759b"
+  }
+}
