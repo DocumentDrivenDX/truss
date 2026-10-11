@@ -1772,3 +1772,37 @@ protected ordinary-person authority. Forward admission remains disabled. The
 input. Complete installed producer/registered artifact authority and seven-body
 finalization remain required before public install/register/apply/read; continue
 that workflow toward the full Python interface goal.
+
+
+### Iteration 35 in progress: complete row-touch observer
+
+Astra Ultra selected row_touch_observe as the next integrated native body. The
+first two implementation steps now attribute actual typed state/node/scalar
+values while retaining complete original binary row images. State distinguishes
+object and edge associations, validates mandatory fields and allocator domains,
+and preserves signed graph/catalog identities. Node/scalar compare exact expected
+parent/event images, validate physical slot grammar, and never look up a live
+parent to replace retained prestate. These expected bytes come from the enclosing
+original side inventory; helpers do not issue authority. Numeric active-slot
+checks do not qualify source-token equality, facets or scalar codec meaning.
+
+Eight current-source native cases pass6.257s with terminal exit0. Native tuple
+results match existing Python attribution. The state OLD/NEW probe measures an
+ALWAYS trigger in replica mode; it does not qualify ordinary installed coverage.
+The cascade fixture restores origin mode before DELETE, retains all three exact
+image byte values before deletion, verifies all three homes become empty, and
+uses the retained bytes afterwards. Astra independently approved the state
+helper with five native cases6.004s; dependent-helper source is also approved. Its independent eight-case matrix
+passed10.443s; a separate prior-test-snapshot run discovered eleven cases
+(7 dependent plus 4 imported base), passing10.943s. Final current evidence
+hashes and task-only main checkpoint are approved.
+See [scoped checkpoint receipt](evidence/python-contracts-iteration35-attribution.json).
+
+The iteration target remains the complete observer: original side completeness
+and uniqueness, protected issuer/context/effect-scope producer membership and
+reservation, complete contribution retention, event-local touch deduplication,
+checked touch transitions and exactly one operation-generation invalidation.
+Compose or replace existing state/node/scalar generation triggers to avoid a
+double increment. Preserve the unconditional commit barrier. Full seven-body
+installation composition and public install/register/apply/read remain open;
+these completed attribution steps do not replace that outcome.

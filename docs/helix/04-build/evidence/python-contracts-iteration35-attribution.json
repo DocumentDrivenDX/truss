@@ -1,0 +1,61 @@
+{
+  "scope": "Native data-attribution primitives toward the complete row_touch_observe body; no ordinary installed event or scope authority",
+  "source_basis_commit": "0aee312d8ed1690ee55cb3fcf42aa491225b1610",
+  "source_sha256": {
+    "packages/postgresql/native/row-image/state-owner.sql": "ee8def896f1bfe2e13b51acfaef61bf475f6a4a04fb2c14ae60d2547cce64d37",
+    "packages/postgresql/native/row-image/dependent-owner.sql": "e6b1f4c9d1d741613366fa60703554a5261964c0c8e461dac3b19b8f39e3abae",
+    "packages/python/tests/test_native_state_owner.py": "203bd4ad837135b046c653ed612eea36d0f83431a9403a07532a4ac106a7ce54",
+    "packages/python/tests/test_native_dependent_owner.py": "fd92f343cbd0f88d3f9c6cf40ef83d66ef1bbf39d3f05e789dcf094de00b703b"
+  },
+  "native_inputs_sha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "packages/postgresql/native/row-image/codec.sql": "580876ef61326fc8458f0b226c4136aeb6b6f3f64c2b3ca4d83157f4c02d5006"
+  },
+  "native": {
+    "cases": 8,
+    "seconds": 6.257,
+    "process_exit": 0,
+    "log": "python-contracts-iteration35-attribution-native.log",
+    "sha256": "ce9c14b721b6c995f56010a07978a1c92c84579a133b5b2e391ecbd777286829"
+  },
+  "profile": {
+    "postgresql": "16.15",
+    "pg8000": "1.31.5",
+    "python": "3.11.17",
+    "fixture": "administrative"
+  },
+  "evidence_qualifications": [
+    "State OLD/NEW probe uses replica mode with measured ALWAYS trigger",
+    "Cascade fixture seeded in replica mode, restored origin before measured DELETE; all three homes actually become empty",
+    "Retained expected bytes establish correspondence only; enclosing original inventory still owns completeness, side, membership and authority"
+  ],
+  "astra_ultra": {
+    "state_source": "approved",
+    "state_independent_native": {
+      "cases": 5,
+      "seconds": 6.004,
+      "process_exit": 0
+    },
+    "dependent_source": "approved scoped attribution primitives",
+    "dependent_independent_native": {
+      "cases": 8,
+      "seconds": 10.443,
+      "process_exit": 0,
+      "scope": "reviewer node-slot and scalar-family matrix"
+    },
+    "prior_test_snapshot": {
+      "discovered_cases": 11,
+      "seconds": 10.943,
+      "process_exit": 0,
+      "qualification": "7 dependent class cases plus 4 imported base cases; not 11 distinct new scenarios"
+    },
+    "final_evidence": "approved exact scoped checkpoint and task-only main commit/push"
+  },
+  "remaining": [
+    "Complete original side inventory uniqueness and coverage",
+    "Protected original effect-scope producer and issuer/context/reservation membership",
+    "Complete one-event touch/contribution transition and generation composition",
+    "Complete seven-body bundle then public install/register/apply/read"
+  ],
+  "native_python_interchange": "Exact native node/scalar tuple matches existing Python attribute_row_event on native codec images"
+}
