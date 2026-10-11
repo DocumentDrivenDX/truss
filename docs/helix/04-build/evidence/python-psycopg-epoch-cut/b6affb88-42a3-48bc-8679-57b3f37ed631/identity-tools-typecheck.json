@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "exitCode": 0,
+  "typescript": "7.0.2",
+  "cwd": "/Users/erik/.codex/worktrees/security-main-integration/umf",
+  "command": [
+    "/opt/homebrew/bin/bun",
+    "/Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/typescript/bin/tsc",
+    "--ignoreConfig",
+    "--noEmit",
+    "--strict",
+    "--target",
+    "ES2022",
+    "--module",
+    "ESNext",
+    "--moduleResolution",
+    "bundler",
+    "--resolveJsonModule",
+    "--allowSyntheticDefaultImports",
+    "--esModuleInterop",
+    "--skipLibCheck",
+    "--types",
+    "bun",
+    "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts",
+    "/private/tmp/truss-security-main-integration/scripts/produce-security-identity-requirements.ts"
+  ],
+  "scope": "Independent strict tool source check; no package/toolchain delivery qualification"
+}

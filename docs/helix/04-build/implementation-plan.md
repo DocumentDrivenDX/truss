@@ -4102,3 +4102,35 @@ key/endpoint/decoder closure, authenticated issuer/mapping/source/role/config cu
 original fact construction, protected evaluation/dispatch and final disclosure
 remain required across flat and graph implementations. No acceptance promotion,
 public API or grant: checkpoint26/132 with106 missing. Full goal active.
+
+
+### Original identity closure to fixed native capture and facts — 2026-10-11
+
+Added a separate source-produced identity inventory and retained original ordered
+transport metadata. The conformance tool reconstructs original typed facts from
+fixed epoch-bound capture using original UMF literal checks and core Key encoder;
+no Python semantic traversal, row ordinal identity or field-label inference.
+Final native `evidence/python-psycopg-epoch-cut/b6affb88-42a3-48bc-8679-57b3f37ed631`
+passes98 methods (47 fact/dependency/owner/recipe/capture/reconstruction,16 graph,
+nine epoch,26 adoption),130 verified current/archived Truss source pins,363 original
+UMF pins,1614 native payload pins, module boundaries and three independent named
+stop0/status3/socket-absent cleanups. Seven controls include missing instance keys,
+original a1/o1 reconstruction/withholding, inactive/missing-owner denial, reversed
+provider order, duplicate-key indeterminate and semantic domain refusal. Independent
+strict tool source check passes with TypeScript7.0.2; delivery is not hermetic.
+
+Formal `evidence/security-key-transport-formal/95155f19-29c7-4ece-ab42-fb6e4819023c`
+passes five fresh-context replayed obligations (two UNSAT/three SAT), with eight
+selected original code/data inputs and exact SMT digests. Original ordered-key
+component preservation is separate from deterministic encoding under equal
+normalized key material. Order/width changes and constant ordinal material have
+countermodels. Initial703e12cb retains the incomplete combined quantified-array/
+encoder attempt with observed/replayed unknown; no proof was claimed for it.
+This is conditional algebra, not injectivity, original encoder byte format,
+JSON/Python/SQL/browser refinement or complete native authorization proof.
+
+Reconstruction is still an owned tool step after capture, not a protected host
+coordinator; original issuer/mapping/source/role/config stability, graph typed
+property decoding, caller/current-authority admission and final release remain
+required. No new backend acceptance binding. Last full gate checkpoint26/132 with
+106 missing; earlier packets retain their original source tuples. Full goal active.

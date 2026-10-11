@@ -1,0 +1,8 @@
+{
+  "status": "incomplete-model-attempt",
+  "query": "complete_original_frame_preserves_deterministic_identity",
+  "observed": "unknown",
+  "freshContextReplay": "unknown",
+  "scope": "10-second solver limit for combined quantified-array/encoder query; no proof or acceptance promotion",
+  "smt2Sha256": "59ddf4674d5164a431454efc9e8b8b4b6481cf9ec1c48f22909dad6ab2266136"
+}

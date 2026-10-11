@@ -743,3 +743,16 @@ in integer/NULL controls test native raw encoding only; they are not qualified
 against the original ontology's required string identity. These seven controls
 advance CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites, not
 original trusted fact construction, protected evaluation or final publication.
+
+
+### Original identity reconstruction controls — 2026-10-11
+
+For CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and UMF US-079 AC3/AC6
+prerequisites, consume original ten-field/two-association identity transport.
+Reject omitted instance Keys before native xid assignment; reconstruct original
+a1/o1 Keys and permit with salary withheld; deny inactive assignment and missing
+owner; reverse provider order without changing identity; refuse duplicate instance
+Keys as indeterminate and incompatible native/semantic literal domains before
+policy output. Seven native controls pass in packetb6affb88,98 total component
+methods. These do not qualify issuer/mapping provenance, protected reconstruction
+lifetime, ordinary caller authentication, complete graph decoding or final release.
