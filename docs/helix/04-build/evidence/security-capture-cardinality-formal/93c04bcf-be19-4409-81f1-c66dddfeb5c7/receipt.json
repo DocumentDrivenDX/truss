@@ -1,0 +1,57 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-capture-cardinality.py": "1396ba71b64e38d278d4082b7ff42d6c700dddc169daed440e6b1c72d4bf9f3a",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "066be6ecd01d61e4ccaa98c1ff99a73a426cb6bb57152526674227e988a6e0d8",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "12be99cbe47bc33272a91a417aae75e6fcdf942bb0603e4a4a134e259e8d2a26"
+  },
+  "queries": [
+    {
+      "id": "sentinel_acceptance_cannot_hide_over_quota_source",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "c8286cae8b49aa32b3ec7d585a14b50cda3492180ec4abad00bcfb0a65c44f0a",
+      "model": null
+    },
+    {
+      "id": "sentinel_accepted_capture_is_count_complete",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "767f2ad5f1950376ae8a3e866ecd42402f26b073d46b1d6f8cf1ab738db895e5",
+      "model": null
+    },
+    {
+      "id": "sentinel_native_result_is_bounded",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "d921842e7a9b949a8372df3021efcb78d33b15587cbd939e3cf6949c506cd837",
+      "model": null
+    },
+    {
+      "id": "omitted_limit_can_receive_unbounded_source",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "dd6731508dc71789ac851879cc78eaae2ba9337fea430a77f548f7e57ab91343",
+      "model": "[quota = 0,\n complete_source_rows = 2,\n received_native_rows = 2]"
+    },
+    {
+      "id": "limit_at_quota_silently_accepts_incomplete_source",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "18ca168552c8bf2c3ed8de5b654dee802830577df3d535bd139726a643b2c9e6",
+      "model": "[quota = 0,\n complete_source_rows = 1,\n received_native_rows = 0]"
+    }
+  ],
+  "scope": "Unbounded nonnegative source cardinality and quota. A faithful query result min(source,quota+1) plus refusal above quota guarantees native row bound and count-complete acceptance.",
+  "limitations": [
+    "Does not derive SQL LIMIT semantics, driver PGresult origin or semantic row correspondence from implementation",
+    "Requires original complete visible source population; no RLS/role/source/authority visibility qualification",
+    "Count completeness is not field/identity completeness, strict byte/allocator transport budget, protected policy execution or final disclosure"
+  ]
+}

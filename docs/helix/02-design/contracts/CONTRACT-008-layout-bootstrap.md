@@ -2219,3 +2219,16 @@ collections, authenticated issuer/mapping and source/role/config closure remain
 unqualified. Reconstruction runs as an owned fixture step after raw capture, not
 inside a complete protected host dispatch/final-disclosure coordinator; captured
 JSON is not a portable authorization credential.
+
+
+### Native capture row sentinel before driver buffering — 2026-10-11
+
+Fixed capture now submits `LIMIT 101` in the original quoted table projection.
+A bounded `fetchmany(101)` alone limits Python's returned batch after psycopg has
+received the original native result; it does not constrain server result cardinality.
+Accept at most100 rows. The extra sentinel row causes complete-result refusal;
+never accept a silently truncated100-row prefix. Existing row-payload overflow
+markers and whole-capture refusal remain in place. Count-complete acceptance is
+conditional on faithful SQL execution and the original complete visible fact
+population; role/RLS visibility and a strict whole-byte/allocator transport envelope
+remain unqualified. This is not a new authorization or disclosure capability.

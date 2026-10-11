@@ -144,7 +144,7 @@ def _capture_epoch_bound_dependency_cells(host, transaction, epoch, original_byt
             overflow=sql.SQL('({}) OPERATOR(pg_catalog.>) 65536').format(size)
             columns=[sql.SQL('CASE WHEN {} THEN NULL ELSE {}::pg_catalog.text END AS {}').format(overflow,sql.Identifier(c.name),sql.Identifier('f'+str(i))) for i,(_,c) in enumerate(fields)]
             columns.append(sql.SQL('({})::pg_catalog.text AS oversize').format(overflow))
-            cursor.execute(sql.SQL('SELECT {} FROM ONLY {}').format(sql.SQL(',').join(columns),sql.Identifier(r.schema,r.name)),prepare=False,binary=False)
+            cursor.execute(sql.SQL('SELECT {} FROM ONLY {} LIMIT 101').format(sql.SQL(',').join(columns),sql.Identifier(r.schema,r.name)),prepare=False,binary=False)
             if (cursor.description is None or tuple(d.name for d in cursor.description)!=tuple('f'+str(i) for i in range(len(fields)))+('oversize',)
                     or any(d.type_code!=25 for d in cursor.description)):
                 raise ValueError('Original native raw-cell text descriptors required')

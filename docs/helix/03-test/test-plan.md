@@ -737,3 +737,15 @@ Keys as indeterminate and incompatible native/semantic literal domains before
 policy output. Seven native controls pass in packetb6affb88,98 total component
 methods. These do not qualify issuer/mapping provenance, protected reconstruction
 lifetime, ordinary caller authentication, complete graph decoding or final release.
+
+
+### Original native result cardinality controls — 2026-10-11
+
+Insert10000 additional fixture rows and independently confirm10001 source rows.
+Observe original stock psycopg PGresult.ntuples after the actual capture submission:
+require101 before `fetchmany`, and whole capture refusal. Deliberately remove only
+the submitted SQL limit; retain ordinary post-fetch refusal and observe10001 native
+rows. This counter proves the missing server bound without manufacturing a response.
+The two controls advance CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
+resource-bound prerequisites only; source/role/RLS completeness, strict byte
+accounting and final publication still require independent qualification.

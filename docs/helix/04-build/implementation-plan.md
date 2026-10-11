@@ -4112,3 +4112,27 @@ coordinator; original issuer/mapping/source/role/config stability, graph typed
 property decoding, caller/current-authority admission and final release remain
 required. No new backend acceptance binding. Last full gate checkpoint26/132 with
 106 missing; earlier packets retain their original source tuples. Full goal active.
+
+
+### Bound native capture before buffered result delivery — 2026-10-11
+
+Corrected fixed capture to send a101-row SQL sentinel limit before driver buffering,
+with rejection above100 rather than truncating logical fact supply. Final
+`evidence/python-psycopg-epoch-cut/dcf2afbb-d612-4f0e-acdb-cef660d95490` passes100
+methods (49 fact/dependency/owner/recipe/capture/reconstruction/cardinality,16 graph,
+nine epoch,26 adoption),130 current/archived Truss source pins,363 UMF source pins,
+1614 native payload pins, module boundaries and three independent named
+stop0/status3/socket-absent cleanups. Actual PGresult observation sees101 from a
+10001-row fixture; omitted-limit control sees10001 despite boundedfetchmany and
+ordinary post-fetch refusal. Earlier source packets remain scoped to their tuples.
+
+Formal `evidence/security-capture-cardinality-formal/93c04bcf-be19-4409-81f1-c66dddfeb5c7`
+passes five fresh-context queries (three UNSAT/two SAT), with three current source
+inputs. Arbitrary nonnegative source/quota under faithful min(source,quota+1)
+projection implies bounded native cardinality and count-complete acceptance;
+omitting the limit admits unbounded receive and using only quota silently accepts
+incomplete source. These formulas do not derive SQL/driver origin, role/RLS complete
+visibility, typed field/identity completeness, strict whole-wire allocation budgets
+or protected authorization/refinement. Original issuer/mapping, protected fact
+construction, graph decoding, caller/current-authority and final release remain
+open. No acceptance promotion; last full checkpoint26/132 with106 missing. Goal active.

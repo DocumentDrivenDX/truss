@@ -342,3 +342,26 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         providers=self.identity_dependency_providers();p=providers[0];changed=_DependencyFactProvider(p.kind,p.reference,p.relation,_FactColumnComparison('active',4,25,-1,True,100))
         result=self.reconstruct_identity_fixture(t,(changed,)+providers[1:])
         self.assertNotEqual(result.returncode,0);self.assertEqual(result.stdout,'')
+
+    def observe_native_capture_cardinality(self,omit_server_limit=False):
+        from unittest.mock import patch
+        from truss.psycopg_host import _GuardedCursor
+        t=self.begin();self.connection.execute("INSERT INTO truss.sec_assignment SELECT 'a'||i::text,'s1','p1',true FROM generate_series(1,10000) i")
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.sec_assignment').fetchone(),(10001,))
+        original=_GuardedCursor.execute;observed=[]
+        def execute(cursor,query,*args,**kwargs):
+            text=query.as_string(cursor._cursor) if hasattr(query,'as_string') else str(query)
+            selected=text.startswith('SELECT CASE WHEN') and 'FROM ONLY "truss"."sec_assignment"' in text
+            if selected and omit_server_limit:
+                self.assertTrue(text.endswith(' LIMIT 101'));query=sql.SQL(text[:-len(' LIMIT 101')])
+            result=original(cursor,query,*args,**kwargs)
+            if selected:observed.append(cursor.pgresult.ntuples)
+            return result
+        with patch.object(_GuardedCursor,'execute',execute):result=self.fixed_capture(t)
+        self.assertIsInstance(result,Error);return observed
+    def test_fixed_capture_server_result_is_capped_before_fetchmany(self):
+        self.assertEqual(self.observe_native_capture_cardinality(),[101])
+    def test_omitted_server_limit_receives_all_rows_despite_bounded_fetchmany(self):
+        # Deliberately omit only the SQL limit; ordinary post-fetch refusal
+        # remains intact and does not qualify this oversized native result.
+        self.assertEqual(self.observe_native_capture_cardinality(True),[10001])
