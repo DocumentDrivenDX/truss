@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from threading import Lock
 from uuid import uuid4
 from .execution import Ok, Error, ExecutionFailure
-from ._native_pg8000 import NativeBoundaryRefusal, _Ownership
+from ._native_pg8000 import NativeBoundaryRefusal, NativeCancellationAdmission, _Ownership
 from ._native_arbitration import NativeArbitration, NativeOperationSession
 from ._operation_arbitration import Prepared, CompletionDecision
 from ._native_result_custody import NativeResultCustody, NativeTextLimits
@@ -116,6 +116,24 @@ class NativeOperationRunner:
             return handle
 
     def execute(self, transaction, statement, params=None, *, cancellation=None):
+        custody=self.service._executor._original_custody(transaction)
+        context=custody.cancellation if custody is not None else None
+        if context is None:return self._execute(transaction,statement,params,cancellation=cancellation)
+        self.service._executor._refresh_native_liveness(custody)
+        if not custody.usable:return self._error(custody.refusal_code,'Original native custody unavailable')
+        if self.service._executor._closed:return self._error('invalid_transaction','Original executor disposed')
+        if context.requested():return self._error('cancelled','Original adoption cancellation latched')
+        if cancellation is not None:return self._error('execution_obligation','Adoption context owns cancellation')
+        try:child=self.cancellation()
+        except CancellationUnavailable:return self._error('execution_obligation','Original cancellation capacity unavailable')
+        if not context.attach(custody,child):return self._error('execution_obligation','Original adoption operation busy')
+        try:
+            result=self._execute(transaction,statement,params,cancellation=child)
+            if isinstance(result,Error) and result.error.code=='transaction_unusable':custody.usable=False
+            return result
+        finally:context.detach(custody,child)
+
+    def _execute(self, transaction, statement, params=None, *, cancellation=None):
         deadline = NativeOperationDeadline(self.limits.ordinary_ms, self.limits.settlement_ms)
         params = {} if params is None else params
         with self._lock:
@@ -173,7 +191,7 @@ class NativeOperationRunner:
             deadline.check()
             prepared = self.service.registry.prepare(self._assembly, transaction)
             if type(prepared) is not Prepared:
-                return self._error('invalid_transaction', 'Original operation preparation refused')
+                return self._error('cancelled' if prepared.reason=='cancelled' else 'invalid_transaction', 'Original operation preparation refused')
             run.attempt = prepared.attempt
             try:
                 deadline.check()
@@ -195,10 +213,11 @@ class NativeOperationRunner:
             if type(run.session) is not NativeOperationSession:
                 from ._operation_arbitration import Refused
                 if type(run.session) is Refused:
+                    self.service.registry.abandon_prepared(run.attempt)
                     if cancellation is not None and not cancellation._close_channel():
                         raise CancellationUnavailable('Original unused cancel channel closure unresolved')
                     boundary.release_operation(run.token)
-                    return self._error('execution_obligation', 'Original operation binding refused')
+                    return self._error('cancelled' if run.session.reason=='cancelled' else 'execution_obligation', 'Original operation binding refused')
                 return self._error('transaction_unusable', 'Original operation binding unavailable')
             session = run.session
             session.deadline = deadline
@@ -241,14 +260,16 @@ class NativeOperationRunner:
                            and not boundary._quarantined and not boundary._calling
                            and call is not None and call.capture_complete
                            and run.savepoint in tracker._state.savepoints)
-                unsubmitted = (type(error) is NativeBoundaryRefusal and call is before
+                unsubmitted = (type(error) in (NativeBoundaryRefusal,NativeCancellationAdmission) and call is before
                                and not boundary._quarantined and not boundary._calling)
                 if not native and not unsubmitted and not expired: raise
                 state = next((field[1:].decode('ascii') for e in call.events if e.code == b'E'
                     for field in e.payload.split(b'\0') if field[:1] == b'C'), None) if native else None
                 if cancellation is not None:
                     cancellation._settle()
-                if expired:
+                if type(error) is NativeCancellationAdmission:
+                    failure = self._error('cancelled','Original adoption cancellation refused unsent call')
+                elif expired:
                     failure = self._error('cancelled', 'Original scheduling deadline expired')
                 elif state == '57014' and cancellation is not None and cancellation._is_requested():
                     failure = self._error('cancelled', 'Original statement cancellation contained')

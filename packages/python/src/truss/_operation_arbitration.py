@@ -134,8 +134,11 @@ class OperationArbitration:
 
     def prepare(self, assembly, transaction):
         custody = HostExecutor._original_custody(self._executor, transaction)
+        self._executor._refresh_native_liveness(custody)
         if custody is None or not custody.usable or self._executor._closed:
             return Refused('invalid_transaction')
+        if custody.cancellation is not None and custody.cancellation.requested():
+            return Refused('cancelled')
         generation = custody.observation.transaction_identity
         if type(generation) is not str or len(generation) > self._limits.metadata_bytes:
             return Refused('resource')
@@ -171,6 +174,8 @@ class OperationArbitration:
                 reason = 'disposed'
             elif not entry.custody.usable:
                 reason = 'invalid_transaction'
+            elif entry.custody.cancellation is not None and entry.custody.cancellation.requested():
+                reason = 'cancelled'
             elif entry.transaction in root.active:
                 reason = 'busy'
             elif len(root.active) >= self._limits.leases:

@@ -262,18 +262,23 @@ class NativeHostSession:
     def rollback(self):
         return self._invoke('rollback',lambda token,record:self._control('rollback',token,record))
 
-    def adopt_transaction(self,*,isolation='read_committed',access_mode='read_write'):
+    def adopt_transaction(self,*,isolation='read_committed',access_mode='read_write',cancellation=None):
         if type(isolation) is not str or type(access_mode) is not str:
             return self._error('invalid_transaction')
         def adopt(token,record):
             if self.tracker._state.generation is None: return self._error('invalid_transaction')
-            return self.executor.adopt_transaction(self.tracker.port(token),isolation=isolation,access_mode=access_mode)
+            return self.executor.adopt_transaction(self.tracker.port(token),isolation=isolation,access_mode=access_mode,cancellation=cancellation)
         return self._invoke('adopt',adopt)
 
     def _transaction_call(self,kind,transaction,savepoint=None):
         custody=self.executor._original_custody(transaction)
         if custody is None or type(custody.port) is not NativeTransactionPort or custody.port._tracker is not self.tracker:
             return self._error('invalid_transaction')
+        self.executor._refresh_native_liveness(custody)
+        if not custody.usable:return self._error(custody.refusal_code)
+        if self.executor._closed:return self._error('invalid_transaction')
+        if kind=='savepoint' and custody.cancellation is not None and custody.cancellation.requested():
+            return self._error('cancelled')
         def invoke(token,record):
             custody.port.bind_operation(token)
             method=getattr(self.executor,kind)

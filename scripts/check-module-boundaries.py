@@ -13,6 +13,7 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_adoption_cancellation': {'threading'},
     'contracts': {'dataclasses', 'enum', 'types', 'typing'},
     'groups': {'dataclasses', 'typing', 'truss.contracts', 'truss.execution'},
     'imports': {'dataclasses', 'typing', 'truss.contracts', 'truss.execution'},
@@ -21,8 +22,8 @@ ALLOWED = {
     '_host_control_custody': {'truss._native_ingress_deadline', 'truss._native_outbound', 'dataclasses', 'threading', 'pg8000.core', 'truss._native_pg8000', 'truss._native_transactions', 'truss._native_result_custody', 'truss._native_driver_profile', 'truss._host_execution', 'truss.execution'},
     '_host_session': {'truss._native_deadline', 'truss._host_call_recovery', 'dataclasses', 'threading', 'truss._host_execution', 'truss._native_transactions', 'truss._native_arbitration', 'truss._native_pg8000', 'truss._host_control_custody', 'truss.execution'},
     '_host_contracts': {'dataclasses', 'truss.execution'},
-    '_host_execution': {'truss._host_call_recovery', 'dataclasses', 'threading', 'truss._host_contracts', 'truss._native_adoption', 'truss._native_transactions', 'truss.execution', 'uuid'},
-    '_native_adoption': {'dataclasses', 'truss._host_contracts', 'truss._native_pg8000', 'truss.execution', 'uuid'},
+    '_host_execution': {'truss._adoption_cancellation', 'truss._host_call_recovery', 'dataclasses', 'threading', 'truss._host_contracts', 'truss._native_adoption', 'truss._native_transactions', 'truss.execution', 'uuid'},
+    '_native_adoption': {'contextlib', 'dataclasses', 'truss._host_contracts', 'truss._native_pg8000', 'truss.execution', 'uuid'},
     '_native_arbitration': {'dataclasses', 'threading', 'truss._host_execution', 'truss._native_adoption', 'truss._native_pg8000', 'truss._native_transactions', 'truss._operation_arbitration', 'uuid'},
     '_native_driver_profile': {'pg8000.converters', 'pg8000.core', 'pg8000.native'},
     '_native_outbound': {'truss._native_driver_profile', 'dataclasses', 'truss._native_pg8000', 'truss._resource_account'},

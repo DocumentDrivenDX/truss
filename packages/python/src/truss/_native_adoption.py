@@ -7,6 +7,7 @@ operation/resource recovery integration remains required.
 """
 from dataclasses import dataclass, replace, field
 from uuid import uuid4
+from contextlib import nullcontext
 from .execution import Ok, TransactionObservation
 
 
@@ -48,6 +49,7 @@ class _Claim:
     success: object
     refusal: object
     capture: _Capture = field(default_factory=_Capture)
+    cancelled: object = None
 
 
 @dataclass(frozen=True)
@@ -84,7 +86,8 @@ def _reserve(port, executor, custody, success, refusal):
         with executor._lifecycle_lock:
             if executor._closed or len(executor._native_claims) >= executor._native_claim_limit:
                 raise NativeBoundaryRefusal('Original executor adoption retention unavailable')
-            claim = _Claim(executor, port, g, port._token, custody, success, refusal)
+            claim = _Claim(executor, port, g, port._token, custody, success, refusal,
+                           cancelled=executor._error('cancelled','Original adoption cancellation latched'))
             native_retention = t._adoption_custody + (claim,)
             executor_retention = executor._native_claims + (claim,)
             # Both stable owners retain original custody before observation,
@@ -115,6 +118,24 @@ def _corresponds(claim, native):
             and claim.capture.native is native)
 
 
+class _AdoptionCancelled(Exception):
+    pass
+
+def check_cancellation(claim,port):
+    """Caller holds native guard; no Q cancellation or handle publication."""
+    signal=claim.custody.cancellation
+    if signal is None or not signal.requested():return
+    root=_current(claim);b=port._tracker._boundary
+    call=b.last_call
+    if (b._quarantined or b._calling or claim.token is not b._operation
+            or claim.generation is not port._tracker._state.generation
+            or port._tracker._state.status!=b'T' or call is None
+            or not call.capture_complete or call.final_status!=b'T'):
+        from ._native_pg8000 import NativeBoundaryRefusal
+        raise NativeBoundaryRefusal('Original cancelled observation unresolved')
+    _publish_root(claim.generation,replace(root,current=replace(root.current,phase='cancelled')))
+    raise _AdoptionCancelled()
+
 def profile_precheck(claim, port):
     """SHOW-only mismatch checks preserve a not-yet-acquired host snapshot.
 
@@ -128,6 +149,7 @@ def profile_precheck(claim, port):
         raise NativeBoundaryRefusal('Original profile precheck already submitted')
     for setting in ('transaction_isolation', 'transaction_read_only'):
         with b._lock:
+            check_cancellation(claim,port)
             root = _current(claim)
             if (root.current.phase != 'observing' or claim.port is not port
                     or claim.token is not b._operation or claim.generation is not port._tracker._state.generation
@@ -178,6 +200,7 @@ def start_probe(claim, port):
     from ._native_pg8000 import NativeBoundaryRefusal
     if type(claim) is not _Claim or claim.port is not port:
         raise NativeBoundaryRefusal('Original adoption probe capability required')
+    check_cancellation(claim,port)
     root = _current(claim)
     if (root.current.phase != 'observing' or claim.capture.probe_revision is not None or
             claim.token is not port._token or claim.generation is not port._tracker._state.generation
@@ -207,6 +230,8 @@ def _retain_unknown(claim):
             if terminal is not None and terminal.phase == 'profile_refused':
                 return claim.refusal
             if root.current is not None and root.current.claim is claim:
+                if root.current.phase == 'cancelled':
+                    return claim.cancelled
                 if root.current.phase == 'published':
                     return claim.success
                 claim.custody.usable = False
@@ -226,14 +251,19 @@ def is_published(generation, custody):
             root.current.phase == 'published' and root.current.claim.custody is custody)
 
 
-def adopt(executor, port, *, isolation, access_mode):
+def adopt(executor, port, *, isolation, access_mode,cancellation=None):
     from ._host_contracts import TransactionHandle, _Adoption
     from ._native_pg8000 import NativeBoundaryRefusal
     # Allocate the issued handle, original custody and success result before any
     # native observation or final publication. Unpublished custody is inert.
     key = uuid4().hex
     handle = TransactionHandle(executor._issuer, key, isolation, access_mode)
-    custody = _Adoption(port, None, handle)
+    custody = _Adoption(port, None, handle,cancellation=cancellation)
+    if cancellation is not None:
+        if not cancellation.bind(executor,custody):
+            return executor._error('execution_obligation','Original adoption cancellation already bound')
+        if cancellation.requested():
+            return executor._error('cancelled','Cancelled before original adoption observation')
     success = Ok(handle)
     refusal = executor._error('invalid_transaction', 'Actual transaction profile does not match')
     try:
@@ -254,9 +284,10 @@ def adopt(executor, port, *, isolation, access_mode):
     try:
         observed = port._observe_for_adoption(claim)
         b = port._tracker._boundary
-        with b._lock:
+        with b._lock, (cancellation._lock if cancellation is not None else nullcontext()):
             root = _current(claim)
             native = claim.capture.native
+            check_cancellation(claim,port)
             if (native is None or native.observation is not observed or
                     type(observed) is not TransactionObservation or native.port is not port or
                     native.generation is not claim.generation or native.token is not claim.token):

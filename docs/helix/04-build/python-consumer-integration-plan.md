@@ -983,3 +983,77 @@ passed23.127s. Definitive installed wheel passed436 tests in73.581s against
 PostgreSQL16.15. All58 package files/four metadata files and53 test modules
 match the original retained source/wheel/install snapshot; boundaries pass242
 imports. The receipt records exact hashes and preserves the private-profile gates.
+
+### Iteration23: persistent original adoption cancellation
+
+Astra Ultra selected a distinct executor-issued AdoptionCancellation signal.
+Bind it to exact preallocated custody before native observation, preserve a monotone
+latch, and forward requests outside its lock to the exact active one-use Execute
+child. A finished child does not clear context cancellation or rewrite its result.
+Existing standalone per-run cancellation remains separate private qualification.
+
+Pre-cancel before claim reservation returns cancelled with no SQL. After claim
+reservation, cancellation before each observation/final publication wins a terminal
+cancelled claim with no handle/refund when original state is clean. An already
+active bounded Q settles; no Q cancel support is inferred. Unknown native state
+retains unusable custody. Exact successful publication first preserves its original
+Ok; a later request closes that context's new admission. No duplicate adoption or
+disposal can erase the latch. New runner/registry/native-session/savepoint admission
+refuses while exact previously issued savepoint cleanup and host-owned settlement
+remain available. Unresolved native outcomes take precedence over cancellation.
+
+Qualify before-observation and publication races, original active Execute cancel
+with preserved prior host writes, late request, child races, native dispatch failure
+and duplicate-generation refusal. The existing original cancel channel profile
+requires a finite host socket timeout greater than zero and at most2s; unsupported
+active cancel must refuse, never silently downgrade. Public Q/adoption cancellation
+profile and complete external capabilities remain separate unimplemented gates.
+
+Astra source review required preserving acquired binding reconciliation after a
+latch, validating exact cleanup membership/native liveness before observation,
+and retaining unusable native custody ahead of cancellation classification.
+Ordinary operation cancellation is checked only at its original native admission
+checkpoint, not again after resource preflight mutates custody. A distinct original
+unsent-cancellation refusal returns cancelled only after confirmed containment.
+
+SAVEPOINT has an explicit signal-lock admission point retaining its exact original
+custody on the preallocated publication; release the lock before I/O. Cancellation
+before that point refuses without a SAVEPOINT. Admission first permits that bounded
+Q to settle and closes the next ordinary admission. Exact rollback/release cleanup
+remains available. This does not introduce active Q cancellation support.
+
+Concurrent main ad23e08b/d42e93ce records genuine owner/native provisional catalog
+staging and proposed ontology association bindings. Installer-only staging remains
+unpublished and synthetic admission; ontology roles cannot invent physical core
+relationships. These owner/security gates remain prerequisites of public Python
+catalog and protected operation capabilities.
+
+Cancellation during setup after native binding and before the operation savepoint
+exists conservatively retains transaction_unusable custody. This iteration does
+not prove no-effect handback for those windows. A native regression checks a
+post-binding request submits no baseline probe, retains the exact guard/session
+and quarantines future calls. This limitation is separate from confirmed Execute
+containment and remains a prerequisite of public adapter exposure.
+
+Original outcome classification precedes the cancellation shortcut: quarantined
+or otherwise unresolved custody remains transaction_unusable; a confirmed ended
+or replaced native generation and disposed ordinary executor admission return
+invalid_transaction with no SQL. Pure exact native liveness is checked before the
+runner/session/direct-executor latch and registry preparation, outside registry
+locks. Native regressions cover host commit, rollback, replacement generation and
+disposal while retaining original cancellation/custody.
+
+Concurrent main fe8a6705 adds the separately Astra-reviewed private association
+source-correspondence component and39 tests. Preserve its exact original bytes,
+fixtures and explicit module map; rebuild the combined wheel rather than promoting
+its earlier source-tree evidence into installed-package qualification. Its frozen
+mapping remains declaration correspondence, not authenticated/native authority or
+accepted publication. This integration does not change the reviewed cancellation
+paths or public exports.
+
+Astra Ultra approved the final private source/plan; independent83 tests passed
+13.919s. The definitive integrated installed wheel passed497 tests in65.603s
+against PostgreSQL16.15. Exact60 package files, four distribution metadata files,
+55 test modules, two original owner fixtures and the251-import checker remained
+unchanged through the run. The retained receipt/log record the combined main
+snapshot and keep public execution/security/cancellation gates explicit.

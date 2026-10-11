@@ -21,6 +21,7 @@ class _SavepointPublication:
     ordinal: int
     success: object
     phase: str = 'prepared'
+    admission: object = None
 
 class HostExecutor:
     """One synchronous executor over explicit trusted ports; no connection pool."""
@@ -41,21 +42,37 @@ class HostExecutor:
         self._host_call_recovery = HostCallRecovery(self)
         self._native_claims = ()
         self._native_claim_limit = 4096
+        self._adoption_signals = ()
+
+    def cancellation(self):
+        from ._adoption_cancellation import AdoptionCancellation
+        with self._lifecycle_lock:
+            if self._closed or len(self._adoption_signals)>=256:
+                raise ValueError('Original adoption cancellation capacity unavailable')
+            signal=AdoptionCancellation(self)
+            self._adoption_signals=(*self._adoption_signals,signal)
+            return signal
 
     @staticmethod
     def _error(code, message):
         return Error(ExecutionFailure(code, message))
 
     def adopt_transaction(self, port: HostTransactionPort, *, isolation: Isolation,
-                          access_mode: AccessMode) -> Outcome[TransactionHandle]:
+                          access_mode: AccessMode, cancellation=None) -> Outcome[TransactionHandle]:
         if self._closed:
             return self._error('invalid_transaction', 'Executor disposed')
         if isolation not in ('read_committed', 'repeatable_read', 'serializable') or access_mode not in ('read_only', 'read_write'):
             return self._error('invalid_transaction', 'Unsupported requested transaction profile')
         from ._native_transactions import NativeTransactionPort
+        if cancellation is not None:
+            from ._adoption_cancellation import AdoptionCancellation
+            if (type(cancellation) is not AdoptionCancellation
+                    or not any(item is cancellation for item in self._adoption_signals)
+                    or type(port) is not NativeTransactionPort):
+                return self._error('execution_obligation','Original native adoption cancellation required')
         if type(port) is NativeTransactionPort:
             from ._native_adoption import adopt
-            return adopt(self, port, isolation=isolation, access_mode=access_mode)
+            return adopt(self, port, isolation=isolation, access_mode=access_mode,cancellation=cancellation)
         try:
             observed = port.observe()
         except Exception:
@@ -93,9 +110,25 @@ class HostExecutor:
         a = self._transactions.get(handle._key)
         return a if a is not None and a.handle is handle else None
 
-    def _admission(self, handle, allow_failed=False):
+    def _refresh_native_liveness(self, custody):
+        """Pure original native generation classification, never SQL/admission."""
+        from ._native_transactions import NativeTransactionPort
+        if custody is None or type(custody.port) is not NativeTransactionPort:return
+        port=custody.port;boundary=port._tracker._boundary
+        with boundary._lock:
+            if boundary._quarantined:
+                custody.usable=False
+                custody.refusal_code='transaction_unusable'
+            elif custody.usable and (port._generation.ended or port._tracker._state.generation is not port._generation):
+                custody.usable=False
+                custody.refusal_code='invalid_transaction'
+
+    def _admission(self, handle, allow_failed=False,allow_cancelled=False):
         a = self._original_custody(handle)
+        self._refresh_native_liveness(a)
         if self._closed or a is None or not a.usable:
+            return None
+        if a.cancellation is not None and a.cancellation.requested() and not allow_cancelled:
             return None
         published = getattr(a.port, '_adoption_is_published', None)
         if callable(published) and not published(a):
@@ -122,6 +155,8 @@ class HostExecutor:
             a = self._transactions.get(handle._key)
             if a is not None and a.handle is handle and not a.usable:
                 return self._error(a.refusal_code, 'Original transaction observation or completion unresolved')
+            if a is not None and a.handle is handle and a.cancellation is not None and a.cancellation.requested():
+                return self._error('cancelled','Original adoption cancellation latched')
         return self._error('invalid_transaction', 'Original adopted transaction unavailable')
 
     def _command(self, a, sql):
@@ -146,6 +181,8 @@ class HostExecutor:
         a = self._admission(transaction)
         if a is None:
             return self._admission_error(transaction)
+        if a.cancellation is not None and a.cancellation.requested():
+            return self._error('cancelled','Original adoption cancellation latched')
         if len(self._savepoint_publications)>=self._savepoint_publication_limit:
             return self._error('execution_obligation', 'Savepoint publication retention exhausted')
         preflight=getattr(a.port,'_preflight_control',None)
@@ -158,7 +195,9 @@ class HostExecutor:
         success = Ok(handle)
         publication = _SavepointPublication(handle,transaction,candidate,self._ordinal,success)
         # All handle/map/success custody exists before the first SAVEPOINT.
-        self._savepoint_publications = (*self._savepoint_publications,publication)
+        retained=(*self._savepoint_publications,publication)
+        if not self._admit_savepoint(a,publication,retained):
+            return self._error('cancelled','Original adoption cancellation latched')
         self._ordinal += 1
         try:
             result = self._command(a, 'SAVEPOINT ' + key)
@@ -183,6 +222,20 @@ class HostExecutor:
         publication.phase = 'published'
         return success
 
+    def _admit_savepoint(self, custody, publication, retained):
+        # This is the ordinary control admission point. A later request may
+        # close the next admission, but this bounded Q must settle originally.
+        signal=custody.cancellation
+        if signal is None:
+            publication.admission=custody
+            self._savepoint_publications=retained
+            return True
+        with signal._lock:
+            if signal._requested:return False
+            publication.admission=custody
+            self._savepoint_publications=retained
+            return True
+
     def _publish_savepoint_map(self, candidate):
         self._savepoints = candidate
 
@@ -195,7 +248,7 @@ class HostExecutor:
             self._savepoint_publication_lock.release()
 
     def _savepoint_command_locked(self, transaction, savepoint, rollback):
-        a = self._admission(transaction, allow_failed=rollback)
+        a = self._original_custody(transaction)
         if a is None:
             return self._admission_error(transaction)
         if type(savepoint) is not SavepointHandle:
@@ -211,6 +264,9 @@ class HostExecutor:
                 return self._error('transaction_unusable', 'Original savepoint observation unavailable')
             if not live:
                 return self._error('invalid_transaction', 'Original native savepoint absent or shadowed')
+        a = self._admission(transaction, allow_failed=rollback,allow_cancelled=True)
+        if a is None:
+            return self._admission_error(transaction)
         if len(self._savepoint_publications)>=self._savepoint_publication_limit:
             return self._error('execution_obligation','Savepoint publication retention exhausted')
         preflight=getattr(a.port,'_preflight_control',None)

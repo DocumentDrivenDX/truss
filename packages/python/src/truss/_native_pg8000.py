@@ -17,6 +17,10 @@ class NativeBoundaryRefusal(RuntimeError):
     pass
 
 
+class NativeCancellationAdmission(NativeBoundaryRefusal):
+    """Original persistent latch refused an ordinary, unsent native call."""
+
+
 @dataclass(frozen=True)
 class NativeEvent:
     code: bytes

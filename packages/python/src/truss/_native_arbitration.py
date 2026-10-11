@@ -8,7 +8,7 @@ from uuid import uuid4
 from threading import Lock
 from ._host_execution import HostExecutor
 from ._native_transactions import NativeTransactionPort
-from ._native_pg8000 import NativeBoundaryRefusal
+from ._native_pg8000 import NativeBoundaryRefusal, NativeCancellationAdmission
 from ._operation_arbitration import OperationArbitration, Admitted, Refused, Unresolved
 
 @dataclass
@@ -63,6 +63,8 @@ class NativeOperationSession:
             if (self.admission_closed or self.owner._executor._closed
                     or not self.context.custody.usable):
                 raise NativeBoundaryRefusal('Ordinary native admission closed')
+            if admission and self.context.custody.cancellation is not None and self.context.custody.cancellation.requested():
+                raise NativeCancellationAdmission('Original adoption cancellation latched')
             if len(self.calls) >= self.call_limit:
                 raise NativeBoundaryRefusal('Native operation call custody exhausted')
 

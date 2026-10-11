@@ -9,3 +9,4 @@ class _Adoption:
     handle: TransactionHandle
     usable: bool = True
     refusal_code: str = "transaction_unusable"
+    cancellation: object = None
