@@ -345,3 +345,41 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_collect_pending_association_effect_candidate(int) FROM PUBLIC;
+
+-- Private value-bearing image of the verified five-family new metadata cohort.
+-- Not a complete report, accepted binding authority, or durable readiness token.
+CREATE FUNCTION truss.runtime_collect_pending_association_value_candidate(original_revision int)
+RETURNS TABLE(family text,identity jsonb,physical_value jsonb)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET bytea_output='hex' AS $$
+DECLARE verified jsonb; image jsonb; initial_generation bigint; final_generation bigint;
+BEGIN
+ SELECT o.effect_generation INTO STRICT initial_generation FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted';
+ SELECT coalesce(jsonb_agg(jsonb_build_object('family',v.family,'identity',v.identity)
+  ORDER BY v.family COLLATE "C",v.identity::text COLLATE "C"),'[]'::jsonb) INTO verified
+  FROM truss.runtime_collect_pending_association_effect_candidate(original_revision) v;
+ SELECT coalesce(jsonb_agg(jsonb_build_object('family',q.family,'identity',q.identity,'physicalValue',q.physical_value)
+  ORDER BY q.family COLLATE "C",q.identity::text COLLATE "C"),'[]'::jsonb) INTO image FROM (
+  SELECT 'type'::text AS family,jsonb_build_array(t.type_id::text,t.document_id,t.module,t.element) AS identity,to_jsonb(t) AS physical_value FROM truss.type_def t WHERE t.since_rev=original_revision
+  UNION ALL SELECT 'property',jsonb_build_array(p.prop_id::text,p.type_id::text,p.declaration_module,p.element),to_jsonb(p) FROM truss.prop_def p WHERE p.since_rev=original_revision
+  UNION ALL SELECT 'key',jsonb_build_array(k.type_id::text,k.key_id,k.key_num::text),to_jsonb(k) FROM truss.key_def k WHERE k.since_rev=original_revision
+  UNION ALL SELECT 'relationship',jsonb_build_array(r.rel_type_id::text,r.document_id,r.module,r.rel_id),jsonb_build_object('definition',to_jsonb(r),'lineage',(SELECT to_jsonb(l) FROM truss.relationship_lineage l WHERE l.rel_type_id=r.rel_type_id)) FROM truss.rel_def r WHERE r.since_rev=original_revision
+  UNION ALL SELECT 'endpoint',jsonb_build_array(e.rel_type_id::text,e.source_type::text,e.target_type::text),to_jsonb(e) FROM truss.rel_endpoint e JOIN truss.rel_def r USING(rel_type_id) WHERE r.since_rev=original_revision
+ ) q;
+ IF jsonb_array_length(image)>16384 OR octet_length(image::text)>1048576 THEN
+  RAISE EXCEPTION 'pending association physical value component capacity exceeded' USING ERRCODE='54000';
+ END IF;
+ IF (SELECT coalesce(jsonb_agg(v.value-'physicalValue' ORDER BY v.value->>'family' COLLATE "C",(v.value->'identity')::text COLLATE "C"),'[]'::jsonb) FROM jsonb_array_elements(image) v) IS DISTINCT FROM verified THEN
+  RAISE EXCEPTION 'pending association physical value identity correspondence required' USING ERRCODE='55000';
+ END IF;
+ SELECT o.effect_generation INTO STRICT final_generation FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted';
+ IF final_generation IS DISTINCT FROM initial_generation THEN
+  RAISE EXCEPTION 'pending association physical value generation changed' USING ERRCODE='55000';
+ END IF;
+ RETURN QUERY SELECT v.value->>'family',v.value->'identity',v.value->'physicalValue' FROM jsonb_array_elements(image) v ORDER BY v.value->>'family' COLLATE "C",(v.value->'identity')::text COLLATE "C";
+EXCEPTION WHEN no_data_found OR too_many_rows THEN
+ RAISE EXCEPTION 'pending association physical value operation correspondence required' USING ERRCODE='55000';
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_collect_pending_association_value_candidate(int) FROM PUBLIC;
