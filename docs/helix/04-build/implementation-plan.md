@@ -3772,3 +3772,37 @@ successful acquisition. All44 methods/boundaries pass;109 current/archive source
 pins match,1614 native payload pins and both named independent cleanup receipts
 remain retained. Typed-edgeffb76425 is the earlier source-qualified predecessor.
 No additional acceptance promotion or independent review is claimed.
+
+### Explicit supported Python PostgreSQL 17.11 profile — 2026-10-11
+
+The owner-selected current integration target is PostgreSQL 17.11 from the
+private pgserver 0.1.4+truss.pg17.11 wheel. Astra Ultra approved explicit closed
+profile selection in PsycopgHost/adopt_psycopg_host: psycopg 3.3.6, binary
+implementation, libpq 180006 and selected server 160015 or 170011. Arbitrary
+profiles and version mismatch refuse before SQL or connection attachment.
+Historical default 16.15 selection and its receipts remain explicit; there is
+no automatic fallback. The PG16 installation-definition baseline remains
+unchanged. Passing private PG17 components cannot qualify that installer.
+
+The native replay covers original adoption and prerequisite cases, retained
+profile identity, wrong/unsupported tuple refusal and actual transaction_timeout
+termination. Require original/public SQLSTATE 25P04, transaction_unusable,
+retained failure custody, quarantine and no callback or connection reattachment
+after termination. Truss never resets the host transaction timer. Distinct
+fixture cleanup receipts cover startup uncertainty and post-start setup failure,
+with independent stop/status/socket/log observation and directory preservation
+when shutdown is unconfirmed. Per-test connection cleanup is registered before
+adoption. Exact verified wheel bytes and extracted native files are retained
+with project, dependency/executable and before/after native hashes. This is
+host-adoption/private-prerequisite evidence, not accepted catalog, protected
+installation, ordinary authority, finalization, commit or public activation.
+
+Astra Ultra approved final packet `55a413f7-3ff9-4e5f-b2a9-6180a0748e09`:
+49 native methods (29 adoption, 18 prerequisites, two fixture-failure controls)
+and the 543-import boundary check pass. Independent review matches 1284 project
+source pins, 1637 wheel-derived executed native files, 257 external input files
+and 11 evidence files. All four fixture shutdown/socket/directory checks pass.
+The wheel-to-executed-tree correspondence is exact. Packet `939366fd` passed its
+earlier 49-method source tuple but precedes the final harness corrections; it
+is not substituted for the final packet. No protected installer or public
+accepted catalog capability is promoted by this host profile checkpoint.

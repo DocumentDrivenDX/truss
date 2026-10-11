@@ -1,0 +1,6 @@
+2026-10-11 16:05:39.476 EDT [5546] LOG:  starting PostgreSQL 17.11 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 16:05:39.477 EDT [5546] LOG:  listening on Unix socket "/private/tmp/truss-prerequisite-mhoojz_w/socket/.s.PGSQL.5432"
+2026-10-11 16:05:39.485 EDT [5549] LOG:  database system was shut down at 2026-10-11 16:05:38 EDT
+2026-10-11 16:05:39.488 EDT [5546] LOG:  database system is ready to accept connections
+2026-10-11 16:05:39.901 EDT [5546] LOG:  received immediate shutdown request
+2026-10-11 16:05:39.905 EDT [5546] LOG:  database system is shut down
