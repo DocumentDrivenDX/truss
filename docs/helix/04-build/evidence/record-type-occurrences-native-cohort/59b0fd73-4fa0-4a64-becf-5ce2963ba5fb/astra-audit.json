@@ -1,0 +1,132 @@
+{
+  "status": "passed",
+  "method": "Independent read-only exact source/ZIP/native receipt/log/custody audit; no native execution",
+  "receiptSha256": "ff07c38ead2a914252e85417d96938c5dfc4f075574cb8cfff76a9e25949ddc7",
+  "nativeReceiptSha256": "3e73fddd6c5010a2b5c81a4d7ce7df7c0cde4350aae8505dd4a3c39e012aeb82",
+  "nativeLogSha256": "f093d3199a45a67ea3afade049d1ccbd74e1bf96e4389617c7315b60a17e5d7c",
+  "archiveSha256": "ac0b41807b2769d5417d0090d3890e9c276538c57b4573d8670496681e3fffca",
+  "sourcePins": 821,
+  "includedHostPins": 733,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentInputInventoryMatches": true,
+  "uniqueNativeChecks": 227,
+  "allHistoricalChecksRetained": 225,
+  "newDeclarationDutyChecks": [
+    "native exact receipt duty joins complete original occurrence inventory",
+    "native multi-Field duties join original occurrences without completeness promotion"
+  ],
+  "familyChecks": [
+    {
+      "composition": "typeReceiptComposition",
+      "ruleCount": 1,
+      "manifestSha256": "2f3409acf0d72010a028bfc1c86b29e106564985833b1c972781a6d00b59ac1d",
+      "protocol": "exact_current_receipt",
+      "qualifiedOccurrences": [
+        {
+          "sourceKind": "umf_document",
+          "documentId": "type-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "70bb78c93125a39292748d16eedf28018ce4d186b3b9dc26c82f361f5b325a19",
+          "owner": {
+            "module": "m",
+            "element": "v"
+          },
+          "sourcePointer": "/modules/0/elements/0/references/1"
+        }
+      ]
+    },
+    {
+      "composition": "typeJournalComposition",
+      "ruleCount": 2,
+      "manifestSha256": "2f3409acf0d72010a028bfc1c86b29e106564985833b1c972781a6d00b59ac1d",
+      "protocol": "transition_journal",
+      "qualifiedOccurrences": [
+        {
+          "sourceKind": "umf_document",
+          "documentId": "journal-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+          "owner": {
+            "module": "m",
+            "element": "v"
+          },
+          "sourcePointer": "/modules/0/elements/0/references/1"
+        },
+        {
+          "sourceKind": "umf_document",
+          "documentId": "journal-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+          "owner": {
+            "module": "m",
+            "element": "w"
+          },
+          "sourcePointer": "/modules/0/elements/1/references/0"
+        }
+      ]
+    }
+  ],
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "journalOwnerProfile": {
+    "identity": "umf-record-type-journal-inspection",
+    "version": "e71613d9c76bf7a4bf5476bf72ab4fd99059ff17",
+    "sha256": "88d68b176a3d2a5f8877332bbe332c116b87c57642f21f69932133599f521783"
+  },
+  "originalRequestSha256": "72ffaf8cc1992cf7dd1f4ffc976e289e390978fcc5e436e90eb1a8b0a13dc1dc",
+  "originalJournalSha256": "f073afdf0794e77809e6cd0e32f166fef9453d11c14d9febf6b001d8cb4a4155",
+  "originalSourceSha256": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+  "ownerEvidenceSha256": "16ce94e3142cf053a20cdf43440421baa4cfa8a41495b185a6247892d2795103",
+  "nativeObservation": {
+    "writerXid": "870",
+    "operationOrdinal": "0",
+    "effectGeneration": "7"
+  },
+  "exactJournalSourceMeaningAndPointerJoin": true,
+  "cleanup": {
+    "containerId": "c95a8c6ea1f8a45aaf09112005eb10fb14cc0652b8b0da4e7b8357d61fc52339",
+    "exitCode": 0,
+    "stdout": "c95a8c6ea1f8a45aaf09112005eb10fb14cc0652b8b0da4e7b8357d61fc52339",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "scope": "Private original source occurrence and issued declaration-duty joins composed with the actual PostgreSQL17.9 report fixture. Complete lexical value coverage is not complete semantic assertion membership, native nested-value enforcement, authenticated issuer, accepted report persistence or publication.",
+  "acceptancePromoted": false,
+  "independentLexicalInventoryAudit": [
+    {
+      "composition": "typeReceiptComposition",
+      "sourceSha256": "70bb78c93125a39292748d16eedf28018ce4d186b3b9dc26c82f361f5b325a19",
+      "independentlyReconstructedValueOccurrences": 52,
+      "joinedDuties": [
+        {
+          "pointer": "/modules/0/elements/0/references/1",
+          "start": 330,
+          "end": 383,
+          "fragmentSha256": "92830d6ebd53ca03b2fb0e94bbd2107468ead9674375c296dbb0771665cef73e"
+        }
+      ]
+    },
+    {
+      "composition": "typeJournalComposition",
+      "sourceSha256": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+      "independentlyReconstructedValueOccurrences": 67,
+      "joinedDuties": [
+        {
+          "pointer": "/modules/0/elements/0/references/1",
+          "start": 329,
+          "end": 382,
+          "fragmentSha256": "92830d6ebd53ca03b2fb0e94bbd2107468ead9674375c296dbb0771665cef73e"
+        },
+        {
+          "pointer": "/modules/0/elements/1/references/0",
+          "start": 502,
+          "end": 551,
+          "fragmentSha256": "e48e7761718059015d99a5dfb6cdfc5a6781bde0e59c26119942e6a49e9ac06f"
+        }
+      ]
+    }
+  ],
+  "independentLexicalAuditMethod": "Python JSONDecoder recursively located original value spans; UTF-8 byte offsets and RFC6901 pointers independently reconstructed and compared against every retained occurrence. No Truss lexer or producer was executed.",
+  "reviewScope": "Original declaration-duty occurrence join and pre-SQL private report composition",
+  "remainingFindings": []
+}

@@ -70,7 +70,7 @@ test('journal issuance binds exact original preparation before private report SQ
  const s=setup(),c=collectCatalogTypeJournals(s.prepared,owner,s.wire),other=preparation.prepare(packet(s.input));expect(()=>requireOriginalCatalogTypeJournals(s.prepared,{...c})).toThrow('collection custody');expect(()=>requireOriginalCatalogTypeJournals(other,c)).toThrow('collection custody');
  let calls=0;const connection={unsafe:async(query:string)=>{calls++;if(query.includes('runtime_collect_report_documents'))return [{doc_id:'journal-doc',doc_revision:'r1',content_sha256:s.prepared.original.input.documents[0]!.artifact.sha256,ord:'0',writer_xid:'42',operation_ordinal:'0',effect_generation:'11'}];if(query.includes('runtime_collect_new_catalog_counts'))return [{types_added:'0',properties_added:'0',keys_added:'0',relationships_added:'0',endpoints_added:'0',elements_retired:'0',provisional_count:'0',writer_xid:'42',operation_ordinal:'0',effect_generation:'11'}];return []}};
  for(const invalid of [{...c},false,0,'',null])await expect(collectCatalogReportPreparation(connection,s.prepared,'1',declarations,fields,undefined,undefined,undefined,undefined,invalid as any)).rejects.toThrow('collection custody');await expect(collectCatalogReportPreparation(connection,other,'1',declarations,fields,undefined,undefined,undefined,undefined,c)).rejects.toThrow('collection custody');expect(calls).toBe(0);
- const report=await collectCatalogReportPreparation(connection,s.prepared,'1',declarations,fields,undefined,undefined,undefined,undefined,c);expect(report.typeJournals).toBe(c);expect(report.typeReceipts).toBeNull();const noRecordType=(entries:readonly {ruleName:string}[])=>entries.every(e=>e.ruleName!=='core.recordType');expect(noRecordType(report.coreAssertionIdentities.entries)).toBe(true);expect(noRecordType([...report.coreAssertionIdentities.entries,{ruleName:'core.recordType'}])).toBe(false);expect(report.coreAssertionIdentities.complete).toBe(false);expect(calls).toBeGreaterThan(0);
+ const report=await collectCatalogReportPreparation(connection,s.prepared,'1',declarations,fields,undefined,undefined,undefined,undefined,c);expect(report.typeJournals).toBe(c);expect(report.originalOccurrenceInventory.documents[0]!.occurrences.filter(r=>r.recordTypeDuties.length).flatMap(r=>[...r.recordTypeDuties])).toEqual([...report.recordTypeRuleFamilies.rules]);expect(report.originalOccurrenceInventory.complete).toBe(false);expect(report.typeReceipts).toBeNull();const noRecordType=(entries:readonly {ruleName:string}[])=>entries.every(e=>e.ruleName!=='core.recordType');expect(noRecordType(report.coreAssertionIdentities.entries)).toBe(true);expect(noRecordType([...report.coreAssertionIdentities.entries,{ruleName:'core.recordType'}])).toBe(false);expect(report.coreAssertionIdentities.complete).toBe(false);expect(calls).toBeGreaterThan(0);
 });
 
 import {collectCatalogAssertionObservations} from '../packages/umf-bun/src/catalog-assertion-observations';
@@ -116,4 +116,26 @@ test('receipt protocol is evidence: equal declaration identity and duplicate occ
   expect(()=>collectCatalogRecordTypeRuleFamilies(s.prepared,observed,undefined,journal)).toThrow('correspondence required');
   let calls=0;await expect(collectCatalogReportPreparation({unsafe:async()=>{calls++;throw Error('SQL must not run')}},s.prepared,'1',declarations,fields,undefined,undefined,unavailable,undefined,journal)).rejects.toThrow('correspondence required');expect(calls).toBe(0);
  }finally{await rm(temp,{recursive:true,force:true})}
+});
+
+import {collectCatalogOriginalOccurrenceInventory,originalCatalogOccurrenceBytes} from '../packages/umf-bun/src/catalog-original-occurrence-inventory';
+test('original occurrence inventory joins declaration duties to exact lexical source bytes',()=>{
+ const s=setup(),observed=observations(s),journal=collectCatalogTypeJournals(s.prepared,owner,s.wire),duties=collectCatalogRecordTypeRuleFamilies(s.prepared,observed,undefined,journal);
+ const inventory=collectCatalogOriginalOccurrenceInventory(s.prepared,observed,duties),document=inventory.documents[0]!;
+ const rows=document.occurrences.filter(r=>r.recordTypeDuties.length);expect(rows.length).toBe(2);
+ for(const row of rows){expect(row.recordTypeDuties.length).toBe(1);const rule=row.recordTypeDuties[0]!;expect(row.pointer).toBe(rule.identity.occurrence.sourcePointer);expect(Buffer.from(originalCatalogOccurrenceBytes(s.prepared,inventory,0,document.occurrences.indexOf(row))).toString('base64')).toBe(rule.originalReferenceBytesBase64);expect(row.assertionMembershipComplete).toBe(false);expect(row.assertions.some(e=>e.ruleName==='core.recordType')).toBe(false)}
+ expect(inventory.sourceCoverageComplete).toBe(true);expect(inventory.complete).toBe(false);expect(()=>collectCatalogOriginalOccurrenceInventory(s.prepared,observed,{...duties})).toThrow('custody');
+ const other=preparation.prepare(packet(s.input));expect(()=>collectCatalogOriginalOccurrenceInventory(other,collectCatalogAssertionObservations(other,declarations,fields),duties)).toThrow('custody');
+ const bare=collectCatalogOriginalOccurrenceInventory(s.prepared,observed);expect(bare.documents[0]!.occurrences.every(r=>r.recordTypeDuties.length===0)).toBe(true);
+});
+
+test('declaration occurrence join preserves independently authored lexical reference spelling',()=>{
+ const s=setup(),fragment=String.raw`{ "element" : "R", "\u0072ole" : "record-type", "module" : "other" }`;
+ const compact=JSON.stringify(s.first.reference),source=Buffer.from(s.input.documents[0]!.artifact.bytesBase64,'base64').toString();expect(source.includes(compact)).toBe(true);
+ const input=structuredClone(s.input);input.documents[0]!.artifact=artifact('lexical-journal-doc',Buffer.from(source.replace(compact,fragment)));
+ const prepared=preparation.prepare(packet(input)),observed=collectCatalogAssertionObservations(prepared,declarations,fields,undefined,undefined,linksOwner),journal=collectCatalogTypeJournals(prepared,owner,s.wire),duties=collectCatalogRecordTypeRuleFamilies(prepared,observed,undefined,journal);
+ const inventory=collectCatalogOriginalOccurrenceInventory(prepared,observed,duties),document=inventory.documents[0]!,position=document.occurrences.findIndex(r=>r.pointer==='/modules/0/elements/0/references/1'),row=document.occurrences[position]!;
+ expect(row.recordTypeDuties.length).toBe(1);const bytes=originalCatalogOccurrenceBytes(prepared,inventory,0,position);expect(Buffer.from(bytes).toString()).toBe(fragment);expect(Buffer.from(row.recordTypeDuties[0]!.originalReferenceBytesBase64,'base64').toString()).toBe(fragment);
+ bytes.fill(0);expect(Buffer.from(originalCatalogOccurrenceBytes(prepared,inventory,0,position)).toString()).toBe(fragment);expect(()=>((row.recordTypeDuties as any).pop())).toThrow();expect(()=>((row.recordTypeDuties[0]!.identity.occurrence as any).sourcePointer='/changed')).toThrow();
+ for(const invalid of [null,false,0,''])expect(()=>collectCatalogOriginalOccurrenceInventory(prepared,observed,invalid as any)).toThrow('custody');
 });

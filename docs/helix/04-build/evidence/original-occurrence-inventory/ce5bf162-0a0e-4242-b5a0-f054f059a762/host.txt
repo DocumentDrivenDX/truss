@@ -1,0 +1,149 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/catalog-core-assertion-identities.test.ts:
+(pass) original pointer identities retain partial meanings without inventing missing facets or enforcement [2.84ms]
+(pass) cloned observation collections cannot issue source identities [0.05ms]
+(pass) authored key and relationship IDs remain qualified by original occurrence pointers [20.79ms]
+(pass) original 0.8 schema properties keep authored pointers and legacy API failures explicit [11.73ms]
+(pass) complete original value coverage keeps unclassified and opaque meaning unavailable [0.58ms]
+(pass) occurrence inventory retains original custody instead of copied or foreign preparation [4.22ms]
+(pass) mixed original versions and lexical numeric opaque bytes remain distinct from transition targets [7.42ms]
+(pass) the original UMF profile still refuses unsafe integer source before inventory issuance [0.39ms]
+(pass) loaded owner declaration meanings cannot change content while retaining IDs and counts [187.62ms]
+
+tests/acceptance-json.test.ts:
+(pass) empty object [0.16ms]
+(pass) null boolean string array [0.03ms]
+(pass) legal whitespace [0.03ms]
+(pass) inert prototype name [0.01ms]
+(pass) valid escaped surrogate pair [0.07ms]
+(pass) distinct normalization forms [0.02ms]
+(pass) escaped equivalent duplicate [0.08ms]
+(pass) unpaired high surrogate [0.01ms]
+(pass) unpaired low surrogate
+(pass) overlong utf8 [0.02ms]
+(pass) surrogate utf8 [0.01ms]
+(pass) out of range utf8
+(pass) outer number
+(pass) trailing data
+(pass) trailing comma
+(pass) bom
+(pass) comment
+(pass) opaque numeric artifact base64
+(pass) complete original input fixture preserves all native and converted custody [0.22ms]
+(pass) selected depth and container limits refuse before an over-limit output [1.92ms]
+(pass) raw byte and cumulative duplicate-name work are conjunctive ceilings [1.33ms]
+(pass) exact node ceiling counts containers and every scalar occurrence [20.20ms]
+
+tests/catalog-reference-links-correspondence.test.ts:
+(pass) ordered repeated cross-module generic links join original bytes separately from type assertions [16.56ms]
+(pass) empty absent and record-role-to-Field stay explicit generic link observations without type invention [45.99ms]
+(pass) loaded reference owner substitutions refuse full context target role occurrence and authority changes [442.02ms]
+(pass) original0.8 is explicitly unavailable to original0.7 reference links owner [14.58ms]
+(pass) private report forwards reference observations while synthetic native rows supply no type authority [13.45ms]
+(pass) loaded owner cannot mutate retained original request identity [11.70ms]
+
+tests/source-occurrence-index.test.ts:
+(pass) every original value has an ordered pointer and exact lexical span [0.14ms]
+(pass) escaped member identity and unicode retain exact source bytes [0.06ms]
+(pass) captured bytes and returned slices are independent of caller mutation [0.12ms]
+(pass) root primitives and empty containers remain complete occurrences [0.04ms]
+(pass) source admission still refuses duplicates invalid unicode and malformed grammar [0.09ms]
+(pass) discarded preflight tree does not replace original number lexemes [0.05ms]
+(pass) occurrence indexing applies conjunctive source and pointer work bounds [3.15ms]
+(pass) source copying never invokes caller species or own length callbacks [0.06ms]
+(pass) non-byte typed arrays cannot be silently narrowed into source bytes [0.06ms]
+
+tests/catalog-type-receipts.test.ts:
+(pass) original receipt bytes qualified current document and appended occurrence stay distinct from authority [17.97ms]
+(pass) whole packet refuses missing wrong crossed duplicate and stale receipts without partial collections [20.91ms]
+(pass) receipt numeric parsing preserves supported decimal meaning and refuses silent Number loss [0.17ms]
+(pass) loaded owner result substitutions refuse before interpretation or report use [227.34ms]
+(pass) collection custody crosses neither preparations nor private report native boundaries [17.68ms]
+
+tests/catalog-input-preparation.test.ts:
+(pass) real owner validates original ordered UMF sources with reversible interpretation [2.98ms]
+(pass) foreign original interpretation profile cannot borrow validation [0.20ms]
+(pass) archive document identity must equal original owner source [1.04ms]
+(pass) shape-only original {} source does not become accepted UMF [0.34ms]
+(pass) native archive carrier has exact five original fields without interpretation substitution [1.85ms]
+(pass) source declaration extraction preserves original owner and Field references [1.75ms]
+(pass) configured original registry refuses unregistered synthetic root profiles [9.15ms]
+(pass) absent binding derives complete default json homes from original members [2.42ms]
+(pass) present binding cannot be silently replaced with default homes [2.31ms]
+(pass) embedded duplicate source members refuse before owner interpretation [0.19ms]
+(pass) reconstructed preparations cannot enter home, extension, report or native staging helpers [2.92ms]
+(pass) new-only staging cannot silently ignore declared transforms [2.43ms]
+(pass) UMF report basis never invents a supported-subset artifact for unregistered preparation [2.66ms]
+(pass) UMF report basis preserves actual original version and registered bytes without a support claim [15.85ms]
+(pass) optional original primary markers project without changing source or ordered keys [6.20ms]
+(pass) non-Boolean primary markers fail original owner validation [0.31ms]
+
+tests/catalog-report-preparation.test.ts:
+(pass) composition preserves original partial interpretation and extensions without accepted claim [0.49ms]
+(pass) mixed native observation tuple and missing/extra count rows refuse [0.57ms]
+(pass) count grammar bounds columns and new-only retirement are explicit [0.99ms]
+(pass) forged preparation refuses before issuing native reads [0.12ms]
+(pass) composed validation evidence preserves diagnostics at both source and reversible target bases [0.32ms]
+(pass) original 0.8 validation does not invent a transition or duplicate a target-basis diagnostic scan [0.51ms]
+(pass) new-only report preparation cannot ignore a declared transform registration [0.61ms]
+(pass) report profile binds original registered bytes and refuses substitution before native observation [24.78ms]
+(pass) combined report check refuses unissued execution custody before profile resolution or native I/O [0.42ms]
+(pass) complete wire corresponds to ten issued producer fields while other fixture fields remain untrusted [2.86ms]
+(pass) native ingress absence does not admit injected loss or transform registration [8.91ms]
+(pass) changed source effect and diagnostic fields refuse before native recheck [17.41ms]
+(pass) copied report basis and stale native cut cannot supply correspondence [3.06ms]
+(pass) native actor basis retains original bytes and rejects inconsistent result carriers [0.56ms]
+(pass) report correspondence refuses omitted, duplicated or substituted original extension artifacts [47.51ms]
+(pass) execution report comparison refuses copied/unissued candidate before parsing or native I/O [0.40ms]
+
+tests/catalog-type-journals.test.ts:
+(pass) original whole journal reconciles multiple typed Fields and exact source occurrences [23.19ms]
+(pass) whole journal packet refuses gaps crossed contexts mutations duplicates and unsupported profiles [64.82ms]
+(pass) journal original bytes reject duplicate members and numeric meaning loss [6.45ms]
+(pass) kind-only history retains imported bare type links without inventing duties [11.75ms]
+(pass) mixed kind events retain original type event indices and independent scanner bounds remain active [28.52ms]
+(pass) retained-evidence ledger enforces its independent exact byte bound [10.83ms]
+(pass) loaded journal output substitutions and argument mutation cannot change original meaning [442.27ms]
+(pass) journal issuance binds exact original preparation before private report SQL [20.55ms]
+(pass) record-type duties conserve exact qualified occurrences without value or enforcement promotion [29.40ms]
+(pass) receipt protocol is evidence: equal declaration identity and duplicate occurrence refusal [32.97ms]
+(pass) configured generic owner must observe every receipt-backed declaration before SQL [53.49ms]
+(pass) original occurrence inventory joins declaration duties to exact lexical source bytes [28.61ms]
+
+tests/catalog-field-shape-correspondence.test.ts:
+(pass) original kind states preserve explicit roles, unknown labels and unspecified role [24.94ms]
+(pass) one array and map preserve item meaning and actual transitioned Record shapes [20.37ms]
+(pass) cardinality unspecified missing unknown and inapplicable remain separate and incomplete [19.73ms]
+(pass) loaded owners cannot substitute role, container shape, item references or opaque qualifiers [295.61ms]
+(pass) facets retain interpreted groups and actual value boundaries after reversible transition [41.26ms]
+(pass) facets retain independent original warning paths and unknown units without invented interpretation [24.00ms]
+(pass) loaded facet owners cannot replace retained values projections states or unknown paths [264.41ms]
+(pass) distinct decimal duties share an original pointer without collapsing family identity [8.48ms]
+(pass) facet families follow interpreted groups while empty and unknown groups invent no duty [22.30ms]
+
+tests/catalog-nullability-correspondence.test.ts:
+(pass) original nullability meanings remain distinct through reversible transition and actual Record behavior [8.92ms]
+(pass) future authored nullability remains unavailable to the known semantic subset [2.57ms]
+(pass) loaded diagnostic owners cannot replace required meaning or its context before state filtering [136.58ms]
+(pass) original missing Field and inapplicable Record nullability remain distinct observations [3.70ms]
+
+tests/catalog-record-members-correspondence.test.ts:
+(pass) original ordered qualified membership joins declaration and each exact byte occurrence [7.68ms]
+(pass) explicit empty membership stays an assertion while absence and nonrecord stay separate [18.71ms]
+(pass) controlled loaded membership substitutions refuse before filtering, object key order remains valid [240.29ms]
+(pass) original0.8 membership unavailable observations prevent configured call availability [4.45ms]
+(pass) private report composition forwards actual membership owner with exact configured coverage [6.07ms]
+(pass) missing membership can be inspected but cannot become empty native staging or home inventory [3.72ms]
+
+tests/catalog-scalar-type-correspondence.test.ts:
+(pass) nine original scalar families join exact byte occurrences with independent semantic owner pins [71.09ms]
+(pass) unknown absent non-Field and container scalar meanings stay distinct without invented entries [50.82ms]
+(pass) loaded scalar owners cannot alter any original result before classification filtering [249.63ms]
+(pass) original 0.8 remains explicitly unavailable to the pinned original 0.7 scalar owner [7.84ms]
+(pass) composed private report carries genuine scalar observations and exact ordered coverage [9.71ms]
+
+ 119 pass
+ 0 fail
+ 1486 expect() calls
+Ran 119 tests across 12 files. [5.07s]
