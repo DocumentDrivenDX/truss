@@ -1,0 +1,23 @@
+{
+  "identity": "truss-python-inspection-assembly-construction-diagnostic",
+  "version": "0.1.0-candidate",
+  "scope": "installation_inspection_assembly_construction_only",
+  "interfaceVersion": "truss-installation-inspection-assembly/0.1.0",
+  "errorCodes": [
+    "invalid_configuration",
+    "unsupported_profile",
+    "incompatible_selection"
+  ],
+  "pathGrammar": {
+    "kind": "fixed_field_path",
+    "allowed": [
+      "interface_version",
+      "assembly_id",
+      "assembly_profile",
+      "host_services"
+    ],
+    "callerContentAllowed": false
+  },
+  "nativeAuthority": "none",
+  "resourceQualification": "fixed_shape_and_text_bounds_only"
+}
