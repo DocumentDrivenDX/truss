@@ -94,7 +94,7 @@ class NativeCatalogCapture(NativeAdmissionCapture):
         original = bytes.fromhex(encoded)
         result = decode_acceptance_json(original)
         if (type(result) is not dict
-                or result.get('interfaceVersion')!='truss-native-provisional-catalog/0.2'
+                or result.get('interfaceVersion') not in ('truss-native-provisional-catalog/0.2','truss-native-provisional-catalog/0.3')
                 or result.get('writerXid')!=writer or result.get('ordinal')!=ordinal
                 or result.get('accepted') is not False or not _result_shape(result)):
             raise NativeBoundaryRefusal('Original provisional operation correspondence required')
@@ -104,7 +104,7 @@ class NativeCatalogCapture(NativeAdmissionCapture):
         # Preserve original native sources even if Python composition refuses.
         self.original_observation=NativeCatalogStageObservation(call,writer,ordinal,context,original)
         try:
-            snapshot=compose_captured_catalog_sources(self.encoded,result)
+            snapshot=compose_captured_catalog_sources(self.encoded,result,context)
         except ValueError as error:
             raise NativeBoundaryRefusal('Original report source correspondence required') from error
         if type(snapshot) is not CapturedReportSources:

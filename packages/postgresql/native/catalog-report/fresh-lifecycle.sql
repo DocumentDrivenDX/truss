@@ -72,7 +72,11 @@ BEGIN
  -- Original inventory producer independently matches all source/identity families.
  PERFORM * FROM truss.runtime_collect_new_catalog_inventory(revision);
  PERFORM truss.runtime_verify_new_catalog_prestate(revision);
- PERFORM * FROM truss.runtime_collect_empty_catalog_graph();
+ IF convert_from(op.original_context_bytes,'UTF8')::jsonb->>'interfaceVersion'='truss-native-operation-context/0.4' THEN
+  PERFORM * FROM truss.runtime_collect_configured_catalog_graph();
+ ELSE
+  PERFORM * FROM truss.runtime_collect_empty_catalog_graph();
+ END IF;
  IF EXISTS(SELECT 1 FROM truss.schema_change) OR EXISTS(SELECT 1 FROM truss.key_lifecycle_history)
   OR EXISTS(SELECT 1 FROM truss.catalog_acceptance_report) THEN
   RAISE EXCEPTION 'unexpected lifecycle history or publication' USING ERRCODE='55000';

@@ -11,7 +11,7 @@ from ._catalog_lifecycle import validate_catalog_source as validate_lifecycle
 from ._catalog_index_declarations import validate_catalog_source as validate_indexes
 from ._catalog_owner_evidence import require_catalog_owner_evidence
 from ._catalog_support import evaluate_catalog_support
-from ._catalog_report_assembly import assemble_catalog_report_sources
+from ._catalog_report_assembly import assemble_catalog_report_sources, validate_configured_catalog_sources
 from ._catalog_report_semantics import canonical_numeric_free, compose_catalog_report_semantics
 
 MISSING_FIELDS=('interfaceVersion','reportProfile','originalExecution','umf','assertions','extensions')
@@ -23,14 +23,16 @@ class CapturedReportSources:
     assembly_bytes: bytes
 
 
-def compose_captured_catalog_sources(encoded, result):
+def compose_captured_catalog_sources(encoded, result, original_context=None):
     prepared=encoded.original_input.prepared
     _require_original_preparation(prepared)
     sources=result['reportSources']
-    if type(sources) is not dict or set(sources)!={'start','end','lifecycle','indexDeclarations'}:
+    configured=result.get('interfaceVersion')=='truss-native-provisional-catalog/0.3'
+    required={'start','end','lifecycle','indexDeclarations'}|({'catalogRelease'} if configured else set())
+    if type(sources) is not dict or set(sources)!=required:
         raise ValueError('Closed original catalog source snapshot required')
     start=sources['start'];end=sources['end']
-    cut_names={'writer_xid','operation_ordinal','effect_generation','empty_scope'}
+    cut_names={'writer_xid','operation_ordinal','effect_generation','empty_scope'}|({'metadata_source'} if configured else set())
     if (type(start) is not dict or type(end) is not dict
             or set(start)!=cut_names or set(end)!=cut_names
             or any(type(v) is not str for cut in (start,end) for v in cut.values())
@@ -69,6 +71,9 @@ def compose_captured_catalog_sources(encoded, result):
         'semanticSourceFields':compose_catalog_report_semantics(prepared,support,result['revision']),
         'missingFields':list(MISSING_FIELDS),'acceptedReportQualified':False,
         'currentStateRevalidated':False}
+    if configured:
+        payload['configuredReleaseCandidate']=validate_configured_catalog_sources(
+            start,end,sources['catalogRelease'],original_context,result)
     assembly=assemble_catalog_report_sources(prepared,result,payload['semanticSourceFields'])
     assembly_bytes=canonical_numeric_free(assembly)
     payload['reportAssembly']={'state':assembly['state'],

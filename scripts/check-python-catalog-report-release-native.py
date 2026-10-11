@@ -11,17 +11,30 @@ def retain(path):
     p=root/path;inputs[str(p)]=p.read_bytes()
 for p in (root/'packages/python/src/truss').rglob('*'):
     if p.is_file() and '__pycache__' not in p.parts:inputs[str(p)]=p.read_bytes()
-for name in ('test_catalog_report_release_native.py','test_native_pg8000.py'):
+for name in ('test_catalog_report_release_native.py','test_catalog_configured_release_stage_native.py',
+             'test_catalog_staging.py','test_catalog_support.py','test_preparation.py','test_native_pg8000.py',
+             'test_native_catalog_dispatch.py','test_native_operation_ordinals.py','test_native_arbitration.py'):
     retain('packages/python/tests/'+name)
 for name in ('source-epoch-lock','issued-operation-admission/operation-configuration-context-admission',
              'catalog-observation-recheck','catalog-epoch-context','operation-configuration-current',
-             'catalog-admission-configuration','catalog-report/release-selection'):
+             'catalog-admission-configuration','catalog-report/release-selection',
+             'catalog-report/configured-graph','catalog-report/configured-stage','catalog-stage-issued'):
     retain('packages/postgresql/native/'+name+'.sql')
 for path in ('docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
              'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql',
              'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql',
              'scripts/check-python-catalog-report-release-native.py','scripts/check-module-boundaries.py'):
     retain(path)
+# Freeze the original catalog staging component closure used by the configured call.
+import ast
+staging=ast.parse((root/'packages/python/tests/test_catalog_staging.py').read_text())
+components=next(ast.literal_eval(n.value) for n in staging.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='COMPONENTS' for t in n.targets))
+for name in components:
+    retain('packages/postgresql/native/'+name+'.sql')
+for name in ('issued-operation-admission/operation-admission','catalog-report/empty-graph',
+             'catalog-report/absent-binding-index-declarations','catalog-report/fresh-lifecycle','edge-limit/verify-current-scope'):
+    retain('packages/postgresql/native/'+name+'.sql')
+retain('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json')
 policy=json.loads((root/'packages/python/src/truss/_profiles/catalog-report-release.json').read_bytes())
 for entry in policy['resources']:retain(entry['path'])
 for package in ('pg8000','scramp','asn1crypto'):
@@ -66,7 +79,7 @@ try:
     require(run([str(pgbin/'initdb'),'-D',str(pgdata),'-U','postgres','--auth=trust','--encoding=UTF8'],timeout=60))
     attempted=True
     require(run([str(pgbin/'pg_ctl'),'-D',str(pgdata),'-l',str(execution/'server.log'),'-w','-o',f"-h '' -k {socket}",'start'],timeout=60))
-    test=run([sys.executable,'-m','unittest','discover','-s',str(execution/'checkout/packages/python/tests'),'-p','test_catalog_report_release_native.py','-v'],
+    test=run([sys.executable,'-m','unittest','discover','-s',str(execution/'checkout/packages/python/tests'),'-p','test_catalog_*release*native.py','-v'],
         cwd=execution/'checkout',env={**os.environ,'PYTHONPATH':str(execution/'checkout/packages/python/src')+os.pathsep+str(execution/'dependencies'),
         'TRUSS_NATIVE_TEST_SOCKET':str(socket/'.s.PGSQL.5432')},timeout=120)
     (folder/'tests.stdout.log').write_text(test.stdout);(folder/'tests.stderr.log').write_text(test.stderr)
@@ -74,14 +87,24 @@ try:
         if test.returncode!=1 or test.stderr.count('DatabaseError not raised')!=4 or 'FAILED (failures=4)' not in test.stderr:
             raise RuntimeError('Expected four native archive-cut counterexamples required')
     else:require(test)
-    if 'Ran 12 tests' not in test.stderr or 'skipped' in test.stderr:raise RuntimeError('Complete twelve-test native population required')
+    if 'Ran 16 tests' not in test.stderr or 'skipped' in test.stderr:raise RuntimeError('Complete sixteen-test native population required')
+    # Execute each original catalog-dispatch regression method exactly once.
+    original=ast.parse(inputs[str(root/'packages/python/tests/test_native_catalog_dispatch.py')])
+    suite=next(n for n in original.body if isinstance(n,ast.ClassDef) and n.name=='NativeCatalogDispatchTests')
+    methods=[n.name for n in suite.body if isinstance(n,ast.FunctionDef) and n.name.startswith('test_')]
+    if len(methods)!=11:raise RuntimeError('Closed original eleven-method catalog regression inventory required')
+    regression=run([sys.executable,'-m','unittest',*[f'test_native_catalog_dispatch.NativeCatalogDispatchTests.{name}' for name in methods],'-v'],
+        cwd=execution/'checkout',env={**os.environ,'PYTHONPATH':str(execution/'checkout/packages/python/tests')+os.pathsep+str(execution/'checkout/packages/python/src')+os.pathsep+str(execution/'dependencies'),
+        'TRUSS_NATIVE_TEST_SOCKET':str(socket/'.s.PGSQL.5432')},timeout=120)
+    (folder/'regression.stdout.log').write_text(regression.stdout);(folder/'regression.stderr.log').write_text(regression.stderr);require(regression)
+    if 'Ran 11 tests' not in regression.stderr or 'skipped' in regression.stderr:raise RuntimeError('Complete original catalog regressions required')
     boundary=run([sys.executable,'scripts/check-module-boundaries.py'])
     (folder/'boundaries.stdout.log').write_text(boundary.stdout);(folder/'boundaries.stderr.log').write_text(boundary.stderr);require(boundary)
     if any(Path(p).read_bytes()!=raw for p,raw in inputs.items()):raise RuntimeError('Source changed during native execution')
     receipt={'status':'countercontrol-reproduced' if countercontrol else 'component-passed','countercontrol':countercontrol,'runId':run_id,'sourceDigests':pins,'nativeBinaryDigests':binaries,
-        'executedReleaseSqlSha256':sha((execution/'checkout/packages/postgresql/native/catalog-report/release-selection.sql').read_bytes()),'testCommand':test.args,'testExitCode':test.returncode,'nativeTests':12,'python':sys.version,
+        'executedReleaseSqlSha256':sha((execution/'checkout/packages/postgresql/native/catalog-report/release-selection.sql').read_bytes()),'testCommand':test.args,'testExitCode':test.returncode,'nativeTests':16,'originalCatalogRegressions':methods,'python':sys.version,
         'versions':{p:importlib.metadata.version(p) for p in ('pg8000','scramp','asn1crypto')},
-        'scope':('Deliberate omitted-archive-lock native variant reproduces four exact exclusion assertion failures. ' if countercontrol else '')+'Frozen original private release selector and tests over owned installed PostgreSQL16.15 Unix fixture. SHARE table lock excludes concurrent archive writes; transaction/savepoint controls qualify only native archive cut lifetime. Administrative synthetic configuration/archive/capture fixtures do not establish authenticated caller, source issuer, complete installed source/authority cut, host held-use dispatcher, public installer, complete accepted report or final disclosure.'}
+        'scope':('Deliberate omitted-archive-lock native variant reproduces four exact exclusion assertion failures. ' if countercontrol else '')+'Frozen original private release selector, configured catalog staging/metadata producer, Python candidate source composition and tests over owned installed PostgreSQL16.15 Unix fixture. SHARE table lock excludes concurrent archive writes; transaction/savepoint controls qualify only native archive cut lifetime. Administrative synthetic configuration/archive/capture fixtures do not establish authenticated caller, source issuer, complete installed source/authority cut, host held-use dispatcher, public installer, complete accepted report or final disclosure.'}
 except BaseException as error:
     receipt={'status':'failed','runId':run_id,'sourceDigests':pins,'nativeBinaryDigests':binaries,'error':str(error)}
 finally:

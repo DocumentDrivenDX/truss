@@ -17,6 +17,7 @@ REQUIRED_SOURCES=('originalInstalledExecution','admittedLayout',
     'registeredEnforcementReportProfile','registeredAcceptanceReportProfile')
 ENFORCEMENT_SHA256='678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1'
 PROFILE_SHA256='ef0a39be769d74037a54f62a138fec47bb3a4fbe46e5e96c2891f70e18227ff5'
+RELEASE_SHA256='2d4ab361c53fba2ecbe10a57c181aef3887edd2751ff37796e5d03d6514996e4'
 
 
 def assemble_catalog_report_sources(prepared, native, semantics):
@@ -133,3 +134,56 @@ def encode_unissued_complete_report_wire(source_projection, required_sources):
     validate_complete_report(decode_acceptance_json(wire))
     # This is the same handoff as TypeScript; the native codec is its sole SQL encoder.
     return prepare_canonical_wire_tree(wire)
+
+
+def validate_configured_catalog_sources(start,end,release,original_context,result):
+    """Recognize original configured candidate sources; never issue report authority."""
+    if type(original_context) is not bytes or not 1<=len(original_context)<=1048576:
+        raise ValueError('Original configured context bytes required')
+    context=decode_acceptance_json(original_context)
+    if (type(context) is not dict or context.get('interfaceVersion')!='truss-native-operation-context/0.4'
+            or context.get('xid')!=result['writerXid'] or context.get('ordinal')!=result['ordinal']):
+        raise ValueError('Original configured context correspondence required')
+    if start['metadata_source']!=end['metadata_source']:
+        raise ValueError('Original configured metadata cut required')
+    metadata=decode_acceptance_json(start['metadata_source'].encode('utf8'))
+    fields={'interfaceVersion','installationId','sourceEpoch','targetIncarnation',
+            'configurationGeneration','contextSha256','configurationSha256',
+            'selectedBindingSha256','installedInventorySha256','epochProfileSha256','epochEvidenceSha256'}
+    if (type(metadata) is not dict or set(metadata)!=fields
+            or any(type(v) is not str for v in metadata.values())
+            or metadata['interfaceVersion']!='truss-configured-catalog-metadata/0.1'
+            or metadata['contextSha256']!=sha256(original_context).hexdigest()
+            or any(metadata[k]!=context.get(k) for k in ('installationId','sourceEpoch','targetIncarnation'))):
+        raise ValueError('Complete original configured metadata fields required')
+    for key in ('configurationSha256','selectedBindingSha256','installedInventorySha256'):
+        value=metadata[key]
+        if len(value)!=64 or any(c not in '0123456789abcdef' for c in value):
+            raise ValueError('Exact original configuration digest required')
+    for key,maximum in (('sourceEpochProfileHex',131072),('sourceEpochEvidenceHex',2097152)):
+        value=context.get(key)
+        if type(value) is not str or not 2<=len(value)<=maximum or len(value)%2 or any(c not in '0123456789abcdef' for c in value):
+            raise ValueError('Bounded original epoch bytes required')
+        target='epochProfileSha256' if key=='sourceEpochProfileHex' else 'epochEvidenceSha256'
+        if metadata[target]!=sha256(bytes.fromhex(value)).hexdigest():
+            raise ValueError('Original epoch metadata digest correspondence required')
+    fields={'interfaceVersion','writerXid','operationOrdinal','initialEffectGeneration',
+            'effectGeneration','configurationGeneration','policyHex','policySha256','scope'}
+    if (type(release) is not dict or set(release)!=fields
+            or any(type(v) is not str for v in release.values())
+            or release['interfaceVersion']!='truss-configured-catalog-release/0.1'
+            or release['writerXid']!=result['writerXid'] or release['operationOrdinal']!=result['ordinal']
+            or release['initialEffectGeneration']!='0' or release['effectGeneration']!=result['effectGeneration']
+            or release['configurationGeneration']!=metadata['configurationGeneration']
+            or release['scope']!='original_configured_release_at_native_call_only'):
+        raise ValueError('Original configured release source cut required')
+    generation=release['configurationGeneration']
+    if (not generation.isascii() or not generation.isdecimal() or len(generation)>19
+            or len(generation)>1 and generation[0]=='0' or int(generation)>9223372036854775807):
+        raise ValueError('Canonical original configuration generation required')
+    policy=files('truss').joinpath('_profiles/catalog-report-release.json').read_bytes()
+    if sha256(policy).hexdigest()!=RELEASE_SHA256 or release['policyHex']!=policy.hex() or release['policySha256']!=RELEASE_SHA256:
+        raise ValueError('Exact selected original release policy required')
+    return {'scope':'configured_native_release_candidate_only','metadata':metadata,
+            'selectedReportProfile':{'identity':'truss-catalog-report-release','version':'0.1.0','sha256':RELEASE_SHA256},
+            'registeredAuthority':False,'acceptedReportQualified':False,'currentStateRevalidated':False}
