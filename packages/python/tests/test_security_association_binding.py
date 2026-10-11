@@ -27,6 +27,20 @@ class BindingTests(unittest.TestCase):
   with self.assertRaisesRegex(AssociationBindingError,reason):self.run_binding(binding)
  def test_original_complete_two_association_basis(self):
   result=self.run_binding();self.assertEqual(result.core_bytes,CORE);self.assertEqual(result.ontology_bytes,ONTOLOGY);self.assertEqual([a.association[2] for a in result.associations],['Ownership','Assignment']);self.assertEqual(len(result.associations[1].all_member_fields),3);self.assertEqual(result.scope,'original_source_correspondence_only')
+ def test_explicit_storage_choices_survive_preparation(self):
+  result=self.run_binding();storage=result.associations[1].storage
+  self.assertEqual((storage.source_min,storage.source_max,storage.target_min,storage.target_max),('0','*','0','*'))
+  self.assertIs(storage.directed,True);self.assertEqual(storage.lifecycle,'independent');self.assertIs(storage.composition,False);self.assertIsNone(storage.inverse)
+  self.assertEqual(storage.source_pointer,'/mappings/1/storage')
+ def test_storage_pointer_tracks_original_mapping_order(self):
+  binding=inputs();binding['mappings'].reverse();result=self.run_binding(binding)
+  self.assertEqual(result.associations[0].association[2],'Assignment');self.assertEqual(result.associations[0].storage.source_pointer,'/mappings/0/storage')
+  self.assertEqual(result.binding_bytes,wire(binding))
+ def test_storage_basis_is_immutable(self):
+  result=self.run_binding()
+  with self.assertRaises(FrozenInstanceError):result.associations[0].storage.lifecycle='cascade'
+ def test_no_storage_choices_are_inferred_from_missing_carrier(self):
+  self.refuse(lambda b:b['mappings'][0].pop('storage'),'closed_binding')
  def test_both_explicit_orientations_preserve_roles(self):
   binding=inputs()
   for mapping in binding['mappings']:mapping['sourceRole'],mapping['targetRole']=mapping['targetRole'],mapping['sourceRole']

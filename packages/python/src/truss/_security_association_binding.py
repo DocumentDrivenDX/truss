@@ -94,6 +94,19 @@ class AssociationRoleBasis:
 
 
 @dataclass(frozen=True)
+class AssociationStorageBasis:
+    source_min: str
+    source_max: str
+    target_min: str
+    target_max: str
+    directed: bool
+    lifecycle: str
+    composition: bool
+    inverse: None
+    source_pointer: str
+
+
+@dataclass(frozen=True)
 class AssociationBasis:
     association: tuple
     instance_key_id: str
@@ -102,6 +115,7 @@ class AssociationBasis:
     target_role: str
     roles: tuple[AssociationRoleBasis, ...]
     all_member_fields: tuple
+    storage: AssociationStorageBasis
 
 
 @dataclass(frozen=True)
@@ -157,7 +171,7 @@ def _prepare_association_binding(core_bytes: bytes, ontology_bytes: bytes,
         if identity in entities: _fail('duplicate_entity')
         entities[identity] = item
     results = []; seen = set()
-    for mapping in _array(binding.get('mappings')):
+    for mapping_index, mapping in enumerate(_array(binding.get('mappings'))):
         _closed(mapping, ('association', 'instanceKeyId', 'sourceRole', 'targetRole', 'roles', 'storage'))
         identity = _ref(mapping['association']); original = authored.get(identity)
         if identity in seen or original is None: _fail('association_coverage')
@@ -196,7 +210,11 @@ def _prepare_association_binding(core_bytes: bytes, ontology_bytes: bytes,
         storage = _closed(mapping['storage'], ('sourceMin', 'sourceMax', 'targetMin', 'targetMax', 'directed', 'lifecycle', 'composition', 'inverse'))
         expected = {'sourceMin':'0','sourceMax':'*','targetMin':'0','targetMax':'*','directed':True,'lifecycle':'independent','composition':False,'inverse':None}
         if storage != expected or type(storage['directed']) is not bool or type(storage['composition']) is not bool: _fail('storage_subset')
-        results.append(AssociationBasis(identity, key_id, own_key, source, target, tuple(roles), own_members))
+        results.append(AssociationBasis(identity, key_id, own_key, source, target, tuple(roles), own_members,
+            AssociationStorageBasis(storage['sourceMin'], storage['sourceMax'],
+                storage['targetMin'], storage['targetMax'], storage['directed'],
+                storage['lifecycle'], storage['composition'], storage['inverse'],
+                f'/mappings/{mapping_index}/storage')))
     if seen != set(authored): _fail('association_coverage')
     return AssociationBindingBasis(core_bytes, ontology_bytes, binding_bytes, tuple(results))
 
