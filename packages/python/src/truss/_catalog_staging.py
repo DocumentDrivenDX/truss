@@ -35,7 +35,7 @@ def _id(value):
         raise ValueError('Original native catalog ID required')
     return value
 
-def stage_new_catalog(connection, prepared: PreparedAcceptance, *, origin_bytes: bytes):
+def stage_new_catalog(connection, prepared: PreparedAcceptance, *, origin_bytes: bytes, _report_basis=False):
     """Administrative native component on a caller transaction; binding absent only.
 
     The caller supplies a trusted pg8000 native-style port; host registration
@@ -46,6 +46,7 @@ def stage_new_catalog(connection, prepared: PreparedAcceptance, *, origin_bytes:
     This private origin carrier is strict numeric-free JSON; original UTF-8
     is passed unchanged. Numeric origin extensions require a later exact profile.
     """
+    if type(_report_basis) is not bool:raise ValueError('Exact report selection required')
     _require_original_preparation(prepared)
     choices=prepared.input()
     if choices['transforms'] or choices['binding'] != {'state':'absent'}:
@@ -66,6 +67,10 @@ def stage_new_catalog(connection, prepared: PreparedAcceptance, *, origin_bytes:
     savepoint='truss_catalog_'+uuid4().hex
     connection.run('SAVEPOINT '+savepoint)
     try:
+        prior_cut=None
+        if _report_basis:
+            from ._catalog_report import begin_catalog_report
+            prior_cut=begin_catalog_report(connection,prepared)
         connection.run("SELECT truss.runtime_require_catalog_input(pg_catalog.decode(:input,'hex'))",input=prepared.input_bytes.hex())
         connection.run('SELECT truss.runtime_require_catalog_document_carrier(CAST(:documents AS pg_catalog.jsonb))',documents=prepared.archive_documents_bytes.decode())
         staged=rows('SELECT * FROM truss.runtime_stage_catalog_documents(CAST(:documents AS pg_catalog.jsonb),CAST(:origin AS pg_catalog.jsonb))',documents=prepared.archive_documents_bytes.decode(),origin=origin_bytes.decode("utf8"))
@@ -110,6 +115,9 @@ def stage_new_catalog(connection, prepared: PreparedAcceptance, *, origin_bytes:
         connection.run('SELECT truss.edge_limit_verify_current_scope()')
         _require_original_preparation(prepared)
         result=ProvisionalCatalog(revision,_json(inventory).encode(),_json(documents).encode(),_json(counts[0]).encode())
+        if _report_basis:
+            from ._catalog_report import compose_catalog_report_basis
+            result=compose_catalog_report_basis(connection,prepared,result,prior_cut)
         connection.run('RELEASE SAVEPOINT '+savepoint)
         return result
     except BaseException as primary:
@@ -119,3 +127,8 @@ def stage_new_catalog(connection, prepared: PreparedAcceptance, *, origin_bytes:
         except BaseException as cleanup:
             raise CatalogStagingCleanupFailure(primary,cleanup) from primary
         raise
+
+
+def stage_catalog_report_basis(connection,prepared,*,origin_bytes):
+    """Private prepare→stage→report basis on one host savepoint; no acceptance."""
+    return stage_new_catalog(connection,prepared,origin_bytes=origin_bytes,_report_basis=True)

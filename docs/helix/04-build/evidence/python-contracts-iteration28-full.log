@@ -1,0 +1,14 @@
+............................../private/tmp/truss-main-integration-20261010/packages/python/src/truss/_native_driver_profile.py:10: ResourceWarning: unclosed <socket.socket fd=10, family=1, type=1, proto=0>
+  with boundary._lock:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....................................................................................................................................................................................................................................................................................................s...................../private/tmp/truss-main-integration-20261010/packages/python/tests/test_native_operation.py:186: ResourceWarning: unclosed <socket.socket fd=9, family=1, type=1, proto=0>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/tmp/truss-main-integration-20261010/packages/python/tests/test_native_operation.py:186: ResourceWarning: unclosed <socket.socket fd=22, family=1, type=1, proto=0>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......................................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 590 tests in 206.926s
+
+OK (skipped=1)

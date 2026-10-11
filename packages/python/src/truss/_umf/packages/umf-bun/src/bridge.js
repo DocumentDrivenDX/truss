@@ -463,6 +463,10 @@ function requireOriginalAcceptanceProfileResolver(resolver) {
 
 // packages/umf-bun/src/catalog-input.ts
 var originalPreparations = new WeakSet;
+function requireOriginalCatalogPreparation(prepared) {
+  if (!originalPreparations.has(prepared))
+    throw Error("Original validated catalog preparation required");
+}
 async function createCatalogInputPreparation(directory, dependenciesPackage, profiles) {
   if (profiles !== undefined)
     requireOriginalAcceptanceProfileResolver(profiles);
@@ -514,13 +518,137 @@ async function createCatalogInputPreparation(directory, dependenciesPackage, pro
   } });
 }
 
+// packages/umf-bun/src/catalog-validation-evidence.ts
+import { createHash as createHash2 } from "crypto";
+function collectCatalogValidationEvidence(prepared) {
+  requireOriginalCatalogPreparation(prepared);
+  let retained = 0, diagnosticCount = 0;
+  const artifact = (identity, value) => {
+    const bytes = Buffer.from(JSON.stringify(value), "utf8");
+    retained += bytes.length;
+    if (retained > 4194304)
+      throw Error("Validation evidence component output capacity exceeded");
+    return Object.freeze({ identity, bytesBase64: bytes.toString("base64"), sha256: createHash2("sha256").update(bytes).digest("hex") });
+  };
+  const manifest = artifact("truss.umf-validation-evidence-profile/0.1.0", { interfaceVersion: "truss-umf-validation-evidence/0.1.0", producer: prepared.umfProfile, encoding: "UTF-8 JSON native diagnostic wrapper; no code/path/severity remapping", basis: ["original", "reversible_target"], sourcePointer: "whole original document", completeness: "both source and interpretation-target owner validation complete" });
+  const profile = Object.freeze({ identity: "truss-umf-validation-evidence", version: "0.1.0", sha256: manifest.sha256 });
+  const diagnostics = [];
+  const interpretations = prepared.documents.map((document, index) => {
+    const observation = document.interpretation, source = prepared.original.input.documents[index].artifact;
+    const validations = [{ basis: "original", validation: observation.sourceValidation }];
+    if (observation.transition)
+      validations.push({ basis: "reversible_target", validation: observation.targetValidation });
+    for (const { basis, validation } of validations) {
+      if (!validation || typeof validation.complete !== "boolean" || !Array.isArray(validation.diagnostics))
+        throw Error("Original validation observation required");
+      for (let di = 0;di < validation.diagnostics.length; di++) {
+        if (++diagnosticCount > 4096)
+          throw Error("Validation diagnostic component capacity exceeded");
+        const diagnostic = artifact(`truss.original-umf-diagnostic/${index}/${basis}/${di}`, { profile, producer: prepared.umfProfile, documentId: document.documentId, contentSha256: source.sha256, basis, diagnostic: validation.diagnostics[di] });
+        diagnostics.push(Object.freeze({ classification: "upstream_validation", source: Object.freeze({ kind: "document", artifact: source, sourcePointer: "" }), diagnosticProfile: profile, diagnostic }));
+      }
+    }
+    if (typeof observation.targetValidation?.complete !== "boolean")
+      throw Error("Original target validation required");
+    const evidence = artifact("truss.original-umf-observation/" + document.documentId, { producer: prepared.umfProfile, observation });
+    return Object.freeze({
+      documentId: document.documentId,
+      contentSha256: source.sha256,
+      interpretationProfile: prepared.umfProfile,
+      completeness: observation.sourceValidation.complete && observation.targetValidation.complete ? "complete" : "partial",
+      evidence
+    });
+  });
+  return Object.freeze({ profile, manifest, diagnostics: Object.freeze(diagnostics), documentInterpretations: Object.freeze(interpretations), scope: "original_producer_validation_evidence_only" });
+}
+
+// packages/umf-bun/src/catalog-extension-artifacts.ts
+import { createHash as createHash3 } from "crypto";
+
+// packages/umf-bun/src/catalog-extension-inventory.ts
+function collectCatalogExtensionInventory(prepared) {
+  requireOriginalCatalogPreparation(prepared);
+  const entries = [];
+  const pointer = (key) => key.replace(/~/g, "~0").replace(/\//g, "~1");
+  for (let index = 0;index < prepared.documents.length; index++) {
+    const document = prepared.documents[index], source = document.interpretation.source;
+    const artifact = prepared.original.input.documents[index].artifact;
+    const add = (node, path, owner, scope) => {
+      for (const extensionId of Object.keys(node.extensions ?? {})) {
+        if (entries.length >= 4096)
+          throw Error("Original extension occurrence capacity exceeded");
+        if (!Object.hasOwn(source.vocabularies, extensionId))
+          throw Error("Original extension vocabulary declaration missing");
+        entries.push(Object.freeze({
+          owner: Object.freeze(owner),
+          scope,
+          sourcePointer: path + "/extensions/" + pointer(extensionId),
+          extensionId,
+          vocabulary: source.vocabularies[extensionId],
+          payload: node.extensions[extensionId],
+          source: artifact
+        }));
+      }
+    };
+    add(source, "", { scope: "document", documentId: document.documentId }, "document");
+    for (let mi = 0;mi < source.modules.length; mi++) {
+      const module = source.modules[mi], owner = { documentId: document.documentId, moduleId: module.id };
+      add(module, `/modules/${mi}`, owner, "module");
+      for (let ei = 0;ei < module.elements.length; ei++)
+        add(module.elements[ei], `/modules/${mi}/elements/${ei}`, owner, "element");
+    }
+  }
+  return Object.freeze({ entries: Object.freeze(entries), scope: "original_document_module_element_extension_occurrences_only" });
+}
+
+// packages/umf-bun/src/catalog-extension-artifacts.ts
+function collectCatalogExtensionArtifacts(prepared) {
+  const inventory = collectCatalogExtensionInventory(prepared);
+  let retained = 0;
+  const extensions = inventory.entries.map((entry, index) => {
+    const bytes = Buffer.from(JSON.stringify({
+      interfaceVersion: "truss-original-extension-occurrence/0.1.0",
+      interpretation: "retained_uninterpreted",
+      owner: entry.owner,
+      scope: entry.scope,
+      sourcePointer: entry.sourcePointer,
+      extensionId: entry.extensionId,
+      vocabulary: entry.vocabulary,
+      payload: entry.payload,
+      source: entry.source
+    }));
+    if (bytes.length > 1048576 || (retained += bytes.length) > 4194304)
+      throw Error("Extension artifact output capacity exceeded");
+    return Object.freeze({ identity: `truss.original-extension-occurrence/${index}`, bytesBase64: bytes.toString("base64"), sha256: createHash3("sha256").update(bytes).digest("hex") });
+  });
+  return Object.freeze({ extensions: Object.freeze(extensions), scope: "original_document_module_element_extension_artifacts_only" });
+}
+
+// packages/umf-bun/src/catalog-ingress-report-basis.ts
+function collectCatalogIngressReportBasis(prepared) {
+  requireOriginalCatalogPreparation(prepared);
+  const input = prepared.original.input;
+  if (input.transforms.length)
+    throw Error("Complete transform report producer required");
+  if (input.binding.state !== "absent")
+    throw Error("Registered binding effect interpretation required");
+  if (input.documents.some((document) => document.ingress.kind !== "native"))
+    throw Error("Complete converted ingress loss producer required");
+  return Object.freeze({
+    losses: Object.freeze([]),
+    transformRegistrations: Object.freeze([]),
+    originalIngress: Object.freeze(input.documents.map((document, index) => Object.freeze({ documentId: document.documentId, contentSha256: document.artifact.sha256, sourcePointer: `/documents/${index}/ingress`, kind: "native" }))),
+    scope: "original_native_ingress_absent_binding_and_transforms_only"
+  });
+}
+
 // packages/umf-bun/src/python-preparation.ts
 init_acceptance_json();
 var root = resolve2(import.meta.dir, "../../..");
 var MAX_OUTPUT = 16777216;
 var emit = (value) => {
   const text = JSON.stringify(value);
-  console.log(Buffer.byteLength(text) <= MAX_OUTPUT ? text : JSON.stringify({ status: "refused", reason: "resource", diagnostics: [] }));
+  console.log(Buffer.byteLength(text) + 1 <= MAX_OUTPUT ? text : JSON.stringify({ status: "refused", reason: "resource", diagnostics: [] }));
 };
 var diagnostics = [];
 try {
@@ -567,14 +695,29 @@ try {
     emit({ status: "refused", reason: "invalid_document", diagnostics });
   } else {
     const prepared = preparation.prepare(original);
-    emit({
+    let reportEvidence;
+    try {
+      reportEvidence = {
+        validation: collectCatalogValidationEvidence(prepared),
+        retainedExtensions: collectCatalogExtensionArtifacts(prepared),
+        ingress: prepared.original.input.binding.state === "absent" && !prepared.original.input.transforms.length ? { state: "available", basis: collectCatalogIngressReportBasis(prepared) } : { state: "unavailable", reason: "registered_binding_or_transform_report_producer_required" },
+        scope: "original_owner_report_preparation_only"
+      };
+    } catch {
+      reportEvidence = { scope: "original_owner_report_preparation_only", ingress: { state: "unavailable", reason: "report_evidence_unavailable" } };
+    }
+    const response = {
       status: "prepared",
       inputHex: prepared.original.originalUtf8Hex,
       documents: prepared.documents,
       declarations: prepared.declarations,
       archiveDocuments: prepared.archiveDocuments,
+      reportEvidence,
       provenance: { umfProfile: prepared.umfProfile, schemaSha256: prepared.original.schemaSha256, scope: prepared.scope }
-    });
+    };
+    if (Buffer.byteLength(JSON.stringify(response)) + 1 > MAX_OUTPUT)
+      response.reportEvidence = { scope: "original_owner_report_preparation_only", ingress: { state: "unavailable", reason: "report_evidence_resource" } };
+    emit(response);
   }
 } catch (error) {
   const message = error instanceof Error ? error.message : "";
