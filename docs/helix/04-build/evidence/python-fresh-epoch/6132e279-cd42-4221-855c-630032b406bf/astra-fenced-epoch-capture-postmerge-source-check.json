@@ -1,0 +1,26 @@
+{
+  "auditedAtUtc": "2026-10-11T17:00:34.220165+00:00",
+  "packets": {
+    "native": {
+      "receiptSha256": "774eac515450e01ede8ca5897705fe678ad4ff1fa340c0d943da4ea98fcff0bd",
+      "sourcePinCount": 143,
+      "currentChangedPins": []
+    },
+    "formal": {
+      "receiptSha256": "3eb1d67ad3ae8d734a103cf4fd08801a4b0334cb4b61f5ac611648f8bcb087f2",
+      "sourcePinCount": 6,
+      "currentChangedPins": []
+    },
+    "configuredBeforeMerge": {
+      "receiptSha256": "7f4a1fbe8186eaed3b4a2ebbff6bd86096e295ac7e7aa128fe10769c4f7d3b7b",
+      "sourcePinCount": 282,
+      "currentChangedPins": [
+        {
+          "path": "/private/tmp/truss-security-main-integration/scripts/check-python-catalog-report-release-native.py",
+          "capturedSha256": "a3d5c75b15705306f2377032e247502c790ff83a1ff76bafedea492dfe7577a7",
+          "currentSha256": "c6e5a3508e229d7d6775aebed813f274580edbf7c5c1c4b5188fe33d01ee4381"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "status": "independent-replay-passed",
+  "receipt": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/epoch-request-custody-formal/9d86dd46-edc5-4faa-90a2-c776143f1fd6/receipt.json",
+  "receiptSha256": "3eb1d67ad3ae8d734a103cf4fd08801a4b0334cb4b61f5ac611648f8bcb087f2",
+  "solver": "4.15.4",
+  "sourcePins": [
+    {
+      "path": "scripts/prove-epoch-request-custody.py",
+      "sha256": "f08d7cc75b4f508de810b57d2a77702be8cd416cdc8d3444954d0dee0c9e7d0d",
+      "currentAndPreimageMatch": true
+    },
+    {
+      "path": "packages/python/src/truss/_native_fresh_epoch_capture.py",
+      "sha256": "49bb176a4b6e7d1dbc1872ec8bf5325665682b646534a3e4e2c35cb00ef7c137",
+      "currentAndPreimageMatch": true
+    },
+    {
+      "path": "packages/python/src/truss/_native_epoch_acquisitions.py",
+      "sha256": "8b10b499dac31fcea225186e7d74f2124e3ef5f371d81f2a60c9a645d77094b2",
+      "currentAndPreimageMatch": true
+    },
+    {
+      "path": "packages/python/src/truss/_native_arbitration.py",
+      "sha256": "5a777dad86a32ad7c1504609eff4111bce6f849027c64a9bd0edce7cee89192b",
+      "currentAndPreimageMatch": true
+    },
+    {
+      "path": "packages/python/tests/test_native_fresh_epoch_capture.py",
+      "sha256": "695e9e345adb2c7ea463f255f14715e28e90dd1f65032b9d19ca211df09c4984",
+      "currentAndPreimageMatch": true
+    },
+    {
+      "path": "scripts/python-fresh-epoch-worker.py",
+      "sha256": "e205e0a98770bbb76fd81d0dc793135974a5eb37b50b6eb84bd304532360c0d6",
+      "currentAndPreimageMatch": true
+    }
+  ],
+  "queries": [
+    {
+      "id": "accepted_request_excludes_owner_session_root_substitution",
+      "smt2Sha256": "34693043c05b152ecc299c70d8b841fef1ddb0754df3d76092b32c8a70415aad",
+      "expected": "unsat",
+      "independentReplay": "unsat",
+      "matches": true
+    },
+    {
+      "id": "accepted_request_excludes_recipe_substitution",
+      "smt2Sha256": "e7228e07df5935a41b61796b277654c27088f9685fe191fd5ed7dcb809ac279a",
+      "expected": "unsat",
+      "independentReplay": "unsat",
+      "matches": true
+    },
+    {
+      "id": "accepted_closed_family_excludes_scope_crossover",
+      "smt2Sha256": "d471dc73bebde6721fc6dd0dde9a60aebb8f2259e209c64f0f6f52eee5c22137",
+      "expected": "unsat",
+      "independentReplay": "unsat",
+      "matches": true
+    },
+    {
+      "id": "omitted_owner_check_allows_copied_gate",
+      "smt2Sha256": "8b1b81314f4f0bdb9d59413f23b612d6da11417345707093e232f10594b906b4",
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    },
+    {
+      "id": "omitted_root_check_allows_copied_request",
+      "smt2Sha256": "ee9ee0805906fe9eba90c31ceb181ddca3c9647f14303b95d36614b2f64e464f",
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    },
+    {
+      "id": "omitted_recipe_check_allows_substitution",
+      "smt2Sha256": "8f0add68da2e1deacd239cd582239e65b03ac1858fe35a10c5d68f277d9e957e",
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    },
+    {
+      "id": "omitted_scope_correspondence_allows_crossover",
+      "smt2Sha256": "a613e42b460574092ce4e9a4fa38479fda81e02cd5834b2cb960f3da305c276b",
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    }
+  ],
+  "counts": {
+    "unsat": 3,
+    "sat": 4
+  },
+  "independentFullGuardNonvacuity": [
+    {
+      "family": 0,
+      "observed": "sat",
+      "method": "Retained full-valid first assertion plus explicit family; excludes violation second assertion."
+    },
+    {
+      "family": 1,
+      "observed": "sat",
+      "method": "Retained full-valid first assertion plus explicit family; excludes violation second assertion."
+    }
+  ],
+  "findings": [],
+  "scope": "Conditional identity/recipe/family guard algebra under original-custody/immutable-request premises; not Python/native refinement, authenticated issuer, use capability or full cut."
+}
