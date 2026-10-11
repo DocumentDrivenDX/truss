@@ -1725,3 +1725,24 @@ or enables forward admission. Next composition must bind the original retained
 issued attempt, request and reserved admission slot, validate installed original
 producer custody, and correlate the actual native admission result before business
 work. The full install/register/apply/read target remains unfinished.
+
+
+### Iteration 33: original issued-attempt request custody
+
+Private request preparation now derives the ordinal only from the exact retained
+issued attempt. It requires the original post-SAVEPOINT root, complete successful
+native call, published original port record and live original handle. Current
+transaction/adoption/token/session ownership, cancellation, deadline and disposal
+are checked before encoding and again before publication. One authoritative
+coordinator tuple retains each request; the attempt exposes a read-only identity
+projection. Publication faults close ordinary admission/issuance and preserve
+exact cleanup. Preparation sends no SQL and enables no forward business work.
+
+Five native custody cases pass5.314s; the separate disposal-during-encoding case
+passes19.996s. Both processes are terminal exit0 on PostgreSQL16.15. Twenty unit
+cases and327 import boundaries pass. Astra Ultra approved source and independently
+passed20 unit cases; final evidence review approved the task-only main push. See
+[receipt](evidence/python-contracts-iteration33-request.json).
+The opaque administrative test input grants no artifact authority. Original
+registered artifacts/installed family custody, native dispatch/result settlement
+and complete finalization remain required before install/register/apply/read.
