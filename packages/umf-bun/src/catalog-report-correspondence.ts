@@ -1,5 +1,6 @@
 /** Existing producer fields only; never full report/effect admission. */
 import {requireOriginalCatalogExecutionReportCandidate,recheckOriginalCatalogExecutionReportCandidate,type composeCatalogExecutionReportCandidate} from './catalog-execution-report-candidate';
+import {requireOriginalCatalogUmfMembershipCandidate,type composeCatalogUmfMembershipCandidate} from './catalog-umf-membership-candidate';
 import {createCanonicalAcceptanceReportHandoff} from './canonical-report-handoff';
 import {collectCatalogExtensionArtifacts} from './catalog-extension-artifacts';
 import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';
@@ -32,7 +33,14 @@ export async function createCatalogReportCorrespondence(dependenciesPackage:stri
   return Object.freeze({...encoded,verifiedFields:Object.freeze(Object.keys(expected)),nativeObservation:basis.documentBasis.nativeObservation,
    scope:'ten_original_report_producer_fields_only' as const});
  }};
- const paths=Object.freeze({...correspondence,async verifyWithRegisteredReportProfile(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
+ const paths=Object.freeze({...correspondence,async verifyWithUmfMembershipCandidate(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,candidate:ReturnType<typeof composeCatalogUmfMembershipCandidate>){
+  requireOriginalCatalogUmfMembershipCandidate(candidate,prepared);
+  const result=await correspondence.verify(connection,prepared,basis,wire);
+  const report=decodeAcceptanceJson(Buffer.from(result.originalUtf8Hex,'hex')) as Record<string,unknown>;
+  if(!same(report.umf,candidate.umf))throw Error('Original report producer correspondence required: umf');
+  return Object.freeze({...result,verifiedFields:Object.freeze([...result.verifiedFields,'umf']),supportSemanticsQualified:false as const,
+   scope:'ten_producer_fields_and_declared_umf_membership_only' as const});
+ },async verifyWithRegisteredReportProfile(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,wire:Uint8Array,resolver:ReturnType<typeof createAcceptanceProfileResolver>,selected:ProfilePin){
   requireOriginalCatalogReportPreparation(basis,prepared);
   requireOriginalAcceptanceProfileResolver(resolver);
   const registration=resolver.resolveReport(selected);
