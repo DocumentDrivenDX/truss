@@ -1,0 +1,26 @@
+{
+  "scope": "existing_catalog_staging_generation_update_correspondence",
+  "database": "PostgreSQL 16.15",
+  "tests": 50,
+  "elapsedSeconds": 30.669,
+  "exitCode": 0,
+  "logSha256": "559ae72cf6a32bb63bd692d209ed9be3717415d41207edb301c135ea4fa2b76d",
+  "sourceSha256": {
+    "packages/postgresql/native/catalog-generation-observer.sql": "ddc90f3c84b173eb30f962ade935c0bbea1cbae7aa67e5e727b7e83ebf05532c",
+    "packages/postgresql/native/catalog-report/fresh-lifecycle.sql": "8b206cd9e844a28b2e39988ab39ad43e213d582698ce27da98fb4d97efefc76a",
+    "packages/postgresql/native/catalog-completion/physical-poststate.sql": "a6dd1ef0a419bec64098fb21283db50820e95673379490698dd6e8a798d28512",
+    "packages/python/tests/test_catalog_generation_native.py": "2c27384fc699789f456b89ae32cf91aa39a792aff577cbee106cf5be018ed06e"
+  },
+  "acceptedCatalogQualified": false,
+  "installedRuntimeQualified": false,
+  "publicWorkflowAvailable": false,
+  "rollbackSnapshotScope": [
+    "operation",
+    "revisions",
+    "documents",
+    "types",
+    "properties",
+    "separate_caller_work_row"
+  ],
+  "review": "Astra Ultra plan and completed source review; corrected BEFORE generation rewrite control approved conditional on successful retained test run"
+}
