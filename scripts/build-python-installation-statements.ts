@@ -17,6 +17,38 @@ if(sourceDefinition.qualified!==false||sourceDefinition.executable!==false
 if(await exportPostgresqlSql(document,backend)!==originalExport)throw Error('Original complete owner export correspondence required');
 const nodes=JSON.parse(renderTree(getPostgresqlNode(document,'/stmts')));
 const membership:any={tables:[],sequences:[],indexes:[],routines:[],definitionObligations:[]};
+const routineExecution=(f:any)=>{
+ const fields:any={language:null,body:null,security:false,volatility:'v',parallel:'u',strict:false,leakproof:false,settings:[]};
+ const seen=new Set<string>();
+ for(const option of f.options??[]){
+  const d=option.DefElem;if(seen.has(d.defname))throw Error('Duplicate routine execution option');seen.add(d.defname);
+  if(d.defname==='language')fields.language=d.arg.String.sval;
+  else if(d.defname==='as'){if(d.arg.List.items.length!==1)throw Error('Unselected multi-string body');fields.body=d.arg.List.items[0].String.sval;}
+  else if(['security','strict','leakproof'].includes(d.defname))fields[d.defname]=d.arg.Boolean.boolval??false;
+  else if(d.defname==='volatility'){fields.volatility=({volatile:'v',stable:'s',immutable:'i'} as any)[d.arg.String.sval];if(!fields.volatility)throw Error('Unselected volatility');}
+  else if(d.defname==='parallel'){fields.parallel=({unsafe:'u',restricted:'r',safe:'s'} as any)[d.arg.String.sval];if(!fields.parallel)throw Error('Unselected parallel');}
+  else if(d.defname==='set'){
+   const v=d.arg.VariableSetStmt;if(v.kind!=='VAR_SET_VALUE'||v.name!=='search_path')throw Error('Unselected routine configuration');
+   const names=v.args.map((a:any)=>a.A_Const.sval.sval);if(names.some((n:string)=>!['pg_catalog','pg_temp'].includes(n)))throw Error('Unselected routine path');
+   fields.settings.push('search_path='+names.join(', '));
+  }else throw Error('Unselected routine execution option '+d.defname);
+ }
+ if(f.sql_body||fields.language!=='plpgsql'||typeof fields.body!=='string')throw Error('Selected original PLpgSQL body required');
+ return fields;
+};
+const sequenceParameters=(s:any)=>{
+ const fields:any={type:'pg_catalog.int8',increment:'1',minimum:'1',maximum:'9223372036854775807',start:'1',cache:'1',cycle:false};
+ const keys:any={increment:'increment',minvalue:'minimum',maxvalue:'maximum',start:'start',cache:'cache'};
+ const seen=new Set<string>();
+ for(const option of s.options??[]){const d=option.DefElem;if(seen.has(d.defname))throw Error('Duplicate sequence option');seen.add(d.defname);
+  if(d.defname==='as'){const names=d.arg.TypeName.names.map((n:any)=>n.String.sval);if(names.join('.')!=='pg_catalog.int8')throw Error('Unselected sequence type');}
+  else if(d.defname==='cycle')fields.cycle=d.arg.Boolean.boolval??false;
+  else if(keys[d.defname]){const n=d.arg.Integer?.ival;if(n!==undefined&&!Number.isSafeInteger(n))throw Error('Exact AST integer required');const value=n===undefined?d.arg.Float?.fval:String(n);if(!/^[1-9][0-9]*$/.test(value)||BigInt(value)>9223372036854775807n)throw Error('Unselected sequence numeric token');fields[keys[d.defname]]=value;}
+  else throw Error('Unselected sequence option '+d.defname);
+ }
+ if(!seen.has('start'))fields.start=fields.minimum;
+ return fields;
+};
 const tableMap=new Map<string,any>();
 const namespace=(r:any)=>{if(r.schemaname!=='truss')throw Error('Original selected namespace required');return r.relname;};
 for(const [position,wrapped] of nodes.entries()){
@@ -37,13 +69,13 @@ for(const [position,wrapped] of nodes.entries()){
    else if(['AT_AddConstraint','AT_DropConstraint','AT_AlterColumnType'].includes(cmd.subtype))membership.definitionObligations.push({pointer:source,kind:cmd.subtype});
    else throw Error('Unknown original alteration membership');
   }
- }else if(kind==='CreateSeqStmt')membership.sequences.push({name:namespace(stmt.CreateSeqStmt.sequence),pointer});
+ }else if(kind==='CreateSeqStmt')membership.sequences.push({name:namespace(stmt.CreateSeqStmt.sequence),pointer,parameters:sequenceParameters(stmt.CreateSeqStmt)});
  else if(kind==='IndexStmt')membership.indexes.push({name:stmt.IndexStmt.idxname,table:namespace(stmt.IndexStmt.relation),pointer});
  else if(kind==='CreateFunctionStmt'){
   const f=stmt.CreateFunctionStmt,name=f.funcname.map((n:any)=>n.String.sval);if(name.length!==2||name[0]!=='truss')throw Error('Original routine namespace required');
   const inputs=(f.parameters??[]).filter((p:any)=>!['FUNC_PARAM_TABLE','FUNC_PARAM_OUT'].includes(p.FunctionParameter.mode)).map((p:any)=>{
    const names=p.FunctionParameter.argType.names.map((n:any)=>n.String.sval);return names.length===1?'pg_catalog.'+names[0]:names.join('.');});
-  membership.routines.push({schema:name[0],name:name[1],inputs,kind:f.is_procedure?'p':'f',pointer});
+  membership.routines.push({schema:name[0],name:name[1],inputs,kind:f.is_procedure?'p':'f',pointer,execution:routineExecution(f)});
  }else if(['CreateSchemaStmt','CommentStmt','InsertStmt','GrantStmt'].includes(kind))membership.definitionObligations.push({pointer,kind});
  else throw Error('Unknown original statement membership form');
 }
@@ -61,7 +93,7 @@ const sources:Record<string,string>={};
 for(const path of [modelPath,exportPath,sourceManifestPath,'scripts/build-python-installation-statements.ts',
  '/Users/erik/Projects/umf/src/adapters/postgresql/index.ts','/Users/erik/Projects/umf/src/model/native-json.ts',
  '/Users/erik/Projects/umf/native/postgresql/runtime.ts'])sources[path]=hash(new Uint8Array(await Bun.file(path).arrayBuffer()));
-const asset=JSON.stringify({interfaceVersion:'truss-provisional-installation-statements/0.1.0',
+const asset=JSON.stringify({nativeMajor:'16',interfaceVersion:'truss-provisional-installation-statements/0.1.0',
  scope:'original_owner_statement_units_rollback_only_construction',ownerRevision:Buffer.from(revision.stdout).toString().trim(),
  modelSha256:hash(model),ownerExportSha256:hash(originalExport),sources,statements,membership,
  completeInstalledProfile:false,installationReady:false},null,2)+'\n';

@@ -13,6 +13,15 @@ class CatalogInstallationInputTests(unittest.TestCase):
         with patch('truss._catalog_installation.STATEMENTS_SHA256','0'*64),self.assertRaises(ValueError):
             construct_provisional_catalog_layout(NoCalls())
 
+    def test_other_native_major_refuses_before_begin(self):
+        class Port:
+            _transaction_status=b'I'
+            def run(self,sql):
+                if not sql.startswith('SELECT pg_catalog.jsonb_build_object('):raise AssertionError('No transaction SQL permitted')
+                return [[json.dumps({'version':'170009'})]]
+        with self.assertRaisesRegex(ValueError,'PostgreSQL16'):
+            construct_provisional_catalog_layout(Port())
+
     def test_caller_runtime_transaction_not_adopted(self):
         class NoCalls:
             _transaction_status=b'T'
@@ -106,6 +115,32 @@ class CatalogInstallationNativeTests(NativeBoundaryFixture,unittest.TestCase):
                 def run(self,sql):
                     if sql.startswith('SELECT pg_catalog.jsonb_build_object(') and "'namespace'" in sql:
                         connection.run(change)
+                    return connection.run(sql)
+            with self.subTest(change=change),self.assertRaises(CatalogConstructionFailure) as refused:
+                construct_provisional_catalog_layout(Port())
+            self.assertIsInstance(refused.exception.primary_failure,ValueError)
+            self.assertTrue(refused.exception.rollback_confirmed)
+            self.assertEqual(connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
+
+    def test_execution_definitions_refuse_changes_and_restore_absence(self):
+        for change in (
+            'ALTER SEQUENCE truss.id_seq MAXVALUE 9223372036854775806',
+            'ALTER SEQUENCE truss.id_seq CACHE 2',
+            'ALTER SEQUENCE truss.id_seq INCREMENT BY 2',
+            'ALTER SEQUENCE truss.id_seq CYCLE',
+            "CREATE OR REPLACE FUNCTION truss.catalog_global_high_water_v01() RETURNS TABLE(allocation_domain text,maximum_id text) LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ BEGIN RETURN; END $$",
+            'ALTER FUNCTION truss.catalog_global_high_water_v01() SECURITY INVOKER',
+            'ALTER FUNCTION truss.catalog_global_high_water_v01() SET search_path TO public',
+            'ALTER FUNCTION truss.catalog_global_high_water_v01() STRICT',
+            'ALTER FUNCTION truss.catalog_global_high_water_v01() LEAKPROOF',
+            'ALTER FUNCTION truss.catalog_global_high_water_v01() SET statement_timeout TO 1000',
+        ):
+            connection=self.connection
+            class Port:
+                @property
+                def _transaction_status(self):return connection._transaction_status
+                def run(self,sql):
+                    if sql.startswith('SELECT pg_catalog.jsonb_build_object(') and "'namespace'" in sql:connection.run(change)
                     return connection.run(sql)
             with self.subTest(change=change),self.assertRaises(CatalogConstructionFailure) as refused:
                 construct_provisional_catalog_layout(Port())

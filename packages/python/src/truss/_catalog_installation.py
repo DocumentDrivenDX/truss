@@ -44,7 +44,7 @@ def _statements():
         or profile['modelSha256']!=next(r['sha256'] for r in definition['resources'] if r['role']=='model')
         or profile['ownerExportSha256']!=next(r['sha256'] for r in definition['resources'] if r['role']=='owner_export')):
         raise ValueError('Original model and owner export correspondence required')
-    if (profile['interfaceVersion']!='truss-provisional-installation-statements/0.1.0'
+    if (profile['nativeMajor']!='16' or profile['interfaceVersion']!='truss-provisional-installation-statements/0.1.0'
         or profile['completeInstalledProfile'] is not False or profile['installationReady'] is not False
         or profile['scope']!='original_owner_statement_units_rollback_only_construction'):
         raise ValueError('Provisional construction profile required')
@@ -85,11 +85,12 @@ _OBSERVATION="""SELECT pg_catalog.jsonb_build_object(
  'columns',(SELECT COALESCE(jsonb_agg(to_jsonb(a) ORDER BY a.attrelid,a.attnum),'[]'::jsonb) FROM pg_catalog.pg_attribute a JOIN pg_catalog.pg_class c ON c.oid=a.attrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
  'defaults',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(a),'definition',pg_catalog.pg_get_expr(a.adbin,a.adrelid,false)) ORDER BY a.oid),'[]'::jsonb) FROM pg_catalog.pg_attrdef a JOIN pg_catalog.pg_class c ON c.oid=a.adrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
  'sequences',(SELECT COALESCE(jsonb_agg(to_jsonb(s) ORDER BY s.seqrelid),'[]'::jsonb) FROM pg_catalog.pg_sequence s JOIN pg_catalog.pg_class c ON c.oid=s.seqrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
+ 'sequenceParameters',(SELECT COALESCE(jsonb_agg(jsonb_build_object('name',c.relname,'type',tn.nspname||'.'||t.typname,'increment',s.seqincrement::text,'minimum',s.seqmin::text,'maximum',s.seqmax::text,'start',s.seqstart::text,'cache',s.seqcache::text,'cycle',s.seqcycle) ORDER BY c.relname),'[]'::jsonb) FROM pg_catalog.pg_sequence s JOIN pg_catalog.pg_class c ON c.oid=s.seqrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace JOIN pg_catalog.pg_type t ON t.oid=s.seqtypid JOIN pg_catalog.pg_namespace tn ON tn.oid=t.typnamespace WHERE n.nspname='truss'),
  'types',(SELECT COALESCE(jsonb_agg(to_jsonb(t) ORDER BY t.oid),'[]'::jsonb) FROM pg_catalog.pg_type t JOIN pg_catalog.pg_namespace n ON n.oid=t.typnamespace WHERE n.nspname='truss'),
  'rules',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(r),'definition',pg_catalog.pg_get_ruledef(r.oid,false)) ORDER BY r.oid),'[]'::jsonb) FROM pg_catalog.pg_rewrite r JOIN pg_catalog.pg_class c ON c.oid=r.ev_class JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
  'constraints',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(c),'definition',pg_catalog.pg_get_constraintdef(c.oid)) ORDER BY c.oid),'[]'::jsonb) FROM pg_catalog.pg_constraint c JOIN pg_catalog.pg_namespace n ON n.oid=c.connamespace WHERE n.nspname='truss'),
  'indexes',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(i),'definition',pg_catalog.pg_get_indexdef(i.indexrelid)) ORDER BY i.indexrelid),'[]'::jsonb) FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class c ON c.oid=i.indrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
- 'routines',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(p),'inputTypes',(SELECT COALESCE(jsonb_agg(tn.nspname||'.'||t.typname ORDER BY args.ordinality),'[]'::jsonb) FROM unnest(p.proargtypes::oid[]) WITH ORDINALITY args(typeoid,ordinality) JOIN pg_catalog.pg_type t ON t.oid=args.typeoid JOIN pg_catalog.pg_namespace tn ON tn.oid=t.typnamespace),'definition',pg_catalog.pg_get_functiondef(p.oid)) ORDER BY p.oid),'[]'::jsonb) FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss'),
+ 'routines',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(p),'language',(SELECT l.lanname FROM pg_catalog.pg_language l WHERE l.oid=p.prolang),'inputTypes',(SELECT COALESCE(jsonb_agg(tn.nspname||'.'||t.typname ORDER BY args.ordinality),'[]'::jsonb) FROM unnest(p.proargtypes::oid[]) WITH ORDINALITY args(typeoid,ordinality) JOIN pg_catalog.pg_type t ON t.oid=args.typeoid JOIN pg_catalog.pg_namespace tn ON tn.oid=t.typnamespace),'definition',pg_catalog.pg_get_functiondef(p.oid)) ORDER BY p.oid),'[]'::jsonb) FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss'),
  'triggers',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(t),'definition',pg_catalog.pg_get_triggerdef(t.oid)) ORDER BY t.oid),'[]'::jsonb) FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid=t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
  'policies',(SELECT COALESCE(jsonb_agg(to_jsonb(p) ORDER BY p.oid),'[]'::jsonb) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid=p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'))::text"""
 
@@ -104,6 +105,9 @@ def construct_provisional_catalog_layout(connection):
     if getattr(connection,'_transaction_status',None)!=b'I':
         raise ValueError('Original idle installer-owned administrative connection required')
     target=_native_text(connection,_TARGET)
+    version=json.loads(target)['version']
+    if type(version) is not str or not version.isascii() or not version.isdigit() or not 160000<=int(version)<170000:
+        raise ValueError('Selected PostgreSQL16 source default profile required')
     begun=False;primary=None;cleanup=None;observed=b'';restored=False;prior_namespace=None
     attempt={'phase':'target_observed','submitted_statements':[], 'rollback_submitted':False,'rollback_reply_observed':False}
     try:
@@ -174,3 +178,13 @@ def compare_source_membership(expected,observed):
     routines=[(r['native']['proname'],r['native']['prokind'],tuple(r['inputTypes'])) for r in observed['routines']]
     if sorted(routines)!=sorted((r['name'],r['kind'],tuple(r['inputs'])) for r in expected['routines']):
         raise ValueError('Original routine overload membership mismatch')
+
+    sequence_parameters={s['name']:{k:v for k,v in s.items() if k!='name'} for s in observed['sequenceParameters']}
+    if len(sequence_parameters)!=len(observed['sequenceParameters']) or sequence_parameters!={s['name']:s['parameters'] for s in expected['sequences']}:
+        raise ValueError('Original sequence parameters mismatch')
+    expected_routines={(r['name'],r['kind'],tuple(r['inputs'])):r['execution'] for r in expected['routines']}
+    for entry in observed['routines']:
+        native=entry['native'];identity=(native['proname'],native['prokind'],tuple(entry['inputTypes']))
+        fields={'language':entry['language'],'body':native['prosrc'],'security':native['prosecdef'],'volatility':native['provolatile'],
+                'parallel':native['proparallel'],'strict':native['proisstrict'],'leakproof':native['proleakproof'],'settings':native['proconfig'] or []}
+        if fields!=expected_routines[identity]:raise ValueError('Original routine execution definition mismatch')

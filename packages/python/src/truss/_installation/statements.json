@@ -1,4 +1,5 @@
 {
+  "nativeMajor": "16",
   "interfaceVersion": "truss-provisional-installation-statements/0.1.0",
   "scope": "original_owner_statement_units_rollback_only_construction",
   "ownerRevision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
@@ -8,7 +9,7 @@
     "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
     "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
     "packages/python/src/truss/_installation/manifest.json": "e2605e8d3de55bb0b4db8ee045d937707ce7345489add89da0fc7a2bb1eae3df",
-    "scripts/build-python-installation-statements.ts": "1ca180146549d06bc546a3ac08f92121bf37825103ae19c140a540ad28c95af5",
+    "scripts/build-python-installation-statements.ts": "0b11f3715c6e6b6612d1745fbf446bcf3f9886fd4876795a18dbf146273dc507",
     "/Users/erik/Projects/umf/src/adapters/postgresql/index.ts": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4",
     "/Users/erik/Projects/umf/src/model/native-json.ts": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882",
     "/Users/erik/Projects/umf/native/postgresql/runtime.ts": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
@@ -3299,47 +3300,146 @@
     "sequences": [
       {
         "name": "id_seq",
-        "pointer": "/stmts/17/stmt/CreateSeqStmt"
+        "pointer": "/stmts/17/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "journal_seq",
-        "pointer": "/stmts/29/stmt/CreateSeqStmt"
+        "pointer": "/stmts/29/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "row_home_id_seq",
-        "pointer": "/stmts/45/stmt/CreateSeqStmt"
+        "pointer": "/stmts/45/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "key_storage_row_seq",
-        "pointer": "/stmts/63/stmt/CreateSeqStmt"
+        "pointer": "/stmts/63/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "installation_archive_row_seq",
-        "pointer": "/stmts/75/stmt/CreateSeqStmt"
+        "pointer": "/stmts/75/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "complete_feed_consumer_row_seq",
-        "pointer": "/stmts/82/stmt/CreateSeqStmt"
+        "pointer": "/stmts/82/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "feed_administration_receipt_row_seq",
-        "pointer": "/stmts/85/stmt/CreateSeqStmt"
+        "pointer": "/stmts/85/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "feed_seed_attempt_row_seq",
-        "pointer": "/stmts/88/stmt/CreateSeqStmt"
+        "pointer": "/stmts/88/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "feed_seed_artifact_row_seq",
-        "pointer": "/stmts/91/stmt/CreateSeqStmt"
+        "pointer": "/stmts/91/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "migration_receipt_row_seq",
-        "pointer": "/stmts/98/stmt/CreateSeqStmt"
+        "pointer": "/stmts/98/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       },
       {
         "name": "request_receipt_row_seq",
-        "pointer": "/stmts/102/stmt/CreateSeqStmt"
+        "pointer": "/stmts/102/stmt/CreateSeqStmt",
+        "parameters": {
+          "type": "pg_catalog.int8",
+          "increment": "1",
+          "minimum": "1",
+          "maximum": "9223372036854775807",
+          "start": "1",
+          "cache": "1",
+          "cycle": false
+        }
       }
     ],
     "indexes": [
@@ -3470,7 +3570,19 @@
         "name": "catalog_global_high_water_v01",
         "inputs": [],
         "kind": "f",
-        "pointer": "/stmts/70/stmt/CreateFunctionStmt"
+        "pointer": "/stmts/70/stmt/CreateFunctionStmt",
+        "execution": {
+          "language": "plpgsql",
+          "body": "\nBEGIN\n  RETURN QUERY\n  SELECT 'type_id'::text, GREATEST(COALESCE(MAX(t.type_id)::bigint, 0), 0)::text\n  FROM truss.type_def AS t\n  UNION ALL\n  SELECT 'prop_id'::text, GREATEST(COALESCE(MAX(p.prop_id)::bigint, 0), 0)::text\n  FROM truss.prop_def AS p\n  UNION ALL\n  SELECT 'rel_type_id'::text, GREATEST(COALESCE(MAX(r.rel_type_id)::bigint, 0), 0)::text\n  FROM truss.rel_def AS r;\nEND\n",
+          "security": true,
+          "volatility": "v",
+          "parallel": "u",
+          "strict": false,
+          "leakproof": false,
+          "settings": [
+            "search_path=pg_catalog, pg_temp"
+          ]
+        }
       },
       {
         "schema": "truss",
@@ -3479,7 +3591,19 @@
           "pg_catalog.int4"
         ],
         "kind": "f",
-        "pointer": "/stmts/72/stmt/CreateFunctionStmt"
+        "pointer": "/stmts/72/stmt/CreateFunctionStmt",
+        "execution": {
+          "language": "plpgsql",
+          "body": "\nDECLARE\n  retained_type_id int;\nBEGIN\n  IF original_type_id IS NULL THEN\n    RAISE EXCEPTION 'missing original key owner' USING ERRCODE = '22023';\n  END IF;\n  SELECT t.type_id INTO STRICT retained_type_id\n  FROM truss.type_def AS t WHERE t.type_id = original_type_id;\n  RETURN QUERY\n  SELECT retained_type_id::text,\n         GREATEST(COALESCE(MAX(k.key_num)::bigint, 0), 0)::text\n  FROM truss.key_def AS k WHERE k.type_id = retained_type_id;\nEND\n",
+          "security": true,
+          "volatility": "v",
+          "parallel": "u",
+          "strict": false,
+          "leakproof": false,
+          "settings": [
+            "search_path=pg_catalog, pg_temp"
+          ]
+        }
       }
     ],
     "definitionObligations": [

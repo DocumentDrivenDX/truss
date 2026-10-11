@@ -1,0 +1,31 @@
+{
+  "scope": "selected_original_UMF_routine_execution_fields_and_sequence_parameters_rollback_only",
+  "sourceHashes": {
+    "packages/python/src/truss/_catalog_installation.py": "1d21dfe169add30cc73df7a795bbc187b3404949aeaa03e488b51c904f4b58fe",
+    "packages/python/src/truss/_installation/statements.json": "08356dba59ebba1048a0f1d9ac5a0a57ebea9142048ac175f8398a34739c45ff",
+    "packages/python/src/truss/_installation_statement_release.py": "88ee037e3a698c988ea50996dc732e48ab4167cdee1011559186a5697045bb53",
+    "packages/python/tests/test_catalog_installation.py": "098db605da8a8bf4af85a4469c32728622f93970aac5ac4f077cd83ba84bf96b",
+    "scripts/build-python-installation-statements.ts": "0b11f3715c6e6b6612d1745fbf446bcf3f9886fd4876795a18dbf146273dc507"
+  },
+  "testLog": "docs/helix/04-build/evidence/python-installation-execution-definitions.log",
+  "testLogSha256": "ecb1949a8589d1ae758315f8e10cf8ae7aaa19afd8ba3dd5dbcf7386d2e1be62",
+  "installedWheelSha256": "c4132b0e33070b29305db33d4b26ba25d72fa19ffe156ac0a89f7f0d950e5cc0",
+  "testsPassed": 12,
+  "nativeMajor": "16",
+  "nativeRuntime": "PostgreSQL16.15 / pg8000 1.31.5 / corrected private pgserver",
+  "sequenceCount": 11,
+  "routineCount": 2,
+  "sequenceNumericCarriers": "Original AST exact decimal tokens/BigInt validation; observed PostgreSQL text; no floating point conversion",
+  "defaultsSources": [
+    "https://www.postgresql.org/docs/16/sql-createsequence.html",
+    "https://www.postgresql.org/docs/16/sql-createfunction.html"
+  ],
+  "installationReady": false,
+  "moduleBoundaryImports": 401,
+  "limitations": [
+    "Routine returns/OUT metadata, cost/rows/support/transforms, language-handler and other dependencies remain unresolved.",
+    "Sequence ownership and live allocator state remain unresolved.",
+    "Column/constraint/index definitions and constraint-backed membership, effective rights and complete semantic body installation remain unresolved.",
+    "No installation marker/archive/source epoch or public installation API published."
+  ]
+}
