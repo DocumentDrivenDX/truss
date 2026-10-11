@@ -37,9 +37,9 @@ def _run_fenced_epoch_operation(host, transaction, comparison, callback):
         from psycopg.types.string import StrDumper
         # Toolkit comparison parameters must not use host custom string codecs.
         cursor.adapters.register_dumper(str, StrDumper)
-        cursor.execute("SELECT pg_current_xact_id()::text,"
-                       "(SELECT oid::text FROM pg_database WHERE datname=current_database()),"
-                       "pg_backend_pid()::text,session_user::text,current_user::text",
+        cursor.execute("SELECT pg_catalog.pg_current_xact_id()::pg_catalog.text,"
+                       "(SELECT oid::pg_catalog.text FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()),"
+                       "pg_catalog.pg_backend_pid()::pg_catalog.text,session_user::pg_catalog.text,current_user::pg_catalog.text",
                        prepare=False, binary=False)
         identity = cursor.fetchmany(2)
         if (len(identity) != 1 or len(identity[0]) != 5

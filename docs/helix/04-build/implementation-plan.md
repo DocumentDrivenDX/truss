@@ -3677,3 +3677,57 @@ native payload digests plus independent stop0/status3/socket absence. All106
 source hashes match current bytes and archives. Incoming prerequisite SQL/tests
 are preserved, not qualified by the epoch-cut test population. No backend
 acceptance binding or supported protected-engine status changes.
+
+
+### Actual flat and Truss graph fact-cut composition — 2026-10-11
+
+Previous turn made progress by publishing supported-driver epoch integration
+67ebdf3c directly to main. The new private `_psycopg_fact_cut` composes bounded
+original relation/guard comparisons with its original epoch/lease/savepoint scope.
+It acquires sorted ONLY SHARE NOWAIT cuts, verifies exact permanent non-inherited
+native relation identity/owner and installed ALWAYS guard metadata/body, then
+invokes the private callback. The native invoker statement guard refuses own
+INSERT/UPDATE/DELETE/TRUNCATE while its actual table ShareLock survives. Explicit
+pg_catalog identifiers/operators/types also remove host temp-catalog substitution
+from epoch identity and fact readback. No public grant/API or UMF meaning changes.
+
+Typed-edge packet `evidence/python-psycopg-epoch-cut/ffb76425-5463-4d7f-8443-630922bf5e0a`
+passes44 tests (10 fact, eight epoch,26 adoption), module boundaries,109 source
+pins/current and archived preimages,1614 native payload pins and independent named
+epoch/fact stop0/status3/socket removal. Flat active Assignment and actual Truss
+works_on typed edge existence return project200 under the same selected native
+cut mechanism. Committed flat deactivation/native edge deletion after reader
+release yields no projects on fresh acquisition. Both stores exercise all four
+own DML events; independent bounded native writes refuse. Mapping mismatch,
+inheritance, duplicate binding and disabled guard refuse before callback. The
+omitted readback/trigger countervariant changes facts despite actual SHARE; replica
+mode remains fenced, and host temp catalog shadows do not replace native sources.
+
+Administrative fixture source carriers satisfy existing Truss definition/FK
+constraints; they are not accepted catalog artifacts or authenticated subjects.
+Initial setup attempts exposed missing classmethod rebinding and required type/
+relationship definition/document carriers. A failed setup left one owned native
+process, positively identified and stopped; setup now tears down on failure. An
+unbounded competing UPDATE was explicitly canceled, then replaced with150ms native
+lock_timeout and1500ms statement_timeout. No failed run is positive qualification.
+Historical retained e4e6795c and03a2fb18 qualify their earlier43/44-test source tuples;
+finalffb76425 uses typed edge existence rather than an undeclared graph active
+property. No new independent Astra review or formal native-refinement proof is
+claimed. Existing finite-history source/authority proofs retain their explicit
+complete-writer/native-transition premises.
+
+CONTRACT-008 and test plan link CONTRACT-063/STP-056 B10/B11/B12/L03 and US-056
+AC2/AC8/AC9/AC10 plus US-057 AC2 prerequisites. Complete mapping/fact provider
+membership, hidden facts, original ordinary-person authority, shared-role/grant/
+configuration/external source cuts, protected dispatch and final disclosure remain
+open. No132-case binding changes; checkpoint remains26/132 with106 missing. The
+full goal stays active, and this source/evidence is authorized for direct main.
+
+
+Final source packet `evidence/python-psycopg-epoch-cut/d95f1186-924b-4ab6-8747-cbeb96387474`
+adds explicit actual zero-ShareLock checks after pending-writer and changed-binding
+refusal, verifying partial fact-cut rollback rather than inferring it from a later
+successful acquisition. All44 methods/boundaries pass;109 current/archive source
+pins match,1614 native payload pins and both named independent cleanup receipts
+remain retained. Typed-edgeffb76425 is the earlier source-qualified predecessor.
+No additional acceptance promotion or independent review is claimed.
