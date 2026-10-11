@@ -24,7 +24,7 @@ ddx:
 
 ## Overview
 
-This feature is how stored data is read: one object by identifier or key, a type's objects in pages, an object's edges, a short traversal, and the catalog's own types.
+This feature exposes the full query surface supplied by Weft and direct storage reads: one object by identifier or key, a type's objects in pages, an object's edges, a short traversal, and the catalog's own types. Weft owns evolving SQL coverage; Truss owns the underlying table layout and execution.
 
 ## Ideal Future State
 
@@ -70,6 +70,10 @@ RD-04. A traversal of one to three hops returns related objects within the laten
 
 RD-05. The catalog's types are enumerated with properties, keys and endpoints, from one revision (FR-32).
 
+#### Weft query integration
+
+RD-06. Expose the full Weft query surface over the Truss storage mapping, preserving Weft compiler diagnostics and result semantics. Direct read requirements (FR-28 to FR-32) do not restrict SQL coverage. Compatible Weft upgrades extend coverage without introducing a Truss SQL feature allowlist. Truss retains responsibility for execution, authorization, transaction lifetime, exact transport and required execution obligations.
+
 ### Non-Functional Requirements
 
 - **Performance** (proposed, PRD): p95 read by id or key at most 1 ms; type enumeration at most 20 ms at 1,000 types; traversal within 2× of a hand-designed schema. Measured: 0.02 ms reads and 0.03 to 0.04 ms one-hop at 1,000 types.
@@ -98,7 +102,7 @@ RD-05. The catalog's types are enumerated with properties, keys and endpoints, f
 
 ## Constraints and Assumptions
 
-- The traversal query language is later; this feature fixes only the storage-level reads.
+- Weft owns the query language and SQL coverage; Truss exposes its full query surface and executes against the Truss-owned layout.
 - Listing order is by identifier, not by property.
 
 ## Dependencies
@@ -108,5 +112,5 @@ RD-05. The catalog's types are enumerated with properties, keys and endpoints, f
 
 ## Out of Scope
 
-- A query language and filters on properties.
-- Full-text or analytic queries.
+- Implementing a separate SQL parser, planner or coverage policy in Truss. Query forms, including property filters and analytic queries, follow Weft coverage.
+- SQL capabilities required by Truss actions are specified with those actions; they do not define general query coverage.

@@ -1,0 +1,8 @@
+test_all26_zero_row_statement_paths_and_truncate (__main__.Events.test_all26_zero_row_statement_paths_and_truncate) ... ok
+test_copy_merge_replica_mode_and_external_caller_work (__main__.Events.test_copy_merge_replica_mode_and_external_caller_work) ... ok
+test_exact_guard_inventory_and_disable_refusal (__main__.Events.test_exact_guard_inventory_and_disable_refusal) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 10.233s
+
+OK

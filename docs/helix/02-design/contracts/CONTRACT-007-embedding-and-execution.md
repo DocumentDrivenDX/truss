@@ -21,6 +21,10 @@ ddx:
 
 # Contract: Embedding and execution
 
+## Query and execution ownership — owner direction, 2026-10-11
+
+Truss exposes the full query surface exposed by Weft. Weft owns SQL language coverage, semantics, planning and lowering, and that coverage is expected to evolve. Truss owns the underlying table layout, query execution, actions and other executions. Truss documents the SQL capabilities required to implement its own actions and execution guarantees; it does not maintain a separate SQL feature allowlist or exclusions. Dependency versions and execution evidence qualify integration readiness, not a permanent limit on Weft SQL coverage. Execution admission checks below enforce artifact compatibility, authority, transaction and resource guarantees; they must not become an independent SQL coverage policy.
+
 ## Baseline execution profile — owner decision 2026-10-11
 
 ADR-003 selects stock psycopg 3 through supported APIs for the Python baseline. Publish and qualify exact driver/libpq/server versions and modes. Host-supplied authenticated connections and transaction ownership, exclusive statement use, exact values, current authority, savepoint containment and confirmed/pending/unknown durability remain normative.

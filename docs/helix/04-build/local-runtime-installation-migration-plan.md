@@ -19,6 +19,29 @@ checks and release availability are recorded below; complete runtime and actual
 Lakebase TLS/token/transaction acceptance remain separate gates.
 
 
+## Published PostgreSQL18.6 wheel verification — 2026-10-11
+
+[Release CI](https://github.com/DocumentDrivenDX/pgserver/actions/runs/38183446416)
+completed successfully at7c21032e8bf983c17bb747097c0c2435ab9c5141.
+[The public release](https://github.com/DocumentDrivenDX/pgserver/releases/tag/pg18.6-pgv0.8.6-r1)
+provides `pgserver-pg18==18.6.0`. The macOS14 arm64 CPython3.11 wheel SHA256 is
+`8abba22528fc6f35ca1bf2d7d7638ca4515101d6830909a432e524b05d488ae8`;
+this supersedes the preliminary local binary for distribution. Preserve the
+preliminary receipts below with their original digests and subset.
+
+[Fresh released consumer evidence](evidence/design-audit/pg18-released-consumer-20261011/receipt.json)
+verifies the published checksum, direct public-URL binary installation, all
+installed runtime/toolkit payloads, release-listing resolution without an index,
+and a consistent dependency set. Native18.6 Unix-socket/no-TCP startup,
+pgvector0.8.6 loading, retained commit/restart, confirmed stop,26 supported-driver
+tests and21 worker cleanup/collision controls pass in18.4 seconds of native checks.
+The Truss artifact is the previously verified toolkit snapshot
+`e6e465d16c8989f098d401f9f52ae9d81e88f75ed375ebf11222ebdc9448ece5`;
+this is released-runtime consumer evidence, not a full current-main corpus or
+actual Lakebase acceptance. Routine installs use released wheels without building
+PostgreSQL. Source checks, update matrix and publication belong to the public
+pgserver repository.
+
 ## PostgreSQL18.6 focused consumer evidence — 2026-10-11
 
 The [installed consumer smoke receipt](evidence/design-audit/pg18-consumer-smoke-final-20261011/receipt.json)
@@ -48,8 +71,8 @@ and ordered statement release are unchanged, and rollback is independently
 confirmed. This qualifies the selected source projection, not a complete installer.
 
 The macOS14 arm64 CPython3.11 wheel is delivered in the verified local cache.
-Public release `pg18.6-pgv0.8.6-r1` remains pending the build repository's platform
-matrix. Install only `pgserver-pg18`, because upstream `pgserver` and the other
+At this preliminary checkpoint, release publication was pending; the released
+consumer verification above supersedes that availability status. Install only `pgserver-pg18`, because upstream `pgserver` and the other
 major distributions share the same import files. Wheel build/release maintenance
 belongs to the public repository; the historical Truss build entrypoints now
 refuse with that pointer. Actual Lakebase TLS, identity/token refresh and transaction

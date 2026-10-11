@@ -1,0 +1,6 @@
+test_suppressed_original_publication_step_rolls_back (__main__.ForgedPublish.test_suppressed_original_publication_step_rolls_back) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 16.908s
+
+OK

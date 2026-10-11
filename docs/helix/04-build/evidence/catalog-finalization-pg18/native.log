@@ -1,0 +1,9 @@
+test_original_registration_publication_and_repeat (__main__.Finalization.test_original_registration_publication_and_repeat) ... ok
+test_malformed_ordinal_refuses_without_repair (__main__.Finalization.test_malformed_ordinal_refuses_without_repair) ... ok
+test_late_failure_restores_finalized_tuple_and_caller_work (__main__.Finalization.test_late_failure_restores_finalized_tuple_and_caller_work) ... ok
+test_connected_head_last_and_raw_commit_refusal (__main__.Finalization.test_connected_head_last_and_raw_commit_refusal) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 55.266s
+
+OK
