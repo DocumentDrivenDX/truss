@@ -1,0 +1,69 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/catalog-core-assertion-identities.test.ts:
+(pass) original pointer identities retain partial meanings without inventing missing facets or enforcement [2.29ms]
+(pass) cloned observation collections cannot issue source identities [0.05ms]
+(pass) authored key and relationship IDs remain qualified by original occurrence pointers [20.13ms]
+(pass) original 0.8 schema properties keep authored pointers and legacy API failures explicit [11.68ms]
+(pass) complete original value coverage keeps unclassified and opaque meaning unavailable [0.42ms]
+(pass) occurrence inventory retains original custody instead of copied or foreign preparation [3.84ms]
+(pass) mixed original versions and lexical numeric opaque bytes remain distinct from transition targets [7.22ms]
+(pass) the original UMF profile still refuses unsafe integer source before inventory issuance [0.40ms]
+
+tests/acceptance-json.test.ts:
+(pass) empty object [0.16ms]
+(pass) null boolean string array [0.03ms]
+(pass) legal whitespace [0.02ms]
+(pass) inert prototype name [0.01ms]
+(pass) valid escaped surrogate pair [0.07ms]
+(pass) distinct normalization forms [0.02ms]
+(pass) escaped equivalent duplicate [0.05ms]
+(pass) unpaired high surrogate [0.01ms]
+(pass) unpaired low surrogate
+(pass) overlong utf8 [0.02ms]
+(pass) surrogate utf8
+(pass) out of range utf8
+(pass) outer number
+(pass) trailing data
+(pass) trailing comma
+(pass) bom
+(pass) comment
+(pass) opaque numeric artifact base64
+(pass) complete original input fixture preserves all native and converted custody [0.20ms]
+(pass) selected depth and container limits refuse before an over-limit output [1.92ms]
+(pass) raw byte and cumulative duplicate-name work are conjunctive ceilings [1.32ms]
+(pass) exact node ceiling counts containers and every scalar occurrence [21.05ms]
+
+tests/source-occurrence-index.test.ts:
+(pass) every original value has an ordered pointer and exact lexical span [0.23ms]
+(pass) escaped member identity and unicode retain exact source bytes [0.09ms]
+(pass) captured bytes and returned slices are independent of caller mutation [0.11ms]
+(pass) root primitives and empty containers remain complete occurrences [0.05ms]
+(pass) source admission still refuses duplicates invalid unicode and malformed grammar [0.10ms]
+(pass) discarded preflight tree does not replace original number lexemes [0.04ms]
+(pass) occurrence indexing applies conjunctive source and pointer work bounds [3.35ms]
+(pass) source copying never invokes caller species or own length callbacks [0.08ms]
+(pass) non-byte typed arrays cannot be silently narrowed into source bytes [0.04ms]
+
+tests/catalog-input-preparation.test.ts:
+(pass) real owner validates original ordered UMF sources with reversible interpretation [4.02ms]
+(pass) foreign original interpretation profile cannot borrow validation [0.18ms]
+(pass) archive document identity must equal original owner source [1.23ms]
+(pass) shape-only original {} source does not become accepted UMF [0.32ms]
+(pass) native archive carrier has exact five original fields without interpretation substitution [2.44ms]
+(pass) source declaration extraction preserves original owner and Field references [2.43ms]
+(pass) configured original registry refuses unregistered synthetic root profiles [10.63ms]
+(pass) absent binding derives complete default json homes from original members [2.97ms]
+(pass) present binding cannot be silently replaced with default homes [2.22ms]
+(pass) embedded duplicate source members refuse before owner interpretation [0.17ms]
+(pass) reconstructed preparations cannot enter home, extension, report or native staging helpers [22.31ms]
+(pass) new-only staging cannot silently ignore declared transforms [2.39ms]
+(pass) UMF report basis never invents a supported-subset artifact for unregistered preparation [5.01ms]
+(pass) UMF report basis preserves actual original version and registered bytes without a support claim [12.20ms]
+(pass) optional original primary markers project without changing source or ordered keys [5.92ms]
+(pass) non-Boolean primary markers fail original owner validation [0.31ms]
+
+ 55 pass
+ 0 fail
+ 334 expect() calls
+Ran 55 tests across 4 files. [1006.00ms]

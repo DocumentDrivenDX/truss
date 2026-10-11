@@ -24,6 +24,7 @@ export function collectCatalogOriginalOccurrenceInventory(prepared:Prepared,coll
    const assertions=byPointer.get(value.pointer)??[];remaining.delete(value.pointer);
    return Object.freeze({...value,sourceSha256:source.sha256,owner:Object.freeze({scope:'document' as const,documentId:document.documentId}),
     disposition:assertions.length?'assertion' as const:'unavailable' as const,
+    interpretationState:assertions.length?'partial' as const:'unavailable' as const,assertionMembershipComplete:false as const,
     assertions:Object.freeze([...assertions]),reason:assertions.length?'original_inspected_core_subset' as const:'original_semantic_classification_unavailable' as const});
   });
   if(remaining.size)throw Error('Every original assertion pointer must occur in original source');

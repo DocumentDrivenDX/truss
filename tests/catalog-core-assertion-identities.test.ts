@@ -48,7 +48,8 @@ test('complete original value coverage keeps unclassified and opaque meaning una
   ['/modules/0/elements/0/kind','core.kind'],['/modules/0/elements/0/nullability','core.nullability'],['/modules/0/elements/0/cardinality','core.cardinality'],['/modules/0/elements/0/facets','core.facets'],
   ['/modules/0/elements/1/kind','core.kind'],['/modules/0/elements/1/nullability','core.nullability'],['/modules/0/elements/1/cardinality','core.cardinality'],
  ]);
- const opaque=doc.occurrences.find(o=>o.pointer==='/modules/0/elements/0/facets/future/value')!;expect(opaque.disposition).toBe('unavailable');expect(opaque.assertions).toEqual([]);
+ const opaque=doc.occurrences.find(o=>o.pointer==='/modules/0/elements/0/facets/future/value')!;expect(opaque.disposition).toBe('unavailable');expect(opaque.assertions).toEqual([]);expect(opaque.interpretationState).toBe('unavailable');expect(opaque.assertionMembershipComplete).toBe(false);
+ for(const row of doc.occurrences.filter(o=>o.disposition==='assertion')){expect(row.interpretationState).toBe('partial');expect(row.assertionMembershipComplete).toBe(false)}
  const pos=doc.occurrences.indexOf(opaque);expect(new TextDecoder().decode(originalCatalogOccurrenceBytes(prepared,result,0,pos))).toBe('"opaque"');
  for(const row of doc.occurrences){expect(row.sourceSha256).toBe(input.documents[0].artifact.sha256);expect(row.owner.documentId).toBe('doc');for(const assertion of row.assertions){expect(assertion.assertion.sourcePointer).toBe(row.pointer);expect(assertion.enforcement).toBe('none')}}
 });

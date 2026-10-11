@@ -1,7 +1,7 @@
 """Retain scoped original-owner inventory evidence; no backend admission claim."""
 from pathlib import Path
-import os, json, hashlib, zipfile, subprocess
-root=Path.cwd(); out=root/'docs/helix/04-build/evidence/original-occurrence-inventory';out.mkdir(parents=True,exist_ok=True)
+import os, json, hashlib, zipfile, subprocess, uuid
+root=Path.cwd(); out=root/'docs/helix/04-build/evidence/original-occurrence-inventory'/str(uuid.uuid4());out.mkdir(parents=True)
 env=os.environ.copy()
 roles=['TRUSS_UMF_PRODUCER','TRUSS_UMF_DECLARATION_PRODUCER','TRUSS_UMF_FIELD_ASSERTION_PRODUCER']
 for role in roles:

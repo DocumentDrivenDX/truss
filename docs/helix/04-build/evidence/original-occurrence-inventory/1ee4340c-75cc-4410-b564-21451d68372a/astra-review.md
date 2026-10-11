@@ -1,0 +1,5 @@
+# Astra ultra final combined audit — 2026-10-11
+
+Final combined audit is clean. Row-level interpretationState is partial only where actual core assertions exist, unavailable elsewhere, and assertionMembershipComplete is always false; tests assert both. Host1ee4340c: all698 current pins/exact ZIP verified,55 unique passes/0 failures/334 assertions across four files, strict typecheck exit0. Receipt SHA25695ce434758f02bcf59790af03fe318dad5ac906526297aeca9e5c2006b15ef6c; ZIP03bd56bb59d29da083ce224e2c120e8ae430f12cb55eb6e339765a90f67a54a8.
+
+Formal86655c50: all seven current pins/exact archive verified; independently replayed all24 fresh Z3 contexts (8 UNSAT/16 SAT), receipt SHA2564d584733581d74f661d81bfb5d01bc385e1d19d7681bab4fbb8acf7d2b97dca7. No remaining blocker within structural occurrence/partial owner interpretation and conditional formal scope. Prior source-specific evidence remains historical; no native or acceptance promotion. Review supplied by the existing astra_security_review agent; no host/native test rerun by reviewer.
