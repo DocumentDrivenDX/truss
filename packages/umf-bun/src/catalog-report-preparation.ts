@@ -2,6 +2,7 @@
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import {collectCatalogAssertionObservations} from './catalog-assertion-observations';
 import {assessCatalogObservationCoverage} from './catalog-observation-coverage';
+import {requireOriginalCatalogTypeJournals,type collectCatalogTypeJournals} from './catalog-type-journals';
 import {requireOriginalCatalogTypeReceipts,type collectCatalogTypeReceipts} from './catalog-type-receipts';
 import {collectCatalogValidationEvidence} from './catalog-validation-evidence';
 import {collectCatalogExtensionInventory} from './catalog-extension-inventory';
@@ -17,8 +18,9 @@ export function requireOriginalCatalogReportPreparation(result:object,prepared:P
  if(originalReportPreparations.get(result)!==prepared)throw Error('Original bound catalog report preparation required');
 }
 export async function collectCatalogReportPreparation(connection:CatalogStageConnection,prepared:Prepared,revision:string,
- owner:Awaited<ReturnType<typeof loadUmfDeclarationProducer>>,fields:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>,scalars?:Awaited<ReturnType<typeof loadUmfScalarTypeProducer>>,members?:Awaited<ReturnType<typeof loadUmfRecordMembersProducer>>,links?:Awaited<ReturnType<typeof loadUmfReferenceLinksProducer>>,typeReceipts?:ReturnType<typeof collectCatalogTypeReceipts>){
+ owner:Awaited<ReturnType<typeof loadUmfDeclarationProducer>>,fields:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>,scalars?:Awaited<ReturnType<typeof loadUmfScalarTypeProducer>>,members?:Awaited<ReturnType<typeof loadUmfRecordMembersProducer>>,links?:Awaited<ReturnType<typeof loadUmfReferenceLinksProducer>>,typeReceipts?:ReturnType<typeof collectCatalogTypeReceipts>,typeJournals?:ReturnType<typeof collectCatalogTypeJournals>){
  requireOriginalCatalogPreparation(prepared);
+ if(typeJournals!==undefined)requireOriginalCatalogTypeJournals(prepared,typeJournals);
  if(typeReceipts!==undefined)requireOriginalCatalogTypeReceipts(prepared,typeReceipts);
  if(prepared.original.input.transforms.length)throw Error('Complete transform execution and report producer required');
  const ingressBasis=collectCatalogIngressReportBasis(prepared);
@@ -39,7 +41,7 @@ export async function collectCatalogReportPreparation(connection:CatalogStageCon
  if(row.provisional_count!=='0')throw Error('Original empty provisional inventory proof required');
  if(counts.elementsRetired!=='0')throw Error('Original new-only retirement count required');
  await recheckCatalogReportDocumentBasis(connection,documentBasis);
- const result=Object.freeze({provisionalRevision:revision,documentBasis,counts:Object.freeze(counts),provisional:Object.freeze([]),ownerObservations,observationCoverage,coreAssertionIdentities,extensions,validationEvidence,ingressBasis,typeReceipts:typeReceipts??null,
+ const result=Object.freeze({provisionalRevision:revision,documentBasis,counts:Object.freeze(counts),provisional:Object.freeze([]),ownerObservations,observationCoverage,coreAssertionIdentities,extensions,validationEvidence,ingressBasis,typeReceipts:typeReceipts??null,typeJournals:typeJournals??null,
   scope:'original_new_catalog_report_preparation_only' as const});
  originalReportPreparations.set(result,prepared);return result;
 }

@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "method": "Independent read-only exact source/ZIP/native receipt/log/custody audit; no native execution",
+  "receiptSha256": "7f28bc1010e53ce4287e1034bb75770a3f0376efd17590bae92370bc8d579cd2",
+  "nativeReceiptSha256": "adc207d085dfcb72ca18e04a799bb26610e25692e69f2646f61a84b0a1e0fa0f",
+  "nativeLogSha256": "1ac742b9f48ce03f1b5d5c41d6c1f72c89590f0bd0fc6065f293cc2df46e935b",
+  "archiveSha256": "9b40d6ea83cef78255d167d02b74f1054d80ce1ab3252ce3449925f415291a2c",
+  "sourcePins": 819,
+  "includedHostPins": 732,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentInputInventoryMatches": true,
+  "uniqueNativeChecks": 222,
+  "allHistoricalChecksRetained": 216,
+  "newJournalChecks": [
+    "actual journal cohort stages three Records and two properties with exact source archive",
+    "actual native report retains independent journal owner and whole original journal wire",
+    "native multi-Field journal joins original event and source bytes without authority promotion",
+    "native report refuses copied crossed and falsy journal sidecars before SQL",
+    "journal cohort rollback removes native catalog property and document effects",
+    "retained journal consistency cannot authorize an ended native report cut"
+  ],
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "journalOwnerProfile": {
+    "identity": "umf-record-type-journal-inspection",
+    "version": "e71613d9c76bf7a4bf5476bf72ab4fd99059ff17",
+    "sha256": "88d68b176a3d2a5f8877332bbe332c116b87c57642f21f69932133599f521783"
+  },
+  "originalRequestSha256": "72ffaf8cc1992cf7dd1f4ffc976e289e390978fcc5e436e90eb1a8b0a13dc1dc",
+  "originalJournalSha256": "f073afdf0794e77809e6cd0e32f166fef9453d11c14d9febf6b001d8cb4a4155",
+  "originalSourceSha256": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+  "ownerEvidenceSha256": "16ce94e3142cf053a20cdf43440421baa4cfa8a41495b185a6247892d2795103",
+  "nativeObservation": {
+    "writerXid": "870",
+    "operationOrdinal": "0",
+    "effectGeneration": "7"
+  },
+  "exactJournalSourceMeaningAndPointerJoin": true,
+  "cleanup": {
+    "containerId": "fe19eb4538ec5f5c3700dc80051bc3abcc6cc19ad28499ba7b864141e8101ded",
+    "exitCode": 0,
+    "stdout": "fe19eb4538ec5f5c3700dc80051bc3abcc6cc19ad28499ba7b864141e8101ded",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "scope": "Private journal-sidecar composition with actual native source/archive and transaction observations; ended-cut control rechecks the native report document basis, not journal consumption. No SQL type enforcement, authenticated issuer, persisted journal or accepted report/publication authority.",
+  "acceptancePromoted": false
+}

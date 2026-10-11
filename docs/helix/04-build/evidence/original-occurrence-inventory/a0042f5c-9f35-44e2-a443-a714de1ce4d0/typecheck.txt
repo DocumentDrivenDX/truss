@@ -1,0 +1,7 @@
+packages/umf-bun/src/catalog-type-journals.ts(53,9): error TS7022: 'ownerEvidence' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+packages/umf-bun/src/catalog-type-journals.ts(54,9): error TS7022: 'common' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/catalog-type-journals.test.ts(27,238): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ identity: string; bytesBase64: string; sha256: string; }' is not assignable to parameter of type 'Readonly<{ identity: "truss.original-type-journal-requests"; bytesBase64: string; sha256: string; }>'.
+      Types of property 'identity' are incompatible.
+        Type 'string' is not assignable to type '"truss.original-type-journal-requests"'.

@@ -1,10 +1,10 @@
 /** Trusted host-only original producer registration. No alternate UMF validation. */
 import {resolve} from 'node:path';
 import {requireUnchangedCatalogTransition} from './catalog-transition-correspondence';
-const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'>();
-function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'):T{assertionOwners.set(owner,mode);return owner;}
+const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'|'record-type-journals'>();
+function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'|'record-type-journals'):T{assertionOwners.set(owner,mode);return owner;}
 /** Private loaded-instance recognition; no external issuer or native qualification. */
-export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'):void{
+export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'|'record-type-journals'):void{
  if(assertionOwners.get(owner)!==mode)throw Error('Original loaded assertion owner required');
 }
 export const UMF_RUNTIME_SOURCE='c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3';
@@ -107,4 +107,11 @@ export async function loadUmfRecordTypeReceiptProducer(directory:string){
  const {hash,captured}=await loadPinnedFunctions(directory,UMF_RECORD_TYPE_RECEIPT_SOURCE,'record-type-receipts',['inspectCoreRecordTypeReceipt']);
  return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RECORD_TYPE_RECEIPT_SOURCE,bundleSha256:hash,
   inspectRecordTypeReceipt:captured.inspectCoreRecordTypeReceipt}),'record-type-receipts');
+}
+
+/** Explicit transition journal owner; no authenticated issuer or native authority. */
+export const UMF_RECORD_TYPE_JOURNAL_SOURCE='e71613d9c76bf7a4bf5476bf72ab4fd99059ff17';
+export async function loadUmfRecordTypeJournalProducer(directory:string){
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_RECORD_TYPE_JOURNAL_SOURCE,'record-type-journals',['inspectCoreRecordTypeJournal']);
+ return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RECORD_TYPE_JOURNAL_SOURCE,bundleSha256:hash,inspectRecordTypeJournal:captured.inspectCoreRecordTypeJournal}),'record-type-journals');
 }

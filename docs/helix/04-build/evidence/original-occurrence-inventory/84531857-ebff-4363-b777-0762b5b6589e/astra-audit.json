@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "method": "Independent read-only current-source/exact-ZIP/retained-log audit; no host/browser/native rerun",
+  "receiptSha256": "eeb33ffb65948a80cda4486b87b2b7a79247bcedcf44717554ab2a0072ccf129",
+  "sourcePins": 732,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentSelectedInputInventoryMatches": true,
+  "archiveSha256": "037bc7e1b5512746b667e496bde93ad846e661680d1548c56d1fe86c774b4646",
+  "hostLogSha256": "8cee98353b7dda24f0252a9949272775747e4d7e4bddb7602977c1d6634fe13d",
+  "typeLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "hostTests": 115,
+  "hostAssertions": 1418,
+  "testFiles": 12,
+  "strictTypecheckExit": 0,
+  "journalIngressTests": [
+    "original whole journal reconciles multiple typed Fields and exact source occurrences",
+    "whole journal packet refuses gaps crossed contexts mutations duplicates and unsupported profiles",
+    "journal original bytes reject duplicate members and numeric meaning loss",
+    "kind-only history retains imported bare type links without inventing duties",
+    "mixed kind events retain original type event indices and independent scanner bounds remain active",
+    "retained-evidence ledger enforces its independent exact byte bound",
+    "loaded journal output substitutions and argument mutation cannot change original meaning",
+    "journal issuance binds exact original preparation before private report SQL"
+  ],
+  "journalOwnerDirectory": "/private/tmp/truss-umf-runtime-lb0q5l",
+  "journalOwner": {
+    "revision": "e71613d9c76bf7a4bf5476bf72ab4fd99059ff17",
+    "producerMode": "record-type-journals",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "8bd6ad5ee2824345e5b5e0dc9aad01d1d89453d2f77e784127f0b7e1a2e58ac0",
+    "bundleSha256": "88d68b176a3d2a5f8877332bbe332c116b87c57642f21f69932133599f521783",
+    "operations": [
+      "inspectCoreRecordTypeJournal",
+      "declareCoreElementKind",
+      "declareCoreRecordType"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "extraSourceArchiveCheck": "Temporary source.tar digest and Git commit comment match producer manifest; receipt owner module/schema match archived bytes. Not a fresh rebuild or authenticated bundle issuance.",
+  "remainingFindings": [],
+  "nativeExecution": false,
+  "acceptancePromoted": false
+}

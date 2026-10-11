@@ -1,0 +1,6 @@
+tests/catalog-type-journals.test.ts(24,113): error TS2322: Type '{ identity: "changed-journal"; bytesBase64: string; sha256: string; }' is not assignable to type '{ identity: "original-journal"; bytesBase64: string; sha256: string; }'.
+  Types of property 'identity' are incompatible.
+    Type '"changed-journal"' is not assignable to type '"original-journal"'.
+tests/catalog-type-journals.test.ts(46,230): error TS2322: Type '{ identity: "invalid-byte-journal"; bytesBase64: string; sha256: string; }' is not assignable to type '{ identity: "original-journal"; bytesBase64: string; sha256: string; }'.
+  Types of property 'identity' are incompatible.
+    Type '"invalid-byte-journal"' is not assignable to type '"original-journal"'.
