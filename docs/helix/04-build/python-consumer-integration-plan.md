@@ -1993,3 +1993,33 @@ complete FV01–FV07 validator. Complete report admission, protected ordinary-pe
 context, revision payload encoding, journal/source/reservation producers, resource
 accounting, finalization and public registration remain unfinished. The existing
 operation phase and unconditional commit barrier remain unchanged.
+
+### Original immutable pending-index declaration field
+
+ADR-002 D2/D11/D12 and CONTRACT-003's immutable declaration rule now have a
+Truss-owned [selected policy resource](../../../packages/python/src/truss/_profiles/absent-binding-index-declarations.json).
+Its identity/version and exact bytes belong to this producer; caller-supplied
+layout, support and policy pins are not registered declaration-policy authority.
+The resource retains the original source0.15 layout artifact pin as provenance,
+without claiming installed-layout qualification. It selects absent binding,
+no transforms, native ingress and the existing new-catalog JSON-home component.
+It declares no document-, extension- or query-driven optimization jobs and
+excludes fixed baseline enforcement indexes from catalog jobs. Unknown extension
+meaning remains retained and separately unresolved; statistics are a distinct
+declaration field/profile.
+
+The native producer compares exact original policy bytes, admitted input and
+writer/ordinal/generation, observes complete current native catalog/document
+correspondence and rechecks the cut. Python retains original producer identity,
+preparation, bytes and native evidence. Report composition consumes this actual
+result into pending_indexes; report reuse re-runs the producer and compares exact
+original evidence. Only pending_indexes leaves the missing-field list. A missing,
+changed or unselected policy refuses and preserves whole-acceptance containment;
+there is no empty-list fallback.
+
+[Native evidence](evidence/python-catalog-index-declarations.json) and
+[the regression log](evidence/python-catalog-index-declarations.log) cover the
+selected administrative PostgreSQL16.15 component and source-exact policy. This
+does not install jobs, run DDL, certify readiness or grant complete report,
+installation or ordinary-person authority. Remaining report/context fields,
+protected finalization and the public register operation remain unfinished.

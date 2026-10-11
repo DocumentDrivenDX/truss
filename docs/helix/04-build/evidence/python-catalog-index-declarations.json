@@ -1,0 +1,63 @@
+{
+  "scope": "selected_administrative_original_immutable_pending_index_declarations",
+  "complete_report_qualified": false,
+  "installed_profile_qualified": false,
+  "readiness_qualified": false,
+  "protected_finalization_qualified": false,
+  "public_registration_callable": false,
+  "declaration_policy": {
+    "identity": "truss-absent-binding-index-declarations",
+    "version": "0.1.0",
+    "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d"
+  },
+  "native_runtime": {
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "pg8000": "1.31.5",
+    "fixture_layout": "qualified-property-0.15"
+  },
+  "test": {
+    "command": "python -m unittest test_catalog_index_declarations test_catalog_report test_catalog_revision_obligation test_catalog_completion_physical test_catalog_staging -v",
+    "tests": 63,
+    "elapsed_seconds": 37.843,
+    "exit_code": 0,
+    "result": "OK",
+    "log": "python-catalog-index-declarations.log",
+    "log_sha256": "420a16a74011aeaa484ee7fb19ceb023ef0690b164b46c623f6cd5cf297be438",
+    "scope": "affected cohort including native PostgreSQL scenarios and existing pure custody cases"
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "plan": "approved",
+    "completed_iteration": "approved_no_remaining_source_blockers",
+    "independent_tests": 63,
+    "elapsed_seconds": 41.374,
+    "exit_code": 0,
+    "source_snapshot_unchanged": true,
+    "captured_files": 230,
+    "receipt_source_and_log_hashes_verified": true,
+    "embedded_policy_and_source_pin_verified": true
+  },
+  "python_import_boundaries": 365,
+  "source_sha256": {
+    "packages/python/src/truss/_profiles/absent-binding-index-declarations.json": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+    "packages/postgresql/native/catalog-report/absent-binding-index-declarations.sql": "b45071f79deeb37b6fa38bc7acb1c7ad0ca898000c44a2897ba29f10e6105f93",
+    "packages/python/src/truss/_catalog_index_declarations.py": "60e1411722d1aaa31b6ffc0c576b26d1eae8fbfe8fd636c1d195ca3447d251e7",
+    "packages/python/src/truss/_catalog_report.py": "ebdca25c2e4f04c92c6ffc483f9dddfafe1da0526dbd665af7e23df1243f9e6f",
+    "packages/python/tests/test_catalog_index_declarations.py": "8253f9cd6981b0eb83baae3e819483fbd4272e2083b608a58b0f3db2273631ca",
+    "packages/python/tests/test_catalog_staging.py": "8944024ceeb8db7a5585cf482a23af51aaea7796a712ffcd492192596ac847f3",
+    "scripts/check-module-boundaries.py": "10f0d2241010881f8c066daaec4cb2a91abfa573fee4c736476c30d527351529",
+    "docs/helix/04-build/python-consumer-integration-plan.md": "a609feca9035799c173429d99b63332546c83c2681ac56ad579b77c176c5d470",
+    "docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql": "cc725df53f0d74e13bb51fda29603f8cafe8c0cee237667778566f81b33f5011"
+  },
+  "limitations": [
+    "Only absent binding, empty transforms, native ingress and the selected new-catalog JSON component are supported.",
+    "Policy exact bytes have their own release identity; arbitrary input layout/support/policy pins remain unqualified.",
+    "The source0.15 artifact pin records original source provenance, not installed-layout authority.",
+    "Unknown extension meaning remains retained and separately unresolved; no implicit document/extension/query job interpretation is admitted.",
+    "Baseline enforcement indexes are not pending catalog jobs; statistics declaration semantics, dispatch and readiness are separate.",
+    "Other report fields, issuer/context authority, complete runtime resource/dependency qualification, protected finalization and public registration remain incomplete.",
+    "Native and Python byte bounds qualify retained materialized response only, not complete preallocation accounting."
+  ]
+}
