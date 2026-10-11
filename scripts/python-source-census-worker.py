@@ -15,7 +15,7 @@ sha=lambda b:hashlib.sha256(b).hexdigest()
 def check(name,expected,observed):
  observations.append({'id':name,'expected':expected,'observed':observed})
  if expected!=observed:raise AssertionError(name)
-def connect():return Connection(user='postgres',password=input['password'],host='127.0.0.1',port=input['port'],database='postgres',ssl_context=False,timeout=5)
+def connect():return Connection(user='postgres',password=input['password'],unix_sock=input['unixSocket'],database='postgres',ssl_context=False,timeout=5)
 admin=connect()
 def capture(label,*,unavailable=False,lost=False):
  con=connect();gate=None
@@ -56,7 +56,14 @@ def capture(label,*,unavailable=False,lost=False):
   try:gate.capture();replay='unexpected'
   except NativeBoundaryRefusal:replay='refused'
   check(label+':no-replay','refused',replay);check(label+':no-new-native-call',True,boundary.last_call is before)
-  gate.detach();check(label+':original-ingress-restored',True,con._sock is boundary._original_stream and gate.detached)
+  retained_before=gate.original_observation
+  gate.detach()
+  if retained_before is not None:
+   check(label+':detach-retains-image',True,gate.original_observation is retained_before and retained_before.original_image==image)
+   check(label+':detach-retains-request',True,retained_before.original_request==(folder/(label+'.request.bin')).read_bytes())
+   retained_frames=b''.join(e.code+struct.pack('!I',len(e.payload)+4)+e.payload for e in retained_before.original_frames)
+   check(label+':detach-retains-frames',True,raw==retained_frames)
+  check(label+':original-ingress-restored',True,con._sock is boundary._original_stream and gate.detached)
   # Administrative fixture teardown closes the original connection. No complete
   # cooperative operation handback, accepted issuer or mutation is inferred.
   return None if gate.original_observation is None else gate.original_observation.original_image
@@ -81,7 +88,7 @@ try:
  admin.run("CREATE FUNCTION census_probe.overflow() RETURNS text LANGUAGE sql AS $body$ SELECT '"+'Z'*17000000+"'::text $body$;")
  capture('overflow-refusal',unavailable=True);admin.run('DROP FUNCTION census_probe.overflow();')
  final=capture('final-restored');check('overflow:exact-source-restoration',sha(baseline),sha(final))
- (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'captures':captures,'scope':'Excluded PostgreSQL16.15 Docker installer and pg8000 original-operation capture only. Cooperative host/driver and retained payload bookkeeping premises. No installed pgserver port, authenticated provider/issuer, whole native observer interpretation, authority/execution held cut, graph profile, completed operation handback or backend acceptance.'},indent=2)+'\n')
+ (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'captures':captures,'scope':'Excluded installed pgserver PostgreSQL16.15 Unix-socket installer and pg8000 original-operation capture only. Cooperative host/driver and retained payload bookkeeping premises. No public installed provider profile, authenticated provider/issuer, whole native observer interpretation, authority/execution held cut, graph profile, completed operation handback or backend acceptance.'},indent=2)+'\n')
  print(json.dumps({'status':'component-passed','observations':len(observations)}))
 except BaseException as error:
  (folder/'native-failure.json').write_text(json.dumps({'status':'failed','observations':observations,'captures':captures,'error':str(error)},indent=2)+'\n');raise

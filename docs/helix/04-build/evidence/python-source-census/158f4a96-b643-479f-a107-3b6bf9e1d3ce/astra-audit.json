@@ -1,0 +1,134 @@
+{
+  "status": "independent-retained-native-reconstruction-passed",
+  "runId": "158f4a96-b643-479f-a107-3b6bf9e1d3ce",
+  "wrapperReceiptSha256": "587cc754025843b967c28e294273005a0d44d86dd5690c75433cab376c263176",
+  "nativeReceiptSha256": "6207e993dc715c0a8d9cb12fccb8a0cb63a066af8084eec0c9d3e87f24fbefb6",
+  "sourceArchiveSha256": "78bda80d9bd411b174194743d7a2b8ab9cb5aa6ea4295614905685166b24c94b",
+  "sourcePins": 124,
+  "changedCurrentSources": [],
+  "exactDuplicateFreeSourceArchive": true,
+  "nativeBinaryDigests": 1614,
+  "binaryDigestsCurrentlyMatch": true,
+  "observations": 130,
+  "uniqueTypeSensitiveMatches": true,
+  "hostTests": 12,
+  "moduleBoundaryImports": 441,
+  "independentRawResponseReconstruction": [
+    {
+      "label": "baseline",
+      "imageSha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "frameCount": 2674,
+      "wireBytes": 21961599,
+      "selectedSections": 40
+    },
+    {
+      "label": "backing-data-update",
+      "imageSha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "frameCount": 2674,
+      "wireBytes": 21961599,
+      "selectedSections": 40
+    },
+    {
+      "label": "source-change",
+      "imageSha256": "109ed0882fa1e82645103896a0f1e3bd1ac4c371be8dc74d79a06cf0017ecb0a",
+      "imageBytes": 10939899,
+      "chunks": 2671,
+      "frameCount": 2674,
+      "wireBytes": 21961603,
+      "selectedSections": 40
+    },
+    {
+      "label": "restored",
+      "imageSha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "frameCount": 2674,
+      "wireBytes": 21961599,
+      "selectedSections": 40
+    },
+    {
+      "label": "lost-publication",
+      "imageSha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "frameCount": 2674,
+      "wireBytes": 21961599,
+      "selectedSections": 40
+    },
+    {
+      "label": "final-restored",
+      "imageSha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "frameCount": 2674,
+      "wireBytes": 21961599,
+      "selectedSections": 40
+    }
+  ],
+  "rawRequestAndResponseDigests": {
+    "baseline": {
+      "requestSha256": "af3ba567274f7ba2b6ff7a21c7f13a24cb48eeaa02846046eee3e81b78c7092e",
+      "responseSha256": "8515ca3b72253b984945bddfe0ab1ee8e35c879a24b66d79caceecae8d2f2798",
+      "wireBytes": 21961599,
+      "frameCount": 2674
+    },
+    "backing-data-update": {
+      "requestSha256": "af3ba567274f7ba2b6ff7a21c7f13a24cb48eeaa02846046eee3e81b78c7092e",
+      "responseSha256": "8515ca3b72253b984945bddfe0ab1ee8e35c879a24b66d79caceecae8d2f2798",
+      "wireBytes": 21961599,
+      "frameCount": 2674
+    },
+    "source-change": {
+      "requestSha256": "af3ba567274f7ba2b6ff7a21c7f13a24cb48eeaa02846046eee3e81b78c7092e",
+      "responseSha256": "28412301b53ac98042007c9ba6a6de0d04de3517f499718fb788440350e2b482",
+      "wireBytes": 21961603,
+      "frameCount": 2674
+    },
+    "restored": {
+      "requestSha256": "af3ba567274f7ba2b6ff7a21c7f13a24cb48eeaa02846046eee3e81b78c7092e",
+      "responseSha256": "8515ca3b72253b984945bddfe0ab1ee8e35c879a24b66d79caceecae8d2f2798",
+      "wireBytes": 21961599,
+      "frameCount": 2674
+    },
+    "lost-publication": {
+      "requestSha256": "af3ba567274f7ba2b6ff7a21c7f13a24cb48eeaa02846046eee3e81b78c7092e",
+      "responseSha256": "8515ca3b72253b984945bddfe0ab1ee8e35c879a24b66d79caceecae8d2f2798",
+      "wireBytes": 21961599,
+      "frameCount": 2674
+    },
+    "final-restored": {
+      "requestSha256": "af3ba567274f7ba2b6ff7a21c7f13a24cb48eeaa02846046eee3e81b78c7092e",
+      "responseSha256": "8515ca3b72253b984945bddfe0ab1ee8e35c879a24b66d79caceecae8d2f2798",
+      "wireBytes": 21961599,
+      "frameCount": 2674
+    },
+    "foreign-refusal": {
+      "requestSha256": "af3ba567274f7ba2b6ff7a21c7f13a24cb48eeaa02846046eee3e81b78c7092e",
+      "responseSha256": "c29ee44ad25e975e9ad1e921f0f6de65c35d710ac8052164e44cbe4b7b1c99af",
+      "wireBytes": 130,
+      "frameCount": 4
+    },
+    "overflow-refusal": {
+      "requestSha256": "af3ba567274f7ba2b6ff7a21c7f13a24cb48eeaa02846046eee3e81b78c7092e",
+      "responseSha256": "c29ee44ad25e975e9ad1e921f0f6de65c35d710ac8052164e44cbe4b7b1c99af",
+      "wireBytes": 130,
+      "frameCount": 4
+    }
+  },
+  "sqlPortChange": "Only engine guard 170009 -> 160015; prior selected 40-catalog/28-numeric-OID query retained",
+  "cleanup": {
+    "attempted": true,
+    "stopExitCode": 0,
+    "statusExitCode": 3,
+    "socketAbsent": true
+  },
+  "serverLogSha256": "a5b8b75a0d01b0801fcd199a5d099072062f8aa6caf164ca12df25eb54e19932",
+  "unixSocketAbsentAtAudit": true,
+  "privateArtifactPermissions": true,
+  "lostPublication": "Same complete original bytes retained; no returned image and no replay/new native call according to matching observations",
+  "scope": "Read-only source/archive/log/byte reconstruction; no native or test execution. Frozen copied Python and selected AF_UNIX pg8000 operation custody, not full observer meaning, source/provider authentication, authority execution cut or completed cooperative operation handback. Byte ledger is conservative bookkeeping, not total heap/CPU metering."
+}

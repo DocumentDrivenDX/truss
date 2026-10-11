@@ -4,6 +4,7 @@ import unittest
 from types import SimpleNamespace
 from pg8000.converters import string_in
 from truss._native_source_census import NativeSourceCensusCapture,CENSUS_LIMITS,CHUNK_BYTES
+from truss._native_arbitration import NativeOperationSession
 from truss._native_result_custody import NativeTextLimits
 from truss._native_pg8000 import NativeBoundaryRefusal
 from truss._resource_account import BytePermitAccount
@@ -47,7 +48,7 @@ class NativeSourceCensusFrameTests(unittest.TestCase):
         self.assertEqual(bytes(g.image),image)
     def test_constructor_rejects_unselected_session(self):
         for source in ("", "x"*32769):
-            with self.assertRaises(NativeBoundaryRefusal):NativeSourceCensusCapture(object(),source)
+            with self.assertRaises(NativeBoundaryRefusal):NativeSourceCensusCapture(object.__new__(NativeOperationSession),source)
     def test_changed_decoder_refused(self):
         g=gate();feed(g,b"T",descriptor());g.census_context.input_funcs=[str]*3
         with self.assertRaises(NativeBoundaryRefusal):feed(g,b"D",row((b"0",b"1",b"61")))

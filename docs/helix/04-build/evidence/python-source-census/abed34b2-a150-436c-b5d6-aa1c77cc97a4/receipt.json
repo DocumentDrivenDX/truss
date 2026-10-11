@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "scope": "Early local wrapper attempt before fixture creation or source freezing; no native qualification.",
+  "error": "Selected pgserver Python runtime lacked pg8000. Replaced by explicit installed binary path and qualified pg8000 worker runtime.",
+  "cleanup": {
+    "attempted": false
+  }
+}

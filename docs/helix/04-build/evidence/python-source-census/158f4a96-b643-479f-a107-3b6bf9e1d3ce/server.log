@@ -1,0 +1,6 @@
+2026-10-11 08:34:35.756 EDT [83639] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 08:34:35.757 EDT [83639] LOG:  listening on Unix socket "/private/tmp/pc-4x3jqyzp/.s.PGSQL.5432"
+2026-10-11 08:34:35.766 EDT [83642] LOG:  database system was shut down at 2026-10-11 08:34:35 EDT
+2026-10-11 08:34:35.770 EDT [83639] LOG:  database system is ready to accept connections
+2026-10-11 08:34:40.453 EDT [83639] LOG:  received immediate shutdown request
+2026-10-11 08:34:40.455 EDT [83639] LOG:  database system is shut down

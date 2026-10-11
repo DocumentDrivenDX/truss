@@ -1,0 +1,17 @@
+test_changed_decoder_refused (test_native_source_census.NativeSourceCensusFrameTests.test_changed_decoder_refused) ... ok
+test_closed_response_inventory (test_native_source_census.NativeSourceCensusFrameTests.test_closed_response_inventory) ... ok
+test_complete_boundaries_and_unicode (test_native_source_census.NativeSourceCensusFrameTests.test_complete_boundaries_and_unicode) ... ok
+test_complete_null_is_unavailable_not_partial_image (test_native_source_census.NativeSourceCensusFrameTests.test_complete_null_is_unavailable_not_partial_image) ... ok
+test_constructor_rejects_unselected_session (test_native_source_census.NativeSourceCensusFrameTests.test_constructor_rejects_unselected_session) ... ok
+test_exact_maximum_image (test_native_source_census.NativeSourceCensusFrameTests.test_exact_maximum_image) ... ok
+test_invalid_chunk_shapes (test_native_source_census.NativeSourceCensusFrameTests.test_invalid_chunk_shapes) ... ok
+test_missing_prefix_or_terminal_and_count (test_native_source_census.NativeSourceCensusFrameTests.test_missing_prefix_or_terminal_and_count) ... ok
+test_native_descriptor_bounds (test_native_source_census.NativeSourceCensusFrameTests.test_native_descriptor_bounds) ... ok
+test_record_exhaustion_before_original_frame_retention (test_native_source_census.NativeSourceCensusFrameTests.test_record_exhaustion_before_original_frame_retention) ... ok
+test_selected_profile_does_not_modify_defaults (test_native_source_census.NativeSourceCensusFrameTests.test_selected_profile_does_not_modify_defaults) ... ok
+test_shape_only_can_capture_forged_bytes (test_native_source_census.NativeSourceCensusFrameTests.test_shape_only_can_capture_forged_bytes) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.230s
+
+OK

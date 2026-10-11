@@ -1,0 +1,750 @@
+{
+  "status": "component-passed",
+  "observations": [
+    {
+      "id": "native-engine",
+      "expected": [
+        [
+          "160015"
+        ]
+      ],
+      "observed": [
+        [
+          "160015"
+        ]
+      ]
+    },
+    {
+      "id": "baseline:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "baseline:prepared",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:closed-admission",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:retained-original",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:exact-retained-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:returned-or-lost-reply",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:complete-original-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:qualified-engine",
+      "expected": "160015",
+      "observed": "160015"
+    },
+    {
+      "id": "baseline:40-sections",
+      "expected": 40,
+      "observed": 40
+    },
+    {
+      "id": "baseline:original-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:no-replay",
+      "expected": "refused",
+      "observed": "refused"
+    },
+    {
+      "id": "baseline:no-new-native-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:detach-retains-image",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:detach-retains-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:detach-retains-frames",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:original-ingress-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:greater-than-default-text-wire",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "baseline:complete-native-Unicode",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "backing-data-update:prepared",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:closed-admission",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:retained-original",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:exact-retained-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:returned-or-lost-reply",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:complete-original-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:qualified-engine",
+      "expected": "160015",
+      "observed": "160015"
+    },
+    {
+      "id": "backing-data-update:40-sections",
+      "expected": 40,
+      "observed": 40
+    },
+    {
+      "id": "backing-data-update:original-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:no-replay",
+      "expected": "refused",
+      "observed": "refused"
+    },
+    {
+      "id": "backing-data-update:no-new-native-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:detach-retains-image",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:detach-retains-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:detach-retains-frames",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data-update:original-ingress-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "backing-data:same-source",
+      "expected": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "observed": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff"
+    },
+    {
+      "id": "source-change:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "source-change:prepared",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:closed-admission",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:retained-original",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:exact-retained-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:returned-or-lost-reply",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:complete-original-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:qualified-engine",
+      "expected": "160015",
+      "observed": "160015"
+    },
+    {
+      "id": "source-change:40-sections",
+      "expected": 40,
+      "observed": 40
+    },
+    {
+      "id": "source-change:original-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:no-replay",
+      "expected": "refused",
+      "observed": "refused"
+    },
+    {
+      "id": "source-change:no-new-native-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:detach-retains-image",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:detach-retains-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:detach-retains-frames",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-change:original-ingress-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "same-descriptor-body-change",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "restored:prepared",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:closed-admission",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:retained-original",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:exact-retained-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:returned-or-lost-reply",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:complete-original-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:qualified-engine",
+      "expected": "160015",
+      "observed": "160015"
+    },
+    {
+      "id": "restored:40-sections",
+      "expected": 40,
+      "observed": 40
+    },
+    {
+      "id": "restored:original-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:no-replay",
+      "expected": "refused",
+      "observed": "refused"
+    },
+    {
+      "id": "restored:no-new-native-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:detach-retains-image",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:detach-retains-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:detach-retains-frames",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "restored:original-ingress-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "exact-source-restoration",
+      "expected": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "observed": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff"
+    },
+    {
+      "id": "lost-publication:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "lost-publication:prepared",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:closed-admission",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:retained-original",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:exact-retained-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:returned-or-lost-reply",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:complete-original-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:qualified-engine",
+      "expected": "160015",
+      "observed": "160015"
+    },
+    {
+      "id": "lost-publication:40-sections",
+      "expected": 40,
+      "observed": 40
+    },
+    {
+      "id": "lost-publication:original-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:no-replay",
+      "expected": "refused",
+      "observed": "refused"
+    },
+    {
+      "id": "lost-publication:no-new-native-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:detach-retains-image",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:detach-retains-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:detach-retains-frames",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:original-ingress-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lost-publication:retained-original-image",
+      "expected": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "observed": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff"
+    },
+    {
+      "id": "foreign-refusal:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "foreign-refusal:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "foreign-refusal:prepared",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "foreign-refusal:closed-admission",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "foreign-refusal:no-image",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "id": "foreign-refusal:no-retained-positive",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "id": "foreign-refusal:complete-native-null",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "foreign-refusal:no-replay",
+      "expected": "refused",
+      "observed": "refused"
+    },
+    {
+      "id": "foreign-refusal:no-new-native-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "foreign-refusal:original-ingress-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "overflow-refusal:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "overflow-refusal:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "overflow-refusal:prepared",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "overflow-refusal:closed-admission",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "overflow-refusal:no-image",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "id": "overflow-refusal:no-retained-positive",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "id": "overflow-refusal:complete-native-null",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "overflow-refusal:no-replay",
+      "expected": "refused",
+      "observed": "refused"
+    },
+    {
+      "id": "overflow-refusal:no-new-native-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "overflow-refusal:original-ingress-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:real-adoption",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:registered",
+      "expected": "registered",
+      "observed": "registered"
+    },
+    {
+      "id": "final-restored:prepared",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:closed-admission",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:retained-original",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:exact-retained-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:returned-or-lost-reply",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:complete-original-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:qualified-engine",
+      "expected": "160015",
+      "observed": "160015"
+    },
+    {
+      "id": "final-restored:40-sections",
+      "expected": 40,
+      "observed": 40
+    },
+    {
+      "id": "final-restored:original-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:no-replay",
+      "expected": "refused",
+      "observed": "refused"
+    },
+    {
+      "id": "final-restored:no-new-native-call",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:detach-retains-image",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:detach-retains-request",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:detach-retains-frames",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "final-restored:original-ingress-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "overflow:exact-source-restoration",
+      "expected": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "observed": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff"
+    }
+  ],
+  "captures": [
+    {
+      "label": "baseline",
+      "sha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "account": [
+        570575425,
+        0,
+        570575425,
+        false
+      ],
+      "rows": 2671,
+      "wireRemaining": 19981441
+    },
+    {
+      "label": "backing-data-update",
+      "sha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "account": [
+        570575425,
+        0,
+        570575425,
+        false
+      ],
+      "rows": 2671,
+      "wireRemaining": 19981441
+    },
+    {
+      "label": "source-change",
+      "sha256": "109ed0882fa1e82645103896a0f1e3bd1ac4c371be8dc74d79a06cf0017ecb0a",
+      "imageBytes": 10939899,
+      "chunks": 2671,
+      "account": [
+        570575529,
+        0,
+        570575529,
+        false
+      ],
+      "rows": 2671,
+      "wireRemaining": 19981437
+    },
+    {
+      "label": "restored",
+      "sha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "account": [
+        570575425,
+        0,
+        570575425,
+        false
+      ],
+      "rows": 2671,
+      "wireRemaining": 19981441
+    },
+    {
+      "label": "lost-publication",
+      "sha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "account": [
+        570575425,
+        0,
+        570575425,
+        false
+      ],
+      "rows": 2671,
+      "wireRemaining": 19981441
+    },
+    {
+      "label": "final-restored",
+      "sha256": "a332c6aa0532f076cb9158663210e3a2139ecb7cc47912f80df19fb787cb85ff",
+      "imageBytes": 10939897,
+      "chunks": 2671,
+      "account": [
+        570575425,
+        0,
+        570575425,
+        false
+      ],
+      "rows": 2671,
+      "wireRemaining": 19981441
+    }
+  ],
+  "scope": "Excluded installed pgserver PostgreSQL16.15 Unix-socket installer and pg8000 original-operation capture only. Cooperative host/driver and retained payload bookkeeping premises. No public installed provider profile, authenticated provider/issuer, whole native observer interpretation, authority/execution held cut, graph profile, completed operation handback or backend acceptance."
+}
