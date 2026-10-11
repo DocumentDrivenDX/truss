@@ -45,3 +45,85 @@ remain prerequisites; an RLS-visible subset cannot establish completeness. Image
 length bounds do not qualify aggregate scan work, detoast, allocation or deadlines.
 This selected singleton implementation supplies no general recursive definition,
 facet/history validation, readiness, seal, accepted authority or public mutation.
+
+`forest.sql` adds `row_image_forest_original(original_scope bytea) RETURNS void`,
+a private read-only physical forest check over the existing retained-image scope.
+The original decoder bounds UTF8 JSON to 8 MiB and at most 1,024 images, validates
+complete native cell framing and rejects duplicate identities. The forest body
+requires declared roots, same-state parents, exclusive child slots and permitted
+parent kinds, full-byte map/record identities, contiguous sequence ordinals and
+scalar payload parity. An iterative bounded traversal checks every retained node,
+including disconnected cycles. Array/index and child scans have bounded quadratic
+work; no linear-work or full native resource qualification is claimed.
+
+Native tests compare identical original codec bytes with Python's physical tree
+validator, including empty/scalar/null forests, nested containers, multiple states,
+a deep chain at the exact image ceiling, and malformed parent/slot/payload cases.
+An administrative fixture installs an actual disconnected cycle, successfully
+checks native foreign keys immediately, requires both validators to refuse, and
+verifies exact original-image restoration after savepoint rollback. It removes
+row observers transaction-locally to isolate this check from unfinished admission;
+this is not a protected writer route.
+
+Empty input proves an empty retained physical forest only. RF02 complete-scope
+integrity and visibility, original current authority, logical definition/member
+semantics, native scalar codecs, candidate reconstruction, seals and deferred
+commit closure remain separate. This component performs no writes, issues no
+proof token and enables no public Python capability. PUBLIC execution is revoked.
+
+`numeric-witness.sql` implements the private NX02–NX05 mathematical component:
+`numeric_witness_original(text)` and `numeric_equal_original(text,text)`. The
+explicit candidate grammar is JSON numeric token syntax; it does not admit an
+original UMF Field or source codec. Each complete UTF8 token is bounded to 65,536
+bytes. Full grammar and signed-bigint exponent parsing run before zero handling,
+including arbitrary token-bounded leading exponent zeros. Checked normalization
+adds the net trailing-zero/fraction adjustment once. Mantissa digits are never
+cast to native numeric and exponents never cause power-of-ten expansion.
+
+The ephemeral witness contains mathematical sign, full coefficient digits and
+signed exponent. Mathematical zero does not overwrite retained negative-zero,
+scale or exponent spelling. Equality decodes both original operands itself and
+uses C-collated coefficient equality. PUBLIC execution is revoked; no caller
+witness can confer admission. Native tests execute eleven authored witnesses and
+seven pairs, malformed complete tokens, both signed exponent endpoints, zero and
+normalized exponent overflow, exact byte limit, and independent original-spelling
+custody in an administrative temporary table.
+
+This does not replace the registered UMF exact-number APIs, admit source facets,
+qualify native representability or shared allocation/work charging, register a
+Weft comparator, complete RF05, seal an operation or enable a public Python API.
+Million-exponent witnesses are mathematical cases, not PostgreSQL storage claims.
+
+`numeric-binary-witness.sql` decodes the PostgreSQL16 `numeric_send` finite binary
+cell and compares it with a complete candidate source token through
+`numeric_source_binary_equal_original(text,bytea)`. The selected subset is at most
+16,384 base-10000 groups / 32,776 bytes, not PostgreSQL's overall numeric limit.
+Exact frame extent, finite sign, scale ≤16,383, every digit ≤9,999 and nonzero
+endpoint groups are required. Positive zero has no groups; its weight is ignored.
+Scale may exceed stored fractional significance but cannot hide nonzero digits.
+Coefficient assembly and normalization do not expand weight-sized buffers.
+
+Tests use actual native numeric_send outputs at the group limit and one group
+beyond it, zero with maximum scale, finite fractions and large adjacent integers;
+independently expected witnesses supplement the source/binary comparison checks.
+Malformed frames, hidden significance and all native special values refuse. The
+original cell bytes and display scale remain separate from the mathematical
+witness. This helper cannot authenticate their native origin, qualify source or
+facet admission, establish runtime retention, or grant finalizer authority.
+Array growth/copies remain unqualified against shared operation resources. No
+public Python capability or protected installation claim is added.
+
+`numeric-correspondence.sql` connects NX decoding to a complete original scalar
+image. `row_image_numeric_correspondence_original(bytea)` first validates all 13
+native cells, positive state/node IDs, integer/decimal kind, exclusive numeric
+payload columns and nonempty codec/source bytes. It independently decodes the
+retained numeric cell and token, compares exact witnesses, and requires integer
+integrality. It never invokes numeric_recv or reconstructs native values from
+possibly truncated binary input. Tests consume actual scalar composite images
+and confirm retained token bytes, plus missing/extra carrier, malformed frame,
+identity, nonfinite, fractional-integer and adjacent-large-value refusals.
+
+The token parser remains the selected JSON numeric syntax subset. Original source
+bytes are retained and checked nonempty, not semantically decoded; codec/facets,
+parent association, complete scope, native origin and shared resources still need
+independent admission. This check grants no seal, operation phase or public API.

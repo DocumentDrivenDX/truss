@@ -1,0 +1,32 @@
+{
+  "interfaceVersion": "truss-component-evidence/0.1",
+  "component": "native-numeric-mathematical-correspondence",
+  "baseCommit": "9974da55d22f78f49ef683776c0ccdfcc0fa7117",
+  "database": "PostgreSQL16.15",
+  "python": "CPython3.11.17",
+  "driver": "pg8000 1.31.5",
+  "tests": {
+    "count": 6,
+    "seconds": "3.089",
+    "result": "PASS",
+    "witnesses": 11,
+    "pairs": 7
+  },
+  "sources": {
+    "packages/postgresql/native/row-image/numeric-witness.sql": "900c72c95962d4ba7996998514f94d18b8732fd17dbf86a576b0a95a956ee79c",
+    "packages/python/tests/test_numeric_witness_native.py": "835a576d851dba8f9e7f81e6d21c7e570f31a5019809d224ef4679bcd8c363aa",
+    "docs/helix/02-design/contracts/bindings/numeric-correspondence-v0.1.vectors.json": "01bf8c2079c9f10ffebf0804138c8ef4b39019274a981cd1816f69682a69a1c9",
+    "docs/helix/04-build/evidence/python-numeric-witness-native-tests.log": "57fbaf62d9b0980c30a6f7216dacbf5f654b708a77c6ce6809a922b32743843b"
+  },
+  "bounds": {
+    "tokenBytes": 65536,
+    "exponent": "signed int64, checked net normalization",
+    "grammar": "explicit candidate JSON numeric token syntax"
+  },
+  "limitations": [
+    "Mathematical NX02\u201305 only, no original source/facet/native representability admission",
+    "No exponent expansion; regex/copy resource use not qualified against shared operation account",
+    "Temporary administrative custody test does not establish runtime source custody",
+    "No RF05 completion, seal, Weft comparator registration, installed readiness or public Python capability"
+  ]
+}
