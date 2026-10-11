@@ -2,7 +2,20 @@ from typing import assert_type
 from truss import (ConnectedHost, connect_pg8000_host, Ok, HostServices,
     ReferenceAssemblyConfiguration, create_reference_assembly, ReferenceAssembly,
     AssemblyConstructionError, CapabilityUnavailable, HostRecovery,
-    TransactionHandle, Isolation, AccessMode)
+    TransactionHandle, Isolation, AccessMode, BorrowedHost, adopt_pg8000_host)
+
+def borrowed_consumer(connection: object) -> BorrowedHost:
+    host=adopt_pg8000_host(connection)
+    host.connection.run_non_lifecycle('SELECT 1')
+    baseline=host.session.observe_host_resource_baseline()
+    if isinstance(baseline,Ok):
+        begun=host.session.begin()
+        if isinstance(begun,Ok):
+            adopted=host.session.adopt_transaction()
+            if isinstance(adopted,Ok):assert_type(adopted.value,TransactionHandle)
+            host.session.rollback()
+    assert_type(host.detach(),bool)
+    return host
 
 def host_consumer(sock: str) -> ConnectedHost:
     host=connect_pg8000_host(user="postgres",database="postgres",unix_sock=sock)

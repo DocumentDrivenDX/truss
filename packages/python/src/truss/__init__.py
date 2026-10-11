@@ -28,3 +28,6 @@ __all__ += ["ConnectedHost", "HostConnection", "HostSession", "HostRecovery", "H
 from .installation import (InstallationObservation, InstallationRelationObservation,
                            inspect_installation)
 __all__ += ["InstallationObservation", "InstallationRelationObservation", "inspect_installation"]
+
+from ._borrowed_host import BorrowedHost, BorrowedHostAttachmentFailure, adopt_pg8000_host
+__all__ += ["BorrowedHost", "BorrowedHostAttachmentFailure", "adopt_pg8000_host"]

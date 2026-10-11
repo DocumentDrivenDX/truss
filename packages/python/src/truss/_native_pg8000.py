@@ -72,8 +72,12 @@ class _OperationRelease:
     published: bool = False
 
 class NativeBoundary:
-    def __init__(self, connection, *, event_bytes=65536, event_count=256, prepared_limit=256, startup=None):
+    def __init__(self, connection, *, event_bytes=65536, event_count=256, prepared_limit=256, startup=None, attachment=None):
         from pg8000.native import Connection
+        if attachment is not None:
+            from ._native_attachment import DriverAttachment
+            if type(attachment) is not DriverAttachment or startup is not None:
+                raise NativeBoundaryRefusal('Original borrowed attachment required')
         if version('pg8000') != '1.31.5' or type(connection) is not Connection:
             raise NativeBoundaryRefusal('Unselected original driver')
         if type(event_bytes) is not int or event_bytes < 1 or type(event_count) is not int or event_count < 1:
@@ -123,9 +127,8 @@ class NativeBoundary:
             self._original_driver_handlers = dict(connection.message_types)
             originals = {code: connection.message_types[code] for code in (b'C', b'E', b'Z', b'1', b'3')}
             hooks = {code: self._hook(code, handler) for code, handler in originals.items()}
-            connection.message_types.update(hooks)
-            self._original_handlers = dict(connection.message_types)
-            connection._truss_native_boundary = self
+            self._original_handlers = dict(self._original_driver_handlers)
+            self._original_handlers.update(hooks)
             original_parse = connection.send_PARSE
             self._original_parse = original_parse
             original_close = connection.close_prepared_statement
@@ -139,14 +142,19 @@ class NativeBoundary:
                 return original_close(name, *args, **kwargs)
             self._parse_entry = parse
             self._close_entry = close_prepared
-            connection.send_PARSE = parse
-            connection.close_prepared_statement = close_prepared
             self._original_bind = connection.send_BIND
             def bind(*args, **kwargs):
                 with self._lock: self._unnamed_pending = True
                 return self._original_bind(*args, **kwargs)
             self._bind_entry = bind
-            connection.send_BIND = bind
+            updates=(('_truss_native_boundary',self),('send_PARSE',parse),
+                     ('close_prepared_statement',close_prepared),('send_BIND',bind))
+            if attachment is None:
+                connection.message_types.update(hooks)
+                for name,value in updates:setattr(connection,name,value)
+            else:
+                attachment.prepare(connection,self,hooks,updates)
+                attachment.install()
 
     def _resource_name(self, kind, name):
         # Original driver argument retained before native submission; no inferred

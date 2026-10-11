@@ -1,0 +1,48 @@
+{
+  "scope": "selected_idle_borrowed_pg8000_unix_host_only",
+  "sourceDigests": {
+    "packages/python/src/truss/__init__.py": "9ed007a72f6fc8e9b786087c40c919a894ae064752c9f2e4b72395ff962a001f",
+    "packages/python/src/truss/_borrowed_host.py": "45e5de0609a73d0d4a2a88c48754095ca22a6453826333eb93a573b8a88c0ab9",
+    "packages/python/src/truss/_native_attachment.py": "e7af13436aec1d96e84449d1dc2fedb698ff38961eab5ff743296241c2dc6d24",
+    "packages/python/src/truss/_native_pg8000.py": "4b936f14c16f2ee0b817f1b1457e542a112056523899efe61c72698a4f43c5d6",
+    "packages/python/src/truss/host.py": "783ad597b055bf29efffa9c7faec79a999db22a8fea6c70e580feb99af4dfa5a",
+    "packages/python/tests/test_borrowed_host.py": "92bb10be6fa8a7c877c0a82263840fafd2f8b5d78572ac0a4f08cca373488deb",
+    "packages/python/tests/typecheck_host_assembly.py": "7391edad40f0bd8bc97480e6b9b520e9d4e71ff539dae59545da644f6d5fcb96",
+    "scripts/check-module-boundaries.py": "1878e81d87dd4518dc23dba49c45144a1a074f0de1c7973c8cf820f93c957067",
+    "packages/python/README.md": "90c53da1d3d54778b522fa58a6b6c3811b0e4d97661929fc9dd40f64fe3133fd"
+  },
+  "installedSourceParity": {
+    "truss/__init__.py": true,
+    "truss/_borrowed_host.py": true,
+    "truss/_native_attachment.py": true,
+    "truss/_native_pg8000.py": true,
+    "truss/host.py": true
+  },
+  "wheelSha256": "8125145bea715a8e03f5ffeb80fdb38adfc10b9320eac4164f0fad2e7253a139",
+  "tests": {
+    "modules": [
+      "test_borrowed_host",
+      "test_public_host",
+      "test_native_pg8000",
+      "test_host_control_custody"
+    ],
+    "count": 65,
+    "seconds": 11.522,
+    "status": "passed",
+    "execution": "installed_wheel"
+  },
+  "optionalDriverAbsentImport": "passed; pg8000 find_spec is None",
+  "strictInstalledConsumerMypy": "passed",
+  "pythonImportBoundaries": 521,
+  "review": "Astra Ultra source review approved, conditional checks passed",
+  "excludedClaims": [
+    "active_connection_attachment",
+    "TCP_or_TLS_transport",
+    "pool_reset",
+    "startup_or_authenticated_authority_issuance",
+    "catalog_acceptance",
+    "complete_installation",
+    "mutation_query_feed_readiness"
+  ],
+  "testLogSha256": "69279190c708371eac0c63448a388a1e76d4cefcca46830e4c33adfe2fb158e9"
+}
