@@ -2232,3 +2232,16 @@ markers and whole-capture refusal remain in place. Count-complete acceptance is
 conditional on faithful SQL execution and the original complete visible fact
 population; role/RLS visibility and a strict whole-byte/allocator transport envelope
 remain unqualified. This is not a new authorization or disclosure capability.
+
+
+### Plain fact-source visibility admission — 2026-10-11
+
+The private PostgreSQL16.15 plain fact-table cut requires original native
+`relrowsecurity` and `relforcerowsecurity` readback both false under the acquired
+relation cut, alongside permanent/plain/noninherited relation and column/guard
+checks. Current owner or administrative visibility cannot override this refusal.
+This restricts the current fact-source producer profile; protected business tables
+may use RLS through a separately qualified provider. Such a provider must establish
+complete relevant fact visibility and stable policy/role/configuration sources.
+A flag snapshot alone does not prove their lifetime stability or arbitrary callback
+safety, and it supplies no caller or issuer authority.

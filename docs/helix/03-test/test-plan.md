@@ -749,3 +749,17 @@ rows. This counter proves the missing server bound without manufacturing a respo
 The two controls advance CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
 resource-bound prerequisites only; source/role/RLS completeness, strict byte
 accounting and final publication still require independent qualification.
+
+
+### Original native fact-source visibility controls — 2026-10-11
+
+Three PostgreSQL16.15 controls require whole-cut refusal without callback: enabled
+RLS even when the administrative session sees all rows; FORCE RLS while ENABLE
+RLS is false; and an actual nonowner role whose native policy hides the fixture row.
+The nonowner control independently observes count zero, successful epoch acquisition
+and the original native metadata result (`true`, `false` RLS flags); it requires a
+Python metadata refusal with no SQL error. Transactional role/grant/policy fixtures
+are rolled back. Packet027f2354 passes103 component methods. These advance
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and US-079 AC6 completeness
+prerequisites; they do not qualify an RLS-aware fact provider, complete role/config
+cuts, ordinary authenticated authority or protected disclosure.

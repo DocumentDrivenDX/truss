@@ -365,3 +365,29 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         # Deliberately omit only the SQL limit; ordinary post-fetch refusal
         # remains intact and does not qualify this oversized native result.
         self.assertEqual(self.observe_native_capture_cardinality(True),[10001])
+
+    def test_rls_enabled_fact_source_refuses_even_when_admin_can_see_all_rows(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY')
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.flat_assignment').fetchone(),(1,));called=[]
+        result=self.cut(t,lambda c:called.append(True),(self.bindings['flat_assignment'],))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+    def test_force_rls_flag_refuses_even_when_row_security_disabled(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.flat_assignment FORCE ROW LEVEL SECURITY');called=[]
+        result=self.cut(t,lambda c:called.append(True),(self.bindings['flat_assignment'],))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[])
+    def test_native_rls_hides_fact_rows_from_nonowner_and_refuses_cut(self):
+        self.connection.execute("BEGIN; CREATE ROLE fact_visibility_reader; GRANT USAGE ON SCHEMA truss TO fact_visibility_reader; GRANT ALL ON ALL TABLES IN SCHEMA truss TO fact_visibility_reader; GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA truss TO fact_visibility_reader; ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY; CREATE POLICY hide_facts ON truss.flat_assignment FOR SELECT TO fact_visibility_reader USING(false); SET LOCAL ROLE fact_visibility_reader")
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.flat_assignment').fetchone(),(0,))
+        from unittest.mock import patch
+        from truss.psycopg_host import _GuardedCursor
+        original=_GuardedCursor.execute;metadata=[]
+        def observe(cursor,query,*args,**kwargs):
+            text=query.as_string(cursor._cursor) if hasattr(query,'as_string') else str(query)
+            result=original(cursor,query,*args,**kwargs)
+            if text.startswith('SELECT c.oid::pg_catalog.text') and 'c.relrowsecurity' in text:
+                metadata.append(tuple(cursor.pgresult.get_value(0,i) for i in range(7)))
+            return result
+        t=self.begin();called=[]
+        with patch.object(_GuardedCursor,'execute',observe):result=self.cut(t,lambda c:called.append(True),(self.bindings['flat_assignment'],))
+        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,None);self.assertEqual(called,[])
+        self.assertEqual(len(metadata),1);self.assertEqual(metadata[0][4:6],(b'true',b'false'))

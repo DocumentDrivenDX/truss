@@ -4136,3 +4136,32 @@ visibility, typed field/identity completeness, strict whole-wire allocation budg
 or protected authorization/refinement. Original issuer/mapping, protected fact
 construction, graph decoding, caller/current-authority and final release remain
 open. No acceptance promotion; last full checkpoint26/132 with106 missing. Goal active.
+
+
+### Refuse filtered plain fact sources — 2026-10-11
+
+The original native class query now captures both RLS flags and refuses either
+flag for the current plain fact-table producer. Final
+`evidence/python-psycopg-epoch-cut/027f2354-ba28-408a-80d4-b229a67db10f`
+passes103 methods (52 fact/dependency/capture/identity/visibility,16 graph,nine epoch,
+26 adoption), module boundaries,130 current/archived Truss source pins,363 original
+UMF source pins and1614 native payload pins. All three named native fixture cleanups
+confirm stop0/status3/socket absent. The strengthened nonowner control proves
+actual hidden-row behavior and the successful native metadata phase before refusal.
+Initiale5c381e5 retains its earlier test source tuple; it is not relabeled current.
+
+Formal `evidence/security-fact-visibility-formal/5ce98127-ec56-4818-89fa-6471fbbc6707`
+retains six fresh-context queries (four UNSAT/two SAT), exact SMT/model receipts and
+three source preimages. Under unbounded relevant forbidden-fact/visibility sets,
+complete relevant visibility prevents the modeled false permit; hidden facts and
+changed visibility admit counterexamples even when stored facts remain fixed.
+Plain-profile admission excludes enabled/forced RLS regardless of current admin
+visibility. This is conditional logic, not SQL/role/BYPASSRLS/ACL refinement or a
+whole-source lifetime proof. Protected business-table RLS remains a design option
+requiring a separately qualified visibility producer.
+
+Trace: CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and US-079 AC6. No new
+public support flag or backend acceptance binding. Complete source/role/config
+cuts, issuer/mapping/caller authority, protected evaluation and final release remain
+open. Last full acceptance checkpoint remains26/132 with106 missing bindings; no
+current full-gate pass is claimed. The overall goal remains active.
