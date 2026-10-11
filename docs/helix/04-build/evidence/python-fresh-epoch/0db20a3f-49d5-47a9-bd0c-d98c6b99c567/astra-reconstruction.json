@@ -1,0 +1,62 @@
+{
+  "runId": "0db20a3f-49d5-47a9-bd0c-d98c6b99c567",
+  "responses": [
+    {
+      "label": "original-capture",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "2cc295b4b531e364f47db88ab9c8356d5fdcca74a69fb03cc1ffd60365c41054",
+      "responseSha256": "8a4748bfa5f0616900bb1a6da74d98dcd9b25a7381afcf5dd331bd748c4317ff",
+      "rowJsonSha256": "9bf92b89f8e5a787e5f731cd90d124e338aec558c0a52ab1d8e00f171b27df6f"
+    },
+    {
+      "label": "lost-local-reply",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "2cc295b4b531e364f47db88ab9c8356d5fdcca74a69fb03cc1ffd60365c41054",
+      "responseSha256": "3e08b9f6dcace0e678850a6724941baedb6064ee5f5edf5b5186b070af62dea8",
+      "rowJsonSha256": "f86c26599c8539cc35998e7d2acd279875ced0b658354b172215b4ed8b714528"
+    },
+    {
+      "label": "maximum-native-evidence",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 2228921,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 65536,
+      "evidenceBytes": 1048576,
+      "evidenceSha256": "2fa4430272111c7854b204001461e16f2c73725b07dde2b6d1dc4f2aa8fe18da",
+      "requestSha256": "ee1546bd2a1cfe1fce3956872332b8061dde2d14a7e01f76e00ed5c154f83f41",
+      "responseSha256": "731246fbce627e71d9c0d3a67095706ff2d362bdff48d2faf80ae721f599b963",
+      "rowJsonSha256": "1f9ad1f9306a5c31ff87a5500ce3709b57787725ba2531ab85e7f79840687dd2"
+    }
+  ]
+}
