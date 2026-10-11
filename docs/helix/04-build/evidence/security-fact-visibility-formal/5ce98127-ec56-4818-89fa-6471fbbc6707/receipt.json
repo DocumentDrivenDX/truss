@@ -1,0 +1,65 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-fact-visibility.py": "31c3c68b28ad097484e0ce8e619cc3bae59934fa30aa81a812dd2011e40a51dc",
+    "packages/python/src/truss/_psycopg_fact_cut.py": "3a7854e48d3e418904fa972437ab79bcdb243b2727d640a6fdb4fa543e4f5098",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "ece1971dfd3cd9e2392bec36604394f232e4578234e08ecaf713ff2bc13b95cc"
+  },
+  "queries": [
+    {
+      "id": "hidden_forbidden_fact_can_falsely_permit",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "0814f155fb676e696764674feee31b08d19c944f5b2a5ec69c4f6311cdcca400",
+      "model": "[original_visibility = Store(K(Int, False), 1, True),\n complete_relevant_forbidden_facts = Store(Store(K(Int,\n                                        True),\n                                        1,\n                                        False),\n                                        2,\n                                        False),\n k!5 = [1 -> False, 2 -> False, else -> True],\n k!6 = [1 -> True, else -> False],\n Ext = [(as-array, as-array) -> 1, else -> 0]]"
+    },
+    {
+      "id": "complete_relevant_visibility_prevents_false_permit",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "f9f511a25c93bbf886861d9a01d82651858f1e534adbde6f94fc7184be7e7b57",
+      "model": null
+    },
+    {
+      "id": "visibility_change_can_flip_decision_under_unchanged_facts",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "336c726c3384532b10658a4d3ef22307e3c4e92d16360e1fb70c383d682c18d9",
+      "model": "[later_visibility = Store(K(Int, False), 1, True),\n original_visibility = K(Int, True),\n complete_relevant_forbidden_facts = Store(K(Int, False),\n                                        0,\n                                        True),\n k!16 = [0 -> True, else -> False],\n k!18 = [1 -> True, else -> False],\n Ext = [(as-array, as-array) -> 1, else -> 0]]"
+    },
+    {
+      "id": "enabled_rls_refuses_plain_profile",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "2a5641fefff97dc1da0e4bfcbc2839a0e07135c128ffac0044326686b3bbb275",
+      "model": null
+    },
+    {
+      "id": "force_flag_refuses_plain_profile_even_disabled",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "06efe057f5b4b87644f6c564807fda0112dafc6066a105f3c855bbdecce40675",
+      "model": null
+    },
+    {
+      "id": "admin_current_visibility_does_not_override_profile_refusal",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "d2ba38c24e55646a17c218cc7d692bbd107b12f0443fa523179e19fbebedeb92",
+      "model": null
+    }
+  ],
+  "scope": "Unbounded relevant forbidden-fact and visibility sets. A no-visible-forbidden-fact decision needs complete relevant visibility; fixed facts alone do not stabilize it. Plain-profile admission excludes both native RLS flags regardless of current administrative visibility.",
+  "limitations": [
+    "No SQL policy, role/BYPASSRLS/config/ACL visibility refinement or whole-source lifetime proof",
+    "Native metadata refusal is an installed fixture control; no full RLS-aware provider qualification",
+    "Does not prove all policy predicates, authenticated issuer/caller, protected evaluation or final disclosure"
+  ]
+}

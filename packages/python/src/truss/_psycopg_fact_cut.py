@@ -25,7 +25,7 @@ class _FactRelationComparison:
     columns: tuple = ()
 
 
-def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback):
+def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback, *, ddl_barrier=None):
     """Reacquire declared plain-table cuts inside the original epoch scope.
 
     Independent admitted mapping/installed trigger closure is required. This
@@ -72,15 +72,15 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
         from psycopg import sql
         for schema,name,oid,owner,guard_source,columns in recipe:
             cursor.execute(sql.SQL('LOCK TABLE ONLY {} IN SHARE MODE NOWAIT').format(sql.Identifier(schema,name)),prepare=False)
-            cursor.execute("SELECT c.oid::pg_catalog.text,c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,"
+            cursor.execute("SELECT c.oid::pg_catalog.text,c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,"
                            "EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text "
                            "FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) c.relnamespace WHERE n.nspname OPERATOR(pg_catalog.=) %s AND c.relname OPERATOR(pg_catalog.=) %s",
                            (schema,name),prepare=False,binary=False)
             rows=cursor.fetchmany(2)
-            if (cursor.description is None or len(cursor.description)!=5
+            if (cursor.description is None or len(cursor.description)!=7
                     or any(d.type_code!=25 for d in cursor.description)
-                    or rows != [(str(oid),str(owner),'r','p','false')]):
-                raise ValueError('Exact permanent non-inherited fact table required')
+                    or rows != [(str(oid),str(owner),'r','p','false','false','false')]):
+                raise ValueError('Exact permanent non-inherited unfiltered fact table required')
             cursor.execute("SELECT t.tgenabled::pg_catalog.text,t.tgtype::pg_catalog.text,t.tgnargs::pg_catalog.text,pg_catalog.encode(t.tgargs,'hex'),"
                            "t.tgisinternal::pg_catalog.text,(t.tgqual IS NULL)::pg_catalog.text,p.proowner::pg_catalog.text,p.prosecdef::pg_catalog.text,"
                            "p.provolatile::pg_catalog.text,pg_catalog.to_jsonb(p.proconfig)::pg_catalog.text,p.prosrc,"
@@ -107,4 +107,7 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
                         or any(d.type_code!=25 for d in cursor.description) or actual != [expected]):
                     raise ValueError('Original native field descriptor correspondence required')
         return callback(cursor)
+    if ddl_barrier is not None:
+        from ._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        return _run_ddl_fenced_epoch_operation(host,transaction,epoch_comparison,ddl_barrier,acquire)
     return _run_fenced_epoch_operation(host,transaction,epoch_comparison,acquire)

@@ -756,3 +756,58 @@ Keys as indeterminate and incompatible native/semantic literal domains before
 policy output. Seven native controls pass in packetb6affb88,98 total component
 methods. These do not qualify issuer/mapping provenance, protected reconstruction
 lifetime, ordinary caller authentication, complete graph decoding or final release.
+
+
+### Original native result cardinality controls — 2026-10-11
+
+Insert10000 additional fixture rows and independently confirm10001 source rows.
+Observe original stock psycopg PGresult.ntuples after the actual capture submission:
+require101 before `fetchmany`, and whole capture refusal. Deliberately remove only
+the submitted SQL limit; retain ordinary post-fetch refusal and observe10001 native
+rows. This counter proves the missing server bound without manufacturing a response.
+The two controls advance CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
+resource-bound prerequisites only; source/role/RLS completeness, strict byte
+accounting and final publication still require independent qualification.
+
+
+### Original native fact-source visibility controls — 2026-10-11
+
+Three PostgreSQL16.15 controls require whole-cut refusal without callback: enabled
+RLS even when the administrative session sees all rows; FORCE RLS while ENABLE
+RLS is false; and an actual nonowner role whose native policy hides the fixture row.
+The nonowner control independently observes count zero, successful epoch acquisition
+and the original native metadata result (`true`, `false` RLS flags); it requires a
+Python metadata refusal with no SQL error. Transactional role/grant/policy fixtures
+are rolled back. Packet027f2354 passes103 component methods. These advance
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and US-079 AC6 completeness
+prerequisites; they do not qualify an RLS-aware fact provider, complete role/config
+cuts, ordinary authenticated authority or protected disclosure.
+
+
+### Native visibility lifetime and table-DDL participation — 2026-10-11
+
+Four additional controls in packet30ba8a7b require: competing ENABLE/FORCE RLS
+DDL times out under the retained fact SHARE lock; after reader release a committed
+ENABLE is observed and the fresh cut refuses; actual same-session ALTER succeeds
+when the optional writer barrier is omitted (counterexample); installing the
+selected barrier refuses same-session ALTER before its effect with55000; and a
+pending participating ALTER excludes a fresh epoch reader with55P03 until abort,
+after which a fresh cut succeeds. Two behaviors share the first control.
+All107 component methods and three independent native cleanups pass. Trace:
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 lifecycle prerequisites.
+These do not establish whole source/role/config closure or public authority.
+
+
+### Joint installed DDL/fact readback controls — 2026-10-11
+
+Seven native controls qualify selected installed metadata correspondence: exact
+routine/table barrier pair passes and composes with retained fact SHARE; missing
+table barrier refuses; disabled table barrier refuses; incomplete native table tag
+set refuses; wrong original owner/function/body comparisons refuse; disabled
+routine barrier refuses even when table barrier is ALWAYS; joint fact acquisition
+with a missing barrier refuses before fact locks or callback. Native mismatches
+produce metadata refusal rather than an unrelated SQL permission failure.
+Packetf764ff62 passes114 component methods and three independent cleanup checks.
+Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 correspondence
+prerequisites. Administrative fixtures do not establish ordinary caller authority,
+installed administration exclusions, whole source lifetime or final disclosure.

@@ -41,7 +41,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
     tearDown=epoch_tests.PsycopgEpochCutNativeTests.tearDown
     begin=epoch_tests.PsycopgEpochCutNativeTests.begin
     comparison=epoch_tests.PsycopgEpochCutNativeTests.comparison
-    def cut(self,t,callback,bindings=None):return _run_fenced_fact_operation(self.host,t,self.comparison(),bindings or tuple(self.bindings.values()),callback)
+    def cut(self,t,callback,bindings=None,ddl_barrier=None):return _run_fenced_fact_operation(self.host,t,self.comparison(),bindings or tuple(self.bindings.values()),callback,ddl_barrier=ddl_barrier)
     def fact_shares(self):return self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.flat_assignment'::regclass,'truss.edge'::regclass)").fetchone()[0]
     def test_flat_and_native_graph_membership_under_joint_cut(self):
         t=self.begin()
@@ -342,3 +342,180 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         providers=self.identity_dependency_providers();p=providers[0];changed=_DependencyFactProvider(p.kind,p.reference,p.relation,_FactColumnComparison('active',4,25,-1,True,100))
         result=self.reconstruct_identity_fixture(t,(changed,)+providers[1:])
         self.assertNotEqual(result.returncode,0);self.assertEqual(result.stdout,'')
+
+    def observe_native_capture_cardinality(self,omit_server_limit=False):
+        from unittest.mock import patch
+        from truss.psycopg_host import _GuardedCursor
+        t=self.begin();self.connection.execute("INSERT INTO truss.sec_assignment SELECT 'a'||i::text,'s1','p1',true FROM generate_series(1,10000) i")
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.sec_assignment').fetchone(),(10001,))
+        original=_GuardedCursor.execute;observed=[]
+        def execute(cursor,query,*args,**kwargs):
+            text=query.as_string(cursor._cursor) if hasattr(query,'as_string') else str(query)
+            selected=text.startswith('SELECT CASE WHEN') and 'FROM ONLY "truss"."sec_assignment"' in text
+            if selected and omit_server_limit:
+                self.assertTrue(text.endswith(' LIMIT 101'));query=sql.SQL(text[:-len(' LIMIT 101')])
+            result=original(cursor,query,*args,**kwargs)
+            if selected:observed.append(cursor.pgresult.ntuples)
+            return result
+        with patch.object(_GuardedCursor,'execute',execute):result=self.fixed_capture(t)
+        self.assertIsInstance(result,Error);return observed
+    def test_fixed_capture_server_result_is_capped_before_fetchmany(self):
+        self.assertEqual(self.observe_native_capture_cardinality(),[101])
+    def test_omitted_server_limit_receives_all_rows_despite_bounded_fetchmany(self):
+        # Deliberately omit only the SQL limit; ordinary post-fetch refusal
+        # remains intact and does not qualify this oversized native result.
+        self.assertEqual(self.observe_native_capture_cardinality(True),[10001])
+
+    def test_rls_enabled_fact_source_refuses_even_when_admin_can_see_all_rows(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY')
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.flat_assignment').fetchone(),(1,));called=[]
+        result=self.cut(t,lambda c:called.append(True),(self.bindings['flat_assignment'],))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+    def test_force_rls_flag_refuses_even_when_row_security_disabled(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.flat_assignment FORCE ROW LEVEL SECURITY');called=[]
+        result=self.cut(t,lambda c:called.append(True),(self.bindings['flat_assignment'],))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[])
+    def test_native_rls_hides_fact_rows_from_nonowner_and_refuses_cut(self):
+        self.connection.execute("BEGIN; CREATE ROLE fact_visibility_reader; GRANT USAGE ON SCHEMA truss TO fact_visibility_reader; GRANT ALL ON ALL TABLES IN SCHEMA truss TO fact_visibility_reader; GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA truss TO fact_visibility_reader; ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY; CREATE POLICY hide_facts ON truss.flat_assignment FOR SELECT TO fact_visibility_reader USING(false); SET LOCAL ROLE fact_visibility_reader")
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.flat_assignment').fetchone(),(0,))
+        from unittest.mock import patch
+        from truss.psycopg_host import _GuardedCursor
+        original=_GuardedCursor.execute;metadata=[]
+        def observe(cursor,query,*args,**kwargs):
+            text=query.as_string(cursor._cursor) if hasattr(query,'as_string') else str(query)
+            result=original(cursor,query,*args,**kwargs)
+            if text.startswith('SELECT c.oid::pg_catalog.text') and 'c.relrowsecurity' in text:
+                metadata.append(tuple(cursor.pgresult.get_value(0,i) for i in range(7)))
+            return result
+        t=self.begin();called=[]
+        with patch.object(_GuardedCursor,'execute',observe):result=self.cut(t,lambda c:called.append(True),(self.bindings['flat_assignment'],))
+        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,None);self.assertEqual(called,[])
+        self.assertEqual(len(metadata),1);self.assertEqual(metadata[0][4:6],(b'true',b'false'))
+
+    def test_competing_visibility_ddl_blocks_until_cut_release_then_fresh_cut_refuses(self):
+        t=self.begin()
+        self.assertEqual(self.cut(t,lambda c:'retained'),Ok('retained'))
+        self.assertEqual(self.fact_shares(),2)
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as writer:
+            for clause in ('ENABLE ROW LEVEL SECURITY','FORCE ROW LEVEL SECURITY'):
+                with self.assertRaises(psycopg.errors.LockNotAvailable):
+                    writer.execute('ALTER TABLE truss.flat_assignment '+clause)
+            self.assertEqual(writer.execute("SELECT relrowsecurity,relforcerowsecurity FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass").fetchone(),(False,False))
+            self.connection.execute('ROLLBACK')
+            try:
+                writer.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY')
+                self.assertEqual(writer.execute("SELECT relrowsecurity FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass").fetchone(),(True,))
+                fresh=self.begin();called=[]
+                result=self.cut(fresh,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
+                self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+            finally:
+                self.connection.execute('ROLLBACK')
+                writer.execute('ALTER TABLE truss.flat_assignment DISABLE ROW LEVEL SECURITY')
+
+    def test_same_backend_visibility_ddl_is_a_counterexample_to_lock_only_lifetime(self):
+        t=self.begin()
+        def bypass(cursor):
+            cursor.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY')
+            cursor.execute("SELECT relrowsecurity::pg_catalog.text FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass")
+            return cursor.fetchone()[0]
+        # Actual native SHARE is retained, but its owner can upgrade its own
+        # table lock. No arbitrary-callback safety or full lifetime claim.
+        self.assertEqual(self.cut(t,bypass),Ok('true'))
+        self.assertEqual(self.fact_shares(),2)
+        called=[];result=self.cut(t,lambda c:called.append(True))
+        self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
+        self.assertEqual(called,[])
+
+    def test_table_ddl_participation_refuses_same_backend_visibility_change(self):
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            t=self.begin()
+            result=self.cut(t,lambda c:c.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY'))
+            self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000')
+            self.assertEqual(self.fact_shares(),0)
+            self.assertEqual(self.connection.execute("SELECT relrowsecurity FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass").fetchone(),(False,))
+        finally:
+            self.connection.execute('ROLLBACK')
+            self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def test_pending_table_ddl_participant_refuses_epoch_read_until_abort(self):
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            t=self.begin();called=[]
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres') as writer:
+                writer.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY')
+                self.assertEqual(writer.execute("SELECT relrowsecurity FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass").fetchone(),(True,))
+                result=self.cut(t,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55P03')
+                self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+                writer.rollback()
+            self.assertEqual(self.cut(t,lambda c:'fresh-after-abort'),Ok('fresh-after-abort'))
+        finally:
+            self.connection.execute('ROLLBACK')
+            self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def ddl_comparison(self):
+        from truss._psycopg_epoch_cut import _DDLBarrierComparison
+        oid,owner,source=self.connection.execute("SELECT oid,proowner,prosrc FROM pg_catalog.pg_proc WHERE oid='truss.runtime_fence_routine_ddl_writer()'::regprocedure").fetchone()
+        return _DDLBarrierComparison(owner,oid,source)
+    def test_original_installed_ddl_barriers_readback_passes(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();t=self.begin()
+            self.assertEqual(_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:'qualified-fixture'),Ok('qualified-fixture'))
+            self.assertEqual(self.cut(t,lambda c:'joint-qualified-fixture',ddl_barrier=original),Ok('joint-qualified-fixture'))
+            self.assertEqual(self.fact_shares(),2)
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_missing_installed_table_barrier_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        original=self.ddl_comparison();t=self.begin();called=[]
+        result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+        self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+    def test_disabled_installed_table_barrier_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();self.connection.execute('ALTER EVENT TRIGGER truss_table_ddl_writer_barrier DISABLE');t=self.begin();called=[]
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def test_incomplete_native_table_barrier_tag_set_refuses(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute("CREATE EVENT TRIGGER truss_table_ddl_writer_barrier ON ddl_command_start WHEN TAG IN ('ALTER TABLE') EXECUTE FUNCTION truss.runtime_fence_routine_ddl_writer(); ALTER EVENT TRIGGER truss_table_ddl_writer_barrier ENABLE ALWAYS")
+        try:
+            original=self.ddl_comparison();t=self.begin();called=[]
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_wrong_original_barrier_owner_function_or_body_refuses(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation,_DDLBarrierComparison
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();t=self.begin()
+            for wrong in (_DDLBarrierComparison(original.owner_oid+1,original.function_oid,original.source),_DDLBarrierComparison(original.owner_oid,original.function_oid+1,original.source),_DDLBarrierComparison(original.owner_oid,original.function_oid,original.source+' ')):
+                with self.subTest(comparison=wrong):
+                    called=[];result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),wrong,lambda c:called.append(True))
+                    self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_disabled_routine_barrier_refuses_even_with_table_barrier_always(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();self.connection.execute('ALTER EVENT TRIGGER truss_routine_ddl_writer_barrier DISABLE');t=self.begin();called=[]
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('ALTER EVENT TRIGGER truss_routine_ddl_writer_barrier ENABLE ALWAYS');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def test_joint_ddl_fact_cut_missing_barrier_refuses_before_fact_read(self):
+        original=self.ddl_comparison();t=self.begin();called=[]
+        result=self.cut(t,lambda c:called.append(True),ddl_barrier=original)
+        self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
+        self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)

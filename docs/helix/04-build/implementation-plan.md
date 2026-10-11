@@ -4134,3 +4134,113 @@ coordinator; original issuer/mapping/source/role/config stability, graph typed
 property decoding, caller/current-authority admission and final release remain
 required. No new backend acceptance binding. Last full gate checkpoint26/132 with
 106 missing; earlier packets retain their original source tuples. Full goal active.
+
+
+### Bound native capture before buffered result delivery — 2026-10-11
+
+Corrected fixed capture to send a101-row SQL sentinel limit before driver buffering,
+with rejection above100 rather than truncating logical fact supply. Final
+`evidence/python-psycopg-epoch-cut/dcf2afbb-d612-4f0e-acdb-cef660d95490` passes100
+methods (49 fact/dependency/owner/recipe/capture/reconstruction/cardinality,16 graph,
+nine epoch,26 adoption),130 current/archived Truss source pins,363 UMF source pins,
+1614 native payload pins, module boundaries and three independent named
+stop0/status3/socket-absent cleanups. Actual PGresult observation sees101 from a
+10001-row fixture; omitted-limit control sees10001 despite boundedfetchmany and
+ordinary post-fetch refusal. Earlier source packets remain scoped to their tuples.
+
+Formal `evidence/security-capture-cardinality-formal/93c04bcf-be19-4409-81f1-c66dddfeb5c7`
+passes five fresh-context queries (three UNSAT/two SAT), with three current source
+inputs. Arbitrary nonnegative source/quota under faithful min(source,quota+1)
+projection implies bounded native cardinality and count-complete acceptance;
+omitting the limit admits unbounded receive and using only quota silently accepts
+incomplete source. These formulas do not derive SQL/driver origin, role/RLS complete
+visibility, typed field/identity completeness, strict whole-wire allocation budgets
+or protected authorization/refinement. Original issuer/mapping, protected fact
+construction, graph decoding, caller/current-authority and final release remain
+open. No acceptance promotion; last full checkpoint26/132 with106 missing. Goal active.
+
+
+### Refuse filtered plain fact sources — 2026-10-11
+
+The original native class query now captures both RLS flags and refuses either
+flag for the current plain fact-table producer. Final
+`evidence/python-psycopg-epoch-cut/027f2354-ba28-408a-80d4-b229a67db10f`
+passes103 methods (52 fact/dependency/capture/identity/visibility,16 graph,nine epoch,
+26 adoption), module boundaries,130 current/archived Truss source pins,363 original
+UMF source pins and1614 native payload pins. All three named native fixture cleanups
+confirm stop0/status3/socket absent. The strengthened nonowner control proves
+actual hidden-row behavior and the successful native metadata phase before refusal.
+Initiale5c381e5 retains its earlier test source tuple; it is not relabeled current.
+
+Formal `evidence/security-fact-visibility-formal/5ce98127-ec56-4818-89fa-6471fbbc6707`
+retains six fresh-context queries (four UNSAT/two SAT), exact SMT/model receipts and
+three source preimages. Under unbounded relevant forbidden-fact/visibility sets,
+complete relevant visibility prevents the modeled false permit; hidden facts and
+changed visibility admit counterexamples even when stored facts remain fixed.
+Plain-profile admission excludes enabled/forced RLS regardless of current admin
+visibility. This is conditional logic, not SQL/role/BYPASSRLS/ACL refinement or a
+whole-source lifetime proof. Protected business-table RLS remains a design option
+requiring a separately qualified visibility producer.
+
+Trace: CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and US-079 AC6. No new
+public support flag or backend acceptance binding. Complete source/role/config
+cuts, issuer/mapping/caller authority, protected evaluation and final release remain
+open. Last full acceptance checkpoint remains26/132 with106 missing bindings; no
+current full-gate pass is claimed. The overall goal remains active.
+
+
+### Table-DDL participation repairs the same-session lock counterexample — 2026-10-11
+
+Implemented optional private CREATE/ALTER/DROP TABLE event-trigger participation
+using the existing original routine writer epoch/marker ordering. Native same-
+session ALTER can upgrade its own fact SHARE lock without this adjunct; the
+retained counter proves a flag snapshot plus table SHARE is insufficient. With
+the adjunct installed, original same-session ALTER refuses55000 before changing
+RLS; a pending participant excludes fresh epoch acquisition with55P03 until abort.
+Competing ENABLE/FORCE DDL is independently blocked by the fact lock; after release
+a committed ENABLE is observed and a new plain-profile admission refuses.
+
+Final `evidence/python-psycopg-epoch-cut/30ba8a7b-ba61-4781-8a34-a2f86dc812b4`
+passes107 methods (56 fact/dependency/capture/identity/visibility/DDL,16 graph,nine
+epoch,26 adoption), module boundaries,131 current/archived Truss pins,363 original
+UMF pins,1614 native payload pins and three stop0/status3/socket-absent cleanups.
+Initial19715fbd passed105 methods but correctly failed source stability because
+sources changed while it ran; it is retained as nonqualifying evidence.
+
+The adjunct is optional fixture SQL, not implicit capture admission or a new
+public support flag. Exact installed event-trigger/function custody and
+administration exclusions must be composed into source qualification; grants,
+roles, policy sources, extensions/cascades and protected final release remain
+open. No new formal SQL refinement or backend acceptance binding. Trace:
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10. Last full gate26/132 with106
+missing; goal active. Next integrate original installed barrier readback/custody
+with the protected source census, then compose caller/mapping/decoder authority.
+
+
+### Compose original installed DDL barrier readback with fact acquisition — 2026-10-11
+
+Implemented bounded original owner/function/body comparison and actual catalog
+readback of both selected event triggers and their shared function inside the
+original fenced epoch host operation. The private fact cut explicitly selects
+this prerequisite before fact acquisition; no nested host operation or reusable
+authority token. Exact original metadata requires complete selected tag arrays,
+ALWAYS state, original owners/function OID/namespace/name/language/return shape,
+invoker/volatile configuration, exact search_path/body and absent PUBLIC EXECUTE.
+Seven controls include exact joint success and native missing/disabled/incomplete
+tag sets plus original owner/function/body substitution refusals.
+
+Final `evidence/python-psycopg-epoch-cut/f764ff62-bb8f-4d15-bf91-6ffebf307a82`
+passes114 methods (63 fact/dependency/identity/visibility/DDL/readback,16 graph,
+nine epoch,26 adoption), module boundaries,131 current/archived Truss pins,363
+original UMF pins,1614 native payload pins and all three stop0/status3/socket-
+absent cleanups. Earliera2bb2d11 (110 methods) and4f016b85 (113 methods) retain
+their successful earlier source tuples and are not current-source promotion.
+
+This is a selected native projection, not the complete protected source census,
+authenticated issuer/mapping/caller admission, language-handler dependency proof
+or event-trigger administration/role/config lifetime closure. No public support
+flag, packaged delivery or backend acceptance binding changed. Trace
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10. Last full gate26/132 with
+106 missing; goal active. Next establish original ordinary-role administration
+exclusions and protect the selected barrier lifetime, then compose fixed fact
+capture and original semantic decoding before protected final release.

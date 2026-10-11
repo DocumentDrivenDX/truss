@@ -2219,3 +2219,64 @@ collections, authenticated issuer/mapping and source/role/config closure remain
 unqualified. Reconstruction runs as an owned fixture step after raw capture, not
 inside a complete protected host dispatch/final-disclosure coordinator; captured
 JSON is not a portable authorization credential.
+
+
+### Native capture row sentinel before driver buffering — 2026-10-11
+
+Fixed capture now submits `LIMIT 101` in the original quoted table projection.
+A bounded `fetchmany(101)` alone limits Python's returned batch after psycopg has
+received the original native result; it does not constrain server result cardinality.
+Accept at most100 rows. The extra sentinel row causes complete-result refusal;
+never accept a silently truncated100-row prefix. Existing row-payload overflow
+markers and whole-capture refusal remain in place. Count-complete acceptance is
+conditional on faithful SQL execution and the original complete visible fact
+population; role/RLS visibility and a strict whole-byte/allocator transport envelope
+remain unqualified. This is not a new authorization or disclosure capability.
+
+
+### Plain fact-source visibility admission — 2026-10-11
+
+The private PostgreSQL16.15 plain fact-table cut requires original native
+`relrowsecurity` and `relforcerowsecurity` readback both false under the acquired
+relation cut, alongside permanent/plain/noninherited relation and column/guard
+checks. Current owner or administrative visibility cannot override this refusal.
+This restricts the current fact-source producer profile; protected business tables
+may use RLS through a separately qualified provider. Such a provider must establish
+complete relevant fact visibility and stable policy/role/configuration sources.
+A flag snapshot alone does not prove their lifetime stability or arbitrary callback
+safety, and it supplies no caller or issuer authority.
+
+
+### Selected table-DDL writer participation — 2026-10-11
+
+The optional private `source-epoch-table-ddl-barrier.sql` adjunct participates
+CREATE TABLE, ALTER TABLE and DROP TABLE in the existing native epoch/marker
+writer protocol. Its ALWAYS event trigger invokes the original routine writer
+boundary: retained epoch readers refuse same-session DDL with55000; competing
+participants acquire epoch ROW EXCLUSIVE before the DDL effect and retain it
+until transaction settlement. Readers refuse pending writers with55P03.
+The adjunct is fixture-qualified, not automatically admitted or installed by
+plain fact capture. An installer MUST qualify its original event-trigger/function
+identity, body, enabled state, ownership and administration exclusions before
+claiming the selected participation profile. No event-trigger administration,
+policy/grant/shared-role/extension or complete cascading dependency closure is
+qualified. Original issuer/current-authority and final release remain separate.
+
+
+### Original installed DDL barrier readback — 2026-10-11
+
+The private joint DDL/fact cut MAY select an original `_DDLBarrierComparison`
+(owner OID, function OID, bounded exact source). After original epoch acquisition,
+read both named native event triggers and the shared original function before
+fact acquisition or callback. Require exact complete tag arrays, ddl_command_start,
+ALWAYS state, original trigger/function owners and function OID, truss namespace,
+exact routine name, plpgsql language, ordinary zero-argument scalar event-trigger
+return, invoker/volatile configuration, exact search_path/source and no PUBLIC
+EXECUTE. Missing, altered or incomplete metadata refuses the operation and rolls
+back its acquired cut without a callback. Comparison bytes are not an issuer or
+caller credential.
+
+This adds installed metadata correspondence to the optional selected tag profile;
+it does not qualify language-handler dependencies, event-trigger administration
+exclusion, all-role ACL closure or lifetime stability. Ordinary plain fact capture
+does not implicitly claim or select this stronger profile.
