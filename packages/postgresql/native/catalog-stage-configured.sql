@@ -41,9 +41,9 @@ BEGIN
  IF octet_length(admitted.context_hex)>8192 THEN
   RAISE EXCEPTION 'selected original configured context response capacity' USING ERRCODE='54000';
  END IF;
- RETURN QUERY SELECT * FROM truss.runtime_stage_catalog_admitted(
+ RETURN QUERY SELECT * FROM truss.runtime_stage_catalog_with_release(
   issued_ordinal,definition_bytes,input_bytes,candidate_bytes,obligation_bytes,group_bytes,
-  documents_bytes,declarations_bytes,origin_bytes,prestate,decode(admitted.context_hex,'hex'));
+  documents_bytes,declarations_bytes,origin_bytes,prestate,decode(admitted.context_hex,'hex'),configuration_profile_bytes);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_stage_catalog_configured(bigint,bytea,bytea,bytea,bytea,bytea,

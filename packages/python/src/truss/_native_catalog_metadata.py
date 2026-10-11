@@ -111,10 +111,7 @@ def validate_configured_metadata(encoded, raw_context, writer, ordinal, raw_meta
         if row['target_incarnation']!=selection['incarnation']:raise ValueError('Original incarnation correspondence required')
     if epoch['transition_reason']=='initial':
         if epoch['predecessor_epoch'] is not None:raise ValueError('Initial epoch predecessor')
-    elif epoch['transition_reason']=='restore':
-        if type(epoch['predecessor_epoch']) is not str or not epoch['predecessor_epoch'] or epoch['predecessor_epoch']==epoch['source_epoch']:
-            raise ValueError('Restore epoch predecessor')
-    else:raise ValueError('Selected epoch transition required')
+    else:raise ValueError('Selected first-catalog initial epoch required')
     if (_hex(epoch['profile_bytes'],65536,'\\x').hex()!=context['sourceEpochProfileHex']
             or _hex(epoch['evidence_bytes'],1048576,'\\x').hex()!=context['sourceEpochEvidenceHex']
             or _hex(epoch['evidence_sha256'],32,'\\x')!=sha256(bytes.fromhex(context['sourceEpochEvidenceHex'])).digest()):

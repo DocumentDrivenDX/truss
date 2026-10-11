@@ -67,6 +67,21 @@ materialization and does not establish a complete native allocation budget.
 Continue into report construction and the installer/provider composition below;
 this checkpoint does not satisfy the public workflow milestone.
 
+The [reconciled release checkpoint](evidence/python-catalog-report-release/541de020-edf7-4323-957e-f3cc05fbf3c7/receipt.json)
+integrates committed security work into that same configured Python path. One
+canonical entry retains the source envelope, epoch-before-head ordering and
+4 KiB context limit. The extra release collector is followed by a complete
+metadata and original-operation recheck before returning context 0.4 / response
+0.3. The first-catalog subset requires an initial epoch with no predecessor;
+configured and legacy requests require response 0.3 and 0.2 respectively.
+Full metadata supplies the compact release candidate; it does not issue report
+authority. Fresh frozen evidence covers 18 native cases and 13 original host
+dispatch cases, with 246 source pins and 1,614 native binary pins. The
+[omitted-lock control](evidence/python-catalog-report-release/30bce539-5a93-4fee-8f29-fd968af940dc/receipt.json)
+reproduces four expected failures. Both owned clusters stop successfully with
+status 3 and absent sockets. Earlier peer packets remain historical; complete
+report, installation authority, publication and public capabilities remain open.
+
 Implement the catalog provider and its actual installer as one connected delivery.
 Extend the issued staging route with the four original report sources already
 required by `_catalog_report_assembly`: original installed execution, admitted

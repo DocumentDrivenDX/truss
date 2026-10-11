@@ -17,6 +17,7 @@ REQUIRED_SOURCES=('originalInstalledExecution','admittedLayout',
     'registeredEnforcementReportProfile','registeredAcceptanceReportProfile')
 ENFORCEMENT_SHA256='678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1'
 PROFILE_SHA256='ef0a39be769d74037a54f62a138fec47bb3a4fbe46e5e96c2891f70e18227ff5'
+RELEASE_SHA256='2d4ab361c53fba2ecbe10a57c181aef3887edd2751ff37796e5d03d6514996e4'
 
 
 def assemble_catalog_report_sources(prepared, native, semantics):
@@ -133,3 +134,48 @@ def encode_unissued_complete_report_wire(source_projection, required_sources):
     validate_complete_report(decode_acceptance_json(wire))
     # This is the same handoff as TypeScript; the native codec is its sole SQL encoder.
     return prepare_canonical_wire_tree(wire)
+
+
+def validate_configured_catalog_sources(encoded,start,end,release,original_context,result):
+    """Selected release candidate from the same validated full native metadata."""
+    from ._native_catalog_metadata import validate_configured_metadata, _hex, _native_rows
+    if start['empty_scope']!=end['empty_scope']:
+        raise ValueError('Original configured metadata cut required')
+    scope=decode_acceptance_json(start['empty_scope'].encode('utf8'))
+    if (type(scope) is not dict or set(scope)!={'interfaceVersion','businessRelations','metadataUtf8Hex'}
+            or scope['interfaceVersion']!='truss-configured-empty-graph/0.1'):
+        raise ValueError('Original configured full metadata scope required')
+    raw=_hex(scope['metadataUtf8Hex'],32768)
+    validate_configured_metadata(encoded,original_context,result['writerXid'],result['ordinal'],raw)
+    native=_native_rows(raw)
+    capsule=native['configuration'];epoch=native['epoch']
+    metadata={'interfaceVersion':'truss-configured-catalog-metadata/0.1',
+        'installationId':capsule['installation_id'],'sourceEpoch':capsule['source_epoch'],
+        'targetIncarnation':capsule['target_incarnation'],
+        'configurationGeneration':str(capsule['configuration_generation']),
+        'contextSha256':sha256(original_context).hexdigest(),
+        'configurationSha256':_hex(capsule['configuration_sha256'],32,'\\x').hex(),
+        'selectedBindingSha256':_hex(capsule['selected_binding_sha256'],32,'\\x').hex(),
+        'installedInventorySha256':_hex(capsule['installed_inventory_sha256'],32,'\\x').hex(),
+        'epochProfileSha256':sha256(_hex(epoch['profile_bytes'],65536,'\\x')).hexdigest(),
+        'epochEvidenceSha256':_hex(epoch['evidence_sha256'],32,'\\x').hex()}
+    fields={'interfaceVersion','writerXid','operationOrdinal','initialEffectGeneration',
+            'effectGeneration','configurationGeneration','policyHex','policySha256','scope'}
+    if (type(release) is not dict or set(release)!=fields
+            or any(type(v) is not str for v in release.values())
+            or release['interfaceVersion']!='truss-configured-catalog-release/0.1'
+            or release['writerXid']!=result['writerXid'] or release['operationOrdinal']!=result['ordinal']
+            or release['initialEffectGeneration']!='0' or release['effectGeneration']!=result['effectGeneration']
+            or release['configurationGeneration']!=metadata['configurationGeneration']
+            or release['scope']!='original_configured_release_at_native_call_only'):
+        raise ValueError('Original configured release source cut required')
+    generation=release['configurationGeneration']
+    if (not generation.isascii() or not generation.isdecimal() or len(generation)>19
+            or len(generation)>1 and generation[0]=='0' or int(generation)>9223372036854775807):
+        raise ValueError('Canonical original configuration generation required')
+    policy=files('truss').joinpath('_profiles/catalog-report-release.json').read_bytes()
+    if sha256(policy).hexdigest()!=RELEASE_SHA256 or release['policyHex']!=policy.hex() or release['policySha256']!=RELEASE_SHA256:
+        raise ValueError('Exact selected original release policy required')
+    return {'scope':'configured_native_release_candidate_only','metadata':metadata,
+            'selectedReportProfile':{'identity':'truss-catalog-report-release','version':'0.1.0','sha256':RELEASE_SHA256},
+            'registeredAuthority':False,'acceptedReportQualified':False,'currentStateRevalidated':False}
