@@ -29,6 +29,13 @@ export function lowerSecuritySourceCompleteness(input:{root:SecurityPhysicalType
  const selectedCarrier='('+selector(carrier.discriminator,'original_row')+') AND '+relation;
  const required=carrier.fields.map(f=>ident('original_row')+'.'+ident(f.column)+' IS NULL').join(' OR ');
  const table=ident(carrier.schema)+'.'+ident(carrier.table);
- return 'NOT EXISTS(SELECT 1 FROM '+ident(root.home.schema)+'.'+ident(root.home.table)+' AS '+ident('collection_root')+' WHERE ('+selector(root.discriminator,'collection_root')+') AND ((SELECT pg_catalog.count(*) FROM '+table+' AS '+ident('original_row')+' WHERE '+selectedCarrier+') OPERATOR(pg_catalog.<>) 1 OR EXISTS(SELECT 1 FROM '+table+' AS '+ident('original_row')+' WHERE '+selectedCarrier+' AND ('+required+'))))';
+ const rootTable=ident(root.home.schema)+'.'+ident(root.home.table);
+ const rootSelector=selector(root.discriminator,'collection_root');
+ const complete='NOT EXISTS(SELECT 1 FROM '+rootTable+' AS '+ident('collection_root')+' WHERE ('+rootSelector+') AND ((SELECT pg_catalog.count(*) FROM '+table+' AS '+ident('original_row')+' WHERE '+selectedCarrier+') OPERATOR(pg_catalog.<>) 1 OR EXISTS(SELECT 1 FROM '+table+' AS '+ident('original_row')+' WHERE '+selectedCarrier+' AND ('+required+'))))';
+ // Completeness in one direction does not exclude additional ineligible rows
+ // from an application scan. The selected carrier must also be contained in
+ // the eligible root population visible at this same native authority cut.
+ const contained='NOT EXISTS(SELECT 1 FROM '+table+' AS '+ident('original_row')+' WHERE ('+selector(carrier.discriminator,'original_row')+') AND NOT EXISTS(SELECT 1 FROM '+rootTable+' AS '+ident('collection_root')+' WHERE ('+rootSelector+') AND '+relation+'))';
+ return '('+complete+') AND ('+contained+')';
  } catch { return fail(); }
 }

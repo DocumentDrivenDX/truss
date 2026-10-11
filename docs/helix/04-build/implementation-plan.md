@@ -3011,3 +3011,36 @@ completeness modules; the guard has no imports or I/O. SQL/native installation
 and browser/host execution remain separate tools. Six concurrent Python-main
 commits were preserved by fast-forwarding before final source verification.
 No backend admission is promoted.
+
+
+### Selected application-carrier eligibility closure — 2026-10-11
+
+`security-source-completeness.ts` now checks selected carrier containment as well
+as forward exact-one/non-null completeness. The same native key conjunction and
+root/carrier type selectors are reused in reverse anti-existence. This closes an
+observed source-view drift: an unchanged text/int64 view with a constant RB row
+previously let ordinary Alice receive that ineligible ID despite complete RA/RAB
+carriers. The predecessor native counterexample is retained in UMF
+`query-carrier-eligibility-counterexample/da5a64ac-128a-44b9-bbb5-e08cfa435484`.
+This invariant applies to the selected application source, not private Assignment
+or other authority-fact populations. No competing policy resolver is introduced.
+
+Fixed actual issued predicate/empty routines pass51 PostgreSQL17.9 observations
+in UMF `query-carrier-eligibility/757801b1-1556-4b80-821c-efc8ab7d0c48`.
+Extra ineligible, absent, NULL-key, duplicate and predicate-filtered-out carrier
+rows refuse before both applications; restoration recovers independently authored
+RAB/empty vectors. The empty artifact is freshly inspection-owner prepared using
+the retained actual executable;19 raw refusals and owned cleanup output are
+retained. The initial diagnostic failed direct view permission as intended and
+was corrected without ordinary grants. Chromium matches both program/fragments
+and rejects four copied-fragment attempts;14 host tests/58 assertions and all
+security-module strict typecheck pass with raw logs.
+
+Eight conditional first-order checks (four UNSAT/four SAT) retain pre-solve SMT
+and fresh contexts under faithful matching/eligibility/availability and stable-cut
+premises in UMF `query-carrier-eligibility-formal/bbab0298-9613-47ba-aec9-89877bbfee77`.
+They are not SQL/identity/RLS refinement, complete native view-expression/callable
+or concurrent-DDL/authority qualification, authenticated public compiler issuance,
+typed graph adoption or complete B08 acceptance. This closes the demonstrated
+extra-row preflight gap only. Broader132-case acceptance remains26 accepted;
+the full security goal stays active and no public backend profile is promoted.
