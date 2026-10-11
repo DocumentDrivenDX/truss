@@ -2440,3 +2440,41 @@ and decoder construction, complete source/role/ACL lifetime and protected final
 release remain open. No backend acceptance binding or public support flag promoted;
 last full checkpoint26/132 with106 missing. Goal active. Next bind original semantic
 and physical profile construction to qualified issuer custody and protected release.
+
+
+### Owned within-host capture, semantic evaluation and decision projection — 2026-10-11
+
+An owned flat-table read spike now composes source-bound0.2 profile validation,
+native dependency/fact cuts, shared fixed raw-cell capture and the original UMF
+identity decoder/evaluator inside one host operation/savepoint. Semantic ownership
+stays in UMF; Python does not interpret policy or Keys. The tool emits only the
+original determinate decision/dispositions, excluding raw cells/private identities
+and subprocess diagnostics. An indeterminate or malformed evaluation refuses.
+The original evaluator's trusted=true, issuer/mapping and subject assumptions are
+explicit administrative fixture premises, not ordinary-user authority.
+
+Four native methods prove active assignment permits with salary withheld, inactive
+assignment denies without raw output, duplicate identity/indeterminate evaluation
+rolls back the operation while preserving earlier caller work, and original UMF
+evaluation runs with all seven required native fact/epoch SHARE locks. Independent
+competing fact UPDATE and explicit shared-authority writer acquisition refuse
+during that actual evaluator invocation. Private fixed capture is shared between
+the existing raw-cell profile and this owned tool; no public user SQL/decoder
+callback was added to fixed capture.
+
+Final `evidence/python-psycopg-epoch-cut/01992ea3-7088-472c-9ca1-fb66a52f73af`
+passes147 methods (96 fact/dependency/identity/visibility/DDL/role/semantic,16 graph,
+nine epoch,26 adoption), module boundaries,139 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Initial49f139f4 retains17 failed capture
+regressions from a missing SQL import during helper extraction; it is not a pass.
+
+Trace CONTRACT-063/STP-056 B01/B07/B10/L03/B11/B12 and US-056 AC1/AC6/AC8/AC9/AC10
+composition prerequisites only. Native lock observation and owned source checks
+do not prove executed bundle/dependency provenance or full semantic/SQL refinement.
+No new formal theorem or backend acceptance binding. Qualified ordinary caller,
+issuer/mapping/decoder and packaged evaluator custody, complete source/role/ACL
+lifetime, graph decoding and protected final release remain required. Last full
+checkpoint26/132 with106 missing; goal active. Next qualify original operation
+context and mapping/producer custody before turning this pipeline into ordinary
+protected disclosure.
