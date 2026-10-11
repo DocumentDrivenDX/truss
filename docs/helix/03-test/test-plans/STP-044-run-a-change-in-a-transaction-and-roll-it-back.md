@@ -17,6 +17,12 @@ ddx:
 
 # STP-044: Caller-owned transactions
 
+## Baseline versus optional qualification — 2026-10-11
+
+The Python baseline is stock psycopg 3 through supported APIs (ADR-003). Caller transaction ownership, original attempt identity, exclusive use, savepoint rollback preserving earlier work, dry-run, deferred violations, pending/committed/unknown settlement and safe connection discard/reuse remain required. Test through the actual pinned driver/server and independently observe native effects. No custom protocol producer is needed to satisfy those semantic cases.
+
+Finite payload/value/page/batch/concurrency/recovery-record limits, deadlines and maximum-workload peak-memory tests qualify practical resource control. DH predecode/private-hook and exact backing/copy/preallocation requirements below qualify only the optional strict profile; they do not block baseline closeout. Preserve semantic portions of DH-03/04/05 and resource-exhaustion/rollback cases using supported API evidence. LR record/count/byte/concurrency limits remain practical tests; exact driver backing-lifetime proofs are optional. Do not turn an experimental case into a required mechanism. Custom wire/private-hook implementation requires the PRD's hard documented deficiency and owner-approved ADR.
+
 ## Formal close-gate counterexample: original runtime replay
 
 The [bounded model trace](../../04-build/evidence/design-audit/python-custody-bounded-model-controls.json)
@@ -208,7 +214,7 @@ Extend OL-03 with distinct pool baselines and independently introduced role/sett
 
 Plan SB-01–03 for the PostgreSQL 17 owned-session baseline floor. SB-01 supplies equal textual search_path on two actual role/namespace contexts with differing resolved current_schemas or dependency identity; require original correspondence refusal before protected work rather than string-only acceptance. SB-02 independently changes session_replication_role to an incompatible integrity mode, or grants a role an unqualified bypass path; require admission refusal even when that value matches the pool baseline. Restoring a matching settings string cannot establish effective RLS/trigger/FK authority. SB-03 changes a required decoding/timeout/default-transaction observation, omits transaction_timeout under a substituted engine version or returns a native NULL/unsupported descriptor; require explicit version/profile refusal or unavailable observation before interpreting it as a default. Verify complete original values, actual allowed transaction-local changes, native descriptors and after-settlement comparison; no baseline overwrite or arbitrary session reset supplies the expected evidence. All cases remain not_run and require actual driver/server/profile producers.
 
-## Selected driver predecode and protocol-capture qualification
+## Optional strict-profile predecode and protocol-capture qualification
 
 DH-01–DH-05 qualify the two integration boundaries identified by CONTRACT-007’s frozen node-postgres review and the [driver handoff](../../02-design/contracts/reference-driver-hook-review.proposal.md). All are `not_run`. Use a controlled protocol peer for independently authored wire bytes and a real PostgreSQL fixture for successful transaction semantics; neither peer-only parsing nor successful driver queries establish the whole adapter profile. Pin the actual driver/runtime/transport hook and complete dependency tuple in every receipt.
 
@@ -247,7 +253,7 @@ This supplements US-044 lifetime/rollback controls and B-014 packed delivery; it
 
 Selected complete-frame controls additionally split each header/body/UTF-8 field at every boundary and assert zero partial parser forwards; combine multiple complete frames with a trailing partial frame and assert original ordered single forwarding under shared budgets. Inject pre-forward residual, post-forward residual, double/missing callback, wrong cycle and reentrant query submission. Missing no-residual assertions refuse the selected profile rather than activating an instrumented alternative. After any post-forward fault, independently verify possible-effects/containment custody, no frame replay, no result publication and no premature pool release. These supplement DH-01–05 and remain not_run.
 
-### Original driver producer port controls
+### Optional strict-profile driver producer port controls
 
 Extend DH-02/05 with the [private producer port](../../02-design/contracts/reference-driver-producer-port.proposal.md). Independently instrument original ingress allocation and parser entry while submitting forged, foreign-issuer, reused, stale-epoch and stale-generation tickets. No rejected precondition forwards bytes or admits a replacement account. Mutate an admitted frame through an upstream shared view and require refusal or prevention by the selected actual ownership mechanism; a readonly type is insufficient.
 

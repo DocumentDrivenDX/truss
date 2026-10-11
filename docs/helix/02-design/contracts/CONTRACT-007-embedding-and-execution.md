@@ -21,6 +21,16 @@ ddx:
 
 # Contract: Embedding and execution
 
+## Baseline execution profile — owner decision 2026-10-11
+
+ADR-003 selects stock psycopg 3 through supported APIs for the Python baseline. Publish and qualify exact driver/libpq/server versions and modes. Host-supplied authenticated connections and transaction ownership, exclusive statement use, exact values, current authority, savepoint containment and confirmed/pending/unknown durability remain normative.
+
+Resource admission enforces published input and individual-value byte limits, page/batch/iteration and concurrency ceilings, query/lock/operation deadlines and conservative toolkit budgets. Limit stored values on supported write paths and complete projected values before transfer where applicable; do not truncate a value to fit. Use bounded SQL and supported incremental retrieval, accounting for large individual rows and Python/native conversion overhead in peak-memory tests. Baseline accounting controls Truss work; it does not claim exact native allocation lifetimes or hard total-process containment.
+
+Stock supported driver APIs may supply execution, descriptors, errors and completion observations. Test correspondence against independent database effects and transaction outcomes. Missing internal socket/parser hooks alone is not invalid admission. Caller coordination excludes concurrent host commands during an adopted operation; stale handles refuse. An uncertain command or COMMIT closes affected admission and prevents unsafe reuse; successful cancellation, local disposal or an idle status alone cannot resolve uncertain effects. Explicitly discard an uncertain connection when safe recovery/reuse cannot be established, while retaining durable attempt/retry custody and never claiming rollback from disconnection.
+
+**Profile scope:** every stronger pre-read/predecode, raw-frame forwarding, physical backing-capacity, per-copy lifetime or rollback-resistant native-account requirement below belongs to the optional strict accounting profile. It does not apply to baseline release qualification. Shared semantic custody, exactness, parameter/result validation, authorization and recovery requirements continue to apply, implemented using supported driver APIs and conservative controlled-work budgets. The optional [producer port](reference-driver-producer-port.proposal.md) is not a required baseline executor dependency. Custom protocol/private-hook work requires the PRD's hard documented deficiency evidence and owner-approved ADR.
+
 ## Owner decisions — 2026-10-07
 
 Selected execution boundary: engine-owned callback transactions commit before returning committed results; adopted transactions remain caller-owned and return explicit pending results. Pending object/edge IDs are usable only within the same live transaction. Only confirmed outer commit authorizes durable external publication; savepoint release and successful Truss operations do not. Unknown commit requires original recovery/receipt observation. No commit-by-string-ID or live cross-network transaction protocol is selected.
@@ -821,7 +831,7 @@ Capture is private and single-custody: events with no original active cycle, for
 No implementation may mutate arbitrary internal driver fields to manufacture original control authority. A selected versioned hook/wrapper must independently establish observation order, native parameter/result framing, buffers, cancellation/termination, error and host transaction mediation against these frozen sources. Those exact hook/producer bodies, package/runtime dependency selection and native evidence remain open.
 
 
-### Predecode frame admission for the candidate driver
+### Optional strict-profile predecode frame admission
 
 The additional [frozen frame-source receipt](../../04-build/evidence/design-audit/node-postgres-frame-source-review.json) covers BufferReader, Parser, Connection and Query at the same revision. BufferReader.string/cstring convert original buffers to UTF-8 strings; Parser constructs DataRow strings before Query invokes value parsing. Identity type parsers therefore cannot establish original byte validity or recover bytes already decoded. Parser.mergeBuffer also retains and can grow buffers before emitting a complete packet. A post-row check cannot qualify preallocation bounds. This is source inspection only, not an executed malformed-frame or memory experiment.
 
@@ -957,7 +967,7 @@ The current Weft source supplies original structural violation-count statements 
 
 A zero count cannot prove authorized complete visibility, required member presence, codec/domain/full-tree semantics or absent source evidence. Independently require all original obligation families and original current authority before logical query execution/publication. Original aliases/check identity and physical mapping remain pinned; extra logical WHERE/LIMIT or a matching current count from another source cannot discharge the original obligation. Complete checks, raw result buffers and repeated occurrences share the enclosing resource account and supported coherent observation/containment procedures. Exact public obligation/result producer adoption and native Truss qualification remain open.
 
-### Shared cumulative account transition procedure
+### Optional strict-profile cumulative account transition procedure
 
 The selected host/native resource profile must distinguish three state classes under one original issuer/transaction epoch: retained occupancy, cumulative spent work, and pending reservations whose actual outcome is unresolved. This is a private producer procedure, not a new public ledger API. Each admitted child operation/helper retains its original enclosing account identity; changing facade, savepoint, helper or finalization pass cannot create another transaction allowance. Native guards consume the separately selected unavoidable native account; agreement with a host estimate alone is insufficient.
 

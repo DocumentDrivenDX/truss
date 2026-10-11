@@ -1,5 +1,9 @@
 # Embeddable package delivery design
 
+## Python baseline distribution — owner decision 2026-10-11
+
+ADR-003 selects maintained stock psycopg 3 through supported APIs. The release must identify its qualified psycopg implementation/libpq version, execution mode, supported server/managed targets and practical limits. Select dependency/extra packaging explicitly; this design decision does not publish a wheel or qualify a target. No pg8000, custom wire handler, private parser hook or strict allocation producer is a baseline runtime dependency. Strict transport accounting is optional and gets a separate capability/profile and acceptance result; missing optional tests do not fail baseline release. Exact-value, host-owned transaction, authorization and recovery acceptance remain required. Custom protocol or driver replacement work requires the PRD deficiency evidence and owner-approved ADR.
+
 Architecture and ADR-001 govern this proposal. Workspace paths are internal locations, not published package names. Experimental implementation packages now exist. This document specifies the B-014 delivery target; existing private manifests and source components do not establish published, qualified packages.
 
 ## Build and export boundaries
