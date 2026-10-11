@@ -1022,3 +1022,41 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 self.assertFalse(self.host._custody.lease.acquire(blocking=False))
             finally:self.host._custody.lease.release()
         self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_release_refuses_executor_transaction_retirement(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_read=tool._run_owned_identity_read
+        def retire(*args,**kwargs):
+            result=original_read(*args,**kwargs);self.assertIsInstance(result,Ok)
+            # Excluded administrator deliberately violates raw-alias discipline.
+            self.connection.execute('ROLLBACK');return result
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',retire):result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+    def test_delegated_release_refuses_lost_guards_with_same_native_xid(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_read=tool._run_owned_identity_read;observed=[]
+        def lose(*args,**kwargs):
+            result=original_read(*args,**kwargs);self.assertIsInstance(result,Ok)
+            xid=self.connection.execute('SELECT pg_current_xact_id()::text').fetchone()
+            self.connection.execute('ROLLBACK TO outer_release_guard')
+            self.assertEqual(self.connection.execute('SELECT pg_current_xact_id()::text').fetchone(),xid)
+            self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation='truss.sec_assignment'::regclass").fetchone(),(0,))
+            observed.append(True);return result
+        def operation(host,t,original,connection):
+            executor_t=self.begin();self.connection.execute('SAVEPOINT outer_release_guard')
+            try:
+                with patch.object(tool,'_run_owned_identity_read',lose):result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);self.assertEqual(observed,[True])
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)

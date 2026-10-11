@@ -71,7 +71,7 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
     Executor credentials, mapping issuer and final release remain unqualified.
     """
     if caller_host is executor_host:raise ValueError('Separate original caller/executor hosts required')
-    selected,_=_epoch_dependency_recipe(epoch,hashlib.sha256(requirements).hexdigest(),sources)
+    selected,providers=_epoch_dependency_recipe(epoch,hashlib.sha256(requirements).hexdigest(),sources)
     if not json.loads(selected.profile)['kind'].endswith('/0.4'):raise ValueError('Original delegated profile required')
     left,right=caller_host.connection.info,executor_host.connection.info
     if (left.host,left.port,left.dbname)!=(right.host,right.port,right.dbname):raise ValueError('Original configured endpoint correspondence required')
@@ -85,6 +85,19 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
         # operation still confirms its native custody before publication.
         from truss.execution import Ok
         if type(result) is not Ok:raise ValueError('Original executor operation refused')
+        def retained(executor_cursor,executor_observed):
+            # Observe existing locks only: do not reacquire a lost guard and
+            # accidentally bless an earlier decision under a new data cut.
+            required=tuple(sorted({p.relation.oid for p in providers}))
+            executor_cursor.execute("SELECT count(*)::pg_catalog.text FROM pg_catalog.pg_locks WHERE pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND granted AND mode OPERATOR(pg_catalog.=) 'ShareLock' AND relation OPERATOR(pg_catalog.=) ANY(%s::pg_catalog.oid[])",('{'+','.join(str(v) for v in required)+'}',),prepare=False,binary=False)
+            if executor_cursor.description is None or len(executor_cursor.description)!=1 or executor_cursor.description[0].type_code!=25 or executor_cursor.fetchmany(2)!=[(str(len(required)),)]:
+                raise ValueError('Original native fact guards unavailable at release')
+            executor_cursor.execute("SELECT count(*)::pg_catalog.text FROM pg_catalog.pg_locks WHERE pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND granted AND mode OPERATOR(pg_catalog.=) 'ShareLock' AND relation IN ('truss.source_epoch_current'::pg_catalog.regclass,'truss.source_epoch_registry'::pg_catalog.regclass)",prepare=False,binary=False)
+            if executor_cursor.description is None or len(executor_cursor.description)!=1 or executor_cursor.description[0].type_code!=25 or executor_cursor.fetchmany(2)!=[('2',)]:
+                raise ValueError('Original native authority guards unavailable at release')
+            return 'original-guards-retained'
+        checked=executor_host._run_operation(executor_transaction,retained)
+        if type(checked) is not Ok:raise ValueError('Original executor release guard refused')
         return result.value
     from truss.psycopg_host import _HostPairReservation
     with _HostPairReservation(caller_host,executor_host):

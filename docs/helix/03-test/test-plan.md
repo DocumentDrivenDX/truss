@@ -1133,3 +1133,23 @@ protected disclosure remain open. No new formal native refinement theorem or
 backend acceptance binding; last full checkpoint26/132,106 missing. Goal active.
 Next qualify native release guard ownership and original service target/caller
 custody alongside this toolkit reservation.
+
+### Native delegated release guard observation — 2026-10-11
+
+The private delegated read now observes existing executor ShareLocks on every
+original fact relation and both epoch tables before caller completion. It does
+not reacquire lost guards. Two native controls refuse release after executor
+transaction retirement and after rollback to an earlier savepoint loses guards
+while retaining the same native transaction ID. These controlled raw-alias
+violations remain outside the supported host contract; observation does not
+prove uninterrupted guard lifetime or exclude loss/reacquisition ABA.
+
+Evidence `evidence/python-psycopg-epoch-cut/d0f2095f-5fd8-4227-bc91-3aee055d07fd`
+passes all160 component methods on PostgreSQL18.6/psycopg3.3.6 binary, module
+boundaries,142 source hashes,363 original UMF sources and1705 native payload
+pins, with three stop0/status3/socket-absent cleanups. Trace shared CONTRACT-063 /
+STP-056 L03/L11/B11/B12 and US-056 AC9/AC10 custody prerequisites. No new formal
+native refinement theorem or backend acceptance binding is claimed. Original
+issuer/mapping/credential/target authentication, source/role/ACL lifetime, graph
+capture and complete protected disclosure remain open. Last full backend gate
+checkpoint remains26/132 with106 missing bindings; goal active.
