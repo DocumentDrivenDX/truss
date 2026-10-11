@@ -727,3 +727,34 @@ unchanged. Preserve original trusted-host custody and the invoker elevation guar
 the capture candidate does not qualify production actor mapping or seven semantic
 bodies. No supplied actor label or post-elevation tuple substitutes for that owner
 protocol in the Python assembly.
+
+### Iteration17: single raw-stream ingress visits
+
+Astra Ultra reviewed the next deadline plan and identified buffered receive and
+outbound qualification gaps. This completed slice selects `readinto1` before
+gate installation so each accounted ingress visit makes at most one underlying
+raw-stream call and preserves already buffered byte order. Socket-layer syscall
+retries and connection-owned buffer prefetch remain outside this counter.
+Tests use an actual BufferedRWPair and a partial raw stream; native and installed
+regressions must also pass before main integration.
+
+Full absolute operation deadlines remain open: retain one original ordinary
+clock and a distinct reserved settlement clock, qualify buffered writes/flush
+and admission/result checkpoints, and restore exact original socket timeout
+before handback. A genuine SocketIO timeout poisons its buffered wrapper;
+incomplete original calls require quarantine, not a reconstructed stream or
+optimistic drain. Cleanup permits alone cannot choose deadline phase because
+ordinary baseline probes already use reserved close operations. No public C02
+or ReferenceAssembly readiness is claimed by this ingress correction.
+
+Iteration17 passes380 separately installed tests in49.478 seconds; all55
+installed package files match source. Astra independently passes15 focused
+checks, including the original native success/failure/success workflow. Python
+module boundaries pass222 imports. See [receipt](evidence/python-contracts-iteration17.json)
+and [installed log](evidence/python-contracts-iteration17-installed.log).
+
+Security main15c8fcf9 was fast-forwarded before iteration17 integration. Its
+39 native observations and eight replayed formulas qualify the isolated
+authority-row primitive; ontology resolution, admitted subject mapping and
+final publication custody remain open. Runtime source is unchanged, and no
+protected entry or actor mapping is adopted from this candidate.

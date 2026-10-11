@@ -5,6 +5,7 @@ notices and notifications are preserved; no empty-socket claim is produced.
 """
 from dataclasses import dataclass
 import struct
+import io
 from ._accounted_receive import AccountedReceiver
 from ._resource_account import BytePermitAccount
 from ._native_pg8000 import NativeBoundaryRefusal
@@ -36,8 +37,14 @@ class NativeResultOwner:
     transferred: bool = False
 
 class _BufferedIngress:
-    def __init__(self, original): self.original = original
-    def recv_into(self, view): return self.original.readinto(view)
+    def __init__(self, original):
+        if type(original) is not io.BufferedRWPair:
+            raise NativeBoundaryRefusal('Single raw-stream ingress required')
+        self.original = original
+    def recv_into(self, view):
+        # One underlying raw-stream call at most, including buffered prefetch.
+        # This is not a syscall count or an absolute elapsed-time guarantee.
+        return io.BufferedRWPair.readinto1(self.original, view)
 
 class NativeResultCustody:
     def __init__(self, session, limits):
