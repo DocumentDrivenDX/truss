@@ -71,7 +71,7 @@ class HostCallRecovery:
         if not self._lock.acquire(blocking=False):return self._errors['execution_obligation']
         try:
             with boundary._lock, self._executor._lifecycle_lock:
-                if self._executor._closed and record.kind not in ('begin','commit','rollback'):
+                if self._executor._closed and record.kind not in ('begin','commit','rollback','host_savepoint','host_rollback_to','host_release'):
                     return self._errors['invalid_transaction']
                 if len(self._entries)>=self._limit or len(boundary._host_call_records)>=4096:
                     return self._errors['execution_obligation']

@@ -188,7 +188,10 @@ class HostExecutor:
         preflight=getattr(a.port,'_preflight_control',None)
         if callable(preflight) and not preflight('savepoint'):
             return self._error('execution_obligation','Original native savepoint capacity unavailable')
-        key = 'truss_' + uuid4().hex
+        reserve_name=getattr(a.port,'_reserve_savepoint_name',None)
+        try:key=reserve_name(self) if callable(reserve_name) else None
+        except Exception:return self._error('execution_obligation','Original savepoint namespace unavailable')
+        if key is None:key='truss_' + uuid4().hex
         handle = SavepointHandle(self._issuer, key)
         candidate = dict(self._savepoints)
         candidate[key] = (handle, transaction, self._ordinal)

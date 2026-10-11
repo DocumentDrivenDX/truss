@@ -59,9 +59,14 @@ class _Creation:
     phase: str = 'creating'
     exposed: bool = False
     constructor_completed: bool = False
+    host_close_started: bool = False
+    host_close_running: bool = False
 
     def close_owned(self, *, recovery=False):
         if self.exposed:raise StartupRefusal('Factory no longer owns connection lifetime')
+        return self._close_resources(recovery=recovery)
+
+    def _close_resources(self, *, recovery=False):
         if self.close_attempted and not recovery:return
         if self.cleanup_attempts>=4:raise StartupRefusal("Original cleanup attempt allowance exhausted")
         self.cleanup_attempts+=1

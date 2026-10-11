@@ -99,7 +99,7 @@ class NativeHostSession:
             if self._closed: return self._error('transaction_unusable')
             if len(self._calls)>=self._limit: return self._error('execution_obligation')
             with self.executor._lifecycle_lock:
-                if self.executor._closed and kind not in ('begin','commit','rollback'):
+                if self.executor._closed and kind not in ('begin','commit','rollback','host_savepoint','host_rollback_to','host_release'):
                     return self._error('invalid_transaction')
             record=_Call(kind,token=object(),control_type=_CONTROL_RESULT_TYPE,deadline=deadline)
             record.failures={code:self._error(code) for code in ('transaction_unusable','execution_obligation','commit_unknown')}
@@ -269,6 +269,37 @@ class NativeHostSession:
             if self.tracker._state.generation is None: return self._error('invalid_transaction')
             return self.executor.adopt_transaction(self.tracker.port(token),isolation=isolation,access_mode=access_mode,cancellation=cancellation)
         return self._invoke('adopt',adopt)
+
+    def _host_savepoint_call(self,kind,value):
+        def admitted():
+            with self._boundary._lock:
+                state=self.tracker._state
+                if kind=='savepoint':
+                    return state.status==b'T' and len(state.savepoints)<self.tracker._limit
+                return (self.tracker._live(value) and
+                        (kind=='rollback_to' or state.status==b'T'))
+        if not admitted():return self._error('invalid_transaction')
+        def invoke(token,record):
+            # Recheck after serialized scope acquisition, before any native send.
+            if not admitted():return self._error('invalid_transaction')
+            method={'savepoint':self.tracker.savepoint,
+                    'rollback_to':self.tracker.rollback_to,
+                    'release':self.tracker.release}[kind]
+            return Ok(method(value,token=token))
+        return self._invoke('host_'+kind,invoke)
+
+    def host_savepoint(self,name):
+        try:
+            self.tracker._name(name)
+            if name.startswith('truss_sp_'):return self._error('invalid_transaction')
+        except Exception:return self._error('invalid_transaction')
+        return self._host_savepoint_call('savepoint',name)
+
+    def host_rollback_to_savepoint(self,savepoint):
+        return self._host_savepoint_call('rollback_to',savepoint)
+
+    def host_release_savepoint(self,savepoint):
+        return self._host_savepoint_call('release',savepoint)
 
     def _transaction_call(self,kind,transaction,savepoint=None):
         custody=self.executor._original_custody(transaction)

@@ -1367,3 +1367,154 @@ Astra Ultra approved final source, plan and artifacts and independently passed
 the two final regressions in4.096s. This iteration publishes no accepted report/head or ordinary-role grant;
 protected finalization and public registration remain next deliverables toward
 install → register → apply → read, followed by the rest of the full interface.
+
+
+### Iteration29 proposal: public assembly and host transaction entry point
+
+Deliver public Python construction and host adoption using existing components,
+then attach protected catalog acceptance to this same assembly. Match the existing
+ReferenceAssembly and Executor contracts rather than introducing a second engine.
+Construction is inert: validate immutable configuration/profile selections before
+I/O; host transaction adoption is an explicit operation returning the existing
+Outcome and opaque TransactionHandle. Construction does not install the catalog
+or grant graph authority. Capability selection and observed readiness remain
+separate from per-operation admission.
+
+The native route must compose the existing HostExecutor, NativeTransactions,
+NativeArbitration, NativeHostSession and original host-control producer under one
+lifetime. Keep BEGIN/COMMIT/ROLLBACK on the host session, not on adopted transaction
+handles. Disposal closes admission and preserves the host's settlement route;
+uncertain native work must retain recovery references. Existing fresh connection
+qualification is limited to the pinned pg8000 Unix-socket profile. Arbitrary live
+connection adoption remains a required consumer integration gap until the original
+connection/lifetime producer can qualify it; do not present the fresh-only factory
+as fulfilling that requirement.
+
+Expose exact public Python contract carriers and assembly/executor entry points
+with explicit unavailable results for operations whose selected implementation or
+installed gates are absent. Do not create a façade that silently calls private
+administrative catalog helpers. Installation/status must distinguish a running
+local server, namespace installation and individual capability readiness. Actual
+installation must preserve explicit administrative transaction ownership and
+original-attempt recovery under the bootstrap contract.
+
+Astra Ultra plan review is pending. Required evidence includes inert invalid
+construction, real host adoption and preserved host work, mismatched/stale/foreign
+handles, host rollback/commit, disposed admission with continued host settlement,
+known versus unknown completion, and capability-specific unsupported selection.
+Accepted registration, apply/read, idempotent recovery, imports, visibility/feed
+and ordinary-role acknowledgement remain on the same full delivery path.
+
+
+Iteration29 source inspection distinguishes two existing adoption routes:
+`HostExecutor.adopt_transaction` accepts an explicitly trusted `HostTransactionPort`
+whose host-owned observation/control implementation supplies transaction identity,
+and separately dispatches exact `NativeTransactionPort` instances through original
+native custody. Public portable adoption may expose the trusted-host contract
+without claiming that arbitrary connection objects were independently qualified
+by Truss. Such a handle confers no graph authority. The public connection adapter
+must make its supported route explicit and preserve the same host transaction.
+
+`NativeHostSession.dispose` currently only closes executor admission. It does not
+produce ReferenceAssembly's `ownedResourcesReleased` or quarantined recovery list.
+The assembly must therefore implement its disposal/recovery result using actual
+resource state; it cannot infer safe release from this existing method's return.
+These findings constrain the pending plan review before source implementation.
+
+
+Iteration29 host composition draft has real PostgreSQL evidence for baseline,
+begin/adopt/savepoint/rollback/release/commit preserving host work, disposed
+admission preserving host rollback, failed construction closing its fresh owned
+connection, and failed cleanup retaining the original connection and both errors.
+All4 tests passed in3.346s. The draft is not a completed public assembly delivery.
+
+CONTRACT-007's selected savepoint namespace requires an original host-issued
+transaction-local32-hex namespace and monotone uint64 counter. The current native
+boundary host SQL entry does not classify lifecycle controls. Returning that
+boundary without mediated namespace/control custody cannot satisfy the selected
+contract. Implement the shared host participant/epoch registry and explicit
+lifecycle/savepoint route before package-root export; do not substitute random
+name probability or a partial SQL semicolon parser for this required custody.
+
+
+The initial driver-field cleanup test did not establish resource release. Astra
+reproduced the retained BufferedRWPair/socket leak. The corrected cleanup path
+shares the original shutdown-before-buffer/socket-close routine and retains the
+exposed owner record without reversing its ownership flag. Explicit host close
+reserves admission closure under the original boundary lock, serializes cleanup
+attempts, and performs resource I/O outside that lock. It does not claim server
+termination or transaction rollback. Tests inspect original stream.closed and
+socket.fileno()==-1, reject retained native operation tokens, and prove concurrent
+host calls/retries cannot enter after close reservation.25 affected host/bootstrap
+tests pass in6.262s; Python boundaries pass301 imports. Public namespace/assembly
+and recovery composition remain in progress, and no package-root export is made.
+
+
+Iteration29 selected fresh factory now reserves savepoint namespaces in the
+original NativeTransactions generation under the boundary lock. Native adoption
+owner correspondence is required; namespace uniqueness and exact32-hex shape are
+checked, and positive uint64 counters are consumed before possible native control.
+Release/rollback cannot rewind them. Fixed executor control recognition validates
+the consumed namespace/counter; typed host savepoint creation rejects its reserved
+prefix. Legacy private adapter paths are not promoted to this selected profile.
+The outer factory also handles a lost reply after inner bootstrap exposure,
+closing only the still-unreturned original host resource without changing exposure.
+33 affected host/native-transaction/executor tests passed in7.103s, including
+counter exhaustion and original stream/descriptor closure after lost publication.
+Public mediated connection, shared assemblies and original recovery observation
+remain to implement before the planned public export; source review is pending.
+
+
+The mediated host draft exposes explicitly trusted non-lifecycle statements and
+fixed typed host savepoint controls sharing the original ordered native stack.
+Host ancestor rollback invalidates descendant Truss handles. Original recovery
+observations use retained facts without new native SQL. Savepoint creation now
+has a one-use issuance record consumed before possible native submission; a
+released or failed name cannot be submitted again. Fatal lost bootstrap replies
+preserve original exception identity and close still-unreturned resources.
+85 affected host/transaction-control tests pass in12.261s. Source review is pending;
+public assembly configuration/diagnostic profile, local disposal and installation
+status remain required parts of iteration29 rather than completed capabilities.
+
+
+For inert assembly construction, reuse the original Truss inert assembly profile
+and preserve exact configured capability selection metadata without inferring
+native availability. The Python construction diagnostic proposal defines a
+separate release-owned error/path grammar and fixed shape/count/text limits.
+Rejected configuration cannot supply its diagnostic pin or diagnostic text.
+Typed immutable Python input carriers are copied into an assembly-owned snapshot;
+host services remain original executable references, not recursively frozen data.
+Disposal of this inert assembly closes only its own admission and releases its
+own empty native resource set. It must not dispose the shared host executor or
+session. Two assemblies over one host must remain independently disposable.
+Full configuration heap/resource qualification remains explicit rather than
+inferred from count bounds. Concrete metadata/service protocol review is pending.
+
+
+Iteration29 correction evidence: deterministic host savepoint refusals (idle,
+capacity, absent handle and failed-state RELEASE) now refuse before native send
+and are rechecked after original scope acquisition. Separate host control kinds
+preserve caller-owned rollback-to/release after executor disposal. Actually
+submitted native control errors still conservatively retain unresolved custody;
+this change does not classify arbitrary publication failures as no-send or
+qualify active-query cancellation. The affected native regression passes131
+tests in20.103s. Inert assembly inputs use ABSENT for omitted contract fields,
+exact-string admission precedes caller equality, readiness is fixed unverified,
+and direct construction cannot bypass factory capture. A real native sibling
+assembly test proves local disposal preserves shared host adoption, rollback and
+commit. Public host Protocol signatures describe only selected lifecycle controls;
+opaque savepoint/baseline payloads and trusted raw SQL remain explicitly outside
+the complete Executor/query surface. The optional native dependency pins
+pg8000 1.31.5. Installation, accepted catalog and graph operations remain open.
+
+
+Final iteration29 artifact evidence is recorded in
+`evidence/python-contracts-iteration29-artifact.json`:83 original package files
+match source, wheel and installed copies; installed host/assembly23 tests pass
+in9.623s; strict installed consumer and three source interface modules pass.
+Base installed import succeeds with pg8000 blocked. Root exports describe
+selected lifecycle/adoption and inert assembly only. Full install/register/apply/read
+and complete Executor remain unfinished. Astra Ultra approved the scoped final source/export/artifact, independently
+verifying all83 package files, retained log/consumer hashes, diagnostic artifact,
+strict checks and native-free import. Its independent22-test run predates the
+added packaged diagnostic test; final installed23-test evidence remains separate.
