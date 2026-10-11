@@ -1,4 +1,4 @@
-"""Compile original release definitions on an independent disposable PG16.15.
+"""Compile original release definitions on an independent disposable PG17.11.
 
 No installation constructor, target observation or target snapshot is consumed.
 The same registered projection selects compared fields, not whole catalog closure.
@@ -35,7 +35,7 @@ with tempfile.TemporaryDirectory(prefix='truss-independent-release-') as directo
             backend_sha256=sha256(runtime.psql_path.with_name('postgres').read_bytes()).hexdigest()
             backend_description=connection.run('SELECT pg_catalog.version()')[0][0]
             version=connection.run("SELECT pg_catalog.current_setting('server_version_num')")[0][0]
-            if version!='160015':raise ValueError('Independent compiler profile requires PostgreSQL16.15')
+            if version!='170011':raise ValueError('Independent compiler profile requires PostgreSQL17.11')
             if connection.run("SELECT pg_catalog.to_regnamespace('truss')::pg_catalog.text")!=[[None]]:raise ValueError('Independent fresh namespace required')
             connection.run('BEGIN');connection.run('SET LOCAL search_path = pg_catalog, pg_temp')
             try:

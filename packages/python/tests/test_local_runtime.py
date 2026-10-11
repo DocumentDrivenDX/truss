@@ -24,7 +24,7 @@ class LocalRuntimeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'caller failure'):
                 with runtime:
                     package_version = importlib.metadata.version('pgserver')
-                    expected = {'0.1.4': '16.2', '0.1.4+truss.pg16.15': '16.15'}[package_version]
+                    expected = {'0.1.4': '16.2', '0.1.4+truss.pg16.15': '16.15', '0.1.4+truss.pg17.11': '17.11'}[package_version]
                     self.assertEqual(runtime.info.server_version, expected)
                     self.assertEqual(runtime.info.runtime_version, package_version)
                     self.assertEqual(runtime.info.truss_installation, 'not_checked')
@@ -96,7 +96,7 @@ class LocalRuntimeTests(unittest.TestCase):
             runtime = LocalPostgres(directory)
             def fail_startup(*args, **kwargs):
                 directory.mkdir()
-                (directory / 'PG_VERSION').write_text('16\n')
+                (directory / 'PG_VERSION').write_text('17\n' if importlib.metadata.version('pgserver') == '0.1.4+truss.pg17.11' else '16\n')
                 (directory / 'postmaster.pid').write_text('synthetic unresolved marker\n')
                 raise OSError('injected constructor failure')
             try:
@@ -132,11 +132,12 @@ class LocalRuntimeTests(unittest.TestCase):
                 with LocalPostgres(directory):
                     self.fail('foreign directory admitted')
             self.assertEqual(marker.read_text(), 'retain me')
-            (directory / 'PG_VERSION').write_text('17\n')
+            wrong_major = '16\n' if importlib.metadata.version('pgserver') == '0.1.4+truss.pg17.11' else '17\n'
+            (directory / 'PG_VERSION').write_text(wrong_major)
             with self.assertRaisesRegex(LocalRuntimeError, 'no automatic upgrade'):
                 with LocalPostgres(directory):
                     self.fail('incompatible version admitted')
-            self.assertEqual((directory / 'PG_VERSION').read_text(), '17\n')
+            self.assertEqual((directory / 'PG_VERSION').read_text(), wrong_major)
 
 
 if __name__ == '__main__':

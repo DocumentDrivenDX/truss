@@ -1,0 +1,10 @@
+{
+  "scope": "Exact corrected native recipe materialization from original pinned git blob; no native rebuild, packaging, installation or publication",
+  "sourceRevision": "3b227607a6c94590ba7c16ae827cef9fb7e3920b",
+  "upstreamMakefileSha256": "1211dc6ce27a3e9e8a532bdb9d1f0c8f8cbfa569bbacbab4e88e347e55500c45",
+  "candidateMakefileSha256": "0220465b4420e6e8efb06fe767615e3d9a20f2c38311983cfcd29fc03f099f87",
+  "inputManifestSha256": "77a858e5c7804faa25f2c6be6a9ccad131724f3682642e944e7a28492ff991d7",
+  "producerSha256": "2ff14d6e92d454fa5f0e5f42003d23d5f42eedd42cf3d0103ae80fd06ffb0ef8",
+  "nativeBuildPerformed": false,
+  "defaultRuntimePublished": false
+}

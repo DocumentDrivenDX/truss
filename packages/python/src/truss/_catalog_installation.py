@@ -80,7 +80,7 @@ def _definition_baseline(original_statements):
         raise ValueError('Independent original definition baseline required')
     profile=json.loads(original);statements=json.loads(original_statements)
     if (profile['interface']!='truss-selected-native-definition-baseline/0.1.0' or profile['installationReady'] is not False
-        or profile['independentRollbackConfirmed'] is not True or profile['nativeVersion']!='160015'
+        or profile['independentRollbackConfirmed'] is not True or profile['nativeVersion']!='170011'
         or profile['statementReleaseSha256']!=sha256(original_statements).hexdigest()
         or profile['modelSha256']!=statements['modelSha256'] or profile['ownerExportSha256']!=statements['ownerExportSha256']
         or profile['querySha256']!=sha256(query).hexdigest()):
@@ -131,7 +131,7 @@ def prepare_provisional_catalog_construction(connection,recovery,*,metadata=Fals
         raise ValueError('Original idle installer-owned administrative connection required')
     target=_native_text(connection,_TARGET)
     if json.loads(target)['version']!=profile['nativeVersion']:
-        raise ValueError('Selected PostgreSQL16.15 source compilation profile required')
+        raise ValueError('Selected PostgreSQL17.11 source compilation profile required')
     recipe,input_bytes=prepare_metadata(target) if metadata else (b'',b'')
     return recovery.reserve(ConstructionOriginal(connection,original,target,definitions,
         recipe,input_bytes,160 if metadata else 128))
@@ -175,7 +175,7 @@ def execute_provisional_catalog_construction(recovery,reference):
         target=retained.target
         version=json.loads(target)['version']
         if type(version) is not str or not version.isascii() or not version.isdigit() or version!=definition_profile['nativeVersion']:
-            raise ValueError('Selected PostgreSQL16.15 source compilation profile required')
+            raise ValueError('Selected PostgreSQL17.11 source compilation profile required')
         begun=False;primary=None;cleanup=None;observed=b'';restored=False;prior_namespace=None
         definition_observed=b'';metadata_observed=b''
         attempt=_construction_attempt(definitions)

@@ -10,6 +10,11 @@ from truss.execution import Ok, Error, TransactionHandle
 from truss.psycopg_host import adopt_psycopg_host, PsycopgProfile
 
 
+def postgres_bin_for_profile(profile):
+    variable = 'TRUSS_PSYCOPG_PG17_POSTGRES_BIN' if profile.server == 170011 else 'TRUSS_CENSUS_POSTGRES_BIN'
+    return Path(os.environ[variable])
+
+
 class PsycopgHostNativeTests(unittest.TestCase):
     selected_profile = PsycopgProfile()
     @classmethod
@@ -18,7 +23,7 @@ class PsycopgHostNativeTests(unittest.TestCase):
         cls.root = Path(cls.directory.name)
         cls.data = cls.root/'data'
         cls.socket = cls.root/'socket'; cls.socket.mkdir()
-        cls.pgbin = Path(os.environ['TRUSS_CENSUS_POSTGRES_BIN'])
+        cls.pgbin = postgres_bin_for_profile(cls.selected_profile)
         cls.run_pg('initdb', '-D', str(cls.data), '-U', 'postgres', '--auth=trust', '--encoding=UTF8')
         cls.run_pg('pg_ctl', '-D', str(cls.data), '-l', str(cls.root/'server.log'), '-w',
                    '-o', f"-h '' -k {cls.socket}", 'start')

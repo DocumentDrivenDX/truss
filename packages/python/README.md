@@ -79,77 +79,51 @@ does not prove an installed runtime, layout version or accepted catalog. It does
 not read Truss table/view bodies, begin or settle a transaction, or retry. Native
 failures propagate without a new recovery reference; a failed query may abort the caller's transaction, whose rollback remains the host's responsibility.
 
-For local PostgreSQL:
+For local PostgreSQL, use the verified private PostgreSQL17.11 wheel. This
+checkout has a verified local wheelhouse at `.cache/pgserver/pg17.11/wheels`;
+copy it or rebuild once if that ignored cache is absent. Other toolkit/build
+dependencies may be resolved from the package index:
 
 ```sh
 python3.11 -m venv .venv
-.venv/bin/pip install './packages/python[local]'
-.venv/bin/truss-local-postgres --data-dir .local/truss-postgres
+.venv/bin/pip install --find-links .cache/pgserver/pg17.11/wheels './packages/python[local]'
+.venv/bin/truss-local-postgres --data-dir .local/truss-postgres-17 --probe
 ```
 
-The installation command uses the repository root; the installed `truss-local-postgres`
-command runs without the checkout. Stop with Ctrl-C; data survives. `--probe` starts,
-checks readiness and stops. This component uses pgserver0.1.4 with its actual
-bundled PostgreSQL16.2 on the qualified macOS arm64 tuple. It performs no Truss
-installation or migration. Use a host-supplied connection for external PostgreSQL;
-pool configuration/operation belongs to the host.
+The wheelhouse must contain `pgserver0.1.4+truss.pg17.11`, fasteners0.20,
+platformdirs4.12.4 and psutil7.2.2. The local extra, runtime requirements and
+`constraints/local-corrected.txt` select the exact private distribution; the
+public pgserver0.1.4 package cannot satisfy it. The wheel remains unpublished.
+Build it once when PostgreSQL or its recipe changes, then reuse it for normal
+tests. The [runtime checkpoint](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#postgresql-1711-embedded-runtime--owner-direction-2026-10-11)
+records the pinned source/build procedure, wheel hash, installed payload verification
+and all15 passing component qualification groups on macOS27 arm64/Python3.11.
 
-The explicit corrected candidate `pgserver==0.1.4+truss.pg16.15` is now accepted
-by LocalPostgres only when the native server reports16.15. RuntimeInfo and CLI
-output retain that actual package version. The paired published0.1.4/16.2 check
-remains separate; arbitrary package/server versions refuse. The corrected wheel
-is a private macOS27 arm64/Python3.11 build, not a published dependency. For that
-candidate, select the independently verified corrected wheel explicitly with the
-base Truss package and lifecycle dependencies. The `[local]` requirement
-`pgserver==0.1.4` also accepts `0.1.4+truss.pg16.15`; it does not select or exclude
-the private candidate. Use an explicit artifact path and verify the installed
-package and actual server versions:
+The [installed suite](../../docs/helix/04-build/evidence/design-audit/python-pg17.11-installed-suite.json)
+passes132 tests; the [native timeout probe](../../docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-transaction-timeout.json)
+observes actual transaction_timeout connection termination. These component checks
+retain the existing complete-engine, protected-installation and managed-service gates.
+Earlier16.2/16.15 evidence below remains historical.
+
+To reproduce the selected embedded qualification lane with an installed Truss wheel:
 
 ```sh
-.venv/bin/pip install ./packages/python fasteners==0.20 platformdirs==4.12.4 psutil==7.2.2 /path/to/admitted/pgserver-0.1.4+truss.pg16.15-cp311-cp311-macosx_27_0_arm64.whl
-.venv/bin/python -c 'from importlib.metadata import version; assert version("pgserver") == "0.1.4+truss.pg16.15"'
-.venv/bin/truss-local-postgres --data-dir .local/truss-postgres-corrected --probe
+.venv/bin/python scripts/qualify-pgserver-pg17.py /path/to/truss_toolkit-0.0.1.dev0-py3-none-any.whl --run-id pg17-my-run --workers 2
 ```
 
-The wheel path is a placeholder for the separately admitted private artifact,
-not a published download or a clean-install qualification claim. Verify its
-original hash/platform before installation; the retained wheel receipt is linked
-from the runtime plan. Check the actual CLI serverVersion16.15 as well as package
-metadata. A fresh `[local]` installation with only the public index available
-uses published0.1.4/16.2; an already installed matching local build also satisfies
-that requirement. Do not infer replacement or candidate selection from the
-public equality pin. The [installed matcher evidence](../../docs/helix/04-build/evidence/design-audit/python-local-runtime-dependency-selection.json)
-checks these version matches only, not index resolution or installation.
-Neither tuple installs Truss or qualifies complete R4/R5 enforcement.
+This command requires the pinned pg8000/Weft test dependencies and a fresh run id.
+It reuses installed binaries and performs no source build. Twelve native groups
+share one cluster per worker with fresh databases and roles; default `--workers 1`
+uses one suite cluster. The installed lifecycle suite, CLI signal/restart and
+transaction-timeout observations use separate owned clusters.
 
-For corrected-candidate development, use the explicit repository constraint:
-
-```sh
-.venv/bin/pip install --no-index --find-links /path/to/verified/wheels --constraint packages/python/constraints/local-corrected.txt './packages/python[local]'
-```
-
-The wheelhouse must contain the separately verified corrected pgserver and the
-three pinned lifecycle dependency wheels. The exact local-version constraint
-excludes public pgserver0.1.4; package version still does not prove original native
-payload correspondence. The current rebuilt candidate has clean offline resolver,
-payload and132-test evidence in the runtime plan. This optional development
-constraint does not publish the private wheel or change the default public extra.
-
-
-See the [installation and migration execution plan](../../docs/helix/04-build/local-runtime-installation-migration-plan.md)
-for the complete delivery scope and independent acceptance scenarios.
-
-Rollback-only native profile checks (same environment):
-
-```sh
-.venv/bin/python scripts/check-pgserver-layout.py
-.venv/bin/python scripts/check-pgserver-adjuncts.py
-.venv/bin/python scripts/check-pgserver-umf-structure.py
-```
-
-Each creates its own disposable server and rolls back all review DDL. The last
-compares the UMF schema-browser model with actual columns and FK mappings; it
-is not a complete installer or migration verifier.
+Workers use unique short Unix socket directories and disable TCP listening.
+The socket's port suffix is local to its directory; workers do not contend for a
+TCP5432 listener. Fixtures refuse overlap, terminate leaked sessions only in their
+owned database, remove fixture roles and compare original native inventory.
+Failed setup/cleanup or leaked state invalidates the worker; confirmed shutdown
+precedes directory removal. The [shared-worker checkpoint](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#shared-native-test-workers--owner-direction-2026-10-11)
+records all15 passing groups and21 native cleanup/collision controls.
 
 Embed the local runtime in Python3.11:
 
@@ -167,7 +141,8 @@ caller exception. Use a new context to restart. Same-directory contexts refuse
 immediately through process-local and interprocess leases. Existing postmaster
 custody, nonempty non-PostgreSQL directories and incompatible major versions
 refuse without automatic retry, takeover or migration. The local candidate admits
-bundled16.2 or the explicit corrected16.15 candidate; other platform/version
+bundled17.11 with its exact private package identity; historical16.x pairs remain
+recognized explicitly for historical checks. Other platform/version
 tuples still require qualification.
 
 The experimental truss-toolkit0.0.1.dev0 wheel exposes this lifecycle component;

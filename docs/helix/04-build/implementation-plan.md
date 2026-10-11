@@ -113,6 +113,28 @@ late generation changes, operation rollback preserving earlier host work and los
 commit acknowledgement without an automatic retry. Astra Ultra reviewed this
 delivery order; completed implementation still requires its own review.
 
+## Shared pgserver test workers — 2026-10-11
+
+Owner direction adopts one owned PostgreSQL17.11 Unix-socket cluster per suite or
+worker, with fresh databases/roles and isolated lifecycle tests. The
+[runtime checkpoint](local-runtime-installation-migration-plan.md#shared-native-test-workers--owner-direction-2026-10-11)
+records all15 passing qualification groups on two workers,132 installed Python
+tests and21 cleanup/collision/failure observations. Native inventory restoration
+and confirmed shutdown are required; failed cleanup invalidates a worker.
+Cached binaries are reused without rebuilding PostgreSQL.
+
+
+## PostgreSQL 17.11 runtime checkpoint — 2026-10-11
+
+Owner direction selects17.11 for the private pgserver build and exact local
+package/development pins. The [runtime checkpoint](local-runtime-installation-migration-plan.md#postgresql-1711-embedded-runtime--owner-direction-2026-10-11)
+retains source/wheel/installed payload verification and all15 passing native/component
+qualification groups, including132 installed Python tests. Older16.15 receipts
+remain historical. Complete protected runtime and managed-service qualification
+retain their existing gates. Routine tests reuse the built wheel; the measured
+lifecycle costs and static-server comparison are recorded in the checkpoint.
+
+
 ## Selected decision handoff — 2026-10-07
 
 Apply the accepted owner decisions in the PRD and ADR-005/006/007. Remove universal native resource-account and independent precommit allocator assumptions from the required reference-host composition. Retain finite bounds for controlled work, database graph integrity, pooling, current authority and original cleanup/recovery obligations. Keep optional stronger profiles explicitly separate.

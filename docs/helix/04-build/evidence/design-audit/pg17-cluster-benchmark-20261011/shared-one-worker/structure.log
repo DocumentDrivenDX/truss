@@ -1,0 +1,1 @@
+{"serverVersion": "17.11", "tables": 50, "columns": 481, "foreignKeys": 67, "sequences": 12, "explicitIndexes": 25, "keyConstraints": 64, "rollbackRemovedNamespace": true, "truncateRefusals": 4, "truncateModes": ["origin", "replica"], "transactionTimeout": "0"}

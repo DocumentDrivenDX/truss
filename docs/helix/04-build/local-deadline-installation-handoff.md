@@ -6,21 +6,17 @@ execution ordering, not a qualified cancellation producer or native time bound.
 
 ## Version frontier
 
-The original published pgserver0.1.4 receipts independently observe PostgreSQL
-16.2. That tuple is historical component evidence and cannot qualify the selected
-R4/R5 profile because of its observed role/reset defect. The next integration
-uses the private corrected pgserver0.1.4+truss.pg16.15 candidate; its
-[installed-wheel receipt](evidence/design-audit/pgserver-corrected-installed-wheel.json)
-and [caller-reset receipt](evidence/design-audit/pgserver-corrected-caller-reset.json)
-retain the exact build and actual native observations. This is not adoption of a
-published default or complete installation/security qualification.
+The current owner-selected local tuple is private pgserver0.1.4+truss.pg17.11 /
+PostgreSQL17.11. The [runtime checkpoint](local-runtime-installation-migration-plan.md#postgresql-1711-embedded-runtime--owner-direction-2026-10-11)
+links fresh native qualification; earlier16.2/16.15 observations remain historical.
+Published0.1.4/16.2 retains its observed role/reset defect and cannot qualify R4/R5.
 
-The corrected patch does not introduce transaction_timeout. Carry forward these
-execution responsibilities, but qualify their original native producers on the
-corrected tuple rather than transferring the 16.2 timeout receipt. A profile that
-requires transaction_timeout must refuse; any bounded alternative requires its
-own complete admission and evidence. Do not assume a 17.x binary, change a data
-directory's major version during startup or silently replace the selected runtime.
+The [17.11 timeout probe](evidence/design-audit/pgserver-pg17.11-transaction-timeout.json)
+observes native transaction_timeout availability and actual connection termination.
+The setting's existence does not supply original deadline/account/containment
+composition. Profiles requiring it now have local capability evidence; qualify
+the complete installed producers and behavior before admission. Startup refuses
+existing16.x directories without modifying them or migrating their contents.
 
 Native statement_timeout and lock_timeout constrain different scopes. Neither
 provides an unavoidable deadline for the complete transaction, and an idle or

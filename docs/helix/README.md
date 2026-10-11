@@ -4,6 +4,21 @@
 
 [ADR-003](02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md#accepted-owner-amendment--python-driver-baseline-2026-10-11) selects maintained stock psycopg 3 through supported APIs as the Python baseline. [The PRD](01-frame/prd.md#owner-decision--proportional-resource-controls-2026-10-11) requires practical workload limits and transaction safety; strict transport allocation accounting is optional and cannot block baseline release. Custom PostgreSQL wire/private-hook/fork/replacement work requires hard documented proof of a necessary deficiency and an owner-approved ADR. Historical pg8000/strict-parser receipts remain scoped experiments. Driver/package/Lakebase qualification remains pending.
 
+Native test execution now shares one owned pgserver17.11 Unix-socket cluster per
+suite/worker with fresh databases and roles, while lifecycle tests remain isolated.
+The [shared-worker checkpoint](04-build/local-runtime-installation-migration-plan.md#shared-native-test-workers--owner-direction-2026-10-11)
+records all15 passing groups on two workers and21 cleanup/collision controls.
+
+
+Current local runtime (owner direction2026-10-11): **PostgreSQL17.11**, packaged as
+private `pgserver0.1.4+truss.pg17.11`. Exact build/dependency pins and all15 selected
+qualification groups pass, including132 installed Python tests and verified native
+transaction timeout. See the [runtime checkpoint](04-build/local-runtime-installation-migration-plan.md#postgresql-1711-embedded-runtime--owner-direction-2026-10-11)
+for fresh evidence and the measured development-cycle tradeoffs. Earlier16.15
+receipts below remain historical; complete protected runtime and managed-service
+qualification remain unfinished.
+
+
 Current schema-browser projection: [core 0.8](02-design/models/truss-layout-core-structural-0.8.proposal.umf.json) includes the unchanged native 0.16 baseline plus uncomposed configuration, migration, capacity-reservation and commit-cache adjuncts: 51 Records, 491 Fields and 61 associations. The 60 prior physical FK associations are unchanged; the memo singleton PK/FK and four Fields come from UMF's original PostgreSQL declaration inventory. Native xid8 equality, SQL NULL and coupled CHECK meanings remain qualified separately. Chromium verifies 542 displayed definitions, all memo Fields, the singleton FK, exact core/cache downloads and 390px mobile layout against current UMF browser322b193. [Source correspondence](04-build/evidence/design-audit/capacity-cache-core-source.json) restores the original core0.7 exactly after removing the cache adjunct. All five native models are available separately. Protected producers, complete resource/security installation and native engine qualification remain unfinished.
 
 Historical storage source handoff: [CONTRACT-012](02-design/contracts/CONTRACT-012-weft-storage-handoff.md) supplies the reconciled 0.12 reference-history review, its [column inventory](02-design/contracts/weft-review-columns-v0.12.proposal.md) and separate [0.12 source packet](04-build/evidence/weft-source-binding012/README.md). It retains 46 tables and 442 columns from the separately pinned 0.11 foundation; explicit journal allocator settings and the review marker change. Native installation, replay qualification and Weft mapping adoption are unfinished.

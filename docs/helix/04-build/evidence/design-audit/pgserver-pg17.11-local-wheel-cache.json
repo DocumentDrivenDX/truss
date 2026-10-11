@@ -1,0 +1,26 @@
+{
+  "scope": "Local ignored wheel cache for PostgreSQL17.11 development; no publication",
+  "wheels": [
+    {
+      "path": "/Users/erik/Projects/truss/.cache/pgserver/pg17.11/wheels/pgserver-0.1.4+truss.pg17.11-cp311-cp311-macosx_27_0_arm64.whl",
+      "sha256": "36b4240bedc03a082d349c6cf586800df2df89dce530252fb51227b93e978920"
+    },
+    {
+      "path": "/Users/erik/Projects/truss/.cache/pgserver/pg17.11/wheels/psutil-7.2.2-cp36-abi3-macosx_11_0_arm64.whl",
+      "sha256": "1a7b04c10f32cc88ab39cbf606e117fd74721c831c98a27dc04578deb0c16979"
+    },
+    {
+      "path": "/Users/erik/Projects/truss/.cache/pgserver/pg17.11/wheels/platformdirs-4.12.4-py3-none-any.whl",
+      "sha256": "78bfb9db2a8471ed7eebe3c3c932da413911042994e699b384fbb4493fa872d7"
+    },
+    {
+      "path": "/Users/erik/Projects/truss/.cache/pgserver/pg17.11/wheels/fasteners-0.20-py3-none-any.whl",
+      "sha256": "9422c40d1e350e4259f509fb2e608d6bc43c0136f79a00db1b49046029d0b3b7"
+    },
+    {
+      "path": "/Users/erik/Projects/truss/.cache/pgserver/pg17.11/wheels/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+      "sha256": "2b6676952dd6ef19d6b26e75ea0a046c3706afa1d2e526ecf136c94021924fc9"
+    }
+  ],
+  "qualification": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-qualification.json"
+}

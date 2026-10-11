@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Owned installed CLI signal checks; preserve data on uncertain cleanup."""
+from native_fixture import evidence_directory
 import hashlib
 import importlib.metadata
 import json
@@ -15,8 +16,8 @@ root = Path(__file__).resolve().parents[1]
 if sys.argv[1:] not in ([], ['--corrected-pgserver']):
  raise SystemExit('usage: check-python-installed-cli-signals.py [--corrected-pgserver]')
 corrected = bool(sys.argv[1:])
-expected_package = '0.1.4+truss.pg16.15' if corrected else '0.1.4'
-expected_server = '16.15' if corrected else '16.2'
+expected_package = '0.1.4+truss.pg17.11' if corrected else '0.1.4'
+expected_server = '17.11' if corrected else '16.2'
 if importlib.metadata.version('pgserver') != expected_package:
  raise RuntimeError('Selected original runtime package mismatch')
 loaded = Path(truss.cli.__file__).resolve()
@@ -42,20 +43,20 @@ for signum in [signal.SIGTERM,signal.SIGINT]:
   process.send_signal(signum)
   stdout,stderr = process.communicate(timeout=60)
   if process.returncode != 0 or stdout or stderr: raise RuntimeError('Signal shutdown failed: '+stderr)
-  if (directory/'postmaster.pid').exists() or (directory/'PG_VERSION').read_text().strip() != '16':
+  if (directory/'postmaster.pid').exists() or (directory/'PG_VERSION').read_text().strip() != expected_server.split('.')[0]:
    raise RuntimeError('Owned shutdown/retained data mismatch')
   runs.append({'signal':signal.Signals(signum).name,'cliPid':process.pid,'runtime':observed,'exitCode':process.returncode,'postmasterMarkerAbsent':True,'dataRetained':True})
  except BaseException:
   # This is only our recorded child command; never terminate other processes.
   if process.poll() is None: process.terminate()
   raise
-receipt = {'scope':'Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on '+('macOS27 arm64 PostgreSQL16.15' if corrected else 'macOS arm64 PostgreSQL16.2')+'; no crash/installer qualification',
+receipt = {'scope':'Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on '+('macOS27 arm64 PostgreSQL17.11' if corrected else 'macOS arm64 PostgreSQL16.2')+'; no crash/installer qualification',
  'correctedPgserverCandidate':corrected,
  'loadedCli':str(loaded),'cliSha256':hashlib.sha256(loaded.read_bytes()).hexdigest(),
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'runs':runs,
  'originalCustody':'Signals sent only to the subprocess PIDs started by this probe',
  'completeEngineQualified':False,'processCrashQualified':False}
-filename = 'python-corrected-runtime-cli-signals.json' if corrected else 'python-installed-cli-signals.json'
-(root/'docs/helix/04-build/evidence/design-audit'/filename).write_text(json.dumps(receipt,indent=2)+'\n')
+filename = 'python-pg17.11-runtime-cli-signals.json' if corrected else 'python-installed-cli-signals.json'
+(evidence_directory()/filename).write_text(json.dumps(receipt,indent=2)+'\n')
 shutil.rmtree(parent)
 print(json.dumps({'signals':[r['signal'] for r in runs],'completeEngineQualified':False}))

@@ -1,0 +1,37 @@
+{
+  "scope": "Pinned PostgreSQL17.11 source build and private wheel packaging on macOS arm64 Python3.11",
+  "buildExitCode": 0,
+  "packageExitCode": 0,
+  "serverVersionOutput": "postgres (PostgreSQL) 17.11",
+  "buildCommand": [
+    "make",
+    "-C",
+    "pgbuild",
+    "postgres"
+  ],
+  "sourceCheckout": "/private/tmp/truss-pgserver-pg17-source-20261011",
+  "recipeSha256": "0220465b4420e6e8efb06fe767615e3d9a20f2c38311983cfcd29fc03f099f87",
+  "postgresqlArchiveSha256": "5367f6fb2ec97efe1eb2e0c7926bb33438e51b0bd3a9733b88498056a7dc9a7e",
+  "wheel": "/private/tmp/truss-pgserver-pg17-wheel-20261011/pgserver-0.1.4+truss.pg17.11-cp311-cp311-macosx_27_0_arm64.whl",
+  "wheelSha256": "36b4240bedc03a082d349c6cf586800df2df89dce530252fb51227b93e978920",
+  "payloadMembers": 1643,
+  "logs": {
+    "build": {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-build.log.gz",
+      "sha256": "453e844838a8b186e1ff0cff07e1692114330e122bc7a135794a8478cbae3a76",
+      "originalSha256": "e12f34b46311f4236a1f7a5162d902301a1f1b4d399a3a681ed5497aa3df2aeb"
+    },
+    "packaging": {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-packaging.log.gz",
+      "sha256": "7e7bdc05123bf958fb85b1c79d4419e4e3529a3935b52356ecd119e9314324fa",
+      "originalSha256": "9ecbb19cf852088b67363bfb703310b819ff75671580f91ef56b462e101ce147"
+    },
+    "toolkit": {
+      "path": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-toolkit.log.gz",
+      "sha256": "7513e89ab99bff9ec299583be65a4433e2b3ab50a39a3298d9dc39b363e23791",
+      "originalSha256": "01ef32480ae0adf833cfc0de9a4c3441001f1be73a8b646e858dbde491393415"
+    }
+  },
+  "completeRuntimeQualified": false,
+  "published": false
+}

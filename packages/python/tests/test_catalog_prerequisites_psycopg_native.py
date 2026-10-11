@@ -12,7 +12,7 @@ import tempfile
 from pathlib import Path
 import psycopg
 from truss import Ok, Error, adopt_psycopg_host, PsycopgProfile
-from test_psycopg_host_native import PsycopgHostNativeTests
+from test_psycopg_host_native import PsycopgHostNativeTests, postgres_bin_for_profile
 from test_catalog_staging import COMPONENTS
 from test_catalog_support import selected
 from truss._catalog_candidate import encode_original_catalog_candidate
@@ -25,7 +25,7 @@ class PrerequisitePsycopgNativeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.root=Path(tempfile.mkdtemp(prefix='truss-prerequisite-',dir='/private/tmp'));cls.data=cls.root/'data';cls.socket=cls.root/'socket';cls.socket.mkdir()
-        cls.pgbin=Path(os.environ['TRUSS_CENSUS_POSTGRES_BIN'])
+        cls.pgbin=postgres_bin_for_profile(cls.selected_profile)
         cls.start_attempted=False
         cls.addClassCleanup(cls.cleanup_fixture)
         cls.run_pg('initdb','-D',str(cls.data),'-U','postgres','--auth=trust','--encoding=UTF8')

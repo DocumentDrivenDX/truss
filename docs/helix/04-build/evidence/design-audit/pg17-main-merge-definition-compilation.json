@@ -1,0 +1,21 @@
+{
+  "scope": "Merge qualification of current-main provisional definition compilation on PostgreSQL17.11; not complete installation authority",
+  "nativeVersion": "170011",
+  "historicalNativeVersion": "160015",
+  "compiledDefinitionProjectionEqual": true,
+  "ownerExportUnchanged": true,
+  "statementReleaseUnchanged": true,
+  "counts": {
+    "indexes": 86,
+    "constraints": 298,
+    "expressions": 63
+  },
+  "independentRollbackConfirmed": true,
+  "inputs": {
+    "scripts/build-python-installation-definitions.py": "c12ac10e94b2a6df696f8c32174073621812ba57a39b1dfa15a443384a9b46e2",
+    "packages/python/src/truss/_installation/definitions.json": "504f870cc6a5f0ebec054f112211f4219b77b4551f023bad7b859b8f98636fc3",
+    "packages/python/src/truss/_installation_definition_release.py": "1744ef723e15cafe2b94211a6790314f6313c59747dd198099e0453550cbee63",
+    "packages/python/src/truss/_catalog_installation.py": "fca4260ec19b42f86cc633a7c20af2767588d8d3ea833e617e7898408e888ed3",
+    "packages/python/src/truss/_installed_admission_inventory.py": "c52364b85a4fe7691a4a720f362feead362e14c5ce9cfe407d7e2d4fd52a5dd5"
+  }
+}

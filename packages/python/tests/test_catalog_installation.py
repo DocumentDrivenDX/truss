@@ -24,8 +24,8 @@ class CatalogInstallationInputTests(unittest.TestCase):
             _transaction_status=b'I'
             def run(self,sql):
                 if not sql.startswith('SELECT pg_catalog.jsonb_build_object('):raise AssertionError('No transaction SQL permitted')
-                return [[json.dumps({'version':'170009'})]]
-        with self.assertRaisesRegex(ValueError,'PostgreSQL16'):
+                return [[json.dumps({'version':'160015'})]]
+        with self.assertRaisesRegex(ValueError,'PostgreSQL17'):
             construct_provisional_catalog_layout(Port())
 
     def test_caller_runtime_transaction_not_adopted(self):

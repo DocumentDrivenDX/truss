@@ -1,0 +1,26 @@
+{
+  "scope": "Pinned inputs for corrected local runtime candidate; build/package/native qualification pending",
+  "pgserverRepository": "https://github.com/orm011/pgserver",
+  "pgserverRevision": "3b227607a6c94590ba7c16ae827cef9fb7e3920b",
+  "pgserverSourceArchiveSha256": "18c4ea3eadaa47ada582f48e36f295ca22a3aadc87844e6b1f0bbd75fce9f2f6",
+  "postgresqlVersion": "16.15",
+  "postgresqlSourceUrl": "https://ftp.postgresql.org/pub/source/v16.15/postgresql-16.15.tar.gz",
+  "postgresqlChecksumUrl": "https://ftp.postgresql.org/pub/source/v16.15/postgresql-16.15.tar.gz.sha256",
+  "postgresqlSourceSha256": "4f200ca23dfb120ff9838f13ce06014aad1d3c432d16ee9f93ab2000c0eeef7b",
+  "upstreamMakefileSha256": "1211dc6ce27a3e9e8a532bdb9d1f0c8f8cbfa569bbacbab4e88e347e55500c45",
+  "candidateMakefileSha256": "ec453d43b38a42b25ae700d8ebdcc9f931e21d4ee1ee31dab33bbde8b3bfd749",
+  "makefileReplacements": [
+    ["POSTGRES_VERSION := 16.2", "POSTGRES_VERSION := 16.15"],
+    [" -j\n", " -j4\n"]
+  ],
+  "nativeBuildCommand": ["make", "-C", "pgbuild", "postgres"],
+  "configureFlags": ["--without-readline", "--without-icu"],
+  "wheelBuildDependencies": {"setuptools": "79.0.1", "wheel": "0.45.1", "cffi": "1.17.1", "pycparser": "2.22"},
+  "candidateDistributionVersion": "0.1.4+truss.pg16.15",
+  "pgvectorIncluded": false,
+  "candidatePlatform": "macOS arm64 Python3.11",
+  "buildCompleted": false,
+  "wheelDelivered": false,
+  "callerResetQualified": false,
+  "completeRuntimeQualified": false
+}

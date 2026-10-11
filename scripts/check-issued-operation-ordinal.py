@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import pgserver
+from native_fixture import get_server, evidence_directory
 
 root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(root / 'packages/python/src'))
@@ -19,7 +20,7 @@ family = sys.argv[1] if len(sys.argv) >= 2 else 'base'
 assert len(sys.argv) <= 3
 receipt_name = sys.argv[2] if len(sys.argv) == 3 else 'issued-operation-ordinal-' + family + '-native.json'
 assert Path(receipt_name).name == receipt_name and receipt_name.endswith('.json')
-destination = root / 'docs/helix/04-build/evidence/design-audit' / receipt_name
+destination = evidence_directory() / receipt_name
 if destination.exists():
     raise SystemExit('refusing to replace an existing receipt')
 configurations = []
@@ -42,20 +43,20 @@ if family in ('epoch', 'configuration'):
 paths += extras
 
 originals = [(root / p).read_bytes() for p in paths]
-assert importlib.metadata.version('pgserver') == '0.1.4+truss.pg16.15'
+assert importlib.metadata.version('pgserver') == '0.1.4+truss.pg17.11'
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
 custody = object()
 producer = object()
 issuer = None
 with tempfile.TemporaryDirectory(prefix='truss-issued-ordinal-') as directory:
-    server = pgserver.get_server(Path(directory) / 'data', cleanup_mode='stop')
+    server = get_server(Path(directory) / 'data', cleanup_mode='stop')
     def query(sql):
         return subprocess.check_output([str(psql), server.get_uri(), '-X', '-qAt', '-v', 'ON_ERROR_STOP=1'],
                                        input=sql, text=True, timeout=30).strip()
     process = None
     try:
         version = query('SHOW server_version;')
-        assert version.startswith('16.15')
+        assert version.startswith('17.11')
         with tempfile.TemporaryFile(mode='w+t') as errors:
             process = subprocess.Popen([str(psql), server.get_uri(), '-X', '-qAt', '-v', 'ON_ERROR_STOP=1'],
                                        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=errors, text=True)

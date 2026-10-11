@@ -1,0 +1,90 @@
+{
+  "scope": "Preserved sandbox-denied attempt artifacts relocated without changing original bytes",
+  "files": [
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-caller-reset.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-caller-reset.log.gz",
+      "sha256": "06c4dc66946a268aabc095e9fb67ba4b5a147467959c05ba8efabaaf85bd747a"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-cli-signals.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-cli-signals.log.gz",
+      "sha256": "41db0ed62e35ca6fcf96ff7457b2cf4fa1744ea1e49afae72cfd618e6594ae65"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-elevation.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-elevation.log.gz",
+      "sha256": "5f61d1ea1dfe3359fbe7f6766114debe5b0e620b35a130e2ba4182fa57d7c931"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-four-family-driver.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-four-family-driver.log.gz",
+      "sha256": "a5256b71c054dbe6364df67bc48f89be59c1691ad49dd9b02eaa6c36354b6f9f"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-installed-suite.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-installed-suite.log.gz",
+      "sha256": "5322a936e026790f352763f07dc212085e518d45cb376d20edb528f93dc8cbbe"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-isolation.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-isolation.log.gz",
+      "sha256": "f343966e0965bb157a5301c829a3f817b3abf96bd15f566cf06412d0321c1cec"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-issued-asserted.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-issued-asserted.log.gz",
+      "sha256": "a6584da326c6b9d0b52cbb504f84bb590b4cf2e2b52c49ca905f9ca75fdd741b"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-issued-base.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-issued-base.log.gz",
+      "sha256": "90b61b892e013e0c659a3f64cca903037fe4e3fa9162b50e78759590b4749229"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-issued-configuration.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-issued-configuration.log.gz",
+      "sha256": "bf82aec51fcbbcea0ff28e74a2e2d5cdc2907bdd2e2656d994ba24fe888b1929"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-issued-epoch.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-issued-epoch.log.gz",
+      "sha256": "718b966942c00c711347e3fed1b57825e439af98127a68bccf026af0e97a865a"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-origin.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-origin.log.gz",
+      "sha256": "378d538603531a09d9529c73811dd914f4543d5a94a39b1b91efabdc81919e81"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-populated-guards.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-populated-guards.log.gz",
+      "sha256": "24d041e9faaef6d4aff748f56d47fc57ba8163f87d428f30775b58a010058243"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-private-callable-inventory.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-private-callable-inventory.log.gz",
+      "sha256": "a4e4d2da97e84115e1098c955869c21ca12cc1fac1b37881eb048eaefefcf78f"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-qualification.json",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-qualification.json",
+      "sha256": "773ac1178ce6fa95a583684353ae5f4a57898f3035b98034f7714ad09dfaaa0e"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-structure.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-structure.log.gz",
+      "sha256": "3d3c21f543fcd64f93b25b8f3c933d14f86014666ff7becdc428ea261d295831"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-transaction-timeout.log.gz",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-transaction-timeout.log.gz",
+      "sha256": "ddebee9203c7af9bdbfd152dded3dfda563082a48e8d4e566b5c803a04ba8299"
+    },
+    {
+      "originalPath": "docs/helix/04-build/evidence/design-audit/python-pg17.11-installed-suite.json",
+      "retainedPath": "docs/helix/04-build/evidence/design-audit/pg17.11-sandbox-denied/python-pg17.11-installed-suite.json",
+      "sha256": "9040c768d6a8cfbec4aedb98b4d79e0d5be98f309b0b557014c5813173bfb041"
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 import argparse
 import pgserver
+from native_fixture import get_server, evidence_directory
 
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
@@ -44,7 +45,7 @@ steps = [
     ('final_reset', 'RESET ROLE', 'initial', 'initial', 'none'),
 ]
 with tempfile.TemporaryDirectory(prefix='truss-caller-reset-') as directory:
-    server = pgserver.get_server(Path(directory) / 'data', cleanup_mode='stop')
+    server = get_server(Path(directory) / 'data', cleanup_mode='stop')
     try:
         def query(sql):
             return subprocess.check_output([str(psql), server.get_uri(), '-X', '-q', '-A', '-t',
@@ -74,7 +75,7 @@ receipt = {'scope': 'Role/session reset observations on disposable pgserver; no 
     'callerResetSchedulePassed': all(item['matches'] for item in comparisons),
     'correctedBuildProvenanceVerified': False, 'r4Qualified': False, 'r5Qualified': False,
     'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
-(root / 'docs/helix/04-build/evidence/design-audit' / arguments.receipt).write_text(
+(evidence_directory() / arguments.receipt).write_text(
     json.dumps(receipt, indent=2) + '\n')
 print(json.dumps({'serverVersion': version, 'observations': len(comparisons),
     'mismatches': receipt['mismatches'], 'r4Qualified': False, 'r5Qualified': False}))
