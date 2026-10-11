@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-50pxq9x1/worker.py", line 100, in <module>
+    boundary=NativeBoundary(con);tracker=NativeTransactions(boundary)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-50pxq9x1/modules/truss/_native_pg8000.py", line 122, in __init__
+    raise NativeBoundaryRefusal('Requires original idle, unattached connection')
+truss._native_pg8000.NativeBoundaryRefusal: Requires original idle, unattached connection
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-50pxq9x1/worker.py", line 139, in <module>
+    if connection is not writer:connection.close()
+                                ^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-50pxq9x1/modules/pg8000/core.py", line 553, in close
+    raise InterfaceError("connection is closed")
+pg8000.exceptions.InterfaceError: connection is closed

@@ -1,0 +1,44 @@
+2026-10-11 09:38:17.775 EDT [13804] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 09:38:17.775 EDT [13804] LOG:  listening on Unix socket "/private/tmp/pc-o4pr6zs3/.s.PGSQL.5432"
+2026-10-11 09:38:17.785 EDT [13807] LOG:  database system was shut down at 2026-10-11 09:38:17 EDT
+2026-10-11 09:38:17.788 EDT [13804] LOG:  database system is ready to accept connections
+2026-10-11 09:38:18.357 EDT [13817] ERROR:  permission denied for function runtime_lock_fresh_source_epoch
+2026-10-11 09:38:18.357 EDT [13817] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 09:38:18.528 EDT [13814] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:38:18.528 EDT [13814] CONTEXT:  while locking tuple (0,1) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 24 at SQL statement
+2026-10-11 09:38:18.528 EDT [13814] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 09:38:18.545 EDT [13813] ERROR:  current source epoch correspondence required
+2026-10-11 09:38:18.545 EDT [13813] CONTEXT:  PL/pgSQL function truss.runtime_lock_source_epoch(text,text,text) line 18 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_lock_source_epoch(
+	  expected_installation,expected_epoch,expected_incarnation)"
+	PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 14 at SQL statement
+2026-10-11 09:38:18.545 EDT [13813] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 09:38:18.546 EDT [13813] ERROR:  original epoch evidence correspondence required
+2026-10-11 09:38:18.546 EDT [13813] CONTEXT:  PL/pgSQL function truss.runtime_lock_source_epoch(text,text,text) line 24 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_lock_source_epoch(
+	  expected_installation,expected_epoch,expected_incarnation)"
+	PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 14 at SQL statement
+2026-10-11 09:38:18.546 EDT [13813] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 09:38:18.546 EDT [13813] ERROR:  bounded original epoch comparison required
+2026-10-11 09:38:18.546 EDT [13813] CONTEXT:  PL/pgSQL function truss.runtime_lock_source_epoch(text,text,text) line 13 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_lock_source_epoch(
+	  expected_installation,expected_epoch,expected_incarnation)"
+	PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 14 at SQL statement
+2026-10-11 09:38:18.546 EDT [13813] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 09:38:18.547 EDT [13813] ERROR:  fresh epoch requires native read committed read write
+2026-10-11 09:38:18.547 EDT [13813] CONTEXT:  PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 12 at RAISE
+2026-10-11 09:38:18.547 EDT [13813] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 09:38:18.547 EDT [13813] ERROR:  fresh epoch requires native read committed read write
+2026-10-11 09:38:18.547 EDT [13813] CONTEXT:  PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 12 at RAISE
+2026-10-11 09:38:18.547 EDT [13813] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 09:38:18.548 EDT [13813] ERROR:  fresh epoch requires native read committed read write
+2026-10-11 09:38:18.548 EDT [13813] CONTEXT:  PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 12 at RAISE
+2026-10-11 09:38:18.548 EDT [13813] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 09:38:18.550 EDT [13812] ERROR:  original invoker fresh epoch boundary required
+2026-10-11 09:38:18.550 EDT [13812] CONTEXT:  PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 6 at RAISE
+	SQL function "fresh_epoch_definer_probe" statement 1
+2026-10-11 09:38:18.550 EDT [13812] STATEMENT:  SELECT truss.fresh_epoch_definer_probe()
+2026-10-11 09:38:18.580 EDT [13804] LOG:  received immediate shutdown request
+2026-10-11 09:38:18.583 EDT [13804] LOG:  database system is shut down
