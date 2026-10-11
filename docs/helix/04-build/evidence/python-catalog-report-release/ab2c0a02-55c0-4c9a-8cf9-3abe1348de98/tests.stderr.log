@@ -1,0 +1,84 @@
+test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) ... 
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='TRUNCATE truss.installation_archive') ... FAIL
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='INSERT INTO truss.installation_archive SELECT * FROM truss.installation_archive WHERE false') ... ERROR
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='UPDATE truss.installation_archive SET artifact_identity=artifact_identity WHERE false') ... ERROR
+test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) ... ERROR
+test_always_enabled_and_public_execution_revoked (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_always_enabled_and_public_execution_revoked) ... ok
+test_change_restore_cannot_begin_under_original_cut (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_change_restore_cannot_begin_under_original_cut) ... ok
+test_release_reparents_fence_and_later_rollback_preserves_it (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_release_reparents_fence_and_later_rollback_preserves_it) ... ok
+test_replica_mode_does_not_disable_fence (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_replica_mode_does_not_disable_fence) ... ok
+test_rollback_across_acquisition_releases_fence_same_xid (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_rollback_across_acquisition_releases_fence_same_xid) ... ok
+test_unselected_writes_and_reads_remain_available (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_unselected_writes_and_reads_remain_available) ... ok
+
+======================================================================
+ERROR: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='INSERT INTO truss.installation_archive SELECT * FROM truss.installation_archive WHERE false')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 41, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 30, in refused
+    self.c.run('SAVEPOINT refusal')
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '25P02', 'M': 'current transaction is aborted, commands ignored until end of transaction block', 'F': 'postgres.c', 'L': '1144', 'R': 'exec_simple_query'}
+
+======================================================================
+ERROR: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='UPDATE truss.installation_archive SET artifact_identity=artifact_identity WHERE false')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 41, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 30, in refused
+    self.c.run('SAVEPOINT refusal')
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '25P02', 'M': 'current transaction is aborted, commands ignored until end of transaction block', 'F': 'postgres.c', 'L': '1144', 'R': 'exec_simple_query'}
+
+======================================================================
+ERROR: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 42, in test_all_write_events_and_noop_statements_are_fenced
+    self.assertEqual(self.c.run("SELECT encode(artifact_bytes,'hex') FROM truss.installation_archive"),[['01']])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '25P02', 'M': 'current transaction is aborted, commands ignored until end of transaction block', 'F': 'postgres.c', 'L': '1144', 'R': 'exec_simple_query'}
+
+======================================================================
+FAIL: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='TRUNCATE truss.installation_archive')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 41, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-8a22c1wx/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 32, in refused
+    self.assertEqual(caught.exception.args[0]['C'],'55000')
+AssertionError: '55006' != '55000'
+- 55006
+?     ^
++ 55000
+?     ^
+
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.732s
+
+FAILED (failures=1, errors=3)
