@@ -3044,3 +3044,41 @@ or concurrent-DDL/authority qualification, authenticated public compiler issuanc
 typed graph adoption or complete B08 acceptance. This closes the demonstrated
 extra-row preflight gap only. Broader132-case acceptance remains26 accepted;
 the full security goal stays active and no public backend profile is promoted.
+
+
+### Native query-source census prerequisite — 2026-10-11
+
+The shared security workstream adds private
+`packages/postgresql/native/security-query-source-census.sql` for PostgreSQL17.9.
+Forty selected database-wide catalogs/sections retain routine bodies and native
+source/type/operator/aggregate/role/ACL/parameter/event/conversion metadata beyond
+pg_depend edges. All28 selected regproc catalog columns retain numeric OID references
+beside rendered names. Native same-named overloads show that ordinary catalog JSON
+can hide a changed aggregate reference; this projection preserves the distinction.
+The observer excludes row data, private statistics and credential columns, refuses
+foreign routes and closes selected row/serialized-image overflow. It is not a
+complete installation, authenticated observation port or source-meaning resolver.
+
+UMF final `query-source-census/b4e127c5-bb11-4ae0-a42a-73c32aabff72` retains204
+PostgreSQL17.9 observations,14 exact source preimages, the compressed complete
+40-section/14,352-row source image, actual issued predicate/empty applications,
+changed native sections,19 raw refusals and owned cleanup. View and external
+string-body changes, existing aggregate/parameter/event mappings, native ACL/policy
+and numeric-reference corruption refuse before populated and empty application
+calls. A sequential post-result source mutation discards the private RAB buffer;
+faithful data updates preserve source meaning and return the new RA/RAB oracle.
+Actual8192/+1 attribute and serialization-overflow controls restore exactly. Earlier
+passed receipts and failed diagnostic/NULL harness attempts remain separately
+qualified in UMF; final source custody is not inherited from them.
+
+The existing UMF trusted-host inventory guard now checks before application and
+again before returning its copied buffer. Host18 controls and six conditional Z3
+queries (three UNSAT/three SAT) retain explicit ABA countermodels. Endpoint equality
+alone cannot qualify a stable cut. Catalog completeness/injectivity, installed
+issuer/driver/provider authority, current GUC/external executable/fact resolution,
+MVCC freshness, participating writers and protected final release remain required.
+Native16MiB and host16,000,000 encoded-character ceilings differ and do not bound
+native aggregation CPU/heap. No Python asset/runtime installer or graph profile is
+activated by this raw issued-query witness. Compose this native observation through
+the original protected runtime/authority port before public admission; no alternate
+policy resolver is supplied. Full shared security acceptance remains26/132.
