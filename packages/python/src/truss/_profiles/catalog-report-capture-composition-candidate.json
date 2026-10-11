@@ -1,0 +1,16 @@
+{
+  "identity": "truss-administrative-full-context-composition",
+  "version": "0.1.0-candidate",
+  "scope": "administrative_rollback_only_report_write",
+  "context": "truss-native-operation-context/0.4",
+  "fields": {
+    "installationId": "original context independently matched to actual marker/configuration",
+    "sourceEpoch": "original context independently matched to actual pointer/epoch/configuration",
+    "origin": "original numeric-free asserted bytes and original actingUser",
+    "journalOrigin": "exact selected origin-map artifact semantics",
+    "originMappingProfile": "original archived complete mapping artifact pin",
+    "captureProfile": "this complete composition artifact; bytes equal retained assertedOriginCaptureProfileHex",
+    "contextEvidence": "exact original native context bytes; canonical base64, SHA256 and truss.original-native-operation-context4/<xid>/<ordinal>"
+  },
+  "authority": "administrative fixture only; authenticated driver/caller, installed inventory and protected publication remain unqualified"
+}

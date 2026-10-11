@@ -1,0 +1,163 @@
+2026-10-11 12:39:58.133 EDT [89823] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 12:39:58.134 EDT [89823] LOG:  listening on Unix socket "/private/tmp/rl-df7g9fn8/.s.PGSQL.5432"
+2026-10-11 12:39:58.141 EDT [89826] LOG:  database system was shut down at 2026-10-11 12:39:57 EDT
+2026-10-11 12:39:58.145 EDT [89823] LOG:  database system is ready to accept connections
+2026-10-11 12:40:01.728 EDT [89839] ERROR:  unsupported Unicode escape sequence
+2026-10-11 12:40:01.728 EDT [89839] DETAIL:  \u0000 cannot be converted to text.
+2026-10-11 12:40:01.728 EDT [89839] CONTEXT:  JSON data, line 1: {"key\u0000...
+	PL/pgSQL function truss.runtime_stage_catalog_admitted(bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) line 87 at assignment
+	SQL statement "SELECT *                    FROM truss.runtime_stage_catalog_admitted(
+	  issued_ordinal,definition_bytes,input_bytes,candidate_bytes,obligation_bytes,group_bytes,
+	  documents_bytes,declarations_bytes,origin_bytes,original_prestate,original_context)"
+	PL/pgSQL function truss.runtime_stage_catalog_with_release(bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) line 22 at SQL statement
+2026-10-11 12:40:01.728 EDT [89839] STATEMENT:  SELECT * FROM truss.runtime_stage_catalog_with_release(0,
+	            decode('01','hex'),$1,$2,decode('05','hex'),decode('06','hex'),
+	            $3,$4,$5,$6,$7,$8)
+2026-10-11 12:40:04.040 EDT [89859] ERROR:  original report insert and independent byte readback required
+2026-10-11 12:40:04.040 EDT [89859] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 185 at RAISE
+2026-10-11 12:40:04.040 EDT [89859] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:05.388 EDT [89863] ERROR:  original candidate report final source cut required
+2026-10-11 12:40:05.388 EDT [89863] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 207 at RAISE
+2026-10-11 12:40:05.388 EDT [89863] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:06.729 EDT [89869] ERROR:  original candidate report final source cut required
+2026-10-11 12:40:06.729 EDT [89869] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 207 at RAISE
+2026-10-11 12:40:06.729 EDT [89869] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:06.857 EDT [89869] ERROR:  catalog observation stale or unrelated
+2026-10-11 12:40:06.857 EDT [89869] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_observation(text,text,text) line 17 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_observation(expected_writer,expected_ordinal,expected_generation)"
+	PL/pgSQL function truss.runtime_collect_catalog_epoch_context(text,text,text) line 8 at PERFORM
+	SQL statement "SELECT *                              FROM truss.runtime_collect_catalog_epoch_context(
+	  expected_writer_xid,expected_operation_ordinal,expected_effect_generation)"
+	PL/pgSQL function truss.runtime_require_operation_configuration_current(text,text,text) line 7 at SQL statement
+	SQL statement "SELECT truss.runtime_require_operation_configuration_current(
+	  expected_writer_xid,expected_operation_ordinal,expected_effect_generation)"
+	PL/pgSQL function truss.runtime_collect_catalog_admission_configuration(text,text,text,text) line 9 at PERFORM
+	SQL statement "SELECT *                      FROM truss.runtime_collect_catalog_admission_configuration(
+	  expected_writer,expected_ordinal,expected_generation,expected_configuration_profile_hex)"
+	PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 194 at SQL statement
+	SQL statement "SELECT *                      FROM truss.runtime_select_catalog_report_release(
+	  expected_writer,expected_ordinal,expected_generation,expected_configuration_profile_hex)"
+	PL/pgSQL function truss.runtime_select_catalog_report_resources(text,text,text,text) line 6 at SQL statement
+	PL/pgSQL assignment "after_resources:=truss.runtime_select_catalog_report_resources(expected_writer,expected_ordinal,(op.effect_generation+1)::text,
+	  (SELECT encode(c.admission_profile_bytes,'hex') FROM truss.operation_configuration c
+	   WHERE c.original_writer_xid=op.original_writer_xid AND c.operation_ordinal=op.operation_ordinal))"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 193 at assignment
+2026-10-11 12:40:06.857 EDT [89869] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:08.211 EDT [89874] ERROR:  original report resource digest correspondence required
+2026-10-11 12:40:08.211 EDT [89874] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_resources(text,text,text,text) line 44 at RAISE
+	PL/pgSQL assignment "after_resources:=truss.runtime_select_catalog_report_resources(expected_writer,expected_ordinal,(op.effect_generation+1)::text,
+	  (SELECT encode(c.admission_profile_bytes,'hex') FROM truss.operation_configuration c
+	   WHERE c.original_writer_xid=op.original_writer_xid AND c.operation_ordinal=op.operation_ordinal))"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 193 at assignment
+2026-10-11 12:40:08.211 EDT [89874] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:08.335 EDT [89874] ERROR:  unique original report resource archive required
+2026-10-11 12:40:08.335 EDT [89874] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_resources(text,text,text,text) line 30 at RAISE
+	PL/pgSQL assignment "after_resources:=truss.runtime_select_catalog_report_resources(expected_writer,expected_ordinal,(op.effect_generation+1)::text,
+	  (SELECT encode(c.admission_profile_bytes,'hex') FROM truss.operation_configuration c
+	   WHERE c.original_writer_xid=op.original_writer_xid AND c.operation_ordinal=op.operation_ordinal))"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 193 at assignment
+2026-10-11 12:40:08.335 EDT [89874] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:09.569 EDT [89884] ERROR:  complete selected candidate report shape required
+2026-10-11 12:40:09.569 EDT [89884] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 177 at RAISE
+2026-10-11 12:40:09.569 EDT [89884] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:09.908 EDT [89884] ERROR:  complete selected candidate report shape required
+2026-10-11 12:40:09.908 EDT [89884] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 177 at RAISE
+2026-10-11 12:40:09.908 EDT [89884] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:11.241 EDT [89890] ERROR:  unique original candidate registration archive required
+2026-10-11 12:40:11.241 EDT [89890] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 47 at RAISE
+2026-10-11 12:40:11.241 EDT [89890] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:11.244 EDT [89890] ERROR:  query returned no rows
+2026-10-11 12:40:11.244 EDT [89890] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 48 at SQL statement
+2026-10-11 12:40:11.244 EDT [89890] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:11.246 EDT [89890] ERROR:  explicit administrative candidate registration required
+2026-10-11 12:40:11.246 EDT [89890] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 31 at RAISE
+2026-10-11 12:40:11.246 EDT [89890] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:11.249 EDT [89890] ERROR:  unique original candidate registration archive required
+2026-10-11 12:40:11.249 EDT [89890] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 47 at RAISE
+2026-10-11 12:40:11.249 EDT [89890] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:12.209 EDT [89923] ERROR:  numeric-free native report value required
+2026-10-11 12:40:12.209 EDT [89923] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_native_tree(jsonb,integer) line 25 at RAISE
+	PL/pgSQL function truss.runtime_catalog_report_native_tree(jsonb,integer) line 21 at assignment
+2026-10-11 12:40:12.209 EDT [89923] STATEMENT:  SELECT truss.runtime_catalog_report_native_tree($1::jsonb)
+2026-10-11 12:40:13.180 EDT [89929] ERROR:  duplicate original object key
+2026-10-11 12:40:13.180 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 45 at RAISE
+	SQL statement "SELECT truss.runtime_canonical_tree_bytes(parsed.tree)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 7 at PERFORM
+2026-10-11 12:40:13.180 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.181 EDT [89929] ERROR:  numeric-free original JSON token required
+2026-10-11 12:40:13.181 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 77 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:40:13.181 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.181 EDT [89929] ERROR:  numeric-free original JSON token required
+2026-10-11 12:40:13.181 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 77 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_catalog_report_parse_value(original,p,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 59 at SQL statement
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:40:13.181 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.181 EDT [89929] ERROR:  original JSON surrogate pair required
+2026-10-11 12:40:13.181 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 32 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:40:13.181 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.181 EDT [89929] ERROR:  unpaired JSON low surrogate
+2026-10-11 12:40:13.181 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 37 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:40:13.181 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.181 EDT [89929] ERROR:  recognized JSON escape required
+2026-10-11 12:40:13.181 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 39 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:40:13.181 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.181 EDT [89929] ERROR:  one complete original JSON value required
+2026-10-11 12:40:13.181 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 6 at RAISE
+2026-10-11 12:40:13.181 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.182 EDT [89929] ERROR:  JSON object key required
+2026-10-11 12:40:13.182 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 54 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:40:13.182 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.182 EDT [89929] ERROR:  closed JSON string required
+2026-10-11 12:40:13.182 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 43 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:40:13.182 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:13.182 EDT [89929] ERROR:  unescaped JSON control required to refuse
+2026-10-11 12:40:13.182 EDT [89929] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 17 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:40:13.182 EDT [89929] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:40:15.496 EDT [89939] ERROR:  complete runtime finalizer is not installed
+2026-10-11 12:40:15.496 EDT [89939] CONTEXT:  PL/pgSQL function truss.runtime_operation_commit_barrier() line 7 at RAISE
+2026-10-11 12:40:15.496 EDT [89939] STATEMENT:  COMMIT
+2026-10-11 12:40:15.496 EDT [89939] WARNING:  there is no transaction in progress
+2026-10-11 12:40:16.712 EDT [89962] ERROR:  catalog observation stale or unrelated
+2026-10-11 12:40:16.712 EDT [89962] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_observation(text,text,text) line 17 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_observation(expected_writer,expected_ordinal,expected_generation)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 13 at PERFORM
+2026-10-11 12:40:16.712 EDT [89962] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:16.852 EDT [89962] ERROR:  unpublished first revision candidate required
+2026-10-11 12:40:16.852 EDT [89962] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 111 at RAISE
+2026-10-11 12:40:16.852 EDT [89962] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:18.197 EDT [89968] ERROR:  query returned no rows
+2026-10-11 12:40:18.197 EDT [89968] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 180 at SQL statement
+2026-10-11 12:40:18.197 EDT [89968] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:40:18.241 EDT [89823] LOG:  received immediate shutdown request
+2026-10-11 12:40:18.249 EDT [89823] LOG:  database system is shut down
