@@ -1,0 +1,203 @@
+2026-10-11 12:53:55.773 EDT [94515] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 12:53:55.774 EDT [94515] LOG:  listening on Unix socket "/private/tmp/pc-7ewd8xje/.s.PGSQL.5432"
+2026-10-11 12:53:55.783 EDT [94518] LOG:  database system was shut down at 2026-10-11 12:53:55 EDT
+2026-10-11 12:53:55.786 EDT [94515] LOG:  database system is ready to accept connections
+2026-10-11 12:53:56.043 EDT [94532] ERROR:  division by zero
+2026-10-11 12:53:56.043 EDT [94532] STATEMENT:  SELECT 1/0
+2026-10-11 12:53:56.100 EDT [94542] ERROR:  duplicate key value violates unique constraint "deferred_probe_value_key"
+2026-10-11 12:53:56.100 EDT [94542] DETAIL:  Key (value)=(1) already exists.
+2026-10-11 12:53:56.100 EDT [94542] STATEMENT:  COMMIT
+2026-10-11 12:53:56.106 EDT [94544] ERROR:  division by zero
+2026-10-11 12:53:56.106 EDT [94544] STATEMENT:  SELECT 1/0
+2026-10-11 12:53:56.117 EDT [94548] WARNING:  there is already a transaction in progress
+2026-10-11 12:53:56.138 EDT [94550] ERROR:  division by zero
+2026-10-11 12:53:56.138 EDT [94550] STATEMENT:  SELECT 1/0
+2026-10-11 12:53:56.142 EDT [94551] WARNING:  there is already a transaction in progress
+2026-10-11 12:53:56.532 EDT [94562] ERROR:  permission denied for function runtime_lock_fresh_source_epoch
+2026-10-11 12:53:56.532 EDT [94562] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 12:53:56.698 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:56.698 EDT [94557] CONTEXT:  while locking tuple (0,1) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:56.698 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:56.705 EDT [94556] ERROR:  current source epoch correspondence required
+2026-10-11 12:53:56.705 EDT [94556] CONTEXT:  PL/pgSQL function truss.runtime_lock_source_epoch(text,text,text) line 18 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_lock_source_epoch(
+	  expected_installation,expected_epoch,expected_incarnation)"
+	PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 14 at SQL statement
+2026-10-11 12:53:56.705 EDT [94556] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 12:53:56.705 EDT [94556] ERROR:  original epoch evidence correspondence required
+2026-10-11 12:53:56.705 EDT [94556] CONTEXT:  PL/pgSQL function truss.runtime_lock_source_epoch(text,text,text) line 24 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_lock_source_epoch(
+	  expected_installation,expected_epoch,expected_incarnation)"
+	PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 14 at SQL statement
+2026-10-11 12:53:56.705 EDT [94556] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 12:53:56.705 EDT [94556] ERROR:  bounded original epoch comparison required
+2026-10-11 12:53:56.705 EDT [94556] CONTEXT:  PL/pgSQL function truss.runtime_lock_source_epoch(text,text,text) line 13 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_lock_source_epoch(
+	  expected_installation,expected_epoch,expected_incarnation)"
+	PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 14 at SQL statement
+2026-10-11 12:53:56.705 EDT [94556] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 12:53:56.705 EDT [94556] ERROR:  fresh epoch requires native read committed read write
+2026-10-11 12:53:56.705 EDT [94556] CONTEXT:  PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 12 at RAISE
+2026-10-11 12:53:56.705 EDT [94556] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 12:53:56.706 EDT [94556] ERROR:  fresh epoch requires native read committed read write
+2026-10-11 12:53:56.706 EDT [94556] CONTEXT:  PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 12 at RAISE
+2026-10-11 12:53:56.706 EDT [94556] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 12:53:56.706 EDT [94556] ERROR:  fresh epoch requires native read committed read write
+2026-10-11 12:53:56.706 EDT [94556] CONTEXT:  PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 12 at RAISE
+2026-10-11 12:53:56.706 EDT [94556] STATEMENT:  SELECT * FROM truss.runtime_lock_fresh_source_epoch('component-test-installation',$1,$2)
+2026-10-11 12:53:56.862 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:56.862 EDT [94557] CONTEXT:  while locking tuple (0,5) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:56.862 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:57.014 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:57.014 EDT [94557] CONTEXT:  while locking tuple (0,7) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:57.014 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:57.166 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:57.166 EDT [94557] CONTEXT:  while locking tuple (0,7) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:57.166 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:57.168 EDT [94555] ERROR:  original invoker fresh epoch boundary required
+2026-10-11 12:53:57.168 EDT [94555] CONTEXT:  PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 6 at RAISE
+	SQL function "fresh_epoch_definer_probe" statement 1
+2026-10-11 12:53:57.168 EDT [94555] STATEMENT:  SELECT truss.fresh_epoch_definer_probe()
+2026-10-11 12:53:57.344 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:57.344 EDT [94557] CONTEXT:  while locking tuple (0,8) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:57.344 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:57.495 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:57.495 EDT [94557] CONTEXT:  while locking tuple (0,8) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:57.495 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:57.647 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:57.647 EDT [94557] CONTEXT:  while locking tuple (0,8) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:57.647 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:57.804 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:57.804 EDT [94557] CONTEXT:  while locking tuple (0,9) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:57.804 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:57.955 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:57.955 EDT [94557] CONTEXT:  while locking tuple (0,9) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:57.955 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:58.107 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:58.107 EDT [94557] CONTEXT:  while locking tuple (0,9) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:58.107 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:58.293 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:58.293 EDT [94557] CONTEXT:  while locking tuple (0,11) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:58.293 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:58.445 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:58.445 EDT [94557] CONTEXT:  while locking tuple (0,11) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:58.445 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:58.597 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:58.597 EDT [94557] CONTEXT:  while locking tuple (0,11) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:58.597 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:58.755 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:58.755 EDT [94557] CONTEXT:  while locking tuple (0,12) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:58.755 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:58.917 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:58.917 EDT [94557] CONTEXT:  while locking tuple (0,12) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:58.917 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.069 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:59.069 EDT [94557] CONTEXT:  while locking tuple (0,12) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:59.069 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.227 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:59.227 EDT [94557] CONTEXT:  while locking tuple (0,12) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:59.227 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.227 EDT [94577] ERROR:  division by zero
+2026-10-11 12:53:59.227 EDT [94577] STATEMENT:  SELECT 1/0
+2026-10-11 12:53:59.387 EDT [94557] ERROR:  canceling statement due to lock timeout
+2026-10-11 12:53:59.387 EDT [94557] CONTEXT:  while locking tuple (0,12) in relation "source_epoch_current"
+	SQL statement "SELECT c.source_epoch                    FROM truss.source_epoch_current c WHERE c.singleton_id=1 FOR UPDATE"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 38 at SQL statement
+2026-10-11 12:53:59.387 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.411 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.411 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.411 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.411 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.411 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.411 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.412 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.412 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.412 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.418 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.418 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.418 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.418 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.418 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.418 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.419 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.419 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.419 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.453 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.453 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.453 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.453 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.453 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.453 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.454 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.454 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.454 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.460 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.460 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.460 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.460 EDT [94593] ERROR:  selected epoch cut excludes same-backend writes
+2026-10-11 12:53:59.460 EDT [94593] CONTEXT:  PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 16 at RAISE
+2026-10-11 12:53:59.460 EDT [94593] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.465 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.465 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.465 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.465 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.465 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.465 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.470 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.470 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.470 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.470 EDT [94595] ERROR:  division by zero
+2026-10-11 12:53:59.470 EDT [94595] STATEMENT:  SELECT 1/0
+2026-10-11 12:53:59.476 EDT [94557] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:53:59.476 EDT [94557] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:53:59.476 EDT [94557] STATEMENT:  SELECT truss.runtime_issue_source_epoch('component-test-installation',$1,'component-test-incarnation',decode('01','hex'),decode('0405','hex'))
+2026-10-11 12:53:59.547 EDT [94515] LOG:  received immediate shutdown request
+2026-10-11 12:53:59.549 EDT [94515] LOG:  database system is shut down

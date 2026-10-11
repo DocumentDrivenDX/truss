@@ -22,7 +22,9 @@ sql_inputs={'layout':'docs/helix/04-build/evidence/source-epoch-layout-0.16.owne
  'immutable':'packages/postgresql/native/source-epoch-immutability.sql',
  'lock':'packages/postgresql/native/source-epoch-lock.sql',
  'issue':'packages/postgresql/native/source-epoch-issue.sql',
- 'fresh':'packages/postgresql/native/source-epoch-fresh-lock.sql'}
+ 'fresh':'packages/postgresql/native/source-epoch-fresh-lock.sql',
+ 'epoch_fence':'packages/postgresql/native/source-epoch-read-fence.sql',
+ 'fenced_fresh':'packages/postgresql/native/source-epoch-fenced-fresh-lock.sql'}
 for q in ['scripts/check-python-fresh-epoch-native.py','scripts/python-fresh-epoch-worker.py','scripts/check-module-boundaries.py','packages/python/tests/test_native_fresh_epoch_capture.py','packages/python/tests/test_native_epoch_acquisitions.py','packages/python/tests/test_native_transactions.py','packages/python/tests/test_native_pg8000.py',*sql_inputs.values()]:
  p=root/q;inputs[str(p)]=p.read_bytes()
 pins={p:sha(b) for p,b in inputs.items()}

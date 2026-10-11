@@ -1,0 +1,1 @@
+Historical failed proof publication: all seven solver checks completed, but source reread failed because the symbolic request-root variable shadowed the repository Path. No receipt or successful qualification. Corrected final run is ../9d86dd46-edc5-4faa-90a2-c776143f1fd6/receipt.json.
