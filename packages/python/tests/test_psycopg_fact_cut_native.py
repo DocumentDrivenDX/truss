@@ -302,3 +302,43 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest());self.assertIsInstance(result,Ok)
         cells=next(r for r in result.value if r.relation[1]=='sec_staff')
         self.assertEqual(cells.rows,(('s1',),))
+
+    def identity_dependency_providers(self):
+        return self.dependency_providers()+tuple(_DependencyFactProvider('field',('domain','m',ref),self.semantic_relations[table],_FactColumnComparison(column,1,25,-1,True,100)) for ref,table,column in [('assignmentId','sec_assignment','assignment_id'),('ownerId','sec_ownership','owner_id')])
+    def identity_raw(self):return (ROOT/'docs/helix/04-build/evidence/security-identity-requirements/requirements.json').read_bytes()
+    def identity_capture(self,t,providers=None):
+        raw=self.identity_raw();profile=json.dumps({'kind':'truss-flat-fact-provider-fixture/0.1','requirementsSha256':hashlib.sha256(raw).hexdigest(),'providers':[asdict(p) for p in (self.identity_dependency_providers() if providers is None else providers)]},sort_keys=True,separators=(',',':')).encode()
+        comparison=self.issue_bound_profile(profile)
+        return _capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest())
+    def reconstruct_identity_fixture(self,t,providers=None):
+        captured=self.identity_capture(t,providers);self.assertIsInstance(captured,Ok)
+        return subprocess.run(['/opt/homebrew/bin/bun','scripts/evaluate-security-captured-identity-fixture.ts'],cwd=ROOT,input=json.dumps([asdict(c) for c in captured.value]),capture_output=True,text=True,timeout=20)
+    def identity_decision(self,mutation=None,providers=None):
+        t=self.begin()
+        if mutation:self.connection.execute(mutation)
+        result=self.reconstruct_identity_fixture(t,providers);self.assertEqual(result.returncode,0,result.stderr);return json.loads(result.stdout)
+    def test_original_identity_closure_refuses_missing_instance_key_providers(self):
+        t=self.begin();called=[];raw=self.identity_raw()
+        with self.assertRaisesRegex(ValueError,'Incomplete original'):
+            _run_dependency_fact_operation(self.host,t,self.comparison(),raw,hashlib.sha256(raw).hexdigest(),self.dependency_providers(),lambda c:called.append(True))
+        self.assertEqual(called,[]);self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+    def test_fixed_identity_capture_reconstructs_original_keys_and_permits(self):
+        result=self.identity_decision();self.assertEqual(result['decision'],{'decision':'permit','output':[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}]})
+        keys={r['type']['elementId']:r['key'] for r in result['identities']}
+        self.assertEqual(keys['Assignment'],[{'string':'a1'}]);self.assertEqual(keys['Ownership'],[{'string':'o1'}])
+    def test_fixed_identity_capture_revoked_assignment_denies(self):
+        self.assertEqual(self.identity_decision('UPDATE truss.sec_assignment SET active=false')['decision']['decision'],'deny')
+    def test_fixed_identity_capture_missing_owner_denies(self):
+        self.assertEqual(self.identity_decision('DELETE FROM truss.sec_ownership')['decision']['decision'],'deny')
+    def test_fixed_identity_capture_reversed_provider_order_preserves_keys(self):
+        result=self.identity_decision(providers=tuple(reversed(self.identity_dependency_providers())))
+        self.assertEqual(result['decision']['decision'],'permit');keys={r['type']['elementId']:r['key'] for r in result['identities']}
+        self.assertEqual(keys['Assignment'],[{'string':'a1'}]);self.assertEqual(keys['Ownership'],[{'string':'o1'}])
+    def test_fixed_identity_capture_duplicate_instance_key_is_indeterminate(self):
+        result=self.identity_decision("INSERT INTO truss.sec_assignment VALUES('a1','s1','p1',true)")
+        self.assertEqual(result['decision']['decision'],'indeterminate')
+    def test_fixed_identity_capture_wrong_native_literal_domain_refuses_fact_construction(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.sec_assignment ALTER COLUMN active TYPE text USING active::text')
+        providers=self.identity_dependency_providers();p=providers[0];changed=_DependencyFactProvider(p.kind,p.reference,p.relation,_FactColumnComparison('active',4,25,-1,True,100))
+        result=self.reconstruct_identity_fixture(t,(changed,)+providers[1:])
+        self.assertNotEqual(result.returncode,0);self.assertEqual(result.stdout,'')

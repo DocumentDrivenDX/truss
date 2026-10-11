@@ -2192,3 +2192,30 @@ mapping/source/role/config closure remain separate obligations; unordered native
 row position is not semantic identity. Original issuer/profile admission and
 graph payload decoding remain unqualified. The old arbitrary-callback prototype
 and its successful negative control must not authorize ordinary callers.
+
+
+### Original identity-complete fixture capture/reconstruction — 2026-10-11
+
+A separate original UMF identity producer now retains the ten identity/endpoint
+fields, two associations and per-record ordered Key/endpoint metadata. Keep its
+requirements distinct from the earlier eight-policy-field inventory; both original
+meanings remain intact. Require assignmentId and ownerId provider comparisons in
+addition to the earlier policy dependencies, with the requirement digest bound into
+original native epoch profiles before fixed capture. Missing instance-key providers
+refuse before native assignment.
+
+The owned table-per-record fixture reconstructs facts only from fixed captured
+cells and original owner metadata. Select an unambiguous original field-reference
+set per record, preserve original key component order, validate each native literal
+through original UMF schema semantics and validate Keys through the original core
+Key encoder. Provider order/native row ordinal/labels do not define identity.
+Duplicate actual instance Keys make the original evaluator indeterminate; native
+literal domains incompatible with original semantic fields refuse construction.
+The original inventory does not read salary; withholding remains explicit.
+
+This is a conformance tool, not an admitted library policy executor. Ambiguous or
+shared-field/per-record physical binding, graph type filters/JSONB decoding, general
+collections, authenticated issuer/mapping and source/role/config closure remain
+unqualified. Reconstruction runs as an owned fixture step after raw capture, not
+inside a complete protected host dispatch/final-disclosure coordinator; captured
+JSON is not a portable authorization credential.

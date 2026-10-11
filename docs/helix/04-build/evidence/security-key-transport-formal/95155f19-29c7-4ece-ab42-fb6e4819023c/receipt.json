@@ -1,0 +1,64 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "/private/tmp/truss-security-main-integration/scripts/prove-security-key-transport.py": "31e56aa68507b9432f221efb7fd8f18c6eb1d09f2c9df476514d7aa5ecb3aabc",
+    "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts": "a447da4d0873131855111ea05270027cbdd4eadf9277d8c9999141645ec7f03c",
+    "/private/tmp/truss-security-main-integration/scripts/produce-security-identity-requirements.ts": "b592207f72fb2f3b7a094ad86c19e58e3ca2f664acb8f3e4e366de883ea676e4",
+    "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_dependency_fact_cut.py": "7dbe12b81f18c2a5e02cfb3731141855648929efc0b5089c9978768915b8f3e8",
+    "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-identity-requirements/transport.json": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+    "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-identity-requirements/requirements.json": "ac2fffeec144f7d7c9324ff692a9c42f048e6ea634d4c498a790942d8536aefe",
+    "/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/dependencies.ts": "a94e291f78ad38dfdc73b7b03fb7f7ed7547dd3adb678040e952be71e3e8f2c7",
+    "/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/key-tuple.ts": "5baba1577035aefba2ff1786b646b35e9fc7266fd99eaf42c9b5a4b13b1381aa"
+  },
+  "queries": [
+    {
+      "id": "complete_component_cuts_preserve_original_key_vector",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "a08cebd750426e537d75a757b8c3d841ff4f566cef13c2bbe9d8867e59bead2d",
+      "model": null
+    },
+    {
+      "id": "equal_complete_frame_preserves_deterministic_identity",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "1ca61b75dcbe2f6b4b3efa7922923413689431ad4fd9220348d800b267630592",
+      "model": null
+    },
+    {
+      "id": "changed_component_order_changes_key_despite_unchanged_data",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "ae0f5da37f99b5ed8765f0fe31fcf4637d427645a2dd62f4cd5fceb43d7683d6",
+      "model": "[later_ordered_components = Store(K(Int, 0), 0, 1),\n original_ordered_components = Store(K(Int, 1), 0, 0),\n later_field_values = Store(K(Int, 3), 0, 2),\n original_field_values = Store(K(Int, 3), 0, 2),\n later_width = 2,\n original_width = 2]"
+    },
+    {
+      "id": "changed_key_width_can_change_identity_despite_unchanged_data",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "67afa29e40576ed568546312fe5315a43de34f9b96d3cac3c941b35a28621f4e",
+      "model": "[qualified_type = 3,\n later_normalized_key_material = K(Int, 6),\n stable_key_id = 4,\n later_width = 2,\n original_width = 1,\n original_normalized_key_material = K(Int, 6),\n k!3 = [else -> 6],\n stable_deterministic_encoder = [(3, 4, 2, as-array) -> 6,\n                                 else -> 5]]"
+    },
+    {
+      "id": "constant_ordinal_material_collides_for_distinct_original_keys",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "4808c137e8f9af99474a334f2c7a6879852ed41c73c29a9012cef0b4dc897d77",
+      "model": "[original_field_values = Store(K(Int, 3), 0, 2),\n later_normalized_key_material = K(Int, 0),\n original_normalized_key_material = K(Int, 0)]"
+    }
+  ],
+  "scope": "Unbounded positive ordered-key widths, opaque qualified component references and typed canonical values. Stable original width/order/frame plus preserved selected values imply key-vector and stable deterministic encoder equality.",
+  "limitations": [
+    "Second obligation uses equal normalized finite key material as the first obligation's component-equivalence lemma; normalization outside width and construction/refinement are not derived",
+    "Integer symbols abstract qualified references and full typed literals; no hash-collision or native domain inference",
+    "No injectivity/byte-format, original UMF encoder, JSON/Python/SQL capture or browser refinement theorem",
+    "Ordinal counter only demonstrates that replacing original key material by constant row position permits distinct-key collision; no SQL row-order theorem",
+    "No authenticated issuer/mapping, complete source/role/config cut, protected evaluation or final disclosure admission"
+  ]
+}
