@@ -4,14 +4,14 @@ from unittest.mock import patch
 from test_native_operation_ordinals import ReservedNativeOperationOrdinalTests
 from test_catalog_staging import ROOT, COMPONENTS
 from test_catalog_support import selected
-from truss._native_catalog_request import NativeCatalogStageInput
+from truss._native_catalog_request import NativeCatalogStageInput,ConfiguredCatalogSelection
 from truss._native_catalog_capture import NativeCatalogCapture
 from truss._native_deadline import NativeOperationDeadline
 from truss._native_pg8000 import NativeBoundaryRefusal
 
 
 class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
-    def _prepare_catalog(self, *, bad_response=False, prepared=None):
+    def _prepare_catalog(self, *, bad_response=False, prepared=None, configured=False):
         setup=(ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text()
         for name in COMPONENTS:
             if name!='operation-admission':
@@ -21,12 +21,34 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
                      'catalog-report/fresh-lifecycle','catalog-report/absent-binding-index-declarations',
                      'catalog-stage-issued'):
             setup+=';\n'+(ROOT/f'packages/postgresql/native/{name}.sql').read_text()
+        if configured:
+            setup+=';\n'+(ROOT/'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql').read_text()
+            for name in ('source-epoch-lock','issued-operation-admission/operation-configuration-context-admission',
+                         'catalog-epoch-context','operation-configuration-current','catalog-admission-configuration',
+                         'canonical-string-bytes','canonical-tree-bytes','catalog-report/source-candidate','catalog-report/release-selection',
+                         'catalog-report/configured-graph','catalog-report/configured-stage'):
+                setup+=';\n'+(ROOT/f'packages/postgresql/native/{name}.sql').read_text()
         # Install development fixture components outside the adopted host
         # transaction. DDL locks cannot masquerade as a fresh graph start cut.
         fixture=self.Connection(**self.kwargs)
         try:
             fixture.run('DROP SCHEMA IF EXISTS truss CASCADE')
             fixture.run(setup)
+            if configured:
+                import hashlib
+                seed=(ROOT/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql').read_text()
+                fixture.run(seed.split('INSERT INTO truss.row_home_operation')[0])
+                fixture.run("INSERT INTO truss.source_epoch_current VALUES(1,'guard-fixture','guard-fixture-epoch')")
+                policy=(ROOT/'packages/python/src/truss/_profiles/catalog-report-release.json').read_bytes()
+                configuration=json.dumps({'interfaceVersion':'truss-catalog-report-configuration/0.1',
+                    'catalogReportRelease':{'artifactIdentity':'truss.catalog-report-release/0.1.0',
+                    'sha256':hashlib.sha256(policy).hexdigest()}}).encode()
+                fixture.run("""INSERT INTO truss.installation_admission VALUES(1,convert_to('guard-fixture','UTF8'),
+                    convert_to('guard-fixture-epoch','UTF8'),7,'forbid','engine',:configuration,
+                    convert_to('binding fixture','UTF8'),convert_to('inventory fixture','UTF8'))""",configuration=configuration)
+                fixture.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,
+                    artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
+                    'truss.catalog-report-release/0.1.0',:raw,sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')))""",raw=policy)
         finally:fixture.close()
         setup=''
         if bad_response:
@@ -55,6 +77,11 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
         issued.controls.run_control('savepoint')
         original=NativeCatalogStageInput(selected() if prepared is None else prepared,b'{"x-action":"test"}',b'fixture definition',
             b'fixture obligations',b'fixture group')
+        if configured:
+            original=NativeCatalogStageInput(original.prepared,original.origin,original.definition,
+                original.obligations,original.group,ConfiguredCatalogSelection('guard-fixture',
+                'guard-fixture-epoch','guard-fixture-incarnation',b'original capture fixture',
+                (ROOT/'packages/python/src/truss/_profiles/catalog-report-configuration.json').read_bytes()))
         request=issued.owner.prepare_catalog_stage(issued,original)
         return session,issued,request
 
@@ -191,3 +218,17 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
 
     def test_substituted_native_inventory_count_refuses(self):
         self._assert_substituted_response('counts')
+
+    def test_original_configured_encoder_capture_and_rollback(self):
+        session,issued,request=self._prepare_catalog(configured=True)
+        result=issued.owner.dispatch_catalog_stage_candidate(request)
+        native=json.loads(result.original_provisional_result)
+        context=json.loads(result.original_context)
+        self.assertEqual(native['interfaceVersion'],'truss-native-provisional-catalog/0.3')
+        self.assertEqual(context['assertedOriginUtf8Hex'],request.encoded.original_input.origin.hex())
+        self.assertIs(result.original_call,request.entry.native_call)
+        self.assertTrue(result.original_call.capture_complete)
+        self.assertFalse(json.loads(result.original_report_source_snapshot)['configuredReleaseCandidate']['registeredAuthority'])
+        self.assertIsNone(json.loads(result.original_report_assembly)['completeReportBytes'])
+        self.assertFalse(issued.controls.forward_ready)
+        self._restore_catalog(session,issued)

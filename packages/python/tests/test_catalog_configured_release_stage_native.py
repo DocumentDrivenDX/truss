@@ -3,7 +3,8 @@ import copy,hashlib,json,unittest
 from test_native_pg8000 import NativeBoundaryFixture
 from test_catalog_staging import ROOT,COMPONENTS
 from test_catalog_support import selected
-from truss._native_catalog_request import NativeCatalogStageInput,encode_catalog_stage
+from truss._native_catalog_request import NativeCatalogStageInput,ConfiguredCatalogSelection,encode_catalog_stage
+from truss._catalog_candidate import encode_original_catalog_candidate
 from truss._native_catalog_report_sources import compose_captured_catalog_sources
 
 class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase):
@@ -19,7 +20,7 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
             for name in ('source-epoch-lock','issued-operation-admission/operation-admission',
                          'issued-operation-admission/operation-configuration-context-admission',
                          'catalog-epoch-context','operation-configuration-current','catalog-admission-configuration',
-                         'catalog-report/release-selection','catalog-report/empty-graph',
+                         'canonical-string-bytes','canonical-tree-bytes','catalog-report/release-selection','catalog-report/source-candidate','catalog-report/configured-metadata','catalog-report/empty-graph',
                          'catalog-report/configured-graph','catalog-report/absent-binding-index-declarations',
                          'catalog-report/fresh-lifecycle','edge-limit/verify-current-scope',
                          'catalog-stage-issued','catalog-report/configured-stage'):
@@ -59,18 +60,20 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
             0,'catalog-acceptance',decode('01','hex'),:input,decode(:pre,'hex'),:candidate,
             decode('05','hex'),decode('06','hex'),convert_to('{}','UTF8'),
             convert_to('original capture fixture','UTF8'),'guard-fixture','guard-fixture-epoch',
-            'guard-fixture-incarnation',:profile)""",input=p.input_bytes,pre=pre,candidate=p.declarations_bytes,profile=self.profile)[0]
+            'guard-fixture-incarnation',:profile)""",input=p.input_bytes,pre=pre,candidate=encode_original_catalog_candidate(p),profile=self.profile)[0]
         self.context=bytes.fromhex(context);self.prestate=bytes.fromhex(pre);return writer,ordinal
     def invoke(self):
         p=self.prepared
         rows=self.connection.run("""SELECT * FROM truss.runtime_stage_catalog_with_release(0,
             decode('01','hex'),:input,:candidate,decode('05','hex'),decode('06','hex'),
-            :documents,:candidate,convert_to('{}','UTF8'),:pre,:context,:profile)""",
-            input=p.input_bytes,candidate=p.declarations_bytes,documents=p.archive_documents_bytes,
+            :documents,:declarations,convert_to('{}','UTF8'),:pre,:context,:profile)""",
+            input=p.input_bytes,candidate=encode_original_catalog_candidate(p),declarations=p.declarations_bytes,documents=p.archive_documents_bytes,
             pre=self.prestate,context=self.context,profile=self.profile)
         self.result=json.loads(bytes.fromhex(rows[0][3]));return rows[0]
-    def compose(self,result=None,context=None):
-        value=NativeCatalogStageInput(self.prepared,b'{}',b'\x01',b'\x05',b'\x06')
+    def compose(self,result=None,context=None,profile=None):
+        value=NativeCatalogStageInput(self.prepared,b'{}',b'\x01',b'\x05',b'\x06',
+            ConfiguredCatalogSelection('guard-fixture','guard-fixture-epoch','guard-fixture-incarnation',
+                b'original capture fixture',self.profile if profile is None else profile))
         encoded=encode_catalog_stage(value,'0')
         return compose_captured_catalog_sources(encoded,self.result if result is None else result,
             self.context if context is None else context)
@@ -116,7 +119,32 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
                            (('catalogRelease','effectGeneration'),'0'),(('end','metadata_source'),'{}')):
             changed=copy.deepcopy(self.result);changed['reportSources'][path[0]][path[1]]=value
             with self.assertRaises(ValueError):self.compose(changed)
+        changed=copy.deepcopy(self.result)
+        for cut in ('start','end'):
+            scope=json.loads(changed['reportSources'][cut]['empty_scope'])
+            changed['reportSources'][cut]['empty_scope']=json.dumps(scope+['source_epoch_registry','source_epoch_current'])
+        with self.assertRaises(ValueError):self.compose(changed)
+        changed=copy.deepcopy(self.result);changed['interfaceVersion']='truss-native-provisional-catalog/0.2'
+        del changed['reportSources']['catalogRelease']
+        for cut in ('start','end'):del changed['reportSources'][cut]['metadata_source']
+        with self.assertRaises(ValueError):self.compose(changed)
         changed=json.loads(self.context);changed['sourceEpoch']='other'
         with self.assertRaises(ValueError):self.compose(context=json.dumps(changed).encode())
+        with self.assertRaises(ValueError):self.compose(profile=b'changed configuration profile')
+        for mutation in ('foreign','origin','capture','missing','extra','array'):
+            changed=json.loads(self.context)
+            if mutation=='foreign':changed['sourceEpoch']='other'
+            elif mutation=='origin':changed['assertedOriginUtf8Hex']=b'{"different":true}'.hex()
+            elif mutation=='capture':changed['assertedOriginCaptureProfileHex']=b'other profile'.hex()
+            elif mutation=='missing':del changed['database']
+            elif mutation=='extra':changed['extra']='unexpected'
+            else:changed=[]
+            raw=json.dumps(changed).encode();response=copy.deepcopy(self.result)
+            for cut in ('start','end'):
+                metadata=json.loads(response['reportSources'][cut]['metadata_source'])
+                metadata['contextSha256']=hashlib.sha256(raw).hexdigest()
+                if mutation=='foreign':metadata['sourceEpoch']='other'
+                response['reportSources'][cut]['metadata_source']=json.dumps(metadata)
+            with self.assertRaises(ValueError):self.compose(response,raw)
         changed=copy.deepcopy(self.result);del changed['reportSources']['catalogRelease']
         with self.assertRaises(ValueError):self.compose(changed)

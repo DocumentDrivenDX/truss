@@ -11,7 +11,7 @@ from ._catalog_lifecycle import validate_catalog_source as validate_lifecycle
 from ._catalog_index_declarations import validate_catalog_source as validate_indexes
 from ._catalog_owner_evidence import require_catalog_owner_evidence
 from ._catalog_support import evaluate_catalog_support
-from ._catalog_report_assembly import assemble_catalog_report_sources, validate_configured_catalog_sources
+from ._catalog_report_assembly import assemble_catalog_report_sources, validate_configured_catalog_sources, require_configuration_profile_source
 from ._catalog_report_semantics import canonical_numeric_free, compose_catalog_report_semantics
 
 MISSING_FIELDS=('interfaceVersion','reportProfile','originalExecution','umf','assertions','extensions')
@@ -28,6 +28,18 @@ def compose_captured_catalog_sources(encoded, result, original_context=None):
     _require_original_preparation(prepared)
     sources=result['reportSources']
     configured=result.get('interfaceVersion')=='truss-native-provisional-catalog/0.3'
+    if configured != (encoded.original_configuration is not None):
+        raise ValueError('Original configured request and response version correspondence required')
+    if configured:
+        selection=decode_acceptance_json(encoded.original_configuration)
+        context=decode_acceptance_json(original_context)
+        if type(context) is not dict:
+            raise ValueError('Original configured context object required')
+        require_configuration_profile_source(selection['configurationProfileHex'])
+        pairs={'installation':'installationId','sourceEpoch':'sourceEpoch','incarnation':'targetIncarnation',
+               'captureProfileHex':'assertedOriginCaptureProfileHex','originHex':'assertedOriginUtf8Hex'}
+        if any(selection[k]!=context.get(v) for k,v in pairs.items()):
+            raise ValueError('Original configured selection and context correspondence required')
     required={'start','end','lifecycle','indexDeclarations'}|({'catalogRelease'} if configured else set())
     if type(sources) is not dict or set(sources)!=required:
         raise ValueError('Closed original catalog source snapshot required')
@@ -53,7 +65,7 @@ def compose_captured_catalog_sources(encoded, result, original_context=None):
         'complete_feed_administration_receipt','complete_feed_seed_attempt',
         'complete_feed_seed_artifact','key_lifecycle_history','key_migration_receipt',
         'request_receipt_route_guard','request_receipt','request_receipt_protection','schema_change']
-    if scope!=expected and scope!=expected+['source_epoch_registry','source_epoch_current']:
+    if scope!=expected and (configured or scope!=expected+['source_epoch_registry','source_epoch_current']):
         raise ValueError('Selected complete empty graph scope required')
     cut=(end['writer_xid'],end['operation_ordinal'],end['effect_generation'])
     validate_lifecycle(sources['lifecycle'],prepared,result['revision'],cut,encoded.lifecycle_policy)

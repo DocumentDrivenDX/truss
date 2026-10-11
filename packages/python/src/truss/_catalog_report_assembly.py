@@ -141,7 +141,11 @@ def validate_configured_catalog_sources(start,end,release,original_context,resul
     if type(original_context) is not bytes or not 1<=len(original_context)<=1048576:
         raise ValueError('Original configured context bytes required')
     context=decode_acceptance_json(original_context)
-    if (type(context) is not dict or context.get('interfaceVersion')!='truss-native-operation-context/0.4'
+    context_fields={'interfaceVersion','xid','ordinal','sessionUser','actingUser','actorRoleOid',
+        'sessionRoleOid','database','backendPid','assertedOriginUtf8Hex','assertedOriginCaptureProfileHex',
+        'installationId','sourceEpoch','targetIncarnation','sourceEpochProfileHex','sourceEpochEvidenceHex'}
+    if (type(context) is not dict or set(context)!=context_fields
+            or any(type(v) is not str for v in context.values()) or context.get('interfaceVersion')!='truss-native-operation-context/0.4'
             or context.get('xid')!=result['writerXid'] or context.get('ordinal')!=result['ordinal']):
         raise ValueError('Original configured context correspondence required')
     if start['metadata_source']!=end['metadata_source']:
@@ -187,3 +191,9 @@ def validate_configured_catalog_sources(start,end,release,original_context,resul
     return {'scope':'configured_native_release_candidate_only','metadata':metadata,
             'selectedReportProfile':{'identity':'truss-catalog-report-release','version':'0.1.0','sha256':RELEASE_SHA256},
             'registeredAuthority':False,'acceptedReportQualified':False,'currentStateRevalidated':False}
+
+
+def require_configuration_profile_source(profile_hex):
+    profile=files('truss').joinpath('_profiles/catalog-report-configuration.json').read_bytes()
+    if profile_hex!=profile.hex():
+        raise ValueError('Original selected configuration profile required')

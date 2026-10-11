@@ -437,3 +437,7 @@ open until actual producer/arbitration/security/native integration evidence exis
 Unrelated rendering/numeric convenience slices record non-applicability rather
 than run empty models. Unchecked bounds, timeout/error and stale mapped source
 invalidate the corresponding assurance claim without rewriting historical receipts.
+
+### Configured catalog original-call qualification
+
+The implementation-plan configured producer checkpoint retains final positive e267de87 and omitted-lock negative f4854ca4 packets. Require the sixteen configured/release controls plus twelve original dispatch cases, including the actual retained configured encoder→native admission→NativeCatalogCapture route. A downgrade control must strip configured-only fields into otherwise-valid legacy grammar; crossed-context controls must recompute both metadata digests and duplicated epoch coordinates; origin/capture substitutions and changed-only configuration profile must refuse independently. Enforce the closed sixteen-string context and exact thirty-home configured emptiness list. Missing release must refuse before the nontransactional first-effect sequence changes; rollback must remove original catalog/configuration effects. Retain exact source/dependency/native pins, module boundaries and owned cleanup before claiming this administrative component. Four complete-report authority producers and all backend acceptance bindings remain separate gates; these tests do not pass B11/B12 or qualify ordinary-role security.
