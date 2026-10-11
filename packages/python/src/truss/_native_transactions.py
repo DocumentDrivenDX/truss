@@ -86,6 +86,8 @@ class NativeTransactions:
         self._limit = savepoint_limit
         self._cached = None
         self._next_epoch = 1
+        from ._native_operation_ordinals import NativeOperationOrdinals
+        self._operation_ordinals=NativeOperationOrdinals(self)
         with boundary._lock:
             if (boundary._transaction_tracker is not None or boundary._calling or
                     boundary._operation is not None or boundary._quarantined or
@@ -98,9 +100,16 @@ class NativeTransactions:
             raise NativeBoundaryRefusal('Original lifecycle changed before admission')
 
     def _after(self, control, call):
+        try:return self._after_original(control,call)
+        except BaseException:
+            self._operation_ordinals.close_locked()
+            raise
+
+    def _after_original(self, control, call):
         # Called with the shared native guard held, before releasing call custody.
         if not call.capture_complete:
             self._boundary._quarantined = True
+            self._operation_ordinals.close_locked()
             return
         tags = tuple(e.payload.rstrip(b'\0') for e in call.events if e.code == b'C')
         lifecycle_tags = {b'BEGIN', b'COMMIT', b'ROLLBACK', b'SAVEPOINT', b'RELEASE'}
@@ -114,6 +123,7 @@ class NativeTransactions:
             if any(tag == b'SET' for tag in tags):
                 self._cached = None
             if state.generation is not None and status == b'I':
+                self._operation_ordinals.end_locked(state.generation)
                 state.generation.ended = True
                 self._state, self._cached = _State(), None
             else:
@@ -127,6 +137,7 @@ class NativeTransactions:
                 raise NativeBoundaryRefusal('Missing original control completion')
             if status == b'I':
                 if state.generation is not None:
+                    self._operation_ordinals.end_locked(state.generation)
                     state.generation.ended = True
                 self._state, self._cached = _State(), None
             elif state.generation is not None:
@@ -147,7 +158,9 @@ class NativeTransactions:
         elif control.kind in ('commit', 'rollback'):
             if status != (b'T' if control.chain else b'I'):
                 raise NativeBoundaryRefusal('End completion did not match original chain selection')
-            if state.generation is not None: state.generation.ended = True
+            if state.generation is not None:
+                self._operation_ordinals.end_locked(state.generation)
+                state.generation.ended = True
             self._state = _State(control.candidate if control.chain else None, status)
             self._cached = None
         else:

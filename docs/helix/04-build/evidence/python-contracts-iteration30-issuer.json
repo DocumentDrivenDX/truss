@@ -1,0 +1,39 @@
+{
+  "scope": "Current original-generation issuer component; no admission/permit/installed qualification",
+  "source_sha256": {
+    "packages/python/src/truss/_native_operation_ordinals.py": "935df375a513169c06cadd4183caa26cfbf009ea271b4b41c4e369e2326780c5",
+    "packages/python/src/truss/_operation_ordinal.py": "8437efb0b6fd6581b745e3bcf80c0e310cd79ba584ed9daf27ce6db94da233e6",
+    "packages/python/src/truss/_native_transactions.py": "aa4a8d625758a01c40209d5e9a77a82e1f556d8c34e9a7a0096a781d8993272c",
+    "packages/python/src/truss/_native_arbitration.py": "263f27bb1ded41aa86f26d8c15fc7697c9215fd716edaf198075e7b13cf76d6e",
+    "packages/python/src/truss/_native_bootstrap.py": "2d8167009e179816473c7c5fb384888ca1164043d31c8e6d7733974973e03711",
+    "packages/python/tests/test_native_operation_ordinals.py": "c0451d71042195688c1c1906404035f2215c2b70ea5dfb891182c9a86acc0942",
+    "packages/python/tests/test_operation_ordinal.py": "c2a0fa55bb622a64151afbfb7a4a684a44220b69884440c84a1bcfbf8678ca85"
+  },
+  "native_tests": {
+    "cases": 6,
+    "seconds": 21.478,
+    "result": "passed",
+    "log_sha256": "a92712d876b904ed4d1248f04dbb55c94cfd4a246fc451cc64cab11f56162e2f"
+  },
+  "unit_tests": {
+    "cases": 5,
+    "result": "passed"
+  },
+  "remaining": [
+    "attempt-owned forward/cleanup permits",
+    "original four-family artifact admission",
+    "complete installed composition"
+  ],
+  "wheel": {
+    "sha256": "5e277651b618086c40da9daf42b824374f721f1dd31611cf37fdeed0a30e79a3",
+    "matched_python_sources": 63
+  },
+  "independent_review": {
+    "model": "Astra Ultra",
+    "unit_tests": 5,
+    "native_tests": 6,
+    "native_seconds": 152.413,
+    "boundary_imports": 322,
+    "decision": "approved private issuer checkpoint; admission remains unavailable"
+  }
+}

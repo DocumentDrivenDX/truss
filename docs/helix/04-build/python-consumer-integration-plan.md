@@ -1518,3 +1518,68 @@ and complete Executor remain unfinished. Astra Ultra approved the scoped final s
 verifying all83 package files, retained log/consumer hashes, diagnostic artifact,
 strict checks and native-free import. Its independent22-test run predates the
 added packaged diagnostic test; final installed23-test evidence remains separate.
+
+
+### Iteration30 proposal: installed composition and original issuer wiring
+
+Iteration29 is on main d33dd34c. The next completion target remains a coherent
+explicit installation enabling the first accepted catalog operation, rather
+than a presence-only status facade. Bootstrap installation consumes a qualified
+original candidate, original administrative attempt custody and complete native
+inventory; current generated review SQL and private security candidates do not
+supply those facts. No marker, phase flag or caller-provided hash can substitute.
+
+The installation plan's dependency order remains operative: original issued
+operation admission, canonical handlers/validators, complete original SQL/grant/
+initializer membership, independent native parity, explicit Python install and
+settlement/reconciliation. Existing OperationOrdinalRegistry evidence includes original pg8000/PG16.15
+four-family admission with92 observations and synthetic artifact bytes; before
+this checkpoint the shipped NativeTransactions/NativeArbitration classes did not
+bind that registry to their original native generation. The next reviewed
+implementation must share the issuer across facades/re-adoption, consume before
+possible admission/savepoint submission, preserve consumption through rollback
+and known refusals, and close issuance on ended or uncertain original lifetime.
+Then exercise the four issued admission families through the actual coordinated
+Python/native path before selecting them in installation composition. Synthetic
+artifact fixture results remain component evidence, never installed authority.
+
+A fixed namespace/marker-relation presence diagnostic may be included within
+this work, but must report caller-snapshot observation only. It cannot implement
+CapabilityReadiness, prove a globally fresh namespace, read a spoofable marker
+as authority, or complete this iteration. Caller transactions can see their own
+uncommitted DDL and old Repeatable Read snapshots.
+
+Security synchronization: read the current Assess security control support work
+on2026-10-11. Its main51e895ea source-custody checkpoint and active association
+semantic verification remain separate from Truss installer/issuer wiring. Do not
+duplicate association interpretation, widen public authority, or replace the
+unconditional deferred commit barrier before complete substitute finalization.
+Astra Ultra is reviewing the substantive next implementation slice.
+
+
+Astra approved implementing the original-generation issuer checkpoint. The
+current draft registers one NativeOperationOrdinals coordinator per actual
+NativeTransactions/NativeBoundary and admits only retained original operation
+sessions before native calls. Pre-retained attempts use a single issuer state
+publication tying counter advance to reservation visibility; faults before/after
+that publication cannot expose a reusable ordinal. Confirmed native end closes
+existing bindings even when attempt publication failed; unknown completion/owner
+closure closes admission without fabricating transaction termination. Current
+root publication5-test unit evidence passes. The earlier native baseline49 tests
+passed172.016s before the final atomic-root corrections and cannot qualify their
+current source. Native issued-attempt regressions and source review remain active.
+Actual attempt-owned forward/containment permits and four-family original artifact
+admission are required before business issuance; count preflight is insufficient.
+This draft is not exported and has not been committed or promoted to installation.
+
+
+Corrected coordinator checkpoint: six exact native tests pass21.478s, covering
+original session issuance before savepoint, rollback retention, lost issuance
+reply, capacity preflight, uncertainty without fabricated end, competing
+coordinator refusal and confirmed end (six named cases include the listed paired
+assertions). The five unit tests include faults before/after authoritative root
+publication. Astra Ultra approved corrected counter/coordinator source within
+private scope; its independent rerun passed five unit tests and six native cases (152.413s), and the boundary checker passed 322 imports. Actual
+call permits and original artifact admission remain mandatory before business
+use. Preserve the existing92-observation original-driver candidate as historical
+component evidence; this checkpoint integrates the shipped native classes.

@@ -181,6 +181,11 @@ class NativeArbitration:
                 self._publish_binding(boundary, session)
                 return session
 
+    def issue_operation(self,session):
+        if type(session) is not NativeOperationSession or session.owner is not self:
+            raise NativeBoundaryRefusal('Original operation session required')
+        return session.boundary._transaction_tracker._operation_ordinals.issue(session)
+
     def _make_session(self, context, binding):
         session = NativeOperationSession(self, context, binding.boundary, binding.generation,
                                       binding.token, uuid4().hex.encode('ascii'), self._call_limit)

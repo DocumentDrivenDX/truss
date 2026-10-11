@@ -124,6 +124,8 @@ class NativeConnectionFactory:
                     or boundary._active_cancellation is not None):
                 raise NativeBoundaryRefusal('Original native work must settle before host close')
             boundary._quarantined=True
+            if boundary._transaction_tracker is not None:
+                boundary._transaction_tracker._operation_ordinals.close_locked()
             record.host_close_started=True
             record.host_close_running=True
         try:

@@ -1,0 +1,11 @@
+test_original_session_issue_precedes_savepoint_and_survives_rollback (test_native_operation_ordinals.NativeOperationOrdinalTests.test_original_session_issue_precedes_savepoint_and_survives_rollback) ... ok
+test_lost_issue_reply_preserves_same_original_ordinal (test_native_operation_ordinals.NativeOperationOrdinalTests.test_lost_issue_reply_preserves_same_original_ordinal) ... ok
+test_attempt_capacity_refuses_before_ordinal_or_sql (test_native_operation_ordinals.NativeOperationOrdinalTests.test_attempt_capacity_refuses_before_ordinal_or_sql) ... ok
+test_uncertain_native_call_closes_issuance_without_ending_generation (test_native_operation_ordinals.NativeOperationOrdinalTests.test_uncertain_native_call_closes_issuance_without_ending_generation) ... ok
+test_competing_coordinator_cannot_restart_original_counter (test_native_operation_ordinals.NativeOperationOrdinalTests.test_competing_coordinator_cannot_restart_original_counter) ... ok
+test_confirmed_native_end_closes_original_issuer (test_native_operation_ordinals.NativeOperationOrdinalTests.test_confirmed_native_end_closes_original_issuer) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 21.478s
+
+OK

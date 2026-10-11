@@ -65,4 +65,22 @@ class OperationOrdinalRegistryTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             registry.bind(producer, connection, transaction)
 
+
+
+class ReservationPublicationTests(unittest.TestCase):
+    def test_publication_fault_cannot_reuse_observable_ordinal(self):
+        from unittest.mock import patch
+        from truss._operation_ordinal import OperationOrdinalIssuer,OrdinalReservation
+        for after in (False,True):
+            scope=object();issuer=OperationOrdinalIssuer(scope);slot=OrdinalReservation()
+            original=issuer._publish_state
+            def lost(state):
+                if after:original(state)
+                raise MemoryError('publication lost')
+            with patch.object(issuer,'_publish_state',lost):
+                with self.assertRaises(MemoryError):issuer.reserve_into(scope,slot)
+            self.assertEqual(slot.result.ordinal if slot.result else None,'0' if after else None)
+            other=OrdinalReservation()
+            self.assertEqual(issuer.reserve_into(scope,other).ordinal,'1' if after else '0')
+
 if __name__=='__main__':unittest.main()
