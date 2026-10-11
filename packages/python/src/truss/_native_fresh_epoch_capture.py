@@ -15,7 +15,7 @@ from ._native_deadline import NativeOperationDeadline
 
 FRESH_EPOCH_LIMITS=NativeTextLimits(columns=12,rows=1,cell_bytes=2097152,
     result_bytes=2359296,frame_bytes=2621440,wire_bytes=8388608,
-    sql_bytes=32768,payload_capacity=268435456,cumulative_payload=268435456)
+    sql_bytes=32768)
 
 
 def _literal(value,maximum):
@@ -128,10 +128,6 @@ class NativeFreshEpochCapture(NativeAdmissionCapture):
             raise NativeBoundaryRefusal('Original epoch context required')
         if len(self.frames)>=self.limits.messages:
             raise NativeBoundaryRefusal('Epoch frame journal bound')
-        charge=2*len(data)+5
-        permit=self.account.reserve(self,charge)
-        self.account.allocate(self,permit,charge)
-        self.account.terminate(self,permit)
         self.frames.append(NativeEvent(code,bytes(data)))
     def _publish(self,observation):self.original_observation=observation
     def capture(self):
@@ -149,12 +145,6 @@ class NativeFreshEpochCapture(NativeAdmissionCapture):
                     or call.original_resource is not self.entry.resource
                     or call.original_cleanup is not self.entry.cleanup):
                 raise NativeBoundaryRefusal('Complete original epoch call required')
-            # Reserve bounded validation/copy work before temporary hex decoding
-            # and retained request assembly. This is payload bookkeeping only.
-            charge=6*FRESH_EPOCH_LIMITS.result_bytes+2*(len(self.sql.encode())+6)
-            permit=self.account.reserve(self,charge)
-            self.account.allocate(self,permit,charge)
-            self.account.terminate(self,permit)
             frozen=self.transfer(rows)
             if len(frozen)!=1:raise NativeBoundaryRefusal('Single original epoch row required')
             if self._check_recipe() is not original_request:

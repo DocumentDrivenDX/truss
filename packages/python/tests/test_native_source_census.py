@@ -7,7 +7,6 @@ from truss._native_source_census import NativeSourceCensusCapture,CENSUS_LIMITS,
 from truss._native_arbitration import NativeOperationSession
 from truss._native_result_custody import NativeTextLimits
 from truss._native_pg8000 import NativeBoundaryRefusal
-from truss._resource_account import BytePermitAccount
 
 def descriptor(names=(b'ordinal',b'total_bytes',b'chunk_hex'),oid=25):
     return struct.pack('!H',3)+b''.join(n+b'\0'+struct.pack('!IhIhih',0,0,oid,-1,-1,0) for n in names)
@@ -20,7 +19,6 @@ def gate():
     g.limits=CENSUS_LIMITS;g.stage=0;g.chunk_count=0;g.image=None;g.offset=0
     g.unavailable=False;g.frames=[];g.census_context=SimpleNamespace(input_funcs=[string_in]*3)
     g.rows_seen=0;g.bytes_seen=0;g.cleanup_rows_seen=0;g.cleanup_bytes_seen=0;g.expected_command='SELECT'
-    g.account=BytePermitAccount(g,CENSUS_LIMITS.payload_capacity,CENSUS_LIMITS.cumulative_payload,CENSUS_LIMITS.account_records)
     return g
 def feed(g,code,data):g._validate(code,data,g.census_context)
 def pieces(image):
@@ -28,7 +26,6 @@ def pieces(image):
 class NativeSourceCensusFrameTests(unittest.TestCase):
     def test_selected_profile_does_not_modify_defaults(self):
         self.assertEqual(NativeTextLimits().wire_bytes,1048576)
-        self.assertEqual(NativeTextLimits().payload_capacity,8388608)
         self.assertEqual(CENSUS_LIMITS.frame_bytes,65536)
         self.assertEqual(CENSUS_LIMITS.cell_bytes,8192)
     def test_native_descriptor_bounds(self):
@@ -40,7 +37,6 @@ class NativeSourceCensusFrameTests(unittest.TestCase):
             for p in pieces(image):feed(g,b'D',row(p))
             feed(g,b'C',b'SELECT '+str(g.chunk_count).encode()+b'\0');self.assertEqual(g.stage,2)
             feed(g,b'Z',b'T');self.assertEqual(g.stage,3);self.assertEqual(bytes(g.image),image)
-            self.assertGreater(g.account.snapshot(g)[2],len(image))
     def test_exact_maximum_image(self):
         image=b"a"*16777216;g=gate();feed(g,b"T",descriptor())
         for p in pieces(image):feed(g,b"D",row(p))
@@ -72,10 +68,6 @@ class NativeSourceCensusFrameTests(unittest.TestCase):
         for code,data in ((b'T',descriptor()),(b'N',b'SNOTICE\0C00000\0\0'),(b'Z',b'I')):
             g=gate();feed(g,b'T',descriptor())
             with self.assertRaises(NativeBoundaryRefusal):feed(g,code,data)
-    def test_record_exhaustion_before_original_frame_retention(self):
-        g=gate();g.account=BytePermitAccount(g,1024,1024,0)
-        with self.assertRaises(ValueError):feed(g,b'T',descriptor())
-        self.assertEqual(g.frames,[])
     def test_shape_only_can_capture_forged_bytes(self):
         g=gate();feed(g,b'T',descriptor());feed(g,b'D',row((b'0',b'6',b'forged'.hex().encode())))
         feed(g,b'C',b'SELECT 1\0');feed(g,b'Z',b'T');self.assertEqual(bytes(g.image),b'forged')

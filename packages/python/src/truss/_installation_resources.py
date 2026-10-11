@@ -1,27 +1,22 @@
 """Private pinned resource capture; not complete index or installer admission.
 
 Only a trusted registered resource handle supplies open/read. This component
-charges the declared read bound, not actual interpreter/decoder/hash workspace.
+uses exact read and digest limits for the selected original bytes.
 """
 from dataclasses import dataclass
 from hashlib import sha256
-from ._resource_account import ByteAllocation, BytePermitAccount
 
 
 @dataclass(frozen=True, eq=False)
 class ResourceCapture:
     original: bytes
-    allocation: ByteAllocation
-    account: BytePermitAccount
 
 
-def capture_resource(resource, expected_length, expected_sha256, maximum_length,
-                     account, producer):
+def capture_resource(resource, expected_length, expected_sha256, maximum_length):
     """Read once through a complete bounded binary-read handle, retaining bytes.
 
     The independently selected entry/profile supplies lengths and digest. No
     path lookup, package index selection, database submission or retry occurs.
-    On read/close/correspondence failure, quarantine the original charge.
     """
     if (type(expected_length) is not int or type(maximum_length) is not int
             or expected_length < 0 or maximum_length < 0
@@ -32,21 +27,13 @@ def capture_resource(resource, expected_length, expected_sha256, maximum_length,
         raise ValueError('Independent exact resource digest required')
     # One sentinel byte distinguishes exact EOF from an appended payload.
     bound = expected_length + 1
-    permit = account.reserve(producer, bound)
-    allocation = account.allocate(producer, permit, bound)
-    try:
-        with resource.open('rb') as stream:
-            original = stream.read(bound)
-        if type(original) is not bytes or len(original) != expected_length:
-            raise ValueError('Resource byte length mismatch')
-        if sha256(original).hexdigest() != expected_sha256:
-            raise ValueError('Resource digest mismatch')
-        account.terminate(producer, permit)
-        return ResourceCapture(original, allocation, account)
-    except BaseException:
-        # Error/close/termination does not establish safe release of all views.
-        account.close(producer)
-        raise
+    with resource.open('rb') as stream:
+        original = stream.read(bound)
+    if type(original) is not bytes or len(original) != expected_length:
+        raise ValueError('Resource byte length mismatch')
+    if sha256(original).hexdigest() != expected_sha256:
+        raise ValueError('Resource digest mismatch')
+    return ResourceCapture(original)
 
 
 @dataclass(frozen=True)
@@ -158,24 +145,20 @@ class ResourceBundleCapture:
 def capture_resource_bundle(index_resource, index_length, index_sha256,
                             release, expected_entries, resolve_registered,
                             maximum_index_bytes, maximum_entries,
-                            maximum_total_bytes, account, producer):
+                            maximum_total_bytes):
     """Private composition with a trusted original registered-handle resolver.
 
     Resolver owns installed-package containment; no caller path/fallback is used.
-    Byte/entry bookkeeping is not complete decoder/allocator/work containment.
+    Logical byte and entry limits apply to the selected original resources.
     """
     index = capture_resource(index_resource, index_length, index_sha256,
-                             maximum_index_bytes, account, producer)
-    try:
-        entries = decode_resource_index(index.original, index_sha256, release,
-                                        expected_entries, maximum_index_bytes,
-                                        maximum_entries, maximum_total_bytes)
-        resources = []
-        for entry in entries:
-            handle = resolve_registered(entry)
-            resources.append(capture_resource(handle, entry.byte_length, entry.sha256,
-                                              maximum_total_bytes, account, producer))
-        return ResourceBundleCapture(index, entries, tuple(resources))
-    except BaseException:
-        account.close(producer)
-        raise
+                             maximum_index_bytes)
+    entries = decode_resource_index(index.original, index_sha256, release,
+                                    expected_entries, maximum_index_bytes,
+                                    maximum_entries, maximum_total_bytes)
+    resources = []
+    for entry in entries:
+        handle = resolve_registered(entry)
+        resources.append(capture_resource(handle, entry.byte_length, entry.sha256,
+                                          maximum_total_bytes))
+    return ResourceBundleCapture(index, entries, tuple(resources))

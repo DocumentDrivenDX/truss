@@ -226,11 +226,6 @@ class NativeOperationRunner:
             gate = NativeResultCustody(session, self.limits)
             run.gate = gate
             gate.install()
-            # Outbound SQL/parameter copies remain conservatively charged;
-            # object/driver/server heap is a separate profile qualification.
-            permit = gate.account.reserve(gate, 16 * (len(statement.sql.encode('utf-8')) + encoded + 4096))
-            gate.account.allocate(gate, permit, 16 * (len(statement.sql.encode('utf-8')) + encoded + 4096))
-            gate.account.terminate(gate, permit)
             gate.expected_command = 'SELECT'
             run.baseline = self._state(run, cleanup=False)
             if (run.baseline[2].replace(' ', '_') != transaction.isolation

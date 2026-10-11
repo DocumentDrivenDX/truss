@@ -1,13 +1,12 @@
 """Private selected pg8000 frame/context/result custody, not a heap bound.
 
-Gate/core/decode payload charges never rewind. Connection-owned buffering,
+Logical frame and result limits bound returned carriers. Connection-owned buffering,
 notices and notifications are preserved; no empty-socket claim is produced.
 """
 from dataclasses import dataclass
 import struct
 import io
-from ._accounted_receive import AccountedReceiver
-from ._resource_account import BytePermitAccount
+from ._bounded_receive import BoundedReceiver
 from ._native_pg8000 import NativeBoundaryRefusal
 from ._native_ingress_deadline import NativeIngressDeadline
 from ._native_outbound import NativeOutbound
@@ -22,9 +21,6 @@ class NativeTextLimits:
     wire_bytes: int = 1048576
     messages: int = 2048
     reads: int = 4096
-    payload_capacity: int = 8388608
-    cumulative_payload: int = 33554432
-    account_records: int = 32768
     contexts: int = 64
     rows: int = 256
     columns: int = 32
@@ -70,16 +66,11 @@ class NativeResultCustody:
         self.original_handle_messages = con.handle_messages
         self.original_handlers = dict(con.message_types)
         self.original_ready_error = self.boundary._ready_error
-        self.account = BytePermitAccount(self, limits.payload_capacity,
-            limits.cumulative_payload, limits.account_records)
-        self.receiver = AccountedReceiver(_BufferedIngress(self.original_sock, self.ingress_deadline), self.account, self,
+        self.receiver = BoundedReceiver(_BufferedIngress(self.original_sock, self.ingress_deadline),
             frame_bytes=limits.frame_bytes, total_bytes=limits.wire_bytes,
             messages=limits.messages, reads=limits.reads)
-        # Independent preallocated ingress/account/context lanes. Ordinary work
-        # cannot consume the budget reserved for original native cleanup.
-        self.cleanup_account = BytePermitAccount(self, limits.payload_capacity,
-            limits.cumulative_payload, limits.account_records)
-        self.cleanup_receiver = AccountedReceiver(_BufferedIngress(self.original_sock, self.ingress_deadline), self.cleanup_account, self,
+        # Keep a separate cleanup lane so ordinary input cannot consume it.
+        self.cleanup_receiver = BoundedReceiver(_BufferedIngress(self.original_sock, self.ingress_deadline),
             frame_bytes=limits.frame_bytes, total_bytes=limits.wire_bytes,
             messages=limits.messages, reads=limits.reads)
         self.contexts = [None] * limits.contexts
@@ -140,12 +131,8 @@ class NativeResultCustody:
                 if size != 5:
                     raise NativeBoundaryRefusal('Original header read required')
                 cleanup = self._cleanup_mode()
-                account = self.cleanup_account if cleanup else self.account
                 receiver = self.cleanup_receiver if cleanup else self.receiver
-                permit = account.reserve(self, 16 * self.limits.frame_bytes)
-                header, body = receiver.receive_core_parts()
-                account.allocate(self, permit, 16 * len(body))
-                account.terminate(self, permit)
+                header, body = receiver.receive_parts()
                 self.pending_body = body
                 return header
             body = self.pending_body
@@ -388,7 +375,3 @@ class NativeResultCustody:
             self.original_context = None
             self.original_ready_error = None
             self.detached = True
-            # Charges stay retained: native evidence and the transferred result
-            # have consumers. Permit termination is not allocation release.
-            self.account.close(self)
-            self.cleanup_account.close(self)

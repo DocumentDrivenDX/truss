@@ -6,7 +6,6 @@ from truss._native_fresh_epoch_capture import NativeFreshEpochCapture,FRESH_EPOC
 from truss._native_result_custody import NativeTextLimits
 from truss._native_pg8000 import NativeBoundaryRefusal
 
-from truss._resource_account import BytePermitAccount
 
 EXPECTED=('installation','epoch','incarnation')
 ROW=(*EXPECTED,'01','0203',hashlib.sha256(b'\x02\x03').hexdigest(),'123','5','345','actor','actor','transaction_source_epoch_lock_only')
@@ -14,9 +13,8 @@ def gate():
  g=object.__new__(NativeFreshEpochCapture)
  g.boundary=SimpleNamespace(_connection=SimpleNamespace(_client_encoding='utf8'),_active_control=None)
  g.session=SimpleNamespace(cleanup_calls=())
- g.limits=FRESH_EPOCH_LIMITS;g.rows_seen=0;g.bytes_seen=0;g.cleanup_rows_seen=0;g.cleanup_bytes_seen=0
+ g.frames=[];g.limits=FRESH_EPOCH_LIMITS;g.rows_seen=0;g.bytes_seen=0;g.cleanup_rows_seen=0;g.cleanup_bytes_seen=0
  g.response_stage=0;g.expected_command='SELECT';g.admission_context=SimpleNamespace(input_funcs=[string_in]*12)
- g.frames=[];g.account=BytePermitAccount(g,FRESH_EPOCH_LIMITS.payload_capacity,FRESH_EPOCH_LIMITS.cumulative_payload,FRESH_EPOCH_LIMITS.account_records)
  return g
 def descriptor(oid=25,names=None):
  names=names or NativeFreshEpochCapture.NAMES
