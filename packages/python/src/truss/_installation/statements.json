@@ -8,7 +8,7 @@
     "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
     "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
     "packages/python/src/truss/_installation/manifest.json": "e2605e8d3de55bb0b4db8ee045d937707ce7345489add89da0fc7a2bb1eae3df",
-    "scripts/build-python-installation-statements.ts": "97c764e1d8a15d7e2ea437c38f7012e03a11ee46937a05e6d2f0f7db6ab6d21d",
+    "scripts/build-python-installation-statements.ts": "1ca180146549d06bc546a3ac08f92121bf37825103ae19c140a540ad28c95af5",
     "/Users/erik/Projects/umf/src/adapters/postgresql/index.ts": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4",
     "/Users/erik/Projects/umf/src/model/native-json.ts": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882",
     "/Users/erik/Projects/umf/native/postgresql/runtime.ts": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
@@ -687,6 +687,2936 @@
       "sha256": "9badde01409781db53f53b16cf46410313d88017558f534b9db6255d0dcdb21b"
     }
   ],
+  "membership": {
+    "tables": [
+      {
+        "name": "setting",
+        "kind": "r",
+        "pointer": "/stmts/2/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "key",
+            "ordinal": "1",
+            "pointer": "/stmts/2/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "value",
+            "ordinal": "2",
+            "pointer": "/stmts/2/stmt/CreateStmt/tableElts/1/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "module_access",
+        "kind": "r",
+        "pointer": "/stmts/5/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "document_id",
+            "ordinal": "1",
+            "pointer": "/stmts/5/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "module",
+            "ordinal": "2",
+            "pointer": "/stmts/5/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "reader_role",
+            "ordinal": "3",
+            "pointer": "/stmts/5/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "writer_role",
+            "ordinal": "4",
+            "pointer": "/stmts/5/stmt/CreateStmt/tableElts/3/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "schema_rev",
+        "kind": "r",
+        "pointer": "/stmts/6/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "rev",
+            "ordinal": "1",
+            "pointer": "/stmts/6/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "accepted_at",
+            "ordinal": "2",
+            "pointer": "/stmts/6/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "origin",
+            "ordinal": "3",
+            "pointer": "/stmts/6/stmt/CreateStmt/tableElts/2/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "schema_head",
+        "kind": "r",
+        "pointer": "/stmts/8/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "id",
+            "ordinal": "1",
+            "pointer": "/stmts/8/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "rev",
+            "ordinal": "2",
+            "pointer": "/stmts/8/stmt/CreateStmt/tableElts/1/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "schema_doc",
+        "kind": "r",
+        "pointer": "/stmts/10/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "rev",
+            "ordinal": "1",
+            "pointer": "/stmts/10/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "ord",
+            "ordinal": "2",
+            "pointer": "/stmts/10/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "doc_id",
+            "ordinal": "3",
+            "pointer": "/stmts/10/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "doc_revision",
+            "ordinal": "4",
+            "pointer": "/stmts/10/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "umf_version",
+            "ordinal": "5",
+            "pointer": "/stmts/10/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "content_sha256",
+            "ordinal": "6",
+            "pointer": "/stmts/10/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "document",
+            "ordinal": "7",
+            "pointer": "/stmts/10/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "validation",
+            "ordinal": "8",
+            "pointer": "/stmts/10/stmt/CreateStmt/tableElts/7/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "schema_change",
+        "kind": "r",
+        "pointer": "/stmts/11/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "rev",
+            "ordinal": "1",
+            "pointer": "/stmts/11/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "seq",
+            "ordinal": "2",
+            "pointer": "/stmts/11/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "kind",
+            "ordinal": "3",
+            "pointer": "/stmts/11/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "def_id",
+            "ordinal": "4",
+            "pointer": "/stmts/11/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "before",
+            "ordinal": "5",
+            "pointer": "/stmts/11/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "after",
+            "ordinal": "6",
+            "pointer": "/stmts/11/stmt/CreateStmt/tableElts/5/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "type_def",
+        "kind": "r",
+        "pointer": "/stmts/12/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "document_id",
+            "ordinal": "1",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "type_id",
+            "ordinal": "2",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "module",
+            "ordinal": "3",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "element",
+            "ordinal": "4",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "kind",
+            "ordinal": "5",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "provisional",
+            "ordinal": "6",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "since_rev",
+            "ordinal": "7",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "doc_ord",
+            "ordinal": "8",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "retired_rev",
+            "ordinal": "9",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "lineage_profile",
+            "ordinal": "10",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "lineage_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "lineage_sha256",
+            "ordinal": "12",
+            "pointer": "/stmts/12/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "definition_source_kind",
+            "ordinal": "13",
+            "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_rev",
+            "ordinal": "14",
+            "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_doc_ord",
+            "ordinal": "15",
+            "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/2/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_document_id",
+            "ordinal": "16",
+            "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_rev",
+            "ordinal": "17",
+            "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/4/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_pointer",
+            "ordinal": "18",
+            "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_bytes",
+            "ordinal": "19",
+            "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "prop_def",
+        "kind": "r",
+        "pointer": "/stmts/13/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "prop_id",
+            "ordinal": "1",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "type_id",
+            "ordinal": "2",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "element",
+            "ordinal": "3",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "name",
+            "ordinal": "4",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "scalar_type",
+            "ordinal": "5",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "nullability",
+            "ordinal": "6",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "cardinality",
+            "ordinal": "7",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "facets",
+            "ordinal": "8",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "item",
+            "ordinal": "9",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "home",
+            "ordinal": "10",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "since_rev",
+            "ordinal": "11",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "doc_ord",
+            "ordinal": "12",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "retired_rev",
+            "ordinal": "13",
+            "pointer": "/stmts/13/stmt/CreateStmt/tableElts/12/ColumnDef"
+          },
+          {
+            "name": "definition_source_kind",
+            "ordinal": "14",
+            "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_rev",
+            "ordinal": "15",
+            "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_doc_ord",
+            "ordinal": "16",
+            "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/2/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_document_id",
+            "ordinal": "17",
+            "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_rev",
+            "ordinal": "18",
+            "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/4/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_pointer",
+            "ordinal": "19",
+            "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_bytes",
+            "ordinal": "20",
+            "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "declaration_module",
+            "ordinal": "21",
+            "pointer": "/stmts/106/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "key_def",
+        "kind": "r",
+        "pointer": "/stmts/14/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "type_id",
+            "ordinal": "1",
+            "pointer": "/stmts/14/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "key_id",
+            "ordinal": "2",
+            "pointer": "/stmts/14/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "key_num",
+            "ordinal": "3",
+            "pointer": "/stmts/14/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "prop_ids",
+            "ordinal": "4",
+            "pointer": "/stmts/14/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "is_primary",
+            "ordinal": "5",
+            "pointer": "/stmts/14/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "since_rev",
+            "ordinal": "6",
+            "pointer": "/stmts/14/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "retired_rev",
+            "ordinal": "7",
+            "pointer": "/stmts/14/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "definition_source_kind",
+            "ordinal": "8",
+            "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_rev",
+            "ordinal": "9",
+            "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_doc_ord",
+            "ordinal": "10",
+            "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/2/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_document_id",
+            "ordinal": "11",
+            "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_rev",
+            "ordinal": "12",
+            "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/4/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_pointer",
+            "ordinal": "13",
+            "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_bytes",
+            "ordinal": "14",
+            "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "rel_def",
+        "kind": "r",
+        "pointer": "/stmts/15/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "document_id",
+            "ordinal": "1",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "rel_type_id",
+            "ordinal": "2",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "module",
+            "ordinal": "3",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "rel_id",
+            "ordinal": "4",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "name",
+            "ordinal": "5",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "source_min",
+            "ordinal": "6",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "source_max",
+            "ordinal": "7",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "target_min",
+            "ordinal": "8",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "target_max",
+            "ordinal": "9",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "lifecycle",
+            "ordinal": "10",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "directed",
+            "ordinal": "11",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "target_key",
+            "ordinal": "12",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "composition",
+            "ordinal": "13",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/12/ColumnDef"
+          },
+          {
+            "name": "assoc_type_id",
+            "ordinal": "14",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/13/ColumnDef"
+          },
+          {
+            "name": "inverse",
+            "ordinal": "15",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/14/ColumnDef"
+          },
+          {
+            "name": "since_rev",
+            "ordinal": "16",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/15/ColumnDef"
+          },
+          {
+            "name": "doc_ord",
+            "ordinal": "17",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/16/ColumnDef"
+          },
+          {
+            "name": "retired_rev",
+            "ordinal": "18",
+            "pointer": "/stmts/15/stmt/CreateStmt/tableElts/17/ColumnDef"
+          },
+          {
+            "name": "definition_source_kind",
+            "ordinal": "19",
+            "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_rev",
+            "ordinal": "20",
+            "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_doc_ord",
+            "ordinal": "21",
+            "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/2/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "definition_document_id",
+            "ordinal": "22",
+            "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/3/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_rev",
+            "ordinal": "23",
+            "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/4/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_pointer",
+            "ordinal": "24",
+            "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/5/AlterTableCmd/def/ColumnDef"
+          },
+          {
+            "name": "binding_source_bytes",
+            "ordinal": "25",
+            "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/6/AlterTableCmd/def/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "rel_endpoint",
+        "kind": "r",
+        "pointer": "/stmts/16/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "rel_type_id",
+            "ordinal": "1",
+            "pointer": "/stmts/16/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "source_type",
+            "ordinal": "2",
+            "pointer": "/stmts/16/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "target_type",
+            "ordinal": "3",
+            "pointer": "/stmts/16/stmt/CreateStmt/tableElts/2/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "object",
+        "kind": "r",
+        "pointer": "/stmts/18/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "id",
+            "ordinal": "1",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "type_id",
+            "ordinal": "2",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "props",
+            "ordinal": "3",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "retained",
+            "ordinal": "4",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "root_id",
+            "ordinal": "5",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "root_type",
+            "ordinal": "6",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "rev",
+            "ordinal": "7",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "ver",
+            "ordinal": "8",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "created_at",
+            "ordinal": "9",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "updated_at",
+            "ordinal": "10",
+            "pointer": "/stmts/18/stmt/CreateStmt/tableElts/9/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "edge",
+        "kind": "r",
+        "pointer": "/stmts/20/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "id",
+            "ordinal": "1",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "rel_type_id",
+            "ordinal": "2",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "source_id",
+            "ordinal": "3",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "source_type",
+            "ordinal": "4",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "target_id",
+            "ordinal": "5",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "target_type",
+            "ordinal": "6",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "props",
+            "ordinal": "7",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "order_key",
+            "ordinal": "8",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "rev",
+            "ordinal": "9",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "ver",
+            "ordinal": "10",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "created_at",
+            "ordinal": "11",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "updated_at",
+            "ordinal": "12",
+            "pointer": "/stmts/20/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "retained",
+            "ordinal": "13",
+            "pointer": "/stmts/34/stmt/AlterTableStmt/cmds/0/AlterTableCmd/def/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "edge_limit",
+        "kind": "r",
+        "pointer": "/stmts/23/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "rel_type_id",
+            "ordinal": "1",
+            "pointer": "/stmts/23/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "side",
+            "ordinal": "2",
+            "pointer": "/stmts/23/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "endpoint_id",
+            "ordinal": "3",
+            "pointer": "/stmts/23/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "edge_id",
+            "ordinal": "4",
+            "pointer": "/stmts/23/stmt/CreateStmt/tableElts/3/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "key_tombstone",
+        "kind": "r",
+        "pointer": "/stmts/25/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "entity_kind",
+            "ordinal": "1",
+            "pointer": "/stmts/25/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "type_id",
+            "ordinal": "2",
+            "pointer": "/stmts/25/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "key_num",
+            "ordinal": "3",
+            "pointer": "/stmts/25/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "k",
+            "ordinal": "4",
+            "pointer": "/stmts/25/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "entity_id",
+            "ordinal": "5",
+            "pointer": "/stmts/25/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "ver",
+            "ordinal": "6",
+            "pointer": "/stmts/25/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "at",
+            "ordinal": "7",
+            "pointer": "/stmts/25/stmt/CreateStmt/tableElts/6/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "record_source",
+        "kind": "r",
+        "pointer": "/stmts/26/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "entity_kind",
+            "ordinal": "1",
+            "pointer": "/stmts/26/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "entity_id",
+            "ordinal": "2",
+            "pointer": "/stmts/26/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "load_id",
+            "ordinal": "3",
+            "pointer": "/stmts/26/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "source",
+            "ordinal": "4",
+            "pointer": "/stmts/26/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "imported_at",
+            "ordinal": "5",
+            "pointer": "/stmts/26/stmt/CreateStmt/tableElts/4/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "feed_consumer",
+        "kind": "r",
+        "pointer": "/stmts/28/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "consumer",
+            "ordinal": "1",
+            "pointer": "/stmts/28/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "xid",
+            "ordinal": "2",
+            "pointer": "/stmts/28/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "seq",
+            "ordinal": "3",
+            "pointer": "/stmts/28/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "updated_at",
+            "ordinal": "4",
+            "pointer": "/stmts/28/stmt/CreateStmt/tableElts/3/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "journal",
+        "kind": "p",
+        "pointer": "/stmts/30/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "seq",
+            "ordinal": "1",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "at",
+            "ordinal": "2",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "xid",
+            "ordinal": "3",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "entity_kind",
+            "ordinal": "4",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "entity_id",
+            "ordinal": "5",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "entity_type",
+            "ordinal": "6",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "ver",
+            "ordinal": "7",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "op",
+            "ordinal": "8",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "prop_id",
+            "ordinal": "9",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "old_value",
+            "ordinal": "10",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "new_value",
+            "ordinal": "11",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "rev",
+            "ordinal": "12",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "origin",
+            "ordinal": "13",
+            "pointer": "/stmts/30/stmt/CreateStmt/tableElts/12/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "row_home_operation",
+        "kind": "r",
+        "pointer": "/stmts/40/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "original_writer_xid",
+            "ordinal": "1",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "operation_ordinal",
+            "ordinal": "2",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "operation_kind",
+            "ordinal": "3",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "phase",
+            "ordinal": "4",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "effect_generation",
+            "ordinal": "5",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "readiness_generation",
+            "ordinal": "6",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "sealed_generation",
+            "ordinal": "7",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "application_generation",
+            "ordinal": "8",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "original_context_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "original_definition_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "original_input_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "original_prestate_bytes",
+            "ordinal": "12",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "admitted_candidate_bytes",
+            "ordinal": "13",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/12/ColumnDef"
+          },
+          {
+            "name": "effect_obligation_bytes",
+            "ordinal": "14",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/13/ColumnDef"
+          },
+          {
+            "name": "original_group_custody_bytes",
+            "ordinal": "15",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/14/ColumnDef"
+          },
+          {
+            "name": "application_result_bytes",
+            "ordinal": "16",
+            "pointer": "/stmts/40/stmt/CreateStmt/tableElts/15/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "row_home_journal_stage",
+        "kind": "r",
+        "pointer": "/stmts/41/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "original_writer_xid",
+            "ordinal": "1",
+            "pointer": "/stmts/41/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "operation_ordinal",
+            "ordinal": "2",
+            "pointer": "/stmts/41/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "stage_name",
+            "ordinal": "3",
+            "pointer": "/stmts/41/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "stage_ordinal",
+            "ordinal": "4",
+            "pointer": "/stmts/41/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "effect_generation",
+            "ordinal": "5",
+            "pointer": "/stmts/41/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "body_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/41/stmt/CreateStmt/tableElts/5/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "row_home_state",
+        "kind": "r",
+        "pointer": "/stmts/46/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "state_id",
+            "ordinal": "1",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "owner_kind",
+            "ordinal": "2",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "object_id",
+            "ordinal": "3",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "object_type_id",
+            "ordinal": "4",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "edge_id",
+            "ordinal": "5",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "relationship_type_id",
+            "ordinal": "6",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "property_owner_type_id",
+            "ordinal": "7",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "property_id",
+            "ordinal": "8",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "root_node_id",
+            "ordinal": "9",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "definition_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "home_profile_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "value_profile_bytes",
+            "ordinal": "12",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "source_bytes",
+            "ordinal": "13",
+            "pointer": "/stmts/46/stmt/CreateStmt/tableElts/12/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "row_home_node",
+        "kind": "r",
+        "pointer": "/stmts/47/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "state_id",
+            "ordinal": "1",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "node_id",
+            "ordinal": "2",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "parent_node_id",
+            "ordinal": "3",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "slot_kind",
+            "ordinal": "4",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "sequence_ordinal",
+            "ordinal": "5",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "map_key",
+            "ordinal": "6",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "record_field_identity_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "value_kind",
+            "ordinal": "8",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "definition_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "source_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/47/stmt/CreateStmt/tableElts/9/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "row_home_scalar",
+        "kind": "r",
+        "pointer": "/stmts/52/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "state_id",
+            "ordinal": "1",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "node_id",
+            "ordinal": "2",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "scalar_kind",
+            "ordinal": "3",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "text_value",
+            "ordinal": "4",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "boolean_value",
+            "ordinal": "5",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "numeric_value",
+            "ordinal": "6",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "numeric_token",
+            "ordinal": "7",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "binary_value",
+            "ordinal": "8",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "temporal_text",
+            "ordinal": "9",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "temporal_instant",
+            "ordinal": "10",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "opaque_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "codec_definition_bytes",
+            "ordinal": "12",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "original_source_bytes",
+            "ordinal": "13",
+            "pointer": "/stmts/52/stmt/CreateStmt/tableElts/12/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "relationship_lineage",
+        "kind": "r",
+        "pointer": "/stmts/53/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "rel_type_id",
+            "ordinal": "1",
+            "pointer": "/stmts/53/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "lineage_category",
+            "ordinal": "2",
+            "pointer": "/stmts/53/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "identity_profile",
+            "ordinal": "3",
+            "pointer": "/stmts/53/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "original_identity_bytes",
+            "ordinal": "4",
+            "pointer": "/stmts/53/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "identity_sha256",
+            "ordinal": "5",
+            "pointer": "/stmts/53/stmt/CreateStmt/tableElts/4/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "row_home_touch",
+        "kind": "r",
+        "pointer": "/stmts/61/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "transaction_id",
+            "ordinal": "1",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "owner_kind",
+            "ordinal": "2",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "owner_id",
+            "ordinal": "3",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "owner_discriminator_id",
+            "ordinal": "4",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "property_owner_type_id",
+            "ordinal": "5",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "property_id",
+            "ordinal": "6",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "dirty_generation",
+            "ordinal": "7",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "sealed_generation",
+            "ordinal": "8",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "original_layout_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "original_home_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "original_owner_property_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "original_operation_bytes",
+            "ordinal": "12",
+            "pointer": "/stmts/61/stmt/CreateStmt/tableElts/11/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "row_home_capacity",
+        "kind": "r",
+        "pointer": "/stmts/62/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "singleton_id",
+            "ordinal": "1",
+            "pointer": "/stmts/62/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "retained_rows",
+            "ordinal": "2",
+            "pointer": "/stmts/62/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "retained_custody_bytes",
+            "ordinal": "3",
+            "pointer": "/stmts/62/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "reserved_rows",
+            "ordinal": "4",
+            "pointer": "/stmts/62/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "reserved_custody_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/62/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "original_layout_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/62/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "original_resource_profile_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/62/stmt/CreateStmt/tableElts/6/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "key_bucket_guard",
+        "kind": "r",
+        "pointer": "/stmts/64/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "namespace_sha256",
+            "ordinal": "1",
+            "pointer": "/stmts/64/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "key_sha256",
+            "ordinal": "2",
+            "pointer": "/stmts/64/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "generation",
+            "ordinal": "3",
+            "pointer": "/stmts/64/stmt/CreateStmt/tableElts/2/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "object_key_bucket",
+        "kind": "r",
+        "pointer": "/stmts/65/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "type_id",
+            "ordinal": "2",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "key_num",
+            "ordinal": "3",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "object_id",
+            "ordinal": "4",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "namespace_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "key_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "original_context_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "namespace_sha256",
+            "ordinal": "8",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "key_sha256",
+            "ordinal": "9",
+            "pointer": "/stmts/65/stmt/CreateStmt/tableElts/8/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "object_key_reservation_bucket",
+        "kind": "r",
+        "pointer": "/stmts/67/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/67/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "namespace_bytes",
+            "ordinal": "2",
+            "pointer": "/stmts/67/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "key_bytes",
+            "ordinal": "3",
+            "pointer": "/stmts/67/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "original_reservation_bytes",
+            "ordinal": "4",
+            "pointer": "/stmts/67/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "namespace_sha256",
+            "ordinal": "5",
+            "pointer": "/stmts/67/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "key_sha256",
+            "ordinal": "6",
+            "pointer": "/stmts/67/stmt/CreateStmt/tableElts/5/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "catalog_acceptance_report",
+        "kind": "r",
+        "pointer": "/stmts/69/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "rev",
+            "ordinal": "1",
+            "pointer": "/stmts/69/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "report_bytes",
+            "ordinal": "2",
+            "pointer": "/stmts/69/stmt/CreateStmt/tableElts/1/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "installation_marker",
+        "kind": "r",
+        "pointer": "/stmts/74/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "singleton_id",
+            "ordinal": "1",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "marker_interface_version",
+            "ordinal": "2",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "installation_id",
+            "ordinal": "3",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "layout_version",
+            "ordinal": "4",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "bundle_sha256",
+            "ordinal": "5",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "inventory_profile",
+            "ordinal": "6",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "inventory_sha256",
+            "ordinal": "7",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "database_identity",
+            "ordinal": "8",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "schema_name",
+            "ordinal": "9",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "installed_at",
+            "ordinal": "10",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "installed_at_text",
+            "ordinal": "11",
+            "pointer": "/stmts/74/stmt/CreateStmt/tableElts/10/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "installation_archive",
+        "kind": "r",
+        "pointer": "/stmts/76/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "archive_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/76/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "installation_id",
+            "ordinal": "2",
+            "pointer": "/stmts/76/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "artifact_role",
+            "ordinal": "3",
+            "pointer": "/stmts/76/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "artifact_identity",
+            "ordinal": "4",
+            "pointer": "/stmts/76/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "artifact_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/76/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "artifact_sha256",
+            "ordinal": "6",
+            "pointer": "/stmts/76/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "artifact_identity_sha256",
+            "ordinal": "7",
+            "pointer": "/stmts/76/stmt/CreateStmt/tableElts/6/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "feed_tx",
+        "kind": "r",
+        "pointer": "/stmts/78/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "source_epoch",
+            "ordinal": "1",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "feed_profile",
+            "ordinal": "2",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "original_writer_xid",
+            "ordinal": "3",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "registration_counter",
+            "ordinal": "4",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "prerequisite_registration_counter",
+            "ordinal": "5",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "configuration_registration_counter",
+            "ordinal": "6",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "membership_generation",
+            "ordinal": "7",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "finalized_generation",
+            "ordinal": "8",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "original_context_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "manifest_profile_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "manifest_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "manifest_sha256",
+            "ordinal": "12",
+            "pointer": "/stmts/78/stmt/CreateStmt/tableElts/11/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "feed_member",
+        "kind": "r",
+        "pointer": "/stmts/79/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "source_epoch",
+            "ordinal": "1",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "feed_profile",
+            "ordinal": "2",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "original_writer_xid",
+            "ordinal": "3",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "registration_address",
+            "ordinal": "4",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "fact_kind",
+            "ordinal": "5",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "original_fact_key_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "original_fact_key_profile_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "original_payload_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "original_payload_profile_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "original_payload_sha256",
+            "ordinal": "10",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "original_owner_context_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "original_write_at",
+            "ordinal": "12",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "original_fact_clock_bytes",
+            "ordinal": "13",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/12/ColumnDef"
+          },
+          {
+            "name": "delivery_ordinal",
+            "ordinal": "14",
+            "pointer": "/stmts/79/stmt/CreateStmt/tableElts/13/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "feed_prerequisite",
+        "kind": "r",
+        "pointer": "/stmts/80/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "source_epoch",
+            "ordinal": "1",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "feed_profile",
+            "ordinal": "2",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "original_writer_xid",
+            "ordinal": "3",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "prerequisite_address",
+            "ordinal": "4",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "original_revision",
+            "ordinal": "5",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "original_artifact_identity_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "original_definition_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "original_definition_profile_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "original_definition_sha256",
+            "ordinal": "9",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "original_owner_context_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/80/stmt/CreateStmt/tableElts/9/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "feed_configuration_prerequisite",
+        "kind": "r",
+        "pointer": "/stmts/81/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "source_epoch",
+            "ordinal": "1",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "feed_profile",
+            "ordinal": "2",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "original_writer_xid",
+            "ordinal": "3",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "configuration_address",
+            "ordinal": "4",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "original_installation_identity_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "original_configuration_generation",
+            "ordinal": "6",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "original_configuration_profile_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "original_configuration_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "original_producer_inventory_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "original_configuration_sha256",
+            "ordinal": "10",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "original_owner_context_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/81/stmt/CreateStmt/tableElts/10/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "complete_feed_consumer",
+        "kind": "r",
+        "pointer": "/stmts/83/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "source_epoch",
+            "ordinal": "2",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "feed_profile",
+            "ordinal": "3",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "scope_identity",
+            "ordinal": "4",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "consumer_id",
+            "ordinal": "5",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "registration_id",
+            "ordinal": "6",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "worker_generation",
+            "ordinal": "7",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "state_kind",
+            "ordinal": "8",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "consumer_identity_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "consumer_identity_sha256",
+            "ordinal": "10",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "original_registration_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "current_state_bytes",
+            "ordinal": "12",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "current_state_sha256",
+            "ordinal": "13",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/12/ColumnDef"
+          },
+          {
+            "name": "applied_boundary_bytes",
+            "ordinal": "14",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/13/ColumnDef"
+          },
+          {
+            "name": "applied_boundary_profile_bytes",
+            "ordinal": "15",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/14/ColumnDef"
+          },
+          {
+            "name": "inclusive_protection_xid",
+            "ordinal": "16",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/15/ColumnDef"
+          },
+          {
+            "name": "protection_evidence_bytes",
+            "ordinal": "17",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/16/ColumnDef"
+          },
+          {
+            "name": "procedure_profile_bytes",
+            "ordinal": "18",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/17/ColumnDef"
+          },
+          {
+            "name": "downstream_profile_bytes",
+            "ordinal": "19",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/18/ColumnDef"
+          },
+          {
+            "name": "registered_at",
+            "ordinal": "20",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/19/ColumnDef"
+          },
+          {
+            "name": "acknowledged_at",
+            "ordinal": "21",
+            "pointer": "/stmts/83/stmt/CreateStmt/tableElts/20/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "complete_feed_administration_receipt",
+        "kind": "r",
+        "pointer": "/stmts/86/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "source_epoch",
+            "ordinal": "2",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "administrative_namespace",
+            "ordinal": "3",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "request_id",
+            "ordinal": "4",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "identity_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "identity_sha256",
+            "ordinal": "6",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "canonical_input_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "input_profile_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "receipt_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "receipt_profile_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "actual_database_role",
+            "ordinal": "11",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "authorization_evidence_bytes",
+            "ordinal": "12",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "producing_xid",
+            "ordinal": "13",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/12/ColumnDef"
+          },
+          {
+            "name": "original_production_evidence_bytes",
+            "ordinal": "14",
+            "pointer": "/stmts/86/stmt/CreateStmt/tableElts/13/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "complete_feed_seed_attempt",
+        "kind": "r",
+        "pointer": "/stmts/89/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "attempt_identity_bytes",
+            "ordinal": "2",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "attempt_identity_sha256",
+            "ordinal": "3",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "activation_profile_bytes",
+            "ordinal": "4",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "source_context_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "original_worker_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "state_kind",
+            "ordinal": "7",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "current_state_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "inclusive_replay_xmin",
+            "ordinal": "9",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "protection_evidence_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "invalidation_evidence_bytes",
+            "ordinal": "11",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "classifier_retirement_evidence_bytes",
+            "ordinal": "12",
+            "pointer": "/stmts/89/stmt/CreateStmt/tableElts/11/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "complete_feed_seed_artifact",
+        "kind": "r",
+        "pointer": "/stmts/92/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "attempt_row_id",
+            "ordinal": "2",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "artifact_role",
+            "ordinal": "3",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "artifact_ordinal",
+            "ordinal": "4",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "artifact_identity_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "artifact_identity_sha256",
+            "ordinal": "6",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "artifact_profile_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "payload_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "payload_sha256",
+            "ordinal": "9",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "production_custody_evidence_bytes",
+            "ordinal": "10",
+            "pointer": "/stmts/92/stmt/CreateStmt/tableElts/9/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "key_lifecycle_history",
+        "kind": "r",
+        "pointer": "/stmts/95/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "rev",
+            "ordinal": "1",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "seq",
+            "ordinal": "2",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "type_id",
+            "ordinal": "3",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "key_num",
+            "ordinal": "4",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "transition_kind",
+            "ordinal": "5",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "before_retired_rev",
+            "ordinal": "6",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "after_retired_rev",
+            "ordinal": "7",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "before_definition_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "after_definition_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/95/stmt/CreateStmt/tableElts/8/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "installation_admission",
+        "kind": "r",
+        "pointer": "/stmts/97/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "head_id",
+            "ordinal": "1",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "installation_id_utf8",
+            "ordinal": "2",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "source_epoch_utf8",
+            "ordinal": "3",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "configuration_generation",
+            "ordinal": "4",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "key_reuse",
+            "ordinal": "5",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "journal_mode",
+            "ordinal": "6",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "configuration_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "selected_binding_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "installed_inventory_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "configuration_sha256",
+            "ordinal": "10",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "selected_binding_sha256",
+            "ordinal": "11",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "installed_inventory_sha256",
+            "ordinal": "12",
+            "pointer": "/stmts/97/stmt/CreateStmt/tableElts/11/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "key_migration_receipt",
+        "kind": "r",
+        "pointer": "/stmts/99/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "installation_id_utf8",
+            "ordinal": "2",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "source_epoch_utf8",
+            "ordinal": "3",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "migration_attempt_id_utf8",
+            "ordinal": "4",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "original_request_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "original_attempt_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "receipt_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "prior_generation",
+            "ordinal": "8",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "resulting_generation",
+            "ordinal": "9",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "installation_sha256",
+            "ordinal": "10",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "epoch_sha256",
+            "ordinal": "11",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "attempt_sha256",
+            "ordinal": "12",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/11/ColumnDef"
+          },
+          {
+            "name": "receipt_sha256",
+            "ordinal": "13",
+            "pointer": "/stmts/99/stmt/CreateStmt/tableElts/12/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "request_receipt_route_guard",
+        "kind": "r",
+        "pointer": "/stmts/101/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "namespace_sha256",
+            "ordinal": "1",
+            "pointer": "/stmts/101/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "request_sha256",
+            "ordinal": "2",
+            "pointer": "/stmts/101/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "generation",
+            "ordinal": "3",
+            "pointer": "/stmts/101/stmt/CreateStmt/tableElts/2/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "request_receipt",
+        "kind": "r",
+        "pointer": "/stmts/103/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "namespace_identity_utf8",
+            "ordinal": "2",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "request_id_utf8",
+            "ordinal": "3",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "original_writer_xid",
+            "ordinal": "4",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "original_writer_context_bytes",
+            "ordinal": "5",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "lifecycle_generation",
+            "ordinal": "6",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "payload_state",
+            "ordinal": "7",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "original_receipt_bytes",
+            "ordinal": "8",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/7/ColumnDef"
+          },
+          {
+            "name": "expired_identity_bytes",
+            "ordinal": "9",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/8/ColumnDef"
+          },
+          {
+            "name": "namespace_sha256",
+            "ordinal": "10",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/9/ColumnDef"
+          },
+          {
+            "name": "request_sha256",
+            "ordinal": "11",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/10/ColumnDef"
+          },
+          {
+            "name": "expiry_writer_xid",
+            "ordinal": "12",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/13/ColumnDef"
+          },
+          {
+            "name": "expiry_writer_context_bytes",
+            "ordinal": "13",
+            "pointer": "/stmts/103/stmt/CreateStmt/tableElts/14/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "request_receipt_protection",
+        "kind": "r",
+        "pointer": "/stmts/105/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "receipt_storage_row_id",
+            "ordinal": "1",
+            "pointer": "/stmts/105/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "protection_generation",
+            "ordinal": "2",
+            "pointer": "/stmts/105/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "original_protection_bytes",
+            "ordinal": "3",
+            "pointer": "/stmts/105/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "original_update_evidence_bytes",
+            "ordinal": "4",
+            "pointer": "/stmts/105/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "original_update_writer_xid",
+            "ordinal": "5",
+            "pointer": "/stmts/105/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "original_update_writer_context_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/105/stmt/CreateStmt/tableElts/5/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "source_epoch_registry",
+        "kind": "r",
+        "pointer": "/stmts/109/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "installation_id",
+            "ordinal": "1",
+            "pointer": "/stmts/109/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "source_epoch",
+            "ordinal": "2",
+            "pointer": "/stmts/109/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "target_incarnation",
+            "ordinal": "3",
+            "pointer": "/stmts/109/stmt/CreateStmt/tableElts/2/ColumnDef"
+          },
+          {
+            "name": "predecessor_epoch",
+            "ordinal": "4",
+            "pointer": "/stmts/109/stmt/CreateStmt/tableElts/3/ColumnDef"
+          },
+          {
+            "name": "transition_reason",
+            "ordinal": "5",
+            "pointer": "/stmts/109/stmt/CreateStmt/tableElts/4/ColumnDef"
+          },
+          {
+            "name": "profile_bytes",
+            "ordinal": "6",
+            "pointer": "/stmts/109/stmt/CreateStmt/tableElts/5/ColumnDef"
+          },
+          {
+            "name": "evidence_bytes",
+            "ordinal": "7",
+            "pointer": "/stmts/109/stmt/CreateStmt/tableElts/6/ColumnDef"
+          },
+          {
+            "name": "evidence_sha256",
+            "ordinal": "8",
+            "pointer": "/stmts/109/stmt/CreateStmt/tableElts/7/ColumnDef"
+          }
+        ]
+      },
+      {
+        "name": "source_epoch_current",
+        "kind": "r",
+        "pointer": "/stmts/110/stmt/CreateStmt",
+        "columns": [
+          {
+            "name": "singleton_id",
+            "ordinal": "1",
+            "pointer": "/stmts/110/stmt/CreateStmt/tableElts/0/ColumnDef"
+          },
+          {
+            "name": "installation_id",
+            "ordinal": "2",
+            "pointer": "/stmts/110/stmt/CreateStmt/tableElts/1/ColumnDef"
+          },
+          {
+            "name": "source_epoch",
+            "ordinal": "3",
+            "pointer": "/stmts/110/stmt/CreateStmt/tableElts/2/ColumnDef"
+          }
+        ]
+      }
+    ],
+    "sequences": [
+      {
+        "name": "id_seq",
+        "pointer": "/stmts/17/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "journal_seq",
+        "pointer": "/stmts/29/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "row_home_id_seq",
+        "pointer": "/stmts/45/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "key_storage_row_seq",
+        "pointer": "/stmts/63/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "installation_archive_row_seq",
+        "pointer": "/stmts/75/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "complete_feed_consumer_row_seq",
+        "pointer": "/stmts/82/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "feed_administration_receipt_row_seq",
+        "pointer": "/stmts/85/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "feed_seed_attempt_row_seq",
+        "pointer": "/stmts/88/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "feed_seed_artifact_row_seq",
+        "pointer": "/stmts/91/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "migration_receipt_row_seq",
+        "pointer": "/stmts/98/stmt/CreateSeqStmt"
+      },
+      {
+        "name": "request_receipt_row_seq",
+        "pointer": "/stmts/102/stmt/CreateSeqStmt"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "object_type_id",
+        "table": "object",
+        "pointer": "/stmts/19/stmt/IndexStmt"
+      },
+      {
+        "name": "edge_out",
+        "table": "edge",
+        "pointer": "/stmts/21/stmt/IndexStmt"
+      },
+      {
+        "name": "edge_in",
+        "table": "edge",
+        "pointer": "/stmts/22/stmt/IndexStmt"
+      },
+      {
+        "name": "edge_limit_edge",
+        "table": "edge_limit",
+        "pointer": "/stmts/24/stmt/IndexStmt"
+      },
+      {
+        "name": "record_source_load",
+        "table": "record_source",
+        "pointer": "/stmts/27/stmt/IndexStmt"
+      },
+      {
+        "name": "journal_entity",
+        "table": "journal",
+        "pointer": "/stmts/31/stmt/IndexStmt"
+      },
+      {
+        "name": "journal_feed",
+        "table": "journal",
+        "pointer": "/stmts/32/stmt/IndexStmt"
+      },
+      {
+        "name": "journal_request",
+        "table": "journal",
+        "pointer": "/stmts/33/stmt/IndexStmt"
+      },
+      {
+        "name": "type_def_lineage_route",
+        "table": "type_def",
+        "pointer": "/stmts/42/stmt/IndexStmt"
+      },
+      {
+        "name": "row_home_one_root",
+        "table": "row_home_node",
+        "pointer": "/stmts/49/stmt/IndexStmt"
+      },
+      {
+        "name": "row_home_sequence_slot",
+        "table": "row_home_node",
+        "pointer": "/stmts/50/stmt/IndexStmt"
+      },
+      {
+        "name": "row_home_map_parent",
+        "table": "row_home_node",
+        "pointer": "/stmts/51/stmt/IndexStmt"
+      },
+      {
+        "name": "relationship_lineage_route",
+        "table": "relationship_lineage",
+        "pointer": "/stmts/54/stmt/IndexStmt"
+      },
+      {
+        "name": "object_key_bucket_route",
+        "table": "object_key_bucket",
+        "pointer": "/stmts/66/stmt/IndexStmt"
+      },
+      {
+        "name": "object_key_reservation_bucket_route",
+        "table": "object_key_reservation_bucket",
+        "pointer": "/stmts/68/stmt/IndexStmt"
+      },
+      {
+        "name": "installation_archive_identity_route",
+        "table": "installation_archive",
+        "pointer": "/stmts/77/stmt/IndexStmt"
+      },
+      {
+        "name": "complete_feed_consumer_identity_route",
+        "table": "complete_feed_consumer",
+        "pointer": "/stmts/84/stmt/IndexStmt"
+      },
+      {
+        "name": "feed_administration_receipt_identity_route",
+        "table": "complete_feed_administration_receipt",
+        "pointer": "/stmts/87/stmt/IndexStmt"
+      },
+      {
+        "name": "feed_seed_attempt_identity_route",
+        "table": "complete_feed_seed_attempt",
+        "pointer": "/stmts/90/stmt/IndexStmt"
+      },
+      {
+        "name": "feed_seed_artifact_identity_route",
+        "table": "complete_feed_seed_artifact",
+        "pointer": "/stmts/93/stmt/IndexStmt"
+      },
+      {
+        "name": "row_home_operation_unfinished_xid",
+        "table": "row_home_operation",
+        "pointer": "/stmts/94/stmt/IndexStmt"
+      },
+      {
+        "name": "key_lifecycle_history_by_key",
+        "table": "key_lifecycle_history",
+        "pointer": "/stmts/96/stmt/IndexStmt"
+      },
+      {
+        "name": "key_migration_receipt_route",
+        "table": "key_migration_receipt",
+        "pointer": "/stmts/100/stmt/IndexStmt"
+      },
+      {
+        "name": "request_receipt_route",
+        "table": "request_receipt",
+        "pointer": "/stmts/104/stmt/IndexStmt"
+      }
+    ],
+    "routines": [
+      {
+        "schema": "truss",
+        "name": "catalog_global_high_water_v01",
+        "inputs": [],
+        "kind": "f",
+        "pointer": "/stmts/70/stmt/CreateFunctionStmt"
+      },
+      {
+        "schema": "truss",
+        "name": "catalog_key_high_water_v01",
+        "inputs": [
+          "pg_catalog.int4"
+        ],
+        "kind": "f",
+        "pointer": "/stmts/72/stmt/CreateFunctionStmt"
+      }
+    ],
+    "definitionObligations": [
+      {
+        "pointer": "/stmts/0/stmt/CreateSchemaStmt",
+        "kind": "CreateSchemaStmt"
+      },
+      {
+        "pointer": "/stmts/1/stmt/CommentStmt",
+        "kind": "CommentStmt"
+      },
+      {
+        "pointer": "/stmts/3/stmt/InsertStmt",
+        "kind": "InsertStmt"
+      },
+      {
+        "pointer": "/stmts/4/stmt/InsertStmt",
+        "kind": "InsertStmt"
+      },
+      {
+        "pointer": "/stmts/7/stmt/InsertStmt",
+        "kind": "InsertStmt"
+      },
+      {
+        "pointer": "/stmts/9/stmt/InsertStmt",
+        "kind": "InsertStmt"
+      },
+      {
+        "pointer": "/stmts/35/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/36/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/37/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/38/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/39/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/43/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/44/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/48/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/55/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AlterColumnType"
+      },
+      {
+        "pointer": "/stmts/56/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/7/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/8/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/57/stmt/AlterTableStmt/cmds/9/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/7/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/8/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/58/stmt/AlterTableStmt/cmds/9/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/7/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/8/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/59/stmt/AlterTableStmt/cmds/9/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/7/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/8/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/60/stmt/AlterTableStmt/cmds/9/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/71/stmt/GrantStmt",
+        "kind": "GrantStmt"
+      },
+      {
+        "pointer": "/stmts/73/stmt/GrantStmt",
+        "kind": "GrantStmt"
+      },
+      {
+        "pointer": "/stmts/107/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_DropConstraint"
+      },
+      {
+        "pointer": "/stmts/108/stmt/AlterTableStmt/cmds/0/AlterTableCmd",
+        "kind": "AT_AddConstraint"
+      },
+      {
+        "pointer": "/stmts/111/stmt/GrantStmt",
+        "kind": "GrantStmt"
+      }
+    ]
+  },
   "completeInstalledProfile": false,
   "installationReady": false
 }

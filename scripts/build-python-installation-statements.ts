@@ -16,6 +16,38 @@ if(sourceDefinition.qualified!==false||sourceDefinition.executable!==false
  throw Error('Original development source definition correspondence required');
 if(await exportPostgresqlSql(document,backend)!==originalExport)throw Error('Original complete owner export correspondence required');
 const nodes=JSON.parse(renderTree(getPostgresqlNode(document,'/stmts')));
+const membership:any={tables:[],sequences:[],indexes:[],routines:[],definitionObligations:[]};
+const tableMap=new Map<string,any>();
+const namespace=(r:any)=>{if(r.schemaname!=='truss')throw Error('Original selected namespace required');return r.relname;};
+for(const [position,wrapped] of nodes.entries()){
+ const stmt=wrapped.stmt,kind=Object.keys(stmt)[0],pointer=`/stmts/${position}/stmt/${kind}`;
+ if(kind==='CreateStmt'){
+  const name=namespace(stmt.CreateStmt.relation),columns=[];
+  for(const [i,e] of (stmt.CreateStmt.tableElts??[]).entries()){
+   if(e.ColumnDef)columns.push({name:e.ColumnDef.colname,ordinal:String(columns.length+1),pointer:pointer+`/tableElts/${i}/ColumnDef`});
+   else if(!e.Constraint)throw Error('Unknown table member form');
+  }
+  if(tableMap.has(name))throw Error('Duplicate original table');
+  const table={name,kind:stmt.CreateStmt.partspec?'p':'r',pointer,columns};tableMap.set(name,table);membership.tables.push(table);
+ }else if(kind==='AlterTableStmt'){
+  const table=tableMap.get(namespace(stmt.AlterTableStmt.relation));if(!table)throw Error('Original alteration owner absent');
+  for(const [i,c] of stmt.AlterTableStmt.cmds.entries()){
+   const cmd=c.AlterTableCmd,source=pointer+`/cmds/${i}/AlterTableCmd`;
+   if(cmd.subtype==='AT_AddColumn')table.columns.push({name:cmd.def.ColumnDef.colname,ordinal:String(table.columns.length+1),pointer:source+'/def/ColumnDef'});
+   else if(['AT_AddConstraint','AT_DropConstraint','AT_AlterColumnType'].includes(cmd.subtype))membership.definitionObligations.push({pointer:source,kind:cmd.subtype});
+   else throw Error('Unknown original alteration membership');
+  }
+ }else if(kind==='CreateSeqStmt')membership.sequences.push({name:namespace(stmt.CreateSeqStmt.sequence),pointer});
+ else if(kind==='IndexStmt')membership.indexes.push({name:stmt.IndexStmt.idxname,table:namespace(stmt.IndexStmt.relation),pointer});
+ else if(kind==='CreateFunctionStmt'){
+  const f=stmt.CreateFunctionStmt,name=f.funcname.map((n:any)=>n.String.sval);if(name.length!==2||name[0]!=='truss')throw Error('Original routine namespace required');
+  const inputs=(f.parameters??[]).filter((p:any)=>!['FUNC_PARAM_TABLE','FUNC_PARAM_OUT'].includes(p.FunctionParameter.mode)).map((p:any)=>{
+   const names=p.FunctionParameter.argType.names.map((n:any)=>n.String.sval);return names.length===1?'pg_catalog.'+names[0]:names.join('.');});
+  membership.routines.push({schema:name[0],name:name[1],inputs,kind:f.is_procedure?'p':'f',pointer});
+ }else if(['CreateSchemaStmt','CommentStmt','InsertStmt','GrantStmt'].includes(kind))membership.definitionObligations.push({pointer,kind});
+ else throw Error('Unknown original statement membership form');
+}
+for(const table of membership.tables)if(new Set(table.columns.map((c:any)=>c.name)).size!==table.columns.length)throw Error('Duplicate original column');
 const statements=[];
 for(const [position,node] of nodes.entries()){
  const one=proposePostgresqlNodeEdit(document,'/stmts',JSON.stringify([node])).document;
@@ -31,7 +63,7 @@ for(const path of [modelPath,exportPath,sourceManifestPath,'scripts/build-python
  '/Users/erik/Projects/umf/native/postgresql/runtime.ts'])sources[path]=hash(new Uint8Array(await Bun.file(path).arrayBuffer()));
 const asset=JSON.stringify({interfaceVersion:'truss-provisional-installation-statements/0.1.0',
  scope:'original_owner_statement_units_rollback_only_construction',ownerRevision:Buffer.from(revision.stdout).toString().trim(),
- modelSha256:hash(model),ownerExportSha256:hash(originalExport),sources,statements,
+ modelSha256:hash(model),ownerExportSha256:hash(originalExport),sources,statements,membership,
  completeInstalledProfile:false,installationReady:false},null,2)+'\n';
 const path='packages/python/src/truss/_installation/statements.json';
 await Bun.write(path,asset);

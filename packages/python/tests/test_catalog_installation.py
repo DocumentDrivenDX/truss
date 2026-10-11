@@ -79,14 +79,39 @@ class CatalogInstallationNativeTests(NativeBoundaryFixture,unittest.TestCase):
                         rows=connection.run(query)
                         independent[category]=[{'native':json.loads(row[0]),'definition':row[1]} if expression else json.loads(row[0]) for row in rows]
                 return connection.run(sql)
-        value=construct_provisional_catalog_layout(Port())
-        observed=json.loads(value.namespace_observation)
+        with self.assertRaises(CatalogConstructionFailure) as refused:
+            construct_provisional_catalog_layout(Port())
+        observed=json.loads(refused.exception.original_attempt['namespace_observation'])
         for category,expected in independent.items():
             with self.subTest(category=category):
                 self.assertTrue(expected)
                 self.assertEqual(observed[category],expected)
-        self.assertTrue(value.rollback_confirmed)
+        self.assertTrue(refused.exception.rollback_confirmed)
         self.assertEqual(connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
+
+    def test_membership_changes_refuse_and_restore_absence(self):
+        for change in (
+            'ALTER TABLE truss.setting RENAME TO setting_changed',
+            'ALTER SEQUENCE truss.id_seq RENAME TO id_seq_changed',
+            'ALTER TABLE truss.setting RENAME COLUMN value TO changed_value',
+            'ALTER TABLE truss.setting DROP COLUMN value; ALTER TABLE truss.setting ADD COLUMN value jsonb',
+            'CREATE FUNCTION truss.catalog_global_high_water_v01(integer) RETURNS integer LANGUAGE sql AS $$ SELECT 1 $$',
+            'CREATE INDEX constructor_extra ON truss.setting(value)',
+            'CREATE VIEW truss.constructor_extra AS SELECT 1 AS value',
+        ):
+            connection=self.connection
+            class Port:
+                @property
+                def _transaction_status(self):return connection._transaction_status
+                def run(self,sql):
+                    if sql.startswith('SELECT pg_catalog.jsonb_build_object(') and "'namespace'" in sql:
+                        connection.run(change)
+                    return connection.run(sql)
+            with self.subTest(change=change),self.assertRaises(CatalogConstructionFailure) as refused:
+                construct_provisional_catalog_layout(Port())
+            self.assertIsInstance(refused.exception.primary_failure,ValueError)
+            self.assertTrue(refused.exception.rollback_confirmed)
+            self.assertEqual(connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
 
     def test_existing_namespace_preserved_without_overwrite(self):
         self.connection.run('CREATE SCHEMA truss')

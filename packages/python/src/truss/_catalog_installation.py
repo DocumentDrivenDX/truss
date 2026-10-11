@@ -89,7 +89,7 @@ _OBSERVATION="""SELECT pg_catalog.jsonb_build_object(
  'rules',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(r),'definition',pg_catalog.pg_get_ruledef(r.oid,false)) ORDER BY r.oid),'[]'::jsonb) FROM pg_catalog.pg_rewrite r JOIN pg_catalog.pg_class c ON c.oid=r.ev_class JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
  'constraints',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(c),'definition',pg_catalog.pg_get_constraintdef(c.oid)) ORDER BY c.oid),'[]'::jsonb) FROM pg_catalog.pg_constraint c JOIN pg_catalog.pg_namespace n ON n.oid=c.connamespace WHERE n.nspname='truss'),
  'indexes',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(i),'definition',pg_catalog.pg_get_indexdef(i.indexrelid)) ORDER BY i.indexrelid),'[]'::jsonb) FROM pg_catalog.pg_index i JOIN pg_catalog.pg_class c ON c.oid=i.indrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
- 'routines',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(p),'definition',pg_catalog.pg_get_functiondef(p.oid)) ORDER BY p.oid),'[]'::jsonb) FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss'),
+ 'routines',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(p),'inputTypes',(SELECT COALESCE(jsonb_agg(tn.nspname||'.'||t.typname ORDER BY args.ordinality),'[]'::jsonb) FROM unnest(p.proargtypes::oid[]) WITH ORDINALITY args(typeoid,ordinality) JOIN pg_catalog.pg_type t ON t.oid=args.typeoid JOIN pg_catalog.pg_namespace tn ON tn.oid=t.typnamespace),'definition',pg_catalog.pg_get_functiondef(p.oid)) ORDER BY p.oid),'[]'::jsonb) FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss'),
  'triggers',(SELECT COALESCE(jsonb_agg(jsonb_build_object('native',to_jsonb(t),'definition',pg_catalog.pg_get_triggerdef(t.oid)) ORDER BY t.oid),'[]'::jsonb) FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_class c ON c.oid=t.tgrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'),
  'policies',(SELECT COALESCE(jsonb_agg(to_jsonb(p) ORDER BY p.oid),'[]'::jsonb) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid=p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'))::text"""
 
@@ -124,6 +124,8 @@ def construct_provisional_catalog_layout(connection):
                     'REVOKE ALL ON ALL FUNCTIONS IN SCHEMA truss FROM PUBLIC'):
             connection.run(sql)
         observed=_native_text(connection,_OBSERVATION)
+        attempt['namespace_observation']=observed
+        compare_source_membership(json.loads(original)['membership'],json.loads(observed))
     except BaseException as error:
         primary=error
     finally:
@@ -140,3 +142,35 @@ def construct_provisional_catalog_layout(connection):
     if primary is not None or cleanup is not None:
         raise CatalogConstructionFailure(primary,cleanup,original,target,restored,connection,attempt) from primary
     return ProvisionalCatalogConstruction(original,target,observed,str(len(statements)),restored)
+
+
+def compare_source_membership(expected,observed):
+    """Original declaration membership only; definitions and authority unresolved."""
+    relations=observed['relations']
+    if any(r['relkind'] not in ('r','p','S','i','I') for r in relations):
+        raise ValueError('Unaccounted original relation kind')
+    by_oid={r['oid']:r for r in relations}
+    tables=[r for r in relations if r['relkind'] in ('r','p')]
+    actual={r['relname']:r for r in tables}
+    if len(actual)!=len(tables) or set(actual)!={t['name'] for t in expected['tables']}:
+        raise ValueError('Original table membership mismatch')
+    for table in expected['tables']:
+        relation=actual[table['name']]
+        columns=sorted((a for a in observed['columns'] if a['attrelid']==relation['oid'] and a['attnum']>0),key=lambda a:a['attnum'])
+        if (relation['relkind']!=table['kind'] or any(a['attisdropped'] for a in columns)
+            or [(a['attname'],str(a['attnum'])) for a in columns]!=[(a['name'],a['ordinal']) for a in table['columns']]):
+            raise ValueError('Original ordered column membership mismatch')
+    sequences=[r['relname'] for r in relations if r['relkind']=='S']
+    if sorted(sequences)!=sorted(s['name'] for s in expected['sequences']):
+        raise ValueError('Original sequence membership mismatch')
+    constraint_indexes={c['native']['conindid'] for c in observed['constraints'] if c['native']['contype'] in ('p','u','x')}
+    indexes=[]
+    for entry in observed['indexes']:
+        native=entry['native'];relation=by_oid[native['indexrelid']]
+        identity=(by_oid[native['indrelid']]['relname'],relation['relname'])
+        if native['indexrelid'] not in constraint_indexes:indexes.append(identity)
+    if sorted(indexes)!=sorted((i['table'],i['name']) for i in expected['indexes']):
+        raise ValueError('Original standalone index membership mismatch')
+    routines=[(r['native']['proname'],r['native']['prokind'],tuple(r['inputTypes'])) for r in observed['routines']]
+    if sorted(routines)!=sorted((r['name'],r['kind'],tuple(r['inputs'])) for r in expected['routines']):
+        raise ValueError('Original routine overload membership mismatch')

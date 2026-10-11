@@ -1,0 +1,26 @@
+{
+  "scope": "original_UMF_source_membership_correspondence_rollback_only",
+  "sourceHashes": {
+    "packages/python/src/truss/_catalog_installation.py": "00494246138281b88aaf0fbb7f55a6a593776c021baf4c2400ffa318c095869e",
+    "packages/python/src/truss/_installation/statements.json": "c26a2232e570b9b71c4ffb1e0b7aa192675a97bd976311f99f3dc85c0030e501",
+    "packages/python/src/truss/_installation_statement_release.py": "10362629c168bc81d0aeb940964b0bee119d3d9d547bb0a293c3545e1321c11e",
+    "packages/python/tests/test_catalog_installation.py": "f51b68e158fe1406209bda15f6e38e89934dbbf870eed5466ac45ff200b4701b",
+    "scripts/build-python-installation-statements.ts": "1ca180146549d06bc546a3ac08f92121bf37825103ae19c140a540ad28c95af5"
+  },
+  "testLog": "docs/helix/04-build/evidence/python-installation-source-membership.log",
+  "testLogSha256": "a4658614dabbbffb68012da2e8edb124516391548f81614054eb8e4361a175c0",
+  "installedWheelSha256": "605d9af391c09f9309677697f025356c51b022e0717326eee99ce5a322f2fb9d",
+  "testsPassed": 10,
+  "declaredTables": 48,
+  "declaredColumns": 454,
+  "declaredSequences": 11,
+  "declaredStandaloneIndexes": 24,
+  "declaredRoutines": 2,
+  "installationReady": false,
+  "moduleBoundaryImports": 401,
+  "limitations": [
+    "Membership comparison does not qualify full native definitions, dependencies or effective authority.",
+    "Constraint-backed index/constraint membership and definitions remain unresolved; only standalone index membership is compared.",
+    "No installation marker/archive/source epoch or public installation API published."
+  ]
+}
