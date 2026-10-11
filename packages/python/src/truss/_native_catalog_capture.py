@@ -9,11 +9,9 @@ from ._native_catalog_report_sources import CapturedReportSources, compose_captu
 
 
 CATALOG_LIMITS = NativeTextLimits(columns=5, rows=1, cell_bytes=262144,
-    result_bytes=294912, frame_bytes=307200, wire_bytes=614400,
-    payload_capacity=33554432, cumulative_payload=33554432)
+    result_bytes=294912, frame_bytes=307200, wire_bytes=614400)
 # Maximum cells: 20+19+8192+262144+20=270395; DataRow adds27.
-# Nonrewinding ingress/decoder reservations fit21*(wire+frame)+5<32MiB.
-# These are selected payload bounds, not full heap/work qualification.
+# These are logical carrier limits.
 
 def _integer(value, minimum=0, maximum=9223372036854775807):
     return (type(value) is str and len(value)<=20

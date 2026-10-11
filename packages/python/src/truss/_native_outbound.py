@@ -1,7 +1,6 @@
 """Private original direct-send ledger; trusted successful empty-writer baseline."""
 from dataclasses import dataclass
 from ._native_pg8000 import NativeBoundaryRefusal, NativeCall, HostSimpleWitness
-from ._resource_account import BytePermitAccount
 
 @dataclass(eq=False)
 class OutboundWrite:
@@ -98,8 +97,8 @@ class NativeOutbound:
         self.ordinary = [None] * limits.outbound_records
         self.cleanup = [None] * 128
         self.ordinary_count = self.cleanup_count = 0
-        self.accounts = tuple(BytePermitAccount(self, 2 * limits.outbound_bytes,
-            2 * limits.outbound_bytes, 4 * limits.outbound_records) for _ in range(2))
+        self.byte_counts = [0, 0]
+        self.byte_limit = limits.outbound_bytes
         self.barriers = [None] * (limits.outbound_records + 128)
         self.barrier_count = 0
         self.barrier = None
@@ -118,12 +117,13 @@ class NativeOutbound:
             cleanup = self.gate._cleanup_mode()
             slots = self.cleanup if cleanup else self.ordinary
             count = self.cleanup_count if cleanup else self.ordinary_count
-            account = self.accounts[int(cleanup)]
             if type(data) is not bytes or count >= len(slots):
                 raise NativeBoundaryRefusal('Bounded exact outbound bytes required')
             size = len(data)
-            permit = account.reserve(self, 2 * size)
-            account.allocate(self, permit, 2 * size); account.terminate(self, permit)
+            lane = int(cleanup)
+            if size > self.byte_limit - self.byte_counts[lane]:
+                raise NativeBoundaryRefusal('Outbound byte limit exceeded')
+            self.byte_counts[lane] += size
             payload = data
             entry = OutboundWrite(call, self.boundary._revision, self.boundary._active_resource, payload)
             slots[count] = entry

@@ -17,11 +17,9 @@ MAXIMUM_IMAGE=16777216
 CHUNK_BYTES=4096
 SOURCE_SHA256='494a647e449032e21ebc5e2eb9903619b9385bf99cbde72c63923da44ee23465'
 # Separate explicit observer profile, never the ordinary/default text profile.
-# Conservative retained payload charges are not measurements of the whole heap.
 CENSUS_LIMITS=NativeTextLimits(columns=3,rows=4096,cell_bytes=8192,
     result_bytes=41943040,wire_bytes=41943040,messages=8192,reads=32768,
-    sql_bytes=32768,payload_capacity=1073741824,
-    cumulative_payload=1073741824,account_records=131072)
+    sql_bytes=32768)
 NAMES=(b'ordinal',b'total_bytes',b'chunk_hex')
 
 @dataclass(frozen=True,slots=True,eq=False)
@@ -74,11 +72,6 @@ class NativeSourceCensusCapture(NativeResultCustody):
             self.census_context=context
         return super()._messages(context)
 
-    def _charge(self,amount):
-        permit=self.account.reserve(self,amount)
-        self.account.allocate(self,permit,amount)
-        self.account.terminate(self,permit)
-
     def _validate(self,code,data,context):
         super()._validate(code,data,context)
         if self._cleanup_mode() or self.boundary._active_control is not None:return
@@ -86,7 +79,6 @@ class NativeSourceCensusCapture(NativeResultCustody):
             raise NativeBoundaryRefusal('Original census context required')
         if len(self.frames)>=CENSUS_LIMITS.messages:
             raise NativeBoundaryRefusal('Census frame bound')
-        self._charge(2*len(data)+5)
         self.frames.append(NativeEvent(code,bytes(data)))
         if code==b'T':
             if self.stage!=0 or struct.unpack_from('!H',data)[0]!=3:
@@ -117,8 +109,8 @@ class NativeSourceCensusCapture(NativeResultCustody):
                     or len(encoded)!=2*min(CHUNK_BYTES,size-self.offset)):
                 raise NativeBoundaryRefusal('Exact native chunk width required')
             if self.image is None:
-                # Buffer + immutable original publication + conservative UTF8 work.
-                self._charge(6*size);self.image=bytearray(size)
+                # The validated complete image size bounds this buffer.
+                self.image=bytearray(size)
             if len(self.image)!=size or self.offset>=size:
                 raise NativeBoundaryRefusal('Consistent complete census size required')
             chunk=bytes.fromhex(encoded.decode('ascii'))
@@ -161,7 +153,6 @@ class NativeSourceCensusCapture(NativeResultCustody):
                     or not any(item is barrier for item in self.outbound.barriers)
                     or any(w.call is not self.entry or not w.native_returned or not w.settled for w in barrier.writes)):
                 raise NativeBoundaryRefusal('Original outbound census barrier required')
-            self._charge(2*(len(self.sql.encode())+6))
             request=b''.join(w.data for w in barrier.writes)
             payload=self.sql.encode()+b'\0'
             if request!=b'Q'+struct.pack('!I',len(payload)+4)+payload:

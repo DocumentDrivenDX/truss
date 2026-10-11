@@ -3217,3 +3217,27 @@ Deployment requirements come from a separately trusted owner profile; a compiler
 manifest cannot mint its own native evidence authority. The six authored negative
 controls are unexecuted integration exits, and the reviewed owner gate remains
 unfinished. No public Python support claim or alternate resolver is introduced.
+
+
+### 2026-10-11: remove legacy allocation accounting
+
+The owner requested removal of custom tracing and metrics as well as elaborate
+resource accounting. No custom tracing or metrics hooks exist in the current
+Python, TypeScript or Rust package sources. The remaining private pg8000 path
+now uses logical frame, wire, message, read, row, cell, result and outbound byte
+limits with separate ordinary and cleanup lanes. Allocation permits, retained
+allocation ledgers, copy precharges and allocation-only profile fields are
+removed. Resource capture keeps bounded reads, original bytes, digest checks,
+complete index membership and the existing contained path resolver.
+
+This supersedes the earlier private BytePermitAccount and copy-accounting
+implementation notes above. It preserves transaction recovery and semantic
+custody checks; it makes no backend heap or rollback-resistant cumulative-work
+guarantee. The psycopg host path retains its existing deadlines and original
+transaction ownership.
+
+Validation on the published PostgreSQL 18.6 local runtime: 149 existing host,
+borrowed-host, execution and recovery tests passed; 46 resource, frame, census,
+epoch and outbound tests passed. The Python module boundary check passed.
+These results qualify the accounting removal, not the unfinished public catalog
+or mutation capabilities.

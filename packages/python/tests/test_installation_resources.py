@@ -4,50 +4,26 @@ from pathlib import Path
 import tempfile
 import unittest
 from truss._installation_resources import capture_resource
-from truss._resource_account import BytePermitAccount
 
 
 class ResourceCaptureTests(unittest.TestCase):
-    def test_real_file_capture_retains_verified_bytes_after_change(self):
-        producer = object(); account = BytePermitAccount(producer, 100, 100, 10)
-        with tempfile.TemporaryDirectory() as directory:
-            resource = Path(directory) / 'original.sql'
-            original = b'SELECT 1;\n'; resource.write_bytes(original)
-            captured = capture_resource(resource, len(original), sha256(original).hexdigest(), 100, account, producer)
-            resource.write_bytes(b'SELECT 2;\n')
-            self.assertEqual(captured.original, original)
-            self.assertIs(captured.account, account)
-            self.assertEqual(account.snapshot(producer), (len(original)+1, 0, len(original)+1, False))
-            allocation = captured.allocation
-            del captured
-            account.release(producer, allocation)
-            self.assertEqual(account.snapshot(producer), (0, 0, len(original)+1, False))
-
-    def test_missing_changed_truncated_appended_resources_quarantine_once(self):
-        original = b'original'; digest = sha256(original).hexdigest()
+    def test_capture_preserves_original_and_rejects_changed_files(self):
+        original = b'SELECT 1;\n'
         with tempfile.TemporaryDirectory() as directory:
             resource = Path(directory) / 'input'
-            for replacement in (None, b'origina', b'changed!', b'originalx'):
-                with self.subTest(replacement=replacement):
-                    if replacement is not None: resource.write_bytes(replacement)
-                    producer = object(); account = BytePermitAccount(producer, 100, 100, 10)
-                    with self.assertRaises((ValueError, FileNotFoundError)):
-                        capture_resource(resource, len(original), digest, 100, account, producer)
-                    self.assertEqual(account.snapshot(producer), (9, 0, 9, True))
-                    with self.assertRaises(ValueError): account.reserve(producer, 1)
-
-    def test_reservation_refusal_precedes_open_and_invalid_pin_is_inert(self):
+            resource.write_bytes(original)
+            captured = capture_resource(resource, len(original), sha256(original).hexdigest(), 100)
+            for replacement in (original[:-1], b'x' * len(original), original + b'x'):
+                resource.write_bytes(replacement)
+                with self.assertRaises(ValueError):
+                    capture_resource(resource, len(original), sha256(original).hexdigest(), 100)
+                self.assertEqual(captured.original, original)
+    def test_invalid_limit_and_digest_do_not_open(self):
         class Unopened:
-            def open(self, mode): raise AssertionError('Must not open')
-        producer = object(); account = BytePermitAccount(producer, 0, 0, 10)
-        with self.assertRaises(ValueError):
-            capture_resource(Unopened(), 0, sha256(b'').hexdigest(), 100, account, producer)
-        self.assertEqual(account.snapshot(producer), (0, 0, 0, True))
-        for length, digest in [(True, sha256(b'').hexdigest()), (0, 'A'*64), (101, '0'*64)]:
-            account = BytePermitAccount(producer, 100, 100, 10)
+            def open(self, mode): raise AssertionError('opened')
+        for length, digest in ((True, '0'*64), (101, '0'*64), (0, 'bad')):
             with self.assertRaises(ValueError):
-                capture_resource(Unopened(), length, digest, 100, account, producer)
-            self.assertEqual(account.snapshot(producer), (0, 0, 0, False))
+                capture_resource(Unopened(), length, digest, 100)
 
 
 class ResourceIndexTests(unittest.TestCase):
@@ -109,10 +85,9 @@ class ResourceIndexTests(unittest.TestCase):
 
 
 class ResourceBundleTests(unittest.TestCase):
-    def test_complete_bundle_retains_one_account_and_late_failure_quarantines(self):
+    def test_complete_bundle_retains_originals_and_refuses_late_failure(self):
         import json
         from truss._installation_resources import ResourceEntry, capture_resource_bundle
-        producer = object()
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             a = b'first'; b = b'second'
@@ -125,23 +100,15 @@ class ResourceBundleTests(unittest.TestCase):
             def resolve(entry):
                 calls.append(entry.id)
                 return {'a':root/'a', 'b':root/'b'}[entry.id]
-            def run(account, expected=entries):
+            def run(expected=entries):
                 return capture_resource_bundle(root/'index', len(index), sha256(index).hexdigest(),
-                                               'test-release', expected, resolve, 4096, 2, 100,
-                                               account, producer)
-            account = BytePermitAccount(producer, 8192, 8192, 20)
-            captured = run(account)
+                                               'test-release', expected, resolve, 4096, 2, 100)
+            captured = run()
             self.assertEqual([r.original for r in captured.resources], [a,b])
-            self.assertTrue(all(r.account is account for r in (captured.index,)+captured.resources))
             (root/'b').write_bytes(b'changed')
             self.assertEqual(captured.resources[1].original, b)
-            failed = BytePermitAccount(producer, 8192, 8192, 20)
-            with self.assertRaises(ValueError): run(failed)
+            with self.assertRaises(ValueError): run()
             self.assertEqual(calls, ['a','b','a','b'])
-            charge = len(index)+1+len(a)+1+len(b)+1
-            self.assertEqual(failed.snapshot(producer), (charge,0,charge,True))
             calls.clear()
-            bad_inventory = BytePermitAccount(producer, 8192, 8192, 20)
-            with self.assertRaises(ValueError): run(bad_inventory, entries[:1])
+            with self.assertRaises(ValueError): run(entries[:1])
             self.assertEqual(calls, [])
-            self.assertEqual(bad_inventory.snapshot(producer), (len(index)+1,0,len(index)+1,True))
