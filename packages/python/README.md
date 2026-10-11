@@ -2,7 +2,8 @@
 
 Truss owns the tested embeddable Python implementation. The complete engine
 package is under implementation; current public components provide local runtime lifecycle, UMF acceptance-input
-preparation, selected native host transaction controls and inert assembly construction.
+preparation, selected native host transaction controls, installation footprint inspection
+and inert assembly construction.
 Mutation/query/installation APIs remain unfinished.
 
 The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
@@ -12,6 +13,14 @@ first usable Python preview. The earlier week estimates are historical; there is
 no verified delivery ETA yet. Reforecast follows a complete protected ordinary-
 consumer transaction on one installed profile and measured fresh install/verify.
 See the plan’s forecast checkpoint for exact prerequisites and current evidence.
+
+`inspect_installation(host.connection)` reads PostgreSQL system catalogs through
+an existing public `ConnectedHost` connection. It returns an `Outcome` containing
+the observed `truss` namespace presence and relation kinds in the caller's current
+snapshot. It always reports readiness as `unverified`: namespace/table presence
+does not prove an installed runtime, layout version or accepted catalog. It does
+not read Truss table/view bodies, begin or settle a transaction, or retry. Native
+failures propagate without a new recovery reference; a failed query may abort the caller's transaction, whose rollback remains the host's responsibility.
 
 For local PostgreSQL:
 

@@ -1,0 +1,45 @@
+{
+  "scope": "public_current_snapshot_catalog_footprint_diagnostic_only",
+  "installation_qualified": false,
+  "readiness": "unverified",
+  "public_entrypoint": "truss.inspect_installation(HostConnection)",
+  "native_runtime": {
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "pg8000": "1.31.5"
+  },
+  "test": {
+    "command": "python -m unittest test_installation_observation -v",
+    "tests": 7,
+    "elapsed_seconds": 2.684,
+    "exit_code": 0,
+    "result": "OK"
+  },
+  "checks": {
+    "python_import_boundaries": 353,
+    "mypy": "passed",
+    "git_diff_check": "passed"
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "plan": "approved",
+    "completed_iteration": "approved_no_findings",
+    "independent_initial_tests": 5,
+    "independent_privilege_probes": 2,
+    "final_seven_case_source_review": "approved"
+  },
+  "source_sha256": {
+    "packages/python/src/truss/installation.py": "8da78b14145f60f89348a53cbbe5544b5c4dc1f4ab10594dd7958ebe742fe1c3",
+    "packages/python/src/truss/__init__.py": "5570db718f0658e4b73f39b0fd070b3e6dcee63eb6a192784e55c4a57c906759",
+    "packages/python/tests/test_installation_observation.py": "c669d78c89484667895696d840943ae9c83676dadb4bfbac9d7b1c77a6711347",
+    "packages/python/README.md": "debd51b36e72ec6526414e15c291336d5433e8402c7c6aeb55feb0a4ae4bfa4b",
+    "scripts/check-module-boundaries.py": "bf482fb9d5ea0d3abbb03334f0d2fea5bb22cc276e86f9a906991d706bca9735"
+  },
+  "limitations": [
+    "No installer, migration, layout version or protected readiness authority.",
+    "No Truss table/view body or report bytes read.",
+    "Native failures propagate; no new recovery reference or transaction-usability guarantee.",
+    "Catalog report persistence, head publication and complete finalization remain unfinished."
+  ]
+}

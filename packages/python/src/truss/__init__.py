@@ -23,3 +23,7 @@ __all__ += ["ConnectedHost", "HostConnection", "HostSession", "HostControlObserv
     "CapabilityUnavailable", "AssemblyDisposed", "ReferenceAssembly", "HostServices",
     "RecoveryServiceRegistration", "NamespaceAuthorityRegistration", "CapabilityReadiness",
     "create_reference_assembly", "INERT_ASSEMBLY_PROFILE", "CONSTRUCTION_DIAGNOSTIC_PROFILE"]
+
+from .installation import (InstallationObservation, InstallationRelationObservation,
+                           inspect_installation)
+__all__ += ["InstallationObservation", "InstallationRelationObservation", "inspect_installation"]
