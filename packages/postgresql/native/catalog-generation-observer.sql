@@ -4,7 +4,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE op truss.row_home_operation%ROWTYPE; actual_xid xid8:=pg_current_xact_id_if_assigned();
 BEGIN
  IF TG_LEVEL<>'ROW' OR TG_WHEN<>'AFTER' OR TG_OP NOT IN ('INSERT','UPDATE','DELETE')
-  OR TG_TABLE_SCHEMA<>'truss' OR TG_NARGS<>0 OR actual_xid IS NULL OR TG_TABLE_NAME NOT IN ('schema_rev','schema_doc','type_def','prop_def','key_def','key_lifecycle_history','rel_def','rel_endpoint','relationship_lineage','catalog_acceptance_report','schema_head') THEN
+  OR TG_TABLE_SCHEMA<>'truss' OR TG_NARGS<>0 OR actual_xid IS NULL OR TG_TABLE_NAME NOT IN ('schema_rev','schema_doc','type_def','prop_def','key_def','key_lifecycle_history','rel_def','rel_endpoint','relationship_lineage','catalog_acceptance_report','schema_head','catalog_binding_archive') THEN
   RAISE EXCEPTION 'original registered catalog event required' USING ERRCODE='55000';
  END IF;
  SELECT o.* INTO STRICT op FROM truss.row_home_operation o WHERE o.original_writer_xid=actual_xid AND o.phase<>'application_finalized' FOR UPDATE;

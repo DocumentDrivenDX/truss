@@ -3,6 +3,9 @@ CREATE FUNCTION truss.runtime_capture_catalog_prestate() RETURNS text
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE snapshot jsonb; bytes bytea;
 BEGIN
+ IF to_regclass('truss.catalog_binding_archive') IS NOT NULL THEN
+  RAISE EXCEPTION 'catalog binding prestate profile required' USING ERRCODE='55000';
+ END IF;
  IF EXISTS(SELECT 1 FROM truss.row_home_operation o WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized') THEN
   RAISE EXCEPTION 'catalog prestate must precede original operation admission' USING ERRCODE='55000';
  END IF;

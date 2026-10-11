@@ -21,6 +21,13 @@ export async function stageNewCatalogCohort(connection:CatalogStageConnection,pr
   await connection.unsafe('SELECT truss.runtime_require_catalog_document_carrier($1::text::jsonb)',[JSON.stringify(prepared.archiveDocuments)]);
   const revision=await connection.unsafe("SELECT * FROM truss.runtime_stage_catalog_documents($1::text::jsonb,$2::text::jsonb)",[JSON.stringify(prepared.archiveDocuments),JSON.stringify(origin)]);
   if(revision.length!==1)throw Error('Original staged revision correspondence');const rev=id(revision[0].provisional_revision);
+  let bindingArchiveSha256:string|null=null;
+  if(prepared.original.input.binding.state==='present'){
+   const binding=prepared.original.input.binding;
+   const rows=await connection.unsafe("SELECT truss.runtime_stage_catalog_binding($1::int,decode($2::text,'hex')) AS binding_sha256",[rev,Buffer.from(binding.artifact.bytesBase64,'base64').toString('hex')]);
+   if(rows.length!==1||rows[0].binding_sha256!==binding.artifact.sha256)throw Error('Original archived binding correspondence');
+   bindingArchiveSha256=rows[0].binding_sha256;
+  }
   const types=records.length?await connection.unsafe('SELECT * FROM truss.runtime_stage_new_types($1::int,$2::text::jsonb)',[rev,JSON.stringify(records.map(({documentId,moduleId,elementId})=>({documentId,moduleId,elementId})))]):[];
   function type(record:{documentId:string;moduleId:string;elementId:string}){const rows=types.filter(row=>row.document_id===record.documentId&&row.module_id===record.moduleId&&row.element_id===record.elementId);if(rows.length!==1)throw Error('Original allocated Record correspondence');return id(rows[0].type_id)}
   const properties=selected.length?await connection.unsafe('SELECT * FROM truss.runtime_stage_new_properties($1::int,$2::text::jsonb)',[rev,JSON.stringify(selected.map(({record,field,home})=>({ownerTypeId:type(record),fieldModule:field.fieldModule,field:field.declaration,home})))]):[];
@@ -34,6 +41,6 @@ export async function stageNewCatalogCohort(connection:CatalogStageConnection,pr
    if(rows.length!==1)throw Error('Original allocated relationship correspondence');relationships.push(Object.freeze({...relationship,relationshipId:id(rows[0].relationship_id)}));
   }
   await connection.unsafe('RELEASE SAVEPOINT '+savepoint);
-  return Object.freeze({provisionalRevision:rev,types:Object.freeze(types),properties:Object.freeze(properties),keys:Object.freeze(keys),relationships:Object.freeze(relationships),scope:'provisional_new_catalog_staging_only' as const});
+  return Object.freeze({provisionalRevision:rev,bindingArchiveSha256,types:Object.freeze(types),properties:Object.freeze(properties),keys:Object.freeze(keys),relationships:Object.freeze(relationships),scope:'provisional_new_catalog_staging_only' as const});
  }catch(error){await connection.unsafe('ROLLBACK TO SAVEPOINT '+savepoint);await connection.unsafe('RELEASE SAVEPOINT '+savepoint);throw error}
 }
