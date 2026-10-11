@@ -99,7 +99,7 @@ tests. The [runtime checkpoint](../../docs/helix/04-build/local-runtime-installa
 records the pinned source/build procedure, wheel hash, installed payload verification
 and all15 passing component qualification groups on macOS27 arm64/Python3.11.
 
-The [installed suite](../../docs/helix/04-build/evidence/design-audit/python-pg17.11-installed-suite.json)
+The initial [installed suite](../../docs/helix/04-build/evidence/design-audit/python-pg17.11-installed-suite.json)
 passes132 tests; the [native timeout probe](../../docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-transaction-timeout.json)
 observes actual transaction_timeout connection termination. These component checks
 retain the existing complete-engine, protected-installation and managed-service gates.
@@ -115,7 +115,7 @@ This command requires the pinned pg8000/Weft test dependencies and a fresh run i
 It reuses installed binaries and performs no source build. Twelve native groups
 share one cluster per worker with fresh databases and roles; default `--workers 1`
 uses one suite cluster. The expanded installed suite also shares socket workers across ordinary native
-fixture classes; `TRUSS_INSTALLED_SUITE_WORKERS` defaults to2 and may select1–8.
+psycopg and pg8000 fixture classes; `TRUSS_INSTALLED_SUITE_WORKERS` defaults to2 and may select1–8.
 Direct startup/shutdown fixtures, CLI signal/restart and transaction-timeout
 observations use separate owned clusters. Set `TRUSS_INSTALLED_SUITE_TIMEOUT`
 within30–1800 seconds for the expanded suite (default1800).

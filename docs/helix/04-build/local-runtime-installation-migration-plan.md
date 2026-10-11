@@ -19,7 +19,7 @@ confirms identical projected definitions (86 indexes,298 constraints,63 expressi
 unchanged owner SQL and ordered statement release. Complete runtime and Lakebase
 acceptance remain separate gates.
 
-The expanded installed suite uses owned socket workers with fresh databases and
+The expanded installed suite uses owned socket workers for both ordinary psycopg and pg8000 fixture classes. The frozen historical report-release CLI is retired; current report, dispatch and staging tests run through the installed suite. The expanded installed suite uses owned socket workers with fresh databases and
 roles per native fixture class. Explicit class teardown and registered cleanup
 both release fixtures, including tests that delegate another class's setup.
 Lifecycle tests keep isolated clusters. Each module must restore the database,
@@ -33,11 +33,11 @@ worker and20.3 seconds for two workers, including startup and cleanup. The compo
 15-group comparison was105.8/50.2/48.4 seconds on the earlier132-test source; it is
 not a timing claim for the expanded current-main suite.
 
-## Shared native test workers — owner direction 2026-10-11
+## Initial shared native test workers — owner direction 2026-10-11
 
 Routine native qualification now reuses **one pgserver17.11 cluster per suite or
 worker**, with a fresh database and owner role for each experiment. The
-[final two-worker run](evidence/design-audit/pg17-shared-workers-final-20261011/pgserver-pg17.11-qualification.json)
+[initial two-worker run](evidence/design-audit/pg17-shared-workers-final-20261011/pgserver-pg17.11-qualification.json)
 passes all15 groups: twelve native groups share two clusters, six fresh fixtures
 per worker; installed Python132 tests, CLI signal/restart and timeout/lifecycle
 observations run on separate owned clusters. Both shared workers restore their
