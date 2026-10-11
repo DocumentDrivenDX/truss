@@ -2245,3 +2245,19 @@ may use RLS through a separately qualified provider. Such a provider must establ
 complete relevant fact visibility and stable policy/role/configuration sources.
 A flag snapshot alone does not prove their lifetime stability or arbitrary callback
 safety, and it supplies no caller or issuer authority.
+
+
+### Selected table-DDL writer participation — 2026-10-11
+
+The optional private `source-epoch-table-ddl-barrier.sql` adjunct participates
+CREATE TABLE, ALTER TABLE and DROP TABLE in the existing native epoch/marker
+writer protocol. Its ALWAYS event trigger invokes the original routine writer
+boundary: retained epoch readers refuse same-session DDL with55000; competing
+participants acquire epoch ROW EXCLUSIVE before the DDL effect and retain it
+until transaction settlement. Readers refuse pending writers with55P03.
+The adjunct is fixture-qualified, not automatically admitted or installed by
+plain fact capture. An installer MUST qualify its original event-trigger/function
+identity, body, enabled state, ownership and administration exclusions before
+claiming the selected participation profile. No event-trigger administration,
+policy/grant/shared-role/extension or complete cascading dependency closure is
+qualified. Original issuer/current-authority and final release remain separate.

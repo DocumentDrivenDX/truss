@@ -763,3 +763,17 @@ are rolled back. Packet027f2354 passes103 component methods. These advance
 CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and US-079 AC6 completeness
 prerequisites; they do not qualify an RLS-aware fact provider, complete role/config
 cuts, ordinary authenticated authority or protected disclosure.
+
+
+### Native visibility lifetime and table-DDL participation — 2026-10-11
+
+Four additional controls in packet30ba8a7b require: competing ENABLE/FORCE RLS
+DDL times out under the retained fact SHARE lock; after reader release a committed
+ENABLE is observed and the fresh cut refuses; actual same-session ALTER succeeds
+when the optional writer barrier is omitted (counterexample); installing the
+selected barrier refuses same-session ALTER before its effect with55000; and a
+pending participating ALTER excludes a fresh epoch reader with55P03 until abort,
+after which a fresh cut succeeds. Two behaviors share the first control.
+All107 component methods and three independent native cleanups pass. Trace:
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 lifecycle prerequisites.
+These do not establish whole source/role/config closure or public authority.

@@ -4165,3 +4165,31 @@ public support flag or backend acceptance binding. Complete source/role/config
 cuts, issuer/mapping/caller authority, protected evaluation and final release remain
 open. Last full acceptance checkpoint remains26/132 with106 missing bindings; no
 current full-gate pass is claimed. The overall goal remains active.
+
+
+### Table-DDL participation repairs the same-session lock counterexample — 2026-10-11
+
+Implemented optional private CREATE/ALTER/DROP TABLE event-trigger participation
+using the existing original routine writer epoch/marker ordering. Native same-
+session ALTER can upgrade its own fact SHARE lock without this adjunct; the
+retained counter proves a flag snapshot plus table SHARE is insufficient. With
+the adjunct installed, original same-session ALTER refuses55000 before changing
+RLS; a pending participant excludes fresh epoch acquisition with55P03 until abort.
+Competing ENABLE/FORCE DDL is independently blocked by the fact lock; after release
+a committed ENABLE is observed and a new plain-profile admission refuses.
+
+Final `evidence/python-psycopg-epoch-cut/30ba8a7b-ba61-4781-8a34-a2f86dc812b4`
+passes107 methods (56 fact/dependency/capture/identity/visibility/DDL,16 graph,nine
+epoch,26 adoption), module boundaries,131 current/archived Truss pins,363 original
+UMF pins,1614 native payload pins and three stop0/status3/socket-absent cleanups.
+Initial19715fbd passed105 methods but correctly failed source stability because
+sources changed while it ran; it is retained as nonqualifying evidence.
+
+The adjunct is optional fixture SQL, not implicit capture admission or a new
+public support flag. Exact installed event-trigger/function custody and
+administration exclusions must be composed into source qualification; grants,
+roles, policy sources, extensions/cascades and protected final release remain
+open. No new formal SQL refinement or backend acceptance binding. Trace:
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10. Last full gate26/132 with106
+missing; goal active. Next integrate original installed barrier readback/custody
+with the protected source census, then compose caller/mapping/decoder authority.

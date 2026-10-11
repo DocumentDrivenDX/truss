@@ -391,3 +391,66 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         with patch.object(_GuardedCursor,'execute',observe):result=self.cut(t,lambda c:called.append(True),(self.bindings['flat_assignment'],))
         self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,None);self.assertEqual(called,[])
         self.assertEqual(len(metadata),1);self.assertEqual(metadata[0][4:6],(b'true',b'false'))
+
+    def test_competing_visibility_ddl_blocks_until_cut_release_then_fresh_cut_refuses(self):
+        t=self.begin()
+        self.assertEqual(self.cut(t,lambda c:'retained'),Ok('retained'))
+        self.assertEqual(self.fact_shares(),2)
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as writer:
+            for clause in ('ENABLE ROW LEVEL SECURITY','FORCE ROW LEVEL SECURITY'):
+                with self.assertRaises(psycopg.errors.LockNotAvailable):
+                    writer.execute('ALTER TABLE truss.flat_assignment '+clause)
+            self.assertEqual(writer.execute("SELECT relrowsecurity,relforcerowsecurity FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass").fetchone(),(False,False))
+            self.connection.execute('ROLLBACK')
+            try:
+                writer.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY')
+                self.assertEqual(writer.execute("SELECT relrowsecurity FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass").fetchone(),(True,))
+                fresh=self.begin();called=[]
+                result=self.cut(fresh,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
+                self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+            finally:
+                self.connection.execute('ROLLBACK')
+                writer.execute('ALTER TABLE truss.flat_assignment DISABLE ROW LEVEL SECURITY')
+
+    def test_same_backend_visibility_ddl_is_a_counterexample_to_lock_only_lifetime(self):
+        t=self.begin()
+        def bypass(cursor):
+            cursor.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY')
+            cursor.execute("SELECT relrowsecurity::pg_catalog.text FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass")
+            return cursor.fetchone()[0]
+        # Actual native SHARE is retained, but its owner can upgrade its own
+        # table lock. No arbitrary-callback safety or full lifetime claim.
+        self.assertEqual(self.cut(t,bypass),Ok('true'))
+        self.assertEqual(self.fact_shares(),2)
+        called=[];result=self.cut(t,lambda c:called.append(True))
+        self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
+        self.assertEqual(called,[])
+
+    def test_table_ddl_participation_refuses_same_backend_visibility_change(self):
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            t=self.begin()
+            result=self.cut(t,lambda c:c.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY'))
+            self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000')
+            self.assertEqual(self.fact_shares(),0)
+            self.assertEqual(self.connection.execute("SELECT relrowsecurity FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass").fetchone(),(False,))
+        finally:
+            self.connection.execute('ROLLBACK')
+            self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def test_pending_table_ddl_participant_refuses_epoch_read_until_abort(self):
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            t=self.begin();called=[]
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres') as writer:
+                writer.execute('ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY')
+                self.assertEqual(writer.execute("SELECT relrowsecurity FROM pg_catalog.pg_class WHERE oid='truss.flat_assignment'::regclass").fetchone(),(True,))
+                result=self.cut(t,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55P03')
+                self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+                writer.rollback()
+            self.assertEqual(self.cut(t,lambda c:'fresh-after-abort'),Ok('fresh-after-abort'))
+        finally:
+            self.connection.execute('ROLLBACK')
+            self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
