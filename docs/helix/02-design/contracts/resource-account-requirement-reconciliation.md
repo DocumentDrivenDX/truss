@@ -1,5 +1,11 @@
 # Resource account and host requirement reconciliation
 
+## Current baseline reconciliation — owner decision 2026-10-11
+
+The PRD and ADR-003 now select stock psycopg 3, practical resource limits and transaction safety. Baseline work uses finite input/value/page/batch/concurrency/iteration limits, deadlines, conservative toolkit budgets and measured peak-memory/failure behavior. Database-wide hard memory or rollback-resistant universal accounting is not promised. Exact values, native integrity, authority, pool compatibility and uncertain-outcome handling remain required.
+
+The native-account, preallocation, physical-backing and driver-producer proposals below are optional stronger-profile work. Missing instrumentation or allocation proofs do not make baseline execution unavailable. RA-P01–04 pooling/epoch/recovery semantics remain baseline tests where applicable, using supported driver evidence; exact ledger/instrumentation and universal accounting portions are optional. RA-P05 applies only to a profile claiming those stronger guarantees. The PRD requires hard reproduced deficiency evidence and an owner-approved ADR before custom PostgreSQL wire handling, private hooks, forks or driver replacement.
+
 ## Owner decisions — 2026-10-07
 
 The owner selects bounds for work controlled by the toolkit and its protected procedures, with database-wide/arbitrary bypass work guarantees reported separately. Universal rollback-resistant cumulative accounting is not a required default deployment dependency. Preserve FR-43 pooling/no-session-state and database-level graph integrity. Each selected operation still needs finite admission/cancellation/cleanup and honest enforcement evidence. Historical native-account designs remain optional unadopted realizations, not assumed managed-service capabilities.

@@ -22,6 +22,18 @@ kind: product
 
 # Product Requirements Document
 
+## Owner decision — proportional resource controls, 2026-10-11
+
+Truss selects maintained stock psycopg 3 as the baseline Python PostgreSQL driver. Exact psycopg/libpq versions, execution mode and deployment tuples require qualification; this decision is not a released support claim. The host owns connections, pooling, credentials and outer transactions.
+
+Baseline resource requirements are finite input/value/page/batch sizes, query and lock deadlines, bounded concurrency and Truss-controlled iteration/decoding, conservative application budgets, and measured peak memory on maximum admitted workloads. Bound individual values as well as row counts, including values admitted through supported native write paths. Preserve exact values, atomicity, database authorization, operation-local rollback, caller work and unknown-commit recovery. Cancellation or a timeout alone never establishes rollback or safe connection reuse.
+
+Strict transport accounting is an optional, separately selected profile. Pre-read reservation, frame scanners, exact socket/TLS/parser backing-allocation tracking and per-copy lifetime ledgers are not baseline release prerequisites. Baseline limits do not claim a hard total-process memory ceiling, control of arbitrary native SQL, or protection against a malicious PostgreSQL wire peer. Missing private driver hooks cannot block baseline release unless a documented required semantic or safety guarantee actually depends on them.
+
+Requirements describe consumer outcomes and measured operating limits. A stronger guarantee must name a concrete consumer need, failure scenario, threat model, measurable acceptance criterion and operating cost before it becomes required. A proposal, private component, theoretical risk or stricter test cannot promote itself into a release requirement.
+
+Custom PostgreSQL wire handling, private parser/transport hooks, a driver fork or replacement of the baseline requires an owner-approved ADR with hard documented proof of a deficiency: a minimal reproducer on pinned stock driver/libpq/server builds, actual observed failure of a necessary requirement, and comparison with supported APIs, configuration, bounded SQL/results and simpler adapter remedies. Include maintenance/security ownership, upgrade cost, representative performance and deployment evidence. Lack of introspection or ease of instrumenting a different driver is not proof of deficiency. Existing pg8000/custom-frame experiments remain scoped evidence, not required delivery work or justification to switch.
+
 ## Owner decisions — 2026-10-07
 
 The owner selected bounded work for toolkit and protected procedures Truss controls; arbitrary native/bypass work has separately reported database-wide guarantees. Database-enforced graph integrity remains required and every enforcement claim keeps its database/engine/none classification. No rollback-resistant universal native account or custom extension is selected.
@@ -211,7 +223,19 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-48** — A deployment can give database roles read or write access per UMF module, enforced by the database, without changing the layout's tables or constraints; with the layer unused, truss behaves as without it. *(P1)*
 - **FR-49** — A relationship may name a type in another module. Such an edge is visible only to a role that can read the relationship's module and both endpoints' modules. *(P1)*
 
+### Non-functional requirements: proportional resource control
+
+RES-01 (P0). Publish and enforce practical input, individual-value, page, batch, iteration and concurrency limits and deadlines for supported operations. Refuse unsupported or over-limit work explicitly without truncating meaning. Preserve native integrity, exact values, current authority and transaction safety. Declare the tested workload and exclusions; do not claim a hard total-process memory ceiling from application counters.
+
+RES-02 (P0). Qualify the baseline on maximum admitted workloads and limit/failure boundaries, recording peak process memory, latency and recovery behavior on the actual supported tuple. A regression against a published operating limit requires remediation; a missing private allocation hook does not itself constitute a failure.
+
+RES-03. Use supported maintained infrastructure for PostgreSQL transport. Custom wire handlers, private transport/parser hooks, driver forks or baseline replacement require the documented necessary-deficiency proof, simpler-remedy comparison and owner-approved ADR described above. The baseline release requires no such work when supported APIs satisfy its acceptance cases.
+
+RES-04. Strict transport accounting is optional. Require it only after separate owner adoption of a concrete consumer outcome, threat model and measurable guarantee. Tests and implementation proposals cannot independently strengthen product scope or make optional instrumentation a baseline release gate.
+
 ## Acceptance Test Sketches
+
+Resource acceptance (RES-01–04): exercise each published maximum and one-over input/value/page/batch/concurrency limit, long-running and lock-wait deadlines, large individual values and maximum supported fanout. Observe peak process memory and latency on the pinned supported tuple. Failures preserve prior caller work or retain explicit uncertainty; no truncation, premature pool reuse or blind write retry is permitted. Baseline qualification uses stock supported driver APIs; absence of custom wire hooks and unrun optional strict-profile tests cannot fail release. Review any proposed custom transport against a reproduced necessary deficiency and owner-approved ADR before implementation.
 
 | Requirement | Scenario | Input | Expected Output |
 |-------------|----------|-------|-----------------|
