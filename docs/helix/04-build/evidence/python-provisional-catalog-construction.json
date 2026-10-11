@@ -1,0 +1,28 @@
+{
+  "scope": "rollback_only_original_owner_layout_construction",
+  "installationReady": false,
+  "publicInstallerCallable": false,
+  "sourceHashes": {
+    "packages/python/src/truss/_catalog_installation.py": "613ee6fa429c83739d59dabcd0aaf63548fee7151099635d438da697e6de003a",
+    "packages/python/src/truss/_installation/statements.json": "05e25711d33f0f0b3101f2c29c904be085cb8b0676f511f0cc27b80e9cfd8dd2",
+    "packages/python/src/truss/_installation_statement_release.py": "328aea5fa4e366a7b8833c55a107fab4bf57d4f023e44a64f69de6304e32962d",
+    "packages/python/tests/test_catalog_installation.py": "fb21e8419e9e7a9c81929b2e8969cfc8206bb5ad91ad370d285d7c2d5ad7139f",
+    "packages/python/pyproject.toml": "3a900a8b3ed1c863bc8319922f0e78dab974c43f2549975100a44a2dbf48e804",
+    "scripts/build-python-installation-statements.ts": "97c764e1d8a15d7e2ea437c38f7012e03a11ee46937a05e6d2f0f7db6ab6d21d",
+    "scripts/check-module-boundaries.py": "1bac70796526c784f06f381b9a2b9e4b8351214c915cba0532af4fdd62820ca8"
+  },
+  "testLog": "docs/helix/04-build/evidence/python-provisional-catalog-construction.log",
+  "testLogSha256": "3978d0706a9cc14d5e9166867a07969817d23e2cad79e22e5aa8a0d6d5c7b467",
+  "testsPassed": 8,
+  "installedWheelSha256": "3a2b4eb0c451a6b4a7a1d24b3d9e1d717f0ebe59396642418455b1bcab1dca70",
+  "nativeRuntime": "PostgreSQL16.15 / pg8000 1.31.5 / corrected private pgserver",
+  "observedTables": 48,
+  "observedColumns": 454,
+  "statementUnits": 112,
+  "moduleBoundaryImports": 401,
+  "limitations": [
+    "Selected namespace descriptors are incomplete; no full inventory equality or effective authority closure.",
+    "No installation archive, marker, source epoch, qualified bundle or public installation status published.",
+    "Trusted exclusively owned administrative port prerequisite."
+  ]
+}
