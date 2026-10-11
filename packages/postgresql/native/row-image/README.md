@@ -93,3 +93,22 @@ This does not replace the registered UMF exact-number APIs, admit source facets,
 qualify native representability or shared allocation/work charging, register a
 Weft comparator, complete RF05, seal an operation or enable a public Python API.
 Million-exponent witnesses are mathematical cases, not PostgreSQL storage claims.
+
+`numeric-binary-witness.sql` decodes the PostgreSQL16 `numeric_send` finite binary
+cell and compares it with a complete candidate source token through
+`numeric_source_binary_equal_original(text,bytea)`. The selected subset is at most
+16,384 base-10000 groups / 32,776 bytes, not PostgreSQL's overall numeric limit.
+Exact frame extent, finite sign, scale ≤16,383, every digit ≤9,999 and nonzero
+endpoint groups are required. Positive zero has no groups; its weight is ignored.
+Scale may exceed stored fractional significance but cannot hide nonzero digits.
+Coefficient assembly and normalization do not expand weight-sized buffers.
+
+Tests use actual native numeric_send outputs at the group limit and one group
+beyond it, zero with maximum scale, finite fractions and large adjacent integers;
+independently expected witnesses supplement the source/binary comparison checks.
+Malformed frames, hidden significance and all native special values refuse. The
+original cell bytes and display scale remain separate from the mathematical
+witness. This helper cannot authenticate their native origin, qualify source or
+facet admission, establish runtime retention, or grant finalizer authority.
+Array growth/copies remain unqualified against shared operation resources. No
+public Python capability or protected installation claim is added.

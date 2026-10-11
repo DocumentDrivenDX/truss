@@ -1,0 +1,35 @@
+{
+  "interfaceVersion": "truss-component-evidence/0.1",
+  "component": "native-numeric-binary-correspondence",
+  "baseCommit": "91e7d4baa524c33f129e5860bd27e95ada23d82d",
+  "database": "PostgreSQL16.15",
+  "python": "CPython3.11.17",
+  "driver": "pg8000 1.31.5",
+  "tests": {
+    "count": 17,
+    "newBinaryCases": 5,
+    "inheritedTextCases": 6,
+    "importedTextCases": 6,
+    "seconds": "5.978",
+    "result": "PASS"
+  },
+  "sources": {
+    "packages/postgresql/native/row-image/numeric-binary-witness.sql": "13af28ffbd4d6cc3209bbb50bfa42c1243b816308eb1446efdffec67f025c8cf",
+    "packages/postgresql/native/row-image/numeric-witness.sql": "900c72c95962d4ba7996998514f94d18b8732fd17dbf86a576b0a95a956ee79c",
+    "packages/python/tests/test_numeric_binary_native.py": "63c6811fc0a6fc19f942e79a879f72ba764ce11ce7b7045d3eb1e9edee406095",
+    "docs/helix/04-build/evidence/python-numeric-binary-native-tests.log": "90a7668141b1694ee5674ed511fc00ef0c9986eb407b603cc25085e8078f2440"
+  },
+  "bounds": {
+    "binaryBytes": 32776,
+    "base10000Groups": 16384,
+    "scaleMaximum": 16383
+  },
+  "primaryFormatSource": "https://raw.githubusercontent.com/postgres/postgres/REL_16_15/src/backend/utils/adt/numeric.c",
+  "limitations": [
+    "Selected finite numeric_send subset, not overall PostgreSQL numeric domain",
+    "Original cell bytes/display scale remain independent of mathematical witness",
+    "No native origin/source facet/complete RF05 or runtime retention authority",
+    "Bounded arrays/copies do not qualify shared resource account",
+    "No protected installer/finalizer or public Python capability"
+  ]
+}
