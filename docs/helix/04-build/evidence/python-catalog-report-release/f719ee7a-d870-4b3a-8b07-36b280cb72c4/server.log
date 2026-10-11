@@ -1,0 +1,123 @@
+2026-10-11 13:21:29.506 EDT [7383] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 13:21:29.507 EDT [7383] LOG:  listening on Unix socket "/private/tmp/rl-8n6ew_ur/.s.PGSQL.5432"
+2026-10-11 13:21:29.515 EDT [7386] LOG:  database system was shut down at 2026-10-11 13:21:29 EDT
+2026-10-11 13:21:29.519 EDT [7383] LOG:  database system is ready to accept connections
+2026-10-11 13:21:32.850 EDT [7399] ERROR:  complete original pending revision registration delta required
+2026-10-11 13:21:32.850 EDT [7399] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 190 at RAISE
+2026-10-11 13:21:32.850 EDT [7399] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:35.314 EDT [7415] ERROR:  catalog observation stale or unrelated
+2026-10-11 13:21:35.314 EDT [7415] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_observation(text,text,text) line 17 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_observation(expected_writer,expected_ordinal,expected_generation)"
+	PL/pgSQL function truss.runtime_collect_catalog_epoch_context(text,text,text) line 8 at PERFORM
+	SQL statement "SELECT *                              FROM truss.runtime_collect_catalog_epoch_context(
+	  expected_writer_xid,expected_operation_ordinal,expected_effect_generation)"
+	PL/pgSQL function truss.runtime_require_operation_configuration_current(text,text,text) line 7 at SQL statement
+	SQL statement "SELECT truss.runtime_require_operation_configuration_current(
+	  expected_writer_xid,expected_operation_ordinal,expected_effect_generation)"
+	PL/pgSQL function truss.runtime_collect_catalog_admission_configuration(text,text,text,text) line 9 at PERFORM
+	SQL statement "SELECT *                      FROM truss.runtime_collect_catalog_admission_configuration(
+	  expected_writer,expected_ordinal,expected_generation,expected_configuration_profile_hex)"
+	PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 194 at SQL statement
+	SQL statement "SELECT *                      FROM truss.runtime_select_catalog_report_release(
+	  expected_writer,expected_ordinal,expected_generation,expected_configuration_profile_hex)"
+	PL/pgSQL function truss.runtime_select_catalog_report_resources(text,text,text,text) line 6 at SQL statement
+	PL/pgSQL assignment "resources_after:=truss.runtime_select_catalog_report_resources(expected_writer,expected_ordinal,report_result.effect_generation,
+	  (SELECT encode(c.admission_profile_bytes,'hex') FROM truss.operation_configuration c WHERE c.original_writer_xid=op.original_writer_xid AND c.operation_ordinal=op.operation_ordinal))"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 161 at assignment
+2026-10-11 13:21:35.314 EDT [7415] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:36.462 EDT [7415] ERROR:  original catalog acceptance report bytes are immutable
+2026-10-11 13:21:36.462 EDT [7415] CONTEXT:  PL/pgSQL function truss.runtime_immutable_catalog_report() line 9 at RAISE
+	SQL statement "DELETE FROM truss.catalog_acceptance_report"
+	PL/pgSQL function truss.fixture_registration_drift() line 1 at SQL statement
+	SQL statement "-- Protected new-member candidate; not an ordinary-role public insertion API.
+	-- Invoke only after independently admitted originals and confirmed counter
+	-- reservation, under the same native exclusion and operation savepoint.
+	INSERT INTO truss.feed_member AS m (
+	  source_epoch, feed_profile, original_writer_xid, registration_address,
+	  fact_kind, original_fact_key_bytes, original_fact_key_profile_bytes,
+	  original_payload_bytes, original_payload_profile_bytes, original_payload_sha256,
+	  original_owner_context_bytes, original_write_at, original_fact_clock_bytes,
+	  delivery_ordinal)
+	SELECT t.source_epoch, t.feed_profile, t.original_writer_xid,
+	  $3::pg_catalog.int8, $5::pg_catalog.text,
+	  $6::pg_catalog.bytea, $7::pg_catalog.bytea,
+	  $8::pg_catalog.bytea, $9::pg_catalog.bytea, $10::pg_catalog.bytea,
+	  $11::pg_catalog.bytea, $12::pg_catalog.timestamptz, $13::pg_catalog.bytea,
+	  NULL::pg_catalog.int8
+	FROM truss.feed_tx AS t
+	WHERE t.source_epoch = $1::pg_catalog.text
+	  AND t.feed_profile = $2::pg_catalog.text
+	  AND t.original_writer_xid = pg_catalog.pg_current_xact_id_if_assigned()
+	  AND t.registration_counter = $3::pg_catalog.int8
+	  AND t.membership_generation = $4::pg_catalog.int8
+	  AND t.original_context_bytes = $14::pg_catalog.bytea
+	  AND t.manifest_profile_bytes = $15::pg_catalog.bytea
+	  AND $3::pg_catalog.int8 > 0
+	  AND $4::pg_catalog.int8 > 0
+	RETURNING m.source_epoch, m.feed_profile,
+	  m.original_writer_xid::pg_catalog.text AS original_writer_xid,
+	  m.registration_address::pg_catalog.text AS registration_address,
+	  m.fact_kind,
+	  pg_catalog.encode(m.original_fact_key_bytes, 'hex') AS original_fact_key_bytes_hex,
+	  pg_catalog.encode(m.original_fact_key_profile_bytes, 'hex') AS original_fact_key_profile_bytes_hex,
+	  pg_catalog.encode(m.original_payload_bytes, 'hex') AS original_payload_bytes_hex,
+	  pg_catalog.encode(m.original_payload_profile_bytes, 'hex') AS original_payload_profile_bytes_hex,
+	  pg_catalog.encode(m.original_payload_sha256, 'hex') AS original_payload_sha256_hex,
+	  pg_catalog.encode(m.original_owner_context_bytes, 'hex') AS original_owner_context_bytes_hex,
+	  m.original_write_at::pg_catalog.text AS original_write_at,
+	  pg_catalog.encode(m.original_fact_clock_bytes, 'hex') AS original_fact_clock_bytes_hex,
+	  m.delivery_ordinal::pg_catalog.text AS delivery_ordinal;
+	"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 149 at EXECUTE
+2026-10-11 13:21:36.462 EDT [7415] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:38.869 EDT [7434] ERROR:  complete original pending revision registration delta required
+2026-10-11 13:21:38.869 EDT [7434] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 190 at RAISE
+2026-10-11 13:21:38.869 EDT [7434] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:41.280 EDT [7441] ERROR:  nonempty graph needs original before/after effect report producer
+2026-10-11 13:21:41.280 EDT [7441] CONTEXT:  PL/pgSQL function truss.runtime_collect_configured_catalog_graph() line 75 at RAISE
+	SQL statement "SELECT *                          FROM truss.runtime_collect_configured_catalog_graph()"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 23 at SQL statement
+2026-10-11 13:21:41.280 EDT [7441] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:44.877 EDT [7451] ERROR:  unique original revision registration recipe required
+2026-10-11 13:21:44.877 EDT [7451] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 29 at RAISE
+2026-10-11 13:21:44.877 EDT [7451] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:45.101 EDT [7451] ERROR:  query returned no rows
+2026-10-11 13:21:45.101 EDT [7451] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 30 at SQL statement
+2026-10-11 13:21:45.101 EDT [7451] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:45.323 EDT [7451] ERROR:  unique original revision registration recipe required
+2026-10-11 13:21:45.323 EDT [7451] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 29 at RAISE
+2026-10-11 13:21:45.323 EDT [7451] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:47.721 EDT [7456] ERROR:  original pending parent insert readback required
+2026-10-11 13:21:47.721 EDT [7456] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 128 at RAISE
+2026-10-11 13:21:47.721 EDT [7456] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:48.909 EDT [7456] ERROR:  original parent reservation readback required
+2026-10-11 13:21:48.909 EDT [7456] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 134 at RAISE
+2026-10-11 13:21:48.909 EDT [7456] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:50.072 EDT [7456] ERROR:  original revision member returned snapshot required
+2026-10-11 13:21:50.072 EDT [7456] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 159 at RAISE
+2026-10-11 13:21:50.072 EDT [7456] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:52.485 EDT [7497] ERROR:  query returned no rows
+2026-10-11 13:21:52.485 EDT [7497] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 120 at EXECUTE
+2026-10-11 13:21:52.485 EDT [7497] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:53.649 EDT [7497] ERROR:  query returned no rows
+2026-10-11 13:21:53.649 EDT [7497] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 130 at EXECUTE
+2026-10-11 13:21:53.649 EDT [7497] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:54.785 EDT [7497] ERROR:  query returned no rows
+2026-10-11 13:21:54.785 EDT [7497] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 149 at EXECUTE
+2026-10-11 13:21:54.785 EDT [7497] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:21:54.835 EDT [7383] LOG:  received immediate shutdown request
+2026-10-11 13:21:54.838 EDT [7383] LOG:  database system is shut down

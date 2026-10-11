@@ -83,17 +83,17 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
         self.origin_bytes=getattr(self,'origin_bytes',b'{}')
         writer,ordinal,context=self.connection.run("""SELECT * FROM truss.runtime_admit_operation_with_configuration_context(
             0,'catalog-acceptance',decode('01','hex'),:input,decode(:pre,'hex'),:candidate,
-            decode('05','hex'),decode('06','hex'),:origin,
+            decode('05','hex'),:group,:origin,
             :capture,'guard-fixture','guard-fixture-epoch','guard-fixture-incarnation',:profile)""",
-            input=p.input_bytes,pre=pre,candidate=self.candidate_bytes,origin=self.origin_bytes,capture=self.capture_bytes,profile=self.profile)[0]
+            input=p.input_bytes,pre=pre,candidate=self.candidate_bytes,group=getattr(self,'group_bytes',b'\x06'),origin=self.origin_bytes,capture=self.capture_bytes,profile=self.profile)[0]
         self.context=bytes.fromhex(context);self.prestate=bytes.fromhex(pre);return writer,ordinal
 
     def invoke(self):
         p=self.prepared
         rows=self.connection.run("""SELECT * FROM truss.runtime_stage_catalog_with_release(0,
-            decode('01','hex'),:input,:candidate,decode('05','hex'),decode('06','hex'),
+            decode('01','hex'),:input,:candidate,decode('05','hex'),:group,
             :documents,:declarations,:origin,:pre,:context,:profile)""",
-            input=p.input_bytes,candidate=self.candidate_bytes,declarations=p.declarations_bytes,documents=p.archive_documents_bytes,
+            input=p.input_bytes,candidate=self.candidate_bytes,group=getattr(self,'group_bytes',b'\x06'),declarations=p.declarations_bytes,documents=p.archive_documents_bytes,
             origin=self.origin_bytes,pre=self.prestate,context=self.context,profile=self.profile)
         self.result=json.loads(bytes.fromhex(rows[0][3]));return rows[0]
 

@@ -1,0 +1,84 @@
+test_extra_member_refuses_final_delta (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_extra_member_refuses_final_delta) ... FAIL
+test_late_catalog_or_report_change_refuses (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_late_catalog_or_report_change_refuses) ... ok
+test_late_relation_scope_change_refuses (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_late_relation_scope_change_refuses) ... FAIL
+test_native_write_clock_and_single_use_refusal (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_native_write_clock_and_single_use_refusal) ... ERROR
+test_pending_revision_registration_complete_original_rows (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_pending_revision_registration_complete_original_rows) ... ERROR
+test_registration_profile_missing_changed_and_duplicate_refuse (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_registration_profile_missing_changed_and_duplicate_refuse) ... ok
+test_rewritten_writes_refuse (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_rewritten_writes_refuse) ... ok
+test_suppressed_writes_refuse_and_preserve_host_state (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_suppressed_writes_refuse_and_preserve_host_state) ... FAIL
+
+======================================================================
+ERROR: test_native_write_clock_and_single_use_refusal (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_native_write_clock_and_single_use_refusal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/checkout/packages/python/tests/test_catalog_revision_registration_native.py", line 82, in test_native_write_clock_and_single_use_refusal
+    self.stage();before=self.connection.run('SELECT clock_timestamp()')[0][0];row=self.register()
+                                                                                  ^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/checkout/packages/python/tests/test_catalog_revision_registration_native.py", line 41, in register
+    return self.connection.run("""SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/dependencies/pg8000/native.py", line 239, in run
+    self._context = self.execute_unnamed(
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/dependencies/pg8000/core.py", line 723, in execute_unnamed
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '55000', 'M': 'retained catalog differs from original new-only prestate', 'W': 'PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE\nSQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"\nPL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM\nSQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"\nPL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY\nSQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"\nPL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY\nSQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"\nPL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM\nSQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(\n  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"\nPL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement', 'F': 'pl_exec.c', 'L': '3911', 'R': 'exec_stmt_raise'}
+
+======================================================================
+ERROR: test_pending_revision_registration_complete_original_rows (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_pending_revision_registration_complete_original_rows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/checkout/packages/python/tests/test_catalog_revision_registration_native.py", line 58, in test_pending_revision_registration_complete_original_rows
+    self.stage();row=self.register()
+                     ^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/checkout/packages/python/tests/test_catalog_revision_registration_native.py", line 41, in register
+    return self.connection.run("""SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/dependencies/pg8000/native.py", line 239, in run
+    self._context = self.execute_unnamed(
+                    ^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/dependencies/pg8000/core.py", line 723, in execute_unnamed
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '55000', 'M': 'retained catalog differs from original new-only prestate', 'W': 'PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE\nSQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"\nPL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM\nSQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"\nPL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY\nSQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"\nPL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY\nSQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"\nPL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM\nSQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(\n  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"\nPL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement', 'F': 'pl_exec.c', 'L': '3911', 'R': 'exec_stmt_raise'}
+
+======================================================================
+FAIL: test_extra_member_refuses_final_delta (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_extra_member_refuses_final_delta)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/checkout/packages/python/tests/test_catalog_revision_registration_native.py", line 120, in test_extra_member_refuses_final_delta
+    self.assertEqual(caught.exception.args[0]['M'],'complete original pending revision registration delta required')
+AssertionError: 'retained catalog differs from original new-only prestate' != 'complete original pending revision registration delta required'
+- retained catalog differs from original new-only prestate
++ complete original pending revision registration delta required
+
+
+======================================================================
+FAIL: test_late_relation_scope_change_refuses (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_late_relation_scope_change_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/checkout/packages/python/tests/test_catalog_revision_registration_native.py", line 147, in test_late_relation_scope_change_refuses
+    self.assertEqual(caught.exception.args[0]['M'],'complete original pending revision registration delta required')
+AssertionError: 'retained catalog differs from original new-only prestate' != 'complete original pending revision registration delta required'
+- retained catalog differs from original new-only prestate
++ complete original pending revision registration delta required
+
+
+======================================================================
+FAIL: test_suppressed_writes_refuse_and_preserve_host_state (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_suppressed_writes_refuse_and_preserve_host_state)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-eyuu7eb5/checkout/packages/python/tests/test_catalog_revision_registration_native.py", line 100, in test_suppressed_writes_refuse_and_preserve_host_state
+    self.assertEqual(caught.exception.args[0]['C'],'P0002')
+AssertionError: '55000' != 'P0002'
+- 55000
++ P0002
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 12.199s
+
+FAILED (failures=3, errors=2)

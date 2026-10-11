@@ -1,0 +1,168 @@
+2026-10-11 13:17:22.635 EDT [5520] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 13:17:22.635 EDT [5520] LOG:  listening on Unix socket "/private/tmp/rl-tmh4kxf7/.s.PGSQL.5432"
+2026-10-11 13:17:22.662 EDT [5524] LOG:  database system was shut down at 2026-10-11 13:17:22 EDT
+2026-10-11 13:17:22.666 EDT [5520] LOG:  database system is ready to accept connections
+2026-10-11 13:17:25.089 EDT [5536] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:25.089 EDT [5536] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:25.089 EDT [5536] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:26.421 EDT [5551] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:26.421 EDT [5551] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:26.421 EDT [5551] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:26.476 EDT [5551] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:26.476 EDT [5551] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:26.476 EDT [5551] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:27.812 EDT [5554] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:27.812 EDT [5554] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:27.812 EDT [5554] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:29.132 EDT [5572] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:29.132 EDT [5572] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:29.132 EDT [5572] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:30.437 EDT [5589] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:30.437 EDT [5589] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:30.437 EDT [5589] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:31.704 EDT [5608] ERROR:  unique original revision registration recipe required
+2026-10-11 13:17:31.704 EDT [5608] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 29 at RAISE
+2026-10-11 13:17:31.704 EDT [5608] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:31.946 EDT [5608] ERROR:  query returned no rows
+2026-10-11 13:17:31.946 EDT [5608] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 30 at SQL statement
+2026-10-11 13:17:31.946 EDT [5608] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:32.174 EDT [5608] ERROR:  unique original revision registration recipe required
+2026-10-11 13:17:32.174 EDT [5608] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 29 at RAISE
+2026-10-11 13:17:32.174 EDT [5608] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:33.521 EDT [5629] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:33.521 EDT [5629] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:33.521 EDT [5629] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:33.579 EDT [5629] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:33.579 EDT [5629] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:33.579 EDT [5629] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:33.637 EDT [5629] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:33.637 EDT [5629] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:33.637 EDT [5629] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:35.011 EDT [5636] ERROR:  retained catalog differs from original new-only prestate
+2026-10-11 13:17:35.011 EDT [5636] CONTEXT:  PL/pgSQL function truss.runtime_verify_new_catalog_prestate(integer) line 35 at RAISE
+	SQL statement "SELECT truss.runtime_verify_new_catalog_prestate(original_revision)"
+	PL/pgSQL function truss.runtime_collect_core_catalog_inventory_candidate(integer,boolean) line 17 at PERFORM
+	SQL statement "SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false)"
+	PL/pgSQL function truss.runtime_collect_new_core_catalog_inventory(integer) line 3 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision)"
+	PL/pgSQL function truss.runtime_collect_new_catalog_inventory(integer) line 14 at RETURN QUERY
+	SQL statement "SELECT * FROM truss.runtime_collect_new_catalog_inventory(revision)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 126 at PERFORM
+	SQL statement "SELECT *                           FROM truss.runtime_write_catalog_report_candidate(
+	  expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy)"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 59 at SQL statement
+2026-10-11 13:17:35.011 EDT [5636] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:17:35.067 EDT [5520] LOG:  received immediate shutdown request
+2026-10-11 13:17:35.071 EDT [5520] LOG:  database system is shut down
