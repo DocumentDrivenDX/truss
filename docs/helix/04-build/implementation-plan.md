@@ -3444,3 +3444,35 @@ Main a413421b/PR7 selects stock maintained psycopg3 through supported APIs as th
 The implementation queue now starts with supported psycopg host connection adoption and transaction observation/control, explicit exclusive use, caller-owned commit/rollback, exact descriptors/value projections, operation-local savepoints and independent native outcome tests. Pin the psycopg implementation/libpq tuple and qualify cancellation, connection disposal/reuse and confirmed/pending/unknown recovery. Practical input/value/page/batch/iteration/concurrency limits, deadlines and measured peak memory remain baseline requirements. Optional pre-read/predecode/frame/backing/copy-lifetime accounting must not block that path. Any custom protocol/private hook/fork needs the governing reproducible deficiency comparison and owner-approved ADR; the existing experiments provide no exception.
 
 Native prerequisite production and configured completion continue toward public install/register/commit/report using supported baseline execution. Keep exact database semantics, authority and integrity gates. Lakebase TLS/person-token/refresh support still requires actual target evidence, and the corrected private pgserver wheel still needs release qualification. Public selectors remain unavailable until their native protected operation is implemented; completing driver adoption alone does not close the full external-interface goal.
+
+
+### Supported psycopg adoption — implementation candidate, 2026-10-11
+
+Selected development tuple: Python3.11.17, psycopg3.3.6 plus psycopg-binary3.3.6 (binary implementation), bundled libpq180006, and corrected local PostgreSQL160015. The psycopg release is available from the owner's [PyPI release](https://pypi.org/project/psycopg/3.3.6/). This is one local candidate tuple; server compatibility, other wheel platforms, Lakebase and full baseline release remain unqualified.
+
+Borrow an already active synchronous caller connection through supported APIs. Check public transaction status before observer SQL: refuse IDLE, INERROR, ACTIVE, UNKNOWN, closed/broken or pipeline operation without auto-BEGIN, transaction repair or settlement. Use an explicit supported cursor with tuple rows, text result mode and preparation disabled for native observation. Observe own backend PID, granted virtualxid identity, actual isolation/read-only settings and optional assigned xid. The virtual identity supports read-only transactions without forcing an assigned xid. A direct exploratory owner-API probe on this tuple confirmed same-transaction stability, identity change across rollback/rebegin and unassigned read-only xid; this is not toolkit qualification or retained shared-corpus evidence.
+
+Use a distinct selected native adoption path and issuer registry; do not relabel the older generic unit-test port as protected admission. Enforce a nonblocking exclusive connection lease and require retained raw aliases remain unused during toolkit operations. Recheck original native identity/profile at use; stale host commit/rebegin invalidates the handle. Session disposal/detach must never settle or close the caller connection. Operation-local savepoints and successful rollback/release preserve earlier caller work. Exact descriptors/value projection and practical resource/deadline handling belong to the baseline adapter, while protected catalog/mutation authority remains separately installed.
+
+A successful `cancel_safe` call reports a cancellation request, not the statement outcome or recovered transaction. Preserve the original command result/exception; reuse requires confirmed containment and a fresh same-original-transaction observation. Tests must cover active/idle/failed/read-only adoption, duplicate/concurrent use, stale handles, savepoint errors/rollback, disposal without I/O, exact NULL/numeric/time/bytea handling, cancellation and safe connection reuse/quarantine. Timeout ownership, failure-state containment and issuer integration are under Astra review before implementation.
+
+
+Adoption observation itself is an effectful SQL call that can fail, including denial of the native lock view. After checking INTRANS and acquiring the exclusive lease, contain it within an adapter-owned savepoint. Confirm rollback/release on probe failure before claiming earlier host work survives; unresolved completion retains unusable/quarantined custody. Apply bounded timeout policy only within that owned scope and restore exact previous settings on success; rollback restores the failure path. Supported per-cursor loaders or exact text/hex SQL projections must isolate toolkit result interpretation from host custom loaders. The fixed observer produces exactly one bounded row; later application queries require bounded individual values and incremental retrieval, not merely `fetchone` on an accumulated client result.
+
+
+The supported psycopg adoption candidate now has 26 passing local native controls,
+including interruption containment, allocation/cleanup setup failure, disposal
+while busy, stale/foreign handles, timeout restoration, native SQLSTATE40001
+whole-transaction retry, and expiry between savepoint creation and observation.
+Astra Ultra approved this selected component after failure-path corrections; source-pinned native and boundary evidence is retained in evidence/python-psycopg-adoption/.
+This is not complete Python engine or installation qualification.
+
+Each native submission checks the original monotonic deadline, including observer
+and cleanup submissions. The timer only requests supported cancellation; it is
+not a hard wall-clock termination guarantee. The selected caller prerequisite is
+a preconfigured native statement_timeout of 1..60000ms before each toolkit call.
+The initial observer and rollback-restored cleanup use that caller bound. An
+observed zero/out-of-range setting refuses adoption; this observation does not
+prove that an uncooperative caller supplied the prerequisite before the probe.
+SQLSTATE40001/40P01 retains connection-level transaction identity and refuses
+same-transaction re-adoption until a different actual host transaction is observed.

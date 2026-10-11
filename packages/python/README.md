@@ -6,6 +6,38 @@ preparation, selected native host transaction controls, installation footprint i
 and inert assembly construction.
 Mutation/query/installation APIs remain unfinished.
 
+The supported driver baseline is stock psycopg 3. The initial
+`adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
+3.3.6, libpq18.6 and PostgreSQL16.15 on the tested local tuple. Install the
+`[native]` extra. Other wheels, servers and Lakebase remain unqualified.
+
+Supply a caller-owned synchronous connection with an already active transaction:
+
+```python
+from truss import Ok, adopt_psycopg_host
+
+host = adopt_psycopg_host(connection)
+adopted = host.adopt_transaction()
+if not isinstance(adopted, Ok):
+    raise RuntimeError(adopted.error.message)
+transaction = adopted.value
+# The caller continues to own outer commit/rollback and connection disposal.
+host.detach()
+```
+
+Idle and failed transactions refuse adoption. Keep raw aliases unused during toolkit operations; the host may commit or
+roll back between calls. Before every toolkit call, the host must configure
+`statement_timeout` to 1..60000 milliseconds. The initial observer and failure
+cleanup depend on this native bound; an observed zero or larger value refuses
+adoption. The watchdog requests cancellation and checks monotonic elapsed time
+before each SQL submission; it does not guarantee hard wall-clock termination. Toolkit operation containment preserves earlier host work and timeout
+settings; unresolved cleanup quarantines the connection across detach/re-adoption.
+This entry point provides host adoption, not installed graph capabilities,
+compiled query execution or durable commit recovery.
+
+The pg8000 entry points below are historical experimental components, available
+through `[experimental-pg8000]`; their transport hooks do not gate the baseline.
+
 For an existing idle `pg8000.native.Connection` from version 1.31.5 over a Unix socket, use
 `adopt_pg8000_host(connection)`. It attaches without database I/O and never
 creates, settles or closes your connection. The connection must have completed
