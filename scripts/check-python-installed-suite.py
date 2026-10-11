@@ -42,8 +42,8 @@ for name,version in {'pgserver':'0.1.4+truss.pg17.11' if corrected else '0.1.4',
  if dependencies[name] != version: raise RuntimeError('Local dependency drift: '+name)
 expected_tests = unittest.defaultTestLoader.discover(str(root/'packages/python/tests')).countTestCases()
 environment = os.environ.copy()
-environment.setdefault('TRUSS_PSYCOPG_PG17_POSTGRES_BIN', str(Path(pgserver.__file__).resolve().parent/'pginstall/bin'))
-command = [sys.executable,'-W','error','-m','unittest','discover','-s',str(root/'packages/python/tests'),'-v']
+environment.setdefault('TRUSS_CENSUS_POSTGRES_BIN', str(Path(pgserver.__file__).resolve().parent/'pginstall/bin'))
+command = [sys.executable, str(root/'scripts/run-python-installed-workers.py')]
 fixture_paths = [
  'tests/fixtures/layout-migration-planning.json',
  'tests/fixtures/operation-ordinal-issuer.json',
@@ -55,7 +55,7 @@ fixture_paths = [
  'docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql',
 ]
 def pin_inputs():
- paths = sorted((root/'packages/python/tests').glob('test_*.py')) + [root/p for p in fixture_paths]
+ paths = sorted((root/'packages/python/tests').glob('test_*.py')) + [root/p for p in fixture_paths] + [root/'scripts/native_fixture.py', root/'scripts/run-python-installed-workers.py']
  return [{'path':str(p.relative_to(root)), 'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in paths]
 input_basis = pin_inputs()
 def save_failure(status, stdout, stderr, returncode=None):
@@ -82,7 +82,12 @@ if result.returncode or f'Ran {expected_tests} tests' not in result.stderr or no
 if pin_inputs() != input_basis:
  save_failure('test_or_fixture_input_drift', result.stdout, result.stderr, result.returncode)
  raise SystemExit('Test/fixture input drift; original basis and output retained in '+filename)
-receipt = {'scope':'Installed current wheel full existing component suite; four native lifecycle tests plus synthetic/pure controls',
+worker_receipt = json.loads((evidence_directory()/'python-workers/receipt.json').read_text())
+if worker_receipt['tests'] != expected_tests or not worker_receipt['passed']:
+ raise SystemExit('Incomplete installed module-worker coverage')
+receipt = {'scope':'Installed current wheel full existing component suite on PostgreSQL17.11; shared fresh databases/roles, isolated lifecycle fixtures and synthetic/pure controls',
+ 'workerReceipt':str((evidence_directory()/'python-workers/receipt.json').relative_to(root)),
+ 'workerResults':worker_receipt,
  'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),'python':sys.version,
  'loadedPackage':str(loaded),'modules':modules,'dependencies':dependencies,
  'environmentReused':True,'correctedPgserverCandidate':corrected,'tests':expected_tests,'command':command,'output':result.stdout+result.stderr,

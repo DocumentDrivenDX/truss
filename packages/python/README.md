@@ -6,9 +6,9 @@ preparation, selected native host transaction controls, installation footprint i
 and inert assembly construction.
 Mutation/query/installation APIs remain unfinished.
 
-The supported driver baseline is stock psycopg 3. The initial
+The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL17.11. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
-3.3.6, libpq18.6 and PostgreSQL16.15 on the tested local tuple. Install the
+3.3.6, libpq18.6 and PostgreSQL17.11 on the selected local tuple. Install the
 `[native]` extra. Other wheels, servers and Lakebase remain unqualified.
 
 Supply a caller-owned synchronous connection with an already active transaction:
@@ -141,8 +141,8 @@ caller exception. Use a new context to restart. Same-directory contexts refuse
 immediately through process-local and interprocess leases. Existing postmaster
 custody, nonempty non-PostgreSQL directories and incompatible major versions
 refuse without automatic retry, takeover or migration. The local candidate admits
-bundled17.11 with its exact private package identity; historical16.x pairs remain
-recognized explicitly for historical checks. Other platform/version
+bundled17.11 with its exact private package identity; retired16.x packages refuse
+before startup. Other platform/version
 tuples still require qualification.
 
 The experimental truss-toolkit0.0.1.dev0 wheel exposes this lifecycle component;
@@ -620,9 +620,9 @@ host = adopt_psycopg_host(connection, profile=PsycopgProfile(server=170011))
 ```
 
 Only the exact selected tuple is accepted. There is no automatic version
-fallback. The default profile continues to select the historical PostgreSQL
-16.15 tuple, preserving existing explicit component receipts. This host profile
-does not qualify the PG16-specific installer or activate graph capabilities.
+fallback. The default profile selects PostgreSQL17.11. Retired16.15 packages are rejected
+before embedded startup; earlier receipts retain their original historical scope.
+Graph capabilities still require their separate scoped native qualification.
 The host owns transaction start/end, connection lifecycle and pooling. Truss
 does not change PostgreSQL 17's transaction_timeout; native timeout termination
 retains the original failure, quarantines the connection and refuses reuse.

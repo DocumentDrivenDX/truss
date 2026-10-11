@@ -10,24 +10,23 @@ Before custom PostgreSQL wire handling, private driver hooks, a fork or driver r
 
 ## Current-main integration of the embedded17.11 tuple — 2026-10-11
 
-The integration preserves the stock psycopg3 baseline and separately selects its
-existing explicit17.11 profile for PostgreSQL17.11 native fixtures. Historical
-security fixtures retain their original16.15 profile and separately supplied cached
-binaries; an embedded-runtime move does not qualify that security profile on17.11. The provisional installation
-compiler and version gate now use170011. The [independent compilation comparison](evidence/design-audit/pg17-main-merge-definition-compilation.json)
+The stock psycopg3 baseline, default server profile, installation compiler,
+live inventory collection and security epoch fence now select PostgreSQL17.11
+(170011). Retired16.15 embedded packages refuse before startup. Earlier receipts
+and packet metadata remain readable as history; no live16.15 binary is required.
+The [independent compilation comparison](evidence/design-audit/pg17-main-merge-definition-compilation.json)
 confirms identical projected definitions (86 indexes,298 constraints,63 expressions),
-unchanged owner SQL and ordered statement release, and native rollback. Earlier
-16.15 definitions are preserved in a separate historical receipt. Private admission
-inventory recognizes the historical160015 and selected170011 tuples; this is scoped
-component correspondence, not automatic installation or complete runtime acceptance.
+unchanged owner SQL and ordered statement release. Complete runtime and Lakebase
+acceptance remain separate gates.
 
-The installed test producer defaults to600 seconds for the expanded current-main
-suite; `TRUSS_INSTALLED_SUITE_TIMEOUT` may select30–1800 seconds. Its runner allows
-30 seconds beyond that bound and supplies `TRUSS_PSYCOPG_PG17_POSTGRES_BIN` from
-the pinned installed pgserver package when the host has not supplied it. The
-expanded installed suite also requires `TRUSS_CENSUS_POSTGRES_BIN` for the cached
-historical16.15 security/psycopg fixtures. Native fixtures choose the binary by
-their explicit profile; the library default and security version fence are preserved.
+The expanded installed suite uses owned socket workers with fresh databases and
+roles per native fixture class. Explicit class teardown and registered cleanup
+both release fixtures, including tests that delegate another class's setup.
+Lifecycle tests keep isolated clusters. Each module must restore the database,
+role and membership baseline; any failure discards its worker. The installed
+producer defaults to600 seconds; `TRUSS_INSTALLED_SUITE_TIMEOUT` may select30–1800
+seconds and `TRUSS_INSTALLED_SUITE_WORKERS` may select1–8 workers (default2).
+It supplies native binary paths from the pinned installed17.11 package.
 The [timing comparison](evidence/design-audit/pg17-cluster-benchmark-20261011/README.md)
 measured77.8 seconds for twelve per-experiment checks,22.1 seconds for one shared
 worker and20.3 seconds for two workers, including startup and cleanup. The composed

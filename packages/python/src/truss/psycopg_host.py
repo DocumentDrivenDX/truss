@@ -30,7 +30,7 @@ class PsycopgProfile:
     psycopg: str = '3.3.6'
     implementation: str = 'binary'
     libpq: int = 180006
-    server: int = 160015
+    server: int = 170011
 
 
 @dataclass

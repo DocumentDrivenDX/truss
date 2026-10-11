@@ -102,7 +102,7 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
         from truss.psycopg_host import PsycopgHost,PsycopgProfile
         t=self.begin();called=[]
         self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
-        with patch.object(PsycopgHost,'profile',property(lambda host:PsycopgProfile(server=170011))):
+        with patch.object(PsycopgHost,'profile',property(lambda host:PsycopgProfile(server=160015))):
             with self.assertRaises(ValueError):self.run_cut(t,lambda c:called.append(True))
         self.assertEqual(called,[])
         self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))

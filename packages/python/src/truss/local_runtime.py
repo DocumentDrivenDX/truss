@@ -58,9 +58,9 @@ class LocalPostgres:
             import pgserver
             import fasteners
             runtime_version = importlib.metadata.version('pgserver')
-            expected_server = {'0.1.4': '16.2', '0.1.4+truss.pg16.15': '16.15', '0.1.4+truss.pg17.11': '17.11'}.get(runtime_version)
+            expected_server = {'0.1.4+truss.pg17.11': '17.11'}.get(runtime_version)
             if expected_server is None:
-                raise LocalRuntimeError('Expected published pgserver0.1.4 or explicit corrected candidate')
+                raise LocalRuntimeError('Expected pinned pgserver0.1.4+truss.pg17.11')
         except (ImportError, importlib.metadata.PackageNotFoundError) as error:
             raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
         expected_major = expected_server.split('.')[0]

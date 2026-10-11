@@ -17,6 +17,17 @@ def query(runtime, sql):
 
 
 class LocalRuntimeTests(unittest.TestCase):
+    def test_retired_pgserver_version_refuses_before_startup(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as parent:
+            directory = Path(parent) / 'data'
+            with patch('truss.local_runtime.importlib.metadata.version', return_value='0.1.4+truss.pg16.15'), patch('pgserver.get_server') as start:
+                with self.assertRaisesRegex(LocalRuntimeError, 'Expected pinned pgserver'):
+                    with LocalPostgres(directory):
+                        self.fail('Retired runtime admitted')
+                start.assert_not_called()
+                self.assertFalse(directory.exists())
+
     def test_retained_commit_and_exception_cleanup(self):
         with tempfile.TemporaryDirectory(prefix='truss-python-runtime-') as parent:
             directory = Path(parent) / 'retained data'

@@ -14,6 +14,7 @@ class NativeBoundaryFixture:
     @classmethod
     def setUpClass(cls):
         from pg8000.native import Connection
+        cls.worker_fixture = None
         selected=os.environ.get('TRUSS_NATIVE_TEST_SOCKET')
         if selected is not None:
             path=Path(selected)
@@ -22,18 +23,31 @@ class NativeBoundaryFixture:
             cls.directory=None;cls.runtime=None;cls.Connection=Connection
             cls.kwargs=dict(user='postgres',database='postgres',unix_sock=str(path),ssl_context=False)
             return
-        cls.directory = tempfile.TemporaryDirectory(prefix='truss-native-boundary-')
-        cls.runtime = LocalPostgres(Path(cls.directory.name) / 'data').__enter__()
-        uri = urlparse(cls.runtime.info.connection_uri)
+        worker = os.environ.get('TRUSS_NATIVE_WORKER')
+        if worker:
+            from native_fixture import DatabaseFixture
+            fixture = DatabaseFixture(Path(worker))
+            cls.worker_fixture = fixture
+            cls.addClassCleanup(fixture.cleanup)
+            cls.directory = None
+            cls.runtime = None
+            uri = urlparse(fixture.get_uri())
+        else:
+            cls.directory = tempfile.TemporaryDirectory(prefix='truss-native-boundary-')
+            cls.runtime = LocalPostgres(Path(cls.directory.name) / 'data').__enter__()
+            uri = urlparse(cls.runtime.info.connection_uri)
         params = parse_qs(uri.query)
         host = params.get('host', [uri.hostname])[0]
         port = int(params.get('port', [uri.port or 5432])[0])
-        cls.kwargs = dict(user='postgres', database='postgres', port=port, ssl_context=False)
+        cls.kwargs = dict(user='postgres', database=uri.path.lstrip('/'), port=port, ssl_context=False)
         cls.kwargs['unix_sock' if host.startswith('/') else 'host'] = str(Path(host) / f'.s.PGSQL.{port}') if host.startswith('/') else host
         cls.Connection = Connection
 
     @classmethod
     def tearDownClass(cls):
+        if cls.worker_fixture is not None:
+            cls.worker_fixture.cleanup()
+            cls.worker_fixture = None
         if cls.runtime is not None:cls.runtime.close()
         if cls.directory is not None:cls.directory.cleanup()
 

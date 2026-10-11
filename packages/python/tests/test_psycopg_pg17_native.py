@@ -33,7 +33,7 @@ class Pg17AdoptionTests(PsycopgHostNativeTests):
 
     def test_wrong_profile_refuses_before_attachment(self):
         self.host.detach()
-        for profile in (PsycopgProfile(),PsycopgProfile(server=170010),PsycopgProfile(libpq=170011,server=170011),None):
+        for profile in (PsycopgProfile(server=160015),PsycopgProfile(server=170010),PsycopgProfile(libpq=170011,server=170011),None):
             with self.subTest(profile=profile),self.assertRaises(ValueError):adopt_psycopg_host(self.connection,profile=profile)
         self.host=adopt_psycopg_host(self.connection,profile=self.selected_profile)
 

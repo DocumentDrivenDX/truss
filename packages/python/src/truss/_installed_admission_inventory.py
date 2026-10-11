@@ -160,7 +160,7 @@ def collect_inventory(port: InventoryPort, *, ordinary_role: str,
         retained.append(Section(name,result))
         return result
     context=read('context',CONTEXT,{})
-    if len(context.rows)!=1 or (context.rows[0][0] not in ('160015','170011') or context.rows[0][1]!='pg_catalog, pg_temp'):
+    if len(context.rows)!=1 or context.rows[0][:2]!=('170011','pg_catalog, pg_temp'):
         raise InventoryRefusal('context')
     routines=read('routines',ROUTINES,{})
     relations=read('relations',RELATIONS,{'homes':list(HOMES)})
