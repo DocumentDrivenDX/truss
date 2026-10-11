@@ -1,0 +1,20 @@
+{
+  "revision": "9545b7119ceaa29ca7523e4722ec52412084d835",
+  "producerMode": "reference-links",
+  "buildDependencies": {
+    "yaml": {
+      "version": "2.9.1",
+      "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+    },
+    "ajv": {
+      "version": "8.20.0",
+      "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+    }
+  },
+  "archiveSha256": "7231dea7d5d478c7d6a356410dba54c740ff0b2afa1a04353688462169f53d8a",
+  "bundleSha256": "8d9a5da5bdf9196ec19e09f4037044ccaa741ee8e8b603453d2c515db892b88e",
+  "operations": [
+    "inspectCoreReferenceLinks"
+  ],
+  "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+}

@@ -38,6 +38,10 @@ class CatalogLifecycleTests(CatalogNativeFixture, unittest.TestCase):
         evidence=json.loads(bytes.fromhex(value['lifecycleEvidenceHex']))
         self.assertEqual(evidence['expectedInsertEvents'],value['nativeCut']['effectGeneration'])
         self.assertFalse(value['acceptedReportQualified'])
+        self.assertFalse(value['supportSemanticsQualified'])
+        original=json.loads(self.prepared.report_evidence_bytes)
+        for field in ('ownerObservations','observationCoverage','coreAssertionIdentities'):
+            self.assertEqual(value[field],original[field])
         require_current_catalog_report_basis(basis,self.connection,self.prepared)
         with self.assertRaises(DatabaseError) as caught:self.connection.run('COMMIT')
         self.assertEqual(caught.exception.args[0]['C'],'55000')

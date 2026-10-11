@@ -1,7 +1,10 @@
 /** Installed Python ingress for the existing original catalog preparation route. */
 import {resolve} from 'node:path';
 import {createCatalogInputPreparation} from './catalog-input';
-import {loadUmfProducer} from './index';
+import {loadUmfProducer,loadUmfDeclarationProducer,loadUmfFieldAssertionProducer,loadUmfScalarTypeProducer,loadUmfRecordMembersProducer,loadUmfReferenceLinksProducer} from './index';
+import {collectCatalogAssertionObservations} from './catalog-assertion-observations';
+import {assessCatalogObservationCoverage} from './catalog-observation-coverage';
+import {collectCatalogCoreAssertionIdentities} from './catalog-core-assertion-identities';
 import {collectCatalogValidationEvidence} from './catalog-validation-evidence';
 import {collectCatalogExtensionArtifacts} from './catalog-extension-artifacts';
 import {collectCatalogIngressReportBasis} from './catalog-ingress-report-basis';
@@ -53,7 +56,15 @@ try{
  }else{
   const prepared=preparation.prepare(original);
   let reportEvidence:unknown;
-  try { reportEvidence={validation:collectCatalogValidationEvidence(prepared),
+  try {
+    const [declarations,fields,scalars,members,links]=await Promise.all([
+      loadUmfDeclarationProducer(root+'/owners/declarations'),loadUmfFieldAssertionProducer(root+'/owners/assertion-fields'),
+      loadUmfScalarTypeProducer(root+'/owners/scalar-types'),loadUmfRecordMembersProducer(root+'/owners/record-members'),
+      loadUmfReferenceLinksProducer(root+'/owners/reference-links')]);
+    const observations=collectCatalogAssertionObservations(prepared,declarations,fields,scalars,members,links);
+    reportEvidence={ownerObservations:observations,observationCoverage:assessCatalogObservationCoverage(prepared,observations),
+    coreAssertionIdentities:collectCatalogCoreAssertionIdentities(prepared,observations),
+    validation:collectCatalogValidationEvidence(prepared),
     retainedExtensions:collectCatalogExtensionArtifacts(prepared),
     ingress:prepared.original.input.binding.state==='absent'&&!prepared.original.input.transforms.length
      ?{state:'available',basis:collectCatalogIngressReportBasis(prepared)}
