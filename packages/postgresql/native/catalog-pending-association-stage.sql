@@ -383,3 +383,65 @@ EXCEPTION WHEN no_data_found OR too_many_rows THEN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_collect_pending_association_value_candidate(int) FROM PUBLIC;
+
+-- Private report preparation basis: complete selected source/value correspondence.
+-- Caller-carried bytes are comparison data, never accepted report/readiness authority.
+CREATE FUNCTION truss.runtime_collect_pending_association_report_basis_candidate(original_revision int)
+RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET bytea_output='hex' AS $$
+DECLARE op truss.row_home_operation%ROWTYPE; final_op truss.row_home_operation%ROWTYPE; image jsonb; final_image jsonb;
+ documents jsonb; final_documents jsonb; original_binding bytea; final_binding bytea; body bytea;
+BEGIN
+ SELECT o.* INTO STRICT op FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted';
+ SELECT coalesce(jsonb_agg(jsonb_build_object('family',v.family,'identity',v.identity,'physicalValue',v.physical_value)
+  ORDER BY v.family COLLATE "C",v.identity::text COLLATE "C"),'[]'::jsonb) INTO image
+ FROM truss.runtime_collect_pending_association_value_candidate(original_revision) v;
+ SELECT a.original_binding_bytes INTO STRICT original_binding FROM truss.catalog_binding_archive a WHERE a.revision=original_revision;
+ SELECT jsonb_agg(to_jsonb(d) ORDER BY d.ord) INTO documents FROM truss.schema_doc d WHERE d.rev=original_revision;
+ -- Revalidate complete selected source/metadata and compare the exact captured
+ -- inputs; generation alone cannot exclude equal-generation source substitution.
+ SELECT coalesce(jsonb_agg(jsonb_build_object('family',v.family,'identity',v.identity,'physicalValue',v.physical_value)
+  ORDER BY v.family COLLATE "C",v.identity::text COLLATE "C"),'[]'::jsonb) INTO final_image
+ FROM truss.runtime_collect_pending_association_value_candidate(original_revision) v;
+ SELECT o.* INTO STRICT final_op FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted';
+ SELECT a.original_binding_bytes INTO STRICT final_binding FROM truss.catalog_binding_archive a WHERE a.revision=original_revision;
+ SELECT jsonb_agg(to_jsonb(d) ORDER BY d.ord) INTO final_documents FROM truss.schema_doc d WHERE d.rev=original_revision;
+ IF final_op.effect_generation IS DISTINCT FROM op.effect_generation THEN
+  RAISE EXCEPTION 'pending association report basis generation changed' USING ERRCODE='55000';
+ END IF;
+ IF to_jsonb(final_op) IS DISTINCT FROM to_jsonb(op) THEN
+  RAISE EXCEPTION 'pending association report basis original operation changed' USING ERRCODE='55000';
+ END IF;
+ IF final_binding IS DISTINCT FROM original_binding OR final_documents IS DISTINCT FROM documents OR final_image IS DISTINCT FROM image THEN
+  RAISE EXCEPTION 'pending association report basis captured source/value changed' USING ERRCODE='55000';
+ END IF;
+ body:=convert_to(jsonb_build_object('profile','truss-pending-association-report-basis-candidate/0.1.0',
+  'writerXid',op.original_writer_xid::text,'operationOrdinal',op.operation_ordinal::text,
+  'effectGeneration',final_op.effect_generation::text,'revision',original_revision::text,
+  'originalInputHex',encode(op.original_input_bytes,'hex'),'originalBindingHex',encode(original_binding,'hex'),
+  'documents',documents,'metadataImage',image,'acceptedReportQualified',false)::text,'UTF8');
+ IF octet_length(body)>8388608 THEN
+  RAISE EXCEPTION 'pending association report basis component capacity exceeded' USING ERRCODE='54000';
+ END IF;
+ RETURN body;
+EXCEPTION WHEN no_data_found OR too_many_rows THEN
+ RAISE EXCEPTION 'pending association report basis original operation required' USING ERRCODE='55000';
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_collect_pending_association_report_basis_candidate(int) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_require_pending_association_report_basis_candidate(original_revision int,original_basis bytea)
+RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ IF original_basis IS NULL OR octet_length(original_basis) NOT BETWEEN 1 AND 8388608 THEN
+  RAISE EXCEPTION 'bounded original pending association report basis required' USING ERRCODE='22023';
+ END IF;
+ IF original_basis IS DISTINCT FROM truss.runtime_collect_pending_association_report_basis_candidate(original_revision) THEN
+  RAISE EXCEPTION 'current original pending association report basis correspondence required' USING ERRCODE='55000';
+ END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_require_pending_association_report_basis_candidate(int,bytea) FROM PUBLIC;
