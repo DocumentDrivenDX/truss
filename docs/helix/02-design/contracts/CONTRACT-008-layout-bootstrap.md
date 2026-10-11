@@ -2659,3 +2659,10 @@ This explains the boundary of the160-method native packet, rather than proving a
 PostgreSQL or host refinement. No-loss remains a premise of exclusive toolkit
 custody and the prohibition on raw aliases. Trace CONTRACT-063/STP-056 L03/L11;
 no backend binding or complete final-release theorem is promoted.
+
+Post-main integration requalification: concurrent host receive/resource changes
+are preserved in main b3647328. Fresh
+`evidence/python-psycopg-epoch-cut/9880771d-a781-4414-b64e-a043dec60dce` passes160
+native methods and module boundaries on PostgreSQL18.6, with current source pins
+and three stop0/status3/socket-absent cleanups. The prior native packet retains
+its original pre-integration source scope; qualified exclusions remain unchanged.
