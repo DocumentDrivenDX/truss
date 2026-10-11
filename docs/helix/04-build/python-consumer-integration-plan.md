@@ -9,6 +9,12 @@ ddx:
   links:
     - id: truss.implementation-plan
       kind: informed_by
+    - id: CONTRACT-001
+      kind: informed_by
+    - id: CONTRACT-008
+      kind: informed_by
+    - id: CONTRACT-011
+      kind: informed_by
     - id: CONTRACT-003
       kind: informed_by
     - id: CONTRACT-004
@@ -26,6 +32,51 @@ ddx:
 The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. Current Python exports provide local-server lifecycle, execution outcomes and draft group/import contracts with local report consistency; callable graph capabilities remain unbuilt. TypeScript capability declarations describe intended contracts, not implemented Python behavior. The next release must provide a tested embeddable Python implementation, rather than merely translating interfaces or emitting administrative fixture identities.
 
 Prioritize this plan ahead of more isolated component probes. It narrows the first test input to a synthetic commerce catalog, not the required authority, durability, exact-value or recovery behavior. Full corpus, broader schema coverage, managed deployment profiles and migrations remain required follow-on exits in the existing implementation plan.
+
+## Current implementation priority: finish the installed runtime
+
+The next connected workstream is PY-C04 installation plus PA05 native observation
+and finalization. Commit `3d09a566` supplies first-registration lifecycle report
+fields, but it does not issue a complete report, finalize a catalog operation or
+install an executable bundle. The packaged installation manifest is still
+`executable: false`. Do not treat a context0.4 port, another readiness diagnostic,
+or a mutation against unpublished catalog identities as this workstream's exit.
+
+Start with the actual `row_touch_observe()` body and its native scope projection
+in one implementation change at
+`packages/postgresql/native/row-touch/observe.sql`. This is the first remaining
+runtime body; its event and custody behavior is independently testable while
+PA01–PA04 protected actor/installation/authorization admission is being completed
+by the security workstream. Source implementation and administrative native tests
+must not advertise installed ordinary-person authority.
+
+| Order | Implementation output | Decisive evidence |
+| --- | --- | --- |
+| RT1 | Argument-free original trigger admission: exact state/node/scalar relation, INSERT/every UPDATE/DELETE, actual xid and exactly one unfinished original operation. Native scope decoder compares the existing row-operation context/group/custody formats and all original registry artifacts. | Missing/ambiguous operation, wrong native context version, substituted definition/input/prestate/candidate/obligation/group and copied address refuse. Context0.2/0.4 is not relabeled row-operation context0.1. |
+| RT2 | Fixed versioned projection from the immutable original prestate/candidate/effect artifacts into complete OLD/NEW image membership and nine-artifact context correspondence. Original native binary image decoding preserves type OIDs, NULL, full payload and complete source bytes. Reuse original image/ownership helpers; the projection ships with the observer, rather than becoming another standalone carrier checkpoint. | Python image/attribution/context/group/custody decoders serve as independent oracles. Missing, duplicate, foreign, changed and disconnected members refuse. Native prestate producer and admitted candidate meanings are matched separately; a supplied scope label does not authorize an event. |
+| RT3 | Complete event attribution for object and edge properties, retained OLD parents during deletion/cascade, and both old/new owners on reparenting. Deduplicate exact full tuples only within one event. | All nine relation/event combinations, equal-value updates, deleted-parent cascades and old/new owner changes compare full retained images and contributions. Live-parent absence never skips an event. |
+| RT4 | Consume an existing native capacity reservation, preserve the full prior contributor union, append an original operation once, create/advance every affected touch, clear seals, and advance/reset operation proofs once per actual event. | Two sequential original operations contribute to one touch without losing either; repeated events advance generations independently. Overflow, exhausted reservation or a later tuple failure rolls back all statement effects. Native touch/capacity bytes match independent Python decoding. |
+| RT5 | Install the observer on all participating relations with original unfiltered, immediate, ALWAYS descriptors; replace overlapping row-generation observers atomically in the selected bundle. | No missing event, duplicate generation advance or conditional/deferred trigger is accepted. Savepoint rollback restores earlier host work and its original proof state. PUBLIC/direct consumer execution and registry writes remain denied. |
+| RT6 | `row_touch_commit_check()` validates the complete surviving transaction operation/touch cohort, including operations with no touches, all original contributors, full current generations and final application status. | Missing/stale/foreign seals, omitted zero-touch operations, post-seal writes, rollback/reapplication and early constraint checking cannot commit an incomplete scope. |
+| RT7 | Complete edge/catalog observers and both independent edge/feed validators, plus `feed_current_union_check`, required source facts, journal/feed publication and original complete operation results. | Derive required facts independently of registrations; an omitted registration does not imply zero obligations. Preserve catalog publication, non-row effects, row seals and feed facts under one finalization boundary. |
+| RT8 | Compose actual ordered layout, seven bodies, initialization, roles/grants/policies and complete resource/dependency inventory into the executable installation bundle. Implement IM01–IM07 Python coordinator over original attempt/target admission, DDL, inventory, archive, marker, source epoch, final parity and qualified settlement/reconciliation. | Fresh pgserver install outside the checkout, actual immutable archive/marker/epoch, complete original native inventory, ordinary-person denial/allow schedules, failure rollback and lost-commit reconciliation. No fixture installation or catalog identity is published. |
+| RT9 | Expose install/status and accepted catalog/report/view through ReferenceAssembly, then run register → create → exact read → idempotent retry through public Python imports. | Wheel consumer uses only public entry points, a real installed runtime and actual accepted IDs. Results from caller-adopted operations stay pending until caller commit; owned/network publication follows confirmed commit. |
+
+All six original operation families remain in the completion target: mutation,
+import, catalog transform, catalog acceptance, home migration and administrative
+repair. A family whose original projection is unfinished refuses explicitly;
+that refusal does not qualify the whole body or shrink the eventual release.
+
+Keep the unconditional operation commit barrier until RT6–RT8 and complete
+finalization are actually qualified. No application phase flag, source manifest
+bit, successful codec check or matching hash can replace those proofs. Preserve
+UMF ownership of value/key/schema interpretation, Weft ownership of SQL lowering,
+and the security workstream's PA01–PA04 owner/actor/current-authority boundary.
+
+This schedule supersedes sequencing by isolated report-component milestones.
+Completed components remain implementation inputs with their existing evidence;
+they are not consumer capability completion. The full PY-C01–PY-C10 scope and
+shared corpus/native interchange exits below remain required.
 
 ## Execution order and dependencies
 
