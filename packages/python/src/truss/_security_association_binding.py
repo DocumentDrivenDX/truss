@@ -57,6 +57,46 @@ def _json(original):
     return value
 
 
+
+def _mapping_fragments(original, count):
+    """Exact JSON value slices after full source validation; never reserialize.
+
+    Decoded member names locate the original mappings array, including escaped
+    names. raw_decode supplies character boundaries; UTF-8 re-encoding the
+    original slice preserves its bytes, escapes, whitespace and member order.
+    The caller has already rejected duplicates, invalid Unicode and resources.
+    """
+    text = original.decode('utf-8')
+    decoder = json.JSONDecoder(parse_float=_OriginalNumber, parse_int=_OriginalNumber)
+    def whitespace(position):
+        while position < len(text) and text[position] in ' \t\r\n':
+            position += 1
+        return position
+    position = whitespace(0) + 1
+    while True:
+        position = whitespace(position)
+        name, end = decoder.raw_decode(text, position)
+        position = whitespace(whitespace(end) + 1)
+        if name == 'mappings':
+            position = whitespace(position + 1)
+            fragments = []
+            for index in range(count):
+                start = position
+                _, end = decoder.raw_decode(text, start)
+                fragments.append(text[start:end].encode('utf-8'))
+                position = whitespace(end)
+                if index + 1 < count:
+                    position = whitespace(position + 1)
+            if text[position] != ']':
+                _fail('original_mapping_extraction')
+            return tuple(fragments)
+        _, end = decoder.raw_decode(text, position)
+        position = whitespace(end)
+        if text[position] == '}':
+            _fail('original_mapping_extraction')
+        position += 1
+
+
 def _closed(value, keys):
     if type(value) is not dict or set(value) != set(keys): _fail('closed_binding')
     return value
@@ -116,6 +156,8 @@ class AssociationBasis:
     roles: tuple[AssociationRoleBasis, ...]
     all_member_fields: tuple
     storage: AssociationStorageBasis
+    source_pointer: str
+    definition_bytes: bytes
 
 
 @dataclass(frozen=True)
@@ -125,6 +167,7 @@ class AssociationBindingBasis:
     binding_bytes: bytes
     associations: tuple[AssociationBasis, ...]
     scope: str = 'original_source_correspondence_only'
+    extraction_profile: str = 'truss-original-association-json-candidate/0.1.0'
 
 
 def _prepare_association_binding(core_bytes: bytes, ontology_bytes: bytes,
@@ -170,8 +213,10 @@ def _prepare_association_binding(core_bytes: bytes, ontology_bytes: bytes,
         identity = _ref(item.get('type'))
         if identity in entities: _fail('duplicate_entity')
         entities[identity] = item
+    mappings = _array(binding.get('mappings'))
+    fragments = _mapping_fragments(binding_bytes, len(mappings))
     results = []; seen = set()
-    for mapping_index, mapping in enumerate(_array(binding.get('mappings'))):
+    for mapping_index, mapping in enumerate(mappings):
         _closed(mapping, ('association', 'instanceKeyId', 'sourceRole', 'targetRole', 'roles', 'storage'))
         identity = _ref(mapping['association']); original = authored.get(identity)
         if identity in seen or original is None: _fail('association_coverage')
@@ -214,7 +259,8 @@ def _prepare_association_binding(core_bytes: bytes, ontology_bytes: bytes,
             AssociationStorageBasis(storage['sourceMin'], storage['sourceMax'],
                 storage['targetMin'], storage['targetMax'], storage['directed'],
                 storage['lifecycle'], storage['composition'], storage['inverse'],
-                f'/mappings/{mapping_index}/storage')))
+                f'/mappings/{mapping_index}/storage'),
+            f'/mappings/{mapping_index}', fragments[mapping_index]))
     if seen != set(authored): _fail('association_coverage')
     return AssociationBindingBasis(core_bytes, ontology_bytes, binding_bytes, tuple(results))
 

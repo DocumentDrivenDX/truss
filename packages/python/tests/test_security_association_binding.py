@@ -27,6 +27,46 @@ class BindingTests(unittest.TestCase):
   with self.assertRaisesRegex(AssociationBindingError,reason):self.run_binding(binding)
  def test_original_complete_two_association_basis(self):
   result=self.run_binding();self.assertEqual(result.core_bytes,CORE);self.assertEqual(result.ontology_bytes,ONTOLOGY);self.assertEqual([a.association[2] for a in result.associations],['Ownership','Assignment']);self.assertEqual(len(result.associations[1].all_member_fields),3);self.assertEqual(result.scope,'original_source_correspondence_only')
+ def test_exact_mapping_fragments_preserve_authored_format(self):
+  binding=inputs();fragments=[json.dumps(m,indent=3,ensure_ascii=False).encode() for m in binding.pop('mappings')]
+  prefix=wire(binding)[:-1];original=prefix+b', "mappings" : [ \n'+b', \n'.join(fragments)+b' ] }\n'
+  result=prepare_association_binding(CORE,ONTOLOGY,original)
+  self.assertEqual(result.binding_bytes,original)
+  self.assertEqual(tuple(a.definition_bytes for a in result.associations),tuple(fragments))
+  self.assertEqual(tuple(a.source_pointer for a in result.associations),('/mappings/0','/mappings/1'))
+  self.assertEqual(result.extraction_profile,'truss-original-association-json-candidate/0.1.0')
+ def test_escaped_mapping_member_and_values_preserve_bytes(self):
+  binding=inputs();binding['mappings'].reverse();original=wire(binding).replace(b'"mappings"',b'"mapp\\u0069ngs"').replace(b'Assignment',b'Ass\\u0069gnment')
+  result=prepare_association_binding(CORE,ONTOLOGY,original)
+  self.assertEqual(result.associations[0].association[2],'Assignment')
+  self.assertIn(b'Ass\\u0069gnment',result.associations[0].definition_bytes)
+  self.assertEqual(json.loads(result.associations[0].definition_bytes),binding['mappings'][0])
+  self.assertEqual(result.associations[0].source_pointer,'/mappings/0')
+ def test_mapping_last_or_first_member_has_identical_extraction(self):
+  binding=inputs();first={'mappings':binding['mappings'],**{k:v for k,v in binding.items() if k!='mappings'}}
+  a=self.run_binding(binding);b=self.run_binding(first)
+  self.assertEqual(tuple(x.definition_bytes for x in a.associations),tuple(x.definition_bytes for x in b.associations))
+ def test_string_delimiters_do_not_change_mapping_boundaries(self):
+  ontology=json.loads(ONTOLOGY);role='}], "mappings": [{}] \\ 雪'
+  for association in ontology['associations']:association['endpoints'][0]['role']=role
+  original_ontology=wire(ontology);binding=inputs(CORE,original_ontology)
+  result=prepare_association_binding(CORE,original_ontology,wire(binding))
+  self.assertEqual(tuple(json.loads(a.definition_bytes) for a in result.associations),tuple(binding['mappings']))
+ def test_escaped_duplicate_mapping_member_refuses_before_extraction(self):
+  original=wire(inputs()).replace(b'"mappings":',b'"mapp\\u0069ngs":[],"mappings":',1)
+  with self.assertRaisesRegex(AssociationBindingError,'duplicate_member'):prepare_association_binding(CORE,ONTOLOGY,original)
+ def test_mapping_bytes_cannot_be_mutated(self):
+  result=self.run_binding()
+  with self.assertRaises(FrozenInstanceError):result.associations[0].definition_bytes=b'{}'
+ def test_multibyte_original_slice_preserves_utf8(self):
+  core=json.loads(CORE);ontology=json.loads(ONTOLOGY)
+  for association in ontology['associations']:
+   association['endpoints'][0]['role']='é雪'
+  original_ontology=wire(ontology);binding=inputs(CORE,original_ontology)
+  original=json.dumps(binding,ensure_ascii=False,indent=2).encode()
+  result=prepare_association_binding(CORE,original_ontology,original)
+  self.assertIn('é雪'.encode(),result.associations[0].definition_bytes)
+  self.assertEqual(json.loads(result.associations[0].definition_bytes),binding['mappings'][0])
  def test_explicit_storage_choices_survive_preparation(self):
   result=self.run_binding();storage=result.associations[1].storage
   self.assertEqual((storage.source_min,storage.source_max,storage.target_min,storage.target_max),('0','*','0','*'))
