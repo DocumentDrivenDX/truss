@@ -1,0 +1,20 @@
+test_closed_hook_inventory (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_closed_hook_inventory) ... ok
+test_old_snapshot_refuses_before_acquisition (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_old_snapshot_refuses_before_acquisition) ... ok
+test_omitted_marker_lock_allows_distinct_concurrent_ddl_effects (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_omitted_marker_lock_allows_distinct_concurrent_ddl_effects) ... ok
+test_omitted_own_share_guard_allows_same_backend_source_change (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_omitted_own_share_guard_allows_same_backend_source_change) ... ok
+test_omitted_table_modes_allow_pending_commit_source_change (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_omitted_table_modes_allow_pending_commit_source_change) ... ok
+test_original_privilege_and_definer_refusal (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_original_privilege_and_definer_refusal) ... ok
+test_pending_writer_commit_and_abort (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_pending_writer_commit_and_abort) ... ok
+test_privileged_hook_disable_is_explicitly_outside_barrier (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_privileged_hook_disable_is_explicitly_outside_barrier) ... ok
+test_reader_first_external_writer_refuses_before_effect (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_reader_first_external_writer_refuses_before_effect) ... ok
+test_replica_mode_still_fences_same_backend (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_replica_mode_still_fences_same_backend) ... ok
+test_same_backend_six_tags_refuse_before_effect (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_same_backend_six_tags_refuse_before_effect) ... ok
+test_selected_ddl_changes_source_not_epoch (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_selected_ddl_changes_source_not_epoch) ... ok
+test_shared_role_change_is_explicitly_outside_barrier (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_shared_role_change_is_explicitly_outside_barrier) ... ok
+test_two_participating_writers_serialize_before_effect (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_two_participating_writers_serialize_before_effect) ... ok
+test_writer_lock_savepoint_lifetime (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_writer_lock_savepoint_lifetime) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 3.940s
+
+OK

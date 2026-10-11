@@ -1,0 +1,19 @@
+test_configured_original_host_dispatch_and_cleanup (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup) ... ok
+test_configured_lost_publication_preserves_original_cleanup (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup) ... ok
+test_original_prepared_dispatch_and_replay_refusal (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal) ... ok
+test_combined_sources_and_large_result_complete_ready_and_cleanup (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup) ... ok
+test_python_composition_failure_retains_original_native_sources (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources) ... ok
+test_changed_source_cut_refuses (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses) ... ok
+test_changed_lifecycle_policy_refuses (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses) ... ok
+test_lost_observation_preserves_original_result_without_replay (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay) ... ok
+test_foreign_nominal_request_refuses_before_dereference (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference) ... ok
+test_incomplete_actual_native_response_never_publishes (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes) ... ok
+test_well_shaped_substituted_document_hash_refuses (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses) ... ok
+test_extra_native_response_field_refuses (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses) ... ok
+test_substituted_native_inventory_count_refuses (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses) ... ok
+test_original_configured_encoder_capture_and_rollback (test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 21.681s
+
+OK

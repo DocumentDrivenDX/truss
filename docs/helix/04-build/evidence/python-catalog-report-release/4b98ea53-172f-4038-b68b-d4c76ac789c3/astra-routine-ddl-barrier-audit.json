@@ -1,0 +1,33 @@
+{
+  "status": "scoped-review-passed",
+  "reviewedAtUtc": "2026-10-11T17:20:57.131985+00:00",
+  "findings": [],
+  "nativeRunId": "4b98ea53-172f-4038-b68b-d4c76ac789c3",
+  "nativeSourcePins": 290,
+  "nativeTests": 44,
+  "nativeBinaryDigests": 1614,
+  "retainedCensusImages": 6,
+  "formalRunId": "2305e88b-ecca-4d73-9b99-cab4f61953f1",
+  "formalSourcePins": 6,
+  "formalQueries": 10,
+  "unsat": 5,
+  "sat": 5,
+  "independentFullGuardSatOwnAndForeign": true,
+  "implementationEdits": false,
+  "nativeExecutionByReviewer": false,
+  "scope": "Administrative six-tag writer participation barrier only; unchanged epoch and mandatory fresh census. No complete source/authority, native refinement or protected-use/public admission qualification.",
+  "artifacts": [
+    {
+      "path": "/private/tmp/astra-routine-ddl-barrier-review.md",
+      "sha256": "e5fde4190b256a67db59b30681fca12444bc9c4a209821d37877bed3f9df094a"
+    },
+    {
+      "path": "/private/tmp/astra-routine-ddl-barrier-native-audit.json",
+      "sha256": "bbcfb9a65d894b0c4805b3d4ec1c5ac23d4cebd71b9d1c6b748b4a6857103263"
+    },
+    {
+      "path": "/private/tmp/astra-routine-ddl-barrier-formal-replay.json",
+      "sha256": "34d278de29dea78d59a25109d3c734edaf6adc7f37fefd47f2667867dc7eb3e5"
+    }
+  ]
+}

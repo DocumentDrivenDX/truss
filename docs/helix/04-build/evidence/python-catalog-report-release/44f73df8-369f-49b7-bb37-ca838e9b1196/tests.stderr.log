@@ -1,0 +1,55 @@
+test_closed_hook_inventory (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_closed_hook_inventory) ... FAIL
+test_omitted_own_share_guard_allows_same_backend_source_change (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_omitted_own_share_guard_allows_same_backend_source_change) ... ok
+test_omitted_table_modes_allow_pending_commit_source_change (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_omitted_table_modes_allow_pending_commit_source_change) ... ok
+test_original_privilege_and_definer_refusal (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_original_privilege_and_definer_refusal) ... ok
+test_pending_writer_commit_and_abort (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_pending_writer_commit_and_abort) ... ok
+test_reader_first_external_writer_refuses_before_effect (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_reader_first_external_writer_refuses_before_effect) ... ok
+test_same_backend_six_tags_refuse_before_effect (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_same_backend_six_tags_refuse_before_effect) ... ok
+test_selected_ddl_changes_source_not_epoch (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_selected_ddl_changes_source_not_epoch) ... ok
+test_shared_role_change_is_explicitly_outside_barrier (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_shared_role_change_is_explicitly_outside_barrier) ... FAIL
+test_two_participating_writers_serialize_before_effect (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_two_participating_writers_serialize_before_effect) ... ok
+test_writer_lock_savepoint_lifetime (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_writer_lock_savepoint_lifetime) ... ok
+
+======================================================================
+FAIL: test_closed_hook_inventory (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_closed_hook_inventory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-n3qgwphl/checkout/packages/python/tests/test_routine_ddl_barrier_native.py", line 55, in test_closed_hook_inventory
+    self.assertEqual(row,['ddl_command_start','A',TAGS,'truss.runtime_fence_routine_ddl_writer()'])
+AssertionError: Lists differ: ['ddl[19 chars]', ['CREATE FUNCTION', 'ALTER FUNCTION', 'DROP[108 chars]r()'] != ['ddl[19 chars]', ['ALTER FUNCTION', 'ALTER PROCEDURE', 'CREA[108 chars]r()']
+
+First differing element 2:
+['CREATE FUNCTION', 'ALTER FUNCTION', 'DROP[63 chars]URE']
+['ALTER FUNCTION', 'ALTER PROCEDURE', 'CREA[63 chars]URE']
+
+  ['ddl_command_start',
+   'A',
++  ['ALTER FUNCTION',
++   'ALTER PROCEDURE',
+-  ['CREATE FUNCTION',
+?  ^
+
++   'CREATE FUNCTION',
+?  ^
+
+-   'ALTER FUNCTION',
++   'CREATE PROCEDURE',
+    'DROP FUNCTION',
+-   'CREATE PROCEDURE',
+-   'ALTER PROCEDURE',
+    'DROP PROCEDURE'],
+   'truss.runtime_fence_routine_ddl_writer()']
+
+======================================================================
+FAIL: test_shared_role_change_is_explicitly_outside_barrier (test_routine_ddl_barrier_native.RoutineDdlBarrierNativeTests.test_shared_role_change_is_explicitly_outside_barrier)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-n3qgwphl/checkout/packages/python/tests/test_routine_ddl_barrier_native.py", line 105, in test_shared_role_change_is_explicitly_outside_barrier
+    self.assertNotEqual(before,self.census('after-role'));self.assertEqual(self.shares(self.c),2)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '2e329aa75688ab51a8c13ab9b188a479da4a23ef98487c10a0360dc110ae9068' == '2e329aa75688ab51a8c13ab9b188a479da4a23ef98487c10a0360dc110ae9068'
+
+----------------------------------------------------------------------
+Ran 11 tests in 3.199s
+
+FAILED (failures=2)

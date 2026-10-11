@@ -1,0 +1,160 @@
+{
+  "status": "retained-replay-passed-current-source-drift",
+  "auditedAtUtc": "2026-10-11T17:15:21.753366+00:00",
+  "receipt": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/routine-ddl-writer-barrier-formal/c675e068-8576-4ebb-af52-01d3709b4890/receipt.json",
+  "receiptSha256": "439b938b62ece9636f98f7014a6fc5e40d105179e4a6b2b083e4c5e66d655e5d",
+  "solver": "4.15.4",
+  "sourcePins": [
+    {
+      "path": "scripts/prove-routine-ddl-writer-barrier.py",
+      "sha256": "b039ff6977fad7af9bacf992b35e819b01dca61a32f25afa83a98f3aa4dc32d7",
+      "preimageMatches": true,
+      "currentMatches": true
+    },
+    {
+      "path": "packages/postgresql/native/source-epoch-routine-ddl-barrier.sql",
+      "sha256": "8f6d9a451d443ae7b13e0fa7bef09e4d7a5a22fa094cbb226317c13ebcd92bf3",
+      "preimageMatches": true,
+      "currentMatches": true
+    },
+    {
+      "path": "packages/postgresql/native/source-epoch-fenced-fresh-lock.sql",
+      "sha256": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+      "preimageMatches": true,
+      "currentMatches": true
+    },
+    {
+      "path": "packages/postgresql/native/source-epoch-read-fence.sql",
+      "sha256": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+      "preimageMatches": true,
+      "currentMatches": true
+    },
+    {
+      "path": "packages/python/tests/test_routine_ddl_barrier_native.py",
+      "sha256": "c7b7d9c082e8cd8c3a64e0cdcb8d167057a08b6982cb0f978eebce8e3619c20f",
+      "preimageMatches": true,
+      "currentMatches": true
+    },
+    {
+      "path": "scripts/check-python-catalog-report-release-native.py",
+      "sha256": "3d9cb713cefebfa0593d750fd5bae8163365fd3b6db72f6ef945d89f22bafdd4",
+      "preimageMatches": true,
+      "currentMatches": true
+    }
+  ],
+  "queries": [
+    {
+      "id": "selected_foreign_writer_cannot_change_held_source",
+      "smtSha256": "587358cb93558ade01d41a9e0b1722cb36c5ce9e8e8a405a8b7b3a6cc019b3b9",
+      "hashMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat",
+      "matches": true
+    },
+    {
+      "id": "selected_own_writer_refuses_before_effect",
+      "smtSha256": "c3e990d185e473f47e536c14af4958f8c37d57d771896b398f37513d2a2b4631",
+      "hashMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat",
+      "matches": true
+    },
+    {
+      "id": "pending_selected_writer_excludes_new_reader",
+      "smtSha256": "a31f8f013ca8ca7de65ac88751c07d016b5d0311e3aa5c421d0679d540e60b43",
+      "hashMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat",
+      "matches": true
+    },
+    {
+      "id": "marker_serializes_participating_effects",
+      "smtSha256": "d41f1098fa042f3e43b5dccfefc2606f5d74d34a4e1072717a53202c740be60f",
+      "hashMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat",
+      "matches": true
+    },
+    {
+      "id": "complete_selected_barrier_preserves_one_step_source",
+      "smtSha256": "140f52b8854745ea0418189bde08c308907b33f21f14086b94664e2d7874c78e",
+      "hashMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat",
+      "matches": true
+    },
+    {
+      "id": "omitted_own_guard_permits_same_backend_change",
+      "smtSha256": "4523c4f4a76a1c62490924dc0ab0d40836e24bc06927a5353e3959a632c9c0ee",
+      "hashMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    },
+    {
+      "id": "omitted_writer_modes_permit_pending_writer_and_reader",
+      "smtSha256": "f595d84078523a183bfed552b9eb0f7ff28cccdaebd572a44be719051c2cb317",
+      "hashMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    },
+    {
+      "id": "uncovered_or_disabled_hook_allows_change",
+      "smtSha256": "b3e125492f58918983fa07f31300b95a554ea93896a18db3e06bc5cc46a39baf",
+      "hashMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    },
+    {
+      "id": "selected_committed_ddl_changes_source_without_epoch_issuance",
+      "smtSha256": "fa8c13581cd1d5e386fc8f6802f3edc411c6721fea85eb0a3e5b3fde0e208c19",
+      "hashMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    },
+    {
+      "id": "completed_writer_allows_new_reader",
+      "smtSha256": "2dff8b46e9a7b2e4aa3a842e333cb001a210afdd1ba86617420ce7de2abe1036",
+      "hashMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat",
+      "matches": true
+    }
+  ],
+  "counts": {
+    "unsat": 5,
+    "sat": 5
+  },
+  "independentGuardNonvacuity": [
+    {
+      "ownBackend": false,
+      "attemptedWrite": true,
+      "desiredDistinct": true,
+      "observed": "sat",
+      "model": "[state = 1,\n desired = 0,\n own = False,\n tagged = True,\n reader = True,\n successor = 1,\n writer_modes = True,\n own_guard = True,\n write = True]"
+    },
+    {
+      "ownBackend": true,
+      "attemptedWrite": true,
+      "desiredDistinct": true,
+      "observed": "sat",
+      "model": "[state = 1,\n desired = 0,\n own = True,\n tagged = True,\n reader = True,\n successor = 1,\n writer_modes = True,\n own_guard = True,\n write = True]"
+    }
+  ],
+  "scope": "Conditional one-step state/lock classification laws under explicit faithful source-state, selected participation, native compatibility and marker/lifetime premises. Not SQL, native transactions or whole-source/refinement theorem.",
+  "postReviewSourceRecheck": [
+    {
+      "path": "packages/python/tests/test_routine_ddl_barrier_native.py",
+      "captured": "c7b7d9c082e8cd8c3a64e0cdcb8d167057a08b6982cb0f978eebce8e3619c20f",
+      "current": "200f985570233edebe445bec1c0fd174466387c984a291b22d6cdd739b29be1f"
+    },
+    {
+      "path": "scripts/check-python-catalog-report-release-native.py",
+      "captured": "3d9cb713cefebfa0593d750fd5bae8163365fd3b6db72f6ef945d89f22bafdd4",
+      "current": "dfbfd47ba679a5ff206e4eddd912b5ecd99d3792bfb2238d345e5c2955a7ffb6"
+    }
+  ]
+}

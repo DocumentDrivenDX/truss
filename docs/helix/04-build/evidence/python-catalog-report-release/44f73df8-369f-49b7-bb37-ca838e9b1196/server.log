@@ -1,0 +1,68 @@
+2026-10-11 13:11:24.487 EDT [3491] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 13:11:24.488 EDT [3491] LOG:  listening on Unix socket "/private/tmp/rl-831cxze2/.s.PGSQL.5432"
+2026-10-11 13:11:24.497 EDT [3494] LOG:  database system was shut down at 2026-10-11 13:11:23 EDT
+2026-10-11 13:11:24.500 EDT [3491] LOG:  database system is ready to accept connections
+2026-10-11 13:11:25.188 EDT [3502] WARNING:  there is no transaction in progress
+2026-10-11 13:11:25.209 EDT [3504] WARNING:  there is no transaction in progress
+2026-10-11 13:11:26.080 EDT [3505] WARNING:  there is no transaction in progress
+2026-10-11 13:11:26.080 EDT [3506] WARNING:  there is no transaction in progress
+2026-10-11 13:11:26.086 EDT [3511] ERROR:  permission denied for table source_epoch_current
+2026-10-11 13:11:26.086 EDT [3511] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 14 at SQL statement
+2026-10-11 13:11:26.086 EDT [3511] STATEMENT:  CREATE OR REPLACE FUNCTION truss.ddl_subject() RETURNS integer LANGUAGE sql AS $$ SELECT 444 $$
+2026-10-11 13:11:26.086 EDT [3511] ERROR:  permission denied for function runtime_fence_routine_ddl_writer
+2026-10-11 13:11:26.086 EDT [3511] STATEMENT:  SELECT truss.runtime_fence_routine_ddl_writer()
+2026-10-11 13:11:26.087 EDT [3509] ERROR:  original invoker routine DDL boundary required
+2026-10-11 13:11:26.087 EDT [3509] CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 5 at RAISE
+	SQL statement "CREATE FUNCTION truss.definer_added() RETURNS integer LANGUAGE sql AS $b$ SELECT 1 $b$"
+	PL/pgSQL function truss.ddl_definer_probe() line 1 at EXECUTE
+2026-10-11 13:11:26.087 EDT [3509] STATEMENT:  SELECT truss.ddl_definer_probe()
+2026-10-11 13:11:26.087 EDT [3510] WARNING:  there is no transaction in progress
+2026-10-11 13:11:26.112 EDT [3512] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 13:11:26.112 EDT [3512] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN SHARE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 11 at SQL statement
+2026-10-11 13:11:26.112 EDT [3512] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 13:11:26.113 EDT [3512] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 13:11:26.113 EDT [3512] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN SHARE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 11 at SQL statement
+2026-10-11 13:11:26.113 EDT [3512] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 13:11:26.114 EDT [3513] WARNING:  there is no transaction in progress
+2026-10-11 13:11:26.119 EDT [3515] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 13:11:26.119 EDT [3515] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 14 at SQL statement
+2026-10-11 13:11:26.119 EDT [3515] STATEMENT:  CREATE OR REPLACE FUNCTION truss.ddl_subject() RETURNS integer LANGUAGE sql AS $$ SELECT 444 $$
+2026-10-11 13:11:26.125 EDT [3516] ERROR:  selected epoch cut excludes routine DDL
+2026-10-11 13:11:26.125 EDT [3516] CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 12 at RAISE
+2026-10-11 13:11:26.125 EDT [3516] STATEMENT:  CREATE OR REPLACE FUNCTION truss.ddl_subject() RETURNS integer LANGUAGE sql AS $$ SELECT 444 $$
+2026-10-11 13:11:26.125 EDT [3516] ERROR:  selected epoch cut excludes routine DDL
+2026-10-11 13:11:26.125 EDT [3516] CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 12 at RAISE
+2026-10-11 13:11:26.125 EDT [3516] STATEMENT:  ALTER FUNCTION truss.ddl_subject() IMMUTABLE
+2026-10-11 13:11:26.126 EDT [3516] ERROR:  selected epoch cut excludes routine DDL
+2026-10-11 13:11:26.126 EDT [3516] CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 12 at RAISE
+2026-10-11 13:11:26.126 EDT [3516] STATEMENT:  DROP FUNCTION truss.ddl_subject()
+2026-10-11 13:11:26.126 EDT [3516] ERROR:  selected epoch cut excludes routine DDL
+2026-10-11 13:11:26.126 EDT [3516] CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 12 at RAISE
+2026-10-11 13:11:26.126 EDT [3516] STATEMENT:  CREATE PROCEDURE truss.new_procedure() LANGUAGE sql AS $$ SELECT 1 $$
+2026-10-11 13:11:26.126 EDT [3516] ERROR:  selected epoch cut excludes routine DDL
+2026-10-11 13:11:26.126 EDT [3516] CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 12 at RAISE
+2026-10-11 13:11:26.126 EDT [3516] STATEMENT:  ALTER PROCEDURE truss.ddl_procedure() SET search_path=pg_catalog
+2026-10-11 13:11:26.126 EDT [3516] ERROR:  selected epoch cut excludes routine DDL
+2026-10-11 13:11:26.126 EDT [3516] CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 12 at RAISE
+2026-10-11 13:11:26.126 EDT [3516] STATEMENT:  DROP PROCEDURE truss.ddl_procedure()
+2026-10-11 13:11:26.126 EDT [3517] WARNING:  there is no transaction in progress
+2026-10-11 13:11:26.971 EDT [3518] WARNING:  there is no transaction in progress
+2026-10-11 13:11:26.971 EDT [3519] WARNING:  there is no transaction in progress
+2026-10-11 13:11:27.826 EDT [3521] WARNING:  there is no transaction in progress
+2026-10-11 13:11:27.833 EDT [3525] ERROR:  could not obtain lock on row in relation "installation_marker"
+2026-10-11 13:11:27.833 EDT [3525] CONTEXT:  SQL statement "SELECT 1 FROM truss.installation_marker m WHERE m.singleton_id=1 FOR UPDATE NOWAIT"
+	PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 17 at PERFORM
+2026-10-11 13:11:27.833 EDT [3525] STATEMENT:  CREATE OR REPLACE FUNCTION truss.ddl_subject() RETURNS integer LANGUAGE sql AS $$ SELECT 444 $$
+2026-10-11 13:11:27.845 EDT [3526] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 13:11:27.845 EDT [3526] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN SHARE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 11 at SQL statement
+2026-10-11 13:11:27.845 EDT [3526] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 13:11:27.846 EDT [3527] WARNING:  there is no transaction in progress
+2026-10-11 13:11:27.848 EDT [3492] LOG:  checkpoint starting: immediate force wait
+2026-10-11 13:11:27.868 EDT [3492] LOG:  checkpoint complete: wrote 15 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.013 s, sync=0.005 s, total=0.021 s; sync files=12, longest=0.004 s, average=0.001 s; distance=5911 kB, estimate=5911 kB; lsn=0/1A68140, redo lsn=0/1A68108
+2026-10-11 13:11:27.957 EDT [3491] LOG:  received immediate shutdown request
+2026-10-11 13:11:27.960 EDT [3491] LOG:  database system is shut down
