@@ -1,0 +1,4 @@
+{"kind":"request","text":"CLOSE truss_census_074c3693460042998416e48854a4ccea","values":[],"custody":{"lease":"074c3693-4600-4299-8416-e48854a4ccea","ordinal":"26"}}
+{"kind":"frame","hex":"4300000011434c4f534520435552534f5200"}
+{"kind":"frame","hex":"5a0000000554"}
+{"kind":"outcome","outcome":"response_complete"}

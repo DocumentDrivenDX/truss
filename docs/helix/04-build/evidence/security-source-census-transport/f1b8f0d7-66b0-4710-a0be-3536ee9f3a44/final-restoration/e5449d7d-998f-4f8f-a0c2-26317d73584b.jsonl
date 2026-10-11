@@ -1,0 +1,4 @@
+{"kind":"request","text":"COMMIT","values":[],"custody":{"lease":"dae3fa5a-baa8-43cd-944c-b20d4db91f46","ordinal":"27"}}
+{"kind":"frame","hex":"430000000b434f4d4d495400"}
+{"kind":"frame","hex":"5a0000000549"}
+{"kind":"outcome","outcome":"response_complete"}

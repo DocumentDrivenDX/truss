@@ -1,0 +1,6 @@
+{"kind":"request","text":"SELECT pg_catalog.current_setting('server_version_num')::pg_catalog.text AS version,pg_catalog.current_setting('client_encoding')::pg_catalog.text AS encoding","values":[],"custody":{"lease":"77730582-a775-47a9-8cfc-589e46e5dbde","ordinal":"0"}}
+{"kind":"frame","hex":"540000003b000276657273696f6e0000000000000000000019ffffffffffff0000656e636f64696e670000000000000000000019ffffffffffff0000"}
+{"kind":"frame","hex":"44000000180002000000063137303030390000000455544638"}
+{"kind":"frame","hex":"430000000d53454c454354203100"}
+{"kind":"frame","hex":"5a0000000549"}
+{"kind":"outcome","outcome":"response_complete"}

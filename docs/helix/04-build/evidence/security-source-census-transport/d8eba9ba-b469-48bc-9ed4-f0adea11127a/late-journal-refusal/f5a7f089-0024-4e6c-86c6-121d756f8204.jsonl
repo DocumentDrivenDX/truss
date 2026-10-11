@@ -1,0 +1,2 @@
+{"kind":"request","text":"ROLLBACK","values":[],"custody":{"lease":"d7f25566-bb98-430b-b96b-1b434c5e534d","ordinal":"28"}}
+{"kind":"outcome","outcome":"uncertain"}

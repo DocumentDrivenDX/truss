@@ -1,0 +1,5 @@
+{"kind":"request","text":"FETCH FORWARD 16 FROM truss_census_065d9dc2d1df4478b0c197275680d3c6","values":[],"custody":{"lease":"065d9dc2-d1df-4478-b0c1-97275680d3c6","ordinal":"25"}}
+{"kind":"frame","hex":"540000005a00036f7264696e616c0000000000000000000019ffffffffffff0000746f74616c5f62797465730000000000000000000019ffffffffffff00006368756e6b5f6865780000000000000000000019ffffffffffff0000"}
+{"kind":"frame","hex":"430000000c4645544348203000"}
+{"kind":"frame","hex":"5a0000000554"}
+{"kind":"outcome","outcome":"response_complete"}

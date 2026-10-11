@@ -1,0 +1,4 @@
+{"kind":"request","text":"BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY","values":[],"custody":{"lease":"d7f25566-bb98-430b-b96b-1b434c5e534d","ordinal":"1"}}
+{"kind":"frame","hex":"430000000a424547494e00"}
+{"kind":"frame","hex":"5a0000000554"}
+{"kind":"outcome","outcome":"response_complete"}

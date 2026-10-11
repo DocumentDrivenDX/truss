@@ -1,0 +1,4 @@
+{"kind":"request","text":"CLOSE truss_census_ec007cd5cf3542f99597a9aa34a92bfd","values":[],"custody":{"lease":"ec007cd5-cf35-42f9-9597-a9aa34a92bfd","ordinal":"26"}}
+{"kind":"frame","hex":"4300000011434c4f534520435552534f5200"}
+{"kind":"frame","hex":"5a0000000554"}
+{"kind":"outcome","outcome":"response_complete"}

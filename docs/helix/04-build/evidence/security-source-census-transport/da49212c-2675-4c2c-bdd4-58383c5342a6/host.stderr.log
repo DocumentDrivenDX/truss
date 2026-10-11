@@ -1,0 +1,58 @@
+
+tests/pg-wire.test.ts:
+(pass) original command count text beyond host precision remains exact [0.65ms]
+(pass) raw data preserves NULL/empty/binary distinctions and frame boundaries [0.13ms]
+(pass) fragmented original frame forwards once only after full admission [0.25ms]
+(pass) oversized header refuses before body allocation or forwarding and remains closed [0.13ms]
+(pass) invalid text row refuses before forwarding to original parser [0.22ms]
+(pass) query completion requires original command then ready and matching SELECT rows [0.12ms]
+(pass) error response retains ordered fields and ends only on original ready [0.13ms]
+(pass) notice is retained without replacing original command completion [0.05ms]
+(pass) unnamed extended response requires parse/bind before no-data completion [0.07ms]
+(pass) matching command cannot conceal wrong original transaction status [0.08ms]
+
+tests/security-source-census.test.ts:
+(pass) complete exact byte boundary 1 [0.46ms]
+(pass) complete exact byte boundary 32767 [15.12ms]
+(pass) complete exact byte boundary 32768 [12.72ms]
+(pass) complete exact byte boundary 32769 [20.71ms]
+(pass) complete exact byte boundary 524288 [173.47ms]
+(pass) complete exact byte boundary 524289 [118.70ms]
+(pass) complete exact byte boundary 16777216 [3923.41ms]
+(pass) native UTF8 bytes survive a split inside a multibyte scalar [12.86ms]
+(pass) one over image ceiling refuses without accepted prefix [6.43ms]
+(pass) refuse missingFirst [0.06ms]
+(pass) refuse duplicate [12.50ms]
+(pass) refuse reversed [6.22ms]
+(pass) refuse gap [6.27ms]
+(pass) refuse shortened [0.05ms]
+(pass) refuse long [6.24ms]
+(pass) refuse inconsistentTotal [6.41ms]
+(pass) refuse nullChunk [0.07ms]
+(pass) refuse uppercase [6.15ms]
+(pass) refuse invalidHex [6.12ms]
+(pass) refuse noncanonicalOrdinal [6.22ms]
+(pass) refuse negativeOrdinal [6.34ms]
+(pass) refuse noncanonicalTotal [6.20ms]
+(pass) refuse zeroTotal [0.03ms]
+(pass) refuse nullCensus [0.03ms]
+(pass) refuse extraRow [6.36ms]
+(pass) truncated stream and premature terminal response refuse [9.43ms]
+(pass) full bytes are not released before native end of cursor [11.79ms]
+(pass) native descriptor or status refusal {"names":["wrong","total_bytes","chunk_hex"]} [9.41ms]
+(pass) native descriptor or status refusal {"oid":23} [6.04ms]
+(pass) native descriptor or status refusal {"format":1} [0.07ms]
+(pass) native descriptor or status refusal {"status":"I"} [6.09ms]
+(pass) over fetch ceiling [179.42ms]
+(pass) assembler rejects lying FETCH count accepted by generic ingress [6.11ms]
+(pass) final UTF8 refusal retains no accepted image [0.16ms]
+(pass) countercontrol: fabricated well-shaped frames can replace bytes without custody [0.08ms]
+
+tests/query-journal.test.ts:
+(pass) retains exact request, original frame and outcome across journal reconstruction [20.69ms]
+(pass) bounded inspection retains incomplete/unknown originals without granting replay authority [27.84ms]
+
+ 47 pass
+ 0 fail
+ 116 expect() calls
+Ran 47 tests across 3 files. [4.75s]

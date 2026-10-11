@@ -1,0 +1,4 @@
+{"kind":"request","text":"ROLLBACK","values":[],"custody":{"lease":"df600ae7-a1b4-4a97-bdcd-89b5da9c5b5e","ordinal":"4"}}
+{"kind":"frame","hex":"430000000d524f4c4c4241434b00"}
+{"kind":"frame","hex":"5a0000000549"}
+{"kind":"outcome","outcome":"response_complete"}
