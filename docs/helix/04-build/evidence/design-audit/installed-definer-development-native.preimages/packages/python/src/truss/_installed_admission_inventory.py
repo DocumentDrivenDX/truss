@@ -114,8 +114,7 @@ ROLE_REACHABILITY = """SELECT r.oid::text AS oid,r.rolname::text AS name,
  WHERE pg_catalog.pg_has_role(:role,r.oid,'MEMBER') ORDER BY r.oid"""
 
 
-# Fixed invoker profile: no EXECUTE-accessible definer in any native namespace.
-# Namespace USAGE is retained but cannot exclude previously resolved calls.
+# Fixed invoker profile: no ordinary-callable definer in any native namespace.
 # This is a conservative elevation census, not a routine dependency resolver.
 CALLABLE_DEFINERS = """SELECT p.oid::text AS oid,n.oid::text AS namespace_oid,
  n.nspname::text AS namespace,p.proname::text AS name,
@@ -125,7 +124,8 @@ CALLABLE_DEFINERS = """SELECT p.oid::text AS oid,n.oid::text AS namespace_oid,
  pg_catalog.has_function_privilege(:role,p.oid,'EXECUTE') AS executable
  FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
  JOIN pg_catalog.pg_roles r ON r.oid=p.proowner
- WHERE p.prosecdef AND pg_catalog.has_function_privilege(:role,p.oid,'EXECUTE') ORDER BY p.oid"""
+ WHERE p.prosecdef AND pg_catalog.has_schema_privilege(:role,n.oid,'USAGE')
+ AND pg_catalog.has_function_privilege(:role,p.oid,'EXECUTE') ORDER BY p.oid"""
 
 
 def collect_inventory(port: InventoryPort, *, ordinary_role: str,
@@ -314,7 +314,6 @@ def _admit_packet(packet: Inventory) -> None:
         rows-=len(result.rows)
         if rows<0: raise InventoryRefusal('resource')
         text-=sum(len(c) for c in result.columns)
-        if text<0: raise InventoryRefusal('resource')
         for row in result.rows:
             if type(row) is not tuple or len(row)!=len(result.columns): raise InventoryRefusal('shape')
             for cell in row:
@@ -342,7 +341,7 @@ def _admit_packet(packet: Inventory) -> None:
         if section.name in ('routine-acl','relation-acl','column-acl','namespace-acl','roles','role-reachability') and not section.result.rows:
             raise InventoryRefusal('shape')
     definers=sections['callable-definers'].rows
-    if len({r[0] for r in definers})!=len(definers) or any(r[7] is not True or r[9] is not True for r in definers):
+    if len({r[0] for r in definers})!=len(definers) or any(r[7:]!=(True,True,True) for r in definers):
         raise InventoryRefusal('callable_definer_shape')
     roles=next(s.result.rows for s in packet.sections if s.name=='roles')
     reach=sections['role-reachability'].rows

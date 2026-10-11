@@ -529,3 +529,41 @@ This qualifies only the stated local fixture and private inventory component. It
 does not qualify TLS/production authentication, protected mapping, coherent current
 cut, PA01/PA02 completion, seven semantic operation bodies or installer readiness.
 Original UMF acceptance remains26/132; US-056-AC5/AC9/AC10 gain component evidence only.
+
+
+### Installed elevation census across native namespaces
+
+The fixed ordinary invoker profile now requires a twelfth `callable-definers`
+section. It conservatively enumerates every native EXECUTE-accessible SECURITY
+DEFINER across all schemas, retaining schema USAGE independently. Any nonempty
+census refuses, including an identical unsafe expected baseline. Eleven-section
+packets cannot assert absence. Future registered protected definer chains require
+a distinct admitted profile; this rule is not a universal ban in UMF semantics.
+
+[Final native evidence](evidence/design-audit/installed-definer-final-reviewed-native.json)
+passes97 observations across35 inventories, with21 frozen source inputs. An
+ordinary SCRAM session with direct UPDATE false calls an external PUBLIC-executable
+definer owned by a separate nonlogin role. Its committed UPDATE changes the
+protected row's native xmin, independently observed by the inspector; logical
+revision stays unchanged. Matching unsafe baselines refuse. EXECUTE revocation
+removes the route; schema-USAGE revocation retains and refuses the route. The
+fixed native PREPARE/EXECUTE experiment revalidates and returns42501 with unchanged
+xmin after schema revocation. This does not establish all retained-plan behavior.
+
+Astra found an empty-final-section text-budget gap and an unsafe schema-USAGE
+filter. Both were fixed and independently reviewed. The replayed80164-unit packet
+passes exactly;80163 and80076 refuse. Native overflow at the additional final
+census row refuses rather than silently treating an incomplete prefix as empty.
+Earlier positive/failed runs and preimages stay historical at their original bytes,
+including two rejected predictions about prepared calls.
+
+The final separately installed53-file wheel passes334 tests;
+[final suite receipt](evidence/design-audit/definer-paths-final-suite.json) and
+[Astra review](evidence/design-audit/definer-paths-astra-review.json) retain exact
+source/log/native pins. Python boundaries remain212 imports. This advances
+PA01/PA02 and US-056-AC5/AC9/AC10 component evidence. It does not establish
+complete call closure: operator/type/extension, trigger/default/RLS, indirect
+resolution, protected capture/current cuts and the seven semantic bodies remain
+unqualified. Existing source-derived role laws retain their historical module
+pins; no new whole-program or temporal proof is claimed. Original acceptance
+stays26/132.
