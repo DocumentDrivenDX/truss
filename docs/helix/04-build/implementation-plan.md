@@ -3677,3 +3677,44 @@ native payload digests plus independent stop0/status3/socket absence. All106
 source hashes match current bytes and archives. Incoming prerequisite SQL/tests
 are preserved, not qualified by the epoch-cut test population. No backend
 acceptance binding or supported protected-engine status changes.
+
+### Configured provisional head completion — 2026-10-11
+
+CONTRACT-001's exact head transition/post-head obligation and CONTRACT-006's
+prerequisite closure govern this increment. Astra Ultra approved a new private
+configured collector and same-invocation head wrapper. Historical physical
+completion and pending manifest profiles remain unchanged. The wrapper obtains
+report and prerequisite originals from its own registration producer, admits the
+exact original generation observer and ALWAYS head/report wiring, captures all
+configured ONLY row images and complete relation/trigger/routine/constraint/
+index/policy/ACL descriptors, then independently plans only the singleton head
+and original operation generation/reset delta. Complete RETURNING and independent
+poststate must agree. Binding/promotion branches and inheritance refuse.
+
+This is administrative rollback-only provisional head execution through guarded
+PsycopgHost operations. The unconditional commit barrier remains installed, and
+accepted report/feed qualification remains false. The fixture does not install
+the security owner's routine-DDL gate; its merged-source pins do not qualify
+that gate, concurrent administrative DDL, transitive type/shared-authorization
+dependency closure, complete installed authority or ordinary-person execution.
+The retained-size ceiling is checked after materialization; it is not a proof of
+preallocation or whole-process peak-memory control.
+
+Required controls include original multi-document bytes, exact generation/reset,
+wrong head RETURNING, missing/changed original observer, external inheritance,
+late descriptor/configuration/feed substitutions, extra observed catalog effect,
+post-head failure preserving prior host work and continued raw COMMIT refusal.
+The subsequent commit path still requires new-profile independent feed producer
+custody, explicit clear/assign/publish finalization, full FV01–FV07 argument-free
+native validation and unavoidable original-operation scheduling. This increment
+does not provide those missing gates or activate the public catalog capability.
+
+Corrected merged-source packet `4924444b-8d72-4a61-9c3a-89195c52a7ce`
+passes all 32 native methods and the module boundary check, with 1281 unchanged
+project source pins, 1614 unchanged native files and unchanged external dependency/
+executable files. Owned shutdown confirms stop 0/status 3/socket absent. Earlier
+packets `ac9cf80c` and `261566f7` exposed test setup mistakes and supply no positive
+final qualification. The corrected external-child case reaches the wrapper after
+staging; the observer reset case uses a CHECK-valid row_sealed state. The complete
+late-failure state comparison includes original operation custody and staged
+catalog rows. UMF owner reload/export exactly reproduces the native SQL.
