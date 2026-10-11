@@ -2058,3 +2058,46 @@ resource admission and all four family-specific bindings before adopting it.
 PA01–PA04, PA-N01–PA-N12 and the seven native semantic bodies remain unfinished.
 No Truss runtime/public API or registry grant changes are made by this handoff;
 UMF's full132-case acceptance checkpoint remains26/132.
+
+
+## PA02 native authority-row gate — 2026-10-10
+
+UMF main `9f013d57` extends the isolated capture candidate with the
+[39-observation native receipt](https://github.com/DocumentDrivenDX/umf/blob/9f013d57/docs/helix/04-build/evidence/security/truss-protected-capture-candidate/85d31486-2f88-48e5-b492-ec15b9d730f3/native.json),
+[formal receipt](https://github.com/DocumentDrivenDX/umf/blob/9f013d57/docs/helix/04-build/evidence/security/truss-capture-authority-formal/19fe84d8-27c7-4bc7-b323-52ad9fe0223d/proof.json)
+and [Astra review](https://github.com/DocumentDrivenDX/umf/blob/9f013d57/docs/helix/04-build/evidence/security/truss-capture-authority-formal/19fe84d8-27c7-4bc7-b323-52ad9fe0223d/astra-review.json).
+All39 observations are linked to original acceptance criteria without promotion.
+Seven native pins, six installed routine definitions and nine formal pins are
+retained. Original AdmissionCustody/ADR-008 pins remain unchanged after the
+concurrent native-cancellation main integration.
+
+A separate non-login authority owner maintains one fixed actor's private
+permission/generation row. A writer-only helper selects that row FOR SHARE and
+requires presence, permission and matching captured generation before effects.
+Ordinary authority read/update/helper execution and revoker direct update refuse.
+Revocation after capture refuses; matching-generation revocation independently
+isolates permission false. Regrant advances generation, stale capture refuses,
+and a fresh generation produces the independently inspected effect. Actual
+revoker55P03 timeout while the writer holds the row lock leaves authority intact;
+revocation succeeds after writer rollback. READ COMMITTED is natively observed
+and required by the writer; other isolation refusal remains source-reviewed.
+
+Eight saved formulas independently replay as four UNSAT/four SAT. Exact guard
+and writer bodies are recognized, but SQL execution/FOUND/exception semantics,
+faithful complete current authority and shared/exclusive lock exclusion are
+premises. The formal serialization law does not prove PostgreSQL lock execution,
+all writer participation, deadlock/liveness or final publication. The producer
+freezes originally parsed native bytes and rechecks saved SMT before publication.
+Two bounded failure controls remain passing; UUID/exclusive creation preserves
+rerun receipts. All Astra source-custody/directional-control findings were fixed.
+
+This physical primitive does not select an ontology resolver, admitted subject
+mapping or original owner authority/artifact interface. Compose those interfaces,
+complete mutation/callable closure, resource and four-family bindings before
+adoption. Preserve the existing invoker gate and installed admission refusals;
+these synthetic routines are not registered Truss protected entry bodies.
+Savepoint rollback releases this lock and rewinds native consumption, while the
+host ticket remains burned. Durable pending-buffer drain and current final-release
+custody remain separate requirements; this candidate cannot qualify L03.
+PA01–PA04, PA-N01–PA-N12, seven semantic bodies and full132-case acceptance remain
+unfinished at26/132. No Truss runtime API or ordinary registry grants are changed.
