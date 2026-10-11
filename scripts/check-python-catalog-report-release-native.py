@@ -5,10 +5,14 @@ resource_countercontrol=sys.argv[1:]==['--countercontrol-no-resource-digest']
 archive_countercontrol=sys.argv[1:]==['--countercontrol-no-archive-lock']
 self_write_countercontrol=sys.argv[1:]==['--countercontrol-no-self-write-fence']
 self_write_profile=sys.argv[1:]==['--archive-self-write-fence'] or self_write_countercontrol
+epoch_issuer_countercontrol=sys.argv[1:]==['--countercontrol-no-epoch-issuer-fence']
+epoch_table_countercontrol=sys.argv[1:]==['--countercontrol-no-epoch-table-fence']
+epoch_order_countercontrol=sys.argv[1:]==['--countercontrol-no-epoch-write-table-locks']
+epoch_fence_profile=sys.argv[1:]==['--epoch-state-fence'] or epoch_issuer_countercontrol or epoch_table_countercontrol or epoch_order_countercontrol
 fence_check_countercontrol=sys.argv[1:]==['--countercontrol-no-fence-correspondence']
 fence_hash_countercontrol=sys.argv[1:]==['--countercontrol-no-fence-body-hash']
-countercontrol=resource_countercontrol or archive_countercontrol or self_write_countercontrol or fence_check_countercontrol or fence_hash_countercontrol
-if sys.argv[1:] and not countercontrol and not self_write_profile:raise ValueError('Explicit supported native control required')
+countercontrol=resource_countercontrol or archive_countercontrol or self_write_countercontrol or fence_check_countercontrol or fence_hash_countercontrol or epoch_issuer_countercontrol or epoch_table_countercontrol or epoch_order_countercontrol
+if sys.argv[1:] and not countercontrol and not self_write_profile and not epoch_fence_profile:raise ValueError('Explicit supported native control required')
 root=Path.cwd();run_id=str(uuid.uuid4())
 folder=root/'docs/helix/04-build/evidence/python-catalog-report-release'/run_id
 folder.mkdir(parents=True);os.umask(0o077)
@@ -17,11 +21,11 @@ def retain(path):
     p=root/path;inputs[str(p)]=p.read_bytes()
 for p in (root/'packages/python/src/truss').rglob('*'):
     if p.is_file() and '__pycache__' not in p.parts:inputs[str(p)]=p.read_bytes()
-for name in ('test_archive_self_write_fence_native.py','test_catalog_report_release_native.py','test_catalog_configured_release_stage_native.py',
+for name in ('test_epoch_state_fence_native.py','test_archive_self_write_fence_native.py','test_catalog_report_release_native.py','test_catalog_configured_release_stage_native.py',
              'test_catalog_staging.py','test_catalog_support.py','test_preparation.py','test_native_pg8000.py',
              'test_catalog_source_candidate.py','test_configured_catalog_stage.py','test_native_catalog_dispatch.py','test_native_operation_ordinals.py','test_native_arbitration.py'):
     retain('packages/python/tests/'+name)
-for name in ('source-epoch-lock','issued-operation-admission/operation-configuration-context-admission',
+for name in ('source-epoch-lock','source-epoch-issue','source-epoch-immutability','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock','issued-operation-admission/operation-configuration-context-admission',
              'catalog-observation-recheck','catalog-epoch-context','operation-configuration-current',
              'catalog-admission-configuration','catalog-report/archive-self-write-fence','catalog-report/archive-write-fence-current','catalog-report/release-selection',
              'canonical-string-bytes','canonical-tree-bytes','catalog-report/configured-graph','catalog-report/resource-selection','catalog-report/configured-stage','catalog-report/source-candidate','catalog-report/configured-metadata','catalog-stage-configured','catalog-stage-issued'):
@@ -68,6 +72,16 @@ def require(result):
     return result
 try:
     for name,raw in inputs.items():
+        if epoch_order_countercontrol and name==str(root/'packages/postgresql/native/source-epoch-issue.sql'):
+            marker=b' LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT;'
+            if raw.count(marker)!=1:raise RuntimeError('Exact strongest writer mode before row effects required')
+            raw=raw.replace(marker,b' -- Deliberate omitted upfront write table locks.')
+            (folder/'countercontrol-source-epoch-issue.sql').write_bytes(raw)
+        if (epoch_issuer_countercontrol and name==str(root/'packages/postgresql/native/source-epoch-issue.sql')) or (epoch_table_countercontrol and name==str(root/'packages/postgresql/native/source-epoch-read-fence.sql')):
+            marker=b' IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l'
+            if raw.count(marker)!=1:raise RuntimeError('Exact own-reader epoch fence predicate required')
+            raw=raw.replace(marker,b' IF FALSE AND EXISTS(SELECT 1 FROM pg_catalog.pg_locks l')
+            (folder/('countercontrol-source-epoch-issue.sql' if epoch_issuer_countercontrol else 'countercontrol-source-epoch-read-fence.sql')).write_bytes(raw)
         p=Path(name)
         if p.is_relative_to(root):target=execution/'checkout'/p.relative_to(root)
         else:
@@ -107,16 +121,20 @@ try:
     require(run([str(pgbin/'initdb'),'-D',str(pgdata),'-U','postgres','--auth=trust','--encoding=UTF8'],timeout=60))
     attempted=True
     require(run([str(pgbin/'pg_ctl'),'-D',str(pgdata),'-l',str(execution/'server.log'),'-w','-o',f"-h '' -k {socket}",'start'],timeout=60))
-    test=run([sys.executable,'-m','unittest','discover','-s',str(execution/'checkout/packages/python/tests'),'-p','test_archive_self_write_fence_native.py' if self_write_profile else 'test_catalog_report_release_native.py' if archive_countercontrol else 'test_catalog_*release*native.py','-v'],
+    test=run([sys.executable,'-m','unittest','discover','-s',str(execution/'checkout/packages/python/tests'),'-p','test_epoch_state_fence_native.py' if epoch_fence_profile else 'test_archive_self_write_fence_native.py' if self_write_profile else 'test_catalog_report_release_native.py' if archive_countercontrol else 'test_catalog_*release*native.py','-v'],
         cwd=execution/'checkout',env={**os.environ,'PYTHONPATH':str(execution/'checkout/packages/python/src')+os.pathsep+str(execution/'dependencies'),
         'TRUSS_NATIVE_TEST_SOCKET':str(socket/'.s.PGSQL.5432')},timeout=120)
     (folder/'tests.stdout.log').write_text(test.stdout);(folder/'tests.stderr.log').write_text(test.stderr)
     if countercontrol:
-        expected_failures=2 if fence_hash_countercontrol else 22 if fence_check_countercontrol else 10 if self_write_countercontrol else 1 if resource_countercontrol else 4
-        if test.returncode!=1 or test.stderr.count('DatabaseError not raised')!=expected_failures or f'FAILED (failures={expected_failures})' not in test.stderr:
+        expected_failures=1 if epoch_issuer_countercontrol or epoch_order_countercontrol else 10 if epoch_table_countercontrol else 2 if fence_hash_countercontrol else 22 if fence_check_countercontrol else 10 if self_write_countercontrol else 1 if resource_countercontrol else 4
+        missing_errors=0 if epoch_issuer_countercontrol or epoch_order_countercontrol else 9 if epoch_table_countercontrol else expected_failures
+        if test.returncode!=1 or test.stderr.count('DatabaseError not raised')!=missing_errors or f'FAILED (failures={expected_failures})' not in test.stderr:
             raise RuntimeError('Expected exact native omission counterexamples required')
+        if epoch_issuer_countercontrol and "'55P03' != '55000'" not in test.stderr:raise RuntimeError('Original marker-before-guard counterexample required')
+        if epoch_order_countercontrol and "(0, 'success') != (2, '55P03')" not in test.stderr:raise RuntimeError('Original writer modes before marker wait counterexample required')
+        if epoch_table_countercontrol and 'original source epoch registry evidence are immutable' not in test.stderr:raise RuntimeError('Independent registry TRUNCATE guard control required')
     else:require(test)
-    native_test_count=8 if self_write_profile else 12 if archive_countercontrol else 23
+    native_test_count=10 if epoch_fence_profile else 8 if self_write_profile else 12 if archive_countercontrol else 23
     if f'Ran {native_test_count} tests' not in test.stderr or 'skipped' in test.stderr:raise RuntimeError('Complete selected native population required')
     # Execute each original catalog-dispatch regression method exactly once.
     original=ast.parse(inputs[str(root/'packages/python/tests/test_native_catalog_dispatch.py')])
@@ -147,10 +165,11 @@ try:
     boundary=run([sys.executable,'scripts/check-module-boundaries.py'])
     (folder/'boundaries.stdout.log').write_text(boundary.stdout);(folder/'boundaries.stderr.log').write_text(boundary.stderr);require(boundary)
     if any(Path(p).read_bytes()!=raw for p,raw in inputs.items()):raise RuntimeError('Source changed during native execution')
-    receipt={'status':'countercontrol-reproduced' if countercontrol else 'component-passed','countercontrol':countercontrol,'countercontrolKind':'fence-body-hash' if fence_hash_countercontrol else 'fence-correspondence' if fence_check_countercontrol else 'self-write-fence' if self_write_countercontrol else 'resource-digest' if resource_countercontrol else 'archive-lock' if archive_countercontrol else None,'runId':run_id,'sourceDigests':pins,'nativeBinaryDigests':binaries,
+    receipt={'status':'countercontrol-reproduced' if countercontrol else 'component-passed','countercontrol':countercontrol,'countercontrolKind':'epoch-writer-order' if epoch_order_countercontrol else 'epoch-issuer-fence' if epoch_issuer_countercontrol else 'epoch-table-fence' if epoch_table_countercontrol else 'fence-body-hash' if fence_hash_countercontrol else 'fence-correspondence' if fence_check_countercontrol else 'self-write-fence' if self_write_countercontrol else 'resource-digest' if resource_countercontrol else 'archive-lock' if archive_countercontrol else None,'runId':run_id,'sourceDigests':pins,'nativeBinaryDigests':binaries,
         'executedFenceSqlSha256':sha((execution/'checkout/packages/postgresql/native/catalog-report/archive-self-write-fence.sql').read_bytes()),'executedFenceComparisonSqlSha256':sha((execution/'checkout/packages/postgresql/native/catalog-report/archive-write-fence-current.sql').read_bytes()),'executedConfiguredStageSqlSha256':sha((execution/'checkout/packages/postgresql/native/catalog-report/configured-stage.sql').read_bytes()),'executedReleaseSqlSha256':sha((execution/'checkout/packages/postgresql/native/catalog-report/release-selection.sql').read_bytes()),'testCommand':test.args,'testExitCode':test.returncode,'nativeTests':native_test_count,'selfWriteFenceProfile':self_write_profile,'originalCatalogRegressions':methods,'incomingCatalogRegressions':auxiliary_methods,'python':sys.version,
         'versions':{p:importlib.metadata.version(p) for p in ('pg8000','scramp','asn1crypto')},
-        'scope':('Omitted body hash comparison reproduces two isolated same-size/source-settings drift assertions. ' if fence_hash_countercontrol else '')+('Paired omitted installed-fence comparisons reproduce twenty-two exact correspondence assertions. ' if fence_check_countercontrol else '')+('Native actual-lock same-backend archive write fence and acquisition/savepoint controls; separate from configured release installation. ' if self_write_profile else '')+('Deliberate omitted-resource-digest variant reproduces one pre-cut integrity assertion failure; late mutation is independently fenced. ' if resource_countercontrol else 'Deliberate omitted-archive-lock variant reproduces four exact exclusion assertion failures. ' if archive_countercontrol else '')+'Frozen original private release selector, configured catalog staging/metadata producer, Python candidate source composition and tests over owned installed PostgreSQL16.15 Unix fixture. SHARE table lock excludes concurrent archive writes; transaction/savepoint controls qualify only native archive cut lifetime. Administrative synthetic configuration/archive/capture fixtures do not establish authenticated caller, source issuer, complete installed source/authority cut, host held-use dispatcher, public installer, complete accepted report or final disclosure.'}
+        'epochStateFenceProfile':epoch_fence_profile,
+        'scope':('Native epoch-state fence and writer-before-row table lock ordering; excludes neither routine source nor shared-role/configuration/authorization-data writers. ' if epoch_fence_profile else '')+('Omitted body hash comparison reproduces two isolated same-size/source-settings drift assertions. ' if fence_hash_countercontrol else '')+('Paired omitted installed-fence comparisons reproduce twenty-two exact correspondence assertions. ' if fence_check_countercontrol else '')+('Native actual-lock same-backend archive write fence and acquisition/savepoint controls; separate from configured release installation. ' if self_write_profile else '')+('Deliberate omitted-resource-digest variant reproduces one pre-cut integrity assertion failure; late mutation is independently fenced. ' if resource_countercontrol else 'Deliberate omitted-archive-lock variant reproduces four exact exclusion assertion failures. ' if archive_countercontrol else '')+'Frozen original private release selector, configured catalog staging/metadata producer, Python candidate source composition and tests over owned installed PostgreSQL16.15 Unix fixture. SHARE table lock excludes concurrent archive writes; transaction/savepoint controls qualify only native archive cut lifetime. Administrative synthetic configuration/archive/capture fixtures do not establish authenticated caller, source issuer, complete installed source/authority cut, host held-use dispatcher, public installer, complete accepted report or final disclosure.'}
 except BaseException as error:
     receipt={'status':'failed','runId':run_id,'sourceDigests':pins,'nativeBinaryDigests':binaries,'error':str(error)}
 finally:

@@ -1,0 +1,14 @@
+{
+  "status": "scoped-review-passed",
+  "reviewedAtUtc": "2026-10-11T16:42:00.843723+00:00",
+  "implementationRoot": "/private/tmp/truss-security-main-integration",
+  "blockers": [],
+  "artifacts": {
+    "/private/tmp/astra-epoch-state-fence-review.md": "131de22b0dd43c797bb4e433741b4780ed8341c9d7dcc965644f6ccb7074fd6d",
+    "/private/tmp/astra-epoch-state-fence-native-audit.json": "a447de156c6b004a4b856bf2b3674743ae9b7c5d96134ff1992eae4cd0ccec4e",
+    "/private/tmp/astra-epoch-state-fence-formal-replay.json": "6aa2b84555bfea1999260d5362478bdbb6a437b15e04c741fdb678cdb31cb7dc",
+    "/private/tmp/astra-epoch-state-fence-original-regression-audit.json": "b0ef41517c24f636de1a77ce78f2918a1595634e2b666dde516471e599c0859a",
+    "/private/tmp/astra-epoch-state-fence-original-regression-reconstruction.json": "361c420a267709a9b87d2e710c0e253e4a9bc53dc3892532cb0b097668b8d83d"
+  },
+  "qualification": "Administrative epoch-state component only. No native rerun or implementation edits. Full authority/public profile/held source and final disclosure remain unqualified."
+}

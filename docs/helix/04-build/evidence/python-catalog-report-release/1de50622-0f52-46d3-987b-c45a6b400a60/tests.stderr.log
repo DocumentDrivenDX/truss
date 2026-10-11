@@ -1,0 +1,28 @@
+test_acquisition_rollback_release_and_later_rollback (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_acquisition_rollback_release_and_later_rollback) ... ok
+test_all_statement_events_on_both_tables_are_fenced (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_all_statement_events_on_both_tables_are_fenced) ... ok
+test_issuer_refuses_before_registry_first_effect (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_issuer_refuses_before_registry_first_effect) ... FAIL
+test_original_tuple_and_both_actual_locks (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_original_tuple_and_both_actual_locks) ... ok
+test_pending_writer_commit_and_abort_require_new_reader_attempt (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_pending_writer_commit_and_abort_require_new_reader_attempt) ... ok
+test_reader_first_excludes_external_issuer_until_release (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_reader_first_excludes_external_issuer_until_release) ... ok
+test_replica_and_ungranted_ordinary_role (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_replica_and_ungranted_ordinary_role) ... ok
+test_stronger_isolation_and_read_only_refuse (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_stronger_isolation_and_read_only_refuse) ... ok
+test_writer_first_then_reader_rejects_all_later_writes (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_writer_first_then_reader_rejects_all_later_writes) ... ok
+
+======================================================================
+FAIL: test_issuer_refuses_before_registry_first_effect (test_epoch_state_fence_native.EpochStateFenceNativeTests.test_issuer_refuses_before_registry_first_effect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-e182ajp8/checkout/packages/python/tests/test_epoch_state_fence_native.py", line 53, in test_issuer_refuses_before_registry_first_effect
+    self.acquire();self.refusal(ISSUE,prior=self.initial)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-e182ajp8/checkout/packages/python/tests/test_epoch_state_fence_native.py", line 39, in refusal
+    self.assertEqual(caught.exception.args[0]['C'],code)
+AssertionError: '55P03' != '55000'
+- 55P03
++ 55000
+
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.328s
+
+FAILED (failures=1)

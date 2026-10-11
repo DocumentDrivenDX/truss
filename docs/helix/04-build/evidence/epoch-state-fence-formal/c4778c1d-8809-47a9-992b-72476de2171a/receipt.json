@@ -1,0 +1,95 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-epoch-state-fence.py": "d2621b908c44c44e58ff332a2ca7a2bf90aa2c01856bfd172848756d33172e26",
+    "packages/postgresql/native/source-epoch-read-fence.sql": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+    "packages/postgresql/native/source-epoch-fenced-fresh-lock.sql": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+    "packages/postgresql/native/source-epoch-issue.sql": "f7c292a9a70715137c003232603877b58e862cd8476faf7a63992ff05b92326e",
+    "packages/python/tests/test_epoch_state_fence_native.py": "bdfdb060e191a9c8381721cf5be73a688a61789defb50ae0432b757fd9c91b87",
+    "scripts/check-python-catalog-report-release-native.py": "f29436f8805ad62f0b568999acc56dcd4ad8de8bb7ba1608574ca79b50c41e37"
+  },
+  "queries": [
+    {
+      "id": "issuer_entry_guard_preserves_state",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "db53cd8118e878837420a6a98fdfda8fc98494cf14c505d98f8b4f3e1db9b642"
+    },
+    {
+      "id": "reverse_overlap_effect_guard_preserves_state",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "48dead537544ee7b478945eadde2288f2af80151ffbb0b621bf22f17dbcafda2"
+    },
+    {
+      "id": "foreign_reader_excludes_participating_issuer",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "d5c23e2099be62c5af9d7dfc27e085fdbc1e0694b7d7b606c8c97302010d88d9"
+    },
+    {
+      "id": "complete_fence_excludes_two_step_aba",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "345f29e3d90d57449f30bb8be4040ade37b1dc501a10d4960a2d2f69d2effe8f"
+    },
+    {
+      "id": "ordered_modes_exclude_row_upgrade_cycle",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "f93abcd2c6b0a8e81042b47548ba4425094414efc61f28c95bda7a5e0bb689af"
+    },
+    {
+      "id": "old_row_only_reader_allows_same_writer_change",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n foreign_reader = False,\n write = True,\n alive = True,\n mid = 1,\n issuer_guard = False]",
+      "smt2Sha256": "7997344952360cc6b28f710ce21c8a45e4ea651ce735a161ee3b7619be91fc08"
+    },
+    {
+      "id": "omitted_effect_guard_allows_aba",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n write = True,\n foreign_reader = False,\n table_guard = False,\n alive = True,\n mid = 1,\n end = 0]",
+      "smt2Sha256": "98712b949e5ea7ab44f4b1b267e262f53124154b7bdc38256275ab8ceda42c3c"
+    },
+    {
+      "id": "released_cut_allows_issuance",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n foreign_reader = False,\n write = True,\n alive = False,\n mid = 1,\n issuer_guard = True]",
+      "smt2Sha256": "ed908ab30173f165746782accbfc17add0a1d2bb3ba7268ef5661a2961db9df3"
+    },
+    {
+      "id": "rows_first_allows_upgrade_cycle",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[reader_table = True,\n writer_waits = True,\n writer_row = True,\n writer_table = False,\n reader_waits = True]",
+      "smt2Sha256": "5bff63ad8f9a4218ad9352a1190729859c91f9f835bfa005b04c5e3d31d9b63e"
+    },
+    {
+      "id": "omitted_entry_guard_can_reach_marker_wait",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[issuer_guard = False, alive = True, foreign_reader = False]",
+      "smt2Sha256": "5bb60115134f15b615953eee902302149417f55157fa36b31c9c803fcb8b1ad5"
+    }
+  ],
+  "scope": "Opaque epoch-state conditional event preservation and stated finite-history induction while actual cut and complete installed effect-fence participation hold at every step. Native table-mode compatibility and strongest-mode-before-row ordering are premises of the cycle model. The marker-wait witness models reachability, not native timing or privileges. No SQL/trigger/pg_locks/native-lock/savepoint/host refinement, authenticated issuer, full routine/shared-role/configuration/authorization-data writer closure or final disclosure proof. Separate native tests and omissions qualify only the selected PostgreSQL16.15 component."
+}
