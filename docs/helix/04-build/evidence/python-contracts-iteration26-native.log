@@ -1,0 +1,26 @@
+test_actual_installed_body_and_selected_attributes (test_native_edge_limit.NativeEdgeLimitTests.test_actual_installed_body_and_selected_attributes) ... ok
+test_ambiguous_operation_refuses (test_native_edge_limit.NativeEdgeLimitTests.test_ambiguous_operation_refuses) ... ok
+test_catalog_tightening_without_property_touches (test_native_edge_limit.NativeEdgeLimitTests.test_catalog_tightening_without_property_touches) ... ok
+test_column_type_and_nullability_drift_refuses (test_native_edge_limit.NativeEdgeLimitTests.test_column_type_and_nullability_drift_refuses) ... ok
+test_concurrent_catalog_writer_excluded (test_native_edge_limit.NativeEdgeLimitTests.test_concurrent_catalog_writer_excluded) ... ok
+test_concurrent_shared_head_writer_excluded (test_native_edge_limit.NativeEdgeLimitTests.test_concurrent_shared_head_writer_excluded) ... ok
+test_duplicate_native_definition_identity_refuses (test_native_edge_limit.NativeEdgeLimitTests.test_duplicate_native_definition_identity_refuses) ... ok
+test_edge_and_marker_row_boundaries (test_native_edge_limit.NativeEdgeLimitTests.test_edge_and_marker_row_boundaries) ... ok
+test_eleven_original_vectors (test_native_edge_limit.NativeEdgeLimitTests.test_eleven_original_vectors) ... ok
+test_empty_scope_no_mutation (test_native_edge_limit.NativeEdgeLimitTests.test_empty_scope_no_mutation) ... ok
+test_invalid_bounds (test_native_edge_limit.NativeEdgeLimitTests.test_invalid_bounds) ... ok
+test_missing_exclusion_refuses (test_native_edge_limit.NativeEdgeLimitTests.test_missing_exclusion_refuses) ... ok
+test_nondeterministic_side_collation_does_not_fold_marker (test_native_edge_limit.NativeEdgeLimitTests.test_nondeterministic_side_collation_does_not_fold_marker) ... skipped 'Selected local PostgreSQL build lacks ICU'
+test_numeric_marker_relationship_cannot_round_into_identity (test_native_edge_limit.NativeEdgeLimitTests.test_numeric_marker_relationship_cannot_round_into_identity) ... ok
+test_ordinary_direct_call_denied (test_native_edge_limit.NativeEdgeLimitTests.test_ordinary_direct_call_denied) ... ok
+test_retired_definition_is_not_filtered (test_native_edge_limit.NativeEdgeLimitTests.test_retired_definition_is_not_filtered) ... ok
+test_scope_boundary (test_native_edge_limit.NativeEdgeLimitTests.test_scope_boundary) ... ok
+test_signed_relationship_ids (test_native_edge_limit.NativeEdgeLimitTests.test_signed_relationship_ids) ... ok
+test_unknown_phase_refuses (test_native_edge_limit.NativeEdgeLimitTests.test_unknown_phase_refuses) ... ok
+test_wrong_operation_refuses (test_native_edge_limit.NativeEdgeLimitTests.test_wrong_operation_refuses) ... ok
+test_wrong_or_orphan_relationship_marker (test_native_edge_limit.NativeEdgeLimitTests.test_wrong_or_orphan_relationship_marker) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 6.103s
+
+OK (skipped=1)

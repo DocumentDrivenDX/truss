@@ -87,8 +87,11 @@ administrative artifacts do not qualify protected ordinary-person admission.
 Follow the protected admission execution packet in
 `docs/helix/04-build/operation-ordinal-issuer-handoff.md`: preserve original caller
 context separately from privileged owner and asserted origin; qualify original
-installed call/role/ACL/dependency closure before exposing mutation APIs. All seven
-semantic routine bodies remain missing. Do not remove the invoker elevation guard
+installed call/role/ACL/dependency closure before exposing mutation APIs. The complete seven-body
+installed profile remains missing. The private whole-catalog
+`edge_limit_verify_current_scope` semantic body has native component evidence;
+its administrative test custody does not qualify ordinary-person admission,
+complete finalization, installation readiness or accepted publication. Do not remove the invoker elevation guard
 or grant direct consumer registry writes as a composition shortcut.
 
 CONTRACT-001 through CONTRACT-012 describe the storage, journal, catalog,

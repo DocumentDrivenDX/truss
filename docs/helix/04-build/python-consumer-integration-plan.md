@@ -1190,3 +1190,109 @@ atomic acceptance and accepted report/view. Do not turn unfinished unrelated
 capabilities into blockers for independently qualified endpoints; do not bypass
 protected acceptance gates to make a staging example look like registration.
 The complete Python external-interface goal remains open.
+
+### Iteration26: complete catalog acceptance path
+
+The first real Python workflow remains installation → original UMF preparation →
+`catalog.accept_in_transaction` → grouped object creation → object-ID lookup.
+Use actual accepted native IDs and preserve outer transaction ownership. Source
+staging success is not registration, and a full report must precede head
+publication. The unconditional operation commit barrier stays until complete
+independent native finalization is implemented and tested.
+
+Current source gap: `collectCatalogReportPreparation` gathers original new-only
+basis and counts, while `stageNewCatalogCohort` stages definitions. Neither
+publishes an accepted report/head. The audit's acceptance exit sequence requires
+actual installed root/report profile interpretation, complete originalExecution,
+UMF/assertion meaning and enforcement inventory, original rebind/index effects,
+complete extension disclosure, all seventeen report fields and independent native
+comparison. The seven semantic routines have selected boundaries but no bodies;
+capacity closeout alone is explicitly not their replacement.
+
+The first executable semantic slice is `edge_limit_verify_current_scope() -> void`
+under explicit private native test custody. It has no downstream validator
+dependency and implements the selected complete final definition/edge/marker
+multiset algorithm (EL01–EL05). The catalog-only native-test profile derives its whole scope internally from
+`rel_def UNION edge.rel_type_id UNION edge_limit.rel_type_id` under the already-held
+exclusive head and actual unique unfinished catalog operation. Include orphan
+relationships so missing definitions refuse. There is no new opaque effect-byte
+grammar, caller ID list or scope parameter; existing effect bytes do not yet have
+an EL grammar. Affected-scope optimization and commit-union dispatch remain later
+composition, not claims of this whole-catalog body.
+The native body refuses incomplete/foreign scope, invalid bounds or any missing,
+extra, duplicate, wrong-side, wrong-endpoint, wrong-relationship or wrong-edge
+marker. Test self edges, both maximum-one orientations, retired definitions,
+wrong-relationship markers selected through their canonical edge, stale custody,
+savepoint rollback and repeated checking. Keep ordinary-role invocation denied.
+
+Native semantic bodies may be implemented and qualified under explicit test
+custody before the protected issuer is complete. This does not confer ordinary
+role authority, install the whole profile or replace the unconditional commit
+barrier. Integrated public acceptance still requires every selected body and the
+complete protected invocation/installation/resource/authority proof. Astra Ultra approved this first semantic body plan and its explicit native test
+custody/negative controls before implementation.
+
+Integrated implementation sequence for the acceptance path:
+
+1. Admit one coherent actual installed layout/security/driver/resource tuple and
+   protected original caller/context source. Bind installed roles, callable bodies,
+   effective privileges and original profile artifacts; caller-selected bytes from
+   preparation cannot authorize effects. Keep issuer/authentication semantics owned
+   by the existing security boundary. Implement missing Truss capture/custody
+   composition without a competing ACL resolver or direct ordinary-role writes.
+2. Complete the original report producer using existing pinned UMF observations,
+   source identity inventories and actual staged/native effects. Every missing
+   report field needs its original producer; unknown assertions retain explicit
+   unenforced/unsupported evidence. New-only input cannot manufacture empty
+   rebind/index/extension inventories. Present bindings require the registered
+   physical interpretation currently absent; preserve their explicit refusal.
+3. Implement selected native semantic observation, limit and finalization bodies,
+   including complete transaction contributor/touch coverage, settled reservations,
+   independent journal/feed union and repeated early-check safety. Compose the
+   existing capacity and original row-image components rather than treating their
+   individual successes as complete commit authority. Map exact installed routines,
+   owners/dependencies/ACLs and trigger events in both directions.
+4. Compare full retained report/source/native effect membership, insert immutable
+   report bytes once, publish and verify head last under the same native operation.
+   Report and head writes themselves advance semantic generation. Verify the actual
+   resulting generation and full obligations after those writes before publishing
+   final phase/result; an earlier seal cannot authorize them. Return only pending
+   accepted results until the host confirms commit. Preserve
+   unknown settlement and one-refusal/no-internal-retry behavior.
+5. Export the actual Python capability through ReferenceAssembly, using original
+   prepared input and qualified adopted host transactions. Test ordinary-person
+   acceptance, complete report/readback, host rollback and commit, stale authority,
+   copied context, direct helper denial, report/head/finalizer fault and lost commit
+   acknowledgement. Then add one actual grouped object creation and exact lookup.
+
+Review the concrete first native implementation slice with Astra Ultra before
+source edits. Work stays on main and incorporates committed security changes.
+The security chat currently carries explicit association storage values and source
+pointers; it does not yet establish registered physical interpretation or protected
+catalog publication. This work must account for those outputs without adopting
+unfinished APIs. Full migration, broader Weft shapes and feed consumers do not
+block independently qualified first capabilities; mandatory selected integrity and
+authority gates still apply to each capability being published.
+
+The installed runtime, original caller, exact IDs/report and native durable effects
+are decisive evidence. More driver-only tests or an inert capability factory do
+not satisfy this iteration. Original shared corpus/native interchange and the
+remaining external-interface scope stay required goal exits.
+
+The first semantic body is implemented under its private native-test profile.
+Exact type/nullability/character-width checks precede identity casts; signed int4
+relationship identities are preserved, and side comparisons explicitly use C.
+The complete scope includes orphan IDs, identity duplication, retirement and all
+marker occurrences; required-key conflicts are checked independently. Native
+readback matches the loaded body and selected function attributes/ordinary grant
+denial. The latest targeted run attempted21 tests:20 passed and1 skipped because
+this corrected PostgreSQL16.15 build lacks ICU. All eleven authored vectors are
+covered; corruption probes explicitly remove constraints only inside rolled-back
+administrative setup. Resource boundaries and exclusive/shared-head waiters pass.
+Retained receipt/log: `evidence/python-contracts-iteration26.json` and
+`evidence/python-contracts-iteration26-native.log`. Full frozen-source regression attempted555 tests:554 passed and1 ICU probe
+skipped in93.698s; all119 source pins remained unchanged. The full log is retained
+in `evidence/python-contracts-iteration26-full.log`. Astra Ultra approved the source, plan and retained evidence. After integrating
+security main375a6004, its five additional public preparation tests passed in2.316s;
+these are separate from the frozen555-test membership. The unpackaged SQL is proven by actual
+native load/readback/tests; Python wheel membership is not evidence of its install.
