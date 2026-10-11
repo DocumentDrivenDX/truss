@@ -3,6 +3,16 @@
   "runtime": "Bun",
   "runtimeVersion": "1.4.2",
   "files": {
+    "owners/declarations/producer.js": "42d857965d8f01f545e52fabcd6156a8fed3d4e039526b11b6425bff59736d61",
+    "owners/declarations/producer-manifest.json": "bf135d2c1557c6855519bca76cead5ae21dbe546173abbedd640d9d776e6afc2",
+    "owners/assertion-fields/producer.js": "99ce66f606891ab0436240890922e204ce11e354f5601c5f2ede1c3ef6506398",
+    "owners/assertion-fields/producer-manifest.json": "bb628d522ab0811f73c39401cfe3019244fbb1bcbf541d4a86e91ab720654075",
+    "owners/scalar-types/producer.js": "de1ab8d140c5daab20c94cbe1e986e9ab93bf690935b72863b36c9267bb7f3f6",
+    "owners/scalar-types/producer-manifest.json": "d375d1dc762e6da198edbeb4128bf0006ad57d202daab4fad5c77ba8a1c1a346",
+    "owners/record-members/producer.js": "b7d6474a743366347cbd858e65b68974fb0503e8f3023533d18db8e83259faee",
+    "owners/record-members/producer-manifest.json": "9ffba23939061e096a94bcb37109479c7689e8b5ecbe8c6cd3baf1dfba2456c9",
+    "owners/reference-links/producer.js": "8d9a5da5bdf9196ec19e09f4037044ccaa741ee8e8b603453d2c515db892b88e",
+    "owners/reference-links/producer-manifest.json": "234a60fb0abae54a2c7b0ef4117f57c57f3734e77da348b5dc05de947119619d",
     "licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
     "licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
     "licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
@@ -13,7 +23,7 @@
     "owner/producer-manifest.json": "89115bff6644db7f2fe7b292458994a94dc78ff0c4c3f608d7b1fe3eeb810bc8",
     "runtime/package.json": "9a0a1f4e40bbd5082cbcc0f6b6b515368f2dc8dc60341affdc8c50571819bd49",
     "runtime/node_modules/ajv/dist/2020.js": "57cad03e867e41b0bf4a68c13e24b2628312c6dc82a3ca16780a6864130ad40d",
-    "packages/umf-bun/src/bridge.js": "96e021ffcded9f86473f3ee6b7d0161acefddd102bb3dd29f6351bb4b8272781",
+    "packages/umf-bun/src/bridge.js": "fec28c7539a3a2307cc01e6b0830b56fdd4a908c3076caae3b3c9fc1375c8efe",
     "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
   },
   "owner": {
@@ -42,18 +52,21 @@
     "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
   },
   "sources": {
-    "scripts/build-python-umf-preparation.ts": "b0cccdaf001528d5e6ad7ec9bf63f807913a1d0d11d1307afc8368676e045a80",
-    "scripts/build-umf-runtime.ts": "d948759ee88fa2af9a509226ec2a0d8a96addee164fc78531845e37dad7649b2",
-    "packages/umf-bun/src/python-preparation.ts": "2b98bf403757bfa7eb58cb0a954677628c8c174a92b88b7bf85f8cc90d3776fb",
+    "scripts/build-python-umf-preparation.ts": "d1e023a3d74c2ef8e058a2e94d0e01cbcf0b7340359f9bae8c77bfdaba7b776f",
+    "scripts/build-umf-runtime.ts": "8df22e5c42fc229e702f0ef71502536ffaab6498ff44e2e51044b2505ab8cd0a",
+    "packages/umf-bun/src/python-preparation.ts": "fb02b3403e17451904524fbe04c4c17cb85e0a5d7a0d5a3e8252be8c4bb8fef6",
+    "packages/umf-bun/src/catalog-assertion-observations.ts": "384973d41b3f225ccfa7012457a03e530ad4bfc13a54f626aba84326fd3e599f",
+    "packages/umf-bun/src/catalog-observation-coverage.ts": "10c9336d9736ac6ec04e54bf559d2b64fa4ec50a1588deedcac0fcb5d1eeabf8",
+    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "a75ec788006ef1c25297308a744274351d624d0702e263781b6820765297a399",
     "packages/umf-bun/src/catalog-input.ts": "d6cf0700168d2c5146bf7a59954bea853e6f906adc233f4ef51dca4fbf490694",
-    "packages/umf-bun/src/catalog-declarations.ts": "fb0db06f9fafde070b58e93160b75c58b05e5a6ae7a75acb5b0ffa60d8bada9f",
+    "packages/umf-bun/src/catalog-declarations.ts": "e1150ec89cd4924a02df0245af7ac1dafc5b1cff687a681587c1527f3ef8ffb9",
     "packages/umf-bun/src/catalog-transition-correspondence.ts": "b28c148fa44b55b4b0ef7cd2e07289f81ee725a8cf59424d2a03d060e185247c",
     "packages/umf-bun/src/catalog-validation-evidence.ts": "81c5b01219ba17119313bca94f8fe516b64343ac1e9afea555e669f70da5a708",
     "packages/umf-bun/src/catalog-extension-artifacts.ts": "8cbdaf76dc4d618d3fd2fc76a3ce7556daf4c843a6102c040b1a1223ca8c4f93",
     "packages/umf-bun/src/catalog-extension-inventory.ts": "f42fa6157fcd8d5ac3a83d9374b39abb295837426d4c44622de579aad9ad3c84",
     "packages/umf-bun/src/catalog-ingress-report-basis.ts": "3d1650163c390a9ea58de1996b017aeae66b048fe72a6d37413d4d7fcd91e50e",
-    "packages/umf-bun/src/index.ts": "45fc2188b2ceb46b18af7a57e2f93427117fd8ddb32ef339e26ee8d0e66d35d7",
-    "packages/umf-bun/src/acceptance-input.ts": "ef6afe7533afa50a37fe29b523228af028c696f9768cf751b8b52b047586f215",
-    "packages/postgresql/src/acceptance-json.ts": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17"
+    "packages/umf-bun/src/index.ts": "62dc01d1dd8e5c08dbd15d9e7aad9ad9ccfea6d42c8d4e82a21e375c15d853e5",
+    "packages/umf-bun/src/acceptance-input.ts": "0106ab6161abb634f670ecd25d845247aa4fd4c7c02bcfdf8582f4c11523f98c",
+    "packages/postgresql/src/acceptance-json.ts": "ef934c8d2ccdd53c604f917c5a16ed27e99d6a24cc5deca809861c117f16bdc4"
   }
 }

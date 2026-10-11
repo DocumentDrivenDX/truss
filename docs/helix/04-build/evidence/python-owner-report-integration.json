@@ -1,0 +1,49 @@
+{
+  "scope": "original_owner_observations_python_preparation_and_native_report_basis",
+  "affectedTests": {
+    "count": 87,
+    "seconds": 109.789,
+    "exitCode": 0,
+    "sourceQualification": "started immediately before final schedule capacity guard edit; no other source changes"
+  },
+  "finalPreparationReplay": {
+    "count": 21,
+    "seconds": 15.402,
+    "exitCode": 0
+  },
+  "installedWheel": {
+    "sha256": "fad42a884503a4eaaf976e7a0420342abf7f9977f4a90ce62e74e7b3061b7a02",
+    "outsideCheckout": true,
+    "exitCode": 0,
+    "requiredObservations": 20
+  },
+  "moduleBoundaryImports": 378,
+  "logs": {
+    "python-owner-report-integration-affected.log": "a0cb70003a84882f7cab5e0b65b05736e33f15181c3466e92583a6e227cc62e5",
+    "python-owner-report-integration-preparation.log": "e8ebbd239e21fb0ae7f130c5ad58f495cb6e27c2dfbf5e6645bdb6fad248773e",
+    "python-owner-report-integration-wheel.log": "421f63af88792ab171efa1da84166ea80e984cdf1c1c97afc97c01a5a0a82fe3"
+  },
+  "finalSourceSha256": {
+    "packages/python/src/truss/_catalog_owner_evidence.py": "a350c14adb800515a3a05bf3df404a55df9b33339c1a1572c6e490d6a253b6c1",
+    "packages/python/src/truss/_catalog_report.py": "18471720cf9b77fbb88392aa4ee447d7c4f671750490b294f7696597001fa7a4",
+    "packages/python/src/truss/_umf/manifest.json": "29a18995eacd7d51279ad65fc276f1f886612311ad26b941b42cdd2ae6dd89db",
+    "packages/python/src/truss/_umf_release.py": "f9f39b9c6b1311a0d5ba3c8bf66586eeb70af1759c96c44ff33d74492d4d4ba1",
+    "packages/python/tests/test_preparation.py": "d2dc7fa6aae3e2066a9bfdf4824f12cae876caa20f1b3db04f8dc284b49fa935",
+    "packages/python/tests/test_catalog_lifecycle.py": "632d0e99511a1720433283d49acff97c327ae0bb01e6c86df98a6309382281bf",
+    "packages/python/pyproject.toml": "40c49c558bb1879debb355221c239e75398ffd883ff56bae80e1e3b86d822b1f",
+    "packages/umf-bun/src/python-preparation.ts": "fb02b3403e17451904524fbe04c4c17cb85e0a5d7a0d5a3e8252be8c4bb8fef6",
+    "scripts/build-python-umf-preparation.ts": "d1e023a3d74c2ef8e058a2e94d0e01cbcf0b7340359f9bae8c77bfdaba7b776f",
+    "scripts/check-module-boundaries.py": "f91b38ae7f3b948f2b65e4339011d6840dfcb37ae2e214f15b57c5a9b8d0c872"
+  },
+  "supportSemanticsQualified": false,
+  "acceptedCatalogQualified": false,
+  "publicAcceptanceAvailable": false,
+  "missingFields": [
+    "interfaceVersion",
+    "reportProfile",
+    "originalExecution",
+    "umf",
+    "assertions",
+    "extensions"
+  ]
+}

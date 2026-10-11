@@ -89,6 +89,8 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
     evidence=json.loads(prepared.report_evidence_bytes)
     if evidence['scope']!='original_owner_report_preparation_only' or evidence['ingress']['state']!='available':
         raise ValueError('Original owner report evidence required')
+    from ._catalog_owner_evidence import require_catalog_owner_evidence
+    owner_observations,observation_coverage,core_assertions=require_catalog_owner_evidence(prepared,evidence)
     choices=prepared.input()
     inventory=_rows(connection,'SELECT family,identity::pg_catalog.text AS identity FROM truss.runtime_collect_new_catalog_inventory(CAST(:rev AS pg_catalog.int4)) ORDER BY family COLLATE pg_catalog."C",identity::pg_catalog.text COLLATE pg_catalog."C"',rev=catalog.revision)
     if inventory!=json.loads(catalog.inventory_bytes):raise ValueError('Complete original native effect inventory required')
@@ -122,6 +124,10 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
     payload={'targetReportInterfaceVersion':'truss-acceptance-report/0.3.0-proposal','fields':fields,'nativeCut':{'writerXid':cut[0],'operationOrdinal':cut[1],'effectGeneration':cut[2]},
              'noRebindEvidence':{'profile':'administrative-empty-graph-and-empty-journal-root/0.1','emptyScope':json.loads(cut[3]),'preEffectGeneration':prior_cut[2]},
              'ownerEvidenceHex':prepared.report_evidence_bytes.hex(),'missingFields':list(MISSING_FIELDS),
+             'ownerObservations':owner_observations,
+             'observationCoverage':observation_coverage,
+             'coreAssertionIdentities':core_assertions,
+             'supportSemanticsQualified':False,
              'nativeInventory':inventory,'physicalSnapshotHex':physical.hex(),'nativeCounts':json.loads(catalog.counts_bytes),
              'fieldQualification':{'extensions':'partial_retention_only',
                  'pending_indexes':'original_selected_immutable_declaration_policy_only',

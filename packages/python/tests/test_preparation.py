@@ -41,6 +41,77 @@ class PreparationTests(unittest.TestCase):
         self.assertEqual(len(result.input()['documents']),2)
         self.assertNotIn('acceptedIds',result.input())
 
+    def test_complete_owner_observations_retain_separate_pins_and_sources(self):
+        from truss._catalog_owner_evidence import require_catalog_owner_evidence
+        result=prepare((document('first'),document('second')))
+        evidence=json.loads(result.report_evidence_bytes)
+        observations,coverage,core=require_catalog_owner_evidence(result,evidence)
+        self.assertGreater(int(coverage['observationsRequired']),0)
+        self.assertFalse(core['complete'])
+        self.assertEqual(observations['profile']['version'],observations['fieldProfile']['version'])
+        self.assertNotEqual(observations['profile']['version'],observations['scalarProfile']['version'])
+        self.assertNotEqual(observations['scalarProfile']['version'],observations['membersProfile']['version'])
+        self.assertTrue(any(o['operation']=='scalarType' for o in observations['observations']))
+        for mutation in ('missing','digest','profile','coverage'):
+            changed=json.loads(result.report_evidence_bytes)
+            if mutation=='missing':del changed['ownerObservations']
+            elif mutation=='digest':changed['ownerObservations']['observations'][0]['evidence']['sha256']='0'*64
+            elif mutation=='profile':changed['ownerObservations']['scalarProfile']['version']='substitute'
+            else:changed['observationCoverage']['observationsRequired']='0'
+            with self.subTest(mutation=mutation),self.assertRaises(ValueError):
+                require_catalog_owner_evidence(result,changed)
+
+    def test_adjusted_empty_bridge_observation_inventory_refuses_report_use(self):
+        from truss._catalog_owner_evidence import require_catalog_owner_evidence
+        original=_capture
+        def altered(command,**kwargs):
+            completed=original(command,**kwargs)
+            if command[-1].endswith('bridge.js'):
+                reply=json.loads(completed.stdout)
+                reply['reportEvidence']['ownerObservations']['observations']=[]
+                coverage=reply['reportEvidence']['observationCoverage']
+                coverage.update(observationsRequired='0',observationsAvailable='0',unavailable=[],availability='available')
+                return subprocess.CompletedProcess(command,completed.returncode,json.dumps(reply).encode(),completed.stderr)
+            return completed
+        with patch('truss.preparation._capture',altered):
+            result=prepare((document('dropped'),))
+        with self.assertRaises(ValueError):
+            require_catalog_owner_evidence(result,json.loads(result.report_evidence_bytes))
+
+    def test_unavailable_version_specific_owner_operations_are_retained(self):
+        from truss._catalog_owner_evidence import require_catalog_owner_evidence
+        value=json.loads(document('current').content)
+        value['umf']='0.8.0'
+        result=prepare((CatalogDocument('current','r1',json.dumps(value).encode()),))
+        evidence=json.loads(result.report_evidence_bytes)
+        observations,coverage,core=require_catalog_owner_evidence(result,evidence)
+        self.assertEqual(coverage['availability'],'incomplete')
+        self.assertGreater(len(coverage['unavailable']),0)
+        self.assertTrue(any(o['operation']=='scalarType' and o['code']=='CORE_SCALAR_TYPE_VERSION' for o in coverage['unavailable']))
+        self.assertTrue(any(o['result']['state']=='unavailable' for o in observations['observations']))
+        self.assertGreater(len(core['deferred']),0)
+        self.assertFalse(core['complete'])
+
+    def test_owner_observations_execute_from_copied_package_outside_checkout(self):
+        import os
+        import shutil
+        import tempfile
+        with tempfile.TemporaryDirectory(prefix='truss-owner-package-') as directory:
+            shutil.copytree(ROOT/'packages/python/src/truss',Path(directory)/'truss',ignore=shutil.ignore_patterns('__pycache__'))
+            request={'documents':[{'identity':'outside','content':base64.b64encode(document('outside').content).decode()}],'configuration':CONFIG}
+            code="""import sys,json,base64
+from truss import CatalogDocument,prepare_acceptance
+from truss._catalog_owner_evidence import require_catalog_owner_evidence
+request=json.load(sys.stdin)
+prepared=prepare_acceptance(tuple(CatalogDocument(d['identity'],'r1',base64.b64decode(d['content'])) for d in request['documents']),json.dumps(request['configuration']).encode(),bun_executable='/opt/homebrew/bin/bun')
+_,coverage,_=require_catalog_owner_evidence(prepared,json.loads(prepared.report_evidence_bytes))
+print(coverage['observationsRequired'])
+"""
+            environment=dict(os.environ, PYTHONPATH=directory)
+            result=subprocess.run([sys.executable,'-c',code],input=json.dumps(request).encode(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=directory,env=environment,timeout=30)
+            self.assertEqual(result.returncode,0,result.stderr.decode())
+            self.assertGreater(int(result.stdout),0)
+
     def test_unknown_extension_original_is_preserved(self):
         source=document('future')
         value=json.loads(source.content)

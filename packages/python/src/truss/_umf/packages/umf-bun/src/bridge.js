@@ -11,6 +11,47 @@ var __esm = (fn, res, err) => () => {
   return res;
 };
 
+// packages/postgresql/src/original-byte-custody.ts
+function copyOriginalByteCustody(original, ordinaryOnly = false, maxBytes = 1048576) {
+  if (typeof ordinaryOnly !== "boolean" || !Number.isSafeInteger(maxBytes) || maxBytes < 0 || maxBytes > 1048576)
+    throw new OriginalByteCustodyError("resource");
+  if (brand.call(original) !== "Uint8Array")
+    throw new OriginalByteCustodyError("carrier");
+  const size = length.call(original);
+  if (size > maxBytes)
+    throw new OriginalByteCustodyError("resource");
+  if (ordinaryOnly) {
+    try {
+      ordinaryLength.call(buffer.call(original));
+    } catch {
+      throw new OriginalByteCustodyError("carrier");
+    }
+  }
+  const owned = new Uint8Array(size);
+  try {
+    set.call(owned, original);
+  } catch {
+    throw new OriginalByteCustodyError("carrier");
+  }
+  return owned;
+}
+var typed, brand, length, buffer, ordinaryLength, set, OriginalByteCustodyError;
+var init_original_byte_custody = __esm(() => {
+  typed = Object.getPrototypeOf(Uint8Array.prototype);
+  brand = Object.getOwnPropertyDescriptor(typed, Symbol.toStringTag).get;
+  length = Object.getOwnPropertyDescriptor(typed, "length").get;
+  buffer = Object.getOwnPropertyDescriptor(typed, "buffer").get;
+  ordinaryLength = Object.getOwnPropertyDescriptor(ArrayBuffer.prototype, "byteLength").get;
+  set = Uint8Array.prototype.set;
+  OriginalByteCustodyError = class OriginalByteCustodyError extends Error {
+    reason;
+    constructor(reason) {
+      super(reason);
+      this.reason = reason;
+    }
+  };
+});
+
 // packages/postgresql/src/acceptance-json.ts
 function decodeAcceptanceJson(original) {
   return scanJson(original, false);
@@ -18,13 +59,20 @@ function decodeAcceptanceJson(original) {
 function preflightSourceJson(original) {
   scanJson(original, true);
 }
-function scanJson(original, sourceNumbers) {
+function scanJson(original, sourceNumbers, capture) {
   const refuse = (reason) => {
     throw new AcceptanceJsonError(reason);
   };
-  if (original.length > MAX_BYTES)
-    refuse("resource");
-  const bytes = original.slice();
+  let bytes;
+  try {
+    bytes = copyOriginalByteCustody(original);
+  } catch (error) {
+    if (error instanceof OriginalByteCustodyError)
+      refuse(error.reason === "resource" ? "resource" : "grammar");
+    throw error;
+  }
+  if (capture)
+    capture.bytes = bytes;
   let index = 0, nodes = 0, work = bytes.length;
   const stack = [];
   let root;
@@ -116,20 +164,43 @@ function scanJson(original, sourceNumbers) {
       parent.state = "comma";
     }
   };
+  const close = () => {
+    take();
+    const frame = stack.pop();
+    if (capture && frame.occurrence !== undefined)
+      capture.occurrences[frame.occurrence].end = index;
+  };
   const value = () => {
     whitespace();
+    const start = index, parent = stack.at(-1);
+    let pointer = "";
+    if (capture && parent) {
+      const prefix = capture.occurrences[parent.occurrence].pointer;
+      pointer = prefix + "/" + (parent.kind === "array" ? String(parent.value.length) : parent.key.replace(/~/g, "~0").replace(/\//g, "~1"));
+      charge(2 * pointer.length);
+    }
+    const record = (kind) => {
+      if (!capture)
+        return;
+      const position = capture.occurrences.length;
+      capture.occurrences.push({ pointer, kind, start, end: index });
+      return position;
+    };
     if (++nodes > MAX_NODES || stack.length > MAX_DEPTH)
       refuse("resource");
     const c = bytes[index];
     if (c === 34) {
-      attach(string());
+      const text = string();
+      record("string");
+      attach(text);
       return;
     }
     if (c === 123 || c === 91) {
       take();
       const item = c === 123 ? Object.create(null) : [];
+      const occurrence = record(c === 123 ? "object" : "array");
       attach(item);
-      stack.push(c === 123 ? { kind: "object", value: item, state: "first", key: "", keys: [] } : { kind: "array", value: item, state: "first" });
+      stack.push(c === 123 ? { kind: "object", value: item, state: "first", key: "", keys: [], occurrence } : { kind: "array", value: item, state: "first", occurrence });
       return;
     }
     for (const [token, result] of [["null", null], ["true", true], ["false", false]]) {
@@ -137,6 +208,7 @@ function scanJson(original, sourceNumbers) {
         for (const ch of token)
           if (take() !== ch.charCodeAt(0))
             refuse("grammar");
+        record(result === null ? "null" : "boolean");
         attach(result);
         return;
       }
@@ -171,6 +243,7 @@ function scanJson(original, sourceNumbers) {
         while (digit())
           take();
       }
+      record("number");
       attach(null);
       return;
     }
@@ -183,13 +256,11 @@ function scanJson(original, sourceNumbers) {
     const c = bytes[index];
     if (frame.kind === "array") {
       if (frame.state === "first" && c === 93) {
-        take();
-        stack.pop();
+        close();
       } else if (frame.state === "first" || frame.state === "value")
         value();
       else if (c === 93) {
-        take();
-        stack.pop();
+        close();
       } else if (c === 44) {
         take();
         frame.state = "value";
@@ -197,8 +268,7 @@ function scanJson(original, sourceNumbers) {
         refuse("grammar");
     } else {
       if (frame.state === "first" && c === 125) {
-        take();
-        stack.pop();
+        close();
       } else if (frame.state === "first" || frame.state === "key") {
         if (c !== 34)
           refuse("grammar");
@@ -220,8 +290,7 @@ function scanJson(original, sourceNumbers) {
       } else if (frame.state === "value")
         value();
       else if (c === 125) {
-        take();
-        stack.pop();
+        close();
       } else if (c === 44) {
         take();
         frame.state = "key";
@@ -234,8 +303,9 @@ function scanJson(original, sourceNumbers) {
     refuse("grammar");
   return root;
 }
-var AcceptanceJsonError, MAX_BYTES = 1048576, MAX_DEPTH = 128, MAX_NODES = 1e5, MAX_MEMBERS = 4096, MAX_WORK = 2000000;
+var AcceptanceJsonError, MAX_DEPTH = 128, MAX_NODES = 1e5, MAX_MEMBERS = 4096, MAX_WORK = 2000000, originalIndexes;
 var init_acceptance_json = __esm(() => {
+  init_original_byte_custody();
   AcceptanceJsonError = class AcceptanceJsonError extends Error {
     reason;
     constructor(reason) {
@@ -243,6 +313,7 @@ var init_acceptance_json = __esm(() => {
       this.reason = reason;
     }
   };
+  originalIndexes = new WeakMap;
 });
 
 // packages/umf-bun/src/acceptance-input.ts
@@ -257,11 +328,14 @@ async function createAcceptanceInputInspector(dependenciesPackage) {
   const Ajv = require2("ajv/dist/2020").default;
   const validate = new Ajv({ strict: true }).compile(JSON.parse(schemaBytes.toString("utf8")));
   return Object.freeze({ schemaSha256: SCHEMA_SHA, inspect(original) {
-    if (!(original.buffer instanceof ArrayBuffer))
-      throw new AcceptanceInputInspectionError("source_custody");
-    if (original.length > 1048576)
-      throw new AcceptanceInputInspectionError("resource");
-    const owned = original.slice();
+    let owned;
+    try {
+      owned = copyOriginalByteCustody(original, true);
+    } catch (error) {
+      if (error instanceof OriginalByteCustodyError)
+        throw new AcceptanceInputInspectionError(error.reason === "resource" ? "resource" : "source_custody");
+      throw error;
+    }
     const input = decodeAcceptanceJson(owned);
     if (!validate(input))
       throw new AcceptanceInputInspectionError("schema");
@@ -312,6 +386,7 @@ async function createAcceptanceInputInspector(dependenciesPackage) {
 }
 var SCHEMA_SHA = "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd", digest = (bytes) => createHash("sha256").update(bytes).digest("hex"), AcceptanceInputInspectionError;
 var init_acceptance_input = __esm(() => {
+  init_original_byte_custody();
   init_acceptance_json();
   AcceptanceInputInspectionError = class AcceptanceInputInspectionError extends Error {
     reason;
@@ -344,6 +419,14 @@ function requireUnchangedCatalogTransition(originalSourceJson, source, transitio
 
 // packages/umf-bun/src/index.ts
 var assertionOwners = new WeakMap;
+function registerAssertionOwner(owner, mode) {
+  assertionOwners.set(owner, mode);
+  return owner;
+}
+function requireLoadedUmfAssertionOwner(owner, mode) {
+  if (assertionOwners.get(owner) !== mode)
+    throw Error("Original loaded assertion owner required");
+}
 var UMF_RUNTIME_SOURCE = "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3";
 async function loadUmfProducer(directory) {
   const { hash, captured } = await loadPinnedFunctions(directory, UMF_RUNTIME_SOURCE, "record", ["readDocument", "validateDocument", "validateCoreRecordValues", "upgradeSchemaPropertiesEnvelope", "verifySchemaPropertiesUpgrade", "rollbackSchemaPropertiesEnvelope"]);
@@ -374,6 +457,16 @@ async function loadUmfProducer(directory) {
     }
   });
 }
+async function loadUmfDeclarationProducer(directory) {
+  const { hash, captured } = await loadPinnedFunctions(directory, UMF_RUNTIME_SOURCE, "declarations", ["inspectCoreSchemaProperties", "inspectCoreKeys", "inspectCoreRelationships"]);
+  return registerAssertionOwner(Object.freeze({
+    sourceRevision: UMF_RUNTIME_SOURCE,
+    bundleSha256: hash,
+    inspectSchemaProperties: captured.inspectCoreSchemaProperties,
+    inspectKeys: captured.inspectCoreKeys,
+    inspectRelationships: captured.inspectCoreRelationships
+  }), "declarations");
+}
 async function loadPinnedFunctions(directory, revision, mode, names) {
   const root = resolve(directory);
   const manifest = await Bun.file(root + "/producer-manifest.json").json();
@@ -388,6 +481,44 @@ async function loadPinnedFunctions(directory, revision, mode, names) {
     return [name, owner[name].bind(owner)];
   }));
   return { hash, captured };
+}
+async function loadUmfFieldAssertionProducer(directory) {
+  const { hash, captured } = await loadPinnedFunctions(directory, UMF_RUNTIME_SOURCE, "assertion-fields", ["inspectCoreElementKind", "inspectCoreNullability", "inspectCoreCardinality", "inspectCoreFacets"]);
+  return registerAssertionOwner(Object.freeze({
+    sourceRevision: UMF_RUNTIME_SOURCE,
+    bundleSha256: hash,
+    inspectKind: captured.inspectCoreElementKind,
+    inspectNullability: captured.inspectCoreNullability,
+    inspectCardinality: captured.inspectCoreCardinality,
+    inspectFacets: captured.inspectCoreFacets
+  }), "assertion-fields");
+}
+var UMF_SCALAR_TYPE_SOURCE = "94d0a99e4d1e9eb39278f38d6cd6bcba51e46db8";
+async function loadUmfScalarTypeProducer(directory) {
+  const { hash, captured } = await loadPinnedFunctions(directory, UMF_SCALAR_TYPE_SOURCE, "scalar-types", ["inspectCoreScalarType"]);
+  return registerAssertionOwner(Object.freeze({
+    sourceRevision: UMF_SCALAR_TYPE_SOURCE,
+    bundleSha256: hash,
+    inspectScalarType: captured.inspectCoreScalarType
+  }), "scalar-types");
+}
+var UMF_RECORD_MEMBERS_SOURCE = "5ddc656273e1965efa0187f3090d165d45225dcd";
+async function loadUmfRecordMembersProducer(directory) {
+  const { hash, captured } = await loadPinnedFunctions(directory, UMF_RECORD_MEMBERS_SOURCE, "record-members", ["inspectCoreRecordMembers"]);
+  return registerAssertionOwner(Object.freeze({
+    sourceRevision: UMF_RECORD_MEMBERS_SOURCE,
+    bundleSha256: hash,
+    inspectRecordMembers: captured.inspectCoreRecordMembers
+  }), "record-members");
+}
+var UMF_REFERENCE_LINKS_SOURCE = "9545b7119ceaa29ca7523e4722ec52412084d835";
+async function loadUmfReferenceLinksProducer(directory) {
+  const { hash, captured } = await loadPinnedFunctions(directory, UMF_REFERENCE_LINKS_SOURCE, "reference-links", ["inspectCoreReferenceLinks"]);
+  return registerAssertionOwner(Object.freeze({
+    sourceRevision: UMF_REFERENCE_LINKS_SOURCE,
+    bundleSha256: hash,
+    inspectReferenceLinks: captured.inspectCoreReferenceLinks
+  }), "reference-links");
 }
 
 // packages/umf-bun/src/catalog-declarations.ts
@@ -420,7 +551,8 @@ function collectCatalogDeclarations(documentId, source) {
       if (declaration.kind !== "record")
         continue;
       const elementId = identity(declaration.id);
-      const fields = array(declaration.members).map((value) => {
+      const membership = Object.hasOwn(declaration, "members") ? "declared" : "missing";
+      const fields = (membership === "declared" ? array(declaration.members) : []).map((value) => {
         const reference = object(value);
         const fieldModule = identity(reference.module);
         const fieldId = identity(reference.element);
@@ -442,7 +574,7 @@ function collectCatalogDeclarations(documentId, source) {
         }
         return key;
       });
-      records.push(Object.freeze({ documentId, moduleId, elementId, declaration, fields: Object.freeze(fields), keys: Object.freeze(keys) }));
+      records.push(Object.freeze({ documentId, moduleId, elementId, declaration, membership, fields: Object.freeze(fields), keys: Object.freeze(keys) }));
     }
     if (module.relationships !== undefined)
       for (const value of array(module.relationships)) {
@@ -518,8 +650,460 @@ async function createCatalogInputPreparation(directory, dependenciesPackage, pro
   } });
 }
 
-// packages/umf-bun/src/catalog-validation-evidence.ts
+// packages/umf-bun/src/catalog-assertion-observations.ts
 import { createHash as createHash2 } from "crypto";
+var originalCollections = new WeakMap;
+function requireOriginalCatalogObservationCollection(prepared, collection) {
+  if (originalCollections.get(collection) !== prepared)
+    throw Error("Original observation collection custody required");
+}
+function collectCatalogAssertionObservations(prepared, owner, fields, scalars, members, links) {
+  requireOriginalCatalogPreparation(prepared);
+  requireLoadedUmfAssertionOwner(owner, "declarations");
+  if (fields)
+    requireLoadedUmfAssertionOwner(fields, "assertion-fields");
+  if (scalars)
+    requireLoadedUmfAssertionOwner(scalars, "scalar-types");
+  if (members)
+    requireLoadedUmfAssertionOwner(members, "record-members");
+  if (links)
+    requireLoadedUmfAssertionOwner(links, "reference-links");
+  if (owner.sourceRevision !== prepared.umfProfile.version)
+    throw Error("Original owner observation source mismatch");
+  if (fields && fields.sourceRevision !== prepared.umfProfile.version)
+    throw Error("Original Field owner observation source mismatch");
+  const referenceLinksProfile = links ? Object.freeze({ identity: "umf-reference-links-inspection", version: links.sourceRevision, sha256: links.bundleSha256 }) : null;
+  const membersProfile = members ? Object.freeze({ identity: "umf-record-members-inspection", version: members.sourceRevision, sha256: members.bundleSha256 }) : null;
+  const scalarProfile = scalars ? Object.freeze({ identity: "umf-scalar-type-inspection", version: scalars.sourceRevision, sha256: scalars.bundleSha256 }) : null;
+  const fieldProfile = fields ? Object.freeze({ identity: "umf-field-assertion-inspection", version: fields.sourceRevision, sha256: fields.bundleSha256 }) : null;
+  const profile = Object.freeze({ identity: "umf-declaration-inspection", version: owner.sourceRevision, sha256: owner.bundleSha256 });
+  const observations = [];
+  let retainedBytes = 0;
+  let calls = 0;
+  function capture(documentIndex, operation, identity, basis, run, observationProfile = profile) {
+    if (++calls > 4096)
+      throw Error("Declaration observation component call capacity exceeded");
+    Object.freeze(identity);
+    const document = prepared.documents[documentIndex];
+    let result;
+    try {
+      result = { state: "observed", observation: run() };
+    } catch (error) {
+      result = { state: "unavailable", name: error instanceof Error ? error.name : null, code: typeof error?.code === "string" ? error.code : null, path: typeof error?.path === "string" ? error.path : null, message: error instanceof Error ? error.message : String(error) };
+    }
+    const bytes = Buffer.from(JSON.stringify({ profile: observationProfile, documentId: document.documentId, contentSha256: prepared.original.documents[documentIndex].sha256, basis, operation, identity, result }), "utf8");
+    retainedBytes += bytes.length;
+    if (retainedBytes > 4194304)
+      throw Error("Declaration observation component output capacity exceeded");
+    observations.push(Object.freeze({
+      documentId: document.documentId,
+      basis,
+      operation,
+      identity,
+      result,
+      evidence: Object.freeze({ identity: "truss.owner-declaration-observation/" + documentIndex + "/" + (calls - 1), bytesBase64: bytes.toString("base64"), sha256: createHash2("sha256").update(bytes).digest("hex") })
+    }));
+  }
+  for (let index = 0;index < prepared.documents.length; index++) {
+    const document = prepared.documents[index];
+    const source = document.interpretation.source;
+    const target = document.interpretation.target;
+    const propertyBasis = document.interpretation.transition ? "reversible_target" : "original";
+    capture(index, "schema_properties", { scope: "document" }, propertyBasis, () => owner.inspectSchemaProperties(target, { scope: "document" }));
+    for (const module of source.modules) {
+      const moduleIdentity = { scope: "module", module: module.id };
+      capture(index, "schema_properties", moduleIdentity, propertyBasis, () => owner.inspectSchemaProperties(target, moduleIdentity));
+      capture(index, "relationships", { module: module.id }, "original", () => owner.inspectRelationships(source, { module: module.id }));
+      for (const element of module.elements) {
+        const identity = { scope: "element", module: module.id, element: element.id };
+        capture(index, "schema_properties", identity, propertyBasis, () => owner.inspectSchemaProperties(target, identity));
+        if (fields) {
+          const fieldIdentity = { module: module.id, element: element.id };
+          for (const [operation, inspect] of [["kind", fields.inspectKind], ["nullability", fields.inspectNullability], ["cardinality", fields.inspectCardinality], ["facets", fields.inspectFacets]])
+            capture(index, operation, fieldIdentity, "original", () => inspect(source, fieldIdentity), fieldProfile);
+        }
+        if (scalars) {
+          const identity = { module: module.id, element: element.id };
+          capture(index, "scalarType", identity, "original", () => scalars.inspectScalarType(source, identity), scalarProfile);
+        }
+        if (members) {
+          const identity = { module: module.id, element: element.id };
+          capture(index, "members", identity, "original", () => members.inspectRecordMembers(source, identity), membersProfile);
+        }
+        if (links) {
+          const identity = { module: module.id, element: element.id };
+          capture(index, "referenceLinks", identity, "original", () => links.inspectReferenceLinks(source, identity), referenceLinksProfile);
+        }
+        if (element.kind === "record")
+          capture(index, "keys", { module: module.id, element: element.id }, "original", () => owner.inspectKeys(source, { module: module.id, element: element.id }));
+      }
+    }
+  }
+  function freeze(value) {
+    if (value && typeof value === "object") {
+      for (const child of Object.values(value))
+        freeze(child);
+      Object.freeze(value);
+    }
+  }
+  freeze(observations);
+  const collection = Object.freeze({ profile, fieldProfile, scalarProfile, membersProfile, referenceLinksProfile, observations: Object.freeze(observations), scope: "original_owner_assertion_observations_only" });
+  originalCollections.set(collection, prepared);
+  return collection;
+}
+
+// packages/umf-bun/src/catalog-observation-coverage.ts
+import { createHash as createHash3 } from "crypto";
+function assessCatalogObservationCoverage(prepared, collection) {
+  requireOriginalCatalogObservationCollection(prepared, collection);
+  if (!collection.fieldProfile)
+    throw Error("Complete Field observation bundle required");
+  for (const [profile, identity] of [[collection.profile, "umf-declaration-inspection"], [collection.fieldProfile, "umf-field-assertion-inspection"]])
+    if (profile.identity !== identity || profile.version !== prepared.umfProfile.version || !/^[0-9a-f]{64}$/.test(profile.sha256))
+      throw Error("Original observation profile correspondence required");
+  if (collection.scalarProfile && (collection.scalarProfile.identity !== "umf-scalar-type-inspection" || collection.scalarProfile.version !== UMF_SCALAR_TYPE_SOURCE || !/^[0-9a-f]{64}$/.test(collection.scalarProfile.sha256)))
+    throw Error("Original scalar observation profile correspondence required");
+  if (collection.membersProfile && (collection.membersProfile.identity !== "umf-record-members-inspection" || collection.membersProfile.version !== UMF_RECORD_MEMBERS_SOURCE || !/^[0-9a-f]{64}$/.test(collection.membersProfile.sha256)))
+    throw Error("Original membership observation profile correspondence required");
+  if (collection.referenceLinksProfile && (collection.referenceLinksProfile.identity !== "umf-reference-links-inspection" || collection.referenceLinksProfile.version !== UMF_REFERENCE_LINKS_SOURCE || !/^[0-9a-f]{64}$/.test(collection.referenceLinksProfile.sha256)))
+    throw Error("Original reference-link observation profile correspondence required");
+  const expected = [];
+  const add = (documentIndex, operation, identity, basis, field = false) => {
+    if (expected.length >= 4096)
+      throw Error("Observation coverage component capacity exceeded");
+    expected.push({ documentIndex, operation, identity, basis, field });
+  };
+  for (let i = 0;i < prepared.documents.length; i++) {
+    const document = prepared.documents[i], source = document.interpretation.source, basis = document.interpretation.transition ? "reversible_target" : "original";
+    add(i, "schema_properties", { scope: "document" }, basis);
+    for (const module of source.modules) {
+      add(i, "schema_properties", { scope: "module", module: module.id }, basis);
+      add(i, "relationships", { module: module.id }, "original");
+      for (const element of module.elements) {
+        add(i, "schema_properties", { scope: "element", module: module.id, element: element.id }, basis);
+        for (const operation of ["kind", "nullability", "cardinality", "facets"])
+          add(i, operation, { module: module.id, element: element.id }, "original", true);
+        if (collection.scalarProfile)
+          add(i, "scalarType", { module: module.id, element: element.id }, "original");
+        if (collection.membersProfile)
+          add(i, "members", { module: module.id, element: element.id }, "original");
+        if (collection.referenceLinksProfile)
+          add(i, "referenceLinks", { module: module.id, element: element.id }, "original");
+        if (element.kind === "record")
+          add(i, "keys", { module: module.id, element: element.id }, "original");
+      }
+    }
+  }
+  if (collection.observations.length !== expected.length)
+    throw Error("Complete original observation inventory required");
+  const unavailable = [];
+  let bytesRetained = 0;
+  for (let index = 0;index < expected.length; index++) {
+    const requirement = expected[index], observed = collection.observations[index], document = prepared.documents[requirement.documentIndex];
+    if (observed.documentId !== document.documentId || observed.operation !== requirement.operation || observed.basis !== requirement.basis || JSON.stringify(observed.identity) !== JSON.stringify(requirement.identity))
+      throw Error("Original ordered observation identity/basis mismatch");
+    const result = observed.result;
+    if (!result || !["observed", "unavailable"].includes(result.state))
+      throw Error("Explicit observation availability required");
+    const original = JSON.stringify({ profile: requirement.operation === "referenceLinks" ? collection.referenceLinksProfile : requirement.operation === "members" ? collection.membersProfile : requirement.operation === "scalarType" ? collection.scalarProfile : requirement.field ? collection.fieldProfile : collection.profile, documentId: document.documentId, contentSha256: prepared.original.documents[requirement.documentIndex].sha256, basis: requirement.basis, operation: requirement.operation, identity: requirement.identity, result: observed.result });
+    const bytes = Buffer.from(original, "utf8");
+    bytesRetained += bytes.length;
+    if (bytesRetained > 4194304)
+      throw Error("Observation coverage evidence capacity exceeded");
+    if (observed.evidence.bytesBase64 !== bytes.toString("base64") || observed.evidence.sha256 !== createHash3("sha256").update(bytes).digest("hex") || observed.evidence.identity !== "truss.owner-declaration-observation/" + requirement.documentIndex + "/" + index)
+      throw Error("Original observation evidence correspondence required");
+    if (result.state === "unavailable") {
+      if (!(result.code === null || typeof result.code === "string") || !(result.path === null || typeof result.path === "string"))
+        throw Error("Original unavailable result required");
+      unavailable.push(Object.freeze({ documentId: document.documentId, operation: requirement.operation, identity: Object.freeze(requirement.identity), code: result.code, path: result.path }));
+    }
+  }
+  return Object.freeze({ observationsRequired: String(expected.length), observationsAvailable: String(expected.length - unavailable.length), unavailable: Object.freeze(unavailable), availability: unavailable.length ? "incomplete" : "available", scope: "original_owner_observation_correspondence_only" });
+}
+
+// packages/umf-bun/src/catalog-core-assertion-identities.ts
+import { createHash as createHash4 } from "crypto";
+function sameOriginalMeaning(a, b) {
+  if (a === null || b === null || typeof a !== "object" || typeof b !== "object")
+    return Object.is(a, b);
+  if (Array.isArray(a) !== Array.isArray(b))
+    return false;
+  const keys = Object.keys(a);
+  if (keys.length !== Object.keys(b).length)
+    return false;
+  if (Array.isArray(a) && a.length !== b.length)
+    return false;
+  return keys.every((key) => Object.hasOwn(b, key) && sameOriginalMeaning(a[key], b[key]));
+}
+function collectCatalogCoreAssertionIdentities(prepared, collection) {
+  requireOriginalCatalogPreparation(prepared);
+  requireOriginalCatalogObservationCollection(prepared, collection);
+  const manifestBytes = Buffer.from(JSON.stringify({
+    interfaceVersion: "truss-core-assertion-source-identity/0.6.0",
+    producers: { fields: collection.fieldProfile, scalar: collection.scalarProfile, members: collection.membersProfile, referenceLinks: collection.referenceLinksProfile, declarations: collection.profile },
+    operations: ["kind", "nullability", "cardinality", "facets", "scalarType", "members", "referenceLinks", "keys", "relationships", "schema_properties"],
+    basis: "original",
+    referenceLinks: "generic_core_links_not_verified_type_assertions",
+    schemaPropertyAssertions: ["allowedValues", "default", "facets"],
+    annotations: "retained separately; not constraint assertions",
+    identity: "original document digest, qualified owner and exact owner-produced pointer",
+    authored: "retain exact declaration ID with full original occurrence pointer",
+    missing: "retained absence observation; no assertion invented",
+    enforcement: "none/unqualified"
+  }));
+  const manifest = Object.freeze({ identity: "truss.core-assertion-source-identity/0.6.0", bytesBase64: manifestBytes.toString("base64"), sha256: createHash4("sha256").update(manifestBytes).digest("hex") });
+  const profile = Object.freeze({ identity: "truss-core-assertion-source-identity", version: "0.6.0", sha256: manifest.sha256 });
+  const referenceLinks = [], referenceLinkDeclarations = [];
+  const entries = [];
+  const declarationMeanings = [];
+  const membershipMeanings = [];
+  const fieldMeanings = [];
+  const absent = [];
+  const deferred = [];
+  const identities = new Set;
+  for (const observed of collection.observations) {
+    if (observed.basis !== "original" || !["kind", "nullability", "cardinality", "facets", "scalarType", "members", "referenceLinks", "keys", "relationships", "schema_properties"].includes(observed.operation)) {
+      deferred.push(observed);
+      continue;
+    }
+    const result = observed.result;
+    if (result.state !== "observed") {
+      deferred.push(observed);
+      continue;
+    }
+    const original = result.observation, meaning = original.meaning;
+    if (observed.operation === "schema_properties") {
+      const di = prepared.documents.findIndex((d) => d.documentId === observed.documentId), document = prepared.documents[di], identity = observed.identity;
+      if (!document || JSON.stringify(original.source) !== JSON.stringify(document.interpretation.source) || typeof original.path !== "string" || original.source.umf !== "0.8.0")
+        throw Error("Original schema-property source required");
+      const properties = original.properties;
+      if (properties === null || typeof properties !== "object" || Array.isArray(properties))
+        throw Error("Original owner property map required");
+      const selected = Object.keys(properties).filter((k) => ["allowedValues", "default", "facets"].includes(k));
+      if (Object.keys(properties).length === 0)
+        absent.push(observed);
+      if (Object.keys(properties).some((k) => !selected.includes(k)))
+        deferred.push(observed);
+      const owner = identity.scope === "document" ? Object.freeze({ scope: "document", documentId: document.documentId }) : Object.freeze({ documentId: document.documentId, moduleId: identity.module });
+      if (identity.scope !== "document" && typeof identity.module !== "string")
+        throw Error("Original schema-property owner required");
+      const source = prepared.original.input.documents[di].artifact;
+      for (const key of selected) {
+        const pointer = original.path + "/" + key;
+        let node = original.source;
+        for (const token of pointer.slice(1).split("/")) {
+          const part = token.replace(/~1/g, "/").replace(/~0/g, "~");
+          if (node === null || typeof node !== "object" || !Object.hasOwn(node, part))
+            throw Error("Original schema-property node absent");
+          node = node[part];
+        }
+        if (JSON.stringify(node) !== JSON.stringify(properties[key]))
+          throw Error("Original schema-property value correspondence required");
+        const uniqueness = JSON.stringify([source.sha256, owner, pointer]);
+        if (identities.has(uniqueness))
+          throw Error("Duplicate original core assertion source identity");
+        identities.add(uniqueness);
+        entries.push(Object.freeze({ assertion: Object.freeze({ sourceKind: "umf_document", owner, definitionPin: source.sha256, sourcePointer: pointer, kind: "source", sourceIdentityProfile: profile }), source, ruleName: "core.schema_properties." + key, ruleNameOrigin: "profile_generated", enforcement: "none", reason: "unqualified", ownerEvidence: observed.evidence }));
+      }
+      continue;
+    }
+    if (observed.operation === "referenceLinks") {
+      const di = prepared.documents.findIndex((d) => d.documentId === observed.documentId), document = prepared.documents[di], requested = observed.identity;
+      if (!document || document.umfVersion !== "0.7.0" || !collection.referenceLinksProfile)
+        throw Error("Original referenceLinks owner context correspondence required");
+      const source = document.interpretation.source, mi = source.modules.findIndex((m) => m.id === requested.module), ei = mi < 0 ? -1 : source.modules[mi].elements.findIndex((e) => e.id === requested.element);
+      if (mi < 0 || ei < 0)
+        throw Error("Original referenceLinks owner context correspondence required");
+      const element = source.modules[mi].elements[ei], path = "/modules/" + mi + "/elements/" + ei + "/references";
+      const expected = !Object.hasOwn(element, "references") ? { state: "missing" } : { state: "present", links: element.references.map((reference, index) => {
+        const ti = source.modules.findIndex((m) => m.id === reference.module), te = ti < 0 ? -1 : source.modules[ti].elements.findIndex((e) => e.id === reference.element);
+        if (ti < 0 || te < 0)
+          throw Error("Original referenceLinks target correspondence required");
+        const target = source.modules[ti].elements[te], at = path + "/" + index;
+        return { index, path: at, reference, target: { identity: { module: reference.module, element: reference.element }, path: "/modules/" + ti + "/elements/" + te, ...Object.hasOwn(target, "kind") ? { kind: target.kind } : {} }, uninterpretedPaths: document.interpretation.sourceValidation.diagnostics.filter((d) => d.severity === "warning" && d.code === "UNKNOWN_CORE_FIELD" && (d.path === at || d.path.startsWith(at + "/"))).map((d) => d.path), typeAssertion: "unverified" };
+      }) };
+      if (!sameOriginalMeaning(original, { operation: "inspect-core-reference-links", version: "0.1.0", source, identity: requested, path, meaning: expected, provenance: "unverified" }))
+        throw Error("Original referenceLinks full result correspondence required");
+      if (expected.state === "missing") {
+        absent.push(observed);
+        continue;
+      }
+      const common = { documentId: document.documentId, owner: Object.freeze({ moduleId: requested.module, elementId: requested.element }), source: prepared.original.input.documents[di].artifact, ownerProfile: collection.referenceLinksProfile, ownerEvidence: observed.evidence, typeAssertion: "unverified", meaningCorrespondence: true, interpretationQualified: false, scope: "original_direct_core_reference_links_only" };
+      referenceLinkDeclarations.push(Object.freeze({ ...common, sourcePointer: path, originalMeaning: meaning }));
+      for (const link of meaning.links)
+        referenceLinks.push(Object.freeze({ ...common, sourcePointer: link.path, originalMeaning: link }));
+      continue;
+    }
+    if (observed.operation === "members") {
+      const di = prepared.documents.findIndex((d) => d.documentId === observed.documentId), document = prepared.documents[di], requested = observed.identity;
+      if (!document || document.umfVersion !== "0.7.0" || !collection.membersProfile)
+        throw Error("Original members owner context correspondence required");
+      const source = document.interpretation.source, mi = source.modules.findIndex((m) => m.id === requested.module), ei = mi < 0 ? -1 : source.modules[mi].elements.findIndex((e) => e.id === requested.element);
+      if (mi < 0 || ei < 0)
+        throw Error("Original members owner context correspondence required");
+      const element = source.modules[mi].elements[ei], path = "/modules/" + mi + "/elements/" + ei + "/members";
+      const uninterpretedPaths = Object.freeze(document.interpretation.sourceValidation.diagnostics.filter((d) => d.severity === "warning" && d.code === "UNKNOWN_KEY_QUALIFIER" && (d.path === path || d.path.startsWith(path + "/"))).map((d) => d.path));
+      const expected = element.kind !== "record" ? { state: "inapplicable" } : !Object.hasOwn(element, "members") ? { state: "missing" } : { state: uninterpretedPaths.length ? "partial" : "known", members: element.members, uninterpretedPaths };
+      if (!sameOriginalMeaning(original, { operation: "inspect-core-record-members", version: "0.1.0", source, identity: requested, path, meaning: expected, provenance: "unverified" }))
+        throw Error("Original members full result correspondence required");
+      if (expected.state === "missing") {
+        absent.push(observed);
+        continue;
+      }
+      if (expected.state === "inapplicable") {
+        deferred.push(observed);
+        continue;
+      }
+      const artifact = prepared.original.input.documents[di].artifact, owner = Object.freeze({ documentId: document.documentId, moduleId: requested.module });
+      const addMemberEntry = (pointer, ruleName, originalMeaning) => {
+        const uniqueness = JSON.stringify([artifact.sha256, owner, pointer]);
+        if (identities.has(uniqueness))
+          throw Error("Duplicate original core assertion source identity");
+        identities.add(uniqueness);
+        const entry = Object.freeze({ assertion: Object.freeze({ sourceKind: "umf_document", owner, definitionPin: artifact.sha256, sourcePointer: pointer, kind: "source", sourceIdentityProfile: profile }), source: artifact, ruleName, ruleNameOrigin: "profile_generated", enforcement: "none", reason: "unqualified", ownerEvidence: observed.evidence });
+        entries.push(entry);
+        membershipMeanings.push(Object.freeze({ assertion: entry, ownerProfile: collection.membersProfile, ownerState: expected.state, originalMeaning, uninterpretedPaths, meaningCorrespondence: true, interpretationQualified: false, scope: "original_record_member_owner_meaning_only" }));
+      };
+      addMemberEntry(path, "core.members", meaning);
+      element.members.forEach((member, index) => addMemberEntry(path + "/" + index, "core.members.member", member));
+      continue;
+    }
+    if (observed.operation === "scalarType") {
+      const document = prepared.documents.find((d) => d.documentId === observed.documentId), requested = observed.identity;
+      if (!document || document.umfVersion !== "0.7.0" || !collection.scalarProfile)
+        throw Error("Original scalarType owner context correspondence required");
+      const source = document.interpretation.source, mi = source.modules.findIndex((m) => m.id === requested.module), ei = mi < 0 ? -1 : source.modules[mi].elements.findIndex((e) => e.id === requested.element);
+      if (mi < 0 || ei < 0)
+        throw Error("Original scalarType owner context correspondence required");
+      const element = source.modules[mi].elements[ei], present = Object.hasOwn(element, "scalarType"), value = element.scalarType;
+      const known = ["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"];
+      const expected = element.kind !== "field" ? { state: "inapplicable", ...present ? { authoredScalarType: value } : {} } : !present ? { state: "missing" } : known.includes(value) ? { state: "known", scalarType: value } : { state: "unknown", value };
+      if (!sameOriginalMeaning(original, { operation: "inspect-core-scalar-type", version: "0.1.0", source, identity: requested, path: "/modules/" + mi + "/elements/" + ei + "/scalarType", meaning: expected, provenance: "unverified" }))
+        throw Error("Original scalarType full result correspondence required");
+    }
+    if (["kind", "nullability", "cardinality", "facets"].includes(observed.operation)) {
+      const document = prepared.documents.find((d) => d.documentId === observed.documentId), requested = observed.identity;
+      if (document?.umfVersion === "0.7.0") {
+        const family = observed.operation;
+        const versions = { kind: "6.0.0", nullability: "5.0.0", cardinality: "4.0.0", facets: "3.0.0" };
+        const known = { kind: ["field", "record", "group"], nullability: ["required", "absent-allowed", "unspecified"], cardinality: ["one", "array", "map", "unspecified"], facets: [] };
+        const source = document.interpretation.source, mi = source.modules.findIndex((m) => m.id === requested.module);
+        const ei = mi < 0 ? -1 : source.modules[mi].elements.findIndex((e) => e.id === requested.element);
+        if (!collection.fieldProfile || mi < 0 || ei < 0 || !sameOriginalMeaning(original.source, source) || !sameOriginalMeaning(original.identity, requested) || original.operation !== "inspect-core-" + family || original.version !== versions[family] || original.path !== "/modules/" + mi + "/elements/" + ei + "/" + family)
+          throw Error("Original " + family + " owner context correspondence required");
+        const element = source.modules[mi].elements[ei], present = Object.hasOwn(element, family), value = element[family];
+        let expected = present ? known[family].includes(value) ? { state: "known", [family]: value, ...family === "cardinality" && Object.hasOwn(element, "itemType") ? { itemType: element.itemType } : {} } : { state: "unknown", value } : { state: family === "kind" ? "unspecified" : element.kind === "field" ? "missing" : "inapplicable" };
+        if (family === "facets" && present) {
+          const facets = value, interpreted = {};
+          if (facets.length && ["unicode-scalar", "byte"].includes(facets.length.unit))
+            interpreted.length = { max: facets.length.max, unit: facets.length.unit };
+          if (facets.integerWidth)
+            interpreted.integerWidth = { bits: facets.integerWidth.bits, signed: facets.integerWidth.signed };
+          if (facets.precision !== undefined) {
+            interpreted.precision = facets.precision;
+            interpreted.scale = facets.scale;
+          }
+          const path = "/modules/" + mi + "/elements/" + ei + "/facets";
+          const uninterpretedPaths = document.interpretation.sourceValidation.diagnostics.filter((d) => d.severity === "warning" && ["UNKNOWN_FACET", "UNKNOWN_FACET_UNIT"].includes(d.code) && (d.path === path || d.path.startsWith(path + "/"))).map((d) => d.path);
+          expected = { state: uninterpretedPaths.length ? "partial" : "known", facets, interpreted, uninterpretedPaths };
+        }
+        if (!sameOriginalMeaning(meaning, expected))
+          throw Error("Original " + family + " meaning correspondence required");
+      }
+    }
+    if (!["known", "partial", "missing"].includes(meaning?.state)) {
+      deferred.push(observed);
+      continue;
+    }
+    const di = prepared.documents.findIndex((d) => d.documentId === observed.documentId), document = prepared.documents[di], identity = observed.identity;
+    if (!document || JSON.stringify(original.source) !== JSON.stringify(document.interpretation.source) || typeof original.path !== "string" || !original.path.startsWith("/") || typeof identity?.module !== "string")
+      throw Error("Original core source/owner pointer required");
+    const mi = original.source.modules.findIndex((m) => m.id === identity.module);
+    const ei = mi < 0 ? -1 : original.source.modules[mi].elements.findIndex((e) => e.id === identity.element);
+    const expectedPath = observed.operation === "relationships" ? "/modules/" + mi + "/relationships" : "/modules/" + mi + "/elements/" + ei + "/" + observed.operation;
+    if (mi < 0 || observed.operation !== "relationships" && ei < 0 || original.path !== expectedPath)
+      throw Error("Original requested owner pointer correspondence required");
+    let node = original.source, present = true;
+    const tokens = original.path.slice(1).split("/");
+    for (let i = 0;i < tokens.length; i++) {
+      const key = tokens[i].replace(/~1/g, "/").replace(/~0/g, "~");
+      if (node === null || typeof node !== "object")
+        throw Error("Original asserted source parent absent");
+      if (!Object.hasOwn(node, key)) {
+        if (i !== tokens.length - 1)
+          throw Error("Original asserted source parent absent");
+        present = false;
+        break;
+      }
+      node = node[key];
+    }
+    if (meaning.state === "missing") {
+      if (present)
+        throw Error("Complete original declaration meaning correspondence required: authored value cannot be missing");
+      absent.push(observed);
+      continue;
+    }
+    if (!present)
+      throw Error("Original asserted source node absent");
+    const source = prepared.original.input.documents[di].artifact, owner = Object.freeze({ documentId: document.documentId, moduleId: identity.module });
+    const declaration = observed.operation === "keys" || observed.operation === "relationships";
+    const originalNodes = declaration ? node : [node], ownerNodes = declaration ? meaning[observed.operation] : [node];
+    if (!Array.isArray(originalNodes) || !Array.isArray(ownerNodes) || originalNodes.length !== ownerNodes.length)
+      throw Error("Complete original declaration occurrence correspondence required");
+    if (declaration && !sameOriginalMeaning(originalNodes, ownerNodes))
+      throw Error("Complete original declaration meaning correspondence required");
+    if (originalNodes.length === 0) {
+      absent.push(observed);
+      continue;
+    }
+    for (let index = 0;index < originalNodes.length; index++) {
+      const pointer = original.path + (declaration ? "/" + index : "");
+      const uniqueness = JSON.stringify([source.sha256, owner, pointer]);
+      if (identities.has(uniqueness))
+        throw Error("Duplicate original core assertion source identity");
+      identities.add(uniqueness);
+      const authored = declaration && typeof originalNodes[index]?.id === "string" && originalNodes[index].id.length > 0;
+      if (declaration && originalNodes[index]?.id !== ownerNodes[index]?.id)
+        throw Error("Original authored declaration identity correspondence required");
+      const identity = authored ? { kind: "authored", authoredIdentity: originalNodes[index].id } : { kind: "source", sourceIdentityProfile: profile };
+      const entry = Object.freeze({
+        assertion: Object.freeze({ sourceKind: "umf_document", owner, definitionPin: source.sha256, sourcePointer: pointer, ...identity }),
+        source,
+        ruleName: "core." + observed.operation,
+        ruleNameOrigin: "profile_generated",
+        enforcement: "none",
+        reason: "unqualified",
+        ownerEvidence: observed.evidence
+      });
+      entries.push(entry);
+      if (["kind", "nullability", "cardinality", "facets", "scalarType"].includes(observed.operation) && original.source.umf === "0.7.0")
+        fieldMeanings.push(Object.freeze({
+          assertion: entry,
+          ownerProfile: observed.operation === "scalarType" ? collection.scalarProfile : collection.fieldProfile,
+          ownerState: meaning.state,
+          originalMeaning: meaning,
+          meaningCorrespondence: true,
+          interpretationQualified: false,
+          scope: `original_${observed.operation}_owner_meaning_only`
+        }));
+      if (declaration)
+        declarationMeanings.push(Object.freeze({
+          assertion: entry,
+          ownerProfile: collection.profile,
+          ownerState: meaning.state,
+          originalMeaning: ownerNodes[index],
+          uninterpretedPaths: meaning.uninterpretedPaths,
+          meaningCorrespondence: true,
+          interpretationQualified: false,
+          scope: "original_declaration_owner_meaning_only"
+        }));
+    }
+  }
+  return Object.freeze({ profile, manifest, entries: Object.freeze(entries), referenceLinks: Object.freeze(referenceLinks), referenceLinkDeclarations: Object.freeze(referenceLinkDeclarations), declarationMeanings: Object.freeze(declarationMeanings), fieldMeanings: Object.freeze(fieldMeanings), membershipMeanings: Object.freeze(membershipMeanings), absent: Object.freeze(absent), deferred: Object.freeze(deferred), complete: false, scope: "original_inspected_core_source_identity_subset_only" });
+}
+
+// packages/umf-bun/src/catalog-validation-evidence.ts
+import { createHash as createHash5 } from "crypto";
 function collectCatalogValidationEvidence(prepared) {
   requireOriginalCatalogPreparation(prepared);
   let retained = 0, diagnosticCount = 0;
@@ -528,7 +1112,7 @@ function collectCatalogValidationEvidence(prepared) {
     retained += bytes.length;
     if (retained > 4194304)
       throw Error("Validation evidence component output capacity exceeded");
-    return Object.freeze({ identity, bytesBase64: bytes.toString("base64"), sha256: createHash2("sha256").update(bytes).digest("hex") });
+    return Object.freeze({ identity, bytesBase64: bytes.toString("base64"), sha256: createHash5("sha256").update(bytes).digest("hex") });
   };
   const manifest = artifact("truss.umf-validation-evidence-profile/0.1.0", { interfaceVersion: "truss-umf-validation-evidence/0.1.0", producer: prepared.umfProfile, encoding: "UTF-8 JSON native diagnostic wrapper; no code/path/severity remapping", basis: ["original", "reversible_target"], sourcePointer: "whole original document", completeness: "both source and interpretation-target owner validation complete" });
   const profile = Object.freeze({ identity: "truss-umf-validation-evidence", version: "0.1.0", sha256: manifest.sha256 });
@@ -563,7 +1147,7 @@ function collectCatalogValidationEvidence(prepared) {
 }
 
 // packages/umf-bun/src/catalog-extension-artifacts.ts
-import { createHash as createHash3 } from "crypto";
+import { createHash as createHash6 } from "crypto";
 
 // packages/umf-bun/src/catalog-extension-inventory.ts
 function collectCatalogExtensionInventory(prepared) {
@@ -619,7 +1203,7 @@ function collectCatalogExtensionArtifacts(prepared) {
     }));
     if (bytes.length > 1048576 || (retained += bytes.length) > 4194304)
       throw Error("Extension artifact output capacity exceeded");
-    return Object.freeze({ identity: `truss.original-extension-occurrence/${index}`, bytesBase64: bytes.toString("base64"), sha256: createHash3("sha256").update(bytes).digest("hex") });
+    return Object.freeze({ identity: `truss.original-extension-occurrence/${index}`, bytesBase64: bytes.toString("base64"), sha256: createHash6("sha256").update(bytes).digest("hex") });
   });
   return Object.freeze({ extensions: Object.freeze(extensions), scope: "original_document_module_element_extension_artifacts_only" });
 }
@@ -697,7 +1281,18 @@ try {
     const prepared = preparation.prepare(original);
     let reportEvidence;
     try {
+      const [declarations, fields, scalars, members, links] = await Promise.all([
+        loadUmfDeclarationProducer(root + "/owners/declarations"),
+        loadUmfFieldAssertionProducer(root + "/owners/assertion-fields"),
+        loadUmfScalarTypeProducer(root + "/owners/scalar-types"),
+        loadUmfRecordMembersProducer(root + "/owners/record-members"),
+        loadUmfReferenceLinksProducer(root + "/owners/reference-links")
+      ]);
+      const observations = collectCatalogAssertionObservations(prepared, declarations, fields, scalars, members, links);
       reportEvidence = {
+        ownerObservations: observations,
+        observationCoverage: assessCatalogObservationCoverage(prepared, observations),
+        coreAssertionIdentities: collectCatalogCoreAssertionIdentities(prepared, observations),
         validation: collectCatalogValidationEvidence(prepared),
         retainedExtensions: collectCatalogExtensionArtifacts(prepared),
         ingress: prepared.original.input.binding.state === "absent" && !prepared.original.input.transforms.length ? { state: "available", basis: collectCatalogIngressReportBasis(prepared) } : { state: "unavailable", reason: "registered_binding_or_transform_report_producer_required" },

@@ -1,0 +1,20 @@
+{
+  "revision": "94d0a99e4d1e9eb39278f38d6cd6bcba51e46db8",
+  "producerMode": "scalar-types",
+  "buildDependencies": {
+    "yaml": {
+      "version": "2.9.1",
+      "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+    },
+    "ajv": {
+      "version": "8.20.0",
+      "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+    }
+  },
+  "archiveSha256": "e2f07352025b6126fc26f0d81b9b182786c7b69eec3277a49a4c4b55095c71c8",
+  "bundleSha256": "de1ab8d140c5daab20c94cbe1e986e9ab93bf690935b72863b36c9267bb7f3f6",
+  "operations": [
+    "inspectCoreScalarType"
+  ],
+  "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+}
