@@ -4,33 +4,37 @@ import json
 import unittest
 from test_native_pg8000 import NativeBoundaryFixture
 
+def install_string_fixture(run):
+    root=Path(__file__).resolve().parents[3]
+    for path in ('docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
+      'packages/postgresql/native/row-image/codec.sql',
+      'packages/postgresql/native/row-image/prestate.sql',
+      'packages/postgresql/native/row-image/state-owner.sql',
+      'packages/postgresql/native/row-image/dependent-owner.sql',
+      'packages/postgresql/native/row-image/string-candidate.sql',
+      'packages/postgresql/native/issued-operation-admission/operation-admission.sql'):
+        run((root/path).read_text())
+    # Native catalog fixture is not accepted UMF evidence. All actual FKs
+    # remain enabled; runtime writes are measured with the ALWAYS observer.
+    run("INSERT INTO truss.schema_doc VALUES(0,0,'native-fixture','0','fixture','fixture','{}','{}')")
+    run("INSERT INTO truss.type_def(document_id,type_id,module,element,kind,since_rev,doc_ord,lineage_profile,lineage_bytes,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id) VALUES('native-fixture',2,'test','item','entity',0,0,'native-fixture',decode('01','hex'),'accepted_document',0,0,'native-fixture')")
+    run("INSERT INTO truss.prop_def(prop_id,type_id,element,name,scalar_type,nullability,cardinality,home,since_rev,doc_ord,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id,declaration_module) VALUES(301,2,'note','note','string','nullable','one','row',0,0,'accepted_document',0,0,'native-fixture','test')")
+    run('INSERT INTO truss.object(id,type_id,rev) VALUES(100,2,0)')
+    run("INSERT INTO truss.row_home_state VALUES(501,'object',100,2,NULL,NULL,2,301,601,decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'))")
+    run("INSERT INTO truss.row_home_node VALUES(501,601,NULL,'root',NULL,NULL,NULL,'scalar',decode('05','hex'),decode('06','hex'))")
+    run("INSERT INTO truss.row_home_scalar VALUES(501,601,'string','value',NULL,NULL,NULL,NULL,NULL,NULL,NULL,decode('07','hex'),decode('08','hex'))")
+    run('SET CONSTRAINTS ALL IMMEDIATE')
+    for path in ('packages/postgresql/native/existing-string-writer/pending-effects.sql',
+             'packages/postgresql/native/operation-commit-barrier.sql'):
+        run((root/path).read_text())
+    run('SET CONSTRAINTS ALL DEFERRED')
+
+
 class NativeConnectedStringWriterTests(NativeBoundaryFixture, unittest.TestCase):
     def setUp(self):
         super().setUp()
-        root=Path(__file__).resolve().parents[3]
         self.connection.run('BEGIN')
-        for path in ('docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
-          'packages/postgresql/native/row-image/codec.sql',
-          'packages/postgresql/native/row-image/prestate.sql',
-          'packages/postgresql/native/row-image/state-owner.sql',
-          'packages/postgresql/native/row-image/dependent-owner.sql',
-          'packages/postgresql/native/row-image/string-candidate.sql',
-          'packages/postgresql/native/issued-operation-admission/operation-admission.sql'):
-            self.connection.run((root/path).read_text())
-        # Native catalog fixture is not accepted UMF evidence. All actual FKs
-        # remain enabled; runtime writes are measured with the ALWAYS observer.
-        self.connection.run("INSERT INTO truss.schema_doc VALUES(0,0,'native-fixture','0','fixture','fixture','{}','{}')")
-        self.connection.run("INSERT INTO truss.type_def(document_id,type_id,module,element,kind,since_rev,doc_ord,lineage_profile,lineage_bytes,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id) VALUES('native-fixture',2,'test','item','entity',0,0,'native-fixture',decode('01','hex'),'accepted_document',0,0,'native-fixture')")
-        self.connection.run("INSERT INTO truss.prop_def(prop_id,type_id,element,name,scalar_type,nullability,cardinality,home,since_rev,doc_ord,definition_source_kind,definition_rev,definition_doc_ord,definition_document_id,declaration_module) VALUES(301,2,'note','note','string','nullable','one','row',0,0,'accepted_document',0,0,'native-fixture','test')")
-        self.connection.run('INSERT INTO truss.object(id,type_id,rev) VALUES(100,2,0)')
-        self.connection.run("INSERT INTO truss.row_home_state VALUES(501,'object',100,2,NULL,NULL,2,301,601,decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'))")
-        self.connection.run("INSERT INTO truss.row_home_node VALUES(501,601,NULL,'root',NULL,NULL,NULL,'scalar',decode('05','hex'),decode('06','hex'))")
-        self.connection.run("INSERT INTO truss.row_home_scalar VALUES(501,601,'string','value',NULL,NULL,NULL,NULL,NULL,NULL,NULL,decode('07','hex'),decode('08','hex'))")
-        self.connection.run('SET CONSTRAINTS ALL IMMEDIATE')
-        for path in ('packages/postgresql/native/existing-string-writer/pending-effects.sql',
-                     'packages/postgresql/native/operation-commit-barrier.sql'):
-            self.connection.run((root/path).read_text())
-        self.connection.run('SET CONSTRAINTS ALL DEFERRED')
+        install_string_fixture(self.connection.run)
 
     def _write(self, text='new ☃', token=None, version=1, ordinal=0):
         token=json.dumps(text,ensure_ascii=False).encode() if token is None else token
@@ -45,7 +49,7 @@ class NativeConnectedStringWriterTests(NativeBoundaryFixture, unittest.TestCase)
         self.assertEqual(self.connection.run('SELECT text_value,original_source_bytes FROM truss.row_home_scalar'),[['new ☃',token]])
         self.assertEqual(self.connection.run('SELECT ver::text FROM truss.object'),[['2']])
         self.assertEqual(self.connection.run('SELECT phase,effect_generation::text FROM truss.row_home_operation'),[['admitted','1']])
-        before,after=(json.loads(bytes(value)) for value in row[2:])
+        before,after=(json.loads(bytes(value)) for value in row[2:4])
         self.assertEqual(before['version'],'1');self.assertEqual(after['version'],'2')
         for name in ('stateHex','nodeHex'):self.assertEqual(before[name],after[name])
         self.assertNotEqual(before['scalarHex'],after['scalarHex'])

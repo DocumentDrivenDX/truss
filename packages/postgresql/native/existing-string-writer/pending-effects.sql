@@ -54,7 +54,7 @@ ALTER TABLE truss.row_home_scalar ENABLE ALWAYS TRIGGER runtime_existing_string_
 CREATE FUNCTION truss.runtime_write_existing_string_pending(
  issued_ordinal bigint, selected_state bigint, expected_version bigint,
  replacement text, replacement_token bytea)
-RETURNS TABLE(writer_xid text, ordinal text, original_prestate bytea, admitted_candidate bytea)
+RETURNS TABLE(writer_xid text, ordinal text, original_prestate bytea, admitted_candidate bytea, context_hex text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE state_row truss.row_home_state%ROWTYPE; node_row truss.row_home_node%ROWTYPE;
  scalar_row truss.row_home_scalar%ROWTYPE; object_row truss.object%ROWTYPE; planned_object truss.object%ROWTYPE; observed_object truss.object%ROWTYPE;
@@ -154,7 +154,7 @@ BEGIN
     OR NOT EXISTS(SELECT 1 FROM truss.row_home_scalar c WHERE c.state_id=selected_state
       AND c.node_id=node_row.node_id AND truss.row_image_scalar_original(c)=images.new_scalar_image) THEN
   RAISE EXCEPTION 'complete final candidate correspondence required' USING ERRCODE='55000';END IF;
- RETURN QUERY SELECT actual_xid::text,issued_ordinal::text,before_scope,after_scope;
+ RETURN QUERY SELECT actual_xid::text,issued_ordinal::text,before_scope,after_scope,admitted.context_hex;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_write_existing_string_pending(bigint,bigint,bigint,text,bytea) FROM PUBLIC;

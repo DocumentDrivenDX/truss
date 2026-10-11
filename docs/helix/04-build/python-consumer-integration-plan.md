@@ -1882,3 +1882,29 @@ precedes admission-size refusal, so bounded native collection is unqualified.
 Continue the same installed consumer workflow by completing those original
 producers and integrating installation/catalog authority; this component cannot
 be exposed as a public apply capability or used to claim installation readiness.
+
+
+### Original Python host pending-write dispatch
+
+The fixed pending writer now consumes an original Python issued operation through
+its reserved savepoint/admission/cleanup entry. A closed string request carries
+exact decimal-text IDs/version, UTF8 value and immutable original token; fixed SQL
+encodes only those values after full query-size preflight. Writer and ordinary
+six-artifact admission preparation share one per-attempt request slot. The writer
+returns its retained context directly after final checks, avoiding an outer
+same-statement read of its newly inserted operation row.
+
+[Current PostgreSQL16.15 evidence](evidence/python-string-host-dispatch.json)
+passes 110 tests: six new dispatch cases, seven raw-writer cases and shared/inherited
+host-admission regressions. Original one-use Context/call/response custody and
+deadlines remain; lost publication prevents send and lost observation cannot replay.
+The observation is explicitly pending native effects, with forward_ready false.
+Stale-write cleanup preserves prior host rows; it does not qualify reuse of an
+adopted transaction after SQLSTATE40001 or authorize an automatic retry.
+
+This connects actual writes to Python host machinery, but remains administrative
+pending-only. Complete original family/context, installed security/source authority,
+capacity/touch contributions, journal/feed/finalization and the public installed
+consumer path are still required. The earlier raw-writer receipt retains its
+historical source hashes; this new receipt covers the added context output and
+factored fixture at their current bytes.

@@ -39,9 +39,16 @@ class PreparedNativeAdmission:
     scope: str = 'original_attempt_request_only'
 
 @dataclass(frozen=True, slots=True, eq=False)
+class PreparedNativeStringReplacement:
+    attempt: IssuedOperationAttempt
+    encoded: object
+    entry: object
+    scope: str = 'original_pending_effect_request_only'
+
+@dataclass(frozen=True, slots=True, eq=False)
 class NativeAdmissionInvocation:
     owner: object
-    request: PreparedNativeAdmission
+    request: PreparedNativeAdmission | PreparedNativeStringReplacement
     sql: str
     invoke: object
     gate: object
@@ -174,6 +181,26 @@ class NativeOperationOrdinals:
                 raise
             return request
 
+    def prepare_string_replacement(self, attempt, original_input):
+        from ._native_string_request import encode_string_replacement
+        with self.boundary._lock:
+            self._check_request_attempt_locked(attempt)
+            if attempt.admission_request is not None or len(self.requests)>=self.maximum_attempts:
+                raise NativeBoundaryRefusal('Original operation request already retained or capacity exhausted')
+            encoded=encode_string_replacement(original_input,attempt.ordinal)
+            request=PreparedNativeStringReplacement(attempt,encoded,attempt.controls.admission_entry)
+            root=(*self.requests,request)
+            self._check_request_attempt_locked(attempt)
+            try:
+                self._publish_admission_requests(root)
+                if self.requests is not root or attempt.admission_request is not request:
+                    raise NativeBoundaryRefusal('Original writer request publication unavailable')
+            except BaseException:
+                self.closed=True
+                attempt.session.admission_closed=True
+                raise
+            return request
+
     def _check_admission_call_locked(self, session, boundary, token, invoke, resource, lifecycle, cleanup, invocation):
         if (type(invocation) is not NativeAdmissionInvocation or invocation.owner is not self
                 or not any(item is invocation for item in self.admission_invocations)):
@@ -217,6 +244,16 @@ class NativeOperationOrdinals:
         return invocation.context.rows
 
     def dispatch_admission_candidate(self, request):
+        if type(request) is not PreparedNativeAdmission:
+            raise NativeBoundaryRefusal('Original admission request required')
+        return self._dispatch_candidate(request)
+
+    def dispatch_string_replacement_candidate(self, request):
+        if type(request) is not PreparedNativeStringReplacement:
+            raise NativeBoundaryRefusal('Original pending string request required')
+        return self._dispatch_candidate(request)
+
+    def _dispatch_candidate(self, request):
         # Administrative original-driver composition only. No installed/artifact
         # authority or public capability can be inferred from this result.
         if not original_control_profile(self.boundary):
@@ -226,7 +263,7 @@ class NativeOperationOrdinals:
             raise NativeBoundaryRefusal('Original admission Context and flush required')
         _, context_type, _, _, flush, _ = symbols
         with self.boundary._lock:
-            if (type(request) is not PreparedNativeAdmission
+            if (type(request) not in (PreparedNativeAdmission,PreparedNativeStringReplacement)
                     or not any(item is request for item in self.requests)):
                 raise NativeBoundaryRefusal('Original prepared admission request required')
             attempt = request.attempt
@@ -247,7 +284,7 @@ class NativeOperationOrdinals:
                 raise NativeBoundaryRefusal('Original admission capture already retained')
             sender = self.boundary._connection.send_QUERY
             original_input = request.encoded.original_input
-            if original_input.family != 'base' and 2*(len(original_input.asserted) + len(original_input.capture_profile)) > 4096:
+            if type(request) is PreparedNativeAdmission and original_input.family != 'base' and 2*(len(original_input.asserted) + len(original_input.capture_profile)) > 4096:
                 raise NativeBoundaryRefusal('Input exceeds selected reduced native context profile')
         gate = NativeAdmissionCapture(session, NativeTextLimits(columns=4, rows=1), entry=request.entry)
         try:
@@ -280,6 +317,9 @@ class NativeOperationOrdinals:
                         or attempt.admission_request is not request
                         or request.entry.native_call is not result.original_call):
                     raise NativeBoundaryRefusal('Original admission settlement correspondence unavailable')
+            if type(request) is PreparedNativeStringReplacement:
+                from dataclasses import replace
+                result=replace(result,scope='pending_native_effects_only')
             return result
         finally:
             with self.boundary._lock:

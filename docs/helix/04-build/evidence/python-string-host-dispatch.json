@@ -1,0 +1,50 @@
+{
+  "scope": "Private original-host pending effects dispatch; no public apply, installation, registered family or ordinary authority",
+  "result": {
+    "tests": 110,
+    "new_dispatch_tests": 6,
+    "raw_writer_tests": 7,
+    "seconds": 26.483,
+    "exit_code": 0,
+    "postgresql": "16.15"
+  },
+  "verified": [
+    "fixed lossless native input and exact issued ordinal",
+    "one per-attempt request slot shared with six-artifact admission",
+    "original invocation and response retained before send",
+    "pending observation with forward_ready false",
+    "duplicate dispatch refuses without replay",
+    "lost observation retains completed original call without replay",
+    "lost invocation publication prevents send",
+    "original cleanup preserves prior host rows after stale refusal",
+    "malformed input refuses before SQL",
+    "existing original admission and raw writer regressions"
+  ],
+  "limitations": [
+    "Administrative native fixtures do not establish accepted UMF or installed authority",
+    "40001 cleanup preserving rows does not qualify reusable host adoption or transaction retry",
+    "Complete family/context/source meaning/capacity/touch/journal/feed/finalization and public installation remain unfinished",
+    "No bounded native row collection or resource qualification"
+  ],
+  "sha256": {
+    "packages/python/src/truss/_native_string_request.py": "07029039d9ecae0739491ac70f00cbc7ee455be673480d1b23e30c0f4923e2c1",
+    "packages/python/src/truss/_native_operation_ordinals.py": "6c1899380c68f9cd16b2c4221119680c4d35e9dbd677ab02ecfc676986d2493f",
+    "packages/postgresql/native/existing-string-writer/pending-effects.sql": "e694bfbd1da9eb0a940cce13aa57a64db97950087c9fa4d8f2a5d134c758a51d",
+    "packages/python/tests/test_native_string_dispatch.py": "3ee419073e3d08278eb1fb513278246175c977496045600e418a2e4f3b75df52",
+    "packages/python/tests/test_native_connected_string_writer.py": "263247e1f10aaf6ea0428dfacd4f51d5c39b285e5225683cbad1d3645ebd0dd5",
+    "docs/helix/04-build/evidence/python-string-host-dispatch.log": "4b34dfb5e8726e09729244ff9109f9c03b77fb9a4f6cee279da9ae88ea69f2fe",
+    "scripts/check-module-boundaries.py": "216c7b5c263c8775b4f407e7732aca6c11d80cb613aca264832fad9c0257b976"
+  },
+  "module_boundaries": {
+    "exit_code": 0,
+    "imports": 348,
+    "scope": "Python source imports only"
+  },
+  "review": {
+    "model": "Astra Ultra",
+    "independent_tests": 8,
+    "seconds": 13.378,
+    "exit_code": 0,
+    "scope": "Six new dispatch tests plus reverse request exclusion and wrong entrypoint controls"
+  }
+}
