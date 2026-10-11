@@ -2,12 +2,15 @@
 import {resolve} from 'node:path';
 import {createCatalogInputPreparation} from './catalog-input';
 import {loadUmfProducer} from './index';
+import {collectCatalogValidationEvidence} from './catalog-validation-evidence';
+import {collectCatalogExtensionArtifacts} from './catalog-extension-artifacts';
+import {collectCatalogIngressReportBasis} from './catalog-ingress-report-basis';
 import {decodeAcceptanceJson,preflightSourceJson} from '../../postgresql/src/acceptance-json';
 const root=resolve(import.meta.dir,'../../..');
 const MAX_OUTPUT=16777216;
 const emit=(value:unknown)=>{
  const text=JSON.stringify(value);
- console.log(Buffer.byteLength(text)<=MAX_OUTPUT?text:JSON.stringify({status:'refused',reason:'resource',diagnostics:[]}));
+ console.log(Buffer.byteLength(text)+1<=MAX_OUTPUT?text:JSON.stringify({status:'refused',reason:'resource',diagnostics:[]}));
 };
 let diagnostics:unknown[]=[];
 try{
@@ -49,9 +52,20 @@ try{
   emit({status:'refused',reason:'invalid_document',diagnostics});
  }else{
   const prepared=preparation.prepare(original);
-  emit({status:'prepared',inputHex:prepared.original.originalUtf8Hex,documents:prepared.documents,
+  let reportEvidence:unknown;
+  try { reportEvidence={validation:collectCatalogValidationEvidence(prepared),
+    retainedExtensions:collectCatalogExtensionArtifacts(prepared),
+    ingress:prepared.original.input.binding.state==='absent'&&!prepared.original.input.transforms.length
+     ?{state:'available',basis:collectCatalogIngressReportBasis(prepared)}
+     :{state:'unavailable',reason:'registered_binding_or_transform_report_producer_required'},
+    scope:'original_owner_report_preparation_only'};
+  } catch { reportEvidence={scope:'original_owner_report_preparation_only',ingress:{state:'unavailable',reason:'report_evidence_unavailable'}}; }
+  const response:any={status:'prepared',inputHex:prepared.original.originalUtf8Hex,documents:prepared.documents,
    declarations:prepared.declarations,archiveDocuments:prepared.archiveDocuments,
-   provenance:{umfProfile:prepared.umfProfile,schemaSha256:prepared.original.schemaSha256,scope:prepared.scope}});
+   reportEvidence,
+   provenance:{umfProfile:prepared.umfProfile,schemaSha256:prepared.original.schemaSha256,scope:prepared.scope}};
+  if(Buffer.byteLength(JSON.stringify(response))+1>MAX_OUTPUT)response.reportEvidence={scope:'original_owner_report_preparation_only',ingress:{state:'unavailable',reason:'report_evidence_resource'}};
+  emit(response);
  }
 }catch(error){
  const message=error instanceof Error?error.message:'';

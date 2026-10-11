@@ -513,3 +513,18 @@ Ordinary-person admission, complete acceptance reports, finalization and public
 installation remain unfinished. No accepted revision is published, and the
 unconditional native commit barrier remains in place. Native tests load the
 retained SQL explicitly; the Python wheel does not install or bundle that SQL.
+
+## Private catalog report integration
+
+The private `stage_catalog_report_basis` route composes original owner evidence
+with actual native catalog allocations on the caller's savepoint. The selected
+fresh-graph administrative profile requires Read Committed, takes native SHARE
+locks without waiting, and includes the empty partitioned journal root. Existing
+rows, uncovered topology, prior graph writes and competing writers refuse.
+The basis retains exact owner bytes and full native source bytes, and currentness
+checks reject changed effects even when a generation counter is reused.
+
+This is report preparation, not accepted report publication. Missing report fields
+and partial extension qualification are explicit. Successful public UMF preparation
+remains usable when optional report evidence is unavailable. Public registration,
+installation and the apply/read workflow remain unfinished.

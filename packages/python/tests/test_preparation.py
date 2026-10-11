@@ -53,6 +53,26 @@ class PreparationTests(unittest.TestCase):
         self.assertEqual(archived['originalText'],raw.decode())
         self.assertEqual(result.documents[0].observation()['source']['extensions'],value['extensions'])
 
+    def test_report_capacity_does_not_reject_valid_preparation(self):
+        value=json.loads(document('ext').content)
+        value['vocabularies']={f'vendor{i}':{'version':'99.0.0'} for i in range(70)}
+        value['extensions']={f'vendor{i}':{'opaque':True} for i in range(70)}
+        value['future_padding']='x'*60000
+        raw=json.dumps(value).encode()
+        result=prepare((CatalogDocument('ext','r1',raw),))
+        self.assertEqual(result.documents[0].document.content,raw)
+        evidence=json.loads(result.report_evidence_bytes)
+        self.assertEqual(evidence['ingress']['state'],'unavailable')
+
+    def test_combined_report_output_capacity_preserves_preparation(self):
+        value=json.loads(document('ext').content)
+        value['vocabularies']={f'vendor{i}':{'version':'99.0.0'} for i in range(40)}
+        value['extensions']={f'vendor{i}':{'opaque':True} for i in range(40)}
+        value['future_padding']='x'*60000
+        value.update({f'future_extra_{i}':True for i in range(20)})
+        result=prepare((CatalogDocument('ext','r1',json.dumps(value).encode()),))
+        self.assertEqual(json.loads(result.report_evidence_bytes)['ingress']['state'],'unavailable')
+
     def test_duplicate_json_key_cannot_be_silently_overwritten(self):
         with self.assertRaises(PreparationRejected):
             prepare_acceptance((document('first'),),b'{"binding":{"state":"absent"},"binding":{"state":"absent"}}',bun_executable='/opt/homebrew/bin/bun')

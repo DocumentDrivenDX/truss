@@ -1344,3 +1344,26 @@ After the reviewed wheel snapshot, security main7ab05500 was integrated without
 overlapping source changes. All50 affected security association tests passed
 in0.023s; their log and source pins are retained separately in iteration27.
 The earlier full and installed-wheel evidence does not include this later delta.
+
+
+### Iteration28: original catalog report integration
+
+Continue the accepted-catalog path by composing original owner report producers
+with real staged native IDs under one host savepoint. Preserve existing document
+carriers and map six native counts to their declared report names. Bound optional
+report extraction without rejecting valid original preparation. The native fresh
+empty-graph profile includes journal, requires Read Committed, excludes raw writers
+with SHARE NOWAIT, and refuses erased prior graph writes or uncovered physical
+scope. Full native value readback prevents generation reuse from admitting stale
+report evidence. Extension retention remains partial and is explicitly unqualified.
+
+Astra Ultra reviewed the plan and found preparation capacity, count naming and
+snapshot isolation defects. Those corrections have targeted evidence:16 preparation,
+12 staging and10 report tests pass. The frozen pre-correction full regression attempted590 tests:589 passed and1 ICU
+probe skipped in206.926s. Final output-limit/newline and TRUNCATE lock corrections
+are separately qualified by40 installed-wheel tests (17 preparation,12 staging,
+11 report) passing in24.852s. All79 packaged files match source/wheel/install.
+Astra Ultra approved final source, plan and artifacts and independently passed
+the two final regressions in4.096s. This iteration publishes no accepted report/head or ordinary-role grant;
+protected finalization and public registration remain next deliverables toward
+install → register → apply → read, followed by the rest of the full interface.

@@ -22,7 +22,7 @@ class CatalogPreparationCustodyTests(unittest.TestCase):
         _require_original_preparation(value)
         with self.assertRaises(ValueError):_require_original_preparation(dataclasses.replace(value))
     def test_mutated_bytes(self):
-        for field in ('input_bytes','declarations_bytes','archive_documents_bytes'):
+        for field in ('input_bytes','declarations_bytes','archive_documents_bytes','report_evidence_bytes'):
             with self.subTest(field=field):
                 value=prepare((document('original'),))
                 object.__setattr__(value,field,getattr(value,field)+b' ')
@@ -64,7 +64,7 @@ class CatalogPreparationCustodyTests(unittest.TestCase):
             self.assertIs(caught.exception.cleanup_failure,cleanup)
             self.assertFalse(caught.exception.containment_confirmed)
 
-class NativeCatalogStagingTests(NativeBoundaryFixture,unittest.TestCase):
+class CatalogNativeFixture(NativeBoundaryFixture):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -86,6 +86,7 @@ class NativeCatalogStagingTests(NativeBoundaryFixture,unittest.TestCase):
         self.connection.run('ROLLBACK');self.connection.close()
     def stage(self,prepared=None):
         return stage_new_catalog(self.connection,self.prepared if prepared is None else prepared,origin_bytes=b'{"source":"native-component"}')
+class NativeCatalogStagingTests(CatalogNativeFixture,unittest.TestCase):
     def test_actual_ids_inventory_counts_and_host_rollback(self):
         result=self.stage()
         self.assertEqual(result.scope,'verified_provisional_new_catalog_only')

@@ -54,6 +54,7 @@ class PreparedAcceptance:
     declarations_bytes: bytes
     archive_documents_bytes: bytes
     provenance: PreparationProvenance
+    report_evidence_bytes: bytes
 
     def input(self) -> dict[str, object]:
         """Fresh AcceptanceInput dictionary; exact source remains in artifacts."""
@@ -64,7 +65,7 @@ _original_preparations = {}
 def _snapshot(prepared):
     if (type(prepared) is not PreparedAcceptance
             or any(type(getattr(prepared,name)) is not bytes for name in
-                   ('input_bytes','declarations_bytes','archive_documents_bytes'))
+                   ('input_bytes','declarations_bytes','archive_documents_bytes','report_evidence_bytes'))
             or type(prepared.documents) is not tuple
             or type(prepared.provenance) is not PreparationProvenance):
         raise ValueError('Exact original preparation carrier required')
@@ -81,7 +82,7 @@ def _snapshot(prepared):
         if type(getattr(prepared.provenance,name)) is not expected:
             raise ValueError('Exact original provenance carrier required')
     return (prepared.input_bytes, prepared.declarations_bytes,
-            prepared.archive_documents_bytes,
+            prepared.archive_documents_bytes, prepared.report_evidence_bytes,
             tuple((d.document.document_id, d.document.document_revision,
                    d.document.content, d.document.artifact_identity, d.observation_bytes)
                   for d in prepared.documents),
@@ -228,7 +229,7 @@ def prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byte
                 or result['provenance']['schemaSha256'] != manifest['files']['docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json']):
             _reject('producer_unavailable')
         return _retain_original(PreparedAcceptance(original,evidence,_json(result['declarations']),_json(result['archiveDocuments']),
-            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],MANIFEST_SHA256,manifest['runtimeVersion'])))
+            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],MANIFEST_SHA256,manifest['runtimeVersion']),_json(result['reportEvidence'])))
     except (KeyError,ValueError,TypeError) as error:
         if isinstance(error,PreparationRejected):raise
         _reject('producer_unavailable')
