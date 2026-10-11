@@ -77,6 +77,12 @@ def _collect(connection,prepared,revision,cut,policy):
     original=rows[0][0].encode('utf8')
     if len(original)>4194304:raise ValueError('Lifecycle retention bound exceeded')
     value=json.loads(original)
+    validate_catalog_source(value,prepared,revision,cut,policy)
+    return original
+
+def validate_catalog_source(value,prepared,revision,cut,policy):
+    _require_original_preparation(prepared)
+    choices=prepared.input()
     expected={'scope':SCOPE,'policyHex':policy.hex(),'inputHex':prepared.input_bytes.hex(),
         'writerXid':cut[0],'operationOrdinal':cut[1],'effectGeneration':cut[2],
         'revision':revision,'expectedInsertEvents':cut[2],
@@ -85,7 +91,6 @@ def _collect(connection,prepared,revision,cut,policy):
     if type(value) is not dict or value.keys()!=expected.keys() or any(
         type(value[k]) is not type(v) or value[k]!=v for k,v in expected.items()):
         raise ValueError('Original lifecycle policy/input/source correspondence required')
-    return original
 
 def collect_catalog_lifecycle(connection,prepared,revision,cut,start):
     _require_start(start,connection,prepared,cut)

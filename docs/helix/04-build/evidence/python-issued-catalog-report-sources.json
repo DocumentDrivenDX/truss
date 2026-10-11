@@ -1,0 +1,128 @@
+{
+  "interface": "truss-python-issued-catalog-report-sources-evidence/0.1",
+  "scope": "private_administrative_same_native_call_provisional_report_sources_only",
+  "sourceSha256": {
+    "packages/postgresql/native/catalog-report/empty-graph.sql": "dfb759fe44108df363809f6231d9951a0c26fe8557251bc780749889ce65ca9e",
+    "packages/postgresql/native/catalog-stage-issued.sql": "2d87f4fb3dc52d826c2a20f5bc2dc606352194374f46a5268071a5ae4a056fd3",
+    "packages/python/src/truss/_catalog_index_declarations.py": "68d4620754f5c0e9651c162a3dde0c9ca21f87b2cc791df333a05ff9d08bb03a",
+    "packages/python/src/truss/_catalog_lifecycle.py": "54972c2abdf487c603dcedb4fbb65454d4489916e66fd30a1f24404d1c5cec70",
+    "packages/python/src/truss/_native_catalog_capture.py": "93734d2ef1a9d853d44376716a64a668e196b2bcb2eb1923340e5e2b9ee0801d",
+    "packages/python/src/truss/_native_catalog_request.py": "59b5a2411f0e3de964e15e13400a24212dcb2c176a1b216e8dd7f97e511a9af6",
+    "packages/python/src/truss/_native_operation_ordinals.py": "f6bab5346a52f10fc18bc717a2b6fb6fb2b0f5c695a55324570859885069073d",
+    "packages/python/src/truss/_native_catalog_report_sources.py": "8a2df8ca8b2b13c8d3b62e6f84005027366252a14aace09ae8b4002ae50c2bd2",
+    "packages/python/tests/test_catalog_stage_issued.py": "0d32b4642cbfab69a028017b7a7e22598b4b01f079486f16ae7730fcdac3a165",
+    "packages/python/tests/test_native_catalog_dispatch.py": "c213daa6790305b70a6b60d4c9038ab80f10fbff50dde1efb7ad91e45678287f",
+    "scripts/check-module-boundaries.py": "88686aabd4bd4ac17cfa63e6a999d0c7dd37c7a09dd4a1b34f319a8ffb644e37"
+  },
+  "nativeFixtureSourceSha256": {
+    "packages/postgresql/native/operation-admission.sql": "3d71a92e3a02f568e1edf9fa0b0ca18b8cc35e79a117c6724a4351022375f1bf",
+    "packages/postgresql/native/operation-commit-barrier.sql": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
+    "packages/postgresql/native/catalog-generation-observer.sql": "ddc90f3c84b173eb30f962ade935c0bbea1cbae7aa67e5e727b7e83ebf05532c",
+    "packages/postgresql/native/catalog-document-batch.sql": "fe6754c5d4fbf054f17f5529387eb0f1ca4531e05c28c1ab31d6902251021000",
+    "packages/postgresql/native/catalog-lineage-producer.sql": "1b329a8c3711834642f3fbf718837396aa292da493a0619f3e3c95cabe43667f",
+    "packages/postgresql/native/catalog-source-integrity.sql": "ffffc887bc4858ef47c62be1e43239665edd04f172f11a137dbc3535635d6c3e",
+    "packages/postgresql/native/catalog-type-match.sql": "652ff06c7a9394fdf360095b0412db1ba0ffc8a20404575c5ae8e8c4d0280481",
+    "packages/postgresql/native/catalog-type-stage.sql": "b1d8f5b83320959034aa20ea3c8a4f3fb37a52b08266c69f545ab965bd3526df",
+    "packages/postgresql/native/catalog-property-match.sql": "6e0807fe00f9a0b7dbf9ef796a12c09022cd69551f2901cca807c6b5b51edc2a",
+    "packages/postgresql/native/catalog-property-stage.sql": "2cd0987f799f2735fd64ac9f412d685beba35d9d9fff7709f913ab7f6e61edcc",
+    "packages/postgresql/native/catalog-key-match.sql": "830901d6db7dc7a358aed192f607eb927c32851b62592e0fe55ad242951da704",
+    "packages/postgresql/native/catalog-key-stage.sql": "bc345b25a15668fbaac06b0a2f2f6ed1562b90b9fd3f09eb445c3b5d4a2d885a",
+    "packages/postgresql/native/catalog-key-batch.sql": "e31a769cf820ca00035b3c4e96f75078d6696fca8eb1bd62c8c4dc136303ae18",
+    "packages/postgresql/native/catalog-relationship-match.sql": "973ccdb65e6708f6b810108b5270cca8132f4e84369b886c5ec5a25a58883006",
+    "packages/postgresql/native/catalog-relationship-stage.sql": "d32c213f607d4f8ca9dd4afcdc7bb4fd2bb7cf39dbf35057a82987859632933e",
+    "packages/postgresql/native/catalog-report-documents.sql": "362b6df87be8f22387c59921af9f827248e79536183e342b7894a3c4e36f4207",
+    "packages/postgresql/native/catalog-new-inventory.sql": "096f07239accb628d533dbef489c703e6e35e0fd0b5517983405bf30c371b06e",
+    "packages/postgresql/native/catalog-observation-recheck.sql": "68bf56799bbcce0a1cfbf46a9a9b58d1870bb29a6e6214302296d8af1e4c38b2",
+    "packages/postgresql/native/catalog-input-custody.sql": "b48222a7eafabfa854568422d9ffd7e76c355563e144fe2c620c216b1af5d230",
+    "packages/postgresql/native/catalog-prestate-capture.sql": "23e96ec7cf16c7086b621299249bd7ba6b5a1dfc7c54a44111bd886ba817d91a",
+    "packages/postgresql/native/catalog-new-prestate-parity.sql": "e74da931690fa11865355d26b65a1537a480d50d82eef8b4b07dcd82d30a9035",
+    "packages/postgresql/native/catalog-new-counts.sql": "4d2962d3b8e1391ad9c97f6fdc2da7e0343463a6e2f4b7c9a1060603b6dab166",
+    "packages/postgresql/native/catalog-provisional-empty.sql": "754c3c53534a5a30d935a1942da903692c488aab3cd7fed3c0c5231c835f65c8",
+    "packages/postgresql/native/catalog-report-immutability.sql": "c243b51682de3fee979b977626bb54279eccb3de22a24270e0bda467bd215167",
+    "packages/postgresql/native/catalog-original-context.sql": "628db25db14d5bd7c979f16b2ddefcff3e41781747e75485fc1253515b55fd0d",
+    "docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql": "cc725df53f0d74e13bb51fda29603f8cafe8c0cee237667778566f81b33f5011",
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "packages/postgresql/native/issued-operation-admission/operation-admission.sql": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335",
+    "packages/postgresql/native/catalog-report/absent-binding-index-declarations.sql": "b45071f79deeb37b6fa38bc7acb1c7ad0ca898000c44a2897ba29f10e6105f93",
+    "packages/postgresql/native/catalog-report/fresh-lifecycle.sql": "8b206cd9e844a28b2e39988ab39ad43e213d582698ce27da98fb4d97efefc76a",
+    "packages/postgresql/native/edge-limit/verify-current-scope.sql": "bd117d6ff2f5b94401d51f4d37777c28b842f0cd8a1c351eac2860cb632d254f",
+    "packages/postgresql/native/catalog-report/empty-graph.sql": "dfb759fe44108df363809f6231d9951a0c26fe8557251bc780749889ce65ca9e"
+  },
+  "nativeProfile": {
+    "postgresql": "16.15",
+    "pg8000": "1.31.5",
+    "python": "3.11.17",
+    "runtime": "pgserver 0.1.4+truss.pg16.15",
+    "layouts": [
+      "0.15 administrative catalog fixture",
+      "0.16 original host dispatch fixture"
+    ]
+  },
+  "tests": {
+    "source": {
+      "tests": 163,
+      "seconds": "134.769",
+      "result": "PASS",
+      "log": "docs/helix/04-build/evidence/python-issued-catalog-report-sources-source.log",
+      "logSha256": "83e65085ff40fdef5658e36b856788e1d10b0e42fd2835fcf3733b98bb6062df"
+    },
+    "installed": {
+      "tests": 163,
+      "seconds": "139.214",
+      "result": "PASS",
+      "log": "docs/helix/04-build/evidence/python-issued-catalog-report-sources-installed.log",
+      "logSha256": "c3bfe32d53d608c8fc83a4aeb62e2bdbac490faab739223b1f16c8dfd49586c7"
+    }
+  },
+  "wheel": {
+    "sha256": "d49a3e6533623a91c6bc6526b7b70a8004399650224220cccc747e9ebd72216b",
+    "filesCompared": 120,
+    "sourceWheelInstalledIdentical": true
+  },
+  "properties": [
+    "original generation-zero graph cut before catalog effects",
+    "complete paired empty source-epoch scope when present",
+    "exact release-owned lifecycle/index policies and original input correspondence",
+    "final graph cut after all native collectors",
+    "original NativeCall retained before Python composition",
+    "owner/semantic source composition without further SQL",
+    "large actual response survives CommandComplete/Ready and rollback/release",
+    "altered source cut/policy refusal",
+    "late collector failure and overflow containment"
+  ],
+  "responseLimits": {
+    "inputBytes": 16384,
+    "originalNativeResultBytes": 131072,
+    "hexCellBytes": 262144,
+    "resultBytes": 294912,
+    "frameBytes": 307200,
+    "wireBytes": 614400,
+    "payloadCapacity": 33554432,
+    "cumulativePayload": 33554432,
+    "canonicalSnapshotBytes": 4194304
+  },
+  "pythonBoundaryCheck": {
+    "result": "PASS",
+    "imports": 432
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "effort": "ultra",
+    "source": "approved",
+    "artifact": "approved",
+    "reviewerRanTests": false
+  },
+  "limitations": [
+    "No new public operation export",
+    "No accepted registration, report/head publication or commit authority",
+    "Six original missing report fields remain explicit",
+    "Snapshot is at the original NativeCall; no current-state revalidation",
+    "Populated installation source epochs require their original authority producer",
+    "Native SQL loaded from checkout development fixtures, not wheel installation assets",
+    "Selected byte/work profiles do not establish complete native/Python heap/resource qualification"
+  ],
+  "securityAlignment": {
+    "incomingMain": "6e0f596b",
+    "scope": "TypeScript census transport; no Python source overlap; original authority remains unfinished"
+  }
+}

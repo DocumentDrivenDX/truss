@@ -14,6 +14,10 @@ DECLARE
  types jsonb; properties jsonb; candidates jsonb; relationships jsonb:='[]'::jsonb; revision int;
  owner_id int; components int[]; source_ids int[]; target_ids int[];
  result jsonb; original_result bytea; final_generation bigint;
+ original_graph record; final_graph record;
+ lifecycle jsonb; index_declarations jsonb;
+ lifecycle_policy bytea:=decode('7b0a2020226964656e74697479223a202274727573732d66726573682d636174616c6f672d6c6966656379636c65222c0a20202276657273696f6e223a2022302e312e30222c0a20202273656c656374696f6e223a202266697273745f7265766973696f6e5f6e65775f6964656e7469746965735f6f6e6c79222c0a202022736f75726365436f6d706f6e656e7456657273696f6e223a2022302e3135222c0a2020227461726765745265706f7274496e7465726661636556657273696f6e223a202274727573732d616363657074616e63652d7265706f72742f302e332e302d70726f706f73616c222c0a202022676f7665726e696e6752756c6573223a205b0a20202020224144522d303034222c0a2020202022434f4e54524143542d3030332d726561637469766174696f6e2d696e76656e746f7279220a20205d2c0a20202272657175697265644f726967696e616c5374617465223a2022686561645f7a65726f5f656d7074795f7072696f725f636174616c6f675f616e645f686973746f7279222c0a2020226576656e74506c616e223a2022696e736572745f6f6e6c795f636f6d706c6574655f736f757263655f62696a656374696f6e222c0a202022726561637469766174696f6e73223a2022656d7074795f61667465725f6f726967696e616c5f616273656e63655f616e645f6576656e745f766572696669636174696f6e222c0a202022696e7374616c6c656450726f66696c65417574686f72697479223a2066616c73650a7d0a','hex');
+ index_policy bytea:=decode('7b0a2020226964656e74697479223a202274727573732d616273656e742d62696e64696e672d696e6465782d6465636c61726174696f6e73222c0a20202276657273696f6e223a2022302e312e30222c0a20202273636f7065223a2022696d6d757461626c655f696e6465785f6a6f625f6465636c61726174696f6e735f6f6e6c79222c0a202022676f7665726e696e6752756c6573223a205b0a20202020224144522d3030322d4432222c0a20202020224144522d3030322d443131222c0a20202020224144522d3030322d443132222c0a2020202022434f4e54524143542d3030332d70656e64696e672d696e6465782d6465636c61726174696f6e73220a20205d2c0a202022736f75726365436f6d706f6e656e74223a207b0a20202020226964656e74697479223a202274727573732d7175616c69666965642d70726f70657274792d6c61796f75742d736f75726365222c0a202020202276657273696f6e223a2022302e3135222c0a2020202022736861323536223a202263633732356466353366306437346531336262353166646132393630336638636166653863306365653233373636373737383536366638316233336635303131220a20207d2c0a20202273656c656374696f6e223a207b0a202020202262696e64696e67223a2022616273656e74222c0a20202020227472616e73666f726d73223a2022656d707479222c0a2020202022696e6772657373223a20226e6174697665222c0a202020202273746f72616765486f6d65223a20226a736f6e220a20207d2c0a202022696e6465784465636c61726174696f6e536f7572636573223a205b0a20202020226578706c696369745f616363657074616e63655f62696e64696e67220a20205d2c0a202022646f63756d656e74457874656e73696f6e416e6451756572794a6f624465636c61726174696f6e73223a20226e6f6e655f696e5f746869735f706f6c696379222c0a202022616273656e7442696e64696e674465636c61726174696f6e73223a2022656d707479222c0a202022626173656c696e65456e666f7263656d656e74496e6465786573223a20226578636c756465645f66726f6d5f636174616c6f675f6a6f6273222c0a202022737461746973746963734465636c61726174696f6e73223a20226f7574736964655f746869735f6669656c64222c0a202022756e6b6e6f776e457874656e73696f6e53656d616e74696373223a202272657461696e65645f616e645f73657061726174656c795f756e7265736f6c766564222c0a202022696e7374616c6c656450726f66696c65417574686f72697479223a2066616c73652c0a20202272656164696e657373417574686f72697479223a2066616c73650a7d0a','hex');
 BEGIN
  FOREACH item IN ARRAY ARRAY[definition_bytes,input_bytes,candidate_bytes,
   obligation_bytes,group_bytes,documents_bytes,declarations_bytes,origin_bytes] LOOP
@@ -22,6 +26,9 @@ BEGIN
   END IF;
   total_bytes:=total_bytes+octet_length(item);
  END LOOP;
+ IF octet_length(input_bytes)>16384 THEN
+  RAISE EXCEPTION 'selected report input capacity exceeded' USING ERRCODE='54000';
+ END IF;
  IF total_bytes>4194304 OR candidate_bytes IS DISTINCT FROM declarations_bytes THEN
   RAISE EXCEPTION 'original declaration plan correspondence required' USING ERRCODE='22023';
  END IF;
@@ -50,6 +57,13 @@ BEGIN
    AND o.original_prestate_bytes=prestate AND o.admitted_candidate_bytes=candidate_bytes
    AND o.effect_obligation_bytes=obligation_bytes AND o.original_group_custody_bytes=group_bytes) THEN
   RAISE EXCEPTION 'original stored catalog operation correspondence required' USING ERRCODE='55000';
+ END IF;
+ PERFORM truss.runtime_require_catalog_lifecycle_observers();
+ SELECT * INTO STRICT original_graph FROM truss.runtime_collect_empty_catalog_graph();
+ IF original_graph.writer_xid IS DISTINCT FROM admitted.writer_xid
+  OR original_graph.operation_ordinal IS DISTINCT FROM admitted.ordinal
+  OR original_graph.effect_generation IS DISTINCT FROM '0' THEN
+  RAISE EXCEPTION 'original pre-effect graph cut required' USING ERRCODE='55000';
  END IF;
  PERFORM truss.runtime_require_catalog_input(input_bytes);
  PERFORM truss.runtime_require_catalog_document_carrier(documents);
@@ -139,7 +153,7 @@ BEGIN
  SELECT o.effect_generation INTO STRICT final_generation FROM truss.row_home_operation o
   WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()
    AND o.operation_ordinal=issued_ordinal AND o.phase='admitted';
- SELECT jsonb_build_object('interfaceVersion','truss-native-provisional-catalog/0.1',
+ SELECT jsonb_build_object('interfaceVersion','truss-native-provisional-catalog/0.2',
   'revision',revision::text,'writerXid',admitted.writer_xid,'ordinal',admitted.ordinal,
   'effectGeneration',o.effect_generation::text,'accepted',false,
   'inventory',(SELECT coalesce(jsonb_agg(to_jsonb(i) ORDER BY i.family COLLATE "C",i.identity::text COLLATE "C"),'[]'::jsonb)
@@ -148,6 +162,20 @@ BEGIN
   'counts',(SELECT to_jsonb(c) FROM truss.runtime_collect_new_catalog_counts(revision) c)) INTO STRICT result
   FROM truss.row_home_operation o WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()
    AND o.operation_ordinal=issued_ordinal AND o.phase='admitted';
+ lifecycle:=truss.runtime_collect_fresh_catalog_lifecycle(
+  admitted.writer_xid,admitted.ordinal,final_generation::text,revision,lifecycle_policy);
+ index_declarations:=truss.runtime_collect_absent_binding_index_declarations(
+  admitted.writer_xid,admitted.ordinal,final_generation::text,revision,index_policy);
+ SELECT * INTO STRICT final_graph FROM truss.runtime_collect_empty_catalog_graph();
+ IF final_graph.writer_xid IS DISTINCT FROM original_graph.writer_xid
+  OR final_graph.operation_ordinal IS DISTINCT FROM original_graph.operation_ordinal
+  OR final_graph.empty_scope IS DISTINCT FROM original_graph.empty_scope
+  OR final_graph.effect_generation IS DISTINCT FROM final_generation::text THEN
+  RAISE EXCEPTION 'original final graph cut required' USING ERRCODE='55000';
+ END IF;
+ result:=result||jsonb_build_object('reportSources',jsonb_build_object(
+  'start',to_jsonb(original_graph),'end',to_jsonb(final_graph),
+  'lifecycle',lifecycle,'indexDeclarations',index_declarations));
  original_result:=convert_to(result::text,'UTF8');
  IF NOT EXISTS(SELECT 1 FROM truss.row_home_operation o
   WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()
@@ -159,7 +187,7 @@ BEGIN
    AND o.effect_obligation_bytes=obligation_bytes AND o.original_group_custody_bytes=group_bytes) THEN
   RAISE EXCEPTION 'stale original catalog result cut' USING ERRCODE='55000';
  END IF;
- IF octet_length(original_result)>16384 THEN
+ IF octet_length(original_result)>131072 THEN
   RAISE EXCEPTION 'selected provisional response capacity exceeded' USING ERRCODE='54000';
  END IF;
  RETURN QUERY SELECT admitted.writer_xid,admitted.ordinal,admitted.context_hex,encode(original_result,'hex');

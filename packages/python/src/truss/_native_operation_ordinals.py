@@ -330,7 +330,7 @@ class NativeOperationOrdinals:
         if type(request) is PreparedNativeCatalogStage:
             from ._native_catalog_capture import NativeCatalogCapture
             gate=NativeCatalogCapture(session, entry=request.entry,
-                expected_documents=request.encoded.expected_documents)
+                expected_documents=request.encoded.expected_documents,encoded=request.encoded)
         else:
             gate = NativeAdmissionCapture(session, NativeTextLimits(columns=4, rows=1), entry=request.entry)
         try:

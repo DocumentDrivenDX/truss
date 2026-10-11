@@ -33,6 +33,15 @@ BEGIN
   AND l.relation='truss.schema_head'::regclass AND l.mode IN ('ExclusiveLock','AccessExclusiveLock')) THEN
   RAISE EXCEPTION 'original catalog exclusion required' USING ERRCODE='55000';
  END IF;
+ -- Source-epoch fixtures must be a complete empty pair. Populated installed
+ -- epochs need their original authority producer; they cannot be exempted.
+ IF (to_regclass('truss.source_epoch_current') IS NULL)
+    IS DISTINCT FROM (to_regclass('truss.source_epoch_registry') IS NULL) THEN
+  RAISE EXCEPTION 'complete source epoch relation pair required' USING ERRCODE='55000';
+ END IF;
+ IF to_regclass('truss.source_epoch_current') IS NOT NULL THEN
+  scope_names:=scope_names||ARRAY['source_epoch_registry','source_epoch_current'];
+ END IF;
  IF EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
   WHERE n.nspname='truss' AND c.relkind IN ('r','p','f','v','m')
    AND NOT(c.relname=ANY(scope_names||ARRAY['setting','module_access','schema_rev',

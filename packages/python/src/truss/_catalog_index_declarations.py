@@ -41,6 +41,12 @@ def _collect(connection,prepared,revision,cut,policy):
     original=rows[0][0].encode('utf8')
     if len(original)>4194304:raise ValueError('Index declaration retention bound exceeded')
     value=json.loads(original)
+    validate_catalog_source(value,prepared,revision,cut,policy)
+    return original
+
+def validate_catalog_source(value,prepared,revision,cut,policy):
+    _require_original_preparation(prepared)
+    choices=prepared.input()
     expected={'scope':SCOPE,'policyHex':policy.hex(),'policySha256':POLICY_SHA256,
         'inputHex':prepared.input_bytes.hex(),'writerXid':cut[0],
         'operationOrdinal':cut[1],'effectGeneration':cut[2],'revision':revision,
@@ -51,7 +57,6 @@ def _collect(connection,prepared,revision,cut,policy):
     if type(value) is not dict or value.keys()!=expected.keys() or any(
         type(value[k]) is not type(v) or value[k]!=v for k,v in expected.items()):
         raise ValueError('Original index declaration policy/input/source correspondence required')
-    return original
 
 def collect_catalog_index_declarations(connection,prepared,revision,cut):
     policy=_policy_bytes()
