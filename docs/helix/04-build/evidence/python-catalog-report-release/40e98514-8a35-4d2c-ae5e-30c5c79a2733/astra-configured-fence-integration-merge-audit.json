@@ -1,0 +1,38 @@
+{
+  "status": "scoped-merged-review-passed",
+  "auditedAtUtc": "2026-10-11T16:21:42.612125+00:00",
+  "mergeCommit": "19f1a223",
+  "nativeSourcePinsPerPacket": 276,
+  "nativeBinaryPinsPerPacket": 1614,
+  "positiveTests": 52,
+  "expectedCountercontrolFailures": [
+    22,
+    2,
+    1,
+    4,
+    10
+  ],
+  "formalQueries": 7,
+  "formalResults": {
+    "unsat": 4,
+    "sat": 3
+  },
+  "files": {
+    "review": {
+      "path": "/private/tmp/astra-configured-fence-integration-merge-review.md",
+      "sha256": "ec48b8d661b21ef4229579746a8f73413a43d344b3dc8b9a1fb3f1a3b85f3f25"
+    },
+    "nativeAudit": {
+      "path": "/private/tmp/astra-configured-fence-integration-merge-native-audit.json",
+      "sha256": "78a5d0970bc2b813c007418c031af6e0a9d3646d9b150d3cec91b3a8b3e1eafb"
+    },
+    "formalReplay": {
+      "path": "/private/tmp/astra-configured-fence-integration-merge-formal-replay.json",
+      "sha256": "20761ce3f862cb6d9126ac3245625f4d34307e0067164057f34dcb56e193f8b0"
+    }
+  },
+  "priorEvidencePreserved": true,
+  "implementationEdits": false,
+  "nativeOrProducerExecution": false,
+  "scope": "Selected installed-fence correspondence, native archive-write exclusion and final metadata observation only; no borrowed-host API qualification, continuous source/authority cut, full accepted report, final disclosure or backend promotion."
+}

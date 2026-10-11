@@ -1,0 +1,188 @@
+{
+  "status": "independent-replay-passed",
+  "auditedAtUtc": "2026-10-11T16:20:41.455423+00:00",
+  "head": "19f1a223cee24dfa74d0fbd7ed54bf9a550cbb9c",
+  "evidenceDirectory": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/archive-self-write-fence-formal/aa5ccaac-36f8-4067-9d1a-3be1a8f40a3b",
+  "receiptSha256": "6598803827c006d360978a6335377f8160f70740719eb5fa4a41ff13556f737a",
+  "priorEvidenceDirectory": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/archive-self-write-fence-formal/e6d9a719-d884-464c-a633-aa7a87258040",
+  "pythonExecutable": "/private/tmp/umf-security-proof-venv/bin/python",
+  "pythonVersion": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "z3Version": "4.15.4",
+  "producerExecuted": false,
+  "nativeExecuted": false,
+  "implementationFilesEdited": false,
+  "expectedPopulation": {
+    "queries": 7,
+    "unsat": 4,
+    "sat": 3,
+    "sourcePins": 4
+  },
+  "sourceChecks": [
+    {
+      "path": "packages/postgresql/native/catalog-report/archive-self-write-fence.sql",
+      "sha256": "b37e86e1531388738288c27df2b1fdbc67abcbde8a0beb4e687615a835c71fb2",
+      "bytes": 1424,
+      "currentEqualsRetainedPreimage": true,
+      "matchesReceipt": true,
+      "changedFromPriorReceipt": false
+    },
+    {
+      "path": "packages/python/tests/test_archive_self_write_fence_native.py",
+      "sha256": "e5dc136e8d23f5d2fec5849fd013b0b359e7dd748acbe1cb14037c94886ea0cb",
+      "bytes": 6408,
+      "currentEqualsRetainedPreimage": true,
+      "matchesReceipt": true,
+      "changedFromPriorReceipt": false
+    },
+    {
+      "path": "scripts/check-python-catalog-report-release-native.py",
+      "sha256": "24049652780cc0016bea8bef177ed800d01de0ed4b30b59a6942d36655402021",
+      "bytes": 17419,
+      "currentEqualsRetainedPreimage": true,
+      "matchesReceipt": true,
+      "changedFromPriorReceipt": true
+    },
+    {
+      "path": "scripts/prove-archive-self-write-fence.py",
+      "sha256": "3879717a1c69572e6e01e4e77e1b121c965de6730f90f9dca47313f5ba6a3833",
+      "bytes": 3836,
+      "currentEqualsRetainedPreimage": true,
+      "matchesReceipt": true,
+      "changedFromPriorReceipt": false
+    }
+  ],
+  "queries": [
+    {
+      "id": "fenced_step_preserves_state",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2Sha256": "f74186bfa932e362c81134d3e4c8a8d0becec1189b906903241a4cd7cb6e0699",
+      "savedFormulaShaMatches": true,
+      "identicalToEarlierFormula": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 4
+    },
+    {
+      "id": "fenced_successful_mutation_unreachable",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2Sha256": "359fe3ae72bf3655671440404768e3512435ac5005ab8f74a0cacb69e7f12939",
+      "savedFormulaShaMatches": true,
+      "identicalToEarlierFormula": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 4
+    },
+    {
+      "id": "read_step_preserves_state_without_fence",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2Sha256": "452286777c55dca02c092db22c5a75bbff6fb4a3bfd50e05495732a54ab78a4a",
+      "savedFormulaShaMatches": true,
+      "identicalToEarlierFormula": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 3
+    },
+    {
+      "id": "fenced_two_step_change_restore_unreachable",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2Sha256": "4f95169127c4566fc75d601eb00b4006f3acc109b88481823bb65b5d43710c24",
+      "savedFormulaShaMatches": true,
+      "identicalToEarlierFormula": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 7
+    },
+    {
+      "id": "omitted_fence_allows_change_restore",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2Sha256": "a08f89411c54870d2a76e86fa6760757ac031b38d9d1c55380e7bb0508a39fc4",
+      "savedFormulaShaMatches": true,
+      "identicalToEarlierFormula": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 7,
+      "model": {
+        "alive": "True",
+        "desired": "1",
+        "final": "0",
+        "installed": "False",
+        "intermediate": "1",
+        "mutate": "True",
+        "state": "0"
+      },
+      "allSavedAssertionsTrueUnderModel": true
+    },
+    {
+      "id": "rollback_crossing_cut_allows_later_change",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2Sha256": "3905f4dc44a88204aeb87f51abf72f550a3b2177e23f1a3309e28c23dd956bbc",
+      "savedFormulaShaMatches": true,
+      "identicalToEarlierFormula": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 5,
+      "model": {
+        "alive": "False",
+        "desired": "1",
+        "installed": "True",
+        "intermediate": "1",
+        "mutate": "True",
+        "state": "0"
+      },
+      "allSavedAssertionsTrueUnderModel": true
+    },
+    {
+      "id": "disabled_trigger_allows_change",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2Sha256": "16d116b5f4c6547b47b0be7fa1e6d2b4411d94ebff07facb9557ebb24d3d372d",
+      "savedFormulaShaMatches": true,
+      "identicalToEarlierFormula": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 5,
+      "model": {
+        "alive": "True",
+        "desired": "1",
+        "installed": "False",
+        "intermediate": "1",
+        "mutate": "True",
+        "state": "0"
+      },
+      "allSavedAssertionsTrueUnderModel": true
+    }
+  ],
+  "scopeAudit": {
+    "assessment": "coherent unchanged conditional transition algebra; no installed-verifier or SQL refinement claim",
+    "retainedScopeUnchanged": true,
+    "retainedScope": "Unbounded abstract one-step preservation and stated finite-history induction, with trigger installed, every successful mutation reaching this fence, actual original ShareLock observation and no privileged bypass as premises. State is opaque, not a digest or SQL catalog interpretation. Acquisition/reparenting/rollback, PostgreSQL pg_locks correspondence, trigger installation/effective privilege, complete source/authority cut and final disclosure are not proven by this model. Native lifetime tests provide separate scoped evidence; no implementation refinement or backend acceptance claim.",
+    "facts": [
+      "Every retained formula is byte-identical to the earlier independently replayed receipt.",
+      "Omitted and disabled fence cases share installed=false; these are not separate implementation proofs.",
+      "Rollback is represented only by alive=false; transaction, acquisition, reparenting and rollback mechanics are not modeled.",
+      "The installed fence verifier and configured-stage source are outside the four pinned sources and are not proven by this model."
+    ]
+  },
+  "configuredStageMergeReview": {
+    "range": "20432c24..19f1a223",
+    "assessment": "no concrete source blocker found in the requested final-cut delta",
+    "reviewedSourceDigests": {
+      "packages/postgresql/native/catalog-report/configured-stage.sql": "3f2165eb2ebd157b25c333b4d78c15b1984eb3c4f177018a0463eab95b7a43fa",
+      "packages/postgresql/native/catalog-report/configured-graph.sql": "18ed0ef60249687c4c256a03b10ccf4f02ac9a9d3b9dc15d6d6658c922accb86",
+      "packages/postgresql/native/catalog-report/configured-metadata.sql": "63214549e733bcd7b9c935ee7a605641b5704b084f6ed6de3a6767fe6b820894",
+      "packages/postgresql/native/catalog-stage-issued.sql": "6d2c6b8cc7e8cfedb283d6314c4c605d6fd0ddd1389daea7da86ebc5534664fe",
+      "packages/python/tests/test_catalog_configured_release_stage_native.py": "eecd6fbba2083a3dcecbf85e52a144d93fd65dfdd391dc8b0f17ef12799f5939"
+    },
+    "observations": [
+      "Wrapper now recollects configured graph after release/resource collectors and compares the complete returned row to retained reportSources.end using IS DISTINCT FROM.",
+      "Configured graph row includes opaque complete metadata cut bytes through empty_scope; current writer, ordinal and generation are also included.",
+      "Separate NOT EXISTS guard binds current admitted operation to original writer, ordinal, effect generation, kind, context, definition, input, prestate, candidate, obligation and group bytes.",
+      "The new negative control wraps the core stager, changes marker layout_version after its retained end cut, and expects the exact final-cut refusal; after rollback it checks earlier host work survives and staged type rows are absent."
+    ],
+    "limits": [
+      "Source inspection only; the new native negative control was not executed by this audit.",
+      "No held whole-program DDL/authority cut or privileged-tamper defense is established.",
+      "The newly added native control directly exercises metadata mismatch, not each independent operation-correspondence conjunct."
+    ]
+  },
+  "sourceRecheckedAfterReplay": true
+}
