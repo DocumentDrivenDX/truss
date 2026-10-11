@@ -1,0 +1,31 @@
+{
+  "interfaceVersion": "truss-component-evidence/0.1",
+  "component": "numeric-original-row-image-correspondence",
+  "baseCommit": "11bd96f0759e0f194fc9e986eaf471f8804a8d87",
+  "database": "PostgreSQL16.15",
+  "python": "CPython3.11.17",
+  "driver": "pg8000 1.31.5",
+  "tests": {
+    "count": 62,
+    "newRowImageCases": 3,
+    "rowTouchInheritedAndImported": 42,
+    "binaryCases": 5,
+    "textInheritedAndImported": 12,
+    "seconds": "20.058",
+    "result": "PASS"
+  },
+  "sources": {
+    "packages/postgresql/native/row-image/numeric-correspondence.sql": "3da0c84b1d386dcd1e1b9901ab956185f8fc8a837cdff5f04c12f33d48860337",
+    "packages/postgresql/native/row-image/numeric-binary-witness.sql": "13af28ffbd4d6cc3209bbb50bfa42c1243b816308eb1446efdffec67f025c8cf",
+    "packages/postgresql/native/row-image/numeric-witness.sql": "900c72c95962d4ba7996998514f94d18b8732fd17dbf86a576b0a95a956ee79c",
+    "packages/python/tests/test_numeric_row_image_native.py": "cfbbc70dc9aca70c2d71261ef5271a31ade905ef546f603de948f9009ef28c13",
+    "docs/helix/04-build/evidence/python-numeric-row-image-native-tests.log": "02584fee75eed5dd2295a6c90d086b1a1f06c1fbfdbb901865ca7522dcd6e338"
+  },
+  "limitations": [
+    "Selected candidate JSON numeric token to retained native binary equality only",
+    "Codec/original-source bytes checked nonempty, not semantic admission",
+    "Parent/scope/native origin/facets/protected authority remain open",
+    "Native binary decoded twice; all work must be charged by future shared resource profile",
+    "No complete RF05/seal/installed readiness or public Python API"
+  ]
+}

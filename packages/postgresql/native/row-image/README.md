@@ -112,3 +112,18 @@ witness. This helper cannot authenticate their native origin, qualify source or
 facet admission, establish runtime retention, or grant finalizer authority.
 Array growth/copies remain unqualified against shared operation resources. No
 public Python capability or protected installation claim is added.
+
+`numeric-correspondence.sql` connects NX decoding to a complete original scalar
+image. `row_image_numeric_correspondence_original(bytea)` first validates all 13
+native cells, positive state/node IDs, integer/decimal kind, exclusive numeric
+payload columns and nonempty codec/source bytes. It independently decodes the
+retained numeric cell and token, compares exact witnesses, and requires integer
+integrality. It never invokes numeric_recv or reconstructs native values from
+possibly truncated binary input. Tests consume actual scalar composite images
+and confirm retained token bytes, plus missing/extra carrier, malformed frame,
+identity, nonfinite, fractional-integer and adjacent-large-value refusals.
+
+The token parser remains the selected JSON numeric syntax subset. Original source
+bytes are retained and checked nonempty, not semantically decoded; codec/facets,
+parent association, complete scope, native origin and shared resources still need
+independent admission. This check grants no seal, operation phase or public API.
