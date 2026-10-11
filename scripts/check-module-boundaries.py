@@ -15,6 +15,7 @@ import sys
 ALLOWED = {
     'psycopg_host': {'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
     '_psycopg_epoch_cut': {'dataclasses', 'hashlib', 'truss.psycopg_host', 'psycopg.types.string'},
+    '_psycopg_dependency_fact_cut': {'dataclasses', 'json', 'truss._psycopg_epoch_cut', 'truss._security_fact_coverage', 'truss._psycopg_fact_cut'},
     '_security_fact_coverage': {'dataclasses', 'hashlib', 'json'},
     '_psycopg_graph_scope': {'dataclasses', 'json', 'truss._psycopg_epoch_cut', 'psycopg.types.numeric', 'psycopg.types.string', 'psycopg.types.array'},
     '_psycopg_fact_cut': {'dataclasses', 'truss._psycopg_epoch_cut', 'psycopg'},

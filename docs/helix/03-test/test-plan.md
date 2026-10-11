@@ -624,3 +624,109 @@ integration. Authenticated owner handoff, actual field/provider bindings and cut
 installed role/body closure, protected mutation dispatch and final disclosure remain
 required. No new formal refinement or Astra review is claimed. The goal remains
 active at 26/132 bindings with 106 missing.
+
+
+### Semantic field/provider cut obligations — 2026-10-11
+
+Formal packet `evidence/security-field-cuts-formal/456a26c5-c5a3-4f80-b944-39ac77d34fb7`
+retains eight SMT2 queries and fresh-context replay (two UNSAT, six SAT), six source
+preimages and the original ten UMF dependency identities. The model admits
+unbounded facts/providers and opaque complete provider states. Complete required
+membership, actual/declared provider correspondence, continuous effective cuts and
+stable deterministic decoding imply one-step required-fact preservation. Induction
+requires these premises at every step. Opaque state equality abstracts complete
+rows/presence/nulls/values; this does not prove PostgreSQL or semantic decoding
+refinement, native source authenticity or policy authorization.
+
+Countermodels separately demonstrate omitted `active` membership, wrong provider
+mapping, missing provider cut, released/bypassed cuts and changed decoding despite
+all data cuts; unrelated uncut provider state may change under full premises.
+Physical admission must therefore qualify original mappings AND their decoding
+source/config/role dependencies, not just compare column names or lock declared
+tables. Expected artifact hashes do not qualify issuer or physical mapping.
+
+For backend tests tied to CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10,
+require each required field/association to resolve through an original qualified
+provider recipe; substitute a wrong but valid provider and demand refusal before
+callback; omit a required field or cut and demand refusal; change the installed
+decoder/source while preserving data and demand refusal. These are required native
+controls, not passed by symbolic countermodels. Flat columns and graph payloads
+must each prove decoding correspondence, including absence/null/type semantics.
+No public API, native admission or acceptance binding is promoted; checkpoint
+remains 26/132 with 106 missing and the objective stays active.
+
+
+### Original native field descriptor correspondence — 2026-10-11
+
+Private fact-table recipes now carry bounded exact column comparisons. Snapshot
+name, native attribute number, type OID/modifier, nullability, collation OID and
+stored-generation/identity markers before the original epoch scope. Reject duplicate
+names/numbers and malformed comparisons before native work. Under actual table
+SHARE and installed ALWAYS guard correspondence, read explicit pg_catalog attributes
+as nine text descriptors; require exact original descriptor and non-dropped column
+before callback. Retain the relation-only read subset separately: an empty column
+recipe does not establish field dependency coverage.
+
+Final native packet `evidence/python-psycopg-epoch-cut/613a92b8-17f9-4db8-8475-478496590c55`
+passes 68 tests (17 fact,16 graph/gateway,nine epoch,26 adoption), with current and
+archived source correspondence, native payload pins, module boundaries and three
+independent named fixture stop0/status3/socket-absent cleanups. Seven added controls
+cover original descriptor success, wrong valid type, actual native type/nullability
+changes, drop/recreate under the same name, duplicate recipe before xid assignment
+and hostile temporary pg_attribute shadow. Refusal preserves pre-existing lock
+baselines and prevents callback. Initial7889a5b7 passes its earlier66-test tuple;
+845be9f0 retains a failed assertion that incorrectly expected the preceding table
+rewrite's lock to disappear. The corrected baseline assertion passes in the final
+packet; historical evidence is unchanged.
+
+Field-cut model replay `evidence/security-field-cuts-formal/0a706a61-4f48-46c6-905e-32b82f9e03ac`
+retains the new module source and the same eight conditional queries, not a native
+refinement proof. Descriptor equality does not authenticate mappings or establish
+decoder/type/collation/generated-expression/role/config closure. The original
+semantic dependency-to-provider handoff and complete cuts remain required for flat
+and graph fields. This advances CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
+prerequisites only; no public API, grants or backend acceptance binding changes.
+The full goal remains active at 26/132 with106 missing.
+
+
+### Complete dependency/provider cut controls — 2026-10-11
+
+For CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites, compose
+actual original UMF fixture dependencies with explicit five-table providers.
+Require ten-dependency coverage, five actual table SHARE locks and fixture resource
+membership `r1`; omission of `active` or all field bindings must refuse with no
+callback and no assigned native xid. Substitute the field descriptor and require
+native refusal before callback. Under complete cuts, attempt same-writer active
+revocation and require SQLSTATE55000 with unchanged facts after rollback. These
+five controls pass in packet79a2bb83 (73 total methods); this is not complete
+semantic mapping provenance, authorization or backend acceptance promotion.
+
+
+### Original logical/semantic/native fixture correspondence controls — 2026-10-11
+
+Under the ten-reference/five-table cut, read explicit native text facts and execute
+the original UMF owner evaluator. Verify permit with salary withheld for active
+same-project membership and deny for inactive, other-staff, sibling-project,
+missing-ownership and missing-assignment variants. Tie these fixture prerequisites
+to UMF US-079 AC1/AC4/AC5/AC7 and backend US-056 AC9/AC10; they do not qualify the
+ordinary caller, decoder/source closure, complete mutation executor or release.
+
+Retain a separate negative control: bind active to a valid alternate boolean column
+and decode it while the original column is false. The current private prototype
+permits these substituted facts. Required future admission must instead reject the
+substituted original mapping/decoder before policy evaluation or any publication.
+The counterexample is evidence of incomplete enforcement, not a passed acceptance
+case or a requirement to keep this behavior in an admitted implementation.
+
+
+### Epoch-bound original provider recipe controls — 2026-10-11
+
+Four new native controls require the original stored profile to derive complete
+provider cuts, reject a well-typed decoy-active replacement profile before callback,
+refuse an original stored profile missing active, and refuse a wrong requirement
+digest. Fixture issuance occurs in the owned transaction and rolls back with its
+scope; no installation/caller authority is inferred. These advance
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites only. Required
+future admission controls must also reject unqualified original issuer/semantic
+mapping and independently changed callback/decoder source; these are not proved by
+exact native profile-byte correspondence.

@@ -1,0 +1,50 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun declared_members () (Array Int Bool))
+(declare-fun required () (Array Int Bool))
+(declare-fun declared_provider () (Array Int Int))
+(declare-fun held_provider_cuts () (Array Int Bool))
+(declare-fun after_provider_state () (Array Int Int))
+(declare-fun before_provider_state () (Array Int Int))
+(declare-fun original_decoder (Int Int) Int)
+(declare-fun later_decoder (Int Int) Int)
+(declare-fun witness () Int)
+(declare-fun actual_provider () (Array Int Int))
+(assert
+ (forall ((fact Int) )(let (($x19 (select declared_members fact)))
+ (let (($x20 (select required fact)))
+ (=> $x20 $x19))))
+ )
+(assert
+ (forall ((fact Int) )(let ((?x25 (select declared_provider fact)))
+ (let (($x31 (select held_provider_cuts ?x25)))
+ (let (($x19 (select declared_members fact)))
+ (let (($x20 (select required fact)))
+ (let (($x32 (and $x20 $x19)))
+ (=> $x32 $x31)))))))
+ )
+(assert
+ (forall ((provider Int) )(let (($x36 (= (select before_provider_state provider) (select after_provider_state provider))))
+ (let (($x37 (select held_provider_cuts provider)))
+ (=> $x37 $x36))))
+ )
+(assert
+ (forall ((fact Int) (provider Int) )(= (later_decoder fact provider) (original_decoder fact provider)))
+ )
+(assert
+ (let ((?x56 (lambda ((fact Int) )(let (($x54 (>= fact 0)))
+ (and $x54 (< fact 10))))
+ ))
+ (= required ?x56)))
+(assert
+ (= witness 0))
+(assert
+ (let ((?x59 (select declared_provider 0)))
+ (let ((?x58 (select actual_provider 0)))
+ (and (distinct ?x58 ?x59) true))))
+(assert
+ (let ((?x45 (original_decoder witness (select before_provider_state (select actual_provider witness)))))
+(let ((?x43 (later_decoder witness (select after_provider_state (select actual_provider witness)))))
+(let (($x15 (select required witness)))
+(and $x15 (and (distinct ?x43 ?x45) true))))))
+(check-sat)

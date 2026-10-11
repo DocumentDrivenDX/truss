@@ -3947,3 +3947,134 @@ integration. Authenticated owner handoff, actual field/provider bindings and cut
 installed role/body closure, protected mutation dispatch and final disclosure remain
 required. No new formal refinement or Astra review is claimed. The goal remains
 active at 26/132 bindings with 106 missing.
+
+
+### Semantic field/provider cut obligations — 2026-10-11
+
+Formal packet `evidence/security-field-cuts-formal/456a26c5-c5a3-4f80-b944-39ac77d34fb7`
+retains eight SMT2 queries and fresh-context replay (two UNSAT, six SAT), six source
+preimages and the original ten UMF dependency identities. The model admits
+unbounded facts/providers and opaque complete provider states. Complete required
+membership, actual/declared provider correspondence, continuous effective cuts and
+stable deterministic decoding imply one-step required-fact preservation. Induction
+requires these premises at every step. Opaque state equality abstracts complete
+rows/presence/nulls/values; this does not prove PostgreSQL or semantic decoding
+refinement, native source authenticity or policy authorization.
+
+Countermodels separately demonstrate omitted `active` membership, wrong provider
+mapping, missing provider cut, released/bypassed cuts and changed decoding despite
+all data cuts; unrelated uncut provider state may change under full premises.
+Physical admission must therefore qualify original mappings AND their decoding
+source/config/role dependencies, not just compare column names or lock declared
+tables. Expected artifact hashes do not qualify issuer or physical mapping.
+
+For backend tests tied to CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10,
+require each required field/association to resolve through an original qualified
+provider recipe; substitute a wrong but valid provider and demand refusal before
+callback; omit a required field or cut and demand refusal; change the installed
+decoder/source while preserving data and demand refusal. These are required native
+controls, not passed by symbolic countermodels. Flat columns and graph payloads
+must each prove decoding correspondence, including absence/null/type semantics.
+No public API, native admission or acceptance binding is promoted; checkpoint
+remains 26/132 with 106 missing and the objective stays active.
+
+
+### Original native field descriptor correspondence — 2026-10-11
+
+Private fact-table recipes now carry bounded exact column comparisons. Snapshot
+name, native attribute number, type OID/modifier, nullability, collation OID and
+stored-generation/identity markers before the original epoch scope. Reject duplicate
+names/numbers and malformed comparisons before native work. Under actual table
+SHARE and installed ALWAYS guard correspondence, read explicit pg_catalog attributes
+as nine text descriptors; require exact original descriptor and non-dropped column
+before callback. Retain the relation-only read subset separately: an empty column
+recipe does not establish field dependency coverage.
+
+Final native packet `evidence/python-psycopg-epoch-cut/613a92b8-17f9-4db8-8475-478496590c55`
+passes 68 tests (17 fact,16 graph/gateway,nine epoch,26 adoption), with current and
+archived source correspondence, native payload pins, module boundaries and three
+independent named fixture stop0/status3/socket-absent cleanups. Seven added controls
+cover original descriptor success, wrong valid type, actual native type/nullability
+changes, drop/recreate under the same name, duplicate recipe before xid assignment
+and hostile temporary pg_attribute shadow. Refusal preserves pre-existing lock
+baselines and prevents callback. Initial7889a5b7 passes its earlier66-test tuple;
+845be9f0 retains a failed assertion that incorrectly expected the preceding table
+rewrite's lock to disappear. The corrected baseline assertion passes in the final
+packet; historical evidence is unchanged.
+
+Field-cut model replay `evidence/security-field-cuts-formal/0a706a61-4f48-46c6-905e-32b82f9e03ac`
+retains the new module source and the same eight conditional queries, not a native
+refinement proof. Descriptor equality does not authenticate mappings or establish
+decoder/type/collation/generated-expression/role/config closure. The original
+semantic dependency-to-provider handoff and complete cuts remain required for flat
+and graph fields. This advances CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
+prerequisites only; no public API, grants or backend acceptance binding changes.
+The full goal remains active at 26/132 with106 missing.
+
+
+### Complete fixture dependency-to-native cut composition — 2026-10-11
+
+Implemented private original-inventory coverage plus field/table provider cut
+composition. Final packet `evidence/python-psycopg-epoch-cut/79a2bb83-5e7b-4b93-b243-a0d6110be324`
+passes73 native methods:22 fact/dependency,16 graph/gateway,nine epoch,26 adoption.
+Verified122 current/archived source pins,1614 native payload pins, module boundaries
+and three independent named stop0/status3/socket-absent cleanups. Five new controls
+exercise complete original ten-reference/five-table coverage, missing active,
+association-only omission, substituted field descriptor and same-writer revocation.
+The six existing pure coverage controls also pass without source changes.
+
+Formal packet `evidence/security-field-cuts-formal/22bf3dfc-17fa-4735-b7b1-56b49693ae50`
+retains seven source inputs including the composition wrapper and replays eight
+conditional formulas (two UNSAT/six SAT), not a Python/native refinement theorem.
+Explicit fixture mappings remain unauthenticated comparison inputs. Original
+production semantic/provider handoff, decoder/source/config/role closure and graph
+field projection/decoding are still required. No backend acceptance binding is
+promoted; checkpoint remains26/132 with106 missing. Goal active; direct main.
+
+Initial235d75a6 native and2dd927da formal packets qualify the earlier comparison
+source without the explicit per-relation pre-copy column bound; final79a2bb83 and
+22bf3dfc retain the bounded current source. Both native tuples pass73 methods.
+
+
+### Original evaluator/native fixture correspondence and mapping counterexample — 2026-10-11
+
+Final packet `evidence/python-psycopg-epoch-cut/806ad967-fae5-4980-aed3-a3c7cdf14c25`
+passes80 component methods:29 fact/dependency/owner outcome controls,16 graph/gateway,
+nine epoch,26 adoption. Verified123 current/archived Truss source pins,
+363 original UMF owner source pins with compressed exact preimages,
+1614 native payload pins, module boundaries and three independent named
+stop0/status3/socket-absent fixture cleanups. Initial82d74a31 qualifies its earlier
+79-test tuple. Owner dependencies/runtime delivery are not hermetically qualified.
+
+Six added original-owner evaluations cover permit/withheld salary and five denial
+variants using facts actually read under complete native cuts. A seventh added
+control reproduces well-typed semantic mapping substitution: real active=false,
+decoy_active=true, incorrect facts permit. This changes the next admission work:
+original mapping/decoder source correspondence must be authenticated and fenced,
+not supplied as caller comparisons. Native input/body/source/role closure, graph
+field decoding, protected dispatch and final disclosure remain incomplete. No
+backend acceptance binding is promoted; checkpoint26/132 with106 missing. Full
+goal active; direct-main publication authorized. No new Astra review or formal
+native/evaluator refinement theorem is claimed.
+
+
+### Epoch-bound original provider recipes — 2026-10-11
+
+Implemented private recipe derivation from original selected native epoch-profile
+bytes, without a caller provider override, reusing the existing native profile
+fence and original complete dependency/table-column cuts. Final packet
+`evidence/python-psycopg-epoch-cut/f6433379-f285-4f4f-bd4e-8bad33b9b54d` passes84
+methods (33 fact/dependency/owner/recipe,16 graph/gateway,nine epoch,26 adoption),
+123 verified current/archived Truss source pins,363 original UMF pins and compressed
+preimages,1614 native payload pins, module boundaries and three independent named
+stop0/status3/socket-absent cleanups. Four controls cover original-profile success,
+well-typed caller profile substitution/no callback, original incomplete profile
+and mismatched requirements digest. No native lifecycle or support flags changed.
+
+Formal packet `evidence/security-field-cuts-formal/c17132f4-6f67-400f-8eee-3b0b10d83ae7`
+replays eight conditional formulas against seven source inputs including the updated
+wrapper. It is not a new native/Python JSON/epoch refinement theorem. Original
+issuer/semantic mapping qualification and decoder/source/role/config closure remain
+required; arbitrary private callbacks still do not constitute a protected policy
+executor. Retain the earlier native decoy-active counterexample and full goal.
+No backend acceptance binding promoted: checkpoint26/132,106 missing; goal active.

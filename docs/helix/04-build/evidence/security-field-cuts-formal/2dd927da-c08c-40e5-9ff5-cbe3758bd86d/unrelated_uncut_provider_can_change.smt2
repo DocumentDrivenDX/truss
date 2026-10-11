@@ -1,0 +1,45 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun declared_members () (Array Int Bool))
+(declare-fun required () (Array Int Bool))
+(declare-fun declared_provider () (Array Int Int))
+(declare-fun actual_provider () (Array Int Int))
+(declare-fun held_provider_cuts () (Array Int Bool))
+(declare-fun after_provider_state () (Array Int Int))
+(declare-fun before_provider_state () (Array Int Int))
+(declare-fun original_decoder (Int Int) Int)
+(declare-fun later_decoder (Int Int) Int)
+(assert
+ (forall ((fact Int) )(let (($x19 (select declared_members fact)))
+ (let (($x20 (select required fact)))
+ (=> $x20 $x19))))
+ )
+(assert
+ (forall ((fact Int) )(let ((?x25 (select declared_provider fact)))
+ (let (($x27 (= (select actual_provider fact) ?x25)))
+ (let (($x20 (select required fact)))
+ (=> $x20 $x27)))))
+ )
+(assert
+ (forall ((fact Int) )(let ((?x25 (select declared_provider fact)))
+ (let (($x31 (select held_provider_cuts ?x25)))
+ (let (($x19 (select declared_members fact)))
+ (let (($x20 (select required fact)))
+ (let (($x32 (and $x20 $x19)))
+ (=> $x32 $x31)))))))
+ )
+(assert
+ (forall ((provider Int) )(let (($x36 (= (select before_provider_state provider) (select after_provider_state provider))))
+ (let (($x37 (select held_provider_cuts provider)))
+ (=> $x37 $x36))))
+ )
+(assert
+ (forall ((fact Int) (provider Int) )(= (later_decoder fact provider) (original_decoder fact provider)))
+ )
+(assert
+ (not (select held_provider_cuts 999)))
+(assert
+ (let ((?x67 (select after_provider_state 999)))
+(let ((?x66 (select before_provider_state 999)))
+(and (distinct ?x66 ?x67) true))))
+(check-sat)

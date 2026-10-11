@@ -2036,3 +2036,133 @@ integration. Authenticated owner handoff, actual field/provider bindings and cut
 installed role/body closure, protected mutation dispatch and final disclosure remain
 required. No new formal refinement or Astra review is claimed. The goal remains
 active at 26/132 bindings with 106 missing.
+
+
+### Semantic field/provider cut obligations — 2026-10-11
+
+Formal packet `evidence/security-field-cuts-formal/456a26c5-c5a3-4f80-b944-39ac77d34fb7`
+retains eight SMT2 queries and fresh-context replay (two UNSAT, six SAT), six source
+preimages and the original ten UMF dependency identities. The model admits
+unbounded facts/providers and opaque complete provider states. Complete required
+membership, actual/declared provider correspondence, continuous effective cuts and
+stable deterministic decoding imply one-step required-fact preservation. Induction
+requires these premises at every step. Opaque state equality abstracts complete
+rows/presence/nulls/values; this does not prove PostgreSQL or semantic decoding
+refinement, native source authenticity or policy authorization.
+
+Countermodels separately demonstrate omitted `active` membership, wrong provider
+mapping, missing provider cut, released/bypassed cuts and changed decoding despite
+all data cuts; unrelated uncut provider state may change under full premises.
+Physical admission must therefore qualify original mappings AND their decoding
+source/config/role dependencies, not just compare column names or lock declared
+tables. Expected artifact hashes do not qualify issuer or physical mapping.
+
+For backend tests tied to CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10,
+require each required field/association to resolve through an original qualified
+provider recipe; substitute a wrong but valid provider and demand refusal before
+callback; omit a required field or cut and demand refusal; change the installed
+decoder/source while preserving data and demand refusal. These are required native
+controls, not passed by symbolic countermodels. Flat columns and graph payloads
+must each prove decoding correspondence, including absence/null/type semantics.
+No public API, native admission or acceptance binding is promoted; checkpoint
+remains 26/132 with 106 missing and the objective stays active.
+
+
+### Original native field descriptor correspondence — 2026-10-11
+
+Private fact-table recipes now carry bounded exact column comparisons. Snapshot
+name, native attribute number, type OID/modifier, nullability, collation OID and
+stored-generation/identity markers before the original epoch scope. Reject duplicate
+names/numbers and malformed comparisons before native work. Under actual table
+SHARE and installed ALWAYS guard correspondence, read explicit pg_catalog attributes
+as nine text descriptors; require exact original descriptor and non-dropped column
+before callback. Retain the relation-only read subset separately: an empty column
+recipe does not establish field dependency coverage.
+
+Final native packet `evidence/python-psycopg-epoch-cut/613a92b8-17f9-4db8-8475-478496590c55`
+passes 68 tests (17 fact,16 graph/gateway,nine epoch,26 adoption), with current and
+archived source correspondence, native payload pins, module boundaries and three
+independent named fixture stop0/status3/socket-absent cleanups. Seven added controls
+cover original descriptor success, wrong valid type, actual native type/nullability
+changes, drop/recreate under the same name, duplicate recipe before xid assignment
+and hostile temporary pg_attribute shadow. Refusal preserves pre-existing lock
+baselines and prevents callback. Initial7889a5b7 passes its earlier66-test tuple;
+845be9f0 retains a failed assertion that incorrectly expected the preceding table
+rewrite's lock to disappear. The corrected baseline assertion passes in the final
+packet; historical evidence is unchanged.
+
+Field-cut model replay `evidence/security-field-cuts-formal/0a706a61-4f48-46c6-905e-32b82f9e03ac`
+retains the new module source and the same eight conditional queries, not a native
+refinement proof. Descriptor equality does not authenticate mappings or establish
+decoder/type/collation/generated-expression/role/config closure. The original
+semantic dependency-to-provider handoff and complete cuts remain required for flat
+and graph fields. This advances CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
+prerequisites only; no public API, grants or backend acceptance binding changes.
+The full goal remains active at 26/132 with106 missing.
+
+
+### Complete original fixture dependency/provider composition — 2026-10-11
+
+The private `_run_dependency_fact_operation` composes the original UMF fixture
+inventory with explicit provider recipes. Every required field needs an exact
+column comparison; every required association needs table-presence coverage.
+Validate original qualified identities through the existing coverage consumer;
+missing, foreign or duplicate membership cannot enter native work. Copy comparison
+primitives before host invocation, require consistent metadata for reused relation
+OIDs, deduplicate equal column comparisons and acquire all distinct table/column
+cuts through the existing epoch/fact scope before callback. No semantic traversal
+moves from UMF to Truss. Relation/column names do not establish semantic mappings.
+
+The five-table fixture explicitly maps Staff, Project, Resource, Ownership and
+Assignment, with string identity/endpoint columns and boolean `active`, to the ten
+original dependency references. This is a complete fixture comparison, not an
+issuer-authenticated binding, decoder qualification or production admission.
+Wrong but well-typed semantic mappings still require original owner qualification;
+native descriptors alone cannot discover that mismatch. Graph payload decoders,
+source/role/config cuts, ordinary caller authorization, protected dispatch and
+final disclosure remain unfinished. No public API or support flag changes.
+
+
+### Original owner evaluation over flat native facts — 2026-10-11
+
+The owned five-table fixture now reads bounded native text rows under complete
+original dependency cuts and invokes UMF's original `evaluateSecurityAccess`.
+The fixture decoder explicitly preserves string identity/endpoint values, boolean
+native spelling and integer tokens; compares original fixture policy/resolution
+bytes before evaluation; and requests salary withholding. `trusted=true` is an
+owned administrative fixture attestation only, not production caller authority.
+The six observed policy outcomes agree with same-project/active membership:
+permit with salary withheld, and deny for inactive assignment, other staff,
+sibling project, missing ownership and missing assignment.
+
+A native negative control maps the required `active` reference to a different real
+boolean column, decoy_active. With real active=false and decoy_active=true, complete
+declared coverage and native descriptor/cut checks succeed and the evaluator permits
+the incorrectly decoded facts. Retain this successful counterexample; do not admit
+the private comparison wrapper for ordinary authorization. Production admission
+must establish original field-to-provider/decoder correspondence and exclude its
+substitution throughout evaluation/publication. Neither complete names nor valid
+native descriptors authenticate that correspondence. No final disclosure or
+compiled PostgreSQL policy refinement is established by this fixture.
+
+
+### Original epoch-bound provider recipe candidate — 2026-10-11
+
+The private epoch-bound dependency path derives provider recipes from the exact
+selected epoch profile bytes, with a closed fixture profile containing kind,
+original requirement SHA256 and complete provider records. Accept no provider
+argument/override. Snapshot selected epoch primitives; preserve opaque qualified
+references; refuse malformed, duplicate, over-bound or incomplete records before
+native work. Compose original requirement coverage and field/table descriptor cuts
+through the existing native epoch fence. Native readback must match the same exact
+profile bytes from which recipes were derived. Replacing a valid field mapping in
+comparison bytes cannot match the original stored epoch profile.
+
+This relies on the existing source-epoch registry/current producer and cuts, with
+no new table, grant or public API. Stored original bytes are a comparison anchor,
+not proof the lifecycle issuer admitted the correct semantic mapping. The owned
+fixture may issue an incomplete profile; consumer completeness must still refuse.
+An arbitrary private callback may still use the wrong decoder despite correct
+cuts. Keep the earlier successful decoy-active counterexample: complete authenticated
+mapping/decoder/source/role/config closure, protected dispatch and final disclosure
+remain required before ordinary authorization. Graph field profiles are unfinished.
