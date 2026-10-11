@@ -1,0 +1,190 @@
+{
+  "status": "passed",
+  "browser": "153.0.8010.12",
+  "checks": [
+    {
+      "id": "tree exact source",
+      "expected": "7b22666c6167223a747275657d",
+      "observed": "7b22666c6167223a747275657d"
+    },
+    {
+      "id": "tree zero callbacks",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "id": "tree immutable result",
+      "expected": "7b22666c6167223a747275657d",
+      "observed": "7b22666c6167223a747275657d"
+    },
+    {
+      "id": "tree actual shared refusal",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "tree shared callback count",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "id": "origin exact source",
+      "expected": "7b22666c6167223a747275657d",
+      "observed": "7b22666c6167223a747275657d"
+    },
+    {
+      "id": "origin zero callbacks",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "id": "origin immutable result",
+      "expected": "7b22666c6167223a747275657d",
+      "observed": "7b22666c6167223a747275657d"
+    },
+    {
+      "id": "origin actual shared refusal",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "origin shared callback count",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "id": "context exact source",
+      "expected": "7b22696e7465726661636556657273696f6e223a2274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c22786964223a2231222c226f7264696e616c223a2230222c2273657373696f6e55736572223a226c6f67696e222c22616374696e6755736572223a22726561646572222c226461746162617365223a2266697874757265222c226261636b656e64506964223a2231222c226163746f72526f6c654f6964223a2232222c2273657373696f6e526f6c654f6964223a2233222c2261737365727465644f726967696e55746638486578223a223665373536633663222c2261737365727465644f726967696e4361707475726550726f66696c65486578223a223031227d",
+      "observed": "7b22696e7465726661636556657273696f6e223a2274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c22786964223a2231222c226f7264696e616c223a2230222c2273657373696f6e55736572223a226c6f67696e222c22616374696e6755736572223a22726561646572222c226461746162617365223a2266697874757265222c226261636b656e64506964223a2231222c226163746f72526f6c654f6964223a2232222c2273657373696f6e526f6c654f6964223a2233222c2261737365727465644f726967696e55746638486578223a223665373536633663222c2261737365727465644f726967696e4361707475726550726f66696c65486578223a223031227d"
+    },
+    {
+      "id": "context zero callbacks",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "id": "context immutable result",
+      "expected": "7b22696e7465726661636556657273696f6e223a2274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c22786964223a2231222c226f7264696e616c223a2230222c2273657373696f6e55736572223a226c6f67696e222c22616374696e6755736572223a22726561646572222c226461746162617365223a2266697874757265222c226261636b656e64506964223a2231222c226163746f72526f6c654f6964223a2232222c2273657373696f6e526f6c654f6964223a2233222c2261737365727465644f726967696e55746638486578223a223665373536633663222c2261737365727465644f726967696e4361707475726550726f66696c65486578223a223031227d",
+      "observed": "7b22696e7465726661636556657273696f6e223a2274727573732d6e61746976652d6f7065726174696f6e2d636f6e746578742f302e33222c22786964223a2231222c226f7264696e616c223a2230222c2273657373696f6e55736572223a226c6f67696e222c22616374696e6755736572223a22726561646572222c226461746162617365223a2266697874757265222c226261636b656e64506964223a2231222c226163746f72526f6c654f6964223a2232222c2273657373696f6e526f6c654f6964223a2233222c2261737365727465644f726967696e55746638486578223a223665373536633663222c2261737365727465644f726967696e4361707475726550726f66696c65486578223a223031227d"
+    },
+    {
+      "id": "context actual shared refusal",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "context shared callback count",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "id": "independent tree",
+      "expected": {
+        "kind": "object",
+        "members": [
+          {
+            "keyUtf8Hex": "7a",
+            "node": {
+              "kind": "string",
+              "utf8Hex": "00c3a9"
+            }
+          },
+          {
+            "keyUtf8Hex": "61",
+            "node": {
+              "kind": "array",
+              "items": [
+                {
+                  "kind": "boolean",
+                  "value": true
+                },
+                {
+                  "kind": "null"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "observed": {
+        "kind": "object",
+        "members": [
+          {
+            "keyUtf8Hex": "7a",
+            "node": {
+              "kind": "string",
+              "utf8Hex": "00c3a9"
+            }
+          },
+          {
+            "keyUtf8Hex": "61",
+            "node": {
+              "kind": "array",
+              "items": [
+                {
+                  "kind": "boolean",
+                  "value": true
+                },
+                {
+                  "kind": "null"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "original numeric lexeme",
+      "expected": "9007199254740993",
+      "observed": "9007199254740993"
+    },
+    {
+      "id": "cross-realm ordinary source",
+      "expected": "6e756c6c",
+      "observed": "6e756c6c"
+    },
+    {
+      "id": "detached carrier refusal",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "exact byte cap",
+      "expected": 1048576,
+      "observed": 1048576
+    },
+    {
+      "id": "over byte cap",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "no host globals",
+      "expected": [],
+      "observed": []
+    }
+  ],
+  "crossOriginIsolated": true,
+  "hostGlobals": [],
+  "externalRequests": 0,
+  "sourceDigests": {
+    "packages/postgresql/src/original-byte-custody.ts": "0080a33427c00435da7cefdc3fbc35feaaaf453e86d21d7df43390e6f291af81",
+    "packages/postgresql/src/acceptance-json.ts": "ef934c8d2ccdd53c604f917c5a16ed27e99d6a24cc5deca809861c117f16bdc4",
+    "packages/postgresql/src/canonical-wire-tree.ts": "29987adb1cdc66cf679d462b4efe3168e03399346e510e31c788eb615f0393e6",
+    "packages/postgresql/src/asserted-origin-map.ts": "6b63c7630dfe9bd44c7d8c7d96163da1e5722eeba14a409a656b4114566dd2ba",
+    "packages/postgresql/src/captured-origin-context.ts": "1d35638253b5f225c8549481b84d938b4336739fab5c9fd6b76604552e6cd1ab",
+    "scripts/check-original-byte-browser.ts": "2434221be12b08ca8b2144b03e1e94d7672be7d6e66e9990f1b1359a53340099"
+  },
+  "bundleDigests": {
+    "original-byte-custody.js": "f6b335e25649fa46f02058debbc2e1fbe1846ea32e9bc558d3cce77d7e667269",
+    "chunk-mqhsd3fd.js": "76a303b3cae849737d44c8791f0ee8e6f41da797af6476b1aa0c7e04d15ed5bd",
+    "chunk-3sry8xnr.js": "12a2c0f5ba6d533ca371b5a0455adb3ea7ba01833753a32b43445db328573556",
+    "chunk-w06z4q6k.js": "495170d161c8775c9f5a29b47c172f51cd438066db5b56f87fcd85c3a3eda7da",
+    "acceptance-json.js": "d6181ddeb3fd36dd7cca06d78f197c2358541de29289deff73a93b08032d5200",
+    "canonical-wire-tree.js": "8f3129b41c06f763175529ca08a80c981a72756416d700a7433d536501abff37",
+    "asserted-origin-map.js": "9e4969487e25c0224b61d513591a3ff209fef8eb0b5f329c4de1f1b235948296",
+    "captured-origin-context.js": "39d9d21d0a42db5c500efe7a2bbcf2e79da8853021aaf153f88bf921e7edcc38"
+  },
+  "scope": "Actual Chromium portable byte custody, JSON scanner, codec and origin/context mapping only; no native backend admission"
+}
