@@ -20,7 +20,7 @@ test('original nullability meanings remain distinct through reversible transitio
   const p=prepare(availability),collection=collectCatalogAssertionObservations(p,owner,fields),r=collectCatalogCoreAssertionIdentities(p,collection);
   expect(p.documents[0]!.umfVersion).toBe('0.7.0');expect(p.documents[0]!.interpretation.target.umf).toBe('0.8.0');
   expect(p.documents[0]!.interpretation.target.modules[0]!.elements[0]!.nullability).toBe(availability);
-  expect(r.fieldMeanings.length).toBe(1);const retained=r.fieldMeanings[0]!;
+  const meanings=r.fieldMeanings.filter(m=>m.assertion.ruleName==='core.nullability');expect(meanings.length).toBe(1);const retained=meanings[0]!;
   expect(retained.originalMeaning).toEqual({state:'known',nullability:availability});expect(retained.ownerProfile).toBe(collection.fieldProfile!);
   expect(r.entries.includes(retained.assertion)).toBe(true);expect(retained.assertion.assertion.sourcePointer).toBe('/modules/0/elements/0/nullability');
   expect(Object.isFrozen(retained.originalMeaning)).toBe(true);expect(retained.interpretationQualified).toBe(false);expect(r.complete).toBe(false);
@@ -37,7 +37,7 @@ test('original nullability meanings remain distinct through reversible transitio
 });
 test('future authored nullability remains unavailable to the known semantic subset',()=>{
  const p=prepare('future-availability'),r=collectCatalogCoreAssertionIdentities(p,collectCatalogAssertionObservations(p,owner,fields));
- expect(r.fieldMeanings).toEqual([]);expect(r.entries.some(e=>e.ruleName==='core.nullability')).toBe(false);
+ expect(r.fieldMeanings.filter(m=>m.assertion.ruleName==='core.nullability')).toEqual([]);expect(r.entries.some(e=>e.ruleName==='core.nullability')).toBe(false);
  expect(r.deferred.some(o=>o.operation==='nullability'&&(o.result as any).observation.meaning.value==='future-availability')).toBe(true);expect(r.complete).toBe(false);
 });
 test('loaded diagnostic owners cannot replace required meaning or its context before state filtering',async()=>{
@@ -62,7 +62,7 @@ test('original missing Field and inapplicable Record nullability remain distinct
  const observations=collection.observations.filter(o=>o.operation==='nullability');
  expect(observations.map(o=>(o.result as any).observation.meaning)).toEqual([{state:'missing'},{state:'inapplicable'}]);
  expect(r.absent.some(o=>o===observations[0])).toBe(true);expect(r.deferred.some(o=>o===observations[1])).toBe(true);
- expect(r.fieldMeanings).toEqual([]);expect(r.entries.some(e=>e.ruleName==='core.nullability')).toBe(false);expect(r.complete).toBe(false);
+ expect(r.fieldMeanings.filter(m=>m.assertion.ruleName==='core.nullability')).toEqual([]);expect(r.entries.some(e=>e.ruleName==='core.nullability')).toBe(false);expect(r.complete).toBe(false);
  const absent=record.checkRecord(p.documents[0]!.interpretation.target,{module:'m',element:'R'},[]) as any;
  expect(absent.validation.complete).toBe(false);expect(absent.validation.diagnostics.some((d:any)=>d.code==='RECORD_AVAILABILITY_UNKNOWN')).toBe(true);
 });

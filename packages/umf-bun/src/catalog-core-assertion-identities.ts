@@ -42,21 +42,36 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
    }
    continue;
   }
-  // Validate original 0.7 nullability before state filtering: a false missing,
-  // unknown or inapplicable classification must not suppress an authored rule.
-  if(observed.operation==='nullability'){
+  // Validate selected original 0.7 Field families before state filtering.
+  // Opaque item-type qualifiers and optional-member presence remain significant.
+  if(['kind','nullability','cardinality','facets'].includes(observed.operation)){
    const document=prepared.documents.find(d=>d.documentId===observed.documentId),requested=observed.identity as any;
    if(document?.umfVersion==='0.7.0'){
+    const family=observed.operation as 'kind'|'nullability'|'cardinality'|'facets';
+    const versions={kind:'6.0.0',nullability:'5.0.0',cardinality:'4.0.0',facets:'3.0.0'};
+    const known={kind:['field','record','group'],nullability:['required','absent-allowed','unspecified'],cardinality:['one','array','map','unspecified'],facets:[] as string[]};
     const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module);
     const ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
     if(!collection.fieldProfile||mi<0||ei<0||!sameOriginalMeaning(original.source,source)||
-      !sameOriginalMeaning(original.identity,requested)||original.operation!=='inspect-core-nullability'||original.version!=='5.0.0'||
-      original.path!=='/modules/'+mi+'/elements/'+ei+'/nullability')throw Error('Original nullability owner context correspondence required');
-    const element=source.modules[mi]!.elements[ei]!,present=Object.hasOwn(element,'nullability');
-    const expected=present?(['required','absent-allowed','unspecified'].includes(element.nullability as string)?
-     {state:'known',nullability:element.nullability}:{state:'unknown',value:element.nullability}):
-     {state:element.kind==='field'?'missing':'inapplicable'};
-    if(!sameOriginalMeaning(meaning,expected))throw Error('Original nullability meaning correspondence required');
+      !sameOriginalMeaning(original.identity,requested)||original.operation!=='inspect-core-'+family||original.version!==versions[family]||
+      original.path!=='/modules/'+mi+'/elements/'+ei+'/'+family)throw Error('Original '+family+' owner context correspondence required');
+    const element=source.modules[mi]!.elements[ei]!,present=Object.hasOwn(element,family),value=element[family];
+    let expected:any=present?(known[family].includes(value as string)?
+     {state:'known',[family]:value,...(family==='cardinality'&&Object.hasOwn(element,'itemType')?{itemType:element.itemType}:{})}:
+     {state:'unknown',value}):{state:family==='kind'?'unspecified':element.kind==='field'?'missing':'inapplicable'};
+    if(family==='facets'&&present){
+     const facets=value as any,interpreted:any={};
+     if(facets.length&&['unicode-scalar','byte'].includes(facets.length.unit))interpreted.length={max:facets.length.max,unit:facets.length.unit};
+     if(facets.integerWidth)interpreted.integerWidth={bits:facets.integerWidth.bits,signed:facets.integerWidth.signed};
+     if(facets.precision!==undefined){interpreted.precision=facets.precision;interpreted.scale=facets.scale}
+     // Derive unknown paths from the separately captured original document
+     // validator, not from this Field observation's own claimed classification.
+     const path='/modules/'+mi+'/elements/'+ei+'/facets';
+     const uninterpretedPaths=document.interpretation.sourceValidation.diagnostics.filter((d:any)=>
+      d.severity==='warning'&&['UNKNOWN_FACET','UNKNOWN_FACET_UNIT'].includes(d.code)&&(d.path===path||d.path.startsWith(path+'/'))).map((d:any)=>d.path);
+     expected={state:uninterpretedPaths.length?'partial':'known',facets,interpreted,uninterpretedPaths};
+    }
+    if(!sameOriginalMeaning(meaning,expected))throw Error('Original '+family+' meaning correspondence required');
    }
   }
   if(!['known','partial','missing'].includes(meaning?.state)){deferred.push(observed);continue}
@@ -91,9 +106,9 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
    const entry=Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,...identity}),
     source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence});
    entries.push(entry);
-   if(observed.operation==='nullability'&&original.source.umf==='0.7.0')fieldMeanings.push(Object.freeze({assertion:entry,
-    ownerProfile:collection.fieldProfile!,ownerState:'known' as const,originalMeaning:meaning,
-    meaningCorrespondence:true as const,interpretationQualified:false as const,scope:'original_nullability_owner_meaning_only' as const}));
+   if(['kind','nullability','cardinality','facets'].includes(observed.operation)&&original.source.umf==='0.7.0')fieldMeanings.push(Object.freeze({assertion:entry,
+    ownerProfile:collection.fieldProfile!,ownerState:meaning.state as 'known'|'partial',originalMeaning:meaning,
+    meaningCorrespondence:true as const,interpretationQualified:false as const,scope:`original_${observed.operation}_owner_meaning_only` as const}));
    if(declaration)declarationMeanings.push(Object.freeze({assertion:entry,ownerProfile:collection.profile,
     ownerState:meaning.state as 'known'|'partial',originalMeaning:ownerNodes[index],
     // Keep whole-owner unknown-path diagnostics; never infer local completeness.
