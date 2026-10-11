@@ -3598,3 +3598,71 @@ caller, complete installed source/trigger/role/ACL closure, whole source census,
 configuration/shared-role/authorization-data cuts, actual protected dispatch and
 final disclosure remain required. Backend acceptance stays26/132 with106 missing
 bindings; no acceptance profile is promoted and the goal remains active.
+### Supported Python catalog prerequisite registration — 2026-10-11
+
+CONTRACT-006's original prerequisite closure and STP-041 govern this private
+fresh-catalog slice. Astra Ultra approved the plan and reviewed the source.
+The new prerequisite wrapper uses guarded `PsycopgHost._run_operation` execution;
+it does not adapt the older pg8000 hook path. The native configured state cut
+runs resource/metadata collectors explicitly before current-source rechecks and
+independent complete row/topology observations. Earlier empty-graph and physical
+completion collectors remain unchanged.
+
+Every document prerequisite derives its original artifact identity, exact bytes
+and UMF profile from the retained original input, with complete schema_doc
+correspondence. Conflicting same-identity content/profile refuses; exact repeats
+share a prerequisite. Configuration content retains installation/source epoch,
+incarnation, generation, policies, admitted profile, configuration, binding and
+producer inventory. Operation xid, ordinal, context digest and clocks remain
+separate owner custody. Each of the four owner-AST-selected statements has full
+RETURNING parity and independent complete stored-row checks. Planned counters
+are member/catalog/configuration 1/D/1 and membership generation D+2; head and
+finalization fields remain unpublished.
+
+Actual two-document execution exposed the historical report artifact scalar
+ceiling, even with small original documents. The separately reviewed wide-report
+profile permits at most786432 original report bytes /1048576 base64 bytes only
+at `/report/bytesBase64`. Specialized emission accepts only native-generated
+base64 of that same original report. Other strings/keys retain65536-byte limits;
+complete tagged tree/payload caps remain4MiB. Distinct report/revision and
+registration producers select exact archived profile pins explicitly, with no
+size-based fallback. Historical profiles, functions and their48KiB refusal remain
+unchanged. UMF owns AST extraction/composition and export checking; this changes
+Truss's candidate resource profile, not UMF semantics or the public wire shape.
+
+The administrative native corpus covers original multi-document
+identity/bytes/profile and complete report/payload readback, configuration
+stability across original transactions, all four suppressed/substituted writes,
+returned substitution despite AFTER restoration, late collector/configuration/
+member changes, extra rows, native signed-int64 reservation overflow, injected
+resource refusal after reservation, prior caller-work preservation, single use,
+closed commit barrier, exact scalar boundaries/padding/canonical oracle parity,
+wrong slot/content, other key/scalar limits and old-profile overflow. Its selected
+caller/toolkit statement budgets are10000/8000ms, operation15000ms. This does not
+qualify default2000ms latency, whole-process memory or ordinary-person authority.
+
+The source-pinned native runner is
+`scripts/check-python-catalog-prerequisites-native.py`; source drift or unconfirmed
+owned shutdown fails qualification. Protected installation, configured head
+publication, complete surviving-transaction inventory/finalization, accepted
+report authority, public provider activation and full external-interface
+qualification remain the next required exits. No private administrative result
+may be presented as a committed accepted catalog.
+
+Astra Ultra approved checkpoint packet `8b771164-a621-4a76-8219-ecdf65d47e23`
+on 2026-10-11: all 18 native methods passed, 536-import boundary check passed,
+and owned shutdown confirmed stop 0/status 3/socket absent. Independent review
+matched all 1273 project source hashes, 1614 PostgreSQL binary hashes, 255 external
+dependency/executable hashes and five evidence hashes; the archive contains
+exactly 1528 expected entries without duplicates. Reviewed source bytes remain
+identical after integrating security main through b3ccc7f0. PostgreSQL binary
+post-run identity was independently verified by the reviewer; the runner itself
+currently records only its pre-run native hashes.
+
+Merged-source packet `7cdf8f83-de3a-4f96-bd45-d1fbbefd305a` also passed all
+18 methods and the module boundary check, retained 1275 unchanged project
+source pins, and confirmed owned shutdown (stop 0, status 3, socket absent).
+The preceding merged attempt `3e1e4317-552e-4fee-bc88-d17770e70157` ran zero
+tests because the sandbox refused initdb shared-memory creation; it supplies
+no native qualification. The successful merged packet ran with the required
+local native-process permission.

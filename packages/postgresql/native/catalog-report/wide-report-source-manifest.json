@@ -1,0 +1,34 @@
+{
+  "scope": "selected owner AST function composition; native qualification separate",
+  "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "inputs": [
+    {
+      "source": "packages/postgresql/native/catalog-report/report-write-candidate.sql",
+      "sourceSha256": "06db785f935bf08216563ca311ccccd2c10005b3126faa6a243f4864c4bcb005",
+      "target": "packages/postgresql/native/catalog-report/report-write-wide-candidate",
+      "targetModelSha256": "b8f1b2300ea4347f9ddec6f43fa876adb7e7b24c5081d7f871c1515a784215a0",
+      "targetSqlSha256": "39e6fc98f2b2351e5d1bd5e5d3f7838fcc0bda92eac55b65440e51af0d8aa2aa"
+    },
+    {
+      "source": "packages/postgresql/native/catalog-report/revision-registration-candidate.sql",
+      "sourceSha256": "b41c56953ab36b9692fadf29607a7ccd703d4b90aef29b2af6a14864db3e022a",
+      "target": "packages/postgresql/native/catalog-report/revision-registration-wide-candidate",
+      "targetModelSha256": "cfcc9289c0cec624c201eda621358019b8c58b4712c2d84fab84869a17c682a4",
+      "targetSqlSha256": "ab53934eb0e3062c35942dd60b1aa21f947cc10d39a62dc6beef606a643b48d5"
+    }
+  ],
+  "profiles": [
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-wide-report-composition-candidate.json",
+      "sha256": "9269939c2151779c919826ef30beccfea51269f06da1d6241e8f6bb6d80e6253"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-wide-composition-candidate.json",
+      "sha256": "d77cf6b399774166da481f0f0e7850271243e8911175b2bb225f9a628d418aba"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-wide-registration-candidate.json",
+      "sha256": "709a7ff1f3009bf88a02b510fcd32dc783087af14e6142f4366565694b11058e"
+    }
+  ]
+}
