@@ -443,3 +443,54 @@ durability and the full import result union. Its bounded local consistency check
 rejects duplicate indices, incorrect batch membership, invented counters and
 execution-incompatible dispositions. It does not execute imports or prove
 commit/rollback. See [the import mapping and limits](../../docs/helix/04-build/python-import-contracts.md).
+
+## Prepare original UMF for catalog registration
+
+`from truss import CatalogDocument, prepare_acceptance, PreparationRejected`
+exposes original UMF preparation. Supply a tuple of `CatalogDocument` values
+(document ID, revision, exact UTF-8 JSON bytes) and `configuration` as UTF-8
+AcceptanceInput JSON containing explicit layout, acceptance, validator, support,
+binding, policy and transform selections, without `interfaceVersion` or
+`documents`. The function returns `PreparedAcceptance.input_bytes` for subsequent
+catalog admission, plus document-qualified declarations, original observations
+and exact archived source carriers. `input()` returns a fresh dictionary.
+
+The installed wheel bundles the original committed UMF producer and the existing
+Truss preparation route. This release requires Bun 1.4.2 on PATH, or a trusted
+host-configured `bun_executable` path. Missing runtime or altered producer assets
+raise `PreparationRejected` with a finite reason. No database is opened. Selected
+installation profiles are unverified, and preparation produces no accepted IDs,
+catalog report, registration success or readiness. Catalog acceptance remains
+unfinished. Exact source bytes are preserved; interpreted observations retain
+the original UMF producer's supported semantics and diagnostics.
+
+A preparation-only example with explicit, unverified selections:
+
+```python
+import json
+from truss import CatalogDocument, prepare_acceptance
+
+# Replace these selections with your deployment's registered profile pins
+# before catalog admission. They are not installed by preparation.
+def pin(name):
+    return {"identity": name, "version": "example", "sha256": "0" * 64}
+
+configuration = {
+    "layoutProfile": pin("layout"),
+    "acceptanceProfile": pin("acceptance"),
+    "validatorProfile": pin("validator"),
+    "supportProfile": pin("support"),
+    "binding": {"state": "absent"},
+    "policy": {"unknownEndpoint": "reject", "loss": "strict",
+               "profile": pin("policy")},
+    "transforms": [],
+}
+source = json.dumps({"umf": "0.7.0", "id": "inventory",
+                     "vocabularies": {}, "extensions": {}, "modules": []}).encode()
+prepared = prepare_acceptance(
+    (CatalogDocument("inventory", "r1", source),),
+    json.dumps(configuration).encode(),
+)
+assert prepared.provenance.installation_profiles_verified is False
+# prepared.input_bytes is input for future catalog admission, not a receipt.
+```

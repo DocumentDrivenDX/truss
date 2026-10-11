@@ -1138,3 +1138,55 @@ Astra Ultra approved the final source, plan and retained installed artifact, wit
 45 independent composed checks and all18 installed bootstrap cases passing.
 No blocker remains within this private scope; constructor/startup accounting,
 active Q cancellation, public C02 and protected authority gates remain open.
+
+### Iteration25: public original UMF preparation
+
+The consumer-facing priority is install → register original UMF → apply → read,
+through public Python exports and real PostgreSQL effects. Previous private driver
+checks do not establish those operations. Active simple-query cancellation is
+unfinished and deferred; its unqualified prototype is archived outside this
+checkout, and no prototype source is promoted into this iteration.
+
+Expose `CatalogDocument` and `prepare_acceptance` from the Python package. Reuse
+the original committed UMF producer and existing Truss AcceptanceInput inspector,
+transition correspondence and declaration extraction. Package the original owner
+bundle, original schema, bridge and runtime dependencies in the installed wheel;
+seal their bytes in the release manifest. Require the declared Bun runtime rather
+than reimplementing UMF semantics in Python.
+
+The caller supplies exact document bytes, document-qualified identities/revisions
+and explicit acceptance configuration. Preserve exact originals in digest-bound
+artifact carriers and return original owner observations and declaration evidence.
+Root installation/policy choices remain unverified. Preparation does not create
+accepted IDs, a report/head, readiness or database effects. Its output feeds the
+existing catalog acceptance pipeline; it is not a second catalog protocol.
+
+Astra Ultra approved this independently useful C03 plan. Fifteen source tests
+cover two documents sharing module/element names, exact source artifacts,
+reversible 0.7 interpretation, invalid source/UTF-8/configuration, duplicate or
+mismatched identities, missing runtime and altered producer assets. Tests also retain unknown extensions, refuse unsafe native numeric lexemes,
+bound stdout/stderr during capture, reap timed-out children, and reject altered
+configuration/document/profile correspondence and malformed responses. Astra
+Ultra independently passed all15 tests and approved source after correcting
+original diagnostic retention, exact numeric-free wire admission and capture
+bounds. The executable README consumer example passes from the frozen installed
+wheel outside the checkout. The fixed installed wheel passed530 tests in85.333s on CPython3.11.17,
+Bun1.4.2, pg8000 1.31.5 and corrected pgserver/PostgreSQL16.15. All77
+package files are exact across source, wheel and installation; test membership
+and bytes remained unchanged. Retained evidence: `evidence/python-contracts-iteration25.json`
+and `evidence/python-contracts-iteration25-installed.log`. Astra Ultra approved source, plan and final artifact; independently verified all
+77package files,57test-module hashes, durable log and wheel hash, executed the
+README consumer example under Python-I outside the checkout, and passed all15
+installed preparation tests in4.045s. Approval is preparation-only.
+
+Concurrent main changes through f432bf59 are integrated, including immutable
+original binding archives and consistent omitted primary-key markers. A mixed
+source/rebuild test run is excluded from qualification; its preparation failures
+occurred while sealed assets changed. Qualify only the frozen final artifact.
+
+Next implement actual native catalog acceptance and installation integration,
+including original authority/origin, mandatory selected guard/finalizer routines,
+atomic acceptance and accepted report/view. Do not turn unfinished unrelated
+capabilities into blockers for independently qualified endpoints; do not bypass
+protected acceptance gates to make a staging example look like registration.
+The complete Python external-interface goal remains open.

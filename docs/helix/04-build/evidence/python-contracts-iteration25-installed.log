@@ -1,0 +1,14 @@
+............................../private/tmp/truss-iteration25-installed/truss/_resource_account.py:80: ResourceWarning: unclosed <socket.socket fd=6, family=1, type=1, proto=0>
+  self._allocations[allocation] = [amount, False]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.............................................................................................................................................................................................................................................................................../private/tmp/truss-main-integration-20261010/packages/python/tests/test_native_operation.py:186: ResourceWarning: unclosed <socket.socket fd=5, family=1, type=1, proto=0>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/tmp/truss-main-integration-20261010/packages/python/tests/test_native_operation.py:186: ResourceWarning: unclosed <socket.socket fd=21, family=1, type=1, proto=0>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.....................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 530 tests in 85.333s
+
+OK

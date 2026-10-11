@@ -1,0 +1,55 @@
+{
+  "interfaceVersion": "truss-python-umf-preparation/0.1.0",
+  "runtime": "Bun",
+  "runtimeVersion": "1.4.2",
+  "files": {
+    "licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "licenses/fast-deep-equal.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "licenses/json-schema-traverse.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "owner/producer.js": "db1d813cafd6f48cb20549ea7e847aca754b53c21bbc624ff88aa963d917c90b",
+    "owner/producer-manifest.json": "89115bff6644db7f2fe7b292458994a94dc78ff0c4c3f608d7b1fe3eeb810bc8",
+    "runtime/package.json": "9a0a1f4e40bbd5082cbcc0f6b6b515368f2dc8dc60341affdc8c50571819bd49",
+    "runtime/node_modules/ajv/dist/2020.js": "57cad03e867e41b0bf4a68c13e24b2628312c6dc82a3ca16780a6864130ad40d",
+    "packages/umf-bun/src/bridge.js": "40190b5e95ee99e93798222755cc9284340f93166dbb48a7c7aead5cd84731ea",
+    "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+  },
+  "owner": {
+    "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+    "producerMode": "record",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+    "bundleSha256": "db1d813cafd6f48cb20549ea7e847aca754b53c21bbc624ff88aa963d917c90b",
+    "operations": [
+      "readDocument",
+      "validateDocument",
+      "validateCoreRecordValues",
+      "upgradeSchemaPropertiesEnvelope",
+      "verifySchemaPropertiesUpgrade",
+      "rollbackSchemaPropertiesEnvelope"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "sources": {
+    "scripts/build-python-umf-preparation.ts": "fb88356bb145d47c1ab8559887405abb68895b4f41826352428767d71239b1b7",
+    "scripts/build-umf-runtime.ts": "d948759ee88fa2af9a509226ec2a0d8a96addee164fc78531845e37dad7649b2",
+    "packages/umf-bun/src/python-preparation.ts": "0aedaa921624ce7afb2c1014999fcb335dc04d9007a6a7edfd9846b99c3c1071",
+    "packages/umf-bun/src/catalog-input.ts": "d6cf0700168d2c5146bf7a59954bea853e6f906adc233f4ef51dca4fbf490694",
+    "packages/umf-bun/src/catalog-declarations.ts": "fb0db06f9fafde070b58e93160b75c58b05e5a6ae7a75acb5b0ffa60d8bada9f",
+    "packages/umf-bun/src/catalog-transition-correspondence.ts": "b28c148fa44b55b4b0ef7cd2e07289f81ee725a8cf59424d2a03d060e185247c",
+    "packages/umf-bun/src/index.ts": "45fc2188b2ceb46b18af7a57e2f93427117fd8ddb32ef339e26ee8d0e66d35d7",
+    "packages/umf-bun/src/acceptance-input.ts": "ef6afe7533afa50a37fe29b523228af028c696f9768cf751b8b52b047586f215",
+    "packages/postgresql/src/acceptance-json.ts": "14a65dc9fd67b3ab53fb080a4a05422b991af63feac52fc6e0655eb03a47ed17"
+  }
+}
