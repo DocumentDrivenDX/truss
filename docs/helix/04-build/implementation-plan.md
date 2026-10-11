@@ -3666,3 +3666,14 @@ The preceding merged attempt `3e1e4317-552e-4fee-bc88-d17770e70157` ran zero
 tests because the sandbox refused initdb shared-memory creation; it supplies
 no native qualification. The successful merged packet ran with the required
 local native-process permission.
+
+
+Post-merge main integration preserves e4e2161d's separately qualified catalog
+prerequisite psycopg implementation. Only implementation-plan append conflicted;
+both histories are retained in merge21d288ce. Current merged-source epoch packet
+`evidence/python-psycopg-epoch-cut/ba36ee88-377e-430b-80da-4679cb7fa0c1`
+again passes34 tests and module boundaries, retaining106 source preimages and1614
+native payload digests plus independent stop0/status3/socket absence. All106
+source hashes match current bytes and archives. Incoming prerequisite SQL/tests
+are preserved, not qualified by the epoch-cut test population. No backend
+acceptance binding or supported protected-engine status changes.
