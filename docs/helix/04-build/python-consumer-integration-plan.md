@@ -1806,3 +1806,16 @@ Compose or replace existing state/node/scalar generation triggers to avoid a
 double increment. Preserve the unconditional commit barrier. Full seven-body
 installation composition and public install/register/apply/read remain open;
 these completed attribution steps do not replace that outcome.
+
+
+The next checkpoint constructs candidate images for an existing root string
+scalar, preserving every other typed cell and retaining separately labeled
+OLD/NEW images. It measures actual typed lengths before complete serialization,
+checks expected lengths and exact bytes, and bounds the six retained images to
+8 MiB. Native evidence passes twelve cases in 11.731s (four new constructor
+cases and eight inherited attribution cases), including exact-limit acceptance,
+one-byte overflow, substituted frames, and requested empty/Unicode text.
+See [candidate checkpoint receipt](evidence/python-contracts-iteration35-string-candidate.json).
+This constructor supplies no protected scope, text/source semantic admission,
+installation authority or public operation; the complete observer and consumer
+workflow remain unfinished.

@@ -1,0 +1,32 @@
+{
+  "scope": "Private existing string candidate image construction toward unfinished row_touch_observe; no public operational capability or installation authority",
+  "base": "52dedb600e0d60201180ab08e79e7018c8971d6b",
+  "result": {
+    "exit_code": 0,
+    "tests": 12,
+    "new_constructor_tests": 4,
+    "inherited_tests": 8,
+    "seconds": 11.731
+  },
+  "verified": [
+    "actual typed lengths before complete serialization",
+    "exact 8388608 byte aggregate acceptance and one byte overflow refusal",
+    "substituted expected frame length refusal",
+    "requested empty and Unicode text preserved",
+    "unchanged metadata and separate OLD/NEW images"
+  ],
+  "remaining": [
+    "complete original protected scope producer",
+    "complete canonical observers and validators",
+    "public install/register/apply/read workflow"
+  ],
+  "sha256": {
+    "packages/postgresql/native/row-image/string-candidate.sql": "f95d036e1dbe028de6257720cbf8775422a2ee180178134836943833e403a7fb",
+    "packages/postgresql/native/row-image/prestate.sql": "3006ae27a2f189be92f5261aa9f9e40f447acce861e31556ecc331cf6d2c6bc0",
+    "packages/postgresql/native/row-image/codec.sql": "580876ef61326fc8458f0b226c4136aeb6b6f3f64c2b3ca4d83157f4c02d5006",
+    "packages/postgresql/native/row-image/state-owner.sql": "ee8def896f1bfe2e13b51acfaef61bf475f6a4a04fb2c14ae60d2547cce64d37",
+    "packages/postgresql/native/row-image/dependent-owner.sql": "e6b1f4c9d1d741613366fa60703554a5261964c0c8e461dac3b19b8f39e3abae",
+    "packages/python/tests/test_native_string_candidate.py": "f78c107e591abeb37667e78ece3bd4bfc28b6239e3469a6f7f64f605d54387da",
+    "docs/helix/04-build/evidence/python-contracts-iteration35-string-candidate.log": "04d1c7141d3867512c18bc245e083bc2bc3e136ee13510507ef587822f2dd9c0"
+  }
+}
