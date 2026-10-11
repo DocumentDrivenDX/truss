@@ -31,6 +31,13 @@ The runtime wheel SHA256 is
 `719c3dae72eded898976a4813ce6321cf4bf5bf2350d9c21a5c1c5f7023ce55b`;
 the toolkit source snapshot wheel SHA256 is
 `3822afee43d8c87018a79d1315f6fc200c95905f31b93079430b663efd6f0081`.
+The [final merged artifact verification](evidence/design-audit/pg18-final-merged-artifact-20261011.json)
+checks the final toolkit wheel SHA256
+`e6e465d16c8989f098d401f9f52ae9d81e88f75ed375ebf11222ebdc9448ece5`.
+All installed members match that wheel, and the exercised lifecycle/driver/profile
+modules remain byte-identical to the six-group smoke snapshot. A fresh native
+startup/query/shutdown passes after the security merge. No repeated full corpus
+is implied by this artifact check.
 The initial smoke attempt stopped at a test subprocess import syntax error before
 native startup; its log is retained separately. No full18.6 corpus pass is claimed.
 
