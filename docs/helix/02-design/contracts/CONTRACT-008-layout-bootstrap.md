@@ -2372,3 +2372,28 @@ qualified lifecycle producer, full current-authority admission or cluster-wide
 administration coordinator. Installed helper/issuer/ACL custody, meaningful
 profile/evidence construction, commit uncertainty and protected final release
 remain independent requirements.
+
+
+### Installed authority writer/issuer correspondence — 2026-10-11
+
+Private source verification now composes original epoch/DDL barrier readback with
+exact installed shared-authority writer and authority issuer OIDs, owners, names,
+plpgsql language, ordinary function kind, argument/return shapes, scalar return,
+non-STRICT/invoker/volatile flags, exact search_path/body and absent PUBLIC EXECUTE
+before callback. Comparisons are bounded original fixture metadata, not credentials.
+Four native controls pass: exact installed source pair; actual PUBLIC EXECUTE drift
+refuses; SECURITY DEFINER drift refuses; STRICT drift demonstrably returns NULL
+without null-predecessor validation, while the stronger source check refuses.
+
+Final `evidence/python-psycopg-epoch-cut/4a75f4b6-57c0-472a-adf8-f7ddf050f746`
+passes138 methods (87 fact/dependency/identity/visibility/DDL/role/issuer,16 graph,
+nine epoch,26 adoption), module boundaries,138 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three stop0/status3/socket-absent
+cleanups. Earlier16944e98 passes137 methods under its earlier source tuple.
+Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10 source-correspondence
+prerequisites only. No new formal refinement or backend acceptance binding.
+Complete language-handler/dependency and all-role ACL/lifetime closure, original
+issuer credentials, qualified profile/evidence production, ordinary caller/mapping
+and protected final release remain open. Last full checkpoint26/132,106 missing;
+goal active. Next compose qualified lifecycle producer and original profile sources
+with this source verification; installed comparison alone is not authority.

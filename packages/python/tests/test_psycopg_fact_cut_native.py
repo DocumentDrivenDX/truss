@@ -770,3 +770,44 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     self.assertEqual(connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(self.epoch,))
                     self.assertEqual(connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),before)
         self.with_unprivileged_actor(operation)
+
+    def issuer_comparison(self):
+        from truss._psycopg_epoch_cut import _AuthorityIssuerComparison
+        rows=self.connection.execute("SELECT proname,oid,proowner,prosrc FROM pg_catalog.pg_proc WHERE oid IN ('truss.runtime_fence_shared_authority_writer()'::regprocedure,'truss.runtime_issue_authority_epoch(text,text,text,bytea,bytea)'::regprocedure) ORDER BY proname").fetchall()
+        return _AuthorityIssuerComparison(rows[0][2],rows[0][1],rows[0][3],rows[1][1],rows[1][3])
+    def test_original_authority_issuer_installed_correspondence_passes(self):
+        from truss._psycopg_epoch_cut import _run_issuer_verified_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.issuer_comparison();barrier=self.ddl_comparison();t=self.begin()
+            self.assertEqual(_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:'original-issuer-source'),Ok('original-issuer-source'))
+        finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_public_execute_drift_on_authority_issuer_refuses(self):
+        from truss._psycopg_epoch_cut import _run_issuer_verified_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.issuer_comparison();barrier=self.ddl_comparison();t=self.begin()
+            self.connection.execute('GRANT EXECUTE ON FUNCTION truss.runtime_issue_authority_epoch(text,text,text,bytea,bytea) TO PUBLIC')
+            called=[];result=_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_definer_drift_on_authority_issuer_refuses(self):
+        from truss._psycopg_epoch_cut import _run_issuer_verified_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.issuer_comparison();barrier=self.ddl_comparison();t=self.begin()
+            self.connection.execute('ALTER FUNCTION truss.runtime_issue_authority_epoch(text,text,text,bytea,bytea) SECURITY DEFINER')
+            called=[];result=_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def test_strict_issuer_skips_null_validation_but_source_admission_refuses(self):
+        from truss._psycopg_epoch_cut import _run_issuer_verified_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.issuer_comparison();barrier=self.ddl_comparison();t=self.begin()
+            self.connection.execute('ALTER FUNCTION truss.runtime_issue_authority_epoch(text,text,text,bytea,bytea) STRICT')
+            self.assertEqual(self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',NULL,'target',%s,%s)",(b'\x03',b'\x04')).fetchone(),(None,))
+            called=[];result=_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')

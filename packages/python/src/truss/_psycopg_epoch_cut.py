@@ -196,3 +196,46 @@ def _run_set_role_excluded_ddl_fenced_epoch_operation(host, transaction, compari
             raise ValueError('Selected SET-reachable role exclusion required')
         return callback(cursor)
     return _run_no_definer_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,exclude)
+
+
+@dataclass(frozen=True)
+class _AuthorityIssuerComparison:
+    owner_oid: int
+    writer_oid: int
+    writer_source: str
+    issuer_oid: int
+    issuer_source: str
+
+
+def _run_issuer_verified_epoch_operation(host, transaction, comparison, barrier, issuer, callback):
+    """Original installed writer/issuer correspondence, not authority issuance.
+
+    Language-handler/role/ACL lifetime, issuer credentials and profile/evidence
+    provenance remain independent requirements. No capability is returned.
+    """
+    if type(issuer) is not _AuthorityIssuerComparison or not callable(callback):
+        raise ValueError('Original issuer comparison and callback required')
+    owner,writer,writer_source,issue,issue_source=(issuer.owner_oid,issuer.writer_oid,issuer.writer_source,issuer.issuer_oid,issuer.issuer_source)
+    if (any(type(v) is not int or not 0<v<=4294967295 for v in (owner,writer,issue))
+            or any(type(v) is not str or not 1<=len(v.encode('utf8'))<=65536 for v in (writer_source,issue_source))):
+        raise ValueError('Bounded original issuer identities required')
+    def qualify(cursor):
+        cursor.execute("SELECT p.proname::pg_catalog.text,p.oid::pg_catalog.text,p.proowner::pg_catalog.text,"
+                       "l.lanname::pg_catalog.text,p.prokind::pg_catalog.text,p.pronargs::pg_catalog.text,"
+                       "p.proargtypes::pg_catalog.text,p.prorettype::pg_catalog.text,p.proretset::pg_catalog.text,"
+                       "p.proisstrict::pg_catalog.text,p.prosecdef::pg_catalog.text,p.provolatile::pg_catalog.text,pg_catalog.to_jsonb(p.proconfig)::pg_catalog.text,p.prosrc,"
+                       "EXISTS(SELECT 1 FROM pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a "
+                       "WHERE a.grantee OPERATOR(pg_catalog.=) 0 AND a.privilege_type OPERATOR(pg_catalog.=) 'EXECUTE')::pg_catalog.text "
+                       "FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace "
+                       "JOIN pg_catalog.pg_language l ON l.oid OPERATOR(pg_catalog.=) p.prolang "
+                       "WHERE n.nspname OPERATOR(pg_catalog.=) 'truss' AND p.proname IN ('runtime_fence_shared_authority_writer','runtime_issue_authority_epoch') "
+                       "ORDER BY p.proname,p.oid",prepare=False,binary=False)
+        rows=cursor.fetchmany(3)
+        common=('false','false','false','v','["search_path=pg_catalog, pg_temp"]')
+        expected=[('runtime_fence_shared_authority_writer',str(writer),str(owner),'plpgsql','f','0','','2278',*common,writer_source,'false'),
+                  ('runtime_issue_authority_epoch',str(issue),str(owner),'plpgsql','f','5','25 25 25 17 17','25',*common,issue_source,'false')]
+        if (cursor.description is None or len(cursor.description)!=15
+                or any(d.type_code!=25 for d in cursor.description) or rows!=expected):
+            raise ValueError('Exact original installed authority writer/issuer required')
+        return callback(cursor)
+    return _run_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,qualify)
