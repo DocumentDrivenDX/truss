@@ -1,0 +1,94 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/catalog-core-assertion-identities.test.ts:
+(pass) original pointer identities retain partial meanings without inventing missing facets or enforcement [2.36ms]
+(pass) cloned observation collections cannot issue source identities [0.04ms]
+(pass) authored key and relationship IDs remain qualified by original occurrence pointers [20.77ms]
+(pass) original 0.8 schema properties keep authored pointers and legacy API failures explicit [11.61ms]
+(pass) complete original value coverage keeps unclassified and opaque meaning unavailable [0.43ms]
+(pass) occurrence inventory retains original custody instead of copied or foreign preparation [4.04ms]
+(pass) mixed original versions and lexical numeric opaque bytes remain distinct from transition targets [7.11ms]
+(pass) the original UMF profile still refuses unsafe integer source before inventory issuance [0.39ms]
+(pass) loaded owner declaration meanings cannot change content while retaining IDs and counts [200.97ms]
+
+tests/acceptance-json.test.ts:
+(pass) empty object [0.20ms]
+(pass) null boolean string array [0.03ms]
+(pass) legal whitespace [0.04ms]
+(pass) inert prototype name [0.02ms]
+(pass) valid escaped surrogate pair [0.07ms]
+(pass) distinct normalization forms [0.02ms]
+(pass) escaped equivalent duplicate [0.11ms]
+(pass) unpaired high surrogate [0.01ms]
+(pass) unpaired low surrogate
+(pass) overlong utf8 [0.02ms]
+(pass) surrogate utf8
+(pass) out of range utf8
+(pass) outer number
+(pass) trailing data
+(pass) trailing comma
+(pass) bom
+(pass) comment [0.02ms]
+(pass) opaque numeric artifact base64 [0.03ms]
+(pass) complete original input fixture preserves all native and converted custody [0.24ms]
+(pass) selected depth and container limits refuse before an over-limit output [2.14ms]
+(pass) raw byte and cumulative duplicate-name work are conjunctive ceilings [1.84ms]
+(pass) exact node ceiling counts containers and every scalar occurrence [30.48ms]
+
+tests/source-occurrence-index.test.ts:
+(pass) every original value has an ordered pointer and exact lexical span [0.24ms]
+(pass) escaped member identity and unicode retain exact source bytes [0.12ms]
+(pass) captured bytes and returned slices are independent of caller mutation [0.13ms]
+(pass) root primitives and empty containers remain complete occurrences [0.07ms]
+(pass) source admission still refuses duplicates invalid unicode and malformed grammar [0.10ms]
+(pass) discarded preflight tree does not replace original number lexemes [0.06ms]
+(pass) occurrence indexing applies conjunctive source and pointer work bounds [4.99ms]
+(pass) source copying never invokes caller species or own length callbacks [0.12ms]
+(pass) non-byte typed arrays cannot be silently narrowed into source bytes [0.08ms]
+
+tests/catalog-input-preparation.test.ts:
+(pass) real owner validates original ordered UMF sources with reversible interpretation [5.30ms]
+(pass) foreign original interpretation profile cannot borrow validation [0.25ms]
+(pass) archive document identity must equal original owner source [1.70ms]
+(pass) shape-only original {} source does not become accepted UMF [0.47ms]
+(pass) native archive carrier has exact five original fields without interpretation substitution [3.07ms]
+(pass) source declaration extraction preserves original owner and Field references [2.97ms]
+(pass) configured original registry refuses unregistered synthetic root profiles [14.19ms]
+(pass) absent binding derives complete default json homes from original members [4.31ms]
+(pass) present binding cannot be silently replaced with default homes [3.05ms]
+(pass) embedded duplicate source members refuse before owner interpretation [0.24ms]
+(pass) reconstructed preparations cannot enter home, extension, report or native staging helpers [5.88ms]
+(pass) new-only staging cannot silently ignore declared transforms [4.49ms]
+(pass) UMF report basis never invents a supported-subset artifact for unregistered preparation [3.71ms]
+(pass) UMF report basis preserves actual original version and registered bytes without a support claim [24.13ms]
+(pass) optional original primary markers project without changing source or ordered keys [7.57ms]
+(pass) non-Boolean primary markers fail original owner validation [0.40ms]
+
+tests/catalog-report-preparation.test.ts:
+(pass) composition preserves original partial interpretation and extensions without accepted claim [0.87ms]
+(pass) mixed native observation tuple and missing/extra count rows refuse [0.51ms]
+(pass) count grammar bounds columns and new-only retirement are explicit [0.52ms]
+(pass) forged preparation refuses before issuing native reads [0.08ms]
+(pass) composed validation evidence preserves diagnostics at both source and reversible target bases [0.26ms]
+(pass) original 0.8 validation does not invent a transition or duplicate a target-basis diagnostic scan [0.55ms]
+(pass) new-only report preparation cannot ignore a declared transform registration [0.68ms]
+(pass) report profile binds original registered bytes and refuses substitution before native observation [29.71ms]
+(pass) combined report check refuses unissued execution custody before profile resolution or native I/O [0.48ms]
+(pass) complete wire corresponds to ten issued producer fields while other fixture fields remain untrusted [2.92ms]
+(pass) native ingress absence does not admit injected loss or transform registration [7.93ms]
+(pass) changed source effect and diagnostic fields refuse before native recheck [24.03ms]
+(pass) copied report basis and stale native cut cannot supply correspondence [3.16ms]
+(pass) native actor basis retains original bytes and rejects inconsistent result carriers [0.62ms]
+(pass) report correspondence refuses omitted, duplicated or substituted original extension artifacts [41.76ms]
+(pass) execution report comparison refuses copied/unissued candidate before parsing or native I/O [0.37ms]
+
+tests/catalog-nullability-correspondence.test.ts:
+(pass) original nullability meanings remain distinct through reversible transition and actual Record behavior [13.87ms]
+(pass) future authored nullability remains unavailable to the known semantic subset [2.95ms]
+(pass) loaded diagnostic owners cannot replace required meaning or its context before state filtering [105.43ms]
+(pass) original missing Field and inapplicable Record nullability remain distinct observations [3.22ms]
+
+ 76 pass
+ 0 fail
+ 578 expect() calls
+Ran 76 tests across 6 files. [1391.00ms]

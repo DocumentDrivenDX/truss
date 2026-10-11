@@ -1,0 +1,4 @@
+tests/catalog-nullability-correspondence.test.ts(24,121): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'Readonly<{ identity: "umf-field-assertion-inspection"; version: "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3"; sha256: string; }> | null' is not assignable to parameter of type 'Readonly<{ identity: "umf-field-assertion-inspection"; version: "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3"; sha256: string; }>'.
+      Type 'null' is not assignable to type 'Readonly<{ identity: "umf-field-assertion-inspection"; version: "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3"; sha256: string; }>'.

@@ -19,7 +19,7 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
   operations:['kind','nullability','cardinality','facets','keys','relationships','schema_properties'],basis:'original',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
  const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.3.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
  const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.3.0',sha256:manifest.sha256});
- const entries=[];const declarationMeanings=[];const absent=[];const deferred=[];const identities=new Set<string>();
+ const entries=[];const declarationMeanings=[];const fieldMeanings=[];const absent=[];const deferred=[];const identities=new Set<string>();
  for(const observed of collection.observations){
   if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','keys','relationships','schema_properties'].includes(observed.operation)){deferred.push(observed);continue}
   const result=observed.result as any;if(result.state!=='observed'){deferred.push(observed);continue}
@@ -41,6 +41,23 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
     entries.push(Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,kind:'source' as const,sourceIdentityProfile:profile}),source,ruleName:'core.schema_properties.'+key,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence}));
    }
    continue;
+  }
+  // Validate original 0.7 nullability before state filtering: a false missing,
+  // unknown or inapplicable classification must not suppress an authored rule.
+  if(observed.operation==='nullability'){
+   const document=prepared.documents.find(d=>d.documentId===observed.documentId),requested=observed.identity as any;
+   if(document?.umfVersion==='0.7.0'){
+    const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module);
+    const ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
+    if(!collection.fieldProfile||mi<0||ei<0||!sameOriginalMeaning(original.source,source)||
+      !sameOriginalMeaning(original.identity,requested)||original.operation!=='inspect-core-nullability'||original.version!=='5.0.0'||
+      original.path!=='/modules/'+mi+'/elements/'+ei+'/nullability')throw Error('Original nullability owner context correspondence required');
+    const element=source.modules[mi]!.elements[ei]!,present=Object.hasOwn(element,'nullability');
+    const expected=present?(['required','absent-allowed','unspecified'].includes(element.nullability as string)?
+     {state:'known',nullability:element.nullability}:{state:'unknown',value:element.nullability}):
+     {state:element.kind==='field'?'missing':'inapplicable'};
+    if(!sameOriginalMeaning(meaning,expected))throw Error('Original nullability meaning correspondence required');
+   }
   }
   if(!['known','partial','missing'].includes(meaning?.state)){deferred.push(observed);continue}
   const di=prepared.documents.findIndex(d=>d.documentId===observed.documentId),document=prepared.documents[di],identity=observed.identity as any;
@@ -74,6 +91,9 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
    const entry=Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,...identity}),
     source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence});
    entries.push(entry);
+   if(observed.operation==='nullability'&&original.source.umf==='0.7.0')fieldMeanings.push(Object.freeze({assertion:entry,
+    ownerProfile:collection.fieldProfile!,ownerState:'known' as const,originalMeaning:meaning,
+    meaningCorrespondence:true as const,interpretationQualified:false as const,scope:'original_nullability_owner_meaning_only' as const}));
    if(declaration)declarationMeanings.push(Object.freeze({assertion:entry,ownerProfile:collection.profile,
     ownerState:meaning.state as 'known'|'partial',originalMeaning:ownerNodes[index],
     // Keep whole-owner unknown-path diagnostics; never infer local completeness.
@@ -81,5 +101,5 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
     interpretationQualified:false as const,scope:'original_declaration_owner_meaning_only' as const}));
   }
  }
- return Object.freeze({profile,manifest,entries:Object.freeze(entries),declarationMeanings:Object.freeze(declarationMeanings),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
+ return Object.freeze({profile,manifest,entries:Object.freeze(entries),declarationMeanings:Object.freeze(declarationMeanings),fieldMeanings:Object.freeze(fieldMeanings),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
 }
