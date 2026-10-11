@@ -1,0 +1,17 @@
+18310 | // ../../../../private/tmp/truss-umf-runtime-LmpSsH/src/model/document.ts
+18311 | function readDocument(text, format = "yaml") {
+18312 |   const value = readJsonValue(text, format);
+18313 |   const result = validateDocument(value);
+18314 |   if (!result.valid)
+18315 |     throw new UmfError("INVALID_DOCUMENT", JSON.stringify(result.diagnostics));
+                  ^
+UmfError: [{"code":"EXPERIMENTAL_CORE_NULLABILITY","path":"/umf","message":"Nullability envelope is experimental; no native absence encoding or default execution is implied","severity":"warning"},{"code":"EXPERIMENTAL_CORE_CARDINALITY","path":"/umf","message":"Cardinality envelope is experimental; native shape and item semantics require explicit bindings","severity":"warning"},{"code":"EXPERIMENTAL_CORE_FACETS","path":"/umf","message":"Facet envelope is experimental; bounds do not establish native enforcement or value conversion","severity":"warning"},{"code":"UNKNOWN_CORE_FIELD","path":"/modules/0/elements/2/references/1/future~1qualifier","message":"Field retained without interpretation","severity":"warning"},{"code":"EXPERIMENTAL_CORE_KEYS","path":"/umf","message":"Candidate key profile; native uniqueness and author provenance are not inferred","severity":"warning"},{"code":"KEY_EQUALITY","path":"/modules/0/elements/0/keys/0/fields/0","message":"Key equality is undefined for this component","severity":"error"},{"code":"EXPERIMENTAL_CORE_RELATIONSHIPS","path":"/umf","message":"Candidate authored relationship profile; native enforcement and storage are not inferred","severity":"warning"}]
+ path: "",
+ code: "INVALID_DOCUMENT"
+
+      at readDocument (/private/tmp/truss-umf-runtime-LmpSsH/producer.js:18315:11)
+      at inspect (/private/tmp/truss-security-main-integration/packages/umf-bun/src/index.ts:16:26)
+      at prepare (/private/tmp/truss-security-main-integration/packages/umf-bun/src/catalog-input.ts:25:28)
+      at /private/tmp/truss-security-main-integration/scripts/check-catalog-new-cohort.ts:51:17
+
+Bun v1.4.2 (macOS arm64)

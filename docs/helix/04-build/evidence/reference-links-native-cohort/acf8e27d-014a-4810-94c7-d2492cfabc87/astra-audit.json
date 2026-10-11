@@ -1,0 +1,73 @@
+{
+  "status": "passed",
+  "method": "Independent read-only exact source/ZIP/native receipt/log/custody audit; no native execution",
+  "receiptSha256": "b07cc073beae9616042004bbb6d6e217d07e2f64c31b142733d73a745fb3fd4e",
+  "nativeReceiptSha256": "d9297b36aa0b02429be05f91ba595dac2518eb83f0c6374d363cee0260fe342a",
+  "nativeLogSha256": "d2e2791a9038807a06c0185da6faccd87be0e0e220ec56c85a071f8c7517de6e",
+  "archiveSha256": "3512aa6bb4951b6bb10d836b9bdbaa8360d7fbd916c3234ecf43607b7adf1eac",
+  "sourcePins": 807,
+  "includedHostPins": 720,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentInputInventoryMatches": true,
+  "uniqueNativeChecks": 210,
+  "allHistoricalChecksRetained": 205,
+  "newReferenceChecks": [
+    "actual native report retains ordered repeated generic links and explicit empty declaration",
+    "actual native report retains independent reference owner revision and bundle",
+    "actual native report ordered coverage includes every reference element observation",
+    "native reference composition joins original bytes without invented type assertions",
+    "original pinned preparation refuses record-type key Field without equality"
+  ],
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "ownerProfiles": {
+    "declarations": {
+      "identity": "umf-declaration-inspection",
+      "version": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+      "sha256": "074cf378afb702ffd84d6924ae4b37817cad5324a4adc587fa30c541e1cfb216"
+    },
+    "fields": {
+      "identity": "umf-field-assertion-inspection",
+      "version": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+      "sha256": "860e70082df1706132fe6389e5274bb45c70783ddc547f4c4950c1a94fea5f67"
+    },
+    "scalar": {
+      "identity": "umf-scalar-type-inspection",
+      "version": "94d0a99e4d1e9eb39278f38d6cd6bcba51e46db8",
+      "sha256": "29168de4927fc440d4025babd765f4ddd8ad125bf6b6c5ed0e62bd88d6d1be04"
+    },
+    "members": {
+      "identity": "umf-record-members-inspection",
+      "version": "5ddc656273e1965efa0187f3090d165d45225dcd",
+      "sha256": "423b5fe730971ca15795a5738371c306a1bdc8779ffe7bab2976dcc07f2c1193"
+    },
+    "referenceLinks": {
+      "identity": "umf-reference-links-inspection",
+      "version": "9545b7119ceaa29ca7523e4722ec52412084d835",
+      "sha256": "0086e86213a065ea294a79a642c70bc362f01d023912b9d565b180d913c089d4"
+    }
+  },
+  "originalGenericLinkProjectionVerified": true,
+  "qualifiedFixture": {
+    "referenceOwnerRecord": "m/A",
+    "orderedRepeatedTargets": [
+      "m/B",
+      "m/A",
+      "m/B"
+    ],
+    "explicitEmptyReferenceRecord": "m/B",
+    "populatedLinks": 3,
+    "declarations": 2,
+    "expectedConfiguredCalls": 37,
+    "unchangedConstraintEntries": 17
+  },
+  "cleanup": {
+    "containerId": "a735688dbf7576a753823aa1c3b0c697f4cebfff040cfb44fe6238609480c253",
+    "exitCode": 0,
+    "stdout": "a735688dbf7576a753823aa1c3b0c697f4cebfff040cfb44fe6238609480c253",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "scope": "Native-backed private report preparation/owner observation and lexical source correspondence only; no SQL link/type enforcement or accepted report/publication authority",
+  "acceptancePromoted": false
+}
