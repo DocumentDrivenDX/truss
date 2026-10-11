@@ -2,6 +2,15 @@
 import {createHash} from 'node:crypto';
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import {requireOriginalCatalogObservationCollection,type collectCatalogAssertionObservations} from './catalog-assertion-observations';
+/** Owner results are already retained frozen JSON; object order is immaterial,
+ * array order and every opaque member remain part of original correspondence. */
+function sameOriginalMeaning(a:any,b:any):boolean{
+ if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return Object.is(a,b);
+ if(Array.isArray(a)!==Array.isArray(b))return false;
+ const keys=Object.keys(a);if(keys.length!==Object.keys(b).length)return false;
+ if(Array.isArray(a)&&a.length!==b.length)return false;
+ return keys.every(key=>Object.hasOwn(b,key)&&sameOriginalMeaning(a[key],b[key]));
+}
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
 export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collection:Collection){
@@ -10,7 +19,7 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
   operations:['kind','nullability','cardinality','facets','keys','relationships','schema_properties'],basis:'original',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
  const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.3.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
  const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.3.0',sha256:manifest.sha256});
- const entries=[];const absent=[];const deferred=[];const identities=new Set<string>();
+ const entries=[];const declarationMeanings=[];const absent=[];const deferred=[];const identities=new Set<string>();
  for(const observed of collection.observations){
   if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','keys','relationships','schema_properties'].includes(observed.operation)){deferred.push(observed);continue}
   const result=observed.result as any;if(result.state!=='observed'){deferred.push(observed);continue}
@@ -33,16 +42,28 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
    }
    continue;
   }
-  if(meaning?.state==='missing'){absent.push(observed);continue}
-  if(!['known','partial'].includes(meaning?.state)){deferred.push(observed);continue}
+  if(!['known','partial','missing'].includes(meaning?.state)){deferred.push(observed);continue}
   const di=prepared.documents.findIndex(d=>d.documentId===observed.documentId),document=prepared.documents[di],identity=observed.identity as any;
   if(!document||JSON.stringify(original.source)!==JSON.stringify(document.interpretation.source)||typeof original.path!=='string'||!original.path.startsWith('/')||typeof identity?.module!=='string')throw Error('Original core source/owner pointer required');
-  let node:any=original.source;
-  for(const token of original.path.slice(1).split('/')){const key=token.replace(/~1/g,'/').replace(/~0/g,'~');if(node===null||typeof node!=='object'||!Object.hasOwn(node,key))throw Error('Original asserted source node absent');node=node[key]}
+  const mi=original.source.modules.findIndex((m:any)=>m.id===identity.module);
+  const ei=mi<0?-1:original.source.modules[mi].elements.findIndex((e:any)=>e.id===identity.element);
+  const expectedPath=observed.operation==='relationships'?'/modules/'+mi+'/relationships':'/modules/'+mi+'/elements/'+ei+'/'+observed.operation;
+  if(mi<0||(observed.operation!=='relationships'&&ei<0)||original.path!==expectedPath)throw Error('Original requested owner pointer correspondence required');
+  let node:any=original.source,present=true;const tokens=original.path.slice(1).split('/');
+  for(let i=0;i<tokens.length;i++){const key=tokens[i]!.replace(/~1/g,'/').replace(/~0/g,'~');
+   if(node===null||typeof node!=='object')throw Error('Original asserted source parent absent');
+   if(!Object.hasOwn(node,key)){if(i!==tokens.length-1)throw Error('Original asserted source parent absent');present=false;break}node=node[key];
+  }
+  if(meaning.state==='missing'){
+   if(present)throw Error('Complete original declaration meaning correspondence required: authored value cannot be missing');
+   absent.push(observed);continue;
+  }
+  if(!present)throw Error('Original asserted source node absent');
   const source=prepared.original.input.documents[di].artifact,owner=Object.freeze({documentId:document.documentId,moduleId:identity.module});
   const declaration=observed.operation==='keys'||observed.operation==='relationships';
   const originalNodes=declaration?node:[node],ownerNodes=declaration?meaning[observed.operation]:[node];
   if(!Array.isArray(originalNodes)||!Array.isArray(ownerNodes)||originalNodes.length!==ownerNodes.length)throw Error('Complete original declaration occurrence correspondence required');
+  if(declaration&&!sameOriginalMeaning(originalNodes,ownerNodes))throw Error('Complete original declaration meaning correspondence required');
   if(originalNodes.length===0){absent.push(observed);continue}
   for(let index=0;index<originalNodes.length;index++){
    const pointer=original.path+(declaration?'/'+index:'');
@@ -50,9 +71,15 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
    const authored=declaration&&typeof originalNodes[index]?.id==='string'&&originalNodes[index].id.length>0;
    if(declaration&&originalNodes[index]?.id!==ownerNodes[index]?.id)throw Error('Original authored declaration identity correspondence required');
    const identity=authored?{kind:'authored' as const,authoredIdentity:originalNodes[index].id as string}:{kind:'source' as const,sourceIdentityProfile:profile};
-   entries.push(Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,...identity}),
-    source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence}));
+   const entry=Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,...identity}),
+    source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence});
+   entries.push(entry);
+   if(declaration)declarationMeanings.push(Object.freeze({assertion:entry,ownerProfile:collection.profile,
+    ownerState:meaning.state as 'known'|'partial',originalMeaning:ownerNodes[index],
+    // Keep whole-owner unknown-path diagnostics; never infer local completeness.
+    uninterpretedPaths:meaning.uninterpretedPaths,meaningCorrespondence:true as const,
+    interpretationQualified:false as const,scope:'original_declaration_owner_meaning_only' as const}));
   }
  }
- return Object.freeze({profile,manifest,entries:Object.freeze(entries),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
+ return Object.freeze({profile,manifest,entries:Object.freeze(entries),declarationMeanings:Object.freeze(declarationMeanings),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
 }

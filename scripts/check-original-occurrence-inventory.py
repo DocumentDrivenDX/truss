@@ -6,14 +6,14 @@ env=os.environ.copy()
 roles=['TRUSS_UMF_PRODUCER','TRUSS_UMF_DECLARATION_PRODUCER','TRUSS_UMF_FIELD_ASSERTION_PRODUCER']
 for role in roles:
  if role not in env:raise RuntimeError('Original producer environment required: '+role)
-tests=['tests/catalog-input-preparation.test.ts','tests/catalog-core-assertion-identities.test.ts','tests/acceptance-json.test.ts','tests/source-occurrence-index.test.ts']
+tests=['tests/catalog-input-preparation.test.ts','tests/catalog-core-assertion-identities.test.ts','tests/acceptance-json.test.ts','tests/source-occurrence-index.test.ts','tests/catalog-report-preparation.test.ts']
 paths=sorted(set([p for folder in ['packages/umf-bun/src','packages/postgresql/src'] for p in root.joinpath(folder).rglob('*.ts')]+[root/p for p in tests]+[Path(__file__).resolve()]))
 for role in roles:
  paths += [Path(env[role])/name for name in ['producer.js','producer.ts','producer-manifest.json']]
 paths += sorted(root.joinpath('docs/helix/02-design/contracts').rglob('*.json'))
 paths += sorted(root.joinpath('docs/helix/02-design/contracts').rglob('*.d.ts'))
 paths += sorted(root.glob('**/acceptance-outer-json-expected.proposal.json'))
-paths += [Path('/Users/erik/Projects/umf/package.json')]
+paths += [root/'docs/helix/03-test/report-wire-untrusted.fixture.json',Path('/Users/erik/Projects/umf/package.json')]
 preimages={str(p):p.read_bytes() for p in paths}
 sha=lambda b:hashlib.sha256(b).hexdigest()
 cmd=['bun','test',*tests]

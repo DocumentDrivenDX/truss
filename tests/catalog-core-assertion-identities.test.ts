@@ -90,3 +90,42 @@ test('the original UMF profile still refuses unsafe integer source before invent
  originalInput.documents[0].artifact={identity:'unsafe',bytesBase64:b.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(b).digest('hex')};
  expect(()=>preparation.prepare(new TextEncoder().encode(JSON.stringify(originalInput)))).toThrow('Integer exceeds exact JavaScript range');
 });
+
+
+import {mkdtemp,rm,writeFile} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join,resolve} from 'node:path';
+test('loaded owner declaration meanings cannot change content while retaining IDs and counts',async()=>{
+ const declared:any=structuredClone(model);
+ declared.modules[0].elements.push({id:'R',kind:'record',members:[{module:'m',element:'v'},{module:'m',element:'w'}],keys:[{id:'same',name:'key',fields:[{module:'m',element:'v'},{module:'m',element:'w'}],primary:true,future:{opaque:['a','b']}}],extensions:{}});
+ declared.modules[0].relationships=[{id:'same',name:'self',source:[{module:'m',element:'R'}],target:[{module:'m',element:'R',key:'same'}],sourceMultiplicity:{min:0,max:1},targetMultiplicity:{min:0,max:1},targetLifecycle:'independent',directed:true,future:{opaque:['a','b']}}];
+ const originalInput=structuredClone(input),source=Buffer.from(JSON.stringify(declared));originalInput.documents[0].artifact={identity:'correspondence',bytesBase64:source.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(source).digest('hex')};
+ const p=preparation.prepare(new TextEncoder().encode(JSON.stringify(originalInput)));
+ // Controlled diagnostic owners exercise the real loaded-instance/collection path.
+ // Self-declared bundle pins establish only fixture custody, never trusted issuer authority.
+ const mutations=[['keys',"r.meaning={state:'missing'}"],['relationships',"r.meaning={state:'missing'}"],['keys',"r.meaning.keys[0].fields.reverse()"],['keys',"r.meaning.keys[0].primary=false"],['keys',"delete r.meaning.keys[0].future"],['keys',"r.meaning.keys[0].future.opaque.reverse()"],['relationships',"r.meaning.relationships[0].target[0].key='other'"],['relationships',"r.meaning.relationships[0].targetLifecycle='owned'"],['relationships',"r.meaning.relationships[0].targetMultiplicity.max=2"],['relationships',"r.meaning.relationships[0].directed=false"],['relationships',"r.meaning.relationships[0].future.opaque.reverse()"]];
+ for(const [operation,mutation] of [...mutations,['keys',"r.meaning.keys[0]=Object.fromEntries(Object.entries(r.meaning.keys[0]).reverse())"]]){
+  const directory=await mkdtemp(join(tmpdir(),'truss-owner-correspondence-'));
+  try{
+   const script=`import * as base from ${JSON.stringify(resolve(process.env.TRUSS_UMF_DECLARATION_PRODUCER!,'producer.js'))};
+export const inspectCoreSchemaProperties=base.inspectCoreSchemaProperties;
+export function inspectCoreKeys(...args){const r=base.inspectCoreKeys(...args);${operation==='keys'?mutation:''};return r}
+export function inspectCoreRelationships(...args){const r=base.inspectCoreRelationships(...args);${operation==='relationships'?mutation:''};return r}
+`;
+   await writeFile(join(directory,'producer.js'),script);
+   await writeFile(join(directory,'producer-manifest.json'),JSON.stringify({revision:owner.sourceRevision,producerMode:'declarations',bundleSha256:new Bun.CryptoHasher('sha256').update(script).digest('hex')}));
+   const controlled=await loadUmfDeclarationProducer(directory),collection=collectCatalogAssertionObservations(p,controlled,fields);
+   if(mutations.some(([,m])=>m===mutation))expect(()=>collectCatalogCoreAssertionIdentities(p,collection)).toThrow('declaration meaning correspondence');
+   else {
+    const result=collectCatalogCoreAssertionIdentities(p,collection);expect(result.declarationMeanings.length).toBe(2);
+    for(const retained of result.declarationMeanings){
+     expect(result.entries.includes(retained.assertion)).toBe(true);expect(retained.ownerProfile).toBe(collection.profile);
+     expect(retained.ownerState).toBe('partial');expect(retained.meaningCorrespondence).toBe(true);expect(retained.interpretationQualified).toBe(false);
+     const expected=retained.assertion.ruleName==='core.keys'?declared.modules[0].elements[2].keys[0]:declared.modules[0].relationships[0];
+     expect(retained.originalMeaning).toEqual(expected);expect(Object.isFrozen(retained.originalMeaning)).toBe(true);
+     expect(retained.uninterpretedPaths.length).toBeGreaterThan(0);
+    }
+   }
+  }finally{await rm(directory,{recursive:true,force:true})}
+ }
+});
