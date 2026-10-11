@@ -148,6 +148,33 @@ class CatalogInstallationNativeTests(NativeBoundaryFixture,unittest.TestCase):
             self.assertTrue(refused.exception.rollback_confirmed)
             self.assertEqual(connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
 
+    def test_column_definition_changes_refuse_and_restore_absence(self):
+        original,_=_statements()
+        profile=json.loads(original)
+        generated=next((t['name'],c['name']) for t in profile['membership']['tables'] for c in t['columns'] if c['definition']['generated']=='s')
+        for change in (
+            'ALTER TABLE truss.setting ALTER COLUMN value TYPE json USING value::json',
+            'ALTER TABLE truss.setting ALTER COLUMN value DROP NOT NULL',
+            'ALTER TABLE truss.setting ALTER COLUMN key TYPE text COLLATE "C"',
+            "ALTER TABLE truss.setting ALTER COLUMN value SET DEFAULT '{}'::jsonb",
+            'ALTER TABLE truss.schema_rev ALTER COLUMN accepted_at DROP DEFAULT',
+            'ALTER TABLE truss.edge_limit ALTER COLUMN side TYPE char(2)',
+            'ALTER TABLE truss.key_def ALTER COLUMN prop_ids TYPE integer[][]',
+            'ALTER TABLE truss."'+generated[0]+'" ALTER COLUMN "'+generated[1]+'" DROP EXPRESSION',
+        ):
+            connection=self.connection
+            class Port:
+                @property
+                def _transaction_status(self):return connection._transaction_status
+                def run(self,sql):
+                    if sql.startswith('SELECT pg_catalog.jsonb_build_object(') and "'namespace'" in sql:connection.run(change)
+                    return connection.run(sql)
+            with self.subTest(change=change),self.assertRaises(CatalogConstructionFailure) as refused:
+                construct_provisional_catalog_layout(Port())
+            self.assertIsInstance(refused.exception.primary_failure,ValueError)
+            self.assertTrue(refused.exception.rollback_confirmed)
+            self.assertEqual(connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
+
     def test_existing_namespace_preserved_without_overwrite(self):
         self.connection.run('CREATE SCHEMA truss')
         self.connection.run('CREATE TABLE truss.sentinel(value text)')

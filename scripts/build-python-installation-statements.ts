@@ -49,6 +49,24 @@ const sequenceParameters=(s:any)=>{
  if(!seen.has('start'))fields.start=fields.minimum;
  return fields;
 };
+const columnType=(c:any)=>{
+ const names=c.typeName.names.map((n:any)=>n.String.sval);let type=names.length===1?'pg_catalog.'+names[0]:names.join('.');
+ if(!['text','jsonb','int2','int4','int8','timestamptz','bool','bytea','bpchar','xid8','numeric'].some(n=>type==='pg_catalog.'+n)||c.typeName.setof)throw Error('Unselected original column type');
+ let dimensions='0';if(c.typeName.arrayBounds){if(type!=='pg_catalog.int4'||c.typeName.arrayBounds.length!==1||c.typeName.arrayBounds[0].Integer?.ival!==-1)throw Error('Unselected original array form');type='pg_catalog._int4';dimensions='1';}
+ let modifier='-1';if(c.typeName.typmods){if(type!=='pg_catalog.bpchar'||c.typeName.typmods.length!==1||c.typeName.typmods[0].A_Const?.ival?.ival!==1)throw Error('Unselected original type modifier');modifier='5';}
+ const collatable=['pg_catalog.text','pg_catalog.bpchar'].includes(type);
+ let collation=collatable?'pg_catalog.default':null;
+ if(c.collClause){const names=c.collClause.collname.map((n:any)=>n.String.sval);if(!collatable||!['pg_catalog.C','C'].includes(names.join('.')))throw Error('Unselected original collation');collation='pg_catalog.C';}
+ return {type,modifier,collation,dimensions};
+};
+const columnDefinition=(c:any)=>{
+ const constraints=(c.constraints??[]).map((n:any)=>n.Constraint);
+ for(const constraint of constraints)if(!['CONSTR_PRIMARY','CONSTR_NOTNULL','CONSTR_DEFAULT','CONSTR_CHECK','CONSTR_FOREIGN','CONSTR_GENERATED','CONSTR_UNIQUE','CONSTR_ATTR_DEFERRABLE','CONSTR_ATTR_DEFERRED'].includes(constraint.contype))throw Error('Unselected column constraint form');
+ if(c.identity||c.generated)throw Error('Unselected column identity/generation field');
+ return {...columnType(c),notNull:constraints.some((n:any)=>['CONSTR_NOTNULL','CONSTR_PRIMARY'].includes(n.contype)),
+  generated:constraints.some((n:any)=>n.contype==='CONSTR_GENERATED')?'s':'',identity:'',hasDefault:constraints.some((n:any)=>['CONSTR_DEFAULT','CONSTR_GENERATED'].includes(n.contype))};
+};
+const requirePrimary=(table:any,constraint:any)=>{if(constraint.contype==='CONSTR_PRIMARY')for(const key of constraint.keys){const column=table.columns.find((c:any)=>c.name===key.String.sval);if(!column)throw Error('Original primary column absent');column.definition.notNull=true;}};
 const tableMap=new Map<string,any>();
 const namespace=(r:any)=>{if(r.schemaname!=='truss')throw Error('Original selected namespace required');return r.relname;};
 for(const [position,wrapped] of nodes.entries()){
@@ -56,17 +74,19 @@ for(const [position,wrapped] of nodes.entries()){
  if(kind==='CreateStmt'){
   const name=namespace(stmt.CreateStmt.relation),columns=[];
   for(const [i,e] of (stmt.CreateStmt.tableElts??[]).entries()){
-   if(e.ColumnDef)columns.push({name:e.ColumnDef.colname,ordinal:String(columns.length+1),pointer:pointer+`/tableElts/${i}/ColumnDef`});
+   if(e.ColumnDef)columns.push({name:e.ColumnDef.colname,ordinal:String(columns.length+1),pointer:pointer+`/tableElts/${i}/ColumnDef`,definition:columnDefinition(e.ColumnDef)});
    else if(!e.Constraint)throw Error('Unknown table member form');
   }
   if(tableMap.has(name))throw Error('Duplicate original table');
   const table={name,kind:stmt.CreateStmt.partspec?'p':'r',pointer,columns};tableMap.set(name,table);membership.tables.push(table);
+  for(const e of stmt.CreateStmt.tableElts??[])if(e.Constraint)requirePrimary(table,e.Constraint);
  }else if(kind==='AlterTableStmt'){
   const table=tableMap.get(namespace(stmt.AlterTableStmt.relation));if(!table)throw Error('Original alteration owner absent');
   for(const [i,c] of stmt.AlterTableStmt.cmds.entries()){
    const cmd=c.AlterTableCmd,source=pointer+`/cmds/${i}/AlterTableCmd`;
-   if(cmd.subtype==='AT_AddColumn')table.columns.push({name:cmd.def.ColumnDef.colname,ordinal:String(table.columns.length+1),pointer:source+'/def/ColumnDef'});
-   else if(['AT_AddConstraint','AT_DropConstraint','AT_AlterColumnType'].includes(cmd.subtype))membership.definitionObligations.push({pointer:source,kind:cmd.subtype});
+   if(cmd.subtype==='AT_AddColumn')table.columns.push({name:cmd.def.ColumnDef.colname,ordinal:String(table.columns.length+1),pointer:source+'/def/ColumnDef',definition:columnDefinition(cmd.def.ColumnDef)});
+   else if(cmd.subtype==='AT_AlterColumnType'){const column=table.columns.find((c:any)=>c.name===cmd.name);if(!column)throw Error('Original altered column absent');Object.assign(column.definition,columnType(cmd.def.ColumnDef));column.typeSourcePointer=source;membership.definitionObligations.push({pointer:source,kind:cmd.subtype,unresolved:'type conversion execution semantics'});}
+   else if(['AT_AddConstraint','AT_DropConstraint'].includes(cmd.subtype)){if(cmd.subtype==='AT_AddConstraint')requirePrimary(table,cmd.def.Constraint);membership.definitionObligations.push({pointer:source,kind:cmd.subtype});}
    else throw Error('Unknown original alteration membership');
   }
  }else if(kind==='CreateSeqStmt')membership.sequences.push({name:namespace(stmt.CreateSeqStmt.sequence),pointer,parameters:sequenceParameters(stmt.CreateSeqStmt)});
