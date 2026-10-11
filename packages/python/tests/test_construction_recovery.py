@@ -38,6 +38,26 @@ class ConstructionRecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'twice'):
             registry.acquire(reference)
 
+    def test_metadata_originals_retained_before_any_submission(self):
+        recipe=b'original candidate metadata recipe';input_bytes=b'original candidate input'
+        registry=ProvisionalConstructionRecovery()
+        original=ConstructionOriginal(object(),b'source',b'target',b'baseline',recipe,input_bytes,160)
+        reference=registry.reserve(original)
+        observation=registry.inspect(reference)
+        self.assertIs(observation.original.metadata_recipe,recipe)
+        self.assertIs(observation.original.metadata_input,input_bytes)
+        self.assertEqual(observation.calls,())
+        insufficient=ProvisionalConstructionRecovery()
+        with self.assertRaisesRegex(ValueError,'call reservation'):
+            insufficient.reserve(ConstructionOriginal(object(),b'source',b'target',b'baseline',recipe,input_bytes,128))
+        self.assertEqual(insufficient.references(),())
+        for recipe,input_bytes in ((b'recipe',b''),(b'',b'input'),
+                (bytearray(b'recipe'),b'input'),(b'recipe',b'x'*1048577)):
+            refused=ProvisionalConstructionRecovery()
+            with self.assertRaises(ValueError):
+                refused.reserve(ConstructionOriginal(object(),b'source',b'target',b'baseline',recipe,input_bytes))
+            self.assertEqual(refused.references(),())
+
     def test_return_fact_survives_status_property_failure(self):
         failure=OSError('status inaccessible')
         class Port:
@@ -53,6 +73,19 @@ class ConstructionRecoveryTests(unittest.TestCase):
         self.assertIs(observation.calls[0].observation_failure,failure)
         self.assertIsNone(observation.calls[0].exception)
         self.assertIsNone(observation.calls[0].status)
+        self.assertEqual(observation.calls[0].original_result,(('original',),))
+
+    def test_returned_original_survives_status_interrupt(self):
+        result=[['retained native original']]
+        class Port:
+            def run(self,sql):return result
+            @property
+            def _transaction_status(self):raise KeyboardInterrupt()
+        registry=ProvisionalConstructionRecovery()
+        reference=registry.reserve(ConstructionOriginal(Port(),b'source',b'target',b'baseline'))
+        with self.assertRaises(KeyboardInterrupt):registry.acquire(reference).run('SELECT original')
+        result.clear()
+        self.assertEqual(registry.inspect(reference).calls[0].original_result,(('retained native original',),))
 
     def test_cleanup_slots_reserved_after_ordinary_capacity(self):
         class Port:
