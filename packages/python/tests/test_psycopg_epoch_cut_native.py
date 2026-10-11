@@ -29,7 +29,9 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
             status=subprocess.run([str(cls.pgbin/'pg_ctl'),'-D',str(cls.data),'status'],capture_output=True,text=True,timeout=60)
             receipt={'stopExitCode':stopped.returncode,'statusExitCode':status.returncode,'socketAbsent':not (cls.socket/'.s.PGSQL.5432').exists()}
             target=os.environ.get('TRUSS_PSYCOPG_EPOCH_EVIDENCE')
-            if target:(Path(target)/'cleanup.json').write_text(json.dumps(receipt,indent=2)+'\n')
+            if target:
+                (Path(target)/'cleanup.json').write_text(json.dumps(receipt,indent=2)+'\n')
+                (Path(target)/('cleanup-'+cls.__name__+'.json')).write_text(json.dumps(receipt,indent=2)+'\n')
             if receipt!={'stopExitCode':0,'statusExitCode':3,'socketAbsent':True}:raise RuntimeError('Owned fixture cleanup failed')
         finally:cls.directory.cleanup()
     setUp=host_tests.PsycopgHostNativeTests.setUp

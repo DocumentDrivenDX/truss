@@ -517,3 +517,27 @@ these eight native composition controls. Freeze sources/preimages before executi
 refuse drift, retain outcomes and independent owned stop/status/socket checks.
 These are administrative components, not a new132-case acceptance binding or a
 whole-source/authority/final-disclosure refinement proof.
+
+
+### Flat/graph fact-cut native schedules — 2026-10-11
+
+For CONTRACT-063/STP-056 B10/B11/B12/L03 and US-056 AC2/AC8/AC9/AC10 plus US-057
+AC2 prerequisites, run actual flat Assignment rows and actual typed Truss edge,
+object, relationship and endpoint rows under unchanged native constraints. Require
+identical selected project identities inside their held cuts; exercise independent
+bounded DML conflicts and all four own DML events on both stores. Pending original
+fact writer refuses before callback; retry only as a new explicit operation after
+writer completion. Changed relation identity, inheritance, duplicate binding and
+missing/disabled ALWAYS guard refuse before callback. Native replica mode still
+fences writes. Temp catalog shadows must not substitute readback or epoch identity.
+After original reader rollback, commit flat deactivation and native edge deletion;
+a fresh same-epoch lookup must return no memberships. Restore fixture originals.
+
+Keep an explicit omitted installed-guard control: disable its trigger outside the
+cut, require normal component refusal, then deliberately omit qualification while
+retaining native SHARE to demonstrate same-writer changed facts. Do not treat that
+countervariant as admitted behavior. Run10 fact controls, eight epoch controls and
+26 supported adoption regressions, frozen sources and boundary check; retain
+independent named cleanup for epoch/fact fixtures. Component evidence does not
+prove hidden-fact nondisclosure, ordinary Staff authentication, complete provider
+coverage, accepted graph catalog, source/role closure or protected final handback.

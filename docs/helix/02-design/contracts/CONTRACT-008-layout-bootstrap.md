@@ -1922,3 +1922,37 @@ helper. Complete independently qualified helper/trigger/role/ACL closure, whole
 source census, shared-role/configuration/authorization-fact cuts, authenticated
 caller/issuer and protected final disclosure remain separate required producers.
 No literal comparison fixture or successful callback establishes their authority.
+
+
+### Selected flat and graph authorization-fact cuts — 2026-10-11
+
+The private psycopg fact-cut component consumes bounded exact relation comparisons,
+not caller authority. Snapshot one to32 distinct permanent plain-table bindings,
+with exact schema/name/native OID/owner and original guard source. Sort acquisition
+by native OID after the original epoch cut. Acquire ONLY SHARE NOWAIT on each
+fully quoted table, then use explicit pg_catalog identities/operators/types for
+readback. Refuse changed owner/address, inheritance or partition/view/foreign/
+temporary storage before the callback. Require the exact zero-argument BEFORE
+STATEMENT INSERT/UPDATE/DELETE/TRUNCATE ALWAYS trigger, original invoker handler
+owner/body/volatility/search_path and no PUBLIC execution. This selected subset
+requires guard and table to have the same expected owner. Preserve complete
+installed profile qualification separately; expected artifacts are comparisons.
+
+The native per-table handler rejects actual same-backend granted ShareLock before
+selected fact DML. SHARE modes exclude independent table writers, including
+uncommitted changes; NOWAIT refuses rather than draining/retrying them. Native
+savepoint failure rolls back partial acquired cuts through the original host scope.
+The flat Assignment active flag and the actual Truss works_on typed edge existence
+are two tested physical representations of membership; no undeclared graph active
+property is introduced. A committed deactivation/deletion after reader release
+must be observed by a fresh operation. Every invocation reacquires all selected
+fact cuts; there is no persistent tuple capability or original-lock inference.
+
+These controls qualify selected table facts, not complete ontology policy or
+source authority. Independently complete fact-provider/mapping membership,
+authenticated ordinary-person admission, shared roles/grants/configuration and
+external facts, whole source/callable closure, protected business dispatch and
+final disclosure remain required. Ordinary roles must not receive metadata DML
+merely to acquire table locks. The same private cut mechanism can cover existing
+flat relational and generic graph stores without per-type storage DDL, but no
+public installer or backend acceptance binding is activated.
