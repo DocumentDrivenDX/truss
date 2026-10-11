@@ -1,0 +1,15 @@
+{
+  "identity": "truss-fresh-catalog-lifecycle",
+  "version": "0.1.0",
+  "selection": "first_revision_new_identities_only",
+  "sourceComponentVersion": "0.15",
+  "targetReportInterfaceVersion": "truss-acceptance-report/0.3.0-proposal",
+  "governingRules": [
+    "ADR-004",
+    "CONTRACT-003-reactivation-inventory"
+  ],
+  "requiredOriginalState": "head_zero_empty_prior_catalog_and_history",
+  "eventPlan": "insert_only_complete_source_bijection",
+  "reactivations": "empty_after_original_absence_and_event_verification",
+  "installedProfileAuthority": false
+}

@@ -2023,3 +2023,35 @@ selected administrative PostgreSQL16.15 component and source-exact policy. This
 does not install jobs, run DDL, certify readiness or grant complete report,
 installation or ordinary-person authority. Remaining report/context fields,
 protected finalization and the public register operation remain unfinished.
+
+### Original fresh lifecycle fields in Python report composition
+
+The selected v0.3 report now obtains `lifecycleProfile` and `reactivations` from
+an original Truss-owned first-revision lifecycle producer. Its profile pin is
+derived from the packaged policy bytes; caller layout pins do not supply that
+identity. This is the first-registration branch of the full lifecycle contract.
+Retained and same-ID reactivation workflows remain required and unfinished.
+
+The native producer requires original head zero, exactly the bootstrap revision,
+complete empty prior document/definition/key/history/relationship/report
+inventories, and independently matched current source and allocated identities.
+Original report-start custody requires generation zero and an excluded empty
+graph/history scope. Current emptiness is rechecked. All contributing catalog
+generation observers must retain their original body, attributes and ALWAYS
+trigger coverage before staging and during collection. Generation must equal
+exactly the independently counted new revision, documents, definitions, lineage
+and endpoints. Extra writes, including retirement followed by restoration and
+no-op updates, refuse even when final rows match.
+
+Composition retains original lifecycle evidence and rechecks it on reuse. It
+explicitly records the selected v0.3 target while leaving complete report
+identity, original execution, UMF qualification, assertions and extension meaning
+unfinished. This administrative native component does not publish an accepted
+catalog, finalize an operation or weaken the unconditional commit barrier.
+
+The lifecycle producer also retains an original pre-write start capability bound
+to the connection, preparation and operation. A standalone staged catalog and a
+reconstructed start cannot issue this evidence. Administrative DDL between
+observations, direct counter tampering and concurrent administrator attacks are
+outside this component qualification; ordinary-person protected installation
+and dependency exclusion remain separate unfinished gates.
