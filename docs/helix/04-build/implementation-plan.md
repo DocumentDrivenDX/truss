@@ -3867,3 +3867,35 @@ owner checkout revision. No current independent Astra review or complete runtime
 ordinary authority qualification is claimed. Prior bbc770ef/4c383f74 qualify their
 pre-merge source tuples. Complete semantic dependency scope and installed producer/
 role/body closure remain the next composition obligations; the goal stays active.
+
+
+### Exact original graph registration gateway — 2026-10-11
+
+Previous turn made progress by publishing graph projectionbf90d386. The new private
+`_psycopg_graph_scope` composes registration with original supported-driver epoch/
+lease/savepoint custody, snapshots bounded comparison primitives, isolates stock
+integer/list/byte codecs, compares prior native context/evidence, derives monotonic
+union and requires exact registration result plus full sorted native union before
+callback. Seven actual native identity/role fields correspond with exact context;
+text descriptors, unique fields/IDs and capped rows/evidence are checked.
+
+Final native `evidence/python-psycopg-epoch-cut/296c0af3-af89-4198-9459-45ff2fa6ea11`
+passes61 methods (16 projection/gateway,10 fact, nine epoch,26 adoption),117 source
+pins/current and archived preimages,1614 native payload pins, module boundaries
+and three independent named stop0/status3/socket removals. Five added controls
+cover unrelated business/selected refusal, hostile host numeric/list/byte codecs,
+unknown definition/no callback, actual substituted native INSERT with unchanged
+plausible count and wrong association/no callback/rolled-back rows, and later
+carrier mutation preserving original native recipe. Initial81929400 qualifies
+its earlier59-test source tuple.
+
+Formal `evidence/graph-fact-projection-formal/37c48d15-e58b-434b-9106-dee6d10c0b75`
+replays the existing11 conditional formulas (four UNSAT/seven SAT) while retaining
+seven current source inputs including the new wrapper. This is source-qualified
+model replay, not a new Python/native registration refinement theorem. No new
+Astra review is claimed. Complete authenticated semantic dependency membership,
+original physical mapping/installed source and role closure, whole current source/
+authority and final protected mutation publication remain required. A declared
+wrong scope remains the previous successful counterexample. No public API/grant,
+backend binding or support flag changes; checkpoint remains26/132 with106 missing,
+and the full objective stays active. Direct-main publication remains authorized.

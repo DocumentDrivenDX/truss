@@ -2,7 +2,7 @@
 from pathlib import Path
 import hashlib,json,uuid,z3
 root=Path.cwd();out=root/'docs/helix/04-build/evidence/graph-fact-projection-formal'/str(uuid.uuid4());out.mkdir(parents=True)
-paths=['scripts/prove-graph-fact-projection.py','packages/postgresql/native/authorization-graph-fact-scope.sql','packages/postgresql/native/authorization-graph-fact-scope-storage.sql','packages/postgresql/native/authorization-fact-write-fence.sql','packages/python/tests/test_psycopg_graph_projection_native.py','docs/helix/04-build/evidence/authorization-graph-fact-scope.owner-export.sql']
+paths=['packages/python/src/truss/_psycopg_graph_scope.py','scripts/prove-graph-fact-projection.py','packages/postgresql/native/authorization-graph-fact-scope.sql','packages/postgresql/native/authorization-graph-fact-scope-storage.sql','packages/postgresql/native/authorization-fact-write-fence.sql','packages/python/tests/test_psycopg_graph_projection_native.py','docs/helix/04-build/evidence/authorization-graph-fact-scope.owner-export.sql']
 pins={}
 for name in paths:
  raw=(root/name).read_bytes();pins[name]=hashlib.sha256(raw).hexdigest();p=out/'preimages'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)

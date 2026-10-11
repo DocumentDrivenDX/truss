@@ -98,3 +98,62 @@ class PsycopgGraphProjectionNativeTests(unittest.TestCase):
         result=self.host._run_operation(t,lambda c,o:c.execute("INSERT INTO truss.authorization_graph_fact_scope VALUES((pg_current_xact_id()::text::numeric+1)::text::xid8,100,decode('01','hex'),decode('02','hex'))"))
         self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000')
         self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.authorization_graph_fact_scope').fetchone(),(0,))
+
+    def test_registered_scope_gateway_permits_only_unrelated_business_write(self):
+        from truss._psycopg_graph_scope import _GraphScopeComparison,_run_graph_scope_operation
+        t=self.begin()
+        def work(c):
+            c.execute('INSERT INTO truss.edge(id,rel_type_id,source_id,source_type,target_id,target_type,rev) VALUES(101,101,100,100,100,100,0)')
+            return 'business'
+        self.assertEqual(_run_graph_scope_operation(self.host,t,self.comparison(),_GraphScopeComparison((100,),b'original'),work),Ok('business'))
+        result=_run_graph_scope_operation(self.host,t,self.comparison(),_GraphScopeComparison((100,),b'original'),lambda c:c.execute('DELETE FROM truss.edge WHERE id=100'))
+        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000')
+    def test_gateway_isolates_host_numeric_array_and_byte_codecs(self):
+        from truss._psycopg_graph_scope import _GraphScopeComparison,_run_graph_scope_operation
+        from psycopg.adapt import Dumper
+        class WrongInt(Dumper):
+            oid=23
+            def dump(self,value):return b'101'
+        class WrongBytes(Dumper):
+            oid=17
+            def dump(self,value):return b'wrong'
+        class WrongList(Dumper):
+            oid=1007
+            def dump(self,value):return b'{101}'
+        self.connection.adapters.register_dumper(int,WrongInt);self.connection.adapters.register_dumper(bytes,WrongBytes);self.connection.adapters.register_dumper(list,WrongList)
+        t=self.begin();called=[]
+        self.assertEqual(_run_graph_scope_operation(self.host,t,self.comparison(),_GraphScopeComparison((100,),b'original'),lambda c:called.append(True)),Ok(None))
+        self.assertEqual(called,[True]);self.assertEqual(self.connection.execute('SELECT rel_type_id FROM truss.authorization_graph_fact_scope').fetchall(),[(100,)])
+    def test_gateway_unknown_association_never_invokes_callback(self):
+        from truss._psycopg_graph_scope import _GraphScopeComparison,_run_graph_scope_operation
+        t=self.begin();called=[]
+        result=_run_graph_scope_operation(self.host,t,self.comparison(),_GraphScopeComparison((102,),b'original'),lambda c:called.append(True))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[])
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.authorization_graph_fact_scope').fetchone(),(0,))
+
+    def test_gateway_substituted_native_registration_refuses_before_callback(self):
+        from truss._psycopg_graph_scope import _GraphScopeComparison,_run_graph_scope_operation
+        source=(ROOT/'packages/postgresql/native/authorization-graph-fact-scope.sql').read_text()
+        function='CREATE OR REPLACE FUNCTION truss.runtime_register_graph_fact_scope('+source.split('CREATE FUNCTION truss.runtime_register_graph_fact_scope(',1)[1].split('CREATE FUNCTION truss.runtime_fence_selected_graph_fact_row()',1)[0]
+        marker='SELECT native_xid,v,native_context,original_evidence FROM unnest(selected_types) v'
+        self.assertEqual(function.count(marker),1)
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True) as owner:
+            owner.execute(function.replace(marker,'SELECT native_xid,101,native_context,original_evidence FROM unnest(selected_types) v'))
+            try:
+                t=self.begin();called=[]
+                result=_run_graph_scope_operation(self.host,t,self.comparison(),_GraphScopeComparison((100,),b'original'),lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertEqual(called,[])
+                self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.authorization_graph_fact_scope').fetchone(),(0,))
+            finally:
+                self.connection.execute('ROLLBACK');owner.execute(function)
+    def test_gateway_recipe_snapshot_ignores_later_carrier_mutation(self):
+        from truss._psycopg_graph_scope import _GraphScopeComparison,_run_graph_scope_operation
+        from truss.psycopg_host import PsycopgHost
+        from unittest.mock import patch
+        t=self.begin();comparison=_GraphScopeComparison((100,),b'original');original=PsycopgHost._run_operation
+        def mutate(host,transaction,callback):
+            object.__setattr__(comparison,'association_ids',(101,));object.__setattr__(comparison,'evidence',b'changed')
+            return original(host,transaction,callback)
+        with patch.object(PsycopgHost,'_run_operation',mutate):
+            self.assertEqual(_run_graph_scope_operation(self.host,t,self.comparison(),comparison,lambda c:'original'),Ok('original'))
+        self.assertEqual(self.connection.execute('SELECT rel_type_id FROM truss.authorization_graph_fact_scope').fetchall(),[(100,)])

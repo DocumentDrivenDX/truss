@@ -565,3 +565,17 @@ shrink controls. Finite-history induction assumes native faithful row effects,
 continuous cuts and complete required scope at each step; newly added scopes need
 fresh baselines. These are CONTRACT-063/STP-056 B09/B11/B12/L03 and US-056 AC2/AC7/
 AC9/AC10 plus US-057 AC2 prerequisites, not authorization/finalization acceptance.
+
+
+### Original graph registration wrapper controls — 2026-10-11
+
+Require actual registered union/context/evidence readback before unrelated business
+callback; selected writes still refuse. Custom host integer, array and byte dumpers
+must not substitute the original recipe. A missing association definition must
+refuse with no callback or scope rows. Replace only the native registration INSERT
+association with a different valid association while retaining its plausible count:
+require original-ID readback refusal, no callback and native rollback of new rows.
+Mutate the comparison carrier after primitive snapshot; native IDs/evidence must
+remain the original selected recipe. Keep native readback separate from required
+semantic dependency completeness and installed source authority. These support
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites, without promotion.

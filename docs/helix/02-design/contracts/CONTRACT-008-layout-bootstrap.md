@@ -1989,3 +1989,24 @@ have other earlier side effects; complete mutation/finalization and disclosure
 are not established by row-guard exclusion. Keep the earlier whole-table read
 profile separate and do not activate ordinary mutation API or release capability
 from this candidate.
+
+
+### Original graph-scope registration/readback — 2026-10-11
+
+The private supported-driver wrapper snapshots bounded exact association-ID and
+original-evidence comparison primitives before acquiring its original epoch/graph
+scope. Isolate supported per-cursor integer/list/byte codecs from host adapters.
+Read the actual current-xid scope before registration, compare complete native
+context/evidence, derive the monotonic union, register once, and require exact
+scalar result plus complete sorted native union readback before callback. Retain
+all seven actual xid/database/backend/session/effective actor/role-OID fields in
+context correspondence; reject duplicate/extra/missing context fields, repeated
+IDs, changed evidence and over-capacity rows. Native text descriptors and capped
+row counts are required. Roll back registration/readback mismatch through the
+original owned scope; no callback, replay or partial publication follows.
+
+Declared comparisons remain inputs, not original authenticated semantic dependency
+membership or write authority. A wrong input association set can still omit a
+required fact; this wrapper closes native registration substitution, not that
+separate producer obligation. Complete installed routine/trigger/role/body closure
+and semantic dependency-to-physical binding must qualify before ordinary use.
