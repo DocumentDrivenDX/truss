@@ -12,6 +12,7 @@ from types import MappingProxyType
 from ._construction_recovery import ConstructionOriginal,ProvisionalConstructionRecovery
 from ._installation_definition_release import DEFINITIONS_SHA256,DEFINITION_QUERY_SHA256
 from ._installation_statement_release import STATEMENTS_SHA256,SOURCE_MANIFEST_SHA256
+from ._installation_metadata import prepare_metadata,execute_metadata,validate_metadata_preflight
 
 
 @dataclass(frozen=True,slots=True)
@@ -27,6 +28,7 @@ class ProvisionalCatalogConstruction:
     definition_observation: bytes = b''
     recovery: object = None
     recovery_reference: object = None
+    metadata_observation: bytes = b''
 
 
 class CatalogConstructionFailure(RuntimeError):
@@ -119,9 +121,10 @@ _OBSERVATION="""SELECT pg_catalog.jsonb_build_object(
  'policies',(SELECT COALESCE(jsonb_agg(to_jsonb(p) ORDER BY p.oid),'[]'::jsonb) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid=p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'))::text"""
 
 
-def prepare_provisional_catalog_construction(connection,recovery):
+def prepare_provisional_catalog_construction(connection,recovery,*,metadata=False):
     """Retain original attempt and return its handle before any BEGIN submission."""
     recovery.check_available(connection)
+    if type(metadata) is not bool:raise ValueError('Exact metadata branch selection required')
     original,statements=_statements()
     definitions,query,profile=_definition_baseline(original)
     if getattr(connection,'_transaction_status',None)!=b'I':
@@ -129,13 +132,15 @@ def prepare_provisional_catalog_construction(connection,recovery):
     target=_native_text(connection,_TARGET)
     if json.loads(target)['version']!=profile['nativeVersion']:
         raise ValueError('Selected PostgreSQL16.15 source compilation profile required')
-    return recovery.reserve(ConstructionOriginal(connection,original,target,definitions))
+    recipe,input_bytes=prepare_metadata(target) if metadata else (b'',b'')
+    return recovery.reserve(ConstructionOriginal(connection,original,target,definitions,
+        recipe,input_bytes,160 if metadata else 128))
 
 
-def construct_provisional_catalog_layout(connection):
+def construct_provisional_catalog_layout(connection,*,metadata=False):
     recovery=ProvisionalConstructionRecovery()
     try:
-        reference=prepare_provisional_catalog_construction(connection,recovery)
+        reference=prepare_provisional_catalog_construction(connection,recovery,metadata=metadata)
         return execute_provisional_catalog_construction(recovery,reference)
     except BaseException as error:
         # The exception retains custody even when ordinary result publication fails.
@@ -164,6 +169,7 @@ def execute_provisional_catalog_construction(recovery,reference):
         original=retained.statements;statements=json.loads(original)['statements']
         definitions,definition_query,definition_profile=_definition_baseline(original)
         if definitions!=retained.definition_baseline:raise ValueError('Original retained definition baseline required')
+        if retained.metadata_recipe:validate_metadata_preflight(retained)
         if getattr(connection,'_transaction_status',None)!=b'I':
             raise ValueError('Original idle installer-owned administrative connection required')
         target=retained.target
@@ -171,7 +177,7 @@ def execute_provisional_catalog_construction(recovery,reference):
         if type(version) is not str or not version.isascii() or not version.isdigit() or version!=definition_profile['nativeVersion']:
             raise ValueError('Selected PostgreSQL16.15 source compilation profile required')
         begun=False;primary=None;cleanup=None;observed=b'';restored=False;prior_namespace=None
-        definition_observed=b''
+        definition_observed=b'';metadata_observed=b''
         attempt=_construction_attempt(definitions)
     except BaseException as error:
         if acquired:recovery.fail_preflight(reference,error)
@@ -200,6 +206,8 @@ def execute_provisional_catalog_construction(recovery,reference):
         attempt['definition_observation']=definition_observed
         if json.loads(definition_observed)!=json.loads(definition_profile['compiledOriginal']):
             raise ValueError('Independent release definition correspondence mismatch')
+        if retained.metadata_recipe:
+            metadata_observed=execute_metadata(connection,retained,definition_observed,attempt)
     except BaseException as error:
         primary=error
     finally:
@@ -218,7 +226,7 @@ def execute_provisional_catalog_construction(recovery,reference):
         failure=CatalogConstructionFailure(primary,cleanup,original,target,restored,retained.connection,attempt)
         failure.recovery=recovery;failure.recovery_reference=reference
         raise failure from primary
-    return ProvisionalCatalogConstruction(original,target,observed,str(len(statements)),restored,original_definition_baseline=definitions,definition_observation=definition_observed,recovery=recovery,recovery_reference=reference)
+    return ProvisionalCatalogConstruction(original,target,observed,str(len(statements)),restored,original_definition_baseline=definitions,definition_observation=definition_observed,recovery=recovery,recovery_reference=reference,metadata_observation=metadata_observed)
 
 
 def compare_source_membership(expected,observed):

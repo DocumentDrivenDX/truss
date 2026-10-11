@@ -20,6 +20,9 @@ class ConstructionOriginal:
     statements: bytes
     target: bytes
     definition_baseline: bytes
+    metadata_recipe: bytes = b''
+    metadata_input: bytes = b''
+    ordinary_call_limit: int = 128
 
 
 @dataclass(frozen=True, slots=True)
@@ -30,6 +33,7 @@ class ConstructionCallObservation:
     exception: object
     status: bytes | None
     observation_failure: object
+    original_result: tuple | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -52,6 +56,7 @@ class _Call:
     exception: object = None
     status: bytes | None = None
     observation_failure: object = None
+    original_result: tuple | None = None
 
 
 @dataclass(slots=True)
@@ -90,13 +95,20 @@ class ProvisionalConstructionRecovery:
     def reserve(self, original):
         if type(original) is not ConstructionOriginal:
             raise ValueError('Original construction custody required')
-        if any(type(value) is not bytes for value in (original.statements,original.target,original.definition_baseline)):
+        if any(type(value) is not bytes for value in (original.statements,original.target,
+                original.definition_baseline,original.metadata_recipe,original.metadata_input)):
             raise ValueError('Exact immutable original bytes required')
+        if (bool(original.metadata_recipe)!=bool(original.metadata_input)
+                or len(original.metadata_recipe)>4194304 or len(original.metadata_input)>1048576):
+            raise ValueError('Complete bounded original metadata recipe and input required')
+        if (type(original.ordinary_call_limit) is not int
+                or original.ordinary_call_limit!=(160 if original.metadata_recipe else 128)):
+            raise ValueError('Original selected construction call reservation required')
         with self._lock:
             self._available(original.connection)
             reference = ConstructionReference(self._issuer, len(self._entries))
             # 128 ordinary calls plus two slots solely for rollback/restoration.
-            entry = _Attempt(reference, original, tuple(_Call() for _ in range(130)))
+            entry = _Attempt(reference, original, tuple(_Call() for _ in range(original.ordinary_call_limit+2)))
             self._entries = (*self._entries, entry)
             return reference
 
@@ -131,9 +143,10 @@ class ProvisionalConstructionRecovery:
         """Historical retained facts only; never accesses the connection."""
         with self._lock:
             entry = self._entry(reference)
-            slots = (*entry.slots[:entry.ordinary_count], *entry.slots[128:128+entry.cleanup_count])
+            limit=entry.original.ordinary_call_limit
+            slots = (*entry.slots[:entry.ordinary_count], *entry.slots[limit:limit+entry.cleanup_count])
             calls = tuple(ConstructionCallObservation(s.sql, s.entered, s.returned,
-                s.exception, s.status, s.observation_failure) for s in slots)
+                s.exception, s.status, s.observation_failure,s.original_result) for s in slots)
             return ConstructionObservation(entry.original, entry.phase, calls,
                 entry.rollback_confirmed, entry.primary_failure,
                 entry.cleanup_failure, entry.observation_failure)
@@ -172,10 +185,10 @@ class _ConstructionPort:
             if self._cleanup:
                 if entry.cleanup_count >= 2:
                     raise ValueError('Reserved cleanup call slots exhausted')
-                slot = entry.slots[128+entry.cleanup_count]
+                slot = entry.slots[entry.original.ordinary_call_limit+entry.cleanup_count]
                 entry.cleanup_count += 1
             else:
-                if entry.ordinary_count >= 128:
+                if entry.ordinary_count >= entry.original.ordinary_call_limit:
                     raise ValueError('Reserved construction call slots exhausted')
                 slot = entry.slots[entry.ordinary_count]
                 entry.ordinary_count += 1
@@ -193,6 +206,12 @@ class _ConstructionPort:
         with self._owner._lock:
             slot.result = result
             slot.returned = True
+            if (type(result) in (list,tuple) and len(result)<=16
+                    and all(type(row) in (list,tuple) and len(row)<=16
+                        and all(type(cell) in (str,bytes) or cell is None for cell in row) for row in result)):
+                size=sum(len(cell.encode('utf8')) if type(cell) is str else len(cell)
+                    for row in result for cell in row if cell is not None)
+                if size<=16777216:slot.original_result=tuple(tuple(row) for row in result)
         self._status(slot)
         return result
 

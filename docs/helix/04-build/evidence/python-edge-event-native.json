@@ -1,0 +1,28 @@
+{
+  "interfaceVersion": "truss-component-evidence/0.1",
+  "component": "native-edge-event-correspondence",
+  "baseCommit": "1764660543d74b5bbdeb13d017b4597863ae7806",
+  "database": "PostgreSQL16.15",
+  "python": "CPython3.11.17",
+  "driver": "pg8000 1.31.5",
+  "tests": {
+    "count": 73,
+    "seconds": "16.194",
+    "result": "PASS",
+    "scope": "edge event tests plus inherited and standalone row-touch regressions"
+  },
+  "sources": {
+    "packages/postgresql/native/edge-limit/event-frame.sql": "e1af46b7dff3aa4942179e963fff76fa54b33214361f3ccc10401cefeb9579fe",
+    "packages/postgresql/native/edge-limit/observe.sql": "323ac06c983eb9131597f4f3fbe47fe59b9fcfcff52057d1f2ea0c40f904334b",
+    "packages/python/tests/test_edge_event_frame_native.py": "aeee0cd4edc0ae7923437d845fa40816474712bdb738e67706fa7fa90abff0f0",
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/python-edge-event-native-tests.log": "efd7ad691a8d8fb926d0a90771ea6a6a78b57a10f193020710b5bf3dc0816bfb"
+  },
+  "limitations": [
+    "Administrative replica-mode fixtures, ALWAYS observers; not ordinary-person protected admission",
+    "Retained guard artifact correspondence does not prove acquired native guards",
+    "Complete plan consumption, native allocation correspondence and finalizer integration remain open",
+    "No public Python install, acceptance or mutation capability enabled",
+    "Unconditional operation commit barrier retained"
+  ]
+}

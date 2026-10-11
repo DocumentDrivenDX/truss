@@ -1,0 +1,92 @@
+{
+  "interface": "truss-python-installation-metadata-construction-evidence/0.1",
+  "scope": "rollback_only_candidate_native_metadata_effects_and_original_recovery",
+  "sourceSha256": {
+    "packages/python/src/truss/_installation_metadata.py": "d04501fcec7fdd26fa8ba2409644bc32213180af2df9ecac9e9f8c5dacb83ad1",
+    "packages/python/src/truss/_profiles/installation-metadata-construction.json": "da5160434020a1b0066c8d411a230c3a528984c5134382506e7835015f0c3ffe",
+    "packages/python/src/truss/_catalog_installation.py": "e796704f21c6ef2fe435896d72d37f3de7cb8d05100459c0b58bd9a416dde812",
+    "packages/python/src/truss/_construction_recovery.py": "647a977b46527aebc20eb31e6515f6903c24ea16ca001f39e62ac0c864d892b9",
+    "packages/python/tests/test_installation_metadata.py": "e956420f72c8de97165e51668b7f169937c9b6f4da489dffda4a6509fccf276c",
+    "packages/python/tests/test_construction_recovery.py": "44326dd927a1d4648eee93b90ec2a67b2deca486697321dc8928210b50376863",
+    "packages/python/tests/test_catalog_installation.py": "aa3825b970274ca05d26fd6cd5a035245fc8a8db0ff32d8bee4673c4769f7cfc",
+    "scripts/check-module-boundaries.py": "311b7e18157836fd4b2efa8720b158280eb1aa169f22b667c08118f3365399bb"
+  },
+  "governingInputs": {
+    "contract": "CONTRACT-008 IM01-IM07",
+    "archiveInsertSource": "docs/helix/02-design/contracts/installation-archive-insert-v0.2.proposal.sql",
+    "epochSource": "packages/postgresql/native/source-epoch-issue.sql"
+  },
+  "installedTests": {
+    "count": 43,
+    "seconds": 34.304,
+    "status": "passed",
+    "modules": [
+      "test_installation_metadata",
+      "test_catalog_installation",
+      "test_construction_recovery"
+    ],
+    "log": "python-installation-metadata-installed-tests.log",
+    "logSha256": "ca1b18199b9ba79a61043ff582a11aa7d0d7b41c140723aece3fb1d0d2876a1b",
+    "nativeProfile": "macOS arm64 CPython3.11.17 pgserver0.1.4+truss.pg16.15 PostgreSQL16.15",
+    "command": "python -m unittest test_installation_metadata test_catalog_installation test_construction_recovery",
+    "packagePath": "/private/tmp/truss-installation-metadata-corrected-installed",
+    "cwd": "/private/tmp",
+    "fixtureScope": "Administrative test runtime; not ordinary-person or protected installer admission"
+  },
+  "wheel": {
+    "sha256": "c85002f9c8748fc067efefc795c99cb8b9e0d806db18878617f84c9859a95abb",
+    "sourceWheelInstalledPayloadFiles": 140,
+    "payloadFilesEqual": true
+  },
+  "moduleBoundaries": {
+    "imports": 469,
+    "status": "passed"
+  },
+  "nativeEffects": [
+    "native UUID and one original UTC microsecond clock capture",
+    "complete five candidate artifact roles with exact identity/digest readback",
+    "matching marker with governing nested namespace wire",
+    "existing epoch issuer definition check and initial epoch registry/pointer parity",
+    "deferred constraint checks",
+    "unconditional rollback"
+  ],
+  "recovery": [
+    "recipe/input and selected call budget retained before BEGIN",
+    "bounded immutable native returned cells retained before status access",
+    "original reference survives final publication failure",
+    "lost rollback acknowledgment remains unresolved without replay"
+  ],
+  "resources": {
+    "defaultOrdinaryCallSlots": 128,
+    "metadataOrdinaryCallSlots": 160,
+    "reservedCleanupSlots": 2,
+    "maximumCandidateArtifactBytes": 1048576,
+    "maximumAggregateCandidateBytes": 3145728,
+    "maximumMetadataReadbackBytes": 6291456,
+    "maximumRetainedReturnedCellBytesPerCall": 16777216,
+    "scope": "Logical artifact preflight and post-materialization retention ceilings only",
+    "archiveSqlExpansion": "Approximately four times original artifact bytes from nested hex encoding",
+    "fullDriverHeapWorkDeadlineQualified": false,
+    "nativeAggregationResourceQualified": false
+  },
+  "qualification": {
+    "completeBootstrapBundle": false,
+    "completeInstalledInventory": false,
+    "trustedDeploymentIdentity": false,
+    "protectedInstallerAuthority": false,
+    "installedReadiness": false,
+    "publicInstallFresh": false,
+    "commitEnabled": false,
+    "publicWorkflow": false
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "source": "approved",
+    "artifact": "approved",
+    "reviewerExecutedTests": false,
+    "verifiedSourcePins": 8,
+    "verifiedPayloadFiles": 140
+  },
+  "recoveryProjectionLimit": "Raw returned result is retained internally before immutable projection; allocation or UTF-8 sizing failure in that projection is not qualified for externally retrievable immutable cells. No native replay is performed."
+}
