@@ -15,7 +15,7 @@ import truss
 root = Path(__file__).resolve().parents[1]
 if len(sys.argv) not in (2,3,4) or (len(sys.argv)>=3 and sys.argv[2]!='--corrected-pgserver'):
  raise SystemExit('usage: check-python-installed-suite.py TRUSS_WHEEL [--corrected-pgserver [NEW_RECEIPT_FILENAME]]')
-corrected = len(sys.argv)>=3
+corrected = True  # Historical flag remains a compatibility spelling.
 filename = sys.argv[3] if len(sys.argv)==4 else ('python-corrected-runtime-installed-suite.json' if corrected else 'python-current-installed-suite.json')
 if Path(filename).name != filename or not filename.endswith('.json'): raise RuntimeError('Receipt basename required')
 receipt_path = evidence_directory()/filename
@@ -38,7 +38,7 @@ with zipfile.ZipFile(wheel) as archive:
    raise RuntimeError('Installed/wheel/source payload drift: '+name)
   modules.append({'path':name,'sha256':hashlib.sha256(original).hexdigest()})
 dependencies = {n:importlib.metadata.version(n) for n in ['truss-toolkit','pgserver','fasteners','platformdirs','psutil','weft-sql']}
-for name,version in {'pgserver':'0.1.4+truss.pg17.11' if corrected else '0.1.4','fasteners':'0.20','platformdirs':'4.12.4','psutil':'7.2.2'}.items():
+for name,version in {'pgserver':'0.1.4+truss.pg17.11','fasteners':'0.20','platformdirs':'4.12.4','psutil':'7.2.2'}.items():
  if dependencies[name] != version: raise RuntimeError('Local dependency drift: '+name)
 expected_tests = unittest.defaultTestLoader.discover(str(root/'packages/python/tests')).countTestCases()
 environment = os.environ.copy()

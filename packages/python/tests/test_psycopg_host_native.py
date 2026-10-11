@@ -21,6 +21,12 @@ class PsycopgHostNativeTests(unittest.TestCase):
     selected_profile = PsycopgProfile()
     @classmethod
     def setUpClass(cls):
+        cls.worker_fixture = None
+        cls.database = 'postgres'
+        if os.environ.get('TRUSS_NATIVE_WORKER') and not getattr(cls, 'isolated_lifecycle', False):
+            from native_fixture import configure_shared_psycopg_fixture
+            configure_shared_psycopg_fixture(cls)
+            return
         cls.directory = tempfile.TemporaryDirectory(prefix='truss-psy-', dir='/private/tmp')
         cls.root = Path(cls.directory.name)
         cls.data = cls.root/'data'
@@ -37,11 +43,15 @@ class PsycopgHostNativeTests(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        if cls.worker_fixture is not None:
+            cls.worker_fixture.cleanup()
+            cls.worker_fixture = None
+            return
         try: cls.run_pg('pg_ctl', '-D', str(cls.data), '-w', '-m', 'immediate', 'stop')
         finally: cls.directory.cleanup()
 
     def setUp(self):
-        self.connection = psycopg.connect(host=str(self.socket), user='postgres', dbname='postgres',
+        self.connection = psycopg.connect(host=str(self.socket), user='postgres', dbname=self.database,
                                          autocommit=True, options='-c statement_timeout=3000')
         self.addCleanup(self.connection.close)
         self.host = adopt_psycopg_host(self.connection, profile=self.selected_profile, statement_timeout_ms=1000)

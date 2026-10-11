@@ -24,14 +24,20 @@ class PrerequisitePsycopgNativeTests(unittest.TestCase):
     run_pg=classmethod(PsycopgHostNativeTests.run_pg.__func__)
     @classmethod
     def setUpClass(cls):
-        cls.root=Path(tempfile.mkdtemp(prefix='truss-prerequisite-',dir='/private/tmp'));cls.data=cls.root/'data';cls.socket=cls.root/'socket';cls.socket.mkdir()
+        cls.worker_fixture=None;cls.database='postgres'
+        if os.environ.get('TRUSS_NATIVE_WORKER') and not getattr(cls, 'isolated_lifecycle', False):
+            from native_fixture import configure_shared_psycopg_fixture
+            configure_shared_psycopg_fixture(cls)
+        else:
+            cls.root=Path(tempfile.mkdtemp(prefix='truss-prerequisite-',dir='/private/tmp'));cls.data=cls.root/'data';cls.socket=cls.root/'socket';cls.socket.mkdir()
         cls.pgbin=postgres_bin_for_profile(cls.selected_profile)
         cls.start_attempted=False
         cls.addClassCleanup(cls.cleanup_fixture)
-        cls.run_pg('initdb','-D',str(cls.data),'-U','postgres','--auth=trust','--encoding=UTF8')
-        cls.start_attempted=True
-        cls.run_pg('pg_ctl','-D',str(cls.data),'-l',str(cls.root/'server.log'),'-w','-o',f"-h '' -k {cls.socket}",'start')
-        with psycopg.connect(host=str(cls.socket),user='postgres',dbname='postgres',autocommit=True) as connection:
+        if cls.worker_fixture is None:
+            cls.run_pg('initdb','-D',str(cls.data),'-U','postgres','--auth=trust','--encoding=UTF8')
+            cls.start_attempted=True
+            cls.run_pg('pg_ctl','-D',str(cls.data),'-l',str(cls.root/'server.log'),'-w','-o',f"-h '' -k {cls.socket}",'start')
+        with psycopg.connect(host=str(cls.socket),user='postgres',dbname=cls.database,autocommit=True) as connection:
             paths=['docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
                    'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql']
             paths.extend(f'packages/postgresql/native/{name}.sql' for name in COMPONENTS if name!='operation-admission')
@@ -51,6 +57,9 @@ class PrerequisitePsycopgNativeTests(unittest.TestCase):
             connection.execute("INSERT INTO truss.source_epoch_current VALUES(1,'guard-fixture','guard-fixture-epoch')")
     @classmethod
     def cleanup_fixture(cls):
+        if cls.worker_fixture is not None:
+            cls.worker_fixture.cleanup();cls.worker_fixture=None
+            return
         import shutil
         receipt={'stop':None,'status':None,'socket_absent':False}
         if cls.start_attempted:
@@ -74,7 +83,7 @@ class PrerequisitePsycopgNativeTests(unittest.TestCase):
         else:raise RuntimeError('Owned prerequisite fixture shutdown unconfirmed; directory retained: '+str(cls.root))
 
     def setUp(self):
-        self.connection=psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c statement_timeout=10000')
+        self.connection=psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=10000')
         self.addCleanup(self.connection.close)
         self.host=adopt_psycopg_host(self.connection,profile=self.selected_profile,statement_timeout_ms=8000,operation_timeout_ms=15000)
         self.addCleanup(self.host.detach)

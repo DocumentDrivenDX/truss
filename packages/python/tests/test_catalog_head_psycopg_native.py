@@ -9,7 +9,7 @@ class HeadPsycopgNativeTests(PrerequisitePsycopgNativeTests):
     def setUpClass(cls):
         super().setUpClass()
         import psycopg
-        with psycopg.connect(host=str(cls.socket),user='postgres',dbname='postgres',autocommit=True) as connection:
+        with psycopg.connect(host=str(cls.socket),user='postgres',dbname=cls.database,autocommit=True) as connection:
             connection.execute((ROOT/'packages/postgresql/native/catalog-completion/configured-state-candidate.sql').read_text(),prepare=False)
 
     def head(self):

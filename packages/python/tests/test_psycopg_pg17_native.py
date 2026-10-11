@@ -66,6 +66,7 @@ class Pg17FixtureFailureTests(unittest.TestCase):
         directory=Path(parent)/('post-setup-failure' if after_setup else 'uncertain-start') if parent else Path(tempfile.mkdtemp(prefix='truss-fixture-failure-',dir='/private/tmp'))
         directory.mkdir(exist_ok=True)
         class Broken(PrerequisitePsycopgNativeTests):
+            isolated_lifecycle=True
             @classmethod
             def run_pg(cls,name,*args):
                 PrerequisitePsycopgNativeTests.run_pg.__func__(cls,name,*args)

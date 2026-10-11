@@ -14,7 +14,7 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         host_tests.PsycopgHostNativeTests.setUpClass.__func__(cls)
-        with psycopg.connect(host=str(cls.socket),user='postgres',dbname='postgres',autocommit=True) as c:
+        with psycopg.connect(host=str(cls.socket),user='postgres',dbname=cls.database,autocommit=True) as c:
             c.execute((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text())
             for n in ('source-epoch-immutability','source-epoch-lock','source-epoch-issue','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock'):
                 c.execute((ROOT/f'packages/postgresql/native/{n}.sql').read_text())
@@ -24,6 +24,9 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
             c.execute((ROOT/'packages/postgresql/native/source-epoch-routine-ddl-barrier.sql').read_text())
     @classmethod
     def tearDownClass(cls):
+        if cls.worker_fixture is not None:
+            cls.worker_fixture.cleanup();cls.worker_fixture=None
+            return
         try:
             stopped=subprocess.run([str(cls.pgbin/'pg_ctl'),'-D',str(cls.data),'-w','-m','immediate','stop'],capture_output=True,text=True,timeout=60)
             status=subprocess.run([str(cls.pgbin/'pg_ctl'),'-D',str(cls.data),'status'],capture_output=True,text=True,timeout=60)
@@ -47,7 +50,7 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
         def callback(cursor):
             cursor.execute("SELECT count(*)::text FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)")
             self.assertEqual(cursor.fetchone(),('2',))
-            with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True) as writer:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True) as writer:
                 with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('CREATE OR REPLACE FUNCTION truss.psy_subject() RETURNS integer LANGUAGE sql AS $$ SELECT 444 $$')
             cursor.execute('SELECT truss.psy_subject()::text');return cursor.fetchone()[0]
         self.assertEqual(self.run_cut(t,callback),Ok('333'));self.assertEqual(self.shares(),2)

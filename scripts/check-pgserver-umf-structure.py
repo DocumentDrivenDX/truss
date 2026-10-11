@@ -17,8 +17,9 @@ from native_fixture import get_server, evidence_directory
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--corrected-pgserver', action='store_true')
 args = parser.parse_args()
-selected_package = '0.1.4+truss.pg17.11' if args.corrected_pgserver else '0.1.4'
-selected_server = '17.11' if args.corrected_pgserver else '16.2'
+args.corrected_pgserver = True  # Historical flag remains a compatibility spelling.
+selected_package = '0.1.4+truss.pg17.11'
+selected_server = '17.11'
 receipt_name = ('pgserver-pg17.11-umf-structural-correspondence.json' if args.corrected_pgserver
                 else 'pgserver-umf-structural-correspondence.json')
 root = Path(__file__).resolve().parents[1]

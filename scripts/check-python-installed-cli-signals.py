@@ -15,9 +15,9 @@ import truss.cli
 root = Path(__file__).resolve().parents[1]
 if sys.argv[1:] not in ([], ['--corrected-pgserver']):
  raise SystemExit('usage: check-python-installed-cli-signals.py [--corrected-pgserver]')
-corrected = bool(sys.argv[1:])
-expected_package = '0.1.4+truss.pg17.11' if corrected else '0.1.4'
-expected_server = '17.11' if corrected else '16.2'
+corrected = True  # All live executions select17.11.
+expected_package = '0.1.4+truss.pg17.11'
+expected_server = '17.11'
 if importlib.metadata.version('pgserver') != expected_package:
  raise RuntimeError('Selected original runtime package mismatch')
 loaded = Path(truss.cli.__file__).resolve()

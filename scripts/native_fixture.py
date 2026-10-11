@@ -197,3 +197,18 @@ def get_server(data_directory, *, cleanup_mode='stop'):
     if worker:
         return DatabaseFixture(Path(worker))
     return pgserver.get_server(data_directory, cleanup_mode=cleanup_mode)
+
+
+def configure_shared_psycopg_fixture(cls):
+    """Fresh database/role on an installed-suite worker; no borrowed raw server."""
+    fixture = DatabaseFixture(Path(os.environ['TRUSS_NATIVE_WORKER']))
+    cls.worker_fixture = fixture
+    cls.addClassCleanup(fixture.cleanup)
+    parsed = urlparse(fixture.get_uri())
+    options = parse_qs(parsed.query)
+    cls.database = parsed.path.lstrip('/')
+    cls.socket = Path(options['host'][0])
+    cls.root = fixture.root
+    cls.data = None
+    cls.directory = None
+    cls.start_attempted = False
