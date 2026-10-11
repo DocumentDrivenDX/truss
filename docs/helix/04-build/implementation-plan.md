@@ -2956,3 +2956,58 @@ The next closure requirement joins the issued record-type duty candidate to the 
 Private report preparation now constructs the original occurrence inventory before native I/O and retains it in the issued report. Final host `original-occurrence-inventory/66810e92-7990-474e-a9f8-0a049d91bb20/receipt.json` passed 120 tests / 1,497 assertions / strict typing with 733 captured inputs. Controls preserve an independently authored reference fragment with escaped key, reordered members and interior whitespace, verify copied byte isolation/frozen duties and refuse falsy/cloned/cross-preparation candidates. Historical failed runs retain both a mistaken revision field and readonly test-type failures, corrected in the final captured sources.
 
 Native `record-type-occurrences-native-cohort/59b0fd73-4fa0-4a64-becf-5ce2963ba5fb/receipt.json` passed all original 225 checks plus two actual report occurrence joins (227 total), with 821 captured pins and fixture cleanup zero. Exact-current and journal duties join complete original value coverage but retain partial semantic membership and no invented core constraint. This byte/custody mapping has runtime evidence, not a new formal implementation-refinement theorem. Earlier formal declaration identity algebra remains conditional historical evidence for its captured report/test source pins. Acceptance and installed enforcement remain unfinished.
+
+
+### Native protected-query carrier type preflight — 2026-10-11
+
+The actual experimental PostgreSQL query consumer now binds each declared
+string/int64 carrier field to the installed native text/int8 column descriptor.
+`security-query-carrier-domains.ts` emits an exact qualified relation/column/type
+census. Empty/duplicate/unsupported fields and invalid identifiers refuse.
+Native domains, int4 and numeric are not silently treated as int64. Identifier
+and SQL literal encoding retain quoted names without interpreting them as SQL.
+This is a descriptor guard, not source provenance or view dependency admission.
+
+`security-query-use.ts` retains the guard as `carrierReady` in its issued program.
+Issued pre-execution and return renderers put its separate fixed42501 check
+before collection completeness and application SQL. Combining it into a single
+Boolean expression with completeness would still parse missing-column references
+before the guard could refuse. View attributes need not claim attnotnull: existing
+value completeness separately rejects nulls under the declared current cut.
+No graph discriminator/key/namespace refusal or original-action restriction is
+removed, and compiler/authorizer semantics remain owner-defined.
+
+Actual native evidence in UMF `query-carrier-domains/62bb09eb-397c-4772-b4d5-ae1bf6f0704b`
+retains25 observations and11 frozen source pins. The retained original-owner
+predicate artifact is consumed by the actual issued lowerer/return renderer;
+its original fragment is installed in an isolated PostgreSQL17.9 guardian routine.
+Ordinary SCRAM Alice returns the authored RAB identity; Bob/outsider lack the
+separate original-query permission. Excluded installer substitutions to salary
+text/int4/numeric/domain, wrong ID type, missing salary and missing view all
+refuse before application output with Original carrier unavailable/42501.
+Exact restoration recovers the same authored query result each time. Owned
+container removal succeeds before receipt publication.
+
+Fourteen targeted host tests/58 assertions and strict portable-module typecheck
+pass. Real Chromium153.0.8010.12 produces the exact native program/checks/return,
+refuses two copied-program bypass attempts and makes no external request.
+The initial TypeScript CLI invocation failed TS5112; --ignoreConfig corrected
+that invocation and the final strict closure passed. This is a physical-query
+preflight component for US-056-AC6/B08, not fresh authenticated compiler admission,
+complete view/role/callable correspondence, concurrent DDL stabilization, typed
+graph execution or completed backend acceptance. The full goal remains active
+at26/132; no public Truss support profile is promoted.
+
+Final source-current native evidence is UMF
+`query-carrier-domains/0e5d2b6f-fbbd-445c-8cb5-6a40e3dd28c8`;62bb09eb is historical.
+The refreshed producer retains all nine raw refusal outputs and exact owned
+Docker removal output, plus raw14-test/58-assertion host and strict typecheck
+logs. Astra independently checked those transcripts, all25 vectors,11 exact
+archive/current source pins,13 browser pins and exact installed checked-return
+source/order, finding no scoped blocker. The existing strict checker for all12
+security TypeScript modules also passes with frozen sources and raw output.
+The module boundary is query-use → descriptor guard plus existing predicate/value
+completeness modules; the guard has no imports or I/O. SQL/native installation
+and browser/host execution remain separate tools. Six concurrent Python-main
+commits were preserved by fast-forwarding before final source verification.
+No backend admission is promoted.

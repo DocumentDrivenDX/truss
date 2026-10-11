@@ -2,6 +2,7 @@
  * compiler provenance, native mapping/cut and final-release guard are host duties. */
 import {lowerSecurityRowPredicate,type SecurityPhysicalType} from './security-predicate';
 import {lowerSecuritySourceCompleteness} from './security-source-completeness';
+import {lowerSecurityQueryCarrierDomains} from './security-query-carrier-domains';
 const issuedPrograms=new WeakSet<object>();
 const fail=():never=>{throw Error('TRUSS_SECURITY_QUERY_USE_UNSUPPORTED');};
 const key=(v:any)=>JSON.stringify([v.documentId,v.moduleId??v.module,v.elementId??v.element]);
@@ -83,6 +84,7 @@ export async function lowerSecurityOriginalUseProgram(input:{handoff:any;expecte
  const table=ident(home.schema)+'.'+ident(home.table);
  const resourceType=types.find(t=>key(t.type)===key(target));
  if(!resourceType||resourceType.discriminator||!resourceType.keyFields.length||new Set(home.fields.map(f=>key(f.ref))).size!==home.fields.length)return fail();
+ const carrierReady=lowerSecurityQueryCarrierDomains({schema:home.schema,table:home.table,fields:home.fields.map(f=>({column:f.column,family:f.family}))});
  const collectionReady=lowerSecuritySourceCompleteness({root:resourceType,carrier:home});
  const joins=plan.joins.map((j:any)=>{if(!Array.isArray(j.on)||!j.on.length)return fail();return ' JOIN '+table+' AS '+ident(j.right.occurrence)+' ON '+j.on.map((e:any)=>comparison(e,'join')).join(' AND ');}).join('');
  const filters=plan.filters.map((e:any)=>comparison(e,'predicate'));
@@ -107,7 +109,7 @@ export async function lowerSecurityOriginalUseProgram(input:{handoff:any;expecte
  });
  const sql='SELECT '+columns.join(',')+' FROM '+table+' AS '+ident(plan.source.occurrence)+joins+(filters.length?' WHERE '+filters.join(' AND '):'')+(groups.length?' GROUP BY '+groups.join(','):'')+(orders.length?' ORDER BY '+orders.join(','):'');
  if(new TextEncoder().encode(sql).length>1000000)return fail();
- const program=Object.freeze({profileSha256:handoff.profile.sha256,sql,collectionReady,admission:Object.freeze(admission),originalActions:Object.freeze(actions),outputColumns:Object.freeze(plan.outputs.map((_:any,i:number)=>'output_'+i))});
+ const program=Object.freeze({profileSha256:handoff.profile.sha256,sql,carrierReady,collectionReady,admission:Object.freeze(admission),originalActions:Object.freeze(actions),outputColumns:Object.freeze(plan.outputs.map((_:any,i:number)=>'output_'+i))});
  issuedPrograms.add(program);return program;
 }
 
@@ -117,6 +119,7 @@ export async function lowerSecurityOriginalUseProgram(input:{handoff:any;expecte
 export function lowerOriginalUsePreExecutionChecks(program:Awaited<ReturnType<typeof lowerSecurityOriginalUseProgram>>):string{
  if(!issuedPrograms.has(program))return fail();
  return program.admission.map(guard=>"IF ("+guard+") IS NOT TRUE THEN RAISE EXCEPTION 'Original query use unavailable' USING ERRCODE='42501'; END IF; ").join('')+
+  "IF ("+program.carrierReady+") IS NOT TRUE THEN RAISE EXCEPTION 'Original carrier unavailable' USING ERRCODE='42501'; END IF; "+
   "IF ("+program.collectionReady+") IS NOT TRUE THEN RAISE EXCEPTION 'Original source unavailable' USING ERRCODE='42501'; END IF; ";
 }
 
