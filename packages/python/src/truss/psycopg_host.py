@@ -6,7 +6,7 @@ not a claim of Lakebase, other libpq implementations or complete installation.
 """
 from ._runtime_profile import SERVER_VERSION_NUM
 from dataclasses import dataclass
-from threading import Lock, Event, Timer
+from threading import Lock, Event, Timer, get_ident
 from time import monotonic
 from uuid import uuid4
 from weakref import WeakKeyDictionary, ref
@@ -41,7 +41,37 @@ class _ConnectionCustody:
     quarantined: bool = False
     pending: object = None
     last_attempt: object = None
+    reservation: object = None
     retry_identity: tuple | None = None
+
+
+class _HostPairReservation:
+    """Private original two-host operation reservation; never an authority token."""
+    def __init__(self, first, second):
+        if type(first) is not PsycopgHost or type(second) is not PsycopgHost or first._custody is second._custody:
+            raise ValueError('Two separate original hosts required')
+        self.hosts=(first,second);self.thread=get_ident();self.active=False
+        self.custodies=tuple(sorted((first._custody,second._custody),key=id))
+    def __enter__(self):
+        acquired=[]
+        try:
+            for custody in self.custodies:
+                if not custody.lease.acquire(blocking=False):raise ValueError('Original host pair unavailable')
+                acquired.append(custody)
+                if custody.quarantined or custody.pending is not None or custody.reservation is not None:
+                    raise ValueError('Original host pair custody unavailable')
+            if any(h._closed for h in self.hosts):raise ValueError('Original host pair disposed')
+            for custody in self.custodies:custody.reservation=self
+            self.active=True
+            return self
+        except BaseException:
+            for custody in reversed(acquired):custody.lease.release()
+            raise
+    def __exit__(self,*error):
+        self.active=False
+        for custody in reversed(self.custodies):
+            if custody.pending is not None:custody.quarantined=True
+            custody.reservation=None;custody.lease.release()
 
 
 @dataclass
@@ -221,7 +251,13 @@ class PsycopgHost:
     def _attempt(self, callback, custody=None, publish=None):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
-        if not self._custody.lease.acquire(blocking=False):
+        reservation=self._custody.reservation
+        reserved=(type(reservation) is _HostPairReservation and reservation.active
+                  and reservation.thread==get_ident() and any(h is self for h in reservation.hosts))
+        if reserved:
+            if self._custody.pending is not None:
+                return _failure('execution_obligation', 'Connection operation already in flight')
+        elif not self._custody.lease.acquire(blocking=False):
             return _failure('execution_obligation', 'Connection operation already in flight')
         cursor = None
         deadline = None
@@ -353,7 +389,7 @@ class PsycopgHost:
                 return _failure('execution_obligation', 'Original operation failed and locally contained', state)
         finally:
             if not self._stop_deadline(deadline, attempt): self._custody.quarantined = True
-            self._custody.lease.release()
+            if not reserved:self._custody.lease.release()
 
     def adopt_transaction(self, *, isolation: Isolation='read_committed', access_mode: AccessMode='read_write'):
         if len(self._transactions) >= 256:

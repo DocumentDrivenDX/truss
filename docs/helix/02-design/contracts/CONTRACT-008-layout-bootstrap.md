@@ -2594,3 +2594,55 @@ lifetime, graph decoding and protected final release remain open. No backend
 acceptance binding; last full checkpoint26/132,106 missing. Goal active. Next
 qualify trusted service caller/target/credential custody and complete reachable
 privilege inventory before admitting ordinary protected disclosure.
+
+
+### Original caller/executor pair reservation through publication — 2026-10-11
+
+Private delegated orchestration now reserves both original toolkit connection
+leases before caller capture and retains them through caller operation completion.
+Acquire in deterministic custody order, nonblocking; partial acquisition releases
+only newly acquired locks. An original thread-bound reservation permits each
+host's normal scoped operation without releasing its outer reserved lease.
+Same-host nested operations remain refused while pending; other threads cannot
+reuse either host. Reservation retirement releases both leases and quarantines
+unresolved pending custody. No driver-private API, reusable capability or new
+public authority flag. Raw aliases remain forbidden during toolkit operations.
+
+Two native controls prove executor reuse from another thread refuses after actual
+evaluator return but before original caller publication, reservations disappear
+after successful return, and failed acquisition preserves the independently held
+executor lease while releasing the caller lease. Final
+`evidence/python-psycopg-epoch-cut/836ef23f-c205-4309-af76-768faf8de05b` passes158
+methods on PostgreSQL18.6 (107 fact/dependency/role/delegation,16 graph,nine epoch,
+26 adoption), module boundaries,142 current/archived Truss sources,363 original
+UMF sources,1705 native payload pins and three independent
+stop0/status3/socket-absent cleanups.
+
+Trace CONTRACT-063/STP-056 L03/L11/B11/B12 and US-056 AC9/AC10 custody prerequisites.
+This verifies toolkit lease exclusion, not native raw-alias interception, trusted
+service credential/target authentication or complete final-release authority.
+Original issuer/mapping/package/source/role/ACL lifetime, graph decoder and public
+protected disclosure remain open. No new formal native refinement theorem or
+backend acceptance binding; last full checkpoint26/132,106 missing. Goal active.
+Next qualify native release guard ownership and original service target/caller
+custody alongside this toolkit reservation.
+
+### Native delegated release guard observation — 2026-10-11
+
+The private delegated read now observes existing executor ShareLocks on every
+original fact relation and both epoch tables before caller completion. It does
+not reacquire lost guards. Two native controls refuse release after executor
+transaction retirement and after rollback to an earlier savepoint loses guards
+while retaining the same native transaction ID. These controlled raw-alias
+violations remain outside the supported host contract; observation does not
+prove uninterrupted guard lifetime or exclude loss/reacquisition ABA.
+
+Evidence `evidence/python-psycopg-epoch-cut/d0f2095f-5fd8-4227-bc91-3aee055d07fd`
+passes all160 component methods on PostgreSQL18.6/psycopg3.3.6 binary, module
+boundaries,142 source hashes,363 original UMF sources and1705 native payload
+pins, with three stop0/status3/socket-absent cleanups. Trace shared CONTRACT-063 /
+STP-056 L03/L11/B11/B12 and US-056 AC9/AC10 custody prerequisites. No new formal
+native refinement theorem or backend acceptance binding is claimed. Original
+issuer/mapping/credential/target authentication, source/role/ACL lifetime, graph
+capture and complete protected disclosure remain open. Last full backend gate
+checkpoint remains26/132 with106 missing bindings; goal active.
