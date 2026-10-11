@@ -172,3 +172,34 @@ def require_compact_metadata_correspondence(raw_metadata, compact):
         expected[key]=_hex(capsule[stem+'_sha256'],32,'\\x').hex()
     if any(compact.get(k)!=v for k,v in expected.items()):
         raise ValueError('Original full and compact metadata correspondence required')
+
+
+def validate_catalog_resource_selection(source, result, release, raw_metadata):
+    _closed(source,'interfaceVersion scope writerXid operationOrdinal configurationGeneration releaseSha256 resources totalBytes')
+    if (source['interfaceVersion']!='truss-catalog-report-resources/0.1'
+        or source['scope']!='original_declared_archive_inputs_only'
+        or source['writerXid']!=result['writerXid'] or source['operationOrdinal']!=result['ordinal']
+        or source['configurationGeneration']!=release['configurationGeneration']
+        or source['releaseSha256']!=release['policySha256']):
+        raise ValueError('Original report resource selection coordinates required')
+    policy=json.loads(bytes.fromhex(release['policyHex']));expected=policy['resources']
+    resources=source['resources'];total=0;ids=set()
+    release_row_id=_native_rows(raw_metadata)['releaseArchive'][0]['archive_row_id']
+    if type(resources) is not list or len(resources)!=len(expected):
+        raise ValueError('Complete original report resource inventory required')
+    for actual,declared in zip(resources,expected,strict=True):
+        _closed(actual,'path sha256 archiveRowId bytes')
+        if any(type(v) is not str for v in actual.values()):
+            raise ValueError('Original report resource string fields required')
+        if actual['path']!=declared['path'] or actual['sha256']!=declared['sha256']:
+            raise ValueError('Original declared report resource correspondence required')
+        for key,maximum in (('archiveRowId',9223372036854775807),('bytes',1048576)):
+            value=actual[key]
+            if len(value)>19 or re.fullmatch('[1-9][0-9]*',value) is None or int(value)>maximum:
+                raise ValueError('Original report resource native domain required')
+        if int(actual['archiveRowId'])==release_row_id:
+            raise ValueError('Distinct original release and resource archive rows required')
+        if actual['archiveRowId'] in ids:raise ValueError('Unique original report archive rows required')
+        ids.add(actual['archiveRowId']);total+=int(actual['bytes'])
+    if total>4194304 or type(source['totalBytes']) is not str or source['totalBytes']!=str(total):
+        raise ValueError('Original complete report resource size required')

@@ -33,7 +33,7 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
                 for name in ('source-epoch-lock','issued-operation-admission/operation-configuration-context-admission',
                     'catalog-epoch-context','operation-configuration-current','catalog-admission-configuration',
                     'canonical-string-bytes','canonical-tree-bytes','catalog-report/source-candidate',
-                    'catalog-report/release-selection','catalog-report/configured-metadata','catalog-report/configured-graph','catalog-report/configured-stage','catalog-stage-configured'):
+                    'catalog-report/release-selection','catalog-report/configured-metadata','catalog-report/configured-graph','catalog-report/resource-selection','catalog-report/configured-stage','catalog-stage-configured'):
                     fixture.run((ROOT/f'packages/postgresql/native/{name}.sql').read_text())
                 guard=(ROOT/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql').read_text()
                 fixture.run(guard.split('INSERT INTO truss.row_home_operation')[0])
@@ -51,6 +51,10 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
                 fixture.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
                     artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
                     'truss.catalog-report-release/0.1.0',:raw,sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')))""",raw=policy)
+                for item in json.loads(policy)['resources']:
+                    fixture.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
+                        artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
+                        :identity,:raw,sha256(convert_to(:identity,'UTF8')))""",identity=item['path'],raw=(ROOT/item['path']).read_bytes())
         finally:fixture.close()
         setup=''
         if bad_response:
@@ -250,7 +254,7 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
         result=issued.owner.dispatch_catalog_stage_candidate(request)
         native=json.loads(result.original_provisional_result)
         context=json.loads(result.original_context)
-        self.assertEqual(native['interfaceVersion'],'truss-native-provisional-catalog/0.3')
+        self.assertEqual(native['interfaceVersion'],'truss-native-provisional-catalog/0.4')
         self.assertEqual(context['assertedOriginUtf8Hex'],request.encoded.original_input.origin.hex())
         self.assertIs(result.original_call,request.entry.native_call)
         self.assertTrue(result.original_call.capture_complete)

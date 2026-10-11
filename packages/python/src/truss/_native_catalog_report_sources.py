@@ -13,7 +13,7 @@ from ._catalog_owner_evidence import require_catalog_owner_evidence
 from ._catalog_support import evaluate_catalog_support
 from ._catalog_report_assembly import assemble_catalog_report_sources, validate_configured_catalog_sources, require_configuration_profile_source
 from ._catalog_report_semantics import canonical_numeric_free, compose_catalog_report_semantics
-from ._native_catalog_metadata import validate_configured_metadata, require_compact_metadata_correspondence
+from ._native_catalog_metadata import validate_configured_metadata, require_compact_metadata_correspondence, validate_catalog_resource_selection
 
 MISSING_FIELDS=('interfaceVersion','reportProfile','originalExecution','umf','assertions','extensions')
 
@@ -28,7 +28,7 @@ def compose_captured_catalog_sources(encoded, result, original_context=None):
     prepared=encoded.original_input.prepared
     _require_original_preparation(prepared)
     sources=result['reportSources']
-    configured=result.get('interfaceVersion')=='truss-native-provisional-catalog/0.3'
+    configured=result.get('interfaceVersion')=='truss-native-provisional-catalog/0.4'
     if configured != (encoded.original_configuration is not None):
         raise ValueError('Original configured request and response version correspondence required')
     if configured:
@@ -41,7 +41,7 @@ def compose_captured_catalog_sources(encoded, result, original_context=None):
                'captureProfileHex':'assertedOriginCaptureProfileHex','originHex':'assertedOriginUtf8Hex'}
         if any(selection[k]!=context.get(v) for k,v in pairs.items()):
             raise ValueError('Original configured selection and context correspondence required')
-    required={'start','end','lifecycle','indexDeclarations'}|({'catalogRelease'} if configured else set())
+    required={'start','end','lifecycle','indexDeclarations'}|({'catalogRelease','catalogResources'} if configured else set())
     if type(sources) is not dict or set(sources)!=required:
         raise ValueError('Closed original catalog source snapshot required')
     start=sources['start'];end=sources['end']
@@ -97,6 +97,8 @@ def compose_captured_catalog_sources(encoded, result, original_context=None):
     if configured:
         payload['configuredReleaseCandidate']=validate_configured_catalog_sources(
             start,end,sources['catalogRelease'],original_context,result)
+        validate_catalog_resource_selection(sources['catalogResources'],result,sources['catalogRelease'],
+            _hex(scope['metadataUtf8Hex'],32768))
         require_compact_metadata_correspondence(_hex(scope['metadataUtf8Hex'],32768),
             payload['configuredReleaseCandidate']['metadata'])
     assembly=assemble_catalog_report_sources(prepared,result,payload['semanticSourceFields'])

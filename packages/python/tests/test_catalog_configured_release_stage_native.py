@@ -23,7 +23,7 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
                          'canonical-string-bytes','canonical-tree-bytes','catalog-report/release-selection','catalog-report/source-candidate','catalog-report/configured-metadata','catalog-report/empty-graph',
                          'catalog-report/configured-graph','catalog-report/absent-binding-index-declarations',
                          'catalog-report/fresh-lifecycle','edge-limit/verify-current-scope',
-                         'catalog-stage-issued','catalog-report/configured-stage'):
+                         'catalog-stage-issued','catalog-report/resource-selection','catalog-report/configured-stage'):
                 c.run((ROOT/f'packages/postgresql/native/{name}.sql').read_text())
             fixture=(ROOT/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql').read_text()
             c.run(fixture.split('INSERT INTO truss.row_home_operation')[0])
@@ -54,6 +54,10 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
         self.connection.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
             artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
             'truss.catalog-report-release/0.1.0',:raw,sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')))""",raw=self.policy)
+        for item in json.loads(self.policy)['resources']:
+            self.connection.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
+                artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
+                :identity,:raw,sha256(convert_to(:identity,'UTF8')))""",identity=item['path'],raw=(ROOT/item['path']).read_bytes())
     def admit(self):
         p=self.prepared;pre=self.connection.run('SELECT truss.runtime_capture_catalog_prestate()')[0][0]
         writer,ordinal,context=self.connection.run("""SELECT * FROM truss.runtime_admit_operation_with_configuration_context(
@@ -81,7 +85,14 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
         self.archive();writer,ordinal=self.admit();row=self.invoke();snapshot=self.compose()
         result=self.result;source=result['reportSources']['catalogRelease']
         self.assertEqual((row[0],row[1]),(writer,ordinal))
-        self.assertEqual(result['interfaceVersion'],'truss-native-provisional-catalog/0.3')
+        self.assertEqual(result['interfaceVersion'],'truss-native-provisional-catalog/0.4')
+        resources=result['reportSources']['catalogResources']
+        self.assertEqual([(r['path'],r['sha256']) for r in resources['resources']],[(r['path'],r['sha256']) for r in json.loads(self.policy)['resources']])
+        observed=self.connection.run("SELECT artifact_identity,archive_row_id::text,octet_length(artifact_bytes)::text,encode(artifact_sha256,'hex'),encode(sha256(artifact_bytes),'hex') FROM truss.installation_archive WHERE artifact_identity=ANY(:paths)",paths=[r['path'] for r in json.loads(self.policy)['resources']])
+        expected={row[0]:row[1:] for row in observed}
+        self.assertEqual(len(expected),21)
+        self.assertEqual({r['path']:[r['archiveRowId'],r['bytes'],r['sha256'],r['sha256']] for r in resources['resources']},expected)
+        self.assertEqual(resources['totalBytes'],str(sum((ROOT/r['path']).stat().st_size for r in json.loads(self.policy)['resources'])))
         self.assertEqual(source['policyHex'],self.policy.hex());self.assertEqual(source['configurationGeneration'],'7')
         self.assertEqual(source['effectGeneration'],result['effectGeneration'])
         self.assertEqual(result['reportSources']['start']['metadata_source'],result['reportSources']['end']['metadata_source'])
@@ -124,8 +135,11 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
             scope=json.loads(changed['reportSources'][cut]['empty_scope'])
             changed['reportSources'][cut]['empty_scope']=json.dumps({**scope,'businessRelations':scope['businessRelations']+['source_epoch_registry','source_epoch_current']})
         with self.assertRaises(ValueError):self.compose(changed)
+        changed=copy.deepcopy(self.result);changed['interfaceVersion']='truss-native-provisional-catalog/0.3'
+        del changed['reportSources']['catalogResources']
+        with self.assertRaises(ValueError):self.compose(changed)
         changed=copy.deepcopy(self.result);changed['interfaceVersion']='truss-native-provisional-catalog/0.2'
-        del changed['reportSources']['catalogRelease']
+        del changed['reportSources']['catalogRelease'];del changed['reportSources']['catalogResources']
         for cut in ('start','end'):
             del changed['reportSources'][cut]['metadata_source']
             changed['reportSources'][cut]['empty_scope']=json.dumps(json.loads(changed['reportSources'][cut]['empty_scope'])['businessRelations'])
@@ -149,6 +163,25 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
             if field=='configurationGeneration':changed['reportSources']['catalogRelease']['configurationGeneration']=value
             with self.assertRaises(ValueError):self.compose(changed)
         with self.assertRaises(ValueError):self.compose(profile=b'changed configuration profile')
+        for mutation in ('missing','duplicate','hash','size','total','extra','row_duplicate','row_domain','release_row','order','writer','ordinal','configuration','release'):
+            changed=copy.deepcopy(self.result);source=changed['reportSources']['catalogResources']
+            if mutation=='missing':source['resources'].pop()
+            elif mutation=='duplicate':source['resources'][1]=source['resources'][0]
+            elif mutation=='hash':source['resources'][0]['sha256']='ab'*32
+            elif mutation=='size':source['resources'][0]['bytes']='01'
+            elif mutation=='total':source['totalBytes']='1'
+            elif mutation=='row_duplicate':source['resources'][1]['archiveRowId']=source['resources'][0]['archiveRowId']
+            elif mutation=='row_domain':source['resources'][0]['archiveRowId']='0'
+            elif mutation=='release_row':
+                scope=json.loads(changed['reportSources']['start']['empty_scope'])
+                source['resources'][0]['archiveRowId']=str(json.loads(bytes.fromhex(scope['metadataUtf8Hex']))['releaseArchive'][0]['archive_row_id'])
+            elif mutation=='order':source['resources'].reverse()
+            elif mutation=='writer':source['writerXid']='1'
+            elif mutation=='ordinal':source['operationOrdinal']='1'
+            elif mutation=='configuration':source['configurationGeneration']='8'
+            elif mutation=='release':source['releaseSha256']='ab'*32
+            else:source['extra']='unexpected'
+            with self.assertRaises(ValueError):self.compose(changed)
         for mutation in ('foreign','origin','capture','missing','extra','array'):
             changed=json.loads(self.context)
             if mutation=='foreign':changed['sourceEpoch']='other'
@@ -166,3 +199,47 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
             with self.assertRaises(ValueError):self.compose(response,raw)
         changed=copy.deepcopy(self.result);del changed['reportSources']['catalogRelease']
         with self.assertRaises(ValueError):self.compose(changed)
+
+    def test_resource_archive_damage_refuses_before_first_catalog_effect(self):
+        from pg8000.exceptions import DatabaseError
+        self.archive();self.admit()
+        identity=json.loads(self.policy)['resources'][0]['path']
+        self.connection.run("CREATE TEMP SEQUENCE resource_first_effect; CREATE FUNCTION truss.resource_fixture_first_effect() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM nextval('pg_temp.resource_first_effect'); RETURN NEW; END $$; CREATE TRIGGER resource_fixture_first_effect BEFORE INSERT ON truss.schema_rev FOR EACH ROW EXECUTE FUNCTION truss.resource_fixture_first_effect()")
+        cases=[("DELETE FROM truss.installation_archive WHERE artifact_identity=:identity",'55000','unique original report resource archive required'),
+            ("INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE artifact_identity=:identity",'55000','unique original report resource archive required'),
+            ("UPDATE truss.installation_archive SET artifact_bytes=decode('00','hex') WHERE artifact_identity=:identity",'55000','original report resource digest correspondence required'),
+            ("UPDATE truss.installation_archive SET artifact_bytes=convert_to(repeat('x',1048577),'UTF8') WHERE artifact_identity=:identity",'54000','original report resource retained byte capacity exceeded')]
+        for sql,code,message in cases:
+            self.connection.run('SAVEPOINT resource_damage');self.connection.run(sql,identity=identity)
+            with self.assertRaises(DatabaseError) as caught:self.invoke()
+            self.assertEqual(caught.exception.args[0]['C'],code);self.assertEqual(caught.exception.args[0]['M'],message)
+            self.connection.run('ROLLBACK TO SAVEPOINT resource_damage');self.connection.run('RELEASE SAVEPOINT resource_damage')
+            self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.resource_first_effect'),[[False]])
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
+
+    def test_same_writer_resource_change_during_effect_refuses_and_rolls_back(self):
+        from pg8000.exceptions import DatabaseError
+        self.archive();self.admit();identity=json.loads(self.policy)['resources'][0]['path']
+        self.connection.run("CREATE TEMP SEQUENCE resource_late_effect; CREATE FUNCTION truss.resource_fixture_late_effect() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM nextval('pg_temp.resource_late_effect'); UPDATE truss.installation_archive SET artifact_bytes=convert_to(repeat('x',octet_length(artifact_bytes)),'UTF8') WHERE artifact_identity='packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json'; RETURN NEW; END $$; CREATE TRIGGER resource_fixture_late_effect BEFORE INSERT ON truss.schema_rev FOR EACH ROW EXECUTE FUNCTION truss.resource_fixture_late_effect()")
+        self.connection.run('SAVEPOINT resource_late')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.assertEqual(caught.exception.args[0]['M'],'original report resource digest correspondence required')
+        self.connection.run('ROLLBACK TO SAVEPOINT resource_late')
+        self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.resource_late_effect'),[[True]])
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
+        self.assertEqual(self.connection.run('SELECT artifact_bytes FROM truss.installation_archive WHERE artifact_identity=:identity',identity=identity),[[(ROOT/identity).read_bytes()]])
+
+    def test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut(self):
+        from pg8000.exceptions import DatabaseError
+        self.archive();self.admit();identity=json.loads(self.policy)['resources'][0]['path']
+        original=self.connection.run('SELECT archive_row_id,artifact_bytes FROM truss.installation_archive WHERE artifact_identity=:identity',identity=identity)
+        self.connection.run("CREATE TEMP SEQUENCE resource_replace_effect; CREATE FUNCTION truss.resource_fixture_replace_effect() RETURNS trigger LANGUAGE plpgsql AS $$ DECLARE old_id bigint; BEGIN PERFORM nextval('pg_temp.resource_replace_effect'); SELECT archive_row_id INTO STRICT old_id FROM truss.installation_archive WHERE artifact_identity='packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json'; INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE archive_row_id=old_id; DELETE FROM truss.installation_archive WHERE archive_row_id=old_id; RETURN NEW; END $$; CREATE TRIGGER resource_fixture_replace_effect BEFORE INSERT ON truss.schema_rev FOR EACH ROW EXECUTE FUNCTION truss.resource_fixture_replace_effect()")
+        self.connection.run('SAVEPOINT resource_replace')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.assertEqual(caught.exception.args[0]['M'],'same original report resource inputs through catalog effects required')
+        self.connection.run('ROLLBACK TO SAVEPOINT resource_replace')
+        self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.resource_replace_effect'),[[True]])
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
+        self.assertEqual(self.connection.run('SELECT archive_row_id,artifact_bytes FROM truss.installation_archive WHERE artifact_identity=:identity',identity=identity),original)
