@@ -6,6 +6,12 @@ from test_catalog_support import selected
 from truss._native_catalog_request import NativeCatalogStageInput,ConfiguredCatalogSelection,encode_catalog_stage
 from truss._catalog_candidate import encode_original_catalog_candidate
 from truss._native_catalog_report_sources import compose_captured_catalog_sources
+FENCE_SOURCE=(ROOT/'packages/postgresql/native/catalog-report/archive-self-write-fence.sql').read_text()
+FENCE_BODY=FENCE_SOURCE.split('AS $$',1)[1].split('$$;',1)[0]
+ALTERED_FENCE_BODY='\nBEGIN RETURN NULL; END;\n'.ljust(len(FENCE_BODY.encode('utf8')))
+ALTERED_FENCE_DEFINITION="CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$"+ALTERED_FENCE_BODY+"$inner$"
+SET_FENCE_DEFINITION="DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); "+FENCE_SOURCE.replace('RETURNS trigger','RETURNS SETOF trigger',1)
+DEFAULT_ACL_FENCE_DEFINITION="DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); "+FENCE_SOURCE.replace('REVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;','-- Deliberate default PUBLIC ACL retained.')
 
 class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase):
     @classmethod
@@ -23,7 +29,7 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
                          'canonical-string-bytes','canonical-tree-bytes','catalog-report/release-selection','catalog-report/source-candidate','catalog-report/configured-metadata','catalog-report/empty-graph',
                          'catalog-report/configured-graph','catalog-report/absent-binding-index-declarations',
                          'catalog-report/fresh-lifecycle','edge-limit/verify-current-scope',
-                         'catalog-stage-issued','catalog-report/resource-selection','catalog-report/configured-stage'):
+                         'catalog-stage-issued','catalog-report/resource-selection','catalog-report/archive-self-write-fence','catalog-report/archive-write-fence-current','catalog-report/configured-stage'):
                 c.run((ROOT/f'packages/postgresql/native/{name}.sql').read_text())
             fixture=(ROOT/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql').read_text()
             c.run(fixture.split('INSERT INTO truss.row_home_operation')[0])
@@ -224,7 +230,7 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
         self.connection.run('SAVEPOINT resource_late')
         with self.assertRaises(DatabaseError) as caught:self.invoke()
         self.assertEqual(caught.exception.args[0]['C'],'55000')
-        self.assertEqual(caught.exception.args[0]['M'],'original report resource digest correspondence required')
+        self.assertEqual(caught.exception.args[0]['M'],'selected archive cut excludes same-backend writes')
         self.connection.run('ROLLBACK TO SAVEPOINT resource_late')
         self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.resource_late_effect'),[[True]])
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
@@ -238,8 +244,76 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
         self.connection.run('SAVEPOINT resource_replace')
         with self.assertRaises(DatabaseError) as caught:self.invoke()
         self.assertEqual(caught.exception.args[0]['C'],'55000')
-        self.assertEqual(caught.exception.args[0]['M'],'same original report resource inputs through catalog effects required')
+        self.assertEqual(caught.exception.args[0]['M'],'selected archive cut excludes same-backend writes')
         self.connection.run('ROLLBACK TO SAVEPOINT resource_replace')
         self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.resource_replace_effect'),[[True]])
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
         self.assertEqual(self.connection.run('SELECT archive_row_id,artifact_bytes FROM truss.installation_archive WHERE artifact_identity=:identity',identity=identity),original)
+
+    def test_missing_or_changed_fence_refuses_before_first_effect(self):
+        from pg8000.exceptions import DatabaseError
+        self.archive();self.admit()
+        self.connection.run('SET CONSTRAINTS truss.installation_archive_marker_fk IMMEDIATE')
+        self.connection.run("CREATE TEMP SEQUENCE fence_first_effect; CREATE FUNCTION truss.fence_fixture_first_effect() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN PERFORM nextval('pg_temp.fence_first_effect'); RETURN NEW; END $$; CREATE TRIGGER fence_fixture_first_effect BEFORE INSERT ON truss.schema_rev FOR EACH ROW EXECUTE FUNCTION truss.fence_fixture_first_effect()")
+        cases=[
+            "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive",
+            "ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence",
+            "ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence",
+            "ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence",
+            "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER",
+            "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog",
+            "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE",
+            "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE",
+            "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT",
+            "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF",
+            ALTERED_FENCE_DEFINITION,
+            SET_FENCE_DEFINITION,
+            DEFAULT_ACL_FENCE_DEFINITION,
+            "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC",
+            "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats",
+            "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats",
+            "CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$",
+            "CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()",
+            "ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence",
+            "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+            "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence"]
+        for sql in cases:
+            with self.subTest(sql=sql):
+                self.connection.run("SELECT setval('pg_temp.fence_first_effect',1,false)")
+                self.connection.run('SAVEPOINT fence_drift')
+                try:
+                    self.connection.run(sql)
+                    if sql==DEFAULT_ACL_FENCE_DEFINITION:
+                        self.assertEqual(self.connection.run("SELECT proacl IS NULL FROM pg_proc WHERE oid=\'truss.runtime_fence_selected_archive_writes()\'::regprocedure"),[[True]])
+                    with self.assertRaises(DatabaseError) as caught:self.invoke()
+                    self.assertEqual(caught.exception.args[0]['C'],'55000')
+                    self.assertEqual(caught.exception.args[0]['M'],'original installed archive write fence required')
+                finally:
+                    self.connection.run('ROLLBACK TO fence_drift');self.connection.run('RELEASE fence_drift')
+                self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.fence_first_effect'),[[False]])
+                self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
+                self.connection.run('SELECT truss.runtime_require_selected_archive_write_fence()')
+
+    def test_same_writer_change_restore_is_fenced_inside_original_stage(self):
+        from pg8000.exceptions import DatabaseError
+        self.archive();self.admit()
+        self.connection.run("CREATE TEMP SEQUENCE resource_aba_effect; CREATE FUNCTION truss.resource_fixture_aba_effect() RETURNS trigger LANGUAGE plpgsql AS $$ DECLARE original bytea; BEGIN PERFORM nextval('pg_temp.resource_aba_effect'); SELECT artifact_bytes INTO STRICT original FROM truss.installation_archive WHERE artifact_identity='packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json'; UPDATE truss.installation_archive SET artifact_bytes=decode('01','hex') WHERE artifact_identity='packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json'; UPDATE truss.installation_archive SET artifact_bytes=original WHERE artifact_identity='packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json'; RETURN NEW; END $$; CREATE TRIGGER resource_fixture_aba_effect BEFORE INSERT ON truss.schema_rev FOR EACH ROW EXECUTE FUNCTION truss.resource_fixture_aba_effect()")
+        self.connection.run('SAVEPOINT aba')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['M'],'selected archive cut excludes same-backend writes')
+        self.connection.run('ROLLBACK TO aba');self.connection.run('RELEASE aba')
+        self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.resource_aba_effect'),[[True]])
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
+
+    def test_late_fence_source_change_refuses_and_rolls_back(self):
+        from pg8000.exceptions import DatabaseError
+        self.archive();self.admit()
+        self.connection.run("CREATE TEMP SEQUENCE fence_late_effect; CREATE FUNCTION truss.fence_fixture_late_effect() RETURNS trigger LANGUAGE plpgsql AS $outer$ BEGIN PERFORM nextval('pg_temp.fence_late_effect'); EXECUTE '"+ALTERED_FENCE_DEFINITION.replace("'","''")+"'; RETURN NEW; END $outer$; CREATE TRIGGER fence_fixture_late_effect BEFORE INSERT ON truss.schema_rev FOR EACH ROW EXECUTE FUNCTION truss.fence_fixture_late_effect()")
+        self.connection.run('SAVEPOINT late_fence')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.assertEqual(caught.exception.args[0]['M'],'original installed archive write fence required')
+        self.connection.run('ROLLBACK TO late_fence');self.connection.run('RELEASE late_fence')
+        self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.fence_late_effect'),[[True]])
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
+        self.connection.run('SELECT truss.runtime_require_selected_archive_write_fence()')

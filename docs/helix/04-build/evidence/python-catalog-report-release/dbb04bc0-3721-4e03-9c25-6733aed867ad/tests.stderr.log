@@ -1,0 +1,123 @@
+test_configured_source_substitutions_never_issue_report (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report) ... ok
+test_late_fence_source_change_refuses_and_rolls_back (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back) ... ok
+test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) ... 
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence') ... ERROR
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence') ... ERROR
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence') ... ERROR
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RETURN NULL; END $$') ... ERROR
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence') ... ERROR
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence') ... ERROR
+test_missing_release_refuses_before_any_catalog_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect) ... ok
+test_one_configured_native_stage_retains_release_and_metadata (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata) ... ok
+test_resource_archive_damage_refuses_before_first_catalog_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect) ... ok
+test_same_writer_change_restore_is_fenced_inside_original_stage (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage) ... ok
+test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut) ... ok
+test_same_writer_resource_change_during_effect_refuses_and_rolls_back (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back) ... ok
+test_uncovered_or_populated_graph_still_refuses (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses) ... ok
+test_actual_policy_selected_from_original_configuration (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration) ... ok
+test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end) ... ok
+test_late_configuration_change_refuses (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses) ... ok
+test_later_rollback_and_savepoint_release_preserve_archive_cut (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut) ... ok
+test_missing_duplicate_and_changed_archive_refuse (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse) ... ok
+test_old_snapshot_and_readonly_release_selection_refuse (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse) ... ok
+test_preexisting_archive_row_locker_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting) ... ok
+test_preexisting_archive_writer_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting) ... ok
+test_release_resources_and_embedded_policy_are_exact (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact) ... ok
+test_rollback_across_selection_releases_archive_cut_same_xid (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid) ... ok
+test_unknown_ambiguous_or_changed_selection_refuses (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses) ... ok
+test_unrecognized_configuration_profile_cannot_select_release (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release) ... ok
+
+======================================================================
+ERROR: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 275, in test_missing_or_changed_fence_refuses_before_first_effect
+    self.connection.run(sql)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '55006', 'M': 'cannot ALTER TABLE "installation_archive" because it has pending trigger events', 'F': 'tablecmds.c', 'L': '4156', 'R': 'CheckTableNotInUse'}
+
+======================================================================
+ERROR: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 275, in test_missing_or_changed_fence_refuses_before_first_effect
+    self.connection.run(sql)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '55006', 'M': 'cannot ALTER TABLE "installation_archive" because it has pending trigger events', 'F': 'tablecmds.c', 'L': '4156', 'R': 'CheckTableNotInUse'}
+
+======================================================================
+ERROR: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 275, in test_missing_or_changed_fence_refuses_before_first_effect
+    self.connection.run(sql)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '55006', 'M': 'cannot ALTER TABLE "installation_archive" because it has pending trigger events', 'F': 'tablecmds.c', 'L': '4156', 'R': 'CheckTableNotInUse'}
+
+======================================================================
+ERROR: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RETURN NULL; END $$')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 275, in test_missing_or_changed_fence_refuses_before_first_effect
+    self.connection.run(sql)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '42P13', 'M': 'trigger functions cannot have declared arguments', 'H': 'The arguments of the trigger can be accessed through TG_NARGS and TG_ARGV instead.', 'W': 'compilation of PL/pgSQL function "runtime_fence_selected_archive_writes" near line 1', 'F': 'pl_comp.c', 'L': '601', 'R': 'do_compile'}
+
+======================================================================
+ERROR: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 275, in test_missing_or_changed_fence_refuses_before_first_effect
+    self.connection.run(sql)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '55006', 'M': 'cannot ALTER TABLE "installation_archive" because it has pending trigger events', 'F': 'tablecmds.c', 'L': '4156', 'R': 'CheckTableNotInUse'}
+
+======================================================================
+ERROR: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 275, in test_missing_or_changed_fence_refuses_before_first_effect
+    self.connection.run(sql)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-6yffuk3_/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '55006', 'M': 'cannot ALTER TABLE "installation_archive" because it has pending trigger events', 'F': 'tablecmds.c', 'L': '4156', 'R': 'CheckTableNotInUse'}
+
+----------------------------------------------------------------------
+Ran 22 tests in 17.911s
+
+FAILED (errors=6)
