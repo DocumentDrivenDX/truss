@@ -1,0 +1,508 @@
+{
+  "auditKind": "independent read-only combined d42 retained evidence audit",
+  "auditedAtUtc": "2026-10-11T15:28:31.348703+00:00",
+  "integrationRoot": "/private/tmp/truss-security-main-integration",
+  "reportedCommit": "9ddbe5a5",
+  "priorAuditPreserved": {
+    "path": "/private/tmp/astra-configured-catalog-final-audit.json",
+    "sha256": "c5fca9a92004a63e82205864d06207f60a0c7b4e9b72e9b3652ce5b72587a5bd",
+    "stage": "pre-d42"
+  },
+  "status": "scoped-evidence-matches",
+  "executionsPerformed": "Only local file/hash/ZIP/AST/log inspection; no tests, native execution, producers or source edits.",
+  "positive": {
+    "runId": "0ee77fdd-fa33-46dc-9fa6-fec1cdfc044c",
+    "status": "scoped-evidence-matches",
+    "auditFailures": [],
+    "receiptStatus": "component-passed",
+    "receiptSha256": "34303b8c7f42f3f4d47dc96d1fad79bd07d9605cc1bc45e57c82aa2927cd4d2d",
+    "zipSha256": "42e89003e88f371a49731bf3523bbb63baf502aa0f5bb4e75cab7e112b5df989",
+    "sourceCount": 270,
+    "currentSourceMismatches": [],
+    "zip": {
+      "entryCount": 270,
+      "expectedCount": 270,
+      "duplicates": 0,
+      "extra": [],
+      "missing": [],
+      "digestMismatches": []
+    },
+    "currentPythonPackageFileCount": 146,
+    "uncapturedCurrentPythonPackageFiles": [],
+    "nativeBinaryCount": 1614,
+    "currentNativeBinaryMismatches": [],
+    "methodGroups": {
+      "release": {
+        "expectedCount": 16,
+        "observedCount": 16,
+        "expectedMethods": [
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report"
+        ],
+        "missing": [],
+        "extra": [],
+        "duplicateCount": 0,
+        "results": {
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release": "ok"
+        },
+        "summary": [
+          "Ran 16 tests in 8.846s",
+          "OK"
+        ],
+        "notRaisedCount": 0,
+        "skipsPresent": false
+      },
+      "dispatch": {
+        "expectedCount": 14,
+        "observedCount": 14,
+        "expectedMethods": [
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback"
+        ],
+        "missing": [],
+        "extra": [],
+        "duplicateCount": 0,
+        "results": {
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback": "ok"
+        },
+        "summary": [
+          "Ran 14 tests in 22.447s",
+          "OK"
+        ],
+        "notRaisedCount": 0,
+        "skipsPresent": false
+      },
+      "incoming": {
+        "expectedCount": 15,
+        "observedCount": 15,
+        "expectedMethods": [
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_original_revision_free_sources_and_exact_evidence",
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_copied_or_mutated_preparation_refused",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_exact_native_source_carrier",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_duplicate_missing_unknown_and_substituted_sources_refused",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_original_configuration_source_envelope_stages_actual_catalog",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_changed_metadata_and_second_origin_refuse_before_catalog_effects",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_late_marker_change_refuses_and_preserves_host_work",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_plain_candidate_cannot_bypass_configured_checks",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_concurrent_release_insert_after_selection_is_fenced",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_one_original_call_and_python_composition",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_hostile_rendering_settings_are_local_and_exact",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_substituted_native_metadata_and_context_refuse",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_context_overflow_rolls_back_admission_before_catalog_write",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_exact_context_limit_and_one_byte_evidence_overflow"
+        ],
+        "missing": [],
+        "extra": [],
+        "duplicateCount": 0,
+        "results": {
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_original_revision_free_sources_and_exact_evidence": "ok",
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_copied_or_mutated_preparation_refused": "ok",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_exact_native_source_carrier": "ok",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_duplicate_missing_unknown_and_substituted_sources_refused": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_original_configuration_source_envelope_stages_actual_catalog": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_changed_metadata_and_second_origin_refuse_before_catalog_effects": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_late_marker_change_refuses_and_preserves_host_work": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_plain_candidate_cannot_bypass_configured_checks": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_concurrent_release_insert_after_selection_is_fenced": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_one_original_call_and_python_composition": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_hostile_rendering_settings_are_local_and_exact": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_substituted_native_metadata_and_context_refuse": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_context_overflow_rolls_back_admission_before_catalog_write": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_exact_context_limit_and_one_byte_evidence_overflow": "ok"
+        },
+        "summary": [
+          "Ran 15 tests in 20.107s",
+          "OK"
+        ],
+        "notRaisedCount": 0,
+        "skipsPresent": false
+      }
+    },
+    "receiptDispatchInventoryMatchesAst": true,
+    "noAuxiliaryExecution": null,
+    "releaseSql": {
+      "originalMarkerCount": 1,
+      "exactExpectedBytes": true,
+      "executedHashMatchesReceipt": true,
+      "originalSha256": "c514a59e28cdbc3bdd5b367fde2a6aa362d65cd201d86a1088b26a94d6df595f",
+      "executedSha256": "c514a59e28cdbc3bdd5b367fde2a6aa362d65cd201d86a1088b26a94d6df595f",
+      "changedLineCount": 0,
+      "sameLineCount": true
+    },
+    "dependencies": {
+      "pg8000": {
+        "pythonFiles": 8,
+        "currentPythonFiles": 8,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 1.31.5"
+        ]
+      },
+      "scramp": {
+        "pythonFiles": 3,
+        "currentPythonFiles": 3,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 1.4.17"
+        ]
+      },
+      "asn1crypto": {
+        "pythonFiles": 23,
+        "currentPythonFiles": 23,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 1.5.1"
+        ]
+      },
+      "dateutil": {
+        "pythonFiles": 18,
+        "currentPythonFiles": 18,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 2.9.0.post0"
+        ]
+      },
+      "six": {
+        "pythonFiles": 1,
+        "currentPythonFiles": 1,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 1.17.0"
+        ]
+      }
+    },
+    "frozenDependencyCopyRules": {
+      "dateutilSelected": true,
+      "sixSelected": true,
+      "frozenDependenciesOnAllThreeTestPaths": true,
+      "auxiliaryOnlyInPositive": true
+    },
+    "codecs": [
+      {
+        "path": "packages/postgresql/native/canonical-string-bytes.sql",
+        "captured": true,
+        "sha256": "fe943bfd4397325ed3dff16cec7436070653f6ad6c19fbe67e853348c508dbc1"
+      },
+      {
+        "path": "packages/postgresql/native/canonical-tree-bytes.sql",
+        "captured": true,
+        "sha256": "c35cbe7cced69fc660142d62e4bd04d7b08d9c844738289cbd4d6aab01389429"
+      },
+      {
+        "path": "packages/python/src/truss/_canonical_wire_tree.py",
+        "captured": true,
+        "sha256": "755bd1c50a506861c76b9332edb086bbb101a8f33e80b6b585df56a3d7a01b79"
+      }
+    ],
+    "cleanupReceipt": {
+      "attempted": true,
+      "stopExitCode": 0,
+      "statusExitCode": 3,
+      "socketAbsent": true
+    },
+    "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-9imeqaff",
+    "executionDirectoryAbsent": true,
+    "socketDirectory": "/private/tmp/rl-hnso3jig",
+    "socketDirectoryAbsent": true,
+    "serverShutdownLogged": true,
+    "serverVersionLine": "2026-10-11 11:23:52.924 EDT [55176] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit",
+    "logSha256": {
+      "auxiliary.stderr.log": "eacc82d92976a1ee758bf042ad3447531b596759fcd6a80955520566ebe047f7",
+      "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "boundaries.stdout.log": "7f0dbc44612626adbd04e8cbc3923b0a7b8136b9caff3833e6970f16d342a64a",
+      "tests.stderr.log": "be5bb3071e062bcb106ce587807a2707f6859d8f3049d34864391d357781abe9",
+      "auxiliary.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "regression.stderr.log": "448b022b10e28149f5b82b661518b25c438f7e2140142047e4a2f26eae96ae9a",
+      "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "server.log": "4307bbafa450901d1b455a56e3e8bb88328f7c783439ce590145575f26f5a7dc",
+      "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "boundaryOutput": "Python module boundaries passed (499 imports); TypeScript/native gates remain open",
+    "scope": "Frozen original private release selector, configured catalog staging/metadata producer, Python candidate source composition and tests over owned installed PostgreSQL16.15 Unix fixture. SHARE table lock excludes concurrent archive writes; transaction/savepoint controls qualify only native archive cut lifetime. Administrative synthetic configuration/archive/capture fixtures do not establish authenticated caller, source issuer, complete installed source/authority cut, host held-use dispatcher, public installer, complete accepted report or final disclosure."
+  },
+  "negative": {
+    "runId": "140ba446-0867-47c9-8cc3-ec9f458f712b",
+    "status": "scoped-evidence-matches",
+    "auditFailures": [],
+    "receiptStatus": "countercontrol-reproduced",
+    "receiptSha256": "7fa288ab4f41d687f52dbf6053adc84b0021afba234ea8da4729dda099fb719b",
+    "zipSha256": "f58145f222390a92ea72b14b812bc6df19f5f5040353516ef34fe0aeb84fce65",
+    "sourceCount": 270,
+    "currentSourceMismatches": [],
+    "zip": {
+      "entryCount": 270,
+      "expectedCount": 270,
+      "duplicates": 0,
+      "extra": [],
+      "missing": [],
+      "digestMismatches": []
+    },
+    "currentPythonPackageFileCount": 146,
+    "uncapturedCurrentPythonPackageFiles": [],
+    "nativeBinaryCount": 1614,
+    "currentNativeBinaryMismatches": [],
+    "methodGroups": {
+      "release": {
+        "expectedCount": 16,
+        "observedCount": 16,
+        "expectedMethods": [
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report"
+        ],
+        "missing": [],
+        "extra": [],
+        "duplicateCount": 0,
+        "results": {
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end": "FAIL",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut": "FAIL",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting": "FAIL",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid": "FAIL",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release": "ok"
+        },
+        "summary": [
+          "Ran 16 tests in 7.866s",
+          "FAILED (failures=4)"
+        ],
+        "notRaisedCount": 4,
+        "skipsPresent": false
+      },
+      "dispatch": {
+        "expectedCount": 14,
+        "observedCount": 14,
+        "expectedMethods": [
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback"
+        ],
+        "missing": [],
+        "extra": [],
+        "duplicateCount": 0,
+        "results": {
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback": "ok"
+        },
+        "summary": [
+          "Ran 14 tests in 22.140s",
+          "OK"
+        ],
+        "notRaisedCount": 0,
+        "skipsPresent": false
+      }
+    },
+    "receiptDispatchInventoryMatchesAst": true,
+    "noAuxiliaryExecution": true,
+    "releaseSql": {
+      "originalMarkerCount": 1,
+      "exactExpectedBytes": true,
+      "executedHashMatchesReceipt": true,
+      "originalSha256": "c514a59e28cdbc3bdd5b367fde2a6aa362d65cd201d86a1088b26a94d6df595f",
+      "executedSha256": "83142a8c9cb01f6ca8006748b90271bc7d8878f7c08843ccbf5b0da27cbfd740",
+      "changedLineCount": 1,
+      "sameLineCount": true
+    },
+    "dependencies": {
+      "pg8000": {
+        "pythonFiles": 8,
+        "currentPythonFiles": 8,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 1.31.5"
+        ]
+      },
+      "scramp": {
+        "pythonFiles": 3,
+        "currentPythonFiles": 3,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 1.4.17"
+        ]
+      },
+      "asn1crypto": {
+        "pythonFiles": 23,
+        "currentPythonFiles": 23,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 1.5.1"
+        ]
+      },
+      "dateutil": {
+        "pythonFiles": 18,
+        "currentPythonFiles": 18,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 2.9.0.post0"
+        ]
+      },
+      "six": {
+        "pythonFiles": 1,
+        "currentPythonFiles": 1,
+        "uncapturedCurrentPythonFiles": [],
+        "metadataCount": 1,
+        "versions": [
+          "Version: 1.17.0"
+        ]
+      }
+    },
+    "frozenDependencyCopyRules": {
+      "dateutilSelected": true,
+      "sixSelected": true,
+      "frozenDependenciesOnAllThreeTestPaths": true,
+      "auxiliaryOnlyInPositive": true
+    },
+    "codecs": [
+      {
+        "path": "packages/postgresql/native/canonical-string-bytes.sql",
+        "captured": true,
+        "sha256": "fe943bfd4397325ed3dff16cec7436070653f6ad6c19fbe67e853348c508dbc1"
+      },
+      {
+        "path": "packages/postgresql/native/canonical-tree-bytes.sql",
+        "captured": true,
+        "sha256": "c35cbe7cced69fc660142d62e4bd04d7b08d9c844738289cbd4d6aab01389429"
+      },
+      {
+        "path": "packages/python/src/truss/_canonical_wire_tree.py",
+        "captured": true,
+        "sha256": "755bd1c50a506861c76b9332edb086bbb101a8f33e80b6b585df56a3d7a01b79"
+      }
+    ],
+    "cleanupReceipt": {
+      "attempted": true,
+      "stopExitCode": 0,
+      "statusExitCode": 3,
+      "socketAbsent": true
+    },
+    "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-_lntkkpe",
+    "executionDirectoryAbsent": true,
+    "socketDirectory": "/private/tmp/rl-xiw9_qxw",
+    "socketDirectoryAbsent": true,
+    "serverShutdownLogged": true,
+    "serverVersionLine": "2026-10-11 11:24:49.054 EDT [55657] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit",
+    "logSha256": {
+      "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "boundaries.stdout.log": "7f0dbc44612626adbd04e8cbc3923b0a7b8136b9caff3833e6970f16d342a64a",
+      "tests.stderr.log": "b54c260319d98885ad99f913a523f5364e2da1cfeef6acb5c811216d85416e35",
+      "regression.stderr.log": "bd1ba3d771df823bc54f753b275aedf81732386530c71f589230cebc43f52c9f",
+      "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "server.log": "a77a23240dff83925615effa903b94ca0197a5ef6bf4e90d2921e8170e99fad5",
+      "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "boundaryOutput": "Python module boundaries passed (499 imports); TypeScript/native gates remain open",
+    "scope": "Deliberate omitted-archive-lock native variant reproduces four exact exclusion assertion failures. Frozen original private release selector, configured catalog staging/metadata producer, Python candidate source composition and tests over owned installed PostgreSQL16.15 Unix fixture. SHARE table lock excludes concurrent archive writes; transaction/savepoint controls qualify only native archive cut lifetime. Administrative synthetic configuration/archive/capture fixtures do not establish authenticated caller, source issuer, complete installed source/authority cut, host held-use dispatcher, public installer, complete accepted report or final disclosure."
+  },
+  "qualification": "Only these retained PostgreSQL16.15 component packets and current pinned sources; no authenticated issuer, public installer, complete accepted report, final disclosure, hermetic runtime or broader repository qualification.",
+  "findings": []
+}

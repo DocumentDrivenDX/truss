@@ -74,10 +74,10 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
             input=p.input_bytes,candidate=self.candidate,documents=p.archive_documents_bytes,declarations=p.declarations_bytes,
             pre=self.prestate,context=self.context,profile=self.profile)
         self.result=json.loads(bytes.fromhex(rows[0][3]));return rows[0]
-    def compose(self,result=None,context=None):
+    def compose(self,result=None,context=None,profile=None):
         value=NativeCatalogStageInput(self.prepared,b'{}',b'\x01',b'\x05',b'\x06',
             ConfiguredCatalogSelection('guard-fixture','guard-fixture-epoch','guard-fixture-incarnation',
-                b'original capture fixture',self.profile))
+                b'original capture fixture',self.profile if profile is None else profile))
         encoded=encode_catalog_stage(value,'0')
         return compose_captured_catalog_sources(encoded,self.result if result is None else result,
             self.context if context is None else context)
@@ -123,8 +123,60 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
                            (('catalogRelease','effectGeneration'),'0'),(('end','empty_scope'),'{}')):
             changed=copy.deepcopy(self.result);changed['reportSources'][path[0]][path[1]]=value
             with self.assertRaises(ValueError):self.compose(changed)
+        changed=copy.deepcopy(self.result)
+        for cut in ('start','end'):
+            scope=json.loads(changed['reportSources'][cut]['empty_scope'])
+            changed['reportSources'][cut]['empty_scope']=json.dumps({**scope,'businessRelations':scope['businessRelations']+['source_epoch_registry','source_epoch_current']})
+        with self.assertRaises(ValueError):self.compose(changed)
+        changed=copy.deepcopy(self.result);changed['interfaceVersion']='truss-native-provisional-catalog/0.2'
+        del changed['reportSources']['catalogRelease']
+        for cut in ('start','end'):
+            changed['reportSources'][cut]['empty_scope']=json.dumps(json.loads(changed['reportSources'][cut]['empty_scope'])['businessRelations'])
+        with self.assertRaises(ValueError):self.compose(changed)
         changed=json.loads(self.context);changed['sourceEpoch']='other'
         with self.assertRaises(ValueError):self.compose(context=json.dumps(changed).encode())
+        changed=copy.deepcopy(self.result)
+        for cut in ('start','end'):
+            scope=json.loads(changed['reportSources'][cut]['empty_scope'])
+            full=json.loads(bytes.fromhex(scope['metadataUtf8Hex']))
+            full['epoch']['transition_reason']='restore';full['epoch']['predecessor_epoch']='earlier'
+            scope['metadataUtf8Hex']=json.dumps(full).encode().hex()
+            changed['reportSources'][cut]['empty_scope']=json.dumps(scope)
+        with self.assertRaises(ValueError):self.compose(changed)
+        for field,value in (('configurationGeneration','8'),('configurationSha256','ab'*32),
+                            ('selectedBindingSha256','ab'*32),('installedInventorySha256','ab'*32)):
+            changed=copy.deepcopy(self.result)
+            for cut in ('start','end'):
+                scope=json.loads(changed['reportSources'][cut]['empty_scope'])
+                full=json.loads(bytes.fromhex(scope['metadataUtf8Hex']))
+                native_field={'configurationGeneration':'configuration_generation',
+                    'configurationSha256':'configuration_sha256','selectedBindingSha256':'selected_binding_sha256',
+                    'installedInventorySha256':'installed_inventory_sha256'}[field]
+                full['configuration'][native_field]=int(value) if field=='configurationGeneration' else '\\x'+value
+                scope['metadataUtf8Hex']=json.dumps(full).encode().hex()
+                changed['reportSources'][cut]['empty_scope']=json.dumps(scope)
+            if field=='configurationGeneration':changed['reportSources']['catalogRelease']['configurationGeneration']=value
+            with self.assertRaises(ValueError):self.compose(changed)
+        with self.assertRaises(ValueError):self.compose(profile=b'changed configuration profile')
+        for mutation in ('foreign','origin','capture','missing','extra','array'):
+            changed=json.loads(self.context)
+            if mutation=='foreign':changed['sourceEpoch']='other'
+            elif mutation=='origin':changed['assertedOriginUtf8Hex']=b'{"different":true}'.hex()
+            elif mutation=='capture':changed['assertedOriginCaptureProfileHex']=b'other profile'.hex()
+            elif mutation=='missing':del changed['database']
+            elif mutation=='extra':changed['extra']='unexpected'
+            else:changed=[]
+            raw=json.dumps(changed).encode();response=copy.deepcopy(self.result)
+            for cut in ('start','end'):
+                scope=json.loads(response['reportSources'][cut]['empty_scope'])
+                full=json.loads(bytes.fromhex(scope['metadataUtf8Hex']))
+                full['configuration']['original_context_sha256']='\\x'+hashlib.sha256(raw).hexdigest()
+                if mutation=='foreign':
+                    for row in ('pointer','epoch','configuration'):full[row]['source_epoch']='other'
+                    full['admission']['source_epoch_utf8']='\\x'+b'other'.hex()
+                scope['metadataUtf8Hex']=json.dumps(full).encode().hex()
+                response['reportSources'][cut]['empty_scope']=json.dumps(scope)
+            with self.assertRaises(ValueError):self.compose(response,raw)
         changed=copy.deepcopy(self.result);del changed['reportSources']['catalogRelease']
         with self.assertRaises(ValueError):self.compose(changed)
 

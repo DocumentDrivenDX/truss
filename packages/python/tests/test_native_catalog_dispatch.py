@@ -245,3 +245,17 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
 
     def test_substituted_native_inventory_count_refuses(self):
         self._assert_substituted_response('counts')
+
+    def test_original_configured_encoder_capture_and_rollback(self):
+        session,issued,request=self._prepare_catalog(configured=True)
+        result=issued.owner.dispatch_catalog_stage_candidate(request)
+        native=json.loads(result.original_provisional_result)
+        context=json.loads(result.original_context)
+        self.assertEqual(native['interfaceVersion'],'truss-native-provisional-catalog/0.3')
+        self.assertEqual(context['assertedOriginUtf8Hex'],request.encoded.original_input.origin.hex())
+        self.assertIs(result.original_call,request.entry.native_call)
+        self.assertTrue(result.original_call.capture_complete)
+        self.assertFalse(json.loads(result.original_report_source_snapshot)['configuredReleaseCandidate']['registeredAuthority'])
+        self.assertIsNone(json.loads(result.original_report_assembly)['completeReportBytes'])
+        self.assertFalse(issued.controls.forward_ready)
+        self._restore_catalog(session,issued)

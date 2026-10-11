@@ -68,6 +68,7 @@ def compose_captured_catalog_sources(encoded, result, original_context=None):
         from ._native_catalog_metadata import _hex
         validate_configured_metadata(encoded,original_context,result['writerXid'],result['ordinal'],
                                     _hex(scope['metadataUtf8Hex'],32768))
+
     cut=(end['writer_xid'],end['operation_ordinal'],end['effect_generation'])
     validate_lifecycle(sources['lifecycle'],prepared,result['revision'],cut,encoded.lifecycle_policy)
     validate_indexes(sources['indexDeclarations'],prepared,result['revision'],cut,encoded.index_policy)
