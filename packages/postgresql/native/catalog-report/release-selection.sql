@@ -190,6 +190,10 @@ $configuration$,'UTF8');
 }
 $release$,'UTF8');
 BEGIN
+ IF current_setting('transaction_isolation') IS DISTINCT FROM 'read committed'
+  OR current_setting('transaction_read_only') IS DISTINCT FROM 'off' THEN
+  RAISE EXCEPTION 'fresh read committed read-write release selection required' USING ERRCODE='55000';
+ END IF;
  IF expected_configuration_profile_hex IS DISTINCT FROM encode(configuration_profile,'hex') THEN
   RAISE EXCEPTION 'recognized configuration profile required' USING ERRCODE='0A000';
  END IF;
@@ -222,6 +226,12 @@ BEGIN
   RAISE EXCEPTION 'exact selected catalog report release required' USING ERRCODE='0A000';
  END IF;
  context:=convert_from(decode(captured.context_hex,'hex'),'UTF8')::jsonb;
+ -- Row locks cannot fence a new matching archive row. SHARE excludes all
+ -- concurrent INSERT/UPDATE/DELETE/TRUNCATE and archive DDL through transaction
+ -- end (or rollback across acquisition). Same-writer changes still require the
+ -- original host lifecycle and protected dispatcher; this is not PA authority.
+ -- Refuse conflicting writers immediately, including competing lock upgrades.
+ LOCK TABLE truss.installation_archive IN SHARE MODE NOWAIT;
  SELECT count(*) INTO matches FROM truss.installation_archive a
  WHERE convert_to(a.installation_id,'UTF8')=convert_to(context->>'installationId','UTF8')
   AND a.artifact_role COLLATE pg_catalog."C"='input'
@@ -234,7 +244,7 @@ BEGIN
  WHERE convert_to(a.installation_id,'UTF8')=convert_to(context->>'installationId','UTF8')
   AND a.artifact_role COLLATE pg_catalog."C"='input'
   AND convert_to(a.artifact_identity,'UTF8')=convert_to('truss.catalog-report-release/0.1.0','UTF8')
- FOR SHARE;
+ FOR SHARE NOWAIT;
  IF archived IS DISTINCT FROM release_bytes
   OR archived_digest IS DISTINCT FROM sha256(release_bytes)
   OR identity_digest IS DISTINCT FROM sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')) THEN
@@ -254,7 +264,8 @@ BEGIN
     AND a.artifact_identity_sha256=sha256(convert_to(a.artifact_identity,'UTF8'))) THEN
   RAISE EXCEPTION 'current unique release archive correspondence required' USING ERRCODE='55000';
  END IF;
- -- Recheck is correspondence, not concurrent archive-writer exclusion authority.
+ -- Recheck verifies the retained row under the native archive table cut.
+ -- It does not confer authenticated capture, all-source or final-release authority.
  RETURN QUERY SELECT encode(archived,'hex'),encode(sha256(archived),'hex'),captured.configuration_generation;
 END;
 $$;

@@ -1,0 +1,49 @@
+test_actual_policy_selected_from_original_configuration (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration) ... ok
+test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end) ... 
+  test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end) (statement="INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input','truss.catalog-report-release/0.1.0',decode('01','hex'),sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')))") ... FAIL
+test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end) ... ERROR
+test_late_configuration_change_refuses (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses) ... ok
+test_later_rollback_and_savepoint_release_preserve_archive_cut (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut) ... FAIL
+test_missing_duplicate_and_changed_archive_refuse (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse) ... ok
+test_release_resources_and_embedded_policy_are_exact (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact) ... ok
+test_rollback_across_selection_releases_archive_cut_same_xid (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid) ... FAIL
+test_unknown_ambiguous_or_changed_selection_refuses (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses) ... ok
+test_unrecognized_configuration_profile_cannot_select_release (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release) ... ok
+
+======================================================================
+ERROR: test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-rvdi62gt/checkout/packages/python/tests/test_catalog_report_release_native.py", line 121, in test_concurrent_archive_writes_excluded_until_transaction_end
+    self.assertEqual(caught.exception.args[0]['C'],'55P03')
+                     ^^^^^^^^^^^^^^^^
+AttributeError: '_AssertRaisesContext' object has no attribute 'exception'
+
+======================================================================
+FAIL: test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end) (statement="INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input','truss.catalog-report-release/0.1.0',decode('01','hex'),sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')))")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-rvdi62gt/checkout/packages/python/tests/test_catalog_report_release_native.py", line 119, in test_concurrent_archive_writes_excluded_until_transaction_end
+    with self.subTest(statement=statement),self.assertRaises(DatabaseError) as caught:
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_later_rollback_and_savepoint_release_preserve_archive_cut (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-rvdi62gt/checkout/packages/python/tests/test_catalog_report_release_native.py", line 157, in test_later_rollback_and_savepoint_release_preserve_archive_cut
+    with self.assertRaises(DatabaseError) as caught:
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_rollback_across_selection_releases_archive_cut_same_xid (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-rvdi62gt/checkout/packages/python/tests/test_catalog_report_release_native.py", line 141, in test_rollback_across_selection_releases_archive_cut_same_xid
+    with self.assertRaises(DatabaseError) as caught:other.run(statement)
+AssertionError: DatabaseError not raised
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.585s
+
+FAILED (failures=3, errors=1)

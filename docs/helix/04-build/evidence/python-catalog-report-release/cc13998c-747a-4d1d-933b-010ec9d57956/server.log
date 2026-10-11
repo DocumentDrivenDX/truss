@@ -1,0 +1,69 @@
+2026-10-11 10:46:49.297 EDT [40823] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 10:46:49.297 EDT [40823] LOG:  listening on Unix socket "/private/tmp/rl-mz6j65m8/.s.PGSQL.5432"
+2026-10-11 10:46:49.306 EDT [40826] LOG:  database system was shut down at 2026-10-11 10:46:49 EDT
+2026-10-11 10:46:49.310 EDT [40823] LOG:  database system is ready to accept connections
+2026-10-11 10:46:50.663 EDT [40839] WARNING:  there is no transaction in progress
+2026-10-11 10:46:50.682 EDT [40841] ERROR:  current configuration differs from original admission capsule
+2026-10-11 10:46:50.682 EDT [40841] CONTEXT:  PL/pgSQL function truss.runtime_require_operation_configuration_current(text,text,text) line 36 at RAISE
+	SQL statement "SELECT truss.runtime_require_operation_configuration_current(
+	  expected_writer_xid,expected_operation_ordinal,expected_effect_generation)"
+	PL/pgSQL function truss.runtime_collect_catalog_admission_configuration(text,text,text,text) line 9 at PERFORM
+	SQL statement "SELECT *                      FROM truss.runtime_collect_catalog_admission_configuration(
+	  expected_writer,expected_ordinal,expected_generation,expected_configuration_profile_hex)"
+	PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 194 at SQL statement
+2026-10-11 10:46:50.682 EDT [40841] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.722 EDT [40844] ERROR:  unique original report release archive required
+2026-10-11 10:46:50.722 EDT [40844] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 234 at RAISE
+2026-10-11 10:46:50.722 EDT [40844] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.725 EDT [40844] ERROR:  unique original report release archive required
+2026-10-11 10:46:50.725 EDT [40844] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 234 at RAISE
+2026-10-11 10:46:50.725 EDT [40844] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.727 EDT [40844] ERROR:  unique original report release archive required
+2026-10-11 10:46:50.727 EDT [40844] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 234 at RAISE
+2026-10-11 10:46:50.727 EDT [40844] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.728 EDT [40844] ERROR:  original complete report release bytes required
+2026-10-11 10:46:50.728 EDT [40844] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 245 at RAISE
+2026-10-11 10:46:50.728 EDT [40844] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.774 EDT [40845] ERROR:  fresh read committed read-write release selection required
+2026-10-11 10:46:50.774 EDT [40845] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 189 at RAISE
+2026-10-11 10:46:50.774 EDT [40845] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.786 EDT [40845] ERROR:  fresh read committed read-write release selection required
+2026-10-11 10:46:50.786 EDT [40845] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 189 at RAISE
+2026-10-11 10:46:50.786 EDT [40845] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.786 EDT [40845] ERROR:  fresh read committed read-write release selection required
+2026-10-11 10:46:50.786 EDT [40845] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 189 at RAISE
+2026-10-11 10:46:50.786 EDT [40845] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.787 EDT [40845] WARNING:  there is no transaction in progress
+2026-10-11 10:46:50.804 EDT [40848] ERROR:  could not obtain lock on row in relation "installation_archive"
+2026-10-11 10:46:50.804 EDT [40848] CONTEXT:  SQL statement "SELECT a.artifact_bytes,a.artifact_sha256,a.artifact_identity_sha256
+	                                                      FROM truss.installation_archive a
+	 WHERE convert_to(a.installation_id,'UTF8')=convert_to(context->>'installationId','UTF8')
+	  AND a.artifact_role COLLATE pg_catalog."C"='input'
+	  AND convert_to(a.artifact_identity,'UTF8')=convert_to('truss.catalog-report-release/0.1.0','UTF8')
+	 FOR SHARE NOWAIT"
+	PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 236 at SQL statement
+2026-10-11 10:46:50.804 EDT [40848] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:50.813 EDT [40848] WARNING:  there is no transaction in progress
+2026-10-11 10:46:51.354 EDT [40855] ERROR:  closed unambiguous catalog report configuration required
+2026-10-11 10:46:51.354 EDT [40855] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 202 at RAISE
+2026-10-11 10:46:51.354 EDT [40855] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:51.357 EDT [40855] ERROR:  recognized catalog report configuration required
+2026-10-11 10:46:51.357 EDT [40855] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 207 at RAISE
+2026-10-11 10:46:51.357 EDT [40855] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:51.359 EDT [40855] ERROR:  closed unambiguous catalog report configuration required
+2026-10-11 10:46:51.359 EDT [40855] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 202 at RAISE
+2026-10-11 10:46:51.359 EDT [40855] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:51.361 EDT [40855] ERROR:  exact selected catalog report release required
+2026-10-11 10:46:51.361 EDT [40855] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 220 at RAISE
+2026-10-11 10:46:51.361 EDT [40855] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:51.363 EDT [40855] ERROR:  exact selected catalog report release required
+2026-10-11 10:46:51.363 EDT [40855] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 220 at RAISE
+2026-10-11 10:46:51.363 EDT [40855] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:51.365 EDT [40855] ERROR:  exact selected catalog report release required
+2026-10-11 10:46:51.365 EDT [40855] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 220 at RAISE
+2026-10-11 10:46:51.365 EDT [40855] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:51.395 EDT [40857] ERROR:  recognized configuration profile required
+2026-10-11 10:46:51.395 EDT [40857] CONTEXT:  PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 192 at RAISE
+2026-10-11 10:46:51.395 EDT [40857] STATEMENT:  SELECT * FROM truss.runtime_select_catalog_report_release($1,'0','0',$2)
+2026-10-11 10:46:51.584 EDT [40823] LOG:  received immediate shutdown request
+2026-10-11 10:46:51.587 EDT [40823] LOG:  database system is shut down
