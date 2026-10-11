@@ -730,3 +730,16 @@ CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites only. Require
 future admission controls must also reject unqualified original issuer/semantic
 mapping and independently changed callback/decoder source; these are not proved by
 exact native profile-byte correspondence.
+
+
+### Fixed raw-cell capture controls — 2026-10-11
+
+Require fixed epoch-bound reads to select original active=false despite a real
+true decoy column, omit unneeded salary, record a present Ownership binding with
+zero rows explicitly, and refuse complete results above row/payload limits.
+Verify exact native int8 text9007199254740993, SQL NULL without empty-string
+coercion, and host custom text-loader isolation. Changed physical Staff mappings
+in integer/NULL controls test native raw encoding only; they are not qualified
+against the original ontology's required string identity. These seven controls
+advance CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites, not
+original trusted fact construction, protected evaluation or final publication.

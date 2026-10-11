@@ -2166,3 +2166,29 @@ An arbitrary private callback may still use the wrong decoder despite correct
 cuts. Keep the earlier successful decoy-active counterexample: complete authenticated
 mapping/decoder/source/role/config closure, protected dispatch and final disclosure
 remain required before ordinary authorization. Graph field profiles are unfinished.
+
+
+### Fixed epoch-bound raw dependency-cell capture candidate — 2026-10-11
+
+The new private capture entry accepts no SQL or decoder callback. Derive its
+columns only from the exact selected native epoch profile, validate complete
+original requirement coverage and table/column cuts, then read quoted columns
+from ONLY the corresponding non-inherited tables. Selected capture subset:
+ordinary PostgreSQL16 bool/int8/text columns, at most32 relations/32 fields per
+relation/100 rows per relation/512 rows total. Native row overflow checks suppress
+oversized value transport and require refusal, not silent truncation or NULL
+substitution: row text payload above65536 bytes refuses the whole capture.
+Cumulative returned text above1MiB also refuses. These are raw-data bounds, not
+qualification of a strict whole-wire/allocator transport envelope.
+
+Require exact named text descriptors and original host text-loader isolation;
+return immutable relation/qualified-reference/type/attribute metadata and raw
+text/NULL rows. Preserve empty association rows separately from missing bindings;
+preserve integer text beyond JavaScript safe precision and SQL NULL distinctly.
+No protected salary column is selected by the original authorization inventory.
+Capture is not a trusted UMF fact cut, semantic key/endpoint reconstruction,
+policy decision or final disclosure. Decoder-required keys/coverage and semantic
+mapping/source/role/config closure remain separate obligations; unordered native
+row position is not semantic identity. Original issuer/profile admission and
+graph payload decoding remain unqualified. The old arbitrary-callback prototype
+and its successful negative control must not authorize ordinary callers.
