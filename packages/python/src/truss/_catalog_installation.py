@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from hashlib import sha256
 from importlib.resources import files
 import json
+from ._installation_definition_release import DEFINITIONS_SHA256,DEFINITION_QUERY_SHA256
 from ._installation_statement_release import STATEMENTS_SHA256,SOURCE_MANIFEST_SHA256
 
 
@@ -20,6 +21,8 @@ class ProvisionalCatalogConstruction:
     rollback_confirmed: bool
     scope: str = 'rollback_only_fresh_layout_construction'
     installation_ready: bool = False
+    original_definition_baseline: bytes = b''
+    definition_observation: bytes = b''
 
 
 class CatalogConstructionFailure(RuntimeError):
@@ -63,6 +66,21 @@ def _statements():
     return original,statements
 
 
+def _definition_baseline(original_statements):
+    original=files('truss').joinpath('_installation/definitions.json').read_bytes()
+    query=files('truss').joinpath('_installation/definitions.sql').read_bytes()
+    if not 1<=len(original)<=4194304 or sha256(original).hexdigest()!=DEFINITIONS_SHA256 or sha256(query).hexdigest()!=DEFINITION_QUERY_SHA256:
+        raise ValueError('Independent original definition baseline required')
+    profile=json.loads(original);statements=json.loads(original_statements)
+    if (profile['interface']!='truss-selected-native-definition-baseline/0.1.0' or profile['installationReady'] is not False
+        or profile['independentRollbackConfirmed'] is not True or profile['nativeVersion']!='160015'
+        or profile['statementReleaseSha256']!=sha256(original_statements).hexdigest()
+        or profile['modelSha256']!=statements['modelSha256'] or profile['ownerExportSha256']!=statements['ownerExportSha256']
+        or profile['querySha256']!=sha256(query).hexdigest()):
+        raise ValueError('Independent baseline release correspondence required')
+    return original,query,profile
+
+
 def _native_text(connection,sql):
     rows=connection.run(sql)
     if len(rows)!=1 or len(rows[0])!=1 or type(rows[0][0]) is not str:
@@ -103,14 +121,16 @@ def construct_provisional_catalog_layout(connection):
     namespace repair or retry path exists. Bounds cover retained data only.
     """
     original,statements=_statements()
+    definitions,definition_query,definition_profile=_definition_baseline(original)
     if getattr(connection,'_transaction_status',None)!=b'I':
         raise ValueError('Original idle installer-owned administrative connection required')
     target=_native_text(connection,_TARGET)
     version=json.loads(target)['version']
-    if type(version) is not str or not version.isascii() or not version.isdigit() or not 160000<=int(version)<170000:
-        raise ValueError('Selected PostgreSQL16 source default profile required')
+    if type(version) is not str or not version.isascii() or not version.isdigit() or version!=definition_profile['nativeVersion']:
+        raise ValueError('Selected PostgreSQL16.15 source compilation profile required')
     begun=False;primary=None;cleanup=None;observed=b'';restored=False;prior_namespace=None
-    attempt={'phase':'target_observed','submitted_statements':[], 'rollback_submitted':False,'rollback_reply_observed':False}
+    definition_observed=b''
+    attempt={'original_definition_baseline':definitions,'phase':'target_observed','submitted_statements':[], 'rollback_submitted':False,'rollback_reply_observed':False}
     try:
         # Treat an uncertain BEGIN as cleanup-required as well.
         begun=True;attempt['phase']='begin_submitted';connection.run('BEGIN')
@@ -131,6 +151,10 @@ def construct_provisional_catalog_layout(connection):
         observed=_native_text(connection,_OBSERVATION)
         attempt['namespace_observation']=observed
         compare_source_membership(json.loads(original)['membership'],json.loads(observed))
+        definition_observed=_native_text(connection,definition_query.decode('utf8'))
+        attempt['definition_observation']=definition_observed
+        if json.loads(definition_observed)!=json.loads(definition_profile['compiledOriginal']):
+            raise ValueError('Independent release definition correspondence mismatch')
     except BaseException as error:
         primary=error
     finally:
@@ -146,7 +170,7 @@ def construct_provisional_catalog_layout(connection):
             except BaseException as error:cleanup=error
     if primary is not None or cleanup is not None:
         raise CatalogConstructionFailure(primary,cleanup,original,target,restored,connection,attempt) from primary
-    return ProvisionalCatalogConstruction(original,target,observed,str(len(statements)),restored)
+    return ProvisionalCatalogConstruction(original,target,observed,str(len(statements)),restored,original_definition_baseline=definitions,definition_observation=definition_observed)
 
 
 def compare_source_membership(expected,observed):

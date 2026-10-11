@@ -1,0 +1,47 @@
+{
+  "scope": "independent_original_release_compilation_and_selected_definition_correspondence_rollback_only",
+  "sourceHashes": {
+    "packages/python/src/truss/_catalog_installation.py": "eb27ccb18340b7b24e2277634c3fece835e19fdede87c47ca737f7f8837ce3ba",
+    "packages/python/src/truss/_installation/definitions.json": "95df8f859f7b56023e860e554b76eb859b576ef18ef15d0ff095c66fad1f7713",
+    "packages/python/src/truss/_installation/definitions.sql": "a549afb4ecdba65f4d42362bae91cbabfc5d2f97e931c8cf7825210f006967d4",
+    "packages/python/src/truss/_installation_definition_release.py": "259b1e0ec7b841f644bb21d5997a438991fb47cf0736c668c4c017e1b2deaf46",
+    "packages/python/tests/test_catalog_installation.py": "aa3825b970274ca05d26fd6cd5a035245fc8a8db0ff32d8bee4673c4769f7cfc",
+    "scripts/build-python-installation-definitions.py": "0c243749a9f31d6ff3bd16b5ab2b1441863abda03d04e7659809556649c05847",
+    "scripts/check-python-installation-definition-census.ts": "88e5e0ea320508ff14cb031715874e2fdccaa286a46a03e9d978eddcb278abc7",
+    "scripts/check-module-boundaries.py": "fcdda4f4737bb72620ad58e7ef49f4439b99ea8065d4d2be5af987398f80f9bd",
+    "packages/python/pyproject.toml": "e8cd2088d654db5ed310a0361be5901f36ff91c06b33335403331670ff6a5a78"
+  },
+  "testLog": "docs/helix/04-build/evidence/python-installation-native-definition-baseline.log",
+  "testLogSha256": "95adfdcb9291410262d55fe939306736f650d42a611c559c802f2b7848ca07bb",
+  "censusLog": "docs/helix/04-build/evidence/python-installation-definition-census.log",
+  "censusLogSha256": "fd4e9a372a1cb9c6a1669be93685d86185cb30c609b23c423c0cdea66ecc6c8c",
+  "installedWheelSha256": "1bc9d0fed3a296277be78529d5b895f5fb91b3cde873a7a4a1e7d0e88e34e936",
+  "testsPassed": 16,
+  "nativeVersion": "160015",
+  "definitionCounts": {
+    "expressions": 63,
+    "constraints": 298,
+    "indexes": 86
+  },
+  "independentSourceCensus": {
+    "sourceSha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
+    "constraints": {
+      "c": 172,
+      "f": 64,
+      "p": 48,
+      "u": 14
+    },
+    "expressions": 63,
+    "explicitIndexes": 24,
+    "compiledIndexes": 86,
+    "scope": "Independent original AST category census only; expression/definition correspondence has separate native evidence"
+  },
+  "installationReady": false,
+  "moduleBoundaryImports": 402,
+  "limitations": [
+    "Selected deparsed/native structural fields do not establish complete dependency closure, collation provider/locale equivalence, table storage/inheritance or effective authority.",
+    "Routine return/OUT metadata and remaining execution attributes, sequence ownership/live allocator state remain unresolved.",
+    "All seven semantic bodies and protected original ordinary-person admission are not installed.",
+    "No installation marker/archive/source epoch or public installation API published."
+  ]
+}

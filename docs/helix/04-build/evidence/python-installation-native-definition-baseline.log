@@ -1,0 +1,21 @@
+test_caller_runtime_transaction_not_adopted (test_catalog_installation.CatalogInstallationInputTests.test_caller_runtime_transaction_not_adopted) ... ok
+test_definition_baseline_substitution_refuses_before_sql (test_catalog_installation.CatalogInstallationInputTests.test_definition_baseline_substitution_refuses_before_sql) ... ok
+test_other_native_major_refuses_before_begin (test_catalog_installation.CatalogInstallationInputTests.test_other_native_major_refuses_before_begin) ... ok
+test_statement_substitution_refuses_before_sql (test_catalog_installation.CatalogInstallationInputTests.test_statement_substitution_refuses_before_sql) ... ok
+test_changed_generated_content_with_same_flags_refuses (test_catalog_installation.CatalogInstallationNativeTests.test_changed_generated_content_with_same_flags_refuses) ... ok
+test_column_definition_changes_refuse_and_restore_absence (test_catalog_installation.CatalogInstallationNativeTests.test_column_definition_changes_refuse_and_restore_absence) ... ok
+test_exact_owner_construction_genesis_and_rollback (test_catalog_installation.CatalogInstallationNativeTests.test_exact_owner_construction_genesis_and_rollback) ... ok
+test_execution_definitions_refuse_changes_and_restore_absence (test_catalog_installation.CatalogInstallationNativeTests.test_execution_definitions_refuse_changes_and_restore_absence) ... ok
+test_existing_namespace_preserved_without_overwrite (test_catalog_installation.CatalogInstallationNativeTests.test_existing_namespace_preserved_without_overwrite) ... ok
+test_expression_constraint_and_index_drift_refuses (test_catalog_installation.CatalogInstallationNativeTests.test_expression_constraint_and_index_drift_refuses) ... ok
+test_failures_after_ddl_and_revocations_restore_absence (test_catalog_installation.CatalogInstallationNativeTests.test_failures_after_ddl_and_revocations_restore_absence) ... ok
+test_hostile_search_path_is_contained_and_restored (test_catalog_installation.CatalogInstallationNativeTests.test_hostile_search_path_is_contained_and_restored) ... ok
+test_lost_rollback_reply_retains_original_attempt_without_retry (test_catalog_installation.CatalogInstallationNativeTests.test_lost_rollback_reply_retains_original_attempt_without_retry) ... ok
+test_membership_changes_refuse_and_restore_absence (test_catalog_installation.CatalogInstallationNativeTests.test_membership_changes_refuse_and_restore_absence) ... ok
+test_native_descriptor_membership_and_content (test_catalog_installation.CatalogInstallationNativeTests.test_native_descriptor_membership_and_content) ... ok
+test_public_bypass_denied_in_constructed_namespace (test_catalog_installation.CatalogInstallationNativeTests.test_public_bypass_denied_in_constructed_namespace) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 21.807s
+
+OK

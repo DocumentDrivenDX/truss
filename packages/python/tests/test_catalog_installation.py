@@ -13,6 +13,12 @@ class CatalogInstallationInputTests(unittest.TestCase):
         with patch('truss._catalog_installation.STATEMENTS_SHA256','0'*64),self.assertRaises(ValueError):
             construct_provisional_catalog_layout(NoCalls())
 
+    def test_definition_baseline_substitution_refuses_before_sql(self):
+        class NoCalls:
+            def run(self,*args,**kwargs):raise AssertionError('No SQL permitted')
+        with patch('truss._catalog_installation.DEFINITIONS_SHA256','0'*64),self.assertRaises(ValueError):
+            construct_provisional_catalog_layout(NoCalls())
+
     def test_other_native_major_refuses_before_begin(self):
         class Port:
             _transaction_status=b'I'
@@ -50,6 +56,10 @@ class CatalogInstallationNativeTests(NativeBoundaryFixture,unittest.TestCase):
         self.assertEqual(len(observed['routines']),2)
         self.assertTrue(value.rollback_confirmed)
         self.assertFalse(value.installation_ready)
+        definitions=json.loads(value.definition_observation)
+        self.assertEqual({k:len(v) for k,v in definitions.items()},{'expressions':63,'constraints':298,'indexes':86})
+        self.assertEqual(sum(c['kind']=='p' for c in definitions['constraints']),48)
+        self.assertTrue(value.original_definition_baseline)
         self.assertEqual(self.connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
 
     def test_hostile_search_path_is_contained_and_restored(self):
@@ -174,6 +184,47 @@ class CatalogInstallationNativeTests(NativeBoundaryFixture,unittest.TestCase):
             self.assertIsInstance(refused.exception.primary_failure,ValueError)
             self.assertTrue(refused.exception.rollback_confirmed)
             self.assertEqual(connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
+
+    def test_expression_constraint_and_index_drift_refuses(self):
+        original,_=_statements();profile=json.loads(original)
+        generated=next((t['name'],c['name']) for t in profile['membership']['tables'] for c in t['columns'] if c['definition']['generated']=='s')
+        for change in (
+            "ALTER TABLE truss.schema_rev ALTER COLUMN origin SET DEFAULT '{\"changed\":true}'::jsonb",
+            'ALTER TABLE truss.setting ADD CONSTRAINT constructor_extra_unique UNIQUE(value)',
+            'ALTER TABLE truss.edge DROP CONSTRAINT edge_typed_identity_row_home CASCADE',
+            'ALTER TABLE truss.schema_rev DROP CONSTRAINT schema_rev_origin_is_object; ALTER TABLE truss.schema_rev ADD CONSTRAINT schema_rev_origin_is_object CHECK (true)',
+            'ALTER TABLE truss.object DROP CONSTRAINT object_rev_fkey; ALTER TABLE truss.object ADD CONSTRAINT object_rev_fkey FOREIGN KEY(rev) REFERENCES truss.schema_rev(rev) ON DELETE CASCADE',
+            'ALTER INDEX truss.object_type_id SET (fillfactor=80)',
+        ):
+            connection=self.connection
+            class Port:
+                @property
+                def _transaction_status(self):return connection._transaction_status
+                def run(self,sql):
+                    if sql.startswith('SELECT pg_catalog.jsonb_build_object(') and "'namespace'" in sql:connection.run(change)
+                    return connection.run(sql)
+            with self.subTest(change=change),self.assertRaises(CatalogConstructionFailure) as refused:
+                construct_provisional_catalog_layout(Port())
+            self.assertIsInstance(refused.exception.primary_failure,ValueError)
+            self.assertTrue(refused.exception.rollback_confirmed)
+            self.assertEqual(connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
+
+    def test_changed_generated_content_with_same_flags_refuses(self):
+        connection=self.connection;changed=[]
+        class Port:
+            @property
+            def _transaction_status(self):return connection._transaction_status
+            def run(self,sql):
+                if not changed and 'GENERATED ALWAYS AS (pg_catalog.sha256(lineage_bytes))' in sql:
+                    sql=sql.replace('pg_catalog.sha256(lineage_bytes)',"pg_catalog.sha256('changed'::bytea)")
+                    changed.append(True)
+                return connection.run(sql)
+        with self.assertRaises(CatalogConstructionFailure) as refused:
+            construct_provisional_catalog_layout(Port())
+        self.assertEqual(changed,[True])
+        self.assertIsInstance(refused.exception.primary_failure,ValueError)
+        self.assertIn('definition correspondence',str(refused.exception.primary_failure))
+        self.assertTrue(refused.exception.rollback_confirmed)
 
     def test_existing_namespace_preserved_without_overwrite(self):
         self.connection.run('CREATE SCHEMA truss')
