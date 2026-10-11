@@ -1,0 +1,72 @@
+{
+  "interface": "truss-private-existing-string-writer-evidence/0.1.0",
+  "scope": "selected_existing_root_string_writer_source_correspondence_and_scope",
+  "sourceSha256": {
+    "packages/postgresql/native/existing-string-writer/pending-effects.sql": "263418750c11b5afad72bb6fe668901b43632c609e44f66595d5d5793fde313f",
+    "packages/postgresql/native/row-image/string-candidate.sql": "1e2f13ec4f7ccc32a180257ec2490e8defa46a52a4483a200835ed608acd6424",
+    "packages/postgresql/native/row-image/existing-string-scope.sql": "06f6b0287ddbb46549f809a5973ab77325859b1178d74de0abe31777679a9554",
+    "packages/postgresql/native/row-image/README.md": "6419e8a7fb5b19473298b3e896ccd8e71e21a578b1347f8693a81627a79a1739",
+    "packages/python/tests/test_native_connected_string_writer.py": "939d6e3f847d27fdbb25558b8cc34a5e9e62d96763967941ba79e78326ed7f36",
+    "packages/python/tests/test_native_string_candidate.py": "a4b698d7d2e0297223e9f21da94199161eb1fa1e7948de5b44ad0a42d4b10a3e",
+    "scripts/build-python-installation-sources.py": "1654b44dbf8e35f048da5b48c9dcaca25a9c2d875d8f1448c31916b91ecb9976",
+    "packages/python/src/truss/_installation/manifest.json": "35589fe38d1b54832c618caca739a8f1de8339d5a2dbe71d717d9b459d7950c0",
+    "packages/python/src/truss/_installation/sources.zip": "2d4fabab96dc9cef7e5971d42bcae9332c442f039a19ac2da6ca5a134b9e56f1",
+    "packages/python/src/truss/_installation/statements.json": "ab97ac257b53b9fea2c92b773bea189ee96cb43a4abb4f9b81c212d4c5b58544",
+    "packages/python/src/truss/_installation/definitions.json": "ac9e645292a1b9cde6672575c47844f17f7f1d7b7fc612a665a381af7bee8a95",
+    "packages/python/src/truss/_installation_definition_release.py": "a825ca63efc79f6b93d5fb8c20e2026d15c2c4bb32620450a5fcf88d7a3327ec",
+    "packages/python/src/truss/_installation_statement_release.py": "42a8337fc5cc16317d1cf988a8b9b3c45fcc96efe88518b4488ab08cb25d7d2b"
+  },
+  "nativeProfile": {
+    "postgresql": "16.15",
+    "pg8000": "1.31.5",
+    "python": "3.11.17",
+    "runtime": "pgserver 0.1.4+truss.pg16.15"
+  },
+  "wheel": {
+    "sha256": "fa98e75842fb3267cf9e9518dd3963cf8d23a8a1badcb7fbd02ef3bb5c8fbbf6",
+    "packageFiles": 117,
+    "archiveResources": 16,
+    "exactSourceWheelInstalledCorrespondence": true,
+    "testsOutsideCheckout": true
+  },
+  "fixtureProvenance": {
+    "writer": "Complete SQL dependency chain loaded from packaged archive",
+    "stringCandidate": "Packaged prestate/string candidate, unchanged inherited codec/state/dependent prerequisites from checkout; source/archive correspondence verified"
+  },
+  "pythonBoundaryCheck": {
+    "result": "passed",
+    "imports": 406
+  },
+  "properties": [
+    "Both original JSON string tokens decode to the exact selected native string while preserving original lexical bytes",
+    "Full five-field owner/property state membership and all node/payload membership checked before capture and after effects",
+    "Adversarial native tests include extra state, disconnected FK-admitted cycle, wrong root, incompatible payload, late state insertion and malformed or mismatched tokens",
+    "New malformed-OLD and scope-refusal cases preserve all twelve inspected native tables and prior host work"
+  ],
+  "limitations": [
+    "Private native component, not a public apply or completed external workflow",
+    "Caller exclusions and complete integrity visibility remain external; INVOKER census does not prove RLS completeness",
+    "Selected root string only; no general tree validation or complete UMF facets",
+    "Retained image bounds do not qualify total native work, allocation, detoast or deadline accounting",
+    "No original journal HistoricalRecord/context producer, journal/feed publication, capacity or authority finalization",
+    "Unconditional operation commit barrier and invoker elevation guard unchanged; no seals, accepted identities or installation readiness"
+  ],
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "sourceApproved": true,
+    "independentTestsRunByReviewer": false
+  },
+  "tests": {
+    "docs/helix/04-build/evidence/python-string-scope-source-tests.log": {
+      "sha256": "33d47cd23523e4305033b20ef6d87143c0794a2784d5dd0dd4b994824485e952",
+      "tests": 94,
+      "result": "passed"
+    },
+    "docs/helix/04-build/evidence/python-string-scope-installed-tests.log": {
+      "sha256": "4a898c6e3445ceff6e2ca03515a9bbc3767a8530ff6beaa9c19d5070ce345580",
+      "tests": 94,
+      "result": "passed"
+    }
+  }
+}

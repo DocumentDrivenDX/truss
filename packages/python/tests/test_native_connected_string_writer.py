@@ -1,19 +1,25 @@
 """Real pending native effects only; no accepted catalog or ordinary authority."""
-from pathlib import Path
+from importlib.resources import files
+from io import BytesIO
+from zipfile import ZipFile
 import json
 import unittest
 from test_native_pg8000 import NativeBoundaryFixture
 
+def installation_sql(path):
+    with ZipFile(BytesIO(files('truss').joinpath('_installation/sources.zip').read_bytes())) as originals:
+        return originals.read(path).decode('utf8')
+
 def install_string_fixture(run):
-    root=Path(__file__).resolve().parents[3]
     for path in ('docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
       'packages/postgresql/native/row-image/codec.sql',
       'packages/postgresql/native/row-image/prestate.sql',
       'packages/postgresql/native/row-image/state-owner.sql',
       'packages/postgresql/native/row-image/dependent-owner.sql',
       'packages/postgresql/native/row-image/string-candidate.sql',
+      'packages/postgresql/native/row-image/existing-string-scope.sql',
       'packages/postgresql/native/issued-operation-admission/operation-admission.sql'):
-        run((root/path).read_text())
+        run(installation_sql(path))
     # Native catalog fixture is not accepted UMF evidence. All actual FKs
     # remain enabled; runtime writes are measured with the ALWAYS observer.
     run("INSERT INTO truss.schema_doc VALUES(0,0,'native-fixture','0','fixture','fixture','{}','{}')")
@@ -22,11 +28,11 @@ def install_string_fixture(run):
     run('INSERT INTO truss.object(id,type_id,rev) VALUES(100,2,0)')
     run("INSERT INTO truss.row_home_state VALUES(501,'object',100,2,NULL,NULL,2,301,601,decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'))")
     run("INSERT INTO truss.row_home_node VALUES(501,601,NULL,'root',NULL,NULL,NULL,'scalar',decode('05','hex'),decode('06','hex'))")
-    run("INSERT INTO truss.row_home_scalar VALUES(501,601,'string','value',NULL,NULL,NULL,NULL,NULL,NULL,NULL,decode('07','hex'),decode('08','hex'))")
+    run("INSERT INTO truss.row_home_scalar VALUES(501,601,'string','value',NULL,NULL,NULL,NULL,NULL,NULL,NULL,decode('07','hex'),decode('2276616c756522','hex'))")
     run('SET CONSTRAINTS ALL IMMEDIATE')
     for path in ('packages/postgresql/native/existing-string-writer/pending-effects.sql',
              'packages/postgresql/native/operation-commit-barrier.sql'):
-        run((root/path).read_text())
+        run(installation_sql(path))
     run('SET CONSTRAINTS ALL DEFERRED')
 
 
@@ -169,3 +175,80 @@ class NativeConnectedStringWriterTests(NativeBoundaryFixture, unittest.TestCase)
             self.connection.run('ROLLBACK TO SAVEPOINT operation');self.connection.run('RELEASE SAVEPOINT operation')
             self.assertEqual(self.connection.run('SELECT ver::text FROM truss.object'),[['1']])
             self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'),[[0]])
+
+    def _complete_snapshot(self):
+        # Independent full native rows, including pending registry and selected keys.
+        return tuple((table,self.connection.run('SELECT encode(record_send(t),\'hex\') FROM truss.'+table+' t ORDER BY encode(record_send(t),\'hex\')'))
+            for table in ('object','row_home_state','row_home_node','row_home_scalar',
+                          'row_home_operation','row_home_journal_stage','object_key_bucket',
+                          'key_def','key_bucket_guard','schema_doc','type_def','prop_def'))
+
+    def test_bad_old_tokens_refuse_without_effects_or_loss_of_prior_host_work(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run('CREATE TABLE public.token_host_sentinel(value text)')
+        self.connection.run("INSERT INTO public.token_host_sentinel VALUES('prior')")
+        for token in (b'"different"',b'123',b'null',b'{}',b'[]',b'"unterminated',b'\xff',b'"\\u0000"'):
+            self.connection.run('SAVEPOINT fixture_token')
+            self.connection.run('ALTER TABLE truss.row_home_scalar DISABLE TRIGGER runtime_existing_string_pending_scalar')
+            self.connection.run("UPDATE truss.row_home_scalar SET original_source_bytes=decode(:token,'hex')",token=token.hex())
+            self.connection.run('ALTER TABLE truss.row_home_scalar ENABLE ALWAYS TRIGGER runtime_existing_string_pending_scalar')
+            before=self._complete_snapshot()
+            self.connection.run('SAVEPOINT token_operation')
+            with self.subTest(token=token),self.assertRaises(DatabaseError):self._write()
+            self.connection.run('ROLLBACK TO SAVEPOINT token_operation')
+            self.assertEqual(self._complete_snapshot(),before)
+            self.assertEqual(self.connection.run('SELECT value FROM public.token_host_sentinel'),[['prior']])
+            self.connection.run('ROLLBACK TO SAVEPOINT fixture_token')
+            self.connection.run('RELEASE SAVEPOINT fixture_token')
+
+    def test_complete_scope_refuses_extra_disconnected_and_wrong_members(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run('CREATE TABLE public.scope_host_sentinel(value text)')
+        self.connection.run("INSERT INTO public.scope_host_sentinel VALUES('prior')")
+        cases=(
+            # Explicit adversarial native fixtures; never installation mutations.
+            ('duplicate-state',("ALTER TABLE truss.row_home_state DROP CONSTRAINT row_home_state_object_property",
+                "INSERT INTO truss.row_home_state SELECT 502,owner_kind,object_id,object_type_id,edge_id,relationship_type_id,property_owner_type_id,property_id,root_node_id,definition_bytes,home_profile_bytes,value_profile_bytes,source_bytes FROM truss.row_home_state")),
+            ('extra-node',("INSERT INTO truss.row_home_node VALUES(501,602,601,'sequence',0,NULL,NULL,'null','node','source')",)),
+            ('disconnected-cycle',("INSERT INTO truss.row_home_node VALUES(501,602,603,'sequence',0,NULL,NULL,'sequence','node','source'),(501,603,602,'sequence',0,NULL,NULL,'sequence','node','source')",)),
+            ('wrong-root',('UPDATE truss.row_home_state SET root_node_id=602',)),
+            ('parented-root',("UPDATE truss.row_home_node SET parent_node_id=602,slot_kind='sequence',sequence_ordinal=0",)),
+            ('wrong-payload-family',("ALTER TABLE truss.row_home_scalar DISABLE TRIGGER runtime_existing_string_pending_scalar",
+                "UPDATE truss.row_home_scalar SET scalar_kind='boolean',text_value=NULL,boolean_value=true",
+                "ALTER TABLE truss.row_home_scalar ENABLE ALWAYS TRIGGER runtime_existing_string_pending_scalar")),
+        )
+        for name,commands in cases:
+            self.connection.run('SAVEPOINT scope_fixture')
+            for command in commands:self.connection.run(command)
+            before=self._complete_snapshot()
+            self.connection.run('SAVEPOINT scope_operation')
+            with self.subTest(case=name),self.assertRaises(DatabaseError):self._write()
+            self.connection.run('ROLLBACK TO SAVEPOINT scope_operation')
+            self.assertEqual(self._complete_snapshot(),before)
+            self.assertEqual(self.connection.run('SELECT value FROM public.scope_host_sentinel'),[['prior']])
+            self.connection.run('ROLLBACK TO SAVEPOINT scope_fixture')
+            self.connection.run('RELEASE SAVEPOINT scope_fixture')
+
+    def test_late_extra_scope_state_refuses_and_restores_every_row(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run('ALTER TABLE truss.row_home_state DROP CONSTRAINT row_home_state_object_property')
+        self.connection.run("CREATE FUNCTION public.add_late_state() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN INSERT INTO truss.row_home_state SELECT 502,owner_kind,object_id,object_type_id,edge_id,relationship_type_id,property_owner_type_id,property_id,root_node_id,definition_bytes,home_profile_bytes,value_profile_bytes,source_bytes FROM truss.row_home_state WHERE state_id=501; RETURN NULL; END $$")
+        self.connection.run('CREATE TRIGGER add_late_state AFTER UPDATE ON truss.object FOR EACH ROW EXECUTE FUNCTION public.add_late_state()')
+        before=self._complete_snapshot()
+        self.connection.run('SAVEPOINT late_scope')
+        with self.assertRaises(DatabaseError):self._write()
+        self.connection.run('ROLLBACK TO SAVEPOINT late_scope')
+        self.assertEqual(self._complete_snapshot(),before)
+
+    def test_old_escaped_token_and_new_token_remain_exact(self):
+        old=b'  "v\\u0061lue"  '
+        new=b'\n"new \\u2603"\t'
+        self.connection.run('ALTER TABLE truss.row_home_scalar DISABLE TRIGGER runtime_existing_string_pending_scalar')
+        self.connection.run("UPDATE truss.row_home_scalar SET original_source_bytes=decode(:token,'hex')",token=old.hex())
+        self.connection.run('ALTER TABLE truss.row_home_scalar ENABLE ALWAYS TRIGGER runtime_existing_string_pending_scalar')
+        row=self._write(token=new)
+        from truss._row_image import decode_row_image
+        before,after=(json.loads(bytes(value)) for value in row[2:4])
+        self.assertEqual(bytes(decode_row_image(bytes.fromhex(before['scalarHex'])).payload(12)),old)
+        self.assertEqual(bytes(decode_row_image(bytes.fromhex(after['scalarHex'])).payload(12)),new)
+        self.assertEqual(self.connection.run('SELECT phase FROM truss.row_home_operation'),[['admitted']])

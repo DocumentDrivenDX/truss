@@ -18,8 +18,10 @@ SOURCES = (
     *tuple(('issued_admission', 'packages/postgresql/native/issued-operation-admission/' + name + '.sql')
            for name in ('operation-admission', 'operation-asserted-origin-admission',
                         'operation-epoch-context-admission', 'operation-configuration-context-admission')),
+    ('pending_writer','packages/postgresql/native/existing-string-writer/pending-effects.sql'),
+    ('operation_commit_barrier','packages/postgresql/native/operation-commit-barrier.sql'),
     *tuple(('row_image', 'packages/postgresql/native/row-image/' + name + '.sql')
-           for name in ('codec', 'prestate', 'snapshot-prestate', 'state-owner', 'dependent-owner', 'string-candidate')),
+           for name in ('codec', 'prestate', 'snapshot-prestate', 'state-owner', 'dependent-owner', 'string-candidate', 'existing-string-scope')),
 )
 REQUIRED_BODIES = (
     'row_touch_observe', 'row_touch_commit_check', 'edge_limit_observe',

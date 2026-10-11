@@ -8,12 +8,12 @@
   "fixedSessionSettings": {
     "search_path": "pg_catalog, pg_temp"
   },
-  "statementReleaseSha256": "9942c0877315af31f464093a0d431d49b735bb1ca61bf282430354aa503148ba",
+  "statementReleaseSha256": "ab97ac257b53b9fea2c92b773bea189ee96cb43a4abb4f9b81c212d4c5b58544",
   "modelSha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
   "ownerExportSha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
   "querySha256": "a549afb4ecdba65f4d42362bae91cbabfc5d2f97e931c8cf7825210f006967d4",
   "sources": {
-    "packages/python/src/truss/_installation/statements.json": "9942c0877315af31f464093a0d431d49b735bb1ca61bf282430354aa503148ba",
+    "packages/python/src/truss/_installation/statements.json": "ab97ac257b53b9fea2c92b773bea189ee96cb43a4abb4f9b81c212d4c5b58544",
     "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
     "packages/python/src/truss/_installation/definitions.sql": "a549afb4ecdba65f4d42362bae91cbabfc5d2f97e931c8cf7825210f006967d4",
     "scripts/build-python-installation-definitions.py": "0c243749a9f31d6ff3bd16b5ab2b1441863abda03d04e7659809556649c05847"

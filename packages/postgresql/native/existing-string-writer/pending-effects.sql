@@ -59,7 +59,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE state_row truss.row_home_state%ROWTYPE; node_row truss.row_home_node%ROWTYPE;
  scalar_row truss.row_home_scalar%ROWTYPE; object_row truss.object%ROWTYPE; planned_object truss.object%ROWTYPE; observed_object truss.object%ROWTYPE;
  property_row truss.prop_def%ROWTYPE; type_row truss.type_def%ROWTYPE;
- images record; before_scope bytea; after_scope bytea; original_input bytea;
+ images record; complete_scope record; before_scope bytea; after_scope bytea; original_input bytea;
  definition bytea; obligations bytea; original_group bytea; admitted record;
  key_rows bytea[]; key_definitions bytea[]; guard_rows bytea[]; source_documents bytea[];
  token jsonb; actual_xid xid8; head_revision integer;
@@ -126,6 +126,12 @@ BEGIN
   RAISE EXCEPTION 'complete single-root membership required' USING ERRCODE='55000';END IF;
  SELECT n.* INTO STRICT node_row FROM truss.row_home_node n WHERE n.state_id=selected_state FOR UPDATE;
  SELECT c.* INTO STRICT scalar_row FROM truss.row_home_scalar c WHERE c.state_id=selected_state FOR UPDATE;
+ SELECT c.* INTO STRICT complete_scope FROM truss.row_image_existing_string_scope_original(
+  object_row.id,object_row.type_id,property_row.type_id,property_row.prop_id,selected_state) c;
+ IF complete_scope.state_image IS DISTINCT FROM truss.row_image_state_original(state_row)
+    OR complete_scope.node_image IS DISTINCT FROM truss.row_image_node_original(node_row)
+    OR complete_scope.scalar_image IS DISTINCT FROM truss.row_image_scalar_original(scalar_row) THEN
+  RAISE EXCEPTION 'complete original string scope capture correspondence required' USING ERRCODE='55000';END IF;
  SELECT c.* INTO STRICT images FROM truss.row_image_existing_string_candidate_original(
   state_row,node_row,scalar_row,truss.row_image_state_original(state_row),
   truss.row_image_node_original(node_row),truss.row_image_scalar_original(scalar_row),replacement,replacement_token) c;
@@ -187,14 +193,11 @@ BEGIN
  SELECT o.* INTO STRICT observed_object FROM truss.object o WHERE o.id=object_row.id AND o.type_id=object_row.type_id;
  IF record_send(observed_object) IS DISTINCT FROM record_send(planned_object) THEN
   RAISE EXCEPTION 'complete planned object correspondence required' USING ERRCODE='55000';END IF;
- IF (SELECT count(*) FROM truss.row_home_node n WHERE n.state_id=selected_state)<>1
-    OR (SELECT count(*) FROM truss.row_home_scalar c WHERE c.state_id=selected_state)<>1
-    OR NOT EXISTS(SELECT 1 FROM truss.row_home_state s WHERE s.state_id=selected_state
-      AND truss.row_image_state_original(s)=images.new_state_image)
-    OR NOT EXISTS(SELECT 1 FROM truss.row_home_node n WHERE n.state_id=selected_state
-      AND n.node_id=node_row.node_id AND truss.row_image_node_original(n)=images.new_node_image)
-    OR NOT EXISTS(SELECT 1 FROM truss.row_home_scalar c WHERE c.state_id=selected_state
-      AND c.node_id=node_row.node_id AND truss.row_image_scalar_original(c)=images.new_scalar_image) THEN
+ SELECT c.* INTO STRICT complete_scope FROM truss.row_image_existing_string_scope_original(
+  object_row.id,object_row.type_id,property_row.type_id,property_row.prop_id,selected_state) c;
+ IF complete_scope.state_image IS DISTINCT FROM images.new_state_image
+    OR complete_scope.node_image IS DISTINCT FROM images.new_node_image
+    OR complete_scope.scalar_image IS DISTINCT FROM images.new_scalar_image THEN
   RAISE EXCEPTION 'complete final candidate correspondence required' USING ERRCODE='55000';END IF;
  IF key_rows IS DISTINCT FROM (SELECT array_agg(record_send(k) ORDER BY k.key_num,k.storage_row_id)
    FROM truss.object_key_bucket k WHERE k.object_id=object_row.id AND k.type_id=object_row.type_id)

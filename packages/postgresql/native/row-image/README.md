@@ -28,3 +28,20 @@ UMF value. Reuse UMF/Weft's owner semantics for interpreting original definition
 and logical values; retain these native bytes for native correspondence only. Full
 row-image fidelity does not qualify family/association meaning or any of the seven
 semantic routine bodies. No installer, ordinary caller grant or public API is added.
+
+The existing-string replacement helper selects UTF-8 JSON string source tokens.
+After actual retained-image size checks, it independently decodes OLD and NEW
+source and compares each decoded string with its native text under C equality.
+It preserves the exact source spelling, including whitespace and escapes. The
+other row-image codecs continue to preserve opaque source cells without selecting
+this interpretation.
+
+`existing-string-scope.sql` supplies the pending writer's selected object/property
+collection: the complete owner/type/property-owner/property tuple must identify
+one state, whose entire node/payload membership must be one parentless declared
+string root. The writer checks this scope before capture and independently after
+all effects. Caller-held owner/catalog exclusions and complete integrity visibility
+remain prerequisites; an RLS-visible subset cannot establish completeness. Image
+length bounds do not qualify aggregate scan work, detoast, allocation or deadlines.
+This selected singleton implementation supplies no general recursive definition,
+facet/history validation, readiness, seal, accepted authority or public mutation.

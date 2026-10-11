@@ -47,6 +47,18 @@
       "sha256": "aed1fde52b149f6e973c289d0917d1442dd4059d2a0a6e1031bcc06de050c529"
     },
     {
+      "role": "pending_writer",
+      "path": "packages/postgresql/native/existing-string-writer/pending-effects.sql",
+      "byteLength": 18445,
+      "sha256": "263418750c11b5afad72bb6fe668901b43632c609e44f66595d5d5793fde313f"
+    },
+    {
+      "role": "operation_commit_barrier",
+      "path": "packages/postgresql/native/operation-commit-barrier.sql",
+      "byteLength": 1048,
+      "sha256": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b"
+    },
+    {
       "role": "row_image",
       "path": "packages/postgresql/native/row-image/codec.sql",
       "byteLength": 8952,
@@ -79,8 +91,14 @@
     {
       "role": "row_image",
       "path": "packages/postgresql/native/row-image/string-candidate.sql",
-      "byteLength": 3652,
-      "sha256": "f95d036e1dbe028de6257720cbf8775422a2ee180178134836943833e403a7fb"
+      "byteLength": 4427,
+      "sha256": "1e2f13ec4f7ccc32a180257ec2490e8defa46a52a4483a200835ed608acd6424"
+    },
+    {
+      "role": "row_image",
+      "path": "packages/postgresql/native/row-image/existing-string-scope.sql",
+      "byteLength": 4572,
+      "sha256": "06f6b0287ddbb46549f809a5973ab77325859b1178d74de0abe31777679a9554"
     }
   ],
   "requiredNativeBodies": [
@@ -103,7 +121,7 @@
   ],
   "archive": {
     "path": "sources.zip",
-    "byteLength": 77100,
-    "sha256": "b1e673db68b0ff88a8bf4aa1253b07dd9397382d30c5ec0839f47e6b161b2137"
+    "byteLength": 83897,
+    "sha256": "2d4fabab96dc9cef7e5971d42bcae9332c442f039a19ac2da6ca5a134b9e56f1"
   }
 }
