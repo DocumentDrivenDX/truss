@@ -1761,9 +1761,10 @@ All 23 new native cases pass in13.843s with terminal exit0 on PostgreSQL16.15;
 343 module import boundaries pass. The cases include all four families, native
 ACL refusal, publication/observation faults, original deadline and driver-symbol
 refusal, send/flush failures and bounded result substitution/cardinality checks.
-See [receipt](evidence/python-contracts-iteration34-dispatch.json). Astra Ultra approved source and verified retained hashes; its independent
-native rerun remains pending. The receipt records the pre-security-rebase source
-basis.
+See [receipt](evidence/python-contracts-iteration34-dispatch.json). Astra Ultra approved source and scoped evidence; its independent 23-case
+native rerun passed15.188s with terminal exit0. The receipt records the
+pre-security-rebase source basis and exact loaded SQL/fixture hashes. The
+security main integration changes none of those loaded native inputs.
 
 This is an administrative candidate composition with synthetic artifacts, not
 protected ordinary-person authority. Forward admission remains disabled. The

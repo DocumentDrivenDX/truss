@@ -31,9 +31,15 @@
     "passed": true
   },
   "astra_ultra": {
-    "source": "approved private candidate scope; independent native rerun pending",
+    "source": "approved private candidate scope",
     "plan": "approved narrow lazy source qualification",
-    "evidence": "seven source/test/checker hashes and final native log verified"
+    "evidence": "seven source/test/checker hashes and final native log verified",
+    "independent_native": {
+      "cases": 23,
+      "seconds": 15.188,
+      "process_exit": 0
+    },
+    "final_evidence": "approved scoped source and evidence disposition"
   },
   "remaining": [
     "Registered original artifact and complete installed authority",
@@ -45,5 +51,17 @@
     "Reduced native result profile does not qualify full family input bounds",
     "Driver source qualification is cooperative compatibility evidence, not arbitrary in-process tamper resistance"
   ],
-  "source_basis_commit": "2c89856029c807d97fd49ec444336cfd978bf56f"
+  "source_basis_commit": "2c89856029c807d97fd49ec444336cfd978bf56f",
+  "native_inputs_sha256": {
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql": "55448d0e9b979ab62f48099e6c317e19ebe40ce5ff9c90472209deff8a618e3a",
+    "packages/postgresql/native/source-epoch-lock.sql": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
+    "docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql": "1221666a5d6b77bfb9f5c31280a95ef453140f4740f54b22fd232822447ef089",
+    "packages/postgresql/native/operation-admission.sql": "3d71a92e3a02f568e1edf9fa0b0ca18b8cc35e79a117c6724a4351022375f1bf",
+    "packages/postgresql/native/operation-asserted-origin-admission.sql": "7fefe615b0d296e627e18f187c52e4d47f890852b5ca5c0d8e225133b5a5efec",
+    "packages/postgresql/native/operation-epoch-context-admission.sql": "7c3af5774c63c34e78e1d623ae203b6f70a3e511c4663d3d397d01927a530619",
+    "packages/postgresql/native/operation-configuration-context-admission.sql": "b24f12ed7fdbb33e64d2ffa4135ced87c55fd1dfdb786f079d49efb20d696efe"
+  },
+  "merged_security_base": "51a7da7d9c7c88e0dde06e18cd6421a85c857045",
+  "merged_native_inputs_unchanged": true
 }
