@@ -1936,3 +1936,33 @@ record serialization have no complete native collection/resource qualification.
 The native accepted_document enum does not convert administrative fixtures into
 accepted UMF evidence. Complete family/context/authority and public installation
 remain required before exposing apply or finalization.
+
+### Connected catalog completion: fresh physical report/head verification
+
+The Python original catalog-report basis now composes with a separate native
+prepublication capture and fresh post-head physical verifier. Capture requires
+original preparation/basis identity and a current native writer/ordinal/generation
+cut before publication. After one exact report insertion and singleton-head update,
+the verifier compares all selected native row multisets, prior report membership,
+the planned head and operation reset fields, and retained relation descriptors.
+Unpublished-revision collectors remain unchanged; no original report issuer,
+finalization phase or commit permission is manufactured by this component.
+
+[Source-exact evidence](evidence/python-catalog-completion-physical.json) and
+[the native regression log](evidence/python-catalog-completion-physical.log)
+cover the selected administrative PostgreSQL16.15/source0.15 component. The
+physical report is deliberately a non-semantic fixture. Tests cover original
+Python custody, stale/foreign cuts, same-count substitutions, wrong/extra/missing
+reports or head, restored-row generation events, late trigger effects, descriptor
+changes, ordinary-role refusal, host savepoint rollback and the unchanged commit
+barrier. Trigger procedure owner/ACL, rewrite rules, index descriptors and policies
+are retained alongside row images.
+
+This closes the selected physical post-publication comparison step only. Complete
+report admission, lifecycle/history semantics, original protected finalization and
+public catalog activation remain open. The selected absent-binding/no-transform
+profile rejects additional relations, RLS and journal children. SHARE locks exclude
+ordinary DML; concurrent administrative DDL, transitive routine/type/security
+closure and complete native allocation/resource accounting remain unqualified.
+The next connected exit still requires a genuine complete report producer and the
+protected finalizer before catalog acceptance can commit and a mutation can follow.

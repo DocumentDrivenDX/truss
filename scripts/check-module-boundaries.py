@@ -48,6 +48,7 @@ ALLOWED = {
     '_umf_release': set(),
     'preparation': {'weakref', 'dataclasses', 'hashlib', 'pathlib', 'base64', 'json', 'shutil', 'subprocess', 'selectors', 'tempfile', 'time', 'truss._umf_release', 'truss._acceptance_json'},
     '_acceptance_json': {'json'},
+    '_catalog_completion': {'dataclasses','json','weakref','truss._catalog_report','truss.preparation'},
     '_catalog_report': {'dataclasses', 'json', 'weakref', 'truss.preparation'},
     '_catalog_staging': {'truss._catalog_report', 'dataclasses', 'json', 'uuid', 'truss.preparation', 'truss._acceptance_json'},
     '_security_association_binding': {'base64', 'dataclasses', 'hashlib', 'json'},

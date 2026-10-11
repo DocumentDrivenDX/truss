@@ -1,0 +1,45 @@
+{
+  "scope": "selected_administrative_catalog_completion_physical_only",
+  "accepted_report_qualified": false,
+  "protected_finalization_qualified": false,
+  "native_runtime": {
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "pg8000": "1.31.5",
+    "fixture_layout": "qualified-property-0.15"
+  },
+  "test": {
+    "command": "python -m unittest test_catalog_completion_physical test_catalog_report -v",
+    "tests": 32,
+    "elapsed_seconds": 16.428,
+    "exit_code": 0,
+    "result": "OK",
+    "log": "python-catalog-completion-physical.log",
+    "log_sha256": "a5f1fa9e20012205d5365e4a8bcd533682da3ab374e58351def0fb4a217589f9"
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "plan": "approved",
+    "completed_iteration": "approved_no_remaining_source_blockers",
+    "independent_tests": 32,
+    "elapsed_seconds": 17.595,
+    "exit_code": 0,
+    "source_snapshot_unchanged": true
+  },
+  "python_import_boundaries": 358,
+  "source_sha256": {
+    "packages/postgresql/native/catalog-completion/physical-poststate.sql": "1e97134291eb2eab4877683ecf6e89dcaca0aa24405a00d3ba71b0d539b387a2",
+    "packages/python/src/truss/_catalog_completion.py": "cae85e77ebfd2d01666fdd302d1f2ceee1ff25a627e967b97aeadb7972a449f4",
+    "packages/python/tests/test_catalog_completion_physical.py": "a7e5950c7ab81b238d7b9500f20ea667f3badd4b182dbd5f9df8aad67213ba5e",
+    "scripts/check-module-boundaries.py": "220b486add83c9427877907dabaf90fadc955b2847c8ceeb3da901987793dc52",
+    "docs/helix/04-build/python-consumer-integration-plan.md": "474a32cad0c58073d637551f7d53ef41204461c17b166f9662c80cf7c7de30b7"
+  },
+  "limitations": [
+    "Physical expected report bytes are explicitly a non-semantic fixture, not a report issuer.",
+    "No phase advance, public catalog activation, settlement or commit-barrier replacement.",
+    "Concurrent administrative DDL and transitive routine/type/security closure remain unqualified.",
+    "Retained-output bounds do not qualify preallocation or full native resource accounting.",
+    "Absent binding/no transforms only; added relations, RLS and journal children refuse."
+  ]
+}
