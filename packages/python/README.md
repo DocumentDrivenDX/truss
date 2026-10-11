@@ -118,7 +118,7 @@ uses one suite cluster. The expanded installed suite also shares socket workers 
 fixture classes; `TRUSS_INSTALLED_SUITE_WORKERS` defaults to2 and may select1–8.
 Direct startup/shutdown fixtures, CLI signal/restart and transaction-timeout
 observations use separate owned clusters. Set `TRUSS_INSTALLED_SUITE_TIMEOUT`
-within30–1800 seconds for the expanded suite (default600).
+within30–1800 seconds for the expanded suite (default1800).
 
 Workers use unique short Unix socket directories and disable TCP listening.
 The socket's port suffix is local to its directory; workers do not contend for a

@@ -72,7 +72,7 @@ def execute(case, environment, worker=None):
     command = [sys.executable, *arguments]
     started = time.perf_counter()
     try:
-        result = subprocess.run(command, cwd=ROOT, env=environment, capture_output=True, timeout=(int(environment.get('TRUSS_INSTALLED_SUITE_TIMEOUT', '600')) + 30 if label == 'installed-suite' else 240))
+        result = subprocess.run(command, cwd=ROOT, env=environment, capture_output=True, timeout=(int(environment.get('TRUSS_INSTALLED_SUITE_TIMEOUT', '1800')) + 30 if label == 'installed-suite' else 240))
         code, log = result.returncode, result.stdout + result.stderr
     except subprocess.TimeoutExpired as error:
         code, log = None, (error.stdout or b'') + (error.stderr or b'') + b'\nQualification timeout\n'

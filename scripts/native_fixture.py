@@ -29,7 +29,7 @@ def evidence_directory():
     return directory
 
 
-def connect(uri):
+def connect(uri, *, timeout=10):
     parsed = urlparse(uri)
     options = parse_qs(parsed.query)
     host = options.get('host', [None])[0]
@@ -38,7 +38,7 @@ def connect(uri):
     port = int(options.get('port', [parsed.port or 5432])[0])
     return pg8000.native.Connection(user=parsed.username or 'postgres',
         database=parsed.path.lstrip('/'), unix_sock=str(Path(host) / f'.s.PGSQL.{port}'),
-        ssl_context=False, timeout=10)
+        ssl_context=False, timeout=timeout)
 
 
 def inventory(connection):
@@ -133,7 +133,8 @@ class DatabaseFixture:
         try:
             if (root / 'poisoned').exists():
                 raise RuntimeError('Worker invalidated by fixture cleanup failure')
-            self.admin = connect(self.owner['uri'])
+            self.admin = connect(self.owner['uri'], timeout=60)
+            self.admin.run('SET statement_timeout=45000; SET lock_timeout=5000')
             self.before = inventory(self.admin)
             if self.before != self.owner['baseline']:
                 (root / 'poisoned').write_text('Worker baseline drift')

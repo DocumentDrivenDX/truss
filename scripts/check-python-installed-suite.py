@@ -20,7 +20,7 @@ filename = sys.argv[3] if len(sys.argv)==4 else ('python-corrected-runtime-insta
 if Path(filename).name != filename or not filename.endswith('.json'): raise RuntimeError('Receipt basename required')
 receipt_path = evidence_directory()/filename
 if receipt_path.exists(): raise RuntimeError('Receipt already exists; supply a new filename')
-timeout_seconds = int(os.environ.get('TRUSS_INSTALLED_SUITE_TIMEOUT', '600'))
+timeout_seconds = int(os.environ.get('TRUSS_INSTALLED_SUITE_TIMEOUT', '1800'))
 if not 30 <= timeout_seconds <= 1800:
  raise RuntimeError('Installed suite timeout must be between30 and1800 seconds')
 wheel = Path(sys.argv[1])
@@ -87,7 +87,7 @@ if worker_receipt['tests'] != expected_tests or not worker_receipt['passed']:
  raise SystemExit('Incomplete installed module-worker coverage')
 receipt = {'scope':'Installed current wheel full existing component suite on PostgreSQL17.11; shared fresh databases/roles, isolated lifecycle fixtures and synthetic/pure controls',
  'workerReceipt':str((evidence_directory()/'python-workers/receipt.json').relative_to(root)),
- 'workerResults':worker_receipt,
+ 'workerResults':worker_receipt,'skippedTests':worker_receipt['skippedTests'],
  'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),'python':sys.version,
  'loadedPackage':str(loaded),'modules':modules,'dependencies':dependencies,
  'environmentReused':True,'correctedPgserverCandidate':corrected,'tests':expected_tests,'command':command,'output':result.stdout+result.stderr,

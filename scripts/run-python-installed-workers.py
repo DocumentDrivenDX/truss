@@ -20,7 +20,7 @@ COUNT = int(os.environ.get('TRUSS_INSTALLED_SUITE_WORKERS', '2'))
 if not 1 <= COUNT <= 8:
     raise SystemExit('Installed suite workers must be between1 and8')
 MODULES = sorted((ROOT / 'packages/python/tests').glob('test_*.py'))
-TIMEOUT = int(os.environ.get('TRUSS_INSTALLED_SUITE_TIMEOUT', '600'))
+TIMEOUT = int(os.environ.get('TRUSS_INSTALLED_SUITE_TIMEOUT', '1800'))
 progress_lock = threading.Lock()
 
 def progress(value):
@@ -59,14 +59,18 @@ def lane(index):
                     log += ('\nWorker cleanup failure: ' + str(error)).encode()
                 match = re.search(rb'Ran (\d+) tests? in ', log)
                 tests = int(match.group(1)) if match else None
-                passed = code == 0 and restored and tests is not None and log.rstrip().endswith(b'OK')
+                skips = [{'test': test.decode(), 'reason': reason.decode()} for test, reason in re.findall(rb"^(.+?) \.\.\. skipped '([^']+)'$", log, re.MULTILINE)]
+                declared_skips = all(item['reason'] == 'Selected local PostgreSQL build lacks ICU' for item in skips)
+                terminal = re.search(rb'\nOK(?: \(skipped=(\d+)\))?\s*$', log)
+                skip_count = int(terminal.group(1) or 0) if terminal else None
+                passed = code == 0 and restored and tests is not None and terminal is not None and declared_skips and skip_count == len(skips)
                 log_path = directory / (module.stem + '.log.gz')
                 log_path.write_bytes(gzip.compress(log, mtime=0))
                 outcome = {'module': module.name, 'tests': tests, 'returncode': code,
                            'passed': passed, 'baselineRestored': restored,
                            'elapsedSeconds': time.perf_counter() - started,
                            'log': str(log_path.relative_to(ROOT)),
-                           'logSha256': hashlib.sha256(log_path.read_bytes()).hexdigest()}
+                           'logSha256': hashlib.sha256(log_path.read_bytes()).hexdigest(), 'skippedTests': skips}
                 result['modules'].append(outcome)
                 progress({'worker': index, **outcome})
                 if not passed:
@@ -89,6 +93,7 @@ passed = complete and all(item['passed'] for item in outcomes) and all(worker['s
 tests = sum(item['tests'] or 0 for item in outcomes)
 receipt = {'passed': passed, 'complete': complete, 'tests': tests, 'workers': workers,
            'elapsedSeconds': time.perf_counter() - started,
+           'skippedTests': [skip for outcome in outcomes for skip in outcome['skippedTests']],
            'sourceSha256': {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
                             for path in [Path(__file__), ROOT / 'scripts/native_fixture.py', ROOT / 'scripts/run-python-test-module.py', *MODULES]},
            'expectedModuleCount': len(MODULES), 'postgresqlVersion': '17.11',

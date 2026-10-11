@@ -24,7 +24,7 @@ roles per native fixture class. Explicit class teardown and registered cleanup
 both release fixtures, including tests that delegate another class's setup.
 Lifecycle tests keep isolated clusters. Each module must restore the database,
 role and membership baseline; any failure discards its worker. The installed
-producer defaults to600 seconds; `TRUSS_INSTALLED_SUITE_TIMEOUT` may select30–1800
+producer defaults to1800 seconds; `TRUSS_INSTALLED_SUITE_TIMEOUT` may select30–1800
 seconds and `TRUSS_INSTALLED_SUITE_WORKERS` may select1–8 workers (default2).
 It supplies native binary paths from the pinned installed17.11 package.
 The [timing comparison](evidence/design-audit/pg17-cluster-benchmark-20261011/README.md)
