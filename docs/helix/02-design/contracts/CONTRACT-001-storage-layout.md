@@ -230,6 +230,37 @@ The [native family/group admission grammar](truss-row-native-admission-v0.1.prop
 
 Required row scopes contain complete original OLD/NEW owner/property/home/prestate/candidate correspondence, in the original planned lock order, without duplicate or omitted affected tuples. Each scope has an explicit ownerLocator: existing-native retains the original persistent ownerId, while creation-alias retains the exact submitted aliasIdentity and originalAliasDefinition. These alternatives cannot be mixed. Alias identity is local to the original admitted invocation and command order, never a globally reusable object ID. Creation aliases must resolve through original admitted group custody before actual effects; a pre-effect plan cannot invent persistent IDs. The protected allocator records the actual allocated owner kind/ID/discriminator and its original alias correspondence before canonical writes. Finalization compares every planned alias scope against that exact recorded tuple and the actual effects in both directions; duplicate/forward/foreign aliases, owner-kind substitution, omitted scopes and invented IDs refuse atomically. The original admission body remains immutable; allocated correspondence is separate effect evidence rather than a rewrite of submitted aliases. Original plannedEffectInventory retains those unresolved-to-persistent correspondences explicitly until native production validates them. A zero row-scope array is permitted only with independently complete original no-row-effect classification; non-row key/history/report/group obligations still apply. Readiness excludes the future seal, while application completion independently requires actual results and all required seals. Every definition resolves under its registered original family profile, not an arbitrary artifact-shaped byte string.
 
+The connected existing-object root-string writer selects the
+[replacement family grammar](existing-root-string-replacement-v0.1.proposal.schema.json)
+for embedded prestate, candidate and planned-effect artifacts. This candidate
+supports one existing object/property/root scalar; it allocates no graph identity,
+alias or ownership transition. It captures complete state/node/scalar membership,
+the complete original object and version, document-qualified property/home/value
+sources, key membership and owner union. Missing or extra rows, stale versions,
+changed associations, unsupported definitions or unavailable source meaning refuse.
+The candidate preserves all non-replacement cells and binds the exact authored
+UTF-8 JSON string token to the requested text under C equality; this is additional
+to actual registered facet/value admission, not its replacement. Unknown facets
+or absent original owner validation cannot be silently treated as unconstrained.
+
+The planned effect definition retains the complete object version/timestamp,
+row event, key preservation, journal, feed, touch contribution, non-row, readiness
+and completion obligations. Non-key classification and unchanged keys require
+complete original key-definition/membership evidence; empty arrays or unchanged
+counts cannot establish them. Repeated equal writes retain their original event
+and advance the object version and dirty generation. Runtime admission additionally
+checks exact artifact bytes, primitive domains, OLD/NEW identities, source
+correspondence, complete effect membership and planned version = original + 1.
+The schema proves none of those facts or invocation authority.
+
+originalFamilyAdmission names the independently retained family/group admission
+source, containing original command/input meaning before the native envelope is
+built. It does not name the later row-native-admission envelope. That envelope
+references the full original operation context and planned effects; the context's
+originalGroupAdmission references the earlier source. This ordering avoids a
+mutually self-hashing context/envelope. Protected installation and caller capture,
+all semantic bodies, actual dispatch and finalization remain implementation gates.
+
 requestParticipation none forbids originalRequestAdmission and requires no receipt/namespace replay readiness. Present requires complete original authorized request admission under its selected CONTRACT-009 profile; this field is not a future receipt or permission to adopt ADR-005. Missing/unavailable request meaning refuses that invocation alone. Unknown family, native operation/context mismatch, changed command order, incomplete row/non-row inventory or substituted request custody refuses before effects. Original JSON/profile/source bytes are retained exactly and all admission/registry/operation/touch copies charge their actual resource/storage occurrence. Native encoder/duplicate-scalar parser, full planned/actual correspondence and privileged producer implementation remain required.
 
 The native admission shape check `check-row-native-admission.ts` executes thirteen controls, including separate existing-owner/creation-alias locators, mixed-locator refusal and independent request-free/request-present rules. Foreign aliases and duplicate scopes deliberately remain shape-valid semantic counterexamples. [The scoped receipt](../../04-build/evidence/design-audit/row-native-admission-shapes.json) pins the schema; it does not prove original artifacts, allocator correspondence, complete effect coverage or native authority.

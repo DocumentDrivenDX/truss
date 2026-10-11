@@ -1838,3 +1838,19 @@ initialization, dependency, resource, statement-inventory and settlement work.
 It is not a complete release inventory or BootstrapGenerationResult, and it
 issues no native identities or readiness. Complete this definition alongside the
 installer/writer producer; the public consumer workflow remains the exit target.
+
+
+### Connected string writer family grammar
+
+The connected writer now selects the proposed existing-root-string replacement
+family grammar for its embedded prestate, candidate and planned-effect records.
+CONTRACT-001 specifies complete object/row/source/key/owner membership, token and
+registered value/facet admission, same-value events, non-row/journal/feed/touch
+obligations and the acyclic family-source/context/native-envelope ordering.
+Fifty-four strict Ajv shape controls pass, independently repeated by Astra Ultra.
+See [shape evidence](evidence/existing-root-string-family-shapes.json).
+These are shape checks, not native effect or authority cases. The next code must
+produce and consume these meanings inside the connected writer/observer, proving
+unchanged complete keys, preserved state/node source meaning, checked version
+increment and all original effect correspondence. Complete installation/capture
+and finalization still gate ordinary positive execution and the public workflow.

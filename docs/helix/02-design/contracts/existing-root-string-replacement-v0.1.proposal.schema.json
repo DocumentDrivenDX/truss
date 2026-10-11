@@ -1,0 +1,329 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:existing-root-string-replacement:0.1.0",
+  "title": "Existing object root string replacement family artifacts",
+  "description": "Closed embedded family grammars for the connected writer. Shape does not establish native membership, source meaning, invocation authority, current authorization or finalization. Native ranges, exact source correspondence and complete independently produced membership require runtime admission.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/prestate"
+    },
+    {
+      "$ref": "#/$defs/candidate"
+    },
+    {
+      "$ref": "#/$defs/plannedEffects"
+    }
+  ],
+  "$defs": {
+    "touch": {
+      "type": "object",
+      "properties": {
+        "ownerKind": {
+          "const": "object"
+        },
+        "ownerId": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "ownerDiscriminatorId": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 11
+        },
+        "propertyOwnerTypeId": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 11
+        },
+        "propertyId": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 11
+        }
+      },
+      "required": [
+        "ownerKind",
+        "ownerId",
+        "ownerDiscriminatorId",
+        "propertyOwnerTypeId",
+        "propertyId"
+      ],
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "object",
+      "properties": {
+        "documentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "moduleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "typeElement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "propertyElement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "originalDocument": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalProperty": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalHome": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalValue": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "documentId",
+        "moduleId",
+        "typeElement",
+        "propertyElement",
+        "originalDocument",
+        "originalProperty",
+        "originalHome",
+        "originalValue"
+      ],
+      "additionalProperties": false
+    },
+    "images": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "node": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "scalar": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "state",
+        "node",
+        "scalar"
+      ],
+      "additionalProperties": false
+    },
+    "prestate": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-existing-root-string-replacement/0.1.0"
+        },
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "touch": {
+          "$ref": "#/$defs/touch"
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        },
+        "kind": {
+          "const": "prestate"
+        },
+        "expectedObjectVersion": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "maxLength": 19
+        },
+        "originalObject": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "completeRowImages": {
+          "$ref": "#/$defs/images"
+        },
+        "originalRowMembership": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalKeyMembership": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalOwnerUnion": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "profile",
+        "touch",
+        "sources",
+        "kind",
+        "expectedObjectVersion",
+        "originalObject",
+        "completeRowImages",
+        "originalRowMembership",
+        "originalKeyMembership",
+        "originalOwnerUnion"
+      ],
+      "additionalProperties": false
+    },
+    "candidate": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-existing-root-string-replacement/0.1.0"
+        },
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "touch": {
+          "$ref": "#/$defs/touch"
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        },
+        "kind": {
+          "const": "candidate"
+        },
+        "expectedObjectVersion": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "maxLength": 19
+        },
+        "plannedObjectVersion": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "maxLength": 19
+        },
+        "plannedObject": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "completeRowImages": {
+          "$ref": "#/$defs/images"
+        },
+        "replacementText": {
+          "type": "string"
+        },
+        "originalReplacementToken": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalValueAdmission": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "plannedRowMembership": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "preservedKeyMembership": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "preservedOwnerUnion": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "profile",
+        "touch",
+        "sources",
+        "kind",
+        "expectedObjectVersion",
+        "plannedObjectVersion",
+        "plannedObject",
+        "completeRowImages",
+        "replacementText",
+        "originalReplacementToken",
+        "originalValueAdmission",
+        "plannedRowMembership",
+        "preservedKeyMembership",
+        "preservedOwnerUnion"
+      ],
+      "additionalProperties": false
+    },
+    "plannedEffects": {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-existing-root-string-replacement/0.1.0"
+        },
+        "profile": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+        },
+        "touch": {
+          "$ref": "#/$defs/touch"
+        },
+        "sources": {
+          "$ref": "#/$defs/sources"
+        },
+        "kind": {
+          "const": "planned-effects"
+        },
+        "originalFamilyAdmission": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalCommandDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalInput": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "originalPrestate": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "admittedCandidate": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "objectVersionAndTimestampDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "rowEventDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "keyPreservationDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "journalDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "feedDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "touchContributionDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "nonRowDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "effectsReadinessDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        },
+        "applicationCompletionDefinition": {
+          "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "profile",
+        "touch",
+        "sources",
+        "kind",
+        "originalFamilyAdmission",
+        "originalCommandDefinition",
+        "originalInput",
+        "originalPrestate",
+        "admittedCandidate",
+        "objectVersionAndTimestampDefinition",
+        "rowEventDefinition",
+        "keyPreservationDefinition",
+        "journalDefinition",
+        "feedDefinition",
+        "touchContributionDefinition",
+        "nonRowDefinition",
+        "effectsReadinessDefinition",
+        "applicationCompletionDefinition"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

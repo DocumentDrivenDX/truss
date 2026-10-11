@@ -1,0 +1,12 @@
+{
+  "base": "c1810d83826c0277a81509d506d78cfc8d85c442",
+  "scope": "Proposed embedded family grammar and closed-shape checks only; no native effects, invocation authority or complete runtime support",
+  "checks": 54,
+  "exitCode": 0,
+  "independentAstraControls": 54,
+  "sha256": {
+    "docs/helix/02-design/contracts/existing-root-string-replacement-v0.1.proposal.schema.json": "c7f08f9ce7ea45dbbe0595f6e859fea065b74f943e3232dbbde6aefc9425ef73",
+    "docs/helix/02-design/contracts/CONTRACT-001-storage-layout.md": "5b2956d2c1d7317c413575c24d4948825bae5bcf4ed0b4532c94944d5b7ce98b",
+    "docs/helix/04-build/evidence/design-audit/check-existing-root-string-family.ts": "c0014ec6a195362af52ad8fd73313ec4f4d10664754cd6eb5a7374430928d3bf"
+  }
+}
