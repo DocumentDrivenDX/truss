@@ -501,3 +501,34 @@ typing marker match source exactly. The Python boundary checker passes 212 impor
 See [combined artifact evidence](evidence/python-contracts-iteration14-combined.json).
 This combined validation supersedes the original 320-test wheel for publication;
 complete public interface and protected admission readiness remain open.
+
+
+### Iteration 15: original host-call recovery and disposal admission
+
+Astra Ultra approved the plan before implementation. Reserve bounded opaque
+recovery references in the original executor domain and retain them at the native
+boundary before acquisition. Recovery must survive lost returns, BaseException,
+disposal and facade collection. Freeze every returned outcome, including acquisition
+refusal and commit_unknown, together with original call facts. Inspection publishes
+no native handles, runs no SQL and neither acquires nor retries cleanup/publication.
+Only the exact original release.published receipt proves historical handback;
+later generations and owners cannot replace this call's evidence. Linearize ordinary
+admission against shared executor disposal before token acquisition; keep disposal
+distinct from unresolved quarantine. Explicit host BEGIN/COMMIT/ROLLBACK remain
+available after disposal only while the original boundary and profile are healthy.
+Test publication faults, known COMMIT with unresolved handback, newer generations,
+forged/foreign references, facade collection and concurrent disposal/admission.
+This is a private recovery observation, not a recovery procedure. Active native
+cancellation and containment are the next mandatory C02 gate; public adoption,
+ReferenceAssembly and protected capabilities remain unfinished.
+
+
+Iteration 15 now implements private original-call recovery observations and shared
+ordinary-admission closure. References and nine fact slots are retained before
+acquisition; inspection uses the original synchronized release receipt and sealed
+facts, never a newer owner or native call. Astra Ultra independently passed all
+17 native recovery tests and approved the source/plan checkpoint. See
+[iteration 15 evidence](evidence/python-contracts-iteration15.json). Merge the latest
+reviewed SCRAM fixture work and validate the combined installed wheel before push.
+Active cancellation and native containment are the next transport implementation;
+public C02 and the complete external interface remain open.
