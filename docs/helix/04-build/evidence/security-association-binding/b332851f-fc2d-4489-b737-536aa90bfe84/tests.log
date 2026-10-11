@@ -1,0 +1,44 @@
+test_attribute_dependent_key_cannot_be_collapsed_to_one_edge (test_security_association_binding.BindingTests.test_attribute_dependent_key_cannot_be_collapsed_to_one_edge) ... ok
+test_authored_unique_subset_of_endpoints_positive (test_security_association_binding.BindingTests.test_authored_unique_subset_of_endpoints_positive) ... ok
+test_both_explicit_orientations_preserve_roles (test_security_association_binding.BindingTests.test_both_explicit_orientations_preserve_roles) ... ok
+test_changed_core_digest (test_security_association_binding.BindingTests.test_changed_core_digest) ... ok
+test_changed_instance_key_selection (test_security_association_binding.BindingTests.test_changed_instance_key_selection) ... ok
+test_changed_model_revision (test_security_association_binding.BindingTests.test_changed_model_revision) ... ok
+test_changed_ontology_digest (test_security_association_binding.BindingTests.test_changed_ontology_digest) ... ok
+test_changed_ontology_revision (test_security_association_binding.BindingTests.test_changed_ontology_revision) ... ok
+test_composite_association_order_refuses (test_security_association_binding.BindingTests.test_composite_association_order_refuses) ... ok
+test_composite_target_and_association_order_positive (test_security_association_binding.BindingTests.test_composite_target_and_association_order_positive) ... ok
+test_composite_target_order_refuses (test_security_association_binding.BindingTests.test_composite_target_order_refuses) ... ok
+test_duplicate_association (test_security_association_binding.BindingTests.test_duplicate_association) ... ok
+test_duplicate_original_element_refuses (test_security_association_binding.BindingTests.test_duplicate_original_element_refuses) ... ok
+test_duplicate_role (test_security_association_binding.BindingTests.test_duplicate_role) ... ok
+test_duplicate_wire_member (test_security_association_binding.BindingTests.test_duplicate_wire_member) ... ok
+test_exact_bytes_required (test_security_association_binding.BindingTests.test_exact_bytes_required) ... ok
+test_excessive_source_depth_refuses (test_security_association_binding.BindingTests.test_excessive_source_depth_refuses) ... ok
+test_extra_mapping (test_security_association_binding.BindingTests.test_extra_mapping) ... ok
+test_lone_escaped_surrogate_refuses (test_security_association_binding.BindingTests.test_lone_escaped_surrogate_refuses) ... ok
+test_malformed_source_shapes_refuse (test_security_association_binding.BindingTests.test_malformed_source_shapes_refuse) ... ok
+test_no_default_storage (test_security_association_binding.BindingTests.test_no_default_storage) ... ok
+test_no_numeric_boolean_alias (test_security_association_binding.BindingTests.test_no_numeric_boolean_alias) ... ok
+test_nonstring_endpoint_profile_is_unsupported (test_security_association_binding.BindingTests.test_nonstring_endpoint_profile_is_unsupported) ... ok
+test_omitted_association (test_security_association_binding.BindingTests.test_omitted_association) ... ok
+test_omitted_role (test_security_association_binding.BindingTests.test_omitted_role) ... ok
+test_original_complete_two_association_basis (test_security_association_binding.BindingTests.test_original_complete_two_association_basis) ... ok
+test_output_has_no_mutable_mapping_containers (test_security_association_binding.BindingTests.test_output_has_no_mutable_mapping_containers) ... ok
+test_oversized_source_refuses (test_security_association_binding.BindingTests.test_oversized_source_refuses) ... ok
+test_restrictive_storage (test_security_association_binding.BindingTests.test_restrictive_storage) ... ok
+test_role_alias (test_security_association_binding.BindingTests.test_role_alias) ... ok
+test_separate_instance_identity_cannot_be_collapsed_to_one_edge (test_security_association_binding.BindingTests.test_separate_instance_identity_cannot_be_collapsed_to_one_edge) ... ok
+test_substituted_endpoint_field (test_security_association_binding.BindingTests.test_substituted_endpoint_field) ... ok
+test_substituted_target (test_security_association_binding.BindingTests.test_substituted_target) ... ok
+test_substituted_target_field (test_security_association_binding.BindingTests.test_substituted_target_field) ... ok
+test_substituted_target_key (test_security_association_binding.BindingTests.test_substituted_target_key) ... ok
+test_third_authored_role_is_unsupported (test_security_association_binding.BindingTests.test_third_authored_role_is_unsupported) ... ok
+test_unknown_binding_members (test_security_association_binding.BindingTests.test_unknown_binding_members) ... ok
+test_unknown_core_content_is_archived_without_interpretation (test_security_association_binding.BindingTests.test_unknown_core_content_is_archived_without_interpretation) ... ok
+test_unknown_extreme_number_tokens_are_retained_exactly (test_security_association_binding.BindingTests.test_unknown_extreme_number_tokens_are_retained_exactly) ... ok
+
+----------------------------------------------------------------------
+Ran 39 tests in 0.009s
+
+OK
