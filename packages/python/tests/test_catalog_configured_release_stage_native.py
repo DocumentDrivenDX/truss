@@ -122,14 +122,32 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
         changed=copy.deepcopy(self.result)
         for cut in ('start','end'):
             scope=json.loads(changed['reportSources'][cut]['empty_scope'])
-            changed['reportSources'][cut]['empty_scope']=json.dumps(scope+['source_epoch_registry','source_epoch_current'])
+            changed['reportSources'][cut]['empty_scope']=json.dumps({**scope,'businessRelations':scope['businessRelations']+['source_epoch_registry','source_epoch_current']})
         with self.assertRaises(ValueError):self.compose(changed)
         changed=copy.deepcopy(self.result);changed['interfaceVersion']='truss-native-provisional-catalog/0.2'
         del changed['reportSources']['catalogRelease']
-        for cut in ('start','end'):del changed['reportSources'][cut]['metadata_source']
+        for cut in ('start','end'):
+            del changed['reportSources'][cut]['metadata_source']
+            changed['reportSources'][cut]['empty_scope']=json.dumps(json.loads(changed['reportSources'][cut]['empty_scope'])['businessRelations'])
         with self.assertRaises(ValueError):self.compose(changed)
         changed=json.loads(self.context);changed['sourceEpoch']='other'
         with self.assertRaises(ValueError):self.compose(context=json.dumps(changed).encode())
+        changed=copy.deepcopy(self.result)
+        for cut in ('start','end'):
+            scope=json.loads(changed['reportSources'][cut]['empty_scope'])
+            full=json.loads(bytes.fromhex(scope['metadataUtf8Hex']))
+            full['epoch']['transition_reason']='restore';full['epoch']['predecessor_epoch']='earlier'
+            scope['metadataUtf8Hex']=json.dumps(full).encode().hex()
+            changed['reportSources'][cut]['empty_scope']=json.dumps(scope)
+        with self.assertRaises(ValueError):self.compose(changed)
+        for field,value in (('configurationGeneration','8'),('configurationSha256','ab'*32),
+                            ('selectedBindingSha256','ab'*32),('installedInventorySha256','ab'*32)):
+            changed=copy.deepcopy(self.result)
+            for cut in ('start','end'):
+                metadata=json.loads(changed['reportSources'][cut]['metadata_source']);metadata[field]=value
+                changed['reportSources'][cut]['metadata_source']=json.dumps(metadata)
+            if field=='configurationGeneration':changed['reportSources']['catalogRelease']['configurationGeneration']=value
+            with self.assertRaises(ValueError):self.compose(changed)
         with self.assertRaises(ValueError):self.compose(profile=b'changed configuration profile')
         for mutation in ('foreign','origin','capture','missing','extra','array'):
             changed=json.loads(self.context)

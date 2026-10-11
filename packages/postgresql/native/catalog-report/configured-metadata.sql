@@ -1,7 +1,8 @@
 -- Private pre-effect metadata correspondence, not installed-source authority.
 -- Full original rows are retained locally; fixture identities are never promoted.
 CREATE FUNCTION truss.runtime_capture_catalog_metadata_cut(expected_writer text,expected_ordinal text,expected_generation text)
-RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY INVOKER
+SET search_path=pg_catalog,pg_temp SET bytea_output='hex' SET TimeZone='UTC' AS $$
 DECLARE context jsonb; name text; result jsonb; original bytea;
 BEGIN
  PERFORM truss.runtime_require_operation_configuration_current(expected_writer,expected_ordinal,expected_generation);

@@ -109,7 +109,9 @@ BEGIN
   'epochProfileSha256',encode(sha256(decode(context->>'sourceEpochProfileHex','hex')),'hex'),
   'epochEvidenceSha256',encode(sha256(decode(context->>'sourceEpochEvidenceHex','hex')),'hex'));
  RETURN QUERY SELECT op.original_writer_xid::text,op.operation_ordinal::text,
-  op.effect_generation::text,to_jsonb(scope_names)::text,metadata::text;
+  op.effect_generation::text,jsonb_build_object('interfaceVersion','truss-configured-empty-graph/0.1',
+   'businessRelations',to_jsonb(scope_names),'metadataUtf8Hex',encode(
+    truss.runtime_capture_catalog_metadata_cut(op.original_writer_xid::text,op.operation_ordinal::text,op.effect_generation::text),'hex'))::text,metadata::text;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_collect_configured_catalog_graph() FROM PUBLIC;

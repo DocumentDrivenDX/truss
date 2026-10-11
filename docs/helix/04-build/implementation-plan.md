@@ -53,8 +53,16 @@ now executes original UMF preparation → retained source envelope → actual co
 complete marker/epoch/configuration/release observations and rejects changed
 metadata, duplicate archive membership and a second asserted origin. The legacy
 context 0.2 route remains separate. This is administrative component evidence;
-Python configured dispatch, complete native report construction and accepted
-publication are still unfinished. The metadata response limit is checked after
+The [Python configured dispatch checkpoint](evidence/design-audit/python-configured-catalog-dispatch.json)
+now connects that source envelope to one original adopted-host call: epoch lock,
+prestate capture, actual configuration admission, bounded context and provisional
+staging. Python validates the retained selection, native context, capsule digest,
+complete captured metadata row correspondence and sole exact packaged release.
+Native metadata rendering uses hexadecimal bytea and UTC; original raw response
+bytes survive composition or publication failure, and cleanup remains usable
+without redispatch. A 4,096-byte context succeeds; one further evidence byte
+refuses before catalog DML and rolls back admission. Complete native report
+construction and accepted publication are still unfinished. The metadata response limit is checked after
 materialization and does not establish a complete native allocation budget.
 Continue into report construction and the installer/provider composition below;
 this checkpoint does not satisfy the public workflow milestone.
@@ -3260,3 +3268,11 @@ Python protocol0.3 source composition binds the retained configuration selection
 Earlier12ae/5d47/caa packets qualify pre-reconciliation bytes. Failed f530 lifecycle dispatch, d57/f7ad/73a codec closure,666a test-wrapper assertion and5cf module boundary attempts remain retained with source archives and cleanup. Final evidence supersedes their passing subsets. Astra ultra requested request/version/scope/context/profile correspondence, decisive coherent controls and dependency capture; retained review/audit accompanies the final positive packet.
 
 CONTRACT-063/STP-056 B11/B12/L03 and US-056-AC9/AC10 gain component prerequisites only. The earlier conditional archive-cut/epoch-lifetime models remain separate historical algebra evidence; no SQL/Python refinement proof is claimed for this producer. Full security acceptance remains26/132 with106 missing bindings. Authenticated original caller/installed-source authority, complete report producer registration, accepted persistence/finalizer, transaction-lifetime cut use and final disclosure remain open. Merge directly into main under the user's explicit authorization, preserving concurrent work; no PR.
+
+### Final concurrent-main reconciliation — 2026-10-11
+
+The checkpoint above is now pre-d42 history. Preserve incoming maind42be9f9 full-row metadata validation and configured native entry. `catalog-stage-configured.sql` is the sole `runtime_stage_catalog_configured` definition; it retains duplicate-preserving input/origin preflight, epoch-before-head acquisition and8192-hex-character context bound, then invokes the release wrapper. The wrapper remains internal and performs final exact release revalidation. The strict configured graph collector now emits the incoming tagged `empty_scope` (`businessRelations` plus exact full-row `metadataUtf8Hex`) alongside compact `metadata_source`. Python validates both and joins every shared installation/epoch/incarnation/configuration-generation/artifact/context/epoch-hash coordinate; coherent compact/release generation changes and all three compact digest substitutions refuse. The selected strict route also requires initial epoch/NULL predecessor; shared generic restore validation does not broaden that route.
+
+[Final combined positive packet](evidence/python-catalog-report-release/0ee77fdd-fa33-46dc-9fa6-fec1cdfc044c/receipt.json) passes45 selected tests:16 configured/release,14 original dispatch (including incoming publication-loss/replay controls), and15 explicitly declared incoming source/metadata regressions without inherited duplicate populations. These cover full-row mutations, hostile bytea/timezone settings and exact4096-byte/+1 context refusal. The incoming fixture installs the actual strict graph/release closure and resets only its owned schema. The packet retains270 current/frozen source and dependency pins,1614 native binary/file pins,499 import boundaries and owned stop0/status3/socket absence. Earlier9ca qualifies the first d42 combination without the compact/full-row join; e8cf is the source-change refusal while final strict epoch controls were added. Earlier e267/f485 remain pre-d42 evidence and their review explicitly records that limit. No full backend case or authority is promoted; security acceptance remains26/132,106 missing. Conditional historical formal algebra is unchanged and does not establish this implementation's refinement.
+
+[Final combined omitted-lock packet](evidence/python-catalog-report-release/140ba446-0867-47c9-8cc3-ec9f458f712b/receipt.json) retains the deliberate SQL variant and exactly four intended failures among16 release tests, with all14 dispatch tests passing,270 exact source/dependency pins,1614 native pins,499 imports and verified owned cleanup. The15 auxiliary tests are explicitly not executed in that variant because their concurrent-fencing expectations also depend on the deliberately omitted lock; their positive qualification is separately retained in0ee77fdd. Astra final review/audit are retained in the positive packet. Direct merge is authorized by the user; no PR.

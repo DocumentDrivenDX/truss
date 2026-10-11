@@ -35,6 +35,7 @@ class NativeCatalogCandidateTests(NativeBoundaryFixture,unittest.TestCase):
         super().setUpClass()
         c=cls.Connection(**cls.kwargs)
         try:
+            c.run('DROP SCHEMA IF EXISTS truss CASCADE')
             c.run('CREATE SCHEMA truss')
             for source in ('canonical-string-bytes','canonical-tree-bytes','catalog-report/source-candidate'):
                 c.run((ROOT/f'packages/postgresql/native/{source}.sql').read_text())
@@ -86,6 +87,7 @@ class ConfiguredCatalogSourceStageTests(NativeBoundaryFixture,unittest.TestCase)
         from test_catalog_staging import COMPONENTS
         c=cls.Connection(**cls.kwargs)
         try:
+            c.run('DROP SCHEMA IF EXISTS truss CASCADE')
             c.run((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text())
             c.run((ROOT/'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql').read_text())
             for component in COMPONENTS:c.run((ROOT/f'packages/postgresql/native/{component}.sql').read_text())
@@ -94,6 +96,7 @@ class ConfiguredCatalogSourceStageTests(NativeBoundaryFixture,unittest.TestCase)
                 'catalog-epoch-context','operation-configuration-current','catalog-admission-configuration',
                 'canonical-string-bytes','canonical-tree-bytes','catalog-report/source-candidate',
                 'catalog-report/release-selection','catalog-report/configured-metadata',
+                'catalog-report/configured-graph','catalog-report/configured-stage',
                 'catalog-report/empty-graph','catalog-report/fresh-lifecycle',
                 'catalog-report/absent-binding-index-declarations','edge-limit/verify-current-scope','catalog-stage-issued'):
                 c.run((ROOT/f'packages/postgresql/native/{source}.sql').read_text())

@@ -13,6 +13,7 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_native_catalog_metadata': {'json','re','hashlib','importlib.resources','truss._acceptance_json'},
     '_native_epoch_acquisitions': {'dataclasses','truss._native_pg8000'},
     '_native_fresh_epoch_capture': {'truss._native_epoch_acquisitions','hashlib','re','struct','truss._native_admission_capture','truss._native_result_custody','truss._native_pg8000','truss._native_arbitration','truss._native_driver_profile','truss._native_deadline'},
     '_native_source_census': {'dataclasses','hashlib','re','struct','truss._native_pg8000','truss._native_arbitration','truss._native_result_custody','truss._native_driver_profile','truss._native_deadline'},
@@ -74,7 +75,7 @@ ALLOWED = {
     '_report_schema_pins': set(),
     '_report_schema': {'hashlib','importlib.resources','json','jsonschema','jsonschema.exceptions','referencing','truss._report_schema_pins'},
     '_catalog_report_assembly': {'truss._acceptance_json','truss._report_schema','truss._catalog_support','truss._catalog_report_semantics','truss._canonical_wire_tree','hashlib','importlib.resources','json','truss.preparation'},
-    '_native_catalog_report_sources': {'dataclasses','hashlib','truss._catalog_report_assembly','json','truss.preparation','truss._acceptance_json','truss._catalog_lifecycle','truss._catalog_index_declarations','truss._catalog_owner_evidence','truss._catalog_support','truss._catalog_report_semantics'},
+    '_native_catalog_report_sources': {'truss._native_catalog_metadata','dataclasses','hashlib','truss._catalog_report_assembly','json','truss.preparation','truss._acceptance_json','truss._catalog_lifecycle','truss._catalog_index_declarations','truss._catalog_owner_evidence','truss._catalog_support','truss._catalog_report_semantics'},
     '_native_catalog_capture': {'truss._native_catalog_report_sources','dataclasses','re','truss._native_admission_capture','truss._native_result_custody','truss._native_pg8000','truss._acceptance_json'},
     '_native_string_request': {'dataclasses', 're', 'truss._native_pg8000'},
     '_native_admission_request': {'dataclasses', 're', 'truss._operation_admission'},
