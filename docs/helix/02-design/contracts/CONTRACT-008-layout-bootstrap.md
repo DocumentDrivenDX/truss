@@ -15,6 +15,20 @@ ddx:
       kind: informed_by
 ---
 
+## Current release resource selection — owner decision 2026-10-11
+
+The stock-PostgreSQL release uses logical input, occurrence, row, statement and
+complete encoded-output limits, bounded query shapes and supported ordinary
+deadlines. It does not require custom tracing, metrics, native allocation meters,
+abstract work-unit meters or rollback-resistant cumulative accounting. Historical
+resource proposals and their instrumentation-specific schedules below remain
+historical evidence, not release gates. Missing custom instrumentation must not
+block generation or installation. Validate logical limits and actual supported
+deadline behavior; retain complete inventory, authorization, transaction integrity,
+cancellation outcome and host resource ownership checks. Post-receive size checks
+do not establish hidden server allocation bounds, and no such guarantee is made.
+
+
 # Contract: Layout bootstrap from UMF
 
 **Contract ID:** CONTRACT-008. **Type:** generation/deployment boundary. **Version:** proposed `truss-bootstrap/0.1.0`. **Status:** draft.

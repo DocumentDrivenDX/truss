@@ -233,6 +233,8 @@ RES-03. Use supported maintained infrastructure for PostgreSQL transport. Custom
 
 RES-04. Strict transport accounting is optional. Require it only after separate owner adoption of a concrete consumer outcome, threat model and measurable guarantee. Tests and implementation proposals cannot independently strengthen product scope or make optional instrumentation a baseline release gate.
 
+Owner decision — 2026-10-11: the Python release uses practical stock-PostgreSQL input/row/carrier limits, bounded queries and supported deadlines. Remove custom tracing, metrics and exact native allocation/cumulative-work instrumentation from this release. Keep basic safe logging and product correctness, authorization, transaction and retry guarantees.
+
 ## Acceptance Test Sketches
 
 Resource acceptance (RES-01–04): exercise each published maximum and one-over input/value/page/batch/concurrency limit, long-running and lock-wait deadlines, large individual values and maximum supported fanout. Observe peak process memory and latency on the pinned supported tuple. Failures preserve prior caller work or retain explicit uncertainty; no truncation, premature pool reuse or blind write retry is permitted. Baseline qualification uses stock supported driver APIs; absence of custom wire hooks and unrun optional strict-profile tests cannot fail release. Review any proposed custom transport against a reproduced necessary deficiency and owner-approved ADR before implementation.

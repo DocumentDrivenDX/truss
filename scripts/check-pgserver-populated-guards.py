@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Rollback-only populated immutable-guard component checks; no installer publication."""
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION, SERVER_VERSION_NUM
 import argparse
 import hashlib
 import importlib.metadata
@@ -9,13 +10,15 @@ from pathlib import Path
 import subprocess
 import tempfile
 import pgserver
+from native_fixture import get_server, evidence_directory
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--corrected-pgserver', action='store_true')
 args = parser.parse_args()
-selected_package = '0.1.4+truss.pg16.15' if args.corrected_pgserver else '0.1.4'
-selected_server = '16.15' if args.corrected_pgserver else '16.2'
-receipt_name = ('pgserver-corrected-populated-guard-component.json' if args.corrected_pgserver
+args.corrected_pgserver = True  # Historical flag remains a compatibility spelling.
+selected_package = RUNTIME_VERSION
+selected_server = SERVER_VERSION
+receipt_name = (f'pgserver-pg{SERVER_VERSION}-populated-guard-component.json' if args.corrected_pgserver
                 else 'pgserver-populated-guard-component.json')
 root = Path(__file__).resolve().parents[1]
 paths = [
@@ -27,7 +30,7 @@ paths = [
  'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql',
 ]
 originals = [(root / p).read_bytes() for p in paths]
-assert importlib.metadata.version('pgserver') == selected_package
+assert importlib.metadata.version(RUNTIME_DISTRIBUTION) == selected_package
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
 probe = '''
 DO $$
@@ -74,7 +77,7 @@ ROLLBACK;
 '''
 hash_text = lambda value: hashlib.sha256(value.encode()).hexdigest()
 with tempfile.TemporaryDirectory(prefix='truss-populated-guards-') as directory:
-    server = pgserver.get_server(Path(directory) / 'data', cleanup_mode='stop')
+    server = get_server(Path(directory) / 'data', cleanup_mode='stop')
     def query(sql):
         return subprocess.check_output([str(psql),server.get_uri(),'-X','-q','-A','-t','-v','ON_ERROR_STOP=1'],
                                        input=sql,text=True,timeout=60).strip()
@@ -96,5 +99,5 @@ receipt = {'scope':'Populated immutable guard component under rollback; administ
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
  'limitations':['No installer/ready-marker publication','No original capsule/receipt semantic producer admission',
  'No ordinary-role authorization qualification','No complete retention/cleanup lifecycle or migration execution']}
-(root/'docs/helix/04-build/evidence/design-audit'/receipt_name).write_text(json.dumps(receipt,indent=2)+'\n')
+(evidence_directory()/receipt_name).write_text(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'serverVersion':observed['serverVersion'],'refusals':12,'unchangedRows':True,'rollbackRemovedNamespace':True}))

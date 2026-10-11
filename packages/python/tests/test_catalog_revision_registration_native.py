@@ -10,6 +10,7 @@ from truss._acceptance_json import decode_acceptance_json
 class RevisionRegistrationNativeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls.addClassCleanup(report_fixture.fixture.NativeBoundaryFixture.tearDownClass.__func__, report_fixture.fixture.ConfiguredReleaseStageNativeTests)
         report_fixture.ReportWriteCandidateNativeTests.setUpClass()
         cls.Connection=report_fixture.ReportWriteCandidateNativeTests.Connection
         cls.kwargs=report_fixture.ReportWriteCandidateNativeTests.kwargs

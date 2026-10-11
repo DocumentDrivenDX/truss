@@ -27,8 +27,8 @@ def _run_fenced_epoch_operation(host, transaction, comparison, callback):
         raise ValueError('Qualified epoch-cut host profile required')
     selected=(native_profile.psycopg,native_profile.implementation,native_profile.libpq,native_profile.server)
     if (tuple(type(v) for v in selected)!=(str,str,int,int)
-            or selected!=('3.3.6','binary',180006,160015)):
-        raise ValueError('Qualified PostgreSQL16.15 epoch-cut profile required')
+            or selected!=('3.3.6','binary',180006,180006)):
+        raise ValueError('Qualified PostgreSQL18.6 epoch-cut profile required')
     installation, epoch, incarnation, profile, evidence = (
         comparison.installation, comparison.epoch, comparison.incarnation,
         comparison.profile, comparison.evidence)

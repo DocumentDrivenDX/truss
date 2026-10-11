@@ -19,7 +19,7 @@ lock='LOCK TABLE '+', '.join('pg_catalog.'+n for n in names)+' IN SHARE MODE'
 (folder/'lock.sql').write_text(lock+';\n')
 admin=connect();holder=connect();writer=connect()
 try:
- check('exact-engine',[['160015']],admin.run("SELECT current_setting('server_version_num')::text"))
+ check('exact-engine',[['180006']],admin.run("SELECT current_setting('server_version_num')::text"))
  admin.run("CREATE SCHEMA census_probe; CREATE TABLE census_probe.facts(value text); INSERT INTO census_probe.facts VALUES('original'); CREATE FUNCTION census_probe.value() RETURNS bigint LANGUAGE sql IMMUTABLE AS 'SELECT 1::bigint'; CREATE ROLE census_actor; CREATE ROLE census_group;")
  admin.run('CREATE DATABASE census_other');other=connect('census_other')
  holder.run('BEGIN ISOLATION LEVEL READ COMMITTED');holder.run(lock)
@@ -120,7 +120,7 @@ try:
  writer.run("UPDATE census_probe.facts SET value='changed'")
  check('application-data-restored',fact_before,holder.run('SELECT value FROM census_probe.facts'))
  holder.run('COMMIT')
- (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'catalogs':names,'scope':'Excluded administrative PostgreSQL16.15 catalog ShareLock feasibility and native stale-snapshot and uncommitted writer counterexamples. Materialized pg8000 rows are not protected bounded original ingress. Cooperative transaction advisory barrier with fresh READ COMMITTED statement after acquisition; native lock wait/drain and blocking tested. Native two-commit routine ABA returns777 between byte-identical666 source images. Ordinary application-data changes are omitted by source census; the fixture data table is not an actual authorization provider. Tested finite DDL set only; no all-writer/catalog/extension/runtime configuration completeness, provider authentication, final authority/data cut, cooperative handback or backend acceptance.'},indent=2)+'\n')
+ (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'catalogs':names,'scope':'Excluded administrative PostgreSQL18.6 catalog ShareLock feasibility and native stale-snapshot and uncommitted writer counterexamples. Materialized pg8000 rows are not protected bounded original ingress. Cooperative transaction advisory barrier with fresh READ COMMITTED statement after acquisition; native lock wait/drain and blocking tested. Native two-commit routine ABA returns777 between byte-identical666 source images. Ordinary application-data changes are omitted by source census; the fixture data table is not an actual authorization provider. Tested finite DDL set only; no all-writer/catalog/extension/runtime configuration completeness, provider authentication, final authority/data cut, cooperative handback or backend acceptance.'},indent=2)+'\n')
  print(json.dumps({'status':'component-passed','observations':len(observations)}))
 except BaseException as error:
  (folder/'native-failure.json').write_text(json.dumps({'status':'failed','observations':observations,'error':str(error)},indent=2)+'\n');raise

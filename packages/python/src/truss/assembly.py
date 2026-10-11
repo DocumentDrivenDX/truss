@@ -6,11 +6,18 @@ Count/text bounds do not establish complete Python heap or native qualification.
 from __future__ import annotations
 from dataclasses import dataclass
 from threading import Lock
-from typing import Literal
+from typing import Literal, overload
+from .execution import TransactionHandle, Outcome
+from .psycopg_host import PsycopgHost
+from .installation import InstallationObservation
 from .contracts import ProfilePin,CapabilitySelection,ABSENT,Absent
 from .assembly_contracts import (RecoveryConfiguration,RequestReplayConfiguration,
-    ReferenceAssemblyConfiguration,AssemblyConstructionError,CapabilityUnavailable,AssemblyDisposed)
+    ReferenceAssemblyConfiguration,InstallationInspectionConfiguration,AssemblyConstructionError,CapabilityUnavailable,AssemblyDisposed)
 from .execution import Ok,Error,ExecutionFailure
+
+INSPECTION_ASSEMBLY_PROFILE=ProfilePin(identity='truss-reference-assembly-inspection',version='0.1.0-candidate',sha256='5df8b93c35dc11d710744b89b5a1aafd11a8c5aa957c514458db5ad5bb8c3b8d')
+
+INSPECTION_CONSTRUCTION_DIAGNOSTIC_PROFILE=ProfilePin(identity='truss-python-inspection-assembly-construction-diagnostic',version='0.1.0-candidate',sha256='b8c53a93d67ec97a9895d3c4d862f1118758204ab06b1e625f8a0793c74c45d1')
 
 INERT_ASSEMBLY_PROFILE=ProfilePin(identity='truss-reference-assembly-inert',version='0.1.0',sha256='3cca9dddd4b39f0325392acae67832137a9f3d6ddc2824e344f6f1a182742d09')
 CONSTRUCTION_DIAGNOSTIC_PROFILE=ProfilePin(identity='truss-python-assembly-construction-diagnostic',version='0.1.0',sha256='2e42e685d6e18169d31cd34abc2d43b720f088c39b74182d5f02944d06e56b94')
@@ -104,8 +111,16 @@ class CapabilityReadiness:
         if type(self.interface_version) is not str or self.interface_version!='truss-capability-readiness/0.1.0':raise ValueError('Unsupported readiness interface')
 
 
-def create_reference_assembly(configuration: ReferenceAssemblyConfiguration,executor: object,host_services: HostServices) -> Ok[ReferenceAssembly] | AssemblyConstructionError:
-    """No native/service callbacks; only this inert assembly profile is supported."""
+@overload
+def create_reference_assembly(configuration: ReferenceAssemblyConfiguration,executor: object,host_services: HostServices) -> Ok[ReferenceAssembly] | AssemblyConstructionError: ...
+
+@overload
+def create_reference_assembly(configuration: InstallationInspectionConfiguration,executor: PsycopgHost,host_services: None = None) -> Ok[InstallationInspectionAssembly] | AssemblyConstructionError: ...
+
+def create_reference_assembly(configuration: ReferenceAssemblyConfiguration | InstallationInspectionConfiguration,executor: object,host_services: HostServices | None = None) -> Ok[ReferenceAssembly | InstallationInspectionAssembly] | AssemblyConstructionError:
+    """Capture the selected inert or inspection configuration without native I/O."""
+    if type(configuration) is InstallationInspectionConfiguration:
+        return _create_inspection_assembly(configuration,executor,host_services)
     if type(configuration) is not ReferenceAssemblyConfiguration:return _error('invalid_configuration')
     if type(configuration.interface_version) is not str or configuration.interface_version!='truss-reference-assembly/0.1.0':return _error('invalid_configuration','interface_version')
     for name,value in (('assembly_id',configuration.assembly_id),('database_identity',configuration.database_identity),('schema',configuration.schema)):
@@ -151,3 +166,49 @@ def create_reference_assembly(configuration: ReferenceAssemblyConfiguration,exec
         capabilities=capabilities,request_replay=captured_replay)
     services=HostServices(recovery_registry=RecoveryServiceRegistration(profile=actual,retention=service.retention,implementation=service.implementation),request_namespace_authority=captured_authority)
     return Ok(ReferenceAssembly(captured,executor,services,_issuer=_ASSEMBLY_ISSUER))
+
+
+class InstallationInspectionAssembly:
+    """Caller-owned transaction diagnostic; no graph providers or readiness claim.
+
+    Disposal waits for an in-flight inspection to finish. It then refuses later
+    inspections without issuing SQL and leaves the caller-owned host attached.
+    """
+    def __init__(self,configuration: InstallationInspectionConfiguration,host: PsycopgHost,*,_issuer: object = None) -> None:
+        if _issuer is not _ASSEMBLY_ISSUER:raise ValueError('Use create_reference_assembly')
+        self._configuration=configuration
+        self._host=host
+        self._disposed=False
+        self._lock=Lock()
+
+    @property
+    def configuration(self) -> InstallationInspectionConfiguration:return self._configuration
+
+    def inspect_installation(self,transaction: TransactionHandle) -> Outcome[InstallationObservation]:
+        from .installation import inspect_installation_in_transaction
+        with self._lock:
+            if self._disposed:
+                return Error(ExecutionFailure('execution_obligation','Assembly disposed'))
+            return inspect_installation_in_transaction(self._host,transaction)
+
+    def dispose(self) -> AssemblyDisposed:
+        with self._lock:
+            self._disposed=True
+            return AssemblyDisposed()
+
+
+def _inspection_error(code: Literal['invalid_configuration','unsupported_profile','incompatible_selection'],path: str) -> AssemblyConstructionError:
+    return AssemblyConstructionError(code=code,path=path,diagnostic_profile=INSPECTION_CONSTRUCTION_DIAGNOSTIC_PROFILE)
+
+def _create_inspection_assembly(configuration: InstallationInspectionConfiguration,executor: object,host_services: object) -> Ok[InstallationInspectionAssembly] | AssemblyConstructionError:
+    from .psycopg_host import PsycopgHost
+    if not _text(configuration.assembly_id):return _inspection_error('invalid_configuration','assembly_id')
+    if type(configuration.interface_version) is not str or configuration.interface_version!='truss-installation-inspection-assembly/0.1.0':
+        return _inspection_error('invalid_configuration','interface_version')
+    try:profile=_pin(configuration.assembly_profile)
+    except ValueError:return _inspection_error('invalid_configuration','assembly_profile')
+    if profile!=INSPECTION_ASSEMBLY_PROFILE:return _inspection_error('unsupported_profile','assembly_profile')
+    if type(executor) is not PsycopgHost or host_services is not None:
+        return _inspection_error('incompatible_selection','host_services')
+    captured=InstallationInspectionConfiguration(assembly_id=configuration.assembly_id,assembly_profile=profile)
+    return Ok(InstallationInspectionAssembly(captured,executor,_issuer=_ASSEMBLY_ISSUER))

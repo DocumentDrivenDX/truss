@@ -13,7 +13,7 @@ class PsycopgGraphProjectionNativeTests(unittest.TestCase):
     def setUpClass(cls):
         fact_tests.PsycopgFactCutNativeTests.setUpClass.__func__(cls)
         try:
-            with psycopg.connect(host=str(cls.socket),user='postgres',dbname='postgres',autocommit=True) as c:
+            with psycopg.connect(host=str(cls.socket),user='postgres',dbname=cls.database,autocommit=True) as c:
                 c.execute('DROP TRIGGER fact_write_fence ON truss.edge')
                 c.execute((ROOT/'docs/helix/04-build/evidence/authorization-graph-fact-scope.owner-export.sql').read_text())
                 c.execute((ROOT/'packages/postgresql/native/authorization-graph-fact-scope.sql').read_text())
@@ -137,7 +137,7 @@ class PsycopgGraphProjectionNativeTests(unittest.TestCase):
         function='CREATE OR REPLACE FUNCTION truss.runtime_register_graph_fact_scope('+source.split('CREATE FUNCTION truss.runtime_register_graph_fact_scope(',1)[1].split('CREATE FUNCTION truss.runtime_fence_selected_graph_fact_row()',1)[0]
         marker='SELECT native_xid,v,native_context,original_evidence FROM unnest(selected_types) v'
         self.assertEqual(function.count(marker),1)
-        with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True) as owner:
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True) as owner:
             owner.execute(function.replace(marker,'SELECT native_xid,101,native_context,original_evidence FROM unnest(selected_types) v'))
             try:
                 t=self.begin();called=[]

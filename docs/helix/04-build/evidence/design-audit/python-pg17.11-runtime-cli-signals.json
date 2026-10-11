@@ -1,0 +1,44 @@
+{
+  "scope": "Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on macOS27 arm64 PostgreSQL17.11; no crash/installer qualification",
+  "correctedPgserverCandidate": true,
+  "loadedCli": "/private/tmp/truss-pgserver-pg17-test-env-20261011/lib/python3.11/site-packages/truss/cli.py",
+  "cliSha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37",
+  "producerSha256": "bca732884986b5b111df35e05b3e3584d68232b5cba803fbb76676d89e479cc8",
+  "runs": [
+    {
+      "signal": "SIGTERM",
+      "cliPid": 66836,
+      "runtime": {
+        "runtime": "pgserver",
+        "runtimeVersion": "0.1.4+truss.pg17.11",
+        "serverVersion": "17.11",
+        "dataDirectory": "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-cli-signals-is6o_1cn/retained data",
+        "connectionUri": "postgresql://postgres:@/postgres?host=/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/d0c473d6e7",
+        "trussInstallation": "not_checked",
+        "scope": "local_postgresql_only"
+      },
+      "exitCode": 0,
+      "postmasterMarkerAbsent": true,
+      "dataRetained": true
+    },
+    {
+      "signal": "SIGINT",
+      "cliPid": 66895,
+      "runtime": {
+        "runtime": "pgserver",
+        "runtimeVersion": "0.1.4+truss.pg17.11",
+        "serverVersion": "17.11",
+        "dataDirectory": "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-cli-signals-is6o_1cn/retained data",
+        "connectionUri": "postgresql://postgres:@/postgres?host=/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/d0c473d6e7",
+        "trussInstallation": "not_checked",
+        "scope": "local_postgresql_only"
+      },
+      "exitCode": 0,
+      "postmasterMarkerAbsent": true,
+      "dataRetained": true
+    }
+  ],
+  "originalCustody": "Signals sent only to the subprocess PIDs started by this probe",
+  "completeEngineQualified": false,
+  "processCrashQualified": false
+}

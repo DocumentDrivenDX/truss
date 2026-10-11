@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 from truss import LocalPostgres, LocalRuntimeError
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, SERVER_VERSION
 
 
 def query(runtime, sql):
@@ -17,14 +18,25 @@ def query(runtime, sql):
 
 
 class LocalRuntimeTests(unittest.TestCase):
+    def test_retired_pgserver_version_refuses_before_startup(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as parent:
+            directory = Path(parent) / 'data'
+            with patch('truss.local_runtime.importlib.metadata.version', return_value='0.1.4+truss.pg16.15'), patch('pgserver.get_server') as start:
+                with self.assertRaisesRegex(LocalRuntimeError, 'Expected pinned pgserver-pg18'):
+                    with LocalPostgres(directory):
+                        self.fail('Retired runtime admitted')
+                start.assert_not_called()
+                self.assertFalse(directory.exists())
+
     def test_retained_commit_and_exception_cleanup(self):
         with tempfile.TemporaryDirectory(prefix='truss-python-runtime-') as parent:
             directory = Path(parent) / 'retained data'
             runtime = LocalPostgres(directory)
             with self.assertRaisesRegex(ValueError, 'caller failure'):
                 with runtime:
-                    package_version = importlib.metadata.version('pgserver')
-                    expected = {'0.1.4': '16.2', '0.1.4+truss.pg16.15': '16.15'}[package_version]
+                    package_version = importlib.metadata.version(RUNTIME_DISTRIBUTION)
+                    expected = SERVER_VERSION
                     self.assertEqual(runtime.info.server_version, expected)
                     self.assertEqual(runtime.info.runtime_version, package_version)
                     self.assertEqual(runtime.info.truss_installation, 'not_checked')
@@ -96,7 +108,7 @@ class LocalRuntimeTests(unittest.TestCase):
             runtime = LocalPostgres(directory)
             def fail_startup(*args, **kwargs):
                 directory.mkdir()
-                (directory / 'PG_VERSION').write_text('16\n')
+                (directory / 'PG_VERSION').write_text(SERVER_VERSION.split('.')[0] + '\n')
                 (directory / 'postmaster.pid').write_text('synthetic unresolved marker\n')
                 raise OSError('injected constructor failure')
             try:
@@ -132,11 +144,12 @@ class LocalRuntimeTests(unittest.TestCase):
                 with LocalPostgres(directory):
                     self.fail('foreign directory admitted')
             self.assertEqual(marker.read_text(), 'retain me')
-            (directory / 'PG_VERSION').write_text('17\n')
+            wrong_major = '17\n'
+            (directory / 'PG_VERSION').write_text(wrong_major)
             with self.assertRaisesRegex(LocalRuntimeError, 'no automatic upgrade'):
                 with LocalPostgres(directory):
                     self.fail('incompatible version admitted')
-            self.assertEqual((directory / 'PG_VERSION').read_text(), '17\n')
+            self.assertEqual((directory / 'PG_VERSION').read_text(), wrong_major)
 
 
 if __name__ == '__main__':

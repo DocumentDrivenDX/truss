@@ -1,5 +1,6 @@
-# Initial local-runtime qualification tuple; full Truss package is not yet released.
-pgserver==0.1.4
+--find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r1
+# Selected reusable PostgreSQL18.6 local-runtime tuple; full Truss package is not yet released.
+pgserver-pg18==18.6.0
 fasteners==0.20
 platformdirs==4.12.4
 psutil==7.2.2

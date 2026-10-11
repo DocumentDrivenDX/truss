@@ -13,7 +13,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
-    'psycopg_host': {'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
+    '_runtime_profile': {'json', 'importlib.resources'},
+    'psycopg_host': {'truss._runtime_profile', 'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
     '_psycopg_epoch_cut': {'dataclasses', 'hashlib', 'truss.psycopg_host', 'psycopg.types.string'},
     '_psycopg_dependency_fact_cut': {'dataclasses', 'json', 'psycopg', 'truss._psycopg_epoch_cut', 'truss._security_fact_coverage', 'truss._psycopg_fact_cut'},
     '_security_fact_coverage': {'dataclasses', 'hashlib', 'json'},
@@ -53,9 +54,9 @@ ALLOWED = {
     'execution': {'dataclasses', 'typing'},
     '_installation_archive': {'dataclasses', 'hashlib'},
     '__init__': {'truss.psycopg_host','truss._borrowed_host','truss.installation', 'truss.host', 'truss.assembly', 'truss.assembly_contracts', 'truss.local_runtime', 'truss.execution', 'truss.preparation'},
-    'installation': {'dataclasses','typing','truss.host','truss.execution'},
+    'installation': {'dataclasses','typing','truss.host','truss.execution','truss.psycopg_host'},
     'host': {'typing', 'truss.execution', 'truss._host_call_recovery', 'dataclasses', 'truss._native_bootstrap', 'truss._host_execution', 'truss._native_transactions', 'truss._native_arbitration', 'truss._host_control_custody', 'truss._host_session'},
-    'assembly': {'__future__', 'typing', 'dataclasses', 'threading', 'truss.contracts', 'truss.assembly_contracts', 'truss.execution'},
+    'assembly': {'__future__', 'typing', 'dataclasses', 'threading', 'truss.contracts', 'truss.assembly_contracts', 'truss.execution', 'truss.psycopg_host', 'truss.installation'},
     'assembly_contracts': {'dataclasses', 'typing', 'truss.contracts'},
     '_umf_release': set(),
     'preparation': {'weakref', 'dataclasses', 'hashlib', 'pathlib', 'base64', 'json', 'shutil', 'subprocess', 'selectors', 'tempfile', 'time', 'truss._umf_release', 'truss._acceptance_json'},
@@ -106,7 +107,7 @@ ALLOWED = {
     '_resource_account': {'dataclasses', 'threading'},
     '_receipt_position': {'base64', 'binascii', 'dataclasses', 'json', 're', 'truss._acceptance_json'},
     'cli': {'argparse', 'json', 'pathlib', 'signal', 'threading', 'truss'},
-    'local_runtime': {'dataclasses', 'importlib.metadata', 'importlib.resources', 'pathlib',
+    'local_runtime': {'truss._runtime_profile', 'dataclasses', 'importlib.metadata', 'importlib.resources', 'pathlib',
                       'subprocess', 'threading', 'pgserver', 'fasteners'},
     'migration_planning': {'dataclasses', 're', 'typing', 'truss._acceptance_json'},
     'numeric': {'dataclasses', 'decimal'},

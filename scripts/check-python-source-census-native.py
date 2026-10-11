@@ -18,7 +18,7 @@ for package in ['pg8000','scramp','asn1crypto']:
  for file in dist.files:
   if str(file).endswith('.dist-info/METADATA'):
    p=Path(dist.locate_file(file));inputs[str(p)]=p.read_bytes();copied[str(file)]=inputs[str(p)]
-for q in ['scripts/check-python-source-census-native.py','scripts/python-source-census-worker.py','scripts/check-module-boundaries.py','packages/python/tests/test_native_source_census.py','packages/postgresql/native/security-query-source-census-pg16.sql','packages/postgresql/native/security-query-source-census.sql']:
+for q in ['scripts/check-python-source-census-native.py','scripts/python-source-census-worker.py','scripts/check-module-boundaries.py','packages/python/tests/test_native_source_census.py','packages/postgresql/native/security-query-source-census-pg18.sql','packages/postgresql/native/security-query-source-census.sql']:
  p=root/q;inputs[str(p)]=p.read_bytes()
 pins={p:sha(b) for p,b in inputs.items()}
 with zipfile.ZipFile(folder/'sources.zip','w',zipfile.ZIP_DEFLATED) as archive:
@@ -32,10 +32,10 @@ if True:
  for p,b in copied.items():
   q=modules/p;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(b)
  worker=captured/'worker.py';worker.write_bytes(inputs[str(root/'scripts/python-source-census-worker.py')])
- selected=captured/'source.sql';selected.write_bytes(inputs[str(root/'packages/postgresql/native/security-query-source-census-pg16.sql')])
+ selected=captured/'source.sql';selected.write_bytes(inputs[str(root/'packages/postgresql/native/security-query-source-census-pg18.sql')])
  tests=captured/'tests';tests.mkdir();(tests/'test_native_source_census.py').write_bytes(inputs[str(root/'packages/python/tests/test_native_source_census.py')])
  if any((modules/p).read_bytes()!=b for p,b in copied.items()):raise RuntimeError('Captured execution bytes differ')
- for target,original in [(worker,root/'scripts/python-source-census-worker.py'),(selected,root/'packages/postgresql/native/security-query-source-census-pg16.sql'),(tests/'test_native_source_census.py',root/'packages/python/tests/test_native_source_census.py')]:
+ for target,original in [(worker,root/'scripts/python-source-census-worker.py'),(selected,root/'packages/postgresql/native/security-query-source-census-pg18.sql'),(tests/'test_native_source_census.py',root/'packages/python/tests/test_native_source_census.py')]:
   if target.read_bytes()!=inputs[str(original)]:raise RuntimeError('Captured harness bytes differ')
  python=os.sys.executable
  try:
@@ -50,7 +50,7 @@ if True:
   native=run([python,str(worker)],input=json.dumps({'capturedModules':str(modules),'source':str(selected),'unixSocket':str(socket_dir/'.s.PGSQL.5432'),'password':None,'evidence':str(folder)}),timeout=180)
   (folder/'native.stdout.log').write_text(native.stdout);(folder/'native.stderr.log').write_text(native.stderr);require(native)
   if any(Path(p).read_bytes()!=b for p,b in inputs.items()):raise RuntimeError('Current source pins changed')
-  result={'status':'component-passed','runId':run_id,'sourceDigests':pins,'versions':{p:importlib.metadata.version(p) for p in ['pg8000','scramp','asn1crypto']},'python':os.sys.version,'scope':'Exact captured Python modules executed in fresh worker; installed pgserver PostgreSQL16.15 binaries over original AF_UNIX original census observation only. Not hermetic interpreter/OS, public installed provider qualification, authenticated source/provider/issuer, held cut, complete protected operation handback or backend acceptance.'}
+  result={'status':'component-passed','runId':run_id,'sourceDigests':pins,'versions':{p:importlib.metadata.version(p) for p in ['pg8000','scramp','asn1crypto']},'python':os.sys.version,'scope':'Exact captured Python modules executed in fresh worker; installed pgserver PostgreSQL18.6 binaries over original AF_UNIX original census observation only. Not hermetic interpreter/OS, public installed provider qualification, authenticated source/provider/issuer, held cut, complete protected operation handback or backend acceptance.'}
  except BaseException as error:result={'status':'failed','runId':run_id,'sourceDigests':pins,'error':str(error)}
  finally:
   cleanup={'attempted':attempted}

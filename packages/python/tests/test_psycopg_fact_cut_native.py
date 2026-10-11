@@ -16,7 +16,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
     def setUpClass(cls):
         epoch_tests.PsycopgEpochCutNativeTests.setUpClass.__func__(cls)
         try:
-            with psycopg.connect(host=str(cls.socket),user='postgres',dbname='postgres',autocommit=True) as c:
+            with psycopg.connect(host=str(cls.socket),user='postgres',dbname=cls.database,autocommit=True) as c:
                 c.execute('CREATE TABLE truss.flat_assignment(staff_id bigint NOT NULL,project_id bigint NOT NULL,active boolean NOT NULL); INSERT INTO truss.flat_assignment VALUES(100,200,true)')
                 c.execute("INSERT INTO truss.type_def(document_id,type_id,module,element,kind,since_rev,lineage_profile,lineage_bytes,definition_source_kind,binding_source_rev,binding_source_pointer,binding_source_bytes) VALUES('fixture',100,'fixture','Staff','entity',0,'fixture',decode('01','hex'),'accepted_binding',0,'#/Staff',decode('01','hex')),('fixture',101,'fixture','Project','entity',0,'fixture',decode('02','hex'),'accepted_binding',0,'#/Project',decode('02','hex'))")
                 c.execute("INSERT INTO truss.schema_doc VALUES(0,0,'fixture','fixture','fixture',encode(sha256(convert_to('{}','UTF8')),'hex'),'{}','{}')")
@@ -52,7 +52,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             c.execute("SELECT project_id::text FROM truss.flat_assignment WHERE staff_id=100 AND active");flat=c.fetchall()
             c.execute("SELECT target_id::text FROM truss.edge WHERE rel_type_id=100 AND source_id=100 AND source_type=100 AND target_type=101");graph=c.fetchall()
             self.assertEqual(flat,[('200',)]);self.assertEqual(graph,flat)
-            with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as w:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as w:
                 for statement in ('UPDATE truss.flat_assignment SET active=false',"UPDATE truss.edge SET ver=ver+1",'INSERT INTO truss.edge(id,rel_type_id,source_id,source_type,target_id,target_type,rev) VALUES(101,100,100,100,200,101,0)','DELETE FROM truss.edge','TRUNCATE truss.edge CASCADE'):
                     with self.assertRaises(psycopg.errors.LockNotAvailable):w.execute(statement)
             return 'same-project'
@@ -64,7 +64,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         self.assertEqual(self.connection.execute('TABLE truss.flat_assignment').fetchall(),[(100,200,True)])
     def test_pending_fact_writer_refuses_before_callback(self):
         t=self.begin();called=[]
-        with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres') as w:
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database) as w:
             w.execute('UPDATE truss.flat_assignment SET active=false')
             result=self.cut(t,lambda c:called.append(True));self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55P03');self.assertEqual(called,[])
             self.assertEqual(self.fact_shares(),0)
@@ -113,13 +113,13 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         self.assertEqual(self.cut(t,projects),Ok(('200',)))
         self.connection.execute('ROLLBACK')
         try:
-            with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres') as w:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database) as w:
                 w.execute('UPDATE truss.flat_assignment SET active=false')
                 w.execute('DELETE FROM truss.edge')
             fresh=self.begin();self.assertEqual(self.cut(fresh,projects),Ok(()))
         finally:
             self.connection.execute('ROLLBACK')
-            with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres') as w:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database) as w:
                 w.execute('UPDATE truss.flat_assignment SET active=true')
                 w.execute('INSERT INTO truss.edge(id,rel_type_id,source_id,source_type,target_id,target_type,rev) VALUES(100,100,100,100,200,101,0)')
 

@@ -6,9 +6,9 @@ preparation, selected native host transaction controls, installation footprint i
 and inert assembly construction.
 Mutation/query/installation APIs remain unfinished.
 
-The supported driver baseline is stock psycopg 3. The initial
+The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
-3.3.6, libpq18.6 and PostgreSQL16.15 on the tested local tuple. Install the
+3.3.6, libpq18.6 and PostgreSQL18.6 on the selected local tuple. Install the
 `[native]` extra. Other wheels, servers and Lakebase remain unqualified.
 
 Supply a caller-owned synchronous connection with an already active transaction:
@@ -79,77 +79,41 @@ does not prove an installed runtime, layout version or accepted catalog. It does
 not read Truss table/view bodies, begin or settle a transaction, or retry. Native
 failures propagate without a new recovery reference; a failed query may abort the caller's transaction, whose rollback remains the host's responsibility.
 
-For local PostgreSQL:
+For local PostgreSQL, install the reusable `pgserver-pg18==18.6.0` wheel from
+[DocumentDrivenDX/pgserver](https://github.com/DocumentDrivenDX/pgserver). Imports
+remain `pgserver`; install only one pgserver distribution in an environment.
+The checked-in `_profiles/local-postgres-runtime.json` selects the exact tuple.
+Ordinary installs and tests use binaries and never build PostgreSQL.
 
 ```sh
 python3.11 -m venv .venv
-.venv/bin/pip install './packages/python[local]'
-.venv/bin/truss-local-postgres --data-dir .local/truss-postgres
+.venv/bin/pip install --only-binary=:all: --find-links .cache/pgserver/pg18.6/wheels './packages/python[local,native]'
+.venv/bin/truss-local-postgres --data-dir .local/truss-postgres-18 --probe
 ```
 
-The installation command uses the repository root; the installed `truss-local-postgres`
-command runs without the checkout. Stop with Ctrl-C; data survives. `--probe` starts,
-checks readiness and stops. This component uses pgserver0.1.4 with its actual
-bundled PostgreSQL16.2 on the qualified macOS arm64 tuple. It performs no Truss
-installation or migration. Use a host-supplied connection for external PostgreSQL;
-pool configuration/operation belongs to the host.
+The verified macOS arm64 Python3.11 wheel is cached locally. Public release
+`pg18.6-pgv0.8.6-r1` is pending the build repository's CI; once published, its
+[release asset listing](https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r1)
+can replace the local `--find-links` directory. Runtime requirements select that
+listing and the pinned distribution. Do not install upstream `pgserver` alongside
+`pgserver-pg18`, and do not upgrade retained PostgreSQL17 data in place.
 
-The explicit corrected candidate `pgserver==0.1.4+truss.pg16.15` is now accepted
-by LocalPostgres only when the native server reports16.15. RuntimeInfo and CLI
-output retain that actual package version. The paired published0.1.4/16.2 check
-remains separate; arbitrary package/server versions refuse. The corrected wheel
-is a private macOS27 arm64/Python3.11 build, not a published dependency. For that
-candidate, select the independently verified corrected wheel explicitly with the
-base Truss package and lifecycle dependencies. The `[local]` requirement
-`pgserver==0.1.4` also accepts `0.1.4+truss.pg16.15`; it does not select or exclude
-the private candidate. Use an explicit artifact path and verify the installed
-package and actual server versions:
+Reproduce the focused consumer checks with both installed wheels:
 
 ```sh
-.venv/bin/pip install ./packages/python fasteners==0.20 platformdirs==4.12.4 psutil==7.2.2 /path/to/admitted/pgserver-0.1.4+truss.pg16.15-cp311-cp311-macosx_27_0_arm64.whl
-.venv/bin/python -c 'from importlib.metadata import version; assert version("pgserver") == "0.1.4+truss.pg16.15"'
-.venv/bin/truss-local-postgres --data-dir .local/truss-postgres-corrected --probe
+.venv/bin/python scripts/check-local-runtime-smoke.py /path/to/pgserver_pg18.whl /path/to/truss_toolkit.whl --run-id FRESH_ID
 ```
 
-The wheel path is a placeholder for the separately admitted private artifact,
-not a published download or a clean-install qualification claim. Verify its
-original hash/platform before installation; the retained wheel receipt is linked
-from the runtime plan. Check the actual CLI serverVersion16.15 as well as package
-metadata. A fresh `[local]` installation with only the public index available
-uses published0.1.4/16.2; an already installed matching local build also satisfies
-that requirement. Do not infer replacement or candidate selection from the
-public equality pin. The [installed matcher evidence](../../docs/helix/04-build/evidence/design-audit/python-local-runtime-dependency-selection.json)
-checks these version matches only, not index resolution or installation.
-Neither tuple installs Truss or qualifies complete R4/R5 enforcement.
-
-For corrected-candidate development, use the explicit repository constraint:
-
-```sh
-.venv/bin/pip install --no-index --find-links /path/to/verified/wheels --constraint packages/python/constraints/local-corrected.txt './packages/python[local]'
-```
-
-The wheelhouse must contain the separately verified corrected pgserver and the
-three pinned lifecycle dependency wheels. The exact local-version constraint
-excludes public pgserver0.1.4; package version still does not prove original native
-payload correspondence. The current rebuilt candidate has clean offline resolver,
-payload and132-test evidence in the runtime plan. This optional development
-constraint does not publish the private wheel or change the default public extra.
-
-
-See the [installation and migration execution plan](../../docs/helix/04-build/local-runtime-installation-migration-plan.md)
-for the complete delivery scope and independent acceptance scenarios.
-
-Rollback-only native profile checks (same environment):
-
-```sh
-.venv/bin/python scripts/check-pgserver-layout.py
-.venv/bin/python scripts/check-pgserver-adjuncts.py
-.venv/bin/python scripts/check-pgserver-umf-structure.py
-```
-
-Each creates its own disposable server and rolls back all review DDL. The last
-compares the UMF schema-browser model with actual columns and FK mappings; it
-is not a complete installer or migration verifier.
+Ordinary psycopg and pg8000 native fixture classes reuse one owned Unix-socket
+cluster per worker, with fresh databases/roles and verified cleanup. Worker
+sockets have unique short paths and TCP is disabled; port5432 does not contend
+across those directories. Lifecycle and destructive cluster tests remain isolated.
+`TRUSS_INSTALLED_SUITE_WORKERS` defaults to2 (range1–8); the optional full suite
+has a default1800-second bound. Workers disable background autovacuum for explicit
+NOWAIT semantic probes; this does not qualify maintenance concurrency.
+The comprehensive `scripts/qualify-pgserver.py` remains available separately.
+Historical17.11 receipts retain their original subset and versions; they do not
+establish18.6 corpus or Lakebase acceptance.
 
 Embed the local runtime in Python3.11:
 
@@ -167,7 +131,8 @@ caller exception. Use a new context to restart. Same-directory contexts refuse
 immediately through process-local and interprocess leases. Existing postmaster
 custody, nonempty non-PostgreSQL directories and incompatible major versions
 refuse without automatic retry, takeover or migration. The local candidate admits
-bundled16.2 or the explicit corrected16.15 candidate; other platform/version
+bundled18.6 with its exact reusable package identity; retired16.x packages refuse
+before startup. Other platform/version
 tuples still require qualification.
 
 The experimental truss-toolkit0.0.1.dev0 wheel exposes this lifecycle component;
@@ -633,7 +598,7 @@ executor/session. Omitted configuration fields use `truss.contracts.ABSENT`.
 This entry point is composition groundwork for install/register/apply/read, not
 a usable graph implementation.
 
-### Explicit PostgreSQL 17.11 host profile
+### Explicit PostgreSQL 18.6 host profile
 
 The current integration target can be selected explicitly for a caller-owned
 psycopg 3.3.6 binary connection using libpq 18.6:
@@ -641,13 +606,13 @@ psycopg 3.3.6 binary connection using libpq 18.6:
 ```python
 from truss import PsycopgProfile, adopt_psycopg_host
 
-host = adopt_psycopg_host(connection, profile=PsycopgProfile(server=170011))
+host = adopt_psycopg_host(connection, profile=PsycopgProfile(server=180006))
 ```
 
 Only the exact selected tuple is accepted. There is no automatic version
-fallback. The default profile continues to select the historical PostgreSQL
-16.15 tuple, preserving existing explicit component receipts. This host profile
-does not qualify the PG16-specific installer or activate graph capabilities.
+fallback. The default profile selects PostgreSQL18.6. Retired16.15 packages are rejected
+before embedded startup; earlier receipts retain their original historical scope.
+Graph capabilities still require their separate scoped native qualification.
 The host owns transaction start/end, connection lifecycle and pooling. Truss
 does not change PostgreSQL 17's transaction_timeout; native timeout termination
 retains the original failure, quarantines the connection and refuses reuse.

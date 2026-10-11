@@ -51,6 +51,24 @@ Qualification is per implementation, adapter, database version, layout, UMF mode
 
 Bun test runs TypeScript development tests under ADR-001. A real Chromium runner exercises the pure browser-compatible core. Bun and Node adapters must independently pass exact transport and host transaction tests; browser success cannot qualify a database adapter. Native tests use ordinary driver clients and independent SQL, not an in-memory database imitation. CI provider and browser harness versions are not yet selected; pin them before B-001 closeout.
 
+### Local native test infrastructure — selected 2026-10-11
+
+Routine native experiments share an owned pgserver18.6 Unix-socket cluster per
+suite/worker. Allocate a fresh database and owner/probe roles per experiment;
+verify native database/role/membership baseline before and after cleanup. Refuse
+same-worker overlap. Failed setup/cleanup or producer death invalidates the worker;
+stop the owned cluster before directory removal. Keep lifecycle, startup/shutdown
+and destructive cluster-setting tests on isolated clusters. Separate workers
+have distinct socket directories and disable TCP listening, so concurrent tests
+can run with a pre-existing TCP5432 listener.
+
+The [consumer checkpoint](../04-build/local-runtime-installation-migration-plan.md#current-embedded-runtime-delivery--owner-decision-2026-10-11)
+selects reusable PostgreSQL18.6 wheels and focused installed consumer, supported
+driver, restart, socket/collision, cleanup, interruption and timeout smoke checks.
+The optional comprehensive corpus remains separate; historical17.11 results do
+not establish18.6 or Lakebase acceptance. Reproduce with
+`scripts/check-local-runtime-smoke.py RUNTIME_WHEEL TRUSS_WHEEL --run-id FRESH_ID`.
+
 ## Test Data
 
 Committed language-neutral fixtures cover absence, explicit null, large signed integers, decimal bounds/trailing zeroes, recursive arrays/records, retained unknown values, Unicode key normalization, composite keys, relationships and revisions. Include expected refusals for unsupported selected meaning. Fixture generation may vary object IDs and interleavings using a recorded seed; it must not derive expected values from the implementation under test.
@@ -468,7 +486,7 @@ Exercise the original configured encoder/native admission/capture and two checks
 
 ### Epoch-state fence controls — 2026-10-11
 
-For CONTRACT-008's epoch-state fence candidate, qualify both table locks and matching writer-before-row ordering on PostgreSQL16.15. Exercise issuer refusal before a nontransactional registry first-effect sentinel; all four native write events on both tables, including empty statements; active writer refusal without reader row wait; reader-first external issuer refusal; commit/rollback release; acquisition rollback with unchanged xid; RELEASE reparenting and later rollback preservation; replica mode; missing ordinary execution grants; and isolation refusal. Retain omitted-predicate controls that fail only intended own-write assertions. This supports original epoch-state custody prerequisites for CONTRACT-063/STP-056 B11/B12/L03 and US-056-AC9/AC10; it cannot promote complete source/authority or backend acceptance.
+For CONTRACT-008's epoch-state fence candidate, qualify both table locks and matching writer-before-row ordering on the current pinned PostgreSQL17.11 tuple; retain prior16.15 receipts as historical component evidence. Exercise issuer refusal before a nontransactional registry first-effect sentinel; all four native write events on both tables, including empty statements; active writer refusal without reader row wait; reader-first external issuer refusal; commit/rollback release; acquisition rollback with unchanged xid; RELEASE reparenting and later rollback preservation; replica mode; missing ordinary execution grants; and isolation refusal. Retain omitted-predicate controls that fail only intended own-write assertions. This supports original epoch-state custody prerequisites for CONTRACT-063/STP-056 B11/B12/L03 and US-056-AC9/AC10; it cannot promote complete source/authority or backend acceptance.
 
 The ordering oracle must observe the issuer waiting on an independently held marker row before checking both ROW EXCLUSIVE modes. A separate reader attempt then refuses55P03. Erasing only the early table LOCK must reproduce zero early modes and successful reader acquisition; modes observed only after issuer completion are insufficient. Keep the entry-guard and trigger-predicate mutants distinct. With only SELECT and helper EXECUTE, an ordinary role must read the current pointer but fail SHARE acquisition42501 and fail direct epoch DML. Valid registry INSERT controls exclude generated evidence_sha256; valid registry TRUNCATE controls include the native dependency scope. An omitted selected fence may still encounter the independently retained immutable-registry TRUNCATE guard; report its diagnostic mismatch honestly.
 

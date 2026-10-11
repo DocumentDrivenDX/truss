@@ -1,5 +1,60 @@
 # Local runtime, installation and migration execution plan
 
+## Current embedded runtime delivery — owner decision 2026-10-11
+
+The production target is now the owner's Lakebase PostgreSQL18.6 tuple.
+Truss consumes `pgserver-pg18==18.6.0` from the public
+[reusable build repository](https://github.com/DocumentDrivenDX/pgserver), retaining
+its `pgserver` import API. The build repository owns source checksums, platform
+builds, relocation, licenses and release wheels. Truss owns its consumer profile,
+installation definition projection and focused smoke checks. Do not rebuild
+PostgreSQL for routine development or rerun the full semantic corpus for a wheel
+packaging change.
+
+The selected profile is `_profiles/local-postgres-runtime.json`. Older private
+16.x/17.11 packages refuse before local startup. Reuse shared socket workers with
+fresh databases/roles; lifecycle tests remain isolated. The earlier broad17.11
+run was stopped on owner direction and is not a passing18.6 receipt. Current
+checks and release availability are recorded below; complete runtime and actual
+Lakebase TLS/token/transaction acceptance remain separate gates.
+
+
+## PostgreSQL18.6 focused consumer evidence — 2026-10-11
+
+The [installed consumer smoke receipt](evidence/design-audit/pg18-consumer-smoke-final-20261011/receipt.json)
+passes all six focused groups on macOS arm64/Python3.11:6 owned lifecycle tests,
+26 supported-driver adoption tests,21 cleanup/collision controls,4 interruption
+controls, actual CLI SIGTERM/SIGINT retained restart and native transaction_timeout.
+The run took186.7 seconds including startup and cleanup. It verifies1714 runtime
+wheel members and165 toolkit members byte-for-byte against the installed packages.
+The runtime wheel SHA256 is
+`719c3dae72eded898976a4813ce6321cf4bf5bf2350d9c21a5c1c5f7023ce55b`;
+the toolkit source snapshot wheel SHA256 is
+`3822afee43d8c87018a79d1315f6fc200c95905f31b93079430b663efd6f0081`.
+The [final merged artifact verification](evidence/design-audit/pg18-final-merged-artifact-20261011.json)
+checks the final toolkit wheel SHA256
+`e6e465d16c8989f098d401f9f52ae9d81e88f75ed375ebf11222ebdc9448ece5`.
+All installed members match that wheel, and the exercised lifecycle/driver/profile
+modules remain byte-identical to the six-group smoke snapshot. A fresh native
+startup/query/shutdown passes after the security merge. No repeated full corpus
+is implied by this artifact check.
+The initial smoke attempt stopped at a test subprocess import syntax error before
+native startup; its log is retained separately. No full18.6 corpus pass is claimed.
+
+The [independent definition compilation](evidence/design-audit/pg18-installation-definitions-20261011.json)
+retains all298 prior constraints and adds345 PostgreSQL18 native NOT NULL constraints
+(kind n); all86 indexes and63 expressions remain unchanged. Original owner SQL
+and ordered statement release are unchanged, and rollback is independently
+confirmed. This qualifies the selected source projection, not a complete installer.
+
+The macOS14 arm64 CPython3.11 wheel is delivered in the verified local cache.
+Public release `pg18.6-pgv0.8.6-r1` remains pending the build repository's platform
+matrix. Install only `pgserver-pg18`, because upstream `pgserver` and the other
+major distributions share the same import files. Wheel build/release maintenance
+belongs to the public repository; the historical Truss build entrypoints now
+refuse with that pointer. Actual Lakebase TLS, identity/token refresh and transaction
+acceptance and the complete protected runtime retain separate gates.
+
 ## Current driver/resource delivery gate — owner decision 2026-10-11
 
 Implement and qualify stock psycopg 3 as the Python baseline under ADR-003. First publish a supported-API connection/transaction adoption design with a pinned driver implementation/libpq/server/mode tuple; then run the TP-001 baseline resource and STP-044 semantic schedules through the installed consumer path. No pg8000 dependency, custom frame scanner, private receive/parser hook or exact backing-allocation ledger is required for this path. Historical pg8000 and strict transport receipts remain component evidence only.
@@ -7,6 +62,210 @@ Implement and qualify stock psycopg 3 as the Python baseline under ADR-003. Firs
 Required release work is practical payload/value/page/batch/concurrency/iteration limits and deadlines, peak-memory/load qualification, exact values, protected native integrity/current authority, savepoint containment preserving caller work, and confirmed/pending/unknown settlement with safe discard/reuse and retained retry custody. Lakebase support requires actual TLS/person-token/refresh and transaction evidence on that target. Strict transport accounting and its hooks/producers/manifests are optional and removed from baseline dependency/exit gates, including earlier E01/PY-01 pre-materialization demands. Optional status is explicit in the release profile; not_run optional cases cannot fail the baseline corpus or milestone.
 
 Before custom PostgreSQL wire handling, private driver hooks, a fork or driver replacement, require the PRD's hard documented necessary deficiency, simpler-remedy comparison and owner-approved ADR. Existing source packets and component experiments do not authorize that work. Keep complete engine/corpus/installation/security acceptance; this decision removes an excessive mechanism, not those semantic requirements.
+
+## Historical main integration of the embedded17.11 tuple — 2026-10-11
+
+The stock psycopg3 baseline, default server profile, installation compiler,
+live inventory collection and security epoch fence now select PostgreSQL17.11
+(170011). Retired16.15 embedded packages refuse before startup. Earlier receipts
+and packet metadata remain readable as history; no live16.15 binary is required.
+The [independent compilation comparison](evidence/design-audit/pg17-main-merge-definition-compilation.json)
+confirms identical projected definitions (86 indexes,298 constraints,63 expressions),
+unchanged owner SQL and ordered statement release. Complete runtime and Lakebase
+acceptance remain separate gates.
+
+The expanded installed suite shares owned socket workers across ordinary psycopg
+and pg8000 fixture classes, with fresh databases and roles per class. The frozen
+historical report-release CLI is retired; current report, dispatch and staging
+tests run through the installed suite. Explicit class teardown and registered cleanup
+both release fixtures, including tests that delegate another class's setup.
+Lifecycle tests keep isolated clusters. Each module must restore the database,
+role and membership baseline; any failure discards its worker. The installed
+producer defaults to1800 seconds; `TRUSS_INSTALLED_SUITE_TIMEOUT` may select30–1800
+seconds and `TRUSS_INSTALLED_SUITE_WORKERS` may select1–8 workers (default2).
+It supplies native binary paths from the pinned installed17.11 package.
+The [timing comparison](evidence/design-audit/pg17-cluster-benchmark-20261011/README.md)
+measured77.8 seconds for twelve per-experiment checks,22.1 seconds for one shared
+worker and20.3 seconds for two workers, including startup and cleanup. The composed
+15-group comparison was105.8/50.2/48.4 seconds on the earlier132-test source; it is
+not a timing claim for the expanded current-main suite.
+
+## Historical experiment disposition — 2026-10-11
+
+Active runtime/profile/compiler/census/security paths are ported to PostgreSQL
+17.11. The eight frozen PostgreSQL16.2 experiment commands and the frozen
+report-release wrapper now refuse with a retirement notice and direct callers
+to the current qualification lane. Original receipts, producer preimages and
+Git history remain intact; their narrower observations are historical evidence,
+not current support claims. The retained pg16 census filename is a deprecated
+alias of the exact17.11-only SQL; current producers use the pg17 filename.
+
+Ordinary psycopg and pg8000 tests share workers. Worker startup disables background
+autovacuum and verifies the setting after reload so deliberate NOWAIT semantic
+probes do not depend on maintenance scheduling. This lane qualifies explicit
+actors; maintenance concurrency needs separate evidence. Fixture cleanup uses
+45-second statement and5-second lock limits with a60-second administrative client
+bound. Full-suite attempts with timeout, leaked delegated fixtures, an undeclared
+ICU skip, shared-memory exhaustion or a NOWAIT conflict remain superseded receipts.
+
+## Shared native test workers — owner direction 2026-10-11
+
+Routine native qualification now reuses **one pgserver17.11 cluster per suite or
+worker**, with a fresh database and owner role for each experiment. The
+[initial two-worker run](evidence/design-audit/pg17-shared-workers-final-20261011/pgserver-pg17.11-qualification.json)
+passes all15 groups: twelve native groups share two clusters, six fresh fixtures
+per worker; installed Python132 tests, CLI signal/restart and timeout/lifecycle
+observations run on separate owned clusters. Both shared workers restore their
+baseline after every experiment and stop before directory removal. Earlier
+per-experiment-cluster receipts retain their original scope.
+
+`scripts/native_fixture.py` is test infrastructure outside the shipped library.
+WorkerCluster owns a short unique temporary data/socket directory and verifies
+PostgreSQL17.11, empty listen_addresses and its actual Unix socket. Connection
+URIs carry the actual native port explicitly. `.s.PGSQL.5432` in separate socket
+directories does not share a TCP listener. Different workers execute concurrently;
+pinned pgserver startup/shutdown calls within one Python process are serialized
+because its lifecycle machinery shares a process-global lock. The first concurrent
+attempt failed at startup; [its receipt](evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-qualification.json)
+and [confirmed-stop recovery](evidence/design-audit/pg17-shared-worker-startup-recovery.json)
+are retained. The original underlying startup exception was masked by cleanup;
+serialization addresses the observed failure without claiming a separately proven
+root cause.
+
+DatabaseFixture creates a UUID-named database and NOLOGIN owner role. Existing
+native probes still exercise their authored administrative/ordinary actors and
+create fresh probe roles. Fixtures hold thread and interprocess leases for all
+cluster-wide role changes; overlap on one worker refuses immediately. Before
+and after each fixture, compare native database attributes, role attributes and
+memberships with the original cluster baseline. This protects suite isolation;
+it does not change or qualify production authorization semantics.
+
+Cleanup uses DROP DATABASE WITH (FORCE) for the **owned fixture database only**,
+then removes newly created roles and their remaining grants, closes the admin
+connection and releases both leases. Partial setup compensates its created role.
+A cleanup failure or leaked inventory poisons the worker and prevents reuse.
+The runner discards a worker after a failed/timeout producer and checks inventory
+even when the producer fails. Confirmed server shutdown precedes removal of its
+owned directory; unconfirmed startup/shutdown preserves the directory for explicit
+recovery. Whole-worker process termination that bypasses Python cleanup still
+requires that explicit recovery; automatic host-wide process sweeping is absent.
+
+The [native worker controls](evidence/design-audit/pg17-shared-worker-controls-process-exit.json)
+pass21 independent observations: two simultaneously live workers while an owned
+TCP5432 listener is bound, distinct Unix socket directories, TCP disabled,
+isolated same-name tables/roles, distinct fixture owners, overlapping-fixture
+refusal, forced cleanup of an active leaked session with the other worker's
+session surviving, restored inventory and a clean next database/role set, partial
+setup compensation, cleanup-failure poisoning, abrupt fixture-process exit
+with leaked inventory detection/refusal, and owned-directory removal after stop.
+Fixture-process death invalidates its worker; it does not turn failure into a pass.
+
+Reproduce with installed verified wheels and the pinned native test dependencies:
+
+```sh
+python scripts/qualify-pgserver-pg17.py /path/to/truss_toolkit-0.0.1.dev0-py3-none-any.whl --run-id pg17-my-run --workers 2
+python scripts/check-native-worker-fixtures.py pg17-my-worker-controls.json
+```
+
+Omit `--workers` for one suite cluster. `--run-id` creates an exclusive evidence
+subdirectory and preserves all previous run artifacts. Direct native producers
+without the runner's worker environment retain isolated-cluster behavior.
+The existing cached wheel supplies PostgreSQL; these commands perform no source
+build. Lifecycle/destructive cluster-setting cases must stay on isolated clusters.
+Evidence is macOS27 arm64/Python3.11/PostgreSQL17.11; Linux, Windows, managed-service,
+full protected runtime and crash-recovery qualifications retain their own gates.
+The [Python boundary check](evidence/design-audit/pg17-shared-workers-python-boundaries.json)
+and [16 controls](evidence/design-audit/pg17-shared-workers-python-boundary-controls.json)
+remain green; test-only helper imports do not enter the shipped core.
+
+
+## PostgreSQL 17.11 embedded runtime — owner direction 2026-10-11
+
+The owner selected PostgreSQL **17.11** for Truss's pgserver build to align the
+local major version with Lakebase Autoscaling's default PostgreSQL17. The
+[Databricks version page](https://docs.databricks.com/gcp/en/oltp/projects/postgres-version-support)
+lists17.11 as of August2026; Lakebase manages subsequent minor updates.
+This supersedes16.15 as the next local integration target. Earlier16.2/16.15
+receipts retain their original historical scope and bytes.
+
+The [source build](evidence/design-audit/pgserver-pg17.11-source-build.json)
+uses unchanged pgserver upstream3b227607 and the official17.11 archive verified
+against its published SHA256. The [build inputs](evidence/design-audit/pgserver-corrected-build-inputs.json)
+and native recipe now select17.11 and package identity `0.1.4+truss.pg17.11`.
+The previous [16.15 manifest](evidence/design-audit/pgserver-pg16.15-build-inputs-historical.json)
+and [recipe](evidence/design-audit/pgserver-pg16.15-native-historical.Makefile)
+are preserved. Configuration still excludes readline, ICU and pgvector.
+The private macOS27 arm64/Python3.11 wheel SHA256 is
+`36b4240bedc03a082d349c6cf586800df2df89dce530252fb51227b93e978920`.
+[Packaging](evidence/design-audit/pgserver-pg17.11-wheel-packaging.json) and
+[installed payload verification](evidence/design-audit/pgserver-pg17.11-installed-payload.json)
+match all1643 original package members.
+
+The [qualification run](evidence/design-audit/pgserver-pg17.11-qualification.json)
+passes all15 selected component groups: installed Python suite132 tests/29 modules,
+CLI SIGTERM/SIGINT shutdown and retained restart, caller-reset18, historical
+isolation and nested definer observations, authenticated/asserted origin capture,
+UMF structural correspondence, populated immutable guards, native transaction
+timeout, all four issued ordinal families, original four-family driver92,
+private callable inventory73 and elevation22 observations. Each run retains a
+fresh receipt and compressed original log. The
+[sandbox-denied attempt](evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-qualification.json)
+records cache-lock access failure separately; the same installed artifacts passed
+with the required native process/cache access.
+The denied artifacts were relocated byte-for-byte with a [path/hash map](evidence/design-audit/pg17.11-sandbox-denied/relocation.json).
+
+`packages/python[local]` and its development constraint now require the exact
+private `pgserver==0.1.4+truss.pg17.11` distribution. Public0.1.4 cannot satisfy
+that requirement; supply the verified wheel explicitly. The [offline resolver](evidence/design-audit/pgserver-pg17.11-offline-resolver.json) selects the exact private package and all three lifecycle pins from the wheelhouse. LocalPostgres checks the
+package/server pair and the selected data-directory major before startup.
+Existing16.x directories refuse unchanged; startup performs no major upgrade.
+Historical tuples remain explicitly recognized for historical checks.
+
+The [native timeout receipt](evidence/design-audit/pgserver-pg17.11-transaction-timeout.json)
+observes the setting's default0, actual connection termination for an active
+transaction with100ms timeout, a successful fresh connection and owned-server
+shutdown. This removes16.x's setting-availability limitation for the selected
+local tuple. Complete deadline/account/cleanup admission, protected installation,
+seven semantic bodies, ordinary-person enforcement, crash recovery, migrations,
+managed-service profiles and published delivery retain their existing gates.
+A local17.11 result does not qualify Lakebase itself.
+
+### Development cycle evaluation
+
+A source build belongs to PostgreSQL/build-recipe changes; ordinary test runs
+reuse the verified installed wheel. The [local wheel cache](evidence/design-audit/pgserver-pg17.11-local-wheel-cache.json) retains the server/toolkit and lifecycle wheels under ignored `.cache/pgserver/pg17.11/wheels` for offline reuse in this checkout. No source build occurs in the qualification
+runner. The [three-sample lifecycle measurement](evidence/design-audit/pgserver-pg17.11-lifecycle-timing.json)
+on this host observes fresh ready times2.45–5.76s (median3.90s), retained restarts
+0.15–0.30s (median0.15s), and shutdown0.11–0.23s. Readiness includes the version
+query; samples overlapped qualification. No static-server provisioning or CI
+performance comparison was measured.
+
+A static local server with disposable databases and distinct roles can cover most
+SQL/layout/transaction/permission checks. Roles, tablespaces, server settings,
+process control and administrative effects remain cluster-wide, so database
+creation alone does not isolate them. Pgserver supplies exact bundled binaries,
+disposable whole-cluster control and lifecycle/packaging coverage, while adding
+cache locks, process/lease custody, socket paths, failed-start cleanup, native
+loader/platform packaging and data-directory version handling.
+
+The owner subsequently selected pgserver with one cluster per suite/worker and
+fresh databases/roles. The shared-worker checkpoint above records implementation
+and fresh evidence. Lifecycle/destructive cases stay isolated; no static-server
+default is selected.
+
+Reproduction after building/installing the two verified wheels:
+
+```sh
+python scripts/qualify-pgserver-pg17.py /path/to/truss_toolkit-0.0.1.dev0-py3-none-any.whl --run-id pg17-my-run
+```
+
+The Python import-boundary checker passes107 edges and all16 positive/negative controls; [checker output](evidence/design-audit/pgserver-pg17.11-python-module-boundaries.json) and [controls](evidence/design-audit/pgserver-pg17.11-python-module-boundaries-controls.json) retain their exact source pins.
+
+The runner refuses existing receipt destinations. A further run requires fresh
+receipt identities, preserving the retained observations. Source builds use
+`scripts/materialize-corrected-pgserver-recipe.py`, the pinned `make -C pgbuild postgres`
+target and `scripts/package-corrected-pgserver.py` in the declared build environment.
+
 
 ## Updated goal and selected direction — 2026-10-09
 
@@ -381,7 +640,11 @@ Actual initial macOS arm64/Python3.11 probe observed pgserver0.1.4 and PostgreSQ
 Full Truss SQL compatibility and installer qualification remain required on that
 exact server; retained17.9 evidence is separate.
 
-## PostgreSQL16.2 installation frontier
+## Historical PostgreSQL16.2 installation frontier
+
+The following receipts describe retired experiments. Their original sources are
+retained in receipt preimages and Git history; the linked16.2 command entrypoints
+now refuse. Use the current17.11 qualification lane for new evidence.
 
 The rollback-only [generated-layout probe](../../../scripts/check-pgserver-layout.py)
 executes original source-epoch0.16 owner-export bytes without schema rewriting.
@@ -414,7 +677,7 @@ as release versions. PostgreSQL17.9 and managed-service evidence remain separate
 
 ## Exact local adjunct composition
 
-The [composed probe](../../../scripts/check-pgserver-adjuncts.py) now runs original
+The historical [composed probe](../../../scripts/check-pgserver-adjuncts.py) ran original
 base and both UMF-generated adjunct exports plus their immutable guard SQL in one
 rollback-only PostgreSQL16.2 transaction. Its [receipt](evidence/design-audit/pgserver-composed-adjunct-component.json)
 pins all five sources. All50 declared native table names are present; independent

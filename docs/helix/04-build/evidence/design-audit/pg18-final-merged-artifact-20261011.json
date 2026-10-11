@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "sourceRevision": "ff68389ae50cca16d1b30778cc0c023ad91518e1",
+  "runtimeDistribution": "pgserver-pg18",
+  "runtimeVersion": "18.6.0",
+  "postgresql": "18.6",
+  "wheelSha256": "e6e465d16c8989f098d401f9f52ae9d81e88f75ed375ebf11222ebdc9448ece5",
+  "installedPayloadMembers": 165,
+  "functionalSourceUnchangedFromFocusedSmoke": {
+    "truss/__init__.py": "edecfe0c492dcb42647b34f9219e786ade715b74f31316d85f5a4e45de562481",
+    "truss/local_runtime.py": "271049ba5356477f472a57b4e424a8e2bbf01e5d1d995e563ce200a3bae42ac1",
+    "truss/psycopg_host.py": "cdc5542ff6d8d7d32bb6eb44ddfb27feaf8c78b5984c9fb176d1e23820896d99",
+    "truss/execution.py": "abec20686d182fe66c1744dc1a5e25fcef53ae58bb242a4eb1632274d48aeffd",
+    "truss/_runtime_profile.py": "14b9fba7359c84e6d84d4b20e13dceebd364accc7d9fb17865f20c520b9b7450",
+    "truss/_profiles/local-postgres-runtime.json": "c65f4c386efafe357104b1af19fe102fbfbff000525ffe1c691a1fd55b60a1e0"
+  },
+  "nativeProbe": "18.6||1",
+  "ownedPostmasterStopped": true,
+  "producerSha256": "8e48a0281271b4afb55bf168f02c6d0cc826bd1e4151ccc2452545563996bd4e",
+  "scope": "Final merged artifact payload verification and native startup/query/shutdown; six focused groups retain their original tested wheel hash. Concurrent security changes outside these exercised runtime/driver modules retain separate evidence."
+}

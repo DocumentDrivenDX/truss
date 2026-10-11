@@ -1,0 +1,912 @@
+{
+  "postgres": "17.11",
+  "samplesPerMode": 1,
+  "includes": "Process launch, cluster initialization/readiness, fresh database/role setup, checks, baseline verification, database/role deletion, cluster stop and owned-directory cleanup",
+  "lifecycleWallSeconds": 28.049,
+  "lifecycle": [
+    {
+      "case": "installed-suite",
+      "elapsedSeconds": 19.616
+    },
+    {
+      "case": "cli-signals",
+      "elapsedSeconds": 4.597
+    },
+    {
+      "case": "transaction-timeout",
+      "elapsedSeconds": 3.836
+    }
+  ],
+  "results": [
+    {
+      "mode": "per-experiment",
+      "nativeWallSeconds": 77.79144137396011,
+      "workers": [],
+      "outcomes": [
+        {
+          "case": "caller-reset",
+          "elapsedSeconds": 4.226,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 3.5098238750360906
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.11610520805697888
+            }
+          ]
+        },
+        {
+          "case": "isolation",
+          "elapsedSeconds": 3.8,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 2.915737707982771
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.11963975010439754
+            }
+          ]
+        },
+        {
+          "case": "origin",
+          "elapsedSeconds": 3.801,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 2.6036489160032943
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.11578958400059491
+            }
+          ]
+        },
+        {
+          "case": "structure",
+          "elapsedSeconds": 23.172,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 15.08430725010112
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 2.772760834079236
+            }
+          ]
+        },
+        {
+          "case": "populated-guards",
+          "elapsedSeconds": 4.629,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 3.1034300830215216
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.32333729206584394
+            }
+          ]
+        },
+        {
+          "case": "issued-base",
+          "elapsedSeconds": 8.479,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 5.670868666958995
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.5351626250194386
+            }
+          ]
+        },
+        {
+          "case": "issued-asserted",
+          "elapsedSeconds": 7.527,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 5.2341539999470115
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.3357719579944387
+            }
+          ]
+        },
+        {
+          "case": "issued-epoch",
+          "elapsedSeconds": 4.198,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 2.5204520410625264
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.32191379205323756
+            }
+          ]
+        },
+        {
+          "case": "issued-configuration",
+          "elapsedSeconds": 4.953,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 2.9439105830388144
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.32037791702896357
+            }
+          ]
+        },
+        {
+          "case": "four-family-driver",
+          "elapsedSeconds": 3.8690402909414843,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 2.6283303749514744
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.11575566604733467
+            }
+          ]
+        },
+        {
+          "case": "private-callable-inventory",
+          "elapsedSeconds": 4.748368624947034,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 3.4423962919972837
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.21675725001841784
+            }
+          ]
+        },
+        {
+          "case": "elevation",
+          "elapsedSeconds": 4.389032458071597,
+          "events": [
+            {
+              "event": "cluster-ready",
+              "seconds": 3.040295375045389
+            },
+            {
+              "event": "cluster-cleanup",
+              "seconds": 0.11365604202728719
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "shared-one-worker",
+      "nativeWallSeconds": 22.118403000058606,
+      "workers": [
+        {
+          "worker": 0,
+          "startupSeconds": 4.388862834079191,
+          "cleanupSeconds": 0.4171777500305325,
+          "outcomes": [
+            {
+              "case": "caller-reset",
+              "elapsedSeconds": 0.6229399580042809,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.11620320798829198
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.1334605000447482
+                }
+              ]
+            },
+            {
+              "case": "isolation",
+              "elapsedSeconds": 1.2577877499861643,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.2333757090382278
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.3136593330418691
+                }
+              ]
+            },
+            {
+              "case": "origin",
+              "elapsedSeconds": 1.534386208979413,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.2562055829912424
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.15512654196936637
+                }
+              ]
+            },
+            {
+              "case": "structure",
+              "elapsedSeconds": 1.223443166934885,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.22820808307733387
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.2342384159564972
+                }
+              ]
+            },
+            {
+              "case": "populated-guards",
+              "elapsedSeconds": 1.377931124996394,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.1445491670165211
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.19471700000576675
+                }
+              ]
+            },
+            {
+              "case": "issued-base",
+              "elapsedSeconds": 2.0487465410260484,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.1531741670332849
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.48758416704367846
+                }
+              ]
+            },
+            {
+              "case": "issued-asserted",
+              "elapsedSeconds": 1.8706920419353992,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.15339745802339166
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.33919412503018975
+                }
+              ]
+            },
+            {
+              "case": "issued-epoch",
+              "elapsedSeconds": 1.5250243750633672,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.12511000002268702
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.19272004207596183
+                }
+              ]
+            },
+            {
+              "case": "issued-configuration",
+              "elapsedSeconds": 1.8526473329402506,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.11970316700171679
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.22245070792268962
+                }
+              ]
+            },
+            {
+              "case": "four-family-driver",
+              "elapsedSeconds": 1.3948089580517262,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.1781288330676034
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.23832404101267457
+                }
+              ]
+            },
+            {
+              "case": "private-callable-inventory",
+              "elapsedSeconds": 1.0007069580024108,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.12117962492629886
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.16463441692758352
+                }
+              ]
+            },
+            {
+              "case": "elevation",
+              "elapsedSeconds": 1.5858712499029934,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.15145370899699628
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.46705816593021154
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "outcomes": [
+        {
+          "case": "caller-reset",
+          "elapsedSeconds": 0.6229399580042809,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.11620320798829198
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.1334605000447482
+            }
+          ]
+        },
+        {
+          "case": "isolation",
+          "elapsedSeconds": 1.2577877499861643,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.2333757090382278
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.3136593330418691
+            }
+          ]
+        },
+        {
+          "case": "origin",
+          "elapsedSeconds": 1.534386208979413,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.2562055829912424
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.15512654196936637
+            }
+          ]
+        },
+        {
+          "case": "structure",
+          "elapsedSeconds": 1.223443166934885,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.22820808307733387
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.2342384159564972
+            }
+          ]
+        },
+        {
+          "case": "populated-guards",
+          "elapsedSeconds": 1.377931124996394,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.1445491670165211
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.19471700000576675
+            }
+          ]
+        },
+        {
+          "case": "issued-base",
+          "elapsedSeconds": 2.0487465410260484,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.1531741670332849
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.48758416704367846
+            }
+          ]
+        },
+        {
+          "case": "issued-asserted",
+          "elapsedSeconds": 1.8706920419353992,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.15339745802339166
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.33919412503018975
+            }
+          ]
+        },
+        {
+          "case": "issued-epoch",
+          "elapsedSeconds": 1.5250243750633672,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.12511000002268702
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.19272004207596183
+            }
+          ]
+        },
+        {
+          "case": "issued-configuration",
+          "elapsedSeconds": 1.8526473329402506,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.11970316700171679
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.22245070792268962
+            }
+          ]
+        },
+        {
+          "case": "four-family-driver",
+          "elapsedSeconds": 1.3948089580517262,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.1781288330676034
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.23832404101267457
+            }
+          ]
+        },
+        {
+          "case": "private-callable-inventory",
+          "elapsedSeconds": 1.0007069580024108,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.12117962492629886
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.16463441692758352
+            }
+          ]
+        },
+        {
+          "case": "elevation",
+          "elapsedSeconds": 1.5858712499029934,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.15145370899699628
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.46705816593021154
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "shared-two-workers",
+      "nativeWallSeconds": 20.335332875023596,
+      "workers": [
+        {
+          "worker": 0,
+          "startupSeconds": 3.5881451659370214,
+          "cleanupSeconds": 0.7430992920417339,
+          "outcomes": [
+            {
+              "case": "caller-reset",
+              "elapsedSeconds": 0.6284192079911008,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.1287769170012325
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.17420233297161758
+                }
+              ]
+            },
+            {
+              "case": "origin",
+              "elapsedSeconds": 1.8459130000555888,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.20084716705605388
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.5415264579933137
+                }
+              ]
+            },
+            {
+              "case": "populated-guards",
+              "elapsedSeconds": 1.8980743339052424,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.614555332926102
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.27687358297407627
+                }
+              ]
+            },
+            {
+              "case": "issued-asserted",
+              "elapsedSeconds": 2.0946894579101354,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.3231365840183571
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.4372551250271499
+                }
+              ]
+            },
+            {
+              "case": "issued-configuration",
+              "elapsedSeconds": 2.149193791905418,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.35730191692709923
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.3721677919384092
+                }
+              ]
+            },
+            {
+              "case": "private-callable-inventory",
+              "elapsedSeconds": 1.4702224159846082,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.28603654203470796
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.2374701249646023
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "worker": 1,
+          "startupSeconds": 7.756984999985434,
+          "cleanupSeconds": 0.8370416249381378,
+          "outcomes": [
+            {
+              "case": "isolation",
+              "elapsedSeconds": 1.4474614170612767,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.2072412910638377
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.33233550004661083
+                }
+              ]
+            },
+            {
+              "case": "structure",
+              "elapsedSeconds": 1.633878333028406,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.2894641669699922
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.425641082925722
+                }
+              ]
+            },
+            {
+              "case": "issued-base",
+              "elapsedSeconds": 2.4391531660221517,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.2990964590571821
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.5510739580495283
+                }
+              ]
+            },
+            {
+              "case": "issued-epoch",
+              "elapsedSeconds": 1.8892762080067769,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.21443620801437646
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.2672626250423491
+                }
+              ]
+            },
+            {
+              "case": "four-family-driver",
+              "elapsedSeconds": 1.6844203330110759,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.14689245796762407
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.28575445897877216
+                }
+              ]
+            },
+            {
+              "case": "elevation",
+              "elapsedSeconds": 2.632618666975759,
+              "events": [
+                {
+                  "event": "fixture-ready",
+                  "seconds": 0.17311766697093844
+                },
+                {
+                  "event": "fixture-cleanup",
+                  "seconds": 0.8527142920065671
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "outcomes": [
+        {
+          "case": "caller-reset",
+          "elapsedSeconds": 0.6284192079911008,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.1287769170012325
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.17420233297161758
+            }
+          ]
+        },
+        {
+          "case": "origin",
+          "elapsedSeconds": 1.8459130000555888,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.20084716705605388
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.5415264579933137
+            }
+          ]
+        },
+        {
+          "case": "populated-guards",
+          "elapsedSeconds": 1.8980743339052424,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.614555332926102
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.27687358297407627
+            }
+          ]
+        },
+        {
+          "case": "issued-asserted",
+          "elapsedSeconds": 2.0946894579101354,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.3231365840183571
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.4372551250271499
+            }
+          ]
+        },
+        {
+          "case": "issued-configuration",
+          "elapsedSeconds": 2.149193791905418,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.35730191692709923
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.3721677919384092
+            }
+          ]
+        },
+        {
+          "case": "private-callable-inventory",
+          "elapsedSeconds": 1.4702224159846082,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.28603654203470796
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.2374701249646023
+            }
+          ]
+        },
+        {
+          "case": "isolation",
+          "elapsedSeconds": 1.4474614170612767,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.2072412910638377
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.33233550004661083
+            }
+          ]
+        },
+        {
+          "case": "structure",
+          "elapsedSeconds": 1.633878333028406,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.2894641669699922
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.425641082925722
+            }
+          ]
+        },
+        {
+          "case": "issued-base",
+          "elapsedSeconds": 2.4391531660221517,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.2990964590571821
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.5510739580495283
+            }
+          ]
+        },
+        {
+          "case": "issued-epoch",
+          "elapsedSeconds": 1.8892762080067769,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.21443620801437646
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.2672626250423491
+            }
+          ]
+        },
+        {
+          "case": "four-family-driver",
+          "elapsedSeconds": 1.6844203330110759,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.14689245796762407
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.28575445897877216
+            }
+          ]
+        },
+        {
+          "case": "elevation",
+          "elapsedSeconds": 2.632618666975759,
+          "events": [
+            {
+              "event": "fixture-ready",
+              "seconds": 0.17311766697093844
+            },
+            {
+              "event": "fixture-cleanup",
+              "seconds": 0.8527142920065671
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "methodologyNotes": [
+    "Same pinned PostgreSQL17.11 and toolkit wheel; no compilation or wheel installation included.",
+    "One sample per mode, sequential mode order; workstation scheduling and filesystem cache may affect timings.",
+    "Per-experiment total is the sum of successful command durations; first nine durations retained to millisecond precision after a measurement-wrapper import-path failure. Failed instrumentation attempt excluded. Three lifecycle durations measured once and added equally to each configuration; full-suite totals are composed comparisons.",
+    "All successful cases returned zero; shared worker baseline verified after every case and owned workers stopped and removed."
+  ]
+}

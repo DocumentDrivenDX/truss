@@ -1,0 +1,11 @@
+test_constructor_failure_with_postmaster_marker_retains_custody (test_local_runtime.LocalRuntimeTests.test_constructor_failure_with_postmaster_marker_retains_custody) ... ok
+test_failed_cleanup_retains_lease_until_explicit_recovery (test_local_runtime.LocalRuntimeTests.test_failed_cleanup_retains_lease_until_explicit_recovery) ... ok
+test_nested_directory_custody_and_independent_servers (test_local_runtime.LocalRuntimeTests.test_nested_directory_custody_and_independent_servers) ... ok
+test_nonempty_and_wrong_version_directories_refuse_unchanged (test_local_runtime.LocalRuntimeTests.test_nonempty_and_wrong_version_directories_refuse_unchanged) ... ok
+test_retained_commit_and_exception_cleanup (test_local_runtime.LocalRuntimeTests.test_retained_commit_and_exception_cleanup) ... ok
+test_retired_pgserver_version_refuses_before_startup (test_local_runtime.LocalRuntimeTests.test_retired_pgserver_version_refuses_before_startup) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 93.946s
+
+OK
