@@ -1,0 +1,39 @@
+{
+  "scope": "selected_original_UMF_column_definition_fields_rollback_only",
+  "sourceHashes": {
+    "packages/python/src/truss/_catalog_installation.py": "3a1bc6c06f98e87ecc361588b1b4fac13544b490dacc3dcdff82e99e36cbaea1",
+    "packages/python/src/truss/_installation/statements.json": "9942c0877315af31f464093a0d431d49b735bb1ca61bf282430354aa503148ba",
+    "packages/python/src/truss/_installation_statement_release.py": "b7fee285758d8f8442b94e200ab492a70c5d44c8865a7e0a7a7494f9a0a5bf8b",
+    "packages/python/tests/test_catalog_installation.py": "8dd993066ecd9ac31238791b6661393a2097362e0bffd2582f764b293ddce238",
+    "scripts/build-python-installation-statements.ts": "9b4750987bfa1a52b2528f5a7b1fb7cd5d8eb2b5c808f49d7c93d03bf026602b"
+  },
+  "testLog": "docs/helix/04-build/evidence/python-installation-column-definitions.log",
+  "testLogSha256": "71bfad7ef3a53c340e7035f487f9e06c5825a6909a0de24c5b117c4f57d001b0",
+  "installedWheelSha256": "36ffac8846d3b55d2e5c4af1b4a9791d1de2387e23a6a037be20b84bfe2c505b",
+  "testsPassed": 13,
+  "nativeRuntime": "PostgreSQL16.15 / pg8000 1.31.5 / corrected private pgserver",
+  "columns": 454,
+  "comparedFields": [
+    "resolved_type_identity",
+    "type_modifier",
+    "array_dimensions",
+    "resolved_collation_identity",
+    "not_null_including_primary_keys",
+    "generated_flag",
+    "identity_flag",
+    "default_or_generated_expression_presence"
+  ],
+  "nativeInterpretationSources": [
+    "https://www.postgresql.org/docs/16/catalog-pg-attribute.html",
+    "https://github.com/postgres/postgres/blob/REL_16_STABLE/src/backend/utils/adt/varchar.c"
+  ],
+  "installationReady": false,
+  "moduleBoundaryImports": 401,
+  "limitations": [
+    "Default/generated expression contents, check/FK/unique/primary/index definitions and constraint-backed membership remain unresolved.",
+    "Table/column inheritance, storage and other physical properties remain unresolved; the compared field set is not all column-definition semantics.",
+    "Collation provider/locale semantics, dependencies and effective authority remain unresolved.",
+    "Routine return/OUT metadata and remaining execution attributes, sequence ownership/live allocator state remain unresolved.",
+    "No installation marker/archive/source epoch or public installation API published."
+  ]
+}
