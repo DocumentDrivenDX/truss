@@ -1,0 +1,23 @@
+{
+  "scope": "connected_python_installation_and_native_observer_plan_only",
+  "artifactId": "PLAN-PYTHON-CONSUMER-001",
+  "planSha256": "f7743bda4faab2021c4dbc5b96808dcebc7f7065a2a7cbd217ea0d0ddb525df6",
+  "astraUltraReview": {
+    "status": "approved",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "reviewedChange": "RT1\u2013RT9 connected native observation, finalization, installation and public workflow sequence",
+    "optionalApprovedWordingApplied": "Results from caller-adopted operations stay pending until caller commit"
+  },
+  "checks": {
+    "traceIdsResolve": true,
+    "existingArtifactIdPreserved": true,
+    "fullPythonScopePreserved": true,
+    "sixOperationFamiliesPreserved": true,
+    "diffCheck": true
+  },
+  "runtimeTests": "not_applicable_documentation_only",
+  "runtimeQualification": false,
+  "firstImplementation": "row_touch_observe plus original native scope projection in one integrated delivery",
+  "securityIntegrationBase": "83a44c53"
+}
