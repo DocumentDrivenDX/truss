@@ -2099,3 +2099,25 @@ semantic dependency-to-provider handoff and complete cuts remain required for fl
 and graph fields. This advances CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
 prerequisites only; no public API, grants or backend acceptance binding changes.
 The full goal remains active at 26/132 with106 missing.
+
+
+### Complete original fixture dependency/provider composition — 2026-10-11
+
+The private `_run_dependency_fact_operation` composes the original UMF fixture
+inventory with explicit provider recipes. Every required field needs an exact
+column comparison; every required association needs table-presence coverage.
+Validate original qualified identities through the existing coverage consumer;
+missing, foreign or duplicate membership cannot enter native work. Copy comparison
+primitives before host invocation, require consistent metadata for reused relation
+OIDs, deduplicate equal column comparisons and acquire all distinct table/column
+cuts through the existing epoch/fact scope before callback. No semantic traversal
+moves from UMF to Truss. Relation/column names do not establish semantic mappings.
+
+The five-table fixture explicitly maps Staff, Project, Resource, Ownership and
+Assignment, with string identity/endpoint columns and boolean `active`, to the ten
+original dependency references. This is a complete fixture comparison, not an
+issuer-authenticated binding, decoder qualification or production admission.
+Wrong but well-typed semantic mappings still require original owner qualification;
+native descriptors alone cannot discover that mismatch. Graph payload decoders,
+source/role/config cuts, ordinary caller authorization, protected dispatch and
+final disclosure remain unfinished. No public API or support flag changes.

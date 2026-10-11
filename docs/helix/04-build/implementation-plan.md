@@ -3988,3 +3988,27 @@ semantic dependency-to-provider handoff and complete cuts remain required for fl
 and graph fields. This advances CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
 prerequisites only; no public API, grants or backend acceptance binding changes.
 The full goal remains active at 26/132 with106 missing.
+
+
+### Complete fixture dependency-to-native cut composition — 2026-10-11
+
+Implemented private original-inventory coverage plus field/table provider cut
+composition. Final packet `evidence/python-psycopg-epoch-cut/79a2bb83-5e7b-4b93-b243-a0d6110be324`
+passes73 native methods:22 fact/dependency,16 graph/gateway,nine epoch,26 adoption.
+Verified122 current/archived source pins,1614 native payload pins, module boundaries
+and three independent named stop0/status3/socket-absent cleanups. Five new controls
+exercise complete original ten-reference/five-table coverage, missing active,
+association-only omission, substituted field descriptor and same-writer revocation.
+The six existing pure coverage controls also pass without source changes.
+
+Formal packet `evidence/security-field-cuts-formal/22bf3dfc-17fa-4735-b7b1-56b49693ae50`
+retains seven source inputs including the composition wrapper and replays eight
+conditional formulas (two UNSAT/six SAT), not a Python/native refinement theorem.
+Explicit fixture mappings remain unauthenticated comparison inputs. Original
+production semantic/provider handoff, decoder/source/config/role closure and graph
+field projection/decoding are still required. No backend acceptance binding is
+promoted; checkpoint remains26/132 with106 missing. Goal active; direct main.
+
+Initial235d75a6 native and2dd927da formal packets qualify the earlier comparison
+source without the explicit per-relation pre-copy column bound; final79a2bb83 and
+22bf3dfc retain the bounded current source. Both native tuples pass73 methods.

@@ -668,3 +668,16 @@ semantic dependency-to-provider handoff and complete cuts remain required for fl
 and graph fields. This advances CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
 prerequisites only; no public API, grants or backend acceptance binding changes.
 The full goal remains active at 26/132 with106 missing.
+
+
+### Complete dependency/provider cut controls — 2026-10-11
+
+For CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites, compose
+actual original UMF fixture dependencies with explicit five-table providers.
+Require ten-dependency coverage, five actual table SHARE locks and fixture resource
+membership `r1`; omission of `active` or all field bindings must refuse with no
+callback and no assigned native xid. Substitute the field descriptor and require
+native refusal before callback. Under complete cuts, attempt same-writer active
+revocation and require SQLSTATE55000 with unchanged facts after rollback. These
+five controls pass in packet79a2bb83 (73 total methods); this is not complete
+semantic mapping provenance, authorization or backend acceptance promotion.

@@ -1,11 +1,12 @@
 """Actual flat Assignment and native Truss edge fact-cut components."""
-import unittest
+import unittest,hashlib
 from pathlib import Path
 import psycopg
 from psycopg import sql
 import test_psycopg_epoch_cut_native as epoch_tests
 from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison,_run_fenced_fact_operation
 from truss.execution import Ok,Error
+from truss._psycopg_dependency_fact_cut import _DependencyFactProvider,_run_dependency_fact_operation
 ROOT=Path(__file__).resolve().parents[3]
 
 class PsycopgFactCutNativeTests(unittest.TestCase):
@@ -23,6 +24,13 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 for name in ('flat_assignment','edge'):
                     c.execute(sql.SQL('CREATE TRIGGER fact_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON {} FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_authorization_fact_write()').format(sql.Identifier('truss',name)))
                     c.execute(sql.SQL('ALTER TABLE {} ENABLE ALWAYS TRIGGER fact_write_fence').format(sql.Identifier('truss',name)))
+                c.execute("CREATE TABLE truss.sec_staff(staff_id text NOT NULL); CREATE TABLE truss.sec_project(project_id text NOT NULL); CREATE TABLE truss.sec_resource(resource_id text NOT NULL,salary bigint NOT NULL); CREATE TABLE truss.sec_ownership(owner_id text NOT NULL,resource_id text NOT NULL,project_id text NOT NULL); CREATE TABLE truss.sec_assignment(assignment_id text NOT NULL,staff_id text NOT NULL,project_id text NOT NULL,active boolean NOT NULL); INSERT INTO truss.sec_staff VALUES('s1'); INSERT INTO truss.sec_project VALUES('p1'); INSERT INTO truss.sec_resource VALUES('r1',100); INSERT INTO truss.sec_ownership VALUES('o1','r1','p1'); INSERT INTO truss.sec_assignment VALUES('a1','s1','p1',true)")
+                cls.semantic_relations={}
+                for name in ('sec_staff','sec_project','sec_resource','sec_ownership','sec_assignment'):
+                    c.execute(sql.SQL('CREATE TRIGGER fact_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON {} FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_authorization_fact_write()').format(sql.Identifier('truss',name)))
+                    c.execute(sql.SQL('ALTER TABLE {} ENABLE ALWAYS TRIGGER fact_write_fence').format(sql.Identifier('truss',name)))
+                    oid,owner=c.execute("SELECT oid,relowner FROM pg_catalog.pg_class WHERE oid=%s::regclass",('truss.'+name,)).fetchone()
+                    cls.semantic_relations[name]=_FactRelationComparison('truss',name,oid,owner,(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0])
                 cls.bindings={r[0]:_FactRelationComparison('truss',r[0],r[1],r[2],(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0]) for r in c.execute("SELECT relname,oid,relowner FROM pg_class WHERE oid IN ('truss.flat_assignment'::regclass,'truss.edge'::regclass)")}
         except BaseException:
             epoch_tests.PsycopgEpochCutNativeTests.tearDownClass.__func__(cls)
@@ -143,3 +151,39 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
     def test_temp_attribute_catalog_cannot_substitute_original_field(self):
         t=self.begin();self.connection.execute('CREATE TEMP TABLE pg_attribute(attname text,attnum smallint,atttypid oid,atttypmod integer,attnotnull boolean,attcollation oid,attgenerated text,attidentity text,attisdropped boolean,attrelid oid); SET LOCAL search_path=pg_temp,pg_catalog')
         self.assertEqual(self.cut(t,lambda c:'original-field',(self.field_binding(),)),Ok('original-field'))
+
+    def dependency_providers(self):
+        # Explicit original fixture mapping; no names-based mapping inference.
+        specs=[('active','sec_assignment','active',4,16),('assignmentProject','sec_assignment','project_id',3,25),('assignmentStaff','sec_assignment','staff_id',2,25),('ownerProject','sec_ownership','project_id',3,25),('ownerResource','sec_ownership','resource_id',2,25),('projectId','sec_project','project_id',1,25),('resourceId','sec_resource','resource_id',1,25),('staffId','sec_staff','staff_id',1,25)]
+        fields=tuple(_DependencyFactProvider('field',('domain','m',ref),self.semantic_relations[table],_FactColumnComparison(name,num,oid,-1,True,100 if oid==25 else 0)) for ref,table,name,num,oid in specs)
+        return fields+tuple(_DependencyFactProvider('association',('domain','m',ref),self.semantic_relations[table]) for ref,table in [('Assignment','sec_assignment'),('Ownership','sec_ownership')])
+    def dependency_cut(self,t,callback,providers=None):
+        raw=(ROOT/'docs/helix/04-build/evidence/security-fact-requirements/requirements.json').read_bytes()
+        return _run_dependency_fact_operation(self.host,t,self.comparison(),raw,hashlib.sha256(raw).hexdigest(),self.dependency_providers() if providers is None else providers,callback)
+    def test_complete_original_dependency_fixture_cuts_all_five_tables(self):
+        t=self.begin()
+        def read(c):
+            c.execute("SELECT r.resource_id::text FROM truss.sec_resource r JOIN truss.sec_ownership o ON o.resource_id=r.resource_id JOIN truss.sec_project p ON p.project_id=o.project_id JOIN truss.sec_assignment a ON a.project_id=p.project_id JOIN truss.sec_staff s ON s.staff_id=a.staff_id WHERE s.staff_id='s1' AND a.active")
+            self.assertEqual(c.fetchall(),[('r1',)])
+            c.execute("SELECT count(*)::text FROM pg_catalog.pg_locks l JOIN pg_catalog.pg_class t ON t.oid=l.relation WHERE l.pid=pg_catalog.pg_backend_pid() AND l.granted AND l.mode='ShareLock' AND t.relname IN ('sec_staff','sec_project','sec_resource','sec_ownership','sec_assignment')")
+            return c.fetchone()[0]
+        self.assertEqual(self.dependency_cut(t,read),Ok('5'))
+    def test_missing_active_provider_refuses_before_native_assignment(self):
+        t=self.begin();called=[]
+        with self.assertRaisesRegex(ValueError,'Incomplete original'):
+            self.dependency_cut(t,lambda c:called.append(True),self.dependency_providers()[1:])
+        self.assertEqual(called,[]);self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+    def test_association_only_providers_cannot_invoke_native_callback(self):
+        t=self.begin();called=[]
+        with self.assertRaisesRegex(ValueError,'Incomplete original'):
+            self.dependency_cut(t,lambda c:called.append(True),self.dependency_providers()[-2:])
+        self.assertEqual(called,[]);self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+    def test_dependency_field_descriptor_substitution_refuses_callback(self):
+        t=self.begin();called=[];providers=self.dependency_providers();p=providers[0]
+        wrong=_DependencyFactProvider(p.kind,p.reference,p.relation,_FactColumnComparison('active',4,20,-1,True,0))
+        self.assertIsInstance(self.dependency_cut(t,lambda c:called.append(True),(wrong,)+providers[1:]),Error);self.assertEqual(called,[])
+    def test_complete_dependency_cut_excludes_same_writer_active_revocation(self):
+        t=self.begin()
+        result=self.dependency_cut(t,lambda c:c.execute('UPDATE truss.sec_assignment SET active=false'))
+        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000')
+        self.assertEqual(self.connection.execute('SELECT active FROM truss.sec_assignment').fetchall(),[(True,)])
