@@ -1,0 +1,700 @@
+2026-10-11 12:59:31.746 EDT [97358] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 12:59:31.746 EDT [97358] LOG:  listening on Unix socket "/private/tmp/rl-tx47xs2v/.s.PGSQL.5432"
+2026-10-11 12:59:31.753 EDT [97361] LOG:  database system was shut down at 2026-10-11 12:59:31 EDT
+2026-10-11 12:59:31.757 EDT [97358] LOG:  database system is ready to accept connections
+2026-10-11 12:59:35.441 EDT [97375] ERROR:  unsupported Unicode escape sequence
+2026-10-11 12:59:35.441 EDT [97375] DETAIL:  \u0000 cannot be converted to text.
+2026-10-11 12:59:35.441 EDT [97375] CONTEXT:  JSON data, line 1: {"key\u0000...
+	PL/pgSQL function truss.runtime_stage_catalog_admitted(bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) line 87 at assignment
+	SQL statement "SELECT *                    FROM truss.runtime_stage_catalog_admitted(
+	  issued_ordinal,definition_bytes,input_bytes,candidate_bytes,obligation_bytes,group_bytes,
+	  documents_bytes,declarations_bytes,origin_bytes,original_prestate,original_context)"
+	PL/pgSQL function truss.runtime_stage_catalog_with_release(bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) line 23 at SQL statement
+2026-10-11 12:59:35.441 EDT [97375] STATEMENT:  SELECT * FROM truss.runtime_stage_catalog_with_release(0,
+	            decode('01','hex'),$1,$2,decode('05','hex'),decode('06','hex'),
+	            $3,$4,$5,$6,$7,$8)
+2026-10-11 12:59:36.461 EDT [97378] ERROR:  selected report schema evaluation depth capacity
+2026-10-11 12:59:36.461 EDT [97378] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 6 at RAISE
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(node,resolved,registry,uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	SQL expression "NOT truss.runtime_catalog_report_shape_matches(child,rule->'items',registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	SQL expression "truss.runtime_catalog_report_shape_matches(node,branch,registry,base_uri,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 24 at IF
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 64 at IF
+	PL/pgSQL function truss.runtime_catalog_report_shape_matches(jsonb,jsonb,jsonb,text,integer) line 28 at IF
+2026-10-11 12:59:36.461 EDT [97378] STATEMENT:  SELECT truss.runtime_catalog_report_shape_matches($1::jsonb,$2::jsonb,$3::jsonb,$4)
+2026-10-11 12:59:37.859 EDT [97390] ERROR:  original report insert and independent byte readback required
+2026-10-11 12:59:37.859 EDT [97390] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 196 at RAISE
+2026-10-11 12:59:37.859 EDT [97390] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:39.327 EDT [97395] ERROR:  original candidate report final source cut required
+2026-10-11 12:59:39.327 EDT [97395] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 245 at RAISE
+2026-10-11 12:59:39.327 EDT [97395] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:40.699 EDT [97398] ERROR:  selected archive cut excludes same-backend writes
+2026-10-11 12:59:40.699 EDT [97398] CONTEXT:  PL/pgSQL function truss.runtime_fence_selected_archive_writes() line 13 at RAISE
+	SQL statement "INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE artifact_identity='fixture.catalog-report-composition/0.1'"
+	PL/pgSQL function truss.fixture_report_drift() line 1 at SQL statement
+	SQL statement "INSERT INTO truss.catalog_acceptance_report(rev,report_bytes) VALUES(revision,original_report)
+	  RETURNING report_bytes"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 191 at SQL statement
+2026-10-11 12:59:40.699 EDT [97398] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:40.907 EDT [97398] ERROR:  catalog observation stale or unrelated
+2026-10-11 12:59:40.907 EDT [97398] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_observation(text,text,text) line 17 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_observation(expected_writer,expected_ordinal,expected_generation)"
+	PL/pgSQL function truss.runtime_collect_catalog_epoch_context(text,text,text) line 8 at PERFORM
+	SQL statement "SELECT *                              FROM truss.runtime_collect_catalog_epoch_context(
+	  expected_writer_xid,expected_operation_ordinal,expected_effect_generation)"
+	PL/pgSQL function truss.runtime_require_operation_configuration_current(text,text,text) line 7 at SQL statement
+	SQL statement "SELECT truss.runtime_require_operation_configuration_current(
+	  expected_writer_xid,expected_operation_ordinal,expected_effect_generation)"
+	PL/pgSQL function truss.runtime_collect_catalog_admission_configuration(text,text,text,text) line 9 at PERFORM
+	SQL statement "SELECT *                      FROM truss.runtime_collect_catalog_admission_configuration(
+	  expected_writer,expected_ordinal,expected_generation,expected_configuration_profile_hex)"
+	PL/pgSQL function truss.runtime_select_catalog_report_release(text,text,text,text) line 194 at SQL statement
+	SQL statement "SELECT *                      FROM truss.runtime_select_catalog_report_release(
+	  expected_writer,expected_ordinal,expected_generation,expected_configuration_profile_hex)"
+	PL/pgSQL function truss.runtime_select_catalog_report_resources(text,text,text,text) line 6 at SQL statement
+	PL/pgSQL assignment "after_resources:=truss.runtime_select_catalog_report_resources(expected_writer,expected_ordinal,(op.effect_generation+1)::text,
+	  (SELECT encode(c.admission_profile_bytes,'hex') FROM truss.operation_configuration c
+	   WHERE c.original_writer_xid=op.original_writer_xid AND c.operation_ordinal=op.operation_ordinal))"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 231 at assignment
+2026-10-11 12:59:40.907 EDT [97398] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:42.287 EDT [97403] ERROR:  selected archive cut excludes same-backend writes
+2026-10-11 12:59:42.287 EDT [97403] CONTEXT:  PL/pgSQL function truss.runtime_fence_selected_archive_writes() line 13 at RAISE
+	SQL statement "UPDATE truss.installation_archive SET artifact_bytes=decode('01','hex') WHERE artifact_identity='packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json'"
+	PL/pgSQL function truss.fixture_report_resource_drift() line 1 at SQL statement
+	SQL statement "INSERT INTO truss.catalog_acceptance_report(rev,report_bytes) VALUES(revision,original_report)
+	  RETURNING report_bytes"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 191 at SQL statement
+2026-10-11 12:59:42.287 EDT [97403] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:42.412 EDT [97403] ERROR:  selected archive cut excludes same-backend writes
+2026-10-11 12:59:42.412 EDT [97403] CONTEXT:  PL/pgSQL function truss.runtime_fence_selected_archive_writes() line 13 at RAISE
+	SQL statement "INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE artifact_identity='packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json'"
+	PL/pgSQL function truss.fixture_report_resource_drift() line 1 at SQL statement
+	SQL statement "INSERT INTO truss.catalog_acceptance_report(rev,report_bytes) VALUES(revision,original_report)
+	  RETURNING report_bytes"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 191 at SQL statement
+2026-10-11 12:59:42.412 EDT [97403] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:43.698 EDT [97408] ERROR:  complete selected candidate report shape required
+2026-10-11 12:59:43.698 EDT [97408] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 188 at RAISE
+2026-10-11 12:59:43.698 EDT [97408] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:44.060 EDT [97408] ERROR:  complete selected candidate report shape required
+2026-10-11 12:59:44.060 EDT [97408] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 188 at RAISE
+2026-10-11 12:59:44.060 EDT [97408] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:45.351 EDT [97415] ERROR:  unique original candidate registration archive required
+2026-10-11 12:59:45.351 EDT [97415] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 48 at RAISE
+2026-10-11 12:59:45.351 EDT [97415] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:45.354 EDT [97415] ERROR:  query returned no rows
+2026-10-11 12:59:45.354 EDT [97415] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 49 at SQL statement
+2026-10-11 12:59:45.354 EDT [97415] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:45.357 EDT [97415] ERROR:  explicit administrative candidate registration required
+2026-10-11 12:59:45.357 EDT [97415] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 32 at RAISE
+2026-10-11 12:59:45.357 EDT [97415] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:45.596 EDT [97415] ERROR:  unique original candidate registration archive required
+2026-10-11 12:59:45.596 EDT [97415] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 48 at RAISE
+2026-10-11 12:59:45.596 EDT [97415] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:46.894 EDT [97433] ERROR:  unique original revision composition archive required
+2026-10-11 12:59:46.894 EDT [97433] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 101 at RAISE
+2026-10-11 12:59:46.894 EDT [97433] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:47.141 EDT [97433] ERROR:  query returned no rows
+2026-10-11 12:59:47.141 EDT [97433] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 102 at SQL statement
+2026-10-11 12:59:47.141 EDT [97433] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:48.180 EDT [97443] ERROR:  numeric-free native report value required
+2026-10-11 12:59:48.180 EDT [97443] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_native_tree(jsonb,integer) line 25 at RAISE
+	PL/pgSQL function truss.runtime_catalog_report_native_tree(jsonb,integer) line 21 at assignment
+2026-10-11 12:59:48.180 EDT [97443] STATEMENT:  SELECT truss.runtime_catalog_report_native_tree($1::jsonb)
+2026-10-11 12:59:49.235 EDT [97453] ERROR:  duplicate original object key
+2026-10-11 12:59:49.235 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 45 at RAISE
+	SQL statement "SELECT truss.runtime_canonical_tree_bytes(parsed.tree)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 7 at PERFORM
+2026-10-11 12:59:49.235 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.235 EDT [97453] ERROR:  numeric-free original JSON token required
+2026-10-11 12:59:49.235 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 77 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:59:49.235 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.235 EDT [97453] ERROR:  numeric-free original JSON token required
+2026-10-11 12:59:49.235 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 77 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_catalog_report_parse_value(original,p,depth+1)"
+	PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 59 at SQL statement
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:59:49.235 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.235 EDT [97453] ERROR:  original JSON surrogate pair required
+2026-10-11 12:59:49.235 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 32 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:59:49.235 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.236 EDT [97453] ERROR:  unpaired JSON low surrogate
+2026-10-11 12:59:49.236 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 37 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:59:49.236 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.236 EDT [97453] ERROR:  recognized JSON escape required
+2026-10-11 12:59:49.236 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 39 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:59:49.236 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.236 EDT [97453] ERROR:  one complete original JSON value required
+2026-10-11 12:59:49.236 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 6 at RAISE
+2026-10-11 12:59:49.236 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.236 EDT [97453] ERROR:  JSON object key required
+2026-10-11 12:59:49.236 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 54 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:59:49.236 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.236 EDT [97453] ERROR:  closed JSON string required
+2026-10-11 12:59:49.236 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 43 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:59:49.236 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:49.236 EDT [97453] ERROR:  unescaped JSON control required to refuse
+2026-10-11 12:59:49.236 EDT [97453] CONTEXT:  PL/pgSQL function truss.runtime_catalog_report_parse_value(bytea,integer,integer) line 17 at RAISE
+	SQL statement "SELECT *                    FROM truss.runtime_catalog_report_parse_value(original,0,0)"
+	PL/pgSQL function truss.runtime_catalog_report_original_tree(bytea) line 4 at SQL statement
+2026-10-11 12:59:49.236 EDT [97453] STATEMENT:  SELECT truss.runtime_catalog_report_original_tree($1)
+2026-10-11 12:59:51.908 EDT [97479] ERROR:  complete runtime finalizer is not installed
+2026-10-11 12:59:51.908 EDT [97479] CONTEXT:  PL/pgSQL function truss.runtime_operation_commit_barrier() line 7 at RAISE
+2026-10-11 12:59:51.908 EDT [97479] STATEMENT:  COMMIT
+2026-10-11 12:59:51.908 EDT [97479] WARNING:  there is no transaction in progress
+2026-10-11 12:59:54.976 EDT [97499] ERROR:  finite selected revision acceptance timestamp required
+2026-10-11 12:59:54.976 EDT [97499] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 205 at RAISE
+2026-10-11 12:59:54.976 EDT [97499] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 12:59:56.566 EDT [97510] ERROR:  original revision parent origin correspondence required
+2026-10-11 12:59:56.566 EDT [97510] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 202 at RAISE
+2026-10-11 12:59:56.566 EDT [97510] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:00:01.348 EDT [97536] ERROR:  catalog observation stale or unrelated
+2026-10-11 13:00:01.348 EDT [97536] CONTEXT:  PL/pgSQL function truss.runtime_require_catalog_observation(text,text,text) line 17 at RAISE
+	SQL statement "SELECT truss.runtime_require_catalog_observation(expected_writer,expected_ordinal,expected_generation)"
+	PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 14 at PERFORM
+2026-10-11 13:00:01.348 EDT [97536] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:00:01.609 EDT [97536] ERROR:  unpublished first revision candidate required
+2026-10-11 13:00:01.609 EDT [97536] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 122 at RAISE
+2026-10-11 13:00:01.609 EDT [97536] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:00:03.382 EDT [97550] ERROR:  query returned no rows
+2026-10-11 13:00:03.382 EDT [97550] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_candidate(text,text,text,text,bytea,bytea,bytea) line 191 at SQL statement
+2026-10-11 13:00:03.382 EDT [97550] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:00:03.541 EDT [97358] LOG:  received immediate shutdown request
+2026-10-11 13:00:03.544 EDT [97358] LOG:  database system is shut down

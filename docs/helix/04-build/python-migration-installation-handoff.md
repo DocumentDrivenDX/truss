@@ -1,5 +1,13 @@
 # Python installation and migration implementation handoff
 
+## Current driver/resource delivery gate — owner decision 2026-10-11
+
+Implement and qualify stock psycopg 3 as the Python baseline under ADR-003. First publish a supported-API connection/transaction adoption design with a pinned driver implementation/libpq/server/mode tuple; then run the TP-001 baseline resource and STP-044 semantic schedules through the installed consumer path. No pg8000 dependency, custom frame scanner, private receive/parser hook or exact backing-allocation ledger is required for this path. Historical pg8000 and strict transport receipts remain component evidence only.
+
+Required release work is practical payload/value/page/batch/concurrency/iteration limits and deadlines, peak-memory/load qualification, exact values, protected native integrity/current authority, savepoint containment preserving caller work, and confirmed/pending/unknown settlement with safe discard/reuse and retained retry custody. Lakebase support requires actual TLS/person-token/refresh and transaction evidence on that target. Strict transport accounting and its hooks/producers/manifests are optional and removed from baseline dependency/exit gates, including earlier E01/PY-01 pre-materialization demands. Optional status is explicit in the release profile; not_run optional cases cannot fail the baseline corpus or milestone.
+
+Before custom PostgreSQL wire handling, private driver hooks, a fork or driver replacement, require the PRD's hard documented necessary deficiency, simpler-remedy comparison and owner-approved ADR. Existing source packets and component experiments do not authorize that work. Keep complete engine/corpus/installation/security acceptance; this decision removes an excessive mechanism, not those semantic requirements.
+
 This handoff applies the owner's Truss-maintained Python and shipped-migration
 requirements to CONTRACT-007, CONTRACT-008, CONTRACT-012 and the existing
 [administrative binding](../02-design/contracts/bindings/truss-layout-migration-v0.1.proposal.d.ts).

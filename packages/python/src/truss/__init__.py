@@ -31,3 +31,6 @@ __all__ += ["InstallationObservation", "InstallationRelationObservation", "inspe
 
 from ._borrowed_host import BorrowedHost, BorrowedHostAttachmentFailure, adopt_pg8000_host
 __all__ += ["BorrowedHost", "BorrowedHostAttachmentFailure", "adopt_pg8000_host"]
+
+from .psycopg_host import PsycopgHost, PsycopgProfile, adopt_psycopg_host
+__all__ += ["PsycopgHost", "PsycopgProfile", "adopt_psycopg_host"]

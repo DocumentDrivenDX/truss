@@ -19,6 +19,12 @@ ddx:
 
 # ADR-003: Other-language implementations conform to shared contracts and a corpus
 
+## Accepted owner amendment — Python driver baseline, 2026-10-11
+
+The owner selects maintained stock psycopg 3 as Truss's baseline Python driver, using supported APIs. Truss owns the choice and qualification; consumer driver preferences and pg8000 experimental receipts do not select it. Pin the tested psycopg implementation/libpq build, sync or async mode and server/deployment tuple before claiming support.
+
+Practical resource limits and exact-value/transaction/authorization guarantees remain required. Strict preallocation and transport lifetime accounting are optional profile work and do not gate the first release. The [PRD proportionality and deficiency gate](../../01-frame/prd.md#owner-decision--proportional-resource-controls-2026-10-11) requires hard reproduced evidence and an owner-approved ADR before implementing custom PostgreSQL wire handling, depending on private parser hooks, forking a driver or replacing this baseline. This amendment selects design direction; it does not claim a callable executor or qualified Lakebase support.
+
 | Field | Value |
 |-------|-------|
 | Status | **Accepted — owner decision 2026-10-09** |

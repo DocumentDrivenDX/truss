@@ -1,0 +1,23 @@
+{
+  "scope": "Local host-adoption component only; no installed graph, full engine, durable commit recovery, Lakebase or general driver/server qualification",
+  "psycopg": "3.3.6",
+  "implementation": "binary",
+  "libpq": 180006,
+  "server": 160015,
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "source_sha256": {
+    "packages/python/src/truss/psycopg_host.py": "4f4bba89175ccc33ce5c41a6807b616d461b3183300a2cdf3641744b61fc5a6b",
+    "packages/python/tests/test_psycopg_host_native.py": "d66eff663112a952157a20355cc16042ec5e1b8c0eb86695f2adfdd7013fd458",
+    "packages/python/src/truss/__init__.py": "edecfe0c492dcb42647b34f9219e786ade715b74f31316d85f5a4e45de562481",
+    "packages/python/pyproject.toml": "709e305e34135894dc304a12065ff9327bfe017f22b646e45d3db86f83623eed",
+    "scripts/check-module-boundaries.py": "4b39e6b6a2d3c1c22a974053e669ddb462006f26d37f18fcc30a1a12a9bae0a3"
+  },
+  "native_exit": 0,
+  "boundary_exit": 0,
+  "source_unchanged": true,
+  "fixture": "isolated initdb/socket; test class stops server and deletes temporary directory; no independent retained cleanup receipt",
+  "evidence_sha256": {
+    "native.log": "feb27ad0f8dec0a213a67bb35f8ed48b0a0ab52be5f57e7bdda3460da887c297",
+    "boundaries.log": "b2365064533ce2dff4ac57747a456db712567b51de383da9443dea025a457cce"
+  }
+}

@@ -1,5 +1,11 @@
 # Remaining design handoff audit — 2026-10-08
 
+## Current resource/driver gate disposition — 2026-10-11
+
+The owner selected stock psycopg 3 as the Python baseline (ADR-003). Practical workload limits, deadlines, peak-memory tests, exact values, authorization, transaction ownership/containment and uncertain-outcome recovery remain required. Exact build/mode/deployment qualification and public APIs remain unfinished.
+
+Strict pre-read/predecode/frame/backing/copy-lifetime/native allocation accounting is optional. Missing custom driver hooks, strict producer manifests or DH allocation receipts no longer block baseline design closure or release. Earlier driver/resource gate rows are scoped by this decision: retain their semantic and practical-limit obligations, remove strict transport mechanisms from required prerequisites. Existing pg8000 and custom parser experiments neither select a replacement nor prove a baseline deficiency. Apply the PRD's hard documented necessary-failure and owner-approved ADR gate before custom wire/private-hook/fork/replacement implementation.
+
 ## Current execution frontier — 2026-10-10
 
 The historical [Python source checkpoint](evidence/design-audit/python-capture-receive-source.json)

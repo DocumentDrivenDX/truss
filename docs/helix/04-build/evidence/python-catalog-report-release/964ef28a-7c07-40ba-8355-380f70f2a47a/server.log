@@ -1,0 +1,71 @@
+2026-10-11 13:18:27.084 EDT [6081] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 13:18:27.085 EDT [6081] LOG:  listening on Unix socket "/private/tmp/rl-te7hvbpn/.s.PGSQL.5432"
+2026-10-11 13:18:27.093 EDT [6084] LOG:  database system was shut down at 2026-10-11 13:18:26 EDT
+2026-10-11 13:18:27.096 EDT [6081] LOG:  database system is ready to accept connections
+2026-10-11 13:18:29.055 EDT [6097] ERROR:  string source capacity
+2026-10-11 13:18:29.055 EDT [6097] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 33 at assignment
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 83 at assignment
+2026-10-11 13:18:29.055 EDT [6097] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:30.518 EDT [6106] ERROR:  string source capacity
+2026-10-11 13:18:30.518 EDT [6106] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 33 at assignment
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 83 at assignment
+2026-10-11 13:18:30.518 EDT [6106] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:30.734 EDT [6106] ERROR:  string source capacity
+2026-10-11 13:18:30.734 EDT [6106] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL assignment "piece:=truss.runtime_canonical_string_bytes(decode(node->>'utf8Hex','hex'))"
+	PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 33 at assignment
+	PL/pgSQL assignment "owner_bytes:=truss.runtime_canonical_tree_bytes(truss.runtime_catalog_report_native_tree(jsonb_build_object(
+	  'scope','administrative_single_original_operation_fresh_catalog_rollback_only',
+	  'originalOperationRecordHex',encode(record_send(op),'hex'),'originalContextHex',encode(op.original_context_bytes,'hex'),
+	  'originalRevisionRecordHex',encode(record_send(revision_row),'hex'),'originalDocumentRecordHex',documents)))"
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 83 at assignment
+2026-10-11 13:18:30.734 EDT [6106] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:32.184 EDT [6111] ERROR:  string source capacity
+2026-10-11 13:18:32.184 EDT [6111] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 33 at assignment
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 83 at assignment
+2026-10-11 13:18:32.184 EDT [6111] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:33.651 EDT [6123] ERROR:  string source capacity
+2026-10-11 13:18:33.651 EDT [6123] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 33 at assignment
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 83 at assignment
+2026-10-11 13:18:33.651 EDT [6123] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:35.117 EDT [6134] ERROR:  string source capacity
+2026-10-11 13:18:35.117 EDT [6134] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 33 at assignment
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 83 at assignment
+2026-10-11 13:18:35.117 EDT [6134] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:36.336 EDT [6139] ERROR:  unique original revision registration recipe required
+2026-10-11 13:18:36.336 EDT [6139] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 29 at RAISE
+2026-10-11 13:18:36.336 EDT [6139] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:36.563 EDT [6139] ERROR:  query returned no rows
+2026-10-11 13:18:36.563 EDT [6139] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 30 at SQL statement
+2026-10-11 13:18:36.563 EDT [6139] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:36.787 EDT [6139] ERROR:  unique original revision registration recipe required
+2026-10-11 13:18:36.787 EDT [6139] CONTEXT:  PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 29 at RAISE
+2026-10-11 13:18:36.787 EDT [6139] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:38.239 EDT [6142] ERROR:  string source capacity
+2026-10-11 13:18:38.239 EDT [6142] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 33 at assignment
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 83 at assignment
+2026-10-11 13:18:38.239 EDT [6142] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:39.705 EDT [6153] ERROR:  string source capacity
+2026-10-11 13:18:39.705 EDT [6153] CONTEXT:  PL/pgSQL function truss.runtime_canonical_string_bytes(bytea) line 8 at RAISE
+	PL/pgSQL function truss.runtime_canonical_tree_bytes(jsonb) line 33 at assignment
+	PL/pgSQL function truss.runtime_write_catalog_report_and_register_revision_candidate(text,text,text,text,bytea,bytea,bytea) line 83 at assignment
+2026-10-11 13:18:39.705 EDT [6153] STATEMENT:  SELECT * FROM truss.runtime_write_catalog_report_and_register_revision_candidate(
+	            $1,$2,$3,$4,$5,$6,$7)
+2026-10-11 13:18:39.761 EDT [6081] LOG:  received immediate shutdown request
+2026-10-11 13:18:39.764 EDT [6081] LOG:  database system is shut down

@@ -1,0 +1,36 @@
+test_extra_member_refuses_final_delta (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_extra_member_refuses_final_delta) ... ok
+test_late_catalog_or_report_change_refuses (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_late_catalog_or_report_change_refuses) ... ok
+test_late_relation_scope_change_refuses (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_late_relation_scope_change_refuses) ... ok
+test_native_write_clock_and_single_use_refusal (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_native_write_clock_and_single_use_refusal) ... ok
+test_pending_revision_registration_complete_original_rows (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_pending_revision_registration_complete_original_rows) ... ERROR
+test_registration_profile_missing_changed_and_duplicate_refuse (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_registration_profile_missing_changed_and_duplicate_refuse) ... ok
+test_rewritten_writes_refuse (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_rewritten_writes_refuse) ... ok
+test_suppressed_writes_refuse_and_preserve_host_state (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_suppressed_writes_refuse_and_preserve_host_state) ... ok
+
+======================================================================
+ERROR: test_pending_revision_registration_complete_original_rows (test_catalog_revision_registration_native.RevisionRegistrationNativeTests.test_pending_revision_registration_complete_original_rows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-swtitvay/checkout/packages/python/tests/test_catalog_revision_registration_native.py", line 68, in test_pending_revision_registration_complete_original_rows
+    owner=decode_acceptance_json(member[4]);self.assertEqual(''.join(owner['originalContextHexChunks']),self.context.hex())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-swtitvay/checkout/packages/python/src/truss/_acceptance_json.py", line 17, in decode_acceptance_json
+    return _decode_numeric_free(original, 1_048_576, 2_000_000)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-swtitvay/checkout/packages/python/src/truss/_acceptance_json.py", line 168, in _decode_numeric_free
+    value()
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-swtitvay/checkout/packages/python/src/truss/_acceptance_json.py", line 135, in value
+    attach(string())
+           ^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-swtitvay/checkout/packages/python/src/truss/_acceptance_json.py", line 101, in string
+    charge(2 * (index - start))
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-swtitvay/checkout/packages/python/src/truss/_acceptance_json.py", line 48, in charge
+    refuse("resource")
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-swtitvay/checkout/packages/python/src/truss/_acceptance_json.py", line 43, in refuse
+    raise AcceptanceJsonError(reason)
+truss._acceptance_json.AcceptanceJsonError: resource
+
+----------------------------------------------------------------------
+Ran 8 tests in 25.093s
+
+FAILED (errors=1)

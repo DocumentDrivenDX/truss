@@ -39,7 +39,10 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
             'scope':'administrative_rollback_only_report_write',
             'layoutProfile':self.prepared.input()['layoutProfile'],
             'composition':{'identity':recipe_path,'sha256':hashlib.sha256(recipe_bytes).hexdigest()}}
+        revision_path='packages/python/src/truss/_profiles/catalog-revision-composition-candidate.json'
         artifacts=[(recipe_path,recipe_bytes)]
+        if not getattr(self,'omit_revision_profile',False):
+            artifacts.append((revision_path,getattr(self,'revision_profile_bytes',(ROOT/revision_path).read_bytes())))
         for field,ref in recipe['profileArtifacts'].items():
             raw=(ROOT/ref['path']).read_bytes();profile=json.loads(raw)
             self.registration[field]={'identity':profile['identity'],'version':profile['version'],
@@ -80,17 +83,17 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
         self.origin_bytes=getattr(self,'origin_bytes',b'{}')
         writer,ordinal,context=self.connection.run("""SELECT * FROM truss.runtime_admit_operation_with_configuration_context(
             0,'catalog-acceptance',decode('01','hex'),:input,decode(:pre,'hex'),:candidate,
-            decode('05','hex'),decode('06','hex'),:origin,
+            decode('05','hex'),:group,:origin,
             :capture,'guard-fixture','guard-fixture-epoch','guard-fixture-incarnation',:profile)""",
-            input=p.input_bytes,pre=pre,candidate=self.candidate_bytes,origin=self.origin_bytes,capture=self.capture_bytes,profile=self.profile)[0]
+            input=p.input_bytes,pre=pre,candidate=self.candidate_bytes,group=getattr(self,'group_bytes',b'\x06'),origin=self.origin_bytes,capture=self.capture_bytes,profile=self.profile)[0]
         self.context=bytes.fromhex(context);self.prestate=bytes.fromhex(pre);return writer,ordinal
 
     def invoke(self):
         p=self.prepared
         rows=self.connection.run("""SELECT * FROM truss.runtime_stage_catalog_with_release(0,
-            decode('01','hex'),:input,:candidate,decode('05','hex'),decode('06','hex'),
+            decode('01','hex'),:input,:candidate,decode('05','hex'),:group,
             :documents,:declarations,:origin,:pre,:context,:profile)""",
-            input=p.input_bytes,candidate=self.candidate_bytes,declarations=p.declarations_bytes,documents=p.archive_documents_bytes,
+            input=p.input_bytes,candidate=self.candidate_bytes,group=getattr(self,'group_bytes',b'\x06'),declarations=p.declarations_bytes,documents=p.archive_documents_bytes,
             origin=self.origin_bytes,pre=self.prestate,context=self.context,profile=self.profile)
         self.result=json.loads(bytes.fromhex(rows[0][3]));return rows[0]
 
@@ -108,7 +111,7 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
         wire=bytes.fromhex(row[3]);report=decode_acceptance_json(wire)
         self.assertEqual(row[:2],[self.writer,self.ordinal])
         self.assertEqual(row[2],str(int(self.generation)+1))
-        self.assertEqual(row[4:],[self.registration['scope'],False])
+        self.assertEqual(row[4:6],[self.registration['scope'],False])
         self.assertEqual(len(report),19)
         validate_complete_report(report)
         context=json.loads(self.context)
@@ -320,3 +323,109 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
         self.assertEqual(caught.exception.args[0]['C'],'54000')
         self.assertEqual(caught.exception.args[0]['M'],'selected report schema evaluation depth capacity')
         self.connection.run('ROLLBACK TO shape_capacity');self.connection.run('RELEASE shape_capacity')
+
+    def test_revision_payload_complete_wire_and_original_report_origin(self):
+        import base64
+        from jsonschema import Draft202012Validator
+        self.origin_bytes=b'{"databaseRole":"authored","x-action":"register","nested":[true,null,"\\u03bb"]}'
+        self.stage();row=self.write();payload=decode_acceptance_json(bytes.fromhex(row[6]))
+        report_bytes=bytes.fromhex(row[3]);report=decode_acceptance_json(report_bytes)
+        schema=json.loads((ROOT/'docs/helix/02-design/contracts/seed-baseline-v0.1.schema.json').read_bytes())
+        from referencing import Registry,Resource
+        registry=Registry().with_resource(schema['$id'],Resource.from_contents(schema))
+        for path in (ROOT/'packages/python/src/truss/_report_schemas').glob('*.json'):
+            original=json.loads(path.read_bytes())
+            registry=registry.with_resource(original['$id'],Resource.from_contents(original))
+        Draft202012Validator({'$ref':schema['$id']+'#/$defs/revision'},registry=registry).validate(payload)
+        self.assertEqual(set(payload),{'interfaceVersion','revision','acceptedAt','input','report','origin'})
+        accepted=self.connection.run("SELECT to_char(accepted_at AT TIME ZONE 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"') FROM truss.schema_rev WHERE rev=1")[0][0]
+        expected={'interfaceVersion':'truss-feed-revision/0.1.0','revision':report['rev'],
+            'acceptedAt':accepted,'input':self.prepared.input(),'report':{
+                'identity':'truss.candidate.catalog-report/'+json.loads(self.context)['installationId'].encode().hex()+'/'+json.loads(self.context)['sourceEpoch'].encode().hex()+'/'+report['rev'],
+                'bytesBase64':base64.b64encode(report_bytes).decode(),'sha256':hashlib.sha256(report_bytes).hexdigest()},
+            'origin':report['originalExecution']['journalOrigin']}
+        self.assertEqual(bytes.fromhex(row[6]),canonical_numeric_free(expected))
+        self.assertEqual(payload['input'],self.prepared.input())
+        self.assertEqual(payload['origin'],report['originalExecution']['journalOrigin'])
+        self.assertEqual(base64.b64decode(payload['report']['bytesBase64'],validate=True),report_bytes)
+        self.assertEqual(payload['report']['sha256'],hashlib.sha256(report_bytes).hexdigest())
+        context=json.loads(self.context)
+        self.assertEqual(payload['report']['identity'],'truss.candidate.catalog-report/'+context['installationId'].encode().hex()+'/'+context['sourceEpoch'].encode().hex()+'/'+payload['revision'])
+        self.assertEqual(self.connection.run('SELECT rev FROM truss.schema_head'),[[0]])
+        for name in ('feed_tx','feed_member','feed_prerequisite','feed_configuration_prerequisite'):
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.'+name),[[0]])
+        self.assertEqual(row[2],str(int(self.generation)+1))
+
+    def test_revision_acceptance_timestamp_is_retained_utc_microseconds(self):
+        self.connection.run("""CREATE FUNCTION truss.fixture_revision_time() RETURNS trigger LANGUAGE plpgsql AS $$
+          BEGIN NEW.accepted_at:='2026-10-11 04:05:06.123456+00'::timestamptz; RETURN NEW; END $$;
+          CREATE TRIGGER fixture_revision_time BEFORE INSERT ON truss.schema_rev
+          FOR EACH ROW EXECUTE FUNCTION truss.fixture_revision_time()""")
+        self.connection.run("SET TimeZone='Pacific/Honolulu'; SET DateStyle='SQL, DMY'")
+        self.stage();payload=decode_acceptance_json(bytes.fromhex(self.write()[6]))
+        self.assertEqual(payload['acceptedAt'],'2026-10-11T04:05:06.123456Z')
+        self.assertEqual(self.connection.run("SELECT to_char(accepted_at AT TIME ZONE 'UTC','YYYY-MM-DD HH24:MI:SS.US') FROM truss.schema_rev WHERE rev=1"),[['2026-10-11 04:05:06.123456']])
+
+    def test_missing_or_changed_revision_profile_refuses_before_report_insert(self):
+        from pg8000.exceptions import DatabaseError
+        for mode in ('missing','changed'):
+            self.connection.run('SAVEPOINT profile_setup')
+            self.omit_revision_profile=mode=='missing';self.revision_profile_bytes=b'{}'
+            self.stage();self.connection.run('SAVEPOINT profile_call')
+            with self.subTest(mode=mode),self.assertRaises(DatabaseError):self.write()
+            self.connection.run('ROLLBACK TO profile_call');self.connection.run('RELEASE profile_call')
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.catalog_acceptance_report'),[[0]])
+            self.assertEqual(self.connection.run('SELECT effect_generation::text FROM truss.row_home_operation'),[[self.generation]])
+            self.connection.run('ROLLBACK TO profile_setup');self.connection.run('RELEASE profile_setup')
+
+    def test_revision_infinite_acceptance_timestamp_refuses_atomically(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run("""CREATE FUNCTION truss.fixture_revision_infinity() RETURNS trigger LANGUAGE plpgsql AS $$
+          BEGIN NEW.accepted_at:='infinity'::timestamptz; RETURN NEW; END $$;
+          CREATE TRIGGER fixture_revision_infinity BEFORE INSERT ON truss.schema_rev
+          FOR EACH ROW EXECUTE FUNCTION truss.fixture_revision_infinity()""")
+        self.stage();self.connection.run('SAVEPOINT invalid_time')
+        with self.assertRaises(DatabaseError) as caught:self.write()
+        self.assertEqual(caught.exception.args[0]['C'],'22023')
+        self.assertEqual(caught.exception.args[0]['M'],'finite selected revision acceptance timestamp required')
+        self.connection.run('ROLLBACK TO invalid_time');self.connection.run('RELEASE invalid_time')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.catalog_acceptance_report'),[[0]])
+        self.assertEqual(self.connection.run('SELECT effect_generation::text FROM truss.row_home_operation'),[[self.generation]])
+
+    def test_revision_report_artifact_scalar_expansion_refuses_and_rolls_back_report(self):
+        from pg8000.exceptions import DatabaseError
+        from truss._canonical_wire_tree import prepare_canonical_wire_tree
+        def expand(candidate):
+            diagnostic={'source':{'kind':'input'},'diagnosticProfile':{'identity':'fixture','version':'0.1','sha256':'0'*64},
+                'diagnostic':{'identity':'initial','bytesBase64':'','sha256':hashlib.sha256(b'').hexdigest()},
+                'classification':'truss_admission'}
+            node=next(m for m in candidate['hostSources']['members'] if m['keyUtf8Hex']==b'diagnostics'.hex())
+            node['node']=json.loads(prepare_canonical_wire_tree(canonical_numeric_free([diagnostic])).native_tree_text)
+            artifact=next(m['node'] for m in node['node']['items'][0]['members'] if m['keyUtf8Hex']==b'diagnostic'.hex())
+            identity=next(m['node'] for m in artifact['members'] if m['keyUtf8Hex']==b'identity'.hex())
+            identity['utf8Hex']='01'*12000
+        self.candidate_transform=expand
+        self.connection.run("CREATE TEMP TABLE revision_host_work(value text); INSERT INTO revision_host_work VALUES('keep')")
+        self.stage();self.connection.run('SAVEPOINT revision_capacity')
+        with self.assertRaises(DatabaseError) as caught:self.write()
+        self.assertEqual(caught.exception.args[0]['C'],'54000')
+        self.assertEqual(caught.exception.args[0]['M'],'revision report artifact scalar capacity')
+        self.connection.run('ROLLBACK TO revision_capacity');self.connection.run('RELEASE revision_capacity')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.catalog_acceptance_report'),[[0]])
+        self.assertEqual(self.connection.run('SELECT effect_generation::text FROM truss.row_home_operation'),[[self.generation]])
+
+        self.assertEqual(self.connection.run('SELECT value FROM revision_host_work'),[['keep']])
+
+    def test_revision_parent_origin_substitution_refuses(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run("""CREATE FUNCTION truss.fixture_revision_origin() RETURNS trigger LANGUAGE plpgsql AS $$
+          BEGIN NEW.origin:='{"x-substitute":true}'::jsonb; RETURN NEW; END $$;
+          CREATE TRIGGER fixture_revision_origin BEFORE INSERT ON truss.schema_rev
+          FOR EACH ROW EXECUTE FUNCTION truss.fixture_revision_origin()""")
+        self.stage();self.connection.run('SAVEPOINT wrong_parent')
+        with self.assertRaises(DatabaseError) as caught:self.write()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.assertEqual(caught.exception.args[0]['M'],'original revision parent origin correspondence required')
+        self.connection.run('ROLLBACK TO wrong_parent');self.connection.run('RELEASE wrong_parent')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.catalog_acceptance_report'),[[0]])
+        self.assertEqual(self.connection.run('SELECT effect_generation::text FROM truss.row_home_operation'),[[self.generation]])
