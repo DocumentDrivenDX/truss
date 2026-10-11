@@ -1,0 +1,66 @@
+-- Selected catalog-only component: refuse business writes before any operation.
+-- Ordinary-role protection/DDL history and metadata transition closure are separate.
+CREATE FUNCTION truss.runtime_catalog_only_business_refusal_candidate() RETURNS trigger
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ IF TG_LEVEL<>'STATEMENT' OR TG_WHEN<>'BEFORE' OR TG_TABLE_SCHEMA<>'truss'
+  OR TG_NAME<>'a_truss_catalog_only_business_refusal' OR TG_NARGS<>0
+  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE')
+  OR NOT TG_TABLE_NAME=ANY(ARRAY['object','edge','edge_limit','key_tombstone','record_source','feed_consumer','journal','row_home_journal_stage','row_home_state','row_home_node','row_home_scalar','row_home_touch','row_home_capacity','key_bucket_guard','object_key_bucket','object_key_reservation_bucket','complete_feed_consumer','complete_feed_administration_receipt','complete_feed_seed_attempt','complete_feed_seed_artifact','key_lifecycle_history','key_migration_receipt','request_receipt_route_guard','request_receipt','request_receipt_protection','schema_change']) THEN
+  RAISE EXCEPTION 'unregistered catalog-only business event' USING ERRCODE='55000'; END IF;
+ RAISE EXCEPTION 'business writes are outside selected catalog-only scope' USING ERRCODE='0A000';
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_catalog_only_business_refusal_candidate() FROM PUBLIC;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.object FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.object ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.edge FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.edge ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.edge_limit FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.edge_limit ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.key_tombstone FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.key_tombstone ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.record_source FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.record_source ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.feed_consumer FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.feed_consumer ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.journal FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.journal ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.row_home_journal_stage FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.row_home_journal_stage ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.row_home_state FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.row_home_state ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.row_home_node FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.row_home_node ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.row_home_scalar FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.row_home_scalar ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.row_home_touch FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.row_home_touch ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.row_home_capacity FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.row_home_capacity ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.key_bucket_guard FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.key_bucket_guard ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.object_key_bucket FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.object_key_bucket ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.object_key_reservation_bucket FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.object_key_reservation_bucket ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.complete_feed_consumer FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.complete_feed_consumer ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.complete_feed_administration_receipt FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.complete_feed_administration_receipt ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.complete_feed_seed_attempt FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.complete_feed_seed_attempt ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.complete_feed_seed_artifact FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.complete_feed_seed_artifact ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.key_lifecycle_history FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.key_lifecycle_history ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.key_migration_receipt FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.key_migration_receipt ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.request_receipt_route_guard FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.request_receipt_route_guard ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.request_receipt FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.request_receipt ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.request_receipt_protection FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.request_receipt_protection ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
+CREATE TRIGGER a_truss_catalog_only_business_refusal BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.schema_change FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_catalog_only_business_refusal_candidate();
+ALTER TABLE truss.schema_change ENABLE ALWAYS TRIGGER a_truss_catalog_only_business_refusal;
