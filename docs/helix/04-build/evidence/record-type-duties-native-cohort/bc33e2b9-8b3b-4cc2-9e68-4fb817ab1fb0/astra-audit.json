@@ -1,0 +1,119 @@
+{
+  "status": "passed",
+  "method": "Independent read-only exact source/ZIP/native receipt/log/custody audit; no native execution",
+  "receiptSha256": "065546032e4c63a97f737cabd4f53b522c9ba013f20c37204f7fe3250dd83bb3",
+  "nativeReceiptSha256": "604c20bc785c6f2a50e78cd46ae5a78c2c2915561c3447bace9c8c32f37a4b44",
+  "nativeLogSha256": "ebad6b0dc91abf838692ff1208de5718b7a46ae4bef053ed2c72a43bb6c99bce",
+  "archiveSha256": "a44924ee2e506658493449e2cba7397c56b8fdc14e8c6478c6bedbd30b3e4d72",
+  "sourcePins": 821,
+  "includedHostPins": 733,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentInputInventoryMatches": true,
+  "uniqueNativeChecks": 225,
+  "allHistoricalChecksRetained": 222,
+  "newDeclarationDutyChecks": [
+    "native exact receipt allocates one original declaration duty without value promotion",
+    "native journal allocates two qualified original declaration occurrences without enforcement",
+    "native overlapping receipt protocols refuse duplicate declaration duties before SQL"
+  ],
+  "familyChecks": [
+    {
+      "composition": "typeReceiptComposition",
+      "ruleCount": 1,
+      "manifestSha256": "2f3409acf0d72010a028bfc1c86b29e106564985833b1c972781a6d00b59ac1d",
+      "protocol": "exact_current_receipt",
+      "qualifiedOccurrences": [
+        {
+          "sourceKind": "umf_document",
+          "documentId": "type-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "70bb78c93125a39292748d16eedf28018ce4d186b3b9dc26c82f361f5b325a19",
+          "owner": {
+            "module": "m",
+            "element": "v"
+          },
+          "sourcePointer": "/modules/0/elements/0/references/1"
+        }
+      ]
+    },
+    {
+      "composition": "typeJournalComposition",
+      "ruleCount": 2,
+      "manifestSha256": "2f3409acf0d72010a028bfc1c86b29e106564985833b1c972781a6d00b59ac1d",
+      "protocol": "transition_journal",
+      "qualifiedOccurrences": [
+        {
+          "sourceKind": "umf_document",
+          "documentId": "journal-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+          "owner": {
+            "module": "m",
+            "element": "v"
+          },
+          "sourcePointer": "/modules/0/elements/0/references/1"
+        },
+        {
+          "sourceKind": "umf_document",
+          "documentId": "journal-cohort",
+          "documentRevision": "r1",
+          "definitionPin": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+          "owner": {
+            "module": "m",
+            "element": "w"
+          },
+          "sourcePointer": "/modules/0/elements/1/references/0"
+        }
+      ]
+    }
+  ],
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "journalOwnerProfile": {
+    "identity": "umf-record-type-journal-inspection",
+    "version": "e71613d9c76bf7a4bf5476bf72ab4fd99059ff17",
+    "sha256": "88d68b176a3d2a5f8877332bbe332c116b87c57642f21f69932133599f521783"
+  },
+  "originalRequestSha256": "72ffaf8cc1992cf7dd1f4ffc976e289e390978fcc5e436e90eb1a8b0a13dc1dc",
+  "originalJournalSha256": "f073afdf0794e77809e6cd0e32f166fef9453d11c14d9febf6b001d8cb4a4155",
+  "originalSourceSha256": "e86e8b8405661dfc8fd74aa7c2f6184456632af0035cd7aec428a7aca7bc27c2",
+  "ownerEvidenceSha256": "16ce94e3142cf053a20cdf43440421baa4cfa8a41495b185a6247892d2795103",
+  "nativeObservation": {
+    "writerXid": "870",
+    "operationOrdinal": "0",
+    "effectGeneration": "7"
+  },
+  "exactJournalSourceMeaningAndPointerJoin": true,
+  "cleanup": {
+    "containerId": "8e56664154e0131974ba25bc761e927138517d9430fd8c7fc7a5b5c3d92ce314",
+    "exitCode": 0,
+    "stdout": "8e56664154e0131974ba25bc761e927138517d9430fd8c7fc7a5b5c3d92ce314",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "scope": "Post-merge rerun of private declaration-duty identity/parameter/byte correspondence with actual catalog source staging and report/cut observations; no native duty persistence/type enforcement, authenticated issuer or accepted publication/finalizer authority.",
+  "acceptancePromoted": false,
+  "postMergeComparison": {
+    "unchangedCheckSequence": true,
+    "checks": 225,
+    "changedPins": [
+      {
+        "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/catalog-completion/physical-poststate.sql",
+        "old": "1e97134291eb2eab4877683ecf6e89dcaca0aa24405a00d3ba71b0d539b387a2",
+        "new": "a6dd1ef0a419bec64098fb21283db50820e95673379490698dd6e8a798d28512"
+      },
+      {
+        "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/catalog-generation-observer.sql",
+        "old": "9d1f354e746e1df856c2c1fb4c3b5493c8ae0b4725210920a86dbb95ad54522c",
+        "new": "ddc90f3c84b173eb30f962ade935c0bbea1cbae7aa67e5e727b7e83ebf05532c"
+      },
+      {
+        "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/catalog-report/fresh-lifecycle.sql",
+        "old": "f4cdf2780ffc604963d974a24ab69b2581c9ac4bd81ee1540cef3072a863ddbd",
+        "new": "8b206cd9e844a28b2e39988ab39ad43e213d582698ce27da98fb4d97efefc76a"
+      }
+    ],
+    "oldArchivePreserved": true
+  },
+  "formalPinsUnchanged": true
+}
