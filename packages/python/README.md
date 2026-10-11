@@ -494,3 +494,22 @@ prepared = prepare_acceptance(
 assert prepared.provenance.installation_profiles_verified is False
 # prepared.input_bytes is input for future catalog admission, not a receipt.
 ```
+
+## Private native catalog staging
+
+`truss._catalog_staging.stage_new_catalog` is an administrative component, not a
+supported registration API. It consumes an original `prepare_acceptance` result
+and an already admitted caller transaction on a trusted pg8000 native-style port.
+It stages original documents, records, fields, keys and relationships using real
+native allocations, then checks complete native/source correspondence and returns
+an immutable provisional inventory. The selected absent-binding storage profile
+uses the existing ADR-002 D4 JSON default; bindings and transforms require their
+registered interpretation and currently refuse. Origin uses strict numeric-free
+JSON and passes its original UTF-8 unchanged.
+
+The host retains transaction ownership. A failed local operation rolls back its
+savepoint; failed cleanup retains both failures with containment unconfirmed.
+Ordinary-person admission, complete acceptance reports, finalization and public
+installation remain unfinished. No accepted revision is published, and the
+unconditional native commit barrier remains in place. Native tests load the
+retained SQL explicitly; the Python wheel does not install or bundle that SQL.

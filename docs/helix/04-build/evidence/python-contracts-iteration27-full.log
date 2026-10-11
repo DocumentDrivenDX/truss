@@ -1,0 +1,14 @@
+............................../private/tmp/truss-main-integration-20261010/packages/python/src/truss/_native_result_custody.py:101: ResourceWarning: unclosed <socket.socket fd=7, family=1, type=1, proto=0>
+  self._handlers = {code:self._handler(code, original)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..........................................................................................................................................................................................................................................................................................s...................../private/tmp/truss-main-integration-20261010/packages/python/tests/test_native_operation.py:186: ResourceWarning: unclosed <socket.socket fd=5, family=1, type=1, proto=0>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/private/tmp/truss-main-integration-20261010/packages/python/tests/test_native_operation.py:186: ResourceWarning: unclosed <socket.socket fd=21, family=1, type=1, proto=0>
+  gc.collect()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..............................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 572 tests in 122.802s
+
+OK (skipped=1)

@@ -1296,3 +1296,51 @@ in `evidence/python-contracts-iteration26-full.log`. Astra Ultra approved the so
 security main375a6004, its five additional public preparation tests passed in2.316s;
 these are separate from the frozen555-test membership. The unpackaged SQL is proven by actual
 native load/readback/tests; Python wheel membership is not evidence of its install.
+
+### Python native catalog staging iteration27
+
+Astra Ultra approved porting the existing original `catalog-new-stage.ts` path
+into Python and requiring independent verification before local savepoint release.
+`_catalog_staging.stage_new_catalog` now consumes an original, unchanged public
+UMF preparation and the caller's trusted native-style connection. Original
+operation admission and host connection coordination remain external. It stages
+complete documents, Records, Fields, keys and relationships with actual native IDs,
+then verifies retained prestate, complete native inventories, document/source
+correspondence, independent counts, every property storage home and whole-catalog
+relationship marker correspondence. The immutable result is explicitly provisional.
+
+The selected storage interpretation is the existing
+`ADR-002-D4-absent-binding-json-default` route: every Field uses JSON only when the
+binding is explicitly absent. Present bindings and transforms refuse before SQL;
+this slice does not interpret their physical/security meaning. Original origin
+UTF-8 is passed unchanged under an explicit strict numeric-free JSON profile;
+numeric origin content, duplicate members and nonfinite values refuse. This
+profile does not claim exact numeric origin-extension support.
+
+Original preparation recognition retains weak instance identity and exact immutable
+snapshots, validating exact nested carrier types before comparison. Copies,
+modified source/declaration/archive/observation bytes, altered provenance and
+custom-equality bytes subclasses cannot borrow the producer's provenance. This
+recognition is not native operation or person authority.
+
+Native tests stage the consumer's original five-Record, nine-Field, five-key core
+and a separate two-Record/key/relationship cohort. Independent late home-readback
+failure removes the entire new cohort and restores operation generation/phase,
+while preserving earlier host work. Host rollback removes successful provisional
+staging. The unconditional commit barrier still refuses commit; no report/head,
+accepted IDs, installation readiness or public registration is published. Cleanup
+failure retains both the primary failure and cleanup failure and reports containment
+unconfirmed. The frozen full regression attempted572 tests:571 passed and1 ICU
+probe skipped in122.802s. After final builtin/type qualification and correction
+of its exact late-fault test seam, a fresh installed wheel passes all12 staging
+tests in15.369s and all15 preparation tests in5.561s. All78 packaged files match
+the final source and installed bytes. The receipt retains both source snapshots
+and explicitly scopes the earlier full run versus the final installed delta.
+Astra Ultra approved the final source, plan and retained artifacts, verified
+all170 final pins and78 packaged files, and independently passed the12 installed
+staging tests in12.907s. The full external interface remains unfinished.
+
+After the reviewed wheel snapshot, security main7ab05500 was integrated without
+overlapping source changes. All50 affected security association tests passed
+in0.023s; their log and source pins are retained separately in iteration27.
+The earlier full and installed-wheel evidence does not include this later delta.

@@ -14,6 +14,7 @@ import subprocess
 import selectors
 import tempfile
 import time
+import weakref
 from ._umf_release import MANIFEST_SHA256
 from ._acceptance_json import decode_acceptance_json
 
@@ -46,7 +47,7 @@ class PreparationProvenance:
     scope: str = 'original_umf_preparation_only'
     installation_profiles_verified: bool = False
 
-@dataclass(frozen=True,slots=True)
+@dataclass(frozen=True,slots=True,weakref_slot=True)
 class PreparedAcceptance:
     input_bytes: bytes
     documents: tuple[DocumentInterpretation,...]
@@ -57,6 +58,47 @@ class PreparedAcceptance:
     def input(self) -> dict[str, object]:
         """Fresh AcceptanceInput dictionary; exact source remains in artifacts."""
         return json.loads(self.input_bytes)
+
+# Producer provenance only: these private records grant no database authority.
+_original_preparations = {}
+def _snapshot(prepared):
+    if (type(prepared) is not PreparedAcceptance
+            or any(type(getattr(prepared,name)) is not bytes for name in
+                   ('input_bytes','declarations_bytes','archive_documents_bytes'))
+            or type(prepared.documents) is not tuple
+            or type(prepared.provenance) is not PreparationProvenance):
+        raise ValueError('Exact original preparation carrier required')
+    for item in prepared.documents:
+        if (type(item) is not DocumentInterpretation or type(item.document) is not CatalogDocument
+                or type(item.observation_bytes) is not bytes
+                or type(item.document.content) is not bytes
+                or type(item.document.document_id) is not str
+                or type(item.document.document_revision) is not str
+                or (item.document.artifact_identity is not None and type(item.document.artifact_identity) is not str)):
+            raise ValueError('Exact original document carrier required')
+    for name in PreparationProvenance.__dataclass_fields__:
+        expected=bool if name=='installation_profiles_verified' else str
+        if type(getattr(prepared.provenance,name)) is not expected:
+            raise ValueError('Exact original provenance carrier required')
+    return (prepared.input_bytes, prepared.declarations_bytes,
+            prepared.archive_documents_bytes,
+            tuple((d.document.document_id, d.document.document_revision,
+                   d.document.content, d.document.artifact_identity, d.observation_bytes)
+                  for d in prepared.documents),
+            tuple(getattr(prepared.provenance, name)
+                  for name in PreparationProvenance.__dataclass_fields__))
+
+def _retain_original(prepared):
+    key = id(prepared)
+    _original_preparations[key] = (weakref.ref(prepared, lambda ref: _original_preparations.pop(key, None)),
+                                   _snapshot(prepared))
+    return prepared
+
+def _require_original_preparation(prepared):
+    entry = _original_preparations.get(id(prepared))
+    if (type(prepared) is not PreparedAcceptance or entry is None
+            or entry[0]() is not prepared or entry[1] != _snapshot(prepared)):
+        raise ValueError('Original unchanged UMF preparation required')
 
 class PreparationRejected(ValueError):
     def __init__(self,reason: str,*,diagnostics: tuple[bytes, ...]=()) -> None:
@@ -185,8 +227,8 @@ def prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byte
                 or pin['sha256'] != manifest['owner']['bundleSha256']
                 or result['provenance']['schemaSha256'] != manifest['files']['docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json']):
             _reject('producer_unavailable')
-        return PreparedAcceptance(original,evidence,_json(result['declarations']),_json(result['archiveDocuments']),
-            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],MANIFEST_SHA256,manifest['runtimeVersion']))
+        return _retain_original(PreparedAcceptance(original,evidence,_json(result['declarations']),_json(result['archiveDocuments']),
+            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],MANIFEST_SHA256,manifest['runtimeVersion'])))
     except (KeyError,ValueError,TypeError) as error:
         if isinstance(error,PreparationRejected):raise
         _reject('producer_unavailable')
