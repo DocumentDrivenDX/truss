@@ -503,6 +503,34 @@ This combined validation supersedes the original 320-test wheel for publication;
 complete public interface and protected admission readiness remain open.
 
 
+### Authenticated native inventory fixture and session lifetime
+
+The original PostgreSQL16.15 / pgserver0.1.4+truss.pg16.15 / pg8000
+1.31.5 candidate now has an owned Unix-socket SCRAM-SHA-256 fixture.
+[Combined native evidence](evidence/design-audit/installed-scram-combined-native.json)
+records82 observations and31 inventories with21 frozen source inputs. Wrong
+credentials and nonexistent subjects refuse28P01; native backend-PID authentication
+logs bind the ordinary connection to SCRAM. NOLOGIN refuses new sessions28000
+and changes inventory qualification, while two established sessions remain usable.
+Restored LOGIN permits a new session. LOGIN state cannot establish current-authority
+revocation or retire an existing authenticated operation.
+
+Four real failure controls verify secret redaction in receipts and subprocess stderr,
+including an unwritable receipt sink, and cleanup of every connection and cluster
+despite close failures. The helper executes captured bytes. Astra ultra feedback
+was applied before the final combined run. Historical development receipts retain
+their original pins; the first failed run identified backend-start log configuration
+and was corrected with a fresh inspector.
+
+The fresh combined-main installed wheel matches all53 source/owner/typing files.
+[Combined suite](evidence/design-audit/scram-combined-installed-suite.json) passes328 tests;
+[Python boundary evidence](evidence/design-audit/scram-combined-boundary.json) passes212 imports.
+This qualifies only the stated local fixture and private inventory component. It
+does not qualify TLS/production authentication, protected mapping, coherent current
+cut, PA01/PA02 completion, seven semantic operation bodies or installer readiness.
+Original UMF acceptance remains26/132; US-056-AC5/AC9/AC10 gain component evidence only.
+
+
 ### Iteration 15: original host-call recovery and disposal admission
 
 Astra Ultra approved the plan before implementation. Reserve bounded opaque
@@ -532,3 +560,11 @@ facts, never a newer owner or native call. Astra Ultra independently passed all
 reviewed SCRAM fixture work and validate the combined installed wheel before push.
 Active cancellation and native containment are the next transport implementation;
 public C02 and the complete external interface remain open.
+
+Combined validation integrates security commit bb5eb75a with checkpoint 3e6fb741.
+The installed wheel passed all 345 tests outside the checkout (43.744 seconds);
+47 Python modules, six owner assets and py.typed match source, wheel and install
+byte for byte. The module boundary check covers 216 imports. See
+[combined iteration 15 evidence](evidence/python-contracts-iteration15-combined.json).
+This completes the private recovery iteration; public C02 and installer readiness
+remain open pending cancellation, containment and the semantic interface.
