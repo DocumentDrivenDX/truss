@@ -589,3 +589,5 @@ trigger/default/RLS or extension routes, nor complete protected capture/current
 cuts. Original acceptance remains26/132. Source-derived proof scope is recorded
 separately by UMF; native privilege observations do not supply a SQL refinement
 proof or authenticate production authority.
+
+UMF main `afc03d29` retains the [source-derived census/guard proof](https://github.com/DocumentDrivenDX/umf/blob/afc03d29/docs/helix/04-build/evidence/security/truss-definer-census-formal/cfa978ae-c2c9-4fef-b244-4495aab10da9/proof.json) and its independent Astra ultra replay: six exact SMT queries,64 actual-tail vectors and38 original native inventory tail replays. Native row completeness and privilege facts remain premises; this is not full SQL/Python/temporal or protected-admission refinement. All original acceptance obligations remain required.
