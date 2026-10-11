@@ -149,5 +149,18 @@ class CatalogSupportNativeTests(CatalogNativeFixture,unittest.TestCase):
         self.assertEqual(payload['supportPolicyDecision'],evaluate_catalog_support(original))
         self.assertEqual(payload['missingFields'],['interfaceVersion','reportProfile','originalExecution','umf','assertions','extensions'])
         self.assertFalse(payload['acceptedReportQualified'])
+        semantics=payload['semanticSourceFields']
+        self.assertEqual(semantics['state'],'source_fields_ready')
+        self.assertEqual(semantics['catalogRevision'],self.connection.run('SELECT max(rev)::text FROM truss.schema_rev')[0][0])
+        self.assertEqual(len(semantics['assertionEntries']),7)
+        from truss._catalog_report import require_current_catalog_report_basis
+        require_current_catalog_report_basis(basis,self.connection,original)
+        from unittest.mock import patch
+        from truss._catalog_report_semantics import compose_catalog_report_semantics
+        def substituted(*args):
+            value=compose_catalog_report_semantics(*args);value['catalogRevision']='2';return value
+        with patch('truss._catalog_report_semantics.compose_catalog_report_semantics',side_effect=substituted),self.assertRaisesRegex(ValueError,'report semantics'):
+            require_current_catalog_report_basis(basis,self.connection,original)
+        require_current_catalog_report_basis(basis,self.connection,original)
         self.assertEqual(self.connection.run('SELECT rev FROM truss.schema_head'),[[0]])
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[1]])

@@ -1,0 +1,49 @@
+{
+  "scope": "Executable canonical report semantic inputs integrated with original native catalog report basis",
+  "acceptedReportQualified": false,
+  "publicCatalogAcceptanceAvailable": false,
+  "verification": {
+    "regression": {
+      "tests": 47,
+      "seconds": 70.338,
+      "result": "passed",
+      "qualification": "final production source; before adding strict Ajv check to projection test"
+    },
+    "exact": {
+      "tests": 5,
+      "seconds": 3.158,
+      "result": "passed",
+      "qualification": "final test source including strict Ajv governing entry schema and extra-ownerEvidence negative control"
+    },
+    "moduleBoundaries": {
+      "imports": 396,
+      "result": "passed"
+    }
+  },
+  "logs": {
+    "regression": {
+      "path": "docs/helix/04-build/evidence/design-audit/catalog-report-semantic-inputs-regression.log",
+      "sha256": "f43bd324b2ecabc44e7bb867fd176c6a9e88ea38ffd883c3a6e57957b9c42484"
+    },
+    "exact": {
+      "path": "docs/helix/04-build/evidence/design-audit/catalog-report-semantic-inputs-exact.log",
+      "sha256": "d2eb42da7daccf570d110ad518963b821166d9a2a45b0c0f7bf864ee97641232"
+    }
+  },
+  "sources": {
+    "packages/python/src/truss/_catalog_report_semantics.py": "a3937003f6daad3d665da17ff55b8bd042ff49747f974299e10aab04ae7f4aa4",
+    "packages/python/src/truss/_profiles/catalog-report-semantic-inputs.json": "be634f1d1bdf8f096333e25d15597d2b81af4ace87c9216a8abf304797df2080",
+    "packages/python/src/truss/_catalog_report.py": "beecc9de83a7d1a2f1a2b0de4a01af7c98605a08f2caf6d2e0f0e04575fb677b",
+    "packages/python/tests/test_catalog_report_semantics.py": "9445191d285ccca8416edd512544fcbf8fbe8e7af7d6a62b5cea2f7b0f03ea19",
+    "packages/python/tests/test_catalog_support.py": "477560c56a43ccd40748b78fd1c07cf704cbab38c4c7871dfb3dac1ff6f1a284",
+    "scripts/check-module-boundaries.py": "ce92fbeb9bffab5ba02e10bf96e0755c5af576bb143c0ffe70e9747cccd1b54f"
+  },
+  "unresolved": [
+    "Installed layout identity",
+    "Enforcement report profile binding",
+    "Original execution authority",
+    "Complete accepted report issuance/persistence and native finalization"
+  ],
+  "runtime": "CPython 3.11.17, PostgreSQL 16.15, pgserver 0.1.4+truss.pg16.15, pg8000 1.31.5; packaged Ajv under Bun",
+  "digest": "truss-canonical/0.1.0 LF truss-catalog-assertion-inventory/0.1.0 LF canonical projected entries"
+}

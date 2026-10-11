@@ -1,0 +1,10 @@
+test_canonical_refuses_numbers_surrogates_and_capacity (test_catalog_report_semantics.CatalogReportSemanticsTests.test_canonical_refuses_numbers_surrogates_and_capacity) ... ok
+test_independent_canonical_bytes_and_domain_vectors (test_catalog_report_semantics.CatalogReportSemanticsTests.test_independent_canonical_bytes_and_domain_vectors) ... ok
+test_original_multidocument_membership (test_catalog_report_semantics.CatalogReportSemanticsTests.test_original_multidocument_membership) ... ok
+test_original_support_and_profile_substitution_refuse (test_catalog_report_semantics.CatalogReportSemanticsTests.test_original_support_and_profile_substitution_refuse) ... ok
+test_projection_and_exact_digest (test_catalog_report_semantics.CatalogReportSemanticsTests.test_projection_and_exact_digest) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 3.158s
+
+OK

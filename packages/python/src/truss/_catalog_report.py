@@ -113,6 +113,8 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
     if provisional!=[['0']]:raise ValueError('Original complete empty provisional inventory required')
     index_declarations=collect_catalog_index_declarations(connection,prepared,catalog.revision,cut[:3])
     lifecycle=collect_catalog_lifecycle(connection,prepared,catalog.revision,cut[:3],original[4])
+    from ._catalog_report_semantics import compose_catalog_report_semantics
+    semantics=compose_catalog_report_semantics(prepared,support,catalog.revision)
     physical=_physical_snapshot(connection)
     final_cut=_cut(connection)
     if final_cut!=cut:raise ValueError('Stale original report cut')
@@ -133,6 +135,7 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
              'observationCoverage':observation_coverage,
              'coreAssertionIdentities':core_assertions,
              'supportSemanticsQualified':False,'supportPolicyDecision':support,
+             'semanticSourceFields':semantics,
              'nativeInventory':inventory,'physicalSnapshotHex':physical.hex(),'nativeCounts':json.loads(catalog.counts_bytes),
              'fieldQualification':{'extensions':'partial_retention_only',
                  'pending_indexes':'original_selected_immutable_declaration_policy_only',
@@ -160,6 +163,10 @@ def require_current_catalog_report_basis(basis,connection,prepared):
     if _cut(connection)!=original[4]:raise ValueError('Stale original report basis')
     payload=json.loads(basis.basis_bytes)
     revision=payload['fields']['rev']
+    from ._catalog_report_semantics import compose_catalog_report_semantics
+    from ._catalog_support import evaluate_catalog_support
+    if payload['semanticSourceFields']!=compose_catalog_report_semantics(prepared,evaluate_catalog_support(prepared),revision):
+        raise ValueError('Original current catalog report semantics required')
     # Re-run original source/native comparison: native generation can be reused
     # after host rollback/reapplication, so equality of counters is insufficient.
     if _physical_snapshot(connection).hex()!=payload['physicalSnapshotHex']:
