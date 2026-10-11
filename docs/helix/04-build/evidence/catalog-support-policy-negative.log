@@ -1,0 +1,7 @@
+test_unknown_required_scalar_refuses_and_absence_retains_duty (test_catalog_support.CatalogSupportTests.test_unknown_required_scalar_refuses_and_absence_retains_duty) ... ok
+test_partial_selected_facets_refuse (test_catalog_support.CatalogSupportTests.test_partial_selected_facets_refuse) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 3.107s
+
+OK

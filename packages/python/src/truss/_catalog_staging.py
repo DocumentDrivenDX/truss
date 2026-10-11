@@ -64,6 +64,8 @@ def stage_new_catalog(connection, prepared: PreparedAcceptance, *, origin_bytes:
         if len(names)!=len(set(names)):
             raise ValueError('Unique native result columns required')
         return [dict(zip(names,row,strict=True)) for row in values]
+    from ._catalog_support import evaluate_catalog_support
+    evaluate_catalog_support(prepared)
     savepoint='truss_catalog_'+uuid4().hex
     connection.run('SAVEPOINT '+savepoint)
     try:

@@ -1,0 +1,41 @@
+{
+  "scope": "original_0.7_native_catalog_metadata_preflight_only",
+  "regression": {
+    "tests": 36,
+    "seconds": 56.695,
+    "exitCode": 0,
+    "source": "before final decision capacity guard and policy hash refresh"
+  },
+  "exactPolicyReplay": {
+    "tests": 9,
+    "seconds": 19.664,
+    "exitCode": 0
+  },
+  "finalNegativeTestReplay": {
+    "tests": 2,
+    "seconds": 3.107,
+    "exitCode": 0,
+    "correction": "prepare outside refusal assertion verifies policy, not upstream invalid-document rejection"
+  },
+  "moduleBoundaryImports": 387,
+  "sourceSha256": {
+    "packages/python/src/truss/_catalog_support.py": "a73ce218571a5c2cf04410427c626645bd70046b58d7e544ba4dbc0805108860",
+    "packages/python/src/truss/_profiles/fresh-catalog-support.json": "d4abdcc3c8e42aac764ca7bb5f8875dcd7f230f0fa4d0dcead8cc91a62901c91",
+    "packages/python/src/truss/_catalog_staging.py": "720f8bb35214832e2ce40ffd7999f08f883ea5476ed70e18beff3197dd917ee0",
+    "packages/python/src/truss/_catalog_report.py": "cfb9284d36f30ec62bb668883cf26fe88387e4f81f18fdaaf3ae8a718fc433ac",
+    "packages/python/tests/test_catalog_support.py": "6b7f1bbf8fa830123e3cfd09f4b37e9f329cbfa73744905b44f3ac0c6aa55f5b",
+    "scripts/check-module-boundaries.py": "97516a8450eedbda00afb5aa032aa614a0f1f37a99fbeeef289022fb6034542c"
+  },
+  "logs": {
+    "catalog-support-policy-regression.log": "af77e1976310fdac09dff378919fdefcb2cf6b9cc87e63189953b1991773d1fe",
+    "catalog-support-policy-exact.log": "382842f176958e0aae4e2c4da5bdcad93395d233fcd05b5b9af7f5f1bf3bf2a8",
+    "catalog-support-policy-negative.log": "14fc1fe068e0f10a3c29dad8e1116baf64633ff2a6981513440f020810981636"
+  },
+  "review": "Astra Ultra reviewed plan and completed source",
+  "limits": "4MiB serialized returned decision bound; no preallocation or protected resource qualification",
+  "supportSemanticsQualified": false,
+  "assertionInventoryComplete": false,
+  "enforcementQualified": false,
+  "acceptedReportQualified": false,
+  "publicAcceptanceAvailable": false
+}
