@@ -681,3 +681,20 @@ native refusal before callback. Under complete cuts, attempt same-writer active
 revocation and require SQLSTATE55000 with unchanged facts after rollback. These
 five controls pass in packet79a2bb83 (73 total methods); this is not complete
 semantic mapping provenance, authorization or backend acceptance promotion.
+
+
+### Original logical/semantic/native fixture correspondence controls — 2026-10-11
+
+Under the ten-reference/five-table cut, read explicit native text facts and execute
+the original UMF owner evaluator. Verify permit with salary withheld for active
+same-project membership and deny for inactive, other-staff, sibling-project,
+missing-ownership and missing-assignment variants. Tie these fixture prerequisites
+to UMF US-079 AC1/AC4/AC5/AC7 and backend US-056 AC9/AC10; they do not qualify the
+ordinary caller, decoder/source closure, complete mutation executor or release.
+
+Retain a separate negative control: bind active to a valid alternate boolean column
+and decode it while the original column is false. The current private prototype
+permits these substituted facts. Required future admission must instead reject the
+substituted original mapping/decoder before policy evaluation or any publication.
+The counterexample is evidence of incomplete enforcement, not a passed acceptance
+case or a requirement to keep this behavior in an admitted implementation.

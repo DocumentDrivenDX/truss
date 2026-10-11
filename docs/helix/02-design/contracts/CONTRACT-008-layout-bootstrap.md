@@ -2121,3 +2121,26 @@ Wrong but well-typed semantic mappings still require original owner qualificatio
 native descriptors alone cannot discover that mismatch. Graph payload decoders,
 source/role/config cuts, ordinary caller authorization, protected dispatch and
 final disclosure remain unfinished. No public API or support flag changes.
+
+
+### Original owner evaluation over flat native facts — 2026-10-11
+
+The owned five-table fixture now reads bounded native text rows under complete
+original dependency cuts and invokes UMF's original `evaluateSecurityAccess`.
+The fixture decoder explicitly preserves string identity/endpoint values, boolean
+native spelling and integer tokens; compares original fixture policy/resolution
+bytes before evaluation; and requests salary withholding. `trusted=true` is an
+owned administrative fixture attestation only, not production caller authority.
+The six observed policy outcomes agree with same-project/active membership:
+permit with salary withheld, and deny for inactive assignment, other staff,
+sibling project, missing ownership and missing assignment.
+
+A native negative control maps the required `active` reference to a different real
+boolean column, decoy_active. With real active=false and decoy_active=true, complete
+declared coverage and native descriptor/cut checks succeed and the evaluator permits
+the incorrectly decoded facts. Retain this successful counterexample; do not admit
+the private comparison wrapper for ordinary authorization. Production admission
+must establish original field-to-provider/decoder correspondence and exclude its
+substitution throughout evaluation/publication. Neither complete names nor valid
+native descriptors authenticate that correspondence. No final disclosure or
+compiled PostgreSQL policy refinement is established by this fixture.

@@ -1,5 +1,5 @@
 """Actual flat Assignment and native Truss edge fact-cut components."""
-import unittest,hashlib
+import unittest,hashlib,json,subprocess
 from pathlib import Path
 import psycopg
 from psycopg import sql
@@ -187,3 +187,42 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         result=self.dependency_cut(t,lambda c:c.execute('UPDATE truss.sec_assignment SET active=false'))
         self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000')
         self.assertEqual(self.connection.execute('SELECT active FROM truss.sec_assignment').fetchall(),[(True,)])
+
+    def original_owner_decision(self, mutation=None, active_column='active', providers=None):
+        t=self.begin()
+        if mutation:self.connection.execute(mutation)
+        def evaluate(c):
+            capture={}
+            queries={'Staff':'SELECT staff_id::text FROM truss.sec_staff','Project':'SELECT project_id::text FROM truss.sec_project','Resource':'SELECT resource_id::text,salary::text FROM truss.sec_resource','Ownership':'SELECT owner_id::text,resource_id::text,project_id::text FROM truss.sec_ownership','Assignment':'SELECT assignment_id::text,staff_id::text,project_id::text,active::text FROM truss.sec_assignment'}
+            if active_column=='decoy_active':queries['Assignment']=queries['Assignment'].replace('active::text','decoy_active::text')
+            elif active_column!='active':raise ValueError('Exact fixture decoder required')
+            for name,query in queries.items():
+                c.execute(query,prepare=False,binary=False)
+                self.assertTrue(all(d.type_code==25 for d in c.description))
+                rows=c.fetchmany(101);self.assertLessEqual(len(rows),100);capture[name]=rows
+            result=subprocess.run(['/opt/homebrew/bin/bun','scripts/evaluate-security-flat-fixture.ts'],cwd=ROOT,input=json.dumps(capture),capture_output=True,text=True,timeout=20)
+            self.assertEqual(result.returncode,0,result.stderr)
+            return json.loads(result.stdout)
+        result=self.dependency_cut(t,evaluate,providers);self.assertIsInstance(result,Ok);return result.value
+    def test_original_owner_permits_native_same_project_and_withholds_salary(self):
+        self.assertEqual(self.original_owner_decision(),{'decision':'permit','output':[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}]})
+    def test_original_owner_denies_native_active_revocation(self):
+        self.assertEqual(self.original_owner_decision('UPDATE truss.sec_assignment SET active=false')['decision'],'deny')
+    def test_original_owner_denies_native_other_staff_assignment(self):
+        self.assertEqual(self.original_owner_decision("UPDATE truss.sec_assignment SET staff_id='s2'")['decision'],'deny')
+    def test_original_owner_denies_native_sibling_project_assignment(self):
+        self.assertEqual(self.original_owner_decision("UPDATE truss.sec_assignment SET project_id='p2'")['decision'],'deny')
+    def test_original_owner_denies_native_missing_ownership(self):
+        self.assertEqual(self.original_owner_decision('DELETE FROM truss.sec_ownership')['decision'],'deny')
+    def test_original_owner_denies_native_missing_assignment(self):
+        self.assertEqual(self.original_owner_decision('DELETE FROM truss.sec_assignment')['decision'],'deny')
+
+    def test_well_typed_wrong_active_mapping_counterexample_permits_revoked_staff(self):
+        providers=self.dependency_providers();p=providers[0]
+        # Negative control: complete declared refs and real native cuts do not
+        # authenticate semantic correspondence to the original active field.
+        wrong=_DependencyFactProvider(p.kind,p.reference,p.relation,_FactColumnComparison('decoy_active',5,16,-1,True,0))
+        mutation='ALTER TABLE truss.sec_assignment ADD COLUMN decoy_active boolean NOT NULL DEFAULT true; UPDATE truss.sec_assignment SET active=false'
+        observed=self.original_owner_decision(mutation,'decoy_active',(wrong,)+providers[1:])
+        self.assertEqual(observed['decision'],'permit')
+        self.assertEqual(self.connection.execute('SELECT active,decoy_active FROM truss.sec_assignment').fetchall(),[(False,True)])

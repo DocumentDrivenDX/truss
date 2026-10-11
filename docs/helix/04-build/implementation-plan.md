@@ -4012,3 +4012,25 @@ promoted; checkpoint remains26/132 with106 missing. Goal active; direct main.
 Initial235d75a6 native and2dd927da formal packets qualify the earlier comparison
 source without the explicit per-relation pre-copy column bound; final79a2bb83 and
 22bf3dfc retain the bounded current source. Both native tuples pass73 methods.
+
+
+### Original evaluator/native fixture correspondence and mapping counterexample — 2026-10-11
+
+Final packet `evidence/python-psycopg-epoch-cut/806ad967-fae5-4980-aed3-a3c7cdf14c25`
+passes80 component methods:29 fact/dependency/owner outcome controls,16 graph/gateway,
+nine epoch,26 adoption. Verified123 current/archived Truss source pins,
+363 original UMF owner source pins with compressed exact preimages,
+1614 native payload pins, module boundaries and three independent named
+stop0/status3/socket-absent fixture cleanups. Initial82d74a31 qualifies its earlier
+79-test tuple. Owner dependencies/runtime delivery are not hermetically qualified.
+
+Six added original-owner evaluations cover permit/withheld salary and five denial
+variants using facts actually read under complete native cuts. A seventh added
+control reproduces well-typed semantic mapping substitution: real active=false,
+decoy_active=true, incorrect facts permit. This changes the next admission work:
+original mapping/decoder source correspondence must be authenticated and fenced,
+not supplied as caller comparisons. Native input/body/source/role closure, graph
+field decoding, protected dispatch and final disclosure remain incomplete. No
+backend acceptance binding is promoted; checkpoint26/132 with106 missing. Full
+goal active; direct-main publication authorized. No new Astra review or formal
+native/evaluator refinement theorem is claimed.
