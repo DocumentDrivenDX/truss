@@ -1,0 +1,9 @@
+-- Private projection-scope adjunct, not an installed/accepted authority profile.
+CREATE TABLE truss.authorization_graph_fact_scope (
+ original_writer_xid xid8 NOT NULL,
+ rel_type_id integer NOT NULL REFERENCES truss.rel_def(rel_type_id),
+ original_context_bytes bytea NOT NULL CHECK(octet_length(original_context_bytes) BETWEEN 1 AND 4096),
+ original_evidence_bytes bytea NOT NULL CHECK(octet_length(original_evidence_bytes) BETWEEN 1 AND 65536),
+ PRIMARY KEY(original_writer_xid,rel_type_id)
+);
+REVOKE ALL ON truss.authorization_graph_fact_scope FROM PUBLIC;

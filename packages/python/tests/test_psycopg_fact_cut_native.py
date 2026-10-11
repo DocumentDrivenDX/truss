@@ -811,3 +811,49 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             called=[];result=_run_issuer_verified_epoch_operation(self.host,t,self.comparison(),barrier,original,lambda c:called.append(True))
             self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
         finally:self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def source_bound_profile(self):
+        from truss._psycopg_dependency_fact_cut import _OriginalFactSources
+        base=ROOT/'docs/helix/04-build/evidence/security-identity-requirements'
+        sources=_OriginalFactSources((base/'policy.json').read_bytes(),(base/'resolution.json').read_bytes())
+        raw=self.identity_raw()
+        profile=json.dumps({'kind':'truss-flat-fact-provider-fixture/0.2','requirementsSha256':hashlib.sha256(raw).hexdigest(),'policyUtf8':sources.policy.decode('utf8'),'resolutionUtf8':sources.resolution.decode('utf8'),'providers':[asdict(p) for p in self.identity_dependency_providers()]},sort_keys=True,separators=(',',':')).encode()
+        return raw,profile,sources
+    def test_source_bound_native_profile_captures_original_identity_cells(self):
+        t=self.begin();raw,profile,sources=self.source_bound_profile();comparison=self.issue_bound_profile(profile)
+        result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
+        self.assertIsInstance(result,Ok);self.assertEqual(len(result.value),5)
+    def test_source_bound_profile_requires_original_source_bundle(self):
+        t=self.begin();raw,profile,sources=self.source_bound_profile()
+        comparison=epoch_tests._EpochComparison('fixture',self.epoch,'target',profile,b'fixture')
+        with self.assertRaisesRegex(ValueError,'Original policy/resolution'):_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest())
+        self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+    def test_source_bound_profile_refuses_changed_policy_or_resolution_bytes(self):
+        from truss._psycopg_dependency_fact_cut import _OriginalFactSources
+        t=self.begin();raw,profile,sources=self.source_bound_profile()
+        comparison=epoch_tests._EpochComparison('fixture',self.epoch,'target',profile,b'fixture')
+        for wrong in (_OriginalFactSources(sources.policy+b' ',sources.resolution),_OriginalFactSources(sources.policy,sources.resolution+b' ')):
+            with self.subTest(source=wrong):
+                with self.assertRaisesRegex(ValueError,'requirement/source'):_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=wrong)
+        self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+    def test_replacing_all_source_bound_caller_copies_cannot_match_native_generation(self):
+        from truss._psycopg_dependency_fact_cut import _OriginalFactSources
+        t=self.begin();raw,profile,sources=self.source_bound_profile();comparison=self.issue_bound_profile(profile)
+        wrong_sources=_OriginalFactSources(sources.policy+b' ',sources.resolution)
+        wrong_raw=json.loads(raw);wrong_raw['policySha256']=hashlib.sha256(wrong_sources.policy).hexdigest();wrong_raw=json.dumps(wrong_raw).encode();wrong_digest=hashlib.sha256(wrong_raw).hexdigest()
+        replacement=json.loads(profile);replacement['policyUtf8']=wrong_sources.policy.decode();replacement['requirementsSha256']=wrong_digest
+        wrong=epoch_tests._EpochComparison(comparison.installation,comparison.epoch,comparison.incarnation,json.dumps(replacement).encode(),comparison.evidence)
+        result=_capture_epoch_bound_dependency_cells(self.host,t,wrong,wrong_raw,wrong_digest,sources=wrong_sources)
+        self.assertIsInstance(result,Error);self.assertEqual(self.fact_shares(),0)
+
+    def test_source_bundle_snapshot_ignores_later_caller_carrier_mutation(self):
+        import truss._psycopg_dependency_fact_cut as producer
+        from unittest.mock import patch
+        t=self.begin();raw,profile,sources=self.source_bound_profile();comparison=self.issue_bound_profile(profile)
+        validate=producer._inspect_original_fact_sources
+        def mutate(*args):
+            validate(*args)
+            object.__setattr__(sources,'policy',sources.policy+b' ')
+        with patch.object(producer,'_inspect_original_fact_sources',mutate):
+            result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
+        self.assertIsInstance(result,Ok);self.assertTrue(sources.policy.endswith(b' '))

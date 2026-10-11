@@ -900,3 +900,46 @@ issuer credentials, qualified profile/evidence production, ordinary caller/mappi
 and protected final release remain open. Last full checkpoint26/132,106 missing;
 goal active. Next compose qualified lifecycle producer and original profile sources
 with this source verification; installed comparison alone is not authority.
+
+
+### Original policy/resolution source-bound profile — 2026-10-11
+
+Private `truss-flat-fact-provider-fixture/0.2` retains policyUtf8/resolutionUtf8
+strings alongside the original requirement digest and provider declarations.
+Fixed capture requires a bounded original source bundle, snapshots its immutable
+bytes before validation, checks owner-artifact source-digest correspondence and
+exact native-profile inline UTF8 byte correspondence before host invocation.
+Original native epoch comparison still requires the same complete installed profile
+bytes; replacing all caller-side source/requirement/profile copies cannot match it.
+Semantic interpretation remains UMF-owned. Legacy0.1 remains its separately scoped
+subset and is not silently upgraded to exact inline-source correspondence.
+
+Five native methods prove original identity-cell capture, missing source-bundle
+refusal before xid assignment, policy/resolution byte-change refusals before xid,
+whole caller-copy replacement refused by actual retained native generation, and
+private snapshot stability despite later caller-carrier mutation. Source-artifact
+validation lives in the original artifact module, not native provider code.
+Final `evidence/python-psycopg-epoch-cut/d0767fa6-5104-4968-b8a2-21a352b3ba99`
+passes143 methods (92 fact/dependency/identity/visibility/DDL/role/source,16 graph,
+nine epoch,26 adoption), module boundaries,138 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Initial5d33494a passed142 native methods but
+correctly failed its module boundary for a misplaced hashing import; it remains
+nonqualifying evidence.
+
+Formal `evidence/security-source-profile-formal/b94c4652-0014-4ee8-913a-41d0fb5f2a5f`
+passes five fresh-context queries (three UNSAT/two SAT) with four exact source
+preimages. Under faithful original/selected/native byte correspondence, source
+substitution is excluded. Abstract finite-width digest equality alone and
+self-consistent replaced manifests without retained native comparison have
+countermodels; no hash injectivity assumed. Earlier123e8acb retains its simpler
+self-agreement counter and original source tuple. No UTF8/JSON/Python/PostgreSQL,
+epoch projection or SHA256 implementation refinement theorem.
+
+Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 provenance prerequisites.
+Source bytes/digests remain comparison premises, not authenticated issuer identity
+or physical mapping meaning. Qualified producer/caller authority, original mapping
+and decoder construction, complete source/role/ACL lifetime and protected final
+release remain open. No backend acceptance binding or public support flag promoted;
+last full checkpoint26/132 with106 missing. Goal active. Next bind original semantic
+and physical profile construction to qualified issuer custody and protected release.

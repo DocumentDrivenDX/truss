@@ -67,3 +67,28 @@ def _inspect_fact_coverage(original_bytes, expected_sha256, declarations):
         selected[key]=producer
     ordered=tuple(required)  # Preserve original owner enumeration, without normalization.
     return _FactCoverage(ordered,tuple(k for k in ordered if k not in selected),tuple((k,selected[k]) for k in ordered if k in selected))
+
+
+@dataclass(frozen=True)
+class _OriginalFactSources:
+    policy: bytes
+    resolution: bytes
+
+
+def _inspect_original_fact_sources(original_bytes, expected_sha256, sources):
+    """Source correspondence diagnostics; hashes are not authenticated identity.
+
+    No policy interpretation, mapping qualification or authority is issued.
+    """
+    if type(sources) is not _OriginalFactSources:
+        raise ValueError('Original policy/resolution source bundle required')
+    policy,resolution=sources.policy,sources.resolution
+    if any(type(v) is not bytes or not 1<=len(v)<=65536 for v in (policy,resolution)):
+        raise ValueError('Bounded original policy/resolution bytes required')
+    # Reuse the closed owner-artifact validator, preserving UMF ownership of
+    # semantic dependency enumeration. Empty declarations do not admit coverage.
+    _inspect_fact_coverage(original_bytes,expected_sha256,())
+    artifact=json.loads(original_bytes)
+    if (artifact['policySha256']!=hashlib.sha256(policy).hexdigest()
+            or artifact['resolutionSha256']!=hashlib.sha256(resolution).hexdigest()):
+        raise ValueError('Original requirement/source digest correspondence required')
