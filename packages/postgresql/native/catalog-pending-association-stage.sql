@@ -228,3 +228,62 @@ EXCEPTION WHEN no_data_found OR too_many_rows THEN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_stage_pending_association_candidate(int) FROM PUBLIC;
+
+-- Post-stage original source custody only. Does not certify semantic effects or publication.
+CREATE FUNCTION truss.runtime_collect_pending_association_source_candidate(original_revision int)
+RETURNS TABLE(mapping_pointer text,relationship_id text,mapping_sha256 text,effect_generation text)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE op truss.row_home_operation%ROWTYPE; archived truss.catalog_binding_archive%ROWTYPE;
+ input jsonb; binding jsonb; artifact jsonb; item record; retained truss.rel_def%ROWTYPE;
+ expected_count int:=0; pointer text; documents jsonb;
+BEGIN
+ SELECT o.* INTO STRICT op FROM truss.row_home_operation o WHERE
+  o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
+ IF op.operation_kind<>'catalog-acceptance' OR op.phase<>'admitted' OR original_revision IS NULL OR original_revision<=0 THEN
+  RAISE EXCEPTION 'pending source candidate admission required' USING ERRCODE='55000';
+ END IF;
+ IF NOT EXISTS(SELECT 1 FROM pg_locks l WHERE l.pid=pg_backend_pid() AND l.granted
+  AND l.relation='truss.schema_head'::regclass AND l.mode IN ('ExclusiveLock','AccessExclusiveLock'))
+  OR NOT EXISTS(SELECT 1 FROM truss.schema_head h WHERE h.id=1 AND h.rev<original_revision)
+  OR NOT EXISTS(SELECT 1 FROM truss.schema_rev r WHERE r.rev=original_revision) THEN
+  RAISE EXCEPTION 'pending source candidate unpublished exclusion required' USING ERRCODE='55000';
+ END IF;
+ SELECT a.* INTO STRICT archived FROM truss.catalog_binding_archive a WHERE a.revision=original_revision;
+ input:=convert_from(op.original_input_bytes,'UTF8')::jsonb;binding:=input->'binding';artifact:=binding->'artifact';
+ IF input->>'interfaceVersion' IS DISTINCT FROM 'truss-acceptance-input/0.1.0'
+  OR binding->>'state' IS DISTINCT FROM 'present'
+  OR archived.original_writer_xid IS DISTINCT FROM op.original_writer_xid
+  OR archived.original_input_bytes IS DISTINCT FROM op.original_input_bytes
+  OR archived.vocabulary IS DISTINCT FROM binding->'vocabulary'
+  OR archived.artifact_identity_utf8 IS DISTINCT FROM convert_to(artifact->>'identity','UTF8')
+  OR encode(archived.binding_sha256,'hex') IS DISTINCT FROM artifact->>'sha256'
+  OR archived.binding_sha256 IS DISTINCT FROM sha256(archived.original_binding_bytes)
+  OR archived.original_binding_bytes IS DISTINCT FROM decode(artifact->>'bytesBase64','base64') THEN
+  RAISE EXCEPTION 'pending source candidate original archive correspondence required' USING ERRCODE='55000';
+ END IF;
+ -- Recheck original document custody without applying the authored-only relationship inventory.
+ SELECT jsonb_agg(jsonb_build_object('documentId',d.doc_id,'revision',d.doc_revision,'umfVersion',d.umf_version,'originalText',d.document,'validation',d.validation) ORDER BY d.ord)
+ INTO documents FROM truss.schema_doc d WHERE d.rev=original_revision;
+ PERFORM truss.runtime_require_catalog_document_carrier(documents);
+ PERFORM * FROM truss.runtime_collect_report_documents(original_revision);
+ FOR item IN SELECT * FROM truss.runtime_extract_original_association_mapping_batch(archived.original_binding_bytes) LOOP
+  expected_count:=expected_count+1;pointer:='/mappings/'||item.mapping_index::text;
+  SELECT r.* INTO STRICT retained FROM truss.rel_def r WHERE r.definition_source_kind='operation_binding'
+   AND r.pending_binding_revision=original_revision AND r.pending_mapping_pointer COLLATE "C"=pointer COLLATE "C";
+  IF retained.pending_writer_xid IS DISTINCT FROM op.original_writer_xid
+   OR retained.pending_operation_ordinal IS DISTINCT FROM op.operation_ordinal
+   OR retained.pending_mapping_bytes IS DISTINCT FROM item.mapping_bytes
+   OR retained.since_rev IS DISTINCT FROM original_revision OR retained.retired_rev IS NOT NULL THEN
+   RAISE EXCEPTION 'pending source candidate exact tuple correspondence required' USING ERRCODE='55000';
+  END IF;
+  RETURN QUERY SELECT pointer,retained.rel_type_id::text,encode(sha256(item.mapping_bytes),'hex'),op.effect_generation::text;
+ END LOOP;
+ IF expected_count=0 OR (SELECT count(*) FROM truss.rel_def r WHERE r.definition_source_kind='operation_binding'
+  AND (r.pending_binding_revision=original_revision OR r.pending_writer_xid=op.original_writer_xid))<>expected_count THEN
+  RAISE EXCEPTION 'pending source candidate complete source cohort required' USING ERRCODE='55000';
+ END IF;
+EXCEPTION WHEN no_data_found OR too_many_rows THEN
+ RAISE EXCEPTION 'pending source candidate unique source correspondence required' USING ERRCODE='55000';
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_collect_pending_association_source_candidate(int) FROM PUBLIC;
