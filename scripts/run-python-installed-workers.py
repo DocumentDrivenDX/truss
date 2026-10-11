@@ -42,7 +42,7 @@ def lane(index):
             env.pop('TRUSS_NATIVE_TEST_SOCKET', None)
             env['PYTHONPATH'] = str(ROOT / 'scripts')
             for module in MODULES[index::COUNT]:
-                command = [sys.executable, '-W', 'error', '-m', 'unittest', 'discover',
+                command = [sys.executable, '-W', 'error', str(ROOT / 'scripts/run-python-test-module.py'), 'discover',
                            '-s', str(ROOT / 'packages/python/tests'), '-p', module.name, '-v']
                 started = time.perf_counter()
                 try:
@@ -90,7 +90,7 @@ tests = sum(item['tests'] or 0 for item in outcomes)
 receipt = {'passed': passed, 'complete': complete, 'tests': tests, 'workers': workers,
            'elapsedSeconds': time.perf_counter() - started,
            'sourceSha256': {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
-                            for path in [Path(__file__), ROOT / 'scripts/native_fixture.py', *MODULES]},
+                            for path in [Path(__file__), ROOT / 'scripts/native_fixture.py', ROOT / 'scripts/run-python-test-module.py', *MODULES]},
            'expectedModuleCount': len(MODULES), 'postgresqlVersion': '17.11',
            'lifecycleIsolation': 'Direct LocalPostgres and raw startup/shutdown fixtures retain separate owned clusters'}
 (DESTINATION / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')

@@ -55,7 +55,7 @@ fixture_paths = [
  'docs/helix/02-design/contracts/row-operation-registry-observation-v0.1.proposal.sql',
 ]
 def pin_inputs():
- paths = sorted((root/'packages/python/tests').glob('test_*.py')) + [root/p for p in fixture_paths] + [root/'scripts/native_fixture.py', root/'scripts/run-python-installed-workers.py']
+ paths = sorted((root/'packages/python/tests').glob('test_*.py')) + [root/p for p in fixture_paths] + [root/'scripts/native_fixture.py', root/'scripts/run-python-installed-workers.py', root/'scripts/run-python-test-module.py']
  return [{'path':str(p.relative_to(root)), 'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in paths]
 input_basis = pin_inputs()
 def save_failure(status, stdout, stderr, returncode=None):

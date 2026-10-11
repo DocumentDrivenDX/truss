@@ -114,8 +114,11 @@ To reproduce the selected embedded qualification lane with an installed Truss wh
 This command requires the pinned pg8000/Weft test dependencies and a fresh run id.
 It reuses installed binaries and performs no source build. Twelve native groups
 share one cluster per worker with fresh databases and roles; default `--workers 1`
-uses one suite cluster. The installed lifecycle suite, CLI signal/restart and
-transaction-timeout observations use separate owned clusters.
+uses one suite cluster. The expanded installed suite also shares socket workers across ordinary native
+fixture classes; `TRUSS_INSTALLED_SUITE_WORKERS` defaults to2 and may select1–8.
+Direct startup/shutdown fixtures, CLI signal/restart and transaction-timeout
+observations use separate owned clusters. Set `TRUSS_INSTALLED_SUITE_TIMEOUT`
+within30–1800 seconds for the expanded suite (default600).
 
 Workers use unique short Unix socket directories and disable TCP listening.
 The socket's port suffix is local to its directory; workers do not contend for a

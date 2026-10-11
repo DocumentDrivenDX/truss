@@ -1,4 +1,5 @@
--- Private PostgreSQL17.9 source-catalog census; not authenticated admission.
+-- The deprecated pg16 filename aliases these17.11-only fixture bytes.
+-- Private PostgreSQL17.11 source-catalog census; not authenticated admission.
 -- Captures whole-database selected catalogs, including bodies absent from pg_depend.
 -- OID-alias fields retain numeric identity beside their potentially ambiguous spelling.
 -- Table contents/statistics, external executable custody, source writers and a
@@ -99,7 +100,7 @@ SELECT 'pg_transform'::pg_catalog.text AS section, (SELECT pg_catalog.jsonb_agg(
  pg_catalog.max(count) AS largest_section,pg_catalog.sum(count) AS total_rows
  FROM measured
 )
-SELECT CASE WHEN pg_catalog.current_setting('server_version_num') OPERATOR(pg_catalog.=) '160015'
+SELECT CASE WHEN pg_catalog.current_setting('server_version_num') OPERATOR(pg_catalog.=) '170011'
  AND largest_section OPERATOR(pg_catalog.<=) 8192 AND total_rows OPERATOR(pg_catalog.<=) 100000
  AND NOT EXISTS(SELECT 1 FROM pg_catalog.pg_foreign_data_wrapper)
  AND NOT EXISTS(SELECT 1 FROM pg_catalog.pg_foreign_server)

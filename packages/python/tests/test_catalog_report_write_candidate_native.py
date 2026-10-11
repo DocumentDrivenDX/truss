@@ -18,7 +18,7 @@ from truss._report_schema import validate_complete_report
 class ReportWriteCandidateNativeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.addClassCleanup(fixture.ConfiguredReleaseStageNativeTests.tearDownClass)
+        cls.addClassCleanup(fixture.NativeBoundaryFixture.tearDownClass.__func__, fixture.ConfiguredReleaseStageNativeTests)
         fixture.ConfiguredReleaseStageNativeTests.setUpClass()
         cls.Connection=fixture.ConfiguredReleaseStageNativeTests.Connection
         cls.kwargs=fixture.ConfiguredReleaseStageNativeTests.kwargs

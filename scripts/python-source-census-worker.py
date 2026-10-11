@@ -44,7 +44,7 @@ def capture(label,*,unavailable=False,lost=False):
    check(label+':returned-or-lost-reply',True,(result is retained) if not lost else result is None)
    check(label+':complete-original-call',True,retained.original_call.capture_complete and retained.original_call.final_status==b'T')
    image=retained.original_image;parsed=json.loads(image)
-   check(label+':qualified-engine','160015',parsed['serverVersion']);check(label+':40-sections',40,len(parsed['sections']))
+   check(label+':qualified-engine','170011',parsed['serverVersion']);check(label+':40-sections',40,len(parsed['sections']))
    check(label+':original-request',True,retained.original_request==b'Q'+struct.pack('!I',len(gate.sql.encode())+5)+gate.sql.encode()+b'\0')
    (folder/(label+'.image.json')).write_bytes(image)
    captures.append({'label':label,'sha256':sha(image),'imageBytes':len(image),'chunks':gate.chunk_count,'account':gate.account.snapshot(gate),'rows':gate.rows_seen,'wireRemaining':gate.receiver._remaining_bytes})
@@ -71,7 +71,7 @@ def capture(label,*,unavailable=False,lost=False):
   if gate is not None and not gate.detached:con._sock=gate.original_sock
   con.close()
 try:
- check('native-engine',[['160015']],admin.run("SELECT current_setting('server_version_num')::text"))
+ check('native-engine',[['170011']],admin.run("SELECT current_setting('server_version_num')::text"))
  admin.run("CREATE SCHEMA census_probe; CREATE TABLE census_probe.facts(value text); INSERT INTO census_probe.facts VALUES('original'); CREATE FUNCTION census_probe.value() RETURNS bigint LANGUAGE sql IMMUTABLE AS 'SELECT 1::bigint';")
  unicode='A'*4095+'🙂é'+'B'*1000000
  admin.run("CREATE FUNCTION census_probe.unicode() RETURNS text LANGUAGE sql AS $body$ SELECT '"+unicode+"'::text $body$;")
@@ -88,7 +88,7 @@ try:
  admin.run("CREATE FUNCTION census_probe.overflow() RETURNS text LANGUAGE sql AS $body$ SELECT '"+'Z'*17000000+"'::text $body$;")
  capture('overflow-refusal',unavailable=True);admin.run('DROP FUNCTION census_probe.overflow();')
  final=capture('final-restored');check('overflow:exact-source-restoration',sha(baseline),sha(final))
- (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'captures':captures,'scope':'Excluded installed pgserver PostgreSQL16.15 Unix-socket installer and pg8000 original-operation capture only. Cooperative host/driver and retained payload bookkeeping premises. No public installed provider profile, authenticated provider/issuer, whole native observer interpretation, authority/execution held cut, graph profile, completed operation handback or backend acceptance.'},indent=2)+'\n')
+ (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'captures':captures,'scope':'Excluded installed pgserver PostgreSQL17.11 Unix-socket installer and pg8000 original-operation capture only. Cooperative host/driver and retained payload bookkeeping premises. No public installed provider profile, authenticated provider/issuer, whole native observer interpretation, authority/execution held cut, graph profile, completed operation handback or backend acceptance.'},indent=2)+'\n')
  print(json.dumps({'status':'component-passed','observations':len(observations)}))
 except BaseException as error:
  (folder/'native-failure.json').write_text(json.dumps({'status':'failed','observations':observations,'captures':captures,'error':str(error)},indent=2)+'\n');raise
