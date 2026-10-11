@@ -1,0 +1,19 @@
+{
+  "failure": "Native composition failed: 1",
+  "nativeFixture": {
+    "containerId": "0806e3c368db1b5f21531edf3073a5f66fee510396c9f69b876579ebec46f495",
+    "imageId": "sha256:2a0d0fe14825b0939f78a8cad5cd4e6aa68bf94d0e5dd96e24b6d23af4315545",
+    "database": "truss_type_receipts_cohort_77980b97d00a4e6d948179405a97ec11",
+    "port": "35395",
+    "scope": "Owned disposable native candidate collector fixture"
+  },
+  "cleanup": {
+    "containerId": "0806e3c368db1b5f21531edf3073a5f66fee510396c9f69b876579ebec46f495",
+    "exitCode": 0,
+    "stdout": "0806e3c368db1b5f21531edf3073a5f66fee510396c9f69b876579ebec46f495",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "ownedName": "truss-type-receipts-cohort-77980b97d00a4e6d948179405a97ec11",
+  "cidfile": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/type-receipts-native-cohort/5130c5f2-7595-4596-b9f7-4fbf69fa3952/container.cid"
+}

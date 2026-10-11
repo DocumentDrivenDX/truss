@@ -1,0 +1,12 @@
+PostgresError: original field carrier
+    errno: "22023",
+ severity: "ERROR",
+    where: "PL/pgSQL function truss.runtime_stage_new_properties(integer,jsonb) line 36 at RAISE",
+     file: "pl_exec.c",
+  routine: "exec_stmt_raise",
+     code: "ERR_POSTGRES_SERVER_ERROR"
+
+      at wrapPostgresError (internal:sql/postgres:176:27)
+      at onRejectPostgresQuery (internal:sql/postgres:204:33)
+
+Bun v1.4.2 (macOS arm64)

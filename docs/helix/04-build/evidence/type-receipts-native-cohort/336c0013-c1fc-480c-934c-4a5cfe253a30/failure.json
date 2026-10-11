@@ -1,0 +1,19 @@
+{
+  "failure": "('TRUSS_UMF_REFERENCE_LINKS_PRODUCER', 'TRUSS_UMF_RECORD_TYPE_RECEIPT_PRODUCER')",
+  "nativeFixture": {
+    "containerId": "a0c75dc792d46449a2746dcb9f0c6266b151437671babd30ecb16346ed8e1d43",
+    "imageId": "sha256:2a0d0fe14825b0939f78a8cad5cd4e6aa68bf94d0e5dd96e24b6d23af4315545",
+    "database": "truss_type_receipts_cohort_289bdf4731b744a69de3b222583bd0ad",
+    "port": "35396",
+    "scope": "Owned disposable native candidate collector fixture"
+  },
+  "cleanup": {
+    "containerId": "a0c75dc792d46449a2746dcb9f0c6266b151437671babd30ecb16346ed8e1d43",
+    "exitCode": 0,
+    "stdout": "a0c75dc792d46449a2746dcb9f0c6266b151437671babd30ecb16346ed8e1d43",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "ownedName": "truss-type-receipts-cohort-289bdf4731b744a69de3b222583bd0ad",
+  "cidfile": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/type-receipts-native-cohort/336c0013-c1fc-480c-934c-4a5cfe253a30/container.cid"
+}

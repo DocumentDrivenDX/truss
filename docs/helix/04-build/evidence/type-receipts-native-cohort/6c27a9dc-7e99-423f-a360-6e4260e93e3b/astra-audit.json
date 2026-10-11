@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "method": "Independent read-only exact source/ZIP/native receipt/log/custody audit; no native execution",
+  "receiptSha256": "ae8b2887c3cb6923d55c9392ceaa745baa5d70f2e280cf43d970c23b96182bd0",
+  "nativeReceiptSha256": "67ad9492f9930260fe671f2c6e34ed6481fdd9a02fc3d3d360c9441399fb73f0",
+  "nativeLogSha256": "68d20a1e2b5fd3736ec57b1733a77c2f9090ba3775299e38ea07e84e76003a5e",
+  "archiveSha256": "6f440bef9734b08f3826c720fbb02d3fe5808fa410375403c96d7e9247439659",
+  "sourcePins": 813,
+  "includedHostPins": 726,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentInputInventoryMatches": true,
+  "uniqueNativeChecks": 216,
+  "allHistoricalChecksRetained": 210,
+  "newTypeReceiptChecks": [
+    "actual typed cohort stages original three Records and one property with exact archive",
+    "actual native report retains independent type owner and original receipt wire",
+    "native type receipt byte correspondence grants no issuer or enforcement authority",
+    "native report refuses copied and falsy type receipt sidecars before SQL",
+    "typed cohort rollback removes native catalog property and document effects",
+    "retained type receipt cannot authorize an ended native report cut"
+  ],
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "typeReceiptOwnerProfile": {
+    "identity": "umf-record-type-receipt-inspection",
+    "version": "ec3fae2bdb93bdbaff30c38ee370030da7db1760",
+    "sha256": "2f3c5ca7a3bf8af05fe5429cf9b2ea32ef594efbaa839cf9685c8da875570098"
+  },
+  "originalRequestSha256": "46756067cdacbc7ea03bb1f2c4aeedfa3791baba9a3b2af386e505ebb39bb004",
+  "originalReceiptSha256": "fe4975353748bfaff311a0818a5273f92ec924647c7fea7cd5e4ee4d4b08d469",
+  "originalSourceSha256": "70bb78c93125a39292748d16eedf28018ce4d186b3b9dc26c82f361f5b325a19",
+  "ownerEvidenceSha256": "376b5c022bb7127f90e443a1e124dc4e229e7cf56a53f2a9a6e07e577b86afba",
+  "nativeObservation": {
+    "writerXid": "868",
+    "operationOrdinal": "0",
+    "effectGeneration": "6"
+  },
+  "exactReceiptSourceMeaningAndPointerJoin": true,
+  "cleanup": {
+    "containerId": "3f934f185485c26b703f5ca71d5c77686e59577fc6892267a62ea0bc29ab5ff3",
+    "exitCode": 0,
+    "stdout": "3f934f185485c26b703f5ca71d5c77686e59577fc6892267a62ea0bc29ab5ff3",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "resolvedFindings": [
+    "Reference producer lookup uses the single intended key",
+    "Exact independently named six-check inventory union with all210 baseline checks; no omissions, duplicates or unrelated substitutes"
+  ],
+  "scope": "Private receipt-sidecar composition with actual native source/archive and transaction observations; ended-cut control rechecks the native report document basis, not receipt consumption. No SQL type enforcement, authenticated issuer, persisted receipt or accepted report/publication authority.",
+  "acceptancePromoted": false
+}
