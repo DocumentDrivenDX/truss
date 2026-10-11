@@ -4260,3 +4260,44 @@ remain open. No public support flag or backend acceptance binding. Last full
 checkpoint26/132 with106 missing; goal active. Next compose original reachable-
 routine/ACL inventory and participating shared-role changes into authority
 admission, preserving the counterexamples as required negative controls.
+
+
+### Native definer bypass and direct-EXECUTE exclusion — 2026-10-11
+
+Implemented selected private invoker-only snapshot composition after original
+installed barrier and session/effective-role checks. A fixed native existence probe
+refuses any SECURITY DEFINER routine with EXECUTE available to either original
+identity, including candidates without current schema USAGE. No user decoder or
+caller-supplied list determines the native result.
+
+Actual nonowner bypass control calls an owned privileged definer to disable the
+ALWAYS barrier after the weaker role-only admission; the stronger snapshot refuses
+before callback. Positive invoker-only and revoked-EXECUTE cases pass. Actor setup
+explicitly excludes the two original administrative high-water definers. Initial
+`evidence/python-psycopg-epoch-cut/0aaf9728-96d4-429f-bdb8-4b7e1dd625fd` retains
+two positive-fixture failures: broad setup grants exposed those existing definers,
+and refusal was correct. It is not relabeled passing evidence.
+
+Final `evidence/python-psycopg-epoch-cut/c5ef24cc-f2e7-49e6-95cd-52f76643dfd4`
+passes121 methods (70 fact/dependency/identity/visibility/DDL/role/definer,16 graph,
+nine epoch,26 adoption), module boundaries,131 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-definer-exclusion-formal/e1dfc639-591f-4815-9c59-a40512ee3286`
+passes five fresh-context queries (three UNSAT/two SAT), retaining SMT/model
+receipts and three exact source preimages. Under abstract unbounded role/EXECUTE
+reachability predicates, selected strong exclusion prevents session/effective
+definer reachability and stable reachability preserves it; weaker admission and
+later ACL changes have countermodels. Initiald7268906 retains its earlier source
+tuple. No native privilege/call-graph/catalog/SQL/Python refinement or lifetime
+proof.
+
+Profiles permitting qualified definers remain required separate implementation
+work; the invoker-only subset does not replace the shared final objective. SET ROLE
+reachability, invoker privilege transitions, shared ACL/role/config changes,
+authenticated caller/issuer/mapping and protected final release remain open. Trace
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC5/AC9/AC10 prerequisites. No public
+support flag or backend acceptance binding changed; last full checkpoint26/132,
+106 missing. Goal active. Next qualify SET ROLE reachability and original routine
+inventories, then coordinate shared ACL/role changes through the authority cut.

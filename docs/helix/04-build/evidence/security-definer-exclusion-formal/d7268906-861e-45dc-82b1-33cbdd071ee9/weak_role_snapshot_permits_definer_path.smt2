@@ -1,0 +1,22 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun original_effective_role () Int)
+(declare-fun original_owner_membership () (Array Int Bool))
+(declare-fun original_bypassrls () (Array Int Bool))
+(declare-fun original_createrole () (Array Int Bool))
+(declare-fun original_superuser () (Array Int Bool))
+(declare-fun original_session_role () Int)
+(declare-fun reachable_privileged_definer () (Array Int Bool))
+(assert
+ (let (($x22 (select original_owner_membership original_effective_role)))
+ (let (($x21 (select original_bypassrls original_effective_role)))
+ (let (($x20 (select original_createrole original_effective_role)))
+ (let (($x19 (select original_superuser original_effective_role)))
+ (let (($x16 (select original_owner_membership original_session_role)))
+ (let (($x15 (select original_bypassrls original_session_role)))
+ (let (($x14 (select original_createrole original_session_role)))
+ (let (($x13 (select original_superuser original_session_role)))
+ (and (not (or $x13 $x14 $x15 $x16)) (not (or $x19 $x20 $x21 $x22))))))))))))
+(assert
+ (select reachable_privileged_definer original_effective_role))
+(check-sat)

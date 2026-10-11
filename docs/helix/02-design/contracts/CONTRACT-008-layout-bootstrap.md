@@ -2296,3 +2296,20 @@ a full role/grant/source lifetime cut. Reachable SECURITY DEFINER routines and
 concurrent shared-role/config/ACL changes remain independent obligations; a
 matching role snapshot cannot qualify their absence. Fixture-wide grants are
 synthetic setup, not a production least-privilege inventory.
+
+
+### Selected direct-EXECUTE invoker-only snapshot — 2026-10-11
+
+A private invoker-only DDL cut composes installed barriers and both-role exclusion
+with native `has_function_privilege` observation over all SECURITY DEFINER routines
+for the original session and effective identities. Any reachable definer refuses
+before callback. Do not discard candidates solely for missing current schema
+USAGE: previously resolved routine identities require conservative inventory.
+The existence probe returns at most one bounded native OID and cannot silently
+accept a truncated inventory.
+
+This is an explicitly selected direct-EXECUTE snapshot subset. Profiles permitting
+qualified definers require their own exact reachable-routine/ACL/dependency
+inventory, not this exclusion. SET ROLE transitions, invoker-to-privileged paths,
+concurrent ACL/role changes, complete call closure and final release remain
+unqualified. No comparison or result confers authenticated authority.

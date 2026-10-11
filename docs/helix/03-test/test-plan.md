@@ -807,3 +807,20 @@ are retained. Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
 prerequisites only. Formal50354147 separately retains three UNSAT properties and
 two SAT counterexamples for abstract role snapshots; no native membership
 algorithm, SQL/Python refinement, role lifetime or full authority proof.
+
+
+### Native reachable-definer bypass and selected refusal — 2026-10-11
+
+Three controls require: the original invoker-only actor fixture passes; an actual
+nonowner with EXECUTE on an owned SECURITY DEFINER routine can disable the native
+table barrier through the weaker role-only snapshot, while the selected stronger
+profile refuses without callback; removing direct and PUBLIC EXECUTE from another
+definer independently reports native false reachability and permits the stronger
+snapshot. Actor grants explicitly exclude the two exact layout administrative
+high-water definers. The bypass control observes its attack EXECUTE=true and both
+high-water EXECUTE=false, so refusal is attributed to the intended native path.
+Packetc5ef24cc passes121 methods; three native cleanups retained. Trace
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC5/AC9/AC10 prerequisites.
+Formale1dfc639 supplies three conditional UNSAT/two SAT results; no native
+EXECUTE implementation, SET ROLE closure, shared ACL lifetime or final-release
+refinement proof.

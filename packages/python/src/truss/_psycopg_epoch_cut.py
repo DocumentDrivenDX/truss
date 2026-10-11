@@ -151,3 +151,24 @@ def _run_unprivileged_ddl_fenced_epoch_operation(host, transaction, comparison, 
             raise ValueError('Original session and effective role administration exclusion required')
         return callback(cursor)
     return _run_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,exclude)
+
+
+def _run_no_definer_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, callback):
+    """Selected no-reachable-definer snapshot profile, not complete call closure.
+
+    Conservatively includes EXECUTE reachability even without current schema
+    USAGE (previously resolved statements can retain routine identities).
+    Profiles allowing qualified definers require a separate exact inventory.
+    """
+    if not callable(callback):raise ValueError('Private operation callback required')
+    def exclude(cursor):
+        cursor.execute("SELECT p.oid::pg_catalog.text FROM pg_catalog.pg_proc p "
+                       "WHERE p.prosecdef AND (pg_catalog.has_function_privilege(session_user,p.oid,'EXECUTE') "
+                       "OR pg_catalog.has_function_privilege(current_user,p.oid,'EXECUTE')) LIMIT 1",
+                       prepare=False,binary=False)
+        rows=cursor.fetchmany(2)
+        if (cursor.description is None or len(cursor.description)!=1
+                or cursor.description[0].type_code!=25 or rows!=[]):
+            raise ValueError('Selected no-reachable-definer profile required')
+        return callback(cursor)
+    return _run_unprivileged_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,exclude)

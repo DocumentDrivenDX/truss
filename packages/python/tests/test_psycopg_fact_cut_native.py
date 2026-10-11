@@ -527,6 +527,9 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         self.connection.execute('CREATE ROLE fact_cut_actor LOGIN')
         try:
             self.connection.execute('GRANT USAGE ON SCHEMA truss TO fact_cut_actor; GRANT ALL ON ALL TABLES IN SCHEMA truss TO fact_cut_actor; GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA truss TO fact_cut_actor')
+            # Exact owned-layout administrative high-water routines are not
+            # part of this invoker-only actor fixture. PUBLIC is already revoked.
+            self.connection.execute('REVOKE ALL ON FUNCTION truss.catalog_global_high_water_v01(),truss.catalog_key_high_water_v01(integer) FROM fact_cut_actor')
             if grant_owner:self.connection.execute('GRANT postgres TO fact_cut_actor')
             if attribute:self.connection.execute('ALTER ROLE fact_cut_actor '+attribute)
             with psycopg.connect(host=str(self.socket),user='fact_cut_actor',dbname='postgres',autocommit=True,options='-c statement_timeout=3s') as connection:
@@ -569,3 +572,36 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
         for attribute in ('CREATEROLE','BYPASSRLS'):
             with self.subTest(attribute=attribute):self.with_unprivileged_actor(operation,attribute=attribute)
+
+    def test_no_reachable_definer_profile_passes_original_invoker_fixture(self):
+        from truss._psycopg_epoch_cut import _run_no_definer_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'invoker-only'),Ok('invoker-only'))
+        self.with_unprivileged_actor(operation)
+    def test_native_definer_can_disable_barrier_and_stronger_profile_refuses(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation,_run_no_definer_ddl_fenced_epoch_operation
+        self.connection.execute("CREATE FUNCTION truss.fixture_disable_barrier() RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$ BEGIN ALTER EVENT TRIGGER truss_table_ddl_writer_barrier DISABLE; END $$")
+        try:
+            def operation(host,t,original,connection):
+                self.assertEqual(connection.execute("SELECT pg_catalog.has_function_privilege(current_user,'truss.fixture_disable_barrier()','EXECUTE'),pg_catalog.has_function_privilege(current_user,'truss.catalog_global_high_water_v01()','EXECUTE'),pg_catalog.has_function_privilege(current_user,'truss.catalog_key_high_water_v01(integer)','EXECUTE')").fetchone(),(True,False,False))
+                called=[];result=_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+                # Actual nonowner role passes the weaker snapshot, then uses a
+                # reachable original SECURITY DEFINER routine to administer it.
+                def bypass(c):
+                    c.execute('SELECT truss.fixture_disable_barrier()')
+                    c.execute("SELECT evtenabled::pg_catalog.text FROM pg_catalog.pg_event_trigger WHERE evtname='truss_table_ddl_writer_barrier'")
+                    return c.fetchone()[0]
+                self.assertEqual(_run_unprivileged_ddl_fenced_epoch_operation(host,t,self.comparison(),original,bypass),Ok('D'))
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP FUNCTION truss.fixture_disable_barrier()')
+    def test_revoked_definer_execute_removes_native_reachability(self):
+        from truss._psycopg_epoch_cut import _run_no_definer_ddl_fenced_epoch_operation
+        self.connection.execute("CREATE FUNCTION truss.fixture_private_definer() RETURNS integer LANGUAGE sql SECURITY DEFINER AS $$ SELECT 1 $$; REVOKE ALL ON FUNCTION truss.fixture_private_definer() FROM PUBLIC")
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('REVOKE ALL ON FUNCTION truss.fixture_private_definer() FROM fact_cut_actor')
+                self.assertEqual(connection.execute("SELECT pg_catalog.has_function_privilege(current_user,'truss.fixture_private_definer()','EXECUTE')").fetchone(),(False,))
+                self.assertEqual(_run_no_definer_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'not-reachable'),Ok('not-reachable'))
+            self.with_unprivileged_actor(operation)
+        finally:self.connection.execute('DROP FUNCTION truss.fixture_private_definer()')
