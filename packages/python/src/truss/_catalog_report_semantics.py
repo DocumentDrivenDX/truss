@@ -54,15 +54,12 @@ def canonical_numeric_free(value):
     return bytes(output)
 
 
-def compose_catalog_report_semantics(prepared,support,revision):
+def compose_original_catalog_report_semantics(prepared,support):
     _require_original_preparation(prepared)
     if support!=evaluate_catalog_support(prepared):raise ValueError('Original evaluated report support required')
     inventory=support.get('closedSourceInventory',{})
     if inventory.get('state')!='inventoried':
         return {'state':'unavailable','reason':'complete_closed_source_inventory_required'}
-    if (type(revision) is not str or not revision.isascii() or not revision.isdecimal()
-        or str(int(revision))!=revision or not 0<int(revision)<=2147483647):
-        raise ValueError('Canonical native catalog revision required')
     policy=files('truss').joinpath('_profiles/catalog-report-semantic-inputs.json').read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=PROFILE_SHA256:
         raise ValueError('Original report semantic projection profile required')
@@ -81,7 +78,7 @@ def compose_catalog_report_semantics(prepared,support,revision):
         if group is None:
             group={'umf':membership,'documentIds':[]};groups.append(group)
         group['documentIds'].append(document['documentId'])
-    return {'state':'source_fields_ready','catalogRevision':revision,'projectionProfile':dict(PROFILE),
+    return {'state':'source_fields_ready','projectionProfile':dict(PROFILE),
             'projectionArtifact':{'identity':'truss.catalog-report-semantic-inputs/0.1.0',
                 'bytesBase64':base64.b64encode(policy).decode('ascii'),'sha256':PROFILE_SHA256},
             'umf':[group['umf'] for group in groups],'umfMembership':groups,'extensions':[],
@@ -89,3 +86,13 @@ def compose_catalog_report_semantics(prepared,support,revision):
             'assertionInventorySha256':digest,
             'unresolvedBindings':['installedLayoutProfile','enforcementReportProfile','originalExecution','acceptanceReportProfile'],
             'acceptedReportQualified':False}
+
+
+def compose_catalog_report_semantics(prepared,support,revision):
+    """Join the actual native revision to the original revision-free sources."""
+    result=compose_original_catalog_report_semantics(prepared,support)
+    if result['state']!='source_fields_ready':return result
+    if (type(revision) is not str or not revision.isascii() or not revision.isdecimal()
+        or str(int(revision))!=revision or not 0<int(revision)<=2147483647):
+        raise ValueError('Canonical native catalog revision required')
+    return {**result,'catalogRevision':revision}

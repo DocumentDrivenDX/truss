@@ -47,6 +47,18 @@ request. Runtime startup, transaction controls, preparation, footprint inspectio
 and private native checks are prerequisites; they do not count as those public
 operations. At main f76f7ab2, assembly operation selectors still return unavailable.
 
+The [configured catalog source checkpoint](evidence/design-audit/python-catalog-source-envelope-native.json)
+now executes original UMF preparation → retained source envelope → actual context
+0.4 configuration admission → provisional native catalog effects. It retains
+complete marker/epoch/configuration/release observations and rejects changed
+metadata, duplicate archive membership and a second asserted origin. The legacy
+context 0.2 route remains separate. This is administrative component evidence;
+Python configured dispatch, complete native report construction and accepted
+publication are still unfinished. The metadata response limit is checked after
+materialization and does not establish a complete native allocation budget.
+Continue into report construction and the installer/provider composition below;
+this checkpoint does not satisfy the public workflow milestone.
+
 Implement the catalog provider and its actual installer as one connected delivery.
 Extend the issued staging route with the four original report sources already
 required by `_catalog_report_assembly`: original installed execution, admitted
