@@ -1,10 +1,10 @@
 /** Trusted host-only original producer registration. No alternate UMF validation. */
 import {resolve} from 'node:path';
 import {requireUnchangedCatalogTransition} from './catalog-transition-correspondence';
-const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'|'scalar-types'>();
-function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'|'scalar-types'):T{assertionOwners.set(owner,mode);return owner;}
+const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'|'scalar-types'|'record-members'>();
+function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'):T{assertionOwners.set(owner,mode);return owner;}
 /** Private loaded-instance recognition; no external issuer or native qualification. */
-export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'|'scalar-types'):void{
+export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'):void{
  if(assertionOwners.get(owner)!==mode)throw Error('Original loaded assertion owner required');
 }
 export const UMF_RUNTIME_SOURCE='c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3';
@@ -83,4 +83,12 @@ export async function loadUmfScalarTypeProducer(directory:string){
  const {hash,captured}=await loadPinnedFunctions(directory,UMF_SCALAR_TYPE_SOURCE,'scalar-types',['inspectCoreScalarType']);
  return registerAssertionOwner(Object.freeze({sourceRevision:UMF_SCALAR_TYPE_SOURCE,bundleSha256:hash,
   inspectScalarType:captured.inspectCoreScalarType}),'scalar-types');
+}
+
+/** Independent original Record membership owner; no native/issuer qualification. */
+export const UMF_RECORD_MEMBERS_SOURCE='5ddc656273e1965efa0187f3090d165d45225dcd';
+export async function loadUmfRecordMembersProducer(directory:string){
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_RECORD_MEMBERS_SOURCE,'record-members',['inspectCoreRecordMembers']);
+ return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RECORD_MEMBERS_SOURCE,bundleSha256:hash,
+  inspectRecordMembers:captured.inspectCoreRecordMembers}),'record-members');
 }

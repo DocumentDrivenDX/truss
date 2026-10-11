@@ -1,6 +1,6 @@
 /** Observation correspondence only: never an enforcement or complete assertion report. */
 import {createHash} from 'node:crypto';
-import {UMF_SCALAR_TYPE_SOURCE} from './index';
+import {UMF_SCALAR_TYPE_SOURCE,UMF_RECORD_MEMBERS_SOURCE} from './index';
 import type {createCatalogInputPreparation} from './catalog-input';
 import {requireOriginalCatalogObservationCollection,type collectCatalogAssertionObservations} from './catalog-assertion-observations';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
@@ -11,6 +11,7 @@ export function assessCatalogObservationCoverage(prepared:Prepared,collection:Co
  for(const [profile,identity] of [[collection.profile,'umf-declaration-inspection'],[collection.fieldProfile,'umf-field-assertion-inspection']] as const)
   if(profile.identity!==identity||profile.version!==prepared.umfProfile.version||!/^[0-9a-f]{64}$/.test(profile.sha256))throw Error('Original observation profile correspondence required');
  if(collection.scalarProfile&&(collection.scalarProfile.identity!=='umf-scalar-type-inspection'||collection.scalarProfile.version!==UMF_SCALAR_TYPE_SOURCE||!/^[0-9a-f]{64}$/.test(collection.scalarProfile.sha256)))throw Error('Original scalar observation profile correspondence required');
+ if(collection.membersProfile&&(collection.membersProfile.identity!=='umf-record-members-inspection'||collection.membersProfile.version!==UMF_RECORD_MEMBERS_SOURCE||!/^[0-9a-f]{64}$/.test(collection.membersProfile.sha256)))throw Error('Original membership observation profile correspondence required');
  const expected:{documentIndex:number;operation:string;identity:unknown;basis:'original'|'reversible_target';field:boolean}[]=[];
  const add=(documentIndex:number,operation:string,identity:unknown,basis:'original'|'reversible_target',field=false)=>{
   if(expected.length>=4096)throw Error('Observation coverage component capacity exceeded');expected.push({documentIndex,operation,identity,basis,field});
@@ -24,6 +25,7 @@ export function assessCatalogObservationCoverage(prepared:Prepared,collection:Co
     add(i,'schema_properties',{scope:'element',module:module.id,element:element.id},basis);
     for(const operation of ['kind','nullability','cardinality','facets'])add(i,operation,{module:module.id,element:element.id},'original',true);
     if(collection.scalarProfile)add(i,'scalarType',{module:module.id,element:element.id},'original');
+    if(collection.membersProfile)add(i,'members',{module:module.id,element:element.id},'original');
     if(element.kind==='record')add(i,'keys',{module:module.id,element:element.id},'original');
    }
   }
@@ -35,7 +37,7 @@ export function assessCatalogObservationCoverage(prepared:Prepared,collection:Co
   if(observed.documentId!==document.documentId||observed.operation!==requirement.operation||observed.basis!==requirement.basis||JSON.stringify(observed.identity)!==JSON.stringify(requirement.identity))throw Error('Original ordered observation identity/basis mismatch');
   const result=observed.result as {state?:unknown;code?:unknown;path?:unknown};
   if(!result||!['observed','unavailable'].includes(result.state as string))throw Error('Explicit observation availability required');
-  const original=JSON.stringify({profile:requirement.operation==='scalarType'?collection.scalarProfile:requirement.field?collection.fieldProfile:collection.profile,documentId:document.documentId,contentSha256:prepared.original.documents[requirement.documentIndex].sha256,basis:requirement.basis,operation:requirement.operation,identity:requirement.identity,result:observed.result});
+  const original=JSON.stringify({profile:requirement.operation==='members'?collection.membersProfile:requirement.operation==='scalarType'?collection.scalarProfile:requirement.field?collection.fieldProfile:collection.profile,documentId:document.documentId,contentSha256:prepared.original.documents[requirement.documentIndex].sha256,basis:requirement.basis,operation:requirement.operation,identity:requirement.identity,result:observed.result});
   const bytes=Buffer.from(original,'utf8');bytesRetained+=bytes.length;if(bytesRetained>4194304)throw Error('Observation coverage evidence capacity exceeded');
   if(observed.evidence.bytesBase64!==bytes.toString('base64')||observed.evidence.sha256!==createHash('sha256').update(bytes).digest('hex')||observed.evidence.identity!=='truss.owner-declaration-observation/'+requirement.documentIndex+'/'+index)throw Error('Original observation evidence correspondence required');
   if(result.state==='unavailable'){

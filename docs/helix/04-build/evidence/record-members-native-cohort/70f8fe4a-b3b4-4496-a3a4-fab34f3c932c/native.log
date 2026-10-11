@@ -1,0 +1,11 @@
+PostgresError: SAVEPOINT can only be used in transaction blocks
+    errno: "25P01",
+ severity: "ERROR",
+     file: "xact.c",
+  routine: "CheckTransactionBlock",
+     code: "ERR_POSTGRES_SERVER_ERROR"
+
+      at wrapPostgresError (internal:sql/postgres:176:27)
+      at onRejectPostgresQuery (internal:sql/postgres:204:33)
+
+Bun v1.4.2 (macOS arm64)

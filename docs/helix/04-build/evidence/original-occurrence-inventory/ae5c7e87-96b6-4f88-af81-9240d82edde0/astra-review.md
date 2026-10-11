@@ -1,0 +1,15 @@
+# Scoped independent membership integration review
+
+No remaining blocker found for this private original-membership integration. Read-only review covered the pinned loader/build mode, owner observations, ordered coverage, report forwarding, core identity profile 0.5, declaration collection and TypeScript staging/default-home guards. The reviewer did not rerun host tests, native probes or builds.
+
+The complete original membership result is compared before state filtering, including source, qualified identity, path, operation/version, state, ordered member objects, opaque qualifiers, unknown paths and provenance. An explicit empty list retains a declaration duty; a missing list remains an absence observation. Each authored member receives a distinct occurrence pointer. Optional owner arguments retain prior calling conventions; the expanded identity projection has an explicit profile version. Original 0.8 produces unavailable membership observations rather than inferred meaning.
+
+One review finding was fixed: the independently derived unknown-path array was mutable below frozen result objects. It is now frozen and typed readonly; controls reject append/replacement and confirm shared retained paths and owner observations remain unchanged. Missing membership is rejected by TypeScript default-home selection and staging before native I/O.
+
+Independent evidence audit verified 716 unique current source pins and every exact ZIP entry, including all five actual producer bundles/entrypoints/manifests and configuration absence. The raw final log reports 96 passing tests, zero failures, 1081 assertions across nine files; strict typecheck exits 0. All six new membership tests appear as passing, including 22 altered loaded-owner results, object-order acceptance, exact lexical occurrence joins, empty/absent distinctions, copied/foreign custody, unsupported 0.8 and synthetic-row report composition.
+
+The independent membership producer is revision `5ddc656273e1965efa0187f3090d165d45225dcd`, bundle SHA-256 `423b5fe730971ca15795a5738371c306a1bdc8779ffe7bab2976dcc07f2c1193`. A separate read-only check found the temporary source archive hash and Git commit comment match its manifest, with matching membership source/schema bytes; no fresh rebuild was performed by the reviewer. This is custody evidence, not authentication of a self-declared producer manifest.
+
+Receipt SHA-256: `313c3617b0cfe8db6819f9950b80ee0db336a855650ddda963430119ee258d61`. Detailed hashes are in `astra-audit.json`. Failed `0ea56e3b` and `ca3f6302` development attempts and pre-freeze-control `bfa0e9b8` remain historical.
+
+The current packaged Python bridge remains at its earlier captured behavior. A future bridge rebuild must add the matching missing-membership refusal to Python `_catalog_staging.py`; this checkpoint does not qualify that adoption or concurrent Python work. Local runtimes/dependencies and stable execution files remain premises. No issuer authentication, registered interpretation, native data enforcement, complete report authority, publication, public admission or original acceptance criterion is promoted; 26/132 is unchanged.

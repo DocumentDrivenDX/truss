@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "method": "Independent read-only native receipt/source/archive/log audit; no native execution",
+  "receiptSha256": "ec53fb93951cb41c039b5d4438df8a631aafae01d622bd1b95ead5cd6a79fc55",
+  "nativeReceiptSha256": "9ffebb7b6822c6cb44ea8ea588f06ca72e7502c8d4ccfb2e8a97e361cc34fb64",
+  "nativeLogSha256": "0bd26076549bca90ab3b3e84b20ca8eebd2fab6c350ad871586c85f24b6546f3",
+  "sourcePins": 798,
+  "hostInputsIncluded": 716,
+  "currentExactPreimages": true,
+  "exactZipEntrySet": true,
+  "archiveSha256": "502d39325570f8399f4477fbfd8b5b375bf7efac28fbe4ece7882c1c3f187b43",
+  "checks": 205,
+  "requiredUniqueChecks": [
+    "actual native report retains both original scalar family duties",
+    "actual native report retains independent scalar owner revision and bundle",
+    "actual native report ordered coverage includes every scalar element observation",
+    "native scalar composition preserves original artifact and explicit unqualified status",
+    "actual native report retains both membership declarations and member occurrences",
+    "actual native report retains independent membership owner revision and bundle",
+    "actual native report ordered coverage includes every membership element observation",
+    "native membership composition preserves original artifact and explicit unqualified status",
+    "actual empty membership stages one Record without invented properties",
+    "actual empty membership retains its explicit original declaration duty"
+  ],
+  "engine": "17.9 (Debian 17.9-1.pgdg13+1)",
+  "profiles": {
+    "declarations": {
+      "identity": "umf-declaration-inspection",
+      "version": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+      "sha256": "074cf378afb702ffd84d6924ae4b37817cad5324a4adc587fa30c541e1cfb216"
+    },
+    "fields": {
+      "identity": "umf-field-assertion-inspection",
+      "version": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+      "sha256": "860e70082df1706132fe6389e5274bb45c70783ddc547f4c4950c1a94fea5f67"
+    },
+    "scalar": {
+      "identity": "umf-scalar-type-inspection",
+      "version": "94d0a99e4d1e9eb39278f38d6cd6bcba51e46db8",
+      "sha256": "29168de4927fc440d4025babd765f4ddd8ad125bf6b6c5ed0e62bd88d6d1be04"
+    },
+    "members": {
+      "identity": "umf-record-members-inspection",
+      "version": "5ddc656273e1965efa0187f3090d165d45225dcd",
+      "sha256": "423b5fe730971ca15795a5738371c306a1bdc8779ffe7bab2976dcc07f2c1193"
+    }
+  },
+  "producerDirectories": {
+    "TRUSS_UMF_PRODUCER": "/private/tmp/truss-umf-runtime-LmpSsH",
+    "TRUSS_UMF_DECLARATION_PRODUCER": "/private/tmp/truss-umf-runtime-vKoRzl",
+    "TRUSS_UMF_FIELD_ASSERTION_PRODUCER": "/private/tmp/truss-umf-runtime-xZQtaP",
+    "TRUSS_UMF_SCALAR_TYPE_PRODUCER": "/private/tmp/truss-umf-runtime-xGVLBZ",
+    "TRUSS_UMF_RECORD_MEMBERS_PRODUCER": "/private/tmp/truss-umf-runtime-OXf35g"
+  },
+  "retainedCleanup": {
+    "containerId": "26cb4157c851025e959ff1bc3b3bb93abd0d26681ff0323163e1aeaca2e11b81",
+    "exitCode": 0,
+    "stdout": "26cb4157c851025e959ff1bc3b3bb93abd0d26681ff0323163e1aeaca2e11b81",
+    "stderr": "",
+    "recoveredByExactNameAndLabel": true
+  },
+  "acceptancePromoted": false
+}

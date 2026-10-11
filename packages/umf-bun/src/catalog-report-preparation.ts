@@ -8,7 +8,7 @@ import {collectCatalogIngressReportBasis} from './catalog-ingress-report-basis';
 import {collectCatalogCoreAssertionIdentities} from './catalog-core-assertion-identities';
 import {collectCatalogReportDocumentBasis,recheckCatalogReportDocumentBasis} from './catalog-report-document-basis';
 import type {CatalogStageConnection} from './catalog-new-stage';
-import type {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer,loadUmfScalarTypeProducer} from './index';
+import type {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer,loadUmfScalarTypeProducer,loadUmfRecordMembersProducer} from './index';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 const originalReportPreparations=new WeakMap<object,Prepared>();
 export function requireOriginalCatalogReportPreparation(result:object,prepared:Prepared):void{
@@ -16,11 +16,11 @@ export function requireOriginalCatalogReportPreparation(result:object,prepared:P
  if(originalReportPreparations.get(result)!==prepared)throw Error('Original bound catalog report preparation required');
 }
 export async function collectCatalogReportPreparation(connection:CatalogStageConnection,prepared:Prepared,revision:string,
- owner:Awaited<ReturnType<typeof loadUmfDeclarationProducer>>,fields:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>,scalars?:Awaited<ReturnType<typeof loadUmfScalarTypeProducer>>){
+ owner:Awaited<ReturnType<typeof loadUmfDeclarationProducer>>,fields:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>,scalars?:Awaited<ReturnType<typeof loadUmfScalarTypeProducer>>,members?:Awaited<ReturnType<typeof loadUmfRecordMembersProducer>>){
  requireOriginalCatalogPreparation(prepared);
  if(prepared.original.input.transforms.length)throw Error('Complete transform execution and report producer required');
  const ingressBasis=collectCatalogIngressReportBasis(prepared);
- const ownerObservations=collectCatalogAssertionObservations(prepared,owner,fields,scalars);
+ const ownerObservations=collectCatalogAssertionObservations(prepared,owner,fields,scalars,members);
  const observationCoverage=assessCatalogObservationCoverage(prepared,ownerObservations);
  const coreAssertionIdentities=collectCatalogCoreAssertionIdentities(prepared,ownerObservations);
  const extensions=collectCatalogExtensionInventory(prepared);

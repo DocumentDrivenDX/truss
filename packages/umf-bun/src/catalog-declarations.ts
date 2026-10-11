@@ -15,7 +15,8 @@ export function collectCatalogDeclarations(documentId:string,source:unknown){
   for(const value of array(module.elements)){
    const declaration=object(value);if(declaration.kind!=='record')continue;
    const elementId=identity(declaration.id);
-   const fields=array(declaration.members).map(value=>{
+   const membership=Object.hasOwn(declaration,'members')?'declared' as const:'missing' as const;
+   const fields=(membership==='declared'?array(declaration.members):[]).map(value=>{
     const reference=object(value);const fieldModule=identity(reference.module);const fieldId=identity(reference.element);
     const declaringModules=modules.filter(candidate=>candidate.id===fieldModule);
     if(declaringModules.length!==1)throw Error('Original member module correspondence unavailable');
@@ -30,7 +31,7 @@ export function collectCatalogDeclarations(documentId:string,source:unknown){
     for(const value of array(key.fields)){const reference=object(value);if(!fields.some(field=>field.fieldModule===reference.module&&field.fieldId===reference.element))throw Error('Original key member correspondence unavailable')}
     return key;
    });
-   records.push(Object.freeze({documentId,moduleId,elementId,declaration,fields:Object.freeze(fields),keys:Object.freeze(keys)}));
+   records.push(Object.freeze({documentId,moduleId,elementId,declaration,membership,fields:Object.freeze(fields),keys:Object.freeze(keys)}));
   }
   if(module.relationships!==undefined)for(const value of array(module.relationships)){
    const declaration=object(value);identity(declaration.id);

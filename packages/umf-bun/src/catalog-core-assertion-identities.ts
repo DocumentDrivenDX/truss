@@ -15,13 +15,14 @@ type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation
 type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
 export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collection:Collection){
  requireOriginalCatalogPreparation(prepared);requireOriginalCatalogObservationCollection(prepared,collection);
- const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.4.0',producers:{fields:collection.fieldProfile,scalar:collection.scalarProfile,declarations:collection.profile},
-  operations:['kind','nullability','cardinality','facets','scalarType','keys','relationships','schema_properties'],basis:'original',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
- const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.4.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
- const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.4.0',sha256:manifest.sha256});
- const entries=[];const declarationMeanings=[];const fieldMeanings=[];const absent=[];const deferred=[];const identities=new Set<string>();
+ const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.5.0',producers:{fields:collection.fieldProfile,scalar:collection.scalarProfile,members:collection.membersProfile,declarations:collection.profile},
+  operations:['kind','nullability','cardinality','facets','scalarType','members','keys','relationships','schema_properties'],basis:'original',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
+ const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.5.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
+ const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.5.0',sha256:manifest.sha256});
+ type Entry={assertion:{sourceKind:'umf_document';owner:{scope:'document';documentId:string}|{documentId:string;moduleId:string};definitionPin:string;sourcePointer:string;kind:'source'|'authored';sourceIdentityProfile?:typeof profile;authoredIdentity?:string};source:Prepared['original']['input']['documents'][number]['artifact'];ruleName:string;ruleNameOrigin:'profile_generated';enforcement:'none';reason:'unqualified';ownerEvidence:Collection['observations'][number]['evidence']};
+ const entries:Entry[]=[];const declarationMeanings=[];const membershipMeanings:{assertion:typeof entries[number];ownerProfile:NonNullable<Collection['membersProfile']>;ownerState:'known'|'partial';originalMeaning:unknown;uninterpretedPaths:readonly string[];meaningCorrespondence:true;interpretationQualified:false;scope:'original_record_member_owner_meaning_only'}[]=[];const fieldMeanings=[];const absent=[];const deferred=[];const identities=new Set<string>();
  for(const observed of collection.observations){
-  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','scalarType','keys','relationships','schema_properties'].includes(observed.operation)){deferred.push(observed);continue}
+  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','scalarType','members','keys','relationships','schema_properties'].includes(observed.operation)){deferred.push(observed);continue}
   const result=observed.result as any;if(result.state!=='observed'){deferred.push(observed);continue}
   const original=result.observation,meaning=original.meaning;
   if(observed.operation==='schema_properties'){
@@ -40,6 +41,29 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
     const uniqueness=JSON.stringify([source.sha256,owner,pointer]);if(identities.has(uniqueness))throw Error('Duplicate original core assertion source identity');identities.add(uniqueness);
     entries.push(Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,kind:'source' as const,sourceIdentityProfile:profile}),source,ruleName:'core.schema_properties.'+key,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence}));
    }
+   continue;
+  }
+  if(observed.operation==='members'){
+   const di=prepared.documents.findIndex(d=>d.documentId===observed.documentId),document=prepared.documents[di],requested=observed.identity as any;
+   if(!document||document.umfVersion!=='0.7.0'||!collection.membersProfile)throw Error('Original members owner context correspondence required');
+   const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module),ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
+   if(mi<0||ei<0)throw Error('Original members owner context correspondence required');
+   const element=source.modules[mi]!.elements[ei]!,path='/modules/'+mi+'/elements/'+ei+'/members';
+   const uninterpretedPaths=Object.freeze(document.interpretation.sourceValidation.diagnostics.filter((d:any)=>d.severity==='warning'&&d.code==='UNKNOWN_KEY_QUALIFIER'&&(d.path===path||d.path.startsWith(path+'/'))).map((d:any)=>d.path));
+   const expected=element.kind!=='record'?{state:'inapplicable'}:!Object.hasOwn(element,'members')?{state:'missing'}:{state:uninterpretedPaths.length?'partial':'known',members:element.members,uninterpretedPaths};
+   if(!sameOriginalMeaning(original,{operation:'inspect-core-record-members',version:'0.1.0',source,identity:requested,path,meaning:expected,provenance:'unverified'}))throw Error('Original members full result correspondence required');
+   if(expected.state==='missing'){absent.push(observed);continue}
+   if(expected.state==='inapplicable'){deferred.push(observed);continue}
+   const artifact=prepared.original.input.documents[di].artifact,owner=Object.freeze({documentId:document.documentId,moduleId:requested.module as string});
+   // The explicit declaration itself is a duty even when its list is empty.
+   // Member occurrence duties keep ordered qualified references and opaque qualifiers.
+   const addMemberEntry=(pointer:string,ruleName:string,originalMeaning:unknown)=>{
+    const uniqueness=JSON.stringify([artifact.sha256,owner,pointer]);if(identities.has(uniqueness))throw Error('Duplicate original core assertion source identity');identities.add(uniqueness);
+    const entry=Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:artifact.sha256,sourcePointer:pointer,kind:'source' as const,sourceIdentityProfile:profile}),source:artifact,ruleName,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence});
+    entries.push(entry);membershipMeanings.push(Object.freeze({assertion:entry,ownerProfile:collection.membersProfile!,ownerState:expected.state as 'known'|'partial',originalMeaning,uninterpretedPaths,meaningCorrespondence:true as const,interpretationQualified:false as const,scope:'original_record_member_owner_meaning_only' as const}));
+   };
+   addMemberEntry(path,'core.members',meaning);
+   (element.members as any[]).forEach((member,index)=>addMemberEntry(path+'/'+index,'core.members.member',member));
    continue;
   }
   if(observed.operation==='scalarType'){
@@ -126,5 +150,5 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
     interpretationQualified:false as const,scope:'original_declaration_owner_meaning_only' as const}));
   }
  }
- return Object.freeze({profile,manifest,entries:Object.freeze(entries),declarationMeanings:Object.freeze(declarationMeanings),fieldMeanings:Object.freeze(fieldMeanings),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
+ return Object.freeze({profile,manifest,entries:Object.freeze(entries),declarationMeanings:Object.freeze(declarationMeanings),fieldMeanings:Object.freeze(fieldMeanings),membershipMeanings:Object.freeze(membershipMeanings),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
 }

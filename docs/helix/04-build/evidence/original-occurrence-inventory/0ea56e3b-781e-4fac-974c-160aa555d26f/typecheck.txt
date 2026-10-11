@@ -1,0 +1,2 @@
+packages/umf-bun/src/catalog-core-assertion-identities.ts(22,54): error TS7034: Variable 'membershipMeanings' implicitly has type 'any[]' in some locations where its type cannot be determined.
+packages/umf-bun/src/catalog-core-assertion-identities.ts(152,203): error TS7005: Variable 'membershipMeanings' implicitly has an 'any[]' type.

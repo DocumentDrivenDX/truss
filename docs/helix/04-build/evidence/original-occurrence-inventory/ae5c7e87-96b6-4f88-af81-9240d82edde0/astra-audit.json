@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "method": "Independent read-only current source/archive/log audit; no test rerun",
+  "receiptSha256": "313c3617b0cfe8db6819f9950b80ee0db336a855650ddda963430119ee258d61",
+  "sourcePins": 716,
+  "currentExactPreimages": true,
+  "exactZipEntrySet": true,
+  "archiveSha256": "294dac7fd5c9500b0fb6050086eb051abb7192f93c8a5b174ecf93e4b3adf2c8",
+  "hostLogSha256": "44230fa85713d28bb03ff14207215449e131b9cb01d7294f3fb295dd01fb7275",
+  "tests": 96,
+  "assertions": 1081,
+  "testFiles": 9,
+  "strictTypecheckExit": 0,
+  "sixMembershipTests": [
+    "original ordered qualified membership joins declaration and each exact byte occurrence",
+    "explicit empty membership stays an assertion while absence and nonrecord stay separate",
+    "controlled loaded membership substitutions refuse before filtering, object key order remains valid",
+    "original0.8 membership unavailable observations prevent configured call availability",
+    "private report composition forwards actual membership owner with exact configured coverage",
+    "missing membership can be inspected but cannot become empty native staging or home inventory"
+  ],
+  "memberOwner": {
+    "revision": "5ddc656273e1965efa0187f3090d165d45225dcd",
+    "producerMode": "record-members",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "260f485f14016fd454239813aa784e6ff6acb2cfe21fa3117640e04456ff1bba",
+    "bundleSha256": "423b5fe730971ca15795a5738371c306a1bdc8779ffe7bab2976dcc07f2c1193",
+    "operations": [
+      "inspectCoreRecordMembers"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "extraReadOnlyBuildArchiveCheck": "Temporary source.tar digest and commit comment match producer manifest; member owner source/schema match archive; not a fresh rebuild",
+  "nativeExecution": false,
+  "acceptancePromoted": false
+}

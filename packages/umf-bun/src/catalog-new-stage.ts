@@ -11,6 +11,7 @@ export async function stageNewCatalogCohort(connection:CatalogStageConnection,pr
  requireOriginalCatalogPreparation(prepared);
  if(prepared.original.input.transforms.length)throw Error('Complete transform execution and report producer required');
  const records=prepared.declarations.flatMap(document=>document.records);
+ if(records.some(record=>record.membership!=='declared'))throw Error('Explicit original Record membership required before staging');
  const declared=records.flatMap(record=>record.fields.map(field=>({...record,field})));
  if(homes.length!==declared.length)throw Error('Complete original property home inventory required');
  const selected=declared.map(({field,...record})=>{const matches=homes.filter(home=>same(home,record)&&home.fieldModule===field.fieldModule&&home.fieldId===field.fieldId);if(matches.length!==1||!['json','row'].includes(matches[0].home))throw Error('Unique original property home required');return {record,field,home:matches[0].home}});

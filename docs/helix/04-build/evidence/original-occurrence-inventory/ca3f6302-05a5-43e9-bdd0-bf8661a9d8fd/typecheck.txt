@@ -1,0 +1,2 @@
+packages/umf-bun/src/catalog-core-assertion-identities.ts(22,8): error TS7034: Variable 'entries' implicitly has type 'any[]' in some locations where its type cannot be determined.
+packages/umf-bun/src/catalog-core-assertion-identities.ts(22,91): error TS7005: Variable 'entries' implicitly has an 'any[]' type.
