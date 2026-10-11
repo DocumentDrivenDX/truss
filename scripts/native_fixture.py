@@ -9,6 +9,7 @@ import shutil
 from pathlib import Path
 import tempfile
 import threading
+import time
 from urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 import uuid
 
@@ -61,9 +62,18 @@ class WorkerCluster:
             self.uri = urlunparse(parsed._replace(query=urlencode(options, doseq=True)))
             admin = connect(self.uri)
             try:
+                # Maintenance locks make NOWAIT semantic probes timing-dependent.
+                # Qualify explicit actors here; maintenance concurrency is a separate lane.
+                admin.run("ALTER SYSTEM SET autovacuum = 'off'")
+                admin.run('SELECT pg_reload_conf()')
+                deadline = time.monotonic() + 2
+                while admin.run('SHOW autovacuum')[0][0] != 'off':
+                    if time.monotonic() >= deadline:
+                        raise RuntimeError('Worker maintenance setting did not reload')
+                    time.sleep(0.02)
                 self.baseline = inventory(admin)
-                self.settings = dict(admin.run("SELECT name, setting FROM pg_settings WHERE name IN ('listen_addresses','port','unix_socket_directories','server_version')"))
-                if self.settings['listen_addresses'] != '' or self.settings['server_version'] != '17.11':
+                self.settings = dict(admin.run("SELECT name, setting FROM pg_settings WHERE name IN ('listen_addresses','port','unix_socket_directories','server_version','autovacuum')"))
+                if self.settings['listen_addresses'] != '' or self.settings['server_version'] != '17.11' or self.settings['autovacuum'] != 'off':
                     raise RuntimeError('Expected socket-only PostgreSQL17.11 worker')
                 socket_directory = Path(self.settings['unix_socket_directories']).resolve()
                 if socket_directory != self.root / 'data':
