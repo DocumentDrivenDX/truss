@@ -1819,3 +1819,22 @@ See [candidate checkpoint receipt](evidence/python-contracts-iteration35-string-
 This constructor supplies no protected scope, text/source semantic admission,
 installation authority or public operation; the complete observer and consumer
 workflow remain unfinished.
+
+
+### Integrated installation source delivery in progress
+
+The integrated install/register/apply/read workstream now has its first actual
+wheel-contained source inputs. The build script selects thirteen exact originals:
+the UMF storage model, its retained owner export and generation evidence, four
+issued-admission sources and six row-image sources. It verifies the model/export
+against the original owner evidence and produces a deterministic archive and
+source manifest. The wheel build succeeds; every packaged byte, ordered archive
+entry and digest matches its original, and regeneration is byte-exact.
+See [delivery evidence](evidence/python-installation-source-delivery.json).
+
+This initial definition explicitly remains non-executable and unqualified. It
+lists all seven required native bodies and the missing installation, security,
+initialization, dependency, resource, statement-inventory and settlement work.
+It is not a complete release inventory or BootstrapGenerationResult, and it
+issues no native identities or readiness. Complete this definition alongside the
+installer/writer producer; the public consumer workflow remains the exit target.

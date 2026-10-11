@@ -1,0 +1,17 @@
+{
+  "base": "ca1a03672ede35d77f7aea8ef6e3a4197df601a4",
+  "scope": "Original development source delivery only; no installation, runtime authority or qualified bootstrap candidate",
+  "wheelBuildExitCode": 0,
+  "wheelSha256": "f429fbd2f0c3d0819c9d586df7ee91bf4b82dc6e0c56e14f752ba3c32fc78c90",
+  "exactOriginalResources": 13,
+  "archiveBytes": 77100,
+  "regenerationByteExact": true,
+  "qualified": false,
+  "executable": false,
+  "sha256": {
+    "scripts/build-python-installation-sources.py": "dee8552ebbc8e8217779eaaffe8a8b8d1569f20ca23860289ef381b80aaa3770",
+    "packages/python/pyproject.toml": "7f3d70adb020d4d1f9bb0e307eb0b0da02c02137b24a9400ca8cfa55cc52712e",
+    "packages/python/src/truss/_installation/manifest.json": "e2605e8d3de55bb0b4db8ee045d937707ce7345489add89da0fc7a2bb1eae3df",
+    "packages/python/src/truss/_installation/sources.zip": "b1e673db68b0ff88a8bf4aa1253b07dd9397382d30c5ec0839f47e6b161b2137"
+  }
+}
