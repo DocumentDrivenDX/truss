@@ -1,0 +1,22 @@
+2026-10-11 09:28:51.468 EDT [10135] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 09:28:51.469 EDT [10135] LOG:  listening on Unix socket "/private/tmp/pc-g8x_amxe/.s.PGSQL.5432"
+2026-10-11 09:28:51.499 EDT [10138] LOG:  database system was shut down at 2026-10-11 09:28:50 EDT
+2026-10-11 09:28:51.513 EDT [10135] LOG:  database system is ready to accept connections
+2026-10-11 09:28:52.397 EDT [10149] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:28:52.397 EDT [10149] STATEMENT:  CREATE OR REPLACE FUNCTION census_probe.value() RETURNS bigint LANGUAGE sql IMMUTABLE AS 'SELECT 333::bigint'
+2026-10-11 09:28:52.548 EDT [10149] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:28:52.548 EDT [10149] STATEMENT:  GRANT census_group TO census_actor
+2026-10-11 09:28:52.700 EDT [10149] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:28:52.700 EDT [10149] STATEMENT:  ALTER ROLE census_actor SET search_path='census_probe'
+2026-10-11 09:28:52.850 EDT [10149] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:28:52.850 EDT [10149] STATEMENT:  ALTER FUNCTION census_probe.value() OWNER TO census_actor
+2026-10-11 09:28:53.001 EDT [10149] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:28:53.001 EDT [10149] STATEMENT:  ALTER TABLE census_probe.facts ADD COLUMN hidden text
+2026-10-11 09:28:53.152 EDT [10149] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:28:53.152 EDT [10149] STATEMENT:  CREATE POLICY census_policy ON census_probe.facts USING (true)
+2026-10-11 09:28:53.303 EDT [10149] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:28:53.303 EDT [10149] STATEMENT:  CREATE FOREIGN DATA WRAPPER census_foreign NO HANDLER
+2026-10-11 09:28:54.997 EDT [10149] ERROR:  canceling statement due to lock timeout
+2026-10-11 09:28:54.997 EDT [10149] STATEMENT:  SELECT pg_catalog.pg_advisory_xact_lock($1)
+2026-10-11 09:28:56.326 EDT [10135] LOG:  received immediate shutdown request
+2026-10-11 09:28:56.329 EDT [10135] LOG:  database system is shut down

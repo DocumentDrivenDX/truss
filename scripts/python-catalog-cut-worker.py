@@ -100,7 +100,27 @@ try:
  check('cross-database-membership-now-visible',[[True]],holder.run("SELECT pg_catalog.pg_has_role('census_actor','census_group','MEMBER')"))
  holder.run('COMMIT');writer.run('BEGIN');writer.run('SELECT pg_catalog.pg_advisory_xact_lock(:key)',key=key);writer.run('COMMIT')
  check('reader-release-permits-participating-writer',b'I'.hex(),writer._transaction_status.hex())
- (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'catalogs':names,'scope':'Excluded administrative PostgreSQL16.15 catalog ShareLock feasibility and native stale-snapshot and uncommitted writer counterexamples. Materialized pg8000 rows are not protected bounded original ingress. Cooperative transaction advisory barrier with fresh READ COMMITTED statement after acquisition; native lock wait/drain and blocking tested. Same database, tested finite DDL set only; no all-writer/catalog/extension/runtime configuration completeness, provider authentication, final authority/data cut, cooperative handback or backend acceptance.'},indent=2)+'\n')
+ # Endpoint source equality can hide an intervening native execution (ABA).
+ holder.run('BEGIN ISOLATION LEVEL READ COMMITTED')
+ aba_before=image(holder,'aba-before')
+ writer.run("CREATE OR REPLACE FUNCTION census_probe.value() RETURNS bigint LANGUAGE sql IMMUTABLE AS 'SELECT 777::bigint'")
+ aba_middle=image(holder,'aba-middle')
+ check('aba-intermediate-source-differs',True,sha(aba_middle)!=sha(aba_before))
+ check('aba-intermediate-native-call',[[777]],holder.run('SELECT census_probe.value() AS aba_middle_value'))
+ writer.run("CREATE OR REPLACE FUNCTION census_probe.value() RETURNS bigint LANGUAGE sql IMMUTABLE AS 'SELECT 666::bigint'")
+ aba_after=image(holder,'aba-after')
+ check('aba-endpoint-source-images-equal',sha(aba_before),sha(aba_after))
+ check('aba-restored-native-call',[[666]],holder.run('SELECT census_probe.value() AS aba_restored_value'))
+ # Source-only census deliberately omits application data values; this fixture
+ # table is not an actual authorization provider.
+ fact_before=holder.run('SELECT value FROM census_probe.facts')
+ writer.run("UPDATE census_probe.facts SET value='changed-without-source-change'")
+ check('application-data-change-native-visible',[['changed-without-source-change']],holder.run('SELECT value FROM census_probe.facts'))
+ check('source-census-omits-application-data-change',sha(aba_after),sha(image(holder,'application-data-changed-source-equal')))
+ writer.run("UPDATE census_probe.facts SET value='changed'")
+ check('application-data-restored',fact_before,holder.run('SELECT value FROM census_probe.facts'))
+ holder.run('COMMIT')
+ (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'catalogs':names,'scope':'Excluded administrative PostgreSQL16.15 catalog ShareLock feasibility and native stale-snapshot and uncommitted writer counterexamples. Materialized pg8000 rows are not protected bounded original ingress. Cooperative transaction advisory barrier with fresh READ COMMITTED statement after acquisition; native lock wait/drain and blocking tested. Native two-commit routine ABA returns777 between byte-identical666 source images. Ordinary application-data changes are omitted by source census; the fixture data table is not an actual authorization provider. Tested finite DDL set only; no all-writer/catalog/extension/runtime configuration completeness, provider authentication, final authority/data cut, cooperative handback or backend acceptance.'},indent=2)+'\n')
  print(json.dumps({'status':'component-passed','observations':len(observations)}))
 except BaseException as error:
  (folder/'native-failure.json').write_text(json.dumps({'status':'failed','observations':observations,'error':str(error)},indent=2)+'\n');raise
