@@ -1,4 +1,5 @@
 /** Decode complete context0.3 bytes only; native collector authority is separate. */
+import {copyOriginalByteCustody} from './original-byte-custody';
 import {decodeAcceptanceJson} from './acceptance-json';
 import {mapAssertedOrigin} from './asserted-origin-map';
 const fields=['interfaceVersion','xid','ordinal','sessionUser','actingUser','database','backendPid','actorRoleOid','sessionRoleOid','assertedOriginUtf8Hex','assertedOriginCaptureProfileHex'].sort();
@@ -8,8 +9,7 @@ const fromHex=(hex:string,max:number)=>{
 };
 export function decodeCapturedOriginContext(originalContext:Uint8Array,version:'0.3'|'0.4'='0.3'){
  const expectedFields=version==='0.3'?fields:[...fields,'installationId','sourceEpoch','targetIncarnation','sourceEpochProfileHex','sourceEpochEvidenceHex'].sort();
- if(!(originalContext.buffer instanceof ArrayBuffer)||originalContext.length>1048576)throw Error('Original bounded context bytes required');
- const owned=Uint8Array.prototype.slice.call(originalContext) as Uint8Array;
+ let owned:Uint8Array;try{owned=copyOriginalByteCustody(originalContext,true)}catch{throw Error('Original bounded context bytes required')}
  const context=decodeAcceptanceJson(owned);
  if(context===null||Array.isArray(context)||typeof context!=='object'||JSON.stringify(Object.keys(context).sort())!==JSON.stringify(expectedFields)||Object.values(context).some(v=>typeof v!=='string')||context.interfaceVersion!=='truss-native-operation-context/'+version)throw Error('Complete original context'+version+' capture required');
  const c=context as Record<string,string>;

@@ -19,10 +19,13 @@ const cases=[{name:'all seventeen untrusted complete-report fields',text:JSON.st
  {name:'UTF-8 object order, NUL, controls and exact integer string',text:'{"𐀀":"\\u0000\\n\\t😀","":"9007199254740993","a":[true,false,null,{},[]]}',report:false},
  {name:'original whitespace and escape spelling',text:' \n{"z":"\\u0061","a":"\\\\\\\""}\n',report:false}];
 // Complete host/oracle preparation before opening the native connection.
+cases.push({name:'caller callbacks cannot change original native wire',text:'{"flag":true,"tag":{"kind":"integer","text":"9007199254740993"}}',report:false});
+let callbacks=0;
 const preparedCases=cases.map(c=>{
- const original=new TextEncoder().encode(c.text),prepared=c.report?handoff.prepare(original):prepareCanonicalWireTree(original);
+ const original=new TextEncoder().encode(c.text);if(c.name.startsWith('caller callbacks')){const callback=()=>{callbacks++;throw Error('caller callback')};for(const key of ['buffer','length','slice','constructor'])Object.defineProperty(original,key,{get:callback});Object.defineProperty(original,Symbol.iterator,{value:callback});}
+ const prepared=c.report?handoff.prepare(original):prepareCanonicalWireTree(original);
  const expected=Buffer.from(oracle(JSON.parse(c.text))).toString('hex');
- if(prepared.originalUtf8Hex!==Buffer.from(original).toString('hex'))throw Error('Original native case custody changed');
+ if(prepared.originalUtf8Hex!==Buffer.from(c.text).toString('hex')||callbacks)throw Error('Original native case custody changed');
  return {...c,prepared,expected};
 });
 if(process.argv.includes('--preflight-only')){
@@ -45,8 +48,8 @@ try{
   }
   return {version:version[0].version,cases:results};
  });
- const paths=['scripts/check-canonical-report-native.ts',fixturePath,'packages/postgresql/src/canonical-wire-tree.ts','packages/umf-bun/src/canonical-report-handoff.ts','packages/postgresql/native/canonical-string-bytes.sql','packages/postgresql/native/canonical-tree-bytes.sql'];
+ const paths=['scripts/check-canonical-report-native.ts',fixturePath,'packages/postgresql/src/canonical-wire-tree.ts','packages/postgresql/src/original-byte-custody.ts','packages/postgresql/src/acceptance-json.ts','packages/umf-bun/src/canonical-report-handoff.ts','packages/postgresql/native/canonical-string-bytes.sql','packages/postgresql/native/canonical-tree-bytes.sql'];
  const sources=Object.fromEntries(await Promise.all(paths.map(async p=>[p,new Bun.CryptoHasher('sha256').update(await Bun.file(p).arrayBuffer()).digest('hex')])));
- const receipt={...observations,sources,scope:'Temporary native codec functions and independent original wire byte oracle only. No installed layout, actual report producer/provenance admission, accepted commit or shared resource qualification.'};
- await Bun.write('docs/helix/04-build/evidence/canonical-report-native.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
+ const receipt={...observations,sources,callbacks,scope:'Temporary native codec functions and independent original wire byte oracle only. No installed layout, actual report producer/provenance admission, accepted commit or shared resource qualification.'};
+ await Bun.write(process.env.TRUSS_CANONICAL_NATIVE_EVIDENCE??'docs/helix/04-build/evidence/canonical-report-native.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));
 }finally{await sql.close()}

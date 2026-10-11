@@ -1,12 +1,12 @@
 /** Pure candidate mapping; role text is a supplied fact, never native authority. */
+import {copyOriginalByteCustody} from './original-byte-custody';
 import {decodeAcceptanceJson,type AcceptanceJson} from './acceptance-json';
 type ExactOriginValue={kind:'null'}|{kind:'boolean';value:boolean}|{kind:'string';text:string}|{kind:'sequence';items:ExactOriginValue[]}|{kind:'map';entries:{key:string;value:ExactOriginValue}[]};
 const freeze=<T>(value:T):T=>{if(value!==null&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;};
 /** Numeric-free canonical-tree strings remain strings, including decimal-looking
  * text and user-authored kind tags. No interpretation of actor labels occurs. */
 export function mapAssertedOrigin(original:Uint8Array,databaseRole:string){
- if(!(original.buffer instanceof ArrayBuffer))throw Error('Original ordinary origin bytes required');
- const bytes=Uint8Array.prototype.slice.call(original) as Uint8Array;
+ let bytes:Uint8Array;try{bytes=copyOriginalByteCustody(original,true)}catch{throw Error('Original ordinary bounded origin bytes required')}
  if(!databaseRole||new TextEncoder().encode(databaseRole).length>1024||databaseRole.includes('\0')||/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/u.test(databaseRole))throw Error('Exact scalar database role text required');
  const asserted=decodeAcceptanceJson(bytes);let nodes=0;
  const map=(node:AcceptanceJson):ExactOriginValue=>{

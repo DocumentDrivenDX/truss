@@ -1,4 +1,5 @@
 /** Original native actor plus separately captured asserted bytes; not full context. */
+import {copyOriginalByteCustody} from '../../postgresql/src/original-byte-custody';
 import {createHash} from 'node:crypto';
 import {mapAssertedOrigin} from '../../postgresql/src/asserted-origin-map';
 import {recheckOriginalCatalogNativeContext,type collectCatalogOriginalExecutionBasis} from './catalog-original-execution-basis';
@@ -7,8 +8,7 @@ type Connection=Parameters<typeof collectCatalogOriginalExecutionBasis>[0];
 type Prepared=Parameters<typeof collectCatalogOriginalExecutionBasis>[1];
 type Basis=Parameters<typeof collectCatalogOriginalExecutionBasis>[2];
 export async function collectCatalogAssertedOriginBasis(connection:Connection,prepared:Prepared,basis:Basis,actor:Actor,originalAsserted:Uint8Array){
- if(!(originalAsserted.buffer instanceof ArrayBuffer)||originalAsserted.length>1048576)throw Error('Original bounded asserted origin bytes required');
- const owned=Uint8Array.prototype.slice.call(originalAsserted) as Uint8Array;
+ let owned:Uint8Array;try{owned=copyOriginalByteCustody(originalAsserted,true)}catch{throw Error('Original bounded asserted origin bytes required')}
  await recheckOriginalCatalogNativeContext(actor,connection,prepared,basis);
  const mapped=mapAssertedOrigin(owned,actor.databaseRole);
  await recheckOriginalCatalogNativeContext(actor,connection,prepared,basis);

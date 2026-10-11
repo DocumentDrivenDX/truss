@@ -1,8 +1,9 @@
+import {copyOriginalByteCustody,OriginalByteCustodyError} from './original-byte-custody';
 /** Internal wire decoder component. Not complete input/profile/native admission. */
 export type AcceptanceJson = null|boolean|string|AcceptanceJson[]|{[key:string]:AcceptanceJson};
 export type WireRefusal='grammar'|'unicode'|'duplicate_member'|'numeric_node'|'resource';
 export class AcceptanceJsonError extends Error {constructor(readonly reason:WireRefusal){super(reason)}}
-const MAX_BYTES=1048576,MAX_DEPTH=128,MAX_NODES=100000,MAX_MEMBERS=4096,MAX_WORK=2000000;
+const MAX_DEPTH=128,MAX_NODES=100000,MAX_MEMBERS=4096,MAX_WORK=2000000;
 type Frame={kind:'object';value:{[key:string]:AcceptanceJson};state:'first'|'key'|'colon'|'value'|'comma';key:string;keys:string[];occurrence?:number}|{kind:'array';value:AcceptanceJson[];state:'first'|'value'|'comma';occurrence?:number};
 /** Caller must retain original immutable bytes; this component copies its input.
  * Finite logical limits below do not qualify host heap or the shared operation account. */
@@ -33,9 +34,7 @@ export function originalSourceOccurrenceBytes(index:SourceIndex,position:number)
 }
 function scanJson(original:Uint8Array,sourceNumbers:boolean,capture?:{occurrences:SourceOccurrence[];bytes?:Uint8Array}):AcceptanceJson {
  const refuse=(reason:WireRefusal):never=>{throw new AcceptanceJsonError(reason)};
- if(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype),Symbol.toStringTag)!.get!.call(original)!=='Uint8Array')refuse('grammar');
- const length=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Uint8Array.prototype),'length')!.get!.call(original) as number;
- if(length>MAX_BYTES)refuse('resource');const bytes=new Uint8Array(length);Uint8Array.prototype.set.call(bytes,original);if(capture)capture.bytes=bytes;
+ let bytes:Uint8Array;try{bytes=copyOriginalByteCustody(original)}catch(error){if(error instanceof OriginalByteCustodyError)refuse(error.reason==='resource'?'resource':'grammar');throw error}if(capture)capture.bytes=bytes;
  let index=0,nodes=0,work=bytes.length;const stack:Frame[]=[];let root:AcceptanceJson|undefined;
  const charge=(n:number)=>{if(!Number.isSafeInteger(n)||n<0||work>MAX_WORK-n)refuse('resource');work+=n};
  const take=()=>{charge(1);return bytes[index++]};

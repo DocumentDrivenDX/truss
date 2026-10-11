@@ -1,4 +1,5 @@
 /** Original pre-effect byte projection; not complete installed/profile admission. */
+import {copyOriginalByteCustody} from '../../postgresql/src/original-byte-custody';
 import {createHash} from 'node:crypto';
 import {requireOriginalCatalogEpochContextBasis,recheckOriginalCatalogEpochContextBasis,type collectCatalogEpochContextBasis} from './catalog-epoch-context-basis';
 import {recheckCatalogReportDocumentBasis} from './catalog-report-document-basis';
@@ -14,8 +15,7 @@ export function requireOriginalCatalogAdmissionConfigurationBasis(value:object,c
  requireOriginalCatalogEpochContextBasis(epoch,connection,prepared,report);
 }
 export async function collectCatalogAdmissionConfigurationBasis(connection:CatalogStageConnection,prepared:Prepared,report:Report,epoch:Epoch,profileBytes:Uint8Array){
- if(!(profileBytes.buffer instanceof ArrayBuffer)||profileBytes.length<1||profileBytes.length>65536)throw Error('Bounded original admission configuration profile required');
- const profile=Uint8Array.prototype.slice.call(profileBytes) as Uint8Array;
+ let profile:Uint8Array;try{profile=copyOriginalByteCustody(profileBytes,true,65536)}catch{throw Error('Bounded original admission configuration profile required')}if(!profile.length)throw Error('Bounded original admission configuration profile required');
  requireOriginalCatalogEpochContextBasis(epoch,connection,prepared,report);
  await recheckCatalogReportDocumentBasis(connection,report.documentBasis);
  const cut=epoch.nativeObservation;

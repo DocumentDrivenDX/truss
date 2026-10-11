@@ -1,4 +1,5 @@
 /** Original context3/native cut custody only, not complete installed admission. */
+import {copyOriginalByteCustody} from '../../postgresql/src/original-byte-custody';
 import {createHash} from 'node:crypto';
 import {decodeCapturedOriginContext} from '../../postgresql/src/captured-origin-context';
 import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';
@@ -12,8 +13,8 @@ const issued=new WeakMap<object,{connection:CatalogStageConnection;prepared:Prep
 export function requireOriginalCapturedOriginBasis(value:object,connection:CatalogStageConnection,prepared:Prepared,basis:Basis){const original=issued.get(value);if(!original||original.connection!==connection||original.prepared!==prepared||original.basis!==basis)throw Error('Original captured origin collector custody required');requireOriginalCatalogReportPreparation(basis,prepared);}
 export async function collectCatalogCapturedOriginBasis(connection:CatalogStageConnection,prepared:Prepared,basis:Basis,expectedCaptureProfile:Uint8Array){
  requireOriginalCatalogReportPreparation(basis,prepared);
- if(!(expectedCaptureProfile.buffer instanceof ArrayBuffer)||expectedCaptureProfile.length<1||expectedCaptureProfile.length>65536)throw Error('Original bounded capture profile bytes required');
- const profile=Buffer.from(Uint8Array.prototype.slice.call(expectedCaptureProfile) as Uint8Array),cut=basis.documentBasis.nativeObservation;
+ let copied:Uint8Array;try{copied=copyOriginalByteCustody(expectedCaptureProfile,true,65536)}catch{throw Error('Original bounded capture profile bytes required')}if(!copied.length)throw Error('Original bounded capture profile bytes required');
+ const profile=Buffer.from(copied),cut=basis.documentBasis.nativeObservation;
  const rows=await connection.unsafe('SELECT * FROM truss.runtime_collect_catalog_captured_context($1,$2,$3)',[cut.writerXid,cut.operationOrdinal,cut.effectGeneration]);
  const keys=['actor_role_oid','backend_pid','context_hex','database_name','database_role','login_role','login_role_oid'];
  if(rows.length!==1||JSON.stringify(Object.keys(rows[0]).sort())!==JSON.stringify(keys)||keys.some(k=>typeof rows[0][k]!=='string')||!/^(?:[0-9a-f]{2})+$/.test(rows[0].context_hex)||rows[0].context_hex.length>2097152)throw Error('Exact original captured-context native result required');

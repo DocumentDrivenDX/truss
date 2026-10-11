@@ -1,0 +1,127 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/catalog-core-assertion-identities.test.ts:
+(pass) original pointer identities retain partial meanings without inventing missing facets or enforcement [2.49ms]
+(pass) cloned observation collections cannot issue source identities [0.05ms]
+(pass) authored key and relationship IDs remain qualified by original occurrence pointers [20.05ms]
+(pass) original 0.8 schema properties keep authored pointers and legacy API failures explicit [11.54ms]
+(pass) complete original value coverage keeps unclassified and opaque meaning unavailable [0.44ms]
+(pass) occurrence inventory retains original custody instead of copied or foreign preparation [3.96ms]
+(pass) mixed original versions and lexical numeric opaque bytes remain distinct from transition targets [7.30ms]
+(pass) the original UMF profile still refuses unsafe integer source before inventory issuance [0.40ms]
+
+tests/acceptance-json.test.ts:
+(pass) empty object [0.20ms]
+(pass) null boolean string array [0.06ms]
+(pass) legal whitespace [0.03ms]
+(pass) inert prototype name [0.01ms]
+(pass) valid escaped surrogate pair [0.07ms]
+(pass) distinct normalization forms [0.01ms]
+(pass) escaped equivalent duplicate [0.09ms]
+(pass) unpaired high surrogate
+(pass) unpaired low surrogate [0.02ms]
+(pass) overlong utf8 [0.02ms]
+(pass) surrogate utf8
+(pass) out of range utf8
+(pass) outer number [0.01ms]
+(pass) trailing data
+(pass) trailing comma
+(pass) bom
+(pass) comment
+(pass) opaque numeric artifact base64
+(pass) complete original input fixture preserves all native and converted custody [0.25ms]
+(pass) selected depth and container limits refuse before an over-limit output [1.94ms]
+(pass) raw byte and cumulative duplicate-name work are conjunctive ceilings [1.47ms]
+(pass) exact node ceiling counts containers and every scalar occurrence [19.01ms]
+
+tests/composed-report-handoff.test.ts:
+(pass) explicit composed codec preserves nineteen fields and full original bytes [5.99ms]
+(pass) baseline and composed versions cannot silently substitute for each other [1.86ms]
+(pass) rebind-only selected event version and exact owner-local key shape remain closed [0.52ms]
+(pass) codec scope cannot establish completeness or native transition meaning [0.54ms]
+(pass) every selected field is mandatory and unknown claims refuse [2.38ms]
+(pass) prepared byte custody survives caller mutation and rejects oversized wire [0.81ms]
+
+tests/canonical-report-handoff.test.ts:
+(pass) all seventeen report fields reach the native codec carrier without accepted authority [2.46ms]
+(pass) each missing complete-report field and extra acceptance claims refuse [1.57ms]
+(pass) numeric counts and projected assertion scope cannot become complete report codec input [0.21ms]
+(pass) shape-valid source and effect forgeries remain visibly codec-only [0.51ms]
+(pass) pinned 0.1 codec refuses proposed or guessed report versions without conversion [0.80ms]
+
+tests/original-byte-custody.test.ts:
+(pass) tree keeps validation and archived bytes independent of caller callbacks [0.21ms]
+(pass) input keeps validation and archived bytes independent of caller callbacks [0.51ms]
+(pass) report keeps validation and archived bytes independent of caller callbacks [3.05ms]
+(pass) composed keeps validation and archived bytes independent of caller callbacks [1.38ms]
+(pass) origin keeps validation and archived bytes independent of caller callbacks [0.20ms]
+(pass) context3 keeps validation and archived bytes independent of caller callbacks [0.24ms]
+(pass) context4 keeps validation and archived bytes independent of caller callbacks [0.10ms]
+(pass) tree does not invoke aliasing or throwing species [0.04ms]
+(pass) input does not invoke aliasing or throwing species [0.19ms]
+(pass) report does not invoke aliasing or throwing species [0.97ms]
+(pass) composed does not invoke aliasing or throwing species [0.94ms]
+(pass) origin does not invoke aliasing or throwing species [0.02ms]
+(pass) context3 does not invoke aliasing or throwing species [0.06ms]
+(pass) context4 does not invoke aliasing or throwing species [0.09ms]
+(pass) actual carrier and capacity win over forged caller properties [0.30ms]
+(pass) intrinsic copies preserve view bounds Buffer carriers and actual cross-realm storage [0.43ms]
+(pass) structural shared copying remains available without promising an atomic snapshot [0.02ms]
+(pass) selected smaller profile cap is intrinsic and detached storage refuses as custody [0.11ms]
+
+tests/source-occurrence-index.test.ts:
+(pass) every original value has an ordered pointer and exact lexical span [0.11ms]
+(pass) escaped member identity and unicode retain exact source bytes [0.08ms]
+(pass) captured bytes and returned slices are independent of caller mutation [0.12ms]
+(pass) root primitives and empty containers remain complete occurrences [0.06ms]
+(pass) source admission still refuses duplicates invalid unicode and malformed grammar [0.09ms]
+(pass) discarded preflight tree does not replace original number lexemes [0.04ms]
+(pass) occurrence indexing applies conjunctive source and pointer work bounds [3.67ms]
+(pass) source copying never invokes caller species or own length callbacks [0.06ms]
+(pass) non-byte typed arrays cannot be silently narrowed into source bytes [0.05ms]
+
+tests/acceptance-input-inspector.test.ts:
+(pass) complete original wire and all converted artifact bytes survive inspection [0.28ms]
+(pass) missing conversion source [0.12ms]
+(pass) damaged source digest [0.10ms]
+(pass) noncanonical identical artifact [0.08ms]
+(pass) duplicate original document [0.08ms]
+(pass) host number [0.06ms]
+(pass) documents-only input cannot become complete original admission [0.05ms]
+(pass) concurrently shared raw custody cannot enter inspection [0.01ms]
+
+tests/catalog-input-preparation.test.ts:
+(pass) real owner validates original ordered UMF sources with reversible interpretation [4.19ms]
+(pass) foreign original interpretation profile cannot borrow validation [0.20ms]
+(pass) archive document identity must equal original owner source [1.41ms]
+(pass) shape-only original {} source does not become accepted UMF [0.33ms]
+(pass) native archive carrier has exact five original fields without interpretation substitution [2.53ms]
+(pass) source declaration extraction preserves original owner and Field references [2.35ms]
+(pass) configured original registry refuses unregistered synthetic root profiles [8.52ms]
+(pass) absent binding derives complete default json homes from original members [9.69ms]
+(pass) present binding cannot be silently replaced with default homes [2.24ms]
+(pass) embedded duplicate source members refuse before owner interpretation [0.15ms]
+(pass) reconstructed preparations cannot enter home, extension, report or native staging helpers [5.09ms]
+(pass) new-only staging cannot silently ignore declared transforms [2.53ms]
+(pass) UMF report basis never invents a supported-subset artifact for unregistered preparation [3.05ms]
+(pass) UMF report basis preserves actual original version and registered bytes without a support claim [10.20ms]
+(pass) optional original primary markers project without changing source or ordered keys [5.89ms]
+(pass) non-Boolean primary markers fail original owner validation [0.31ms]
+
+tests/asserted-origin-map.test.ts:
+(pass) asserted origin candidate mapping > preserves exact numeric-looking strings, tagged authored objects, null and sequence [0.13ms]
+(pass) asserted origin candidate mapping > orders unsigned UTF8 keys and preserves NUL/prototype names [0.05ms]
+(pass) asserted origin candidate mapping > refuses numbers, duplicates and invalid role text [0.07ms]
+
+tests/canonical-wire-tree.test.ts:
+(pass) original source spelling and scalar UTF-8 remain separate from canonical codec carrier [0.07ms]
+(pass) empty containers and inert prototype/member names preserve native member arrays [0.05ms]
+(pass) outer numeric nodes duplicate decoded names and malformed Unicode never reach native codec [0.03ms]
+(pass) native task ceiling is checked before carrier construction [2.30ms]
+(pass) shared backing cannot impersonate original immutable source custody [0.03ms]
+(pass) preflight exact ASCII length covers scalar encodings and nested empty containers [0.06ms]
+
+ 101 pass
+ 0 fail
+ 560 expect() calls
+Ran 101 tests across 10 files. [1107.00ms]

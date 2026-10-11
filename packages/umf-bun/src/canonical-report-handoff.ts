@@ -2,6 +2,7 @@
 import {createRequire} from 'node:module';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {copyOriginalByteCustody} from '../../postgresql/src/original-byte-custody';
 import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';
 import {prepareCanonicalWireTree} from '../../postgresql/src/canonical-wire-tree';
 const schemaPins={
@@ -39,8 +40,7 @@ async function createPinnedReportHandoff(dependenciesPackage:string,pins:Readonl
  }
  const validate=ajv.compile(reportSchema);
  return Object.freeze({schemaPins:Object.freeze({...pins}),prepare(original:Uint8Array){
-  if(!(original.buffer instanceof ArrayBuffer)||original.length>1048576)throw Error('Original report wire byte custody/capacity required');
-  const owned=Uint8Array.prototype.slice.call(original) as Uint8Array;
+  let owned:Uint8Array;try{owned=copyOriginalByteCustody(original,true)}catch{throw Error('Original report wire byte custody/capacity required')}
   if(!validate(decodeAcceptanceJson(owned)))throw Error('Closed complete report wire required');
   const handoff=prepareCanonicalWireTree(owned);
   return Object.freeze({...handoff,scope:'complete_report_wire_codec_handoff_only' as const});

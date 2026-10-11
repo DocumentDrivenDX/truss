@@ -1,12 +1,11 @@
 /** Numeric-free original wire to the existing native canonical-tree codec carrier.
  * This does not admit report shape, semantic provenance, resources or publication. */
+import {copyOriginalByteCustody,OriginalByteCustodyError} from './original-byte-custody';
 import {decodeAcceptanceJson,type AcceptanceJson} from './acceptance-json';
 type NativeTree={kind:'null'}|{kind:'boolean';value:boolean}|{kind:'string';utf8Hex:string}|{kind:'array';items:NativeTree[]}|{kind:'object';members:{keyUtf8Hex:string;node:NativeTree}[]};
 const hex=(bytes:Uint8Array)=>Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
 export function prepareCanonicalWireTree(original:Uint8Array){
- if(!(original.buffer instanceof ArrayBuffer))throw Error('Original ordinary wire byte custody required');
- if(original.length>1048576)throw Error('Canonical wire source capacity exceeded');
- const owned=Uint8Array.prototype.slice.call(original) as Uint8Array;
+ let owned:Uint8Array;try{owned=copyOriginalByteCustody(original,true)}catch(error){if(error instanceof OriginalByteCustodyError)throw Error(error.reason==='resource'?'Canonical wire source capacity exceeded':'Original ordinary wire byte custody required');throw error}
  const value=decodeAcceptanceJson(owned);let steps=0,carrierLength=0;
  // Preflight exact native tasks and compact ASCII length before tagged construction.
  const pending:AcceptanceJson[]=[value];
