@@ -8,6 +8,8 @@ from dataclasses import dataclass
 from hashlib import sha256
 from importlib.resources import files
 import json
+from types import MappingProxyType
+from ._construction_recovery import ConstructionOriginal,ProvisionalConstructionRecovery
 from ._installation_definition_release import DEFINITIONS_SHA256,DEFINITION_QUERY_SHA256
 from ._installation_statement_release import STATEMENTS_SHA256,SOURCE_MANIFEST_SHA256
 
@@ -23,11 +25,14 @@ class ProvisionalCatalogConstruction:
     installation_ready: bool = False
     original_definition_baseline: bytes = b''
     definition_observation: bytes = b''
+    recovery: object = None
+    recovery_reference: object = None
 
 
 class CatalogConstructionFailure(RuntimeError):
     def __init__(self,primary,cleanup,original_statements,original_target,rollback_confirmed,connection,attempt):
-        self.original_connection=connection;self.original_attempt=attempt
+        self.original_connection=connection
+        self.original_attempt=MappingProxyType({**attempt,'submitted_statements':tuple(attempt['submitted_statements'])})
         self.primary_failure=primary;self.cleanup_failure=cleanup
         self.original_statements=original_statements;self.original_target=original_target
         self.rollback_confirmed=rollback_confirmed
@@ -114,23 +119,63 @@ _OBSERVATION="""SELECT pg_catalog.jsonb_build_object(
  'policies',(SELECT COALESCE(jsonb_agg(to_jsonb(p) ORDER BY p.oid),'[]'::jsonb) FROM pg_catalog.pg_policy p JOIN pg_catalog.pg_class c ON c.oid=p.polrelid JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'))::text"""
 
 
+def prepare_provisional_catalog_construction(connection,recovery):
+    """Retain original attempt and return its handle before any BEGIN submission."""
+    recovery.check_available(connection)
+    original,statements=_statements()
+    definitions,query,profile=_definition_baseline(original)
+    if getattr(connection,'_transaction_status',None)!=b'I':
+        raise ValueError('Original idle installer-owned administrative connection required')
+    target=_native_text(connection,_TARGET)
+    if json.loads(target)['version']!=profile['nativeVersion']:
+        raise ValueError('Selected PostgreSQL16.15 source compilation profile required')
+    return recovery.reserve(ConstructionOriginal(connection,original,target,definitions))
+
+
 def construct_provisional_catalog_layout(connection):
+    recovery=ProvisionalConstructionRecovery()
+    try:
+        reference=prepare_provisional_catalog_construction(connection,recovery)
+        return execute_provisional_catalog_construction(recovery,reference)
+    except BaseException as error:
+        # The exception retains custody even when ordinary result publication fails.
+        references=recovery.references()
+        if references:
+            error.recovery=recovery;error.recovery_reference=references[-1]
+        raise
+
+
+def _construction_attempt(definitions):
+    return {'original_definition_baseline':definitions,'phase':'target_observed','submitted_statements':[],
+            'rollback_submitted':False,'rollback_reply_observed':False}
+
+
+def execute_provisional_catalog_construction(recovery,reference):
     """Run actual exact-source construction and always roll back its own transaction.
 
     No caller runtime transaction is adopted. No COMMIT, marker publication,
     namespace repair or retry path exists. Bounds cover retained data only.
     """
-    original,statements=_statements()
-    definitions,definition_query,definition_profile=_definition_baseline(original)
-    if getattr(connection,'_transaction_status',None)!=b'I':
-        raise ValueError('Original idle installer-owned administrative connection required')
-    target=_native_text(connection,_TARGET)
-    version=json.loads(target)['version']
-    if type(version) is not str or not version.isascii() or not version.isdigit() or version!=definition_profile['nativeVersion']:
-        raise ValueError('Selected PostgreSQL16.15 source compilation profile required')
-    begun=False;primary=None;cleanup=None;observed=b'';restored=False;prior_namespace=None
-    definition_observed=b''
-    attempt={'original_definition_baseline':definitions,'phase':'target_observed','submitted_statements':[], 'rollback_submitted':False,'rollback_reply_observed':False}
+    acquired=False
+    try:
+        connection=recovery.acquire(reference)
+        acquired=True
+        retained=recovery.inspect(reference).original
+        original=retained.statements;statements=json.loads(original)['statements']
+        definitions,definition_query,definition_profile=_definition_baseline(original)
+        if definitions!=retained.definition_baseline:raise ValueError('Original retained definition baseline required')
+        if getattr(connection,'_transaction_status',None)!=b'I':
+            raise ValueError('Original idle installer-owned administrative connection required')
+        target=retained.target
+        version=json.loads(target)['version']
+        if type(version) is not str or not version.isascii() or not version.isdigit() or version!=definition_profile['nativeVersion']:
+            raise ValueError('Selected PostgreSQL16.15 source compilation profile required')
+        begun=False;primary=None;cleanup=None;observed=b'';restored=False;prior_namespace=None
+        definition_observed=b''
+        attempt=_construction_attempt(definitions)
+    except BaseException as error:
+        if acquired:recovery.fail_preflight(reference,error)
+        raise
     try:
         # Treat an uncertain BEGIN as cleanup-required as well.
         begun=True;attempt['phase']='begin_submitted';connection.run('BEGIN')
@@ -168,9 +213,12 @@ def construct_provisional_catalog_layout(connection):
                 restored=prior_namespace is not None and _native_text(connection,_NAMESPACE)==prior_namespace
                 if not restored:raise ValueError('Original namespace prestate not restored')
             except BaseException as error:cleanup=error
+    recovery.settle(reference,rollback_confirmed=restored,primary=primary,cleanup=cleanup)
     if primary is not None or cleanup is not None:
-        raise CatalogConstructionFailure(primary,cleanup,original,target,restored,connection,attempt) from primary
-    return ProvisionalCatalogConstruction(original,target,observed,str(len(statements)),restored,original_definition_baseline=definitions,definition_observation=definition_observed)
+        failure=CatalogConstructionFailure(primary,cleanup,original,target,restored,retained.connection,attempt)
+        failure.recovery=recovery;failure.recovery_reference=reference
+        raise failure from primary
+    return ProvisionalCatalogConstruction(original,target,observed,str(len(statements)),restored,original_definition_baseline=definitions,definition_observation=definition_observed,recovery=recovery,recovery_reference=reference)
 
 
 def compare_source_membership(expected,observed):

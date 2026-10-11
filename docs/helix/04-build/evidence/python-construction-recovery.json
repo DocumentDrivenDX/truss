@@ -1,0 +1,62 @@
+{
+  "interface": "truss-private-construction-recovery-evidence/0.1.0",
+  "scope": "original_process_lifetime_rollback_only_construction_custody",
+  "sourceSha256": {
+    "packages/python/src/truss/_construction_recovery.py": "e6600bc4bde4409199fec342120a06478589e512c24227641ac2f7bbf6b3a3a2",
+    "packages/python/src/truss/_catalog_installation.py": "4b6da9a7c4d50dc2ca1830ccdea36d71731289d1c921940e346126c74eeb5e69",
+    "packages/python/tests/test_construction_recovery.py": "7fbd3d0773997db79db0ddf7460805d31d9db39eb851573036249f42e6ca2d67",
+    "packages/python/tests/test_catalog_installation.py": "aa3825b970274ca05d26fd6cd5a035245fc8a8db0ff32d8bee4673c4769f7cfc",
+    "scripts/check-module-boundaries.py": "32ee12e6a07e6ab56156c267d8dfb54b72023406cebdc006c18e54f4bd5b7de7"
+  },
+  "nativeProfile": {
+    "postgresql": "16.15",
+    "pg8000": "1.31.5",
+    "python": "3.11.17",
+    "runtime": "pgserver 0.1.4+truss.pg16.15"
+  },
+  "tests": {
+    "docs/helix/04-build/evidence/python-construction-recovery-source-tests.log": {
+      "sha256": "05e990deda34ad919cb3c2d6beb71812e88f3c6a0f575cc356451b98ceaa080b",
+      "tests": 34,
+      "result": "passed"
+    },
+    "docs/helix/04-build/evidence/python-construction-recovery-installed-tests.log": {
+      "sha256": "af68380f657abf15c2930d777d4bbbe9b7e577596f6dcc36018589d72a78eb2a",
+      "tests": 34,
+      "result": "passed"
+    }
+  },
+  "pythonBoundaryCheck": {
+    "result": "passed",
+    "imports": 406
+  },
+  "wheel": {
+    "sha256": "a4401a2a200c5bc3e6ceab884321c0c1293167cd3d205ee3f1582c0482540f9a",
+    "packageFiles": 117,
+    "exactSourceWheelInstalledCorrespondence": true,
+    "testsOutsideCheckout": true
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "sourceApproved": true,
+    "independentTestsRunByReviewer": false
+  },
+  "properties": [
+    "Original attempt handle before BEGIN; exact immutable source/target/baseline custody",
+    "Bounded strong retention, no silent eviction; 128 ordinary and two reserved cleanup call slots",
+    "Availability gate before native access; unresolved attempts refuse new construction",
+    "Driver invocation, return, exception, status and observation failure remain distinct",
+    "Read-only immutable inspection; foreign and duplicate references refuse without rewriting owner",
+    "Lost registration/result publication retains attempt; no replay or automatic cleanup",
+    "Preflight failures retained without adopting or rolling back caller transaction"
+  ],
+  "limitations": [
+    "Private component only; public external interface workflow still unavailable",
+    "Not HostRecoveryRegistry-qualified bootstrap admission or restart-durable recovery",
+    "Trusted exclusively-owned administrative connection; raw aliases/concurrent external changes outside profile",
+    "Captured driver facts do not prove independently qualified wire settlement",
+    "No COMMIT, installed marker, accepted identity or security-authority issuance",
+    "Security guards and unconditional operation commit barrier unchanged; complete native finalization remains unfinished"
+  ]
+}

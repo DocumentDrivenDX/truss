@@ -1,7 +1,7 @@
 -- Private candidate image construction toward row_touch_observe.
 -- No data writes or lock acquisition. Codecs inspect native catalogs.
 -- Enclosing original producers own complete scope, definition/profile meaning,
--- OLD capture, NEW text/source correspondence, authority and resource custody.
+-- OLD capture, selected JSON-string codec admission, authority and resource custody.
 CREATE FUNCTION truss.row_image_existing_string_candidate_original(
   old_state truss.row_home_state, old_node truss.row_home_node,
   old_scalar truss.row_home_scalar, expected_state bytea, expected_node bytea,
@@ -11,6 +11,7 @@ RETURNS TABLE(old_state_image bytea, old_node_image bytea, old_scalar_image byte
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER PARALLEL UNSAFE
 SET search_path=pg_catalog,pg_temp AS $$
 DECLARE candidate truss.row_home_scalar; attributed record;
+        old_token jsonb; new_token jsonb;
         new_size bigint; retained_size bigint; state_size bigint; node_size bigint; scalar_size bigint;
 BEGIN
  IF replacement IS NULL OR replacement_source IS NULL OR octet_length(replacement_source)=0
@@ -37,6 +38,16 @@ BEGIN
  retained_size:=2*state_size+2*node_size+scalar_size+new_size;
  IF new_size<=0 OR retained_size>8388608 THEN
   RAISE EXCEPTION 'original candidate retained image bound' USING ERRCODE='54000';
+ END IF;
+ -- Selected replacement family uses original UTF-8 JSON string source tokens.
+ -- Bound full retained images first; preserve spelling rather than re-encoding.
+ old_token:=convert_from(old_scalar.original_source_bytes,'UTF8')::jsonb;
+ new_token:=convert_from(replacement_source,'UTF8')::jsonb;
+ IF jsonb_typeof(old_token) IS DISTINCT FROM 'string'
+    OR (old_token#>>'{}') COLLATE pg_catalog."C" IS DISTINCT FROM old_scalar.text_value COLLATE pg_catalog."C"
+    OR jsonb_typeof(new_token) IS DISTINCT FROM 'string'
+    OR (new_token#>>'{}') COLLATE pg_catalog."C" IS DISTINCT FROM replacement COLLATE pg_catalog."C" THEN
+  RAISE EXCEPTION 'lossless original old and new string tokens required' USING ERRCODE='22023';
  END IF;
  SELECT a.* INTO STRICT attributed FROM truss.row_image_scalar_owner_original(
    old_scalar,expected_scalar,old_node,expected_node,old_state,expected_state) a;

@@ -8,7 +8,7 @@
   "sources": {
     "docs/helix/02-design/models/truss-layout-source-epoch-0.16.proposal.umf.json": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
     "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
-    "packages/python/src/truss/_installation/manifest.json": "e2605e8d3de55bb0b4db8ee045d937707ce7345489add89da0fc7a2bb1eae3df",
+    "packages/python/src/truss/_installation/manifest.json": "35589fe38d1b54832c618caca739a8f1de8339d5a2dbe71d717d9b459d7950c0",
     "scripts/build-python-installation-statements.ts": "9b4750987bfa1a52b2528f5a7b1fb7cd5d8eb2b5c808f49d7c93d03bf026602b",
     "/Users/erik/Projects/umf/src/adapters/postgresql/index.ts": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4",
     "/Users/erik/Projects/umf/src/model/native-json.ts": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882",
