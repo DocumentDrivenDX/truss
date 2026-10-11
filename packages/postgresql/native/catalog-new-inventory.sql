@@ -1,5 +1,5 @@
 -- Private actual genuinely-new identity inventory. Not complete effects/report authority.
-CREATE FUNCTION truss.runtime_collect_new_catalog_inventory(original_revision int)
+CREATE FUNCTION truss.runtime_collect_new_core_catalog_inventory(original_revision int)
 RETURNS TABLE(family text,identity jsonb)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE op truss.row_home_operation%ROWTYPE; item record; matched record; inventory jsonb; original_relationship jsonb; expected_endpoints jsonb; actual_endpoints jsonb; original_field jsonb; original_key jsonb; original_properties int[]; original_owner truss.type_def%ROWTYPE; incomplete boolean; archived_documents jsonb;
@@ -130,6 +130,27 @@ BEGIN
   RAISE EXCEPTION 'new catalog inventory component capacity exceeded' USING ERRCODE='54000';
  END IF;
  RETURN QUERY SELECT value->>'family',value->'identity' FROM jsonb_array_elements(inventory);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_collect_new_core_catalog_inventory(int) FROM PUBLIC;
+
+-- Complete effect inventory must not silently omit an uninterpreted binding.
+CREATE FUNCTION truss.runtime_collect_new_catalog_inventory(original_revision int)
+RETURNS TABLE(family text,identity jsonb)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE op truss.row_home_operation%ROWTYPE; original_input jsonb;
+BEGIN
+ SELECT o.* INTO STRICT op FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase<>'application_finalized' FOR UPDATE;
+ IF op.operation_kind<>'catalog-acceptance' OR op.phase<>'admitted' THEN
+  RAISE EXCEPTION 'original complete catalog inventory admission required' USING ERRCODE='55000';
+ END IF;
+ original_input:=convert_from(op.original_input_bytes,'UTF8')::jsonb;
+ IF original_input->>'interfaceVersion' IS DISTINCT FROM 'truss-acceptance-input/0.1.0'
+  OR original_input->'binding' IS DISTINCT FROM jsonb_build_object('state','absent') THEN
+  RAISE EXCEPTION 'registered binding effect inventory required' USING ERRCODE='0A000';
+ END IF;
+ RETURN QUERY SELECT * FROM truss.runtime_collect_new_core_catalog_inventory(original_revision);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_collect_new_catalog_inventory(int) FROM PUBLIC;
