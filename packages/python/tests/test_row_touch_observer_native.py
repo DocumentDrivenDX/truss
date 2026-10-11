@@ -131,6 +131,9 @@ class RowTouchObserverNativeTests(NativeBoundaryFixture,unittest.TestCase):
     def test_two_operations_retain_complete_contributor_union(self):
         self.exercise_events(cascade=False,multiple=True)
 
+    def test_ninth_to_tenth_generation_accounts_both_decimal_growths(self):
+        self.exercise_events(cascade=False,decimal_step=True)
+
     def test_object_to_edge_equal_id_touches_two_distinct_owners(self):
         self.exercise_events(cascade=False,ownership=True)
 
@@ -143,7 +146,7 @@ class RowTouchObserverNativeTests(NativeBoundaryFixture,unittest.TestCase):
     def test_historical_actor_survives_actual_role_change(self):
         self.exercise_events(cascade=False,multiple=True,switched_role=True)
 
-    def exercise_events(self,*,cascade,exhausted=False,late_phase=None,rejected_node=False,wrong_event=False,suppress_touch=None,overflow=None,operation_kind='mutation',multiple=False,switched_role=False,rewrite_operation=False,ownership=False,owner_capacity_failure=False):
+    def exercise_events(self,*,cascade,exhausted=False,late_phase=None,rejected_node=False,wrong_event=False,suppress_touch=None,overflow=None,operation_kind='mutation',multiple=False,switched_role=False,rewrite_operation=False,ownership=False,owner_capacity_failure=False,decimal_step=False):
         import base64,hashlib
         def wire(value):return json.dumps(value,separators=(',',':'),ensure_ascii=False).encode()
         def artifact(name,value):return dict(identity=name,bytesBase64=base64.b64encode(value).decode(),sha256=hashlib.sha256(value).hexdigest())
@@ -184,6 +187,9 @@ class RowTouchObserverNativeTests(NativeBoundaryFixture,unittest.TestCase):
                 before_sides=[[],[('state',state)],[('state',edge_state)]]
                 after_sides=[[('state',state)],[('state',edge_state)],[('state',state)]]
                 descriptors=[dict(kind='state',opcode='INSERT',oldImageHex=None,newImageHex=state.hex()),dict(kind='state',opcode='UPDATE',oldImageHex=state.hex(),newImageHex=edge_state.hex()),dict(kind='state',opcode='UPDATE',oldImageHex=edge_state.hex(),newImageHex=state.hex())]
+            if decimal_step:
+                before_sides.append([]);after_sides.append([('state',state)])
+                descriptors.append(dict(kind='state',opcode='INSERT',oldImageHex=None,newImageHex=state.hex()))
             def frames(sides):
                 entries=[]
                 for generation,images in enumerate(sides):
@@ -207,6 +213,7 @@ class RowTouchObserverNativeTests(NativeBoundaryFixture,unittest.TestCase):
                 lambda:c.run("DELETE FROM truss.row_home_scalar WHERE state_id=1"),
                 lambda:c.run("DELETE FROM truss.row_home_node WHERE state_id=1"),
                 lambda:c.run("DELETE FROM truss.row_home_state WHERE state_id=1")]
+            if decimal_step:actions.append(lambda:c.run("INSERT INTO truss.row_home_state SELECT (truss.row_touch_state_from_image_original(:image)).*",image=state))
             if ownership:
                 actions=actions[:1]+[
                     lambda:c.run("UPDATE truss.row_home_state SET owner_kind='edge',object_id=NULL,object_type_id=NULL,edge_id=-7,relationship_type_id=-2 WHERE state_id=1"),
@@ -292,7 +299,12 @@ class RowTouchObserverNativeTests(NativeBoundaryFixture,unittest.TestCase):
                     c.run('ROLLBACK TO SAVEPOINT substituted_event')
                     for table,rows in snapshots.items():self.assertEqual(c.run(f'SELECT * FROM truss.{table}'),rows)
                     self.assertEqual(c.run('SELECT count(*) FROM truss.row_home_node'),[[0]])
+                if decimal_step and generation==10:
+                    previous_ledger=c.run('SELECT retained_custody_bytes,reserved_custody_bytes FROM truss.row_home_capacity')[0]
                 action()
+                if decimal_step and generation==10:
+                    current_ledger=c.run('SELECT retained_custody_bytes,reserved_custody_bytes FROM truss.row_home_capacity')[0]
+                    self.assertEqual(current_ledger,[previous_ledger[0]+2,previous_ledger[1]-2])
                 self.assert_capacity_matches_original_rows()
                 if ownership:
                     expected=[[ 'object',-7,1 ]] if generation==1 else [['edge',-7,generation-1],['object',-7,generation]]
