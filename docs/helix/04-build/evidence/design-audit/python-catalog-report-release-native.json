@@ -1,0 +1,34 @@
+{
+  "scope": "Real declared catalog report release/configuration selection under native context0.4 operation capsule; administrative installation fixtures, not authenticated PA admission or accepted report issuance",
+  "nativeTests": {
+    "passed": 6,
+    "count": 6,
+    "elapsedSeconds": 3.814,
+    "runtime": "Private corrected pgserver PostgreSQL16.15 / pg8000 1.31.5"
+  },
+  "checks": [
+    "Positive actual fourteen-argument issued configuration admission and original capsule select exact authored policy bytes",
+    "Missing duplicate conflicting and changed full archive identities refuse",
+    "Closed new configuration grammar refuses unknown versions and duplicate keys at both levels",
+    "Arbitrary repeated configuration profile bytes cannot select policy",
+    "Changed current configuration refuses against original capsule",
+    "All declared resource pins and embedded release literal match"
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_profiles/catalog-report-release.json": "2d4ab361c53fba2ecbe10a57c181aef3887edd2751ff37796e5d03d6514996e4",
+    "packages/python/src/truss/_profiles/catalog-report-configuration.json": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+    "packages/postgresql/native/catalog-report/release-selection.sql": "c0929ec9e249eaf9bd03516327c147071a6735c45e8daf779dadee4d0de67eec",
+    "packages/python/tests/test_catalog_report_release_native.py": "30eaddd708c5a263714df74f8769a9f22bbfd7e4084b27f6d2519accca8e5e31",
+    "packages/postgresql/native/catalog-admission-configuration.sql": "876522be71ad6e114fd774dc097afc194ce95952e7173772d4c1bf0d6954ec67",
+    "packages/postgresql/native/catalog-epoch-context.sql": "edb2a0a8ab10fa1b2d392498fd4b23092a8aed05fc15b7b2c11df1d5789323e9",
+    "packages/postgresql/native/operation-configuration-current.sql": "3867e6271489ed331e3669027c759d90bd9a343f9dffc8a7051dc1f2cf701be0",
+    "packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql": "aed1fde52b149f6e973c289d0917d1442dd4059d2a0a6e1031bcc06de050c529"
+  },
+  "remaining": [
+    "Complete shared resource/profile and installed implementation qualification",
+    "Concurrent archive-writer exclusion and held current-authority cut",
+    "Pre-admission original report-source envelope and configuration-aware staging integration",
+    "Native nineteen-field report construction immutable insertion and independent source/effect comparison",
+    "Revision feed registration head publication commit closure and public Python capabilities"
+  ]
+}
