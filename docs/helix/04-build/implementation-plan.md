@@ -4222,3 +4222,41 @@ CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10. Last full gate26/132 with
 106 missing; goal active. Next establish original ordinary-role administration
 exclusions and protect the selected barrier lifetime, then compose fixed fact
 capture and original semantic decoding before protected final release.
+
+
+### Original session/effective-role snapshot exclusion — 2026-10-11
+
+Implemented separate private unprivileged DDL-cut composition: exact installed
+barriers first, then native original session/effective role attributes and owner
+MEMBER reachability before callback. Both identities must lack superuser,
+CREATEROLE, BYPASSRLS and selected-owner membership. Real nonowner connection
+passes and PostgreSQL denies disabling the installed barrier with42501; native
+superuser, owner membership, CREATEROLE and BYPASSRLS cases refuse with no callback.
+Synthetic all-table/function grants serve isolated fixture setup only.
+
+Final `evidence/python-psycopg-epoch-cut/5db462c6-b7f9-4cee-ba6d-5c03a24c5083`
+passes118 methods (67 fact/dependency/identity/visibility/DDL/role,16 graph,nine
+epoch,26 adoption), module boundaries,131 current/archived Truss sources,363 UMF
+original source pins,1614 native payload pins and all three independent
+stop0/status3/socket-absent cleanups. Initialc2cbecf0 exceeded the90-second suite
+deadline; it retains an incomplete-attempt disposition, original preimages,
+completed named cleanup receipts and original diagnostic server log, not a pass.
+Exact owned fixture process inspection found no remaining fixture process. The
+runner now retains timeout output and uses a180-second whole-suite deadline;
+per-operation native deadlines are unchanged.
+
+Formal `evidence/security-role-snapshot-formal/50354147-d7c8-49c9-ba5d-b43c7d1d4807`
+passes five fresh-context queries (three UNSAT/two SAT) with three exact source
+preimages. Under unbounded role identities and abstract original native predicates,
+both-role exclusion prevents selected administrative flags and a lowered effective
+role cannot override session superuser; stable role sources preserve exclusion.
+Later role changes and reachable privileged definer paths have countermodels.
+No PostgreSQL membership-closure/catalog/SQL/Python refinement, role/source lifetime
+or authenticated authority theorem is claimed.
+
+Trace CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10. Full ordinary caller,
+issuer/mapping/definer/ACL closure, role/config lifetime and protected final release
+remain open. No public support flag or backend acceptance binding. Last full
+checkpoint26/132 with106 missing; goal active. Next compose original reachable-
+routine/ACL inventory and participating shared-role changes into authority
+admission, preserving the counterexamples as required negative controls.

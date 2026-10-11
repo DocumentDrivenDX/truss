@@ -519,3 +519,53 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         result=self.cut(t,lambda c:called.append(True),ddl_barrier=original)
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
         self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+
+    def with_unprivileged_actor(self, operation, grant_owner=False, attribute=None):
+        from truss.psycopg_host import PsycopgHost,PsycopgProfile
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        original=self.ddl_comparison()
+        self.connection.execute('CREATE ROLE fact_cut_actor LOGIN')
+        try:
+            self.connection.execute('GRANT USAGE ON SCHEMA truss TO fact_cut_actor; GRANT ALL ON ALL TABLES IN SCHEMA truss TO fact_cut_actor; GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA truss TO fact_cut_actor')
+            if grant_owner:self.connection.execute('GRANT postgres TO fact_cut_actor')
+            if attribute:self.connection.execute('ALTER ROLE fact_cut_actor '+attribute)
+            with psycopg.connect(host=str(self.socket),user='fact_cut_actor',dbname='postgres',autocommit=True,options='-c statement_timeout=3s') as connection:
+                host=PsycopgHost(connection,profile=PsycopgProfile())
+                try:
+                    connection.execute('BEGIN');adopted=host.adopt_transaction();self.assertIsInstance(adopted,Ok)
+                    operation(host,adopted.value,original,connection)
+                    connection.execute('ROLLBACK')
+                finally:host.detach()
+        finally:
+            self.connection.execute('DROP OWNED BY fact_cut_actor; DROP ROLE fact_cut_actor; DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_selected_unprivileged_role_passes_and_cannot_disable_native_barrier(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.assertEqual(_run_unprivileged_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'excluded-administration'),Ok('excluded-administration'))
+            connection.execute('SAVEPOINT denied_admin')
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('ALTER EVENT TRIGGER truss_table_ddl_writer_barrier DISABLE')
+            connection.execute('ROLLBACK TO denied_admin')
+            self.assertEqual(connection.execute("SELECT evtenabled FROM pg_catalog.pg_event_trigger WHERE evtname='truss_table_ddl_writer_barrier'").fetchone(),('A',))
+        self.with_unprivileged_actor(operation)
+    def test_selected_superuser_role_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();t=self.begin();called=[]
+            result=_run_unprivileged_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_selected_owner_membership_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            called=[];result=_run_unprivileged_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        self.with_unprivileged_actor(operation,grant_owner=True)
+    def test_selected_createrole_and_bypassrls_refuse_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_unprivileged_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            called=[];result=_run_unprivileged_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        for attribute in ('CREATEROLE','BYPASSRLS'):
+            with self.subTest(attribute=attribute):self.with_unprivileged_actor(operation,attribute=attribute)

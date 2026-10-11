@@ -792,3 +792,18 @@ Packetf764ff62 passes114 component methods and three independent cleanup checks.
 Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 correspondence
 prerequisites. Administrative fixtures do not establish ordinary caller authority,
 installed administration exclusions, whole source lifetime or final disclosure.
+
+
+### Original role exclusion and native event-trigger privilege — 2026-10-11
+
+Four native methods require: a real nonowner session passes selected original
+role exclusion and PostgreSQL refuses its ALTER EVENT TRIGGER with42501; the
+original superuser session refuses before callback; native membership in the
+barrier owner refuses; original CREATEROLE and BYPASSRLS fixtures refuse. Privilege
+failure is contained by a savepoint and the barrier remains ALWAYS. Each owned
+role/grant fixture is removed after closing the actor connection.
+Final5db462c6 passes118 methods; original source pins and three cleanup receipts
+are retained. Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
+prerequisites only. Formal50354147 separately retains three UNSAT properties and
+two SAT counterexamples for abstract role snapshots; no native membership
+algorithm, SQL/Python refinement, role lifetime or full authority proof.

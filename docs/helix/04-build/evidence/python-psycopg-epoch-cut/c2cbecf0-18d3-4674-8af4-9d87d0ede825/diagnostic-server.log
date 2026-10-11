@@ -1,0 +1,62 @@
+2026-10-11 17:55:28.288 EDT [70436] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 17:55:28.293 EDT [70436] LOG:  listening on Unix socket "/private/tmp/truss-psy-lb18bbq9/socket/.s.PGSQL.5432"
+2026-10-11 17:55:28.344 EDT [70439] LOG:  database system was shut down at 2026-10-11 17:55:18 EDT
+2026-10-11 17:55:28.384 EDT [70436] LOG:  database system is ready to accept connections
+2026-10-11 17:55:33.083 EDT [70606] ERROR:  canceling statement due to lock timeout
+2026-10-11 17:55:33.083 EDT [70606] STATEMENT:  ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY
+2026-10-11 17:55:33.234 EDT [70606] ERROR:  canceling statement due to lock timeout
+2026-10-11 17:55:33.234 EDT [70606] STATEMENT:  ALTER TABLE truss.flat_assignment FORCE ROW LEVEL SECURITY
+2026-10-11 17:55:33.287 EDT [70614] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:33.287 EDT [70614] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:33.287 EDT [70614] STATEMENT:  UPDATE truss.sec_assignment SET active=false
+2026-10-11 17:55:42.555 EDT [70863] ERROR:  canceling statement due to lock timeout at character 8
+2026-10-11 17:55:42.555 EDT [70863] STATEMENT:  UPDATE truss.flat_assignment SET active=false
+2026-10-11 17:55:42.706 EDT [70863] ERROR:  canceling statement due to lock timeout at character 8
+2026-10-11 17:55:42.706 EDT [70863] STATEMENT:  UPDATE truss.edge SET ver=ver+1
+2026-10-11 17:55:42.860 EDT [70863] ERROR:  canceling statement due to lock timeout at character 13
+2026-10-11 17:55:42.860 EDT [70863] STATEMENT:  INSERT INTO truss.edge(id,rel_type_id,source_id,source_type,target_id,target_type,rev) VALUES(101,100,100,100,200,101,0)
+2026-10-11 17:55:43.011 EDT [70863] ERROR:  canceling statement due to lock timeout at character 13
+2026-10-11 17:55:43.011 EDT [70863] STATEMENT:  DELETE FROM truss.edge
+2026-10-11 17:55:43.163 EDT [70863] ERROR:  canceling statement due to lock timeout
+2026-10-11 17:55:43.163 EDT [70863] STATEMENT:  TRUNCATE truss.edge CASCADE
+2026-10-11 17:55:43.515 EDT [70943] WARNING:  there is already a transaction in progress
+2026-10-11 17:55:47.948 EDT [71125] ERROR:  could not obtain lock on relation "truss.flat_assignment"
+2026-10-11 17:55:47.948 EDT [71125] STATEMENT:  LOCK TABLE ONLY "truss"."flat_assignment" IN SHARE MODE NOWAIT
+2026-10-11 17:55:48.015 EDT [71127] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 17:55:48.015 EDT [71127] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN SHARE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 11 at SQL statement
+2026-10-11 17:55:48.015 EDT [71127] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch($1,$2,$3)
+2026-10-11 17:55:48.047 EDT [71130] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.047 EDT [71130] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.047 EDT [71130] STATEMENT:  DELETE FROM truss.flat_assignment
+2026-10-11 17:55:48.113 EDT [71134] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.113 EDT [71134] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.113 EDT [71134] STATEMENT:  INSERT INTO truss.flat_assignment VALUES(100,201,true)
+2026-10-11 17:55:48.118 EDT [71134] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.118 EDT [71134] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.118 EDT [71134] STATEMENT:  UPDATE truss.flat_assignment SET active=false
+2026-10-11 17:55:48.123 EDT [71134] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.123 EDT [71134] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.123 EDT [71134] STATEMENT:  DELETE FROM truss.flat_assignment
+2026-10-11 17:55:48.135 EDT [71134] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.135 EDT [71134] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.135 EDT [71134] STATEMENT:  TRUNCATE truss.flat_assignment
+2026-10-11 17:55:48.143 EDT [71134] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.143 EDT [71134] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.143 EDT [71134] STATEMENT:  UPDATE truss.edge SET ver=ver+1
+2026-10-11 17:55:48.147 EDT [71134] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.147 EDT [71134] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.147 EDT [71134] STATEMENT:  INSERT INTO truss.edge(id,rel_type_id,source_id,source_type,target_id,target_type,rev) VALUES(101,100,100,100,200,101,0)
+2026-10-11 17:55:48.152 EDT [71134] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.152 EDT [71134] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.152 EDT [71134] STATEMENT:  DELETE FROM truss.edge
+2026-10-11 17:55:48.161 EDT [71134] ERROR:  selected authorization fact cut excludes same-backend writes
+2026-10-11 17:55:48.161 EDT [71134] CONTEXT:  PL/pgSQL function truss.runtime_fence_authorization_fact_write() line 11 at RAISE
+2026-10-11 17:55:48.161 EDT [71134] STATEMENT:  TRUNCATE truss.edge CASCADE
+2026-10-11 17:55:48.418 EDT [71142] ERROR:  must be owner of event trigger truss_table_ddl_writer_barrier
+2026-10-11 17:55:48.418 EDT [71142] STATEMENT:  ALTER EVENT TRIGGER truss_table_ddl_writer_barrier DISABLE
+2026-10-11 17:55:48.463 EDT [71145] ERROR:  selected epoch cut excludes routine DDL
+2026-10-11 17:55:48.463 EDT [71145] CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 18 at RAISE
+2026-10-11 17:55:48.463 EDT [71145] STATEMENT:  ALTER TABLE truss.flat_assignment ENABLE ROW LEVEL SECURITY
+2026-10-11 17:55:49.272 EDT [70436] LOG:  received immediate shutdown request
+2026-10-11 17:55:49.292 EDT [70436] LOG:  database system is shut down

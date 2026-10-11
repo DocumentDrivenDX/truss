@@ -122,3 +122,32 @@ def _run_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, call
             raise ValueError('Exact original installed DDL barriers required')
         return callback(cursor)
     return _run_fenced_epoch_operation(host,transaction,comparison,qualify)
+
+
+def _run_unprivileged_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, callback):
+    """Selected session/effective role snapshot exclusion, not role lifetime proof.
+
+    Both identities must lack superuser/CREATEROLE/BYPASSRLS and transitive
+    membership in the selected barrier owner. Issuer, reachable definer routines,
+    concurrent shared-role changes and full grants remain separate obligations.
+    """
+    if type(barrier) is not _DDLBarrierComparison or not callable(callback):
+        raise ValueError('Original DDL barrier comparison and callback required')
+    owner=barrier.owner_oid
+    def exclude(cursor):
+        cursor.execute("SELECT s.oid::pg_catalog.text,s.rolsuper::pg_catalog.text,s.rolcreaterole::pg_catalog.text,s.rolbypassrls::pg_catalog.text,"
+                       "c.oid::pg_catalog.text,c.rolsuper::pg_catalog.text,c.rolcreaterole::pg_catalog.text,c.rolbypassrls::pg_catalog.text,"
+                       "pg_catalog.pg_has_role(s.oid,%s::pg_catalog.oid,'MEMBER')::pg_catalog.text,"
+                       "pg_catalog.pg_has_role(c.oid,%s::pg_catalog.oid,'MEMBER')::pg_catalog.text "
+                       "FROM pg_catalog.pg_roles s CROSS JOIN pg_catalog.pg_roles c "
+                       "WHERE s.rolname OPERATOR(pg_catalog.=) session_user AND c.rolname OPERATOR(pg_catalog.=) current_user",
+                       (str(owner),str(owner)),prepare=False,binary=False)
+        rows=cursor.fetchmany(2)
+        if (cursor.description is None or len(cursor.description)!=10
+                or any(d.type_code!=25 for d in cursor.description) or len(rows)!=1
+                or len(rows[0])!=10 or any(type(v) is not str for v in rows[0])
+                or not rows[0][0].isdigit() or not rows[0][4].isdigit()
+                or tuple(rows[0][1:4])+tuple(rows[0][5:])!=('false',)*8):
+            raise ValueError('Original session and effective role administration exclusion required')
+        return callback(cursor)
+    return _run_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,exclude)

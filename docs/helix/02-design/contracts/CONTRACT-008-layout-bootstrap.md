@@ -2280,3 +2280,19 @@ This adds installed metadata correspondence to the optional selected tag profile
 it does not qualify language-handler dependencies, event-trigger administration
 exclusion, all-role ACL closure or lifetime stability. Ordinary plain fact capture
 does not implicitly claim or select this stronger profile.
+
+
+### Selected session/effective-role administration exclusion — 2026-10-11
+
+The private unprivileged DDL cut composes original installed barrier readback
+with a native session_user/current_user role snapshot before callback. Both roles
+MUST lack superuser, CREATEROLE and BYPASSRLS attributes and MEMBER reachability
+to the selected original barrier owner. Missing or incompatible original role
+metadata refuses without callback. Native role identities are observed in the
+original host scope, not supplied through comparison strings.
+
+This selected exclusion is a prerequisite, not authenticated caller authority or
+a full role/grant/source lifetime cut. Reachable SECURITY DEFINER routines and
+concurrent shared-role/config/ACL changes remain independent obligations; a
+matching role snapshot cannot qualify their absence. Fixture-wide grants are
+synthetic setup, not a production least-privilege inventory.
