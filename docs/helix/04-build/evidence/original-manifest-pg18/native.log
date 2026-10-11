@@ -1,0 +1,9 @@
+test_original_complete_tree_digest_wire_and_order (__main__.Builder.test_original_complete_tree_digest_wire_and_order) ... ok
+test_duplicate_original_dedup_and_conflict (__main__.Builder.test_duplicate_original_dedup_and_conflict) ... ok
+test_same_configuration_coordinates_changed_inventory (__main__.Builder.test_same_configuration_coordinates_changed_inventory) ... ok
+test_malformed_coordinates_version_epoch_and_duplicate_raw_input (__main__.Builder.test_malformed_coordinates_version_epoch_and_duplicate_raw_input) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 3.006s
+
+OK
