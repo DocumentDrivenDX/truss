@@ -73,3 +73,52 @@ def _run_fenced_epoch_operation(host, transaction, comparison, callback):
         # is exposed outside the host operation. Host confirms scope completion.
         return callback(cursor)
     return host._run_operation(transaction, execute)
+
+
+@dataclass(frozen=True)
+class _DDLBarrierComparison:
+    owner_oid: int
+    function_oid: int
+    source: str
+
+
+def _run_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, callback):
+    """Private original installed barrier readback; no authority capability.
+
+    Covers two selected tag sets only. Event-trigger administration, shared
+    roles/ACL/config lifetime and dependency closure remain external premises.
+    """
+    if type(barrier) is not _DDLBarrierComparison or not callable(callback):
+        raise ValueError('Original DDL barrier comparison and callback required')
+    owner, function, source = barrier.owner_oid, barrier.function_oid, barrier.source
+    if (type(owner) is not int or type(function) is not int
+            or not 0 < owner <= 4294967295 or not 0 < function <= 4294967295
+            or type(source) is not str or not 1 <= len(source.encode('utf8')) <= 65536):
+        raise ValueError('Bounded original native barrier identity required')
+    def qualify(cursor):
+        cursor.execute("SELECT e.evtname::pg_catalog.text,e.evtevent::pg_catalog.text,e.evtenabled::pg_catalog.text,"
+                       "e.evtowner::pg_catalog.text,pg_catalog.to_jsonb(e.evttags)::pg_catalog.text,"
+                       "p.oid::pg_catalog.text,p.proowner::pg_catalog.text,n.nspname::pg_catalog.text,p.proname::pg_catalog.text,"
+                       "l.lanname::pg_catalog.text,p.prokind::pg_catalog.text,p.pronargs::pg_catalog.text,"
+                       "(p.prorettype OPERATOR(pg_catalog.=) 'pg_catalog.event_trigger'::pg_catalog.regtype)::pg_catalog.text,"
+                       "p.proretset::pg_catalog.text,p.prosecdef::pg_catalog.text,p.provolatile::pg_catalog.text,"
+                       "pg_catalog.to_jsonb(p.proconfig)::pg_catalog.text,p.prosrc,"
+                       "EXISTS(SELECT 1 FROM pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a "
+                       "WHERE a.grantee OPERATOR(pg_catalog.=) 0 AND a.privilege_type OPERATOR(pg_catalog.=) 'EXECUTE')::pg_catalog.text "
+                       "FROM pg_catalog.pg_event_trigger e JOIN pg_catalog.pg_proc p ON p.oid OPERATOR(pg_catalog.=) e.evtfoid "
+                       "JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace "
+                       "JOIN pg_catalog.pg_language l ON l.oid OPERATOR(pg_catalog.=) p.prolang "
+                       "WHERE e.evtname IN ('truss_routine_ddl_writer_barrier','truss_table_ddl_writer_barrier') "
+                       "ORDER BY e.evtname",prepare=False,binary=False)
+        rows=cursor.fetchmany(3)
+        suffix=(str(function),str(owner),'truss','runtime_fence_routine_ddl_writer','plpgsql','f','0',
+                'true','false','false','v','["search_path=pg_catalog, pg_temp"]',source,'false')
+        expected=[('truss_routine_ddl_writer_barrier','ddl_command_start','A',str(owner),
+                   '["CREATE FUNCTION", "ALTER FUNCTION", "DROP FUNCTION", "CREATE PROCEDURE", "ALTER PROCEDURE", "DROP PROCEDURE"]',*suffix),
+                  ('truss_table_ddl_writer_barrier','ddl_command_start','A',str(owner),
+                   '["CREATE TABLE", "ALTER TABLE", "DROP TABLE"]',*suffix)]
+        if (cursor.description is None or len(cursor.description)!=19
+                or any(d.type_code!=25 for d in cursor.description) or rows!=expected):
+            raise ValueError('Exact original installed DDL barriers required')
+        return callback(cursor)
+    return _run_fenced_epoch_operation(host,transaction,comparison,qualify)

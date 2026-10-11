@@ -25,7 +25,7 @@ class _FactRelationComparison:
     columns: tuple = ()
 
 
-def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback):
+def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback, *, ddl_barrier=None):
     """Reacquire declared plain-table cuts inside the original epoch scope.
 
     Independent admitted mapping/installed trigger closure is required. This
@@ -107,4 +107,7 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
                         or any(d.type_code!=25 for d in cursor.description) or actual != [expected]):
                     raise ValueError('Original native field descriptor correspondence required')
         return callback(cursor)
+    if ddl_barrier is not None:
+        from ._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        return _run_ddl_fenced_epoch_operation(host,transaction,epoch_comparison,ddl_barrier,acquire)
     return _run_fenced_epoch_operation(host,transaction,epoch_comparison,acquire)

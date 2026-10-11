@@ -2261,3 +2261,22 @@ identity, body, enabled state, ownership and administration exclusions before
 claiming the selected participation profile. No event-trigger administration,
 policy/grant/shared-role/extension or complete cascading dependency closure is
 qualified. Original issuer/current-authority and final release remain separate.
+
+
+### Original installed DDL barrier readback — 2026-10-11
+
+The private joint DDL/fact cut MAY select an original `_DDLBarrierComparison`
+(owner OID, function OID, bounded exact source). After original epoch acquisition,
+read both named native event triggers and the shared original function before
+fact acquisition or callback. Require exact complete tag arrays, ddl_command_start,
+ALWAYS state, original trigger/function owners and function OID, truss namespace,
+exact routine name, plpgsql language, ordinary zero-argument scalar event-trigger
+return, invoker/volatile configuration, exact search_path/source and no PUBLIC
+EXECUTE. Missing, altered or incomplete metadata refuses the operation and rolls
+back its acquired cut without a callback. Comparison bytes are not an issuer or
+caller credential.
+
+This adds installed metadata correspondence to the optional selected tag profile;
+it does not qualify language-handler dependencies, event-trigger administration
+exclusion, all-role ACL closure or lifetime stability. Ordinary plain fact capture
+does not implicitly claim or select this stronger profile.

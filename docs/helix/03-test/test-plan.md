@@ -777,3 +777,18 @@ after which a fresh cut succeeds. Two behaviors share the first control.
 All107 component methods and three independent native cleanups pass. Trace:
 CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 lifecycle prerequisites.
 These do not establish whole source/role/config closure or public authority.
+
+
+### Joint installed DDL/fact readback controls — 2026-10-11
+
+Seven native controls qualify selected installed metadata correspondence: exact
+routine/table barrier pair passes and composes with retained fact SHARE; missing
+table barrier refuses; disabled table barrier refuses; incomplete native table tag
+set refuses; wrong original owner/function/body comparisons refuse; disabled
+routine barrier refuses even when table barrier is ALWAYS; joint fact acquisition
+with a missing barrier refuses before fact locks or callback. Native mismatches
+produce metadata refusal rather than an unrelated SQL permission failure.
+Packetf764ff62 passes114 component methods and three independent cleanup checks.
+Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 correspondence
+prerequisites. Administrative fixtures do not establish ordinary caller authority,
+installed administration exclusions, whole source lifetime or final disclosure.

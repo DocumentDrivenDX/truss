@@ -4193,3 +4193,32 @@ open. No new formal SQL refinement or backend acceptance binding. Trace:
 CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10. Last full gate26/132 with106
 missing; goal active. Next integrate original installed barrier readback/custody
 with the protected source census, then compose caller/mapping/decoder authority.
+
+
+### Compose original installed DDL barrier readback with fact acquisition — 2026-10-11
+
+Implemented bounded original owner/function/body comparison and actual catalog
+readback of both selected event triggers and their shared function inside the
+original fenced epoch host operation. The private fact cut explicitly selects
+this prerequisite before fact acquisition; no nested host operation or reusable
+authority token. Exact original metadata requires complete selected tag arrays,
+ALWAYS state, original owners/function OID/namespace/name/language/return shape,
+invoker/volatile configuration, exact search_path/body and absent PUBLIC EXECUTE.
+Seven controls include exact joint success and native missing/disabled/incomplete
+tag sets plus original owner/function/body substitution refusals.
+
+Final `evidence/python-psycopg-epoch-cut/f764ff62-bb8f-4d15-bf91-6ffebf307a82`
+passes114 methods (63 fact/dependency/identity/visibility/DDL/readback,16 graph,
+nine epoch,26 adoption), module boundaries,131 current/archived Truss pins,363
+original UMF pins,1614 native payload pins and all three stop0/status3/socket-
+absent cleanups. Earliera2bb2d11 (110 methods) and4f016b85 (113 methods) retain
+their successful earlier source tuples and are not current-source promotion.
+
+This is a selected native projection, not the complete protected source census,
+authenticated issuer/mapping/caller admission, language-handler dependency proof
+or event-trigger administration/role/config lifetime closure. No public support
+flag, packaged delivery or backend acceptance binding changed. Trace
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10. Last full gate26/132 with
+106 missing; goal active. Next establish original ordinary-role administration
+exclusions and protect the selected barrier lifetime, then compose fixed fact
+capture and original semantic decoding before protected final release.

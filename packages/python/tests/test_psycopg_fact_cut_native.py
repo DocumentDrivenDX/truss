@@ -41,7 +41,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
     tearDown=epoch_tests.PsycopgEpochCutNativeTests.tearDown
     begin=epoch_tests.PsycopgEpochCutNativeTests.begin
     comparison=epoch_tests.PsycopgEpochCutNativeTests.comparison
-    def cut(self,t,callback,bindings=None):return _run_fenced_fact_operation(self.host,t,self.comparison(),bindings or tuple(self.bindings.values()),callback)
+    def cut(self,t,callback,bindings=None,ddl_barrier=None):return _run_fenced_fact_operation(self.host,t,self.comparison(),bindings or tuple(self.bindings.values()),callback,ddl_barrier=ddl_barrier)
     def fact_shares(self):return self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.flat_assignment'::regclass,'truss.edge'::regclass)").fetchone()[0]
     def test_flat_and_native_graph_membership_under_joint_cut(self):
         t=self.begin()
@@ -454,3 +454,68 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         finally:
             self.connection.execute('ROLLBACK')
             self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def ddl_comparison(self):
+        from truss._psycopg_epoch_cut import _DDLBarrierComparison
+        oid,owner,source=self.connection.execute("SELECT oid,proowner,prosrc FROM pg_catalog.pg_proc WHERE oid='truss.runtime_fence_routine_ddl_writer()'::regprocedure").fetchone()
+        return _DDLBarrierComparison(owner,oid,source)
+    def test_original_installed_ddl_barriers_readback_passes(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();t=self.begin()
+            self.assertEqual(_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:'qualified-fixture'),Ok('qualified-fixture'))
+            self.assertEqual(self.cut(t,lambda c:'joint-qualified-fixture',ddl_barrier=original),Ok('joint-qualified-fixture'))
+            self.assertEqual(self.fact_shares(),2)
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_missing_installed_table_barrier_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        original=self.ddl_comparison();t=self.begin();called=[]
+        result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+        self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+    def test_disabled_installed_table_barrier_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();self.connection.execute('ALTER EVENT TRIGGER truss_table_ddl_writer_barrier DISABLE');t=self.begin();called=[]
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def test_incomplete_native_table_barrier_tag_set_refuses(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute("CREATE EVENT TRIGGER truss_table_ddl_writer_barrier ON ddl_command_start WHEN TAG IN ('ALTER TABLE') EXECUTE FUNCTION truss.runtime_fence_routine_ddl_writer(); ALTER EVENT TRIGGER truss_table_ddl_writer_barrier ENABLE ALWAYS")
+        try:
+            original=self.ddl_comparison();t=self.begin();called=[]
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_wrong_original_barrier_owner_function_or_body_refuses(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation,_DDLBarrierComparison
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();t=self.begin()
+            for wrong in (_DDLBarrierComparison(original.owner_oid+1,original.function_oid,original.source),_DDLBarrierComparison(original.owner_oid,original.function_oid+1,original.source),_DDLBarrierComparison(original.owner_oid,original.function_oid,original.source+' ')):
+                with self.subTest(comparison=wrong):
+                    called=[];result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),wrong,lambda c:called.append(True))
+                    self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+    def test_disabled_routine_barrier_refuses_even_with_table_barrier_always(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            original=self.ddl_comparison();self.connection.execute('ALTER EVENT TRIGGER truss_routine_ddl_writer_barrier DISABLE');t=self.begin();called=[]
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[])
+        finally:
+            self.connection.execute('ROLLBACK');self.connection.execute('ALTER EVENT TRIGGER truss_routine_ddl_writer_barrier ENABLE ALWAYS');self.connection.execute('DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
+
+    def test_joint_ddl_fact_cut_missing_barrier_refuses_before_fact_read(self):
+        original=self.ddl_comparison();t=self.begin();called=[]
+        result=self.cut(t,lambda c:called.append(True),ddl_barrier=original)
+        self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
+        self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
