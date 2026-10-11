@@ -8,7 +8,7 @@ CREATE FUNCTION truss.runtime_stage_catalog_with_release(
 RETURNS TABLE(writer_xid text,ordinal text,context_hex text,provisional_result_hex text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE before_release record; after_release record; staged record; result jsonb;
- response bytea; total_bytes bigint; before_resources jsonb; after_resources jsonb;
+ response bytea; total_bytes bigint; before_resources jsonb; after_resources jsonb; final_graph record;
 BEGIN
  IF original_context IS NULL OR octet_length(original_context) NOT BETWEEN 1 AND 1048576
   OR configuration_profile IS NULL OR octet_length(configuration_profile) NOT BETWEEN 1 AND 65536
@@ -42,6 +42,22 @@ BEGIN
   staged.writer_xid,staged.ordinal,result->>'effectGeneration',encode(configuration_profile,'hex'));
  IF after_resources IS DISTINCT FROM before_resources THEN
   RAISE EXCEPTION 'same original report resource inputs through catalog effects required' USING ERRCODE='55000';
+ END IF;
+ -- The extra release/resource collectors must not extend use beyond the core's checked
+ -- cut. Recollect the complete metadata/graph and original operation afterward.
+ SELECT * INTO STRICT final_graph FROM truss.runtime_collect_configured_catalog_graph();
+ IF to_jsonb(final_graph) IS DISTINCT FROM result->'reportSources'->'end'
+  OR NOT EXISTS(SELECT 1 FROM truss.row_home_operation o
+   WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()
+    AND o.original_writer_xid::text=staged.writer_xid AND o.operation_ordinal=issued_ordinal
+    AND o.operation_ordinal::text=staged.ordinal AND o.phase='admitted'
+    AND o.effect_generation::text=result->>'effectGeneration'
+    AND o.operation_kind='catalog-acceptance' AND o.original_context_bytes=original_context
+    AND o.original_context_bytes=decode(staged.context_hex,'hex')
+    AND o.original_definition_bytes=definition_bytes AND o.original_input_bytes=input_bytes
+    AND o.original_prestate_bytes=original_prestate AND o.admitted_candidate_bytes=candidate_bytes
+    AND o.effect_obligation_bytes=obligation_bytes AND o.original_group_custody_bytes=group_bytes) THEN
+  RAISE EXCEPTION 'original configured release final cut required' USING ERRCODE='55000';
  END IF;
  result:=jsonb_set(result,'{reportSources,catalogResources}',before_resources);
  result:=jsonb_set(result,'{interfaceVersion}','"truss-native-provisional-catalog/0.4"'::jsonb);

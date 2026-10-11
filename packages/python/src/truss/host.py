@@ -3,7 +3,9 @@
 The selected adapter is pinned pg8000 over a Unix socket. The returned boundary
 is owned by the host. Session disposal closes Truss admission, never settles or
 closes the host connection. General Executor.execute/with_transaction and
-adoption of preexisting arbitrary driver connections remain unfinished.
+adoption of arbitrary drivers or connections already in a transaction remain
+unfinished. adopt_pg8000_host separately supports existing idle selected
+connections while preserving caller ownership.
 """
 from dataclasses import dataclass
 from typing import Protocol,Literal

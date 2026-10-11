@@ -1,0 +1,43 @@
+{
+  "scope": "borrowed_host_and_committed_security_main_reconciliation_only",
+  "parents": [
+    "f9945cf7",
+    "3c8080b1"
+  ],
+  "nativeDispatchRegression": {
+    "status": "passed",
+    "testCount": 94,
+    "seconds": 30.482,
+    "includesInheritedHostTests": true,
+    "module": "test_native_catalog_dispatch",
+    "logSha256": "a9381ee665be6224ecd558915485c67dbab4bf56e3e7108f5e3ca64df86ae75b",
+    "scope": "preceding compatibility run before final-cut safeguard restoration"
+  },
+  "combinedPythonImportBoundaries": 520,
+  "runtimeConflictCount": 0,
+  "borrowedModulesUnchangedFromReviewedCheckpoint": true,
+  "excludedClaims": [
+    "complete_report_issuance",
+    "catalog_commit",
+    "public_installation",
+    "ordinary_authenticated_authority",
+    "complete_external_interface"
+  ],
+  "restoredSafeguards": [
+    "final configured graph and original admitted operation check after all resource recollections",
+    "native regression for metadata change after core staging"
+  ],
+  "finalFrozenNativeRegression": {
+    "runId": "e2c4fc4d-a9e7-4af7-84ee-fe08ad6fe502",
+    "status": "component-passed",
+    "nativeTests": 20,
+    "directHostTests": 14,
+    "auxiliaryTests": 15,
+    "scope": "private configured staging only; no public installation or accepted report claim"
+  },
+  "supersededRunnerAttempt": {
+    "runId": "92fd9f01-1fd5-445e-b90e-d98c7b3ef4ed",
+    "qualified": false,
+    "reason": "closed test count corrected from 19 to 20 after restoring regression"
+  }
+}

@@ -317,3 +317,26 @@ class ConfiguredReleaseStageNativeTests(NativeBoundaryFixture,unittest.TestCase)
         self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.fence_late_effect'),[[True]])
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
         self.connection.run('SELECT truss.runtime_require_selected_archive_write_fence()')
+    def test_after_core_metadata_change_refuses_at_final_release_cut(self):
+        from pg8000.exceptions import DatabaseError
+        self.archive();self.admit()
+        self.connection.run('CREATE TEMP TABLE earlier_host_work(value int); INSERT INTO earlier_host_work VALUES(7)')
+        self.connection.run("""ALTER FUNCTION truss.runtime_stage_catalog_admitted(
+            bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea)
+            RENAME TO fixture_stage_original;
+            CREATE FUNCTION truss.runtime_stage_catalog_admitted(
+            bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea)
+            RETURNS TABLE(writer_xid text,ordinal text,context_hex text,provisional_result_hex text)
+            LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+            DECLARE original record;
+            BEGIN SELECT * INTO STRICT original FROM truss.fixture_stage_original($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11);
+            UPDATE truss.installation_marker SET layout_version='after-core-change';
+            RETURN QUERY SELECT original.writer_xid,original.ordinal,original.context_hex,original.provisional_result_hex;
+            END $$""")
+        self.connection.run('SAVEPOINT release_cut')
+        with self.assertRaises(DatabaseError) as caught:self.invoke()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.assertEqual(caught.exception.args[0]['M'],'original configured release final cut required')
+        self.connection.run('ROLLBACK TO SAVEPOINT release_cut')
+        self.assertEqual(self.connection.run('SELECT value FROM earlier_host_work'),[[7]])
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])

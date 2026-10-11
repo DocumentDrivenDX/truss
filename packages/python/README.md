@@ -6,6 +6,31 @@ preparation, selected native host transaction controls, installation footprint i
 and inert assembly construction.
 Mutation/query/installation APIs remain unfinished.
 
+For an existing idle `pg8000.native.Connection` from version 1.31.5 over a Unix socket, use
+`adopt_pg8000_host(connection)`. It attaches without database I/O and never
+creates, settles or closes your connection. The connection must have completed
+an actual idle command; fresh startup status, active/failed transactions,
+preexisting prepared resources and changed driver methods are refused.
+
+After attaching, make a successful idle observation through
+`host.connection.run_non_lifecycle("SELECT 1")`, then call
+`host.session.observe_host_resource_baseline()`, `begin()` and
+`adopt_transaction()`, checking each `Outcome`. Use that original handle for
+Truss savepoints. The host session owns your explicit `commit()` or `rollback()`.
+Keep raw connection aliases unused while attached.
+
+`host.detach()` restores the original driver hooks only when the connection is
+idle and native work is settled. It returns false while work is pending or
+driver correspondence is lost. A hook-restoration exception is retained in
+`detach_failure`; explicit `detach()` retry completes restoration without
+native I/O and still refuses foreign replacements. Successful detachment invalidates the old
+session and permits ordinary raw connection reuse. `dispose()` closes Truss
+admission while leaving the host rollback route available; it does not detach.
+Construction failures retain `BorrowedHostAttachmentFailure` with original
+attachment custody and a `restored` flag. Unconfirmed restoration requires host
+recovery before reuse. This API supplies transaction embedding; it grants no
+catalog, read or mutation authority.
+
 The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
 prioritizes complete installation, catalog acceptance, apply/import and direct
 key/edge reads, with per-person isolation and origin capture included in the

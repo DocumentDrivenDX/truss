@@ -116,7 +116,7 @@ try:
         if test.returncode!=1 or test.stderr.count('DatabaseError not raised')!=expected_failures or f'FAILED (failures={expected_failures})' not in test.stderr:
             raise RuntimeError('Expected exact native omission counterexamples required')
     else:require(test)
-    native_test_count=8 if self_write_profile else 12 if archive_countercontrol else 22
+    native_test_count=8 if self_write_profile else 12 if archive_countercontrol else 23
     if f'Ran {native_test_count} tests' not in test.stderr or 'skipped' in test.stderr:raise RuntimeError('Complete selected native population required')
     # Execute each original catalog-dispatch regression method exactly once.
     original=ast.parse(inputs[str(root/'packages/python/tests/test_native_catalog_dispatch.py')])
