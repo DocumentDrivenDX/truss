@@ -46,9 +46,16 @@ class PreparedNativeStringReplacement:
     scope: str = 'original_pending_effect_request_only'
 
 @dataclass(frozen=True, slots=True, eq=False)
+class PreparedNativeCatalogStage:
+    attempt: IssuedOperationAttempt
+    encoded: object
+    entry: object
+    scope: str = 'original_provisional_catalog_request_only'
+
+@dataclass(frozen=True, slots=True, eq=False)
 class NativeAdmissionInvocation:
     owner: object
-    request: PreparedNativeAdmission | PreparedNativeStringReplacement
+    request: PreparedNativeAdmission | PreparedNativeStringReplacement | PreparedNativeCatalogStage
     sql: str
     invoke: object
     gate: object
@@ -201,6 +208,26 @@ class NativeOperationOrdinals:
                 raise
             return request
 
+    def prepare_catalog_stage(self, attempt, original_input):
+        from ._native_catalog_request import encode_catalog_stage
+        with self.boundary._lock:
+            self._check_request_attempt_locked(attempt)
+            if attempt.admission_request is not None or len(self.requests)>=self.maximum_attempts:
+                raise NativeBoundaryRefusal('Original catalog request already retained or capacity exhausted')
+            encoded=encode_catalog_stage(original_input, attempt.ordinal)
+            request=PreparedNativeCatalogStage(attempt, encoded, attempt.controls.admission_entry)
+            root=(*self.requests, request)
+            self._check_request_attempt_locked(attempt)
+            try:
+                self._publish_admission_requests(root)
+                if self.requests is not root or attempt.admission_request is not request:
+                    raise NativeBoundaryRefusal('Original catalog request publication unavailable')
+            except BaseException:
+                self.closed=True
+                attempt.session.admission_closed=True
+                raise
+            return request
+
     def _check_admission_call_locked(self, session, boundary, token, invoke, resource, lifecycle, cleanup, invocation):
         if (type(invocation) is not NativeAdmissionInvocation or invocation.owner is not self
                 or not any(item is invocation for item in self.admission_invocations)):
@@ -253,6 +280,16 @@ class NativeOperationOrdinals:
             raise NativeBoundaryRefusal('Original pending string request required')
         return self._dispatch_candidate(request)
 
+    def dispatch_catalog_stage_candidate(self, request):
+        from .preparation import _require_original_preparation
+        if type(request) is not PreparedNativeCatalogStage:
+            raise NativeBoundaryRefusal('Original catalog request required')
+        with self.boundary._lock:
+            if not any(item is request for item in self.requests):
+                raise NativeBoundaryRefusal('Original retained catalog request required')
+        _require_original_preparation(request.encoded.original_input.prepared)
+        return self._dispatch_candidate(request)
+
     def _dispatch_candidate(self, request):
         # Administrative original-driver composition only. No installed/artifact
         # authority or public capability can be inferred from this result.
@@ -263,7 +300,7 @@ class NativeOperationOrdinals:
             raise NativeBoundaryRefusal('Original admission Context and flush required')
         _, context_type, _, _, flush, _ = symbols
         with self.boundary._lock:
-            if (type(request) not in (PreparedNativeAdmission,PreparedNativeStringReplacement)
+            if (type(request) not in (PreparedNativeAdmission,PreparedNativeStringReplacement,PreparedNativeCatalogStage)
                     or not any(item is request for item in self.requests)):
                 raise NativeBoundaryRefusal('Original prepared admission request required')
             attempt = request.attempt
@@ -275,6 +312,10 @@ class NativeOperationOrdinals:
                 raise NativeBoundaryRefusal('Original admission already retained or capacity exhausted')
             prefix = ('SELECT admitted.writer_xid, admitted.ordinal, admitted.context_hex, '
                       'pg_catalog.pg_current_xact_id()::pg_catalog.text AS actual_writer_xid FROM (')
+            if type(request) is PreparedNativeCatalogStage:
+                prefix = ('SELECT admitted.writer_xid, admitted.ordinal, admitted.context_hex, '
+                          'admitted.provisional_result_hex, '
+                          'pg_catalog.pg_current_xact_id()::pg_catalog.text AS actual_writer_xid FROM (')
             suffix = ') AS admitted'
             if request.encoded.encoded_bytes + len(prefix) + len(suffix) + 6 > 1048576:
                 raise NativeBoundaryRefusal('Full original admission SQL capacity exhausted')
@@ -286,7 +327,12 @@ class NativeOperationOrdinals:
             original_input = request.encoded.original_input
             if type(request) is PreparedNativeAdmission and original_input.family != 'base' and 2*(len(original_input.asserted) + len(original_input.capture_profile)) > 4096:
                 raise NativeBoundaryRefusal('Input exceeds selected reduced native context profile')
-        gate = NativeAdmissionCapture(session, NativeTextLimits(columns=4, rows=1), entry=request.entry)
+        if type(request) is PreparedNativeCatalogStage:
+            from ._native_catalog_capture import NativeCatalogCapture
+            gate=NativeCatalogCapture(session, entry=request.entry,
+                expected_documents=request.encoded.expected_documents)
+        else:
+            gate = NativeAdmissionCapture(session, NativeTextLimits(columns=4, rows=1), entry=request.entry)
         try:
             gate.install()
             with self.boundary._lock:
