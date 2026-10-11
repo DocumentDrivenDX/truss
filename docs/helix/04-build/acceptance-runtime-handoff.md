@@ -679,3 +679,10 @@ native observation in the registered-profile path. Returned original wire
 evidence remains byte-exact to the pre-observation checked copy. The current
 report suite passes sixteen tests/142 assertions and strict TypeScript; this
 controlled observation test adds no native support claim or new verified field.
+
+
+### A2 original value coverage bridge — 2026-10-11
+
+`collectCatalogOriginalOccurrenceInventory` now joins the original recognized UMF preparation and original owner observation collection to the complete original JSON value index. Exact document/artifact/pointer joins are required for every inspected core assertion; all other original values remain unavailable interpretation. Lexical original bytes and source versions remain distinct from transition targets. No caller-supplied dispositions or native enforcement labels are admitted. Structural sourceCoverageComplete is true; semantic complete and interpretationQualified remain false. Core absent observations are retained separately and do not invent authored occurrences.
+
+The source-exact receipt under evidence/original-occurrence-inventory retains55 passing tests/318 assertions, strict selected-source typing and698 selected source/schema/fixture/declaration/producer preimages. Tests independently enumerate all authored pointers and seven expected assertion/rule pairs, copied and crossed genuinely recognized custody refusals, mixed original0.7/0.8 lexical preservation and unsafe-integer refusal by the selected original owner profile. This is not native enforcement or a complete registered assertion-inventory profile. Remaining unavailable dispositions, complete enforcement joins, aggregate execution/resource accounting and full report/publication gates remain open.

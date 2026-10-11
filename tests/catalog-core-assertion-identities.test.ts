@@ -36,3 +36,56 @@ test('original 0.8 schema properties keep authored pointers and legacy API failu
  expect(result.deferred.some(o=>o.operation==='schema_properties'&&(o.identity as any).scope==='document')).toBe(true);expect(result.entries.some(e=>e.ruleName.endsWith('.title'))).toBe(false);
  expect(result.deferred.some(o=>(o.result as any).state==='unavailable')).toBe(true);expect(result.complete).toBe(false);expect(result.entries.every(e=>e.enforcement==='none')).toBe(true);
 });
+
+
+import {collectCatalogOriginalOccurrenceInventory,originalCatalogOccurrenceBytes} from '../packages/umf-bun/src/catalog-original-occurrence-inventory';
+test('complete original value coverage keeps unclassified and opaque meaning unavailable',()=>{
+ const result=collectCatalogOriginalOccurrenceInventory(prepared,observations),doc=result.documents[0]!;
+ // Independent traversal of the authored test model, not the producer's occurrence array.
+ const expected:string[]=[];const visit=(value:any,pointer:string)=>{expected.push(pointer);if(Array.isArray(value))value.forEach((v,i)=>visit(v,pointer+'/'+i));else if(value!==null&&typeof value==='object')for(const [k,v] of Object.entries(value))visit(v,pointer+'/'+k.replace(/~/g,'~0').replace(/\//g,'~1'))};visit(model,'');
+ expect(doc.occurrences.map(o=>o.pointer)).toEqual(expected);expect(result.sourceCoverageComplete).toBe(true);expect(result.complete).toBe(false);expect(result.interpretationQualified).toBe(false);
+ expect(doc.occurrences.filter(o=>o.disposition==='assertion').map(o=>[o.pointer,o.assertions[0]!.ruleName])).toEqual([
+  ['/modules/0/elements/0/kind','core.kind'],['/modules/0/elements/0/nullability','core.nullability'],['/modules/0/elements/0/cardinality','core.cardinality'],['/modules/0/elements/0/facets','core.facets'],
+  ['/modules/0/elements/1/kind','core.kind'],['/modules/0/elements/1/nullability','core.nullability'],['/modules/0/elements/1/cardinality','core.cardinality'],
+ ]);
+ const opaque=doc.occurrences.find(o=>o.pointer==='/modules/0/elements/0/facets/future/value')!;expect(opaque.disposition).toBe('unavailable');expect(opaque.assertions).toEqual([]);
+ const pos=doc.occurrences.indexOf(opaque);expect(new TextDecoder().decode(originalCatalogOccurrenceBytes(prepared,result,0,pos))).toBe('"opaque"');
+ for(const row of doc.occurrences){expect(row.sourceSha256).toBe(input.documents[0].artifact.sha256);expect(row.owner.documentId).toBe('doc');for(const assertion of row.assertions){expect(assertion.assertion.sourcePointer).toBe(row.pointer);expect(assertion.enforcement).toBe('none')}}
+});
+test('occurrence inventory retains original custody instead of copied or foreign preparation',()=>{
+ const result=collectCatalogOriginalOccurrenceInventory(prepared,observations);
+ expect(()=>collectCatalogOriginalOccurrenceInventory(prepared,{...observations})).toThrow('observation collection custody');
+ expect(()=>originalCatalogOccurrenceBytes(prepared,{...result},0,0)).toThrow('inventory custody');
+ const other=preparation.prepare(new TextEncoder().encode(JSON.stringify(input)));
+ expect(()=>originalCatalogOccurrenceBytes(other,result,0,0)).toThrow('inventory custody');
+ const otherObservations=collectCatalogAssertionObservations(other,owner,fields);
+ expect(()=>collectCatalogOriginalOccurrenceInventory(other,observations)).toThrow('observation collection custody');
+ expect(()=>collectCatalogOriginalOccurrenceInventory(prepared,otherObservations)).toThrow('observation collection custody');
+ const returned=originalCatalogOccurrenceBytes(prepared,result,0,0);returned.fill(0);
+ expect(new TextDecoder().decode(originalCatalogOccurrenceBytes(prepared,result,0,0))).toBe(JSON.stringify(model));
+ expect(()=>originalCatalogOccurrenceBytes(prepared,result,-1,0)).toThrow('position');
+});
+
+test('mixed original versions and lexical numeric opaque bytes remain distinct from transition targets',()=>{
+ const originalInput=structuredClone(input);const sources=['0.7.0','0.8.0'].map((version,i)=>{
+  const source:any=structuredClone(model);source.umf=version;source.id='doc'+i;source.modules[0].elements[0].facets.future.value='unsafe';
+  return JSON.stringify(source).replace('"unsafe"','1.2300e+2');
+ });
+ originalInput.documents=sources.map((text,i)=>{const b=Buffer.from(text);return {...structuredClone(input.documents[0]),documentId:'doc'+i,artifact:{identity:'doc'+i,bytesBase64:b.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(b).digest('hex')}}});
+ const p=preparation.prepare(new TextEncoder().encode(JSON.stringify(originalInput))),o=collectCatalogAssertionObservations(p,owner,fields),r=collectCatalogOriginalOccurrenceInventory(p,o);
+ expect(r.documents.map(d=>d.sourceVersion)).toEqual(['0.7.0','0.8.0']);expect(p.documents[0]!.interpretation.target.umf).toBe('0.8.0');
+ for(let i=0;i<2;i++){
+  const d=r.documents[i]!,position=d.occurrences.findIndex(o=>o.pointer==='/modules/0/elements/0/facets/future/value');
+  expect(d.occurrences[position]!.disposition).toBe('unavailable');expect(d.occurrences[position]!.sourceSha256).toBe(originalInput.documents[i].artifact.sha256);
+  expect(new TextDecoder().decode(originalCatalogOccurrenceBytes(p,r,i,position))).toBe('1.2300e+2');
+  expect(new TextDecoder().decode(originalCatalogOccurrenceBytes(p,r,i,0))).toBe(sources[i]);
+  expect(d.occurrences.every(o=>o.owner.documentId==='doc'+i)).toBe(true);
+ }
+ expect(r.complete).toBe(false);
+});
+
+test('the original UMF profile still refuses unsafe integer source before inventory issuance',()=>{
+ const originalInput=structuredClone(input),source=JSON.stringify(model).replace('"opaque"','9007199254740993'),b=Buffer.from(source);
+ originalInput.documents[0].artifact={identity:'unsafe',bytesBase64:b.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(b).digest('hex')};
+ expect(()=>preparation.prepare(new TextEncoder().encode(JSON.stringify(originalInput)))).toThrow('Integer exceeds exact JavaScript range');
+});
