@@ -3490,3 +3490,34 @@ observed zero/out-of-range setting refuses adoption; this observation does not
 prove that an uncooperative caller supplied the prerequisite before the probe.
 SQLSTATE40001/40P01 retains connection-level transaction identity and refuses
 same-transaction re-adoption until a different actual host transaction is observed.
+
+
+### Direct-main integration qualification — 2026-10-11
+
+Merged concurrent main `f8126b6f` into the selected routine-DDL barrier increment
+(`493afee1`, integration merge `ab3e8621`), preserving the supported psycopg
+adoption baseline and revision-registration and report-write runner profiles.
+Post-merge native evidence is retained under
+`evidence/python-catalog-report-release/da256fbb-ba27-457d-a855-913ed4f1ed89`
+(44 tests: 15 barrier + 14 original + 15 incoming regressions),
+`2ad76a81-f267-41dd-aa71-865e833fb751` (52 default tests), and
+`42a55525-c3e7-4455-8496-2a9b8b41e552` (42 revision-registration tests).
+Each packet records 300 source pins and 1614 native binary pins; primary-agent
+verification matched every source pin to both current bytes and its archived
+preimage. All three receipts pass and confirm fixture stop, stopped status and
+socket removal. The barrier packet retains six complete compressed census images.
+
+Merged-source formal evidence is
+`evidence/routine-ddl-writer-barrier-formal/29684e42-66ae-4ba3-9e88-2673b6f41b9e`:
+10 conditional queries, five UNSAT proofs and five SAT witnesses. The completed
+Astra Ultra review applies to unchanged barrier SQL/test semantics and its
+pre-merge evidence; these merged-source repetitions were verified by the primary
+agent and are not represented as a new Astra review. The additional independent
+default-regression appendix was not completed after the reviewer usage limit.
+
+This is direct-main integration evidence for CONTRACT-063/STP-056 B09/B11/B12/L03
+and US-056 AC7/AC9/AC10, US-057 AC2 prerequisites. The pg8000 harness remains a
+private spike. No full source/authority writer closure, automatic routine epoch
+advancement, authenticated issuer, ordinary protected executor, held business-use
+permit, or final disclosure acceptance is established. Backend acceptance remains
+26/132 with 106 missing bindings; the overall implementation goal remains active.

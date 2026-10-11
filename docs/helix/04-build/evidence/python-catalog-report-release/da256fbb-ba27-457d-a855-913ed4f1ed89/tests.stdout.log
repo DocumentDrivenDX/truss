@@ -1,0 +1,6 @@
+{"test": "test_omitted_table_modes_allow_pending_commit_source_change", "census": "pending", "sha256": "73a242b3691d934bb53b40a939f4e4db0fc068e452b4430e2193b746011350ac", "octets": 11985490}
+{"test": "test_omitted_table_modes_allow_pending_commit_source_change", "census": "committed", "sha256": "a04d0d9d0987d666149a6ba8bcead9789e2acf7781d5f33bcad1bbd930549a51", "octets": 11985490}
+{"test": "test_selected_ddl_changes_source_not_epoch", "census": "before", "sha256": "2e329aa75688ab51a8c13ab9b188a479da4a23ef98487c10a0360dc110ae9068", "octets": 11985545}
+{"test": "test_selected_ddl_changes_source_not_epoch", "census": "after", "sha256": "9e47c55fc33823950497dd2b28e32d2e6c250d7e8f420ab09d66f3e12e8d012d", "octets": 11985545}
+{"test": "test_shared_role_change_is_explicitly_outside_barrier", "census": "before-role", "sha256": "2e329aa75688ab51a8c13ab9b188a479da4a23ef98487c10a0360dc110ae9068", "octets": 11985545}
+{"test": "test_shared_role_change_is_explicitly_outside_barrier", "census": "after-role", "sha256": "926f0ba5ed48f8248965595631746e9c938741ec625d908e3943a3603c9aa37d", "octets": 11985544}

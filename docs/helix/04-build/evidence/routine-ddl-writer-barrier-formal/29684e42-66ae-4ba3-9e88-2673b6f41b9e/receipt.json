@@ -1,0 +1,95 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-routine-ddl-writer-barrier.py": "b039ff6977fad7af9bacf992b35e819b01dca61a32f25afa83a98f3aa4dc32d7",
+    "packages/postgresql/native/source-epoch-routine-ddl-barrier.sql": "8f6d9a451d443ae7b13e0fa7bef09e4d7a5a22fa094cbb226317c13ebcd92bf3",
+    "packages/postgresql/native/source-epoch-fenced-fresh-lock.sql": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+    "packages/postgresql/native/source-epoch-read-fence.sql": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+    "packages/python/tests/test_routine_ddl_barrier_native.py": "200f985570233edebe445bec1c0fd174466387c984a291b22d6cdd739b29be1f",
+    "scripts/check-python-catalog-report-release-native.py": "45d39ad45ac1f8f6f9ff2bb063ba022e1ea233d65abf231acadcc593ba866396"
+  },
+  "queries": [
+    {
+      "id": "selected_foreign_writer_cannot_change_held_source",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "587358cb93558ade01d41a9e0b1722cb36c5ce9e8e8a405a8b7b3a6cc019b3b9"
+    },
+    {
+      "id": "selected_own_writer_refuses_before_effect",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "c3e990d185e473f47e536c14af4958f8c37d57d771896b398f37513d2a2b4631"
+    },
+    {
+      "id": "pending_selected_writer_excludes_new_reader",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "a31f8f013ca8ca7de65ac88751c07d016b5d0311e3aa5c421d0679d540e60b43"
+    },
+    {
+      "id": "marker_serializes_participating_effects",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "d41f1098fa042f3e43b5dccfefc2606f5d74d34a4e1072717a53202c740be60f"
+    },
+    {
+      "id": "complete_selected_barrier_preserves_one_step_source",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "140f52b8854745ea0418189bde08c308907b33f21f14086b94664e2d7874c78e"
+    },
+    {
+      "id": "omitted_own_guard_permits_same_backend_change",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n successor = 1,\n tagged = True,\n reader = True,\n write = True,\n own_guard = False,\n own = True,\n epoch_before = 0,\n epoch_after = 0]",
+      "smt2Sha256": "4523c4f4a76a1c62490924dc0ab0d40836e24bc06927a5353e3959a632c9c0ee"
+    },
+    {
+      "id": "omitted_writer_modes_permit_pending_writer_and_reader",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[writer_modes = False,\n ended = False,\n accepted = True,\n started = True,\n tagged = True,\n writer_held = False]",
+      "smt2Sha256": "f595d84078523a183bfed552b9eb0f7ff28cccdaebd572a44be719051c2cb317"
+    },
+    {
+      "id": "uncovered_or_disabled_hook_allows_change",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n tagged = False,\n reader = True,\n write = True,\n successor = 1,\n epoch_before = 0,\n epoch_after = 0]",
+      "smt2Sha256": "b3e125492f58918983fa07f31300b95a554ea93896a18db3e06bc5cc46a39baf"
+    },
+    {
+      "id": "selected_committed_ddl_changes_source_without_epoch_issuance",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n successor = 1,\n tagged = True,\n reader = False,\n write = True,\n writer_modes = True,\n own_guard = True,\n epoch_before = 0,\n epoch_after = 0]",
+      "smt2Sha256": "fa8c13581cd1d5e386fc8f6802f3edc411c6721fea85eb0a3e5b3fde0e208c19"
+    },
+    {
+      "id": "completed_writer_allows_new_reader",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[writer_modes = True,\n ended = True,\n accepted = True,\n started = True,\n tagged = True,\n writer_held = False]",
+      "smt2Sha256": "2dff8b46e9a7b2e4aa3a842e333cb001a210afdd1ba86617420ce7de2abe1036"
+    }
+  ],
+  "scope": "Conditional arbitrary one-step source preservation for continuously held reader and complete selected-tag participation, own-backend entry guard and native mode compatibility. Finite-history induction assumes these laws at every step. Writer lifetime/marker exclusion are explicit abstract premises, not derived PostgreSQL lock/transaction/savepoint/SQL refinement. The completed-writer witness models reader permission after end, not a native timing trace. No snapshot freshness, whole-source/role/grant/cascade/authorization-data coverage, authenticated issuer, automatic source-epoch advancement, ordinary executor or final-disclosure qualification."
+}
