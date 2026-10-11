@@ -1,0 +1,11 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/security/dependencies.test.ts:
+(pass) typed dependency closure includes endpoint components and exact identity keys [14.61ms]
+(pass) a write binding cannot omit a policy-read field to avoid separate policy mutation authority [151.90ms]
+(pass) incomplete interpretation cannot produce an apparently complete dependency inventory [1.19ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [446.00ms]

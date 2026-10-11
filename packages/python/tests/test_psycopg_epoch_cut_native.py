@@ -34,7 +34,9 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
                 (Path(target)/('cleanup-'+cls.__name__+'.json')).write_text(json.dumps(receipt,indent=2)+'\n')
             if receipt!={'stopExitCode':0,'statusExitCode':3,'socketAbsent':True}:raise RuntimeError('Owned fixture cleanup failed')
         finally:cls.directory.cleanup()
-    setUp=host_tests.PsycopgHostNativeTests.setUp
+    def setUp(self):
+        self.selected_profile=host_tests.PsycopgProfile()
+        host_tests.PsycopgHostNativeTests.setUp(self)
     tearDown=host_tests.PsycopgHostNativeTests.tearDown
     begin=host_tests.PsycopgHostNativeTests.begin
     def comparison(self):return _EpochComparison('fixture',self.epoch,'target',b'\x01',b'\x02')
@@ -95,3 +97,12 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
         with patch.object(PsycopgHost,'_run_operation',mutate):
             self.assertEqual(self.run_cut(t,lambda c:'original',comparison),Ok('original'))
         self.assertEqual(self.shares(),2);self.assertEqual(comparison.epoch,'substituted')
+    def test_unqualified_host_profile_refuses_before_native_work(self):
+        from unittest.mock import patch
+        from truss.psycopg_host import PsycopgHost,PsycopgProfile
+        t=self.begin();called=[]
+        self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+        with patch.object(PsycopgHost,'profile',property(lambda host:PsycopgProfile(server=170011))):
+            with self.assertRaises(ValueError):self.run_cut(t,lambda c:called.append(True))
+        self.assertEqual(called,[])
+        self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))

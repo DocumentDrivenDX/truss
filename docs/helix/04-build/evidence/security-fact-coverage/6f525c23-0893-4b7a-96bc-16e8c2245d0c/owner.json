@@ -1,0 +1,7 @@
+{
+  "ownerCommit": "ab4da7a6f6fbcf57f0bbc61ac2581a3255525756",
+  "scope": "Actual UMF0.1 securityPolicyDependencies over original conformance fixture only. Neither authenticated issuer nor physical provider qualification.",
+  "policySha256": "11bcba30d9f049f6dba1a061e590b8a3aa157db8a608ad71656dff69cae5d030",
+  "resolutionSha256": "de2fd0e79da6d2220619f0256d8038e3b115b8d3e4ba8509ded77332bbb52d5c",
+  "requirementsSha256": "c341d435056be2d7fda272dc5d9bbdcef9cd125e18882cf6da20d0f87c1c62da"
+}

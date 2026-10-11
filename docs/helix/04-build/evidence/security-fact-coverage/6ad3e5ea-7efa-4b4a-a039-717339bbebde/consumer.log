@@ -1,0 +1,11 @@
+test_changed_original_artifact_and_duplicate_json_keys_refuse (test_security_fact_coverage.SecurityFactCoverageTests.test_changed_original_artifact_and_duplicate_json_keys_refuse) ... ok
+test_declared_complete_coverage_still_does_not_admit_a_profile (test_security_fact_coverage.SecurityFactCoverageTests.test_declared_complete_coverage_still_does_not_admit_a_profile) ... ok
+test_foreign_or_duplicate_binding_refuses (test_security_fact_coverage.SecurityFactCoverageTests.test_foreign_or_duplicate_binding_refuses) ... ok
+test_missing_dependency_list_is_not_empty (test_security_fact_coverage.SecurityFactCoverageTests.test_missing_dependency_list_is_not_empty) ... ok
+test_opaque_qualified_reference_spelling_is_preserved (test_security_fact_coverage.SecurityFactCoverageTests.test_opaque_qualified_reference_spelling_is_preserved) ... ok
+test_original_owner_association_only_leaves_eight_live_fields_missing (test_security_fact_coverage.SecurityFactCoverageTests.test_original_owner_association_only_leaves_eight_live_fields_missing) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.000s
+
+OK

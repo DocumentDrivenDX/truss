@@ -15,6 +15,8 @@ import sys
 ALLOWED = {
     'psycopg_host': {'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
     '_psycopg_epoch_cut': {'dataclasses', 'hashlib', 'truss.psycopg_host', 'psycopg.types.string'},
+    '_security_fact_coverage': {'dataclasses', 'hashlib', 'json'},
+    '_psycopg_graph_scope': {'dataclasses', 'json', 'truss._psycopg_epoch_cut', 'psycopg.types.numeric', 'psycopg.types.string', 'psycopg.types.array'},
     '_psycopg_fact_cut': {'dataclasses', 'truss._psycopg_epoch_cut', 'psycopg'},
     '_native_attachment': set(),
     '_borrowed_host': {'io','socket','importlib.metadata','pg8000.native','pg8000.core','pg8000.converters','truss.host','truss._native_attachment','truss._native_pg8000','truss._native_driver_profile','truss._host_execution','truss._native_transactions','truss._native_arbitration','truss._host_control_custody','truss._host_session'},

@@ -3795,6 +3795,46 @@ pins match,1614 native payload pins and both named independent cleanup receipts
 remain retained. Typed-edgeffb76425 is the earlier source-qualified predecessor.
 No additional acceptance promotion or independent review is claimed.
 
+
+### Native graph fact projection and unrelated business writes — 2026-10-11
+
+Previous turn published whole-table flat/edge fact cuts directly to main0a804ed5.
+That read component rejects every own edge write, including unrelated business
+relationships. The separate native association-projection candidate implements
+immutable native-xid selected-type scope, original context/evidence correspondence,
+monotonic union/cap32, actual epoch/graph lock prerequisites, selected OLD/NEW row
+exclusion and separate TRUNCATE exclusion. A fixed private scope storage fragment
+is retained through the UMF PostgreSQL owner with exact saved-model reload/export;
+it is not a new core layout/profile or reference binding. No per-type storage or
+policy-revision trigger DDL, PUBLIC grant, ordinary mutation API or support flag.
+
+Pre-merge native packet `evidence/python-psycopg-epoch-cut/bbc770ef-7be9-4975-b19c-123377a0579a`
+passes55 tests (11 projection,10 whole-fact, eight epoch,26 adoption),116 frozen
+current/archive source pins,1614 native payload pins and three independently named
+stop0/status3/socket removals. Unrelated mentors edges can be inserted/updated/
+deleted while works_on membership stays equal. Selected rows and old/new type
+reclassification refuse; retained scope cannot shrink, wrong evidence/shape/
+missing definition/overflow and foreign xid refuse without partial rows. Original
+native rollback removes scope; replica mode preserves fencing. Omitted required
+association control permits membership deletion, demonstrating the incomplete
+producer-membership premise rather than admitting that path.
+
+Formal `evidence/graph-fact-projection-formal/4c383f74-41b5-484d-b355-0ffffd16a1ab`
+passes11 queries (four UNSAT/seven SAT), exact saved SMT and fresh-context replay.
+Required projection is preserved for arbitrary one-row changes when native scope
+contains every required type, actual OLD/NEW checks are complete and cut/scope
+remain live. Monotonic scope extension preserves prior required coverage, not
+newly added baseline equality. OLD/NEW omission, missing required membership,
+TRUNCATE omission and shrink retain witnesses. Initial625da1e6 records the earlier
+eight-test source tuple. No SQL/driver/savepoint/trigger, original dependency
+issuer, full atomic effects or final-disclosure refinement is claimed.
+
+Complete semantic dependency-to-physical provider membership, installed entry/
+role/body/ACL closure, ordinary authenticated admission, other property/entity/
+context facts and shared-role/configuration sources remain required. Registry
+history/retention and ordinary protected mutation publication are unqualified.
+Checkpoint remains26/132 with106 missing; no binding/criterion is promoted. The
+full objective stays active and direct-main integration remains authorized.
 ### Explicit supported Python PostgreSQL 17.11 profile — 2026-10-11
 
 The owner-selected current integration target is PostgreSQL 17.11 from the
@@ -3828,3 +3868,82 @@ The wheel-to-executed-tree correspondence is exact. Packet `939366fd` passed its
 earlier 49-method source tuple but precedes the final harness corrections; it
 is not substituted for the final packet. No protected installer or public
 accepted catalog capability is promoted by this host profile checkpoint.
+
+
+Post-merge graph projection qualification preserves concurrent main840a8659's
+configured catalog/head and explicit PostgreSQL17.11 adoption/timeout work. Merge
+7ce202e0 retains both implementation histories. Its updated shared fixture setup
+now supplies the explicit default16.15 profile; the private epoch cut itself
+refuses every unqualified profile before native work, without widening security
+support from stock host adoption. No PostgreSQL17 security profile is qualified.
+
+Final merged native `evidence/python-psycopg-epoch-cut/82de99bd-52db-44e1-8518-c16148f55865`
+passes56 tests (11 projection,10 fact, nine epoch,26 adoption), module boundaries,
+116 source pins/current and archived preimages,1614 native payload pins and all
+three named independent cleanup receipts. New mocked unqualified-profile control
+refuses before callback/xid assignment; it is not an actual PG17 security run.
+Final merged formal `evidence/graph-fact-projection-formal/e1142460-948f-4273-b23c-565c32fe2e31`
+passes the same11 conditional formulas/fresh-context replay with current source
+pins and exact saved SMT digests. UMF retention receipt now records the original
+owner checkout revision. No current independent Astra review or complete runtime/
+ordinary authority qualification is claimed. Prior bbc770ef/4c383f74 qualify their
+pre-merge source tuples. Complete semantic dependency scope and installed producer/
+role/body closure remain the next composition obligations; the goal stays active.
+
+
+### Exact original graph registration gateway — 2026-10-11
+
+Previous turn made progress by publishing graph projectionbf90d386. The new private
+`_psycopg_graph_scope` composes registration with original supported-driver epoch/
+lease/savepoint custody, snapshots bounded comparison primitives, isolates stock
+integer/list/byte codecs, compares prior native context/evidence, derives monotonic
+union and requires exact registration result plus full sorted native union before
+callback. Seven actual native identity/role fields correspond with exact context;
+text descriptors, unique fields/IDs and capped rows/evidence are checked.
+
+Final native `evidence/python-psycopg-epoch-cut/296c0af3-af89-4198-9459-45ff2fa6ea11`
+passes61 methods (16 projection/gateway,10 fact, nine epoch,26 adoption),117 source
+pins/current and archived preimages,1614 native payload pins, module boundaries
+and three independent named stop0/status3/socket removals. Five added controls
+cover unrelated business/selected refusal, hostile host numeric/list/byte codecs,
+unknown definition/no callback, actual substituted native INSERT with unchanged
+plausible count and wrong association/no callback/rolled-back rows, and later
+carrier mutation preserving original native recipe. Initial81929400 qualifies
+its earlier59-test source tuple.
+
+Formal `evidence/graph-fact-projection-formal/37c48d15-e58b-434b-9106-dee6d10c0b75`
+replays the existing11 conditional formulas (four UNSAT/seven SAT) while retaining
+seven current source inputs including the new wrapper. This is source-qualified
+model replay, not a new Python/native registration refinement theorem. No new
+Astra review is claimed. Complete authenticated semantic dependency membership,
+original physical mapping/installed source and role closure, whole current source/
+authority and final protected mutation publication remain required. A declared
+wrong scope remains the previous successful counterexample. No public API/grant,
+backend binding or support flag changes; checkpoint remains26/132 with106 missing,
+and the full objective stays active. Direct-main publication remains authorized.
+
+
+### Original semantic dependency coverage diagnostics — 2026-10-11
+
+The fixture producer invokes UMF's original `securityPolicyDependencies` over its
+Staff → Project → Resource conformance policy. Retain exact original policy and
+resolution bytes and their direct hashes; do not recreate semantic traversal in
+Truss. Its dependency inventory contains eight fields and two associations.
+Association-only declarations leave all eight fields missing. Preserve owner
+enumeration and exact document/module/element references, including opaque Unicode
+spelling. Reject absent dependency lists, duplicate keys/references, foreign or
+repeated bindings and changed artifact bytes. Expected hashes compare bytes; they
+do not authenticate an issuer. Even complete declarations remain diagnostics with
+`admitted=False`: producer names are unqualified and no physical mapping is inferred.
+
+Retained packet `evidence/security-fact-coverage/6ad3e5ea-7efa-4b4a-a039-717339bbebde`
+passes six consumer controls, three original UMF dependency tests and module
+boundaries, with 369 current/archived source pins and exact original input hashes.
+The earlier 6f525c23 packet qualifies its earlier source tuple only. This supports
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and US-057 AC1/AC2 prerequisites;
+no backend acceptance binding or native support claim is promoted. Semantic closure
+stays in UMF; physical provider qualification and source cuts stay with backend
+integration. Authenticated owner handoff, actual field/provider bindings and cuts,
+installed role/body closure, protected mutation dispatch and final disclosure remain
+required. No new formal refinement or Astra review is claimed. The goal remains
+active at 26/132 bindings with 106 missing.

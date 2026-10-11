@@ -6,7 +6,7 @@ source census, shared roles and authorization facts remain separate producers.
 """
 from dataclasses import dataclass
 from hashlib import sha256
-from .psycopg_host import PsycopgHost
+from .psycopg_host import PsycopgHost, PsycopgProfile
 
 
 @dataclass(frozen=True)
@@ -22,6 +22,13 @@ def _run_fenced_epoch_operation(host, transaction, comparison, callback):
     """Compare original selected bytes before private callback in one host scope."""
     if type(host) is not PsycopgHost or type(comparison) is not _EpochComparison:
         raise ValueError('Original selected host and exact comparison required')
+    native_profile=host.profile
+    if type(native_profile) is not PsycopgProfile:
+        raise ValueError('Qualified epoch-cut host profile required')
+    selected=(native_profile.psycopg,native_profile.implementation,native_profile.libpq,native_profile.server)
+    if (tuple(type(v) for v in selected)!=(str,str,int,int)
+            or selected!=('3.3.6','binary',180006,160015)):
+        raise ValueError('Qualified PostgreSQL16.15 epoch-cut profile required')
     installation, epoch, incarnation, profile, evidence = (
         comparison.installation, comparison.epoch, comparison.incarnation,
         comparison.profile, comparison.evidence)

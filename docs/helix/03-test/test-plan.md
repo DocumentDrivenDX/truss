@@ -560,3 +560,67 @@ countervariant as admitted behavior. Run10 fact controls, eight epoch controls a
 independent named cleanup for epoch/fact fixtures. Component evidence does not
 prove hidden-fact nondisclosure, ordinary Staff authentication, complete provider
 coverage, accepted graph catalog, source/role closure or protected final handback.
+
+
+### Graph projection native/formal controls — 2026-10-11
+
+Under actual epoch/edge cuts and retained original native scope, require INSERT,
+UPDATE and DELETE of unrelated typed business edges to succeed while a required
+membership edge stays equal. Selected association INSERT/UPDATE/DELETE and any
+TRUNCATE refuse. Reclassification both into and out of a selected type refuses
+using actual NEW and OLD values. Missing scope refuses even unrelated writes.
+Observe original native context/evidence; reject immutable scope UPDATE/DELETE/
+TRUNCATE, changed evidence, malformed/duplicate/unknown type lists, union overflow
+and foreign native xid insertion without partial rows. Monotonic extension retains
+and protects earlier types. Rollback across registration under the same parent xid
+removes scope/cut; fresh registration is explicit. Replica mode preserves guards.
+An omitted required association must remain an unsafe success countercontrol.
+
+The conditional SMT model uses unbounded symbolic edge IDs, opaque typed rows and
+required/native scope sets. Require complete-superset row preservation, missing
+scope/TRUNCATE refusal and monotonic coverage laws, with SAT business-write,
+omitted OLD/NEW guard, missing required membership, omitted TRUNCATE and scope
+shrink controls. Finite-history induction assumes native faithful row effects,
+continuous cuts and complete required scope at each step; newly added scopes need
+fresh baselines. These are CONTRACT-063/STP-056 B09/B11/B12/L03 and US-056 AC2/AC7/
+AC9/AC10 plus US-057 AC2 prerequisites, not authorization/finalization acceptance.
+
+
+### Original graph registration wrapper controls — 2026-10-11
+
+Require actual registered union/context/evidence readback before unrelated business
+callback; selected writes still refuse. Custom host integer, array and byte dumpers
+must not substitute the original recipe. A missing association definition must
+refuse with no callback or scope rows. Replace only the native registration INSERT
+association with a different valid association while retaining its plausible count:
+require original-ID readback refusal, no callback and native rollback of new rows.
+Mutate the comparison carrier after primitive snapshot; native IDs/evidence must
+remain the original selected recipe. Keep native readback separate from required
+semantic dependency completeness and installed source authority. These support
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites, without promotion.
+
+
+### Original semantic dependency coverage diagnostics — 2026-10-11
+
+The fixture producer invokes UMF's original `securityPolicyDependencies` over its
+Staff → Project → Resource conformance policy. Retain exact original policy and
+resolution bytes and their direct hashes; do not recreate semantic traversal in
+Truss. Its dependency inventory contains eight fields and two associations.
+Association-only declarations leave all eight fields missing. Preserve owner
+enumeration and exact document/module/element references, including opaque Unicode
+spelling. Reject absent dependency lists, duplicate keys/references, foreign or
+repeated bindings and changed artifact bytes. Expected hashes compare bytes; they
+do not authenticate an issuer. Even complete declarations remain diagnostics with
+`admitted=False`: producer names are unqualified and no physical mapping is inferred.
+
+Retained packet `evidence/security-fact-coverage/6ad3e5ea-7efa-4b4a-a039-717339bbebde`
+passes six consumer controls, three original UMF dependency tests and module
+boundaries, with 369 current/archived source pins and exact original input hashes.
+The earlier 6f525c23 packet qualifies its earlier source tuple only. This supports
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and US-057 AC1/AC2 prerequisites;
+no backend acceptance binding or native support claim is promoted. Semantic closure
+stays in UMF; physical provider qualification and source cuts stay with backend
+integration. Authenticated owner handoff, actual field/provider bindings and cuts,
+installed role/body closure, protected mutation dispatch and final disclosure remain
+required. No new formal refinement or Astra review is claimed. The goal remains
+active at 26/132 bindings with 106 missing.

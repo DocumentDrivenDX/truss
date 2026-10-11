@@ -1956,3 +1956,83 @@ final disclosure remain required. Ordinary roles must not receive metadata DML
 merely to acquire table locks. The same private cut mechanism can cover existing
 flat relational and generic graph stores without per-type storage DDL, but no
 public installer or backend acceptance binding is activated.
+
+
+### Graph association projection candidate — 2026-10-11
+
+Whole-table fact guards are a conservative read component: on the shared edge
+store they also reject unrelated business edge writes. The separate private
+association projection candidate retains selected relationship type IDs in an
+immutable original native-xid scope registry. Its fixed UMF-retained storage
+adjunct is not part of the core0.16 installed profile. Registration requires actual
+epoch/current registry and graph SHARE modes, original READ COMMITTED/read-write
+invoker, bounded distinct declared IDs/evidence, known association definitions and
+original native context correspondence. Record actor/session role OIDs alongside
+xid/database/backend/names. Union registration cannot remove earlier IDs;32 IDs
+per native transaction is the selected cap. PUBLIC registry and routine access is
+revoked. Native rollback across registration removes both scope and cut.
+
+With an actual held graph ShareLock, a row guard refuses missing scope and any
+INSERT/UPDATE/DELETE whose OLD or NEW association type belongs to that retained
+scope. Unrelated typed business edges remain writable by this guard; this is not
+business-write authorization. A separate ALWAYS statement guard excludes TRUNCATE.
+Scopes are immutable while retained; historical rows/retention and complete
+installed lifecycle remain unqualified. No per-type tables or policy-revision
+trigger DDL is introduced. Complete original dependency membership and installed
+all-entry/role/trigger/body closure remain mandatory: registering the wrong
+association set demonstrably permits a required fact change despite actual SHARE.
+
+This association-presence subset does not protect arbitrary property/endpoint/
+entity/context dependencies by inference. Their original dependency/provider
+bindings and appropriate projection cuts remain required. Row transitions may
+have other earlier side effects; complete mutation/finalization and disclosure
+are not established by row-guard exclusion. Keep the earlier whole-table read
+profile separate and do not activate ordinary mutation API or release capability
+from this candidate.
+
+
+### Original graph-scope registration/readback — 2026-10-11
+
+The private supported-driver wrapper snapshots bounded exact association-ID and
+original-evidence comparison primitives before acquiring its original epoch/graph
+scope. Isolate supported per-cursor integer/list/byte codecs from host adapters.
+Read the actual current-xid scope before registration, compare complete native
+context/evidence, derive the monotonic union, register once, and require exact
+scalar result plus complete sorted native union readback before callback. Retain
+all seven actual xid/database/backend/session/effective actor/role-OID fields in
+context correspondence; reject duplicate/extra/missing context fields, repeated
+IDs, changed evidence and over-capacity rows. Native text descriptors and capped
+row counts are required. Roll back registration/readback mismatch through the
+original owned scope; no callback, replay or partial publication follows.
+
+Declared comparisons remain inputs, not original authenticated semantic dependency
+membership or write authority. A wrong input association set can still omit a
+required fact; this wrapper closes native registration substitution, not that
+separate producer obligation. Complete installed routine/trigger/role/body closure
+and semantic dependency-to-physical binding must qualify before ordinary use.
+
+
+### Original semantic dependency coverage diagnostics — 2026-10-11
+
+The fixture producer invokes UMF's original `securityPolicyDependencies` over its
+Staff → Project → Resource conformance policy. Retain exact original policy and
+resolution bytes and their direct hashes; do not recreate semantic traversal in
+Truss. Its dependency inventory contains eight fields and two associations.
+Association-only declarations leave all eight fields missing. Preserve owner
+enumeration and exact document/module/element references, including opaque Unicode
+spelling. Reject absent dependency lists, duplicate keys/references, foreign or
+repeated bindings and changed artifact bytes. Expected hashes compare bytes; they
+do not authenticate an issuer. Even complete declarations remain diagnostics with
+`admitted=False`: producer names are unqualified and no physical mapping is inferred.
+
+Retained packet `evidence/security-fact-coverage/6ad3e5ea-7efa-4b4a-a039-717339bbebde`
+passes six consumer controls, three original UMF dependency tests and module
+boundaries, with 369 current/archived source pins and exact original input hashes.
+The earlier 6f525c23 packet qualifies its earlier source tuple only. This supports
+CONTRACT-063/STP-056 B11/B12/L03, US-056 AC9/AC10 and US-057 AC1/AC2 prerequisites;
+no backend acceptance binding or native support claim is promoted. Semantic closure
+stays in UMF; physical provider qualification and source cuts stay with backend
+integration. Authenticated owner handoff, actual field/provider bindings and cuts,
+installed role/body closure, protected mutation dispatch and final disclosure remain
+required. No new formal refinement or Astra review is claimed. The goal remains
+active at 26/132 bindings with 106 missing.
