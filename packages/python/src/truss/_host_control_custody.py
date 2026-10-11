@@ -12,6 +12,8 @@ from ._native_transactions import _Control
 from ._native_result_custody import NativeResultCustody, NativeTextLimits
 from ._native_driver_profile import original_control_profile
 from .execution import Ok, Error, ExecutionFailure
+from ._native_ingress_deadline import original_ingress_profile
+from ._native_outbound import admitted_outbound_basis, ControlOutboundWitness
 
 BASELINE_SQL = "SELECT (SELECT pg_catalog.count(*) FROM pg_catalog.pg_prepared_statements)::pg_catalog.text, (SELECT pg_catalog.count(*) FROM pg_catalog.pg_cursors WHERE name OPERATOR(pg_catalog.<>) ''::pg_catalog.text)::pg_catalog.text"
 PROFILE_SQL = "SELECT pg_catalog.current_setting('transaction_isolation'), pg_catalog.current_setting('transaction_read_only'), session_user::pg_catalog.text, current_user::pg_catalog.text, pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text"
@@ -48,6 +50,7 @@ class _Completion:
     generation: object
     savepoints: tuple
     publication: object
+    deadline_basis: tuple
 
 class _ControlGate(NativeResultCustody):
     def _messages(self,context):
@@ -111,18 +114,20 @@ class _Ledger:
     completion: object = None
     baseline: object = None
     publication_start: int = 0
+    deadline: object = None
 
     @property
     def token(self):return self.record.token
 
-    def _check_call(self,boundary,token,cleanup=None):
+    def _check_call(self,boundary,token,cleanup=None,*,admission=True):
         if (boundary is not self.boundary or token is not self.token
                 or boundary._ownership is not self.attached_root or self.admission_closed
                 or cleanup is not None or len(self.calls)>=8):
             raise NativeBoundaryRefusal('Original control call admission unavailable')
+        if admission:self.deadline.check()
 
     def _reserve_call(self,boundary,token,resource,lifecycle,cleanup=None):
-        self._check_call(boundary,token,cleanup)
+        self._check_call(boundary,token,cleanup,admission=False)
         if resource is not None or lifecycle is not None and (type(lifecycle) is not _Control or lifecycle.chain):
             raise NativeBoundaryRefusal('Selected simple-query control required')
         entry=_Entry(boundary._revision+1,resource,lifecycle)
@@ -170,7 +175,8 @@ class HostControlCustody:
             executor._host_control_producer=self
 
     def preflight(self,boundary,kind):
-        if not original_control_profile(boundary):return False
+        if (not original_control_profile(boundary) or not original_ingress_profile(boundary)
+                or not admitted_outbound_basis(boundary)):return False
         with boundary._lock:
             if len(self._ledgers)>=self._limit or len(boundary._host_control_records)>=4096 or boundary._host_control_pending is not None:return False
             if kind=='host_baseline':return boundary._transaction_tracker._state.generation is None and boundary._connection._transaction_status==b'I'
@@ -189,7 +195,7 @@ class HostControlCustody:
                     or boundary._operation_ledger is not None or boundary._pending_operation_ledger is not None):
                 raise NativeBoundaryRefusal('Original control scope changed')
             ledger=_Ledger(self,boundary,record,record.release.before,
-                           publication_start=len(self.executor._savepoint_publications))
+                           publication_start=len(self.executor._savepoint_publications),deadline=record.deadline)
             ledger.attached_root=replace(ledger.original_root,ledger=ledger,pending=ledger)
             gate=_ControlGate(ledger,self.limits)
             ledger.result_custody=gate
@@ -225,18 +231,21 @@ class HostControlCustody:
             if any(p.phase!='published' for p in publications):
                 raise NativeBoundaryRefusal('Original executor publication unresolved')
             state=b._transaction_tracker._state
-            completion=_Completion(self,ledger,ledger.calls,state.generation,state.savepoints,publications)
+            completion=_Completion(self,ledger,ledger.calls,state.generation,state.savepoints,publications,ledger.deadline.seal())
+            witness=ControlOutboundWitness(ledger,completion)
             ledger.admission_closed=True
         ledger.result_custody.detach()
         if not original_control_profile(b):raise NativeBoundaryRefusal('Original detached profile changed')
         with b._lock:
             if b._ownership is not ledger.attached_root:raise NativeBoundaryRefusal('Original control root changed')
+            ledger.deadline.check()
             ledger.completion=completion
             b._publish_ownership(ledger.original_root)
             # Simple-query Ready confirms this scope's unnamed retirement. The
             # baseline is host-requested inventory, never an implicit repair.
             b._unnamed_pending=False
             if ledger.record.kind=='host_baseline':b._resource_baseline=ledger.baseline
+            if ledger.calls:b._control_outbound_witness=witness
             b._release_operation_locked(ledger.token,original_release=ledger.record.release,original_control=completion)
         return completion
 

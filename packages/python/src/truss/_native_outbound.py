@@ -20,14 +20,54 @@ class OutboundBarrier:
     resource: object
     writes: tuple
 
+def successful_outbound_basis(boundary):
+    basis = boundary.last_call
+    return (type(basis) is NativeCall and basis.capture_complete and not basis.driver_raised
+            and basis.final_status in (b'I', b'T') and basis.revision == boundary._revision
+            and not boundary._calling)
+
+@dataclass(frozen=True, eq=False)
+class ControlOutboundWitness:
+    ledger: object
+    completion: object
+
+def confirmed_control_outbound_basis(boundary):
+    witness = getattr(boundary, '_control_outbound_witness', None)
+    if type(witness) is not ControlOutboundWitness or boundary._calling or boundary._quarantined or boundary._host_control_pending is not None:
+        return False
+    ledger = witness.ledger
+    completion = witness.completion
+    if (ledger.boundary is not boundary or ledger.completion is not completion
+            or not any(item is ledger for item in boundary._host_control_records)):
+        return False
+    gate = ledger.result_custody
+    basis = boundary.last_call
+    if (completion.ledger is not ledger or completion.deadline_basis is not ledger.deadline.accepted_basis
+            or not ledger.record.release.published or ledger.record.original is not basis
+            or not gate.detached or gate.failed or not ledger.calls
+            or type(basis) is not NativeCall or not basis.capture_complete
+            or basis.final_status not in (b'I', b'E') or basis.revision != boundary._revision
+            or boundary._connection._transaction_status != basis.final_status):
+        return False
+    entry = ledger.calls[-1]
+    outbound = gate.outbound
+    barrier = outbound.barrier if outbound is not None else None
+    return (entry.native_call is basis and barrier is not None and barrier.owner is outbound
+            and barrier.call is entry and barrier.revision == basis.revision
+            and any(item is barrier for item in outbound.barriers)
+            and bool(barrier.writes) and all(w.call is entry and w.native_returned and w.settled
+                and type(w.data) is bytes and w.data[:1] == b'Q' and w.data[-1:] == b'\0'
+                for w in barrier.writes))
+
+def admitted_outbound_basis(boundary):
+    return successful_outbound_basis(boundary) or confirmed_control_outbound_basis(boundary)
+
 class NativeOutbound:
     def __init__(self, gate, guard, limits):
         self.gate, self.guard = gate, guard
         self.boundary = gate.boundary
         basis = self.boundary.last_call
-        if (type(basis) is not NativeCall or not basis.capture_complete
-                or basis.driver_raised or basis.final_status != b'T'
-                or basis.revision != self.boundary._revision or self.boundary._calling):
+        if not admitted_outbound_basis(self.boundary):
             raise NativeBoundaryRefusal('Original successful final-flush baseline required')
         # Selected successful driver paths return after their final original
         # flush/response. Native-error Ready alone cannot establish this basis.

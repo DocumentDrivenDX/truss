@@ -12,6 +12,7 @@ from truss.execution import Ok,Error
 class HostControlCustodyTests(NativeBoundaryFixture,unittest.TestCase):
     def setUp(self):
         super().setUp()
+        self.boundary.run('SELECT 1')
         self.executor=HostExecutor();self.tracker=NativeTransactions(self.boundary)
         self.service=NativeArbitration(self.executor)
         self.producer=HostControlCustody(self.executor)
@@ -275,6 +276,7 @@ class HostControlCustodyTests(NativeBoundaryFixture,unittest.TestCase):
         try:
             other.run('SELECT 1')
             boundary=NativeBoundary(other)
+            boundary.run('SELECT 1')
             tracker=NativeTransactions(boundary)
             session=NativeHostSession(self.executor,tracker,self.service,control_producer=self.producer)
             self.producer._limit=1

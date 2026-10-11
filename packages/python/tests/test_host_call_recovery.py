@@ -17,6 +17,7 @@ from truss.execution import Ok,Error
 class HostCallRecoveryTests(NativeBoundaryFixture,unittest.TestCase):
     def setUp(self):
         super().setUp()
+        self.boundary.run('SELECT 1')
         self.executor=HostExecutor();self.tracker=NativeTransactions(self.boundary)
         self.service=NativeArbitration(self.executor)
         self.producer=HostControlCustody(self.executor)

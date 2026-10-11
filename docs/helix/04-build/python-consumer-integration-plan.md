@@ -881,3 +881,60 @@ passed416 tests in53.020s against PostgreSQL16.15; all58 package files match
 source/wheel/installation, four distribution metadata files match, and the51
 test-module snapshot remained unchanged. Python module boundaries passed235 imports.
 The evidence receipt retains exact hashes and the private-profile limitations.
+
+### Iteration21: bounded original host controls and adoption
+
+Astra Ultra reviewed the next prerequisite: the control/adoption ledger must
+consume the same original monotonic clock and socket deadline as text execution.
+Public Executor/ReferenceAssembly remain unexported: arbitrary Statement
+execution, engine-owned with_transaction and protected capability bodies are
+not implemented. This iteration qualifies the existing caller-owned control path.
+
+Start one deadline at NativeHostSession invocation entry, before native acquisition.
+Carry it through admission, bounded direct sends/reads, Python publication and
+sealed original handback. Refuse expiry at the pre-acquisition checkpoint without SQL; a possibly
+submitted or partially read call keeps its original ledger/token/context and
+unknown outcome. Preserve independently known commit/rollback facts separately
+from an unconfirmed handback. No retry, drain reconstruction or new recovery clock.
+
+Require an explicit boundary-captured successful host setup call at the current
+revision with final I/T before attaching a control gate. That setup call is
+host-owned and outside this iteration's bounded-control claim. Revision zero,
+last_call=None and idle status do not establish an untouched constructor or empty
+writer: pg8000 resets its startup status to None. Never issue setup SQL implicitly
+or flush unknown bytes. Qualify error-to-rollback only from retained original
+control send/barrier and native completion evidence, not generic error Ready.
+
+Verify the full existing control/recovery suites, actual blocked native control
+with socket timeout, timeout restoration, expired pre-effect refusal, adoption
+publication/handback expiry and retained known end facts. Astra reviews source and
+installed wheel evidence before task-only main commit/push.
+
+Retained error-to-rollback basis is limited to a sealed, released original control
+ledger with exact current native completion and fully settled Q send barrier.
+Ordinary boundary.run error has no such witness and refuses without retry/flush.
+The host can explicitly settle through its tracker; bounded ordinary host-error
+recovery remains a required public-adapter gate, not a supported claim here.
+
+Expiry after acquisition but before the first native submission conservatively
+retains the original attached ledger/token and closes admission: attachment or
+Python publication may already exist. It never invents native transaction work,
+returns a released no-effect result or resets the original clock.
+
+Security main d79d806e adds authenticated graph caller147-observation evidence
+and a14-observation original owner-binding audit. It changes only the handoff
+document; no runtime/grant/source changes enter this wheel. Explicit owner storage
+choices, production subject/current cut, complete callable/mutation closure,
+semantic bodies and final publication/drain remain open. Do not manufacture
+primary-key/relationship selections from unspecified logical metadata.
+
+Astra Ultra approved iteration21 source/plan; independently11 native deadline
+and recovery tests passed6.136s, earlier51 composed checks passed20.240s.
+Next public-adapter gates: original simple host-error flush witness, Q cancellation
+and original adoption latch, host-issued savepoint namespace and nonrewinding
+uint64 counters, cumulative/cleanup resource profile, then precise public mapping.
+
+Definitive iteration21 installed wheel passed427 tests in57.686s on PostgreSQL16.15.
+All58 package payloads, four metadata files and52 test modules match the retained
+source/wheel/install snapshot; module boundaries pass238 imports. The evidence
+receipt pins exact bytes and retains the unfinished public-profile obligations.

@@ -11,6 +11,7 @@ from ._native_transactions import NativeTransactions, NativeTransactionPort, _Co
 from ._native_arbitration import NativeArbitration
 from ._native_pg8000 import NativeBoundaryRefusal
 from .execution import Ok, Error, ExecutionFailure
+from ._native_deadline import NativeOperationDeadline, NativeDeadlineExpired
 
 @dataclass(eq=False)
 class _ControlEvidence:
@@ -47,6 +48,7 @@ class _Call:
     acquired: bool = False
     control_type: object = None
     failures: object = None
+    deadline: object = None
 
 class NativeHostSession:
     def __init__(self, executor, tracker, service, *, retained_calls=4096, control_producer=None):
@@ -88,6 +90,8 @@ class NativeHostSession:
         return result
 
     def _invoke(self,kind,callback,*,port=None):
+        deadline = (NativeOperationDeadline(self._control_producer.limits.ordinary_ms,
+                    self._control_producer.limits.settlement_ms) if self._control_producer else None)
         # Cooperative serialized handback; busy never waits or retries.
         if not self._lock.acquire(blocking=False): return self._error('execution_obligation')
         record=None
@@ -97,7 +101,7 @@ class NativeHostSession:
             with self.executor._lifecycle_lock:
                 if self.executor._closed and kind not in ('begin','commit','rollback'):
                     return self._error('invalid_transaction')
-            record=_Call(kind,token=object(),control_type=_CONTROL_RESULT_TYPE)
+            record=_Call(kind,token=object(),control_type=_CONTROL_RESULT_TYPE,deadline=deadline)
             record.failures={code:self._error(code) for code in ('transaction_unusable','execution_obligation','commit_unknown')}
             record.before=self._boundary.last_call
             if kind in ('begin','commit','rollback'):
@@ -110,6 +114,7 @@ class NativeHostSession:
                 self._calls=self._calls[:-1]
                 return reserved
             try:
+                if deadline is not None: deadline.check()
                 self.recovery.publish(record,'acquiring')
                 self._boundary.acquire_operation(original_token=record.token)
                 record.acquired=True
@@ -121,7 +126,7 @@ class NativeHostSession:
                     result=self._finish(record,'unresolved',record.failures['transaction_unusable'])
                     if not isinstance(error,Exception): raise
                     return result
-                result=self._finish(record,'refused',record.failures['execution_obligation'])
+                result=self._finish(record,'refused',self._error('cancelled') if isinstance(error,NativeDeadlineExpired) else record.failures['execution_obligation'])
                 if not isinstance(error,Exception): raise
                 return result
             record.before=self._boundary.last_call
