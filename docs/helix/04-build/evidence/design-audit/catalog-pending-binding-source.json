@@ -1,0 +1,19 @@
+{
+  "sourcePath": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/catalog-pending-binding-source-v0.1.proposal.sql",
+  "sourceSha256": "5242d6cc5c77ac0f88184e74fc7af5369254a4aa9f1c057292b048e641c23d76",
+  "modelPath": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/catalog-pending-binding-source-v0.1.proposal.umf.json",
+  "modelSha256": "667cb771d1a56c0b464527e88f26d590d59008b3e7a75d6ee5ded3d7f5157cff",
+  "ddlPath": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/catalog-pending-binding-source.owner-export.sql",
+  "ddlSha256": "183abbb3884210ca18c967351ea3352399468970fde9f5a447234ac8a4f9ee45",
+  "ownerSourcePins": {
+    "tools/security/capture-pending-binding-layout.ts": "b7301a3e4d6fe031cbe0421dea3b02dbae6cd4b47349b44792a498871cf2a3b3",
+    "native/postgresql/runtime.ts": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751",
+    "src/adapters/postgresql/index.ts": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4",
+    "src/model/document.ts": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f",
+    "src/model/native-json.ts": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+  },
+  "bunVersion": "1.4.2",
+  "savedReloadExportExact": true,
+  "qualified": false,
+  "scope": "Original native SQL archive through actual UMF owner import, saved reload and stable export; selected entry source pins only, not complete toolchain/dependency custody or portable semantics extraction; fresh empty layout adjunct, no populated migration, registration, protected installation or publication"
+}
