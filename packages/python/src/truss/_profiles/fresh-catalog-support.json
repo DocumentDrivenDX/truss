@@ -21,5 +21,53 @@
   "enforcement": "none_unqualified",
   "completeSupportQualified": false,
   "acceptedReportQualified": false,
-  "maxDecisionBytes": 4194304
+  "maxDecisionBytes": 4194304,
+  "closedSourceInventory": {
+    "scope": "original_0.7_explicit_scalar_string_records",
+    "documentKeys": [
+      "umf",
+      "id",
+      "modules",
+      "vocabularies",
+      "extensions"
+    ],
+    "moduleKeys": [
+      "id",
+      "namespace",
+      "elements",
+      "extensions"
+    ],
+    "recordKeys": [
+      "id",
+      "kind",
+      "members",
+      "extensions"
+    ],
+    "fieldKeys": [
+      "id",
+      "kind",
+      "name",
+      "scalarType",
+      "nullability",
+      "cardinality",
+      "extensions"
+    ],
+    "memberKeys": [
+      "module",
+      "element"
+    ],
+    "scalarType": "string",
+    "nullability": [
+      "required",
+      "absent-allowed"
+    ],
+    "cardinality": "one",
+    "extensionsAndVocabularies": "exhaustively_absent_or_empty",
+    "ownership": "all_fields_in_explicit_record_memberships",
+    "assertions": "original_kind_members_member_occurrences_nullability_cardinality_scalarType_bijection",
+    "annotations": "id_namespace_name_are_not_constraint_assertions",
+    "enforcement": "none_unqualified",
+    "outOfSubset": "retained_metadata_only_inventory_unavailable",
+    "acceptedReportQualified": false
+  }
 }

@@ -15,6 +15,63 @@ def selected(value=None):
     return prepare((CatalogDocument('support','r1',json.dumps(source).encode()),),config)
 
 class CatalogSupportTests(unittest.TestCase):
+    def test_closed_source_inventory_covers_original_occurrences(self):
+        result=evaluate_catalog_support(selected())['closedSourceInventory']
+        self.assertEqual(result['state'],'inventoried')
+        self.assertTrue(result['assertionOccurrenceCoverageComplete'])
+        self.assertEqual(len(result['entries']),7)
+        self.assertEqual(result['extensions'],[])
+        self.assertTrue(all(e['enforcement']=='none' and e['reason']=='unqualified' for e in result['entries']))
+        self.assertFalse(result['acceptedReportQualified'])
+
+    def test_closed_source_does_not_claim_broader_retention_complete(self):
+        for home,key,value in (('document','x-opaque',{}),('module','x-opaque',{}),
+                               ('field','extensions',{'future':{}}),
+                               ('field','nullability','unspecified')):
+            source=json.loads(native_document('support').content)
+            target={'document':source,'module':source['modules'][0],
+                    'field':source['modules'][0]['elements'][1]}[home]
+            target[key]=value
+            if key=='extensions':source['vocabularies']={'future':{'version':'99.0.0'}}
+            with self.subTest(home=home,key=key):
+                self.assertEqual(evaluate_catalog_support(selected(source))['closedSourceInventory']['state'],'unavailable')
+
+    def test_closed_source_requires_all_fields_owned(self):
+        source=json.loads(native_document('support').content)
+        source['modules'][0]['elements'][0]['members']=[]
+        self.assertEqual(evaluate_catalog_support(selected(source))['closedSourceInventory']['state'],'unavailable')
+
+    def test_closed_source_empty_record_and_shared_field_occurrences(self):
+        source=json.loads(native_document('support').content)
+        module=source['modules'][0]
+        module['elements'].append({'id':'Other','kind':'record','members':[{'module':'m','element':'label'}],'extensions':{}})
+        from truss import PreparationRejected
+        with self.assertRaises(PreparationRejected) as refused:
+            selected(source)
+        self.assertIn(b'KEY_MEMBER_OWNER',b''.join(refused.exception.diagnostics))
+        module['elements']=[{'id':'Empty','kind':'record','members':[],'extensions':{}}]
+        inventory=evaluate_catalog_support(selected(source))['closedSourceInventory']
+        self.assertEqual(inventory['state'],'inventoried')
+        self.assertEqual([e['ruleName'] for e in inventory['entries']],['core.kind','core.members'])
+
+    def test_closed_source_preserves_absence_allowance(self):
+        source=json.loads(native_document('support').content)
+        source['modules'][0]['elements'][1]['nullability']='absent-allowed'
+        result=evaluate_catalog_support(selected(source))['closedSourceInventory']
+        self.assertEqual(result['state'],'inventoried')
+
+    def test_closed_source_refuses_incomplete_or_substituted_entries(self):
+        from truss._catalog_support import _closed_source_inventory
+        original=selected();evidence=json.loads(original.report_evidence_bytes)
+        for mutation in ('omit','duplicate','owner','pointer'):
+            core=copy.deepcopy(evidence['coreAssertionIdentities'])
+            if mutation=='omit':core['entries'].pop()
+            elif mutation=='duplicate':core['entries'][-1]=core['entries'][0]
+            elif mutation=='owner':core['entries'][0]['ownerEvidence']['sha256']='0'*64
+            else:core['entries'][0]['assertion']['sourcePointer']='/invented'
+            with self.subTest(mutation=mutation),self.assertRaises(ValueError):
+                _closed_source_inventory(original,evidence['ownerObservations'],core)
+
     def test_known_original_metadata_and_fixture_unavailable(self):
         result=evaluate_catalog_support(selected())
         self.assertEqual(result['state'],'evaluated')

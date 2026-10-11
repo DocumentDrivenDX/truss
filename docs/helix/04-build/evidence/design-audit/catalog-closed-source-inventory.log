@@ -1,0 +1,20 @@
+test_actual_policy_decision_survives_native_staging (test_catalog_support.CatalogSupportNativeTests.test_actual_policy_decision_survives_native_staging) ... ok
+test_closed_source_does_not_claim_broader_retention_complete (test_catalog_support.CatalogSupportTests.test_closed_source_does_not_claim_broader_retention_complete) ... ok
+test_closed_source_empty_record_and_shared_field_occurrences (test_catalog_support.CatalogSupportTests.test_closed_source_empty_record_and_shared_field_occurrences) ... ok
+test_closed_source_inventory_covers_original_occurrences (test_catalog_support.CatalogSupportTests.test_closed_source_inventory_covers_original_occurrences) ... ok
+test_closed_source_preserves_absence_allowance (test_catalog_support.CatalogSupportTests.test_closed_source_preserves_absence_allowance) ... ok
+test_closed_source_refuses_incomplete_or_substituted_entries (test_catalog_support.CatalogSupportTests.test_closed_source_refuses_incomplete_or_substituted_entries) ... ok
+test_closed_source_requires_all_fields_owned (test_catalog_support.CatalogSupportTests.test_closed_source_requires_all_fields_owned) ... ok
+test_empty_membership_and_optional_absence_are_preserved (test_catalog_support.CatalogSupportTests.test_empty_membership_and_optional_absence_are_preserved) ... ok
+test_known_original_metadata_and_fixture_unavailable (test_catalog_support.CatalogSupportTests.test_known_original_metadata_and_fixture_unavailable) ... ok
+test_missing_required_metadata_refuses_before_sql (test_catalog_support.CatalogSupportTests.test_missing_required_metadata_refuses_before_sql) ... ok
+test_partial_selected_facets_refuse (test_catalog_support.CatalogSupportTests.test_partial_selected_facets_refuse) ... ok
+test_profile_substitution_remains_unavailable (test_catalog_support.CatalogSupportTests.test_profile_substitution_remains_unavailable) ... ok
+test_source_version_not_in_selected_policy_refuses (test_catalog_support.CatalogSupportTests.test_source_version_not_in_selected_policy_refuses) ... ok
+test_unknown_extension_and_unspecified_are_preserved (test_catalog_support.CatalogSupportTests.test_unknown_extension_and_unspecified_are_preserved) ... ok
+test_unknown_required_scalar_refuses_and_absence_retains_duty (test_catalog_support.CatalogSupportTests.test_unknown_required_scalar_refuses_and_absence_retains_duty) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 28.608s
+
+OK

@@ -1,0 +1,32 @@
+{
+  "scope": "Python closed scalar Record assertion occurrence inventory integrated in private catalog report basis",
+  "assertionOccurrenceCoverageComplete": "only for the exhaustively admitted source language",
+  "acceptedReportQualified": false,
+  "publicCatalogAcceptanceAvailable": false,
+  "tests": {
+    "command": "python -m unittest test_catalog_support -v",
+    "count": 15,
+    "result": "passed",
+    "seconds": 28.608,
+    "native": "PostgreSQL 16.15 via pgserver 0.1.4+truss.pg16.15 and pg8000 1.31.5",
+    "log": "docs/helix/04-build/evidence/design-audit/catalog-closed-source-inventory.log",
+    "sha256": "734bb629fbaf8d02c6972b5e43f6652f48202f609d3c1fb16eaa414a2258b0fb"
+  },
+  "moduleBoundaries": {
+    "imports": 387,
+    "result": "passed"
+  },
+  "sources": {
+    "packages/python/src/truss/_catalog_support.py": "1d3b037dc685534dc250a3e1fe0d0b35fa8483d0c392662af8fe564d61531dbe",
+    "packages/python/src/truss/_profiles/fresh-catalog-support.json": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+    "packages/python/tests/test_catalog_support.py": "a08ff199a30cd12447c45ef6917c80a177f6ba2d0b86507ebdfa2a6b378f1273"
+  },
+  "upstream": "origin/main 7dfea9c9 includes security original JSON occurrence inventory; this checkpoint does not duplicate lexical indexing",
+  "limitations": [
+    "No public install/accept API",
+    "No original execution or installation authority",
+    "No qualified value enforcement",
+    "Full report missing fields unchanged",
+    "Broader metadata preparation retained but closed inventory unavailable"
+  ]
+}
