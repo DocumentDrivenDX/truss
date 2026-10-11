@@ -1,0 +1,21 @@
+test_close_refuses_active_operation_without_discarding_resource (test_public_host.PublicHostTests.test_close_refuses_active_operation_without_discarding_resource) ... ok
+test_close_reservation_blocks_concurrent_host_call (test_public_host.PublicHostTests.test_close_reservation_blocks_concurrent_host_call) ... ok
+test_dispose_leaves_host_rollback_route (test_public_host.PublicHostTests.test_dispose_leaves_host_rollback_route) ... ok
+test_failed_cleanup_retains_original_connection (test_public_host.PublicHostTests.test_failed_cleanup_retains_original_connection) ... ok
+test_failed_composition_closes_created_connection (test_public_host.PublicHostTests.test_failed_composition_closes_created_connection) ... ok
+test_fatal_lost_factory_reply_preserves_exception_and_closes_resource (test_public_host.PublicHostTests.test_fatal_lost_factory_reply_preserves_exception_and_closes_resource) ... ok
+test_host_close_proves_original_stream_and_descriptor_release (test_public_host.PublicHostTests.test_host_close_proves_original_stream_and_descriptor_release) ... ok
+test_host_savepoint_lifecycle_survives_executor_disposal (test_public_host.PublicHostTests.test_host_savepoint_lifecycle_survives_executor_disposal) ... ok
+test_host_savepoints_share_native_stack_and_reserve_truss_namespace (test_public_host.PublicHostTests.test_host_savepoints_share_native_stack_and_reserve_truss_namespace) ... ok
+test_known_savepoint_refusals_preserve_rollback (test_public_host.PublicHostTests.test_known_savepoint_refusals_preserve_rollback) ... ok
+test_lost_inner_factory_publication_reply_closes_unreturned_resource (test_public_host.PublicHostTests.test_lost_inner_factory_publication_reply_closes_unreturned_resource) ... ok
+test_namespaces_counters_do_not_rewind_after_release (test_public_host.PublicHostTests.test_namespaces_counters_do_not_rewind_after_release) ... ok
+test_original_recovery_observation_is_pure (test_public_host.PublicHostTests.test_original_recovery_observation_is_pure) ... ok
+test_real_host_work_and_adoption (test_public_host.PublicHostTests.test_real_host_work_and_adoption) ... ok
+test_released_namespace_name_cannot_be_submitted_again (test_public_host.PublicHostTests.test_released_namespace_name_cannot_be_submitted_again) ... ok
+test_sibling_assemblies_preserve_real_host_transaction (test_public_host.PublicHostTests.test_sibling_assemblies_preserve_real_host_transaction) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 2.955s
+
+OK

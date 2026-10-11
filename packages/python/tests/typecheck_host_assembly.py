@@ -1,17 +1,26 @@
 from typing import assert_type
 from truss import (ConnectedHost, connect_pg8000_host, Ok, HostServices,
     ReferenceAssemblyConfiguration, create_reference_assembly, ReferenceAssembly,
-    AssemblyConstructionError, CapabilityUnavailable)
-from truss.host import HostRecovery
-from truss.execution import TransactionHandle
+    AssemblyConstructionError, CapabilityUnavailable, HostRecovery,
+    TransactionHandle, Isolation, AccessMode)
 
 def host_consumer(sock: str) -> ConnectedHost:
     host=connect_pg8000_host(user="postgres",database="postgres",unix_sock=sock)
     assert_type(host.session.recovery,HostRecovery)
-    adopted=host.session.adopt_transaction()
-    if isinstance(adopted,Ok):
-        assert_type(adopted.value,TransactionHandle)
-        host.session.savepoint(adopted.value)
+    isolation: Isolation='read_committed'
+    access_mode: AccessMode='read_write'
+    baseline=host.session.observe_host_resource_baseline()
+    if isinstance(baseline,Ok):
+        begun=host.session.begin(isolation=isolation,access_mode=access_mode)
+        if isinstance(begun,Ok):
+            adopted=host.session.adopt_transaction(isolation=isolation,access_mode=access_mode)
+            if isinstance(adopted,Ok):
+                assert_type(adopted.value,TransactionHandle)
+                saved=host.session.savepoint(adopted.value)
+                if isinstance(saved,Ok):
+                    rolled=host.session.rollback_to_savepoint(adopted.value,saved.value)
+                    if isinstance(rolled,Ok):
+                        host.session.release_savepoint(adopted.value,saved.value)
     reference=host.session.last_call_reference
     if reference is not None:host.session.recovery.observe(reference)
     host.session.rollback()

@@ -1,0 +1,56 @@
+test_configured_source_substitutions_never_issue_report (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report) ... ok
+test_missing_release_refuses_before_any_catalog_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect) ... ok
+test_one_configured_native_stage_retains_release_and_metadata (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata) ... ok
+test_resource_archive_damage_refuses_before_first_catalog_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect) ... ok
+test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut) ... ok
+test_same_writer_resource_change_during_effect_refuses_and_rolls_back (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back) ... ok
+test_uncovered_or_populated_graph_still_refuses (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses) ... ok
+test_actual_policy_selected_from_original_configuration (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration) ... ok
+test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end) ... FAIL
+test_late_configuration_change_refuses (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses) ... ok
+test_later_rollback_and_savepoint_release_preserve_archive_cut (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut) ... FAIL
+test_missing_duplicate_and_changed_archive_refuse (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse) ... ok
+test_old_snapshot_and_readonly_release_selection_refuse (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse) ... ok
+test_preexisting_archive_row_locker_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting) ... ok
+test_preexisting_archive_writer_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting) ... FAIL
+test_release_resources_and_embedded_policy_are_exact (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact) ... ok
+test_rollback_across_selection_releases_archive_cut_same_xid (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid) ... FAIL
+test_unknown_ambiguous_or_changed_selection_refuses (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses) ... ok
+test_unrecognized_configuration_profile_cannot_select_release (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release) ... ok
+
+======================================================================
+FAIL: test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-ovfqbfzd/checkout/packages/python/tests/test_catalog_report_release_native.py", line 119, in test_concurrent_archive_writes_excluded_until_transaction_end
+    with self.assertRaises(DatabaseError) as caught:
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_later_rollback_and_savepoint_release_preserve_archive_cut (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-ovfqbfzd/checkout/packages/python/tests/test_catalog_report_release_native.py", line 157, in test_later_rollback_and_savepoint_release_preserve_archive_cut
+    with self.assertRaises(DatabaseError) as caught:
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_preexisting_archive_writer_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-ovfqbfzd/checkout/packages/python/tests/test_catalog_report_release_native.py", line 173, in test_preexisting_archive_writer_refuses_without_waiting
+    with self.assertRaises(DatabaseError) as caught:self.select(writer)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_rollback_across_selection_releases_archive_cut_same_xid (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-ovfqbfzd/checkout/packages/python/tests/test_catalog_report_release_native.py", line 141, in test_rollback_across_selection_releases_archive_cut_same_xid
+    with self.assertRaises(DatabaseError) as caught:other.run(statement)
+AssertionError: DatabaseError not raised
+
+----------------------------------------------------------------------
+Ran 19 tests in 15.441s
+
+FAILED (failures=4)

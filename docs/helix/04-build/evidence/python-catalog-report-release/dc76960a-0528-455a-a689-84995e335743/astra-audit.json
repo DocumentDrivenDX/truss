@@ -1,0 +1,141 @@
+{
+  "reviewer": "Astra Ultra",
+  "disposition": "approved_scoped_reconciliation",
+  "nativeTestsExecutedByReviewer": false,
+  "implementationModifiedByReviewer": false,
+  "runs": [
+    {
+      "runId": "dc76960a-0528-455a-a689-84995e335743",
+      "status": "component-passed",
+      "receiptSha256": "e43eeb5399739e249eb8e502d75b30465b5d4b0e93d09ba30a235cb75056d2a0",
+      "sourceArchiveSha256": "586dedace0b5f2b781a8bfe30d633aed3f90a7d512bf92c5e144c588ca3ee75c",
+      "verifiedCurrentSourcePins": 269,
+      "verifiedExactArchiveMembers": 269,
+      "verifiedNativeBinaryPins": 1614,
+      "sourceDrift": [],
+      "archiveDrift": [],
+      "nativeBinaryDrift": [],
+      "nativeTests": 18,
+      "originalHostMethods": [
+        "test_configured_original_host_dispatch_and_cleanup",
+        "test_configured_lost_publication_preserves_original_cleanup",
+        "test_original_prepared_dispatch_and_replay_refusal",
+        "test_combined_sources_and_large_result_complete_ready_and_cleanup",
+        "test_python_composition_failure_retains_original_native_sources",
+        "test_changed_source_cut_refuses",
+        "test_changed_lifecycle_policy_refuses",
+        "test_lost_observation_preserves_original_result_without_replay",
+        "test_foreign_nominal_request_refuses_before_dereference",
+        "test_incomplete_actual_native_response_never_publishes",
+        "test_well_shaped_substituted_document_hash_refuses",
+        "test_extra_native_response_field_refuses",
+        "test_substituted_native_inventory_count_refuses",
+        "test_original_configured_encoder_capture_and_rollback"
+      ],
+      "auxiliaryMethods": [
+        "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_original_revision_free_sources_and_exact_evidence",
+        "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_copied_or_mutated_preparation_refused",
+        "test_catalog_source_candidate.NativeCatalogCandidateTests.test_exact_native_source_carrier",
+        "test_catalog_source_candidate.NativeCatalogCandidateTests.test_duplicate_missing_unknown_and_substituted_sources_refused",
+        "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_original_configuration_source_envelope_stages_actual_catalog",
+        "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_changed_metadata_and_second_origin_refuse_before_catalog_effects",
+        "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_late_marker_change_refuses_and_preserves_host_work",
+        "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_plain_candidate_cannot_bypass_configured_checks",
+        "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_concurrent_release_insert_after_selection_is_fenced",
+        "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert",
+        "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_one_original_call_and_python_composition",
+        "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_hostile_rendering_settings_are_local_and_exact",
+        "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_substituted_native_metadata_and_context_refuse",
+        "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_context_overflow_rolls_back_admission_before_catalog_write",
+        "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_exact_context_limit_and_one_byte_evidence_overflow"
+      ],
+      "cleanup": {
+        "attempted": true,
+        "stopExitCode": 0,
+        "statusExitCode": 3,
+        "socketAbsent": true
+      },
+      "logDigests": {
+        "auxiliary.stderr.log": "b7083f404ea15205a086084482e459b2cdd86ec9f339adf9a5eab1c8e5608249",
+        "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "boundaries.stdout.log": "0b3f1d6846a7df891abfe69b1674b0c7675ad75a690c91383d5e7618a5cb7ce9",
+        "tests.stderr.log": "8c5bf3ff9fb1a319eae4b42f8f91afaf4440ecefa258fe0e22e986eb5ee4b02f",
+        "auxiliary.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "regression.stderr.log": "b604a8743730563326f43e5bf068a7d2d2d9ab7a81829f927ba9650bd24deb68",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "8e67840f8616156d839afdb74300ee54e599fe4918227b88ff13e4e2f9764e59",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "nativeFailureNames": []
+    },
+    {
+      "runId": "98da5a67-d705-46a2-ad85-cc675d2341b9",
+      "status": "countercontrol-reproduced",
+      "receiptSha256": "2a8f79a37ab127ab54273594635b01aff595f0529e142271a218bbf008a046a5",
+      "sourceArchiveSha256": "586dedace0b5f2b781a8bfe30d633aed3f90a7d512bf92c5e144c588ca3ee75c",
+      "verifiedCurrentSourcePins": 269,
+      "verifiedExactArchiveMembers": 269,
+      "verifiedNativeBinaryPins": 1614,
+      "sourceDrift": [],
+      "archiveDrift": [],
+      "nativeBinaryDrift": [],
+      "nativeTests": 18,
+      "originalHostMethods": [
+        "test_configured_original_host_dispatch_and_cleanup",
+        "test_configured_lost_publication_preserves_original_cleanup",
+        "test_original_prepared_dispatch_and_replay_refusal",
+        "test_combined_sources_and_large_result_complete_ready_and_cleanup",
+        "test_python_composition_failure_retains_original_native_sources",
+        "test_changed_source_cut_refuses",
+        "test_changed_lifecycle_policy_refuses",
+        "test_lost_observation_preserves_original_result_without_replay",
+        "test_foreign_nominal_request_refuses_before_dereference",
+        "test_incomplete_actual_native_response_never_publishes",
+        "test_well_shaped_substituted_document_hash_refuses",
+        "test_extra_native_response_field_refuses",
+        "test_substituted_native_inventory_count_refuses",
+        "test_original_configured_encoder_capture_and_rollback"
+      ],
+      "auxiliaryMethods": [],
+      "cleanup": {
+        "attempted": true,
+        "stopExitCode": 0,
+        "statusExitCode": 3,
+        "socketAbsent": true
+      },
+      "logDigests": {
+        "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "boundaries.stdout.log": "0b3f1d6846a7df891abfe69b1674b0c7675ad75a690c91383d5e7618a5cb7ce9",
+        "tests.stderr.log": "bb3ea0c732f77a6ca4a08bae4fc52e66dc2503b3cf04c8fe400d8558233dfea4",
+        "regression.stderr.log": "ec9bba204821dbefcdc8d114cfc682701ca243f7cb7983405f72dd9a81829016",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "ab10751019e35a74775a04715f76e36bbd27b69f50d9873ac3f7fdbb3cfc2037",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "nativeFailureNames": [
+        "test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end)",
+        "test_later_rollback_and_savepoint_release_preserve_archive_cut (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut)",
+        "test_preexisting_archive_writer_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting)",
+        "test_rollback_across_selection_releases_archive_cut_same_xid (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid)"
+      ]
+    }
+  ],
+  "counterVariant": {
+    "exactOneLineArchiveLockOmission": true,
+    "originalSha256": "c514a59e28cdbc3bdd5b367fde2a6aa362d65cd201d86a1088b26a94d6df595f",
+    "counterSha256": "83142a8c9cb01f6ca8006748b90271bc7d8878f7c08843ccbf5b0da27cbfd740",
+    "expectedFailures": 4,
+    "auxiliaryTestsExecuted": false
+  },
+  "documentationDigests": {
+    "docs/helix/03-test/test-plan.md": "4df6b8f1b83017d7ecfb18625f8c794edfdcc4bd03d13aeae153adef75aaa2db",
+    "docs/helix/04-build/implementation-plan.md": "a652d29dce04322a35a27afc60a5ad45de0a1d4134fe504c331ede7270d2d9b7"
+  },
+  "limits": [
+    "Private administrative provisional staging only",
+    "No authenticated caller or complete installed authority",
+    "No full accepted report, public installer or finalizer qualification",
+    "No native test replay by this reviewer",
+    "Interpreter and operating system remain ambient"
+  ]
+}

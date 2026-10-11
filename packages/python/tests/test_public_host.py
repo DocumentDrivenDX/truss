@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 from test_native_pg8000 import NativeBoundaryFixture
 from truss.host import connect_pg8000_host
-from truss import Ok,Error
+from truss import Ok,Error,TransactionHandle
 
 class PublicHostTests(NativeBoundaryFixture,unittest.TestCase):
     def setUp(self):
@@ -15,6 +15,7 @@ class PublicHostTests(NativeBoundaryFixture,unittest.TestCase):
         self.assertIsInstance(s.observe_host_resource_baseline(),Ok)
         self.assertIsInstance(s.begin(),Ok)
         tx=s.adopt_transaction().value
+        self.assertIsInstance(tx,TransactionHandle)
         h.connection.run_non_lifecycle('CREATE TEMP TABLE public_host_work(value text)')
         h.connection.run_non_lifecycle("INSERT INTO public_host_work VALUES('before')")
         savepoint=s.savepoint(tx).value

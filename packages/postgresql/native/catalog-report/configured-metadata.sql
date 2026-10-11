@@ -25,6 +25,8 @@ BEGIN
     AND m.marker_interface_version='truss-bootstrap-marker/0.1.0' AND m.schema_name='truss')
   OR (SELECT count(*) FROM truss.source_epoch_current)<>1
   OR (SELECT count(*) FROM truss.source_epoch_registry)<>1
+  OR NOT EXISTS(SELECT 1 FROM truss.source_epoch_registry e
+   WHERE e.transition_reason='initial' AND e.predecessor_epoch IS NULL)
   OR (SELECT count(*) FROM truss.installation_admission)<>1
   OR (SELECT count(*) FROM truss.operation_configuration)<>1 THEN
   RAISE EXCEPTION 'fresh original metadata identity correspondence required' USING ERRCODE='55000';
