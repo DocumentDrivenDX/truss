@@ -3846,3 +3846,24 @@ The wheel-to-executed-tree correspondence is exact. Packet `939366fd` passed its
 earlier 49-method source tuple but precedes the final harness corrections; it
 is not substituted for the final packet. No protected installer or public
 accepted catalog capability is promoted by this host profile checkpoint.
+
+
+Post-merge graph projection qualification preserves concurrent main840a8659's
+configured catalog/head and explicit PostgreSQL17.11 adoption/timeout work. Merge
+7ce202e0 retains both implementation histories. Its updated shared fixture setup
+now supplies the explicit default16.15 profile; the private epoch cut itself
+refuses every unqualified profile before native work, without widening security
+support from stock host adoption. No PostgreSQL17 security profile is qualified.
+
+Final merged native `evidence/python-psycopg-epoch-cut/82de99bd-52db-44e1-8518-c16148f55865`
+passes56 tests (11 projection,10 fact, nine epoch,26 adoption), module boundaries,
+116 source pins/current and archived preimages,1614 native payload pins and all
+three named independent cleanup receipts. New mocked unqualified-profile control
+refuses before callback/xid assignment; it is not an actual PG17 security run.
+Final merged formal `evidence/graph-fact-projection-formal/e1142460-948f-4273-b23c-565c32fe2e31`
+passes the same11 conditional formulas/fresh-context replay with current source
+pins and exact saved SMT digests. UMF retention receipt now records the original
+owner checkout revision. No current independent Astra review or complete runtime/
+ordinary authority qualification is claimed. Prior bbc770ef/4c383f74 qualify their
+pre-merge source tuples. Complete semantic dependency scope and installed producer/
+role/body closure remain the next composition obligations; the goal stays active.

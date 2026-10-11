@@ -9,4 +9,5 @@ if(await exportPostgresqlSql(readDocument(serialized,'json'),backend)!==ddl)thro
 await Bun.write('docs/helix/02-design/contracts/authorization-graph-fact-scope-v0.1.proposal.umf.json',serialized);
 await Bun.write('docs/helix/04-build/evidence/authorization-graph-fact-scope.owner-export.sql',ddl);
 const hash=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex');
-await Bun.write('docs/helix/04-build/evidence/design-audit/authorization-graph-fact-scope-owner.json',JSON.stringify({scope:'Original owner SQL import and exact saved-model reload/export only; no core layout/installed authority/profile qualification',sourceSha256:hash(source),modelSha256:hash(serialized),ddlSha256:hash(ddl),reloadExact:true},null,2)+'\n');
+const owner=Bun.spawnSync(['git','-C','/Users/erik/.codex/worktrees/security-main-integration/umf','rev-parse','HEAD']);if(owner.exitCode)throw Error('Original owner revision unavailable');
+await Bun.write('docs/helix/04-build/evidence/design-audit/authorization-graph-fact-scope-owner.json',JSON.stringify({ownerCommit:new TextDecoder().decode(owner.stdout).trim(),scope:'Original owner SQL import and exact saved-model reload/export only; no core layout/installed authority/profile qualification',sourceSha256:hash(source),modelSha256:hash(serialized),ddlSha256:hash(ddl),reloadExact:true},null,2)+'\n');
