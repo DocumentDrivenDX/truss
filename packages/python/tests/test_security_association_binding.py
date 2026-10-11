@@ -165,4 +165,52 @@ class BindingTests(unittest.TestCase):
  def test_unknown_extreme_number_tokens_are_retained_exactly(self):
   for number in ['1e999999999999999999999','1e-999999999999999999999','9'*5000]:
    core=json.loads(CORE);core.setdefault('extensions',{})['unknown']='TOKEN';original=wire(core).replace(b'"TOKEN"',number.encode());binding=inputs();binding['coreSha256']=sha256(original).hexdigest();basis=self.run_binding(binding,original,ONTOLOGY);self.assertEqual(basis.core_bytes,original)
+
+class ArchivedBindingTests(unittest.TestCase):
+ def binding(self, ontology=ONTOLOGY):
+  import base64
+  value=inputs(CORE,ontology);value['profile']='truss-binary-association-candidate/0.2.0'
+  value['ontologyArtifact']={'identity':'original-ontology','bytesBase64':base64.b64encode(ontology).decode('ascii'),'sha256':sha256(ontology).hexdigest()}
+  return value
+ def run_archived(self,value):
+  from truss._security_association_binding import prepare_archived_association_binding
+  return prepare_archived_association_binding(CORE,wire(value))
+ def test_exact_original_dependency_recovery(self):
+  original=b' \n'+ONTOLOGY+b'\t\n';value=self.binding(original);result=self.run_archived(value)
+  self.assertEqual(result.ontology_bytes,original);self.assertEqual(result.binding_bytes,wire(value))
+  self.assertEqual(tuple(json.loads(a.definition_bytes) for a in result.associations),tuple(value['mappings']))
+ def test_legacy_requires_external_original(self):
+  with self.assertRaisesRegex(AssociationBindingError,'archived_binding_profile'):self.run_archived(inputs())
+ def test_missing_artifact_refuses(self):
+  value=self.binding();del value['ontologyArtifact']
+  with self.assertRaisesRegex(AssociationBindingError,'closed_binding'):self.run_archived(value)
+ def test_unknown_artifact_member_refuses(self):
+  value=self.binding();value['ontologyArtifact']['invented']=True
+  with self.assertRaisesRegex(AssociationBindingError,'closed_binding'):self.run_archived(value)
+ def test_digest_corruption_refuses(self):
+  value=self.binding();value['ontologyArtifact']['sha256']='0'*64
+  with self.assertRaisesRegex(AssociationBindingError,'ontology_artifact_digest'):self.run_archived(value)
+ def test_invalid_base64_refuses(self):
+  for encoded in ('@@','雪','e30=\n','e31='):
+   value=self.binding();value['ontologyArtifact']['bytesBase64']=encoded
+   with self.subTest(encoded=encoded),self.assertRaisesRegex(AssociationBindingError,'ontology_artifact_base64'):self.run_archived(value)
+ def test_empty_or_oversized_encoded_source_refuses(self):
+  for encoded in ('','A'*1398105):
+   value=self.binding();value['ontologyArtifact']['bytesBase64']=encoded
+   with self.subTest(size=len(encoded)),self.assertRaises(AssociationBindingError):self.run_archived(value)
+ def test_identity_refuses(self):
+  value=self.binding();value['ontologyArtifact']['identity']=''
+  with self.assertRaisesRegex(AssociationBindingError,'source_identity'):self.run_archived(value)
+ def test_external_ontology_substitution_refuses(self):
+  with self.assertRaisesRegex(AssociationBindingError,'ontology_original_mismatch'):prepare_association_binding(CORE,b' '+ONTOLOGY,wire(self.binding()))
+ def test_original_source_digest_still_required(self):
+  value=self.binding();value['ontologySha256']='0'*64
+  with self.assertRaisesRegex(AssociationBindingError,'source_digest'):self.run_archived(value)
+ def test_original_revision_still_required(self):
+  value=self.binding();value['ontologyRevision']='wrong'
+  with self.assertRaisesRegex(AssociationBindingError,'ontology_revision'):self.run_archived(value)
+ def test_complete_mapping_validation_still_required(self):
+  value=self.binding();value['mappings'].pop()
+  with self.assertRaisesRegex(AssociationBindingError,'association_coverage'):self.run_archived(value)
+
 if __name__=='__main__':unittest.main()

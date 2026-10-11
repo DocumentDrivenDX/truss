@@ -1,0 +1,47 @@
+{
+  "scope": "private original ontology dependency recovery only; no native or owner admission",
+  "python": "Python 3.11.17",
+  "sourcePins": {
+    "packages/python/src/truss/_security_association_binding.py": "2652e851820216205bb526ad8921109ddbbd8153fbea1338d7822d13ae400044",
+    "packages/python/tests/test_security_association_binding.py": "a5064a02048ed54cf60248583ec6f3644a1b3aa329c5be8aade858a845e658f4",
+    "scripts/check-module-boundaries.py": "1fa0a07852471ca9ea55649477dd3600dae8ed27fcccfa5cb04937d22b7f6acb"
+  },
+  "sourceArchiveSha256": "93f9723014b124784053eadd8abd952ffbb746f8f05c811d4c03c8e66455d541",
+  "commands": [
+    {
+      "argv": [
+        "/private/tmp/truss-current-clean-consumer-env/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "packages/python/tests",
+        "-p",
+        "test_security_association_binding.py",
+        "-v"
+      ],
+      "exitCode": 0,
+      "log": "command-0.log",
+      "sha256": "fab27970b7191aaf4333d6de8f5caeedb4e578ca4010f7f336bd413c30910b03"
+    },
+    {
+      "argv": [
+        "/private/tmp/truss-current-clean-consumer-env/bin/python",
+        "scripts/check-module-boundaries.py"
+      ],
+      "exitCode": 0,
+      "log": "command-1.log",
+      "sha256": "e4c7c12e1585830186ec47eb417a6fc7d6f563870ccd4f5b8906dea6667bd4e9"
+    }
+  ],
+  "acceptanceCriteria": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "acceptanceClosed": false,
+  "legacyTests": 50,
+  "newTests": 12,
+  "totalTests": 62,
+  "boundaryImports": 288,
+  "ownerNativeRequalification": "required; previous captured receipts remain historical"
+}

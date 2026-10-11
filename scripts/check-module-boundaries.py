@@ -44,7 +44,7 @@ ALLOWED = {
     'preparation': {'weakref', 'dataclasses', 'hashlib', 'pathlib', 'base64', 'json', 'shutil', 'subprocess', 'selectors', 'tempfile', 'time', 'truss._umf_release', 'truss._acceptance_json'},
     '_acceptance_json': {'json'},
     '_catalog_staging': {'dataclasses', 'json', 'uuid', 'truss.preparation', 'truss._acceptance_json'},
-    '_security_association_binding': {'dataclasses', 'hashlib', 'json'},
+    '_security_association_binding': {'base64', 'dataclasses', 'hashlib', 'json'},
     '_directory_resources': {'os', 'stat', 'threading', 'truss._installation_resources'},
     '_installation_resources': {'dataclasses', 'hashlib', 'json', 'truss._resource_account'},
     '_operation_admission': {'dataclasses', 'inspect', 'threading'},

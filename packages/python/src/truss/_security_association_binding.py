@@ -4,6 +4,7 @@ The caller still needs genuine UMF/ontology owner validation, authenticated
 artifact/cut admission, native observations and complete protected publication.
 This module neither compiles predicates nor executes database operations.
 """
+import base64
 from dataclasses import dataclass
 from hashlib import sha256
 import json
@@ -173,8 +174,14 @@ class AssociationBindingBasis:
 def _prepare_association_binding(core_bytes: bytes, ontology_bytes: bytes,
                                 binding_bytes: bytes) -> AssociationBindingBasis:
     core, ontology, binding = map(_json, (core_bytes, ontology_bytes, binding_bytes))
-    _closed(binding, ('profile', 'coreSha256', 'ontologySha256', 'modelRevision', 'ontologyRevision', 'mappings'))
-    if binding['profile'] != 'truss-binary-association-candidate/0.1.0': _fail('binding_profile')
+    profile = binding.get('profile')
+    keys = ('profile', 'coreSha256', 'ontologySha256', 'modelRevision', 'ontologyRevision', 'mappings')
+    if profile == 'truss-binary-association-candidate/0.2.0':
+        _closed(binding, (*keys, 'ontologyArtifact'))
+        if _original_ontology(binding) != ontology_bytes: _fail('ontology_original_mismatch')
+    elif profile == 'truss-binary-association-candidate/0.1.0':
+        _closed(binding, keys)
+    else: _fail('binding_profile')
     if binding['coreSha256'] != sha256(core_bytes).hexdigest() or binding['ontologySha256'] != sha256(ontology_bytes).hexdigest(): _fail('source_digest')
     if core.get('umf') != '0.8.0' or ontology.get('version') != '0.1.0': _fail('source_version')
     document = _text(core.get('id'))
@@ -271,3 +278,35 @@ def prepare_association_binding(core_bytes: bytes, ontology_bytes: bytes,
         return _prepare_association_binding(core_bytes, ontology_bytes, binding_bytes)
     except (AttributeError, KeyError, TypeError):
         _fail('source_shape')
+
+
+def _original_ontology(binding):
+    artifact = _closed(binding.get('ontologyArtifact'), ('identity', 'bytesBase64', 'sha256'))
+    _text(artifact['identity'])
+    encoded = artifact['bytesBase64']
+    if type(encoded) is not str or not 0 < len(encoded) <= 1_398_104:
+        _fail('ontology_artifact_bytes')
+    try:
+        original = base64.b64decode(encoded, validate=True)
+    except (ValueError, UnicodeError):
+        _fail('ontology_artifact_base64')
+    if not 0 < len(original) <= 1_048_576:
+        _fail('ontology_artifact_bytes')
+    if base64.b64encode(original).decode('ascii') != encoded:
+        _fail('ontology_artifact_base64')
+    if artifact['sha256'] != sha256(original).hexdigest():
+        _fail('ontology_artifact_digest')
+    return original
+
+
+def prepare_archived_association_binding(core_bytes: bytes,
+                                         binding_bytes: bytes) -> AssociationBindingBasis:
+    """Recover the original ontology from the private dependency-complete carrier.
+
+    No registration, owner validation or authority is implied. Legacy 0.1.0
+    remains a three-input correspondence profile and cannot use this entry point.
+    """
+    binding = _json(binding_bytes)
+    if binding.get('profile') != 'truss-binary-association-candidate/0.2.0':
+        _fail('archived_binding_profile')
+    return prepare_association_binding(core_bytes, _original_ontology(binding), binding_bytes)
