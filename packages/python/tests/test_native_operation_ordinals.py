@@ -278,3 +278,125 @@ class ReservedNativeOperationOrdinalTests(fixtures.NativeArbitrationTests):
 
     def test_release_retirement_lost_reply_retains_exclusion(self):
         self._assert_release_retirement_fault(True)
+
+    def test_port_retention_exhaustion_refuses_before_ordinal_or_sql(self):
+        session = self.service.bind(self.attempt)
+        port = session.context.custody.port
+        port._control_records = (object(),) * 4094
+        before = self.boundary.last_call
+        with self.assertRaises(NativeBoundaryRefusal):
+            self.service.issue_operation(session, reserve_controls=True)
+        self.assertIsNone(self.t._operation_ordinals.attempts[-1].ordinal)
+        self.assertIs(self.boundary.last_call, before)
+
+    def test_tracker_retention_exhaustion_refuses_before_ordinal_or_sql(self):
+        session = self.service.bind(self.attempt)
+        self.t._control_invocations = (object(),) * 4094
+        before = self.boundary.last_call
+        with self.assertRaises(NativeBoundaryRefusal):
+            self.service.issue_operation(session, reserve_controls=True)
+        self.assertIsNone(self.t._operation_ordinals.attempts[-1].ordinal)
+        self.assertIs(self.boundary.last_call, before)
+
+    def test_joint_owner_partial_publication_closes_issuance(self):
+        from truss._native_transactions import NativeTransactions
+        session = self.service.bind(self.attempt)
+        before = self.boundary.last_call
+        with patch.object(NativeTransactions, '_publish_invocation_retention',
+                          side_effect=MemoryError('second owner publication')):
+            with self.assertRaises(MemoryError):
+                self.service.issue_operation(session, reserve_controls=True)
+        controls = session._reserved_controls
+        self.assertIs(controls, self.t._operation_ordinals.attempts[-1].controls)
+        self.assertFalse(controls.retention.ready())
+        self.assertTrue(session.admission_closed)
+        self.assertIsNone(controls.attempt.ordinal)
+        self.assertIs(self.boundary.last_call, before)
+        with self.assertRaises(NativeBoundaryRefusal): controls.run_control('savepoint')
+        self.assertIs(self.boundary.last_call, before)
+
+    def test_reserved_cleanup_survives_full_owner_retention(self):
+        session = self.service.bind(self.attempt)
+        controls = self.service.issue_operation(session, reserve_controls=True).controls
+        port = controls.port
+        port._control_records += (object(),) * (4096 - len(port._control_records))
+        self.t._control_invocations += (object(),) * (4096 - len(self.t._control_invocations))
+        controls.run_control('savepoint')
+        controls.run_control('release')
+        self.assertEqual(len(port._control_records), 4096)
+        self.assertEqual(len(self.t._control_invocations), 4096)
+        self.assertTrue(controls.retention.slots[1].retired)
+        self.assertIsNone(controls.retention.slots[1].invocation)
+        self.assertIsNone(controls.retention.records[1].native_call)
+
+    def test_lost_invocation_slot_fill_preserves_one_use_and_closes_admission(self):
+        from truss._native_transactions import NativeTransactions
+        session = self.service.bind(self.attempt)
+        controls = self.service.issue_operation(session, reserve_controls=True).controls
+        before = self.boundary.last_call
+        original = NativeTransactions._publish_control_invocation
+        def lost(tracker, slot, invocation):
+            original(tracker, slot, invocation)
+            raise MemoryError('lost slot fill reply')
+        with patch.object(NativeTransactions, '_publish_control_invocation', lost):
+            with self.assertRaises(MemoryError): controls.run_control('savepoint')
+        slot = controls.retention.slots[0]
+        retained = slot.invocation
+        self.assertIsNotNone(retained)
+        self.assertTrue(session.admission_closed)
+        self.assertIsNone(controls.savepoint_entry.native_call)
+        self.assertIs(self.boundary.last_call, before)
+        with self.assertRaises(NativeBoundaryRefusal): controls.run_control('savepoint')
+        self.assertIs(slot.invocation, retained)
+        self.assertIs(self.boundary.last_call, before)
+
+    def test_direct_tracker_cannot_consume_unclaimed_port_record(self):
+        session = self.service.bind(self.attempt)
+        controls = self.service.issue_operation(session, reserve_controls=True).controls
+        controls.run_control('savepoint')
+        handle = controls.savepoint_permit.control.savepoint
+        before = self.boundary.last_call
+        with self.assertRaises(NativeBoundaryRefusal):
+            self.t.rollback_to(handle, token=self.token, cleanup=session.cleanup_permit,
+                               call_permit=controls.rollback_permit)
+        self.assertIsNone(controls.retention.slots[1].invocation)
+        self.assertEqual(controls.retention.records[1].phase, 'reserved')
+        self.assertIs(self.boundary.last_call, before)
+        controls.run_control('rollback_to')
+        controls.run_control('release')
+
+    def test_hostile_permit_is_not_dereferenced_or_retained(self):
+        session = self.service.bind(self.attempt)
+        controls = self.service.issue_operation(session, reserve_controls=True).controls
+        controls.run_control('savepoint')
+        class Hostile:
+            @property
+            def controls(self):
+                raise AssertionError('foreign permit dereferenced')
+        before = self.boundary.last_call
+        with self.assertRaises(NativeBoundaryRefusal):
+            self.t.rollback_to(controls.savepoint_permit.control.savepoint,
+                               token=self.token, cleanup=session.cleanup_permit,
+                               call_permit=Hostile())
+        self.assertIsNone(controls.retention.slots[1].invocation)
+        self.assertIs(self.boundary.last_call, before)
+        controls.run_control('release')
+
+    def test_initial_port_hostile_permit_preserves_namespace_and_slots(self):
+        session = self.service.bind(self.attempt)
+        controls = self.service.issue_operation(session, reserve_controls=True).controls
+        issued = next(item for ns in session.generation.namespaces for item in ns.issued
+                      if item.name == controls.savepoint_name)
+        class Hostile:
+            @property
+            def controls(self):
+                raise AssertionError('foreign permit dereferenced')
+        before = self.boundary.last_call
+        with self.assertRaises(NativeBoundaryRefusal):
+            controls.port.control('SAVEPOINT ' + controls.savepoint_name, call_permit=Hostile())
+        self.assertFalse(issued.submitted)
+        self.assertIsNone(controls.retention.slots[0].invocation)
+        self.assertEqual(controls.retention.records[0].phase, 'reserved')
+        self.assertIs(self.boundary.last_call, before)
+        controls.run_control('savepoint')
+        controls.run_control('release')

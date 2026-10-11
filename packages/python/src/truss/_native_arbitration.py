@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from uuid import uuid4
 from threading import Lock
 from ._host_execution import HostExecutor
-from ._native_transactions import NativeTransactionPort, _Control, _ControlInvocation
+from ._native_transactions import NativeTransactionPort, _Control, _ControlInvocation, _ControlInvocationSlot, _ControlRetention, _PortControl
 from ._native_pg8000 import NativeBoundaryRefusal, NativeCancellationAdmission
 from ._operation_arbitration import OperationArbitration, Admitted, Refused, Unresolved
 
@@ -88,6 +88,7 @@ class _ReservedOperationControls:
     savepoint_permit: object = None
     rollback_permit: object = None
     release_permit: object = None
+    retention: object = None
 
     def run_control(self, kind):
         if type(kind) is not str or kind not in ('savepoint', 'rollback_to', 'release'):
@@ -117,6 +118,10 @@ class _ReservedOperationControls:
                     raise NativeBoundaryRefusal('Original release retirement unavailable')
                 try:
                     session._publish_call_root(session._call_root.retirement_state)
+                    record, slot = self.retention.select(self.rollback_permit)
+                    if slot.invocation is None:
+                        slot.retired = True
+                        record.phase = 'retired_unsubmitted'
                 except BaseException:
                     session.admission_closed = True
                     raise
@@ -200,6 +205,9 @@ class NativeOperationSession:
                 or self._reserved_controls is not None or self.calls or self.cleanup_calls
                 or self._call_root.held_cleanup or self.call_limit < 2 or self.cleanup_limit < 2):
             raise NativeBoundaryRefusal('Original finite operation controls unavailable')
+        tracker = port._tracker
+        if len(port._control_records) + 3 > 4096 or len(tracker._control_invocations) + 3 > 4096:
+            raise NativeBoundaryRefusal('Original joint control retention exhausted')
         name = port._reserve_savepoint_name_locked(self.owner._executor)
         if name is None:
             raise NativeBoundaryRefusal('Original mediated savepoint namespace required')
@@ -217,19 +225,43 @@ class NativeOperationSession:
         controls.savepoint_permit = _ReservedControlPermit(controls, 'savepoint', savepoint)
         controls.rollback_permit = _ReservedControlPermit(controls, 'rollback_to', rollback)
         controls.release_permit = _ReservedControlPermit(controls, 'release', release)
+        records = tuple(_PortControl(kind, phase='reserved') for kind in
+                        ('SAVEPOINT', 'ROLLBACK TO SAVEPOINT', 'RELEASE SAVEPOINT'))
+        slots = tuple(_ControlInvocationSlot(tracker, kind) for kind in
+                      ('savepoint', 'rollback_to', 'release'))
+        controls.retention = _ControlRetention(controls, records, slots)
+        port_root = (*port._control_records, *records)
+        tracker_root = (*tracker._control_invocations, *slots)
         self._reserved_controls = controls
         attempt.controls = controls
         try:
+            port._publish_control_retention(port_root)
+            tracker._publish_invocation_retention(tracker_root)
             self._publish_call_root(initial)
+            if not controls.retention.ready() or self._call_root is not initial:
+                raise NativeBoundaryRefusal('Original joint retention publication incomplete')
         except BaseException:
             self.admission_closed = True
             raise
         return controls
 
+    def _select_control_retention(self, permit, *, claimed=False):
+        controls = self._reserved_controls
+        if (type(permit) is not _ReservedControlPermit or controls is None
+                or permit.controls is not controls
+                or not any(permit is item for item in (controls.savepoint_permit,
+                                                       controls.rollback_permit, controls.release_permit))):
+            raise NativeBoundaryRefusal('Original retained control permit required')
+        record, slot = controls.retention.select(permit)
+        if claimed and (record.phase != 'prepared' or controls.port._last_control is not record):
+            raise NativeBoundaryRefusal('Original claimed port control required')
+        return record, slot
+
     def _bind_reserved_control(self, permit, invocation):
         tracker = self.boundary._transaction_tracker
         if (type(invocation) is not _ControlInvocation or invocation.tracker is not tracker
-                or not any(item is invocation for item in tracker._control_invocations)):
+                or not any(type(item) is _ControlInvocationSlot and item.invocation is invocation
+                           for item in tracker._control_invocations)):
             raise NativeBoundaryRefusal('Original tracker control invocation required')
         control, invoke, sql = invocation.control, invocation.invoke, invocation.sql
         controls = self._reserved_controls
@@ -275,6 +307,7 @@ class NativeOperationSession:
                 or not any(permit is item for item in (controls.savepoint_permit,
                                                        controls.rollback_permit, controls.release_permit))
                 or controls.attempt.controls is not controls or controls.attempt.ordinal is None
+                or controls.retention is None or not controls.retention.ready()
                 or boundary is not self.boundary or token is not self.token
                 or tracker._state.generation is not self.generation or self.generation.ended
                 or lifecycle is not permit.control or invoke is not permit.invoke

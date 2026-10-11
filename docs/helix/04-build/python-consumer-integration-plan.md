@@ -1680,3 +1680,26 @@ session call slots, so later cleanup cannot exhaust those original counters.
 No complete containment reservation, registered family admission, installer or
 release qualification follows. Additional retirement-publication fault run16277
 is pending and is not included in the seven passed cases.
+
+
+### Iteration 31: original control retention capacity
+
+The private original operation reserves three port-control records and three
+tracker invocation slots before ordinal publication. Both owner roots are
+allocated before publication and retained on the session/attempt; partial
+publication closes issuance. Generic appends and reserved claims share the
+boundary lock. Exact registered permits precede namespace consumption; tracker
+submission requires the corresponding original claimed port record. Lost slot
+fill replies retain one-use custody. Confirmed success RELEASE retires an unused
+rollback slot without refunding capacity or inventing a native call.
+
+The corrected PostgreSQL16.15 administrative suite passes40 cases18.924s with
+terminal exit0;13 unit cases and322 module boundaries pass. Source, wheel and
+clean installed package match84 files. Astra Ultra approved source and final evidence; its independent three native
+cases pass40.236s with terminal exit0. See
+[evidence receipt](evidence/python-contracts-iteration31-retention.json).
+This establishes retained capacity, not allocation-free cleanup or full heap
+safety. Registered original admission and the complete installed profile still
+precede public install/register/apply/read qualification. No public data
+capability was enabled. Earlier iteration30 retirement run16277 is terminal:
+two cases pass11.237s, recorded in its updated receipt.

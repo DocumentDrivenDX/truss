@@ -78,6 +78,36 @@ class _ControlInvocation:
     sql: str
 
 
+@dataclass(eq=False)
+class _ControlInvocationSlot:
+    tracker: object
+    kind: str
+    invocation: object = None
+    retired: bool = False
+
+
+@dataclass(eq=False)
+class _ControlRetention:
+    controls: object
+    records: tuple
+    slots: tuple
+
+    def ready(self):
+        port = self.controls.port
+        return (self.controls.session._reserved_controls is self.controls
+                and self.controls.attempt.controls is self.controls
+                and all(any(item is record for item in port._control_records) for record in self.records)
+                and all(any(item is slot for item in port._tracker._control_invocations) for slot in self.slots))
+
+    def select(self, permit):
+        controls = self.controls
+        permits = (controls.savepoint_permit, controls.rollback_permit, controls.release_permit)
+        index = next((i for i, item in enumerate(permits) if item is permit), None)
+        if index is None or not self.ready():
+            raise NativeBoundaryRefusal('Original joint control retention required')
+        return self.records[index], self.slots[index]
+
+
 class NativeTransactions:
     def __init__(self, boundary, *, savepoint_limit=256, adoption_limit=256, mediated_namespace=False):
         if type(boundary) is not NativeBoundary or type(savepoint_limit) is not int or savepoint_limit < 1:
@@ -216,10 +246,19 @@ class NativeTransactions:
                 sql = fixed_sql
             invoke = lambda: self._boundary._run_simple(sql)
             if call_permit is not None:
-                if len(self._control_invocations) >= 4096:
-                    raise NativeBoundaryRefusal('Original control invocation retention exhausted')
+                ledger = self._boundary._operation_ledger
+                if (ledger is None or self._boundary._pending_operation_ledger is not ledger
+                        or not any(item is ledger for item in self._boundary._native_arbitration_sessions)):
+                    raise NativeBoundaryRefusal('Original reserved control session required')
+                record, slot = ledger._select_control_retention(call_permit, claimed=True)
+                if slot.tracker is not self or slot.kind != kind or slot.invocation is not None or slot.retired:
+                    raise NativeBoundaryRefusal('One-use original invocation slot required')
                 invocation = _ControlInvocation(self, control, invoke, sql)
-                self._control_invocations = (*self._control_invocations, invocation)
+                try:
+                    self._publish_control_invocation(slot, invocation)
+                except BaseException:
+                    call_permit.controls.session.admission_closed = True
+                    raise
                 ledger = self._boundary._operation_ledger
                 if (ledger is None or self._boundary._pending_operation_ledger is not ledger
                         or not any(item is ledger for item in self._boundary._native_arbitration_sessions)):
@@ -227,6 +266,12 @@ class NativeTransactions:
                 ledger._bind_reserved_control(call_permit, invocation)
         self._boundary._call(invoke, token, lifecycle=control, cleanup=cleanup, call_permit=call_permit)
         return savepoint if kind == 'savepoint' else None
+
+    def _publish_control_invocation(self, slot, invocation):
+        slot.invocation = invocation
+
+    def _publish_invocation_retention(self, candidate):
+        self._control_invocations = candidate
 
     @staticmethod
     def _name(name):
@@ -404,6 +449,9 @@ class NativeTransactionPort:
             if kind=='savepoint' and (self._tracker._state.status!=b'T' or len(self._tracker._state.savepoints)>=self._tracker._limit): return False
             return True
 
+    def _publish_control_retention(self, candidate):
+        self._control_records = candidate
+
     def _publish_savepoint_map(self, candidate):
         self._savepoints = candidate
 
@@ -416,22 +464,39 @@ class NativeTransactionPort:
         if match is None: raise NativeBoundaryRefusal('Only exact executor savepoint controls accepted')
         kind, name = match.groups()
         t = self._tracker
-        if t._mediated_namespace:
-            namespace_match=re.fullmatch(r'truss_sp_([0-9a-f]{32})_([1-9][0-9]{0,19})',name)
-            with t._boundary._lock:
-                if namespace_match is None:raise NativeBoundaryRefusal('Original reserved namespace name required')
+        with t._boundary._lock:
+            self._require_scope()
+            record = None
+            if call_permit is not None:
+                ledger=t._boundary._operation_ledger
+                if (ledger is None or ledger is not t._boundary._pending_operation_ledger
+                        or not any(item is ledger for item in t._boundary._native_arbitration_sessions)):
+                    raise NativeBoundaryRefusal('Original reserved control session required')
+                record, slot = ledger._select_control_retention(call_permit)
+                if record.kind != kind or record.phase != 'reserved':
+                    raise NativeBoundaryRefusal('One-use original port control required')
+            elif len(self._control_records)>=4096:
+                raise NativeBoundaryRefusal('Original control retention exhausted')
+            if t._mediated_namespace:
+                namespace_match=re.fullmatch(r'truss_sp_([0-9a-f]{32})_([1-9][0-9]{0,19})',name)
+                if namespace_match is None:
+                    raise NativeBoundaryRefusal('Original reserved namespace name required')
                 value,counter=namespace_match.groups()
                 reservation=next((n for n in self._generation.namespaces if n.value==value),None)
                 if reservation is None or not 1<=int(counter)<reservation.next_counter or int(counter)>18446744073709551615:
                     raise NativeBoundaryRefusal('Original consumed namespace counter required')
                 if kind=='SAVEPOINT':
                     issued=next((r for r in reservation.issued if r.name==name),None)
-                    if issued is None or issued.submitted:raise NativeBoundaryRefusal('One-use original savepoint issuance required')
+                    if issued is None or issued.submitted:
+                        raise NativeBoundaryRefusal('One-use original savepoint issuance required')
                     issued.submitted=True
-        if len(self._control_records)>=4096: raise NativeBoundaryRefusal('Original control retention exhausted')
-        record=_PortControl(kind)
-        self._control_records=(*self._control_records,record)
-        self._last_control=record
+
+            if record is None:
+                record=_PortControl(kind)
+                self._publish_control_retention((*self._control_records,record))
+            else:
+                record.phase='prepared'
+            self._last_control=record
         before=t._boundary.last_call
         try:
             if kind=='SAVEPOINT':
