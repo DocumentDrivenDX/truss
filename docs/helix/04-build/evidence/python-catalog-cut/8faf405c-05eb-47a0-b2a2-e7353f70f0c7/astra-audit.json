@@ -1,0 +1,241 @@
+{
+  "status": "independent-read-only-evidence-audit-passed",
+  "runId": "8faf405c-05eb-47a0-b2a2-e7353f70f0c7",
+  "sourcePins": 129,
+  "currentExactArchivePins": true,
+  "duplicateFreeExactZip": true,
+  "nativeBinaryDigests": 1614,
+  "currentBinaryDigestsMatch": true,
+  "observations": 58,
+  "uniqueTypeSensitiveMatches": true,
+  "sourceSections": 40,
+  "expandedCatalogLocks": 43,
+  "exactGrantedInitialLockInventory": true,
+  "images": [
+    {
+      "label": "held-baseline",
+      "bytes": 9935797,
+      "sha256": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+      "functionOid": "16390",
+      "functionBody": "SELECT 1::bigint",
+      "sections": 40
+    },
+    {
+      "label": "held-after-blocked-writes",
+      "bytes": 9935797,
+      "sha256": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+      "functionOid": "16390",
+      "functionBody": "SELECT 1::bigint",
+      "sections": 40
+    },
+    {
+      "label": "old-snapshot",
+      "bytes": 9935797,
+      "sha256": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+      "functionOid": "16390",
+      "functionBody": "SELECT 1::bigint",
+      "sections": 40
+    },
+    {
+      "label": "old-snapshot-after-lock",
+      "bytes": 9935797,
+      "sha256": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+      "functionOid": "16390",
+      "functionBody": "SELECT 1::bigint",
+      "sections": 40
+    },
+    {
+      "label": "lock-before-first-snapshot",
+      "bytes": 9935799,
+      "sha256": "35b9a46e3295dc5f74ad81debdaaa8bf92bc3b2e4324e878a52feb1420a55c96",
+      "functionOid": "16390",
+      "functionBody": "SELECT 333::bigint",
+      "sections": 40
+    },
+    {
+      "label": "lock-before-pending-writer-commit",
+      "bytes": 9935799,
+      "sha256": "35b9a46e3295dc5f74ad81debdaaa8bf92bc3b2e4324e878a52feb1420a55c96",
+      "functionOid": "16390",
+      "functionBody": "SELECT 333::bigint",
+      "sections": 40
+    },
+    {
+      "label": "held-lock-after-pending-writer-commit",
+      "bytes": 9935799,
+      "sha256": "35b9a46e3295dc5f74ad81debdaaa8bf92bc3b2e4324e878a52feb1420a55c96",
+      "functionOid": "16390",
+      "functionBody": "SELECT 333::bigint",
+      "sections": 40
+    },
+    {
+      "label": "cooperative-drained-current-source",
+      "bytes": 9935799,
+      "sha256": "ae8b87ba3f9c1e1c5a3d43e5fde55c39c4fd03d420191ee56d8f8d528bdf89c4",
+      "functionOid": "16390",
+      "functionBody": "SELECT 555::bigint",
+      "sections": 40
+    },
+    {
+      "label": "unparticipating-writer-bypass",
+      "bytes": 9935799,
+      "sha256": "29fe7aa5e20fe92e237623820ea36752b22d7114323ded75e57d83290a3d3e9c",
+      "functionOid": "16390",
+      "functionBody": "SELECT 666::bigint",
+      "sections": 40
+    },
+    {
+      "label": "cross-database-shared-role-change",
+      "bytes": 9935963,
+      "sha256": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+      "functionOid": "16390",
+      "functionBody": "SELECT 666::bigint",
+      "sections": 40
+    },
+    {
+      "label": "aba-before",
+      "bytes": 9935963,
+      "sha256": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+      "functionOid": "16390",
+      "functionBody": "SELECT 666::bigint",
+      "sections": 40
+    },
+    {
+      "label": "aba-middle",
+      "bytes": 9935963,
+      "sha256": "e77c59012837d614d554de470518aab216c1408a92cba1a1758c4857480f09ef",
+      "functionOid": "16390",
+      "functionBody": "SELECT 777::bigint",
+      "sections": 40
+    },
+    {
+      "label": "aba-after",
+      "bytes": 9935963,
+      "sha256": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+      "functionOid": "16390",
+      "functionBody": "SELECT 666::bigint",
+      "sections": 40
+    },
+    {
+      "label": "application-data-changed-source-equal",
+      "bytes": 9935963,
+      "sha256": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+      "functionOid": "16390",
+      "functionBody": "SELECT 666::bigint",
+      "sections": 40
+    }
+  ],
+  "ddlRefusalCount": 7,
+  "retainedServerLockTimeoutCount": 8,
+  "hostTests": 12,
+  "moduleBoundaryImports": 469,
+  "cleanup": {
+    "attempted": true,
+    "stopExitCode": 0,
+    "statusExitCode": 3,
+    "socketAbsent": true
+  },
+  "unixSocketAbsentAtAudit": true,
+  "privateArtifactPermissions": true,
+  "artifactSha256": {
+    "held-baseline.image.json": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+    "native.stdout.log": "a3f9c03d7f11e18f007c47cadb209e657bad8075d6835de8b091fd735b469650",
+    "old-snapshot.image.json": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+    "host.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "boundaries.stdout.log": "a99309f40a424d062f5d21697bece77bb41ebea2e77066fc09bfb7ec5d25b3b2",
+    "locks.json": "736bf10998e9394a64e08c51a1d5b95a0c3235cfbe4f126af254a194c3287ade",
+    "held-after-blocked-writes.image.json": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+    "lock-before-pending-writer-commit.image.json": "35b9a46e3295dc5f74ad81debdaaa8bf92bc3b2e4324e878a52feb1420a55c96",
+    "held-lock-after-pending-writer-commit.image.json": "35b9a46e3295dc5f74ad81debdaaa8bf92bc3b2e4324e878a52feb1420a55c96",
+    "native.json": "597d6ed347f3ad8a9eb07db17056a760989a74caf14570f21c8340e40099fcf0",
+    "cross-database-shared-role-change.image.json": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+    "application-data-changed-source-equal.image.json": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+    "aba-before.image.json": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+    "native.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lock.sql": "25cf8c37c4465c028e1184942fae655834c6371061606c462cd7d86854ba5ca2",
+    "old-snapshot-after-lock.image.json": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+    "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "unparticipating-writer-bypass.image.json": "29fe7aa5e20fe92e237623820ea36752b22d7114323ded75e57d83290a3d3e9c",
+    "sources.zip": "14a64eb4c75d329586ae73ea2575ac1988ce3fe62956f2e414a4cae8c8e53466",
+    "cooperative-drained-current-source.image.json": "ae8b87ba3f9c1e1c5a3d43e5fde55c39c4fd03d420191ee56d8f8d528bdf89c4",
+    "aba-middle.image.json": "e77c59012837d614d554de470518aab216c1408a92cba1a1758c4857480f09ef",
+    "host.stderr.log": "7b8b1113ff20922fff4e25aa48f07e1d2bd15a539ff583845e3c090cc8f9b3ab",
+    "server.log": "9a68314fa0bea7e73f94d5842784ad458182793759809d46d4cced4ebce36511",
+    "aba-after.image.json": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+    "lock-before-first-snapshot.image.json": "35b9a46e3295dc5f74ad81debdaaa8bf92bc3b2e4324e878a52feb1420a55c96",
+    "receipt.json": "5baa873a0393709b23acfd4579a425e5aa50e8a1666b08c59524494a2dafd442"
+  },
+  "cooperativeBarrier": {
+    "key": 57294010831,
+    "sameDatabase": true,
+    "readerWaitObserved": true,
+    "writerCommitDrained": true,
+    "freshReadCommittedImageAndExecution": 555,
+    "laterParticipatingWriterSQLSTATE": "55P03",
+    "allWriterClosure": false,
+    "independentlyRetainedNativeAdvisoryKeyRows": false,
+    "nonparticipatingWriterDifferentSqlAfterFreshCensusExecution": 666
+  },
+  "crossDatabaseWitness": {
+    "otherDatabase": "census_other",
+    "key": 57294010831,
+    "exclusiveLockGrantedWhilePostgresSharedHeld": true,
+    "membershipBefore": false,
+    "membershipAfter": true,
+    "changedSections": [
+      "pg_auth_members"
+    ],
+    "addedNativeMembership": {
+      "oid": "16394",
+      "member": "16391",
+      "roleid": "16392",
+      "grantor": "10",
+      "set_option": true,
+      "admin_option": false,
+      "inherit_option": true
+    },
+    "independentlyRetainedExactKeyDatabaseLockRows": false
+  },
+  "designConclusion": "The observed catalog ShareLocks block seven selected later DDL statements, but do not exclude commit of a previously applied uncommitted function replacement. An RR census remains at 333 while execution yields 444 with 43 locks held; old snapshots independently survive later lock acquisition. A participating writer transaction advisory lock drains before fresh READ COMMITTED observation (555), blocks a new participating writer, and permits reacquisition after reader release. A nonparticipating writer bypasses it (fresh census followed by different SQL text returning 666). Publication/commit exclusion covering every relevant pending writer and fresh source observation remain separate obligations. Exact endpoint source equality hides the demonstrated 666->777->666 routine history and intermediate native call. An unrelated application-data change is absent from the source census. Neither endpoint equality nor a source-only cut establishes full execution-to-disclosure authority.",
+  "scope": "Excluded administrative materialized pg8000 rows on the captured PostgreSQL16.15 fixture. Not protected bounded original response custody, an authenticated provider/issuer, a complete lock/commit barrier, full metadata meaning, whole authority/data cut, cooperative handback or backend acceptance. No native commands rerun.",
+  "abaWitness": {
+    "beforeSha256": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+    "middleSha256": "e77c59012837d614d554de470518aab216c1408a92cba1a1758c4857480f09ef",
+    "afterSha256": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+    "fullBeforeAfterBytesEqual": true,
+    "intermediateNativeValue": 777,
+    "restoredNativeValue": 666,
+    "changedSectionsOnly": [
+      "pg_proc"
+    ],
+    "sameFunctionOid": "16390",
+    "changedFunctionMemberOnly": "prosrc"
+  },
+  "applicationDataWitness": {
+    "sourceBytesEqualBeforeAfterDataChange": true,
+    "changedValue": "changed-without-source-change",
+    "restoredValue": "changed",
+    "actualAuthorizationProvider": false
+  },
+  "callBehaviorQualification": "Earlier f800 reused SQL returned 555 immediately after replacement by 666; current sequence collects a fresh 666 census then uses different SQL text returning 666. Planning/invalidation/census causality and general current-call correspondence remain unresolved.",
+  "postMergeScope": {
+    "added": [
+      "/private/tmp/truss-security-main-integration/packages/python/src/truss/_installation_metadata.py"
+    ],
+    "changed": [
+      "/private/tmp/truss-security-main-integration/packages/python/src/truss/_catalog_installation.py",
+      "/private/tmp/truss-security-main-integration/packages/python/src/truss/_construction_recovery.py",
+      "/private/tmp/truss-security-main-integration/scripts/check-module-boundaries.py"
+    ],
+    "removed": [],
+    "workerWrapperCensusSqlUnchanged": true,
+    "concurrentInstallationOrNativeEdgeSemanticsQualified": false
+  },
+  "historicalNotes": {
+    "4fe4a1d5 / 4b3b2eb2": "11-query model predates explicit state-at-time and disclosure controls; retained historical",
+    "b950669d": "13-query model before final native source-label refresh",
+    "e6355fa6": "passing native before explicit application-data label/scope correction",
+    "d9a139ef": "passing pre-merge native archive; no longer current all-module closure",
+    "f8005795": "failed reused-call 666 expectation observed555; cause unresolved; retained historical"
+  }
+}

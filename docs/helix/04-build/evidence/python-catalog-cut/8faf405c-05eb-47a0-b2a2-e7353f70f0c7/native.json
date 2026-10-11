@@ -1,0 +1,573 @@
+{
+  "status": "component-passed",
+  "observations": [
+    {
+      "id": "exact-engine",
+      "expected": [
+        [
+          "160015"
+        ]
+      ],
+      "observed": [
+        [
+          "160015"
+        ]
+      ]
+    },
+    {
+      "id": "all-covered-catalog-locks",
+      "expected": [
+        "pg_aggregate",
+        "pg_am",
+        "pg_amop",
+        "pg_amproc",
+        "pg_attrdef",
+        "pg_attribute",
+        "pg_auth_members",
+        "pg_authid",
+        "pg_cast",
+        "pg_class",
+        "pg_collation",
+        "pg_constraint",
+        "pg_conversion",
+        "pg_database",
+        "pg_db_role_setting",
+        "pg_default_acl",
+        "pg_depend",
+        "pg_enum",
+        "pg_event_trigger",
+        "pg_extension",
+        "pg_foreign_data_wrapper",
+        "pg_foreign_server",
+        "pg_foreign_table",
+        "pg_index",
+        "pg_inherits",
+        "pg_language",
+        "pg_namespace",
+        "pg_opclass",
+        "pg_operator",
+        "pg_opfamily",
+        "pg_parameter_acl",
+        "pg_partitioned_table",
+        "pg_policy",
+        "pg_proc",
+        "pg_range",
+        "pg_rewrite",
+        "pg_sequence",
+        "pg_shdepend",
+        "pg_statistic_ext",
+        "pg_transform",
+        "pg_trigger",
+        "pg_type",
+        "pg_user_mapping"
+      ],
+      "observed": [
+        "pg_aggregate",
+        "pg_am",
+        "pg_amop",
+        "pg_amproc",
+        "pg_attrdef",
+        "pg_attribute",
+        "pg_auth_members",
+        "pg_authid",
+        "pg_cast",
+        "pg_class",
+        "pg_collation",
+        "pg_constraint",
+        "pg_conversion",
+        "pg_database",
+        "pg_db_role_setting",
+        "pg_default_acl",
+        "pg_depend",
+        "pg_enum",
+        "pg_event_trigger",
+        "pg_extension",
+        "pg_foreign_data_wrapper",
+        "pg_foreign_server",
+        "pg_foreign_table",
+        "pg_index",
+        "pg_inherits",
+        "pg_language",
+        "pg_namespace",
+        "pg_opclass",
+        "pg_operator",
+        "pg_opfamily",
+        "pg_parameter_acl",
+        "pg_partitioned_table",
+        "pg_policy",
+        "pg_proc",
+        "pg_range",
+        "pg_rewrite",
+        "pg_sequence",
+        "pg_shdepend",
+        "pg_statistic_ext",
+        "pg_transform",
+        "pg_trigger",
+        "pg_type",
+        "pg_user_mapping"
+      ]
+    },
+    {
+      "id": "all-share-locks-granted",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "held-baseline:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "routine-body:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "role-membership:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "role-default:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "owner:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "column:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "policy:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "foreign-route:native-lock-conflict",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "ordinary-data-not-source-write",
+      "expected": [
+        [
+          "changed"
+        ]
+      ],
+      "observed": [
+        [
+          "changed"
+        ]
+      ]
+    },
+    {
+      "id": "held-after-blocked-writes:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "held-source-stable",
+      "expected": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+      "observed": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9"
+    },
+    {
+      "id": "held-native-execution",
+      "expected": [
+        [
+          1
+        ]
+      ],
+      "observed": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "id": "write-after-release",
+      "expected": [
+        [
+          333
+        ]
+      ],
+      "observed": [
+        [
+          333
+        ]
+      ]
+    },
+    {
+      "id": "old-snapshot:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "old-snapshot-after-lock:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "stale-snapshot-survives-lock",
+      "expected": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9",
+      "observed": "d50e60dfafc590d9f35159c146a7e9356c6489f48d4150e4f15caf0dc796add9"
+    },
+    {
+      "id": "native-execution-sees-new-routine",
+      "expected": [
+        [
+          333
+        ]
+      ],
+      "observed": [
+        [
+          333
+        ]
+      ]
+    },
+    {
+      "id": "lock-before-first-snapshot:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "fresh-cut-detects-body-change",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "fresh-cut-native-execution",
+      "expected": [
+        [
+          333
+        ]
+      ],
+      "observed": [
+        [
+          333
+        ]
+      ]
+    },
+    {
+      "id": "pending-writer-native-active",
+      "expected": "54",
+      "observed": "54"
+    },
+    {
+      "id": "pending-writer-no-retained-proc-rowexclusive",
+      "expected": [
+        [
+          "0"
+        ]
+      ],
+      "observed": [
+        [
+          "0"
+        ]
+      ]
+    },
+    {
+      "id": "lock-before-pending-writer-commit:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "lock-before-first-snapshot-pending-writer-old-source",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "held-lock-after-pending-writer-commit:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "pending-commit-stale-held-image",
+      "expected": "35b9a46e3295dc5f74ad81debdaaa8bf92bc3b2e4324e878a52feb1420a55c96",
+      "observed": "35b9a46e3295dc5f74ad81debdaaa8bf92bc3b2e4324e878a52feb1420a55c96"
+    },
+    {
+      "id": "pending-commit-current-native-execution",
+      "expected": [
+        [
+          444
+        ]
+      ],
+      "observed": [
+        [
+          444
+        ]
+      ]
+    },
+    {
+      "id": "all-catalog-locks-still-held",
+      "expected": [
+        [
+          "43"
+        ]
+      ],
+      "observed": [
+        [
+          "43"
+        ]
+      ]
+    },
+    {
+      "id": "participating-writer-blocks-reader",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "writer-drain-completes-reader",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "id": "writer-drain-no-driver-error",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "id": "cooperative-drained-current-source:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "post-barrier-read-committed-source-current",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "post-barrier-read-committed-execution",
+      "expected": [
+        [
+          555
+        ]
+      ],
+      "observed": [
+        [
+          555
+        ]
+      ]
+    },
+    {
+      "id": "reader-barrier-blocks-new-participating-writer",
+      "expected": "55P03",
+      "observed": "55P03"
+    },
+    {
+      "id": "unparticipating-writer-bypass:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "unparticipating-administrative-writer-bypasses-barrier",
+      "expected": [
+        [
+          666
+        ]
+      ],
+      "observed": [
+        [
+          666
+        ]
+      ]
+    },
+    {
+      "id": "unparticipating-writer-source-changes",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "cross-database-membership-initial",
+      "expected": [
+        [
+          false
+        ]
+      ],
+      "observed": [
+        [
+          false
+        ]
+      ]
+    },
+    {
+      "id": "same-key-other-database-lock-granted",
+      "expected": [
+        [
+          true
+        ]
+      ],
+      "observed": [
+        [
+          true
+        ]
+      ]
+    },
+    {
+      "id": "cross-database-shared-role-change:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "cross-database-shared-source-changes",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "cross-database-membership-now-visible",
+      "expected": [
+        [
+          true
+        ]
+      ],
+      "observed": [
+        [
+          true
+        ]
+      ]
+    },
+    {
+      "id": "reader-release-permits-participating-writer",
+      "expected": "49",
+      "observed": "49"
+    },
+    {
+      "id": "aba-before:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "aba-middle:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "aba-intermediate-source-differs",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "aba-intermediate-native-call",
+      "expected": [
+        [
+          777
+        ]
+      ],
+      "observed": [
+        [
+          777
+        ]
+      ]
+    },
+    {
+      "id": "aba-after:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "aba-endpoint-source-images-equal",
+      "expected": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+      "observed": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609"
+    },
+    {
+      "id": "aba-restored-native-call",
+      "expected": [
+        [
+          666
+        ]
+      ],
+      "observed": [
+        [
+          666
+        ]
+      ]
+    },
+    {
+      "id": "application-data-change-native-visible",
+      "expected": [
+        [
+          "changed-without-source-change"
+        ]
+      ],
+      "observed": [
+        [
+          "changed-without-source-change"
+        ]
+      ]
+    },
+    {
+      "id": "application-data-changed-source-equal:one-original-result",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "source-census-omits-application-data-change",
+      "expected": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609",
+      "observed": "ed4a0057606fd9be9a38504364c5f0fbd9f0790fcb88739e986dc5a8d41ea609"
+    },
+    {
+      "id": "application-data-restored",
+      "expected": [
+        [
+          "changed"
+        ]
+      ],
+      "observed": [
+        [
+          "changed"
+        ]
+      ]
+    }
+  ],
+  "catalogs": [
+    "pg_aggregate",
+    "pg_am",
+    "pg_amop",
+    "pg_amproc",
+    "pg_attrdef",
+    "pg_attribute",
+    "pg_auth_members",
+    "pg_authid",
+    "pg_cast",
+    "pg_class",
+    "pg_collation",
+    "pg_constraint",
+    "pg_conversion",
+    "pg_database",
+    "pg_db_role_setting",
+    "pg_default_acl",
+    "pg_depend",
+    "pg_enum",
+    "pg_event_trigger",
+    "pg_extension",
+    "pg_foreign_data_wrapper",
+    "pg_foreign_server",
+    "pg_foreign_table",
+    "pg_index",
+    "pg_inherits",
+    "pg_language",
+    "pg_namespace",
+    "pg_opclass",
+    "pg_operator",
+    "pg_opfamily",
+    "pg_parameter_acl",
+    "pg_partitioned_table",
+    "pg_policy",
+    "pg_proc",
+    "pg_range",
+    "pg_rewrite",
+    "pg_sequence",
+    "pg_shdepend",
+    "pg_statistic_ext",
+    "pg_transform",
+    "pg_trigger",
+    "pg_type",
+    "pg_user_mapping"
+  ],
+  "scope": "Excluded administrative PostgreSQL16.15 catalog ShareLock feasibility and native stale-snapshot and uncommitted writer counterexamples. Materialized pg8000 rows are not protected bounded original ingress. Cooperative transaction advisory barrier with fresh READ COMMITTED statement after acquisition; native lock wait/drain and blocking tested. Native two-commit routine ABA returns777 between byte-identical666 source images. Ordinary application-data changes are omitted by source census; the fixture data table is not an actual authorization provider. Tested finite DDL set only; no all-writer/catalog/extension/runtime configuration completeness, provider authentication, final authority/data cut, cooperative handback or backend acceptance."
+}
