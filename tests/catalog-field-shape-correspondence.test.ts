@@ -78,7 +78,7 @@ test('loaded owners cannot substitute role, container shape, item references or 
 
 
 test('facets retain interpreted groups and actual value boundaries after reversible transition',()=>{
- const cases=[['string',{length:{max:1,unit:'unicode-scalar'}},{string:'😀'},{string:'😀😀'}],['binary',{length:{max:1,unit:'byte'}},{binaryHex:'ff'},{binaryHex:'ffaa'}],['integer',{integerWidth:{bits:8,signed:true}},{integerToken:'127'},{integerToken:'128'}],['decimal',{precision:5,scale:2},{decimalToken:'12.34'},{decimalToken:'12.345'}]] as const;
+ const cases=[['string',{length:{max:1,unit:'unicode-scalar'}},{string:'😀'},{string:'😀😀'}],['binary',{length:{max:1,unit:'byte'}},{binaryHex:'ff'},{binaryHex:'ffaa'}],['integer',{integerWidth:{bits:8,signed:true}},{integerToken:'127'},{integerToken:'128'}],['decimal',{precision:5,scale:2},{decimalToken:'12.34'},{decimalToken:'12.345'}],['decimal',{precision:5,scale:2},{decimalToken:'999.99'},{decimalToken:'1000.00'}]] as const;
  for(const [scalarType,facets,good,bad] of cases){
   const p=prepare({kind:'field',scalarType,nullability:'required',cardinality:'one',facets}),r=meanings(p),retained=selected(r,'facets')[0]!;
   expect(retained.originalMeaning).toEqual({state:'known',facets,interpreted:facets,uninterpretedPaths:[]});
@@ -117,5 +117,36 @@ test('loaded facet owners cannot replace retained values projections states or u
    if(mutation.includes('Object.fromEntries'))expect(selected(collectCatalogCoreAssertionIdentities(p,collection),'facets')[0]!.originalMeaning.facets).toEqual(element.facets);
    else expect(()=>collectCatalogCoreAssertionIdentities(p,collection)).toThrow('facets');
   }finally{await rm(directory,{recursive:true,force:true})}
+ }
+});
+
+import {collectCatalogFacetRuleFamilies,requireOriginalCatalogFacetRuleFamilies} from '../packages/umf-bun/src/catalog-facet-rule-families';
+test('distinct decimal duties share an original pointer without collapsing family identity',()=>{
+ const p=prepare({kind:'field',scalarType:'decimal',nullability:'required',cardinality:'one',facets:{precision:5,scale:2,future:{policy:'opaque'}}});
+ const collection=collectCatalogAssertionObservations(p,owner,fields),candidate=collectCatalogFacetRuleFamilies(p,collection);
+ expect(candidate.rules.map(r=>r.identity.family)).toEqual(['decimal_precision','decimal_fixed_scale']);
+ expect(candidate.rules.map(r=>r.identity.occurrence.sourcePointer)).toEqual(['/modules/0/elements/0/facets','/modules/0/elements/0/facets']);
+ expect(candidate.rules.map(r=>r.parameters)).toEqual([{precision:5,scale:2},{precision:5,scale:2}]);
+ expect(new Set(candidate.rules.map(r=>JSON.stringify(r.identity))).size).toBe(2);
+ for(const rule of candidate.rules){
+  expect(rule.source).toBe(p.original.input.documents[0].artifact);expect(rule.identity.profile).toBe(candidate.profile);
+  expect(rule.identity.semanticOwnerProfile).toBe(collection.fieldProfile!);expect(candidate.carriers.includes(rule.carrier)).toBe(true);
+  expect(rule.identity.occurrence).toBe(rule.carrier.assertion.assertion);expect(rule.enforcement).toBe('none');expect(rule.interpretationQualified).toBe(false);
+  expect(rule.carrier.originalMeaning.uninterpretedPaths).toEqual(['/modules/0/elements/0/facets/future']);expect(Object.isFrozen(rule.parameters)).toBe(true);
+ }
+ expect(candidate.complete).toBe(false);expect(candidate.semanticFamilyCoverageComplete).toBe(false);expect(candidate.interpretationQualified).toBe(false);
+ const bytes=Buffer.from(candidate.manifest.bytesBase64,'base64');expect(new Bun.CryptoHasher('sha256').update(bytes).digest('hex')).toBe(candidate.profile.sha256);
+ requireOriginalCatalogFacetRuleFamilies(p,candidate);
+ expect(()=>requireOriginalCatalogFacetRuleFamilies(p,{...candidate})).toThrow('candidate custody');
+ const other=prepare({kind:'field',scalarType:'decimal',nullability:'required',cardinality:'one',facets:{precision:5,scale:2,future:{policy:'opaque'}}});
+ expect(()=>requireOriginalCatalogFacetRuleFamilies(other,candidate)).toThrow('candidate custody');
+ expect(()=>collectCatalogFacetRuleFamilies(other,collection)).toThrow('observation collection custody');
+ const repeat=collectCatalogFacetRuleFamilies(p,collection);expect(repeat.rules.map(r=>r.identity)).toEqual(candidate.rules.map(r=>r.identity));
+});
+test('facet families follow interpreted groups while empty and unknown groups invent no duty',()=>{
+ for(const [scalarType,facets,families] of [['string',{length:{max:2,unit:'unicode-scalar'}},['length']],['integer',{integerWidth:{bits:8,signed:true}},['integer_width']],['string',{},[]],['string',{length:{max:2,unit:'future-unit'}},[]]] as const){
+  const p=prepare({kind:'field',scalarType,facets}),candidate=collectCatalogFacetRuleFamilies(p,collectCatalogAssertionObservations(p,owner,fields));
+  expect(candidate.rules.map(r=>r.identity.family)).toEqual([...families]);expect(candidate.complete).toBe(false);
+  expect(candidate.carriers.length).toBe(1);expect(candidate.carriers[0]!.interpretationQualified).toBe(false);
  }
 });

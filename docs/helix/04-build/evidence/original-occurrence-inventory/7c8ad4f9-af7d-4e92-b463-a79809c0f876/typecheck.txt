@@ -1,0 +1,4 @@
+tests/catalog-field-shape-correspondence.test.ts(149,61): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'readonly [] | readonly ["integer_width"] | readonly ["length"]' is not assignable to parameter of type 'string[]'.
+      The type 'readonly []' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
