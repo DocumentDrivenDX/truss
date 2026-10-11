@@ -13,9 +13,14 @@ from truss._native_fresh_epoch_capture import NativeFreshEpochCapture,FRESH_EPOC
 folder=Path(config['evidence']);observations=[];threads=[];connections=[]
 def connect(user='postgres'):
  c=Connection(user=user,database='postgres',unix_sock=config['unixSocket'],ssl_context=False,timeout=8);connections.append(c);return c
+def same(expected,observed):
+ if type(expected) is not type(observed):return False
+ if type(expected) in (tuple,list):return len(expected)==len(observed) and all(same(a,b) for a,b in zip(expected,observed))
+ if type(expected) is dict:return expected.keys()==observed.keys() and all(same(expected[k],observed[k]) for k in expected)
+ return expected==observed
 def check(name,expected,observed):
- observations.append({'id':name,'expected':expected,'observed':observed})
- if type(expected) is not type(observed) or expected!=observed:raise AssertionError(name)
+ observations.append({'id':name,'expected':copy.deepcopy(expected),'observed':copy.deepcopy(observed)})
+ if not same(expected,observed):raise AssertionError(name)
 def error_detail(call):
  try:call();return {'code':'unexpected-success','message':''}
  except Exception as error:
@@ -125,7 +130,7 @@ try:
  admin.run("CREATE ROLE fresh_epoch_definer; GRANT USAGE ON SCHEMA truss TO fresh_epoch_definer; GRANT EXECUTE ON FUNCTION truss.runtime_lock_fresh_source_epoch(text,text,text) TO fresh_epoch_definer; CREATE FUNCTION truss.fresh_epoch_definer_probe() RETURNS text LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog AS $$ SELECT cut_scope FROM truss.runtime_lock_fresh_source_epoch('component-test-installation', '"+pending+"', 'component-test-incarnation') $$; ALTER FUNCTION truss.fresh_epoch_definer_probe() OWNER TO fresh_epoch_definer")
  check('definer-invoker-elevation-refuses',{'code':'55000','message':'original invoker fresh epoch boundary required'},error_detail(lambda:admin.run('SELECT truss.fresh_epoch_definer_probe()')))
  # Same installed helper through original operation/ingress/outbound custody.
- for label,lost in [('original-capture',False),('lost-local-reply',True),('maximum-native-evidence',False),('unqualified-self-issue',False),('lost-control-reply',False),('unqualified-native-error',False)]:
+ for label,lost in [('original-capture',False),('lost-local-reply',True),('maximum-native-evidence',False),('unqualified-self-issue',False),('lost-control-reply',False),('unqualified-native-error',False),('known-transport-close',False)]:
   if label=='maximum-native-evidence':
    pending=admin.run("SELECT truss.runtime_issue_source_epoch('component-test-installation',:prior,'component-test-incarnation',pg_catalog.decode(pg_catalog.repeat('01',65536),'hex'),pg_catalog.decode(pg_catalog.repeat('02',1048576),'hex'))",prior=pending)[0][0]
   con=connect();gate=None
@@ -190,6 +195,10 @@ try:
    except NativeBoundaryRefusal as error:capacity_refused=str(error)=='Original acquisition capacity exhausted'
    check(label+':capacity-exact-plus-one-refuses',True,capacity_refused)
    check(label+':capacity-refusal-keeps-original-root',True,tracker._epoch_acquisitions.records is original_records and gate.original_acquisition is acquisition)
+   if label=='known-transport-close':
+    original_generation=tracker._state.generation
+    check(label+':acquisition-live-immediately-before-close',True,acquisition.live() and acquisition.valid)
+    continue
    if label=='lost-control-reply':
     original_simple=boundary._run_simple
     def lose_control(command):original_simple(command);raise MemoryError('Lost original control reply')
@@ -273,7 +282,14 @@ try:
   finally:
    if gate is not None and not gate.detached:con._sock=gate.original_sock
    connections.remove(con);con.close()
- (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'scope':'Original source-epoch SQL projection in owned PostgreSQL16.15, original issuer lineage, native RC/read-write gate, pending issuer drain and transaction-bound row lock. Installer-authored synthetic marker/profile/evidence are not admitted artifacts. Drain/lifetime schedules use materialized administrative pg8000 results. Six separate original NativeCall captures qualify bounded selected ingress/outbound and retained-response custody, including native maximum65536-byte profile/1048576-byte evidence, lost local reply and original acquisition lifecycle tracking; an unqualified self-issuer call invalidates lifecycle state before invocation. The explicit8MiB boundary event journal is component-only and ordinary defaults are unchanged. No authenticated provider, full source/authority/data writer closure, complete protected business execution/final host disclosure, final handback or backend acceptance.'},indent=2)+'\n')
+   if gate is not None and gate.original_acquisition is not None:
+    check(label+':known-original-connection-close-refuses-live',False,gate.original_acquisition.live())
+    if label=='known-transport-close':
+     check(label+':close-keeps-stale-native-generation',True,tracker._state.generation is original_generation and tracker._state.status==b'T' and gate.original_acquisition.valid)
+     successor=writer.run(issue,prior=pending)[0][0]
+     check(label+':closed-original-connection-releases-physical-lock',True,successor!=pending);pending=successor
+ if len({e['id'] for e in observations})!=len(observations) or any(not same(e['expected'],e['observed']) for e in observations):raise AssertionError('Final retained observations differ')
+ (folder/'native.json').write_text(json.dumps({'status':'component-passed','observations':observations,'scope':'Original source-epoch SQL projection in owned PostgreSQL16.15, original issuer lineage, native RC/read-write gate, pending issuer drain and transaction-bound row lock. Installer-authored synthetic marker/profile/evidence are not admitted artifacts. Drain/lifetime schedules use materialized administrative pg8000 results. Seven separate original NativeCall captures qualify bounded selected ingress/outbound and retained-response custody, including native maximum65536-byte profile/1048576-byte evidence, lost local reply and original acquisition lifecycle tracking; an unqualified self-issuer call invalidates lifecycle state before invocation. The explicit8MiB boundary event journal is component-only and ordinary defaults are unchanged. No authenticated provider, full source/authority/data writer closure, complete protected business execution/final host disclosure, final handback or backend acceptance.'},indent=2)+'\n')
  print(json.dumps({'status':'component-passed','observations':len(observations)}))
 except BaseException as e:
  (folder/'native-failure.json').write_text(json.dumps({'status':'failed','observations':observations,'error':str(e)},indent=2)+'\n');raise

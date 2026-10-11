@@ -1,0 +1,119 @@
+{
+  "runId": "c393cc38-778d-4996-846b-3dbf16977d55",
+  "responses": [
+    {
+      "label": "lost-control-reply",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+      "responseSha256": "4aab038f4ba8991d0a20af5cf6befc8ebf0869f8ddf689334d012d5e736a2ff5",
+      "rowJsonSha256": "6957bbd674bacbc822ddd734d0feb9a004b2690298681406cc363cc7d8234fec"
+    },
+    {
+      "label": "lost-local-reply",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "0029c8505bf20f0b280d53da98fc308b0c4557a956c5ff6de5183136a96043f8",
+      "responseSha256": "75c11e805d5ba121f8c3e8d6c3118bbf9c988758a5c9305dda5ed6d38b57dd48",
+      "rowJsonSha256": "4a2c3bf03bf1143c91ab5d4b7c359f562491d59647baf08f33a966f93aa4c067"
+    },
+    {
+      "label": "maximum-native-evidence",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 2228921,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 65536,
+      "evidenceBytes": 1048576,
+      "evidenceSha256": "2fa4430272111c7854b204001461e16f2c73725b07dde2b6d1dc4f2aa8fe18da",
+      "requestSha256": "0a534823c6ac5cc23ebcbc39702477b1a58cb4ffd591ccf8d54875880e61c5df",
+      "responseSha256": "1404df723a366931fa20b0c001248352e9eb1c5cd1349d65fe98001f72775990",
+      "rowJsonSha256": "c6738d8793cae1213e6deffe81e1e6105a30a3245474368140d7447cfdc7874c"
+    },
+    {
+      "label": "original-capture",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "88c7b021c04fee836cd0780b46b81154f23c2c1eeaced5041b296558a0f586fa",
+      "responseSha256": "49f8498b83e3df05aac3fd32bd84edc39102d10497f6a2df81d867959be770e2",
+      "rowJsonSha256": "c9b487ad4acbb1dbe9d21ad9266143ae8a6db49e9181fd8ccde819a46d75a0da"
+    },
+    {
+      "label": "unqualified-native-error",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+      "responseSha256": "5a75a494c98013e70d9928ffc3a1fdf2adb1daf800c2212c12f480620d10f781",
+      "rowJsonSha256": "7b08be09cc639eb0410d3006a84a4101e715c06f62d2a296a7ef047d19565916"
+    },
+    {
+      "label": "unqualified-self-issue",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+      "responseSha256": "a0590260ca3d218e7bb2f1cf2382be1d3919d2912ec0f4bc0399c47e10128781",
+      "rowJsonSha256": "b5ea45fc12e60f121fdfe589978fb4dff9870a6ca8835e7841de56dcae3ceaab"
+    }
+  ]
+}

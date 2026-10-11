@@ -21,6 +21,7 @@ class NativeEpochAcquisition:
     observation: object
     generation: object
     scopes: tuple
+    capture: object=None
     valid: bool=True
     reason: str=''
     scope: str='original_acquisition_lifecycle_only'
@@ -34,6 +35,9 @@ class NativeEpochAcquisition:
                 and b._transaction_tracker is self.owner.tracker and not b._quarantined and not b._calling
                 and state.generation is self.generation and not self.generation.ended
                 and state.status==b'T' and b._connection._transaction_status==b'T'
+                and b._connection._usock is b._original_socket
+                and b._original_socket.fileno()>=0 and not b._original_stream.closed
+                and (b._connection._sock is b._original_stream or b._connection._sock is self.capture)
                 and not self.session.released and not self.session.owner._executor._closed
                 and self.session.context.custody.usable
                 and b._operation is self.session.token and b._operation_ledger is self.session
@@ -69,7 +73,7 @@ class NativeEpochAcquisitions:
                     or gate.failed or gate.response_stage!=4 or gate.detached):
                 raise NativeBoundaryRefusal('Original complete acquisition custody required')
             session._check_call(b,session.token)
-            record=NativeEpochAcquisition(self,session,observation,state.generation,state.savepoints)
+            record=NativeEpochAcquisition(self,session,observation,state.generation,state.savepoints,capture=gate)
             self.records=(*self.records,record);gate.original_acquisition=record
             return record
     def before(self,control):

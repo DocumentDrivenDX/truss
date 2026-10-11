@@ -1,0 +1,273 @@
+{
+  "status": "qualified-audit-with-listed-limitations",
+  "runId": "c393cc38-778d-4996-846b-3dbf16977d55",
+  "observations": 267,
+  "uniqueTypeSensitiveMatches": false,
+  "observationMismatches": [
+    {
+      "id": "unqualified-self-issue:invalidated-before-native-invocation",
+      "expected": [
+        false
+      ],
+      "observed": [
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "unqualified-native-error:invalidated-before-failed-native-call",
+      "expected": [
+        false
+      ],
+      "observed": [
+        false,
+        false
+      ]
+    }
+  ],
+  "sourcePins": 137,
+  "exactDuplicateFreeArchive": true,
+  "currentSourceMismatches": [
+    "/private/tmp/truss-security-main-integration/packages/python/src/truss/_native_epoch_acquisitions.py",
+    "/private/tmp/truss-security-main-integration/scripts/python-fresh-epoch-worker.py"
+  ],
+  "same137PinsAsPremergeB46": true,
+  "nativeBinaryDigests": 1614,
+  "currentBinaryMatches": true,
+  "moduleBoundaryImports": 482,
+  "hostTests": 16,
+  "existingNativeRegressionTests": 28,
+  "testSuites": {
+    "host": {
+      "count": 16,
+      "exactCapturedTestInventory": [
+        "test_native_epoch_acquisitions.AcquisitionTests.test_capacity_selection_is_exact_and_bounded",
+        "test_native_epoch_acquisitions.AcquisitionTests.test_generation_transition_and_unknown_target_close",
+        "test_native_epoch_acquisitions.AcquisitionTests.test_original_expected_state_is_required",
+        "test_native_epoch_acquisitions.AcquisitionTests.test_release_reparents_then_rollback_parent_invalidates",
+        "test_native_epoch_acquisitions.AcquisitionTests.test_rollback_later_preserves_but_recreation_cannot_revive",
+        "test_native_epoch_acquisitions.AcquisitionTests.test_unknown_or_failed_completion_closes_without_claiming_release",
+        "test_native_epoch_acquisitions.AcquisitionTests.test_unqualified_call_invalidates_before_effect_and_never_rewinds",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_bounded_lossless_sql_literal",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_comparison_scope_and_closed_tuple",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_default_profiles_unchanged",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_descriptor_order_types_and_count",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_exact_hex_and_evidence_digest",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_native_identity_bounds",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_prefix_wrong_completion_and_idle_refuse",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_singleton_active_response",
+        "test_native_fresh_epoch_capture.NativeFreshEpochTests.test_valid_and_forged_shapes_are_not_authority"
+      ],
+      "logSha256": "5b2df1da54caa41014acef1118ec03efecf7665257bc74a1c9d05da819b78dc5",
+      "allPassedNoSkips": true
+    },
+    "regression": {
+      "count": 28,
+      "exactCapturedTestInventory": [
+        "test_native_pg8000.NativeBoundaryTests.test_attach_requires_idle_and_single_original_owner",
+        "test_native_pg8000.NativeBoundaryTests.test_capture_overflow_is_retained_incomplete_and_quarantined",
+        "test_native_pg8000.NativeBoundaryTests.test_close_vs_run_cannot_submit_after_native_close",
+        "test_native_pg8000.NativeBoundaryTests.test_closed_prepared_validation_is_inside_call_admission",
+        "test_native_pg8000.NativeBoundaryTests.test_competing_call_refuses_before_original_driver_invocation",
+        "test_native_pg8000.NativeBoundaryTests.test_extended_call_keeps_all_ready_cycles",
+        "test_native_pg8000.NativeBoundaryTests.test_missing_completion_keeps_original_operation_quarantined",
+        "test_native_pg8000.NativeBoundaryTests.test_original_error_and_rollback_survive_driver_exception",
+        "test_native_pg8000.NativeBoundaryTests.test_prepared_and_host_calls_share_operation_guard",
+        "test_native_pg8000.NativeBoundaryTests.test_raw_alias_events_quarantine_without_claiming_pre_effect_refusal",
+        "test_native_pg8000.NativeBoundaryTests.test_transport_loss_after_prior_ready_is_not_settled",
+        "test_native_pg8000.NativeBoundaryTests.test_unregistered_call_permit_refuses_before_submission",
+        "test_native_pg8000.ReservedCallDispatchTests.test_foreign_ledger_callbacks_cannot_supply_permits",
+        "test_native_transactions.NativeTransactionTests.test_actual_observation_cannot_resolve_host_shadow_functions",
+        "test_native_transactions.NativeTransactionTests.test_actual_profile_nonallocating_xid_and_scope",
+        "test_native_transactions.NativeTransactionTests.test_confirmed_end_allows_new_adoption_preserving_original_custody",
+        "test_native_transactions.NativeTransactionTests.test_deferred_commit_error_ends_original_generation",
+        "test_native_transactions.NativeTransactionTests.test_ended_port_cannot_be_readopted_as_new_generation",
+        "test_native_transactions.NativeTransactionTests.test_failed_commit_records_actual_rollback_and_retires_generation",
+        "test_native_transactions.NativeTransactionTests.test_host_release_invalidates_executor_savepoint_before_control",
+        "test_native_transactions.NativeTransactionTests.test_host_shadowing_cannot_redirect_original_executor_handle",
+        "test_native_transactions.NativeTransactionTests.test_identifier_and_capacity_refuse_before_submission",
+        "test_native_transactions.NativeTransactionTests.test_monotone_epoch_exhaustion_refuses_before_native_control",
+        "test_native_transactions.NativeTransactionTests.test_original_control_survives_post_native_publication_failure",
+        "test_native_transactions.NativeTransactionTests.test_real_private_executor_adoption_and_failed_savepoint_cleanup",
+        "test_native_transactions.NativeTransactionTests.test_repeated_begin_and_chained_end_generations",
+        "test_native_transactions.NativeTransactionTests.test_shadowing_rollback_and_release_use_original_stack",
+        "test_native_transactions.NativeTransactionTests.test_unasserted_multistatement_lifecycle_quarantines_after_effects"
+      ],
+      "logSha256": "53c3a72d39cf084db3e42cf37de556b3b316d2426908b925b780d8c08142c377",
+      "allPassedNoSkips": true
+    }
+  },
+  "originalProjection": [
+    "component-test-installation",
+    "e04c37b1-4716-44e1-8f00-0bbcef123cb7",
+    "component-test-incarnation",
+    "01",
+    "0203",
+    "ee9040f65c341855e070ff438eb0ea9d5b831b2a2c270fb7ef592d750408e3b3",
+    "742",
+    "5",
+    "26386",
+    "postgres",
+    "postgres",
+    "transaction_source_epoch_lock_only"
+  ],
+  "cleanup": {
+    "attempted": true,
+    "stopExitCode": 0,
+    "statusExitCode": 3,
+    "socketAbsent": true
+  },
+  "ownedUnixSocketAbsent": true,
+  "privateNativeArtifactPermissions": true,
+  "rawReconstruction": [
+    {
+      "label": "lost-control-reply",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+      "responseSha256": "4aab038f4ba8991d0a20af5cf6befc8ebf0869f8ddf689334d012d5e736a2ff5",
+      "rowJsonSha256": "6957bbd674bacbc822ddd734d0feb9a004b2690298681406cc363cc7d8234fec"
+    },
+    {
+      "label": "lost-local-reply",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "0029c8505bf20f0b280d53da98fc308b0c4557a956c5ff6de5183136a96043f8",
+      "responseSha256": "75c11e805d5ba121f8c3e8d6c3118bbf9c988758a5c9305dda5ed6d38b57dd48",
+      "rowJsonSha256": "4a2c3bf03bf1143c91ab5d4b7c359f562491d59647baf08f33a966f93aa4c067"
+    },
+    {
+      "label": "maximum-native-evidence",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 2228921,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 65536,
+      "evidenceBytes": 1048576,
+      "evidenceSha256": "2fa4430272111c7854b204001461e16f2c73725b07dde2b6d1dc4f2aa8fe18da",
+      "requestSha256": "0a534823c6ac5cc23ebcbc39702477b1a58cb4ffd591ccf8d54875880e61c5df",
+      "responseSha256": "1404df723a366931fa20b0c001248352e9eb1c5cd1349d65fe98001f72775990",
+      "rowJsonSha256": "c6738d8793cae1213e6deffe81e1e6105a30a3245474368140d7447cfdc7874c"
+    },
+    {
+      "label": "original-capture",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "88c7b021c04fee836cd0780b46b81154f23c2c1eeaced5041b296558a0f586fa",
+      "responseSha256": "49f8498b83e3df05aac3fd32bd84edc39102d10497f6a2df81d867959be770e2",
+      "rowJsonSha256": "c9b487ad4acbb1dbe9d21ad9266143ae8a6db49e9181fd8ccde819a46d75a0da"
+    },
+    {
+      "label": "unqualified-native-error",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+      "responseSha256": "5a75a494c98013e70d9928ffc3a1fdf2adb1daf800c2212c12f480620d10f781",
+      "rowJsonSha256": "7b08be09cc639eb0410d3006a84a4101e715c06f62d2a296a7ef047d19565916"
+    },
+    {
+      "label": "unqualified-self-issue",
+      "originalRequestBytes": 416,
+      "originalResponseBytes": 703,
+      "originalResponseFrameCodes": [
+        "T",
+        "D",
+        "C",
+        "Z"
+      ],
+      "completeRawResponseRetained": true,
+      "rawRowMatchesRetainedDecodedRow": true,
+      "profileBytes": 1,
+      "evidenceBytes": 2,
+      "evidenceSha256": "2fa1b377bf67309f65e5e7bc9d924345ca648dec4e601a398a9cb497dcba3765",
+      "requestSha256": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+      "responseSha256": "a0590260ca3d218e7bb2f1cf2382be1d3919d2912ec0f4bc0399c47e10128781",
+      "rowJsonSha256": "b5ea45fc12e60f121fdfe589978fb4dff9870a6ca8835e7841de56dcae3ceaab"
+    }
+  ],
+  "completeRawResponses": true,
+  "artifactSha256": {
+    "original-capture.response.bin": "49f8498b83e3df05aac3fd32bd84edc39102d10497f6a2df81d867959be770e2",
+    "lost-control-reply.request.bin": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+    "lost-control-reply.response.bin": "4aab038f4ba8991d0a20af5cf6befc8ebf0869f8ddf689334d012d5e736a2ff5",
+    "native.stdout.log": "50553364615f85b30355af1af7e999e646578c0b33d8d2612ac50bc932176ba9",
+    "maximum-native-evidence.request.bin": "0a534823c6ac5cc23ebcbc39702477b1a58cb4ffd591ccf8d54875880e61c5df",
+    "unqualified-native-error.row.json": "7b08be09cc639eb0410d3006a84a4101e715c06f62d2a296a7ef047d19565916",
+    "maximum-native-evidence.response.bin": "1404df723a366931fa20b0c001248352e9eb1c5cd1349d65fe98001f72775990",
+    "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "host.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "boundaries.stdout.log": "31f282ae51d09172b24012f4421ca902aefc005ca8de34744414db4f7014b8cb",
+    "original-capture.row.json": "c9b487ad4acbb1dbe9d21ad9266143ae8a6db49e9181fd8ccde819a46d75a0da",
+    "unqualified-self-issue.row.json": "b5ea45fc12e60f121fdfe589978fb4dff9870a6ca8835e7841de56dcae3ceaab",
+    "maximum-native-evidence.row.json": "c6738d8793cae1213e6deffe81e1e6105a30a3245474368140d7447cfdc7874c",
+    "native.json": "aaef3409598d58285c90b51158f84410f2e61c2eabe00f290aaf45e0ec00b809",
+    "unqualified-self-issue.request.bin": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+    "unqualified-native-error.response.bin": "5a75a494c98013e70d9928ffc3a1fdf2adb1daf800c2212c12f480620d10f781",
+    "regression.stderr.log": "53c3a72d39cf084db3e42cf37de556b3b316d2426908b925b780d8c08142c377",
+    "native.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lost-local-reply.request.bin": "0029c8505bf20f0b280d53da98fc308b0c4557a956c5ff6de5183136a96043f8",
+    "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "unqualified-native-error.request.bin": "8837295a256a75ec145bfdbd72ca6be844725fbe07ff392a7d5365ae8d8722ed",
+    "lost-local-reply.response.bin": "75c11e805d5ba121f8c3e8d6c3118bbf9c988758a5c9305dda5ed6d38b57dd48",
+    "sources.zip": "b1f0946408e359c63291d9cf00a189c2c9b0c355f07f3d7e43d4e565f4e89116",
+    "host.stderr.log": "5b2df1da54caa41014acef1118ec03efecf7665257bc74a1c9d05da819b78dc5",
+    "server.log": "cbd6cf63cfcd3053b119dfd81437a7aec3c655ebf089b5ae824e34a2c5f8a8bd",
+    "unqualified-self-issue.response.bin": "a0590260ca3d218e7bb2f1cf2382be1d3919d2912ec0f4bc0399c47e10128781",
+    "lost-control-reply.row.json": "6957bbd674bacbc822ddd734d0feb9a004b2690298681406cc363cc7d8234fec",
+    "original-capture.request.bin": "88c7b021c04fee836cd0780b46b81154f23c2c1eeaced5041b296558a0f586fa",
+    "receipt.json": "f717ab450162e874a0392fa866fb6e517d7d96efd32320246da24aa9ae0c4911",
+    "lost-local-reply.row.json": "4a2c3bf03bf1143c91ab5d4b7c359f562491d59647baf08f33a966f93aa4c067"
+  },
+  "qualification": "Private RC/read-write epoch projection, original response custody and tracked lifecycle on owned PostgreSQL16.15. live() is an instantaneous Boolean, not a held-lock/use capability; no complete source/authority cut, atomic protected use/final disclosure or backend acceptance. Capacity control proves selected guard refusal/unchanged root only, not otherwise-valid second-acquisition necessity. Raw reconstruction covers all six original acquisition responses, not the subsequent native control calls."
+}
