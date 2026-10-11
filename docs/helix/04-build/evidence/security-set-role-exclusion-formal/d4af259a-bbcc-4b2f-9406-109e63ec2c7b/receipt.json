@@ -1,0 +1,57 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-set-role-exclusion.py": "32a328c4aad6660e58f90313f386393f6811f6864ea2787490371922494221fd",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "9bb83f856d783849746956f15f50eb686bd74824388add2be15c398f51264b40",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "64b722703c450287ad118a107e23c259e0a8e5148ae8e60da2a5fc6c9e0df5de"
+  },
+  "queries": [
+    {
+      "id": "no_inheritance_does_not_imply_no_set_reachability",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "edcd7c1091593e53c8ddf143dc8ef3921520fd14cb706b38a17e6ab5c9d79c19",
+      "model": "[original_set_reachable = K(Int, True),\n original_inherited = K(Int, False)]"
+    },
+    {
+      "id": "safe_session_can_have_unsafe_assumable_role",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "41961718afb509f5a2f16d64b469f02e2a7f8c68e84849f9caf9310e03b4d063",
+      "model": "[original_selected_unsafe_role = Store(K(Int, False),\n                                       3,\n                                       True),\n original_set_reachable = K(Int, True),\n candidate_role = 3,\n original_inherited = K(Int, False),\n session = 2]"
+    },
+    {
+      "id": "complete_reachable_exclusion_prevents_selected_unsafe_role",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "5e0c6d63a55a6412722ad9308e8e6829a31a447fe99de6553eddb3ae016a5883",
+      "model": null
+    },
+    {
+      "id": "later_membership_change_can_invalidate_snapshot",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "8207772f59143653ed92ff0172178b43c6328f30462b49f6dbf7776b7b86d691",
+      "model": "[original_selected_unsafe_role = Store(K(Int, True),\n                                       1,\n                                       False),\n original_set_reachable = Store(K(Int, False), 1, True),\n later_set_reachable = K(Int, True),\n k!9 = [1 -> False, else -> True],\n k!10 = [1 -> True, else -> False],\n Ext = [(as-array, as-array) -> 1, else -> 0]]"
+    },
+    {
+      "id": "stable_reachability_preserves_selected_exclusion",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "b44cede14286843f802b4236e60b214ba7114034cef1722df8d67da6f0f0cf2a",
+      "model": null
+    }
+  ],
+  "scope": "Unbounded role identities and abstract original SET/inheritance reachability predicates. Inheritance and SET are distinct; excluding selected unsafe roles over complete SET reachability prevents the modeled bypass. Later membership changes have countermodels; stable reachability preserves the exclusion.",
+  "limitations": [
+    "No PostgreSQL pg_has_role SET/transitive-closure or SQL/Python refinement proof",
+    "Role/ACL lifetime, complete privileged-role/routine inventory and qualified-definer profiles remain unqualified",
+    "No authenticated caller/issuer, full authority admission or protected final release proof"
+  ]
+}

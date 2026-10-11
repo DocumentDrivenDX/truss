@@ -1,0 +1,57 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-definer-exclusion.py": "28f82ff688c20f64e84851d59a43a51d574f197981f31e9e1c3b89d31ce7ffb8",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "05a367832bf70bdfc85089430b07e78d563790a55613528327b77e3550b793ea",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "ed50dc8b317fa41be9434cc8fc976ca3108793f981d3da7a5cccb8bd4d6135f1"
+  },
+  "queries": [
+    {
+      "id": "strong_snapshot_excludes_session_definer",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "29803f1fac46f1ce183d5982e9df01be44cd74e19bef56bf33a0297824575402",
+      "model": null
+    },
+    {
+      "id": "strong_snapshot_excludes_effective_definer",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "ce71733679d240f8cdc0971dd8b76282638248edcc2ce1bc530af36c466b582e",
+      "model": null
+    },
+    {
+      "id": "weak_role_snapshot_permits_definer_path",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "131daf29ae8902551693f40403a0f93ee14d0c4226f4158ef9c7dd25557193f0",
+      "model": "[reachable_privileged_definer = K(Int, True),\n original_superuser = K(Int, False),\n original_effective_role = 3,\n original_createrole = K(Int, False),\n original_session_role = 2,\n original_owner_membership = K(Int, False),\n original_bypassrls = K(Int, False)]"
+    },
+    {
+      "id": "later_acl_change_can_invalidate_definer_exclusion",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "1c4f9fcf88bcfa98fa0548da925489fe868a58500655353fb6e7330224819178",
+      "model": "[original_superuser = K(Int, False),\n original_effective_role = 3,\n original_createrole = K(Int, False),\n reachable_privileged_definer = K(Int, False),\n original_owner_membership = K(Int, False),\n original_session_role = 2,\n later_reachable_privileged_definer = K(Int, True),\n original_bypassrls = K(Int, False)]"
+    },
+    {
+      "id": "stable_reachability_preserves_selected_exclusion",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "72af541c76ddebdb948b145feadd7fe28727f8d97e0ba0cdec982938037eae47",
+      "model": null
+    }
+  ],
+  "scope": "Unbounded role identities with abstract original native role and EXECUTE reachability predicates. Both session and effective identities must lack reachable definers under this selected invoker-only profile. Weaker role-only admission and later ACL reachability changes have countermodels; stable reachability preserves the selected exclusion.",
+  "limitations": [
+    "No PostgreSQL has_function_privilege or complete call-graph/catalog/SQL/Python refinement proof",
+    "ACL/role/source lifetime, invoker-to-privileged transitions and qualified-definer profiles remain unqualified",
+    "No authenticated caller/issuer, full authority admission or protected final release proof"
+  ]
+}

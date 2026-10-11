@@ -1,0 +1,57 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-shared-authority-writer.py": "b6c1d8ab826808c53bf5855cbf6bb4d8299a72c4b8759a00feae1071f4007fbc",
+    "packages/postgresql/native/source-epoch-shared-authority-writer.sql": "8bebd869a02cd5c778ed01d0bce23270c104ea9e051110fafc6ed8882e4a1de2",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "747fb34199cc96b8255a625d7fff372442784aa082f6da138499a321cb34e63b"
+  },
+  "queries": [
+    {
+      "id": "participating_external_writer_cannot_change_role_inside_reader",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "4b92fd647d0a92a0f114c49fb3d7ff4eb834a24d67e67cd8d5fdcfb5fab5b09f",
+      "model": null
+    },
+    {
+      "id": "uncoordinated_role_effect_can_overlap_retained_reader",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "33a656640436aa7c057ce7af50772826694f45d6e3400f96706584bbe340e7c6",
+      "model": "[reader_start = 0,\n writer_end = 2,\n writer_start = 1,\n reader_end = 1,\n role_effect = 0]"
+    },
+    {
+      "id": "pending_participant_excludes_new_reader",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "01997483645023bd129a491f09d7c4a42062f94ea2af91b25ab67348cc409177",
+      "model": null
+    },
+    {
+      "id": "same_backend_guard_refuses_writer_upgrade",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "bd25ece53e5aed5789231be002d0c1fd7c4dcdee52a0bd0bd34c1c0e6b3a907e",
+      "model": null
+    },
+    {
+      "id": "omitted_same_backend_guard_permits_upgrade",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "3edbfcdadb16225aae7bf7cbfc3c720cd8602c0a4f4d3e0c2686049fdaa5ffde",
+      "model": "[writer_admitted = True,\n same_backend_retained_reader = True]"
+    }
+  ],
+  "scope": "Unbounded real-time half-open reader/writer intervals under faithful external native exclusion and role effects confined to a participating writer interval. Such effects cannot overlap a reader, and pending writers exclude admission. Same-backend participation separately refuses upgrade; omitted participation or upgrade guards have countermodels.",
+  "limitations": [
+    "No native lock/catalog/SQL or role-change interception refinement proof",
+    "Participation is a premise, not proof all administrators comply; no cluster-wide/multi-database coordination or epoch transition",
+    "No authenticated caller/issuer, original writer installation/ACL closure, full authority admission or protected final release proof"
+  ]
+}

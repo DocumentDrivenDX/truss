@@ -1,0 +1,9 @@
+{
+  "ownerCommit": "fc6265c7591fcfa3cc553e73f0cde8ec60fdde77",
+  "producer": "securityIdentityTransportDependencies",
+  "policySha256": "11bcba30d9f049f6dba1a061e590b8a3aa157db8a608ad71656dff69cae5d030",
+  "resolutionSha256": "de2fd0e79da6d2220619f0256d8038e3b115b8d3e4ba8509ded77332bbb52d5c",
+  "requirementsSha256": "ac2fffeec144f7d7c9324ff692a9c42f048e6ea634d4c498a790942d8536aefe",
+  "transportSha256": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+  "scope": "Original security0.1/core0.8 fixture identity/endpoint closure. Not authenticated issuer or physical mapping qualification."
+}

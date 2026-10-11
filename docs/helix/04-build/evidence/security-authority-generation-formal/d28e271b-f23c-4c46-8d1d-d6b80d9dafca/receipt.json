@@ -1,0 +1,58 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-authority-generation.py": "338987178d887a34b56d246b059c7455a094ef35c974ce9f547fc92ddeb4bc78",
+    "packages/postgresql/native/source-epoch-authority-issue.sql": "8cdcee9884213209023e7a7a7dc7bcca27442b94890fdd71ec9848e7b54680e9",
+    "packages/postgresql/native/source-epoch-authority-reason-storage.sql": "aa0c81c69fe07a0fb65dd2f5b27fc8609b169dd68b912fc2c05f653972e0e11e",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "91db16c1d30c1c1a77a4cdd04ab1aaacb1eaf6a82c8ffad33d77836b03b20b8d"
+  },
+  "queries": [
+    {
+      "id": "committed_successor_excludes_old_generation",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "19f2c848dbac5bda04e1654dede86d2d760653a2ace2ab8e7c2be08bbe1d7580",
+      "model": null
+    },
+    {
+      "id": "aborted_atomic_update_preserves_both_original_states",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "db2f7726c1adc38212fa9fbf1fe8574a8ac31d7869c446d54ba02a51c39f7204",
+      "model": null
+    },
+    {
+      "id": "split_transactions_can_publish_role_without_generation",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "70e78ddb77cee4a6727ccec4860debad2bd478daf17a7314220c81cf0c07595d",
+      "model": "[old_generation = \"!0!\",\n old_role_state = 1,\n new_generation = \"!1!\",\n new_role_state = 0,\n separate_generation_commit = False,\n separate_role_commit = True]"
+    },
+    {
+      "id": "omitted_fresh_generation_comparison_accepts_stale_capture",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "2601b44b00770a88516feb95b49ae436d79878d0f9027ce2c921f839054381b0",
+      "model": "[old_generation = \"\",\n new_generation = \"A\",\n whole_transaction_committed = True]"
+    },
+    {
+      "id": "authority_issuer_cannot_change_target_incarnation",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "487bfa359cc7b307455b437d0a87fecdf15b4ca1ec58c362ff90ed19aa536eee",
+      "model": null
+    }
+  ],
+  "scope": "Unbounded role states and generation/incarnation strings under an atomic transaction visibility projection and distinct successor generation. Commit excludes old generation; abort preserves both states. Split commits and omitted fresh comparison have countermodels. Selected authority issuance preserves the target incarnation.",
+  "limitations": [
+    "No PostgreSQL transaction/catalog/SQL/UUID issuer refinement proof",
+    "Atomicity, successor distinctness and fresh comparison are premises; no automatic administration interception or cluster-wide coordination",
+    "No authenticated caller/issuer, original writer installation/ACL closure, full authority admission or protected final release proof"
+  ]
+}

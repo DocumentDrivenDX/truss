@@ -2294,3 +2294,163 @@ This adds installed metadata correspondence to the optional selected tag profile
 it does not qualify language-handler dependencies, event-trigger administration
 exclusion, all-role ACL closure or lifetime stability. Ordinary plain fact capture
 does not implicitly claim or select this stronger profile.
+
+
+### Selected session/effective-role administration exclusion — 2026-10-11
+
+The private unprivileged DDL cut composes original installed barrier readback
+with a native session_user/current_user role snapshot before callback. Both roles
+MUST lack superuser, CREATEROLE and BYPASSRLS attributes and MEMBER reachability
+to the selected original barrier owner. Missing or incompatible original role
+metadata refuses without callback. Native role identities are observed in the
+original host scope, not supplied through comparison strings.
+
+This selected exclusion is a prerequisite, not authenticated caller authority or
+a full role/grant/source lifetime cut. Reachable SECURITY DEFINER routines and
+concurrent shared-role/config/ACL changes remain independent obligations; a
+matching role snapshot cannot qualify their absence. Fixture-wide grants are
+synthetic setup, not a production least-privilege inventory.
+
+
+### Selected direct-EXECUTE invoker-only snapshot — 2026-10-11
+
+A private invoker-only DDL cut composes installed barriers and both-role exclusion
+with native `has_function_privilege` observation over all SECURITY DEFINER routines
+for the original session and effective identities. Any reachable definer refuses
+before callback. Do not discard candidates solely for missing current schema
+USAGE: previously resolved routine identities require conservative inventory.
+The existence probe returns at most one bounded native OID and cannot silently
+accept a truncated inventory.
+
+This is an explicitly selected direct-EXECUTE snapshot subset. Profiles permitting
+qualified definers require their own exact reachable-routine/ACL/dependency
+inventory, not this exclusion. SET ROLE transitions, invoker-to-privileged paths,
+concurrent ACL/role changes, complete call closure and final release remain
+unqualified. No comparison or result confers authenticated authority.
+
+
+### Selected SET-reachable role snapshot — 2026-10-11
+
+The private stronger invoker-only cut composes prior installed barrier, direct-role
+and direct-EXECUTE snapshots with native `pg_has_role(...,'SET')` reachability
+for both session and effective identities. Refuse when any SET-reachable role has
+superuser/CREATEROLE/BYPASSRLS, is the selected barrier owner, or has EXECUTE on a
+SECURITY DEFINER routine. A fixed native existence probe returns at most one OID;
+incomplete caller lists cannot establish absence. Native SET reachability MUST
+remain distinct from MEMBER and inherited USAGE privileges.
+
+This covers selected role attributes and definer reachability, not every
+privileged predefined/user-defined capability or original routine/ACL inventory.
+Concurrent membership/role/ACL changes and their lifetime coordination remain
+required; this snapshot supplies no authenticated final-release authority.
+
+
+### Explicit shared-authority writer participant — 2026-10-11
+
+Private PostgreSQL16.15 `runtime_fence_shared_authority_writer()` returns void,
+is invoker/volatile with fixed pg_catalog/pg_temp search_path and revoked PUBLIC
+EXECUTE. A participating administrator MUST invoke it before selected shared-role
+or ACL mutation in the same transaction. It refuses original-operation reuse and
+a retained same-backend epoch SHARE reader with55000; otherwise acquires both
+epoch relations ROW EXCLUSIVE NOWAIT before the original installation marker
+FOR UPDATE NOWAIT, retained until transaction settlement. Pending incompatible
+readers/writers refuse55P03 without internal retries. Missing marker refuses55000.
+
+This is explicit database-local participation, not automatic interception of
+ALTER ROLE/GRANT/REVOKE, cluster-wide/multi-database exclusion or an epoch
+transition/acknowledgment API. Original helper/body/owner/ACL custody and complete
+administrative-path exclusions remain required. Calling this helper alone cannot
+qualify shared authority lifetime or a new accepted source generation.
+
+
+### Selected authority-change generation adjunct — 2026-10-11
+
+A private PostgreSQL16.15 base0.16 adjunct extends the registry reason checks with
+`authority-change`, preserving initial/restore rules and requiring a nonnull
+predecessor for authority changes. Before altering checks it independently requires
+exact original native constraint names/definitions. UMF imports the adjunct SQL
+and exports its saved document exactly; the core0.16 layout remains unchanged.
+
+Private invoker-only `runtime_issue_authority_epoch(installation, predecessor,
+incarnation, profile, evidence)` acquires explicit shared-authority writer
+participation, requires the existing original predecessor and preserves the
+predecessor's target incarnation before native UUID/registry/pointer effects.
+The selected administrator role/ACL mutation and generation issuance MUST share
+one transaction. Missing/stale predecessor or changed incarnation refuses55000;
+transaction rollback removes role, successor registry and pointer effects. A
+committed successor invalidates old-generation reads through fresh native
+comparison. Inputs remain original comparison/evidence carriers, not credentials.
+
+The adjunct is a private storage/issuer candidate, not a shipped migration,
+qualified lifecycle producer, full current-authority admission or cluster-wide
+administration coordinator. Installed helper/issuer/ACL custody, meaningful
+profile/evidence construction, commit uncertainty and protected final release
+remain independent requirements.
+
+
+### Installed authority writer/issuer correspondence — 2026-10-11
+
+Private source verification now composes original epoch/DDL barrier readback with
+exact installed shared-authority writer and authority issuer OIDs, owners, names,
+plpgsql language, ordinary function kind, argument/return shapes, scalar return,
+non-STRICT/invoker/volatile flags, exact search_path/body and absent PUBLIC EXECUTE
+before callback. Comparisons are bounded original fixture metadata, not credentials.
+Four native controls pass: exact installed source pair; actual PUBLIC EXECUTE drift
+refuses; SECURITY DEFINER drift refuses; STRICT drift demonstrably returns NULL
+without null-predecessor validation, while the stronger source check refuses.
+
+Final `evidence/python-psycopg-epoch-cut/4a75f4b6-57c0-472a-adf8-f7ddf050f746`
+passes138 methods (87 fact/dependency/identity/visibility/DDL/role/issuer,16 graph,
+nine epoch,26 adoption), module boundaries,138 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three stop0/status3/socket-absent
+cleanups. Earlier16944e98 passes137 methods under its earlier source tuple.
+Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10 source-correspondence
+prerequisites only. No new formal refinement or backend acceptance binding.
+Complete language-handler/dependency and all-role ACL/lifetime closure, original
+issuer credentials, qualified profile/evidence production, ordinary caller/mapping
+and protected final release remain open. Last full checkpoint26/132,106 missing;
+goal active. Next compose qualified lifecycle producer and original profile sources
+with this source verification; installed comparison alone is not authority.
+
+
+### Original policy/resolution source-bound profile — 2026-10-11
+
+Private `truss-flat-fact-provider-fixture/0.2` retains policyUtf8/resolutionUtf8
+strings alongside the original requirement digest and provider declarations.
+Fixed capture requires a bounded original source bundle, snapshots its immutable
+bytes before validation, checks owner-artifact source-digest correspondence and
+exact native-profile inline UTF8 byte correspondence before host invocation.
+Original native epoch comparison still requires the same complete installed profile
+bytes; replacing all caller-side source/requirement/profile copies cannot match it.
+Semantic interpretation remains UMF-owned. Legacy0.1 remains its separately scoped
+subset and is not silently upgraded to exact inline-source correspondence.
+
+Five native methods prove original identity-cell capture, missing source-bundle
+refusal before xid assignment, policy/resolution byte-change refusals before xid,
+whole caller-copy replacement refused by actual retained native generation, and
+private snapshot stability despite later caller-carrier mutation. Source-artifact
+validation lives in the original artifact module, not native provider code.
+Final `evidence/python-psycopg-epoch-cut/d0767fa6-5104-4968-b8a2-21a352b3ba99`
+passes143 methods (92 fact/dependency/identity/visibility/DDL/role/source,16 graph,
+nine epoch,26 adoption), module boundaries,138 current/archived Truss pins,363
+original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Initial5d33494a passed142 native methods but
+correctly failed its module boundary for a misplaced hashing import; it remains
+nonqualifying evidence.
+
+Formal `evidence/security-source-profile-formal/b94c4652-0014-4ee8-913a-41d0fb5f2a5f`
+passes five fresh-context queries (three UNSAT/two SAT) with four exact source
+preimages. Under faithful original/selected/native byte correspondence, source
+substitution is excluded. Abstract finite-width digest equality alone and
+self-consistent replaced manifests without retained native comparison have
+countermodels; no hash injectivity assumed. Earlier123e8acb retains its simpler
+self-agreement counter and original source tuple. No UTF8/JSON/Python/PostgreSQL,
+epoch projection or SHA256 implementation refinement theorem.
+
+Trace CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 provenance prerequisites.
+Source bytes/digests remain comparison premises, not authenticated issuer identity
+or physical mapping meaning. Qualified producer/caller authority, original mapping
+and decoder construction, complete source/role/ACL lifetime and protected final
+release remain open. No backend acceptance binding or public support flag promoted;
+last full checkpoint26/132 with106 missing. Goal active. Next bind original semantic
+and physical profile construction to qualified issuer custody and protected release.
