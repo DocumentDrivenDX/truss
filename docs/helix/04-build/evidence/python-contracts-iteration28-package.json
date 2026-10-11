@@ -296,5 +296,14 @@
   },
   "sourceReview": "Astra Ultra approved final source and plan",
   "artifactReview": "Astra Ultra approved final artifacts; independently verified79 packaged files13bridge pins and2final regressions in4.096s",
-  "nativeReportSqlSha256": "d141f68c7a432f10f2bfc910bfd47ca3860cb6b3d30735aab39de13c3e12e352"
+  "nativeReportSqlSha256": "d141f68c7a432f10f2bfc910bfd47ca3860cb6b3d30735aab39de13c3e12e352",
+  "subsequentSecurityIntegration": {
+    "commits": [
+      "f1a6a453",
+      "906d5882"
+    ],
+    "scope": "Separate affected security regression and additive module boundary conflict resolution after final wheel snapshot",
+    "logSha256": "eb2f91b2f4a3665eb49b5ce093c1dbd0f2dea6a562d693b07d6a2cd709bb8cbc",
+    "securitySourceSha256": "2652e851820216205bb526ad8921109ddbbd8153fbea1338d7822d13ae400044"
+  }
 }
