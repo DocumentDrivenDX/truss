@@ -1,0 +1,34 @@
+{
+  "scope": "Native admitted catalog staging core extraction toward atomic acceptance; not accepted report, protected ordinary role, installation or public API",
+  "nativeTests": {
+    "existingAndNew": 18,
+    "passed": 18,
+    "elapsedSeconds": 25.453,
+    "additionalFinalSentinelTestPassed": true,
+    "additionalElapsedSeconds": 4.478,
+    "runtime": "Private corrected pgserver PostgreSQL16.15 / pg8000 1.31.5"
+  },
+  "checks": [
+    "Existing issued entry retains preflight before prestate capture and one base admission",
+    "Shared core verifies actual transaction ordinal sole unfinished operation original artifacts context prestate phase generation",
+    "Context0.2 complete native collector and fresh prestate verified before catalog effects",
+    "Substituted artifacts produce no first insertion: rollback-resistant sequence remains uncalled; valid call advances it",
+    "Malformed input sentinel proves prestate capture is not reached",
+    "Used core refuses; prior host work survives contained failures"
+  ],
+  "sourceSha256": {
+    "packages/postgresql/native/catalog-stage-issued.sql": "b9f35e8afed0bf502b305584a06c10c39dd4102aaab4b1f2db5338127da72d54",
+    "packages/python/tests/test_catalog_stage_issued.py": "4180c8382f2243337acd0e3bd2a23761b8a782478e6627aa3f871af6d33b557f",
+    "packages/postgresql/native/catalog-original-context.sql": "628db25db14d5bd7c979f16b2ddefcff3e41781747e75485fc1253515b55fd0d",
+    "packages/postgresql/native/catalog-epoch-context.sql": "edb2a0a8ab10fa1b2d392498fd4b23092a8aed05fc15b7b2c11df1d5789323e9",
+    "packages/postgresql/native/catalog-new-prestate-parity.sql": "e74da931690fa11865355d26b65a1537a480d50d82eef8b4b07dcd82d30a9035",
+    "packages/postgresql/native/catalog-report/empty-graph.sql": "dfb759fe44108df363809f6231d9951a0c26fe8557251bc780749889ce65ca9e",
+    "packages/postgresql/native/issued-operation-admission/operation-admission.sql": "4b72ebf3727b9c887befce0280256f73587857fcae5fb363af0917b816b1e335"
+  },
+  "remaining": [
+    "Context0.4 branch not executed; populated epoch/operation configuration scope and origin mapping remain required",
+    "Complete immutable report issuer, revision feed registration, head publication and whole-transaction finalization",
+    "Protected capture-to-writer/current authority and complete installer composition",
+    "Public Python capability implementation and installed-wheel end-to-end acceptance"
+  ]
+}
