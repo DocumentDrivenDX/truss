@@ -7,8 +7,9 @@ from dataclasses import dataclass
 import json
 import weakref
 from .preparation import _require_original_preparation
+from ._catalog_index_declarations import collect_catalog_index_declarations, require_current_catalog_index_declarations
 
-MISSING_FIELDS=('interfaceVersion','reportProfile','originalExecution','umf','assertions','pending_indexes','extensions')
+MISSING_FIELDS=('interfaceVersion','reportProfile','originalExecution','umf','assertions','extensions')
 @dataclass(frozen=True,slots=True,weakref_slot=True)
 class CatalogReportBasis:
     basis_bytes: bytes
@@ -100,6 +101,7 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
     if documents!=expected:raise ValueError('Complete native original document bijection required')
     provisional=connection.run('SELECT truss.runtime_require_empty_provisional_catalog(CAST(:rev AS pg_catalog.int4))',rev=catalog.revision)
     if provisional!=[['0']]:raise ValueError('Original complete empty provisional inventory required')
+    index_declarations=collect_catalog_index_declarations(connection,prepared,catalog.revision,cut[:3])
     physical=_physical_snapshot(connection)
     final_cut=_cut(connection)
     if final_cut!=cut:raise ValueError('Stale original report cut')
@@ -109,16 +111,19 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
             'documentInterpretations':evidence['validation']['documentInterpretations'],
             'extensions':evidence['retainedExtensions']['extensions'],
             'losses':evidence['ingress']['basis']['losses'],
-            'transformRegistrations':evidence['ingress']['basis']['transformRegistrations']}
+            'transformRegistrations':evidence['ingress']['basis']['transformRegistrations'],
+            'pending_indexes':json.loads(index_declarations.original_bytes)['declaredJobs']}
     payload={'fields':fields,'nativeCut':{'writerXid':cut[0],'operationOrdinal':cut[1],'effectGeneration':cut[2]},
              'noRebindEvidence':{'profile':'administrative-empty-graph-and-empty-journal-root/0.1','emptyScope':json.loads(cut[3]),'preEffectGeneration':prior_cut[2]},
              'ownerEvidenceHex':prepared.report_evidence_bytes.hex(),'missingFields':list(MISSING_FIELDS),
              'nativeInventory':inventory,'physicalSnapshotHex':physical.hex(),'nativeCounts':json.loads(catalog.counts_bytes),
-             'fieldQualification':{'extensions':'partial_retention_only'},
+             'fieldQualification':{'extensions':'partial_retention_only',
+                 'pending_indexes':'original_selected_immutable_declaration_policy_only'},
+             'indexDeclarationEvidenceHex':index_declarations.original_bytes.hex(),
              'acceptedReportQualified':False}
     result=CatalogReportBasis(json.dumps(payload,ensure_ascii=True,separators=(',',':')).encode())
     key=id(result)
-    _original_bases[key]=(weakref.ref(result,lambda ref:_original_bases.pop(key,None)),connection,prepared,result.basis_bytes,cut)
+    _original_bases[key]=(weakref.ref(result,lambda ref:_original_bases.pop(key,None)),connection,prepared,result.basis_bytes,cut,index_declarations)
     return result
 
 def require_current_catalog_report_basis(basis,connection,prepared):
@@ -147,4 +152,5 @@ def require_current_catalog_report_basis(basis,connection,prepared):
     counts=_rows(connection,'SELECT * FROM truss.runtime_collect_new_catalog_counts(CAST(:rev AS pg_catalog.int4))',rev=revision)
     if documents!=payload['fields']['documents'] or len(counts)!=1 or _report_counts(counts[0])!=payload['fields']['counts']:
         raise ValueError('Original current report source correspondence required')
+    require_current_catalog_index_declarations(original[5],connection,prepared)
     if _cut(connection)!=original[4]:raise ValueError('Stale original report basis')

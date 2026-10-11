@@ -72,6 +72,7 @@ class CatalogNativeFixture(NativeBoundaryFixture):
         try:
             c.run((ROOT/'docs/helix/04-build/evidence/qualified-property-layout-0.15.owner-export.sql').read_text())
             for component in COMPONENTS:c.run((ROOT/f'packages/postgresql/native/{component}.sql').read_text())
+            c.run((ROOT/'packages/postgresql/native/catalog-report/absent-binding-index-declarations.sql').read_text())
             c.run((ROOT/'packages/postgresql/native/edge-limit/verify-current-scope.sql').read_text())
         finally:c.close()
     def setUp(self):
