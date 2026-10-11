@@ -185,7 +185,7 @@ class ConfiguredCatalogSourceStageTests(NativeBoundaryFixture,unittest.TestCase)
         self.connection.run('ROLLBACK TO SAVEPOINT stage')
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])
 
-    def test_concurrent_release_duplicate_between_selection_and_lock_refuses(self):
+    def test_concurrent_release_insert_after_selection_is_fenced(self):
         import queue
         import threading
         import time
@@ -220,20 +220,52 @@ class ConfiguredCatalogSourceStageTests(NativeBoundaryFixture,unittest.TestCase)
                 if not worker.is_alive():break
                 time.sleep(0.02)
             self.assertTrue(waiting,'stage did not reach the controlled inter-call window')
-            other.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
+            other.run("SET lock_timeout='100ms'")
+            with self.assertRaises(DatabaseError) as blocked:
+                other.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
                 artifact_identity,artifact_bytes,artifact_identity_sha256)
                 VALUES('guard-fixture','input','truss.catalog-report-release/0.1.0',
                 convert_to('conflicting concurrent bytes','UTF8'),
                 sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')))""")
+            self.assertEqual(blocked.exception.args[0]['C'],'55P03')
         finally:
             other.run('SELECT pg_advisory_unlock(919011)');other.close();worker.join(10)
         self.assertFalse(worker.is_alive())
-        result=outcomes.get_nowait();self.assertIsInstance(result,DatabaseError)
-        self.assertEqual(result.args[0]['C'],'55000')
+        result=outcomes.get_nowait()
+        if isinstance(result,BaseException):raise result
+        self.assertFalse(json.loads(bytes.fromhex(result[0][3]))['accepted'])
         # Sequence effects survive statement rollback and prove ordering.
         self.connection.run('ROLLBACK TO SAVEPOINT stage_window')
-        self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.first_catalog_insert'),[[False]])
+        self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.first_catalog_insert'),[[True]])
         self.connection.run('ROLLBACK')
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.schema_rev'),[[1]])
         self.connection.run("DELETE FROM truss.installation_archive WHERE artifact_bytes=convert_to('conflicting concurrent bytes','UTF8')")
         self.connection.run('BEGIN')
+
+    def test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run('CREATE TEMP SEQUENCE first_catalog_insert')
+        self.connection.run("""CREATE FUNCTION truss.test_first_catalog_insert() RETURNS trigger
+            LANGUAGE plpgsql AS $$ BEGIN PERFORM nextval('pg_temp.first_catalog_insert'); RETURN NEW; END $$""")
+        self.connection.run('CREATE TRIGGER test_first_catalog_insert BEFORE INSERT ON truss.schema_rev FOR EACH ROW EXECUTE FUNCTION truss.test_first_catalog_insert()')
+        self.connection.run('CREATE SEQUENCE truss.test_release_calls')
+        self.connection.run('ALTER FUNCTION truss.runtime_select_catalog_report_release(text,text,text,text) RENAME TO test_original_release_selector')
+        self.connection.run("""CREATE FUNCTION truss.runtime_select_catalog_report_release(w text,o text,g text,p text)
+            RETURNS TABLE(policy_hex text,policy_sha256 text,configuration_generation text)
+            LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+            DECLARE original record;
+            BEGIN SELECT * INTO STRICT original FROM truss.test_original_release_selector(w,o,g,p);
+            IF nextval('truss.test_release_calls')=1 THEN
+              INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,
+                artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
+                'truss.catalog-report-release/0.1.0',convert_to('late same writer bytes','UTF8'),
+                sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')));
+            END IF;
+            RETURN QUERY SELECT original.policy_hex,original.policy_sha256,original.configuration_generation;
+            END $$""")
+        self.admit();self.connection.run('SAVEPOINT stage')
+        with self.assertRaises(DatabaseError) as caught:self.stage()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.connection.run('ROLLBACK TO SAVEPOINT stage')
+        self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.first_catalog_insert'),[[False]])
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.type_def'),[[0]])

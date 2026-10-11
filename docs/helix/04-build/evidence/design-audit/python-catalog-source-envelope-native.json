@@ -8,9 +8,9 @@
     "packages/postgresql/native/catalog-report/configured-metadata.sql": "ee4e3f1ebbfc8dc45b39e913a44d091dd54ca4cb4a6f2e1f9b9b59b9d8ac6aeb",
     "packages/postgresql/native/catalog-report/empty-graph.sql": "3b57c7be3884e7b2d48945404ead8a9653efb924baa4dbb094c3b732a6809cfd",
     "packages/postgresql/native/catalog-stage-issued.sql": "4d21eb711adbb744d0b36189779965148350670a3dadcce73abc5469190aef95",
-    "packages/python/tests/test_catalog_source_candidate.py": "33f754b328ce79852ad2331ac38c8cd6bd44a81763588786426bdd1aaae8aa2c",
+    "packages/python/tests/test_catalog_source_candidate.py": "350611aac0f3813d8077189970936875f4b9177a0c14cb7c95ddf9164af6402e",
     "scripts/check-module-boundaries.py": "0366da3a5e3bf15e31d1d53f61ebb030d0295148deeeeef5d04d93e0df19953d",
-    "packages/postgresql/native/catalog-report/release-selection.sql": "c0929ec9e249eaf9bd03516327c147071a6735c45e8daf779dadee4d0de67eec",
+    "packages/postgresql/native/catalog-report/release-selection.sql": "c514a59e28cdbc3bdd5b367fde2a6aa362d65cd201d86a1088b26a94d6df595f",
     "packages/postgresql/native/catalog-epoch-context.sql": "edb2a0a8ab10fa1b2d392498fd4b23092a8aed05fc15b7b2c11df1d5789323e9",
     "packages/postgresql/native/operation-configuration-current.sql": "3867e6271489ed331e3669027c759d90bd9a343f9dffc8a7051dc1f2cf701be0",
     "packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql": "aed1fde52b149f6e973c289d0917d1442dd4059d2a0a6e1031bcc06de050c529"
@@ -20,11 +20,24 @@
       "modules": [
         "test_catalog_source_candidate",
         "test_catalog_stage_issued",
+        "test_catalog_report_semantics",
+        "test_catalog_report_release_native"
+      ],
+      "tests": 45,
+      "seconds": 51.396,
+      "result": "terminal post-integration pass; cross-connection insert refused55P03 by retained selector fence, same-writer duplicate refused55000 before first catalog INSERT; provisional staging/legacy/semantic/release controls pass",
+      "sourceState": "current sourceSha256 tuple"
+    },
+    {
+      "modules": [
+        "test_catalog_source_candidate",
+        "test_catalog_stage_issued",
         "test_catalog_report_semantics"
       ],
       "tests": 32,
       "seconds": 43.43,
-      "result": "terminal final source regression pass; configured source, concurrent race sentinel, stale metadata/origin, provenance/carrier grammar, legacy route and semantic projection"
+      "result": "terminal final source regression pass; configured source, concurrent race sentinel, stale metadata/origin, provenance/carrier grammar, legacy route and semantic projection",
+      "sourceState": "Historical, before integration of security archive fence 4ac008e7; not current concurrent-writer behavior"
     },
     {
       "modules": [
@@ -32,7 +45,8 @@
       ],
       "tests": 9,
       "seconds": 15.944,
-      "result": "pass; final concurrent test subsequently enhanced with first-write sentinel"
+      "result": "pass; final concurrent test subsequently enhanced with first-write sentinel",
+      "sourceState": "Historical, before integration of security archive fence 4ac008e7; not current concurrent-writer behavior"
     },
     {
       "modules": [
@@ -40,7 +54,8 @@
       ],
       "tests": 1,
       "seconds": 4.232,
-      "result": "pass at final source; committed conflicting archive inserted in controlled inter-call window; no first schema_rev INSERT"
+      "result": "pass at final source; committed conflicting archive inserted in controlled inter-call window; no first schema_rev INSERT",
+      "sourceState": "Historical, before integration of security archive fence 4ac008e7; not current concurrent-writer behavior"
     },
     {
       "modules": [
@@ -50,7 +65,8 @@
       ],
       "tests": 29,
       "seconds": 44.547,
-      "result": "earlier integration regression pass before final archive/bypass refinements"
+      "result": "earlier integration regression pass before final archive/bypass refinements",
+      "sourceState": "Historical, before integration of security archive fence 4ac008e7; not current concurrent-writer behavior"
     },
     {
       "modules": [
@@ -59,7 +75,8 @@
       ],
       "tests": 98,
       "seconds": 36.771,
-      "result": "earlier original-driver/dispatch regression pass before final archive/bypass refinements"
+      "result": "earlier original-driver/dispatch regression pass before final archive/bypass refinements",
+      "sourceState": "Historical, before integration of security archive fence 4ac008e7; not current concurrent-writer behavior"
     }
   ],
   "checks": {
@@ -70,7 +87,7 @@
     "Fresh source envelope preserves exact original declarations, original owner report evidence and preparation provenance before admission; revision-independent seven-field source derivation uses original owner/support correspondence.",
     "Duplicate JSON keys are rejected before jsonb at all envelope/carrier metadata homes; duplicate logical keys, UTF8 including NUL and numeric-free source encoding are checked by existing native codec.",
     "Context0.4 requires envelope, exact configured release and captured origin. Legacy array route remains context0.2 only.",
-    "Native metadata capture retains complete actual marker, current epoch pointer, selected epoch, original capsule, current admission and exact release archive membership. Table SHARE NOWAIT locks and a second exact release lookup close the inter-call insertion race.",
+    "Native metadata capture retains complete actual marker, current epoch pointer, selected epoch, original capsule, current admission and exact release archive membership. After integration of security archive fence4ac008e7, selector SHARE NOWAIT blocks concurrent writers; a second exact release lookup under metadata locks also catches same-writer membership changes.",
     "Exact original/final metadata bytes are compared independently of business relation emptiness. Late marker writes are caught after staging; rollback preserves earlier host work."
   ],
   "resourceQualification": [
@@ -87,6 +104,21 @@
   "review": {
     "model": "gpt-6-astra",
     "reasoningEffort": "ultra",
-    "result": "Scoped source approval after correcting archive race, configured bypass, declaration bound and dead checker allowance. Terminal regression passed. Reviewer did not rerun tests."
+    "result": "Astra Ultra scoped source/evidence approval and post-integration source/test approval; terminal45 regression passed. Reviewer did not rerun tests."
+  },
+  "preArchiveFenceSourceSha256": {
+    "packages/python/src/truss/_catalog_candidate.py": "ae0cafd6b9e8c71dc29dd3a16951e58dde01275f37bb30af4f04f9ee9a1a8f72",
+    "packages/python/src/truss/_catalog_report_semantics.py": "8b9e257f71f53b08e30d92b11ace75b1ecc79334698f83f5cc5c862c44efb263",
+    "packages/python/src/truss/_canonical_wire_tree.py": "755bd1c50a506861c76b9332edb086bbb101a8f33e80b6b585df56a3d7a01b79",
+    "packages/postgresql/native/catalog-report/source-candidate.sql": "f18e86f97dad9a16893567c4dff4a474c6419746c3da3f4d09618843dbd5fd30",
+    "packages/postgresql/native/catalog-report/configured-metadata.sql": "ee4e3f1ebbfc8dc45b39e913a44d091dd54ca4cb4a6f2e1f9b9b59b9d8ac6aeb",
+    "packages/postgresql/native/catalog-report/empty-graph.sql": "3b57c7be3884e7b2d48945404ead8a9653efb924baa4dbb094c3b732a6809cfd",
+    "packages/postgresql/native/catalog-stage-issued.sql": "4d21eb711adbb744d0b36189779965148350670a3dadcce73abc5469190aef95",
+    "packages/python/tests/test_catalog_source_candidate.py": "33f754b328ce79852ad2331ac38c8cd6bd44a81763588786426bdd1aaae8aa2c",
+    "scripts/check-module-boundaries.py": "0366da3a5e3bf15e31d1d53f61ebb030d0295148deeeeef5d04d93e0df19953d",
+    "packages/postgresql/native/catalog-report/release-selection.sql": "c0929ec9e249eaf9bd03516327c147071a6735c45e8daf779dadee4d0de67eec",
+    "packages/postgresql/native/catalog-epoch-context.sql": "edb2a0a8ab10fa1b2d392498fd4b23092a8aed05fc15b7b2c11df1d5789323e9",
+    "packages/postgresql/native/operation-configuration-current.sql": "3867e6271489ed331e3669027c759d90bd9a343f9dffc8a7051dc1f2cf701be0",
+    "packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql": "aed1fde52b149f6e973c289d0917d1442dd4059d2a0a6e1031bcc06de050c529"
   }
 }
