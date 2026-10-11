@@ -1966,3 +1966,30 @@ ordinary DML; concurrent administrative DDL, transitive routine/type/security
 closure and complete native allocation/resource accounting remain unqualified.
 The next connected exit still requires a genuine complete report producer and the
 protected finalizer before catalog acceptance can commit and a mutation can follow.
+
+### Required revision source extraction for catalog completion
+
+CONTRACT-006 FV03 requires a revision fact even when acceptance changes no graph
+rows. The private Python completion path now collects that obligation from its
+original completion prestate, actual head transition, exact operation input,
+complete native revision record, ordered document records and stored report
+bytes. Native record bytes retain accepted_at and origin without inventing a
+feed timestamp or deriving the actor from the administrative observing role.
+
+The source extractor preserves one required revision with payload admission
+unavailable until a complete original report/context issuer exists. Missing or
+fabricated feed registration cannot turn that obligation into zero facts or an
+admitted payload. Its source-only comparison excludes the four downstream feed
+store row images; every original descriptor and every other selected table still
+matches. The separate full physical completion verifier remains unchanged and
+rejects those same extra feed rows. Neither a projected prestate nor a completion
+proof is returned by the source extractor.
+
+[Native evidence](evidence/python-catalog-revision-obligation.json) and
+[the retained regression log](evidence/python-catalog-revision-obligation.log)
+cover this selected administrative PostgreSQL16.15 component. This implements
+the required-revision source dependency, not all FV03 producer families or the
+complete FV01–FV07 validator. Complete report admission, protected ordinary-person
+context, revision payload encoding, journal/source/reservation producers, resource
+accounting, finalization and public registration remain unfinished. The existing
+operation phase and unconditional commit barrier remain unchanged.

@@ -39,7 +39,7 @@ def capture_catalog_completion_prestate(connection,prepared,basis):
     _issued[key]=(weakref.ref(result,lambda ref:_issued.pop(key,None)),connection,prepared,basis,original)
     return result
 
-def verify_catalog_completion_physical(connection,prepared,prestate,report_bytes):
+def _require_completion_prestate(connection,prepared,prestate,report_bytes):
     original=_issued.get(id(prestate))
     if (type(prestate) is not CatalogCompletionPrestate or original is None
         or original[0]() is not prestate or original[1] is not connection
@@ -50,7 +50,37 @@ def verify_catalog_completion_physical(connection,prepared,prestate,report_bytes
     _require_original_preparation(prepared)
     if type(report_bytes) is not bytes or not 1<=len(report_bytes)<=4194304:
         raise ValueError('Exact bounded physical report bytes required')
+    return original
+
+def verify_catalog_completion_physical(connection,prepared,prestate,report_bytes):
+    original=_require_completion_prestate(connection,prepared,prestate,report_bytes)
     payload=json.loads(original[4]);generation=str(int(payload['effectGeneration'])+2)
     return _text_row(connection,"SELECT truss.runtime_verify_catalog_completion_physical(:w,:o,:g,CAST(:rev AS pg_catalog.int4),CAST(:prestate AS pg_catalog.jsonb),pg_catalog.decode(:report,'hex'))::pg_catalog.text",
         w=payload['writerXid'],o=payload['operationOrdinal'],g=generation,rev=payload['revision'],
         prestate=original[4].decode('utf8'),report=report_bytes.hex())
+
+def collect_catalog_revision_obligation(connection,prepared,prestate,report_bytes):
+    """Collect an actual required revision; missing payload is never zero facts.
+
+    This administrative source extractor issues no feed payload or authority.
+    Original Python custody and fresh native physical/source correspondence are
+    required independently of whether any feed row was registered.
+    """
+    original=_require_completion_prestate(connection,prepared,prestate,report_bytes)
+    prior=json.loads(original[4]);generation=str(int(prior['effectGeneration'])+2)
+    result=_text_row(connection,"SELECT truss.runtime_collect_catalog_revision_obligation(:w,:o,:g,CAST(:prestate AS pg_catalog.jsonb),pg_catalog.decode(:report,'hex'))::pg_catalog.text",
+        w=prior['writerXid'],o=prior['operationOrdinal'],g=generation,
+        prestate=original[4].decode('utf8'),report=report_bytes.hex())
+    observed=json.loads(result)
+    expected={'interfaceVersion':'truss-catalog-revision-obligation/0.1',
+        'scope':'original_catalog_revision_required_fact_only',
+        'writerXid':prior['writerXid'],'operationOrdinal':prior['operationOrdinal'],
+        'effectGeneration':generation,'revision':prior['revision'],
+        'requiredFactKind':'revision','requiredFactCount':'1',
+        'originalInputHex':prepared.input_bytes.hex(),'originalReportHex':report_bytes.hex(),
+        'payload':{'state':'unavailable','reason':'complete_report_issuer_missing'},
+        'acceptedReportQualified':False,'feedFactQualified':False}
+    if any(type(observed.get(key)) is not type(value) or observed[key]!=value
+           for key,value in expected.items()):
+        raise ValueError('Original required revision obligation correspondence required')
+    return result

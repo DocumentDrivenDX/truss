@@ -1,0 +1,52 @@
+{
+  "scope": "selected_administrative_original_catalog_revision_required_fact_only",
+  "accepted_report_qualified": false,
+  "feed_fact_qualified": false,
+  "protected_finalization_qualified": false,
+  "public_registration_callable": false,
+  "native_runtime": {
+    "python": "3.11.17",
+    "postgresql": "16.15",
+    "pg8000": "1.31.5",
+    "fixture_layout": "qualified-property-0.15"
+  },
+  "test": {
+    "command": "python -m unittest test_catalog_revision_obligation test_catalog_completion_physical test_catalog_report -v",
+    "tests": 40,
+    "elapsed_seconds": 23.509,
+    "exit_code": 0,
+    "result": "OK",
+    "log": "python-catalog-revision-obligation.log",
+    "log_sha256": "860d03c52bf1350d3fd58f24cbd65b8d6378bc15748abc5e9287fc856446fb41"
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning_effort": "ultra",
+    "plan": "approved",
+    "completed_iteration": "approved_no_remaining_source_blockers",
+    "independent_tests": 40,
+    "elapsed_seconds": 23.794,
+    "exit_code": 0,
+    "source_snapshot_unchanged": true,
+    "receipt_source_and_log_hashes_verified": true
+  },
+  "python_import_boundaries": 358,
+  "source_sha256": {
+    "packages/postgresql/native/catalog-completion/revision-obligation.sql": "ce3363de6d4ecfd75948450038ae70e631e3e8a83593641bb0efff24b33a2c80",
+    "packages/postgresql/native/catalog-completion/physical-poststate.sql": "1e97134291eb2eab4877683ecf6e89dcaca0aa24405a00d3ba71b0d539b387a2",
+    "packages/python/src/truss/_catalog_completion.py": "7e29ee848e838514965a15e923c6e2d535d35c8a05c0a67e0407a5ab33dc48fd",
+    "packages/python/tests/test_catalog_revision_obligation.py": "fb579610c38574f4b50c5b5499d8eee589a578963db7c8e9afe02ebb6a168d10",
+    "packages/python/tests/test_catalog_completion_physical.py": "a7e5950c7ab81b238d7b9500f20ea667f3badd4b182dbd5f9df8aad67213ba5e",
+    "packages/python/tests/test_catalog_report.py": "922a4b5012ed289a9bdc37835ed6c15bb17d70c1e159daa6b260775b487e0415",
+    "docs/helix/04-build/python-consumer-integration-plan.md": "1136e7c35b89bd7f33c8c34bcd5cd93183d236a548a90cc5c3ef73064d49177d"
+  },
+  "limitations": [
+    "The report is a non-semantic administrative fixture; required revision payload admission remains unavailable.",
+    "Only the selected new-catalog revision source dependency is implemented, not other FV03 families or FV01-FV07 validation.",
+    "Four downstream feed store row images are excluded only in the private source comparison; original descriptors and all non-feed images remain compared. Full physical verification is unchanged.",
+    "Native binary parent/document/operation records retain originals without inventing acceptedAt, actor or feed-clock meaning.",
+    "No phase advancement, ordinary-role installation, feed publication, settlement or commit-barrier replacement.",
+    "Concurrent administrative DDL, transitive dependency closure, preallocation and complete resource accounting remain unqualified.",
+    "The collector requires the original admitted administrative operation at prestate generation+2; it is not the eventual commit-time FV03 collector."
+  ]
+}
