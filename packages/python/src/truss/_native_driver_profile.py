@@ -45,3 +45,23 @@ def original_control_profile(boundary):
         getattr(getattr(boundary._connection, name), '__func__', None) is getattr(CoreConnection, name)
         and getattr(getattr(boundary._connection,name),'__self__',None) is boundary._connection
         for name in ('execute_simple', 'send_QUERY', '_send_message'))
+
+def original_simple_source_profile(boundary):
+    """Nonlocking source predicate; caller holds the original native guard."""
+    from pg8000.core import CoreConnection
+    from pg8000.native import Connection
+    con = boundary._connection
+    if con._sock is not boundary._original_stream or con._usock is not boundary._original_socket:
+        return False
+    methods = (("run", Connection.run), *( (name, getattr(CoreConnection,name))
+        for name in ('execute_simple','send_QUERY','_send_message','handle_messages')))
+    if not all(getattr(getattr(con,name),'__func__',None) is original
+               and getattr(getattr(con,name),'__self__',None) is con for name,original in methods):
+        return False
+    canonical = {b'C':CoreConnection.handle_COMMAND_COMPLETE,
+                 b'E':CoreConnection.handle_ERROR_RESPONSE,b'Z':CoreConnection.handle_READY_FOR_QUERY}
+    return (all(getattr(boundary._original_driver_handlers[code],'__func__',None) is fn
+                and getattr(boundary._original_driver_handlers[code],'__self__',None) is con
+                for code,fn in canonical.items())
+            and all(con.message_types.get(code) is handler
+                    for code,handler in boundary._original_handlers.items()))

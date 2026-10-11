@@ -938,3 +938,48 @@ Definitive iteration21 installed wheel passed427 tests in57.686s on PostgreSQL16
 All58 package payloads, four metadata files and52 test modules match the retained
 source/wheel/install snapshot; module boundaries pass238 imports. The evidence
 receipt pins exact bytes and retains the unfinished public-profile obligations.
+
+### Iteration22: original simple host-error recovery
+
+Astra Ultra approved qualifying only the actual pg8000 native simple binding:
+exact str SQL, kwargs limited to stream/types, stream None. Native types is ignored
+on this path and must not be traversed. Before effects, under the existing native
+lock, pin original bound run/execute_simple/send_QUERY/_send_message/handle_messages,
+canonical C/E/Z handlers and dispatch, and original stream/socket. Retain a nominal
+immutable descriptor for the exact original revision/call; generic callbacks and
+parameterized/streamed calls receive none.
+
+The pinned execute_simple sends Q, flushes once and then handles responses with
+no later writes. An exact complete original native Error+Ready E/I on that path
+therefore witnesses the old writer's completed flush. Admit it only while descriptor,
+native call, current revision/status and original transport still correspond;
+never infer this from generic Error+Ready or flush queued bytes to discover state.
+Host SQL itself remains trusted host work outside bounded-control qualification.
+
+Verify division/uniqueness errors to bounded rollback, savepoint recovery preserving
+prior host writes, stream=None/types-only selection without traversal, parameterized Parse-error exclusion plus a fault-fixture
+genuine Describe error after successful Parse with queued Bind refusal, and missing/stale/foreign witness refusal
+without SQL. Public adoption cancellation, savepoint/resource profiles and protected
+capabilities remain open. Astra reviews completed source and installed evidence
+before task-only main commit/push.
+
+Source review closed an arbitrary-callback labeling bypass: a boolean cannot issue
+simple-path evidence. A nominal immutable invocation packet carries exact SQL and
+ignored types; inside the guard, the boundary captures the selected original bound
+run and invokes that packet itself, independently of any callback argument. A valid
+packet never invokes the callback. One-write original call association prevents a
+structurally copied NativeCall from borrowing the descriptor. Nine native witness
+tests cover both adversarial invocation paths and exact native recovery.
+
+Concurrent main ac94538b corrects UMF host staging: optional primary markers
+project absence/false to non-primary while preserving original source bytes.
+Its owner-backed16-test55-assertion evidence uses mocked native staging and
+does not qualify accepted publication. This TypeScript change and handoff are
+preserved; no Python wheel source/test bytes change and no TS/native profile
+support is inferred from the Python suite.
+
+Astra Ultra approved iteration22 source/plan; independent38 composed native tests
+passed23.127s. Definitive installed wheel passed436 tests in73.581s against
+PostgreSQL16.15. All58 package files/four metadata files and53 test modules
+match the original retained source/wheel/install snapshot; boundaries pass242
+imports. The receipt records exact hashes and preserves the private-profile gates.

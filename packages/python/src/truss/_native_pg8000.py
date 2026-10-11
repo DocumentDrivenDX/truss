@@ -6,7 +6,7 @@ outside the cooperative host contract. No SQL classification or transaction
 identity is inferred here. Operation tokens are internal exclusion, not receipts
 or verified arbitration completion. Native lifecycle integration remains pending.
 """
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, replace, field
 from importlib.metadata import version
 from threading import Lock
 
@@ -33,7 +33,23 @@ class NativeCall:
     revision: int = 0
     original_resource: object = None
     original_cleanup: object = None
+    original_simple: object = None
 
+
+@dataclass(frozen=True, eq=False)
+class _HostSimpleInvocation:
+    sql: str
+    types: object = None
+
+@dataclass(eq=False)
+class _SimpleCapture:
+    call: object = None
+
+@dataclass(frozen=True, eq=False)
+class HostSimpleWitness:
+    boundary: object
+    revision: int
+    capture: _SimpleCapture = field(default_factory=_SimpleCapture)
 
 @dataclass(frozen=True, eq=False)
 class _Ownership:
@@ -84,6 +100,7 @@ class NativeBoundary:
         self._complete = True
         self._event_bytes, self._event_count = event_bytes, event_count
         self.last_call = None
+        self._host_simple_witness = None
         self._ready_error = None
         self._transaction_tracker = None
         self._active_control = None
@@ -224,7 +241,7 @@ class NativeBoundary:
         self._host_control_pending = None
         original_release.published=True
 
-    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None, cleanup=None):
+    def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None, cleanup=None, host_simple=None):
         with self._lock:
             if (self._quarantined or self._cancel_pending is not None or self._calling or
                     (self._operation is not None and token is not self._operation) or
@@ -252,6 +269,15 @@ class NativeBoundary:
             if cancellation is not None and resource is not None and resource[0] == 'execute':
                 cancel_entry = cancellation._reserve_call(self, self._revision + 1, call_entry, resource)
             self._active_cancellation = cancel_entry
+            simple_witness = None
+            simple_run = self._connection.run
+            simple_invocation = (host_simple if type(host_simple) is _HostSimpleInvocation
+                                 and type(host_simple.sql) is str else None)
+            if simple_invocation is not None:
+                from ._native_driver_profile import original_simple_source_profile
+                if original_simple_source_profile(self):
+                    simple_witness = HostSimpleWitness(self, self._revision + 1)
+            self._host_simple_witness = simple_witness
             self._revision += 1
             self._active_control = lifecycle
             self._active_resource = resource
@@ -262,7 +288,8 @@ class NativeBoundary:
         raised = True
         native_error = False
         try:
-            result = invoke()
+            result = (simple_run(simple_invocation.sql,stream=None,types=simple_invocation.types)
+                      if simple_invocation is not None else invoke())
             raised = False
             return result
         except BaseException as error:
@@ -277,7 +304,9 @@ class NativeBoundary:
                 # only return/raise settles the call, never the first Ready.
                 ready = bool(events) and events[-1].code == b'Z'
                 complete = self._complete and ready and not self._quarantined and (not raised or native_error)
-                self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control, self._revision, self._active_resource, cleanup)
+                self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control, self._revision, self._active_resource, cleanup, simple_witness)
+                if simple_witness is not None:
+                    simple_witness.capture.call = self.last_call
                 if call_entry is not None:
                     call_entry.native_call = self.last_call
                 if cancel_entry is not None:
@@ -309,7 +338,10 @@ class NativeBoundary:
 
     def run(self, sql, *, token=None, cleanup=None, **params):
         """Trusted host SQL; lifecycle classification is not provided here."""
-        return self._call(lambda: self._connection.run(sql, **params), token, cleanup=cleanup)
+        simple = (type(sql) is str and all(key in ('stream','types') for key in params)
+                  and params.get('stream') is None)
+        invocation = _HostSimpleInvocation(sql,params.get('types')) if simple else None
+        return self._call(lambda: self._connection.run(sql, **params), token, cleanup=cleanup, host_simple=invocation)
 
     def prepare(self, sql, *, token=None):
         prepared = _Prepared(self)

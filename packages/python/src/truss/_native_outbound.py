@@ -1,6 +1,6 @@
 """Private original direct-send ledger; trusted successful empty-writer baseline."""
 from dataclasses import dataclass
-from ._native_pg8000 import NativeBoundaryRefusal, NativeCall
+from ._native_pg8000 import NativeBoundaryRefusal, NativeCall, HostSimpleWitness
 from ._resource_account import BytePermitAccount
 
 @dataclass(eq=False)
@@ -59,8 +59,26 @@ def confirmed_control_outbound_basis(boundary):
                 and type(w.data) is bytes and w.data[:1] == b'Q' and w.data[-1:] == b'\0'
                 for w in barrier.writes))
 
+def confirmed_host_simple_basis(boundary):
+    from ._native_driver_profile import original_simple_source_profile
+    basis = boundary.last_call
+    witness = getattr(boundary, '_host_simple_witness', None)
+    return (type(witness) is HostSimpleWitness and witness.boundary is boundary
+            and type(basis) is NativeCall and basis.original_simple is witness
+            and witness.capture.call is basis
+            and witness.revision == basis.revision == boundary._revision
+            and basis.capture_complete and basis.driver_raised
+            and basis.final_status in (b'I', b'E')
+            and boundary._connection._transaction_status == basis.final_status
+            and any(e.code == b'E' for e in basis.events)
+            and not boundary._calling and not boundary._quarantined
+            and boundary._host_control_pending is None
+            and boundary._pending_operation_ledger is None and boundary._cancel_pending is None
+            and original_simple_source_profile(boundary))
+
 def admitted_outbound_basis(boundary):
-    return successful_outbound_basis(boundary) or confirmed_control_outbound_basis(boundary)
+    return (successful_outbound_basis(boundary) or confirmed_control_outbound_basis(boundary)
+            or confirmed_host_simple_basis(boundary))
 
 class NativeOutbound:
     def __init__(self, gate, guard, limits):

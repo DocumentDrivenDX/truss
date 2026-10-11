@@ -86,17 +86,13 @@ class HostControlDeadlineTests(custody.NativeBoundaryFixture,unittest.TestCase):
             self.assertIsNone(boundary._operation)
             self.assertFalse(boundary._quarantined)
         finally:connection.close()
-    def test_unqualified_host_error_refuses_without_retry_or_implicit_flush(self):
+    def test_original_simple_host_error_allows_bounded_rollback(self):
         self.baseline();self.session.begin()
         with self.assertRaises(Exception):self.boundary.run('SELECT 1/0')
-        before=self.boundary.last_call
         result=self.session.rollback()
-        self.assertEqual(result.error.code,'execution_obligation')
-        self.assertIs(self.boundary.last_call,before)
+        self.assertEqual(result.value.state,'rolled_back')
+        self.assertEqual(result.value.handback,'released')
         self.assertIsNone(self.boundary._operation)
-        self.assertEqual(self.tracker._state.status,b'E')
-        # Explicit trusted host settlement remains outside the bounded control claim.
-        self.tracker.rollback()
     def test_expired_acquired_scope_before_submit_retains_original_token(self):
         self.baseline();before=self.boundary.last_call;now=[0];original=self.producer.attach
         def attach(*args):
