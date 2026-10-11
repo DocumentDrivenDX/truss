@@ -72,7 +72,7 @@ class _OperationRelease:
     published: bool = False
 
 class NativeBoundary:
-    def __init__(self, connection, *, event_bytes=65536, event_count=256, prepared_limit=256):
+    def __init__(self, connection, *, event_bytes=65536, event_count=256, prepared_limit=256, startup=None):
         from pg8000.native import Connection
         if version('pg8000') != '1.31.5' or type(connection) is not Connection:
             raise NativeBoundaryRefusal('Unselected original driver')
@@ -105,12 +105,20 @@ class NativeBoundary:
         self._event_bytes, self._event_count = event_bytes, event_count
         self.last_call = None
         self._host_simple_witness = None
+        self._startup_witness = None
         self._ready_error = None
         self._transaction_tracker = None
         self._active_control = None
         self._revision = 0
         with _attachment_lock:
-            if connection._transaction_status != b'I' or hasattr(connection, '_truss_native_boundary'):
+            if hasattr(connection, '_truss_native_boundary'):
+                raise NativeBoundaryRefusal('Requires original unattached connection')
+            if startup is not None:
+                from ._startup_custody import attach_startup
+                try:attach_startup(startup,connection,self)
+                except ValueError as error:raise NativeBoundaryRefusal(str(error)) from None
+                self._startup_witness=startup
+            elif connection._transaction_status != b'I':
                 raise NativeBoundaryRefusal('Requires original idle, unattached connection')
             self._original_driver_handlers = dict(connection.message_types)
             originals = {code: connection.message_types[code] for code in (b'C', b'E', b'Z', b'1', b'3')}

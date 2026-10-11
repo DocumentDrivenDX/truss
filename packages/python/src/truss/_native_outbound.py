@@ -76,9 +76,14 @@ def confirmed_host_simple_basis(boundary):
             and boundary._pending_operation_ledger is None and boundary._cancel_pending is None
             and original_simple_source_profile(boundary))
 
+def original_startup_basis(boundary):
+    if getattr(boundary,'_startup_witness',None) is None:return False
+    from ._startup_custody import startup_outbound_basis
+    return startup_outbound_basis(boundary)
+
 def admitted_outbound_basis(boundary):
     return (successful_outbound_basis(boundary) or confirmed_control_outbound_basis(boundary)
-            or confirmed_host_simple_basis(boundary))
+            or confirmed_host_simple_basis(boundary) or original_startup_basis(boundary))
 
 class NativeOutbound:
     def __init__(self, gate, guard, limits):
@@ -89,7 +94,7 @@ class NativeOutbound:
             raise NativeBoundaryRefusal('Original successful final-flush baseline required')
         # Selected successful driver paths return after their final original
         # flush/response. Native-error Ready alone cannot establish this basis.
-        self.baseline = basis
+        self.baseline = basis if basis is not None else self.boundary._startup_witness
         self.ordinary = [None] * limits.outbound_records
         self.cleanup = [None] * 128
         self.ordinary_count = self.cleanup_count = 0

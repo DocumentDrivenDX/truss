@@ -1057,3 +1057,84 @@ against PostgreSQL16.15. Exact60 package files, four distribution metadata files
 55 test modules, two original owner fixtures and the251-import checker remained
 unchanged through the run. The retained receipt/log record the combined main
 snapshot and keep public execution/security/cancellation gates explicit.
+
+### Iteration24: original fresh-connection bootstrap
+
+PY-C02 needs a usable fresh-connection path. Current native fixtures use an
+uncaptured host SELECT before boundary attachment because pg8000 resets startup
+status to None. That historical fixture cannot establish factory startup custody.
+Astra Ultra selected private factory-owned bootstrap: create an unexposed exact
+original pg8000 connection, retain original constructor/source and resource
+custody, and issue only a one-use writer-empty witness after successful original
+startup. It is never an idle witness or retrofit for an existing host connection.
+
+The witness permits initial boundary attachment at status None and one fixed
+bounded SHOW transaction_isolation using original accounted control framing,
+direct outbound send and ingress/deadline custody. Require actual complete SHOW
+and ReadyForQuery with final I, original settled send barrier and confirmed gate
+restoration/release before returning the boundary or attaching a native tracker.
+Never synthesize NativeCall, idle status or original constructor evidence. Never
+flush unknown writer bytes to establish a baseline. Existing externally supplied
+connections retain their separately qualified provenance requirement.
+
+Constructor startup/authentication precedes the accounted gate: a finite socket
+timeout is not whole-startup work/byte/deadline qualification or constructor
+failure cleanup proof. Retain the factory-owned original connection/resources
+before initialization, close/discard only those resources on failure without
+submitting queued unknown writer bytes, and retain uncertain cleanup for explicit
+owner recovery. No retry, implicit host transaction, pool or protected authority.
+
+Native gates cover fresh pgserver connection through captured bootstrap, real
+host baseline, begin/adoption, original text execution and host commit; foreign,
+replayed/copied witness and constructor/driver mutation refusal; bounded SHOW
+error/timeout/capture failure; original setup/cleanup and publication faults.
+Record original source pins, safe bounded diagnostic references and immutable
+installed-wheel evidence. This remains private until complete constructor,
+active-Q cancellation, public C02 and protected installation exits are proven.
+
+Astra's source review selects an adapted original constructor path: install an
+exact factory-only instance close hook before calling the pinned constructor,
+since its own startup exception handler otherwise emits TERMINATE/flush and drops
+resource references. Restore original close on successful construction. Retain
+available original socket/stream before shutdown, attempt both closures, and record
+actual closure observations/failures. Never erase uncertain custody or apply this
+creation cleanup after exposing the connection to its host.
+
+Use closed exact-primitive AF_UNIX options with SSL False and finite timeout;
+exclude supplied sockets, startup parameters, replication and callbacks. Start one
+original deadline before construction and preserve it through SHOW. Startup/auth
+parsing and I/O are still outside accounted ingress and no absolute startup bound
+is claimed. Specialize the existing ledger to one exact fixed SHOW, retaining and
+consuming startup witness before submission. Test original constructor close hook,
+restoration on success, shutdown/stream/socket faults and publication loss without
+issuing a second SHOW. Astra Ultra approved this private plan; public C02 remains
+open.
+
+Astra's adversarial review rejected caller-configured issuer registration. The
+lower startup module now owns the fixed original constructor and retained record
+registry; the upper factory only composes its original records. No generic
+issuer/type/source binding or caller-supplied connection is accepted. Bound input
+character length before strict UTF-8 encoding and reject startup NUL injection.
+Pin selected callable symbols, including core.Context, before construction and
+again after accounted SHOW restoration.
+
+When original shutdown is unconfirmed, retain both original socket and buffered
+writer without buffered close or flush. Explicit owner recovery uses those same
+handles; it never reissues SHOW. Retain monotone cleanup failure facts, including
+BaseException, before propagation. After exposure only the host owns lifetime.
+
+Final retained iteration24 wheel passed515 tests in78.559s on CPython3.11.17,
+pg8000 1.31.5 and corrected pgserver0.1.4+truss.pg16.15/PostgreSQL16.15.
+The62 package files exactly match source, wheel and isolated installation; the
+56 test modules, two owner fixtures, installed metadata and268-import checker
+remained unchanged through the run. Retained receipt/log:
+`evidence/python-contracts-iteration24.json` and
+`evidence/python-contracts-iteration24-installed.log`. The completed private
+workflow is original fresh connection, captured SHOW, host resource baseline,
+begin/adoption, exact text query and host commit. Public and protected gates stay
+open. The concurrent owner interpretation handoff0cf98abf is incorporated.
+
+Astra Ultra approved the final source, plan and retained installed artifact, with
+45 independent composed checks and all18 installed bootstrap cases passing.
+No blocker remains within this private scope; constructor/startup accounting,
+active Q cancellation, public C02 and protected authority gates remain open.
