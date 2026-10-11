@@ -15,14 +15,16 @@ type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation
 type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
 export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collection:Collection){
  requireOriginalCatalogPreparation(prepared);requireOriginalCatalogObservationCollection(prepared,collection);
- const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.5.0',producers:{fields:collection.fieldProfile,scalar:collection.scalarProfile,members:collection.membersProfile,declarations:collection.profile},
-  operations:['kind','nullability','cardinality','facets','scalarType','members','keys','relationships','schema_properties'],basis:'original',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
- const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.5.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
- const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.5.0',sha256:manifest.sha256});
+ const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.6.0',producers:{fields:collection.fieldProfile,scalar:collection.scalarProfile,members:collection.membersProfile,referenceLinks:collection.referenceLinksProfile,declarations:collection.profile},
+  operations:['kind','nullability','cardinality','facets','scalarType','members','referenceLinks','keys','relationships','schema_properties'],basis:'original',referenceLinks:'generic_core_links_not_verified_type_assertions',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
+ const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.6.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
+ const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.6.0',sha256:manifest.sha256});
  type Entry={assertion:{sourceKind:'umf_document';owner:{scope:'document';documentId:string}|{documentId:string;moduleId:string};definitionPin:string;sourcePointer:string;kind:'source'|'authored';sourceIdentityProfile?:typeof profile;authoredIdentity?:string};source:Prepared['original']['input']['documents'][number]['artifact'];ruleName:string;ruleNameOrigin:'profile_generated';enforcement:'none';reason:'unqualified';ownerEvidence:Collection['observations'][number]['evidence']};
+ type LinkEvidence={documentId:string;owner:{moduleId:string;elementId:string};source:Entry['source'];sourcePointer:string;ownerProfile:NonNullable<Collection['referenceLinksProfile']>;ownerEvidence:Collection['observations'][number]['evidence'];originalMeaning:unknown;typeAssertion:'unverified';meaningCorrespondence:true;interpretationQualified:false;scope:'original_direct_core_reference_links_only'};
+ const referenceLinks:LinkEvidence[]=[],referenceLinkDeclarations:LinkEvidence[]=[];
  const entries:Entry[]=[];const declarationMeanings=[];const membershipMeanings:{assertion:typeof entries[number];ownerProfile:NonNullable<Collection['membersProfile']>;ownerState:'known'|'partial';originalMeaning:unknown;uninterpretedPaths:readonly string[];meaningCorrespondence:true;interpretationQualified:false;scope:'original_record_member_owner_meaning_only'}[]=[];const fieldMeanings=[];const absent=[];const deferred=[];const identities=new Set<string>();
  for(const observed of collection.observations){
-  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','scalarType','members','keys','relationships','schema_properties'].includes(observed.operation)){deferred.push(observed);continue}
+  if(observed.basis!=='original'||!['kind','nullability','cardinality','facets','scalarType','members','referenceLinks','keys','relationships','schema_properties'].includes(observed.operation)){deferred.push(observed);continue}
   const result=observed.result as any;if(result.state!=='observed'){deferred.push(observed);continue}
   const original=result.observation,meaning=original.meaning;
   if(observed.operation==='schema_properties'){
@@ -41,6 +43,26 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
     const uniqueness=JSON.stringify([source.sha256,owner,pointer]);if(identities.has(uniqueness))throw Error('Duplicate original core assertion source identity');identities.add(uniqueness);
     entries.push(Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,kind:'source' as const,sourceIdentityProfile:profile}),source,ruleName:'core.schema_properties.'+key,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence}));
    }
+   continue;
+  }
+  if(observed.operation==='referenceLinks'){
+   const di=prepared.documents.findIndex(d=>d.documentId===observed.documentId),document=prepared.documents[di],requested=observed.identity as any;
+   if(!document||document.umfVersion!=='0.7.0'||!collection.referenceLinksProfile)throw Error('Original referenceLinks owner context correspondence required');
+   const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module),ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
+   if(mi<0||ei<0)throw Error('Original referenceLinks owner context correspondence required');
+   const element=source.modules[mi]!.elements[ei]!,path='/modules/'+mi+'/elements/'+ei+'/references';
+   const expected=!Object.hasOwn(element,'references')?{state:'missing'}:{state:'present',links:element.references!.map((reference:any,index:number)=>{
+    const ti=source.modules.findIndex((m:any)=>m.id===reference.module),te=ti<0?-1:source.modules[ti]!.elements.findIndex((e:any)=>e.id===reference.element);
+    if(ti<0||te<0)throw Error('Original referenceLinks target correspondence required');
+    const target=source.modules[ti]!.elements[te]!,at=path+'/'+index;
+    return {index,path:at,reference,target:{identity:{module:reference.module,element:reference.element},path:'/modules/'+ti+'/elements/'+te,...(Object.hasOwn(target,'kind')?{kind:target.kind}:{})},uninterpretedPaths:document.interpretation.sourceValidation.diagnostics.filter((d:any)=>d.severity==='warning'&&d.code==='UNKNOWN_CORE_FIELD'&&(d.path===at||d.path.startsWith(at+'/'))).map((d:any)=>d.path),typeAssertion:'unverified'};
+   })};
+   if(!sameOriginalMeaning(original,{operation:'inspect-core-reference-links',version:'0.1.0',source,identity:requested,path,meaning:expected,provenance:'unverified'}))throw Error('Original referenceLinks full result correspondence required');
+   if(expected.state==='missing'){absent.push(observed);continue}
+   const common={documentId:document.documentId,owner:Object.freeze({moduleId:requested.module as string,elementId:requested.element as string}),source:prepared.original.input.documents[di].artifact,ownerProfile:collection.referenceLinksProfile,ownerEvidence:observed.evidence,typeAssertion:'unverified' as const,meaningCorrespondence:true as const,interpretationQualified:false as const,scope:'original_direct_core_reference_links_only' as const};
+   referenceLinkDeclarations.push(Object.freeze({...common,sourcePointer:path,originalMeaning:meaning}));
+   for(const link of meaning.links)referenceLinks.push(Object.freeze({...common,sourcePointer:link.path,originalMeaning:link}));
+   // Generic links carry original correspondence, never authored record-type duties.
    continue;
   }
   if(observed.operation==='members'){
@@ -150,5 +172,5 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
     interpretationQualified:false as const,scope:'original_declaration_owner_meaning_only' as const}));
   }
  }
- return Object.freeze({profile,manifest,entries:Object.freeze(entries),declarationMeanings:Object.freeze(declarationMeanings),fieldMeanings:Object.freeze(fieldMeanings),membershipMeanings:Object.freeze(membershipMeanings),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
+ return Object.freeze({profile,manifest,entries:Object.freeze(entries),referenceLinks:Object.freeze(referenceLinks),referenceLinkDeclarations:Object.freeze(referenceLinkDeclarations),declarationMeanings:Object.freeze(declarationMeanings),fieldMeanings:Object.freeze(fieldMeanings),membershipMeanings:Object.freeze(membershipMeanings),absent:Object.freeze(absent),deferred:Object.freeze(deferred),complete:false as const,scope:'original_inspected_core_source_identity_subset_only' as const});
 }

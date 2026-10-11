@@ -1,7 +1,7 @@
 /** Owner observations for report preparation, never complete assertion/enforcement admission. */
 import {createHash} from 'node:crypto';
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
-import {requireLoadedUmfAssertionOwner,type loadUmfDeclarationProducer,type loadUmfFieldAssertionProducer,type loadUmfRecordMembersProducer,type loadUmfScalarTypeProducer} from './index';
+import {requireLoadedUmfAssertionOwner,type loadUmfDeclarationProducer,type loadUmfFieldAssertionProducer,type loadUmfReferenceLinksProducer,type loadUmfRecordMembersProducer,type loadUmfScalarTypeProducer} from './index';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 const originalCollections=new WeakMap<object,Prepared>();
 /** Private in-process issuance correspondence; not native or durable authority. */
@@ -9,14 +9,16 @@ export function requireOriginalCatalogObservationCollection(prepared:Prepared,co
  if(originalCollections.get(collection)!==prepared)throw Error('Original observation collection custody required');
 }
 type Owner=Awaited<ReturnType<typeof loadUmfDeclarationProducer>>;
-export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owner,fields?:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>,scalars?:Awaited<ReturnType<typeof loadUmfScalarTypeProducer>>,members?:Awaited<ReturnType<typeof loadUmfRecordMembersProducer>>){
+export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owner,fields?:Awaited<ReturnType<typeof loadUmfFieldAssertionProducer>>,scalars?:Awaited<ReturnType<typeof loadUmfScalarTypeProducer>>,members?:Awaited<ReturnType<typeof loadUmfRecordMembersProducer>>,links?:Awaited<ReturnType<typeof loadUmfReferenceLinksProducer>>){
  requireOriginalCatalogPreparation(prepared);
  requireLoadedUmfAssertionOwner(owner,'declarations');
  if(fields)requireLoadedUmfAssertionOwner(fields,'assertion-fields');
  if(scalars)requireLoadedUmfAssertionOwner(scalars,'scalar-types');
  if(members)requireLoadedUmfAssertionOwner(members,'record-members');
+ if(links)requireLoadedUmfAssertionOwner(links,'reference-links');
  if(owner.sourceRevision!==prepared.umfProfile.version)throw Error('Original owner observation source mismatch');
  if(fields&&fields.sourceRevision!==prepared.umfProfile.version)throw Error('Original Field owner observation source mismatch');
+ const referenceLinksProfile=links?Object.freeze({identity:'umf-reference-links-inspection',version:links.sourceRevision,sha256:links.bundleSha256}):null;
  const membersProfile=members?Object.freeze({identity:'umf-record-members-inspection',version:members.sourceRevision,sha256:members.bundleSha256}):null;
  const scalarProfile=scalars?Object.freeze({identity:'umf-scalar-type-inspection',version:scalars.sourceRevision,sha256:scalars.bundleSha256}):null;
  const fieldProfile=fields?Object.freeze({identity:'umf-field-assertion-inspection',version:fields.sourceRevision,sha256:fields.bundleSha256}):null;
@@ -24,6 +26,8 @@ export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owne
  const observations:{documentId:string;basis:'original'|'reversible_target';operation:string;identity:unknown;result:unknown;evidence:{identity:string;bytesBase64:string;sha256:string}}[]=[];let retainedBytes=0;let calls=0;
  function capture(documentIndex:number,operation:string,identity:unknown,basis:'original'|'reversible_target',run:()=>unknown,observationProfile:{readonly identity:string;readonly version:string;readonly sha256:string}=profile){
   if(++calls>4096)throw Error('Declaration observation component call capacity exceeded');
+  // Request identities contain primitive fields; retain the original request before invoking loaded code.
+  Object.freeze(identity);
   const document=prepared.documents[documentIndex];let result:unknown;
   try{result={state:'observed',observation:run()}}catch(error){result={state:'unavailable',name:error instanceof Error?error.name:null,code:typeof (error as any)?.code==='string'?(error as any).code:null,path:typeof (error as any)?.path==='string'?(error as any).path:null,message:error instanceof Error?error.message:String(error)}}
   const bytes=Buffer.from(JSON.stringify({profile:observationProfile,documentId:document.documentId,contentSha256:prepared.original.documents[documentIndex].sha256,basis,operation,identity,result}),'utf8');
@@ -44,11 +48,12 @@ export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owne
     if(fields){const fieldIdentity={module:module.id,element:element.id};for(const [operation,inspect] of [['kind',fields.inspectKind],['nullability',fields.inspectNullability],['cardinality',fields.inspectCardinality],['facets',fields.inspectFacets]] as const)capture(index,operation,fieldIdentity,'original',()=>inspect(source,fieldIdentity),fieldProfile!);}
     if(scalars){const identity={module:module.id,element:element.id};capture(index,'scalarType',identity,'original',()=>scalars.inspectScalarType(source,identity),scalarProfile!);}
     if(members){const identity={module:module.id,element:element.id};capture(index,'members',identity,'original',()=>members.inspectRecordMembers(source,identity),membersProfile!);}
+    if(links){const identity={module:module.id,element:element.id};capture(index,'referenceLinks',identity,'original',()=>links.inspectReferenceLinks(source,identity),referenceLinksProfile!);}
     if(element.kind==='record')capture(index,'keys',{module:module.id,element:element.id},'original',()=>owner.inspectKeys(source,{module:module.id,element:element.id}));
    }
   }
  }
  function freeze(value:unknown):void{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value)}}freeze(observations);
- const collection=Object.freeze({profile,fieldProfile,scalarProfile,membersProfile,observations:Object.freeze(observations),scope:'original_owner_assertion_observations_only' as const});
+ const collection=Object.freeze({profile,fieldProfile,scalarProfile,membersProfile,referenceLinksProfile,observations:Object.freeze(observations),scope:'original_owner_assertion_observations_only' as const});
  originalCollections.set(collection,prepared);return collection;
 }

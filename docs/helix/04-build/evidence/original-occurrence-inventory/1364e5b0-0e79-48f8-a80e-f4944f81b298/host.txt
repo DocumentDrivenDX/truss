@@ -1,0 +1,2354 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/catalog-core-assertion-identities.test.ts:
+(pass) original pointer identities retain partial meanings without inventing missing facets or enforcement [2.55ms]
+(pass) cloned observation collections cannot issue source identities [0.04ms]
+(pass) authored key and relationship IDs remain qualified by original occurrence pointers [24.15ms]
+(pass) original 0.8 schema properties keep authored pointers and legacy API failures explicit [11.61ms]
+(pass) complete original value coverage keeps unclassified and opaque meaning unavailable [0.53ms]
+(pass) occurrence inventory retains original custody instead of copied or foreign preparation [3.98ms]
+(pass) mixed original versions and lexical numeric opaque bytes remain distinct from transition targets [7.78ms]
+(pass) the original UMF profile still refuses unsafe integer source before inventory issuance [0.46ms]
+(pass) loaded owner declaration meanings cannot change content while retaining IDs and counts [243.49ms]
+
+tests/acceptance-json.test.ts:
+(pass) empty object [0.19ms]
+(pass) null boolean string array [0.03ms]
+(pass) legal whitespace [0.04ms]
+(pass) inert prototype name [0.02ms]
+(pass) valid escaped surrogate pair [0.07ms]
+(pass) distinct normalization forms [0.02ms]
+(pass) escaped equivalent duplicate [0.10ms]
+(pass) unpaired high surrogate [0.01ms]
+(pass) unpaired low surrogate
+(pass) overlong utf8 [0.02ms]
+(pass) surrogate utf8
+(pass) out of range utf8
+(pass) outer number
+(pass) trailing data
+(pass) trailing comma
+(pass) bom
+(pass) comment
+(pass) opaque numeric artifact base64
+(pass) complete original input fixture preserves all native and converted custody [0.23ms]
+(pass) selected depth and container limits refuse before an over-limit output [1.90ms]
+(pass) raw byte and cumulative duplicate-name work are conjunctive ceilings [1.48ms]
+(pass) exact node ceiling counts containers and every scalar occurrence [20.49ms]
+
+tests/catalog-reference-links-correspondence.test.ts:
+(pass) ordered repeated cross-module generic links join original bytes separately from type assertions [16.50ms]
+(pass) empty absent and record-role-to-Field stay explicit generic link observations without type invention [44.53ms]
+48 |   "r.meaning.links.reverse()","r.meaning.links.pop()","r.meaning.links[2].index=0","r.meaning.links[2].path='/modules/0/elements/0/references/0'","r.meaning.links[0].reference.role='future-role'","r.meaning.links[0].reference.module='m'","r.meaning.links[0].reference.element='v'","r.meaning.links[0].target.identity.module='m'","r.meaning.links[0].target.identity.element='v'","r.meaning.links[0].target.path='/modules/0/elements/1'","r.meaning.links[0].target.kind='field'","delete r.meaning.links[0].target.kind","r.meaning.links[0].typeAssertion='verified'","r.meaning.links[0].enforcement='database'","delete r.meaning.links[1].reference['future/qualifier']","r.meaning.links[1].reference['future/qualifier'].values.reverse()","r.meaning.links[1].uninterpretedPaths=[]","r.meaning.links[1].uninterpretedPaths=['/foreign']","r.meaning={state:'missing'}","r.identity.element='w'","r.identity.module='other'","r.path='/modules/0/elements/2/references'","r.operation='inspect-core-record-type'","r.version='future'","r.prov
+49 |  ].map(m=>[props,m] as [any,string]),[{},"r.meaning={state:'present',links:[]}"],[{references:[]},"r.meaning={state:'missing'}"],[props,"r.meaning=Object.fromEntries(Object.entries(r.meaning).reverse())"]];
+50 |  for(const [properties,mutation] of cases){const p=prepare(properties),directory=await mkdtemp(join(tmpdir(),'truss-reference-owner-control-'));
+51 |   try{const script=`import * as base from ${JSON.stringify(resolve(process.env.TRUSS_UMF_REFERENCE_LINKS_PRODUCER!,'producer.js'))};\nexport function inspectCoreReferenceLinks(...args){const r=base.inspectCoreReferenceLinks(...args);if(args[1].element==='v'){${mutation}}return r}\n`;
+52 |    await writeFile(join(directory,'producer.js'),script);await writeFile(join(directory,'producer-manifest.json'),JSON.stringify({revision:links.sourceRevision,producerMode:'reference-links',bundleSha256:new Bun.CryptoHasher('sha256').update(script).digest('hex')}));
+53 |    const c=observations(p,await loadUmfReferenceLinksProducer(directory));if(mutation.includes('Object.fromEntries'))expect(collectCatalogCoreAssertionIdentities(p,c).referenceLinks.length).toBe(3);else expect(()=>collectCatalogCoreAssertionIdentities(p,c)).toThrow('referenceLinks');
+                                                                                                                                                                                                                                                                       ^
+error: expect(received).toThrow(expected)
+
+Expected substring: "referenceLinks"
+
+Received function did not throw
+Received value: {
+  profile: {
+    identity: "truss-core-assertion-source-identity",
+    version: "0.6.0",
+    sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+  },
+  manifest: {
+    identity: "truss.core-assertion-source-identity/0.6.0",
+    bytesBase64: "eyJpbnRlcmZhY2VWZXJzaW9uIjoidHJ1c3MtY29yZS1hc3NlcnRpb24tc291cmNlLWlkZW50aXR5LzAuNi4wIiwicHJvZHVjZXJzIjp7ImZpZWxkcyI6eyJpZGVudGl0eSI6InVtZi1maWVsZC1hc3NlcnRpb24taW5zcGVjdGlvbiIsInZlcnNpb24iOiJjNDVjNzJhMmE4YTNjNGZiYTYxYzQwYzU5MjdkZDkwOTFhY2Y4Y2MzIiwic2hhMjU2IjoiODYwZTcwMDgyZGYxNzA2MTMyZmU2Mzg5ZTUyNzRiYjQ1YzcwNzgzZGRjNTQ3ZjRjNDk1MGMxYTk0ZmVhNWY2NyJ9LCJzY2FsYXIiOm51bGwsIm1lbWJlcnMiOm51bGwsInJlZmVyZW5jZUxpbmtzIjp7ImlkZW50aXR5IjoidW1mLXJlZmVyZW5jZS1saW5rcy1pbnNwZWN0aW9uIiwidmVyc2lvbiI6Ijk1NDViNzExOWNlYWEyOWNhNzUyM2U0NzIyZWM1MjQxMjA4NGQ4MzUiLCJzaGEyNTYiOiI5YTY5NjM1M2RmN2RlNTE5NDA2YjY1ZjBmOTA1N2IwNjI5ZTBlZjE0NjVmYjc0ZGQ2NzcyNWY1ZGMxYjIyMDI3In0sImRlY2xhcmF0aW9ucyI6eyJpZGVudGl0eSI6InVtZi1kZWNsYXJhdGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiIwNzRjZjM3OGFmYjcwMmZmZDg0ZDY5MjRhZTRiMzc4MTdjYWQ1MzI0YTRhZGM1ODdmYTMwYzU0MWUxY2ZiMjE2In19LCJvcGVyYXRpb25zIjpbImtpbmQiLCJudWxsYWJpbGl0eSIsImNhcmRpbmFsaXR5IiwiZmFjZXRzIiwic2NhbGFyVHlwZSIsIm1lbWJlcnMiLCJyZWZlcmVuY2VMaW5rcyIsImtleXMiLCJyZWxhdGlvbnNoaXBzIiwic2NoZW1hX3Byb3BlcnRpZXMiXSwiYmFzaXMiOiJvcmlnaW5hbCIsInJlZmVyZW5jZUxpbmtzIjoiZ2VuZXJpY19jb3JlX2xpbmtzX25vdF92ZXJpZmllZF90eXBlX2Fzc2VydGlvbnMiLCJzY2hlbWFQcm9wZXJ0eUFzc2VydGlvbnMiOlsiYWxsb3dlZFZhbHVlcyIsImRlZmF1bHQiLCJmYWNldHMiXSwiYW5ub3RhdGlvbnMiOiJyZXRhaW5lZCBzZXBhcmF0ZWx5OyBub3QgY29uc3RyYWludCBhc3NlcnRpb25zIiwiaWRlbnRpdHkiOiJvcmlnaW5hbCBkb2N1bWVudCBkaWdlc3QsIHF1YWxpZmllZCBvd25lciBhbmQgZXhhY3Qgb3duZXItcHJvZHVjZWQgcG9pbnRlciIsImF1dGhvcmVkIjoicmV0YWluIGV4YWN0IGRlY2xhcmF0aW9uIElEIHdpdGggZnVsbCBvcmlnaW5hbCBvY2N1cnJlbmNlIHBvaW50ZXIiLCJtaXNzaW5nIjoicmV0YWluZWQgYWJzZW5jZSBvYnNlcnZhdGlvbjsgbm8gYXNzZXJ0aW9uIGludmVudGVkIiwiZW5mb3JjZW1lbnQiOiJub25lL3VucXVhbGlmaWVkIn0=",
+    sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+  },
+  entries: [
+    {
+      assertion: {
+        sourceKind: "umf_document",
+        owner: {
+          documentId: "doc",
+          moduleId: "m",
+        },
+        definitionPin: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+        sourcePointer: "/modules/0/elements/0/kind",
+        kind: "source",
+        sourceIdentityProfile: {
+          identity: "truss-core-assertion-source-identity",
+          version: "0.6.0",
+          sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+        },
+      },
+      source: [Object: null prototype] {
+        identity: "doc",
+        bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+        sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+      },
+      ruleName: "core.kind",
+      ruleNameOrigin: "profile_generated",
+      enforcement: "none",
+      reason: "unqualified",
+      ownerEvidence: {
+        identity: "truss.owner-declaration-observation/0/4",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJraW5kIiwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLWtpbmQiLCJ2ZXJzaW9uIjoiNi4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAva2luZCIsIm1lYW5pbmciOnsic3RhdGUiOiJrbm93biIsImtpbmQiOiJmaWVsZCJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "242a2e5fead6ad2a839d8cdd7647844f5e1015cb7c5b6e0060fe33f754ab5cb8",
+      },
+    },
+    {
+      assertion: {
+        sourceKind: "umf_document",
+        owner: {
+          documentId: "doc",
+          moduleId: "m",
+        },
+        definitionPin: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+        sourcePointer: "/modules/0/elements/1/kind",
+        kind: "source",
+        sourceIdentityProfile: {
+          identity: "truss-core-assertion-source-identity",
+          version: "0.6.0",
+          sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+        },
+      },
+      source: [Object: null prototype] {
+        identity: "doc",
+        bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+        sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+      },
+      ruleName: "core.kind",
+      ruleNameOrigin: "profile_generated",
+      enforcement: "none",
+      reason: "unqualified",
+      ownerEvidence: {
+        identity: "truss.owner-declaration-observation/0/10",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJraW5kIiwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLWtpbmQiLCJ2ZXJzaW9uIjoiNi4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzEva2luZCIsIm1lYW5pbmciOnsic3RhdGUiOiJrbm93biIsImtpbmQiOiJyZWNvcmQifSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "669581c00df9425f06708501e1b7ce071affd62e86e9f800f4ca576c4abde718",
+      },
+    },
+    {
+      assertion: {
+        sourceKind: "umf_document",
+        owner: {
+          documentId: "doc",
+          moduleId: "m",
+        },
+        definitionPin: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+        sourcePointer: "/modules/0/elements/2/kind",
+        kind: "source",
+        sourceIdentityProfile: {
+          identity: "truss-core-assertion-source-identity",
+          version: "0.6.0",
+          sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+        },
+      },
+      source: [Object: null prototype] {
+        identity: "doc",
+        bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+        sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+      },
+      ruleName: "core.kind",
+      ruleNameOrigin: "profile_generated",
+      enforcement: "none",
+      reason: "unqualified",
+      ownerEvidence: {
+        identity: "truss.owner-declaration-observation/0/17",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJraW5kIiwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ3In0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLWtpbmQiLCJ2ZXJzaW9uIjoiNi4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ3In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzIva2luZCIsIm1lYW5pbmciOnsic3RhdGUiOiJrbm93biIsImtpbmQiOiJmaWVsZCJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "b418ed81b17edf483244d911cc398f190530d36a38df884f02b7b1fa67694db5",
+      },
+    },
+    {
+      assertion: {
+        sourceKind: "umf_document",
+        owner: {
+          documentId: "doc",
+          moduleId: "other",
+        },
+        definitionPin: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+        sourcePointer: "/modules/1/elements/0/kind",
+        kind: "source",
+        sourceIdentityProfile: {
+          identity: "truss-core-assertion-source-identity",
+          version: "0.6.0",
+          sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+        },
+      },
+      source: [Object: null prototype] {
+        identity: "doc",
+        bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+        sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+      },
+      ruleName: "core.kind",
+      ruleNameOrigin: "profile_generated",
+      enforcement: "none",
+      reason: "unqualified",
+      ownerEvidence: {
+        identity: "truss.owner-declaration-observation/0/25",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJraW5kIiwiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1raW5kIiwidmVyc2lvbiI6IjYuMC4wIiwic291cmNlIjp7InVtZiI6IjAuNy4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7Im1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSwicGF0aCI6Ii9tb2R1bGVzLzEvZWxlbWVudHMvMC9raW5kIiwibWVhbmluZyI6eyJzdGF0ZSI6Imtub3duIiwia2luZCI6InJlY29yZCJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "37fc9bba97cd3d48cd7820117497763322c4d3d04da0630cb7c774b1780d0963",
+      },
+    }
+  ],
+  referenceLinks: [
+    {
+      documentId: "doc",
+      owner: {
+        moduleId: "m",
+        elementId: "v",
+      },
+      source: [Object: null prototype] {
+        identity: "doc",
+        bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+        sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+      },
+      ownerProfile: {
+        identity: "umf-reference-links-inspection",
+        version: "9545b7119ceaa29ca7523e4722ec52412084d835",
+        sha256: "9a696353df7de519406b65f0f9057b0629e0ef1465fb74dd67725f5dc1b22027",
+      },
+      ownerEvidence: {
+        identity: "truss.owner-declaration-observation/0/8",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLXJlZmVyZW5jZS1saW5rcy1pbnNwZWN0aW9uIiwidmVyc2lvbiI6Ijk1NDViNzExOWNlYWEyOWNhNzUyM2U0NzIyZWM1MjQxMjA4NGQ4MzUiLCJzaGEyNTYiOiI5YTY5NjM1M2RmN2RlNTE5NDA2YjY1ZjBmOTA1N2IwNjI5ZTBlZjE0NjVmYjc0ZGQ2NzcyNWY1ZGMxYjIyMDI3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJyZWZlcmVuY2VMaW5rcyIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1yZWZlcmVuY2UtbGlua3MiLCJ2ZXJzaW9uIjoiMC4xLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcyIsIm1lYW5pbmciOnsic3RhdGUiOiJwcmVzZW50IiwibGlua3MiOlt7ImluZGV4IjowLCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8wL3JlZmVyZW5jZXMvMCIsInJlZmVyZW5jZSI6eyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInRhcmdldCI6eyJpZGVudGl0eSI6eyJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8xL2VsZW1lbnRzLzAiLCJraW5kIjoicmVjb3JkIn0sInVuaW50ZXJwcmV0ZWRQYXRocyI6W10sInR5cGVBc3NlcnRpb24iOiJ1bnZlcmlmaWVkIn0seyJpbmRleCI6MSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzEiLCJyZWZlcmVuY2UiOnsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzEiLCJraW5kIjoicmVjb3JkIn0sInVuaW50ZXJwcmV0ZWRQYXRocyI6WyIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIl0sInR5cGVBc3NlcnRpb24iOiJ1bnZlcmlmaWVkIn0seyJpbmRleCI6MiwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzIiLCJyZWZlcmVuY2UiOnsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMS9lbGVtZW50cy8wIiwia2luZCI6InJlY29yZCJ9LCJ1bmludGVycHJldGVkUGF0aHMiOltdLCJ0eXBlQXNzZXJ0aW9uIjoidW52ZXJpZmllZCJ9XX0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "94754c3888ce990c0776ef70dec9b6e43fee90e0228acc6dacf3f4e46804aa63",
+      },
+      typeAssertion: "unverified",
+      meaningCorrespondence: true,
+      interpretationQualified: false,
+      scope: "original_direct_core_reference_links_only",
+      sourcePointer: "/modules/0/elements/0/references/0",
+      originalMeaning: [Object: null prototype] {
+        index: 0,
+        path: "/modules/0/elements/0/references/0",
+        reference: [Object: null prototype] {
+          role: "record-type",
+          module: "other",
+          element: "R",
+        },
+        target: [Object: null prototype] {
+          identity: [Object: null prototype] {
+            module: "other",
+            element: "R",
+          },
+          path: "/modules/1/elements/0",
+          kind: "record",
+        },
+        uninterpretedPaths: [],
+        typeAssertion: "unverified",
+      },
+    }, {
+      documentId: "doc",
+      owner: {
+        moduleId: "m",
+        elementId: "v",
+      },
+      source: [Object: null prototype] {
+        identity: "doc",
+        bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+        sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+      },
+      ownerProfile: {
+        identity: "umf-reference-links-inspection",
+        version: "9545b7119ceaa29ca7523e4722ec52412084d835",
+        sha256: "9a696353df7de519406b65f0f9057b0629e0ef1465fb74dd67725f5dc1b22027",
+      },
+      ownerEvidence: {
+        identity: "truss.owner-declaration-observation/0/8",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLXJlZmVyZW5jZS1saW5rcy1pbnNwZWN0aW9uIiwidmVyc2lvbiI6Ijk1NDViNzExOWNlYWEyOWNhNzUyM2U0NzIyZWM1MjQxMjA4NGQ4MzUiLCJzaGEyNTYiOiI5YTY5NjM1M2RmN2RlNTE5NDA2YjY1ZjBmOTA1N2IwNjI5ZTBlZjE0NjVmYjc0ZGQ2NzcyNWY1ZGMxYjIyMDI3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJyZWZlcmVuY2VMaW5rcyIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1yZWZlcmVuY2UtbGlua3MiLCJ2ZXJzaW9uIjoiMC4xLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcyIsIm1lYW5pbmciOnsic3RhdGUiOiJwcmVzZW50IiwibGlua3MiOlt7ImluZGV4IjowLCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8wL3JlZmVyZW5jZXMvMCIsInJlZmVyZW5jZSI6eyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInRhcmdldCI6eyJpZGVudGl0eSI6eyJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8xL2VsZW1lbnRzLzAiLCJraW5kIjoicmVjb3JkIn0sInVuaW50ZXJwcmV0ZWRQYXRocyI6W10sInR5cGVBc3NlcnRpb24iOiJ1bnZlcmlmaWVkIn0seyJpbmRleCI6MSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzEiLCJyZWZlcmVuY2UiOnsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzEiLCJraW5kIjoicmVjb3JkIn0sInVuaW50ZXJwcmV0ZWRQYXRocyI6WyIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIl0sInR5cGVBc3NlcnRpb24iOiJ1bnZlcmlmaWVkIn0seyJpbmRleCI6MiwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzIiLCJyZWZlcmVuY2UiOnsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMS9lbGVtZW50cy8wIiwia2luZCI6InJlY29yZCJ9LCJ1bmludGVycHJldGVkUGF0aHMiOltdLCJ0eXBlQXNzZXJ0aW9uIjoidW52ZXJpZmllZCJ9XX0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "94754c3888ce990c0776ef70dec9b6e43fee90e0228acc6dacf3f4e46804aa63",
+      },
+      typeAssertion: "unverified",
+      meaningCorrespondence: true,
+      interpretationQualified: false,
+      scope: "original_direct_core_reference_links_only",
+      sourcePointer: "/modules/0/elements/0/references/1",
+      originalMeaning: [Object: null prototype] {
+        index: 1,
+        path: "/modules/0/elements/0/references/1",
+        reference: [Object: null prototype] {
+          role: "future-role",
+          module: "m",
+          element: "R",
+          "future/qualifier": [Object: null prototype] {
+            values: [ "b", "a" ],
+          },
+        },
+        target: [Object: null prototype] {
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "R",
+          },
+          path: "/modules/0/elements/1",
+          kind: "record",
+        },
+        uninterpretedPaths: [ "/modules/0/elements/0/references/1/future~1qualifier" ],
+        typeAssertion: "unverified",
+      },
+    }, {
+      documentId: "doc",
+      owner: {
+        moduleId: "m",
+        elementId: "v",
+      },
+      source: [Object: null prototype] {
+        identity: "doc",
+        bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+        sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+      },
+      ownerProfile: {
+        identity: "umf-reference-links-inspection",
+        version: "9545b7119ceaa29ca7523e4722ec52412084d835",
+        sha256: "9a696353df7de519406b65f0f9057b0629e0ef1465fb74dd67725f5dc1b22027",
+      },
+      ownerEvidence: {
+        identity: "truss.owner-declaration-observation/0/8",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLXJlZmVyZW5jZS1saW5rcy1pbnNwZWN0aW9uIiwidmVyc2lvbiI6Ijk1NDViNzExOWNlYWEyOWNhNzUyM2U0NzIyZWM1MjQxMjA4NGQ4MzUiLCJzaGEyNTYiOiI5YTY5NjM1M2RmN2RlNTE5NDA2YjY1ZjBmOTA1N2IwNjI5ZTBlZjE0NjVmYjc0ZGQ2NzcyNWY1ZGMxYjIyMDI3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJyZWZlcmVuY2VMaW5rcyIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1yZWZlcmVuY2UtbGlua3MiLCJ2ZXJzaW9uIjoiMC4xLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcyIsIm1lYW5pbmciOnsic3RhdGUiOiJwcmVzZW50IiwibGlua3MiOlt7ImluZGV4IjowLCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8wL3JlZmVyZW5jZXMvMCIsInJlZmVyZW5jZSI6eyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInRhcmdldCI6eyJpZGVudGl0eSI6eyJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8xL2VsZW1lbnRzLzAiLCJraW5kIjoicmVjb3JkIn0sInVuaW50ZXJwcmV0ZWRQYXRocyI6W10sInR5cGVBc3NlcnRpb24iOiJ1bnZlcmlmaWVkIn0seyJpbmRleCI6MSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzEiLCJyZWZlcmVuY2UiOnsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzEiLCJraW5kIjoicmVjb3JkIn0sInVuaW50ZXJwcmV0ZWRQYXRocyI6WyIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIl0sInR5cGVBc3NlcnRpb24iOiJ1bnZlcmlmaWVkIn0seyJpbmRleCI6MiwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzIiLCJyZWZlcmVuY2UiOnsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMS9lbGVtZW50cy8wIiwia2luZCI6InJlY29yZCJ9LCJ1bmludGVycHJldGVkUGF0aHMiOltdLCJ0eXBlQXNzZXJ0aW9uIjoidW52ZXJpZmllZCJ9XX0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "94754c3888ce990c0776ef70dec9b6e43fee90e0228acc6dacf3f4e46804aa63",
+      },
+      typeAssertion: "unverified",
+      meaningCorrespondence: true,
+      interpretationQualified: false,
+      scope: "original_direct_core_reference_links_only",
+      sourcePointer: "/modules/0/elements/0/references/2",
+      originalMeaning: [Object: null prototype] {
+        index: 2,
+        path: "/modules/0/elements/0/references/2",
+        reference: [Object: null prototype] {
+          role: "record-type",
+          module: "other",
+          element: "R",
+        },
+        target: [Object: null prototype] {
+          identity: [Object: null prototype] {
+            module: "other",
+            element: "R",
+          },
+          path: "/modules/1/elements/0",
+          kind: "record",
+        },
+        uninterpretedPaths: [],
+        typeAssertion: "unverified",
+      },
+    }
+  ],
+  referenceLinkDeclarations: [
+    {
+      documentId: "doc",
+      owner: {
+        moduleId: "m",
+        elementId: "v",
+      },
+      source: [Object: null prototype] {
+        identity: "doc",
+        bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+        sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+      },
+      ownerProfile: {
+        identity: "umf-reference-links-inspection",
+        version: "9545b7119ceaa29ca7523e4722ec52412084d835",
+        sha256: "9a696353df7de519406b65f0f9057b0629e0ef1465fb74dd67725f5dc1b22027",
+      },
+      ownerEvidence: {
+        identity: "truss.owner-declaration-observation/0/8",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLXJlZmVyZW5jZS1saW5rcy1pbnNwZWN0aW9uIiwidmVyc2lvbiI6Ijk1NDViNzExOWNlYWEyOWNhNzUyM2U0NzIyZWM1MjQxMjA4NGQ4MzUiLCJzaGEyNTYiOiI5YTY5NjM1M2RmN2RlNTE5NDA2YjY1ZjBmOTA1N2IwNjI5ZTBlZjE0NjVmYjc0ZGQ2NzcyNWY1ZGMxYjIyMDI3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJyZWZlcmVuY2VMaW5rcyIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1yZWZlcmVuY2UtbGlua3MiLCJ2ZXJzaW9uIjoiMC4xLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcyIsIm1lYW5pbmciOnsic3RhdGUiOiJwcmVzZW50IiwibGlua3MiOlt7ImluZGV4IjowLCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8wL3JlZmVyZW5jZXMvMCIsInJlZmVyZW5jZSI6eyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInRhcmdldCI6eyJpZGVudGl0eSI6eyJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8xL2VsZW1lbnRzLzAiLCJraW5kIjoicmVjb3JkIn0sInVuaW50ZXJwcmV0ZWRQYXRocyI6W10sInR5cGVBc3NlcnRpb24iOiJ1bnZlcmlmaWVkIn0seyJpbmRleCI6MSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzEiLCJyZWZlcmVuY2UiOnsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzEiLCJraW5kIjoicmVjb3JkIn0sInVuaW50ZXJwcmV0ZWRQYXRocyI6WyIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIl0sInR5cGVBc3NlcnRpb24iOiJ1bnZlcmlmaWVkIn0seyJpbmRleCI6MiwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzIiLCJyZWZlcmVuY2UiOnsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJ0YXJnZXQiOnsiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMS9lbGVtZW50cy8wIiwia2luZCI6InJlY29yZCJ9LCJ1bmludGVycHJldGVkUGF0aHMiOltdLCJ0eXBlQXNzZXJ0aW9uIjoidW52ZXJpZmllZCJ9XX0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "94754c3888ce990c0776ef70dec9b6e43fee90e0228acc6dacf3f4e46804aa63",
+      },
+      typeAssertion: "unverified",
+      meaningCorrespondence: true,
+      interpretationQualified: false,
+      scope: "original_direct_core_reference_links_only",
+      sourcePointer: "/modules/0/elements/0/references",
+      originalMeaning: [Object: null prototype] {
+        state: "present",
+        links: [
+          [Object: null prototype] {
+            index: 0,
+            path: "/modules/0/elements/0/references/0",
+            reference: [Object: null prototype] {
+              role: "record-type",
+              module: "other",
+              element: "R",
+            },
+            target: [Object: null prototype] {
+              identity: [Object: null prototype] {
+                module: "other",
+                element: "R",
+              },
+              path: "/modules/1/elements/0",
+              kind: "record",
+            },
+            uninterpretedPaths: [],
+            typeAssertion: "unverified",
+          }, [Object: null prototype] {
+            index: 1,
+            path: "/modules/0/elements/0/references/1",
+            reference: [Object: null prototype] {
+              role: "future-role",
+              module: "m",
+              element: "R",
+              "future/qualifier": [Object: null prototype] {
+                values: [ "b", "a" ],
+              },
+            },
+            target: [Object: null prototype] {
+              identity: [Object: null prototype] {
+                module: "m",
+                element: "R",
+              },
+              path: "/modules/0/elements/1",
+              kind: "record",
+            },
+            uninterpretedPaths: [ "/modules/0/elements/0/references/1/future~1qualifier" ],
+            typeAssertion: "unverified",
+          }, [Object: null prototype] {
+            index: 2,
+            path: "/modules/0/elements/0/references/2",
+            reference: [Object: null prototype] {
+              role: "record-type",
+              module: "other",
+              element: "R",
+            },
+            target: [Object: null prototype] {
+              identity: [Object: null prototype] {
+                module: "other",
+                element: "R",
+              },
+              path: "/modules/1/elements/0",
+              kind: "record",
+            },
+            uninterpretedPaths: [],
+            typeAssertion: "unverified",
+          }
+        ],
+      },
+    }
+  ],
+  declarationMeanings: [],
+  fieldMeanings: [
+    {
+      assertion: {
+        assertion: {
+          sourceKind: "umf_document",
+          owner: {
+            documentId: "doc",
+            moduleId: "m",
+          },
+          definitionPin: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+          sourcePointer: "/modules/0/elements/0/kind",
+          kind: "source",
+          sourceIdentityProfile: {
+            identity: "truss-core-assertion-source-identity",
+            version: "0.6.0",
+            sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+          },
+        },
+        source: [Object: null prototype] {
+          identity: "doc",
+          bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+          sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+        },
+        ruleName: "core.kind",
+        ruleNameOrigin: "profile_generated",
+        enforcement: "none",
+        reason: "unqualified",
+        ownerEvidence: {
+          identity: "truss.owner-declaration-observation/0/4",
+          bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJraW5kIiwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLWtpbmQiLCJ2ZXJzaW9uIjoiNi4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAva2luZCIsIm1lYW5pbmciOnsic3RhdGUiOiJrbm93biIsImtpbmQiOiJmaWVsZCJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+          sha256: "242a2e5fead6ad2a839d8cdd7647844f5e1015cb7c5b6e0060fe33f754ab5cb8",
+        },
+      },
+      ownerProfile: {
+        identity: "umf-field-assertion-inspection",
+        version: "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+        sha256: "860e70082df1706132fe6389e5274bb45c70783ddc547f4c4950c1a94fea5f67",
+      },
+      ownerState: "known",
+      originalMeaning: [Object: null prototype] {
+        state: "known",
+        kind: "field",
+      },
+      meaningCorrespondence: true,
+      interpretationQualified: false,
+      scope: "original_kind_owner_meaning_only",
+    }, {
+      assertion: {
+        assertion: {
+          sourceKind: "umf_document",
+          owner: {
+            documentId: "doc",
+            moduleId: "m",
+          },
+          definitionPin: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+          sourcePointer: "/modules/0/elements/1/kind",
+          kind: "source",
+          sourceIdentityProfile: {
+            identity: "truss-core-assertion-source-identity",
+            version: "0.6.0",
+            sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+          },
+        },
+        source: [Object: null prototype] {
+          identity: "doc",
+          bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+          sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+        },
+        ruleName: "core.kind",
+        ruleNameOrigin: "profile_generated",
+        enforcement: "none",
+        reason: "unqualified",
+        ownerEvidence: {
+          identity: "truss.owner-declaration-observation/0/10",
+          bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJraW5kIiwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLWtpbmQiLCJ2ZXJzaW9uIjoiNi4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzEva2luZCIsIm1lYW5pbmciOnsic3RhdGUiOiJrbm93biIsImtpbmQiOiJyZWNvcmQifSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+          sha256: "669581c00df9425f06708501e1b7ce071affd62e86e9f800f4ca576c4abde718",
+        },
+      },
+      ownerProfile: {
+        identity: "umf-field-assertion-inspection",
+        version: "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+        sha256: "860e70082df1706132fe6389e5274bb45c70783ddc547f4c4950c1a94fea5f67",
+      },
+      ownerState: "known",
+      originalMeaning: [Object: null prototype] {
+        state: "known",
+        kind: "record",
+      },
+      meaningCorrespondence: true,
+      interpretationQualified: false,
+      scope: "original_kind_owner_meaning_only",
+    }, {
+      assertion: {
+        assertion: {
+          sourceKind: "umf_document",
+          owner: {
+            documentId: "doc",
+            moduleId: "m",
+          },
+          definitionPin: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+          sourcePointer: "/modules/0/elements/2/kind",
+          kind: "source",
+          sourceIdentityProfile: {
+            identity: "truss-core-assertion-source-identity",
+            version: "0.6.0",
+            sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+          },
+        },
+        source: [Object: null prototype] {
+          identity: "doc",
+          bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+          sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+        },
+        ruleName: "core.kind",
+        ruleNameOrigin: "profile_generated",
+        enforcement: "none",
+        reason: "unqualified",
+        ownerEvidence: {
+          identity: "truss.owner-declaration-observation/0/17",
+          bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJraW5kIiwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ3In0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLWtpbmQiLCJ2ZXJzaW9uIjoiNi4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ3In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzIva2luZCIsIm1lYW5pbmciOnsic3RhdGUiOiJrbm93biIsImtpbmQiOiJmaWVsZCJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+          sha256: "b418ed81b17edf483244d911cc398f190530d36a38df884f02b7b1fa67694db5",
+        },
+      },
+      ownerProfile: {
+        identity: "umf-field-assertion-inspection",
+        version: "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+        sha256: "860e70082df1706132fe6389e5274bb45c70783ddc547f4c4950c1a94fea5f67",
+      },
+      ownerState: "known",
+      originalMeaning: [Object: null prototype] {
+        state: "known",
+        kind: "field",
+      },
+      meaningCorrespondence: true,
+      interpretationQualified: false,
+      scope: "original_kind_owner_meaning_only",
+    }, {
+      assertion: {
+        assertion: {
+          sourceKind: "umf_document",
+          owner: {
+            documentId: "doc",
+            moduleId: "other",
+          },
+          definitionPin: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+          sourcePointer: "/modules/1/elements/0/kind",
+          kind: "source",
+          sourceIdentityProfile: {
+            identity: "truss-core-assertion-source-identity",
+            version: "0.6.0",
+            sha256: "ebaf2dea70aa4c16631331920cdae0313043ee288aa50dc60917528562c6e36b",
+          },
+        },
+        source: [Object: null prototype] {
+          identity: "doc",
+          bytesBase64: "eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19",
+          sha256: "c5197786acd94dda3ccc9960057bc0c206ab646dfbf3d08ddfd7ccd0ca836afa",
+        },
+        ruleName: "core.kind",
+        ruleNameOrigin: "profile_generated",
+        enforcement: "none",
+        reason: "unqualified",
+        ownerEvidence: {
+          identity: "truss.owner-declaration-observation/0/25",
+          bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJraW5kIiwiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1raW5kIiwidmVyc2lvbiI6IjYuMC4wIiwic291cmNlIjp7InVtZiI6IjAuNy4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7Im1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSwicGF0aCI6Ii9tb2R1bGVzLzEvZWxlbWVudHMvMC9raW5kIiwibWVhbmluZyI6eyJzdGF0ZSI6Imtub3duIiwia2luZCI6InJlY29yZCJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+          sha256: "37fc9bba97cd3d48cd7820117497763322c4d3d04da0630cb7c774b1780d0963",
+        },
+      },
+      ownerProfile: {
+        identity: "umf-field-assertion-inspection",
+        version: "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+        sha256: "860e70082df1706132fe6389e5274bb45c70783ddc547f4c4950c1a94fea5f67",
+      },
+      ownerState: "known",
+      originalMeaning: [Object: null prototype] {
+        state: "known",
+        kind: "record",
+      },
+      meaningCorrespondence: true,
+      interpretationQualified: false,
+      scope: "original_kind_owner_meaning_only",
+    }
+  ],
+  membershipMeanings: [],
+  absent: [
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "relationships",
+      identity: {
+        module: "m",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-relationships",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+          },
+          path: "/modules/0/relationships",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+          diagnostics: [
+            [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }
+          ],
+          residuals: [],
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/2",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJvcmlnaW5hbCIsIm9wZXJhdGlvbiI6InJlbGF0aW9uc2hpcHMiLCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIn0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLXJlbGF0aW9uc2hpcHMiLCJ2ZXJzaW9uIjoiMS4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSJ9LCJwYXRoIjoiL21vZHVsZXMvMC9yZWxhdGlvbnNoaXBzIiwibWVhbmluZyI6eyJzdGF0ZSI6Im1pc3NpbmcifSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQiLCJkaWFnbm9zdGljcyI6W3siY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX05VTExBQklMSVRZIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiTnVsbGFiaWxpdHkgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBubyBuYXRpdmUgYWJzZW5jZSBlbmNvZGluZyBvciBkZWZhdWx0IGV4ZWN1dGlvbiBpcyBpbXBsaWVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfQ0FSRElOQUxJVFkiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYXJkaW5hbGl0eSBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IG5hdGl2ZSBzaGFwZSBhbmQgaXRlbSBzZW1hbnRpY3MgcmVxdWlyZSBleHBsaWNpdCBiaW5kaW5ncyIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX0ZBQ0VUUyIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkZhY2V0IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgYm91bmRzIGRvIG5vdCBlc3RhYmxpc2ggbmF0aXZlIGVuZm9yY2VtZW50IG9yIHZhbHVlIGNvbnZlcnNpb24iLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJVTktOT1dOX0NPUkVfRklFTEQiLCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8wL3JlZmVyZW5jZXMvMS9mdXR1cmV+MXF1YWxpZmllciIsIm1lc3NhZ2UiOiJGaWVsZCByZXRhaW5lZCB3aXRob3V0IGludGVycHJldGF0aW9uIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfS0VZUyIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhbmRpZGF0ZSBrZXkgcHJvZmlsZTsgbmF0aXZlIHVuaXF1ZW5lc3MgYW5kIGF1dGhvciBwcm92ZW5hbmNlIGFyZSBub3QgaW5mZXJyZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9SRUxBVElPTlNISVBTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FuZGlkYXRlIGF1dGhvcmVkIHJlbGF0aW9uc2hpcCBwcm9maWxlOyBuYXRpdmUgZW5mb3JjZW1lbnQgYW5kIHN0b3JhZ2UgYXJlIG5vdCBpbmZlcnJlZCIsInNldmVyaXR5Ijoid2FybmluZyJ9XSwicmVzaWR1YWxzIjpbXX19fQ==",
+        sha256: "cd0d0be58e25fe1a335601a2b555d01d11ff75a2729a747d682c35dba72bcac5",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "nullability",
+      identity: {
+        module: "m",
+        element: "v",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-nullability",
+          version: "5.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "v",
+          },
+          path: "/modules/0/elements/0/nullability",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/5",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJudWxsYWJpbGl0eSIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1udWxsYWJpbGl0eSIsInZlcnNpb24iOiI1LjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6InYifSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9udWxsYWJpbGl0eSIsIm1lYW5pbmciOnsic3RhdGUiOiJtaXNzaW5nIn0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "737bdc039aed5f1a006931f5045ea3af40c269dd55fb97ab81faac02a79a7b32",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "cardinality",
+      identity: {
+        module: "m",
+        element: "v",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-cardinality",
+          version: "4.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "v",
+          },
+          path: "/modules/0/elements/0/cardinality",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/6",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJjYXJkaW5hbGl0eSIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1jYXJkaW5hbGl0eSIsInZlcnNpb24iOiI0LjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6InYifSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9jYXJkaW5hbGl0eSIsIm1lYW5pbmciOnsic3RhdGUiOiJtaXNzaW5nIn0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "87ccde6acb4195cb0b9e64fa335e6962dc7946ad22ba11cf157dcb8c2e5c9ca2",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "facets",
+      identity: {
+        module: "m",
+        element: "v",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-facets",
+          version: "3.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "v",
+          },
+          path: "/modules/0/elements/0/facets",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/7",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJmYWNldHMiLCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6InYifSwicmVzdWx0Ijp7InN0YXRlIjoib2JzZXJ2ZWQiLCJvYnNlcnZhdGlvbiI6eyJvcGVyYXRpb24iOiJpbnNwZWN0LWNvcmUtZmFjZXRzIiwidmVyc2lvbiI6IjMuMC4wIiwic291cmNlIjp7InVtZiI6IjAuNy4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidiJ9LCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8wL2ZhY2V0cyIsIm1lYW5pbmciOnsic3RhdGUiOiJtaXNzaW5nIn0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "e6b3cd366d0d039986172388ad006a826a5f30100c52a2ac724a8f23dc967c2f",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "referenceLinks",
+      identity: {
+        module: "m",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-reference-links",
+          version: "0.1.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "R",
+          },
+          path: "/modules/0/elements/1/references",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/14",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLXJlZmVyZW5jZS1saW5rcy1pbnNwZWN0aW9uIiwidmVyc2lvbiI6Ijk1NDViNzExOWNlYWEyOWNhNzUyM2U0NzIyZWM1MjQxMjA4NGQ4MzUiLCJzaGEyNTYiOiI5YTY5NjM1M2RmN2RlNTE5NDA2YjY1ZjBmOTA1N2IwNjI5ZTBlZjE0NjVmYjc0ZGQ2NzcyNWY1ZGMxYjIyMDI3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJyZWZlcmVuY2VMaW5rcyIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1yZWZlcmVuY2UtbGlua3MiLCJ2ZXJzaW9uIjoiMC4xLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzEvcmVmZXJlbmNlcyIsIm1lYW5pbmciOnsic3RhdGUiOiJtaXNzaW5nIn0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "6d110d21e5a5397d1f86d688871d8a6b8b6aef96489b6ddd153074cfcbce62e4",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "keys",
+      identity: {
+        module: "m",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-keys",
+          version: "2.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "R",
+          },
+          path: "/modules/0/elements/1/keys",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/15",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJvcmlnaW5hbCIsIm9wZXJhdGlvbiI6ImtleXMiLCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIifSwicmVzdWx0Ijp7InN0YXRlIjoib2JzZXJ2ZWQiLCJvYnNlcnZhdGlvbiI6eyJvcGVyYXRpb24iOiJpbnNwZWN0LWNvcmUta2V5cyIsInZlcnNpb24iOiIyLjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIifSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMS9rZXlzIiwibWVhbmluZyI6eyJzdGF0ZSI6Im1pc3NpbmcifSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "576e21ddb088e10979c53c0c2b3cd5f20be386b265551687acf4c23bb7890815",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "nullability",
+      identity: {
+        module: "m",
+        element: "w",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-nullability",
+          version: "5.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "w",
+          },
+          path: "/modules/0/elements/2/nullability",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/18",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJudWxsYWJpbGl0eSIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidyJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1udWxsYWJpbGl0eSIsInZlcnNpb24iOiI1LjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IncifSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMi9udWxsYWJpbGl0eSIsIm1lYW5pbmciOnsic3RhdGUiOiJtaXNzaW5nIn0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "f77a8a934144344014e79e42893c7b9c64c7cd31291c3218a9085ed1abf47e85",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "cardinality",
+      identity: {
+        module: "m",
+        element: "w",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-cardinality",
+          version: "4.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "w",
+          },
+          path: "/modules/0/elements/2/cardinality",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/19",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJjYXJkaW5hbGl0eSIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidyJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1jYXJkaW5hbGl0eSIsInZlcnNpb24iOiI0LjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IncifSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMi9jYXJkaW5hbGl0eSIsIm1lYW5pbmciOnsic3RhdGUiOiJtaXNzaW5nIn0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "c5b75d00e88e526db8c71f521a6f60eb3cda921646f6aad6177139fee2e55574",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "facets",
+      identity: {
+        module: "m",
+        element: "w",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-facets",
+          version: "3.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "w",
+          },
+          path: "/modules/0/elements/2/facets",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/20",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJmYWNldHMiLCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IncifSwicmVzdWx0Ijp7InN0YXRlIjoib2JzZXJ2ZWQiLCJvYnNlcnZhdGlvbiI6eyJvcGVyYXRpb24iOiJpbnNwZWN0LWNvcmUtZmFjZXRzIiwidmVyc2lvbiI6IjMuMC4wIiwic291cmNlIjp7InVtZiI6IjAuNy4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidyJ9LCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8yL2ZhY2V0cyIsIm1lYW5pbmciOnsic3RhdGUiOiJtaXNzaW5nIn0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "f6bb2be4f1b7a038e0aa17bb702a92583db9439754f6a85c702f3ab163cc5ca9",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "referenceLinks",
+      identity: {
+        module: "m",
+        element: "w",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-reference-links",
+          version: "0.1.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "w",
+          },
+          path: "/modules/0/elements/2/references",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/21",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLXJlZmVyZW5jZS1saW5rcy1pbnNwZWN0aW9uIiwidmVyc2lvbiI6Ijk1NDViNzExOWNlYWEyOWNhNzUyM2U0NzIyZWM1MjQxMjA4NGQ4MzUiLCJzaGEyNTYiOiI5YTY5NjM1M2RmN2RlNTE5NDA2YjY1ZjBmOTA1N2IwNjI5ZTBlZjE0NjVmYjc0ZGQ2NzcyNWY1ZGMxYjIyMDI3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJyZWZlcmVuY2VMaW5rcyIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoidyJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1yZWZlcmVuY2UtbGlua3MiLCJ2ZXJzaW9uIjoiMC4xLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ3In0sInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzIvcmVmZXJlbmNlcyIsIm1lYW5pbmciOnsic3RhdGUiOiJtaXNzaW5nIn0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "daf6b93752822897965308c7b115bfce56cadc439f4940bba54cc90de4185fb9",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "relationships",
+      identity: {
+        module: "other",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-relationships",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "other",
+          },
+          path: "/modules/1/relationships",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+          diagnostics: [
+            [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, [Object: null prototype] {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }
+          ],
+          residuals: [],
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/23",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJvcmlnaW5hbCIsIm9wZXJhdGlvbiI6InJlbGF0aW9uc2hpcHMiLCJpZGVudGl0eSI6eyJtb2R1bGUiOiJvdGhlciJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1yZWxhdGlvbnNoaXBzIiwidmVyc2lvbiI6IjEuMC4wIiwic291cmNlIjp7InVtZiI6IjAuNy4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7Im1vZHVsZSI6Im90aGVyIn0sInBhdGgiOiIvbW9kdWxlcy8xL3JlbGF0aW9uc2hpcHMiLCJtZWFuaW5nIjp7InN0YXRlIjoibWlzc2luZyJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCIsImRpYWdub3N0aWNzIjpbeyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfTlVMTEFCSUxJVFkiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJOdWxsYWJpbGl0eSBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IG5vIG5hdGl2ZSBhYnNlbmNlIGVuY29kaW5nIG9yIGRlZmF1bHQgZXhlY3V0aW9uIGlzIGltcGxpZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9DQVJESU5BTElUWSIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhcmRpbmFsaXR5IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgbmF0aXZlIHNoYXBlIGFuZCBpdGVtIHNlbWFudGljcyByZXF1aXJlIGV4cGxpY2l0IGJpbmRpbmdzIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfRkFDRVRTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiRmFjZXQgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBib3VuZHMgZG8gbm90IGVzdGFibGlzaCBuYXRpdmUgZW5mb3JjZW1lbnQgb3IgdmFsdWUgY29udmVyc2lvbiIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IlVOS05PV05fQ09SRV9GSUVMRCIsInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIiwibWVzc2FnZSI6IkZpZWxkIHJldGFpbmVkIHdpdGhvdXQgaW50ZXJwcmV0YXRpb24iLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9LRVlTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FuZGlkYXRlIGtleSBwcm9maWxlOyBuYXRpdmUgdW5pcXVlbmVzcyBhbmQgYXV0aG9yIHByb3ZlbmFuY2UgYXJlIG5vdCBpbmZlcnJlZCIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX1JFTEFUSU9OU0hJUFMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYW5kaWRhdGUgYXV0aG9yZWQgcmVsYXRpb25zaGlwIHByb2ZpbGU7IG5hdGl2ZSBlbmZvcmNlbWVudCBhbmQgc3RvcmFnZSBhcmUgbm90IGluZmVycmVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn1dLCJyZXNpZHVhbHMiOltdfX19",
+        sha256: "e4e11ec227ad46ed9d2288a4d06581c2feb915c757e66ec8b5091b43568acb52",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "referenceLinks",
+      identity: {
+        module: "other",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-reference-links",
+          version: "0.1.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "other",
+            element: "R",
+          },
+          path: "/modules/1/elements/0/references",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/29",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLXJlZmVyZW5jZS1saW5rcy1pbnNwZWN0aW9uIiwidmVyc2lvbiI6Ijk1NDViNzExOWNlYWEyOWNhNzUyM2U0NzIyZWM1MjQxMjA4NGQ4MzUiLCJzaGEyNTYiOiI5YTY5NjM1M2RmN2RlNTE5NDA2YjY1ZjBmOTA1N2IwNjI5ZTBlZjE0NjVmYjc0ZGQ2NzcyNWY1ZGMxYjIyMDI3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJyZWZlcmVuY2VMaW5rcyIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSwicmVzdWx0Ijp7InN0YXRlIjoib2JzZXJ2ZWQiLCJvYnNlcnZhdGlvbiI6eyJvcGVyYXRpb24iOiJpbnNwZWN0LWNvcmUtcmVmZXJlbmNlLWxpbmtzIiwidmVyc2lvbiI6IjAuMS4wIiwic291cmNlIjp7InVtZiI6IjAuNy4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7Im1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSwicGF0aCI6Ii9tb2R1bGVzLzEvZWxlbWVudHMvMC9yZWZlcmVuY2VzIiwibWVhbmluZyI6eyJzdGF0ZSI6Im1pc3NpbmcifSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "b0f2937e89e260d77fd697e30fddc7d3e23144083e5d2f15dee3b471bc5da6df",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "keys",
+      identity: {
+        module: "other",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-keys",
+          version: "2.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "other",
+            element: "R",
+          },
+          path: "/modules/1/elements/0/keys",
+          meaning: [Object: null prototype] {
+            state: "missing",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/30",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJvcmlnaW5hbCIsIm9wZXJhdGlvbiI6ImtleXMiLCJpZGVudGl0eSI6eyJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLWtleXMiLCJ2ZXJzaW9uIjoiMi4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMS9lbGVtZW50cy8wL2tleXMiLCJtZWFuaW5nIjp7InN0YXRlIjoibWlzc2luZyJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "b6de9745bbdda674985e7c6bbfa74d4f0ab8814e6376de1ff0607b1fb22eab08",
+      },
+    }
+  ],
+  deferred: [
+    {
+      documentId: "doc",
+      basis: "reversible_target",
+      operation: "schema_properties",
+      identity: {
+        scope: "document",
+      },
+      result: {
+        state: "observed",
+        observation: {
+          operation: "inspect-core-schema-properties",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.8.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            scope: "document",
+          },
+          path: "",
+          properties: [Object: null prototype] {},
+          diagnostics: [
+            {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_SCHEMA_PROPERTIES",
+              path: "/umf",
+              message: "Experimental 0.8.0 properties; native enforcement/admission not implied",
+              severity: "warning",
+            }
+          ],
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/0",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJyZXZlcnNpYmxlX3RhcmdldCIsIm9wZXJhdGlvbiI6InNjaGVtYV9wcm9wZXJ0aWVzIiwiaWRlbnRpdHkiOnsic2NvcGUiOiJkb2N1bWVudCJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1zY2hlbWEtcHJvcGVydGllcyIsInZlcnNpb24iOiIxLjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjguMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJzY29wZSI6ImRvY3VtZW50In0sInBhdGgiOiIiLCJwcm9wZXJ0aWVzIjp7fSwiZGlhZ25vc3RpY3MiOlt7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9OVUxMQUJJTElUWSIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6Ik51bGxhYmlsaXR5IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgbm8gbmF0aXZlIGFic2VuY2UgZW5jb2Rpbmcgb3IgZGVmYXVsdCBleGVjdXRpb24gaXMgaW1wbGllZCIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX0NBUkRJTkFMSVRZIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FyZGluYWxpdHkgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBuYXRpdmUgc2hhcGUgYW5kIGl0ZW0gc2VtYW50aWNzIHJlcXVpcmUgZXhwbGljaXQgYmluZGluZ3MiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9GQUNFVFMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJGYWNldCBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IGJvdW5kcyBkbyBub3QgZXN0YWJsaXNoIG5hdGl2ZSBlbmZvcmNlbWVudCBvciB2YWx1ZSBjb252ZXJzaW9uIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiVU5LTk9XTl9DT1JFX0ZJRUxEIiwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzEvZnV0dXJlfjFxdWFsaWZpZXIiLCJtZXNzYWdlIjoiRmllbGQgcmV0YWluZWQgd2l0aG91dCBpbnRlcnByZXRhdGlvbiIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX0tFWVMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYW5kaWRhdGUga2V5IHByb2ZpbGU7IG5hdGl2ZSB1bmlxdWVuZXNzIGFuZCBhdXRob3IgcHJvdmVuYW5jZSBhcmUgbm90IGluZmVycmVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfUkVMQVRJT05TSElQUyIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhbmRpZGF0ZSBhdXRob3JlZCByZWxhdGlvbnNoaXAgcHJvZmlsZTsgbmF0aXZlIGVuZm9yY2VtZW50IGFuZCBzdG9yYWdlIGFyZSBub3QgaW5mZXJyZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9TQ0hFTUFfUFJPUEVSVElFUyIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkV4cGVyaW1lbnRhbCAwLjguMCBwcm9wZXJ0aWVzOyBuYXRpdmUgZW5mb3JjZW1lbnQvYWRtaXNzaW9uIG5vdCBpbXBsaWVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn1dLCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "1c3b23ade4432b212a061f8b6643b59d8e81bec54f326e3854216b1d1e2a8587",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "reversible_target",
+      operation: "schema_properties",
+      identity: {
+        scope: "module",
+        module: "m",
+      },
+      result: {
+        state: "observed",
+        observation: {
+          operation: "inspect-core-schema-properties",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.8.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            scope: "module",
+            module: "m",
+          },
+          path: "/modules/0",
+          properties: [Object: null prototype] {},
+          diagnostics: [
+            {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_SCHEMA_PROPERTIES",
+              path: "/umf",
+              message: "Experimental 0.8.0 properties; native enforcement/admission not implied",
+              severity: "warning",
+            }
+          ],
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/1",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJyZXZlcnNpYmxlX3RhcmdldCIsIm9wZXJhdGlvbiI6InNjaGVtYV9wcm9wZXJ0aWVzIiwiaWRlbnRpdHkiOnsic2NvcGUiOiJtb2R1bGUiLCJtb2R1bGUiOiJtIn0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLXNjaGVtYS1wcm9wZXJ0aWVzIiwidmVyc2lvbiI6IjEuMC4wIiwic291cmNlIjp7InVtZiI6IjAuOC4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7InNjb3BlIjoibW9kdWxlIiwibW9kdWxlIjoibSJ9LCJwYXRoIjoiL21vZHVsZXMvMCIsInByb3BlcnRpZXMiOnt9LCJkaWFnbm9zdGljcyI6W3siY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX05VTExBQklMSVRZIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiTnVsbGFiaWxpdHkgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBubyBuYXRpdmUgYWJzZW5jZSBlbmNvZGluZyBvciBkZWZhdWx0IGV4ZWN1dGlvbiBpcyBpbXBsaWVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfQ0FSRElOQUxJVFkiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYXJkaW5hbGl0eSBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IG5hdGl2ZSBzaGFwZSBhbmQgaXRlbSBzZW1hbnRpY3MgcmVxdWlyZSBleHBsaWNpdCBiaW5kaW5ncyIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX0ZBQ0VUUyIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkZhY2V0IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgYm91bmRzIGRvIG5vdCBlc3RhYmxpc2ggbmF0aXZlIGVuZm9yY2VtZW50IG9yIHZhbHVlIGNvbnZlcnNpb24iLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJVTktOT1dOX0NPUkVfRklFTEQiLCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8wL3JlZmVyZW5jZXMvMS9mdXR1cmV+MXF1YWxpZmllciIsIm1lc3NhZ2UiOiJGaWVsZCByZXRhaW5lZCB3aXRob3V0IGludGVycHJldGF0aW9uIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfS0VZUyIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhbmRpZGF0ZSBrZXkgcHJvZmlsZTsgbmF0aXZlIHVuaXF1ZW5lc3MgYW5kIGF1dGhvciBwcm92ZW5hbmNlIGFyZSBub3QgaW5mZXJyZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9SRUxBVElPTlNISVBTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FuZGlkYXRlIGF1dGhvcmVkIHJlbGF0aW9uc2hpcCBwcm9maWxlOyBuYXRpdmUgZW5mb3JjZW1lbnQgYW5kIHN0b3JhZ2UgYXJlIG5vdCBpbmZlcnJlZCIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX1NDSEVNQV9QUk9QRVJUSUVTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiRXhwZXJpbWVudGFsIDAuOC4wIHByb3BlcnRpZXM7IG5hdGl2ZSBlbmZvcmNlbWVudC9hZG1pc3Npb24gbm90IGltcGxpZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifV0sInByb3ZlbmFuY2UiOiJ1bnZlcmlmaWVkIn19fQ==",
+        sha256: "de6ba8255cec3232e06cd9b3ac3eca6ceb33c411fed9726eefa992224f8889a2",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "reversible_target",
+      operation: "schema_properties",
+      identity: {
+        scope: "element",
+        module: "m",
+        element: "v",
+      },
+      result: {
+        state: "observed",
+        observation: {
+          operation: "inspect-core-schema-properties",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.8.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            scope: "element",
+            module: "m",
+            element: "v",
+          },
+          path: "/modules/0/elements/0",
+          properties: [Object: null prototype] {},
+          diagnostics: [
+            {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_SCHEMA_PROPERTIES",
+              path: "/umf",
+              message: "Experimental 0.8.0 properties; native enforcement/admission not implied",
+              severity: "warning",
+            }
+          ],
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/3",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJyZXZlcnNpYmxlX3RhcmdldCIsIm9wZXJhdGlvbiI6InNjaGVtYV9wcm9wZXJ0aWVzIiwiaWRlbnRpdHkiOnsic2NvcGUiOiJlbGVtZW50IiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ2In0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLXNjaGVtYS1wcm9wZXJ0aWVzIiwidmVyc2lvbiI6IjEuMC4wIiwic291cmNlIjp7InVtZiI6IjAuOC4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7InNjb3BlIjoiZWxlbWVudCIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoidiJ9LCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8wIiwicHJvcGVydGllcyI6e30sImRpYWdub3N0aWNzIjpbeyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfTlVMTEFCSUxJVFkiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJOdWxsYWJpbGl0eSBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IG5vIG5hdGl2ZSBhYnNlbmNlIGVuY29kaW5nIG9yIGRlZmF1bHQgZXhlY3V0aW9uIGlzIGltcGxpZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9DQVJESU5BTElUWSIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhcmRpbmFsaXR5IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgbmF0aXZlIHNoYXBlIGFuZCBpdGVtIHNlbWFudGljcyByZXF1aXJlIGV4cGxpY2l0IGJpbmRpbmdzIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfRkFDRVRTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiRmFjZXQgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBib3VuZHMgZG8gbm90IGVzdGFibGlzaCBuYXRpdmUgZW5mb3JjZW1lbnQgb3IgdmFsdWUgY29udmVyc2lvbiIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IlVOS05PV05fQ09SRV9GSUVMRCIsInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIiwibWVzc2FnZSI6IkZpZWxkIHJldGFpbmVkIHdpdGhvdXQgaW50ZXJwcmV0YXRpb24iLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9LRVlTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FuZGlkYXRlIGtleSBwcm9maWxlOyBuYXRpdmUgdW5pcXVlbmVzcyBhbmQgYXV0aG9yIHByb3ZlbmFuY2UgYXJlIG5vdCBpbmZlcnJlZCIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX1JFTEFUSU9OU0hJUFMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYW5kaWRhdGUgYXV0aG9yZWQgcmVsYXRpb25zaGlwIHByb2ZpbGU7IG5hdGl2ZSBlbmZvcmNlbWVudCBhbmQgc3RvcmFnZSBhcmUgbm90IGluZmVycmVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfU0NIRU1BX1BST1BFUlRJRVMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJFeHBlcmltZW50YWwgMC44LjAgcHJvcGVydGllczsgbmF0aXZlIGVuZm9yY2VtZW50L2FkbWlzc2lvbiBub3QgaW1wbGllZCIsInNldmVyaXR5Ijoid2FybmluZyJ9XSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "834e8ce16bdfb4f369f2f6f9009f2b27f8e0453da2d16ae58c1b16de8fe01bee",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "reversible_target",
+      operation: "schema_properties",
+      identity: {
+        scope: "element",
+        module: "m",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: {
+          operation: "inspect-core-schema-properties",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.8.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            scope: "element",
+            module: "m",
+            element: "R",
+          },
+          path: "/modules/0/elements/1",
+          properties: [Object: null prototype] {},
+          diagnostics: [
+            {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_SCHEMA_PROPERTIES",
+              path: "/umf",
+              message: "Experimental 0.8.0 properties; native enforcement/admission not implied",
+              severity: "warning",
+            }
+          ],
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/9",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJyZXZlcnNpYmxlX3RhcmdldCIsIm9wZXJhdGlvbiI6InNjaGVtYV9wcm9wZXJ0aWVzIiwiaWRlbnRpdHkiOnsic2NvcGUiOiJlbGVtZW50IiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIn0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLXNjaGVtYS1wcm9wZXJ0aWVzIiwidmVyc2lvbiI6IjEuMC4wIiwic291cmNlIjp7InVtZiI6IjAuOC4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7InNjb3BlIjoiZWxlbWVudCIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8xIiwicHJvcGVydGllcyI6e30sImRpYWdub3N0aWNzIjpbeyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfTlVMTEFCSUxJVFkiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJOdWxsYWJpbGl0eSBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IG5vIG5hdGl2ZSBhYnNlbmNlIGVuY29kaW5nIG9yIGRlZmF1bHQgZXhlY3V0aW9uIGlzIGltcGxpZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9DQVJESU5BTElUWSIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhcmRpbmFsaXR5IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgbmF0aXZlIHNoYXBlIGFuZCBpdGVtIHNlbWFudGljcyByZXF1aXJlIGV4cGxpY2l0IGJpbmRpbmdzIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfRkFDRVRTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiRmFjZXQgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBib3VuZHMgZG8gbm90IGVzdGFibGlzaCBuYXRpdmUgZW5mb3JjZW1lbnQgb3IgdmFsdWUgY29udmVyc2lvbiIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IlVOS05PV05fQ09SRV9GSUVMRCIsInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIiwibWVzc2FnZSI6IkZpZWxkIHJldGFpbmVkIHdpdGhvdXQgaW50ZXJwcmV0YXRpb24iLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9LRVlTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FuZGlkYXRlIGtleSBwcm9maWxlOyBuYXRpdmUgdW5pcXVlbmVzcyBhbmQgYXV0aG9yIHByb3ZlbmFuY2UgYXJlIG5vdCBpbmZlcnJlZCIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX1JFTEFUSU9OU0hJUFMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYW5kaWRhdGUgYXV0aG9yZWQgcmVsYXRpb25zaGlwIHByb2ZpbGU7IG5hdGl2ZSBlbmZvcmNlbWVudCBhbmQgc3RvcmFnZSBhcmUgbm90IGluZmVycmVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfU0NIRU1BX1BST1BFUlRJRVMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJFeHBlcmltZW50YWwgMC44LjAgcHJvcGVydGllczsgbmF0aXZlIGVuZm9yY2VtZW50L2FkbWlzc2lvbiBub3QgaW1wbGllZCIsInNldmVyaXR5Ijoid2FybmluZyJ9XSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "df404833696a6e577ab08ddfb0394f87fcbba49a8c901d69e0ddd85e472ea94b",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "nullability",
+      identity: {
+        module: "m",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-nullability",
+          version: "5.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "R",
+          },
+          path: "/modules/0/elements/1/nullability",
+          meaning: [Object: null prototype] {
+            state: "inapplicable",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/11",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJudWxsYWJpbGl0eSIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1udWxsYWJpbGl0eSIsInZlcnNpb24iOiI1LjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIifSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMS9udWxsYWJpbGl0eSIsIm1lYW5pbmciOnsic3RhdGUiOiJpbmFwcGxpY2FibGUifSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "fa52ce4ebb9e71b304c4c62ce4efe70b92012cc4414f3abbe9047a6197584b4d",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "cardinality",
+      identity: {
+        module: "m",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-cardinality",
+          version: "4.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "R",
+          },
+          path: "/modules/0/elements/1/cardinality",
+          meaning: [Object: null prototype] {
+            state: "inapplicable",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/12",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJjYXJkaW5hbGl0eSIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1jYXJkaW5hbGl0eSIsInZlcnNpb24iOiI0LjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIifSwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMS9jYXJkaW5hbGl0eSIsIm1lYW5pbmciOnsic3RhdGUiOiJpbmFwcGxpY2FibGUifSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "378f53a4187fe1bd7a88a2185cd0971f6519d7321fda49fb98138d300b4f1851",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "facets",
+      identity: {
+        module: "m",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-facets",
+          version: "3.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "m",
+            element: "R",
+          },
+          path: "/modules/0/elements/1/facets",
+          meaning: [Object: null prototype] {
+            state: "inapplicable",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/13",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJmYWNldHMiLCJpZGVudGl0eSI6eyJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIifSwicmVzdWx0Ijp7InN0YXRlIjoib2JzZXJ2ZWQiLCJvYnNlcnZhdGlvbiI6eyJvcGVyYXRpb24iOiJpbnNwZWN0LWNvcmUtZmFjZXRzIiwidmVyc2lvbiI6IjMuMC4wIiwic291cmNlIjp7InVtZiI6IjAuNy4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7Im1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8xL2ZhY2V0cyIsIm1lYW5pbmciOnsic3RhdGUiOiJpbmFwcGxpY2FibGUifSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "fb788fcc4c175a5dac0a1ab82330279813751e8c1fbe792e72f0f822fc224c4c",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "reversible_target",
+      operation: "schema_properties",
+      identity: {
+        scope: "element",
+        module: "m",
+        element: "w",
+      },
+      result: {
+        state: "observed",
+        observation: {
+          operation: "inspect-core-schema-properties",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.8.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            scope: "element",
+            module: "m",
+            element: "w",
+          },
+          path: "/modules/0/elements/2",
+          properties: [Object: null prototype] {},
+          diagnostics: [
+            {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_SCHEMA_PROPERTIES",
+              path: "/umf",
+              message: "Experimental 0.8.0 properties; native enforcement/admission not implied",
+              severity: "warning",
+            }
+          ],
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/16",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJyZXZlcnNpYmxlX3RhcmdldCIsIm9wZXJhdGlvbiI6InNjaGVtYV9wcm9wZXJ0aWVzIiwiaWRlbnRpdHkiOnsic2NvcGUiOiJlbGVtZW50IiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJ3In0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLXNjaGVtYS1wcm9wZXJ0aWVzIiwidmVyc2lvbiI6IjEuMC4wIiwic291cmNlIjp7InVtZiI6IjAuOC4wIiwiaWQiOiJkb2MiLCJ2b2NhYnVsYXJpZXMiOnt9LCJleHRlbnNpb25zIjp7fSwibW9kdWxlcyI6W3siaWQiOiJtIiwibmFtZXNwYWNlIjoibSIsImVsZW1lbnRzIjpbeyJpZCI6InYiLCJraW5kIjoiZmllbGQiLCJzY2FsYXJUeXBlIjoic3RyaW5nIiwiZXh0ZW5zaW9ucyI6e30sInJlZmVyZW5jZXMiOlt7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSx7InJvbGUiOiJmdXR1cmUtcm9sZSIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoiUiIsImZ1dHVyZS9xdWFsaWZpZXIiOnsidmFsdWVzIjpbImIiLCJhIl19fSx7InJvbGUiOiJyZWNvcmQtdHlwZSIsIm1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifV19LHsiaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX0seyJpZCI6InciLCJraW5kIjoiZmllbGQiLCJleHRlbnNpb25zIjp7fX1dfSx7ImlkIjoib3RoZXIiLCJuYW1lc3BhY2UiOiJvdGhlciIsImVsZW1lbnRzIjpbeyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fV19XX0sImlkZW50aXR5Ijp7InNjb3BlIjoiZWxlbWVudCIsIm1vZHVsZSI6Im0iLCJlbGVtZW50IjoidyJ9LCJwYXRoIjoiL21vZHVsZXMvMC9lbGVtZW50cy8yIiwicHJvcGVydGllcyI6e30sImRpYWdub3N0aWNzIjpbeyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfTlVMTEFCSUxJVFkiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJOdWxsYWJpbGl0eSBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IG5vIG5hdGl2ZSBhYnNlbmNlIGVuY29kaW5nIG9yIGRlZmF1bHQgZXhlY3V0aW9uIGlzIGltcGxpZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9DQVJESU5BTElUWSIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhcmRpbmFsaXR5IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgbmF0aXZlIHNoYXBlIGFuZCBpdGVtIHNlbWFudGljcyByZXF1aXJlIGV4cGxpY2l0IGJpbmRpbmdzIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfRkFDRVRTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiRmFjZXQgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBib3VuZHMgZG8gbm90IGVzdGFibGlzaCBuYXRpdmUgZW5mb3JjZW1lbnQgb3IgdmFsdWUgY29udmVyc2lvbiIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IlVOS05PV05fQ09SRV9GSUVMRCIsInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIiwibWVzc2FnZSI6IkZpZWxkIHJldGFpbmVkIHdpdGhvdXQgaW50ZXJwcmV0YXRpb24iLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9LRVlTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FuZGlkYXRlIGtleSBwcm9maWxlOyBuYXRpdmUgdW5pcXVlbmVzcyBhbmQgYXV0aG9yIHByb3ZlbmFuY2UgYXJlIG5vdCBpbmZlcnJlZCIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX1JFTEFUSU9OU0hJUFMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYW5kaWRhdGUgYXV0aG9yZWQgcmVsYXRpb25zaGlwIHByb2ZpbGU7IG5hdGl2ZSBlbmZvcmNlbWVudCBhbmQgc3RvcmFnZSBhcmUgbm90IGluZmVycmVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfU0NIRU1BX1BST1BFUlRJRVMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJFeHBlcmltZW50YWwgMC44LjAgcHJvcGVydGllczsgbmF0aXZlIGVuZm9yY2VtZW50L2FkbWlzc2lvbiBub3QgaW1wbGllZCIsInNldmVyaXR5Ijoid2FybmluZyJ9XSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "d73170fe2d2b41107d9d9f5b1f4d689fac558037292922ed2258542726d00377",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "reversible_target",
+      operation: "schema_properties",
+      identity: {
+        scope: "module",
+        module: "other",
+      },
+      result: {
+        state: "observed",
+        observation: {
+          operation: "inspect-core-schema-properties",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.8.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            scope: "module",
+            module: "other",
+          },
+          path: "/modules/1",
+          properties: [Object: null prototype] {},
+          diagnostics: [
+            {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_SCHEMA_PROPERTIES",
+              path: "/umf",
+              message: "Experimental 0.8.0 properties; native enforcement/admission not implied",
+              severity: "warning",
+            }
+          ],
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/22",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJyZXZlcnNpYmxlX3RhcmdldCIsIm9wZXJhdGlvbiI6InNjaGVtYV9wcm9wZXJ0aWVzIiwiaWRlbnRpdHkiOnsic2NvcGUiOiJtb2R1bGUiLCJtb2R1bGUiOiJvdGhlciJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1zY2hlbWEtcHJvcGVydGllcyIsInZlcnNpb24iOiIxLjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjguMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJzY29wZSI6Im1vZHVsZSIsIm1vZHVsZSI6Im90aGVyIn0sInBhdGgiOiIvbW9kdWxlcy8xIiwicHJvcGVydGllcyI6e30sImRpYWdub3N0aWNzIjpbeyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfTlVMTEFCSUxJVFkiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJOdWxsYWJpbGl0eSBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IG5vIG5hdGl2ZSBhYnNlbmNlIGVuY29kaW5nIG9yIGRlZmF1bHQgZXhlY3V0aW9uIGlzIGltcGxpZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9DQVJESU5BTElUWSIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhcmRpbmFsaXR5IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgbmF0aXZlIHNoYXBlIGFuZCBpdGVtIHNlbWFudGljcyByZXF1aXJlIGV4cGxpY2l0IGJpbmRpbmdzIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfRkFDRVRTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiRmFjZXQgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBib3VuZHMgZG8gbm90IGVzdGFibGlzaCBuYXRpdmUgZW5mb3JjZW1lbnQgb3IgdmFsdWUgY29udmVyc2lvbiIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IlVOS05PV05fQ09SRV9GSUVMRCIsInBhdGgiOiIvbW9kdWxlcy8wL2VsZW1lbnRzLzAvcmVmZXJlbmNlcy8xL2Z1dHVyZX4xcXVhbGlmaWVyIiwibWVzc2FnZSI6IkZpZWxkIHJldGFpbmVkIHdpdGhvdXQgaW50ZXJwcmV0YXRpb24iLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9LRVlTIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FuZGlkYXRlIGtleSBwcm9maWxlOyBuYXRpdmUgdW5pcXVlbmVzcyBhbmQgYXV0aG9yIHByb3ZlbmFuY2UgYXJlIG5vdCBpbmZlcnJlZCIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX1JFTEFUSU9OU0hJUFMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYW5kaWRhdGUgYXV0aG9yZWQgcmVsYXRpb25zaGlwIHByb2ZpbGU7IG5hdGl2ZSBlbmZvcmNlbWVudCBhbmQgc3RvcmFnZSBhcmUgbm90IGluZmVycmVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfU0NIRU1BX1BST1BFUlRJRVMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJFeHBlcmltZW50YWwgMC44LjAgcHJvcGVydGllczsgbmF0aXZlIGVuZm9yY2VtZW50L2FkbWlzc2lvbiBub3QgaW1wbGllZCIsInNldmVyaXR5Ijoid2FybmluZyJ9XSwicHJvdmVuYW5jZSI6InVudmVyaWZpZWQifX19",
+        sha256: "1074c341c01ab36721b26037714c318331bffc6b45f80de0266cdc121d9f003d",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "reversible_target",
+      operation: "schema_properties",
+      identity: {
+        scope: "element",
+        module: "other",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: {
+          operation: "inspect-core-schema-properties",
+          version: "1.0.0",
+          source: [Object: null prototype] {
+            umf: "0.8.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            scope: "element",
+            module: "other",
+            element: "R",
+          },
+          path: "/modules/1/elements/0",
+          properties: [Object: null prototype] {},
+          diagnostics: [
+            {
+              code: "EXPERIMENTAL_CORE_NULLABILITY",
+              path: "/umf",
+              message: "Nullability envelope is experimental; no native absence encoding or default execution is implied",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_CARDINALITY",
+              path: "/umf",
+              message: "Cardinality envelope is experimental; native shape and item semantics require explicit bindings",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_FACETS",
+              path: "/umf",
+              message: "Facet envelope is experimental; bounds do not establish native enforcement or value conversion",
+              severity: "warning",
+            }, {
+              code: "UNKNOWN_CORE_FIELD",
+              path: "/modules/0/elements/0/references/1/future~1qualifier",
+              message: "Field retained without interpretation",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_KEYS",
+              path: "/umf",
+              message: "Candidate key profile; native uniqueness and author provenance are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_RELATIONSHIPS",
+              path: "/umf",
+              message: "Candidate authored relationship profile; native enforcement and storage are not inferred",
+              severity: "warning",
+            }, {
+              code: "EXPERIMENTAL_CORE_SCHEMA_PROPERTIES",
+              path: "/umf",
+              message: "Experimental 0.8.0 properties; native enforcement/admission not implied",
+              severity: "warning",
+            }
+          ],
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/24",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWRlY2xhcmF0aW9uLWluc3BlY3Rpb24iLCJ2ZXJzaW9uIjoiYzQ1YzcyYTJhOGEzYzRmYmE2MWM0MGM1OTI3ZGQ5MDkxYWNmOGNjMyIsInNoYTI1NiI6IjA3NGNmMzc4YWZiNzAyZmZkODRkNjkyNGFlNGIzNzgxN2NhZDUzMjRhNGFkYzU4N2ZhMzBjNTQxZTFjZmIyMTYifSwiZG9jdW1lbnRJZCI6ImRvYyIsImNvbnRlbnRTaGEyNTYiOiJjNTE5Nzc4NmFjZDk0ZGRhM2NjYzk5NjAwNTdiYzBjMjA2YWI2NDZkZmJmM2QwOGRkZmQ3Y2NkMGNhODM2YWZhIiwiYmFzaXMiOiJyZXZlcnNpYmxlX3RhcmdldCIsIm9wZXJhdGlvbiI6InNjaGVtYV9wcm9wZXJ0aWVzIiwiaWRlbnRpdHkiOnsic2NvcGUiOiJlbGVtZW50IiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJyZXN1bHQiOnsic3RhdGUiOiJvYnNlcnZlZCIsIm9ic2VydmF0aW9uIjp7Im9wZXJhdGlvbiI6Imluc3BlY3QtY29yZS1zY2hlbWEtcHJvcGVydGllcyIsInZlcnNpb24iOiIxLjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjguMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJzY29wZSI6ImVsZW1lbnQiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8xL2VsZW1lbnRzLzAiLCJwcm9wZXJ0aWVzIjp7fSwiZGlhZ25vc3RpY3MiOlt7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9OVUxMQUJJTElUWSIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6Ik51bGxhYmlsaXR5IGVudmVsb3BlIGlzIGV4cGVyaW1lbnRhbDsgbm8gbmF0aXZlIGFic2VuY2UgZW5jb2Rpbmcgb3IgZGVmYXVsdCBleGVjdXRpb24gaXMgaW1wbGllZCIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX0NBUkRJTkFMSVRZIiwicGF0aCI6Ii91bWYiLCJtZXNzYWdlIjoiQ2FyZGluYWxpdHkgZW52ZWxvcGUgaXMgZXhwZXJpbWVudGFsOyBuYXRpdmUgc2hhcGUgYW5kIGl0ZW0gc2VtYW50aWNzIHJlcXVpcmUgZXhwbGljaXQgYmluZGluZ3MiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9GQUNFVFMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJGYWNldCBlbnZlbG9wZSBpcyBleHBlcmltZW50YWw7IGJvdW5kcyBkbyBub3QgZXN0YWJsaXNoIG5hdGl2ZSBlbmZvcmNlbWVudCBvciB2YWx1ZSBjb252ZXJzaW9uIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiVU5LTk9XTl9DT1JFX0ZJRUxEIiwicGF0aCI6Ii9tb2R1bGVzLzAvZWxlbWVudHMvMC9yZWZlcmVuY2VzLzEvZnV0dXJlfjFxdWFsaWZpZXIiLCJtZXNzYWdlIjoiRmllbGQgcmV0YWluZWQgd2l0aG91dCBpbnRlcnByZXRhdGlvbiIsInNldmVyaXR5Ijoid2FybmluZyJ9LHsiY29kZSI6IkVYUEVSSU1FTlRBTF9DT1JFX0tFWVMiLCJwYXRoIjoiL3VtZiIsIm1lc3NhZ2UiOiJDYW5kaWRhdGUga2V5IHByb2ZpbGU7IG5hdGl2ZSB1bmlxdWVuZXNzIGFuZCBhdXRob3IgcHJvdmVuYW5jZSBhcmUgbm90IGluZmVycmVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn0seyJjb2RlIjoiRVhQRVJJTUVOVEFMX0NPUkVfUkVMQVRJT05TSElQUyIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkNhbmRpZGF0ZSBhdXRob3JlZCByZWxhdGlvbnNoaXAgcHJvZmlsZTsgbmF0aXZlIGVuZm9yY2VtZW50IGFuZCBzdG9yYWdlIGFyZSBub3QgaW5mZXJyZWQiLCJzZXZlcml0eSI6Indhcm5pbmcifSx7ImNvZGUiOiJFWFBFUklNRU5UQUxfQ09SRV9TQ0hFTUFfUFJPUEVSVElFUyIsInBhdGgiOiIvdW1mIiwibWVzc2FnZSI6IkV4cGVyaW1lbnRhbCAwLjguMCBwcm9wZXJ0aWVzOyBuYXRpdmUgZW5mb3JjZW1lbnQvYWRtaXNzaW9uIG5vdCBpbXBsaWVkIiwic2V2ZXJpdHkiOiJ3YXJuaW5nIn1dLCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "e3fc44eb0dd243fc1320fa58546f3c1451990665c1e7c4848fe1840161f81853",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "nullability",
+      identity: {
+        module: "other",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-nullability",
+          version: "5.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "other",
+            element: "R",
+          },
+          path: "/modules/1/elements/0/nullability",
+          meaning: [Object: null prototype] {
+            state: "inapplicable",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/26",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJudWxsYWJpbGl0eSIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSwicmVzdWx0Ijp7InN0YXRlIjoib2JzZXJ2ZWQiLCJvYnNlcnZhdGlvbiI6eyJvcGVyYXRpb24iOiJpbnNwZWN0LWNvcmUtbnVsbGFiaWxpdHkiLCJ2ZXJzaW9uIjoiNS4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMS9lbGVtZW50cy8wL251bGxhYmlsaXR5IiwibWVhbmluZyI6eyJzdGF0ZSI6ImluYXBwbGljYWJsZSJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "13d24030f59811dd1a9aeefa033fdd97ffe083624f46b5b32227ada044d41a7d",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "cardinality",
+      identity: {
+        module: "other",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-cardinality",
+          version: "4.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "other",
+            element: "R",
+          },
+          path: "/modules/1/elements/0/cardinality",
+          meaning: [Object: null prototype] {
+            state: "inapplicable",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/27",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJjYXJkaW5hbGl0eSIsImlkZW50aXR5Ijp7Im1vZHVsZSI6Im90aGVyIiwiZWxlbWVudCI6IlIifSwicmVzdWx0Ijp7InN0YXRlIjoib2JzZXJ2ZWQiLCJvYnNlcnZhdGlvbiI6eyJvcGVyYXRpb24iOiJpbnNwZWN0LWNvcmUtY2FyZGluYWxpdHkiLCJ2ZXJzaW9uIjoiNC4wLjAiLCJzb3VyY2UiOnsidW1mIjoiMC43LjAiLCJpZCI6ImRvYyIsInZvY2FidWxhcmllcyI6e30sImV4dGVuc2lvbnMiOnt9LCJtb2R1bGVzIjpbeyJpZCI6Im0iLCJuYW1lc3BhY2UiOiJtIiwiZWxlbWVudHMiOlt7ImlkIjoidiIsImtpbmQiOiJmaWVsZCIsInNjYWxhclR5cGUiOiJzdHJpbmciLCJleHRlbnNpb25zIjp7fSwicmVmZXJlbmNlcyI6W3sicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LHsicm9sZSI6ImZ1dHVyZS1yb2xlIiwibW9kdWxlIjoibSIsImVsZW1lbnQiOiJSIiwiZnV0dXJlL3F1YWxpZmllciI6eyJ2YWx1ZXMiOlsiYiIsImEiXX19LHsicm9sZSI6InJlY29yZC10eXBlIiwibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9XX0seyJpZCI6IlIiLCJraW5kIjoicmVjb3JkIiwibWVtYmVycyI6W10sImV4dGVuc2lvbnMiOnt9fSx7ImlkIjoidyIsImtpbmQiOiJmaWVsZCIsImV4dGVuc2lvbnMiOnt9fV19LHsiaWQiOiJvdGhlciIsIm5hbWVzcGFjZSI6Im90aGVyIiwiZWxlbWVudHMiOlt7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319XX1dfSwiaWRlbnRpdHkiOnsibW9kdWxlIjoib3RoZXIiLCJlbGVtZW50IjoiUiJ9LCJwYXRoIjoiL21vZHVsZXMvMS9lbGVtZW50cy8wL2NhcmRpbmFsaXR5IiwibWVhbmluZyI6eyJzdGF0ZSI6ImluYXBwbGljYWJsZSJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "80a104476379b033df34af681eed9166d9e7069934cf634fee2862fec96ed1f3",
+      },
+    },
+    {
+      documentId: "doc",
+      basis: "original",
+      operation: "facets",
+      identity: {
+        module: "other",
+        element: "R",
+      },
+      result: {
+        state: "observed",
+        observation: [Object: null prototype] {
+          operation: "inspect-core-facets",
+          version: "3.0.0",
+          source: [Object: null prototype] {
+            umf: "0.7.0",
+            id: "doc",
+            vocabularies: [Object: null prototype] {},
+            extensions: [Object: null prototype] {},
+            modules: [
+              [Object: null prototype] {
+                id: "m",
+                namespace: "m",
+                elements: [
+                  [Object ...], [Object ...], [Object ...]
+                ],
+              }, [Object: null prototype] {
+                id: "other",
+                namespace: "other",
+                elements: [
+                  [Object ...]
+                ],
+              }
+            ],
+          },
+          identity: [Object: null prototype] {
+            module: "other",
+            element: "R",
+          },
+          path: "/modules/1/elements/0/facets",
+          meaning: [Object: null prototype] {
+            state: "inapplicable",
+          },
+          provenance: "unverified",
+        },
+      },
+      evidence: {
+        identity: "truss.owner-declaration-observation/0/28",
+        bytesBase64: "eyJwcm9maWxlIjp7ImlkZW50aXR5IjoidW1mLWZpZWxkLWFzc2VydGlvbi1pbnNwZWN0aW9uIiwidmVyc2lvbiI6ImM0NWM3MmEyYThhM2M0ZmJhNjFjNDBjNTkyN2RkOTA5MWFjZjhjYzMiLCJzaGEyNTYiOiI4NjBlNzAwODJkZjE3MDYxMzJmZTYzODllNTI3NGJiNDVjNzA3ODNkZGM1NDdmNGM0OTUwYzFhOTRmZWE1ZjY3In0sImRvY3VtZW50SWQiOiJkb2MiLCJjb250ZW50U2hhMjU2IjoiYzUxOTc3ODZhY2Q5NGRkYTNjY2M5OTYwMDU3YmMwYzIwNmFiNjQ2ZGZiZjNkMDhkZGZkN2NjZDBjYTgzNmFmYSIsImJhc2lzIjoib3JpZ2luYWwiLCJvcGVyYXRpb24iOiJmYWNldHMiLCJpZGVudGl0eSI6eyJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInJlc3VsdCI6eyJzdGF0ZSI6Im9ic2VydmVkIiwib2JzZXJ2YXRpb24iOnsib3BlcmF0aW9uIjoiaW5zcGVjdC1jb3JlLWZhY2V0cyIsInZlcnNpb24iOiIzLjAuMCIsInNvdXJjZSI6eyJ1bWYiOiIwLjcuMCIsImlkIjoiZG9jIiwidm9jYWJ1bGFyaWVzIjp7fSwiZXh0ZW5zaW9ucyI6e30sIm1vZHVsZXMiOlt7ImlkIjoibSIsIm5hbWVzcGFjZSI6Im0iLCJlbGVtZW50cyI6W3siaWQiOiJ2Iiwia2luZCI6ImZpZWxkIiwic2NhbGFyVHlwZSI6InN0cmluZyIsImV4dGVuc2lvbnMiOnt9LCJyZWZlcmVuY2VzIjpbeyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0seyJyb2xlIjoiZnV0dXJlLXJvbGUiLCJtb2R1bGUiOiJtIiwiZWxlbWVudCI6IlIiLCJmdXR1cmUvcXVhbGlmaWVyIjp7InZhbHVlcyI6WyJiIiwiYSJdfX0seyJyb2xlIjoicmVjb3JkLXR5cGUiLCJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn1dfSx7ImlkIjoiUiIsImtpbmQiOiJyZWNvcmQiLCJtZW1iZXJzIjpbXSwiZXh0ZW5zaW9ucyI6e319LHsiaWQiOiJ3Iiwia2luZCI6ImZpZWxkIiwiZXh0ZW5zaW9ucyI6e319XX0seyJpZCI6Im90aGVyIiwibmFtZXNwYWNlIjoib3RoZXIiLCJlbGVtZW50cyI6W3siaWQiOiJSIiwia2luZCI6InJlY29yZCIsIm1lbWJlcnMiOltdLCJleHRlbnNpb25zIjp7fX1dfV19LCJpZGVudGl0eSI6eyJtb2R1bGUiOiJvdGhlciIsImVsZW1lbnQiOiJSIn0sInBhdGgiOiIvbW9kdWxlcy8xL2VsZW1lbnRzLzAvZmFjZXRzIiwibWVhbmluZyI6eyJzdGF0ZSI6ImluYXBwbGljYWJsZSJ9LCJwcm92ZW5hbmNlIjoidW52ZXJpZmllZCJ9fX0=",
+        sha256: "ac17e5cf470b53cdec62401608374b42a43aded970222149199b40b7b8cb6704",
+      },
+    }
+  ],
+  complete: false,
+  scope: "original_inspected_core_source_identity_subset_only",
+}
+
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/catalog-reference-links-correspondence.test.ts:53:259)
+(fail) loaded reference owner substitutions refuse full context target role occurrence and authority changes [582.86ms]
+(pass) original0.8 is explicitly unavailable to original0.7 reference links owner [15.38ms]
+(pass) private report forwards reference observations while synthetic native rows supply no type authority [11.71ms]
+
+tests/source-occurrence-index.test.ts:
+(pass) every original value has an ordered pointer and exact lexical span [0.16ms]
+(pass) escaped member identity and unicode retain exact source bytes [0.06ms]
+(pass) captured bytes and returned slices are independent of caller mutation [0.11ms]
+(pass) root primitives and empty containers remain complete occurrences [0.03ms]
+(pass) source admission still refuses duplicates invalid unicode and malformed grammar [0.07ms]
+(pass) discarded preflight tree does not replace original number lexemes [0.05ms]
+(pass) occurrence indexing applies conjunctive source and pointer work bounds [2.98ms]
+(pass) source copying never invokes caller species or own length callbacks [0.06ms]
+(pass) non-byte typed arrays cannot be silently narrowed into source bytes [0.05ms]
+
+tests/catalog-input-preparation.test.ts:
+(pass) real owner validates original ordered UMF sources with reversible interpretation [2.58ms]
+(pass) foreign original interpretation profile cannot borrow validation [0.17ms]
+(pass) archive document identity must equal original owner source [0.88ms]
+(pass) shape-only original {} source does not become accepted UMF [0.28ms]
+(pass) native archive carrier has exact five original fields without interpretation substitution [1.72ms]
+(pass) source declaration extraction preserves original owner and Field references [1.74ms]
+(pass) configured original registry refuses unregistered synthetic root profiles [8.83ms]
+(pass) absent binding derives complete default json homes from original members [2.40ms]
+(pass) present binding cannot be silently replaced with default homes [2.40ms]
+(pass) embedded duplicate source members refuse before owner interpretation [0.18ms]
+(pass) reconstructed preparations cannot enter home, extension, report or native staging helpers [7.03ms]
+(pass) new-only staging cannot silently ignore declared transforms [2.11ms]
+(pass) UMF report basis never invents a supported-subset artifact for unregistered preparation [6.45ms]
+(pass) UMF report basis preserves actual original version and registered bytes without a support claim [12.02ms]
+(pass) optional original primary markers project without changing source or ordered keys [5.87ms]
+(pass) non-Boolean primary markers fail original owner validation [0.28ms]
+
+tests/catalog-report-preparation.test.ts:
+(pass) composition preserves original partial interpretation and extensions without accepted claim [0.40ms]
+(pass) mixed native observation tuple and missing/extra count rows refuse [0.39ms]
+(pass) count grammar bounds columns and new-only retirement are explicit [0.44ms]
+(pass) forged preparation refuses before issuing native reads [0.08ms]
+(pass) composed validation evidence preserves diagnostics at both source and reversible target bases [0.25ms]
+(pass) original 0.8 validation does not invent a transition or duplicate a target-basis diagnostic scan [0.45ms]
+(pass) new-only report preparation cannot ignore a declared transform registration [0.58ms]
+(pass) report profile binds original registered bytes and refuses substitution before native observation [23.71ms]
+(pass) combined report check refuses unissued execution custody before profile resolution or native I/O [0.40ms]
+(pass) complete wire corresponds to ten issued producer fields while other fixture fields remain untrusted [2.84ms]
+(pass) native ingress absence does not admit injected loss or transform registration [8.27ms]
+(pass) changed source effect and diagnostic fields refuse before native recheck [16.47ms]
+(pass) copied report basis and stale native cut cannot supply correspondence [2.83ms]
+(pass) native actor basis retains original bytes and rejects inconsistent result carriers [0.50ms]
+(pass) report correspondence refuses omitted, duplicated or substituted original extension artifacts [40.81ms]
+(pass) execution report comparison refuses copied/unissued candidate before parsing or native I/O [0.30ms]
+
+tests/catalog-field-shape-correspondence.test.ts:
+(pass) original kind states preserve explicit roles, unknown labels and unspecified role [28.10ms]
+(pass) one array and map preserve item meaning and actual transitioned Record shapes [21.06ms]
+(pass) cardinality unspecified missing unknown and inapplicable remain separate and incomplete [20.11ms]
+(pass) loaded owners cannot substitute role, container shape, item references or opaque qualifiers [365.71ms]
+(pass) facets retain interpreted groups and actual value boundaries after reversible transition [39.80ms]
+(pass) facets retain independent original warning paths and unknown units without invented interpretation [24.38ms]
+(pass) loaded facet owners cannot replace retained values projections states or unknown paths [341.31ms]
+(pass) distinct decimal duties share an original pointer without collapsing family identity [8.86ms]
+(pass) facet families follow interpreted groups while empty and unknown groups invent no duty [23.67ms]
+
+tests/catalog-nullability-correspondence.test.ts:
+(pass) original nullability meanings remain distinct through reversible transition and actual Record behavior [10.78ms]
+(pass) future authored nullability remains unavailable to the known semantic subset [2.95ms]
+(pass) loaded diagnostic owners cannot replace required meaning or its context before state filtering [192.38ms]
+(pass) original missing Field and inapplicable Record nullability remain distinct observations [3.24ms]
+
+tests/catalog-record-members-correspondence.test.ts:
+(pass) original ordered qualified membership joins declaration and each exact byte occurrence [7.76ms]
+(pass) explicit empty membership stays an assertion while absence and nonrecord stay separate [24.91ms]
+(pass) controlled loaded membership substitutions refuse before filtering, object key order remains valid [298.44ms]
+(pass) original0.8 membership unavailable observations prevent configured call availability [5.18ms]
+(pass) private report composition forwards actual membership owner with exact configured coverage [7.04ms]
+(pass) missing membership can be inspected but cannot become empty native staging or home inventory [4.54ms]
+
+tests/catalog-scalar-type-correspondence.test.ts:
+(pass) nine original scalar families join exact byte occurrences with independent semantic owner pins [59.13ms]
+(pass) unknown absent non-Field and container scalar meanings stay distinct without invented entries [58.73ms]
+(pass) loaded scalar owners cannot alter any original result before classification filtering [284.27ms]
+(pass) original 0.8 remains explicitly unavailable to the pinned original 0.7 scalar owner [6.76ms]
+(pass) composed private report carries genuine scalar observations and exact ordered coverage [7.75ms]
+
+1 tests failed:
+(fail) loaded reference owner substitutions refuse full context target role occurrence and authority changes [582.86ms]
+
+ 100 pass
+ 1 fail
+ 1191 expect() calls
+Ran 101 tests across 10 files. [4.21s]

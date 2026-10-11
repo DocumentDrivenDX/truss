@@ -19,15 +19,23 @@ export function collectCatalogOriginalOccurrenceInventory(prepared:Prepared,coll
    if(entry.source!==source)throw Error('Original assertion artifact correspondence required');
    const rows=byPointer.get(entry.assertion.sourcePointer)??[];rows.push(entry);byPointer.set(entry.assertion.sourcePointer,rows);
   }
+  const linkPointers=new Map<string,typeof core.referenceLinks[number][]>(),declarationPointers=new Map<string,typeof core.referenceLinkDeclarations[number][]>();
+  for(const [rows,map] of [[core.referenceLinks,linkPointers],[core.referenceLinkDeclarations,declarationPointers]] as const)for(const link of rows){
+   if(link.documentId!==document.documentId)continue;
+   if(link.source!==source)throw Error('Original reference-link artifact correspondence required');
+   const found=map.get(link.sourcePointer)??[];found.push(link);map.set(link.sourcePointer,found);
+  }
+  const remainingLinks=new Set([...linkPointers.keys(),...declarationPointers.keys()]);
   const remaining=new Set(byPointer.keys());
   const occurrences=index.occurrences.map(value=>{
-   const assertions=byPointer.get(value.pointer)??[];remaining.delete(value.pointer);
+   const assertions=byPointer.get(value.pointer)??[];remaining.delete(value.pointer);remainingLinks.delete(value.pointer);
    return Object.freeze({...value,sourceSha256:source.sha256,owner:Object.freeze({scope:'document' as const,documentId:document.documentId}),
     disposition:assertions.length?'assertion' as const:'unavailable' as const,
     interpretationState:assertions.length?'partial' as const:'unavailable' as const,assertionMembershipComplete:false as const,
-    assertions:Object.freeze([...assertions]),reason:assertions.length?'original_inspected_core_subset' as const:'original_semantic_classification_unavailable' as const});
+    assertions:Object.freeze([...assertions]),referenceLinks:Object.freeze([...(linkPointers.get(value.pointer)??[])]),referenceLinkDeclarations:Object.freeze([...(declarationPointers.get(value.pointer)??[])]),reason:assertions.length?'original_inspected_core_subset' as const:'original_semantic_classification_unavailable' as const});
   });
   if(remaining.size)throw Error('Every original assertion pointer must occur in original source');
+  if(remainingLinks.size)throw Error('Every original reference-link pointer must occur in original source');
   return Object.freeze({documentId:document.documentId,sourceVersion:document.umfVersion,source,originalByteLength:index.originalByteLength,occurrences:Object.freeze(occurrences)});
  });
  const result=Object.freeze({documents:Object.freeze(documents),core,sourceCoverageComplete:true as const,complete:false as const,

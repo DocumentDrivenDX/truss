@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "method": "Independent read-only current-source/exact-ZIP/retained-log audit; no host/browser/native rerun",
+  "receiptSha256": "22a6046e0cbeb291d5f607a61a6df0af7e11eda2958fcbc54de8764e0c19901a",
+  "sourcePins": 720,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentSelectedInputInventoryMatches": true,
+  "archiveSha256": "15c6edd05c53d71e36a08b402d1aabc90af75bea70b97e23317bec4e71e526f5",
+  "hostLogSha256": "22279b33b0496d0791807614fa70f819caa6024a723a04add7582040b9a4e485",
+  "typeLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "hostTests": 102,
+  "hostAssertions": 1200,
+  "testFiles": 10,
+  "strictTypecheckExit": 0,
+  "referenceLinkTests": [
+    "ordered repeated cross-module generic links join original bytes separately from type assertions",
+    "empty absent and record-role-to-Field stay explicit generic link observations without type invention",
+    "loaded reference owner substitutions refuse full context target role occurrence and authority changes",
+    "original0.8 is explicitly unavailable to original0.7 reference links owner",
+    "private report forwards reference observations while synthetic native rows supply no type authority",
+    "loaded owner cannot mutate retained original request identity"
+  ],
+  "referenceLinkOwnerDirectory": "/private/tmp/truss-umf-runtime-Vx1ZLe",
+  "referenceLinkOwner": {
+    "revision": "9545b7119ceaa29ca7523e4722ec52412084d835",
+    "producerMode": "reference-links",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "7231dea7d5d478c7d6a356410dba54c740ff0b2afa1a04353688462169f53d8a",
+    "bundleSha256": "0086e86213a065ea294a79a642c70bc362f01d023912b9d565b180d913c089d4",
+    "operations": [
+      "inspectCoreReferenceLinks"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "extraSourceArchiveCheck": "Temporary source.tar digest and git commit comment match producer manifest; reference-link owner module/schema match archived bytes. Not a fresh rebuild.",
+  "resolvedFindings": [
+    "Frozen primitive request identity before owner invocation; attempted loaded-owner argument mutation retains original request and becomes unavailable",
+    "Harmful meaning-list sort keeps source unchanged and recomputes occurrence index/path/unknown paths; full correspondence refuses"
+  ],
+  "remainingFindings": [],
+  "nativeExecution": false,
+  "acceptancePromoted": false
+}
