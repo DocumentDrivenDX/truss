@@ -1,0 +1,54 @@
+{
+  "scope": "original_fresh_catalog_lifecycle_report_fields_only",
+  "qualification": {
+    "runtime": "PostgreSQL 16.15 private pgserver candidate",
+    "python": "3.11.17",
+    "driver": "pg8000 1.31.5",
+    "sourceLayout": "0.15 administrative component",
+    "targetReportInterfaceVersion": "truss-acceptance-report/0.3.0-proposal",
+    "acceptedReportQualified": false,
+    "protectedOrdinaryPersonQualified": false
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_catalog_lifecycle.py": "138f8756ab41173d525a1fca17ca65e4027135354fd977f915273adc6c8b1288",
+    "packages/python/src/truss/_catalog_report.py": "1fdadb6fa7a87404b2c4ac05709931cb11ab0f8447cd9e9cc8fbf5c4ee821bcb",
+    "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+    "packages/postgresql/native/catalog-report/fresh-lifecycle.sql": "f4cdf2780ffc604963d974a24ab69b2581c9ac4bd81ee1540cef3072a863ddbd",
+    "packages/python/tests/test_catalog_lifecycle.py": "e4a483b4187a6fe55c4394e4ed3241795f3f4dc13bc9ae42b836dca45d5f57a6",
+    "packages/python/tests/test_catalog_staging.py": "6427093ea23967c11aaf29d832fa0727224015049f08263d3529146bb0524373",
+    "scripts/check-module-boundaries.py": "47203dd80ed448ac48d33372cfddb3d9ca7f03def72713500ff7102b7416621c",
+    "docs/helix/04-build/python-consumer-integration-plan.md": "df945564b1ecea6c1d169b4f1ce54ebc4e8bd7a39cc0e5e71653f463e1b1cc69"
+  },
+  "verification": {
+    "affectedTests": 78,
+    "seconds": 47.633,
+    "passed": true,
+    "logSha256": "a74086002a9aada72621761e9679af362b6f1d7c6eaab133dff75b0a2dd93abf",
+    "pythonImportEdges": 372,
+    "diffCheck": true
+  },
+  "astraUltraReview": {
+    "status": "approved",
+    "independentAffectedTests": 78,
+    "seconds": 51.064,
+    "passed": true,
+    "sourcePinsChecked": 251,
+    "changedSources": [],
+    "logSha256": "2a687e23bea665edadcbc6efb1e8908be982c1d49eda92cdf3e9c7a82ca136df",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "terminalExitCode": 0
+  },
+  "remaining": [
+    "complete report identity and original execution authority",
+    "UMF/assertion/extension qualification",
+    "protected installation and finalization",
+    "public register/apply/read workflow",
+    "retained and same-ID reactivation branches"
+  ],
+  "exclusions": [
+    "intervening administrative DDL",
+    "direct counter tampering",
+    "concurrent administrator attacks"
+  ]
+}

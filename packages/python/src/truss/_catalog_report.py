@@ -9,6 +9,8 @@ import weakref
 from .preparation import _require_original_preparation
 from ._catalog_index_declarations import collect_catalog_index_declarations, require_current_catalog_index_declarations
 
+from ._catalog_lifecycle import begin_catalog_lifecycle, collect_catalog_lifecycle, require_current_catalog_lifecycle
+
 MISSING_FIELDS=('interfaceVersion','reportProfile','originalExecution','umf','assertions','extensions')
 @dataclass(frozen=True,slots=True,weakref_slot=True)
 class CatalogReportBasis:
@@ -25,8 +27,9 @@ def begin_catalog_report(connection,prepared):
     _require_original_preparation(prepared)
     cut=_cut(connection)
     if cut[2]!='0':raise ValueError('Original pre-effect report cut required')
+    lifecycle_start=begin_catalog_lifecycle(connection,prepared,cut)
     result=_ReportStart();key=id(result)
-    _original_starts[key]=(weakref.ref(result,lambda ref:_original_starts.pop(key,None)),connection,prepared,cut)
+    _original_starts[key]=(weakref.ref(result,lambda ref:_original_starts.pop(key,None)),connection,prepared,cut,lifecycle_start)
     return result
 
 def _rows(connection,sql,**parameters):
@@ -102,6 +105,7 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
     provisional=connection.run('SELECT truss.runtime_require_empty_provisional_catalog(CAST(:rev AS pg_catalog.int4))',rev=catalog.revision)
     if provisional!=[['0']]:raise ValueError('Original complete empty provisional inventory required')
     index_declarations=collect_catalog_index_declarations(connection,prepared,catalog.revision,cut[:3])
+    lifecycle=collect_catalog_lifecycle(connection,prepared,catalog.revision,cut[:3],original[4])
     physical=_physical_snapshot(connection)
     final_cut=_cut(connection)
     if final_cut!=cut:raise ValueError('Stale original report cut')
@@ -112,18 +116,22 @@ def compose_catalog_report_basis(connection,prepared,catalog,start):
             'extensions':evidence['retainedExtensions']['extensions'],
             'losses':evidence['ingress']['basis']['losses'],
             'transformRegistrations':evidence['ingress']['basis']['transformRegistrations'],
-            'pending_indexes':json.loads(index_declarations.original_bytes)['declaredJobs']}
-    payload={'fields':fields,'nativeCut':{'writerXid':cut[0],'operationOrdinal':cut[1],'effectGeneration':cut[2]},
+            'pending_indexes':json.loads(index_declarations.original_bytes)['declaredJobs'],
+            'lifecycleProfile':json.loads(lifecycle.original_bytes)['lifecycleProfile'],
+            'reactivations':json.loads(lifecycle.original_bytes)['reactivations']}
+    payload={'targetReportInterfaceVersion':'truss-acceptance-report/0.3.0-proposal','fields':fields,'nativeCut':{'writerXid':cut[0],'operationOrdinal':cut[1],'effectGeneration':cut[2]},
              'noRebindEvidence':{'profile':'administrative-empty-graph-and-empty-journal-root/0.1','emptyScope':json.loads(cut[3]),'preEffectGeneration':prior_cut[2]},
              'ownerEvidenceHex':prepared.report_evidence_bytes.hex(),'missingFields':list(MISSING_FIELDS),
              'nativeInventory':inventory,'physicalSnapshotHex':physical.hex(),'nativeCounts':json.loads(catalog.counts_bytes),
              'fieldQualification':{'extensions':'partial_retention_only',
-                 'pending_indexes':'original_selected_immutable_declaration_policy_only'},
+                 'pending_indexes':'original_selected_immutable_declaration_policy_only',
+                 'reactivations':'original_fresh_insert_only_lifecycle'},
+             'lifecycleEvidenceHex':lifecycle.original_bytes.hex(),
              'indexDeclarationEvidenceHex':index_declarations.original_bytes.hex(),
              'acceptedReportQualified':False}
     result=CatalogReportBasis(json.dumps(payload,ensure_ascii=True,separators=(',',':')).encode())
     key=id(result)
-    _original_bases[key]=(weakref.ref(result,lambda ref:_original_bases.pop(key,None)),connection,prepared,result.basis_bytes,cut,index_declarations)
+    _original_bases[key]=(weakref.ref(result,lambda ref:_original_bases.pop(key,None)),connection,prepared,result.basis_bytes,cut,index_declarations,lifecycle)
     return result
 
 def require_current_catalog_report_basis(basis,connection,prepared):
@@ -153,4 +161,5 @@ def require_current_catalog_report_basis(basis,connection,prepared):
     if documents!=payload['fields']['documents'] or len(counts)!=1 or _report_counts(counts[0])!=payload['fields']['counts']:
         raise ValueError('Original current report source correspondence required')
     require_current_catalog_index_declarations(original[5],connection,prepared)
+    require_current_catalog_lifecycle(original[6],connection,prepared)
     if _cut(connection)!=original[4]:raise ValueError('Stale original report basis')
