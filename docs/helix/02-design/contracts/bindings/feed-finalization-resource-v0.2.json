@@ -1,0 +1,35 @@
+{
+  "profile": "truss-feed-finalization-resource/0.2.0",
+  "status": "owner_selected_runtime_qualification_pending",
+  "scope": "Stock PostgreSQL Python delivery: complete logical inventories and encoded carriers, bounded query shapes, supported host/database deadlines. Component limits remain capped by enclosing selected logical limits.",
+  "limits": {
+    "retainedMembers": "100000",
+    "retainedCatalogPrerequisites": "100000",
+    "retainedConfigurationPrerequisites": "100000",
+    "completeOriginalCarrierBytes": "67108864",
+    "singleCanonicalManifestBytes": "67108864",
+    "elapsedMilliseconds": "30000"
+  },
+  "counterEncoding": "canonical_nonnegative_decimal",
+  "refusal": "Refuse when an observable selected limit is exceeded; contain effects and preserve prior caller work. Never truncate required meaning.",
+  "openOutputs": [
+    "implementation and focused evidence for selected observable limits",
+    "complete native finalization and unavoidable commit validation",
+    "PostgreSQL 18.6 integration evidence"
+  ],
+  "nativeExecution": false,
+  "complete": false,
+  "enforcement": {
+    "inventory": "complete logical row counts; no limiting query or skipped occurrence",
+    "carriers": "raw/encoded byte limits with known hex/Base64 expansion; no exact hidden allocation claim",
+    "queries": "selected bounded query shapes and complete results",
+    "deadlines": "supported host operation deadlines and database statement timeouts; not an unavoidable cumulative account across arbitrary caller SQL or rollback",
+    "rollback": "native state follows transaction rollback; no nonrefunded historical work ledger"
+  },
+  "excludedGuarantees": [
+    "exact backend allocator accounting",
+    "hidden query/sort allocation instrumentation",
+    "rollback-resistant cumulative work/allocation metering",
+    "custom instrumentation extension"
+  ]
+}

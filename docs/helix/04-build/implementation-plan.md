@@ -49,6 +49,15 @@ Before custom PostgreSQL wire handling, private driver hooks, a fork or driver r
 
 ## Immediate Python delivery sequence — 2026-10-11
 
+Owner update: use practical stock-PostgreSQL logical limits, bounded queries and
+supported deadlines (CONTRACT-006 resource profile 0.2). Remove exact backend
+allocation instrumentation, rollback-resistant cumulative-meter work and their
+qualification runs from the release queue. Remove custom tracing, metrics, OpenTelemetry/exporter dependencies and their qualification work. Keep basic logs and focused correctness,
+authorization, rollback/retry and observable-limit tests. Deliver the public
+install/accept/commit/report workflow; an instrumentation project is not a prerequisite.
+Production target is Lakebase PostgreSQL 18.6; PostgreSQL 17 evidence is historical
+and cannot qualify the new target.
+
 The consumer-facing milestone is an installed-wheel workflow using ordinary
 credentials: fresh installation → catalog registration → host commit → original
 report retrieval → create/update → exact read → reconnect and replay the same
@@ -439,7 +448,7 @@ This is an integration checkpoint across B-002/003/004/005/008/012/014/015, not 
 
 Before the integrated native run, the milestone owner records one exact selected tuple: PostgreSQL build, adapter/driver and transaction profile, namespace/roles/grants, reconciled layout inventory, original UMF source/API selection, value/key/comparator definitions, resource limits, host service composition and Weft binding/ABI. Candidates cannot become selected merely by appearing in a draft. Choose a schema fixture within the selected capabilities; unsupported recursive, map or structured value capabilities remain explicit rather than silently collapsed to JSON strings. Baseline 0.2 and row-home additions require explicit composition/adoption, not concatenated fragments.
 
-Native helper selection follows the architecture’s responsibility matrix: assess pinned SQL/protected PL/pgSQL sequencing first, separately review byte-level semantics and rollback-resistant cumulative accounting, and propose a compiled helper only against a demonstrated unmet invariant. Produce actual entrypoint/source/type/security/resource manifests before selecting the deployment; neither source-only nor compiled packaging alone qualifies enforcement.
+Native helper selection follows the architecture’s responsibility matrix: assess pinned SQL/protected PL/pgSQL sequencing first, review exact byte semantics and practical observable limits; do not add compiled allocation/work instrumentation to the selected stock-PostgreSQL release. Produce actual entrypoint/source/type/security/resource manifests before selecting the deployment; neither source-only nor compiled packaging alone qualifies enforcement.
 
 ### Design closure versus implementation qualification
 
@@ -1910,7 +1919,7 @@ Use the following dependency order to turn the authored feed sources into a sele
 
 | Unit / prerequisites | Concrete remaining design deliverable | Planned implementation evidence |
 | --- | --- | --- |
-| F01 / selected integration tuple | Exact native language/helper/type/security/role/namespace/resource and original transaction/account/event lifetime declarations; complete ordinary/administrative writer classification | Isolated installed inventory, raw-role/helper/partition bypass and rollback-resistant usage/termination controls |
+| F01 / selected integration tuple | Exact native language/helper/type/security/role/namespace/resource and original transaction/account/event lifetime declarations; complete ordinary/administrative writer classification | Isolated installed inventory, raw-role/helper/partition bypass and observable-limit and supported-deadline controls |
 | F02 / F01 | Five original fact and two prerequisite extractor bodies/decoders with full descriptors, original archive authority and bounded complete collection | Independently authored positive/omission/substitution corpus per family; hidden/deleted owner and zero-graph-change facts |
 | F03 / F01,F02 | Compose the authored counter-reservation and member-insertion sources with actual full-key duplicate/conflict comparison, original clock/context capture, event scheduling, resource admission and atomic containment bodies; prerequisite/configuration registration remains separate | Nineteen three-statement registration source corruption controls precede native identical/conflicting/colliding registrations, savepoint rollback/address liveness, exact-limit/exhaustion, descriptor/command parity and missing upstream registration |
 | F04 / F01,F02,F03 | Selected original manifest profile definition binding typed order, canonical/domain/archive/hash rules and resource producers; native comparator/encoder/hash bodies | Original four byte vectors plus complete actual payload/prerequisite cases, noncanonical/domain/direct-hash substitutions and repeated-prefix resource proof |
@@ -4244,3 +4253,10 @@ CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10. Last full gate26/132 with
 106 missing; goal active. Next establish original ordinary-role administration
 exclusions and protect the selected barrier lifetime, then compose fixed fact
 capture and original semantic decoding before protected final release.
+
+
+The 2026-10-11 owner resource/diagnostics decision also supersedes the OTel bridge,
+receiver and exporter gates in the local runtime installation/migration plan,
+including P1/P2 and its current qualification summary. Those gates are removed
+from the release path; basic safe logging and ordinary correctness checks remain.
+No custom tracing/metrics implementation or exporter qualification is required.
