@@ -36,6 +36,7 @@ class HostExecutor:
         self._arbitration_service = None
         self._arbitration_registration_lock = Lock()
         self._lifecycle_lock = Lock()
+        self._host_control_producer = None
         self._native_claims = ()
         self._native_claim_limit = 4096
 

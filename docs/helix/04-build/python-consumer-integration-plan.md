@@ -402,3 +402,29 @@ independent-connection visibility subcases. Its 45 modules and six packaged owne
 assets match source exactly. See [iteration 13 evidence](evidence/python-contracts-iteration13.json).
 The planned composed control ledger above remains unfinished; this corrective
 iteration does not promote the public adapter or complete C02.
+
+
+### Iteration 14: compose original host control custody
+
+Astra Ultra reviews this plan and the completed implementation before main publication.
+Install a private original simple-query producer which reserves retained call records
+and Context slots before send, enforces exact per-call protocol grammar, and restores
+original host methods and Context before atomic scope handback. Share capacity across
+connections through one producer per executor and a conjunctive boundary cap; busy or
+exhausted reservation refuses without SQL. An explicit host-requested idle resource
+baseline inventories named resources and retires unnamed resources. The text runner
+must require that baseline on this composed path and retire its own unnamed resources
+only through verified original cleanup. Preserve acknowledged commit meaning across
+lost replies while retaining unresolved custody. Validate native malformed responses,
+publication faults, resource preservation, and a baseline/begin/adopt/text/savepoint/
+commit workflow. This remains private infrastructure: public ReferenceAssembly,
+installation, mutation, import, feed and recovery qualification remain outstanding.
+
+
+Iteration 14 implements the private composed producer and runner resource baseline.
+The installed wheel passes 320 tests, including 19 control-custody scenarios; all
+46 Python modules, six owner assets and the typing marker match source. See
+[iteration 14 evidence](evidence/python-contracts-iteration14.json). Astra Ultra
+approved the source, plan and original installed artifact. Integration with newly
+landed security inventory changes and combined validation precede publication. This advances the control
+ledger prerequisite; public adoption/recovery and the external interface remain open.

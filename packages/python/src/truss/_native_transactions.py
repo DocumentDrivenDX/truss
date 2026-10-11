@@ -166,7 +166,7 @@ class NativeTransactions:
                 self._next_epoch += 1  # Reservations never rewind on refusal/uncertainty.
                 candidate = _Generation(str(epoch))
             control = _Control(kind, state, candidate, savepoint, chain)
-        self._boundary._call(lambda: self._boundary._connection.run(sql), token, lifecycle=control, cleanup=cleanup)
+        self._boundary._call(lambda: self._boundary._run_simple(sql), token, lifecycle=control, cleanup=cleanup)
         return savepoint if kind == 'savepoint' else None
 
     @staticmethod
@@ -297,7 +297,7 @@ class NativeTransactionPort:
         sql = "SELECT pg_catalog.current_setting('transaction_isolation'), pg_catalog.current_setting('transaction_read_only'), session_user::pg_catalog.text, current_user::pg_catalog.text, pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text"
         from ._native_adoption import start_probe
         preflight = (lambda: start_probe(claim, self)) if claim is not None else None
-        t._boundary._call(lambda: t._boundary._connection.run(sql), self._token, on_complete=capture, preflight=preflight)
+        t._boundary._call(lambda: t._boundary._run_simple(sql), self._token, on_complete=capture, preflight=preflight)
         return completed[0].observation
 
     def _adoption_is_published(self, adoption):

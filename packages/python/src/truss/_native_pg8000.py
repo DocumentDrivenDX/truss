@@ -61,6 +61,10 @@ class NativeBoundary:
         if type(prepared_limit) is not int or prepared_limit < 1:
             raise ValueError('Positive exact prepared custody limit required')
         self._resources = ()
+        self._host_control_pending = None
+        self._host_control_records = ()
+        self._resource_baseline = None
+        self._unnamed_pending = True
         self._prepared_limit = prepared_limit
         self._active_resource = None
         self._native_arbitration_sessions = ()
@@ -93,6 +97,7 @@ class NativeBoundary:
             original_close = connection.close_prepared_statement
             self._original_close = original_close
             def parse(name, *args, **kwargs):
+                with self._lock: self._unnamed_pending = True
                 self._resource_name('prepare', name)
                 return original_parse(name, *args, **kwargs)
             def close_prepared(name, *args, **kwargs):
@@ -102,6 +107,12 @@ class NativeBoundary:
             self._close_entry = close_prepared
             connection.send_PARSE = parse
             connection.close_prepared_statement = close_prepared
+            self._original_bind = connection.send_BIND
+            def bind(*args, **kwargs):
+                with self._lock: self._unnamed_pending = True
+                return self._original_bind(*args, **kwargs)
+            self._bind_entry = bind
+            connection.send_BIND = bind
 
     def _resource_name(self, kind, name):
         # Original driver argument retained before native submission; no inferred
@@ -169,7 +180,7 @@ class NativeBoundary:
         if original_token is not None and type(original_token) is not object:
             raise NativeBoundaryRefusal('Original preallocated scope token required')
         with self._lock:
-            if self._quarantined or self._calling or self._operation is not None:
+            if self._quarantined or self._calling or self._operation is not None or self._host_control_pending is not None:
                 raise NativeBoundaryRefusal('Native boundary unavailable or busy')
             self._operation = object() if original_token is None else original_token
             return self._operation
@@ -182,21 +193,31 @@ class NativeBoundary:
 
     def release_operation(self, token, *, original_release=None):
         with self._lock:
-            if token is not self._operation or token is None or self._calling or self._quarantined or self._operation_ledger is not None or self._pending_operation_ledger is not None:
-                raise NativeBoundaryRefusal('Original operation cannot be released')
-            if original_release is None:
-                self._operation=None
-                return
-            if (type(original_release) is not _OperationRelease or original_release.owner is not self
-                or original_release.token is not token or original_release.before is not self._ownership
-                or original_release.after.operation is not None or original_release.published):
-                raise NativeBoundaryRefusal('Original release transition correspondence unavailable')
-            try:
-                self._publish_ownership(original_release.after)
-            except BaseException:
-                if self._ownership is original_release.after: original_release.published=True
-                raise
-            original_release.published=True
+            self._release_operation_locked(token, original_release=original_release)
+
+    def _release_operation_locked(self, token, *, original_release=None, original_control=None):
+        if token is not self._operation or token is None or self._calling or self._quarantined or self._operation_ledger is not None or self._pending_operation_ledger is not None:
+            raise NativeBoundaryRefusal('Original operation cannot be released')
+        pending = self._host_control_pending
+        if pending is not None and (original_control is None or pending.completion is not original_control
+                or not pending.result_custody.detached or pending.original_root is not self._ownership):
+            raise NativeBoundaryRefusal('Original sealed control completion required')
+        if original_release is None:
+            self._operation=None
+            return
+        if (type(original_release) is not _OperationRelease or original_release.owner is not self
+            or original_release.token is not token or original_release.before is not self._ownership
+            or original_release.after.operation is not None or original_release.published):
+            raise NativeBoundaryRefusal('Original release transition correspondence unavailable')
+        try:
+            self._publish_ownership(original_release.after)
+        except BaseException:
+            if self._ownership is original_release.after:
+                self._host_control_pending = None
+                original_release.published=True
+            raise
+        self._host_control_pending = None
+        original_release.published=True
 
     def _call(self, invoke, token=None, *, closing=False, preflight=None, lifecycle=None, on_complete=None, resource=None, on_settled=None, cleanup=None):
         with self._lock:
@@ -204,6 +225,9 @@ class NativeBoundary:
                     (self._operation is not None and token is not self._operation) or
                     (token is not None and token is not self._operation)):
                 raise NativeBoundaryRefusal('Native boundary unavailable or busy')
+            if (self._host_control_pending is not None
+                    and self._operation_ledger is not self._host_control_pending):
+                raise NativeBoundaryRefusal('Original host control remains unresolved')
             if (self._pending_operation_ledger is not None
                     and self._operation_ledger is not self._pending_operation_ledger):
                 raise NativeBoundaryRefusal('Original native binding remains unresolved')
@@ -246,6 +270,9 @@ class NativeBoundary:
                 self.last_call = NativeCall(events, raised, complete, self._connection._transaction_status, self._active_control, self._revision, self._active_resource, cleanup)
                 if call_entry is not None:
                     call_entry.native_call = self.last_call
+                if any(e.code == b'C' and e.payload.split(b' ')[0].rstrip(b'\0') in
+                       (b'PREPARE', b'DECLARE', b'DEALLOCATE', b'CLOSE') for e in events):
+                    self._resource_baseline = None
                 if closing or not complete:
                     self._quarantined = True
                 try:
@@ -260,6 +287,13 @@ class NativeBoundary:
                     raise
                 finally:
                     self._calling = False
+
+    def _run_simple(self, sql):
+        # Only fixed native control/observation producers use this entry.
+        ledger = self._operation_ledger
+        if ledger is not None and getattr(ledger, 'simple_query', None) is not None:
+            return ledger.simple_query(sql)
+        return self._connection.run(sql)
 
     def run(self, sql, *, token=None, cleanup=None, **params):
         """Trusted host SQL; lifecycle classification is not provided here."""

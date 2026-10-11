@@ -228,13 +228,9 @@ class NativeResultCustody:
                     raise NativeBoundaryRefusal('Canonical uint64 command count required')
             control = self.boundary._active_control
             if control is not None:
-                expected = {'savepoint':b'SAVEPOINT', 'rollback_to':b'ROLLBACK', 'release':b'RELEASE'}
-                valid = tag == expected.get(control.kind)
+                valid = tag in self._control_tags(control)
             else:
-                patterns = {'SELECT':rb'SELECT (0|[1-9][0-9]*)',
-                    'INSERT':rb'INSERT 0 (0|[1-9][0-9]*)',
-                    'UPDATE':rb'UPDATE (0|[1-9][0-9]*)', 'DELETE':rb'DELETE (0|[1-9][0-9]*)'}
-                pattern = patterns.get(self.expected_command)
+                pattern = self._command_pattern(self.expected_command)
                 valid = pattern is not None and re.fullmatch(pattern, tag) is not None
             if not valid: raise NativeBoundaryRefusal('Unregistered original command completion')
         elif code == b'E':
@@ -253,6 +249,17 @@ class NativeResultCustody:
                 raise NativeBoundaryRefusal('Original UTF8 profile cannot change')
         elif code not in (b'N', b'A'):
             raise NativeBoundaryRefusal('Unsupported original native response')
+
+    def _control_tags(self, control):
+        expected = {'savepoint':b'SAVEPOINT', 'rollback_to':b'ROLLBACK', 'release':b'RELEASE'}
+        tag = expected.get(control.kind)
+        return () if tag is None else (tag,)
+
+    def _command_pattern(self, command):
+        return {'SELECT':rb'SELECT (0|[1-9][0-9]*)',
+            'INSERT':rb'INSERT 0 (0|[1-9][0-9]*)',
+            'UPDATE':rb'UPDATE (0|[1-9][0-9]*)',
+            'DELETE':rb'DELETE (0|[1-9][0-9]*)'}.get(command)
 
     def normal_native_error(self, call):
         return (self.installed and not self.failed and self.session.result_custody is self

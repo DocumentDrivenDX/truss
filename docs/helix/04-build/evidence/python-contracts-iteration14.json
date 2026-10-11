@@ -1,0 +1,77 @@
+{
+  "iteration": 14,
+  "scope": "Private original host control ledger composed with text runner",
+  "baseCommit": "a528ad53",
+  "review": "Astra Ultra approved plan, completed source and original installed artifact; combined-main validation follows",
+  "wheelSha256": "21148ea60ad72790cd1f4740b96318934a9c1be80c5daeb0bd4ec7d2840f09bc",
+  "regressionSuite": {
+    "tests": 320,
+    "passed": true,
+    "seconds": 44.152,
+    "installedWheelOutsideCheckout": true,
+    "logSha256": "25e15aee91e161b38e185e88c70bdcb5e70b67ec33ef8f736f2d89cbc7a97046"
+  },
+  "nativeControlTests": 19,
+  "runtime": {
+    "python": "3.11.17",
+    "postgres": "16.15",
+    "pgserver": "0.1.4+truss.pg16.15",
+    "pg8000": "1.31.5"
+  },
+  "identicalSourceWheelInstalledModules": 46,
+  "identicalPackagedOwnerAssets": 6,
+  "pyTypedIdentical": true,
+  "moduleBoundaryImports": 212,
+  "publicExportsChanged": false,
+  "C02Complete": false,
+  "installerReady": false,
+  "nativeCases": [
+    "Explicit baseline/begin/adopt/text query/savepoint/commit preserves host Context",
+    "Named prepared statement and held cursor remain host-owned on refused baseline",
+    "Unknown original sends retain preregistered Context and custody",
+    "Real dropped profile CommandComplete refuses without publishing a handle",
+    "Unexpected extended acknowledgment synthetic fault refuses",
+    "Two native connections share atomic bounded reservation; loser no SQL",
+    "Lost restoration publication retains independent boundary-owned ledger",
+    "Lost final release reply reconciles original known handback",
+    "Actual acknowledged COMMIT survives lost Ready; independent observer sees persisted row",
+    "Deferred23505 abort preserves known rollback after result-publication fault"
+  ],
+  "limitations": [
+    "Private cooperative pg8000 1.31.5 text subset; no arbitrary borrowed-connection qualification",
+    "Host resource-free work only; opaque resource-producing functions and raw aliases remain excluded",
+    "Frame/decode accounting is not a total heap guarantee",
+    "Public cancellation, recovery and ReferenceAssembly remain outstanding"
+  ],
+  "remaining": [
+    "Public adoption cancellation and host recovery qualification",
+    "ReferenceAssembly and protected catalog/apply/read workflow",
+    "Installation, imports, receipt visibility, feed/ACK and full external interface"
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_host_control_custody.py": "9aae9c014a3a02434fba4afb1449c7ee54bad9b684b1707d692fdb49bc23ae06",
+    "packages/python/src/truss/_host_execution.py": "4261b86628f6d438e40ec22c3d2e3dee2b47cdb20318190c638d8b5a6d9184eb",
+    "packages/python/src/truss/_host_session.py": "c41617526dad6de5d3804eb4b33ceb6abdd566ca33b4ba5f0ab9f9d247ccf9b7",
+    "packages/python/src/truss/_native_pg8000.py": "903e89dbeb32697dd18aecba4e91f6b07fb1ff27290a4a93d078b447aadb56a7",
+    "packages/python/src/truss/_native_operation.py": "6add7f276f60a04b4314ecda21093995e915cab1044db57128a3d84765bd6e5e",
+    "packages/python/src/truss/_native_adoption.py": "f2206bd90458ba5463afc31e0b06337b4dedea86982402073b6ee441dd45e207",
+    "packages/python/src/truss/_native_transactions.py": "3028ec4cbc2b95dd08ef82948fc6462da7463fd6783f27a4e580c18ce4b660fd",
+    "packages/python/src/truss/_native_driver_profile.py": "ea3e3e92fc5d4d064bbd42cd8d10dce611831376ef430157b1f6a4d6992e9958",
+    "packages/python/src/truss/_native_result_custody.py": "8e31188c2a31d6b3a269bdeca05a34e7494c02243f65408d6d01ad799307575e",
+    "packages/python/tests/test_host_control_custody.py": "12ef71dbb4ffd979c2569834e0679df50c9bf9a26d4fb69b23cc14df8786d00b",
+    "scripts/check-module-boundaries.py": "c172bf33aa89ceaa8321a8e92f7007b45ce36a4b4611165d512aa9d10e187d58"
+  },
+  "securitySync": "Origin/main advanced with reviewed role escalation inventory changes. Combined-main artifact validation required before publication.",
+  "astraIndependentReview": {
+    "planApproved": true,
+    "sourceApproved": true,
+    "focusedNativeTests": 19,
+    "seconds": 2.735,
+    "moduleBoundaryImports": 212,
+    "confirmedOriginalCommitWithDuplicateFrameFault": true,
+    "finalArtifactApproved": true,
+    "verifiedFullSuiteTests": 320,
+    "identicalModules": 46,
+    "identicalOwnerAssets": 6
+  }
+}

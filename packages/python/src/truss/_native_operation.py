@@ -97,7 +97,8 @@ class NativeOperationRunner:
 
     def _profile(self, boundary):
         from ._native_driver_profile import original_driver_profile
-        return original_driver_profile(boundary)
+        from ._host_control_custody import selected_resource_entry
+        return original_driver_profile(boundary) and (not boundary._host_control_records or selected_resource_entry(boundary))
 
     def execute(self, transaction, statement, params=None):
         params = {} if params is None else params
@@ -348,6 +349,8 @@ class NativeOperationRunner:
                 # lost publication reply. Later callers cannot reuse this G.
                 session.context.custody.usable = False
             root = _Ownership(None, None, None, (*boundary._ownership.completed, session))
+            # Only the original verified cleanup retires this runner's resources.
+            boundary._unnamed_pending=False
             boundary._publish_ownership(root)
             return 'released'
 

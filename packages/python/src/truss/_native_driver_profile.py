@@ -17,9 +17,13 @@ def original_driver_profile(boundary):
             and getattr(h, '__self__', None) is con for h in handlers.values()) for name in methods)
         exact_dispatch = all(con.message_types.get(k) is v for k,v in boundary._original_handlers.items())
         exact_methods = all(getattr(getattr(con, name), '__func__', None) is getattr(CoreConnection, name)
-            for name in ('handle_messages', 'send_BIND', 'send_EXECUTE', 'send_DESCRIBE_STATEMENT',
+            and getattr(getattr(con,name),'__self__',None) is con
+            for name in ('handle_messages', 'send_EXECUTE', 'send_DESCRIBE_STATEMENT',
                 'execute_unnamed', 'execute_named', 'prepare_statement'))
-        if (not exact_handlers or not exact_dispatch or not exact_methods
+        exact_native_owners = all(getattr(getattr(con,name),'__self__',None) is con for name in ('run','prepare'))
+        exact_original_owners = all(getattr(method,'__self__',None) is con for method in
+            (boundary._original_parse,boundary._original_close,boundary._original_bind))
+        if (not exact_handlers or not exact_dispatch or not exact_methods or not exact_native_owners or not exact_original_owners
                 or getattr(con.run, '__func__', None) is not Connection.run
                 or getattr(con.prepare, '__func__', None) is not Connection.prepare
                 or con.send_PARSE is not boundary._parse_entry
@@ -30,6 +34,14 @@ def original_driver_profile(boundary):
                 or con._client_encoding != 'utf8'
                 or con.pg_types[25] is not string_in or con.py_types[str] is not string_out
                 or con.py_types[type(None)] is not null_out
-                or getattr(con.send_BIND, '__func__', None) is not CoreConnection.send_BIND):
+                or con.send_BIND is not boundary._bind_entry
+                or getattr(boundary._original_bind, '__func__', None) is not CoreConnection.send_BIND):
             return False
         return True
+
+def original_control_profile(boundary):
+    from pg8000.core import CoreConnection
+    return original_driver_profile(boundary) and all(
+        getattr(getattr(boundary._connection, name), '__func__', None) is getattr(CoreConnection, name)
+        and getattr(getattr(boundary._connection,name),'__self__',None) is boundary._connection
+        for name in ('execute_simple', 'send_QUERY', '_send_message'))

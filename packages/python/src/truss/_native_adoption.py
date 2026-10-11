@@ -148,7 +148,7 @@ def profile_precheck(claim, port):
         def settled(call, rows):
             check.call = call
         try:
-            b._call(lambda: b._connection.run('SHOW '+setting), claim.token,
+            b._call(lambda: b._run_simple('SHOW '+setting), claim.token,
                     on_settled=settled, on_complete=capture)
         finally:
             if check.call is None and b.last_call is not None and b.last_call.revision == check.revision:

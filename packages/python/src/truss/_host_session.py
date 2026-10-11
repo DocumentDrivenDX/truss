@@ -41,15 +41,20 @@ class _Call:
     port_control: object = None
     settlements: object = None
     evidence: object = None
+    control_ledger: object = None
     phase: str = 'reserved'
 
 class NativeHostSession:
-    def __init__(self, executor, tracker, service, *, retained_calls=4096):
+    def __init__(self, executor, tracker, service, *, retained_calls=4096, control_producer=None):
         if (type(executor) is not HostExecutor or type(tracker) is not NativeTransactions
             or type(service) is not NativeArbitration or service._executor is not executor
             or executor._arbitration_service is not service.registry
             or type(retained_calls) is not int or not 1<=retained_calls<=4096):
             raise ValueError('Original shared native host composition required')
+        from ._host_control_custody import HostControlCustody
+        if control_producer is not None and (type(control_producer) is not HostControlCustody or control_producer.executor is not executor):
+            raise ValueError('Original control producer required')
+        self._control_producer=control_producer
         self.executor,self.tracker,self.service=executor,tracker,service
         self._boundary=tracker._boundary
         self._limit=retained_calls
@@ -89,6 +94,17 @@ class NativeHostSession:
             record.generation=self.tracker._state.generation
             try:
                 record.release=self._boundary.reserve_operation_release(record.token)
+                if self._control_producer is not None:
+                    if not self._control_producer.preflight(self._boundary,kind):
+                        record.result=self._error('execution_obligation')
+                        self._boundary.release_operation(record.token,original_release=record.release)
+                        record.phase='refused'
+                        return record.result
+                    if self._control_producer.attach(self._boundary,record) is None:
+                        record.result=self._error('execution_obligation')
+                        self._boundary.release_operation(record.token,original_release=record.release)
+                        record.phase='refused'
+                        return record.result
                 record.result=callback(record.token,record)
                 record.original=self._boundary.last_call
                 record.original_frozen=True
@@ -100,7 +116,10 @@ class NativeHostSession:
                 if (self._boundary._quarantined or self._boundary._calling
                     or record.token is not self._boundary._operation):
                     raise NativeBoundaryRefusal('Original native scope unsettled')
-                self._boundary.release_operation(record.token,original_release=record.release)
+                if self._control_producer is None:
+                    self._boundary.release_operation(record.token,original_release=record.release)
+                else:
+                    self._control_producer.handback(record.control_ledger)
                 record.phase='settled'
                 return record.result
             except BaseException as error:
@@ -113,6 +132,7 @@ class NativeHostSession:
                     if not isinstance(error,Exception): raise
                     return record.result
                 record.phase='unresolved'
+                if record.control_ledger is not None:record.control_ledger.admission_closed=True
                 self._closed=True
                 # Never release original token after an unknown Python/native window.
                 known=None
@@ -122,10 +142,11 @@ class NativeHostSession:
                     call=record.original
                     control=call.original_control
                     tags=tuple(e.payload for e in call.events if e.code==b'C')
+                    acknowledged=(record.control_ledger is None or record.control_ledger.calls[-1].commands==1)
                     if (type(control) is _Control and control.kind==kind
                         and control.expected.generation is record.generation and control.chain is False):
-                        if kind=='commit' and tags==(b'COMMIT\0',): known='committed'
-                        elif kind in ('commit','rollback') and tags==(b'ROLLBACK\0',): known='rolled_back'
+                        if acknowledged and kind=='commit' and tags==(b'COMMIT\0',): known='committed'
+                        elif acknowledged and kind in ('commit','rollback') and tags==(b'ROLLBACK\0',): known='rolled_back'
                         elif call.capture_complete and kind=='commit' and call.final_status==b'I' and any(e.code==b'E' for e in call.events): known='rolled_back'
                         elif call.capture_complete and kind=='commit' and call.final_status in (b'T',b'E') and any(e.code==b'E' for e in call.events): known='commit_failed'
                 if known is not None:
@@ -179,6 +200,12 @@ class NativeHostSession:
     @staticmethod
     def _settlement_result(record,state):
         return record.settlements[state][0]
+
+    def observe_host_resource_baseline(self):
+        # Explicit host-owned idle observation, never implicit adoption repair.
+        if self._control_producer is None:return self._error('execution_obligation')
+        return self._invoke('host_baseline',lambda token,record:
+            self._control_producer.observe_baseline(self._boundary,record))
 
     def begin(self,*,isolation='read_committed',access_mode='read_write'):
         if type(isolation) is not str or type(access_mode) is not str:
