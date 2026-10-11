@@ -4374,3 +4374,48 @@ Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10. No public support
 flag or backend acceptance binding; last full checkpoint26/132,106 missing. Goal
 active. Next qualify explicit writer installation and lifecycle/source-generation
 composition while preserving the uncoordinated administrator counterexample.
+
+
+### Atomic shared-role change and explicit authority generation — 2026-10-11
+
+Implemented separate private base0.16 reason adjunct and invoker-only authority
+epoch issuer. Actual role changes retain `authority-change`, not `restore`; source
+incarnation is preserved. The adjunct preflights original native reason-constraint
+identity/definition, then preserves old initial/restore rules while admitting the
+new noninitial reason. Original UMF owner import/saved reload/export produces
+`contracts/authority-epoch-reason-v0.1.proposal.umf.json` and retained owner DDL;
+ownerfc6265c7, exact hashes and reload equality recorded. This qualifies the selected
+owner API round trip, not its entire runtime/package dependency delivery.
+
+Native issuer composes explicit writer participation with original predecessor,
+bounded profile/evidence, same target incarnation, native UUID uniqueness and
+registry/pointer transition in the administrator's transaction. Four native methods
+prove commit invalidates old reads and admits exact successor, abort preserves role
+and old pointer while removing successor, and changed incarnation or missing/stale
+predecessor refuses with no committed role/pointer/registry effect.
+
+Final `evidence/python-psycopg-epoch-cut/2472b218-d963-454b-8144-4d8953796248`
+passes134 methods (83 fact/dependency/identity/visibility/DDL/role/generation,16
+graph,nine epoch,26 adoption), module boundaries,138 current/archived Truss sources,
+363 original UMF sources,1614 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Earlieraaf76b49 passes133 methods under its
+original source tuple. The base-constraint probe is a separate original native
+name/definition observation only; it is not migration/admission proof.
+
+Formal `evidence/security-authority-generation-formal/42fb89e5-9cfb-4841-964f-8f243b6fe1ef`
+passes five fresh-context queries (three UNSAT/two SAT), retaining four exact
+source preimages and SMT/model receipts. Atomic visibility and distinct successor
+premises imply committed successor excludes old generation and abort preserves
+both original states; selected issuance preserves incarnation. Split commits and
+omitted fresh comparison admit countermodels. Earlierd28e271b retains the earlier
+source tuple and simpler unconditional-acceptance counter; final models captured
+generation explicitly. No PostgreSQL transaction/catalog/SQL/UUID issuer refinement
+or protected final-release theorem.
+
+Trace CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10. Complete installed
+issuer/helper/ACL custody, qualified profile/evidence producer, all administrative
+paths and cluster-wide coordination, capability/routine inventory, original
+caller/mapping, uncertain-commit recovery and protected final release remain open.
+No shipped migration/public support flag or backend acceptance binding; last full
+checkpoint26/132,106 missing. Goal active. Next compose original issuer custody
+and generation/profile production with the protected operation lifetime.

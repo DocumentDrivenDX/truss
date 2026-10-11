@@ -858,3 +858,20 @@ Trace CONTRACT-063/STP-056 L03/B11/B12, US-056 AC9/AC10 lifecycle prerequisites.
 Formal4ab1bad4 models external exclusion and explicit participant effect intervals
 with three UNSAT/two SAT results; it does not prove all administrators participate,
 cluster-wide role safety, helper installation custody or final disclosure.
+
+
+### Native atomic authority-change generation controls — 2026-10-11
+
+Four controls require: committed role configuration and authority-change successor
+produce exact predecessor/reason/incarnation, old generation refuses55000 without
+callback and new exact comparison passes; abort restores role inheritance/current
+pointer and removes successor registry row; mismatched target incarnation refuses
+and rollback preserves original state; missing and stale predecessor cases refuse
+without committed role/pointer/registry effects. Restore cleanup issues a distinct
+original restore epoch after the committed fixture, preserving reason meaning.
+Final2472b218 passes134 methods and three independent native cleanups. The UMF
+owner adjunct round-trips saved-document export exactly. Trace
+CONTRACT-063/STP-056 L03/B11/B12 and US-056 AC9/AC10 lifecycle prerequisites.
+Formal42fb89e5 retains three UNSAT/two SAT results under atomic visibility and
+distinct successor premises; no native issuer, complete role/ACL installation,
+cluster-wide coordination, commit-uncertainty or final-release refinement proof.

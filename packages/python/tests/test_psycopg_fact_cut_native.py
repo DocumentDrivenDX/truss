@@ -34,6 +34,8 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     cls.semantic_relations[name]=_FactRelationComparison('truss',name,oid,owner,(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0])
                 cls.bindings={r[0]:_FactRelationComparison('truss',r[0],r[1],r[2],(ROOT/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0]) for r in c.execute("SELECT relname,oid,relowner FROM pg_class WHERE oid IN ('truss.flat_assignment'::regclass,'truss.edge'::regclass)")}
                 c.execute((ROOT/'packages/postgresql/native/source-epoch-shared-authority-writer.sql').read_text())
+                c.execute((ROOT/'docs/helix/04-build/evidence/authority-epoch-reason.owner-export.sql').read_text())
+                c.execute((ROOT/'packages/postgresql/native/source-epoch-authority-issue.sql').read_text())
         except BaseException:
             epoch_tests.PsycopgEpochCutNativeTests.tearDownClass.__func__(cls)
             raise
@@ -707,3 +709,64 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
     def test_shared_authority_writer_refuses_same_backend_retained_reader(self):
         t=self.begin();result=self.cut(t,lambda c:c.execute('SELECT truss.runtime_fence_shared_authority_writer()'))
         self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000');self.assertEqual(self.fact_shares(),0)
+
+    def test_authority_change_commit_invalidates_old_epoch_and_preserves_incarnation(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation,_EpochComparison
+        issued=[]
+        try:
+            def operation(host,t,original,connection):
+                predecessor=self.epoch
+                try:
+                    self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor NOINHERIT')
+                    successor=self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',%s,'target',%s,%s)",(predecessor,b'\x03',b'\x04')).fetchone()[0]
+                    self.connection.execute('COMMIT');issued.append(successor)
+                except BaseException:
+                    self.connection.execute('ROLLBACK');raise
+                self.assertEqual(connection.execute("SELECT rolinherit FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(False,))
+                called=[];old=_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+                self.assertIsInstance(old,Error);self.assertEqual(old.error.sql_state,'55000');self.assertEqual(called,[])
+                selected=_EpochComparison('fixture',successor,'target',b'\x03',b'\x04')
+                self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,selected,original,lambda c:'new-authority-epoch'),Ok('new-authority-epoch'))
+                self.assertEqual(self.connection.execute('SELECT predecessor_epoch,transition_reason,target_incarnation FROM truss.source_epoch_registry WHERE source_epoch=%s',(successor,)).fetchone(),(predecessor,'authority-change','target'))
+            self.with_unprivileged_actor(operation)
+        finally:
+            self.connection.execute('ROLLBACK')
+            if issued:
+                type(self).epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(issued[-1],b'\x01',b'\x02')).fetchone()[0]
+    def test_authority_change_abort_restores_role_pointer_and_registry(self):
+        from truss._psycopg_epoch_cut import _run_set_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            predecessor=self.epoch
+            try:
+                self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor NOINHERIT')
+                successor=self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',%s,'target',%s,%s)",(predecessor,b'\x03',b'\x04')).fetchone()[0]
+                self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(successor,))
+            finally:self.connection.execute('ROLLBACK')
+            self.assertEqual(connection.execute("SELECT rolinherit FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(True,))
+            self.assertEqual(connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(predecessor,))
+            self.assertEqual(connection.execute('SELECT count(*) FROM truss.source_epoch_registry WHERE source_epoch=%s',(successor,)).fetchone(),(0,))
+            self.assertEqual(_run_set_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'original-after-abort'),Ok('original-after-abort'))
+        self.with_unprivileged_actor(operation)
+    def test_authority_change_cannot_silently_restore_different_incarnation(self):
+        def operation(host,t,original,connection):
+            try:
+                self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor NOINHERIT')
+                with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',%s,'different-target',%s,%s)",(self.epoch,b'\x03',b'\x04'))
+            finally:self.connection.execute('ROLLBACK')
+            self.assertEqual(connection.execute("SELECT rolinherit FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(True,))
+            self.assertEqual(connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(self.epoch,))
+        self.with_unprivileged_actor(operation)
+
+    def test_authority_change_missing_or_stale_predecessor_has_no_committed_effect(self):
+        def operation(host,t,original,connection):
+            before=connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone()
+            for predecessor in (None,'wrong-predecessor'):
+                with self.subTest(predecessor=predecessor):
+                    try:
+                        self.connection.execute('BEGIN; SELECT truss.runtime_fence_shared_authority_writer(); ALTER ROLE fact_cut_actor NOINHERIT')
+                        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):self.connection.execute("SELECT truss.runtime_issue_authority_epoch('fixture',%s,'target',%s,%s)",(predecessor,b'\x03',b'\x04'))
+                    finally:self.connection.execute('ROLLBACK')
+                    self.assertEqual(connection.execute("SELECT rolinherit FROM pg_catalog.pg_roles WHERE rolname=current_user").fetchone(),(True,))
+                    self.assertEqual(connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(self.epoch,))
+                    self.assertEqual(connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),before)
+        self.with_unprivileged_actor(operation)

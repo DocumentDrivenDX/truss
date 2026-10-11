@@ -2347,3 +2347,28 @@ ALTER ROLE/GRANT/REVOKE, cluster-wide/multi-database exclusion or an epoch
 transition/acknowledgment API. Original helper/body/owner/ACL custody and complete
 administrative-path exclusions remain required. Calling this helper alone cannot
 qualify shared authority lifetime or a new accepted source generation.
+
+
+### Selected authority-change generation adjunct — 2026-10-11
+
+A private PostgreSQL16.15 base0.16 adjunct extends the registry reason checks with
+`authority-change`, preserving initial/restore rules and requiring a nonnull
+predecessor for authority changes. Before altering checks it independently requires
+exact original native constraint names/definitions. UMF imports the adjunct SQL
+and exports its saved document exactly; the core0.16 layout remains unchanged.
+
+Private invoker-only `runtime_issue_authority_epoch(installation, predecessor,
+incarnation, profile, evidence)` acquires explicit shared-authority writer
+participation, requires the existing original predecessor and preserves the
+predecessor's target incarnation before native UUID/registry/pointer effects.
+The selected administrator role/ACL mutation and generation issuance MUST share
+one transaction. Missing/stale predecessor or changed incarnation refuses55000;
+transaction rollback removes role, successor registry and pointer effects. A
+committed successor invalidates old-generation reads through fresh native
+comparison. Inputs remain original comparison/evidence carriers, not credentials.
+
+The adjunct is a private storage/issuer candidate, not a shipped migration,
+qualified lifecycle producer, full current-authority admission or cluster-wide
+administration coordinator. Installed helper/issuer/ACL custody, meaningful
+profile/evidence construction, commit uncertainty and protected final release
+remain independent requirements.

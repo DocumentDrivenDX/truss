@@ -1,0 +1,33 @@
+{
+  "scope": "Original PostgreSQL16.15 selected 0.16 constraint names only, not migration or authority qualification",
+  "constraints": [
+    [
+      "source_epoch_registry_check",
+      "CHECK ((((transition_reason = 'initial'::text) AND (predecessor_epoch IS NULL)) OR ((transition_reason = 'restore'::text) AND (predecessor_epoch IS NOT NULL))))"
+    ],
+    [
+      "source_epoch_registry_check1",
+      "CHECK (((predecessor_epoch IS NULL) OR (predecessor_epoch <> source_epoch)))"
+    ],
+    [
+      "source_epoch_registry_evidence_bytes_check",
+      "CHECK (((octet_length(evidence_bytes) >= 1) AND (octet_length(evidence_bytes) <= 1048576)))"
+    ],
+    [
+      "source_epoch_registry_profile_bytes_check",
+      "CHECK (((octet_length(profile_bytes) >= 1) AND (octet_length(profile_bytes) <= 65536)))"
+    ],
+    [
+      "source_epoch_registry_source_epoch_check",
+      "CHECK (((octet_length(source_epoch) >= 1) AND (octet_length(source_epoch) <= 256)))"
+    ],
+    [
+      "source_epoch_registry_target_incarnation_check",
+      "CHECK (((octet_length(target_incarnation) >= 1) AND (octet_length(target_incarnation) <= 1024)))"
+    ],
+    [
+      "source_epoch_registry_transition_reason_check",
+      "CHECK ((transition_reason = ANY (ARRAY['initial'::text, 'restore'::text])))"
+    ]
+  ]
+}
