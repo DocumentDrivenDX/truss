@@ -1881,6 +1881,16 @@ Original complete NativeCall, Q request, T/D/C/Z response, singleton text row, n
 
 ### Selected automatic routine-DDL participation adjunct — 2026-10-11
 
+Selected routine DDL must also refuse when this native transaction has any retained
+`row_home_operation` admission, independently of epoch SHARE locks. Apply this
+predicate without phase filtering, before writer table modes and marker locking.
+An operation may finish a call while its enclosing transaction still retains its
+original source basis. Rolling back across native admission removes that basis;
+unchanged parent xid alone does not establish surviving admission. This mirrors
+the issuer's retained-operation guard; it does not supply missing admission
+registration coverage, prevent privileged registry tampering, or qualify an
+ordinary protected executor.
+
 The private PostgreSQL16.15 candidate installs an ALWAYS ddl_command_start hook for exactly CREATE/ALTER/DROP FUNCTION and CREATE/ALTER/DROP PROCEDURE. Before any selected DDL, its original invoker guard refuses elevation, its actual own granted epoch-table ShareLock refuses same-backend changes55000, then current/registry ROW EXCLUSIVE NOWAIT modes precede singleton installation-marker FOR UPDATE NOWAIT. Both table modes and marker row must precede selected effects. The table modes exclude the fenced reader through the actual writer transaction commit/abort; the marker serializes participating writers because ROW EXCLUSIVE modes are mutually compatible. A pending writer causes reader refusal, not internal drain/retry or stale request substitution. Existing native savepoint/transaction semantics govern retained lock lifetime.
 
 This adjunct issues no source-epoch transition. The 0.16 registry accepts only initial/restore meanings; a routine edit must not masquerade as a restore. Successful selected DDL therefore changes body/census under unchanged epoch. Every prospective source admission must freshly collect and compare the complete selected source image under actual retained cuts; epoch identity alone does not establish source equality or an admitted source generation. A full source-epoch transition interpretation, bounded original source-image evidence custody and authenticated provider/issuer remain independent obligations.

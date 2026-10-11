@@ -11,6 +11,12 @@ BEGIN
   THEN session_user::text ELSE current_setting('role') END) THEN
   RAISE EXCEPTION 'original invoker routine DDL boundary required' USING ERRCODE='55000';
  END IF;
+ -- Retained native admissions outlive individual calls in this transaction.
+ -- Refuse before writer modes/marker locking and before any selected DDL effect.
+ IF EXISTS(SELECT 1 FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()) THEN
+  RAISE EXCEPTION 'routine DDL cannot follow an original operation' USING ERRCODE='55000';
+ END IF;
  IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l
   WHERE l.locktype='relation' AND l.pid=pg_catalog.pg_backend_pid()
    AND l.database=(SELECT d.oid FROM pg_catalog.pg_database d WHERE d.datname=pg_catalog.current_database())

@@ -17,7 +17,7 @@ class RoutineDdlBarrierNativeTests(NativeBoundaryFixture,unittest.TestCase):
   c=cls.Connection(**cls.kwargs)
   try:
    c.run((ROOT/'docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql').read_text())
-   for n in ('source-epoch-immutability','source-epoch-lock','source-epoch-issue','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock'):c.run((ROOT/f'packages/postgresql/native/{n}.sql').read_text())
+   for n in ('source-epoch-immutability','source-epoch-lock','source-epoch-issue','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock','operation-admission'):c.run((ROOT/f'packages/postgresql/native/{n}.sql').read_text())
    c.run("INSERT INTO truss.installation_marker VALUES(1,'truss-bootstrap-marker/0.1.0','fixture','fixture',sha256(decode('01','hex')),'fixture',sha256(decode('02','hex')),'fixture','truss',now(),now()::text)")
    cls.epoch=c.run("SELECT truss.runtime_issue_source_epoch('fixture',NULL,'target',decode('01','hex'),decode('02','hex'))")[0][0]
    c.run("CREATE FUNCTION truss.ddl_subject() RETURNS integer LANGUAGE sql AS $$ SELECT 333 $$; CREATE PROCEDURE truss.ddl_procedure() LANGUAGE sql AS $$ SELECT 1 $$; CREATE SEQUENCE truss.ddl_first_effect")
@@ -143,3 +143,29 @@ class RoutineDdlBarrierNativeTests(NativeBoundaryFixture,unittest.TestCase):
   self.w.run('CREATE FUNCTION truss.second_subject() RETURNS integer LANGUAGE sql AS $$ SELECT 1 $$')
   self.assertEqual(self.modes(self.w),2);self.assertNotEqual(self.called(),before)
   self.assertEqual(self.w.run('SELECT truss.second_subject()'),[[1]])
+
+ def admit(self):
+  native=self.c.run('SELECT pg_current_xact_id()::text')[0][0]
+  result=self.c.run("SELECT * FROM truss.runtime_admit_operation('mutation',decode('01','hex'),decode('02','hex'),decode('03','hex'),decode('04','hex'),decode('05','hex'),decode('06','hex'))")
+  self.assertEqual(result[0][:2],[native,'0'])
+  context=json.loads(bytes.fromhex(result[0][2]));self.assertEqual(context['xid'],native)
+  self.assertEqual(self.c.run('SELECT original_writer_xid::text,operation_ordinal::text,phase FROM truss.row_home_operation'),[[native,'0','admitted']])
+  return native
+ def test_original_operation_refuses_ddl_without_epoch_shares(self):
+  self.admit();self.assertEqual(self.shares(self.c),0);self.assertEqual(self.modes(self.c),0);before=self.called()
+  self.refuse(self.c,CHANGE,'55000','routine DDL cannot follow an original operation')
+  self.assertEqual(self.modes(self.c),0);self.assertEqual(self.called(),before)
+  self.assertEqual(self.c.run('SELECT truss.ddl_subject()'),[[333]])
+ def test_rollback_across_original_admission_releases_ddl_refusal(self):
+  self.c.run('SAVEPOINT before_admission');native=self.admit();self.c.run('SAVEPOINT later; ROLLBACK TO later; RELEASE later')
+  self.refuse(self.c,CHANGE,'55000','routine DDL cannot follow an original operation')
+  self.c.run('ROLLBACK TO before_admission; RELEASE before_admission')
+  self.assertEqual(self.c.run('SELECT pg_current_xact_id()::text'),[[native]])
+  self.assertEqual(self.c.run('SELECT count(*)::int FROM truss.row_home_operation'),[[0]])
+  self.c.run(CHANGE);self.assertEqual(self.c.run('SELECT truss.ddl_subject()'),[[444]])
+ def test_omitted_operation_guard_allows_source_change_behind_admission(self):
+  marker=' IF EXISTS(SELECT 1 FROM truss.row_home_operation o';self.assertEqual(FUNCTION.count(marker),1)
+  self.w.run(FUNCTION.replace(marker,' IF FALSE AND EXISTS(SELECT 1 FROM truss.row_home_operation o'))
+  self.admit();before=self.called();self.assertEqual(self.shares(self.c),0);self.c.run(CHANGE)
+  self.assertNotEqual(self.called(),before);self.assertEqual(self.c.run('SELECT truss.ddl_subject()'),[[444]])
+  self.assertEqual(self.c.run('SELECT phase FROM truss.row_home_operation'),[['admitted']])

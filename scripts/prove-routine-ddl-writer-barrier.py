@@ -7,8 +7,9 @@ pins={}
 for name in paths:
  raw=(repo/name).read_bytes();pins[name]=hashlib.sha256(raw).hexdigest();p=folder/'preimages'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
 reader,tagged,own,own_guard,writer_modes,write=z3.Bools('reader tagged own own_guard writer_modes write')
+retained_operation,operation_guard=z3.Bools('retained_operation operation_guard')
 state,desired,successor,epoch_before,epoch_after=z3.Ints('state desired successor epoch_before epoch_after')
-allowed=z3.Not(z3.And(reader,tagged,z3.If(own,own_guard,writer_modes)))
+allowed=z3.And(z3.Not(z3.And(reader,tagged,z3.If(own,own_guard,writer_modes))),z3.Not(z3.And(tagged,own,retained_operation,operation_guard)))
 step=successor==z3.If(z3.And(write,allowed),desired,state)
 epoch=epoch_after==epoch_before
 started,ended,writer_held,accepted=z3.Bools('started ended writer_held accepted')
@@ -26,7 +27,9 @@ queries=[
  ('omitted_writer_modes_permit_pending_writer_and_reader','sat',[started,tagged,z3.Not(writer_modes),z3.Not(ended),lifetime,compatibility,accepted]),
  ('uncovered_or_disabled_hook_allows_change','sat',[reader,z3.Not(tagged),write,step,successor!=state,epoch]),
  ('selected_committed_ddl_changes_source_without_epoch_issuance','sat',[z3.Not(reader),tagged,own_guard,writer_modes,write,step,successor!=state,epoch]),
- ('completed_writer_allows_new_reader','sat',[started,tagged,writer_modes,ended,lifetime,compatibility,accepted])]
+ ('completed_writer_allows_new_reader','sat',[started,tagged,writer_modes,ended,lifetime,compatibility,accepted]),
+ ('original_operation_excludes_selected_own_ddl_without_reader','unsat',[z3.Not(reader),tagged,own,retained_operation,operation_guard,step,successor!=state]),
+ ('omitted_operation_guard_allows_source_change_behind_admission','sat',[z3.Not(reader),tagged,own,retained_operation,z3.Not(operation_guard),write,step,successor!=state,epoch])]
 results=[]
 for name,expected,clauses in queries:
  solver=z3.Solver();solver.set(timeout=10000);solver.add(*clauses);raw=solver.to_smt2();(folder/(name+'.smt2')).write_text(raw);observed=str(solver.check())

@@ -482,6 +482,18 @@ For each family, exercise capture() on altered SQL, altered comparison, copied g
 
 ### Native selected routine-DDL participation controls — 2026-10-11
 
+Invoke the actual private `runtime_admit_operation` producer with original bounded
+artifacts; compare native xid/ordinal/context and its retained registry row. With
+no epoch SHARE locks, selected routine DDL must refuse55000 before writer modes,
+later event-trigger effects or body changes. A later savepoint rollback must not
+remove refusal. Rollback across admission must remove the row and allow DDL while
+the original parent xid remains equal. A separately omitted operation predicate
+must allow changed body/effects behind that actual admitted row. These controls
+qualify the admitted phase only, not complete finalization, registry immutability,
+all operation producers or authenticated ordinary-person admission. Retain the
+conditional UNSAT exclusion law and SAT omitted-guard witness independently of
+native producer/refinement claims.
+
 For CONTRACT-008's automatic six-tag adjunct, retain exact tag order, ALWAYS mode, original invoker/no-PUBLIC execution/settings readback; before-effect refusal for all six tags under an actual own ShareLock; independent first-effect sequence unchanged on ordinary/invoker-definer/external reader refusal; pending original DDL writer modes surviving to COMMIT/ABORT; fresh successful reader/body after completion; marker-specific two-writer refusal before a later event-trigger effect; and original savepoint RELEASE/later-rollback lock preservation. Older Repeatable Read/Serializable readers refuse before acquisition. Replica mode must still execute the ALWAYS fence.
 
 Independently erase only actual own-ShareLock selection, early table modes and marker row exclusion in separate isolated schedules. Require same-backend body change while actual ShareLocks remain, pending foreign commit changing actual execution/census while reader ShareLocks remain, and simultaneous distinct selected DDL effects under both compatible writer modes, respectively. Use exact replacement preimages/counts, original native errors and bounded calls. Include privileged hook disable and relevant shared-role BYPASSRLS change as successful excluded-authority controls. Both must preserve epoch identity while falsifying any complete source/authority-cut claim. Retain complete compressed census bytes plus digest/octet readback where collected; these are administrative materialized observations, not original NativeCall/host disclosure custody.

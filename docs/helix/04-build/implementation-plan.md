@@ -3521,3 +3521,42 @@ private spike. No full source/authority writer closure, automatic routine epoch
 advancement, authenticated issuer, ordinary protected executor, held business-use
 permit, or final disclosure acceptance is established. Backend acceptance remains
 26/132 with 106 missing bindings; the overall implementation goal remains active.
+
+
+### Original operation source-stability guard — 2026-10-11
+
+Previous goal turn made progress by directly publishing reviewed barrier/main
+integration31252f08. Inspection found that automatic routine DDL did not share the
+issuer's retained-operation exclusion: a real admitted operation without epoch
+SHARE locks could otherwise change its routine source. The selected six-tag
+handler now checks any same-native-xid row_home_operation before writer modes,
+marker locking and DDL effects, without phase filtering. No public grant changes.
+
+Native packet `evidence/python-catalog-report-release/71c2e81c-6102-4280-bbd2-255ef7a4989f`
+passes47 tests (18 barrier,14 original dispatch,15 incoming catalog regressions).
+Three new schedules use the actual private runtime_admit_operation: refusal with
+zero epoch SHARE/writer modes and unchanged independent first-effect/body;
+later-savepoint preservation then rollback-across-admission release under unchanged
+parent xid; and exact omitted-operation-guard countervariant permitting444 behind
+the retained admitted row. These do not prove completed-phase finalization,
+registry tamper resistance or complete admission coverage. Six census images and
+owned stop0/status3/socket removal remain retained. All300 source pins match both
+current bytes and archived preimages;1614 installed native binary pins are recorded.
+
+Formal packet `evidence/routine-ddl-writer-barrier-formal/9fdc9b8d-f46b-4b0f-8751-99e896c2cd55`
+passes12 queries (six UNSAT/six SAT), each replayed in a fresh context. Added laws
+abstract an original retained operation and selected own DDL, proving exclusion
+under the operation predicate and exhibiting a changed-source witness without it.
+The producer, SQL predicate, native rollback, complete phase coverage and execution
+remain refinement obligations, not consequences of this model. Primary verification
+checks all six formal source pins and exact saved SMT digests. This increment has
+not received a new independent Astra review; prior review qualifies its earlier
+source/evidence tuple only.
+
+This advances CONTRACT-063/STP-056 B09/B11/B12/L03 and US-056 AC7/AC9/AC10 plus
+US-057 AC2 prerequisites. The backend acceptance checkpoint remains26/132 with106
+missing bindings; no binding or public supported profile is promoted. Whole
+source/role/configuration/authorization-data writer coverage, generation issuance,
+original authenticated held-cut production, protected dispatch and final disclosure
+remain required. The goal remains active. Publish this source/evidence directly to
+main under the user's standing authorization; do not create a PR.
