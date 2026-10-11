@@ -78,15 +78,20 @@ def _epoch_dependency_recipe(epoch, expected_sha256, sources=None):
         return value
     try:profile=json.loads(raw,object_pairs_hook=unique)
     except (UnicodeError,RecursionError) as error:raise ValueError('Original provider profile JSON required') from error
-    if type(profile) is dict and profile.get('kind') in ('truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3'):
-        closed(profile,('kind','requirementsSha256','providers','policyUtf8','resolutionUtf8')+(('caller',) if profile['kind'].endswith('/0.3') else ()))
-        if profile['kind'].endswith('/0.3'):
+    if type(profile) is dict and profile.get('kind') in ('truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3','truss-flat-fact-provider-fixture/0.4'):
+        closed(profile,('kind','requirementsSha256','providers','policyUtf8','resolutionUtf8')+(('caller',) if profile['kind'].endswith(('/0.3','/0.4')) else ())+(('executor',) if profile['kind'].endswith('/0.4') else ()))
+        if profile['kind'].endswith(('/0.3','/0.4')):
             caller=closed(profile['caller'],('sessionRoleOid','effectiveRoleOid','subjectKey'))
             for value in (caller['sessionRoleOid'],caller['effectiveRoleOid']):
                 if type(value) is not str or not value.isascii() or not value.isdigit() or not 0<int(value)<=4294967295:
                     raise ValueError('Original native caller role identities required')
             if type(caller['subjectKey']) is not list or not 1<=len(caller['subjectKey'])<=32:
                 raise ValueError('Bounded original subject key carrier required')
+        if profile['kind'].endswith('/0.4'):
+            executor=closed(profile['executor'],('sessionRoleOid','effectiveRoleOid'))
+            for value in executor.values():
+                if type(value) is not str or not value.isascii() or not value.isdigit() or not 0<int(value)<=4294967295:
+                    raise ValueError('Original native executor identities required')
         if type(sources) is not _OriginalFactSources:
             raise ValueError('Original policy/resolution sources required for source-bound profile')
         for key,original in (('policyUtf8',sources.policy),('resolutionUtf8',sources.resolution)):
@@ -96,7 +101,7 @@ def _epoch_dependency_recipe(epoch, expected_sha256, sources=None):
                 raise ValueError('Exact native profile policy/resolution correspondence required')
     else:
         closed(profile,('kind','requirementsSha256','providers'))
-    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.1','truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3') or profile['requirementsSha256']!=expected_sha256:
+    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.1','truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3','truss-flat-fact-provider-fixture/0.4') or profile['requirementsSha256']!=expected_sha256:
         raise ValueError('Original requirement/profile correspondence required')
     values=profile['providers']
     if type(values) is not list or not 1<=len(values)<=8192:raise ValueError('Bounded original provider list required')
@@ -146,6 +151,9 @@ def _capture_epoch_bound_dependency_cells(host, transaction, epoch, original_byt
         sources=_OriginalFactSources(sources.policy,sources.resolution)
         _inspect_original_fact_sources(original_bytes,expected_sha256,sources)
     selected,providers=_epoch_dependency_recipe(epoch,expected_sha256,sources)
+    import json
+    if json.loads(selected.profile)['kind'].endswith('/0.4'):
+        raise ValueError('Original delegated caller scope required')
     groups={}
     for p in providers:
         group=groups.setdefault(p.relation.oid,{'relation':p.relation,'fields':[],'associations':[]})
