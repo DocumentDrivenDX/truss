@@ -1986,3 +1986,41 @@ assigns these checks to RF05 before protected sealing. The current physical
 components and source-pinned installed128-test wheel remain unchanged; no public
 API, semantic body, installed profile or support claim is promoted. Earlier70/69
 receipts and producers remain intact.
+
+
+## PA02 caller provenance prerequisite — 2026-10-10
+
+UMF main commit `144edec8` retains the [native capture experiment](https://github.com/DocumentDrivenDX/umf/blob/144edec8/docs/helix/04-build/evidence/security/truss-capture-observability/533c90f6-3dbe-4d7d-ae83-484617149b4a/native.json),
+[formal receipt](https://github.com/DocumentDrivenDX/umf/blob/144edec8/docs/helix/04-build/evidence/security/truss-capture-observability-formal/4b3dbd6b-1c44-49f6-8480-0e84fd4c6a69/proof.json)
+and [independent Astra review](https://github.com/DocumentDrivenDX/umf/blob/144edec8/docs/helix/04-build/evidence/security/truss-capture-observability-formal/4b3dbd6b-1c44-49f6-8480-0e84fd4c6a69/astra-review.json).
+The isolated PostgreSQL16.15 fixture passes ten observations: direct entry and
+entry through an unregistered definer wrapper have different explicitly captured
+pre-entry actors, but identical nine post-elevation fields in the same physical
+session and transaction. Those fields include session/effective identity, role
+setting, database, backend PID, transaction identity and session/writer/entry OIDs.
+This fixture uses local trust authentication and synthetic routines; it does not
+execute Truss protected admission or production subject authentication.
+
+The three independently replayed saved formulas yield two UNSAT and one SAT.
+An arbitrary deterministic decision function cannot separate equal observed
+inputs, including equal additional state. A distinct trusted pre-entry actor can
+separate the paths. This is a scoped information-loss proof, not a proof that all
+SQL mechanisms cannot distinguish invocation paths or that supplied actor labels
+are authentic. Sealing only these post-elevation fields cannot recover the actor.
+
+PA02 must specify authentic pre-elevation provenance or a qualified restriction
+that establishes the original call chain. ADR-008 trusted-host custody can supply
+facts only within its exclusive connection and protected-carrier boundary;
+SQL arguments do not authenticate Python object identity. Preserve the existing
+invoker elevation guard until a replacement satisfies the complete protected
+protocol. Entry OID, transaction identity and backend PID alone do not classify
+the two paths. One-use state remains required, but refusing a second invocation
+does not establish the original caller of the first invocation.
+
+Required protocol negatives include this equal-tuple collision, forged pre-entry
+actors, copied public context, first use through another wrapper, same/different
+attempt transaction and connection, and host/native one-use behavior across
+savepoint rollback. These supplement PA-N01–PA-N12; they do not replace them.
+PA01–PA04 owner/capture inputs and all seven semantic bodies remain unfinished.
+No registry grant, public API, protected profile or acceptance case is promoted;
+UMF's original 132-case goal remains at its historical 26/132 checkpoint.
