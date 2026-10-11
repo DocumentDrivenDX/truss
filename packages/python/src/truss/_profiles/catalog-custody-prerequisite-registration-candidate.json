@@ -1,0 +1,53 @@
+{
+  "identity": "truss-administrative-catalog-prerequisite-registration",
+  "version": "0.2.0-custody-candidate",
+  "scope": "administrative_single_original_fresh_catalog_rollback_only",
+  "sources": {
+    "catalog-reserve": {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-reserve.sql",
+      "sha256": "fc83eb26cc5ad4da67b28fd3c25cb9941c904b9b4782a662ac22c34d35f1b70a"
+    },
+    "configuration-reserve": {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-reserve.sql",
+      "sha256": "2994cc429921d16ba69d0c24ef9ecefaca14df45b994c24f83a77223fff38915"
+    },
+    "catalog-insert": {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-insert.sql",
+      "sha256": "cf8f87254fb29f08688cc95148065f90f963fe47cc0617cacdf7d3f1ab5cee76"
+    },
+    "configuration-insert": {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-insert.sql",
+      "sha256": "b580d38e70ede88c37232433b36372850890c88b5a3d563257bf672cdbb6de17"
+    }
+  },
+  "documentProfile": {
+    "identitySource": "original_input.documents[i].artifact.identity UTF8",
+    "definitionSource": "exact original artifact bytes joined to schema_doc.document",
+    "profileSource": "canonical original_input.documents[i].umfProfile",
+    "duplicates": "reject conflicting same-identity bytes/profile; exact repeats share one prerequisite"
+  },
+  "configurationProfile": {
+    "identity": "truss-administrative-generation-configuration",
+    "version": "0.1.0-candidate",
+    "encoding": "canonical numeric-free installation/sourceEpoch/targetIncarnation/generation/keyReuse/journalMode and original admissionProfile/configuration/binding/inventory hex chunks",
+    "excludes": [
+      "writerXid",
+      "operationOrdinal",
+      "contextDigest",
+      "clock"
+    ]
+  },
+  "poststate": "full independently planned parent/prerequisite/configuration delta; retained custody, report, head and all other stores/descriptors/resources unchanged",
+  "resources": {
+    "maxDocuments": "512",
+    "maxConfigurationArtifactBytes": "4194304",
+    "qualification": "logical post-materialization bounds; no strict allocation claim",
+    "maxCompleteSnapshotBytes": "16777216"
+  },
+  "reportRegistration": {
+    "path": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-registration-candidate.json",
+    "sha256": "d981f6a17e54873c781eeece986dbc93a47a7a2ce3460e38d710f13ea0edcaa8"
+  },
+  "custody": "consume one immutable original custody through versioned registrar; no report regeneration, clock resampling or replacement of retained bytes",
+  "planning": "validate all original ordered documents, exact duplicate policy and generation configuration before first prerequisite write"
+}

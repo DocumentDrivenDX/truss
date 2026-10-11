@@ -1,0 +1,58 @@
+{
+  "scope": "UMF owner single-statement AST extraction and reload/export; no native execution or installed authority",
+  "ownerCommit": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "ownerFiles": [
+    {
+      "path": "native/postgresql/runtime.ts",
+      "sha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751"
+    },
+    {
+      "path": "src/adapters/postgresql/index.ts",
+      "sha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4"
+    },
+    {
+      "path": "src/model/document.ts",
+      "sha256": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f"
+    },
+    {
+      "path": "src/model/native-json.ts",
+      "sha256": "1459a3e030419c3ae09b300972e27aed8b8ee1f7e41972b3cc00627dff7d7882"
+    },
+    {
+      "path": "bun.lock",
+      "sha256": "98a99f7d306f7269db103bdbfafe5f9ad9ed34b02024276ad0cce45df27f5cc3"
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "create",
+      "source": "/private/tmp/truss-main-integration-20261010/docs/helix/02-design/contracts/feed-transaction-create-v0.1.proposal.umf.json",
+      "sourceSha256": "977e5338a835b3930a1dd60ebe25ae10e130ef16a5f022451374b5e3329984bf",
+      "ordinal": 0,
+      "modelPath": "/private/tmp/truss-catalog-custody-registration-draft/statements/create.umf.json",
+      "modelSha256": "120a85a801ea772b9b1d71f038117ae8a7c31975dd57d3df0c2f64001a4a1e6b",
+      "sqlPath": "/private/tmp/truss-catalog-custody-registration-draft/statements/create.sql",
+      "sqlSha256": "bbde69b129fc23a4bf13f1fbbd5f526625f77498ae4afbcc9bbd2fde969bf8f6"
+    },
+    {
+      "name": "reserve",
+      "source": "/private/tmp/truss-main-integration-20261010/docs/helix/02-design/contracts/feed-member-counter-reservation-v0.1.proposal.umf.json",
+      "sourceSha256": "9e5198305687fa598c1dc70e142b8813c6b4120b4c2ead4ca695555b0f86eebd",
+      "ordinal": 0,
+      "modelPath": "/private/tmp/truss-catalog-custody-registration-draft/statements/reserve.umf.json",
+      "modelSha256": "2aabb1a26af455d9436a838f01c0a57da64313e4549108d19e64b340f4d249f1",
+      "sqlPath": "/private/tmp/truss-catalog-custody-registration-draft/statements/reserve.sql",
+      "sqlSha256": "213e936ced1bd774b73d7c382f296a02e140bb6b462835c6134d2f470b6ade77"
+    },
+    {
+      "name": "insert",
+      "source": "/private/tmp/truss-main-integration-20261010/docs/helix/02-design/contracts/feed-member-insert-v0.1.proposal.umf.json",
+      "sourceSha256": "979681daf4e8301c572618fef536e3db0600202a514af8985c6f1e4c6e0ddfd4",
+      "ordinal": 0,
+      "modelPath": "/private/tmp/truss-catalog-custody-registration-draft/statements/insert.umf.json",
+      "modelSha256": "a53f90f3da2b4685ca206d2a2fd8216076a3e8e56a9e76ce8a033e41c24afcc7",
+      "sqlPath": "/private/tmp/truss-catalog-custody-registration-draft/statements/insert.sql",
+      "sqlSha256": "4c91dd0261a76767de4cd84b4987b9aab449964378bad98e1fcd96c0a5ad4370"
+    }
+  ]
+}

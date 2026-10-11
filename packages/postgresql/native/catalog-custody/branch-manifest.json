@@ -1,0 +1,48 @@
+{
+  "scope": "Source composition only; not installed, captured or native-qualified",
+  "qualified": false,
+  "recipe": "packages/python/src/truss/_profiles/catalog-report-custody-composition-candidate.json",
+  "recipeSha256": "eb581afaf2dfaf2d25c2b8d27a0c3b65be843a4cae028a3b9f822a526944892b",
+  "artifacts": [
+    {
+      "source": "packages/postgresql/native/catalog-report/configured-graph.sql",
+      "sourceSha256": "18ed0ef60249687c4c256a03b10ccf4f02ac9a9d3b9dc15d6d6658c922accb86",
+      "model": "packages/postgresql/native/catalog-custody/configured-graph.umf.json",
+      "modelSha256": "0d9c31486853242949f830aaefa726726f4c064fd38d5d7e66e9605ab74861ce",
+      "sql": "packages/postgresql/native/catalog-custody/configured-graph.sql",
+      "sqlSha256": "a16fbcd5a6050830d4522a65be660bb152519f703c6f22016deddcf5a33e8d92"
+    },
+    {
+      "source": "packages/postgresql/native/catalog-report/fresh-lifecycle.sql",
+      "sourceSha256": "a856ee9e0c54b6dd6432f9efcb923e099159f684b66c5537c18caaa1093fe699",
+      "model": "packages/postgresql/native/catalog-custody/fresh-lifecycle.umf.json",
+      "modelSha256": "f7a1eced3c579e95ea49deaaef5dabe38dc33e4520374d6f0dd315ccdb5cb2b7",
+      "sql": "packages/postgresql/native/catalog-custody/fresh-lifecycle.sql",
+      "sqlSha256": "d981e52004a7620aa360defd38c14285cac8ecb7e0cfadff6cc131941c27103b"
+    },
+    {
+      "source": "packages/postgresql/native/catalog-stage-issued.sql",
+      "sourceSha256": "6d2c6b8cc7e8cfedb283d6314c4c605d6fd0ddd1389daea7da86ebc5534664fe",
+      "model": "packages/postgresql/native/catalog-custody/stage-issued.umf.json",
+      "modelSha256": "f5d937b944e92542bf9e4617ac3cd4470e910809b21619035666774fef0db85b",
+      "sql": "packages/postgresql/native/catalog-custody/stage-issued.sql",
+      "sqlSha256": "307bb4c1bbdbc16992dbabb24a343f8cf9bfa677b4d100324352055ced18ea3d"
+    },
+    {
+      "source": "packages/postgresql/native/catalog-report/configured-stage.sql",
+      "sourceSha256": "3f2165eb2ebd157b25c333b4d78c15b1984eb3c4f177018a0463eab95b7a43fa",
+      "model": "packages/postgresql/native/catalog-custody/configured-stage.umf.json",
+      "modelSha256": "29a7c38903e5f92aa9e45113cb33f3fb8a79781a8e8ae01f30bd4a5eced1dfc0",
+      "sql": "packages/postgresql/native/catalog-custody/configured-stage.sql",
+      "sqlSha256": "7ff419f8c56b74759882c6004cc985dd7d086c87f5c2fd5a3fee893c0434db24"
+    },
+    {
+      "source": "packages/postgresql/native/catalog-report/report-write-wide-candidate.sql",
+      "sourceSha256": "39e6fc98f2b2351e5d1bd5e5d3f7838fcc0bda92eac55b65440e51af0d8aa2aa",
+      "model": "packages/postgresql/native/catalog-custody/report-write.umf.json",
+      "modelSha256": "ee4881c8860af8d50df4331183dc3a94de225f70b785eb6d7bc9a3649dc02b48",
+      "sql": "packages/postgresql/native/catalog-custody/report-write.sql",
+      "sqlSha256": "029e01a01f416518c1c02fcb709a57a0cad776ff64a0d3a1942137a924e52694"
+    }
+  ]
+}

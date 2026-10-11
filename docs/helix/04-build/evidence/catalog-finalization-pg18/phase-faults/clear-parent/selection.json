@@ -1,0 +1,738 @@
+{
+  "sources": [
+    {
+      "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "file": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql",
+      "file": "docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/operation-commit-barrier.sql",
+      "file": "packages/postgresql/native/operation-commit-barrier.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-generation-observer.sql",
+      "file": "packages/postgresql/native/catalog-generation-observer.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-document-batch.sql",
+      "file": "packages/postgresql/native/catalog-document-batch.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-lineage-producer.sql",
+      "file": "packages/postgresql/native/catalog-lineage-producer.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-source-integrity.sql",
+      "file": "packages/postgresql/native/catalog-source-integrity.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-type-match.sql",
+      "file": "packages/postgresql/native/catalog-type-match.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-type-stage.sql",
+      "file": "packages/postgresql/native/catalog-type-stage.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-property-match.sql",
+      "file": "packages/postgresql/native/catalog-property-match.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-property-stage.sql",
+      "file": "packages/postgresql/native/catalog-property-stage.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-key-match.sql",
+      "file": "packages/postgresql/native/catalog-key-match.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-key-stage.sql",
+      "file": "packages/postgresql/native/catalog-key-stage.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-key-batch.sql",
+      "file": "packages/postgresql/native/catalog-key-batch.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-relationship-match.sql",
+      "file": "packages/postgresql/native/catalog-relationship-match.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-relationship-stage.sql",
+      "file": "packages/postgresql/native/catalog-relationship-stage.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report-documents.sql",
+      "file": "packages/postgresql/native/catalog-report-documents.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-new-inventory.sql",
+      "file": "packages/postgresql/native/catalog-new-inventory.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-observation-recheck.sql",
+      "file": "packages/postgresql/native/catalog-observation-recheck.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-input-custody.sql",
+      "file": "packages/postgresql/native/catalog-input-custody.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-prestate-capture.sql",
+      "file": "packages/postgresql/native/catalog-prestate-capture.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-new-prestate-parity.sql",
+      "file": "packages/postgresql/native/catalog-new-prestate-parity.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-new-counts.sql",
+      "file": "packages/postgresql/native/catalog-new-counts.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-provisional-empty.sql",
+      "file": "packages/postgresql/native/catalog-provisional-empty.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report-immutability.sql",
+      "file": "packages/postgresql/native/catalog-report-immutability.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-original-context.sql",
+      "file": "packages/postgresql/native/catalog-original-context.sql"
+    },
+    {
+      "path": "packages/postgresql/native/source-epoch-lock.sql",
+      "file": "packages/postgresql/native/source-epoch-lock.sql"
+    },
+    {
+      "path": "packages/postgresql/native/issued-operation-admission/operation-admission.sql",
+      "file": "packages/postgresql/native/issued-operation-admission/operation-admission.sql"
+    },
+    {
+      "path": "packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql",
+      "file": "packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-epoch-context.sql",
+      "file": "packages/postgresql/native/catalog-epoch-context.sql"
+    },
+    {
+      "path": "packages/postgresql/native/operation-configuration-current.sql",
+      "file": "packages/postgresql/native/operation-configuration-current.sql"
+    },
+    {
+      "path": "packages/postgresql/native/operation-configuration-immutability.sql",
+      "file": "packages/postgresql/native/operation-configuration-immutability.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-admission-configuration.sql",
+      "file": "packages/postgresql/native/catalog-admission-configuration.sql"
+    },
+    {
+      "path": "packages/postgresql/native/canonical-string-bytes.sql",
+      "file": "packages/postgresql/native/canonical-string-bytes.sql"
+    },
+    {
+      "path": "packages/postgresql/native/canonical-tree-bytes.sql",
+      "file": "packages/postgresql/native/canonical-tree-bytes.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/release-selection.sql",
+      "file": "packages/postgresql/native/catalog-report/release-selection.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/source-candidate.sql",
+      "file": "packages/postgresql/native/catalog-report/source-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/configured-metadata.sql",
+      "file": "packages/postgresql/native/catalog-report/configured-metadata.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/empty-graph.sql",
+      "file": "packages/postgresql/native/catalog-report/empty-graph.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/configured-graph.sql",
+      "file": "packages/postgresql/native/catalog-report/configured-graph.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/absent-binding-index-declarations.sql",
+      "file": "packages/postgresql/native/catalog-report/absent-binding-index-declarations.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/fresh-lifecycle.sql",
+      "file": "packages/postgresql/native/catalog-report/fresh-lifecycle.sql"
+    },
+    {
+      "path": "packages/postgresql/native/edge-limit/verify-current-scope.sql",
+      "file": "packages/postgresql/native/edge-limit/verify-current-scope.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-stage-issued.sql",
+      "file": "packages/postgresql/native/catalog-stage-issued.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/resource-selection.sql",
+      "file": "packages/postgresql/native/catalog-report/resource-selection.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/archive-self-write-fence.sql",
+      "file": "packages/postgresql/native/catalog-report/archive-self-write-fence.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/archive-write-fence-current.sql",
+      "file": "packages/postgresql/native/catalog-report/archive-write-fence-current.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/configured-stage.sql",
+      "file": "packages/postgresql/native/catalog-report/configured-stage.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/report-write-candidate.sql",
+      "file": "packages/postgresql/native/catalog-report/report-write-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/revision-registration-candidate.sql",
+      "file": "packages/postgresql/native/catalog-report/revision-registration-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/revision-report-tree-wide-candidate.sql",
+      "file": "packages/postgresql/native/catalog-report/revision-report-tree-wide-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/report-write-wide-candidate.sql",
+      "file": "packages/postgresql/native/catalog-report/report-write-wide-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/revision-registration-wide-candidate.sql",
+      "file": "packages/postgresql/native/catalog-report/revision-registration-wide-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-completion/configured-prerequisite-state-candidate.sql",
+      "file": "packages/postgresql/native/catalog-completion/configured-prerequisite-state-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-registration-candidate.sql",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-registration-candidate.sql"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/catalog-revision-custody-storage.owner-export.sql",
+      "file": "docs/helix/04-build/evidence/catalog-revision-custody-storage.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/configured-graph.sql",
+      "file": "packages/postgresql/native/catalog-custody/configured-graph.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/fresh-lifecycle.sql",
+      "file": "packages/postgresql/native/catalog-custody/fresh-lifecycle.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/stage-issued.sql",
+      "file": "packages/postgresql/native/catalog-custody/stage-issued.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/configured-stage.sql",
+      "file": "packages/postgresql/native/catalog-custody/configured-stage.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/report-write.sql",
+      "file": "packages/postgresql/native/catalog-custody/report-write.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-completion/configured-state-candidate.sql",
+      "file": "packages/postgresql/native/catalog-completion/configured-state-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/reference-collectors.sql",
+      "file": "packages/postgresql/native/catalog-custody/reference-collectors.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/composition-admission.sql",
+      "file": "packages/postgresql/native/catalog-custody/composition-admission.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/capture.sql",
+      "file": "packages/postgresql/native/catalog-custody/capture.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-composition-admission.sql",
+      "file": "packages/postgresql/native/catalog-custody/registration-composition-admission.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-capture.sql",
+      "file": "packages/postgresql/native/catalog-custody/registration-capture.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registrar.sql",
+      "file": "packages/postgresql/native/catalog-custody/registrar.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/composition-admission.sql",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/composition-admission.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/registration-capture.sql",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/registration-capture.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/registrar.sql",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/registrar.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/prerequisites.sql",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/prerequisites.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalization-composition-admission.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalization-composition-admission.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-capture.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-capture.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-registrar.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-registrar.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-prerequisites.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-prerequisites.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/readonly-custody-preflight.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/readonly-custody-preflight.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/readonly-business-preflight.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/readonly-business-preflight.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-completion-state.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-completion-state.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalize-feed.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalize-feed.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-head.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-head.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/manifest-encoder.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/manifest-encoder.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/original-manifest.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/original-manifest.owner-export.sql"
+    }
+  ],
+  "resources": [
+    {
+      "path": "docs/helix/02-design/contracts/catalog-revision-custody-storage-v0.1.proposal.umf.json",
+      "file": "docs/helix/02-design/contracts/catalog-revision-custody-storage-v0.1.proposal.umf.json"
+    },
+    {
+      "path": "docs/helix/02-design/models/truss-layout-core-structural-0.9.proposal.umf.json",
+      "file": "docs/helix/02-design/models/truss-layout-core-structural-0.9.proposal.umf.json"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/catalog-revision-custody-storage.owner-export.sql",
+      "file": "docs/helix/04-build/evidence/catalog-revision-custody-storage.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/configured-graph.sql",
+      "file": "packages/postgresql/native/catalog-custody/configured-graph.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/configured-graph.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/configured-graph.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/fresh-lifecycle.sql",
+      "file": "packages/postgresql/native/catalog-custody/fresh-lifecycle.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/fresh-lifecycle.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/fresh-lifecycle.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/stage-issued.sql",
+      "file": "packages/postgresql/native/catalog-custody/stage-issued.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/stage-issued.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/stage-issued.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/configured-stage.sql",
+      "file": "packages/postgresql/native/catalog-custody/configured-stage.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/configured-stage.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/configured-stage.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/report-write.sql",
+      "file": "packages/postgresql/native/catalog-custody/report-write.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/report-write.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/report-write.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/branch-manifest.json",
+      "file": "packages/postgresql/native/catalog-custody/branch-manifest.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-custody-composition-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-report-custody-composition-candidate.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-custody-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-revision-custody-candidate.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-wide-report-composition-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-revision-wide-report-composition-candidate.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/capture.sql",
+      "file": "packages/postgresql/native/catalog-custody/capture.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/capture.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/capture.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/composition-admission.sql",
+      "file": "packages/postgresql/native/catalog-custody/composition-admission.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/composition-admission.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/composition-admission.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-completion/configured-state-candidate.sql",
+      "file": "packages/postgresql/native/catalog-completion/configured-state-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-completion/configured-state-candidate.umf.json",
+      "file": "packages/postgresql/native/catalog-completion/configured-state-candidate.umf.json"
+    },
+    {
+      "path": "scripts/build-catalog-revision-custody-layout.ts",
+      "file": "scripts/build-catalog-revision-custody-layout.ts"
+    },
+    {
+      "path": "scripts/project-catalog-revision-custody-core.ts",
+      "file": "scripts/project-catalog-revision-custody-core.ts"
+    },
+    {
+      "path": "scripts/build-catalog-custody-branch.ts",
+      "file": "scripts/build-catalog-custody-branch.ts"
+    },
+    {
+      "path": "scripts/export-catalog-custody-capture.ts",
+      "file": "scripts/export-catalog-custody-capture.ts"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/reference-collectors.sql",
+      "file": "packages/postgresql/native/catalog-custody/reference-collectors.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/reference-collectors.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/reference-collectors.umf.json"
+    },
+    {
+      "path": "scripts/build-catalog-custody-reference.py",
+      "file": "scripts/build-catalog-custody-reference.py"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-composition-admission.sql",
+      "file": "packages/postgresql/native/catalog-custody/registration-composition-admission.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-composition-admission.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/registration-composition-admission.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-capture.sql",
+      "file": "packages/postgresql/native/catalog-custody/registration-capture.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-capture.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/registration-capture.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registrar.sql",
+      "file": "packages/postgresql/native/catalog-custody/registrar.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registrar.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/registrar.umf.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-custody-registration-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-custody-registration-candidate.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-custody-registration-capture-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-revision-custody-registration-capture-candidate.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/create.sql",
+      "file": "packages/postgresql/native/catalog-custody/registration-statements/create.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/create.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/registration-statements/create.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/reserve.sql",
+      "file": "packages/postgresql/native/catalog-custody/registration-statements/reserve.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/reserve.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/registration-statements/reserve.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/insert.sql",
+      "file": "packages/postgresql/native/catalog-custody/registration-statements/insert.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/insert.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/registration-statements/insert.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/registration-statements/manifest.json",
+      "file": "packages/postgresql/native/catalog-custody/registration-statements/manifest.json"
+    },
+    {
+      "path": "scripts/extract-catalog-custody-registration-statements.ts",
+      "file": "scripts/extract-catalog-custody-registration-statements.ts"
+    },
+    {
+      "path": "scripts/export-catalog-custody-registration.ts",
+      "file": "scripts/export-catalog-custody-registration.ts"
+    },
+    {
+      "path": "scripts/build-catalog-custody-registration-reference.py",
+      "file": "scripts/build-catalog-custody-registration-reference.py"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-registration-candidate.sql",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-registration-candidate.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/composition-admission.sql",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/composition-admission.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/composition-admission.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/composition-admission.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/registration-capture.sql",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/registration-capture.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/registration-capture.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/registration-capture.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/registrar.sql",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/registrar.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/registrar.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/registrar.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/prerequisites.sql",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/prerequisites.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-custody/prerequisite-composition/prerequisites.umf.json",
+      "file": "packages/postgresql/native/catalog-custody/prerequisite-composition/prerequisites.umf.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-capture-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-capture-candidate.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-registration-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-registration-candidate.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-custody-prerequisite-registration-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-custody-prerequisite-registration-candidate.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-reserve.sql",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-reserve.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-reserve.umf.json",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-reserve.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-reserve.sql",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-reserve.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-reserve.umf.json",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-reserve.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-insert.sql",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-insert.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-insert.umf.json",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/catalog-insert.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-insert.sql",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-insert.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-insert.umf.json",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/configuration-insert.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/prerequisite-statements/manifest.json",
+      "file": "packages/postgresql/native/catalog-report/prerequisite-statements/manifest.json"
+    },
+    {
+      "path": "scripts/export-catalog-custody-prerequisites.ts",
+      "file": "scripts/export-catalog-custody-prerequisites.ts"
+    },
+    {
+      "path": "scripts/build-catalog-custody-prerequisite-reference.py",
+      "file": "scripts/build-catalog-custody-prerequisite-reference.py"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalization-composition-admission.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalization-composition-admission.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-capture.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-capture.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-registrar.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-registrar.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-prerequisites.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-prerequisites.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/readonly-custody-preflight.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/readonly-custody-preflight.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/readonly-business-preflight.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/readonly-business-preflight.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-completion-state.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-completion-state.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalize-feed.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalize-feed.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/finalizing-head.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/finalizing-head.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/manifest-encoder.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/manifest-encoder.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/original-manifest.owner-export.sql",
+      "file": "packages/postgresql/native/catalog-finalization/original-manifest.owner-export.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/manifest-encoder.sql",
+      "file": "packages/postgresql/native/catalog-finalization/manifest-encoder.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/manifest-encoder.umf.json",
+      "file": "packages/postgresql/native/catalog-finalization/manifest-encoder.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/original-manifest.sql",
+      "file": "packages/postgresql/native/catalog-finalization/original-manifest.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/original-manifest.umf.json",
+      "file": "packages/postgresql/native/catalog-finalization/original-manifest.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/manifest-definition-v0.4.candidate.json",
+      "file": "packages/postgresql/native/catalog-finalization/manifest-definition-v0.4.candidate.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/manifest-definition-v0.4.canonical",
+      "file": "packages/postgresql/native/catalog-finalization/manifest-definition-v0.4.canonical"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/manifest-definition-v0.4.pin.json",
+      "file": "packages/postgresql/native/catalog-finalization/manifest-definition-v0.4.pin.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/statements/clear-parent.sql",
+      "file": "docs/helix/04-build/evidence/catalog-finalization-pg18/phase-faults/clear-parent/statement.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/statements/clear-parent.umf.json",
+      "file": "packages/postgresql/native/catalog-finalization/statements/clear-parent.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/statements/clear-member.sql",
+      "file": "packages/postgresql/native/catalog-finalization/statements/clear-member.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/statements/clear-member.umf.json",
+      "file": "packages/postgresql/native/catalog-finalization/statements/clear-member.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/statements/assign-ordinal.sql",
+      "file": "packages/postgresql/native/catalog-finalization/statements/assign-ordinal.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/statements/assign-ordinal.umf.json",
+      "file": "packages/postgresql/native/catalog-finalization/statements/assign-ordinal.umf.json"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/statements/publish-manifest.sql",
+      "file": "packages/postgresql/native/catalog-finalization/statements/publish-manifest.sql"
+    },
+    {
+      "path": "packages/postgresql/native/catalog-finalization/statements/publish-manifest.umf.json",
+      "file": "packages/postgresql/native/catalog-finalization/statements/publish-manifest.umf.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-finalizing-custody-registration-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-finalizing-custody-registration-candidate.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-feed-finalization-candidate.json",
+      "file": "docs/helix/04-build/evidence/catalog-finalization-pg18/phase-faults/clear-parent/finalization-profile.json"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-finalizing-custody-prerequisite-registration-candidate.json",
+      "file": "packages/python/src/truss/_profiles/catalog-finalizing-custody-prerequisite-registration-candidate.json"
+    }
+  ]
+}

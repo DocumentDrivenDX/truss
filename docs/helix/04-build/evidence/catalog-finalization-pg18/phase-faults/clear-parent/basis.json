@@ -1,0 +1,6 @@
+{
+  "scope": "test-only suppressed selected input; unchanged independently compiled source and native declaration/schema basis",
+  "originalReferenceSha256": "8920077601cca1c61fdc46074ea5fe9a400488b2450b627f90a9265afcb5673c",
+  "compiledSourceBytesUnchanged": true,
+  "phase": "clear-parent"
+}
