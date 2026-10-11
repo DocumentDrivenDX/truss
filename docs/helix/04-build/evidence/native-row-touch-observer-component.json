@@ -1,0 +1,56 @@
+{
+  "scope": "private_native_row_touch_observer_component",
+  "runtimeQualification": false,
+  "installedCapability": false,
+  "publicPythonWorkflow": false,
+  "files": {
+    "packages/postgresql/native/row-touch/observe.sql": "08ff69be623ef6f3df6a69311c7368f0dc547dd0c963b44c1658e3696091f1b3",
+    "packages/python/tests/test_row_touch_observer_native.py": "893e1c73dfafa67848b6046671df7ff69f7cf94825ace35e60e6911e3bacb525",
+    "docs/helix/04-build/native-row-touch-observer-component.md": "20f58ecfa10267b51773d3a4bf4ff17418ae5cf552ff60c59e130e3064274c75"
+  },
+  "nativeTests": {
+    "command": "python -m unittest test_row_touch_observer_native -q",
+    "count": 20,
+    "result": "PASS",
+    "elapsedSeconds": 5.961
+  },
+  "astraUltraReview": {
+    "status": "approved_scoped_component_commit",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "reviewedBaseline": "104aa0fc",
+    "exclusions": [
+      "complete_family_projection",
+      "installed_authority",
+      "finalization",
+      "public_python_workflow"
+    ],
+    "purePythonOracleReplay": {
+      "count": 14,
+      "result": "PASS",
+      "elapsedSeconds": 0.359,
+      "terminalExitCode": 0
+    },
+    "moduleBoundaryImports": 372
+  },
+  "commitBarrier": "unchanged_unconditional_ALWAYS",
+  "remaining": "See BUILD-ROW-TOUCH-OBSERVER-001; full objective remains active",
+  "purePythonOracleTests": {
+    "count": 14,
+    "result": "PASS",
+    "elapsedSeconds": 0.351
+  },
+  "independentNativeReplay": {
+    "count": 20,
+    "result": "PASS",
+    "elapsedSeconds": 6.588,
+    "terminalExitCode": 0,
+    "baseline": "104aa0fc",
+    "stablePinCount": 83,
+    "log": "docs/helix/04-build/evidence/native-row-touch-observer-component.log",
+    "logSha256": "b1fa14d93a79915d6a12f2bdf245c68fb8aab2744efdc5784d3a112ef24362ac",
+    "pins": "docs/helix/04-build/evidence/native-row-touch-observer-source-pins.json",
+    "pinsSha256": "1324d6caa6b7d3fa22bc5feb7327aa8fa5df50a17fb8afb090ac8b463f4b41ff",
+    "postReplayChange": "documentation-only metadata/type correction and narrowed ledger-oracle wording; SQL and test hashes unchanged"
+  }
+}
