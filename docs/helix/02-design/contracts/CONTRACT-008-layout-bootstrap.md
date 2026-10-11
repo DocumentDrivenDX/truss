@@ -2144,3 +2144,25 @@ must establish original field-to-provider/decoder correspondence and exclude its
 substitution throughout evaluation/publication. Neither complete names nor valid
 native descriptors authenticate that correspondence. No final disclosure or
 compiled PostgreSQL policy refinement is established by this fixture.
+
+
+### Original epoch-bound provider recipe candidate — 2026-10-11
+
+The private epoch-bound dependency path derives provider recipes from the exact
+selected epoch profile bytes, with a closed fixture profile containing kind,
+original requirement SHA256 and complete provider records. Accept no provider
+argument/override. Snapshot selected epoch primitives; preserve opaque qualified
+references; refuse malformed, duplicate, over-bound or incomplete records before
+native work. Compose original requirement coverage and field/table descriptor cuts
+through the existing native epoch fence. Native readback must match the same exact
+profile bytes from which recipes were derived. Replacing a valid field mapping in
+comparison bytes cannot match the original stored epoch profile.
+
+This relies on the existing source-epoch registry/current producer and cuts, with
+no new table, grant or public API. Stored original bytes are a comparison anchor,
+not proof the lifecycle issuer admitted the correct semantic mapping. The owned
+fixture may issue an incomplete profile; consumer completeness must still refuse.
+An arbitrary private callback may still use the wrong decoder despite correct
+cuts. Keep the earlier successful decoy-active counterexample: complete authenticated
+mapping/decoder/source/role/config closure, protected dispatch and final disclosure
+remain required before ordinary authorization. Graph field profiles are unfinished.

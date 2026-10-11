@@ -53,3 +53,50 @@ def _run_dependency_fact_operation(host, transaction, epoch, original_bytes,
     if coverage.missing:raise ValueError('Incomplete original semantic dependency provider coverage')
     recipe=tuple(_FactRelationComparison(*base,columns) for base,columns in relations.values())
     return _run_fenced_fact_operation(host,transaction,epoch,recipe,callback)
+
+
+def _run_epoch_bound_dependency_fact_operation(host, transaction, epoch,
+                                               original_bytes, expected_sha256, callback):
+    """Derive recipes from exact selected native epoch profile bytes.
+
+    Lifecycle issuer, original semantic mapping and decoder/source closure remain
+    unqualified. There is no caller provider override and no authority result.
+    """
+    import json
+    from ._psycopg_epoch_cut import _EpochComparison
+    if type(epoch) is not _EpochComparison:raise ValueError('Exact original epoch comparison required')
+    selected=_EpochComparison(epoch.installation,epoch.epoch,epoch.incarnation,epoch.profile,epoch.evidence)
+    raw=selected.profile
+    if type(raw) is not bytes or not 1<=len(raw)<=65536:raise ValueError('Bounded original provider profile required')
+    def unique(pairs):
+        result={}
+        for k,v in pairs:
+            if k in result:raise ValueError('Duplicate provider profile member')
+            result[k]=v
+        return result
+    def closed(value,keys):
+        if type(value) is not dict or set(value)!=set(keys):raise ValueError('Closed original provider profile required')
+        return value
+    try:profile=json.loads(raw,object_pairs_hook=unique)
+    except (UnicodeError,RecursionError) as error:raise ValueError('Original provider profile JSON required') from error
+    closed(profile,('kind','requirementsSha256','providers'))
+    if profile['kind']!='truss-flat-fact-provider-fixture/0.1' or profile['requirementsSha256']!=expected_sha256:
+        raise ValueError('Original requirement/profile correspondence required')
+    values=profile['providers']
+    if type(values) is not list or not 1<=len(values)<=8192:raise ValueError('Bounded original provider list required')
+    def column(value):
+        keys=('name','number','type_oid','type_modifier','not_null','collation_oid','generated','identity')
+        closed(value,keys)
+        return _FactColumnComparison(*(value[k] for k in keys))
+    providers=[]
+    for value in values:
+        closed(value,('kind','reference','relation','column'))
+        reference=value['reference']
+        if type(reference) is not list or len(reference)!=3:raise ValueError('Original qualified provider reference required')
+        r=value['relation'];keys=('schema','name','oid','owner_oid','guard_source','columns');closed(r,keys)
+        if type(r['columns']) is not list or len(r['columns'])>1600:raise ValueError('Bounded original relation columns required')
+        relation=_FactRelationComparison(*(r[k] for k in keys[:-1]),tuple(column(c) for c in r['columns']))
+        providers.append(_DependencyFactProvider(value['kind'],tuple(reference),relation,None if value['column'] is None else column(value['column'])))
+    # The nested native epoch comparison must match these same exact selected
+    # bytes; a caller-supplied replacement cannot match the installed original.
+    return _run_dependency_fact_operation(host,transaction,selected,original_bytes,expected_sha256,tuple(providers),callback)

@@ -698,3 +698,16 @@ permits these substituted facts. Required future admission must instead reject t
 substituted original mapping/decoder before policy evaluation or any publication.
 The counterexample is evidence of incomplete enforcement, not a passed acceptance
 case or a requirement to keep this behavior in an admitted implementation.
+
+
+### Epoch-bound original provider recipe controls — 2026-10-11
+
+Four new native controls require the original stored profile to derive complete
+provider cuts, reject a well-typed decoy-active replacement profile before callback,
+refuse an original stored profile missing active, and refuse a wrong requirement
+digest. Fixture issuance occurs in the owned transaction and rolls back with its
+scope; no installation/caller authority is inferred. These advance
+CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10 prerequisites only. Required
+future admission controls must also reject unqualified original issuer/semantic
+mapping and independently changed callback/decoder source; these are not proved by
+exact native profile-byte correspondence.

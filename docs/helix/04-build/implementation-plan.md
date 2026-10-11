@@ -4034,3 +4034,25 @@ field decoding, protected dispatch and final disclosure remain incomplete. No
 backend acceptance binding is promoted; checkpoint26/132 with106 missing. Full
 goal active; direct-main publication authorized. No new Astra review or formal
 native/evaluator refinement theorem is claimed.
+
+
+### Epoch-bound original provider recipes — 2026-10-11
+
+Implemented private recipe derivation from original selected native epoch-profile
+bytes, without a caller provider override, reusing the existing native profile
+fence and original complete dependency/table-column cuts. Final packet
+`evidence/python-psycopg-epoch-cut/f6433379-f285-4f4f-bd4e-8bad33b9b54d` passes84
+methods (33 fact/dependency/owner/recipe,16 graph/gateway,nine epoch,26 adoption),
+123 verified current/archived Truss source pins,363 original UMF pins and compressed
+preimages,1614 native payload pins, module boundaries and three independent named
+stop0/status3/socket-absent cleanups. Four controls cover original-profile success,
+well-typed caller profile substitution/no callback, original incomplete profile
+and mismatched requirements digest. No native lifecycle or support flags changed.
+
+Formal packet `evidence/security-field-cuts-formal/c17132f4-6f67-400f-8eee-3b0b10d83ae7`
+replays eight conditional formulas against seven source inputs including the updated
+wrapper. It is not a new native/Python JSON/epoch refinement theorem. Original
+issuer/semantic mapping qualification and decoder/source/role/config closure remain
+required; arbitrary private callbacks still do not constitute a protected policy
+executor. Retain the earlier native decoy-active counterexample and full goal.
+No backend acceptance binding promoted: checkpoint26/132,106 missing; goal active.

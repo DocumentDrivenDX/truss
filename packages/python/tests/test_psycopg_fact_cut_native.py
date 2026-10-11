@@ -1,12 +1,13 @@
 """Actual flat Assignment and native Truss edge fact-cut components."""
 import unittest,hashlib,json,subprocess
+from dataclasses import asdict
 from pathlib import Path
 import psycopg
 from psycopg import sql
 import test_psycopg_epoch_cut_native as epoch_tests
 from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison,_run_fenced_fact_operation
 from truss.execution import Ok,Error
-from truss._psycopg_dependency_fact_cut import _DependencyFactProvider,_run_dependency_fact_operation
+from truss._psycopg_dependency_fact_cut import _DependencyFactProvider,_run_dependency_fact_operation,_run_epoch_bound_dependency_fact_operation
 ROOT=Path(__file__).resolve().parents[3]
 
 class PsycopgFactCutNativeTests(unittest.TestCase):
@@ -226,3 +227,30 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         observed=self.original_owner_decision(mutation,'decoy_active',(wrong,)+providers[1:])
         self.assertEqual(observed['decision'],'permit')
         self.assertEqual(self.connection.execute('SELECT active,decoy_active FROM truss.sec_assignment').fetchall(),[(False,True)])
+
+    def bound_profile(self,providers=None):
+        raw=(ROOT/'docs/helix/04-build/evidence/security-fact-requirements/requirements.json').read_bytes()
+        return raw,json.dumps({'kind':'truss-flat-fact-provider-fixture/0.1','requirementsSha256':hashlib.sha256(raw).hexdigest(),'providers':[asdict(p) for p in (self.dependency_providers() if providers is None else providers)]},sort_keys=True,separators=(',',':')).encode()
+    def issue_bound_profile(self,raw_profile):
+        epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(self.epoch,raw_profile,b'bound-fixture')).fetchone()[0]
+        return epoch_tests._EpochComparison('fixture',epoch,'target',raw_profile,b'bound-fixture')
+    def test_epoch_original_profile_derives_complete_native_provider_cuts(self):
+        t=self.begin();raw,profile=self.bound_profile();comparison=self.issue_bound_profile(profile)
+        self.assertEqual(_run_epoch_bound_dependency_fact_operation(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),lambda c:'original-recipe'),Ok('original-recipe'))
+    def test_caller_replaced_well_typed_mapping_cannot_match_original_epoch(self):
+        t=self.begin();raw,profile=self.bound_profile();comparison=self.issue_bound_profile(profile);called=[]
+        self.connection.execute('ALTER TABLE truss.sec_assignment ADD COLUMN decoy_active boolean NOT NULL DEFAULT true')
+        replacement=json.loads(profile);replacement['providers'][0]['column']['name']='decoy_active';replacement['providers'][0]['column']['number']=5
+        bad=epoch_tests._EpochComparison(comparison.installation,comparison.epoch,comparison.incarnation,json.dumps(replacement).encode(),comparison.evidence)
+        result=_run_epoch_bound_dependency_fact_operation(self.host,t,bad,raw,hashlib.sha256(raw).hexdigest(),lambda c:called.append(True))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[])
+    def test_original_epoch_profile_missing_active_refuses_complete_cut(self):
+        t=self.begin();raw,profile=self.bound_profile(self.dependency_providers()[1:]);comparison=self.issue_bound_profile(profile);called=[]
+        with self.assertRaisesRegex(ValueError,'Incomplete original'):
+            _run_epoch_bound_dependency_fact_operation(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),lambda c:called.append(True))
+        self.assertEqual(called,[])
+    def test_wrong_requirement_digest_cannot_select_original_provider_profile(self):
+        t=self.begin();raw,profile=self.bound_profile();comparison=self.issue_bound_profile(profile);called=[]
+        with self.assertRaisesRegex(ValueError,'requirement/profile'):
+            _run_epoch_bound_dependency_fact_operation(self.host,t,comparison,raw,'0'*64,lambda c:called.append(True))
+        self.assertEqual(called,[])
