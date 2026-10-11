@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from uuid import uuid4
 from threading import Lock
 from ._host_execution import HostExecutor
-from ._native_transactions import NativeTransactionPort
+from ._native_transactions import NativeTransactionPort, _Control, _ControlInvocation
 from ._native_pg8000 import NativeBoundaryRefusal, NativeCancellationAdmission
 from ._operation_arbitration import OperationArbitration, Admitted, Refused, Unresolved
 
@@ -28,6 +28,10 @@ class _OperationCallRoot:
     rollback_root: tuple = ()
     rollback_release_root: tuple = ()
     release_root: tuple = ()
+    rollback_state: object = None
+    rollback_release_state: object = None
+    release_state: object = None
+    retirement_state: object = None
 
     @classmethod
     def build(cls, calls, cleanup_calls, rollback_entry=None, release_entry=None):
@@ -38,12 +42,87 @@ class _OperationCallRoot:
                                  if rollback_entry is not None and release_entry is not None else ())
         release_root = ((*cleanup_calls, release_entry)
                         if release_entry is not None else ())
+        release_retired = cls(calls, release_root) if release_entry is not None else None
+        release_state = (cls(calls, release_root, rollback_entry,
+                             retirement_state=release_retired)
+                         if release_entry is not None else None)
+        rollback_release_retired = (cls(calls, rollback_release_root)
+                                   if rollback_entry is not None and release_entry is not None else None)
+        rollback_release_state = (cls(calls, rollback_release_root,
+                                      retirement_state=rollback_release_retired)
+                                  if rollback_release_retired is not None else None)
+        rollback_state = (cls(calls, rollback_root, None, release_entry,
+                              release_root=rollback_release_root,
+                              release_state=rollback_release_state)
+                          if rollback_entry is not None else None)
         return cls(calls, cleanup_calls, rollback_entry, release_entry,
-                   rollback_root, rollback_release_root, release_root)
+                   rollback_root, rollback_release_root, release_root,
+                   rollback_state, rollback_release_state, release_state)
 
     @property
     def held_cleanup(self):
         return int(self.rollback_entry is not None) + int(self.release_entry is not None)
+
+@dataclass(eq=False)
+class _ReservedControlPermit:
+    controls: object
+    kind: str
+    entry: object
+    invoke: object = None
+    control: object = None
+
+@dataclass(eq=False)
+class _ReservedOperationControls:
+    session: object
+    port: object
+    savepoint_name: str
+    savepoint_entry: object
+    admission_entry: object
+    rollback_entry: object
+    release_entry: object
+    initial_root: object
+    savepoint_root: object
+    admission_root: object
+    forward_ready: bool = False
+    attempt: object = None
+    savepoint_permit: object = None
+    rollback_permit: object = None
+    release_permit: object = None
+
+    def run_control(self, kind):
+        if type(kind) is not str or kind not in ('savepoint', 'rollback_to', 'release'):
+            raise NativeBoundaryRefusal('Fixed reserved control kind required')
+        permit = {'savepoint': self.savepoint_permit, 'rollback_to': self.rollback_permit,
+                  'release': self.release_permit}[kind]
+        command = {'savepoint': 'SAVEPOINT ', 'rollback_to': 'ROLLBACK TO SAVEPOINT ',
+                   'release': 'RELEASE SAVEPOINT '}[kind] + self.savepoint_name
+        cleanup = None if kind == 'savepoint' else self.session.cleanup_permit
+        self.port.control(command, cleanup=cleanup, call_permit=permit)
+        with self.session.boundary._lock:
+            session = self.session
+            entry = permit.entry
+            call = entry.native_call
+            tracker = self.port._tracker
+            expected = {'savepoint': b'SAVEPOINT\0', 'rollback_to': b'ROLLBACK\0',
+                        'release': b'RELEASE\0'}[kind]
+            if (call is None or not call.capture_complete or call.driver_raised
+                    or call.final_status != b'T' or call.original_control is not permit.control
+                    or not any(event.code == b'C' and event.payload == expected for event in call.events)
+                    or tracker._state.generation is not session.generation):
+                session.admission_closed = True
+                raise NativeBoundaryRefusal('Reserved control settlement unavailable')
+            handle = permit.control.savepoint
+            if kind == 'release':
+                if tracker._live(handle) or session._call_root.retirement_state is None:
+                    raise NativeBoundaryRefusal('Original release retirement unavailable')
+                try:
+                    session._publish_call_root(session._call_root.retirement_state)
+                except BaseException:
+                    session.admission_closed = True
+                    raise
+            elif not tracker._live(handle):
+                raise NativeBoundaryRefusal('Original reserved savepoint publication unavailable')
+        return call
 
 @dataclass(frozen=True, eq=False)
 class _CleanupPermit:
@@ -68,6 +147,7 @@ class NativeOperationSession:
     released: bool = False
     cancellation: object = None
     deadline: object = None
+    _reserved_controls: object = None
 
     def __post_init__(self):
         self._call_root = _OperationCallRoot.build((), ())
@@ -92,6 +172,10 @@ class NativeOperationSession:
                 or self.generation.ended
                 or boundary._transaction_tracker._state.generation is not self.generation):
             raise NativeBoundaryRefusal('Original native operation correspondence lost')
+        if self._call_root.retirement_state is not None:
+            raise NativeBoundaryRefusal('Reserved release settlement remains unavailable')
+        if self._reserved_controls is not None and not self._reserved_controls.forward_ready:
+            raise NativeBoundaryRefusal('Reserved original admission remains unavailable')
         if cleanup is not None:
             if (type(cleanup) is not _CleanupPermit or cleanup is not self.cleanup_permit
                     or cleanup.session is not self or self.cleanup_closed):
@@ -106,6 +190,144 @@ class NativeOperationSession:
                 raise NativeCancellationAdmission('Original adoption cancellation latched')
             if len(self.calls) >= self.call_limit:
                 raise NativeBoundaryRefusal('Native operation call custody exhausted')
+
+    def _prepare_reserved_controls(self, attempt):
+        # Called by the original issuer under the shared native guard, before
+        # ordinal publication. No native invocation permit is supplied here.
+        port = self.context.custody.port
+        if (type(port) is not NativeTransactionPort or port._tracker._boundary is not self.boundary
+                or port._generation is not self.generation or port._token is not self.token
+                or self._reserved_controls is not None or self.calls or self.cleanup_calls
+                or self._call_root.held_cleanup or self.call_limit < 2 or self.cleanup_limit < 2):
+            raise NativeBoundaryRefusal('Original finite operation controls unavailable')
+        name = port._reserve_savepoint_name_locked(self.owner._executor)
+        if name is None:
+            raise NativeBoundaryRefusal('Original mediated savepoint namespace required')
+        savepoint = _OperationCall(0, None, None)
+        admission = _OperationCall(0, None, None)
+        rollback = _OperationCall(0, None, None, self.cleanup_permit)
+        release = _OperationCall(0, None, None, self.cleanup_permit)
+        initial = _OperationCallRoot.build((), (), rollback, release)
+        savepoint_root = _OperationCallRoot.build((savepoint,), (), rollback, release)
+        admission_root = _OperationCallRoot.build((savepoint, admission), (), rollback, release)
+        controls = _ReservedOperationControls(self, port, name, savepoint, admission,
+                                              rollback, release, initial,
+                                              savepoint_root, admission_root)
+        controls.attempt = attempt
+        controls.savepoint_permit = _ReservedControlPermit(controls, 'savepoint', savepoint)
+        controls.rollback_permit = _ReservedControlPermit(controls, 'rollback_to', rollback)
+        controls.release_permit = _ReservedControlPermit(controls, 'release', release)
+        self._reserved_controls = controls
+        attempt.controls = controls
+        try:
+            self._publish_call_root(initial)
+        except BaseException:
+            self.admission_closed = True
+            raise
+        return controls
+
+    def _bind_reserved_control(self, permit, invocation):
+        tracker = self.boundary._transaction_tracker
+        if (type(invocation) is not _ControlInvocation or invocation.tracker is not tracker
+                or not any(item is invocation for item in tracker._control_invocations)):
+            raise NativeBoundaryRefusal('Original tracker control invocation required')
+        control, invoke, sql = invocation.control, invocation.invoke, invocation.sql
+        controls = self._reserved_controls
+        if (type(permit) is not _ReservedControlPermit or controls is None
+                or permit.controls is not controls
+                or not any(permit is item for item in (controls.savepoint_permit,
+                                                       controls.rollback_permit, controls.release_permit))
+                or type(control) is not _Control or permit.invoke is not None
+                or control.kind != permit.kind or control.chain
+                or control.expected is not self.boundary._transaction_tracker._state
+                or control.savepoint is None or control.savepoint.name != controls.savepoint_name
+                or control.savepoint.generation is not self.generation):
+            raise NativeBoundaryRefusal('Original reserved control binding required')
+        port = controls.port
+        if permit.kind == 'savepoint':
+            pending = port._pending_savepoint
+            issued = next((item for namespace in self.generation.namespaces
+                           for item in namespace.issued if item.name == controls.savepoint_name), None)
+            if (pending is None or pending[0] is not control.savepoint
+                    or issued is None or not issued.submitted):
+                raise NativeBoundaryRefusal('Original issued port savepoint required')
+        elif port._savepoints.get(controls.savepoint_name) is not control.savepoint:
+            raise NativeBoundaryRefusal('Original retained port savepoint required')
+        prefix = {'savepoint': 'SAVEPOINT ', 'rollback_to': 'ROLLBACK TO SAVEPOINT ',
+                  'release': 'RELEASE SAVEPOINT '}[permit.kind]
+        if sql != prefix + self.port_name_sql(controls.savepoint_name):
+            raise NativeBoundaryRefusal('Fixed original control SQL required')
+        permit.control = control
+        permit.invoke = invoke
+        permit.entry.lifecycle = control
+
+    @staticmethod
+    def port_name_sql(name):
+        return '"' + name + '"'
+
+    def _check_call_permit(self, boundary, token, invoke, resource, lifecycle, cleanup, permit):
+        if self.deadline is not None:
+            self.deadline.check()
+        controls = self._reserved_controls
+        tracker = boundary._transaction_tracker
+        if (type(permit) is not _ReservedControlPermit or controls is None
+                or permit.controls is not controls or controls.session is not self
+                or not any(permit is item for item in (controls.savepoint_permit,
+                                                       controls.rollback_permit, controls.release_permit))
+                or controls.attempt.controls is not controls or controls.attempt.ordinal is None
+                or boundary is not self.boundary or token is not self.token
+                or tracker._state.generation is not self.generation or self.generation.ended
+                or lifecycle is not permit.control or invoke is not permit.invoke
+                or permit.control is None or permit.control.expected is not tracker._state
+                or resource is not None):
+            raise NativeBoundaryRefusal('Original invocation-bound control required')
+        entry = permit.entry
+        if any(item is entry for item in (*self.calls, *self.cleanup_calls)):
+            raise NativeBoundaryRefusal('Original reserved control already consumed')
+        if permit.kind == 'savepoint':
+            if (cleanup is not None or self._call_root is not controls.initial_root
+                    or self.admission_closed or self.owner._executor._closed
+                    or not self.context.custody.usable or tracker._state.status != b'T'):
+                raise NativeBoundaryRefusal('Original forward control unavailable')
+            cancellation = self.context.custody.cancellation
+            if cancellation is not None and cancellation.requested():
+                raise NativeCancellationAdmission('Original adoption cancellation latched')
+        else:
+            if (cleanup is not self.cleanup_permit or self.cleanup_closed
+                    or not tracker._live(permit.control.savepoint)
+                    or self._call_root.retirement_state is not None):
+                raise NativeBoundaryRefusal('Original containment control unavailable')
+            if permit.kind == 'rollback_to' and self._call_root.rollback_entry is not entry:
+                raise NativeBoundaryRefusal('Original rollback reservation unavailable')
+            if permit.kind == 'release' and (self._call_root.release_entry is not entry
+                                             or tracker._state.status != b'T'):
+                raise NativeBoundaryRefusal('Original release reservation unavailable')
+
+    def _reserve_call_permit(self, boundary, token, invoke, resource, lifecycle, cleanup, permit):
+        self._check_call_permit(boundary, token, invoke, resource, lifecycle, cleanup, permit)
+        controls = self._reserved_controls
+        candidate = (controls.savepoint_root if permit.kind == 'savepoint' else
+                     self._call_root.rollback_state if permit.kind == 'rollback_to' else
+                     self._call_root.release_state)
+        if candidate is None:
+            raise NativeBoundaryRefusal('Original complete branch state unavailable')
+        permit.entry.revision = boundary._revision + 1
+        self._publish_call_root(candidate)
+        return permit.entry
+
+    def _reserve_containment(self, rollback_entry, release_entry):
+        # Original enclosing producer must hold the boundary guard. These
+        # descriptors do not independently authorize native controls.
+        previous = self._call_root
+        if (type(rollback_entry) is not _OperationCall or type(release_entry) is not _OperationCall
+                or rollback_entry is release_entry or previous.held_cleanup
+                or rollback_entry.native_call is not None or release_entry.native_call is not None
+                or len(previous.cleanup_calls) + 2 > self.cleanup_limit):
+            raise NativeBoundaryRefusal('Original finite containment reservation unavailable')
+        candidate = _OperationCallRoot.build(previous.calls, previous.cleanup_calls,
+                                            rollback_entry, release_entry)
+        self._publish_call_root(candidate)
+        return candidate
 
     def _reserve_call(self, boundary, token, resource, lifecycle, cleanup=None):
         self._check_call(boundary, token, cleanup, admission=False)
@@ -222,10 +444,10 @@ class NativeArbitration:
                 self._publish_binding(boundary, session)
                 return session
 
-    def issue_operation(self,session):
+    def issue_operation(self,session,*,reserve_controls=False):
         if type(session) is not NativeOperationSession or session.owner is not self:
             raise NativeBoundaryRefusal('Original operation session required')
-        return session.boundary._transaction_tracker._operation_ordinals.issue(session)
+        return session.boundary._transaction_tracker._operation_ordinals.issue(session,reserve_controls=reserve_controls)
 
     def _make_session(self, context, binding):
         session = NativeOperationSession(self, context, binding.boundary, binding.generation,

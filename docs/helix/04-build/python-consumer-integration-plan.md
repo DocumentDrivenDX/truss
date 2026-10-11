@@ -1625,3 +1625,58 @@ independent unit/boundary cases passed0.001s. Permit activation still requires
 complete preallocated root transitions, held-capacity exclusion and both
 retirement branches under actual native custody. Native process exit remains
 unverified and the ordinary-path regression predates the widened fault guard.
+
+
+Next containment draft preallocates complete rollback, rollback→release and
+success-release call-root states. Generic calls rebase their full states before
+submission. Exact entry/capacity preflight refuses malformed reservations, and
+held slots reduce generic cleanup allowance. Eight unit/boundary cases pass;
+actual native held-capacity exclusion test session16761 is pending. Native
+invocation permissions and original four-family producer remain unimplemented;
+branch-state assignment alone never establishes control completion or permits
+retirement. Astra Ultra is reviewing this next draft.
+
+Earlier native processes now terminal: session57829 exited0 (three ordinary
+call-root cases,100.751s); session64009 exited0 (two routing/rollback cases,
+585.629s including fixture lifecycle). These remain scoped to their respective
+source snapshots. Reserved-control continuation threads cleanup and call permits
+through NativeTransactionPort.control and supplies exact invocation identity to
+original-session permit checks. No callback binder or family admission authority
+has been exposed. The current native held-capacity run16761 remains pending.
+
+Original issuer reservation draft now selects `reserve_controls=True` privately:
+reserve the original mediated namespace and all four original call entries/full
+branch roots before ordinal publication. The retained session preserves controls
+through publication faults. No invented namespace fallback is allowed. Generic
+submission remains closed until registered forward admission is available; the
+original port carries cleanup/call permits and the boundary supplies invocation
+identity for future exact-producer checks. Thirteen unit cases pass. Actual
+mediated issuance/lost-reply run88433 and Astra review are pending. This remains
+a private composition draft, not a callable catalog or installation surface.
+
+
+Original fixed-control producer draft composes reserved SAVEPOINT, ROLLBACK TO
+and RELEASE through the existing port. The tracker independently fixes SQL and
+retains a nominal immutable invocation; session binding accepts only its exact
+original retained record. Alternate invocation/callback options are refused.
+Cleanup honors the settlement deadline while remaining available after ordinary
+executor disposal; original RELEASE+T and tracker publication precede retirement.
+The preliminary two native branches passed68.091s before nominal-record/deadline
+corrections. The corrected seven-case native run56740 is pending. Thirteen unit
+cases pass and322 import boundaries pass. Astra review remains active.
+
+Read-only security sync: “Assess security control support” is building a private
+verified association value collector for complete definitions/endpoints/lineage.
+Its registered-inventory and commit gates remain closed; do not duplicate that
+semantic collection or promote it to an accepted report. Original admission
+artifacts, complete finalization and seven-body installation remain unfinished.
+
+Astra Ultra approved the private fixed-control checkpoint. Corrected native
+seven-case run56740 exited0 in112.205s; source/wheel/clean installation match84
+files;13 installed unit cases pass0.002s. Astra independently checked all84 files
+and passed13 current-source cases0.005s. Remaining business-admission gate:
+reserve port-control and tracker-invocation retention capacity in addition to
+session call slots, so later cleanup cannot exhaust those original counters.
+No complete containment reservation, registered family admission, installer or
+release qualification follows. Additional retirement-publication fault run16277
+is pending and is not included in the seven passed cases.

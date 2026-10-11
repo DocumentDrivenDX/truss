@@ -1,0 +1,59 @@
+{
+  "scope": "Private original fixed SAVEPOINT/ROLLBACK_TO/RELEASE producer; no business admission, complete resource reservation, installation or release qualification",
+  "source_sha256": {
+    "packages/python/src/truss/_native_arbitration.py": "f9a5b7309aa3baaba184f00610878c04f6c19bf4f5101f59b82ac11e855aac91",
+    "packages/python/src/truss/_native_operation_ordinals.py": "fb98d8c7597fee4cff616ec7f25422e7f6f2c17c5315287b6a838a01e9168edb",
+    "packages/python/src/truss/_native_pg8000.py": "14d7d1fc53d9a8a2555bdc2bca7a0ad10836f883b39c907c50d28f4fabc2a906",
+    "packages/python/src/truss/_native_transactions.py": "0f7828fc676abdd21851639f3fedad51f18395873f2465cba4cb545c78835010",
+    "packages/python/tests/test_native_arbitration.py": "3e0f6b63ea806205d86b2e717b388ac516a98f5d83427ff5c0b7af4f5ea34a8e",
+    "packages/python/tests/test_native_call_root.py": "e63feb15b3ca80c64af58031f1ccbec7f45d71d5597f142844c8ea09ed604e6f",
+    "packages/python/tests/test_native_operation_ordinals.py": "de7df02416b47e1804d88d9ceb5d13182f939acb5e3015861abb3027865b2dac",
+    "packages/python/tests/test_native_pg8000.py": "d56305dae464aff13cbb72d20cfeb874d2dff430734365cdc99fc0fd175b47a8"
+  },
+  "profile": {
+    "python": "3.11.17",
+    "pg8000": "1.31.5",
+    "postgresql": "16.15",
+    "role": "administrative native fixture; not ordinary-person admission"
+  },
+  "native": {
+    "cases": 7,
+    "seconds": 112.205,
+    "process_exit": 0,
+    "log_sha256": "39e0fe7d575dddf567d4ac5c9bdf3c9a55f25cae0b131116c0d9bdbcb344dca1",
+    "coverage": [
+      "rollback then release",
+      "success release",
+      "SQL override refused",
+      "foreign callback refused",
+      "forged initial invocation record refused",
+      "expired settlement deadline no send",
+      "cleanup after executor disposal"
+    ]
+  },
+  "installed_unit": {
+    "cases": 13,
+    "seconds": 0.002,
+    "process_exit": 0,
+    "log_sha256": "19ce4c3fe936ba5a289b545d890b7ffce48ced29d4b7b20a8c6b10a871321dd4"
+  },
+  "wheel": {
+    "sha256": "9f695ea7f1b67c5aae722091ee5b05f20d3bf784999784965aacff4f8f5bfaf9",
+    "matched_source_wheel_installed_files": 84
+  },
+  "astra_ultra": {
+    "decision": "approved scoped fixed-control checkpoint",
+    "independent_unit_cases": 13,
+    "independent_unit_seconds": 0.005,
+    "wheel_parity": "84 files independently verified"
+  },
+  "remaining": [
+    "reserve port-control and tracker-invocation retention capacity before business effects",
+    "registered four-family original admission/artifacts",
+    "complete native semantic bodies/finalization/install",
+    "public consumer operations"
+  ],
+  "additional_tests": {
+    "release_retirement_publication_faults": "pending session16277; no passed claim"
+  }
+}

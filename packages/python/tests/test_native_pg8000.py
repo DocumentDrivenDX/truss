@@ -235,3 +235,12 @@ class ReservedCallDispatchTests(unittest.TestCase):
             boundary._call(lambda: callbacks.append('invoke'), call_permit=object())
         self.assertEqual(callbacks, [])
         self.assertEqual(boundary._revision, 0)
+        from truss._native_pg8000 import _HostSimpleInvocation
+        for options in ({'closing': True}, {'host_simple': _HostSimpleInvocation('SELECT 99')},
+                        {'preflight': lambda: callbacks.append('preflight')},
+                        {'on_complete': lambda *args: callbacks.append('complete')},
+                        {'on_settled': lambda *args: callbacks.append('settled')}):
+            with self.assertRaisesRegex(NativeBoundaryRefusal, 'invocation overrides'):
+                boundary._call(lambda: callbacks.append('invoke'), call_permit=object(), **options)
+            self.assertEqual(callbacks, [])
+            self.assertEqual(boundary._revision, 0)

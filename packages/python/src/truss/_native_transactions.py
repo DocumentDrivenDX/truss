@@ -70,6 +70,14 @@ class _Control:
     chain: bool = False
 
 
+@dataclass(frozen=True, eq=False)
+class _ControlInvocation:
+    tracker: object
+    control: _Control
+    invoke: object
+    sql: str
+
+
 class NativeTransactions:
     def __init__(self, boundary, *, savepoint_limit=256, adoption_limit=256, mediated_namespace=False):
         if type(boundary) is not NativeBoundary or type(savepoint_limit) is not int or savepoint_limit < 1:
@@ -83,6 +91,7 @@ class NativeTransactions:
         self._boundary = boundary
         self._identity = uuid4().hex
         self._state = _State()
+        self._control_invocations = ()
         self._limit = savepoint_limit
         self._cached = None
         self._next_epoch = 1
@@ -196,7 +205,27 @@ class NativeTransactions:
                 self._next_epoch += 1  # Reservations never rewind on refusal/uncertainty.
                 candidate = _Generation(str(epoch))
             control = _Control(kind, state, candidate, savepoint, chain)
-        self._boundary._call(lambda: self._boundary._run_simple(sql), token, lifecycle=control, cleanup=cleanup, call_permit=call_permit)
+            if call_permit is not None:
+                if kind not in ('savepoint', 'rollback_to', 'release') or type(savepoint) is not _Savepoint:
+                    raise NativeBoundaryRefusal('Fixed reserved control kind required')
+                prefix = {'savepoint': 'SAVEPOINT ', 'rollback_to': 'ROLLBACK TO SAVEPOINT ',
+                          'release': 'RELEASE SAVEPOINT '}[kind]
+                fixed_sql = prefix + self._name(savepoint.name)
+                if type(sql) is not str or sql != fixed_sql:
+                    raise NativeBoundaryRefusal('Fixed original control SQL required')
+                sql = fixed_sql
+            invoke = lambda: self._boundary._run_simple(sql)
+            if call_permit is not None:
+                if len(self._control_invocations) >= 4096:
+                    raise NativeBoundaryRefusal('Original control invocation retention exhausted')
+                invocation = _ControlInvocation(self, control, invoke, sql)
+                self._control_invocations = (*self._control_invocations, invocation)
+                ledger = self._boundary._operation_ledger
+                if (ledger is None or self._boundary._pending_operation_ledger is not ledger
+                        or not any(item is ledger for item in self._boundary._native_arbitration_sessions)):
+                    raise NativeBoundaryRefusal('Original reserved control session required')
+                ledger._bind_reserved_control(call_permit, invocation)
+        self._boundary._call(invoke, token, lifecycle=control, cleanup=cleanup, call_permit=call_permit)
         return savepoint if kind == 'savepoint' else None
 
     @staticmethod
@@ -333,31 +362,35 @@ class NativeTransactionPort:
         return completed[0].observation
 
     def _reserve_savepoint_name(self,executor):
+        with self._tracker._boundary._lock:
+            return self._reserve_savepoint_name_locked(executor)
+
+    def _reserve_savepoint_name_locked(self,executor):
+        # Original enclosing producer already holds the native guard.
         t=self._tracker
         if not t._mediated_namespace:return None
-        with t._boundary._lock:
-            self._require_scope()
-            generation=self._generation
-            root=generation.adoption
-            if root is None or root.current is None or root.current.claim.executor is not executor:
-                raise NativeBoundaryRefusal('Original adopted namespace owner required')
-            reservation=next((n for n in generation.namespaces if n.executor is executor),None)
-            if reservation is None:
-                if len(generation.namespaces)>=256:raise NativeBoundaryRefusal('Namespace retention exhausted')
-                namespace=uuid4().hex
-                if re.fullmatch('[0-9a-f]{32}',namespace) is None or any(n.value==namespace for n in generation.namespaces):
-                    raise NativeBoundaryRefusal('Unique original namespace required')
-                reservation=_SavepointNamespace(executor,namespace)
-                generation.namespaces=(*generation.namespaces,reservation)
-            if not 1<=reservation.next_counter<=18446744073709551615:
-                raise NativeBoundaryRefusal('Savepoint namespace counter exhausted')
-            if len(reservation.issued)>=4096:raise NativeBoundaryRefusal('Savepoint name retention exhausted')
-            counter=reservation.next_counter
-            name='truss_sp_'+reservation.value+'_'+str(counter)
-            issued=_IssuedSavepoint(name)
-            reservation.issued=(*reservation.issued,issued)
-            reservation.next_counter+=1
-            return name
+        self._require_scope()
+        generation=self._generation
+        root=generation.adoption
+        if root is None or root.current is None or root.current.claim.executor is not executor:
+            raise NativeBoundaryRefusal('Original adopted namespace owner required')
+        reservation=next((n for n in generation.namespaces if n.executor is executor),None)
+        if reservation is None:
+            if len(generation.namespaces)>=256:raise NativeBoundaryRefusal('Namespace retention exhausted')
+            namespace=uuid4().hex
+            if re.fullmatch('[0-9a-f]{32}',namespace) is None or any(n.value==namespace for n in generation.namespaces):
+                raise NativeBoundaryRefusal('Unique original namespace required')
+            reservation=_SavepointNamespace(executor,namespace)
+            generation.namespaces=(*generation.namespaces,reservation)
+        if not 1<=reservation.next_counter<=18446744073709551615:
+            raise NativeBoundaryRefusal('Savepoint namespace counter exhausted')
+        if len(reservation.issued)>=4096:raise NativeBoundaryRefusal('Savepoint name retention exhausted')
+        counter=reservation.next_counter
+        name='truss_sp_'+reservation.value+'_'+str(counter)
+        issued=_IssuedSavepoint(name)
+        reservation.issued=(*reservation.issued,issued)
+        reservation.next_counter+=1
+        return name
 
     def _adoption_is_published(self, adoption):
         from ._native_adoption import is_published
@@ -374,7 +407,7 @@ class NativeTransactionPort:
     def _publish_savepoint_map(self, candidate):
         self._savepoints = candidate
 
-    def control(self, sql):
+    def control(self, sql, *, cleanup=None, call_permit=None):
         with self._tracker._boundary._lock:
             self._require_scope()
             if self._generation is not self._tracker._state.generation or self._generation.ended:
@@ -407,7 +440,7 @@ class NativeTransactionPort:
                 candidate[name]=original
                 self._pending_savepoint=(original,candidate)
                 t._control('savepoint','SAVEPOINT '+t._name(name),token=self._token,
-                           savepoint=name,prepared_savepoint=original)
+                           savepoint=name,prepared_savepoint=original,cleanup=cleanup,call_permit=call_permit)
                 record.native_call=t._boundary.last_call
                 try:
                     self._publish_savepoint_map(candidate)
@@ -416,8 +449,8 @@ class NativeTransactionPort:
                 self._pending_savepoint=None
             else:
                 handle=self._savepoints.get(name)
-                if kind=='ROLLBACK TO SAVEPOINT': t.rollback_to(handle,token=self._token)
-                else: t.release(handle,token=self._token)
+                if kind=='ROLLBACK TO SAVEPOINT': t.rollback_to(handle,token=self._token,cleanup=cleanup,call_permit=call_permit)
+                else: t.release(handle,token=self._token,cleanup=cleanup,call_permit=call_permit)
                 record.native_call=t._boundary.last_call
             record.phase='published'
         except BaseException:
