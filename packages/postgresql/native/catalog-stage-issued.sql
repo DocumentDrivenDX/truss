@@ -1,9 +1,10 @@
 -- Fixed original-driver staging composition. Provisional effects only: no
 -- accepted report/head, PA authority, installation readiness or commit seal.
-CREATE FUNCTION truss.runtime_stage_catalog_issued(
+CREATE FUNCTION truss.runtime_stage_catalog_admitted(
  issued_ordinal bigint, definition_bytes bytea, input_bytes bytea,
  candidate_bytes bytea, obligation_bytes bytea, group_bytes bytea,
- documents_bytes bytea, declarations_bytes bytea, origin_bytes bytea)
+ documents_bytes bytea, declarations_bytes bytea, origin_bytes bytea,
+ original_prestate bytea, original_context bytea)
 RETURNS TABLE(writer_xid text, ordinal text, context_hex text, provisional_result_hex text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER
 SET search_path=pg_catalog,pg_temp AS $$
@@ -29,7 +30,54 @@ BEGIN
  IF octet_length(input_bytes)>16384 THEN
   RAISE EXCEPTION 'selected report input capacity exceeded' USING ERRCODE='54000';
  END IF;
- IF total_bytes>4194304 OR candidate_bytes IS DISTINCT FROM declarations_bytes THEN
+ IF total_bytes>4194304 THEN
+  RAISE EXCEPTION 'original declaration plan correspondence required' USING ERRCODE='22023';
+ END IF;
+ -- Reuse one actual admitted root; no admission or identity factory in this core.
+ IF current_user::text IS DISTINCT FROM (CASE WHEN current_setting('role')='none'
+  THEN session_user::text ELSE current_setting('role') END) THEN
+  RAISE EXCEPTION 'original invoker actor boundary required' USING ERRCODE='55000';
+ END IF;
+ IF original_prestate IS NULL OR original_context IS NULL
+  OR octet_length(original_prestate) NOT BETWEEN 1 AND 1048576
+  OR octet_length(original_context) NOT BETWEEN 1 AND 1048576 THEN
+  RAISE EXCEPTION 'bounded retained original admission required' USING ERRCODE='22023';
+ END IF;
+ IF (SELECT count(*) FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()
+   AND o.phase<>'application_finalized')<>1 THEN
+  RAISE EXCEPTION 'sole current unfinished catalog operation required' USING ERRCODE='55000';
+ END IF;
+ SELECT o.original_writer_xid::text AS writer_xid,o.operation_ordinal::text AS ordinal,
+  encode(o.original_context_bytes,'hex') AS context_hex INTO admitted
+ FROM truss.row_home_operation o
+ WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()
+  AND o.operation_ordinal=issued_ordinal AND o.operation_kind='catalog-acceptance'
+  AND o.phase='admitted' AND o.effect_generation=0
+  AND o.original_context_bytes=original_context
+  AND o.original_definition_bytes=definition_bytes AND o.original_input_bytes=input_bytes
+  AND o.original_prestate_bytes=original_prestate AND o.admitted_candidate_bytes=candidate_bytes
+  AND o.effect_obligation_bytes=obligation_bytes AND o.original_group_custody_bytes=group_bytes;
+ IF NOT FOUND THEN
+  RAISE EXCEPTION 'original stored catalog operation correspondence required' USING ERRCODE='55000';
+ END IF;
+ prestate:=original_prestate;
+ CASE convert_from(original_context,'UTF8')::jsonb->>'interfaceVersion'
+ WHEN 'truss-native-operation-context/0.2' THEN
+  PERFORM * FROM truss.runtime_collect_catalog_original_context(admitted.writer_xid,admitted.ordinal,'0');
+ WHEN 'truss-native-operation-context/0.4' THEN
+  PERFORM * FROM truss.runtime_collect_catalog_epoch_context(admitted.writer_xid,admitted.ordinal,'0');
+ ELSE
+  RAISE EXCEPTION 'supported complete original context grammar required' USING ERRCODE='0A000';
+ END CASE;
+ IF NOT EXISTS(SELECT 1 FROM truss.schema_head h WHERE h.id=1 AND h.rev=0)
+  OR EXISTS(SELECT 1 FROM truss.schema_rev r WHERE r.rev<>0)
+  OR convert_from(prestate,'UTF8')::jsonb->>'interfaceVersion'
+     IS DISTINCT FROM 'truss-native-catalog-prestate/0.1' THEN
+  RAISE EXCEPTION 'original fresh catalog head and prestate required' USING ERRCODE='0A000';
+ END IF;
+ PERFORM truss.runtime_verify_new_catalog_prestate(1);
+ IF candidate_bytes IS DISTINCT FROM declarations_bytes THEN
   RAISE EXCEPTION 'original declaration plan correspondence required' USING ERRCODE='22023';
  END IF;
  input:=convert_from(input_bytes,'UTF8')::jsonb;
@@ -42,21 +90,6 @@ BEGIN
   OR jsonb_array_length(declarations)>4096
   OR jsonb_typeof(origin) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'selected original catalog staging profile required' USING ERRCODE='0A000';
- END IF;
- -- This producer checks forbidden prior shared admission before taking its
- -- own exclusion. Never pre-acquire EXCLUSIVE and mask that check.
- prestate:=decode(truss.runtime_capture_catalog_prestate(),'hex');
- SELECT a.* INTO STRICT admitted FROM truss.runtime_admit_operation(
-  issued_ordinal,'catalog-acceptance',definition_bytes,input_bytes,prestate,
-  candidate_bytes,obligation_bytes,group_bytes) a;
- IF NOT EXISTS(SELECT 1 FROM truss.row_home_operation o
-  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.operation_ordinal=issued_ordinal
-   AND o.operation_kind='catalog-acceptance' AND o.phase='admitted' AND o.effect_generation=0
-   AND o.original_context_bytes=decode(admitted.context_hex,'hex')
-   AND o.original_definition_bytes=definition_bytes AND o.original_input_bytes=input_bytes
-   AND o.original_prestate_bytes=prestate AND o.admitted_candidate_bytes=candidate_bytes
-   AND o.effect_obligation_bytes=obligation_bytes AND o.original_group_custody_bytes=group_bytes) THEN
-  RAISE EXCEPTION 'original stored catalog operation correspondence required' USING ERRCODE='55000';
  END IF;
  PERFORM truss.runtime_require_catalog_lifecycle_observers();
  SELECT * INTO STRICT original_graph FROM truss.runtime_collect_empty_catalog_graph();
@@ -194,6 +227,51 @@ BEGIN
   RAISE EXCEPTION 'selected provisional response capacity exceeded' USING ERRCODE='54000';
  END IF;
  RETURN QUERY SELECT admitted.writer_xid,admitted.ordinal,admitted.context_hex,encode(original_result,'hex');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_stage_catalog_admitted(bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) FROM PUBLIC;
+
+-- Existing base-context entry retains capture → admission → staging behavior.
+CREATE FUNCTION truss.runtime_stage_catalog_issued(
+ issued_ordinal bigint, definition_bytes bytea, input_bytes bytea,
+ candidate_bytes bytea, obligation_bytes bytea, group_bytes bytea,
+ documents_bytes bytea, declarations_bytes bytea, origin_bytes bytea)
+RETURNS TABLE(writer_xid text, ordinal text, context_hex text, provisional_result_hex text)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE prestate bytea; admitted record; item bytea; total_bytes bigint:=0;
+ input jsonb; declarations jsonb; documents jsonb; origin jsonb;
+BEGIN
+ FOREACH item IN ARRAY ARRAY[definition_bytes,input_bytes,candidate_bytes,
+  obligation_bytes,group_bytes,documents_bytes,declarations_bytes,origin_bytes] LOOP
+  IF item IS NULL OR octet_length(item) NOT BETWEEN 1 AND 1048576 THEN
+   RAISE EXCEPTION 'bounded original catalog input required' USING ERRCODE='22023';
+  END IF;
+  total_bytes:=total_bytes+octet_length(item);
+ END LOOP;
+ IF octet_length(input_bytes)>16384 THEN
+  RAISE EXCEPTION 'selected report input capacity exceeded' USING ERRCODE='54000';
+ END IF;
+ IF total_bytes>4194304 OR candidate_bytes IS DISTINCT FROM declarations_bytes THEN
+  RAISE EXCEPTION 'original declaration plan correspondence required' USING ERRCODE='22023';
+ END IF;
+ input:=convert_from(input_bytes,'UTF8')::jsonb;
+ declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
+ documents:=convert_from(documents_bytes,'UTF8')::jsonb;
+ origin:=convert_from(origin_bytes,'UTF8')::jsonb;
+ IF input->'binding' IS DISTINCT FROM jsonb_build_object('state','absent')
+  OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
+  OR jsonb_typeof(declarations) IS DISTINCT FROM 'array'
+  OR jsonb_array_length(declarations)>4096
+  OR jsonb_typeof(origin) IS DISTINCT FROM 'object' THEN
+  RAISE EXCEPTION 'selected original catalog staging profile required' USING ERRCODE='0A000';
+ END IF;
+ prestate:=decode(truss.runtime_capture_catalog_prestate(),'hex');
+ SELECT a.* INTO STRICT admitted FROM truss.runtime_admit_operation(
+  issued_ordinal,'catalog-acceptance',definition_bytes,input_bytes,prestate,
+  candidate_bytes,obligation_bytes,group_bytes) a;
+ RETURN QUERY SELECT * FROM truss.runtime_stage_catalog_admitted(
+  issued_ordinal,definition_bytes,input_bytes,candidate_bytes,obligation_bytes,group_bytes,
+  documents_bytes,declarations_bytes,origin_bytes,prestate,decode(admitted.context_hex,'hex'));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_stage_catalog_issued(bigint,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) FROM PUBLIC;

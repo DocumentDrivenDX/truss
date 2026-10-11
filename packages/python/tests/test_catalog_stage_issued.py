@@ -223,3 +223,86 @@ class NativeIssuedCatalogStageTests(CatalogNativeFixture, unittest.TestCase):
             self.connection.run('ROLLBACK TO SAVEPOINT stage')
             self.connection.run('RELEASE SAVEPOINT stage')
         self.assertEqual(mappings[0],mappings[1])
+
+    def admit_core(self):
+        p=self.prepared
+        pre=self.connection.run("SELECT truss.runtime_capture_catalog_prestate()")[0][0]
+        row=self.connection.run("""SELECT * FROM truss.runtime_admit_operation(
+            0,'catalog-acceptance',decode('01','hex'),decode(:input,'hex'),decode(:pre,'hex'),
+            decode(:candidate,'hex'),decode('05','hex'),decode('06','hex'))""",
+            input=p.input_bytes.hex(),pre=pre,candidate=p.declarations_bytes.hex())[0]
+        return dict(ordinal=0,definition='01',input=p.input_bytes.hex(),
+            candidate=p.declarations_bytes.hex(),obligations='05',group='06',
+            documents=p.archive_documents_bytes.hex(),declarations=p.declarations_bytes.hex(),
+            origin=b'{}'.hex(),pre=pre,context=row[2])
+
+    def invoke_core(self,arguments):
+        return self.connection.run("""SELECT * FROM truss.runtime_stage_catalog_admitted(
+            :ordinal,decode(:definition,'hex'),decode(:input,'hex'),decode(:candidate,'hex'),
+            decode(:obligations,'hex'),decode(:group,'hex'),decode(:documents,'hex'),
+            decode(:declarations,'hex'),decode(:origin,'hex'),decode(:pre,'hex'),decode(:context,'hex'))""",
+            **arguments)
+
+    def test_admitted_core_preserves_one_original_operation(self):
+        arguments=self.admit_core();rows=self.invoke_core(arguments)
+        self.assertEqual(rows[0][2],arguments['context'])
+        self.assertEqual(rows[0][1],'0')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'),[[1]])
+        self.assertEqual(self.connection.run('SELECT home FROM truss.prop_def'),[['json']])
+        self.assertFalse(json.loads(bytes.fromhex(rows[0][3]))['accepted'])
+
+    def test_core_substitution_refuses_before_catalog_effects(self):
+        from pg8000.exceptions import DatabaseError
+        arguments=self.admit_core()
+        self.connection.run('CREATE TEMP TABLE preserved_core(value text)')
+        self.connection.run("INSERT INTO preserved_core VALUES('earlier host work')")
+        # Sequence advancement survives operation rollback, independently exposing
+        # any attempted first catalog insertion even when its rows disappear.
+        self.connection.run("""CREATE TEMP SEQUENCE core_first_effect;
+            CREATE FUNCTION truss.fixture_core_first_effect() RETURNS trigger LANGUAGE plpgsql AS $$
+            BEGIN PERFORM nextval('pg_temp.core_first_effect'); RETURN NEW; END $$;
+            CREATE TRIGGER fixture_core_first_effect BEFORE INSERT ON truss.schema_rev
+            FOR EACH ROW EXECUTE FUNCTION truss.fixture_core_first_effect()""")
+        for key in ('definition','input','candidate','obligations','group','pre','context','ordinal'):
+            self.connection.run('SAVEPOINT core_attempt')
+            substituted=dict(arguments);substituted[key]=1 if key=='ordinal' else 'ff'
+            with self.subTest(key=key),self.assertRaises(DatabaseError) as caught:
+                self.invoke_core(substituted)
+            self.assertEqual(caught.exception.args[0]['C'],'55000')
+            self.connection.run('ROLLBACK TO SAVEPOINT core_attempt')
+            self.connection.run('RELEASE SAVEPOINT core_attempt')
+            self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.core_first_effect'),[[False]])
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.schema_doc'),[[0]])
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'),[[1]])
+            self.assertEqual(self.connection.run('SELECT value FROM preserved_core'),[['earlier host work']])
+        self.invoke_core(arguments)
+        self.assertEqual(self.connection.run('SELECT is_called FROM pg_temp.core_first_effect'),[[True]])
+
+    def test_used_core_cannot_stage_again(self):
+        from pg8000.exceptions import DatabaseError
+        arguments=self.admit_core();self.invoke_core(arguments)
+        before=self.connection.run('SELECT count(*) FROM truss.schema_doc')
+        self.connection.run('SAVEPOINT repeated_core')
+        with self.assertRaises(DatabaseError) as caught:self.invoke_core(arguments)
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.connection.run('ROLLBACK TO SAVEPOINT repeated_core')
+        self.assertEqual(self.connection.run('SELECT count(*) FROM truss.schema_doc'),before)
+
+    def test_wrapper_preflight_precedes_prestate_capture(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run("""CREATE OR REPLACE FUNCTION truss.runtime_capture_catalog_prestate()
+            RETURNS text LANGUAGE plpgsql AS $$ BEGIN
+            RAISE EXCEPTION 'prestate capture must not run' USING ERRCODE='P0001'; END $$""")
+        for input_bytes,expected in [(b'', '22023'),(b'x'*16385,'54000'),(b'{}','0A000')]:
+            self.connection.run('SAVEPOINT bounded_preflight')
+            with self.assertRaises(DatabaseError) as caught:
+                self.connection.run("""SELECT * FROM truss.runtime_stage_catalog_issued(
+                    0,decode('01','hex'),:input,decode(:declarations,'hex'),decode('05','hex'),
+                    decode('06','hex'),decode(:documents,'hex'),decode(:declarations,'hex'),
+                    convert_to('{}','UTF8'))""",input=input_bytes,
+                    declarations=self.prepared.declarations_bytes.hex(),
+                    documents=self.prepared.archive_documents_bytes.hex())
+            self.assertEqual(caught.exception.args[0]['C'],expected)
+            self.connection.run('ROLLBACK TO SAVEPOINT bounded_preflight')
+            self.connection.run('RELEASE SAVEPOINT bounded_preflight')
+            self.assertEqual(self.connection.run('SELECT count(*) FROM truss.row_home_operation'),[[0]])
