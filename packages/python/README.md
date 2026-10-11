@@ -87,15 +87,20 @@ Ordinary installs and tests use binaries and never build PostgreSQL.
 
 ```sh
 python3.11 -m venv .venv
-.venv/bin/pip install --only-binary=:all: --find-links .cache/pgserver/pg18.6/wheels './packages/python[local,native]'
+.venv/bin/pip install --only-binary=:all: --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r1 './packages/python[local,native]'
 .venv/bin/truss-local-postgres --data-dir .local/truss-postgres-18 --probe
 ```
 
-The verified macOS arm64 Python3.11 wheel is cached locally. Public release
-`pg18.6-pgv0.8.6-r1` is pending the build repository's CI; once published, its
-[release asset listing](https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r1)
-can replace the local `--find-links` directory. Runtime requirements select that
-listing and the pinned distribution. Do not install upstream `pgserver` alongside
+Public release `pg18.6-pgv0.8.6-r1` is published. A fresh Truss installation
+from its macOS arm64 CPython3.11 wheel, dependency check, native retained restart,
+26 driver tests and21 worker cleanup/collision controls pass. The
+[released consumer receipt](../../docs/helix/04-build/evidence/design-audit/pg18-released-consumer-20261011/receipt.json)
+records the exact published wheel SHA256
+`8abba22528fc6f35ca1bf2d7d7638ca4515101d6830909a432e524b05d488ae8`.
+The public release asset listing also resolves with `--no-index --only-binary`.
+Runtime requirements select that listing and pinned distribution; local caches
+remain an optional convenience.
+Do not install upstream `pgserver` alongside
 `pgserver-pg18`, and do not upgrade retained PostgreSQL17 data in place.
 
 Reproduce the focused consumer checks with both installed wheels:
