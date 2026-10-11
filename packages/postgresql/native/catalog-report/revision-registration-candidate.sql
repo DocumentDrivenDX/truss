@@ -26,6 +26,7 @@ RETURNS TABLE(writer_xid text,operation_ordinal text,effect_generation text,
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp
 SET bytea_output='hex' AS $$
 DECLARE op truss.row_home_operation%ROWTYPE; final_op truss.row_home_operation%ROWTYPE;
+ original_configuration truss.operation_configuration%ROWTYPE; final_configuration truss.operation_configuration%ROWTYPE; original_configuration_record bytea;
  context jsonb; profile_bytes bytea; profile jsonb; identity text;
  source_sql jsonb:='{}'::jsonb; source_name text; source_bytes bytea;
  identities text[]; archive_before jsonb; archive_after jsonb;
@@ -56,7 +57,7 @@ BEGIN
  SELECT a.artifact_bytes INTO STRICT profile_bytes FROM truss.installation_archive a
   WHERE a.installation_id=context->>'installationId' AND a.artifact_role='input' AND a.artifact_identity=identity
    AND a.artifact_sha256=sha256(a.artifact_bytes)
-   AND a.artifact_sha256=decode('cc5248ce8db93cf37f48386ebd7a5d1be48fb844369cc36b650c79e38223adaf','hex')
+   AND a.artifact_sha256=decode('a32febdea06ee57405d856038ede3b503430a4f823226e0dfa65b072fae2f725','hex')
    AND a.artifact_identity_sha256=sha256(convert_to(a.artifact_identity,'UTF8')) FOR SHARE NOWAIT;
  profile:=convert_from(profile_bytes,'UTF8')::jsonb;identities:=ARRAY[identity];
  FOREACH source_name IN ARRAY ARRAY['create','reserve','insert'] LOOP
@@ -81,6 +82,11 @@ BEGIN
  identities:=array_append(identities,identity);
  SELECT jsonb_agg(to_jsonb(a) ORDER BY a.archive_row_id) INTO archive_before FROM truss.installation_archive a
   WHERE a.installation_id=context->>'installationId' AND a.artifact_role='input' AND a.artifact_identity=ANY(identities);
+ -- Preserve the admission capsule before the report producer, not a later cut.
+ PERFORM truss.runtime_require_operation_configuration_current(expected_writer,expected_ordinal,expected_generation);
+ SELECT c.* INTO STRICT original_configuration FROM truss.operation_configuration c
+  WHERE c.original_writer_xid=op.original_writer_xid AND c.operation_ordinal=op.operation_ordinal;
+ original_configuration_record:=record_send(original_configuration);
  -- The payload is obtained only by this direct native producer call.
  SELECT * INTO STRICT report_result FROM truss.runtime_write_catalog_report_candidate(
   expected_writer,expected_ordinal,expected_generation,registration_identity,original_registration,lifecycle_policy,index_policy);
@@ -117,8 +123,8 @@ BEGIN
  IF original_op_record IS NULL OR op.original_context_bytes IS NULL OR original_revision_record IS NULL
   OR original_document_records IS NULL OR cardinality(original_document_records) NOT BETWEEN 1 AND 512 THEN
   RAISE EXCEPTION 'complete original owner custody inventory required' USING ERRCODE='55000'; END IF;
- aggregate_original_bytes:=octet_length(original_op_record)::bigint+octet_length(op.original_context_bytes)+octet_length(original_revision_record);
- total_chunks:=((octet_length(original_op_record)+32767)/32768)+((octet_length(op.original_context_bytes)+32767)/32768)+((octet_length(original_revision_record)+32767)/32768);
+ aggregate_original_bytes:=octet_length(original_configuration_record)::bigint+octet_length(original_op_record)::bigint+octet_length(op.original_context_bytes)+octet_length(original_revision_record);
+ total_chunks:=((octet_length(original_configuration_record)+32767)/32768)+((octet_length(original_op_record)+32767)/32768)+((octet_length(op.original_context_bytes)+32767)/32768)+((octet_length(original_revision_record)+32767)/32768);
  FOREACH original_document_record IN ARRAY original_document_records LOOP
   IF original_document_record IS NULL THEN RAISE EXCEPTION 'original document byte custody required' USING ERRCODE='55000'; END IF;
   aggregate_original_bytes:=aggregate_original_bytes+octet_length(original_document_record);
@@ -132,6 +138,7 @@ BEGIN
  END LOOP;
  owner_bytes:=truss.runtime_canonical_tree_bytes(truss.runtime_catalog_report_native_tree(jsonb_build_object(
   'scope','administrative_single_original_operation_fresh_catalog_rollback_only',
+  'originalConfigurationRecordHexChunks',truss.runtime_registration_original_hex_chunks(original_configuration_record),
   'originalOperationRecordHexChunks',truss.runtime_registration_original_hex_chunks(original_op_record),
   'originalContextHexChunks',truss.runtime_registration_original_hex_chunks(op.original_context_bytes),
   'originalRevisionRecordHexChunks',truss.runtime_registration_original_hex_chunks(original_revision_record),
@@ -205,6 +212,10 @@ BEGIN
   catalog_after:=jsonb_set(catalog_after,ARRAY[name],rows_json);
  END LOOP;
  SELECT o.* INTO STRICT final_op FROM truss.row_home_operation o WHERE o.original_writer_xid=pg_current_xact_id_if_assigned();
+ SELECT c.* INTO STRICT final_configuration FROM truss.operation_configuration c
+  WHERE c.original_writer_xid=op.original_writer_xid AND c.operation_ordinal=op.operation_ordinal;
+ IF record_send(final_configuration) IS DISTINCT FROM original_configuration_record THEN
+  RAISE EXCEPTION 'complete original pre-report configuration custody required' USING ERRCODE='55000'; END IF;
  IF resources_after IS DISTINCT FROM resources_before OR metadata_after IS DISTINCT FROM metadata_before
   OR archive_after IS DISTINCT FROM archive_before OR relation_after IS DISTINCT FROM relation_before
   OR census_after IS DISTINCT FROM census_before OR catalog_after IS DISTINCT FROM catalog_before

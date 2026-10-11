@@ -28,7 +28,7 @@ for name in ('test_catalog_revision_registration_native.py','test_catalog_report
              'test_catalog_source_candidate.py','test_configured_catalog_stage.py','test_native_catalog_dispatch.py','test_native_operation_ordinals.py','test_native_arbitration.py'):
     retain('packages/python/tests/'+name)
 for name in ('source-epoch-lock','source-epoch-issue','source-epoch-immutability','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock','issued-operation-admission/operation-configuration-context-admission',
-             'catalog-observation-recheck','catalog-epoch-context','operation-configuration-current',
+             'catalog-observation-recheck','catalog-epoch-context','operation-configuration-current','operation-configuration-immutability',
              'catalog-admission-configuration','catalog-report/revision-registration-candidate','catalog-report/report-write-candidate','catalog-report/archive-self-write-fence','catalog-report/archive-write-fence-current','catalog-report/release-selection',
              'canonical-string-bytes','canonical-tree-bytes','catalog-report/configured-graph','catalog-report/resource-selection','catalog-report/configured-stage','catalog-report/source-candidate','catalog-report/configured-metadata','catalog-stage-configured','catalog-stage-issued'):
     retain('packages/postgresql/native/'+name+'.sql')
@@ -136,7 +136,7 @@ try:
         if epoch_order_countercontrol and "(0, 'success') != (2, '55P03')" not in test.stderr:raise RuntimeError('Original writer modes before marker wait counterexample required')
         if epoch_table_countercontrol and 'original source epoch registry evidence are immutable' not in test.stderr:raise RuntimeError('Independent registry TRUNCATE guard control required')
     else:require(test)
-    native_test_count=11 if registration_profile else 21 if report_write_profile else 10 if epoch_fence_profile else 8 if self_write_profile else 12 if archive_countercontrol else 23
+    native_test_count=13 if registration_profile else 21 if report_write_profile else 10 if epoch_fence_profile else 8 if self_write_profile else 12 if archive_countercontrol else 23
     if f'Ran {native_test_count} tests' not in test.stderr or 'skipped' in test.stderr:raise RuntimeError('Complete selected native population required')
     # Execute each original catalog-dispatch regression method exactly once.
     original=ast.parse(inputs[str(root/'packages/python/tests/test_native_catalog_dispatch.py')])

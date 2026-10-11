@@ -70,6 +70,7 @@ class RevisionRegistrationNativeTests(unittest.TestCase):
         self.assertEqual(self.connection.run("SELECT encode(record_send(r),'hex') FROM truss.schema_rev r WHERE rev=1"),[[''.join(owner['originalRevisionRecordHexChunks'])]])
         self.assertEqual(self.connection.run("SELECT encode(record_send(d),'hex') FROM truss.schema_doc d WHERE rev=1 ORDER BY ord"),[[''.join(v)] for v in owner['originalDocumentRecordHexChunks']])
         self.assertEqual(self.connection.run("SELECT encode(record_send(o),'hex') FROM truss.row_home_operation o"),[[''.join(owner['originalOperationRecordHexChunks'])]])
+        self.assertEqual(self.connection.run("SELECT encode(record_send(c),'hex') FROM truss.operation_configuration c"),[[''.join(owner['originalConfigurationRecordHexChunks'])]])
         self.assertIsNone(member[5]);self.assertEqual(self.connection.run('SELECT rev FROM truss.schema_head'),[[0]])
         from pg8000.exceptions import DatabaseError
         with self.assertRaises(DatabaseError) as caught:self.connection.run('COMMIT')
@@ -188,3 +189,48 @@ class RevisionRegistrationNativeTests(unittest.TestCase):
         self.assert_rolled_back()
         self.assertEqual(self.connection.run('SELECT value FROM owner_capacity_host_work'),[['keep']])
         self.assertEqual(self.connection.run('SELECT original_group_custody_bytes FROM truss.row_home_operation'),[[self.group_bytes]])
+
+    def test_configuration_capsule_crosses_aggregate_capacity_from_original_admission(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run('SAVEPOINT measure_originals')
+        self.stage()
+        capsule_size=self.connection.run('SELECT octet_length(record_send(c)) FROM truss.operation_configuration c')[0][0]
+        without_capsule=self.connection.run("""SELECT octet_length(record_send(o))+octet_length(o.original_context_bytes)
+            +(SELECT octet_length(record_send(r)) FROM truss.schema_rev r WHERE rev=1)
+            +(SELECT sum(octet_length(record_send(d))) FROM truss.schema_doc d WHERE rev=1)
+            FROM truss.row_home_operation o""")[0][0]
+        self.connection.run('ROLLBACK TO measure_originals');self.connection.run('RELEASE measure_originals')
+        self.group_bytes=b'g'*(786432-without_capsule+1-capsule_size//2)
+        self.stage()
+        actual=self.connection.run("""SELECT octet_length(record_send(o))+octet_length(o.original_context_bytes)
+            +(SELECT octet_length(record_send(r)) FROM truss.schema_rev r WHERE rev=1)
+            +(SELECT sum(octet_length(record_send(d))) FROM truss.schema_doc d WHERE rev=1)
+            FROM truss.row_home_operation o""")[0][0]
+        self.assertLessEqual(actual,786432);self.assertGreater(actual+capsule_size,786432)
+        self.connection.run("CREATE TEMP TABLE capsule_host_work(value text); INSERT INTO capsule_host_work VALUES('keep')")
+        self.connection.run('SAVEPOINT capsule_capacity')
+        with self.assertRaises(DatabaseError) as caught:self.register()
+        self.assertEqual(caught.exception.args[0]['C'],'54000')
+        self.assertEqual(caught.exception.args[0]['M'],'aggregate original registration owner capacity')
+        self.connection.run('ROLLBACK TO capsule_capacity');self.connection.run('RELEASE capsule_capacity')
+        self.assert_rolled_back();self.assertEqual(self.connection.run('SELECT value FROM capsule_host_work'),[['keep']])
+
+    def test_late_configuration_capsule_change_refuses(self):
+        from pg8000.exceptions import DatabaseError
+        self.connection.run((ROOT/'packages/postgresql/native/operation-configuration-immutability.sql').read_text())
+        self.stage()
+        original=self.connection.run("SELECT encode(record_send(c),'hex') FROM truss.operation_configuration c")
+        guard=self.connection.run("SELECT tgenabled FROM pg_trigger WHERE tgname='runtime_operation_configuration_immutable' AND tgrelid='truss.operation_configuration'::regclass")
+        self.assertEqual(guard,[['A']])
+        self.connection.run("CREATE TEMP TABLE capsule_drift_host(value text); INSERT INTO capsule_drift_host VALUES('keep')")
+        self.connection.run('SAVEPOINT capsule_drift')
+        # Administrative adversarial trigger; ordinary capsule writes remain forbidden.
+        self.trigger('feed_member','AFTER','INSERT',"""ALTER TABLE truss.operation_configuration DISABLE TRIGGER runtime_operation_configuration_immutable;
+            UPDATE truss.operation_configuration SET selected_binding_bytes=decode('aabb','hex'); RETURN NEW;""")
+        with self.assertRaises(DatabaseError) as caught:self.register()
+        self.assertEqual(caught.exception.args[0]['C'],'55000')
+        self.assertEqual(caught.exception.args[0]['M'],'current configuration differs from original admission capsule')
+        self.connection.run('ROLLBACK TO capsule_drift');self.connection.run('RELEASE capsule_drift');self.assert_rolled_back()
+        self.assertEqual(self.connection.run("SELECT encode(record_send(c),'hex') FROM truss.operation_configuration c"),original)
+        self.assertEqual(self.connection.run("SELECT tgenabled FROM pg_trigger WHERE tgname='runtime_operation_configuration_immutable' AND tgrelid='truss.operation_configuration'::regclass"),guard)
+        self.assertEqual(self.connection.run('SELECT value FROM capsule_drift_host'),[['keep']])

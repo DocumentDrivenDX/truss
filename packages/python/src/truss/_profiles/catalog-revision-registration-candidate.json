@@ -1,6 +1,6 @@
 {
   "identity": "truss-administrative-revision-registration",
-  "version": "0.1.0-candidate",
+  "version": "0.2.0-candidate",
   "scope": "administrative_single_original_operation_fresh_catalog_rollback_only",
   "sources": {
     "create": {
@@ -17,7 +17,7 @@
     }
   },
   "transactionContext": "exact original admitted operation context; valid only for the one original fresh catalog operation, not a transaction-wide identity",
-  "ownerContext": "canonical envelope originalOperationRecordHexChunks, originalContextHexChunks, originalRevisionRecordHexChunks, ordered originalDocumentRecordHexChunks; each array is consecutive native byte chunks encoded lowercase hex; exact full reconstruction; provenance only, not disclosure authority",
+  "ownerContext": "canonical envelope originalOperationRecordHexChunks, originalConfigurationRecordHexChunks captured before report production, originalContextHexChunks, originalRevisionRecordHexChunks, ordered originalDocumentRecordHexChunks; each array is consecutive native byte chunks encoded lowercase hex; exact full reconstruction; provenance only, not disclosure authority",
   "manifestProfile": {
     "identity": "truss-administrative-pending-manifest",
     "version": "0.1.0-candidate",
