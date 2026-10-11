@@ -1,0 +1,23 @@
+{
+  "scope": "Native setting availability and active transaction connection termination on local PostgreSQL 18.6",
+  "serverVersion": "18.6",
+  "pgserver": "18.6.0",
+  "expectedDefaults": [
+    "lock_timeout=0",
+    "statement_timeout=0",
+    "transaction_timeout=0"
+  ],
+  "observedDefaults": [
+    "lock_timeout=0",
+    "statement_timeout=0",
+    "transaction_timeout=0"
+  ],
+  "terminationSql": "SET transaction_timeout='100ms'; BEGIN; SELECT pg_sleep(1); COMMIT;",
+  "returncode": 2,
+  "stdout": "",
+  "stderr": "FATAL:  terminating connection due to transaction timeout\nserver closed the connection unexpectedly\n\tThis probably means the server terminated abnormally\n\tbefore or while processing the request.\nconnection to server was lost\n",
+  "freshConnectionPassed": true,
+  "ownedServerStopped": true,
+  "completeDeadlineProfileQualified": false,
+  "producerSha256": "41c4edb6d1faeadedb530cc7ba9cfde28973a865e533fb93ec45c2c6e08b6e8a"
+}

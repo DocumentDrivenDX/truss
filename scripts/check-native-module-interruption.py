@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Native owned-module interrupt cleanup and unrelated-worker survival control."""
+from truss._runtime_profile import SERVER_VERSION
 from pathlib import Path
 import hashlib,json,os,signal,subprocess,sys,tempfile,time
 root=Path(__file__).resolve().parents[1]
 if len(sys.argv)!=2 or Path(sys.argv[1]).name!=sys.argv[1]:raise SystemExit('Supply a fresh receipt basename')
 receipt_name=sys.argv[1]
-if (root/'docs/helix/04-build/evidence/design-audit'/receipt_name).exists():raise SystemExit('Receipt exists')
 sys.path.insert(0,str(root/'scripts'))
-from native_fixture import WorkerCluster,connect
+from native_fixture import WorkerCluster,connect,evidence_directory
+if (evidence_directory()/receipt_name).exists():raise SystemExit("Receipt exists")
 with tempfile.TemporaryDirectory(prefix='truss-module-interrupt-',dir='/private/tmp') as folder:
  folder=Path(folder);ready=folder/'ready.json'
  (folder/'test_owned_interrupt.py').write_text('''import json,os,signal,unittest
@@ -35,5 +36,5 @@ def load_tests(loader,tests,pattern):return unittest.TestSuite([OwnedInterruptTe
    assert all(checks.values()),checks
   finally:
    if child.poll() is None:child.send_signal(signal.SIGINT);child.communicate(timeout=45)
- receipt={'passed':True,'postgresql':'17.11','checks':checks,'childReturncode':child.returncode,'stderr':stderr.decode(),'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'wrapperSha256':hashlib.sha256((root/'scripts/run-python-test-module.py').read_bytes()).hexdigest(),'scope':'SIGINT during an owned raw native fixture; confirmed shutdown and directory removal, unrelated socket worker stays usable'}
- out=root/'docs/helix/04-build/evidence/design-audit'/receipt_name;out.write_text(json.dumps(receipt,indent=2)+'\n');print(checks)
+ receipt={'passed':True,'postgresql':SERVER_VERSION,'checks':checks,'childReturncode':child.returncode,'stderr':stderr.decode(),'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'wrapperSha256':hashlib.sha256((root/'scripts/run-python-test-module.py').read_bytes()).hexdigest(),'scope':'SIGINT during an owned raw native fixture; confirmed shutdown and directory removal, unrelated socket worker stays usable'}
+ out=evidence_directory()/receipt_name;out.write_text(json.dumps(receipt,indent=2)+'\n');print(checks)

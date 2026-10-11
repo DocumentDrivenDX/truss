@@ -11,8 +11,8 @@ from truss.psycopg_host import adopt_psycopg_host, PsycopgProfile
 
 
 def postgres_bin_for_profile(profile):
-    if profile.server != 170011:
-        raise ValueError('Native tests require PostgreSQL17.11')
+    if profile.server != 180006:
+        raise ValueError('Native tests require PostgreSQL18.6')
     variable = 'TRUSS_CENSUS_POSTGRES_BIN'
     return Path(os.environ[variable])
 

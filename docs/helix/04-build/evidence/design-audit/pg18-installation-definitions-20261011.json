@@ -1,0 +1,18 @@
+{
+  "postgresql": "18.6",
+  "status": "component-passed",
+  "definitionSha256": "3190689d74dca0b78e70bfd8daa95864bdb39563f85119ce89fcacd0975b99bb",
+  "previousDefinitionSha256": "504f870cc6a5f0ebec054f112211f4219b77b4551f023bad7b859b8f98636fc3",
+  "priorConstraintsRetained": 298,
+  "addedNotNullConstraints": 345,
+  "indexes": 86,
+  "expressions": 63,
+  "independentRollbackConfirmed": true,
+  "sourceSha256": {
+    "packages/python/src/truss/_installation/statements.json": "ab97ac257b53b9fea2c92b773bea189ee96cb43a4abb4f9b81c212d4c5b58544",
+    "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+    "packages/python/src/truss/_installation/definitions.sql": "a549afb4ecdba65f4d42362bae91cbabfc5d2f97e931c8cf7825210f006967d4",
+    "scripts/build-python-installation-definitions.py": "5f6a326381a70e7035cac7d4cbe666d9464811012ad05abcf8adb684cb4a65d2"
+  },
+  "scope": "Independent native source compilation and prior projection comparison, not full installation or Lakebase acceptance"
+}

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Rollback-only composition probe of original base, adjunct DDL and immutable guards on pgserver."""
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION, SERVER_VERSION_NUM
 import argparse
 import hashlib
 import importlib.metadata
@@ -18,9 +19,9 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--corrected-pgserver', action='store_true')
 args = parser.parse_args()
 args.corrected_pgserver = True  # Historical flag remains a compatibility spelling.
-selected_package = '0.1.4+truss.pg17.11'
-selected_server = '17.11'
-receipt_name = ('pgserver-pg17.11-umf-structural-correspondence.json' if args.corrected_pgserver
+selected_package = RUNTIME_VERSION
+selected_server = SERVER_VERSION
+receipt_name = (f'pgserver-pg{SERVER_VERSION}-umf-structural-correspondence.json' if args.corrected_pgserver
                 else 'pgserver-umf-structural-correspondence.json')
 root = Path(__file__).resolve().parents[1]
 paths = [
@@ -221,7 +222,7 @@ for obj in declarations['objects']:
             keys = [v['String']['sval'] for v in c['keys']]
             expected_key_constraints.append([table, 'p' if c['contype']=='CONSTR_PRIMARY' else 'u', keys,
                 c.get('deferrable',False),c.get('initdeferred',False),c.get('nulls_not_distinct',False),True,True,True,keys])
-if importlib.metadata.version('pgserver') != selected_package:
+if importlib.metadata.version(RUNTIME_DISTRIBUTION) != selected_package:
     raise SystemExit('Expected exact selected pgserver package')
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
 with tempfile.TemporaryDirectory(prefix='truss-pgserver-layout-') as directory:

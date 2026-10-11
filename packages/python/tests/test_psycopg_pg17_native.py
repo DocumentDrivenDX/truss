@@ -1,10 +1,10 @@
-"""Explicit PG17.11 tuple; no installer or ordinary authority qualification."""
+"""Explicit PG18.6 tuple; no installer or ordinary authority qualification."""
 from truss import PsycopgProfile,adopt_psycopg_host,Ok,Error
 from test_psycopg_host_native import PsycopgHostNativeTests
 from test_catalog_prerequisites_psycopg_native import PrerequisitePsycopgNativeTests
 
 class Pg17AdoptionTests(PsycopgHostNativeTests):
-    selected_profile=PsycopgProfile(server=170011)
+    selected_profile=PsycopgProfile(server=180006)
 
     @classmethod
     def setUpClass(cls):
@@ -29,11 +29,11 @@ class Pg17AdoptionTests(PsycopgHostNativeTests):
 
     def test_selected_profile_retained(self):
         self.assertIs(self.host.profile,self.selected_profile)
-        self.assertEqual(self.connection.info.server_version,170011)
+        self.assertEqual(self.connection.info.server_version,180006)
 
     def test_wrong_profile_refuses_before_attachment(self):
         self.host.detach()
-        for profile in (PsycopgProfile(server=160015),PsycopgProfile(server=170010),PsycopgProfile(libpq=170011,server=170011),None):
+        for profile in (PsycopgProfile(server=160015),PsycopgProfile(server=180005),PsycopgProfile(libpq=170011,server=180006),None):
             with self.subTest(profile=profile),self.assertRaises(ValueError):adopt_psycopg_host(self.connection,profile=profile)
         self.host=adopt_psycopg_host(self.connection,profile=self.selected_profile)
 
@@ -55,7 +55,7 @@ class Pg17AdoptionTests(PsycopgHostNativeTests):
         with self.assertRaises(ValueError):adopt_psycopg_host(self.connection,profile=self.selected_profile)
 
 class Pg17PrerequisiteTests(PrerequisitePsycopgNativeTests):
-    selected_profile=PsycopgProfile(server=170011)
+    selected_profile=PsycopgProfile(server=180006)
 
 import unittest
 class Pg17FixtureFailureTests(unittest.TestCase):

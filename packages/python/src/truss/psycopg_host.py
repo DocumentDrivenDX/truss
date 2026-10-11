@@ -4,6 +4,7 @@ The caller owns the connection and outer transaction. Raw aliases must remain
 unused during toolkit operations. The host may settle its transaction between calls. This initial selected tuple is local evidence,
 not a claim of Lakebase, other libpq implementations or complete installation.
 """
+from ._runtime_profile import SERVER_VERSION_NUM
 from dataclasses import dataclass
 from threading import Lock, Event, Timer
 from time import monotonic
@@ -30,7 +31,7 @@ class PsycopgProfile:
     psycopg: str = '3.3.6'
     implementation: str = 'binary'
     libpq: int = 180006
-    server: int = 170011
+    server: int = SERVER_VERSION_NUM
 
 
 @dataclass
@@ -118,7 +119,7 @@ class PsycopgHost:
         if (type(profile) is not PsycopgProfile
                 or type(profile.psycopg) is not str or type(profile.implementation) is not str
                 or type(profile.libpq) is not int or type(profile.server) is not int
-                or profile not in (PsycopgProfile(), PsycopgProfile(server=170011))):
+                or profile not in (PsycopgProfile(), PsycopgProfile(server=SERVER_VERSION_NUM))):
             raise ValueError('Explicit supported psycopg profile required')
         if (type(connection) is not psycopg.Connection
                 or psycopg.__version__ != profile.psycopg or pq.__impl__ != profile.implementation

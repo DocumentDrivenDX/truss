@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Current installed package component suite; no complete engine qualification."""
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION, SERVER_VERSION_NUM
 from native_fixture import evidence_directory
 import hashlib
 import importlib.metadata
@@ -37,8 +38,8 @@ with zipfile.ZipFile(wheel) as archive:
   if original != (loaded/Path(name).name).read_bytes() or original != (root/'packages/python/src'/name).read_bytes():
    raise RuntimeError('Installed/wheel/source payload drift: '+name)
   modules.append({'path':name,'sha256':hashlib.sha256(original).hexdigest()})
-dependencies = {n:importlib.metadata.version(n) for n in ['truss-toolkit','pgserver','fasteners','platformdirs','psutil','weft-sql']}
-for name,version in {'pgserver':'0.1.4+truss.pg17.11','fasteners':'0.20','platformdirs':'4.12.4','psutil':'7.2.2'}.items():
+dependencies = {n:importlib.metadata.version(n) for n in ['truss-toolkit',RUNTIME_DISTRIBUTION,'fasteners','platformdirs','psutil','weft-sql']}
+for name,version in {RUNTIME_DISTRIBUTION:RUNTIME_VERSION,'fasteners':'0.20','platformdirs':'4.12.4','psutil':'7.2.2'}.items():
  if dependencies[name] != version: raise RuntimeError('Local dependency drift: '+name)
 expected_tests = unittest.defaultTestLoader.discover(str(root/'packages/python/tests')).countTestCases()
 environment = os.environ.copy()
@@ -85,7 +86,7 @@ if pin_inputs() != input_basis:
 worker_receipt = json.loads((evidence_directory()/'python-workers/receipt.json').read_text())
 if worker_receipt['tests'] != expected_tests or not worker_receipt['passed']:
  raise SystemExit('Incomplete installed module-worker coverage')
-receipt = {'scope':'Installed current wheel full existing component suite on PostgreSQL17.11; shared fresh databases/roles, isolated lifecycle fixtures and synthetic/pure controls',
+receipt = {'scope':f'Installed current wheel full existing component suite on PostgreSQL{SERVER_VERSION}; shared fresh databases/roles, isolated lifecycle fixtures and synthetic/pure controls',
  'workerReceipt':str((evidence_directory()/'python-workers/receipt.json').relative_to(root)),
  'workerResults':worker_receipt,'skippedTests':worker_receipt['skippedTests'],
  'wheelSha256':hashlib.sha256(wheel.read_bytes()).hexdigest(),'python':sys.version,
@@ -96,7 +97,7 @@ receipt = {'scope':'Installed current wheel full existing component suite on Pos
  'testSources':[{'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted((root/'packages/python/tests').glob('test_*.py'))],
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
  'completeEngineQualified':False,'installationQualified':False,'migrationExecutionQualified':False,
- 'platformScope':('macOS27 arm64 Python3.11 pgserver0.1.4+truss.pg17.11 PostgreSQL17.11' if corrected else 'macOS arm64 Python3.11 pgserver0.1.4 PostgreSQL16.2')+'; no process-crash or cross-platform qualification'}
+ 'platformScope':f'macOS arm64 Python3.11 {RUNTIME_DISTRIBUTION}=={RUNTIME_VERSION} PostgreSQL{SERVER_VERSION}'+'; no process-crash or cross-platform qualification'}
 with receipt_path.open('x') as output:
  output.write(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'modules':len(modules),'tests':expected_tests,'completeEngineQualified':False}))

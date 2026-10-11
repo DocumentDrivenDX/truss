@@ -1,4 +1,5 @@
 """Retain supported-driver epoch-cut component evidence; no backend acceptance."""
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION, SERVER_VERSION_NUM
 from pathlib import Path
 import hashlib,json,os,subprocess,sys,uuid,zipfile
 import psycopg

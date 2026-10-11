@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "postgresql": "18.6",
+  "checks": {
+    "interruptionPropagated": true,
+    "ownedRawDirectoryRemoved": true,
+    "ownedRawSocketAbsent": true,
+    "borrowedWorkerSurvives": true
+  },
+  "childReturncode": -2,
+  "stderr": "test_interrupt (test_owned_interrupt.OwnedInterruptTests.test_interrupt) ... Traceback (most recent call last):\n  File \"/private/tmp/truss-pg18-integration-20261011/scripts/run-python-test-module.py\", line 13, in <module>\n    runpy.run_module('unittest', run_name='__main__')\n  File \"<frozen runpy>\", line 229, in run_module\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/__main__.py\", line 18, in <module>\n    main(module=None)\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/main.py\", line 102, in __init__\n    self.runTests()\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/main.py\", line 274, in runTests\n    self.result = testRunner.run(self.test)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/runner.py\", line 217, in run\n    test(result)\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/suite.py\", line 84, in __call__\n    return self.run(*args, **kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/suite.py\", line 122, in run\n    test(result)\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/suite.py\", line 84, in __call__\n    return self.run(*args, **kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/suite.py\", line 122, in run\n    test(result)\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/case.py\", line 678, in __call__\n    return self.run(*args, **kwds)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/case.py\", line 623, in run\n    self._callTestMethod(testMethod)\n  File \"/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/case.py\", line 579, in _callTestMethod\n    if method() is not None:\n       ^^^^^^^^\n  File \"/private/tmp/truss-module-interrupt-912o5feb/test_owned_interrupt.py\", line 7, in test_interrupt\n    signal.pause()\nKeyboardInterrupt\n",
+  "producerSha256": "1d5e224abee66d8e9a16cea8cf1ab070efd54935b6a556ab93cff185321c1622",
+  "wrapperSha256": "3e8fb4756f3195f5e66c3b2005ef8d283d3aea215e247a627c89de9b0b70d0dc",
+  "scope": "SIGINT during an owned raw native fixture; confirmed shutdown and directory removal, unrelated socket worker stays usable"
+}

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Native PostgreSQL 17 timeout capability; not a complete deadline profile."""
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION, SERVER_VERSION_NUM
 from native_fixture import evidence_directory
 import hashlib
 import importlib.metadata
@@ -11,10 +12,10 @@ import tempfile
 from truss import LocalPostgres
 
 root = Path(__file__).resolve().parents[1]
-destination = evidence_directory() / 'pgserver-pg17.11-transaction-timeout.json'
+destination = evidence_directory() / f'pgserver-pg{SERVER_VERSION}-transaction-timeout.json'
 if destination.exists():
     raise RuntimeError('Receipt exists')
-if importlib.metadata.version('pgserver') != '0.1.4+truss.pg17.11':
+if importlib.metadata.version(RUNTIME_DISTRIBUTION) != RUNTIME_VERSION:
     raise RuntimeError('Pinned PostgreSQL 17 candidate required')
 with tempfile.TemporaryDirectory(prefix='truss-pg17-timeout-') as directory:
     with LocalPostgres(Path(directory) / 'data') as runtime:
@@ -35,8 +36,8 @@ with tempfile.TemporaryDirectory(prefix='truss-pg17-timeout-') as directory:
     stopped = not (Path(directory) / 'data/postmaster.pid').exists()
     if not stopped:
         raise RuntimeError('Owned server stop unconfirmed')
-receipt = {'scope': 'Native setting availability and active transaction connection termination on local PostgreSQL 17.11',
-           'serverVersion': version, 'pgserver': importlib.metadata.version('pgserver'),
+receipt = {'scope': f'Native setting availability and active transaction connection termination on local PostgreSQL {SERVER_VERSION}',
+           'serverVersion': version, 'pgserver': importlib.metadata.version(RUNTIME_DISTRIBUTION),
            'expectedDefaults': expected, 'observedDefaults': settings,
            'terminationSql': sql, 'returncode': result.returncode,
            'stdout': result.stdout, 'stderr': result.stderr, 'freshConnectionPassed': True,

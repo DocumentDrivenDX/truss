@@ -1,0 +1,171 @@
+{
+  "scope": "Two concurrent owned PostgreSQL18.6 Unix-socket workers with TCP5432 occupied; native cleanup and injected failure controls",
+  "checks": [
+    {
+      "case": "two-workers-start-with-tcp5432-occupied",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "case": "distinct-worker-socket-directories",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "case": "tcp-listening-disabled",
+      "expected": [
+        "",
+        ""
+      ],
+      "observed": [
+        "",
+        ""
+      ]
+    },
+    {
+      "case": "same-worker-overlap-refuses",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "case": "same-table-names-isolated",
+      "expected": [
+        [
+          "worker-a"
+        ]
+      ],
+      "observed": [
+        [
+          "worker-a"
+        ]
+      ]
+    },
+    {
+      "case": "other-worker-content-isolated",
+      "expected": [
+        [
+          "worker-b"
+        ]
+      ],
+      "observed": [
+        [
+          "worker-b"
+        ]
+      ]
+    },
+    {
+      "case": "fresh-owner-roles-distinct",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "case": "leaked-fixture-session-terminated",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "case": "other-worker-session-survives-cleanup",
+      "expected": [
+        [
+          1
+        ]
+      ],
+      "observed": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "case": "terminated-client-transport-closed",
+      "expected": null,
+      "observed": null
+    },
+    {
+      "case": "both-worker-inventories-restored",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "case": "next-database-has-no-prior-table",
+      "expected": [
+        [
+          null
+        ]
+      ],
+      "observed": [
+        [
+          null
+        ]
+      ]
+    },
+    {
+      "case": "previous-role-removed",
+      "expected": [
+        [
+          0
+        ]
+      ],
+      "observed": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "case": "setup-failure-propagates",
+      "expected": "injected create database failure",
+      "observed": "injected create database failure"
+    },
+    {
+      "case": "partial-setup-role-compensated",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "case": "cleanup-failure-propagates",
+      "expected": "injected drop failure",
+      "observed": "injected drop failure"
+    },
+    {
+      "case": "poisoned-worker-refuses-next-fixture",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "case": "fixture-process-exit-injected",
+      "expected": 17,
+      "observed": 17
+    },
+    {
+      "case": "process-death-leak-detected",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "case": "dead-producer-worker-refuses-reuse",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "case": "owned-worker-directories-removed-after-stop",
+      "expected": [
+        false,
+        false
+      ],
+      "observed": [
+        false,
+        false
+      ]
+    }
+  ],
+  "tcp5432": "owned-test-listener",
+  "workerPostmasterPids": [
+    40990,
+    41065
+  ],
+  "passed": true,
+  "producerSha256": "bc6558012e1d20bd16e92875ee4d68bd362886754618061ba120f14e28fefaa7",
+  "fixtureSha256": "8a446601062553f423e0bc93a11225b5c2d3cb887ae0b6b7de091fc0cc6b66d0",
+  "completeRuntimeQualified": false
+}

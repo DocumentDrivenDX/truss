@@ -1,3 +1,4 @@
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION
 """Actual 17-helper native/ACL inventory. Not complete protected installation."""
 import hashlib, importlib.metadata, json, sys, tempfile
 from pathlib import Path
@@ -10,7 +11,7 @@ if len(sys.argv)!=2 or Path(sys.argv[1]).name!=sys.argv[1] or not sys.argv[1].en
  raise SystemExit('Fresh receipt basename required')
 out=evidence_directory()/sys.argv[1]
 if out.exists(): raise SystemExit('Receipt exists')
-if importlib.metadata.version('pgserver') not in ('0.1.4+truss.pg16.15','0.1.4+truss.pg17.11') or importlib.metadata.version('pg8000')!='1.31.5':
+if importlib.metadata.version(RUNTIME_DISTRIBUTION) != RUNTIME_VERSION or importlib.metadata.version('pg8000')!='1.31.5':
  raise SystemExit('Original local runtime and driver required')
 manifest_path='docs/helix/02-design/contracts/capacity-component-source-handoff-v0.1.proposal.json'
 manifest=json.loads((ROOT/manifest_path).read_bytes())
@@ -30,7 +31,7 @@ with tempfile.TemporaryDirectory(prefix='truss-callable-inventory-') as director
   def connect(user):
    c=pg8000.native.Connection(user=user,database=uri.path.lstrip('/'),unix_sock=str(Path(host)/f'.s.PGSQL.{port}'),ssl_context=False,timeout=5); connections.append(c); return c
   admin=connect('postgres'); version=admin.run('SHOW server_version')[0][0]
-  if version != {'0.1.4+truss.pg16.15':'16.15','0.1.4+truss.pg17.11':'17.11'}[importlib.metadata.version('pgserver')]: raise ValueError('Native version mismatch')
+  if version != SERVER_VERSION: raise ValueError('Native version mismatch')
   admin.run(frozen[paths[1]].decode()); admin.run(frozen[paths[2]].decode())
   init=frozen[paths[3]].decode().replace('$1::bytea',':layout').replace('$2::bytea',':resource')
   admin.run(init,layout=frozen[paths[1]],resource=frozen[paths[4]])

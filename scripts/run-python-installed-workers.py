@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+from truss._runtime_profile import SERVER_VERSION
 import threading
 import time
 from native_fixture import WorkerCluster, evidence_directory
@@ -96,7 +97,7 @@ receipt = {'passed': passed, 'complete': complete, 'tests': tests, 'workers': wo
            'skippedTests': [skip for outcome in outcomes for skip in outcome['skippedTests']],
            'sourceSha256': {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
                             for path in [Path(__file__), ROOT / 'scripts/native_fixture.py', ROOT / 'scripts/run-python-test-module.py', *MODULES]},
-           'expectedModuleCount': len(MODULES), 'postgresqlVersion': '17.11',
+           'expectedModuleCount': len(MODULES), 'postgresqlVersion': SERVER_VERSION,
            'lifecycleIsolation': 'Direct LocalPostgres and raw startup/shutdown fixtures retain separate owned clusters'}
 (DESTINATION / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
 print(f'Ran {tests} tests across installed module workers', file=sys.stderr)

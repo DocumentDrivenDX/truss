@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Rollback-only populated immutable-guard component checks; no installer publication."""
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION, SERVER_VERSION_NUM
 import argparse
 import hashlib
 import importlib.metadata
@@ -15,9 +16,9 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--corrected-pgserver', action='store_true')
 args = parser.parse_args()
 args.corrected_pgserver = True  # Historical flag remains a compatibility spelling.
-selected_package = '0.1.4+truss.pg17.11'
-selected_server = '17.11'
-receipt_name = ('pgserver-pg17.11-populated-guard-component.json' if args.corrected_pgserver
+selected_package = RUNTIME_VERSION
+selected_server = SERVER_VERSION
+receipt_name = (f'pgserver-pg{SERVER_VERSION}-populated-guard-component.json' if args.corrected_pgserver
                 else 'pgserver-populated-guard-component.json')
 root = Path(__file__).resolve().parents[1]
 paths = [
@@ -29,7 +30,7 @@ paths = [
  'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql',
 ]
 originals = [(root / p).read_bytes() for p in paths]
-assert importlib.metadata.version('pgserver') == selected_package
+assert importlib.metadata.version(RUNTIME_DISTRIBUTION) == selected_package
 psql = Path(str(importlib.resources.files('pgserver'))) / 'pginstall/bin/psql'
 probe = '''
 DO $$

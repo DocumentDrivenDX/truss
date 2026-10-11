@@ -10,15 +10,16 @@ import shutil
 import signal
 import subprocess
 import sys
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION
 import tempfile
 import truss.cli
 root = Path(__file__).resolve().parents[1]
 if sys.argv[1:] not in ([], ['--corrected-pgserver']):
  raise SystemExit('usage: check-python-installed-cli-signals.py [--corrected-pgserver]')
 corrected = True  # All live executions select17.11.
-expected_package = '0.1.4+truss.pg17.11'
-expected_server = '17.11'
-if importlib.metadata.version('pgserver') != expected_package:
+expected_package = RUNTIME_VERSION
+expected_server = SERVER_VERSION
+if importlib.metadata.version(RUNTIME_DISTRIBUTION) != expected_package:
  raise RuntimeError('Selected original runtime package mismatch')
 loaded = Path(truss.cli.__file__).resolve()
 if not loaded.is_relative_to(Path(sys.prefix).resolve()) or loaded.is_relative_to(root):
@@ -50,13 +51,13 @@ for signum in [signal.SIGTERM,signal.SIGINT]:
   # This is only our recorded child command; never terminate other processes.
   if process.poll() is None: process.terminate()
   raise
-receipt = {'scope':'Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on '+('macOS27 arm64 PostgreSQL17.11' if corrected else 'macOS arm64 PostgreSQL16.2')+'; no crash/installer qualification',
+receipt = {'scope':'Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on '+('macOS arm64 PostgreSQL' + SERVER_VERSION)+'; no crash/installer qualification',
  'correctedPgserverCandidate':corrected,
  'loadedCli':str(loaded),'cliSha256':hashlib.sha256(loaded.read_bytes()).hexdigest(),
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'runs':runs,
  'originalCustody':'Signals sent only to the subprocess PIDs started by this probe',
  'completeEngineQualified':False,'processCrashQualified':False}
-filename = 'python-pg17.11-runtime-cli-signals.json' if corrected else 'python-installed-cli-signals.json'
+filename = 'python-pg' + SERVER_VERSION + '-runtime-cli-signals.json'
 (evidence_directory()/filename).write_text(json.dumps(receipt,indent=2)+'\n')
 shutil.rmtree(parent)
 print(json.dumps({'signals':[r['signal'] for r in runs],'completeEngineQualified':False}))

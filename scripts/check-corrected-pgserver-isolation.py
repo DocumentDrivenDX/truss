@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Historical isolation + nested-definer experiment; not current installation."""
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION, SERVER_VERSION_NUM
 import hashlib
 import importlib.metadata
 import importlib.resources
@@ -40,7 +41,7 @@ with tempfile.TemporaryDirectory(prefix='truss-corrected-isolation-') as directo
             return subprocess.check_output([str(psql), server.get_uri(), '-X', '-q', '-A', '-t',
                 '-v', 'ON_ERROR_STOP=1'], input=sql, text=True, timeout=60).strip()
         version = query('SHOW server_version;')
-        if version != '17.11' or importlib.metadata.version('pgserver') != '0.1.4+truss.pg17.11':
+        if version != SERVER_VERSION or importlib.metadata.version(RUNTIME_DISTRIBUTION) != RUNTIME_VERSION:
             raise RuntimeError('Original corrected candidate required')
         output = query('BEGIN;\n' + '\n'.join(data.decode() for data in originals) + fixture + '\nROLLBACK;')
         lines = [line for line in output.splitlines() if line]
@@ -57,12 +58,12 @@ with tempfile.TemporaryDirectory(prefix='truss-corrected-isolation-') as directo
     finally:
         server.cleanup()
 receipt = {'scope': 'Original historical0.2 module isolation and five nested non-superuser definer observations on corrected candidate only',
-    'serverVersion': version, 'pgserver': importlib.metadata.version('pgserver'),
+    'serverVersion': version, 'pgserver': importlib.metadata.version(RUNTIME_DISTRIBUTION),
     'historicalCheckPassed': True, 'observed': observed, 'expected': expected,
     'preparedObservationCount': 3, 'unpreparedObservationCount': 2,
     'fixtureSql': fixture, 'fixtureSqlSha256': hashlib.sha256(fixture.encode()).hexdigest(),
     'sources': [{'path': path, 'sha256': hashlib.sha256(data).hexdigest()} for path, data in zip(paths, originals)],
     'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     'current016InstallationQualified': False, 'r4Qualified': False, 'r5Qualified': False}
-(evidence_directory() / 'pgserver-pg17.11-isolation.json').write_text(json.dumps(receipt, indent=2) + '\n')
+(evidence_directory() / f'pgserver-pg{SERVER_VERSION}-isolation.json').write_text(json.dumps(receipt, indent=2) + '\n')
 print(json.dumps({'historicalCheckPassed': True, 'nestedObservations': 5, 'r4Qualified': False}))

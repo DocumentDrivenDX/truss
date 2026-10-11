@@ -38,6 +38,15 @@ ddx:
 
 # Truss build plan
 
+## PostgreSQL18.6 consumer delivery — owner direction 2026-10-11
+
+Consume the reusable public `pgserver-pg18==18.6.0` wheel. The build repository
+owns the reusable build/release pipeline; Truss owns its selected runtime profile,
+independent installation-definition compilation and focused installed-wheel
+consumer checks. Shared worker and isolated lifecycle custody remain required.
+See the [runtime checkpoint](local-runtime-installation-migration-plan.md#current-embedded-runtime-delivery--owner-decision-2026-10-11).
+Historical17.11 receipts do not establish18.6 corpus or Lakebase acceptance.
+
 ## Current driver/resource delivery gate — owner decision 2026-10-11
 
 Implement and qualify stock psycopg 3 as the Python baseline under ADR-003. First publish a supported-API connection/transaction adoption design with a pinned driver implementation/libpq/server/mode tuple; then run the TP-001 baseline resource and STP-044 semantic schedules through the installed consumer path. No pg8000 dependency, custom frame scanner, private receive/parser hook or exact backing-allocation ledger is required for this path. Historical pg8000 and strict transport receipts remain component evidence only.
