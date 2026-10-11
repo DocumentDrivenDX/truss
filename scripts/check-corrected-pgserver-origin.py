@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 from urllib.parse import urlparse, urlunparse
 import pgserver
+from native_fixture import get_server, evidence_directory
 
 root=Path(__file__).resolve().parents[1]
 paths=['docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
@@ -28,7 +29,7 @@ GRANT SELECT,INSERT ON truss.row_home_operation TO truss_origin_person,truss_ori
 GRANT EXECUTE ON FUNCTION truss.runtime_admit_operation_with_asserted_origin(text,bytea,bytea,bytea,bytea,bytea,bytea,bytea,bytea) TO truss_origin_person,truss_origin_role;
 """
 with tempfile.TemporaryDirectory(prefix='truss-origin-capture-') as directory:
- server=pgserver.get_server(Path(directory)/'data',cleanup_mode='stop')
+ server=get_server(Path(directory)/'data',cleanup_mode='stop')
  try:
   uri=server.get_uri(); parsed=urlparse(uri)
   if '@' not in parsed.netloc:raise RuntimeError('Expected original local URI user component')
@@ -36,7 +37,7 @@ with tempfile.TemporaryDirectory(prefix='truss-origin-capture-') as directory:
   def query(sql,connection_uri=uri):
    return subprocess.check_output([str(psql),connection_uri,'-X','-q','-A','-t','-v','ON_ERROR_STOP=1'],input=sql,text=True,timeout=60).strip()
   version=query('SHOW server_version;')
-  if version!='16.15' or importlib.metadata.version('pgserver')!='0.1.4+truss.pg16.15':raise RuntimeError('Corrected candidate required')
+  if version!='17.11' or importlib.metadata.version('pgserver')!='0.1.4+truss.pg17.11':raise RuntimeError('Corrected candidate required')
   query('BEGIN;\n'+';\n'.join(data.decode() for data in originals)+';\n'+setup+'\nCOMMIT;')
   captured=[]
   for role_command in ['', 'SET ROLE truss_origin_role;']:
@@ -61,5 +62,5 @@ receipt={'scope':'Two native0.16 asserted-origin captures from an actual non-sup
  'Fixture asserted/profile bytes are not original admitted UMF/application evidence',
  'No public Python mutation, journal/action correspondence or completion proof',
  'Original row-derived ordinal allocator remains incompatible']}
-(root/'docs/helix/04-build/evidence/design-audit/pgserver-corrected-origin.json').write_text(json.dumps(receipt,indent=2)+'\n')
+(evidence_directory()/'pgserver-pg17.11-origin.json').write_text(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({'authenticatedCallerCaptures':2,'serverVersion':version,'r5Qualified':False}))

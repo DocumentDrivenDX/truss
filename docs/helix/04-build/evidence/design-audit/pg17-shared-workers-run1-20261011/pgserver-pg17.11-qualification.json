@@ -1,0 +1,373 @@
+{
+  "scope": "Shared owned Unix-socket workers with fresh database/role fixtures; isolated lifecycle checks; selected local PostgreSQL17.11 components only",
+  "pgserver": "0.1.4+truss.pg17.11",
+  "postgresqlVersion": "17.11",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "trussWheelSha256": "2b6676952dd6ef19d6b26e75ea0a046c3706afa1d2e526ecf136c94021924fc9",
+  "outcomes": [
+    {
+      "case": "installed-suite",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-python-installed-suite.py",
+        "/private/tmp/truss-pg17-toolkit-wheel-20261011/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+        "--corrected-pgserver",
+        "python-pg17.11-installed-suite.json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 21.061911792028695,
+      "lane": "isolated-lifecycle",
+      "workerBaselineRestored": null,
+      "producerSha256": "cc87dbe89c4858754a31f581bfc472f34c4fd716ea265abd09b4f0b6ce600001",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-installed-suite.log.gz",
+      "logSha256": "494ac6be69c2c474d86685fb641245071679666057db4d056ff2227c6d1c5ab8",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/python-pg17.11-installed-suite.json",
+      "receiptSha256": "fef763eb532f1f69d1633235841457d73c82a0c0904b1e35bd63e3172e5fa8cf"
+    },
+    {
+      "case": "cli-signals",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-python-installed-cli-signals.py",
+        "--corrected-pgserver"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 8.311456833034754,
+      "lane": "isolated-lifecycle",
+      "workerBaselineRestored": null,
+      "producerSha256": "a198943b5e3bacf362480f074a14b1aff75ee90bb24fbe869a515bd930dfa401",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-cli-signals.log.gz",
+      "logSha256": "75169ea155b8c82fc2a0454d909be047269792dd3370cb27a50c1ad55fdfa788",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/python-pg17.11-runtime-cli-signals.json",
+      "receiptSha256": "c0f3bf1c22f5a63e2dea5397a91eee61d6b450abda37fa2302e256b2432197f3"
+    },
+    {
+      "case": "transaction-timeout",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-pg17-transaction-timeout.py"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 4.008791125030257,
+      "lane": "isolated-lifecycle",
+      "workerBaselineRestored": null,
+      "producerSha256": "9e764d02f50bee8aa0c31c5a02c698e2bc043a923ac54b7c90fc5bb80a022680",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-transaction-timeout.log.gz",
+      "logSha256": "05f111bd8e8e485c8b2d709bbfb931c3090168f35e67b74b13472a1232be294c",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-transaction-timeout.json",
+      "receiptSha256": "9f7c7ffe1817e1e7ecc552be63508bb7e7aa8591a2de73ede2a7d683dd6f280c"
+    },
+    {
+      "case": "caller-reset",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-pgserver-caller-reset.py",
+        "--require-matches",
+        "--receipt",
+        "pgserver-pg17.11-caller-reset.json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.7179549160646275,
+      "lane": "shared-worker",
+      "workerBaselineRestored": true,
+      "producerSha256": "5e423b681f6816835cfbed91a5db08c2cffd8858d43980dd7e9a5f8510bb4ba4",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-caller-reset.log.gz",
+      "logSha256": "1784188a985e6b23598ae75700226bd70bac63d7c4578b345c227f917a55f2ce",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-caller-reset.json",
+      "receiptSha256": "a311023275afc1f49b6f25dafdb514da36f5cfe7900e6d7daf6ea5eaed5d07f9"
+    },
+    {
+      "case": "origin",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-corrected-pgserver-origin.py"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 1.2892285409616306,
+      "lane": "shared-worker",
+      "workerBaselineRestored": true,
+      "producerSha256": "13f46291bc4dfeedf3e2dde5dec53286b1e309f8569a27d0b13e3f590cd973b8",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-origin.log.gz",
+      "logSha256": "1bc69793eccfa8bfbe7045e60999cb0d25c6598444ef535e6379a6d6df45391e",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-origin.json",
+      "receiptSha256": "33269c4d88d8db3ddf6d21bf33f174bdce39b4e9a3900734f1e30b4096585bfe"
+    },
+    {
+      "case": "populated-guards",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-pgserver-populated-guards.py",
+        "--corrected-pgserver"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 1.277424208004959,
+      "lane": "shared-worker",
+      "workerBaselineRestored": true,
+      "producerSha256": "be213727e80e3677f15ef10323444ca170cf95bb2a8c3601c2994f47184fd1e4",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-populated-guards.log.gz",
+      "logSha256": "c05a3384523969544b09c32688828b41e0818e11c8daaefe2a836e7421dd49df",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-populated-guard-component.json",
+      "receiptSha256": "892f97127bf96bc44269ca70df7dcf48a09cd5315dbbf9181a93d1060ebe672f"
+    },
+    {
+      "case": "issued-asserted",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-issued-operation-ordinal.py",
+        "asserted",
+        "pgserver-pg17.11-issued-asserted-native.json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 1.9982264169957489,
+      "lane": "shared-worker",
+      "workerBaselineRestored": true,
+      "producerSha256": "a7c4560cb1b1c7e2efa54c8f288b65aa5aa0cb65d3c37642b9753ec4456cf5f7",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-issued-asserted.log.gz",
+      "logSha256": "a2adc8c4ee17b7740236e30e6b115031e1e8f77384934a21fc48531c42b43230",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-issued-asserted-native.json",
+      "receiptSha256": "691d1a8079849a08cab9fa9ffd633fccf7e18a8001ac23e4992e58c70ef65f4b"
+    },
+    {
+      "case": "issued-configuration",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-issued-operation-ordinal.py",
+        "configuration",
+        "pgserver-pg17.11-issued-configuration-native.json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 2.0144994169240817,
+      "lane": "shared-worker",
+      "workerBaselineRestored": true,
+      "producerSha256": "a7c4560cb1b1c7e2efa54c8f288b65aa5aa0cb65d3c37642b9753ec4456cf5f7",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-issued-configuration.log.gz",
+      "logSha256": "4aa12ab2196498d5873e2133103cee721b4602beec942dc30d8ceccf1f800838",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-issued-configuration-native.json",
+      "receiptSha256": "920254b057de38ebee5c3fd088482446773ad4e964d638cacd5ee7199628d03d"
+    },
+    {
+      "case": "private-callable-inventory",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "docs/helix/04-build/evidence/design-audit/check_private_callable_inventory_native.py",
+        "pgserver-pg17.11-private-callable-inventory-native.json"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "elapsedSeconds": 1.273121083038859,
+      "lane": "shared-worker",
+      "workerBaselineRestored": true,
+      "producerSha256": "0ff815fbf18b41458558dde90e4fa31096f5b2ebd2e7229d0b27973bae8b04d1",
+      "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-private-callable-inventory.log.gz",
+      "logSha256": "462cc1bdacf011421776361497bdb7a2473b64acc531368b3fff7599b5a018d9",
+      "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-private-callable-inventory-native.json",
+      "receiptSha256": "7de252f9ea0c7c3bf7ac21b15783e7fa67a96d7963980f2ad05922b7514c5994"
+    }
+  ],
+  "workers": [
+    {
+      "worker": 0,
+      "outcomes": [
+        {
+          "case": "caller-reset",
+          "command": [
+            "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+            "scripts/check-pgserver-caller-reset.py",
+            "--require-matches",
+            "--receipt",
+            "pgserver-pg17.11-caller-reset.json"
+          ],
+          "returncode": 0,
+          "passed": true,
+          "elapsedSeconds": 0.7179549160646275,
+          "lane": "shared-worker",
+          "workerBaselineRestored": true,
+          "producerSha256": "5e423b681f6816835cfbed91a5db08c2cffd8858d43980dd7e9a5f8510bb4ba4",
+          "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-caller-reset.log.gz",
+          "logSha256": "1784188a985e6b23598ae75700226bd70bac63d7c4578b345c227f917a55f2ce",
+          "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-caller-reset.json",
+          "receiptSha256": "a311023275afc1f49b6f25dafdb514da36f5cfe7900e6d7daf6ea5eaed5d07f9"
+        },
+        {
+          "case": "origin",
+          "command": [
+            "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+            "scripts/check-corrected-pgserver-origin.py"
+          ],
+          "returncode": 0,
+          "passed": true,
+          "elapsedSeconds": 1.2892285409616306,
+          "lane": "shared-worker",
+          "workerBaselineRestored": true,
+          "producerSha256": "13f46291bc4dfeedf3e2dde5dec53286b1e309f8569a27d0b13e3f590cd973b8",
+          "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-origin.log.gz",
+          "logSha256": "1bc69793eccfa8bfbe7045e60999cb0d25c6598444ef535e6379a6d6df45391e",
+          "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-origin.json",
+          "receiptSha256": "33269c4d88d8db3ddf6d21bf33f174bdce39b4e9a3900734f1e30b4096585bfe"
+        },
+        {
+          "case": "populated-guards",
+          "command": [
+            "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+            "scripts/check-pgserver-populated-guards.py",
+            "--corrected-pgserver"
+          ],
+          "returncode": 0,
+          "passed": true,
+          "elapsedSeconds": 1.277424208004959,
+          "lane": "shared-worker",
+          "workerBaselineRestored": true,
+          "producerSha256": "be213727e80e3677f15ef10323444ca170cf95bb2a8c3601c2994f47184fd1e4",
+          "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-populated-guards.log.gz",
+          "logSha256": "c05a3384523969544b09c32688828b41e0818e11c8daaefe2a836e7421dd49df",
+          "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-populated-guard-component.json",
+          "receiptSha256": "892f97127bf96bc44269ca70df7dcf48a09cd5315dbbf9181a93d1060ebe672f"
+        },
+        {
+          "case": "issued-asserted",
+          "command": [
+            "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+            "scripts/check-issued-operation-ordinal.py",
+            "asserted",
+            "pgserver-pg17.11-issued-asserted-native.json"
+          ],
+          "returncode": 0,
+          "passed": true,
+          "elapsedSeconds": 1.9982264169957489,
+          "lane": "shared-worker",
+          "workerBaselineRestored": true,
+          "producerSha256": "a7c4560cb1b1c7e2efa54c8f288b65aa5aa0cb65d3c37642b9753ec4456cf5f7",
+          "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-issued-asserted.log.gz",
+          "logSha256": "a2adc8c4ee17b7740236e30e6b115031e1e8f77384934a21fc48531c42b43230",
+          "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-issued-asserted-native.json",
+          "receiptSha256": "691d1a8079849a08cab9fa9ffd633fccf7e18a8001ac23e4992e58c70ef65f4b"
+        },
+        {
+          "case": "issued-configuration",
+          "command": [
+            "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+            "scripts/check-issued-operation-ordinal.py",
+            "configuration",
+            "pgserver-pg17.11-issued-configuration-native.json"
+          ],
+          "returncode": 0,
+          "passed": true,
+          "elapsedSeconds": 2.0144994169240817,
+          "lane": "shared-worker",
+          "workerBaselineRestored": true,
+          "producerSha256": "a7c4560cb1b1c7e2efa54c8f288b65aa5aa0cb65d3c37642b9753ec4456cf5f7",
+          "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-issued-configuration.log.gz",
+          "logSha256": "4aa12ab2196498d5873e2133103cee721b4602beec942dc30d8ceccf1f800838",
+          "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-issued-configuration-native.json",
+          "receiptSha256": "920254b057de38ebee5c3fd088482446773ad4e964d638cacd5ee7199628d03d"
+        },
+        {
+          "case": "private-callable-inventory",
+          "command": [
+            "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+            "docs/helix/04-build/evidence/design-audit/check_private_callable_inventory_native.py",
+            "pgserver-pg17.11-private-callable-inventory-native.json"
+          ],
+          "returncode": 0,
+          "passed": true,
+          "elapsedSeconds": 1.273121083038859,
+          "lane": "shared-worker",
+          "workerBaselineRestored": true,
+          "producerSha256": "0ff815fbf18b41458558dde90e4fa31096f5b2ebd2e7229d0b27973bae8b04d1",
+          "log": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-private-callable-inventory.log.gz",
+          "logSha256": "462cc1bdacf011421776361497bdb7a2473b64acc531368b3fff7599b5a018d9",
+          "receipt": "docs/helix/04-build/evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-private-callable-inventory-native.json",
+          "receiptSha256": "7de252f9ea0c7c3bf7ac21b15783e7fa67a96d7963980f2ad05922b7514c5994"
+        }
+      ],
+      "stopped": true,
+      "readySeconds": 3.748581749969162,
+      "settings": {
+        "listen_addresses": "",
+        "port": "5432",
+        "server_version": "17.11",
+        "unix_socket_directories": "/private/tmp/truss-nw-p0jvc9iy/data"
+      },
+      "uri": "postgresql://postgres:@/postgres?host=/private/tmp/truss-nw-p0jvc9iy/data",
+      "postmasterPid": 78591,
+      "fixtures": [
+        {
+          "database": "truss_test_a54e7c10845c4a829ea526de7e1ec6f6",
+          "ownerRole": "truss_owner_fa660907f4ea472bb2bc52c7da5991d0",
+          "removedRoles": [
+            "truss_owner_fa660907f4ea472bb2bc52c7da5991d0",
+            "truss_probe_a",
+            "truss_probe_b"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_9a6c4972cbc54d7a8291b764a466bcfa",
+          "ownerRole": "truss_owner_e9a0d995be0e494a8eb139ee6e1ca80a",
+          "removedRoles": [
+            "truss_origin_person",
+            "truss_origin_role",
+            "truss_owner_e9a0d995be0e494a8eb139ee6e1ca80a"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_b9e883e1bfbb4dafaeb6bd9df100e0a8",
+          "ownerRole": "truss_owner_329a7d4f7972413bbe3b76f2bb3f3d45",
+          "removedRoles": [
+            "truss_owner_329a7d4f7972413bbe3b76f2bb3f3d45"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_d2594cfa196f47939c0754fa83ea8310",
+          "ownerRole": "truss_owner_ec0569c673bb4997b9d508b1c6fc261f",
+          "removedRoles": [
+            "truss_owner_ec0569c673bb4997b9d508b1c6fc261f"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_4d116280fb444cf2bb9b93b2d8825d29",
+          "ownerRole": "truss_owner_f5167f6840ac46c5aad258369168b4ae",
+          "removedRoles": [
+            "truss_owner_f5167f6840ac46c5aad258369168b4ae"
+          ],
+          "baselineRestored": true
+        },
+        {
+          "database": "truss_test_419666856d614fd2ad1b69e6a5ddb376",
+          "ownerRole": "truss_owner_09329cc4ff3f43678875ed38fa9b9dc6",
+          "removedRoles": [
+            "inventory_actor",
+            "inventory_grantee",
+            "truss_owner_09329cc4ff3f43678875ed38fa9b9dc6"
+          ],
+          "baselineRestored": true
+        }
+      ]
+    },
+    {
+      "worker": 1,
+      "outcomes": [],
+      "stopped": false,
+      "error": "Possible startup process remains; directory retained"
+    }
+  ],
+  "expectedCaseCount": 15,
+  "producerInputsUnchanged": true,
+  "passed": false,
+  "producerSha256": "efc2a307b9dbefcda5bff7da3b030b2c203050e541406bae95bca48dfb7b78d7",
+  "fixtureSha256": "fc314f9331bbb146a1cea2d28c24b1cea8fc7a82aa18ed21d74938b1bf07e559",
+  "completeRuntimeQualified": false,
+  "lakebaseQualified": false,
+  "published": false
+}

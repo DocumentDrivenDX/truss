@@ -20,14 +20,16 @@ from pg8000_original_admission_candidate import OriginalAdmissionProducer,Native
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[4]
+sys.path.insert(0, str(ROOT / 'scripts'))
+from native_fixture import get_server, evidence_directory
 if len(sys.argv)!=2 or Path(sys.argv[1]).name!=sys.argv[1] or not sys.argv[1].endswith('.json'):
     raise SystemExit('Supply fresh receipt basename')
-destination=HERE/sys.argv[1]
+destination=evidence_directory()/sys.argv[1]
 if destination.exists():raise SystemExit('Original receipt exists')
 CORE_SHA='cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26'
 if importlib.metadata.version('pg8000')!='1.31.5' or hashlib.sha256(Path(pg8000.core.__file__).read_bytes()).hexdigest()!=CORE_SHA:
     raise SystemExit('Original pinned driver required')
-if importlib.metadata.version('pgserver')!='0.1.4+truss.pg16.15':raise SystemExit('Corrected pgserver required')
+if importlib.metadata.version('pgserver') not in ('0.1.4+truss.pg16.15','0.1.4+truss.pg17.11'):raise SystemExit('Corrected pgserver required')
 paths=['docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
  'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql',
  'packages/postgresql/native/source-epoch-lock.sql',
@@ -43,7 +45,7 @@ def expect(family,name,expected,observed):
     observations.append({'family':family,'id':name,'expected':expected,'observed':observed})
 def cells(result):return [[None if v is None else v.decode('ascii') for v in row] for row in result.rows]
 with tempfile.TemporaryDirectory(prefix='truss-four-family-admission-') as directory:
-    server=pgserver.get_server(Path(directory)/'data',cleanup_mode='stop')
+    server=get_server(Path(directory)/'data',cleanup_mode='stop')
     try:
         psql=Path(pgserver.__file__).parent/'pginstall/bin/psql'
         setup=originals[paths[0]].decode()+';\n'+originals[paths[1]].decode()+';\n'+originals[paths[2]].decode()+';\n'
@@ -64,9 +66,9 @@ with tempfile.TemporaryDirectory(prefix='truss-four-family-admission-') as direc
             supplied.file.receiver=AccountedReceiver(transport,account,producer,
                 frame_bytes=1048576,total_bytes=33554432,messages=512,reads=50000)
             supplied.file.remaining_writes=512;supplied.file.remaining_send_bytes=16777216
-            connection=OriginalControlConnection(user='postgres',database='postgres',sock=supplied,ssl_context=False,startup_params={'client_encoding':'UTF8'})
+            connection=OriginalControlConnection(user='postgres',database=uri.path.lstrip('/'),sock=supplied,ssl_context=False,startup_params={'client_encoding':'UTF8'})
             version=connection.parameter_statuses['server_version']
-            if not version.startswith('16.15'):raise ValueError('Actual corrected native version required')
+            if version != {'0.1.4+truss.pg16.15':'16.15','0.1.4+truss.pg17.11':'17.11'}[importlib.metadata.version('pgserver')]:raise ValueError('Actual corrected native version required')
             connection.execute_simple('BEGIN')
             actual=cells(connection.execute_simple("SELECT pg_catalog.pg_current_xact_id()::text,current_user::text,session_user::text,current_database()::text,pg_backend_pid()::text,(SELECT oid::text FROM pg_catalog.pg_roles WHERE rolname=current_user),(SELECT oid::text FROM pg_catalog.pg_roles WHERE rolname=session_user)"))[0]
             xid,actor,session_actor,database,pid,actor_oid,session_oid=actual

@@ -40,9 +40,10 @@ provisional may change when its validation measurements report.
   infrequent migrations. The host supplies the PostgreSQL connection and operates
   any pool. Stale admission returns one refusal without internal retries. Catalog
   identity is document-qualified. Consult the current installation/migration plan
-  for historical PostgreSQL16.2 evidence, the corrected private PostgreSQL16.15
-  integration candidate and remaining complete-runtime gates. The corrected wheel
-  is not yet a published shipped default.
+  for historical PostgreSQL16.2 evidence, the private PostgreSQL17.11
+  integration candidate and remaining complete-runtime gates. The private17.11 wheel
+  is the exact local dependency pin; it remains unpublished. See the2026-10-11
+  runtime checkpoint and preserve older16.15 receipts as historical evidence.
 
 - [ADR-001](docs/helix/02-design/adr/ADR-001-language-and-portable-core.md):
   TypeScript (strict, ES modules), with Bun for development, tests and tooling.
@@ -82,7 +83,7 @@ provisional may change when its validation measurements report.
     `target_type` edge-index include.
 
 Current original-driver evidence composes all four issued admission families with
-one-use Python custody and nonrewinding ordinals on PostgreSQL16.15. Its synthetic
+one-use Python custody and nonrewinding ordinals on PostgreSQL17.11. Its synthetic
 administrative artifacts do not qualify protected ordinary-person admission.
 Follow the protected admission execution packet in
 `docs/helix/04-build/operation-ordinal-issuer-handoff.md`: preserve original caller
@@ -124,3 +125,10 @@ Truss owns their composition, retained evidence and protected publication.
   database, the engine, or nothing enforces it.
 - Qualify every support claim with the database engine and version, UMF core
   version, supported subset and evidence.
+
+Native qualification reuses one owned pgserver17.11 Unix-socket cluster per
+suite/worker, fresh databases/roles and explicit inventory/cleanup checks.
+Use `scripts/qualify-pgserver-pg17.py WHEEL --run-id FRESH_ID [--workers N]`;
+keep LocalPostgres/CLI lifecycle and destructive cluster-setting checks isolated.
+Do not enable a shared TCP5432 listener or reuse a worker after cleanup drift.
+See the2026-10-11 shared-worker checkpoint for final native evidence.

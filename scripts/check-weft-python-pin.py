@@ -110,7 +110,7 @@ if len(sys.argv) == 4:
    delivered.append({'path':name,'sha256':hashlib.sha256(payload).hexdigest()})
  truss_distribution = importlib.metadata.distribution('truss-toolkit')
  assert truss_distribution.requires == [f'{p}; extra == "local"' for p in (
-  'pgserver==0.1.4','fasteners==0.20','platformdirs==4.12.4','psutil==7.2.2')]
+  'pgserver==0.1.4+truss.pg17.11','fasteners==0.20','platformdirs==4.12.4','psutil==7.2.2')]
  truss_delivery = {
   'wheel':{'path':str(truss_wheel),'sha256':hashlib.sha256(truss_wheel.read_bytes()).hexdigest()},
   'loadedBoundary':str(loaded),'modules':delivered,'allModulePayloadsMatch':True,
@@ -121,7 +121,7 @@ if len(sys.argv) == 4:
   'localExtraInstalled':all(
    any(d.metadata['Name'].lower()==name and d.version==version
        for d in importlib.metadata.distributions())
-   for name,version in [('pgserver','0.1.4'),('fasteners','0.20'),
+   for name,version in [('pgserver','0.1.4+truss.pg17.11'),('fasteners','0.20'),
                         ('platformdirs','4.12.4'),('psutil','7.2.2')]),
   'nativeInstallationQualified':False,
  }

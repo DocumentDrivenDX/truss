@@ -45,6 +45,25 @@ Qualification is per implementation, adapter, database version, layout, UMF mode
 
 Bun test runs TypeScript development tests under ADR-001. A real Chromium runner exercises the pure browser-compatible core. Bun and Node adapters must independently pass exact transport and host transaction tests; browser success cannot qualify a database adapter. Native tests use ordinary driver clients and independent SQL, not an in-memory database imitation. CI provider and browser harness versions are not yet selected; pin them before B-001 closeout.
 
+### Local native test infrastructure — selected 2026-10-11
+
+Routine native experiments share an owned pgserver17.11 Unix-socket cluster per
+suite/worker. Allocate a fresh database and owner/probe roles per experiment;
+verify native database/role/membership baseline before and after cleanup. Refuse
+same-worker overlap. Failed setup/cleanup or producer death invalidates the worker;
+stop the owned cluster before directory removal. Keep lifecycle, startup/shutdown
+and destructive cluster-setting tests on isolated clusters. Separate workers
+have distinct socket directories and disable TCP listening, so concurrent tests
+can run with a pre-existing TCP5432 listener.
+
+The [execution checkpoint](../04-build/local-runtime-installation-migration-plan.md#shared-native-test-workers--owner-direction-2026-10-11)
+traces this test infrastructure to CONTRACT-007 host custody and CONTRACT-011
+qualified evidence. All15 component groups pass on two workers, including132
+installed Python tests, with21 native cleanup/collision/failure controls. These
+are local component results; story acceptance and full deployment support retain
+their own qualifications. Cached verified wheels avoid source rebuilds during
+ordinary tests. Reproduce with `scripts/qualify-pgserver-pg17.py WHEEL --run-id FRESH_ID --workers 2`.
+
 ## Test Data
 
 Committed language-neutral fixtures cover absence, explicit null, large signed integers, decimal bounds/trailing zeroes, recursive arrays/records, retained unknown values, Unicode key normalization, composite keys, relationships and revisions. Include expected refusals for unsupported selected meaning. Fixture generation may vary object IDs and interleavings using a recorded seed; it must not derive expected values from the implementation under test.

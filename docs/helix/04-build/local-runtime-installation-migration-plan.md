@@ -1,5 +1,164 @@
 # Local runtime, installation and migration execution plan
 
+## Shared native test workers — owner direction 2026-10-11
+
+Routine native qualification now reuses **one pgserver17.11 cluster per suite or
+worker**, with a fresh database and owner role for each experiment. The
+[final two-worker run](evidence/design-audit/pg17-shared-workers-final-20261011/pgserver-pg17.11-qualification.json)
+passes all15 groups: twelve native groups share two clusters, six fresh fixtures
+per worker; installed Python132 tests, CLI signal/restart and timeout/lifecycle
+observations run on separate owned clusters. Both shared workers restore their
+baseline after every experiment and stop before directory removal. Earlier
+per-experiment-cluster receipts retain their original scope.
+
+`scripts/native_fixture.py` is test infrastructure outside the shipped library.
+WorkerCluster owns a short unique temporary data/socket directory and verifies
+PostgreSQL17.11, empty listen_addresses and its actual Unix socket. Connection
+URIs carry the actual native port explicitly. `.s.PGSQL.5432` in separate socket
+directories does not share a TCP listener. Different workers execute concurrently;
+pinned pgserver startup/shutdown calls within one Python process are serialized
+because its lifecycle machinery shares a process-global lock. The first concurrent
+attempt failed at startup; [its receipt](evidence/design-audit/pg17-shared-workers-run1-20261011/pgserver-pg17.11-qualification.json)
+and [confirmed-stop recovery](evidence/design-audit/pg17-shared-worker-startup-recovery.json)
+are retained. The original underlying startup exception was masked by cleanup;
+serialization addresses the observed failure without claiming a separately proven
+root cause.
+
+DatabaseFixture creates a UUID-named database and NOLOGIN owner role. Existing
+native probes still exercise their authored administrative/ordinary actors and
+create fresh probe roles. Fixtures hold thread and interprocess leases for all
+cluster-wide role changes; overlap on one worker refuses immediately. Before
+and after each fixture, compare native database attributes, role attributes and
+memberships with the original cluster baseline. This protects suite isolation;
+it does not change or qualify production authorization semantics.
+
+Cleanup uses DROP DATABASE WITH (FORCE) for the **owned fixture database only**,
+then removes newly created roles and their remaining grants, closes the admin
+connection and releases both leases. Partial setup compensates its created role.
+A cleanup failure or leaked inventory poisons the worker and prevents reuse.
+The runner discards a worker after a failed/timeout producer and checks inventory
+even when the producer fails. Confirmed server shutdown precedes removal of its
+owned directory; unconfirmed startup/shutdown preserves the directory for explicit
+recovery. Whole-worker process termination that bypasses Python cleanup still
+requires that explicit recovery; automatic host-wide process sweeping is absent.
+
+The [native worker controls](evidence/design-audit/pg17-shared-worker-controls-process-exit.json)
+pass21 independent observations: two simultaneously live workers while an owned
+TCP5432 listener is bound, distinct Unix socket directories, TCP disabled,
+isolated same-name tables/roles, distinct fixture owners, overlapping-fixture
+refusal, forced cleanup of an active leaked session with the other worker's
+session surviving, restored inventory and a clean next database/role set, partial
+setup compensation, cleanup-failure poisoning, abrupt fixture-process exit
+with leaked inventory detection/refusal, and owned-directory removal after stop.
+Fixture-process death invalidates its worker; it does not turn failure into a pass.
+
+Reproduce with installed verified wheels and the pinned native test dependencies:
+
+```sh
+python scripts/qualify-pgserver-pg17.py /path/to/truss_toolkit-0.0.1.dev0-py3-none-any.whl --run-id pg17-my-run --workers 2
+python scripts/check-native-worker-fixtures.py pg17-my-worker-controls.json
+```
+
+Omit `--workers` for one suite cluster. `--run-id` creates an exclusive evidence
+subdirectory and preserves all previous run artifacts. Direct native producers
+without the runner's worker environment retain isolated-cluster behavior.
+The existing cached wheel supplies PostgreSQL; these commands perform no source
+build. Lifecycle/destructive cluster-setting cases must stay on isolated clusters.
+Evidence is macOS27 arm64/Python3.11/PostgreSQL17.11; Linux, Windows, managed-service,
+full protected runtime and crash-recovery qualifications retain their own gates.
+The [Python boundary check](evidence/design-audit/pg17-shared-workers-python-boundaries.json)
+and [16 controls](evidence/design-audit/pg17-shared-workers-python-boundary-controls.json)
+remain green; test-only helper imports do not enter the shipped core.
+
+
+## PostgreSQL 17.11 embedded runtime — owner direction 2026-10-11
+
+The owner selected PostgreSQL **17.11** for Truss's pgserver build to align the
+local major version with Lakebase Autoscaling's default PostgreSQL17. The
+[Databricks version page](https://docs.databricks.com/gcp/en/oltp/projects/postgres-version-support)
+lists17.11 as of August2026; Lakebase manages subsequent minor updates.
+This supersedes16.15 as the next local integration target. Earlier16.2/16.15
+receipts retain their original historical scope and bytes.
+
+The [source build](evidence/design-audit/pgserver-pg17.11-source-build.json)
+uses unchanged pgserver upstream3b227607 and the official17.11 archive verified
+against its published SHA256. The [build inputs](evidence/design-audit/pgserver-corrected-build-inputs.json)
+and native recipe now select17.11 and package identity `0.1.4+truss.pg17.11`.
+The previous [16.15 manifest](evidence/design-audit/pgserver-pg16.15-build-inputs-historical.json)
+and [recipe](evidence/design-audit/pgserver-pg16.15-native-historical.Makefile)
+are preserved. Configuration still excludes readline, ICU and pgvector.
+The private macOS27 arm64/Python3.11 wheel SHA256 is
+`36b4240bedc03a082d349c6cf586800df2df89dce530252fb51227b93e978920`.
+[Packaging](evidence/design-audit/pgserver-pg17.11-wheel-packaging.json) and
+[installed payload verification](evidence/design-audit/pgserver-pg17.11-installed-payload.json)
+match all1643 original package members.
+
+The [qualification run](evidence/design-audit/pgserver-pg17.11-qualification.json)
+passes all15 selected component groups: installed Python suite132 tests/29 modules,
+CLI SIGTERM/SIGINT shutdown and retained restart, caller-reset18, historical
+isolation and nested definer observations, authenticated/asserted origin capture,
+UMF structural correspondence, populated immutable guards, native transaction
+timeout, all four issued ordinal families, original four-family driver92,
+private callable inventory73 and elevation22 observations. Each run retains a
+fresh receipt and compressed original log. The
+[sandbox-denied attempt](evidence/design-audit/pg17.11-sandbox-denied/pgserver-pg17.11-qualification.json)
+records cache-lock access failure separately; the same installed artifacts passed
+with the required native process/cache access.
+The denied artifacts were relocated byte-for-byte with a [path/hash map](evidence/design-audit/pg17.11-sandbox-denied/relocation.json).
+
+`packages/python[local]` and its development constraint now require the exact
+private `pgserver==0.1.4+truss.pg17.11` distribution. Public0.1.4 cannot satisfy
+that requirement; supply the verified wheel explicitly. The [offline resolver](evidence/design-audit/pgserver-pg17.11-offline-resolver.json) selects the exact private package and all three lifecycle pins from the wheelhouse. LocalPostgres checks the
+package/server pair and the selected data-directory major before startup.
+Existing16.x directories refuse unchanged; startup performs no major upgrade.
+Historical tuples remain explicitly recognized for historical checks.
+
+The [native timeout receipt](evidence/design-audit/pgserver-pg17.11-transaction-timeout.json)
+observes the setting's default0, actual connection termination for an active
+transaction with100ms timeout, a successful fresh connection and owned-server
+shutdown. This removes16.x's setting-availability limitation for the selected
+local tuple. Complete deadline/account/cleanup admission, protected installation,
+seven semantic bodies, ordinary-person enforcement, crash recovery, migrations,
+managed-service profiles and published delivery retain their existing gates.
+A local17.11 result does not qualify Lakebase itself.
+
+### Development cycle evaluation
+
+A source build belongs to PostgreSQL/build-recipe changes; ordinary test runs
+reuse the verified installed wheel. The [local wheel cache](evidence/design-audit/pgserver-pg17.11-local-wheel-cache.json) retains the server/toolkit and lifecycle wheels under ignored `.cache/pgserver/pg17.11/wheels` for offline reuse in this checkout. No source build occurs in the qualification
+runner. The [three-sample lifecycle measurement](evidence/design-audit/pgserver-pg17.11-lifecycle-timing.json)
+on this host observes fresh ready times2.45–5.76s (median3.90s), retained restarts
+0.15–0.30s (median0.15s), and shutdown0.11–0.23s. Readiness includes the version
+query; samples overlapped qualification. No static-server provisioning or CI
+performance comparison was measured.
+
+A static local server with disposable databases and distinct roles can cover most
+SQL/layout/transaction/permission checks. Roles, tablespaces, server settings,
+process control and administrative effects remain cluster-wide, so database
+creation alone does not isolate them. Pgserver supplies exact bundled binaries,
+disposable whole-cluster control and lifecycle/packaging coverage, while adding
+cache locks, process/lease custody, socket paths, failed-start cleanup, native
+loader/platform packaging and data-directory version handling.
+
+The owner subsequently selected pgserver with one cluster per suite/worker and
+fresh databases/roles. The shared-worker checkpoint above records implementation
+and fresh evidence. Lifecycle/destructive cases stay isolated; no static-server
+default is selected.
+
+Reproduction after building/installing the two verified wheels:
+
+```sh
+python scripts/qualify-pgserver-pg17.py /path/to/truss_toolkit-0.0.1.dev0-py3-none-any.whl --run-id pg17-my-run
+```
+
+The Python import-boundary checker passes107 edges and all16 positive/negative controls; [checker output](evidence/design-audit/pgserver-pg17.11-python-module-boundaries.json) and [controls](evidence/design-audit/pgserver-pg17.11-python-module-boundaries-controls.json) retain their exact source pins.
+
+The runner refuses existing receipt destinations. A further run requires fresh
+receipt identities, preserving the retained observations. Source builds use
+`scripts/materialize-corrected-pgserver-recipe.py`, the pinned `make -C pgbuild postgres`
+target and `scripts/package-corrected-pgserver.py` in the declared build environment.
+
+
 ## Updated goal and selected direction — 2026-10-09
 
 Complete Truss's remaining governed design and execution-ready implementation/test

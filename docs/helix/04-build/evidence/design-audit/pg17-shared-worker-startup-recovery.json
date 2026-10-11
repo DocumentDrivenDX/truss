@@ -1,0 +1,21 @@
+{
+  "scope": "Explicit recovery of the two retained owned startup-failure directories after pg_ctl confirmed no server running",
+  "events": [
+    {
+      "directory": "/private/tmp/truss-nw-yxjgqrga",
+      "pgCtlStatusReturncode": 3,
+      "statusOutput": "pg_ctl: no server running\n",
+      "log": "docs/helix/04-build/evidence/design-audit/truss-nw-yxjgqrga-startup-failure.log.gz",
+      "logSha256": "6a28f7fad995a2d3df2a5a5fc16db9543177767b1e0c20b078d4c4d997539bcc",
+      "removedAfterConfirmedStop": true
+    },
+    {
+      "directory": "/private/tmp/truss-nw-7ag6elxe",
+      "pgCtlStatusReturncode": 3,
+      "statusOutput": "pg_ctl: no server running\n",
+      "log": "docs/helix/04-build/evidence/design-audit/truss-nw-7ag6elxe-startup-failure.log.gz",
+      "logSha256": "a99f81fe9af3d2b57e2a2e07c85784a445bb949eec4c44dca379d5fe505412b8",
+      "removedAfterConfirmedStop": true
+    }
+  ]
+}

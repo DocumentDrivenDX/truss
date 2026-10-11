@@ -58,11 +58,12 @@ class LocalPostgres:
             import pgserver
             import fasteners
             runtime_version = importlib.metadata.version('pgserver')
-            expected_server = {'0.1.4': '16.2', '0.1.4+truss.pg16.15': '16.15'}.get(runtime_version)
+            expected_server = {'0.1.4': '16.2', '0.1.4+truss.pg16.15': '16.15', '0.1.4+truss.pg17.11': '17.11'}.get(runtime_version)
             if expected_server is None:
                 raise LocalRuntimeError('Expected published pgserver0.1.4 or explicit corrected candidate')
         except (ImportError, importlib.metadata.PackageNotFoundError) as error:
             raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
+        expected_major = expected_server.split('.')[0]
         self.directory.parent.mkdir(parents=True, exist_ok=True)
         with _directory_lock:
             if self.directory in _active_directories:
@@ -80,8 +81,8 @@ class LocalPostgres:
                 version = self.directory / 'PG_VERSION'
                 if any(self.directory.iterdir()) and not version.is_file():
                     raise LocalRuntimeError('Nonempty directory is not a PostgreSQL data directory')
-                if version.is_file() and version.read_text().strip() != '16':
-                    raise LocalRuntimeError('Local profile requires PostgreSQL16; no automatic upgrade')
+                if version.is_file() and version.read_text().strip() != expected_major:
+                    raise LocalRuntimeError(f'Local profile requires PostgreSQL{expected_major}; no automatic upgrade')
                 if (self.directory / 'postmaster.pid').exists():
                     raise LocalRuntimeError('Existing postmaster custody requires explicit host recovery')
             self._startup_pending = True

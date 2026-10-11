@@ -1,0 +1,18 @@
+{
+  "currentQualification": "pg17-shared-workers-final-20261011/pgserver-pg17.11-qualification.json",
+  "currentControls": "pg17-shared-worker-controls-process-exit.json",
+  "earlierAttempts": [
+    {
+      "path": "pg17-shared-workers-initial-20261011",
+      "outcome": "Runner producer path construction failed before native execution; no pass claim"
+    },
+    {
+      "path": "pg17-shared-workers-run1-20261011/pgserver-pg17.11-qualification.json",
+      "outcome": "Concurrent worker startup failure; owned retained directories were subsequently stopped/removed with recovery evidence"
+    },
+    {
+      "path": "pg17-shared-worker-controls-final.json",
+      "outcome": "18 observations passed before the process-exit controls were added; producer file may have changed during execution, so this receipt is excluded from current source qualification"
+    }
+  ]
+}

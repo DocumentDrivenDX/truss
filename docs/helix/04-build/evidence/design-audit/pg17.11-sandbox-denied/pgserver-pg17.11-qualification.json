@@ -1,0 +1,217 @@
+{
+  "scope": "Selected local embedded PostgreSQL 17.11 component checks; no complete runtime or managed-service qualification",
+  "pgserver": "0.1.4+truss.pg17.11",
+  "postgresqlVersion": "17.11",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "trussWheelSha256": "2b6676952dd6ef19d6b26e75ea0a046c3706afa1d2e526ecf136c94021924fc9",
+  "outcomes": [
+    {
+      "case": "installed-suite",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-python-installed-suite.py",
+        "/private/tmp/truss-pg17-toolkit-wheel-20261011/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+        "--corrected-pgserver",
+        "python-pg17.11-installed-suite.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "59ffc607ae4914523781567349ac5d6badfd68a920564ca7520d03c503741351",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-installed-suite.log.gz",
+      "logSha256": "5322a936e026790f352763f07dc212085e518d45cb376d20edb528f93dc8cbbe",
+      "receipt": "docs/helix/04-build/evidence/design-audit/python-pg17.11-installed-suite.json",
+      "receiptSha256": "9040c768d6a8cfbec4aedb98b4d79e0d5be98f309b0b557014c5813173bfb041"
+    },
+    {
+      "case": "cli-signals",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-python-installed-cli-signals.py",
+        "--corrected-pgserver"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "bca732884986b5b111df35e05b3e3584d68232b5cba803fbb76676d89e479cc8",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-cli-signals.log.gz",
+      "logSha256": "41db0ed62e35ca6fcf96ff7457b2cf4fa1744ea1e49afae72cfd618e6594ae65"
+    },
+    {
+      "case": "caller-reset",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-pgserver-caller-reset.py",
+        "--require-matches",
+        "--receipt",
+        "pgserver-pg17.11-caller-reset.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "0693b07a329935b2448da667c6ed2a4f878f46e737c0a999515f8918e2f1a6a9",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-caller-reset.log.gz",
+      "logSha256": "06c4dc66946a268aabc095e9fb67ba4b5a147467959c05ba8efabaaf85bd747a"
+    },
+    {
+      "case": "isolation",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-corrected-pgserver-isolation.py"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "45a77cb9524aa6da541155cf5e2cc16e01ade4162cca0ed156cabba5e2fba8d0",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-isolation.log.gz",
+      "logSha256": "f343966e0965bb157a5301c829a3f817b3abf96bd15f566cf06412d0321c1cec"
+    },
+    {
+      "case": "origin",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-corrected-pgserver-origin.py"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "2b6acdff97942f6f56ce11f7287b74e1de780979033f67553a2c01fc54fa8db0",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-origin.log.gz",
+      "logSha256": "378d538603531a09d9529c73811dd914f4543d5a94a39b1b91efabdc81919e81"
+    },
+    {
+      "case": "structure",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-pgserver-umf-structure.py",
+        "--corrected-pgserver"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "d254fb58a4f97b6b0514299c4b53e951ca3af1e2f8f20154883a48086e70749a",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-structure.log.gz",
+      "logSha256": "3d3c21f543fcd64f93b25b8f3c933d14f86014666ff7becdc428ea261d295831"
+    },
+    {
+      "case": "populated-guards",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-pgserver-populated-guards.py",
+        "--corrected-pgserver"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "da82ac0be6e4fe9eed87f9a9501ae499503cd6ec954f741d24f44a5581df791c",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-populated-guards.log.gz",
+      "logSha256": "24d041e9faaef6d4aff748f56d47fc57ba8163f87d428f30775b58a010058243"
+    },
+    {
+      "case": "transaction-timeout",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-pg17-transaction-timeout.py"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "85f645dd424d6d455cccda7153f17d6d502efef41b5b509156df7d7cd2573adb",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-transaction-timeout.log.gz",
+      "logSha256": "ddebee9203c7af9bdbfd152dded3dfda563082a48e8d4e566b5c803a04ba8299"
+    },
+    {
+      "case": "issued-base",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-issued-operation-ordinal.py",
+        "base",
+        "pgserver-pg17.11-issued-base-native.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "5a06bc28d7e5f71c30e39c3c7d7c7a7a0dc82bd67698ef29489eae422f354edc",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-issued-base.log.gz",
+      "logSha256": "90b61b892e013e0c659a3f64cca903037fe4e3fa9162b50e78759590b4749229"
+    },
+    {
+      "case": "issued-asserted",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-issued-operation-ordinal.py",
+        "asserted",
+        "pgserver-pg17.11-issued-asserted-native.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "5a06bc28d7e5f71c30e39c3c7d7c7a7a0dc82bd67698ef29489eae422f354edc",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-issued-asserted.log.gz",
+      "logSha256": "a6584da326c6b9d0b52cbb504f84bb590b4cf2e2b52c49ca905f9ca75fdd741b"
+    },
+    {
+      "case": "issued-epoch",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-issued-operation-ordinal.py",
+        "epoch",
+        "pgserver-pg17.11-issued-epoch-native.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "5a06bc28d7e5f71c30e39c3c7d7c7a7a0dc82bd67698ef29489eae422f354edc",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-issued-epoch.log.gz",
+      "logSha256": "718b966942c00c711347e3fed1b57825e439af98127a68bccf026af0e97a865a"
+    },
+    {
+      "case": "issued-configuration",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "scripts/check-issued-operation-ordinal.py",
+        "configuration",
+        "pgserver-pg17.11-issued-configuration-native.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "5a06bc28d7e5f71c30e39c3c7d7c7a7a0dc82bd67698ef29489eae422f354edc",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-issued-configuration.log.gz",
+      "logSha256": "bf82aec51fcbbcea0ff28e74a2e2d5cdc2907bdd2e2656d994ba24fe888b1929"
+    },
+    {
+      "case": "four-family-driver",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "docs/helix/04-build/evidence/design-audit/check_pg8000_four_family_admission_native.py",
+        "pgserver-pg17.11-four-family-driver-native.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "4f78fd8d2032c97b8dde62c09fecbcaa11c0a097897a11ac82b7d92e0bfedd74",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-four-family-driver.log.gz",
+      "logSha256": "a5256b71c054dbe6364df67bc48f89be59c1691ad49dd9b02eaa6c36354b6f9f"
+    },
+    {
+      "case": "private-callable-inventory",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "docs/helix/04-build/evidence/design-audit/check_private_callable_inventory_native.py",
+        "pgserver-pg17.11-private-callable-inventory-native.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "f03b8e2b92742036c04cc5668cb74d1445484a3d8629f17d9d5410e9c6569d07",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-private-callable-inventory.log.gz",
+      "logSha256": "a4e4d2da97e84115e1098c955869c21ca12cc1fac1b37881eb048eaefefcf78f"
+    },
+    {
+      "case": "elevation",
+      "command": [
+        "/private/tmp/truss-pgserver-pg17-test-env-20261011/bin/python",
+        "docs/helix/04-build/evidence/design-audit/check_four_family_elevation_native.py",
+        "pgserver-pg17.11-elevation-native.json"
+      ],
+      "returncode": 1,
+      "passed": false,
+      "producerSha256": "e6c873e4733e05081f2db1e9743d1ce48322afa9ede3b9aad9a80c5b6ca4e37d",
+      "log": "docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-elevation.log.gz",
+      "logSha256": "5f61d1ea1dfe3359fbe7f6766114debe5b0e620b35a130e2ba4182fa57d7c931"
+    }
+  ],
+  "producerInputsUnchanged": true,
+  "passed": false,
+  "producerSha256": "2ba0b3086e1eace41c2686288bbe1546967ad42438c5e5e8ec7d084220f73300",
+  "completeRuntimeQualified": false,
+  "lakebaseQualified": false,
+  "published": false
+}

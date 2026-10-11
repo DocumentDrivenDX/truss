@@ -8,6 +8,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import pgserver
+from native_fixture import get_server, evidence_directory
 
 root = Path(__file__).resolve().parents[1]
 paths = ['docs/helix/02-design/contracts/storage-layout.sql',
@@ -33,13 +34,13 @@ SET ROLE iso_none; EXECUTE caller_probe; RESET ROLE;
 DEALLOCATE caller_probe;
 """
 with tempfile.TemporaryDirectory(prefix='truss-corrected-isolation-') as directory:
-    server = pgserver.get_server(Path(directory) / 'data', cleanup_mode='stop')
+    server = get_server(Path(directory) / 'data', cleanup_mode='stop')
     try:
         def query(sql):
             return subprocess.check_output([str(psql), server.get_uri(), '-X', '-q', '-A', '-t',
                 '-v', 'ON_ERROR_STOP=1'], input=sql, text=True, timeout=60).strip()
         version = query('SHOW server_version;')
-        if version != '16.15' or importlib.metadata.version('pgserver') != '0.1.4+truss.pg16.15':
+        if version != '17.11' or importlib.metadata.version('pgserver') != '0.1.4+truss.pg17.11':
             raise RuntimeError('Original corrected candidate required')
         output = query('BEGIN;\n' + '\n'.join(data.decode() for data in originals) + fixture + '\nROLLBACK;')
         lines = [line for line in output.splitlines() if line]
@@ -63,5 +64,5 @@ receipt = {'scope': 'Original historical0.2 module isolation and five nested non
     'sources': [{'path': path, 'sha256': hashlib.sha256(data).hexdigest()} for path, data in zip(paths, originals)],
     'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     'current016InstallationQualified': False, 'r4Qualified': False, 'r5Qualified': False}
-(root / 'docs/helix/04-build/evidence/design-audit/pgserver-corrected-isolation.json').write_text(json.dumps(receipt, indent=2) + '\n')
+(evidence_directory() / 'pgserver-pg17.11-isolation.json').write_text(json.dumps(receipt, indent=2) + '\n')
 print(json.dumps({'historicalCheckPassed': True, 'nestedObservations': 5, 'r4Qualified': False}))
