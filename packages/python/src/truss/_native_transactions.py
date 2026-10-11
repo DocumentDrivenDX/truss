@@ -18,6 +18,21 @@ class _Generation:
     identity: str
     ended: bool = False
     adoption: object = None
+    namespaces: tuple = ()
+
+
+@dataclass(eq=False)
+class _SavepointNamespace:
+    executor: object
+    value: str
+    next_counter: int = 1
+    issued: tuple = ()
+
+
+@dataclass(eq=False)
+class _IssuedSavepoint:
+    name: str
+    submitted: bool = False
 
 
 @dataclass(frozen=True)
@@ -56,11 +71,13 @@ class _Control:
 
 
 class NativeTransactions:
-    def __init__(self, boundary, *, savepoint_limit=256, adoption_limit=256):
+    def __init__(self, boundary, *, savepoint_limit=256, adoption_limit=256, mediated_namespace=False):
         if type(boundary) is not NativeBoundary or type(savepoint_limit) is not int or savepoint_limit < 1:
             raise ValueError('Original boundary and positive exact limit required')
         if type(adoption_limit) is not int or adoption_limit < 1:
             raise ValueError('Positive exact adoption retention limit required')
+        if type(mediated_namespace) is not bool:raise ValueError('Exact namespace selection required')
+        self._mediated_namespace=mediated_namespace
         self._adoption_limit = adoption_limit
         self._adoption_custody = ()
         self._boundary = boundary
@@ -197,6 +214,8 @@ class NativeTransactions:
         return self._control('rollback', 'ROLLBACK' + (' AND CHAIN' if chain else ''), token=token, chain=chain)
 
     def savepoint(self, name, *, token=None):
+        if self._mediated_namespace and type(name) is str and name.startswith('truss_sp_'):
+            raise NativeBoundaryRefusal('Reserved Truss savepoint namespace')
         return self._control('savepoint', 'SAVEPOINT ' + self._name(name), token=token, savepoint=name)
 
     def rollback_to(self, savepoint, *, token=None, cleanup=None):
@@ -300,6 +319,33 @@ class NativeTransactionPort:
         t._boundary._call(lambda: t._boundary._run_simple(sql), self._token, on_complete=capture, preflight=preflight)
         return completed[0].observation
 
+    def _reserve_savepoint_name(self,executor):
+        t=self._tracker
+        if not t._mediated_namespace:return None
+        with t._boundary._lock:
+            self._require_scope()
+            generation=self._generation
+            root=generation.adoption
+            if root is None or root.current is None or root.current.claim.executor is not executor:
+                raise NativeBoundaryRefusal('Original adopted namespace owner required')
+            reservation=next((n for n in generation.namespaces if n.executor is executor),None)
+            if reservation is None:
+                if len(generation.namespaces)>=256:raise NativeBoundaryRefusal('Namespace retention exhausted')
+                namespace=uuid4().hex
+                if re.fullmatch('[0-9a-f]{32}',namespace) is None or any(n.value==namespace for n in generation.namespaces):
+                    raise NativeBoundaryRefusal('Unique original namespace required')
+                reservation=_SavepointNamespace(executor,namespace)
+                generation.namespaces=(*generation.namespaces,reservation)
+            if not 1<=reservation.next_counter<=18446744073709551615:
+                raise NativeBoundaryRefusal('Savepoint namespace counter exhausted')
+            if len(reservation.issued)>=4096:raise NativeBoundaryRefusal('Savepoint name retention exhausted')
+            counter=reservation.next_counter
+            name='truss_sp_'+reservation.value+'_'+str(counter)
+            issued=_IssuedSavepoint(name)
+            reservation.issued=(*reservation.issued,issued)
+            reservation.next_counter+=1
+            return name
+
     def _adoption_is_published(self, adoption):
         from ._native_adoption import is_published
         with self._tracker._boundary._lock:
@@ -320,10 +366,22 @@ class NativeTransactionPort:
             self._require_scope()
             if self._generation is not self._tracker._state.generation or self._generation.ended:
                 raise NativeBoundaryRefusal('Original port generation ended')
-        match = re.fullmatch(r'(SAVEPOINT|ROLLBACK TO SAVEPOINT|RELEASE SAVEPOINT) (truss_[0-9a-f]{32})', sql)
+        match = re.fullmatch(r'(SAVEPOINT|ROLLBACK TO SAVEPOINT|RELEASE SAVEPOINT) (truss_[0-9a-f]{32}|truss_sp_[0-9a-f]{32}_[1-9][0-9]{0,19})', sql)
         if match is None: raise NativeBoundaryRefusal('Only exact executor savepoint controls accepted')
         kind, name = match.groups()
         t = self._tracker
+        if t._mediated_namespace:
+            namespace_match=re.fullmatch(r'truss_sp_([0-9a-f]{32})_([1-9][0-9]{0,19})',name)
+            with t._boundary._lock:
+                if namespace_match is None:raise NativeBoundaryRefusal('Original reserved namespace name required')
+                value,counter=namespace_match.groups()
+                reservation=next((n for n in self._generation.namespaces if n.value==value),None)
+                if reservation is None or not 1<=int(counter)<reservation.next_counter or int(counter)>18446744073709551615:
+                    raise NativeBoundaryRefusal('Original consumed namespace counter required')
+                if kind=='SAVEPOINT':
+                    issued=next((r for r in reservation.issued if r.name==name),None)
+                    if issued is None or issued.submitted:raise NativeBoundaryRefusal('One-use original savepoint issuance required')
+                    issued.submitted=True
         if len(self._control_records)>=4096: raise NativeBoundaryRefusal('Original control retention exhausted')
         record=_PortControl(kind)
         self._control_records=(*self._control_records,record)

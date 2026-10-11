@@ -1,8 +1,9 @@
 # Truss Python delivery
 
 Truss owns the tested embeddable Python implementation. The complete engine
-package is under implementation; current files provide the pinned local runtime
-candidate, not released mutation/query/installation APIs.
+package is under implementation; current public components provide local runtime lifecycle, UMF acceptance-input
+preparation, selected native host transaction controls and inert assembly construction.
+Mutation/query/installation APIs remain unfinished.
 
 The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
 prioritizes complete installation, catalog acceptance, apply/import and direct
@@ -528,3 +529,40 @@ This is report preparation, not accepted report publication. Missing report fiel
 and partial extension qualification are explicit. Successful public UMF preparation
 remains usable when optional report evidence is unavailable. Public registration,
 installation and the apply/read workflow remain unfinished.
+
+
+## Selected host transaction entry point
+
+Install `./packages/python[native]` for the selected pg8000 1.31.5 Unix-socket
+route. Base package import does not load pg8000. This factory opens a fresh
+connection; adoption of an existing arbitrary driver connection remains unfinished.
+
+```python
+from truss import connect_pg8000_host, Ok
+
+host = connect_pg8000_host(user="postgres", database="postgres",
+                           unix_sock="/path/to/.s.PGSQL.5432")
+try:
+    assert isinstance(host.session.observe_host_resource_baseline(), Ok)
+    assert isinstance(host.session.begin(), Ok)
+    adopted = host.session.adopt_transaction()
+    assert isinstance(adopted, Ok)
+    # The host owns transaction settlement. No graph capability is granted.
+    assert isinstance(host.session.rollback(), Ok)
+finally:
+    host.close()
+```
+
+Host lifecycle controls share one mediator; raw/dynamic lifecycle SQL violates
+its cooperative contract. `run_non_lifecycle` is an explicit trusted host utility,
+not the exact Truss query interface. Known idle/capacity/failed-state savepoint
+refusals preserve rollback; actually submitted control errors may retain unresolved
+custody. Do not treat cleanup closure as server rollback evidence.
+
+`create_reference_assembly` currently supports only `INERT_ASSEMBLY_PROFILE`.
+It captures immutable configuration and original service registrations without
+calling host services. Capability selectors return unavailable and configured
+readiness remains unverified. Assembly disposal does not dispose the shared host
+executor/session. Omitted configuration fields use `truss.contracts.ABSENT`.
+This entry point is composition groundwork for install/register/apply/read, not
+a usable graph implementation.

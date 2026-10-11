@@ -1,0 +1,376 @@
+{
+  "scope": "iteration29 selected fresh Unix host lifecycle and inert assembly; no installation/catalog/graph qualification",
+  "wheel_sha256": "9b340ebf479693d8febd8b78ee67e287d481d193bc05a120c2b5940d5790dac2",
+  "source_wheel_installed_files": [
+    {
+      "path": "truss/__init__.py",
+      "sha256": "2f9566b58066451911107d179cef48c3b6d0e39c5ec32a180ee96ae09c4d205f"
+    },
+    {
+      "path": "truss/_acceptance_json.py",
+      "sha256": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01"
+    },
+    {
+      "path": "truss/_accounted_receive.py",
+      "sha256": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78"
+    },
+    {
+      "path": "truss/_adoption_cancellation.py",
+      "sha256": "3fbce34b38844251e2b7a4a52bfa21086786f3a04d4f1bf3d132f45f3457088c"
+    },
+    {
+      "path": "truss/_catalog_report.py",
+      "sha256": "824823cf12bbbd3feb6ab79661b3a6aea5c82ce604223340e9f828ae3de1dc51"
+    },
+    {
+      "path": "truss/_catalog_staging.py",
+      "sha256": "da28f42570afd7ce167cf3c9fdf64032635111e99c0a5f898f89f2da3f9599ff"
+    },
+    {
+      "path": "truss/_directory_resources.py",
+      "sha256": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48"
+    },
+    {
+      "path": "truss/_host_call_recovery.py",
+      "sha256": "90e844ef2d3e061186fe96707b01ea1ff8067b06f59420fdcf68e7a05d36b4fd"
+    },
+    {
+      "path": "truss/_host_contracts.py",
+      "sha256": "a120a9a7465aeb0936cd81be52ec7f7d49e59befe0de9002f82e1a9221ed6c94"
+    },
+    {
+      "path": "truss/_host_control_custody.py",
+      "sha256": "b54753d0698b74ef1e4f983306d23dde5fb4d09ea8068304f3926cbcf194135c"
+    },
+    {
+      "path": "truss/_host_execution.py",
+      "sha256": "211dcc53cea6ceb295511c3ce0b36e62a19fb6aa2977ce44eae401331a800fbb"
+    },
+    {
+      "path": "truss/_host_session.py",
+      "sha256": "18754ffd000aec5202c49545fc508fd6775d47ca163503b56c3b95bcfebeff2f"
+    },
+    {
+      "path": "truss/_installation_archive.py",
+      "sha256": "d1674fb5f8537873e3b41ce46618fd3aac1c73db7c8b34a90fe741cba6918f72"
+    },
+    {
+      "path": "truss/_installation_resources.py",
+      "sha256": "abaab39777891125da2f522cd2a0f3a6702896a05464cf344eddbc2acff08759"
+    },
+    {
+      "path": "truss/_installed_admission_inventory.py",
+      "sha256": "4904b011ba5c961179dd0ffc4ade03f7df725a04a0dd09d8c7708b59ddf159c2"
+    },
+    {
+      "path": "truss/_inventory_sql/column-acl.sql",
+      "sha256": "f328a40200427d5e5b67179233e9d77b77c6ed4478608d1f5e269122976090fd"
+    },
+    {
+      "path": "truss/_inventory_sql/dependency.sql",
+      "sha256": "b6d3b3eb4fe10d817a57c0e2d1ab723fc630233b4d15985bc5e6aaa366a3ba74"
+    },
+    {
+      "path": "truss/_inventory_sql/manifest.json",
+      "sha256": "3544d094ff90df4b6966414cfd203db607ae347dd2a4923dc72c92758188f890"
+    },
+    {
+      "path": "truss/_inventory_sql/namespace-acl.sql",
+      "sha256": "b28027fe1b0c15780c3000988d5396dc83acfa5d8228fe5488a7bd5ec5d5af17"
+    },
+    {
+      "path": "truss/_inventory_sql/relation-acl.sql",
+      "sha256": "10ae36d576209b954b218908d2a9c4f4a4344803b18457eaa5bb42c12415c8eb"
+    },
+    {
+      "path": "truss/_inventory_sql/routine-acl.sql",
+      "sha256": "7af67d9bc4e1a6873814197926d7f92cf69bbb299c83f0145731fcb6bebdbe7e"
+    },
+    {
+      "path": "truss/_native_adoption.py",
+      "sha256": "f7e714beeaede3e09888d226dedd1df5aa18090ed62981138675571016b1de0b"
+    },
+    {
+      "path": "truss/_native_arbitration.py",
+      "sha256": "391c4f557bdbf61500c6cde6684447298b057e65f3bcfee4fc896c0afeb98669"
+    },
+    {
+      "path": "truss/_native_bootstrap.py",
+      "sha256": "aa172d0254518ca5d4f936eb15b5d6d0c0c466e0675b71edcbb7f521e41078d5"
+    },
+    {
+      "path": "truss/_native_cancellation.py",
+      "sha256": "2bc533da73c0e8727945df2a539d4494636c5028492597b2dd3ee4c9161835d3"
+    },
+    {
+      "path": "truss/_native_deadline.py",
+      "sha256": "818b01a238d1722e81efff792b6abdbc037d67485e77d3bf9c8fa16226ecab56"
+    },
+    {
+      "path": "truss/_native_driver_profile.py",
+      "sha256": "9dc3846b1858418a92336f4e2a462ac4c9361bfbbcf49517b02d11938c2ec631"
+    },
+    {
+      "path": "truss/_native_ingress_deadline.py",
+      "sha256": "fe29cffb4040ee57ff2e107e3b008e1d56b97c6f561261d5be289d3b1d133651"
+    },
+    {
+      "path": "truss/_native_operation.py",
+      "sha256": "8b95980e6ffe1f67f08964b2fe4b012ee202bd2248f51a4db3aa0bac4089460f"
+    },
+    {
+      "path": "truss/_native_outbound.py",
+      "sha256": "22cdc026d20f277178b8fbc90645d3a9d95dfa69a028be99fe09e97ad96b8f88"
+    },
+    {
+      "path": "truss/_native_pg8000.py",
+      "sha256": "a61ace49e5018aa208483f3fbbff496508a81c5cb32accee9d3c729b0d1c18b9"
+    },
+    {
+      "path": "truss/_native_result_custody.py",
+      "sha256": "10c5add2665bfc9315ef249818c57f26a86f0f5b03a0e11aa9a69fc432c7ff58"
+    },
+    {
+      "path": "truss/_native_transactions.py",
+      "sha256": "f43eaa679df697d890a4a82f3fae1beddb93f6fe57f3f41e4e56d8ad1281787e"
+    },
+    {
+      "path": "truss/_operation_admission.py",
+      "sha256": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+    },
+    {
+      "path": "truss/_operation_arbitration.py",
+      "sha256": "a7ff26d17feccb15885ae18a0ba7a0178cbb1e86de3a15de055cd51159a021bc"
+    },
+    {
+      "path": "truss/_operation_ordinal.py",
+      "sha256": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977"
+    },
+    {
+      "path": "truss/_operation_registry.py",
+      "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+    },
+    {
+      "path": "truss/_profiles/assembly-construction-diagnostic.json",
+      "sha256": "2e42e685d6e18169d31cd34abc2d43b720f088c39b74182d5f02944d06e56b94"
+    },
+    {
+      "path": "truss/_query_execution.py",
+      "sha256": "9cf9d08a45f0b31ef1621c9bed47eb879715771583dd467ecb57b8278115b0aa"
+    },
+    {
+      "path": "truss/_receipt_position.py",
+      "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+    },
+    {
+      "path": "truss/_resource_account.py",
+      "sha256": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1"
+    },
+    {
+      "path": "truss/_row_event_attribution.py",
+      "sha256": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b"
+    },
+    {
+      "path": "truss/_row_group_custody.py",
+      "sha256": "b39f7f4e17243d846fc60b3fff02807d168a93c23adf793a8be4fcd2abf3dcdd"
+    },
+    {
+      "path": "truss/_row_image.py",
+      "sha256": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9"
+    },
+    {
+      "path": "truss/_row_image_capture.py",
+      "sha256": "377bb631b3dd939436dc89c50b6ca4f188a99e5352e8a18d8f6a30037f593125"
+    },
+    {
+      "path": "truss/_row_image_scalar_shape.py",
+      "sha256": "1e639bfed2680ce589d8af65fe255b4498a61246384fb593e3313d673fbdccdc"
+    },
+    {
+      "path": "truss/_row_image_tree.py",
+      "sha256": "8ff76ee2a95ec60db0bdfecded4e1f35bc302d711be0f71f14d42178cabb5386"
+    },
+    {
+      "path": "truss/_row_operation_address.py",
+      "sha256": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08"
+    },
+    {
+      "path": "truss/_row_operation_context.py",
+      "sha256": "aeaa86163233a597c554f977d3c82badcbf8290a336e47b5e1ff8c64c66794ca"
+    },
+    {
+      "path": "truss/_row_operation_custody.py",
+      "sha256": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445"
+    },
+    {
+      "path": "truss/_row_registry_correspondence.py",
+      "sha256": "f0229b5032aa1801dba1cf85ddf0d6be84a087baf1f51c9482475a5b1e6c2282"
+    },
+    {
+      "path": "truss/_row_touch_registry.py",
+      "sha256": "332c37d656bbf825ab119422714330277d9988eef280fc6f72fff26e2d5e778b"
+    },
+    {
+      "path": "truss/_security_association_binding.py",
+      "sha256": "2652e851820216205bb526ad8921109ddbbd8153fbea1338d7822d13ae400044"
+    },
+    {
+      "path": "truss/_startup_custody.py",
+      "sha256": "5cb7426701c8f1b831d1dc4dff635935dab3284a9672cae49d49f36b9f0b5061"
+    },
+    {
+      "path": "truss/_umf/docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "truss/_umf/licenses/ajv.txt",
+      "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3"
+    },
+    {
+      "path": "truss/_umf/licenses/fast-deep-equal.txt",
+      "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+    },
+    {
+      "path": "truss/_umf/licenses/fast-uri.txt",
+      "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786"
+    },
+    {
+      "path": "truss/_umf/licenses/json-schema-traverse.txt",
+      "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+    },
+    {
+      "path": "truss/_umf/licenses/require-from-string.txt",
+      "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f"
+    },
+    {
+      "path": "truss/_umf/licenses/yaml.txt",
+      "sha256": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869"
+    },
+    {
+      "path": "truss/_umf/manifest.json",
+      "sha256": "e8dd25c9e48a297765886f14ec4199d976db35ad7364c33df501a23bb3f0c1b5"
+    },
+    {
+      "path": "truss/_umf/owner/producer-manifest.json",
+      "sha256": "89115bff6644db7f2fe7b292458994a94dc78ff0c4c3f608d7b1fe3eeb810bc8"
+    },
+    {
+      "path": "truss/_umf/owner/producer.js",
+      "sha256": "db1d813cafd6f48cb20549ea7e847aca754b53c21bbc624ff88aa963d917c90b"
+    },
+    {
+      "path": "truss/_umf/packages/umf-bun/src/bridge.js",
+      "sha256": "96e021ffcded9f86473f3ee6b7d0161acefddd102bb3dd29f6351bb4b8272781"
+    },
+    {
+      "path": "truss/_umf/runtime/node_modules/ajv/dist/2020.js",
+      "sha256": "57cad03e867e41b0bf4a68c13e24b2628312c6dc82a3ca16780a6864130ad40d"
+    },
+    {
+      "path": "truss/_umf/runtime/package.json",
+      "sha256": "9a0a1f4e40bbd5082cbcc0f6b6b515368f2dc8dc60341affdc8c50571819bd49"
+    },
+    {
+      "path": "truss/_umf_release.py",
+      "sha256": "6fc49215ae1596f942e98a2847c9dfebd93c3b8ee783bfe888fa382e057c3cbd"
+    },
+    {
+      "path": "truss/assembly.py",
+      "sha256": "cc2c7beb1e927adaee84b408cbbca2dbd5751c78b2d9c3a5b6d937109056c4d6"
+    },
+    {
+      "path": "truss/assembly_contracts.py",
+      "sha256": "d3cdbf3bbdb765eee962a3e9181c80e79b668105c2bb49bb551531438c2c21f9"
+    },
+    {
+      "path": "truss/cli.py",
+      "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+    },
+    {
+      "path": "truss/contracts.py",
+      "sha256": "a5a71937709f3a8704de9e33b87e8aadcb743ea9adcdeea8037a7d76b069bdbd"
+    },
+    {
+      "path": "truss/execution.py",
+      "sha256": "0df49d51e760bfa36a814dd0cca31b8d266ae3378d46f63b9e94f2ef63cdcff5"
+    },
+    {
+      "path": "truss/groups.py",
+      "sha256": "e6911d22e53fde65a6e9ebb441ab7d3a1428a312b8342e9e2e3c9e07b0228c00"
+    },
+    {
+      "path": "truss/host.py",
+      "sha256": "f7be091d09d3c3bd272f9e849b378f44049d0b0153b94c925f58296d4bcd74f4"
+    },
+    {
+      "path": "truss/imports.py",
+      "sha256": "22c151c516770c2284a386659c0884e666ae4780eaf7aa7920c0a8e8d2787592"
+    },
+    {
+      "path": "truss/local_runtime.py",
+      "sha256": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9"
+    },
+    {
+      "path": "truss/migration_planning.py",
+      "sha256": "1523a466555ab7b4075f501edd0570f9465c67a67558d2733b5c06984571c3a6"
+    },
+    {
+      "path": "truss/numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "truss/preparation.py",
+      "sha256": "fdd790047c1406e13d335951a50053013398e1b0068849e6bf3a4ebf73850af0"
+    },
+    {
+      "path": "truss/py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "truss/timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "truss/weft.py",
+      "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+    }
+  ],
+  "tests": {
+    "affected_native": "131 passed in20.103s; before final typing/export-only edits",
+    "installed_host_assembly": "23 passed in9.623s",
+    "strict_source": "3 files passed --strict --follow-imports=skip",
+    "strict_installed_consumer": "1 consumer passed --strict --follow-imports=silent"
+  },
+  "logs": {
+    "lifecycle-regression": {
+      "sha256": "40d65f4963400324d279acab51d600e33deede8945626a1604acb5228e71b69e",
+      "path": "docs/helix/04-build/evidence/python-contracts-iteration29-lifecycle-regression.log"
+    },
+    "installed-tests": {
+      "sha256": "2d0e10625e8a408c9555c9c2ae225e52b4a0281cab228bc25513af09a441746b",
+      "path": "docs/helix/04-build/evidence/python-contracts-iteration29-installed-tests.log"
+    },
+    "consumer-typecheck": {
+      "sha256": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e",
+      "path": "docs/helix/04-build/evidence/python-contracts-iteration29-consumer-typecheck.log"
+    },
+    "wheel-final": {
+      "sha256": "3a52b2a95747a0bb1b9dcdbc8fb1fc0aa91a355a36258ff8c275eecbc2be002e",
+      "path": "docs/helix/04-build/evidence/python-contracts-iteration29-wheel-final.log"
+    }
+  },
+  "consumer_sha256": "5d4d9c94f24c077a3fe22158ddddd94b1b2ff32037702f70288e4745a87896f0",
+  "consumer_path": "packages/python/tests/typecheck_host_assembly.py",
+  "installed_base_import": "isolated installed import with pg8000 blocked: passed",
+  "test_sources": {
+    "packages/python/tests/test_public_host.py": "a234f994d9a555c8785a1ca13738982556292e3627cad3ae0780eaf7d9ebeaf4",
+    "packages/python/tests/test_reference_assembly.py": "1a4d9612be371bcbd342715e69215fe30c68a6af2b5f2eb1802c1db0d0be1e3b"
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "result": "approved scoped source/export/artifact checkpoint",
+    "independent_tests": "22 passed in3.334s before final packaged diagnostic test; distinct from final23 installed tests",
+    "artifact_correspondence": "independent83file check and retained log/consumer hashes passed"
+  }
+}

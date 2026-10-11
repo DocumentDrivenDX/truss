@@ -104,6 +104,34 @@ class NativeConnectionFactory:
             raise NativeBoundaryRefusal('Original exposed bootstrap receipt required')
         return record.witness.boundary
 
+    def close_host(self,boundary,*,retry=False):
+        """Explicit host-owned discard; original stream/socket cleanup only.
+
+        No transaction durability inference. A returned false requires retained
+        custody and an explicit retry; no internal cleanup loop is performed.
+        """
+        if type(retry) is not bool:raise NativeBoundaryRefusal('Exact retry selection required')
+        record=next((r for r in self._records if r.exposed and r.witness.boundary is boundary),None)
+        if record is None:raise NativeBoundaryRefusal('Original host-owned connection required')
+        with boundary._lock:
+            if (record.connection is not boundary._connection or record.witness.record is not record
+                    or record.witness.boundary is not boundary):
+                raise NativeBoundaryRefusal('Original host resource correspondence required')
+            if record.closed:return True
+            if (record.host_close_running or boundary._calling or boundary._operation is not None
+                    or boundary._operation_ledger is not None or boundary._pending_operation_ledger is not None
+                    or boundary._host_control_pending is not None or boundary._cancel_pending is not None
+                    or boundary._active_cancellation is not None):
+                raise NativeBoundaryRefusal('Original native work must settle before host close')
+            boundary._quarantined=True
+            record.host_close_started=True
+            record.host_close_running=True
+        try:
+            record._close_resources(recovery=retry)
+            return record.closed
+        finally:
+            with boundary._lock:record.host_close_running=False
+
     def _publish(self,record,boundary):
         if record.phase!='ready' or not record.release.published or boundary._operation is not None:
             raise NativeBoundaryRefusal('Original bootstrap publication unavailable')
