@@ -1,0 +1,54 @@
+{
+  "scope": "Fixed reference decimal(21,3) candidate semantics and actual native scalar images; not public API, codec authority, installation or protected operation qualification",
+  "nativeTests": {
+    "count": 5,
+    "passed": 5,
+    "runtime": "PostgreSQL16.15, pg8000 1.31.5, corrected private pgserver runtime",
+    "elapsedSeconds": 4.458,
+    "latestAdditionalCheck": {
+      "test": "test_reference_images_require_complete_exclusive_carriers",
+      "passed": true,
+      "elapsedSeconds": 4.785,
+      "includes": "Raw native null codec/source cells; original host decoder independently refuses these malformed mandatory cells"
+    }
+  },
+  "owner": {
+    "sourceRevision": "9e4bed3efe922c11e4b5a888ba6854de14f1b29f",
+    "bundleSha256": "0a5c81094f4cb153d8d847701e9f73dc96ddd3d03eeb6488251fc696a95ad775",
+    "scope": "Original UMF decimal Field precision21 scale3 admission only; no installed runtime qualification",
+    "accepted": [
+      "9007199254740993.000",
+      "0.00",
+      "-0.01",
+      "1e2",
+      "1.2300",
+      "999999999999999999.999",
+      "-999999999999999999.999",
+      "0e999999999999999999999999999999999",
+      "-0.000e9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
+    ],
+    "refused": [
+      "0.0001",
+      "1e18",
+      "-1e18",
+      "1e000000000000000000000000000000000",
+      "+1",
+      "01",
+      ".1",
+      "1.",
+      "NaN",
+      "1e",
+      "1\n"
+    ]
+  },
+  "sourceSha256": {
+    "packages/postgresql/native/row-image/reference-decimal.sql": "41029a97bfaf786a051ad703a279027b83776af712df9cc0f7d7704e60dd2fc2",
+    "packages/python/tests/test_reference_decimal_native.py": "06345f4411b45322e8043b747c217c876b41a2fc3a53f76fcc852459c778d851",
+    "docs/helix/04-build/evidence/design-audit/check-reference-decimal-field.ts": "319b76d6bde5d75d8f10d207e83125c465aabe597c448351e5b4c76768e0c3c3"
+  },
+  "remaining": [
+    "Original registered codec and source authority",
+    "Complete semantic reconstruction and bounded shared operation account",
+    "Protected installation, commit finalization and public Python operations"
+  ]
+}

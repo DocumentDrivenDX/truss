@@ -38,6 +38,52 @@ ddx:
 
 # Truss build plan
 
+## Immediate Python delivery sequence — 2026-10-11
+
+The consumer-facing milestone is an installed-wheel workflow using ordinary
+credentials: fresh installation → catalog registration → host commit → original
+report retrieval → create/update → exact read → reconnect and replay the same
+request. Runtime startup, transaction controls, preparation, footprint inspection
+and private native checks are prerequisites; they do not count as those public
+operations. At main f76f7ab2, assembly operation selectors still return unavailable.
+
+Implement the catalog provider and its actual installer as one connected delivery.
+Extend the issued staging route with the four original report sources already
+required by `_catalog_report_assembly`: original installed execution, admitted
+layout, registered enforcement report profile and registered acceptance report
+profile. Produce the complete immutable report, register exactly one revision
+feed fact with its original input/report/clock/origin, advance the head, independently
+verify the final state and finalize at the actual final generation. Keep these
+phases internal to one atomic acceptance call. A missing producer refuses before
+publication; neither a dictionary nor a test fixture registers authority.
+
+Complete `row_touch_commit_check`, `feed_current_union_check` and
+`feed_union_validate_current_scope` for the same bundle. A catalog-only operation
+has zero row touches but requires report, revision feed, complete operation and
+capacity closure. Detect missing registration and later changes independently of
+surviving feed rows and phase flags. Replace the unconditional commit barrier only
+after complete transaction closure passes. Finish `install_fresh` with original
+bootstrap admission, installed dependency/authority verification and acknowledged
+or unknown settlement under IM01–IM07; changing the provisional constructor's
+rollback to commit is not implementation of installation.
+
+Compose the security owner's adopted pre-elevation subject/current-authority and
+held installed-source cut through the protected dispatcher. The merged fresh epoch
+response and ancestry evidence are prerequisites, not that held capability. Truss
+owns report policy, report source integration, feed production, finalization,
+installer composition and Python settlement; continue these while security work
+progresses. Further standalone scalar helpers do not set the delivery sequence.
+
+After accepted registration and report retrieval, implement JSON-home create/string
+update, journal/feed/receipt effects, authorized identity read and durable exact
+request replay. This follows the existing fresh closed UMF subset's JSON homes;
+the private row-home string writer is not a substitute. Retain all broader read,
+Weft, import, receipt visibility, feed/ACK, shared-corpus and migration obligations.
+Required negative schedules include direct-helper denial, missing report/feed,
+late generation changes, operation rollback preserving earlier host work and lost
+commit acknowledgement without an automatic retry. Astra Ultra reviewed this
+delivery order; completed implementation still requires its own review.
+
 ## Selected decision handoff — 2026-10-07
 
 Apply the accepted owner decisions in the PRD and ADR-005/006/007. Remove universal native resource-account and independent precommit allocator assumptions from the required reference-host composition. Retain finite bounds for controlled work, database graph integrity, pooling, current authority and original cleanup/recovery obligations. Keep optional stronger profiles explicitly separate.
