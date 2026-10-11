@@ -1,0 +1,167 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-field-cuts.py": "8e1c412894c6f09cfe924f53f3d6e01d8f2c8e8c1ca1b60b50e4725ed7315c72",
+    "packages/python/src/truss/_security_fact_coverage.py": "e6e0e0b3798b64b4c3d60a285ca80865d43ff0d5275426c4cc9c5f3a8fa88da6",
+    "packages/python/src/truss/_psycopg_fact_cut.py": "c08488aebae4f3430d54144a8f19965d0ca4c81e04820dd0dcc3779aaa32110e",
+    "docs/helix/04-build/evidence/security-fact-requirements/requirements.json": "c341d435056be2d7fda272dc5d9bbdcef9cd125e18882cf6da20d0f87c1c62da",
+    "docs/helix/04-build/evidence/security-fact-requirements/policy.json": "11bcba30d9f049f6dba1a061e590b8a3aa157db8a608ad71656dff69cae5d030",
+    "docs/helix/04-build/evidence/security-fact-requirements/resolution.json": "de2fd0e79da6d2220619f0256d8038e3b115b8d3e4ba8509ded77332bbb52d5c",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "7dbe12b81f18c2a5e02cfb3731141855648929efc0b5089c9978768915b8f3e8"
+  },
+  "fixtureReferences": [
+    [
+      "field",
+      [
+        "domain",
+        "m",
+        "active"
+      ]
+    ],
+    [
+      "field",
+      [
+        "domain",
+        "m",
+        "assignmentProject"
+      ]
+    ],
+    [
+      "field",
+      [
+        "domain",
+        "m",
+        "assignmentStaff"
+      ]
+    ],
+    [
+      "field",
+      [
+        "domain",
+        "m",
+        "ownerProject"
+      ]
+    ],
+    [
+      "field",
+      [
+        "domain",
+        "m",
+        "ownerResource"
+      ]
+    ],
+    [
+      "field",
+      [
+        "domain",
+        "m",
+        "projectId"
+      ]
+    ],
+    [
+      "field",
+      [
+        "domain",
+        "m",
+        "resourceId"
+      ]
+    ],
+    [
+      "field",
+      [
+        "domain",
+        "m",
+        "staffId"
+      ]
+    ],
+    [
+      "association",
+      [
+        "domain",
+        "m",
+        "Assignment"
+      ]
+    ],
+    [
+      "association",
+      [
+        "domain",
+        "m",
+        "Ownership"
+      ]
+    ]
+  ],
+  "queries": [
+    {
+      "id": "complete_corresponding_stable_cuts_preserve_facts",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "07ccb197c52ffc1d091a5398071801e3a57d4a8c074ce0bd5979a25e43b0fe2d",
+      "model": null
+    },
+    {
+      "id": "fixture_complete_cuts_preserve_active",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "924bea6611736d933e63ea0faf550b959d44464d4610affaf9423239a6f76055",
+      "model": null
+    },
+    {
+      "id": "missing_active_dependency_changes_fact",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "c07d3271d08228bf7a7d88cc215d1767ba94b97b3c39fe05275c95ea0179fb1d",
+      "model": "[actual_provider = Store(Store(Store(Store(K(Int, 8),\n                                        -1797,\n                                        11),\n                                     -1,\n                                     7),\n                               0,\n                               5),\n                         -8366,\n                         13),\n declared_members = Store(K(Int, False), -450, True),\n before_provider_state = Store(Store(Store(Store(K(Int, 8),\n                                        -1797,\n                                        12),\n                                        -2283,\n                                        16),\n                                     17,\n                                     18),\n                               5,\n                               3),\n after_provider_state = Store(Store(Store(K(Int, 8),\n                                        -610,\n                                        21),\n                                    17,\n                                    19),\n                              5,\n                              2),\n declared_provider = Store(Store(Store(Store(K(Int, 8),\n                                        -2283,\n                                        15),\n                                       0,\n                                       5),\n                                 -8366,\n                                 14),\n                           -610,\n                           20),\n held_provider_cuts = Store(Store(Store(Store(Store(Store(Store(K(Int,\n                                        True),\n                                        -1797,\n                                        False),\n                                        -450,\n                                        False),\n                                        -2283,\n                                        False),\n                                        -1,\n                                        False),\n                                        -610,\n                                        False),\n                                  17,\n                                  False),\n                            5,\n                            False),\n required = Lambda(fact, And(fact >= 0, Not(10 <= fact))),\n witness = 0,\n k!15 = [-1797 -> 11,\n         -1 -> 7,\n         0 -> 5,\n         -8366 -> 13,\n         else -> 8],\n k!16 = [-1797 -> 12,\n         -2283 -> 16,\n         17 -> 18,\n         5 -> 3,\n         else -> 8],\n k!13 = [-450 -> True, else -> False],\n k!17 = [-2283 -> 15,\n         0 -> 5,\n         -8366 -> 14,\n         -610 -> 20,\n         else -> 8],\n Ext = [(as-array, as-array) -> -450, else -> 0],\n later_decoder = [(0, 2) -> 6,\n                  (0, 3) -> 4,\n                  else -> original_decoder(Var(0), Var(1))],\n Ext = [(as-array, as-array) -> -1,\n        (as-array, as-array) -> -1797,\n        (as-array, as-array) -> -8366,\n        (as-array, as-array) -> -2283,\n        (as-array, as-array) -> 17,\n        (as-array, as-array) -> -610,\n        else -> 0],\n original_decoder = [(0, 2) -> 6, else -> 4],\n k!14 = [-610 -> 21, 17 -> 19, 5 -> 2, else -> 8],\n k!18 = [-1797 -> False,\n         -450 -> False,\n         -2283 -> False,\n         -1 -> False,\n         -610 -> False,\n         17 -> False,\n         5 -> False,\n         else -> True]]"
+    },
+    {
+      "id": "wrong_provider_mapping_changes_fact",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "425db2421c01d3f01bf79d1fa537e87caa8111a126fde7823e2764e22e3e254d",
+      "model": "[declared_members = Store(Store(K(Int, True), -1, False),\n                          -7720,\n                          False),\n before_provider_state = Store(Store(Store(Store(Store(K(Int,\n                                        8),\n                                        1,\n                                        4),\n                                        -7720,\n                                        15),\n                                        -39,\n                                        11),\n                                     12,\n                                     13),\n                               2,\n                               7),\n after_provider_state = Store(Store(Store(Store(K(Int, 8),\n                                        1,\n                                        3),\n                                        -7720,\n                                        15),\n                                    12,\n                                    14),\n                              2,\n                              7),\n declared_provider = Store(Store(Store(K(Int, 8), -39, 10),\n                                 0,\n                                 2),\n                           -1,\n                           9),\n actual_provider = K(Int, 1),\n held_provider_cuts = Store(Store(Store(Store(K(Int, True),\n                                        1,\n                                        False),\n                                        -39,\n                                        False),\n                                  -1,\n                                  False),\n                            12,\n                            False),\n required = Lambda(fact, And(fact >= 0, Not(10 <= fact))),\n witness = 0,\n Ext = [(as-array, as-array) -> -1,\n        (as-array, as-array) -> -39,\n        (as-array, as-array) -> 12,\n        else -> 0],\n k!30 = [-1 -> False, -7720 -> False, else -> True],\n later_decoder = [(0, 3) -> 6,\n                  (0, 4) -> 5,\n                  else -> original_decoder(Var(0), Var(1))],\n k!27 = [-39 -> 10, 0 -> 2, -1 -> 9, else -> 8],\n k!31 = [1 -> False,\n         -39 -> False,\n         -1 -> False,\n         12 -> False,\n         else -> True],\n k!28 = [1 -> 3, -7720 -> 15, 12 -> 14, 2 -> 7, else -> 8],\n original_decoder = [(0, 3) -> 6, else -> 5],\n k!29 = [1 -> 4,\n         -7720 -> 15,\n         -39 -> 11,\n         12 -> 13,\n         2 -> 7,\n         else -> 8],\n Ext = [(as-array, as-array) -> -7720, else -> 0]]"
+    },
+    {
+      "id": "missing_provider_cut_changes_fact",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "158a9138223e11fc0a14adc354af1d5a0a4c7814d41ab43b0d7809f9f90e6c54",
+      "model": "[actual_provider = Store(Store(Store(Store(K(Int, 8),\n                                        -8366,\n                                        18),\n                                     -2283,\n                                     20),\n                               0,\n                               5),\n                         -1,\n                         13),\n declared_members = Store(K(Int, True), -450, False),\n before_provider_state = Store(Store(Store(Store(Store(K(Int,\n                                        8),\n                                        -8366,\n                                        19),\n                                        -450,\n                                        22),\n                                        -1797,\n                                        16),\n                                     7,\n                                     11),\n                               5,\n                               3),\n after_provider_state = Store(Store(Store(Store(K(Int, 8),\n                                        -450,\n                                        22),\n                                        -2283,\n                                        21),\n                                    -8856,\n                                    14),\n                              5,\n                              2),\n declared_provider = Store(Store(Store(Store(K(Int, 8),\n                                        -1797,\n                                        17),\n                                       0,\n                                       5),\n                                 -1,\n                                 12),\n                           -8856,\n                           15),\n held_provider_cuts = Store(K(Int, False), -450, True),\n required = Lambda(fact, And(fact >= 0, Not(10 <= fact))),\n witness = 0,\n k!55 = [-8366 -> 19,\n         -450 -> 22,\n         -1797 -> 16,\n         7 -> 11,\n         5 -> 3,\n         else -> 8],\n k!52 = [-450 -> True, else -> False],\n k!57 = [-1797 -> 17,\n         0 -> 5,\n         -1 -> 12,\n         -8856 -> 15,\n         else -> 8],\n Ext = [(as-array, as-array) -> 7,\n        (as-array, as-array) -> -1,\n        (as-array, as-array) -> -8856,\n        (as-array, as-array) -> -1797,\n        (as-array, as-array) -> -8366,\n        (as-array, as-array) -> -2283,\n        else -> 0],\n later_decoder = [(0, 2) -> 6,\n                  (0, 3) -> 4,\n                  else -> original_decoder(Var(0), Var(1))],\n Ext = [(as-array, as-array) -> -450, else -> 0],\n k!56 = [-450 -> False, else -> True],\n original_decoder = [(0, 2) -> 6, else -> 4],\n k!53 = [-8366 -> 18,\n         -2283 -> 20,\n         0 -> 5,\n         -1 -> 13,\n         else -> 8],\n k!54 = [-450 -> 22,\n         -2283 -> 21,\n         -8856 -> 14,\n         5 -> 2,\n         else -> 8]]"
+    },
+    {
+      "id": "released_or_bypassed_cut_changes_fact",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "08e6dc27598f48f56956054b8035c7581a6ed81208ea4a25cce8f89c2147b127",
+      "model": "[actual_provider = Store(Store(K(Int, -1), 9, 6), -1, 7),\n declared_members = K(Int, True),\n before_provider_state = K(Int, 3),\n declared_provider = Store(Store(K(Int, -1), 9, 6), -1, 8),\n after_provider_state = K(Int, 2),\n held_provider_cuts = K(Int, True),\n required = Lambda(fact, And(fact >= 0, Not(10 <= fact))),\n witness = 0,\n k!79 = [9 -> 6, -1 -> 7, else -> -1],\n k!80 = [9 -> 6, -1 -> 8, else -> -1],\n original_decoder = [(0, 2) -> 5, else -> 4],\n Ext = [(as-array, as-array) -> -1, else -> 0],\n later_decoder = [(0, 2) -> 5,\n                  (0, 3) -> 4,\n                  else -> original_decoder(Var(0), Var(1))]]"
+    },
+    {
+      "id": "changed_decoder_changes_fact_under_all_data_cuts",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "8c00ab4dd9a43989a19fdd726d8f8529495bd161dd26d41a527ea75a10775dd0",
+      "model": "[actual_provider = Store(Store(Store(Store(Store(K(Int, 8),\n                                        -536,\n                                        23),\n                                        9,\n                                        6),\n                                     0,\n                                     5),\n                               -1,\n                               13),\n                         -1143,\n                         16),\n declared_members = Store(Store(K(Int, True), -5854, False),\n                          -282,\n                          False),\n before_provider_state = Store(Store(Store(Store(Store(Store(K(Int,\n                                        8),\n                                        6,\n                                        7),\n                                        -536,\n                                        24),\n                                        -5854,\n                                        14),\n                                        8,\n                                        11),\n                                     18,\n                                     20),\n                               5,\n                               2),\n after_provider_state = Store(Store(Store(Store(Store(Store(K(Int,\n                                        8),\n                                        6,\n                                        7),\n                                        8,\n                                        11),\n                                        -1143,\n                                        17),\n                                        -282,\n                                        21),\n                                    18,\n                                    19),\n                              5,\n                              2),\n declared_provider = Store(Store(Store(Store(Store(K(Int, 8),\n                                        -5854,\n                                        15),\n                                        9,\n                                        6),\n                                       0,\n                                       5),\n                                 -1,\n                                 12),\n                           -282,\n                           22),\n held_provider_cuts = Store(Store(Store(K(Int, False),\n                                        5,\n                                        True),\n                                  8,\n                                  True),\n                            6,\n                            True),\n required = Lambda(fact, And(fact >= 0, Not(10 <= fact))),\n witness = 0,\n k!115 = [-5854 -> False, -282 -> False, else -> True],\n k!112 = [6 -> 7,\n          8 -> 11,\n          -1143 -> 17,\n          -282 -> 21,\n          18 -> 19,\n          5 -> 2,\n          else -> 8],\n Ext = [(as-array, as-array) -> -1,\n        (as-array, as-array) -> -5854,\n        (as-array, as-array) -> -1143,\n        (as-array, as-array) -> 18,\n        (as-array, as-array) -> -282,\n        (as-array, as-array) -> -536,\n        else -> 0],\n k!113 = [-536 -> 23,\n          9 -> 6,\n          0 -> 5,\n          -1 -> 13,\n          -1143 -> 16,\n          else -> 8],\n k!117 = [5 -> True, 8 -> True, 6 -> True, else -> False],\n k!114 = [6 -> 7,\n          -536 -> 24,\n          -5854 -> 14,\n          8 -> 11,\n          18 -> 20,\n          5 -> 2,\n          else -> 8],\n later_decoder = [else -> 3],\n Ext = [(as-array, as-array) -> -8099, else -> 0],\n k!116 = [-5854 -> 15,\n          9 -> 6,\n          0 -> 5,\n          -1 -> 12,\n          -282 -> 22,\n          else -> 8],\n original_decoder = [else -> 4]]"
+    },
+    {
+      "id": "unrelated_uncut_provider_can_change",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "0ee454b901fd8cbe27711403dc2503e5519d450686747b18c5ee71160e962b35",
+      "model": "[actual_provider = K(Int, 0),\n declared_members = K(Int, False),\n before_provider_state = K(Int, 0),\n after_provider_state = K(Int, 1),\n required = K(Int, False),\n declared_provider = K(Int, 0),\n held_provider_cuts = K(Int, False),\n later_decoder = [else -> original_decoder(Var(0), Var(1))],\n original_decoder = [else -> 999]]"
+    }
+  ],
+  "scope": "Unbounded symbolic facts/providers and opaque provider states. Complete original dependency membership, corresponding actual/declared providers, continuously effective provider cuts and stable deterministic decoding imply one-step fact preservation. Fixture instantiation uses the ten original UMF dependency identities, not inferred physical bindings. Finite-history induction requires premises at every step.",
+  "limitations": [
+    "Opaque state equality abstracts all rows, presence, nulls and column values; no PostgreSQL SQL, trigger, driver or semantic decoder refinement",
+    "Source/role/config cuts, authenticated issuer and actual mapping provenance are premises, not established by hashes",
+    "No authorization, mutation atomicity, disclosure, browser/package qualification or backend acceptance promotion"
+  ]
+}

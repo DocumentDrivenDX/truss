@@ -7,7 +7,7 @@ from psycopg import sql
 import test_psycopg_epoch_cut_native as epoch_tests
 from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison,_run_fenced_fact_operation
 from truss.execution import Ok,Error
-from truss._psycopg_dependency_fact_cut import _DependencyFactProvider,_run_dependency_fact_operation,_run_epoch_bound_dependency_fact_operation
+from truss._psycopg_dependency_fact_cut import _DependencyFactProvider,_run_dependency_fact_operation,_run_epoch_bound_dependency_fact_operation,_capture_epoch_bound_dependency_cells
 ROOT=Path(__file__).resolve().parents[3]
 
 class PsycopgFactCutNativeTests(unittest.TestCase):
@@ -254,3 +254,51 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'requirement/profile'):
             _run_epoch_bound_dependency_fact_operation(self.host,t,comparison,raw,'0'*64,lambda c:called.append(True))
         self.assertEqual(called,[])
+
+    def fixed_capture(self,t):
+        raw,profile=self.bound_profile();comparison=self.issue_bound_profile(profile)
+        return _capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest())
+    def test_fixed_capture_reads_original_active_not_decoy_column(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.sec_assignment ADD COLUMN decoy_active boolean NOT NULL DEFAULT true; UPDATE truss.sec_assignment SET active=false')
+        result=self.fixed_capture(t);self.assertIsInstance(result,Ok)
+        assignment=next(r for r in result.value if r.relation[1]=='sec_assignment')
+        active=next(i for i,(ref,number,oid) in enumerate(assignment.fields) if ref[-1]=='active')
+        self.assertEqual(assignment.rows[0][active],'false')
+        self.assertTrue(all(ref[-1]!='salary' for r in result.value for ref,_,_ in r.fields))
+    def test_fixed_capture_empty_association_is_explicit_not_missing_binding(self):
+        t=self.begin();self.connection.execute('DELETE FROM truss.sec_ownership')
+        result=self.fixed_capture(t);self.assertIsInstance(result,Ok)
+        ownership=next(r for r in result.value if r.relation[1]=='sec_ownership')
+        self.assertEqual(ownership.associations,(('domain','m','Ownership'),));self.assertEqual(ownership.rows,())
+    def test_fixed_capture_over_row_cap_refuses_whole_result(self):
+        t=self.begin();self.connection.execute("INSERT INTO truss.sec_assignment SELECT 'a'||i::text,'s1','p1',true FROM generate_series(1,100) i")
+        result=self.fixed_capture(t);self.assertIsInstance(result,Error)
+    def test_fixed_capture_oversize_cell_refuses_without_partial_values(self):
+        t=self.begin();self.connection.execute("UPDATE truss.sec_staff SET staff_id=repeat('x',65537)")
+        result=self.fixed_capture(t);self.assertIsInstance(result,Error)
+
+    def physical_capture_variant(self,t,column):
+        providers=self.dependency_providers();index=next(i for i,p in enumerate(providers) if p.reference[-1]=='staffId');prior=providers[index]
+        changed=_DependencyFactProvider(prior.kind,prior.reference,prior.relation,column)
+        raw,profile=self.bound_profile(providers[:index]+(changed,)+providers[index+1:]);comparison=self.issue_bound_profile(profile)
+        result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest());self.assertIsInstance(result,Ok)
+        return next(r for r in result.value if r.relation[1]=='sec_staff')
+    def test_fixed_raw_capture_preserves_native_int8_above_javascript_safe_integer(self):
+        # Physical encoding control only; this changed mapping is not qualified
+        # against the original ontology's string-valued staff identity.
+        t=self.begin();self.connection.execute("UPDATE truss.sec_staff SET staff_id='9007199254740993'; ALTER TABLE truss.sec_staff ALTER COLUMN staff_id TYPE bigint USING staff_id::bigint")
+        cells=self.physical_capture_variant(t,_FactColumnComparison('staff_id',1,20,-1,True,0))
+        self.assertEqual(cells.rows,(('9007199254740993',),));self.assertEqual(cells.fields[0][2],20)
+    def test_fixed_raw_capture_preserves_native_null_without_empty_text_coercion(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.sec_staff ALTER COLUMN staff_id DROP NOT NULL; UPDATE truss.sec_staff SET staff_id=NULL')
+        cells=self.physical_capture_variant(t,_FactColumnComparison('staff_id',1,25,-1,False,100))
+        self.assertEqual(cells.rows,((None,),))
+    def test_fixed_capture_ignores_host_custom_text_loader(self):
+        from psycopg.types.string import TextLoader
+        class SubstituteText(TextLoader):
+            def load(self,data):return 'substituted'
+        t=self.begin();raw,profile=self.bound_profile();comparison=self.issue_bound_profile(profile)
+        self.connection.adapters.register_loader(25,SubstituteText)
+        result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest());self.assertIsInstance(result,Ok)
+        cells=next(r for r in result.value if r.relation[1]=='sec_staff')
+        self.assertEqual(cells.rows,(('s1',),))

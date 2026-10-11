@@ -4056,3 +4056,27 @@ issuer/semantic mapping qualification and decoder/source/role/config closure rem
 required; arbitrary private callbacks still do not constitute a protected policy
 executor. Retain the earlier native decoy-active counterexample and full goal.
 No backend acceptance binding promoted: checkpoint26/132,106 missing; goal active.
+
+
+### Fixed original-profile raw cell capture — 2026-10-11
+
+Implemented private fixed raw-cell capture without caller SQL/decoder callback,
+sharing original epoch profile derivation and complete dependency/native cuts.
+Final packet `evidence/python-psycopg-epoch-cut/5b782b22-1881-4bbb-8ce2-d985541d080a`
+passes91 methods:40 fact/dependency/owner/recipe/capture,16 graph/gateway,nine epoch,
+26 adoption. Verified123 Truss and363 UMF current/archived source pins,1614 native
+payload pins, module boundaries and three independent named
+stop0/status3/socket-absent cleanups. Seven added controls cover decoy exclusion,
+empty association distinction, row/oversized-cell refusal, int8 precision, NULL
+preservation and hostile host loader. Initial884182c1 qualifies88 methods;
+2d663dde retains a91-method failure caused by poisoning the fixture issuer's epoch
+ID observation before capture. Final setup records the original baseline first;
+production lifecycle observation remains independently unqualified.
+
+Formal `evidence/security-field-cuts-formal/f9fa7134-2b71-4f51-9a3f-a8d6080b477f`
+replays eight conditional formulas with seven current source inputs, not native
+capture/refinement proof. Fixed capture produces raw rows only: complete semantic
+key/endpoint/decoder closure, authenticated issuer/mapping/source/role/config cuts,
+original fact construction, protected evaluation/dispatch and final disclosure
+remain required across flat and graph implementations. No acceptance promotion,
+public API or grant: checkpoint26/132 with106 missing. Full goal active.
