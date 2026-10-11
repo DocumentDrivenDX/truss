@@ -70,3 +70,34 @@ test('UMF report basis preserves actual original version and registered bytes wi
  expect(basis.supportProfile).toEqual(input.supportProfile);expect(Object.isFrozen(basis.sourceVersions)).toBe(true);
  expect(basis.scope).toBe('original_umf_and_support_byte_basis_only');expect('supportedSubset' in basis).toBe(false);
 });
+
+test('optional original primary markers project without changing source or ordered keys',async()=>{
+ const {stageNewCatalogCohort}=await import('../packages/umf-bun/src/catalog-new-stage');
+ for(const marker of [undefined,false,true]){
+  const input=request();input.documents=input.documents.slice(0,1);
+  const source=JSON.parse(Buffer.from(input.documents[0].artifact.bytesBase64,'base64').toString());
+  const record=source.modules[0].elements[0];record.members.push({module:'m',element:'code'});
+  source.modules[0].elements.push({id:'code',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}});
+  record.keys=[{id:'identity',name:'identity',fields:[{module:'m',element:'code'},{module:'m',element:'label'}],...(marker===undefined?{}:{primary:marker})}];
+  const original=JSON.stringify(source),bytes=Buffer.from(original);input.documents[0].artifact={identity:'first-doc',bytesBase64:bytes.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};
+  const prepared=run(input);let candidates:unknown;let archive:unknown;
+  const connection={unsafe:async(query:string,parameters?:unknown[])=>{
+   if(query.includes('runtime_stage_catalog_documents')){archive=JSON.parse(parameters![0] as string);return [{provisional_revision:'1'}]}
+   if(query.includes('runtime_stage_new_types'))return [{document_id:'first-doc',module_id:'m',element_id:'Item',type_id:'10'}];
+   if(query.includes('runtime_stage_new_properties'))return ['label','code'].map((field_id,i)=>({owner_type_id:'10',field_module:'m',field_id,property_id:String(20+i)}));
+   if(query.includes('runtime_stage_new_keys'))candidates=JSON.parse(parameters![1] as string);
+   return [];
+  }};
+  await stageNewCatalogCohort(connection,prepared,prepareDefaultCatalogHomes(prepared).homes,{});
+  expect(candidates).toEqual([{ownerTypeId:'10',keyId:'identity',primary:marker===true,propertyIds:['21','20']}]);
+  expect((archive as {originalText:string}[])[0].originalText).toBe(original);
+  expect(Object.hasOwn(prepared.declarations[0].records[0].keys[0],'primary')).toBe(marker!==undefined);
+ }
+});
+
+test('non-Boolean primary markers fail original owner validation',()=>{
+ const input=request();const source=JSON.parse(Buffer.from(input.documents[0].artifact.bytesBase64,'base64').toString());
+ source.modules[0].elements[0].keys=[{id:'identity',name:'identity',fields:[{module:'m',element:'label'}],primary:'false'}];
+ const bytes=Buffer.from(JSON.stringify(source));input.documents[0].artifact={identity:'first-doc',bytesBase64:bytes.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')};
+ expect(()=>run(input)).toThrow();
+});
