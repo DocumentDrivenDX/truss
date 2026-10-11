@@ -4571,3 +4571,21 @@ lifetime, graph decoding and protected final release remain required. Last full
 checkpoint26/132 with106 missing; goal active. Next qualify original operation
 context and mapping/producer custody before turning this pipeline into ordinary
 protected disclosure.
+
+
+### Requalified against concurrently advanced main — 2026-10-11
+
+Preserved concurrent public assembly/resource simplification and PostgreSQL18.6
+main history through a merge. The runner retains the added147-case security scope
+and current runtime metadata; exact runtime profile JSON and shared-fixture source
+are now retained inputs. Final
+`evidence/python-psycopg-epoch-cut/ab9d3789-a230-46c2-be8e-c4c2a9f475cd` passes147
+methods on pgserver-pg18 18.6.0/PostgreSQL18.6 with stock psycopg3.3.6 binary/libpq
+18.6, module boundaries and three independent stop0/status3/socket-absent cleanups.
+Earlier01992ea3 remains its separate PostgreSQL16.15/source tuple, not current-main
+qualification. Initial5a38c4e4 stopped during input discovery due to a wrong fixture
+source path; no native fixture launched and no qualification claimed.
+The owned within-host evaluator remains an administrative flat-table spike;
+ordinary caller, full original issuer/mapping/package custody, complete role/ACL
+lifetime, graph decoder and protected final release remain open. No new backend
+acceptance binding; last full checkpoint26/132,106 missing. Goal active.
