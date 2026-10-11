@@ -1,0 +1,126 @@
+test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) ... 
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql="UPDATE truss.installation_archive SET artifact_bytes=decode('02','hex')") ... FAIL
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql="INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('fixture','input','second',decode('02','hex'),sha256(convert_to('second','UTF8')))") ... FAIL
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='DELETE FROM truss.installation_archive') ... FAIL
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='TRUNCATE truss.installation_archive') ... FAIL
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE false') ... FAIL
+  test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='UPDATE truss.installation_archive SET artifact_identity=artifact_identity WHERE false') ... FAIL
+test_always_enabled_and_public_execution_revoked (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_always_enabled_and_public_execution_revoked) ... ok
+test_change_restore_cannot_begin_under_original_cut (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_change_restore_cannot_begin_under_original_cut) ... FAIL
+test_lock_upgrade_keeps_original_fence_visible (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_lock_upgrade_keeps_original_fence_visible) ... FAIL
+test_release_reparents_fence_and_later_rollback_preserves_it (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_release_reparents_fence_and_later_rollback_preserves_it) ... FAIL
+test_replica_mode_does_not_disable_fence (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_replica_mode_does_not_disable_fence) ... FAIL
+test_rollback_across_acquisition_releases_fence_same_xid (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_rollback_across_acquisition_releases_fence_same_xid) ... ok
+test_unselected_writes_and_reads_remain_available (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_unselected_writes_and_reads_remain_available) ... ok
+
+======================================================================
+FAIL: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql="UPDATE truss.installation_archive SET artifact_bytes=decode('02','hex')")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 45, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql="INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('fixture','input','second',decode('02','hex'),sha256(convert_to('second','UTF8')))")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 45, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='DELETE FROM truss.installation_archive')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 45, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='TRUNCATE truss.installation_archive')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 45, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE false')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 45, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='UPDATE truss.installation_archive SET artifact_identity=artifact_identity WHERE false')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 45, in test_all_write_events_and_noop_statements_are_fenced
+    with self.subTest(sql=sql):self.refused(sql)
+                               ^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_change_restore_cannot_begin_under_original_cut (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_change_restore_cannot_begin_under_original_cut)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 48, in test_change_restore_cannot_begin_under_original_cut
+    self.lock();self.refused("UPDATE truss.installation_archive SET artifact_bytes=decode('02','hex')")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_lock_upgrade_keeps_original_fence_visible (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_lock_upgrade_keeps_original_fence_visible)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 72, in test_lock_upgrade_keeps_original_fence_visible
+    self.refused('DELETE FROM truss.installation_archive')
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_release_reparents_fence_and_later_rollback_preserves_it (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_release_reparents_fence_and_later_rollback_preserves_it)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 60, in test_release_reparents_fence_and_later_rollback_preserves_it
+    self.refused('DELETE FROM truss.installation_archive')
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_replica_mode_does_not_disable_fence (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_replica_mode_does_not_disable_fence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 75, in test_replica_mode_does_not_disable_fence
+    self.refused('DELETE FROM truss.installation_archive')
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89/checkout/packages/python/tests/test_archive_self_write_fence_native.py", line 33, in refused
+    with self.assertRaises(DatabaseError) as caught:self.c.run(sql)
+AssertionError: DatabaseError not raised
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.423s
+
+FAILED (failures=10)

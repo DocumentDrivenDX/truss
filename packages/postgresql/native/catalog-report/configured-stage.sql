@@ -22,6 +22,7 @@ BEGIN
  IF total_bytes>4194304 THEN
   RAISE EXCEPTION 'configured catalog artifact aggregate capacity exceeded' USING ERRCODE='54000';
  END IF;
+ PERFORM truss.runtime_require_selected_archive_write_fence();
  -- Select and acquire the archive cut before any catalog business effect.
  SELECT * INTO STRICT before_release FROM truss.runtime_select_catalog_report_release(
   pg_current_xact_id()::text,issued_ordinal::text,'0',encode(configuration_profile,'hex'));
@@ -31,6 +32,7 @@ BEGIN
   issued_ordinal,definition_bytes,input_bytes,candidate_bytes,obligation_bytes,group_bytes,
   documents_bytes,declarations_bytes,origin_bytes,original_prestate,original_context);
  result:=convert_from(decode(staged.provisional_result_hex,'hex'),'UTF8')::jsonb;
+ PERFORM truss.runtime_require_selected_archive_write_fence();
  SELECT * INTO STRICT after_release FROM truss.runtime_select_catalog_report_release(
   staged.writer_xid,staged.ordinal,result->>'effectGeneration',encode(configuration_profile,'hex'));
  IF to_jsonb(before_release) IS DISTINCT FROM to_jsonb(after_release) THEN

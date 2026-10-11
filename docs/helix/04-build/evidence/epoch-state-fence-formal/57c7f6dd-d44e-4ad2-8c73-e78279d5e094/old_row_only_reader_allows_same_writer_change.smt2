@@ -1,0 +1,23 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun alive () Bool)
+(declare-fun issuer_guard () Bool)
+(declare-fun foreign_reader () Bool)
+(declare-fun write () Bool)
+(declare-fun state () Int)
+(declare-fun desired () Int)
+(declare-fun mid () Int)
+(assert
+ alive)
+(assert
+ (not issuer_guard))
+(assert
+ (not foreign_reader))
+(assert
+ write)
+(assert
+ (let ((?x21 (ite (and write (not (or (and alive issuer_guard) foreign_reader))) desired state)))
+ (= mid ?x21)))
+(assert
+ (and (distinct mid state) true))
+(check-sat)

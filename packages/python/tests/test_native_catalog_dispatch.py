@@ -33,7 +33,7 @@ class NativeCatalogDispatchTests(ReservedNativeOperationOrdinalTests):
                 for name in ('source-epoch-lock','issued-operation-admission/operation-configuration-context-admission',
                     'catalog-epoch-context','operation-configuration-current','catalog-admission-configuration',
                     'canonical-string-bytes','canonical-tree-bytes','catalog-report/source-candidate',
-                    'catalog-report/release-selection','catalog-report/configured-metadata','catalog-report/configured-graph','catalog-report/resource-selection','catalog-report/configured-stage','catalog-stage-configured'):
+                    'catalog-report/release-selection','catalog-report/configured-metadata','catalog-report/configured-graph','catalog-report/resource-selection','catalog-report/archive-self-write-fence','catalog-report/archive-write-fence-current','catalog-report/configured-stage','catalog-stage-configured'):
                     fixture.run((ROOT/f'packages/postgresql/native/{name}.sql').read_text())
                 guard=(ROOT/'docs/helix/04-build/evidence/design-audit/pgserver-populated-guard-fixture.sql').read_text()
                 fixture.run(guard.split('INSERT INTO truss.row_home_operation')[0])

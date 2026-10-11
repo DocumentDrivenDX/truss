@@ -57,6 +57,10 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
         self.connection.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
             artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
             :identity,:raw,sha256(convert_to(:identity,'UTF8')))""",identity=self.identity,raw=self.registration_bytes)
+        if getattr(self,'duplicate_registration',False):
+            self.connection.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,
+                artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,
+                artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE artifact_identity=:identity""",identity=self.identity)
         self.writer,self.ordinal=self.admit()
         if getattr(self,'skip_stage',False):return
         self.invoke()
@@ -128,7 +132,7 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
 
     def test_missing_changed_duplicate_registration_and_production_scope_refuse(self):
         from pg8000.exceptions import DatabaseError
-        self.stage()
+        self.connection.run('SAVEPOINT before_stage');self.stage()
         cases=[('missing',self.registration_bytes),('changed',self.registration_bytes+b' ')]
         changed=copy.deepcopy(self.registration);changed['scope']='installed_report_authority'
         cases.append(('scope',canonical_numeric_free(changed)))
@@ -139,9 +143,9 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
                     self.write(raw=raw,identity='absent' if kind=='missing' else None)
             finally:self.connection.run('ROLLBACK TO refusal');self.connection.run('RELEASE refusal')
             self.assertEqual(self.connection.run('SELECT count(*) FROM truss.catalog_acceptance_report'),[[0]])
-        self.connection.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,
-            artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,
-            artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE artifact_identity=:identity""",identity=self.identity)
+        # Duplicate before acquisition; post-cut archive writes are independently refused.
+        self.connection.run('ROLLBACK TO before_stage');self.connection.run('RELEASE before_stage')
+        self.duplicate_registration=True;self.stage()
         with self.assertRaises(DatabaseError) as caught:self.write()
         self.assertEqual(caught.exception.args[0]['M'],'unique original candidate registration archive required')
 
@@ -231,7 +235,7 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
             self.connection.run("CREATE FUNCTION truss.fixture_report_drift() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "+body+" RETURN NEW; END $$; CREATE TRIGGER fixture_report_drift AFTER INSERT ON truss.catalog_acceptance_report FOR EACH ROW EXECUTE FUNCTION truss.fixture_report_drift()")
             with self.subTest(body=body),self.assertRaises(DatabaseError) as caught:self.write()
             self.assertEqual(caught.exception.args[0]['C'],'55000')
-            self.assertEqual(caught.exception.args[0]['M'],'catalog observation stale or unrelated' if body.startswith('UPDATE') else 'original candidate report final source cut required')
+            self.assertEqual(caught.exception.args[0]['M'],'catalog observation stale or unrelated' if body.startswith('UPDATE') else 'selected archive cut excludes same-backend writes')
             self.connection.run('ROLLBACK TO drift');self.connection.run('RELEASE drift')
             self.assertEqual(self.connection.run('SELECT count(*) FROM truss.catalog_acceptance_report'),[[0]])
 
@@ -296,7 +300,8 @@ class ReportWriteCandidateNativeTests(unittest.TestCase):
             self.connection.run('SAVEPOINT resource_drift')
             self.connection.run("CREATE FUNCTION truss.fixture_report_resource_drift() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN "+body+" RETURN NEW; END $$; CREATE TRIGGER fixture_report_resource_drift AFTER INSERT ON truss.catalog_acceptance_report FOR EACH ROW EXECUTE FUNCTION truss.fixture_report_resource_drift()")
             with self.subTest(body=body),self.assertRaises(DatabaseError) as caught:self.write()
-            self.assertEqual(caught.exception.args[0]['M'],message)
+            self.assertEqual(caught.exception.args[0]['C'],'55000')
+            self.assertEqual(caught.exception.args[0]['M'],'selected archive cut excludes same-backend writes')
             self.connection.run('ROLLBACK TO resource_drift');self.connection.run('RELEASE resource_drift')
             self.assertEqual(self.connection.run('SELECT count(*) FROM truss.catalog_acceptance_report'),[[0]])
             self.assertEqual(self.connection.run('SELECT effect_generation::text FROM truss.row_home_operation'),[[self.generation]])

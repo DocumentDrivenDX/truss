@@ -1,0 +1,31 @@
+{
+  "status": "scoped-review-passed",
+  "auditedAtUtc": "2026-10-11T16:16:02.556452+00:00",
+  "implementationEdits": false,
+  "nativeOrProducerExecution": false,
+  "savedSmtReplay": true,
+  "files": {
+    "review": {
+      "path": "/private/tmp/astra-configured-fence-integration-review.md",
+      "sha256": "1d119085a488f1527aa2e17964cec7101dec3de54f26ac8e66fd8bfed59b27d2"
+    },
+    "nativeAudit": {
+      "path": "/private/tmp/astra-configured-fence-integration-native-audit.json",
+      "sha256": "9e152e5b85af23e96220ed5d74ce756034fdf1565d6b91638499854b3f425abd"
+    },
+    "formalReplay": {
+      "path": "/private/tmp/astra-configured-fence-integration-formal-replay.json",
+      "sha256": "cf6348cd707bf23ec71cb50c8af71a196f410f5d679c883ba3ff6ec251ac7e34"
+    }
+  },
+  "nativePackets": [
+    "fa97ed77-c2b0-426c-85ce-892bc46e5c4b",
+    "f8c0cabd-08bf-47fc-9c0c-a8fce0380a9e",
+    "4fb3bf2e-f812-44eb-9a83-249cb074e5e6",
+    "50c1ff15-08ee-4b64-9083-ef0c94d53304",
+    "d54640f1-c4f3-41d1-b0d7-cc093bc16e38",
+    "9b421857-df35-45e3-be72-fb2fc0d51ac1"
+  ],
+  "formalPacket": "e6d9a719-d884-464c-a633-aa7a87258040",
+  "qualification": "Private point-in-time installed-fence correspondence and scoped archive-write exclusion only; no continuous source/configuration/authority cut, authenticated/public installer, complete accepted report, final disclosure, or backend acceptance promotion."
+}

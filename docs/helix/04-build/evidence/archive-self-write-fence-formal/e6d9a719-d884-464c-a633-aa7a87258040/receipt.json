@@ -1,0 +1,69 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-archive-self-write-fence.py": "3879717a1c69572e6e01e4e77e1b121c965de6730f90f9dca47313f5ba6a3833",
+    "packages/postgresql/native/catalog-report/archive-self-write-fence.sql": "b37e86e1531388738288c27df2b1fdbc67abcbde8a0beb4e687615a835c71fb2",
+    "packages/python/tests/test_archive_self_write_fence_native.py": "e5dc136e8d23f5d2fec5849fd013b0b359e7dd748acbe1cb14037c94886ea0cb",
+    "scripts/check-python-catalog-report-release-native.py": "ab9cf07bb420399e8917086bcbc63c3a9bdf25128664d20690dba6a01eaff7b4"
+  },
+  "queries": [
+    {
+      "id": "fenced_step_preserves_state",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "f74186bfa932e362c81134d3e4c8a8d0becec1189b906903241a4cd7cb6e0699"
+    },
+    {
+      "id": "fenced_successful_mutation_unreachable",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "359fe3ae72bf3655671440404768e3512435ac5005ab8f74a0cacb69e7f12939"
+    },
+    {
+      "id": "read_step_preserves_state_without_fence",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "452286777c55dca02c092db22c5a75bbff6fb4a3bfd50e05495732a54ab78a4a"
+    },
+    {
+      "id": "fenced_two_step_change_restore_unreachable",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "4f95169127c4566fc75d601eb00b4006f3acc109b88481823bb65b5d43710c24"
+    },
+    {
+      "id": "omitted_fence_allows_change_restore",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n mutate = True,\n final = 0,\n alive = True,\n intermediate = 1,\n installed = False]",
+      "smt2Sha256": "a08f89411c54870d2a76e86fa6760757ac031b38d9d1c55380e7bb0508a39fc4"
+    },
+    {
+      "id": "rollback_crossing_cut_allows_later_change",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n mutate = True,\n alive = False,\n intermediate = 1,\n installed = True]",
+      "smt2Sha256": "3905f4dc44a88204aeb87f51abf72f550a3b2177e23f1a3309e28c23dd956bbc"
+    },
+    {
+      "id": "disabled_trigger_allows_change",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[desired = 1,\n state = 0,\n mutate = True,\n alive = True,\n intermediate = 1,\n installed = False]",
+      "smt2Sha256": "16d116b5f4c6547b47b0be7fa1e6d2b4411d94ebff07facb9557ebb24d3d372d"
+    }
+  ],
+  "scope": "Unbounded abstract one-step preservation and stated finite-history induction, with trigger installed, every successful mutation reaching this fence, actual original ShareLock observation and no privileged bypass as premises. State is opaque, not a digest or SQL catalog interpretation. Acquisition/reparenting/rollback, PostgreSQL pg_locks correspondence, trigger installation/effective privilege, complete source/authority cut and final disclosure are not proven by this model. Native lifetime tests provide separate scoped evidence; no implementation refinement or backend acceptance claim."
+}

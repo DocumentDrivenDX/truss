@@ -1,0 +1,63 @@
+2026-10-11 12:31:08.475 EDT [84818] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 12:31:08.476 EDT [84818] LOG:  listening on Unix socket "/private/tmp/rl-ngfthv09/.s.PGSQL.5432"
+2026-10-11 12:31:08.519 EDT [84823] LOG:  database system was shut down at 2026-10-11 12:31:08 EDT
+2026-10-11 12:31:08.523 EDT [84818] LOG:  database system is ready to accept connections
+2026-10-11 12:31:09.647 EDT [84846] ERROR:  selected epoch cut excludes same-backend writes
+2026-10-11 12:31:09.647 EDT [84846] CONTEXT:  PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 16 at RAISE
+2026-10-11 12:31:09.647 EDT [84846] STATEMENT:  SELECT truss.runtime_issue_source_epoch('fixture',$1,'target',decode('01','hex'),decode('02','hex'))
+2026-10-11 12:31:09.647 EDT [84847] WARNING:  there is no transaction in progress
+2026-10-11 12:31:09.670 EDT [84850] ERROR:  original source epoch registry evidence are immutable
+2026-10-11 12:31:09.670 EDT [84850] CONTEXT:  PL/pgSQL function truss.runtime_immutable_source_epoch() line 9 at RAISE
+2026-10-11 12:31:09.670 EDT [84850] STATEMENT:  TRUNCATE truss.source_epoch_registry CASCADE
+2026-10-11 12:31:09.671 EDT [84851] WARNING:  there is no transaction in progress
+2026-10-11 12:31:09.689 EDT [84852] ERROR:  selected epoch cut excludes same-backend writes
+2026-10-11 12:31:09.689 EDT [84852] CONTEXT:  PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 16 at RAISE
+2026-10-11 12:31:09.689 EDT [84852] STATEMENT:  SELECT truss.runtime_issue_source_epoch('fixture',$1,'target',decode('01','hex'),decode('02','hex'))
+2026-10-11 12:31:09.696 EDT [84857] WARNING:  there is no transaction in progress
+2026-10-11 12:31:09.703 EDT [84858] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:31:09.703 EDT [84858] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN SHARE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 11 at SQL statement
+2026-10-11 12:31:09.703 EDT [84858] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 12:31:09.705 EDT [84858] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:31:09.705 EDT [84858] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN SHARE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 11 at SQL statement
+2026-10-11 12:31:09.705 EDT [84858] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 12:31:09.712 EDT [84858] ERROR:  current source epoch correspondence required
+2026-10-11 12:31:09.712 EDT [84858] CONTEXT:  PL/pgSQL function truss.runtime_lock_source_epoch(text,text,text) line 18 at RAISE
+	SQL statement "SELECT *                   FROM truss.runtime_lock_source_epoch(
+	  expected_installation,expected_epoch,expected_incarnation)"
+	PL/pgSQL function truss.runtime_lock_fresh_source_epoch(text,text,text) line 14 at SQL statement
+	SQL statement "SELECT e.installation_id,e.source_epoch,e.target_incarnation,
+	  e.profile_hex,e.evidence_hex,e.evidence_sha256,
+	  e.actual_writer_xid,e.actual_database_oid,e.actual_backend_pid,
+	  e.original_actor,e.effective_actor,'transaction_epoch_state_fence_only'::text
+	 FROM truss.runtime_lock_fresh_source_epoch(expected_installation,expected_epoch,expected_incarnation) e"
+	PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 12 at RETURN QUERY
+2026-10-11 12:31:09.712 EDT [84858] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 12:31:09.712 EDT [84859] WARNING:  there is no transaction in progress
+2026-10-11 12:31:09.719 EDT [84862] ERROR:  could not obtain lock on relation "truss.source_epoch_current"
+2026-10-11 12:31:09.719 EDT [84862] CONTEXT:  SQL statement "LOCK TABLE truss.source_epoch_current, truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT"
+	PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 34 at SQL statement
+2026-10-11 12:31:09.719 EDT [84862] STATEMENT:  SELECT truss.runtime_issue_source_epoch('fixture',$1,'target',decode('01','hex'),decode('02','hex'))
+2026-10-11 12:31:09.721 EDT [84862] WARNING:  there is no transaction in progress
+2026-10-11 12:31:09.726 EDT [84863] ERROR:  permission denied for function runtime_lock_fenced_fresh_source_epoch
+2026-10-11 12:31:09.726 EDT [84863] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 12:31:09.727 EDT [84864] WARNING:  there is no transaction in progress
+2026-10-11 12:31:09.732 EDT [84865] ERROR:  fenced epoch requires native read committed read write
+2026-10-11 12:31:09.732 EDT [84865] CONTEXT:  PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 9 at RAISE
+2026-10-11 12:31:09.732 EDT [84865] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 12:31:09.732 EDT [84865] ERROR:  fenced epoch requires native read committed read write
+2026-10-11 12:31:09.732 EDT [84865] CONTEXT:  PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 9 at RAISE
+2026-10-11 12:31:09.732 EDT [84865] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 12:31:09.733 EDT [84865] ERROR:  fenced epoch requires native read committed read write
+2026-10-11 12:31:09.733 EDT [84865] CONTEXT:  PL/pgSQL function truss.runtime_lock_fenced_fresh_source_epoch(text,text,text) line 9 at RAISE
+2026-10-11 12:31:09.733 EDT [84865] STATEMENT:  SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch('fixture',$1,'target')
+2026-10-11 12:31:09.733 EDT [84866] WARNING:  there is no transaction in progress
+2026-10-11 12:31:09.738 EDT [84867] ERROR:  selected epoch cut excludes same-backend writes
+2026-10-11 12:31:09.738 EDT [84867] CONTEXT:  PL/pgSQL function truss.runtime_issue_source_epoch(text,text,text,bytea,bytea) line 16 at RAISE
+2026-10-11 12:31:09.738 EDT [84867] STATEMENT:  SELECT truss.runtime_issue_source_epoch('fixture',$1,'target',decode('01','hex'),decode('02','hex'))
+2026-10-11 12:31:09.739 EDT [84868] WARNING:  there is no transaction in progress
+2026-10-11 12:31:09.740 EDT [84821] LOG:  checkpoint starting: immediate force wait
+2026-10-11 12:31:09.775 EDT [84821] LOG:  checkpoint complete: wrote 16 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.018 s, sync=0.013 s, total=0.036 s; sync files=13, longest=0.009 s, average=0.001 s; distance=5886 kB, estimate=5886 kB; lsn=0/1A61F48, redo lsn=0/1A61F10
+2026-10-11 12:31:36.604 EDT [84818] LOG:  received immediate shutdown request
+2026-10-11 12:31:36.607 EDT [84818] LOG:  database system is shut down

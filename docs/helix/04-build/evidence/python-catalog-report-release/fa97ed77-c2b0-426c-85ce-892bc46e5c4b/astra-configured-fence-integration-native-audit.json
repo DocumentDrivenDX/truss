@@ -1,0 +1,2245 @@
+{
+  "auditKind": "independent configured fence integration retained native evidence audit",
+  "auditedAtUtc": "2026-10-11T16:13:31.260512+00:00",
+  "integrationRoot": "/private/tmp/truss-security-main-integration",
+  "status": "scoped-evidence-matches",
+  "executionsPerformed": "Only local file/hash/ZIP/AST/log inspection; no tests, SQL/native execution, producers or repository edits.",
+  "sameSourcePinMaps": true,
+  "sameNativePinMaps": true,
+  "priorAuditPreserved": {
+    "path": "/private/tmp/astra-archive-self-write-fence-audit.json",
+    "sha256": "b2069787967bd8f6ffa165d16aef4a35ccf260bd63ffc7fe310112eb5f272586"
+  },
+  "packets": {
+    "positive": {
+      "runId": "fa97ed77-c2b0-426c-85ce-892bc46e5c4b",
+      "kind": null,
+      "auditFailures": [],
+      "receiptStatus": "component-passed",
+      "receiptSha256": "6fe57fbba0da97d2811f1d5aee302c3dfd47097a7815284b8e5c85c56ee88cc5",
+      "zipSha256": "4d7fbe55e4e79d080f80b3dec7fb93ad78ea5a61d958f1fee123bb9b79c7d61a",
+      "sourceCount": 274,
+      "currentSourceMismatches": [],
+      "zip": {
+        "entryCount": 274,
+        "duplicates": 0,
+        "extra": [],
+        "missing": [],
+        "digestMismatches": []
+      },
+      "bodyAndDriftControls": {
+        "originalBodyBytes": 694,
+        "originalBodySha256": "9880d745800a1eb0e61f341053c04fdad219172815e95bbad20da369f50eefc9",
+        "alteredBodyBytes": 694,
+        "alteredBodySha256": "4207505b4c160c51e61e0aac6389f327972caaa9e42c2c094996f1f5f4a78c40",
+        "driftCount": 21,
+        "uniqueDrifts": 21,
+        "declaredDrifts": [
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive",
+          "ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF",
+          "CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats",
+          "CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$",
+          "CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()",
+          "ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence"
+        ]
+      },
+      "resources": {
+        "count": 21,
+        "totalBytes": 101453,
+        "rows": [
+          {
+            "path": "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json",
+            "bytes": 5917,
+            "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json",
+            "bytes": 7661,
+            "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json",
+            "bytes": 17292,
+            "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json",
+            "bytes": 6208,
+            "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json",
+            "bytes": 3336,
+            "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json",
+            "bytes": 9371,
+            "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json",
+            "bytes": 7284,
+            "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json",
+            "bytes": 10672,
+            "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json",
+            "bytes": 2184,
+            "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json",
+            "bytes": 7628,
+            "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json",
+            "bytes": 6593,
+            "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
+            "bytes": 2027,
+            "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",
+            "bytes": 427,
+            "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json",
+            "bytes": 561,
+            "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/absent-binding-index-declarations.json",
+            "bytes": 1007,
+            "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-capture.proposal.md",
+            "bytes": 4267,
+            "sha256": "dd047b5817322aa7dfd6b4e62218822c595ceaaad33c3bfbe8b75d8bc0b4d271",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-map-v0.1.proposal.json",
+            "bytes": 1613,
+            "sha256": "c3f2645d6af8465366b49332d62cf696ee58acebf826e4abd5aa9de33aa7497d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/acceptance-input-decoder-resource-v0.1.candidate.json",
+            "bytes": 2638,
+            "sha256": "79a9d77371cd2c1b6a06cee8f996c4d5f5a0d830c1dedad7002ea63e3f24157b",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/operation-arbitration-resource-v0.1.candidate.json",
+            "bytes": 775,
+            "sha256": "1468bf2b27153be99958b53d0244c09c36e22755d41819037f44531ac9060e36",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/feed-finalization-resource-v0.1.proposal.json",
+            "bytes": 3124,
+            "sha256": "e560fb142e536b603d37b90b4dbaee5cb69c74bdbe9a2b58cb789df560965ebc",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-report-configuration.json",
+            "bytes": 868,
+            "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+            "matchesPolicyAndPin": true
+          }
+        ]
+      },
+      "uncapturedPythonFiles": [],
+      "currentPythonPackageFileCount": 146,
+      "dependencies": {
+        "pg8000": {
+          "pythonFiles": 8,
+          "metadataFiles": 1,
+          "versions": [
+            "1.31.5"
+          ]
+        },
+        "scramp": {
+          "pythonFiles": 3,
+          "metadataFiles": 1,
+          "versions": [
+            "1.4.17"
+          ]
+        },
+        "asn1crypto": {
+          "pythonFiles": 23,
+          "metadataFiles": 1,
+          "versions": [
+            "1.5.1"
+          ]
+        },
+        "dateutil": {
+          "pythonFiles": 18,
+          "metadataFiles": 1,
+          "versions": [
+            "2.9.0.post0"
+          ]
+        },
+        "six": {
+          "pythonFiles": 1,
+          "metadataFiles": 1,
+          "versions": [
+            "1.17.0"
+          ]
+        }
+      },
+      "nativeInventory": {
+        "expectedMethods": [
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back"
+        ],
+        "mainResults": {
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release": "ok"
+        },
+        "expectedFailureCount": 0,
+        "subtestResults": [],
+        "failureHeaders": [],
+        "summary": [
+          "Ran 22 tests in 20.917s",
+          "OK"
+        ]
+      },
+      "dispatch": {
+        "executed": true,
+        "expectedMethods": [
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback"
+        ],
+        "results": {
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback": "ok"
+        },
+        "count": 14
+      },
+      "auxiliary": {
+        "executed": true,
+        "expectedMethods": [
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_original_revision_free_sources_and_exact_evidence",
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_copied_or_mutated_preparation_refused",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_exact_native_source_carrier",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_duplicate_missing_unknown_and_substituted_sources_refused",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_original_configuration_source_envelope_stages_actual_catalog",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_changed_metadata_and_second_origin_refuse_before_catalog_effects",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_late_marker_change_refuses_and_preserves_host_work",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_plain_candidate_cannot_bypass_configured_checks",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_concurrent_release_insert_after_selection_is_fenced",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_one_original_call_and_python_composition",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_hostile_rendering_settings_are_local_and_exact",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_substituted_native_metadata_and_context_refuse",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_context_overflow_rolls_back_admission_before_catalog_write",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_exact_context_limit_and_one_byte_evidence_overflow"
+        ],
+        "results": {
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_original_revision_free_sources_and_exact_evidence": "ok",
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_copied_or_mutated_preparation_refused": "ok",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_exact_native_source_carrier": "ok",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_duplicate_missing_unknown_and_substituted_sources_refused": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_original_configuration_source_envelope_stages_actual_catalog": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_changed_metadata_and_second_origin_refuse_before_catalog_effects": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_late_marker_change_refuses_and_preserves_host_work": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_plain_candidate_cannot_bypass_configured_checks": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_concurrent_release_insert_after_selection_is_fenced": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_one_original_call_and_python_composition": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_hostile_rendering_settings_are_local_and_exact": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_substituted_native_metadata_and_context_refuse": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_context_overflow_rolls_back_admission_before_catalog_write": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_exact_context_limit_and_one_byte_evidence_overflow": "ok"
+        },
+        "count": 15
+      },
+      "nativeBinaryCount": 1614,
+      "currentNativeBinaryMismatches": [],
+      "cleanup": {
+        "receipt": {
+          "attempted": true,
+          "stopExitCode": 0,
+          "statusExitCode": 3,
+          "socketAbsent": true
+        },
+        "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-z3_mclh7",
+        "executionDirectoryAbsent": true,
+        "socketPath": "/private/tmp/rl-z8sgvxku/.s.PGSQL.5432",
+        "socketParentAbsent": true,
+        "serverShutdownLogged": true
+      },
+      "boundaries": "Python module boundaries passed (499 imports); TypeScript/native gates remain open",
+      "logHashes": {
+        "auxiliary.stderr.log": "25c33214de407d77aa90bdb96a55a7ec392531c87808a12e78eb731b09188c23",
+        "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "boundaries.stdout.log": "7f0dbc44612626adbd04e8cbc3923b0a7b8136b9caff3833e6970f16d342a64a",
+        "tests.stderr.log": "80f6e66c69dfb3fbeb5439e84e50a15eb4d1bf33039285d4cf09fa5f8fd4f05c",
+        "auxiliary.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "regression.stderr.log": "3375d8a041bf6ddd380cbad6431f8d891c65c8fcbd103b09dc689f7db90a6f77",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "3e554edb4520be660a7338727e19e943a8151c92b9d2ed56c84e19b376fb0f9f",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "scoped-evidence-matches"
+    },
+    "fence-correspondence": {
+      "runId": "f8c0cabd-08bf-47fc-9c0c-a8fce0380a9e",
+      "kind": "fence-correspondence",
+      "auditFailures": [],
+      "receiptStatus": "countercontrol-reproduced",
+      "receiptSha256": "bce47e62841ba3930d51cb1934eff3354f67454b4fbb243c3a73c06f47766c12",
+      "zipSha256": "6048c24bb43d2f740617142f260031c97d20faf552c92c9b493dd192b3968042",
+      "sourceCount": 274,
+      "currentSourceMismatches": [],
+      "zip": {
+        "entryCount": 274,
+        "duplicates": 0,
+        "extra": [],
+        "missing": [],
+        "digestMismatches": []
+      },
+      "bodyAndDriftControls": {
+        "originalBodyBytes": 694,
+        "originalBodySha256": "9880d745800a1eb0e61f341053c04fdad219172815e95bbad20da369f50eefc9",
+        "alteredBodyBytes": 694,
+        "alteredBodySha256": "4207505b4c160c51e61e0aac6389f327972caaa9e42c2c094996f1f5f4a78c40",
+        "driftCount": 21,
+        "uniqueDrifts": 21,
+        "declaredDrifts": [
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive",
+          "ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF",
+          "CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats",
+          "CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$",
+          "CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()",
+          "ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence"
+        ]
+      },
+      "variant": {
+        "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/python-catalog-report-release/f8c0cabd-08bf-47fc-9c0c-a8fce0380a9e/countercontrol-configured-stage.sql",
+        "originalSha256": "1bce5b9c4d81292339998b35f20c48cda3624e81adbf196e5468490853239418",
+        "variantSha256": "a2d7378822441ed78d59b4648706bd21c8e7a031994137994a7959b224843794",
+        "markerCount": 2,
+        "exactReplacement": true
+      },
+      "resources": {
+        "count": 21,
+        "totalBytes": 101453,
+        "rows": [
+          {
+            "path": "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json",
+            "bytes": 5917,
+            "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json",
+            "bytes": 7661,
+            "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json",
+            "bytes": 17292,
+            "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json",
+            "bytes": 6208,
+            "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json",
+            "bytes": 3336,
+            "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json",
+            "bytes": 9371,
+            "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json",
+            "bytes": 7284,
+            "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json",
+            "bytes": 10672,
+            "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json",
+            "bytes": 2184,
+            "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json",
+            "bytes": 7628,
+            "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json",
+            "bytes": 6593,
+            "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
+            "bytes": 2027,
+            "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",
+            "bytes": 427,
+            "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json",
+            "bytes": 561,
+            "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/absent-binding-index-declarations.json",
+            "bytes": 1007,
+            "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-capture.proposal.md",
+            "bytes": 4267,
+            "sha256": "dd047b5817322aa7dfd6b4e62218822c595ceaaad33c3bfbe8b75d8bc0b4d271",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-map-v0.1.proposal.json",
+            "bytes": 1613,
+            "sha256": "c3f2645d6af8465366b49332d62cf696ee58acebf826e4abd5aa9de33aa7497d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/acceptance-input-decoder-resource-v0.1.candidate.json",
+            "bytes": 2638,
+            "sha256": "79a9d77371cd2c1b6a06cee8f996c4d5f5a0d830c1dedad7002ea63e3f24157b",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/operation-arbitration-resource-v0.1.candidate.json",
+            "bytes": 775,
+            "sha256": "1468bf2b27153be99958b53d0244c09c36e22755d41819037f44531ac9060e36",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/feed-finalization-resource-v0.1.proposal.json",
+            "bytes": 3124,
+            "sha256": "e560fb142e536b603d37b90b4dbaee5cb69c74bdbe9a2b58cb789df560965ebc",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-report-configuration.json",
+            "bytes": 868,
+            "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+            "matchesPolicyAndPin": true
+          }
+        ]
+      },
+      "uncapturedPythonFiles": [],
+      "currentPythonPackageFileCount": 146,
+      "dependencies": {
+        "pg8000": {
+          "pythonFiles": 8,
+          "metadataFiles": 1,
+          "versions": [
+            "1.31.5"
+          ]
+        },
+        "scramp": {
+          "pythonFiles": 3,
+          "metadataFiles": 1,
+          "versions": [
+            "1.4.17"
+          ]
+        },
+        "asn1crypto": {
+          "pythonFiles": 23,
+          "metadataFiles": 1,
+          "versions": [
+            "1.5.1"
+          ]
+        },
+        "dateutil": {
+          "pythonFiles": 18,
+          "metadataFiles": 1,
+          "versions": [
+            "2.9.0.post0"
+          ]
+        },
+        "six": {
+          "pythonFiles": 1,
+          "metadataFiles": 1,
+          "versions": [
+            "1.17.0"
+          ]
+        }
+      },
+      "nativeInventory": {
+        "expectedMethods": [
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back"
+        ],
+        "mainResults": {
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back": "FAIL",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect": "",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release": "ok"
+        },
+        "expectedFailureCount": 22,
+        "subtestResults": [
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+            "result": "FAIL"
+          }
+        ],
+        "failureHeaders": [
+          "test_late_fence_source_change_refuses_and_rolls_back (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back)",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\\nBEGIN RETURN NULL; END;\\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql=\"DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\\nBEGIN\\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\\n END IF;\\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\\n   WHERE datname=pg_catalog.current_database())\\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\\n   AND l.mode='ShareLock' AND l.granted) THEN\\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\\n END IF;\\n RETURN NULL;\\nEND;\\n$$;\\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\\nCREATE TRIGGER runtime_selected_archive_write_fence\\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\\n\")",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql=\"DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\\nBEGIN\\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\\n END IF;\\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\\n   WHERE datname=pg_catalog.current_database())\\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\\n   AND l.mode='ShareLock' AND l.granted) THEN\\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\\n END IF;\\n RETURN NULL;\\nEND;\\n$$;\\n-- Deliberate default PUBLIC ACL retained.\\nCREATE TRIGGER runtime_selected_archive_write_fence\\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\\n\")",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence')",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence')"
+        ],
+        "summary": [
+          "Ran 22 tests in 22.608s",
+          "FAILED (failures=22)"
+        ]
+      },
+      "dispatch": {
+        "executed": true,
+        "expectedMethods": [
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback"
+        ],
+        "results": {
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback": "ok"
+        },
+        "count": 14
+      },
+      "auxiliary": {
+        "executed": false,
+        "logFiles": []
+      },
+      "nativeBinaryCount": 1614,
+      "currentNativeBinaryMismatches": [],
+      "cleanup": {
+        "receipt": {
+          "attempted": true,
+          "stopExitCode": 0,
+          "statusExitCode": 3,
+          "socketAbsent": true
+        },
+        "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60",
+        "executionDirectoryAbsent": true,
+        "socketPath": "/private/tmp/rl-fg36l835/.s.PGSQL.5432",
+        "socketParentAbsent": true,
+        "serverShutdownLogged": true
+      },
+      "boundaries": "Python module boundaries passed (499 imports); TypeScript/native gates remain open",
+      "logHashes": {
+        "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "boundaries.stdout.log": "7f0dbc44612626adbd04e8cbc3923b0a7b8136b9caff3833e6970f16d342a64a",
+        "tests.stderr.log": "e207aed5466893ba8bd906f78323c802d80d2564fe15bd5f10ba9c929bdc16e4",
+        "regression.stderr.log": "d2b2f5abcc20fcc86ebf1ea81c21e863e02cdee4d519915d5f09806eb3d73fb5",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "1d91242280985fd41562cea5039d869e35f1b4a30c65428f3d97b3ad6364955b",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "scoped-evidence-matches"
+    },
+    "fence-body-hash": {
+      "runId": "4fb3bf2e-f812-44eb-9a83-249cb074e5e6",
+      "kind": "fence-body-hash",
+      "auditFailures": [],
+      "receiptStatus": "countercontrol-reproduced",
+      "receiptSha256": "3c876cb2aa041d378645d01bfb78cad48ad197db97357e9c027dbaef2ef95d69",
+      "zipSha256": "47ecfc7daabb19e267c3e9776beb60b7254c364e44d0ce8c5ee79e16cc8ef2c6",
+      "sourceCount": 274,
+      "currentSourceMismatches": [],
+      "zip": {
+        "entryCount": 274,
+        "duplicates": 0,
+        "extra": [],
+        "missing": [],
+        "digestMismatches": []
+      },
+      "bodyAndDriftControls": {
+        "originalBodyBytes": 694,
+        "originalBodySha256": "9880d745800a1eb0e61f341053c04fdad219172815e95bbad20da369f50eefc9",
+        "alteredBodyBytes": 694,
+        "alteredBodySha256": "4207505b4c160c51e61e0aac6389f327972caaa9e42c2c094996f1f5f4a78c40",
+        "driftCount": 21,
+        "uniqueDrifts": 21,
+        "declaredDrifts": [
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive",
+          "ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF",
+          "CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats",
+          "CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$",
+          "CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()",
+          "ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence"
+        ]
+      },
+      "variant": {
+        "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/python-catalog-report-release/4fb3bf2e-f812-44eb-9a83-249cb074e5e6/countercontrol-archive-write-fence-current.sql",
+        "originalSha256": "e46526b211d9183d2cdf235e77af1842068ed8840e368795396e1d9b7270287c",
+        "variantSha256": "4b9fe03ee537ab664069f3028bd7ebc255ae3a6ea5348ee703340a48630c9e91",
+        "markerCount": 1,
+        "exactReplacement": true
+      },
+      "resources": {
+        "count": 21,
+        "totalBytes": 101453,
+        "rows": [
+          {
+            "path": "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json",
+            "bytes": 5917,
+            "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json",
+            "bytes": 7661,
+            "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json",
+            "bytes": 17292,
+            "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json",
+            "bytes": 6208,
+            "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json",
+            "bytes": 3336,
+            "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json",
+            "bytes": 9371,
+            "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json",
+            "bytes": 7284,
+            "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json",
+            "bytes": 10672,
+            "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json",
+            "bytes": 2184,
+            "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json",
+            "bytes": 7628,
+            "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json",
+            "bytes": 6593,
+            "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
+            "bytes": 2027,
+            "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",
+            "bytes": 427,
+            "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json",
+            "bytes": 561,
+            "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/absent-binding-index-declarations.json",
+            "bytes": 1007,
+            "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-capture.proposal.md",
+            "bytes": 4267,
+            "sha256": "dd047b5817322aa7dfd6b4e62218822c595ceaaad33c3bfbe8b75d8bc0b4d271",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-map-v0.1.proposal.json",
+            "bytes": 1613,
+            "sha256": "c3f2645d6af8465366b49332d62cf696ee58acebf826e4abd5aa9de33aa7497d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/acceptance-input-decoder-resource-v0.1.candidate.json",
+            "bytes": 2638,
+            "sha256": "79a9d77371cd2c1b6a06cee8f996c4d5f5a0d830c1dedad7002ea63e3f24157b",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/operation-arbitration-resource-v0.1.candidate.json",
+            "bytes": 775,
+            "sha256": "1468bf2b27153be99958b53d0244c09c36e22755d41819037f44531ac9060e36",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/feed-finalization-resource-v0.1.proposal.json",
+            "bytes": 3124,
+            "sha256": "e560fb142e536b603d37b90b4dbaee5cb69c74bdbe9a2b58cb789df560965ebc",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-report-configuration.json",
+            "bytes": 868,
+            "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+            "matchesPolicyAndPin": true
+          }
+        ]
+      },
+      "uncapturedPythonFiles": [],
+      "currentPythonPackageFileCount": 146,
+      "dependencies": {
+        "pg8000": {
+          "pythonFiles": 8,
+          "metadataFiles": 1,
+          "versions": [
+            "1.31.5"
+          ]
+        },
+        "scramp": {
+          "pythonFiles": 3,
+          "metadataFiles": 1,
+          "versions": [
+            "1.4.17"
+          ]
+        },
+        "asn1crypto": {
+          "pythonFiles": 23,
+          "metadataFiles": 1,
+          "versions": [
+            "1.5.1"
+          ]
+        },
+        "dateutil": {
+          "pythonFiles": 18,
+          "metadataFiles": 1,
+          "versions": [
+            "2.9.0.post0"
+          ]
+        },
+        "six": {
+          "pythonFiles": 1,
+          "metadataFiles": 1,
+          "versions": [
+            "1.17.0"
+          ]
+        }
+      },
+      "nativeInventory": {
+        "expectedMethods": [
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back"
+        ],
+        "mainResults": {
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back": "FAIL",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect": "",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release": "ok"
+        },
+        "expectedFailureCount": 2,
+        "subtestResults": [
+          {
+            "method": "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+            "sql": "CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$",
+            "result": "FAIL"
+          }
+        ],
+        "failureHeaders": [
+          "test_late_fence_source_change_refuses_and_rolls_back (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back)",
+          "test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\\nBEGIN RETURN NULL; END;\\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$')"
+        ],
+        "summary": [
+          "Ran 22 tests in 20.496s",
+          "FAILED (failures=2)"
+        ]
+      },
+      "dispatch": {
+        "executed": true,
+        "expectedMethods": [
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback"
+        ],
+        "results": {
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback": "ok"
+        },
+        "count": 14
+      },
+      "auxiliary": {
+        "executed": false,
+        "logFiles": []
+      },
+      "nativeBinaryCount": 1614,
+      "currentNativeBinaryMismatches": [],
+      "cleanup": {
+        "receipt": {
+          "attempted": true,
+          "stopExitCode": 0,
+          "statusExitCode": 3,
+          "socketAbsent": true
+        },
+        "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-qiyu2i1c",
+        "executionDirectoryAbsent": true,
+        "socketPath": "/private/tmp/rl-72_3lvza/.s.PGSQL.5432",
+        "socketParentAbsent": true,
+        "serverShutdownLogged": true
+      },
+      "boundaries": "Python module boundaries passed (499 imports); TypeScript/native gates remain open",
+      "logHashes": {
+        "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "boundaries.stdout.log": "7f0dbc44612626adbd04e8cbc3923b0a7b8136b9caff3833e6970f16d342a64a",
+        "tests.stderr.log": "62e876757ab35364aa0090d7ef79e1c5a610cc8212fbb58366d735b5d04581c4",
+        "regression.stderr.log": "fbb37d05e0df1294641d187f97f097125a536f0f707206ed8c021f24828c3f9f",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "c239dedaa308e873c878fb1e4812aa2b7cac3898b7244e767156725bb7166a2a",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "scoped-evidence-matches"
+    },
+    "resource-digest": {
+      "runId": "50c1ff15-08ee-4b64-9083-ef0c94d53304",
+      "kind": "resource-digest",
+      "auditFailures": [],
+      "receiptStatus": "countercontrol-reproduced",
+      "receiptSha256": "fcd023a000b772180dc7c9be78e648b2f3795128137d3cc55d6017689723172e",
+      "zipSha256": "4ce31643af7156cc2ef9de38e05fe87cbfab7bb0f03fee50c89b08be8c0e50f5",
+      "sourceCount": 274,
+      "currentSourceMismatches": [],
+      "zip": {
+        "entryCount": 274,
+        "duplicates": 0,
+        "extra": [],
+        "missing": [],
+        "digestMismatches": []
+      },
+      "bodyAndDriftControls": {
+        "originalBodyBytes": 694,
+        "originalBodySha256": "9880d745800a1eb0e61f341053c04fdad219172815e95bbad20da369f50eefc9",
+        "alteredBodyBytes": 694,
+        "alteredBodySha256": "4207505b4c160c51e61e0aac6389f327972caaa9e42c2c094996f1f5f4a78c40",
+        "driftCount": 21,
+        "uniqueDrifts": 21,
+        "declaredDrifts": [
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive",
+          "ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF",
+          "CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats",
+          "CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$",
+          "CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()",
+          "ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence"
+        ]
+      },
+      "variant": {
+        "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/python-catalog-report-release/50c1ff15-08ee-4b64-9083-ef0c94d53304/countercontrol-resource-selection.sql",
+        "originalSha256": "10cd35897f7cfcfb9f195b6fddbb6fc0a152d48e30f7157315ccc2fe1f99522e",
+        "variantSha256": "760d388050fb86db0644f73fc660a5f1b1b84414a090eb98300e62d4928ec05d",
+        "markerCount": 1,
+        "exactReplacement": true
+      },
+      "resources": {
+        "count": 21,
+        "totalBytes": 101453,
+        "rows": [
+          {
+            "path": "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json",
+            "bytes": 5917,
+            "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json",
+            "bytes": 7661,
+            "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json",
+            "bytes": 17292,
+            "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json",
+            "bytes": 6208,
+            "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json",
+            "bytes": 3336,
+            "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json",
+            "bytes": 9371,
+            "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json",
+            "bytes": 7284,
+            "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json",
+            "bytes": 10672,
+            "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json",
+            "bytes": 2184,
+            "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json",
+            "bytes": 7628,
+            "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json",
+            "bytes": 6593,
+            "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
+            "bytes": 2027,
+            "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",
+            "bytes": 427,
+            "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json",
+            "bytes": 561,
+            "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/absent-binding-index-declarations.json",
+            "bytes": 1007,
+            "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-capture.proposal.md",
+            "bytes": 4267,
+            "sha256": "dd047b5817322aa7dfd6b4e62218822c595ceaaad33c3bfbe8b75d8bc0b4d271",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-map-v0.1.proposal.json",
+            "bytes": 1613,
+            "sha256": "c3f2645d6af8465366b49332d62cf696ee58acebf826e4abd5aa9de33aa7497d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/acceptance-input-decoder-resource-v0.1.candidate.json",
+            "bytes": 2638,
+            "sha256": "79a9d77371cd2c1b6a06cee8f996c4d5f5a0d830c1dedad7002ea63e3f24157b",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/operation-arbitration-resource-v0.1.candidate.json",
+            "bytes": 775,
+            "sha256": "1468bf2b27153be99958b53d0244c09c36e22755d41819037f44531ac9060e36",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/feed-finalization-resource-v0.1.proposal.json",
+            "bytes": 3124,
+            "sha256": "e560fb142e536b603d37b90b4dbaee5cb69c74bdbe9a2b58cb789df560965ebc",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-report-configuration.json",
+            "bytes": 868,
+            "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+            "matchesPolicyAndPin": true
+          }
+        ]
+      },
+      "uncapturedPythonFiles": [],
+      "currentPythonPackageFileCount": 146,
+      "dependencies": {
+        "pg8000": {
+          "pythonFiles": 8,
+          "metadataFiles": 1,
+          "versions": [
+            "1.31.5"
+          ]
+        },
+        "scramp": {
+          "pythonFiles": 3,
+          "metadataFiles": 1,
+          "versions": [
+            "1.4.17"
+          ]
+        },
+        "asn1crypto": {
+          "pythonFiles": 23,
+          "metadataFiles": 1,
+          "versions": [
+            "1.5.1"
+          ]
+        },
+        "dateutil": {
+          "pythonFiles": 18,
+          "metadataFiles": 1,
+          "versions": [
+            "2.9.0.post0"
+          ]
+        },
+        "six": {
+          "pythonFiles": 1,
+          "metadataFiles": 1,
+          "versions": [
+            "1.17.0"
+          ]
+        }
+      },
+      "nativeInventory": {
+        "expectedMethods": [
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back"
+        ],
+        "mainResults": {
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect": "FAIL",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release": "ok"
+        },
+        "expectedFailureCount": 1,
+        "subtestResults": [],
+        "failureHeaders": [
+          "test_resource_archive_damage_refuses_before_first_catalog_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect)"
+        ],
+        "summary": [
+          "Ran 22 tests in 25.551s",
+          "FAILED (failures=1)"
+        ]
+      },
+      "dispatch": {
+        "executed": true,
+        "expectedMethods": [
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback"
+        ],
+        "results": {
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback": "ok"
+        },
+        "count": 14
+      },
+      "auxiliary": {
+        "executed": false,
+        "logFiles": []
+      },
+      "nativeBinaryCount": 1614,
+      "currentNativeBinaryMismatches": [],
+      "cleanup": {
+        "receipt": {
+          "attempted": true,
+          "stopExitCode": 0,
+          "statusExitCode": 3,
+          "socketAbsent": true
+        },
+        "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-xphzlvz6",
+        "executionDirectoryAbsent": true,
+        "socketPath": "/private/tmp/rl-dhc8uopc/.s.PGSQL.5432",
+        "socketParentAbsent": true,
+        "serverShutdownLogged": true
+      },
+      "boundaries": "Python module boundaries passed (499 imports); TypeScript/native gates remain open",
+      "logHashes": {
+        "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "boundaries.stdout.log": "7f0dbc44612626adbd04e8cbc3923b0a7b8136b9caff3833e6970f16d342a64a",
+        "tests.stderr.log": "cf1388986d2213029df48f2cdb264ce28451ebb92d98d72ed90f0d79d8f655fb",
+        "regression.stderr.log": "f4068c5b78a648e85f464ca831d56eb1d8143c76b14492d21d33d540eb825fbf",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "07b2dcfb3561c0911e5e822505acf8340ffd350e67f4545aa14a1020f1f14825",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "scoped-evidence-matches"
+    },
+    "archive-lock": {
+      "runId": "d54640f1-c4f3-41d1-b0d7-cc093bc16e38",
+      "kind": "archive-lock",
+      "auditFailures": [],
+      "receiptStatus": "countercontrol-reproduced",
+      "receiptSha256": "2b080a7966964a52fd202f11b7cb44df81210c56349c947c534ac3c7577334a9",
+      "zipSha256": "c9e23d745537c29159008de815589117cdfe026457a28a3a4967197ef5de6ea1",
+      "sourceCount": 274,
+      "currentSourceMismatches": [],
+      "zip": {
+        "entryCount": 274,
+        "duplicates": 0,
+        "extra": [],
+        "missing": [],
+        "digestMismatches": []
+      },
+      "bodyAndDriftControls": {
+        "originalBodyBytes": 694,
+        "originalBodySha256": "9880d745800a1eb0e61f341053c04fdad219172815e95bbad20da369f50eefc9",
+        "alteredBodyBytes": 694,
+        "alteredBodySha256": "4207505b4c160c51e61e0aac6389f327972caaa9e42c2c094996f1f5f4a78c40",
+        "driftCount": 21,
+        "uniqueDrifts": 21,
+        "declaredDrifts": [
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive",
+          "ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF",
+          "CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats",
+          "CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$",
+          "CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()",
+          "ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence"
+        ]
+      },
+      "variant": {
+        "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/python-catalog-report-release/d54640f1-c4f3-41d1-b0d7-cc093bc16e38/countercontrol-release-selection.sql",
+        "originalSha256": "c514a59e28cdbc3bdd5b367fde2a6aa362d65cd201d86a1088b26a94d6df595f",
+        "variantSha256": "83142a8c9cb01f6ca8006748b90271bc7d8878f7c08843ccbf5b0da27cbfd740",
+        "markerCount": 1,
+        "exactReplacement": true
+      },
+      "resources": {
+        "count": 21,
+        "totalBytes": 101453,
+        "rows": [
+          {
+            "path": "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json",
+            "bytes": 5917,
+            "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json",
+            "bytes": 7661,
+            "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json",
+            "bytes": 17292,
+            "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json",
+            "bytes": 6208,
+            "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json",
+            "bytes": 3336,
+            "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json",
+            "bytes": 9371,
+            "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json",
+            "bytes": 7284,
+            "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json",
+            "bytes": 10672,
+            "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json",
+            "bytes": 2184,
+            "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json",
+            "bytes": 7628,
+            "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json",
+            "bytes": 6593,
+            "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
+            "bytes": 2027,
+            "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",
+            "bytes": 427,
+            "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json",
+            "bytes": 561,
+            "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/absent-binding-index-declarations.json",
+            "bytes": 1007,
+            "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-capture.proposal.md",
+            "bytes": 4267,
+            "sha256": "dd047b5817322aa7dfd6b4e62218822c595ceaaad33c3bfbe8b75d8bc0b4d271",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-map-v0.1.proposal.json",
+            "bytes": 1613,
+            "sha256": "c3f2645d6af8465366b49332d62cf696ee58acebf826e4abd5aa9de33aa7497d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/acceptance-input-decoder-resource-v0.1.candidate.json",
+            "bytes": 2638,
+            "sha256": "79a9d77371cd2c1b6a06cee8f996c4d5f5a0d830c1dedad7002ea63e3f24157b",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/operation-arbitration-resource-v0.1.candidate.json",
+            "bytes": 775,
+            "sha256": "1468bf2b27153be99958b53d0244c09c36e22755d41819037f44531ac9060e36",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/feed-finalization-resource-v0.1.proposal.json",
+            "bytes": 3124,
+            "sha256": "e560fb142e536b603d37b90b4dbaee5cb69c74bdbe9a2b58cb789df560965ebc",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-report-configuration.json",
+            "bytes": 868,
+            "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+            "matchesPolicyAndPin": true
+          }
+        ]
+      },
+      "uncapturedPythonFiles": [],
+      "currentPythonPackageFileCount": 146,
+      "dependencies": {
+        "pg8000": {
+          "pythonFiles": 8,
+          "metadataFiles": 1,
+          "versions": [
+            "1.31.5"
+          ]
+        },
+        "scramp": {
+          "pythonFiles": 3,
+          "metadataFiles": 1,
+          "versions": [
+            "1.4.17"
+          ]
+        },
+        "asn1crypto": {
+          "pythonFiles": 23,
+          "metadataFiles": 1,
+          "versions": [
+            "1.5.1"
+          ]
+        },
+        "dateutil": {
+          "pythonFiles": 18,
+          "metadataFiles": 1,
+          "versions": [
+            "2.9.0.post0"
+          ]
+        },
+        "six": {
+          "pythonFiles": 1,
+          "metadataFiles": 1,
+          "versions": [
+            "1.17.0"
+          ]
+        }
+      },
+      "nativeInventory": {
+        "expectedMethods": [
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting"
+        ],
+        "mainResults": {
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end": "FAIL",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut": "FAIL",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting": "FAIL",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid": "FAIL",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release": "ok"
+        },
+        "expectedFailureCount": 4,
+        "subtestResults": [],
+        "failureHeaders": [
+          "test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end)",
+          "test_later_rollback_and_savepoint_release_preserve_archive_cut (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut)",
+          "test_preexisting_archive_writer_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting)",
+          "test_rollback_across_selection_releases_archive_cut_same_xid (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid)"
+        ],
+        "summary": [
+          "Ran 12 tests in 1.134s",
+          "FAILED (failures=4)"
+        ]
+      },
+      "dispatch": {
+        "executed": true,
+        "expectedMethods": [
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback"
+        ],
+        "results": {
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback": "ok"
+        },
+        "count": 14
+      },
+      "auxiliary": {
+        "executed": false,
+        "logFiles": []
+      },
+      "nativeBinaryCount": 1614,
+      "currentNativeBinaryMismatches": [],
+      "cleanup": {
+        "receipt": {
+          "attempted": true,
+          "stopExitCode": 0,
+          "statusExitCode": 3,
+          "socketAbsent": true
+        },
+        "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-o6ge21d9",
+        "executionDirectoryAbsent": true,
+        "socketPath": "/private/tmp/rl-xb1o69wb/.s.PGSQL.5432",
+        "socketParentAbsent": true,
+        "serverShutdownLogged": true
+      },
+      "boundaries": "Python module boundaries passed (499 imports); TypeScript/native gates remain open",
+      "logHashes": {
+        "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "boundaries.stdout.log": "7f0dbc44612626adbd04e8cbc3923b0a7b8136b9caff3833e6970f16d342a64a",
+        "tests.stderr.log": "21651b0db9a047f4eda407bbcbf4687038f479a0063eb4411e0eeaf8d556f006",
+        "regression.stderr.log": "2f5649795c2a70f8f07abf4813fe5a5988f5d49008d25dfad46206bb49fd6f62",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "93e5246c576daa7fd97e7144b9047e60eeb4604184f0b480091cba91c1a154e0",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "scoped-evidence-matches"
+    },
+    "self-write-fence": {
+      "runId": "9b421857-df35-45e3-be72-fb2fc0d51ac1",
+      "kind": "self-write-fence",
+      "auditFailures": [],
+      "receiptStatus": "countercontrol-reproduced",
+      "receiptSha256": "e239e9373b4e86025bff07c5ef55e9e147fc517c1156441cfe346eb81e914336",
+      "zipSha256": "6c0d1de98126e4aeda676f074d625da5b9e5a72700b41652e1d79b920cb2a432",
+      "sourceCount": 274,
+      "currentSourceMismatches": [],
+      "zip": {
+        "entryCount": 274,
+        "duplicates": 0,
+        "extra": [],
+        "missing": [],
+        "digestMismatches": []
+      },
+      "bodyAndDriftControls": {
+        "originalBodyBytes": 694,
+        "originalBodySha256": "9880d745800a1eb0e61f341053c04fdad219172815e95bbad20da369f50eefc9",
+        "alteredBodyBytes": 694,
+        "alteredBodySha256": "4207505b4c160c51e61e0aac6389f327972caaa9e42c2c094996f1f5f4a78c40",
+        "driftCount": 21,
+        "uniqueDrifts": 21,
+        "declaredDrifts": [
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive",
+          "ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence",
+          "ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF",
+          "CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC",
+          "GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats",
+          "ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats",
+          "CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$",
+          "CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()",
+          "ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence",
+          "DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence"
+        ]
+      },
+      "variant": {
+        "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/python-catalog-report-release/9b421857-df35-45e3-be72-fb2fc0d51ac1/countercontrol-archive-self-write-fence.sql",
+        "originalSha256": "b37e86e1531388738288c27df2b1fdbc67abcbde8a0beb4e687615a835c71fb2",
+        "variantSha256": "b6fabb02260efb68cb8a80784b82841797c028016f6995fd69cb184a928348b9",
+        "markerCount": 1,
+        "exactReplacement": true
+      },
+      "resources": {
+        "count": 21,
+        "totalBytes": 101453,
+        "rows": [
+          {
+            "path": "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json",
+            "bytes": 5917,
+            "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json",
+            "bytes": 7661,
+            "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json",
+            "bytes": 17292,
+            "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json",
+            "bytes": 6208,
+            "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json",
+            "bytes": 3336,
+            "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json",
+            "bytes": 9371,
+            "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json",
+            "bytes": 7284,
+            "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json",
+            "bytes": 10672,
+            "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json",
+            "bytes": 2184,
+            "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json",
+            "bytes": 7628,
+            "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json",
+            "bytes": 6593,
+            "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
+            "bytes": 2027,
+            "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",
+            "bytes": 427,
+            "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json",
+            "bytes": 561,
+            "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/absent-binding-index-declarations.json",
+            "bytes": 1007,
+            "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-capture.proposal.md",
+            "bytes": 4267,
+            "sha256": "dd047b5817322aa7dfd6b4e62218822c595ceaaad33c3bfbe8b75d8bc0b4d271",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-map-v0.1.proposal.json",
+            "bytes": 1613,
+            "sha256": "c3f2645d6af8465366b49332d62cf696ee58acebf826e4abd5aa9de33aa7497d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/acceptance-input-decoder-resource-v0.1.candidate.json",
+            "bytes": 2638,
+            "sha256": "79a9d77371cd2c1b6a06cee8f996c4d5f5a0d830c1dedad7002ea63e3f24157b",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/operation-arbitration-resource-v0.1.candidate.json",
+            "bytes": 775,
+            "sha256": "1468bf2b27153be99958b53d0244c09c36e22755d41819037f44531ac9060e36",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/feed-finalization-resource-v0.1.proposal.json",
+            "bytes": 3124,
+            "sha256": "e560fb142e536b603d37b90b4dbaee5cb69c74bdbe9a2b58cb789df560965ebc",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-report-configuration.json",
+            "bytes": 868,
+            "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+            "matchesPolicyAndPin": true
+          }
+        ]
+      },
+      "uncapturedPythonFiles": [],
+      "currentPythonPackageFileCount": 146,
+      "dependencies": {
+        "pg8000": {
+          "pythonFiles": 8,
+          "metadataFiles": 1,
+          "versions": [
+            "1.31.5"
+          ]
+        },
+        "scramp": {
+          "pythonFiles": 3,
+          "metadataFiles": 1,
+          "versions": [
+            "1.4.17"
+          ]
+        },
+        "asn1crypto": {
+          "pythonFiles": 23,
+          "metadataFiles": 1,
+          "versions": [
+            "1.5.1"
+          ]
+        },
+        "dateutil": {
+          "pythonFiles": 18,
+          "metadataFiles": 1,
+          "versions": [
+            "2.9.0.post0"
+          ]
+        },
+        "six": {
+          "pythonFiles": 1,
+          "metadataFiles": 1,
+          "versions": [
+            "1.17.0"
+          ]
+        }
+      },
+      "nativeInventory": {
+        "expectedMethods": [
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_change_restore_cannot_begin_under_original_cut",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_rollback_across_acquisition_releases_fence_same_xid",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_release_reparents_fence_and_later_rollback_preserves_it",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_unselected_writes_and_reads_remain_available",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_always_enabled_and_public_execution_revoked",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_lock_upgrade_keeps_original_fence_visible",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_replica_mode_does_not_disable_fence"
+        ],
+        "mainResults": {
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced": "",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_always_enabled_and_public_execution_revoked": "ok",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_change_restore_cannot_begin_under_original_cut": "FAIL",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_lock_upgrade_keeps_original_fence_visible": "FAIL",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_release_reparents_fence_and_later_rollback_preserves_it": "FAIL",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_replica_mode_does_not_disable_fence": "FAIL",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_rollback_across_acquisition_releases_fence_same_xid": "ok",
+          "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_unselected_writes_and_reads_remain_available": "ok"
+        },
+        "expectedFailureCount": 10,
+        "subtestResults": [
+          {
+            "method": "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced",
+            "sql": "UPDATE truss.installation_archive SET artifact_bytes=decode('02','hex')",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced",
+            "sql": "INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('fixture','input','second',decode('02','hex'),sha256(convert_to('second','UTF8')))",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced",
+            "sql": "DELETE FROM truss.installation_archive",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced",
+            "sql": "TRUNCATE truss.installation_archive",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced",
+            "sql": "INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE false",
+            "result": "FAIL"
+          },
+          {
+            "method": "test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced",
+            "sql": "UPDATE truss.installation_archive SET artifact_identity=artifact_identity WHERE false",
+            "result": "FAIL"
+          }
+        ],
+        "failureHeaders": [
+          "test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql=\"UPDATE truss.installation_archive SET artifact_bytes=decode('02','hex')\")",
+          "test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql=\"INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('fixture','input','second',decode('02','hex'),sha256(convert_to('second','UTF8')))\")",
+          "test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='DELETE FROM truss.installation_archive')",
+          "test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='TRUNCATE truss.installation_archive')",
+          "test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='INSERT INTO truss.installation_archive(installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256) SELECT installation_id,artifact_role,artifact_identity,artifact_bytes,artifact_identity_sha256 FROM truss.installation_archive WHERE false')",
+          "test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) (sql='UPDATE truss.installation_archive SET artifact_identity=artifact_identity WHERE false')",
+          "test_change_restore_cannot_begin_under_original_cut (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_change_restore_cannot_begin_under_original_cut)",
+          "test_lock_upgrade_keeps_original_fence_visible (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_lock_upgrade_keeps_original_fence_visible)",
+          "test_release_reparents_fence_and_later_rollback_preserves_it (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_release_reparents_fence_and_later_rollback_preserves_it)",
+          "test_replica_mode_does_not_disable_fence (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_replica_mode_does_not_disable_fence)"
+        ],
+        "summary": [
+          "Ran 8 tests in 1.423s",
+          "FAILED (failures=10)"
+        ]
+      },
+      "dispatch": {
+        "executed": false,
+        "logFiles": []
+      },
+      "auxiliary": {
+        "executed": false,
+        "logFiles": []
+      },
+      "nativeBinaryCount": 1614,
+      "currentNativeBinaryMismatches": [],
+      "cleanup": {
+        "receipt": {
+          "attempted": true,
+          "stopExitCode": 0,
+          "statusExitCode": 3,
+          "socketAbsent": true
+        },
+        "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-y0xzgh89",
+        "executionDirectoryAbsent": true,
+        "socketPath": "/private/tmp/rl-2g11xrpw/.s.PGSQL.5432",
+        "socketParentAbsent": true,
+        "serverShutdownLogged": true
+      },
+      "boundaries": "Python module boundaries passed (499 imports); TypeScript/native gates remain open",
+      "logHashes": {
+        "boundaries.stdout.log": "7f0dbc44612626adbd04e8cbc3923b0a7b8136b9caff3833e6970f16d342a64a",
+        "tests.stderr.log": "2cb76ea6956d4755c9e35248883755dbbe5fadcdfed0de6faab863959303480c",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "3534bff26e3fe880e1604212d666e1253ed6e069fad15c863704d6807bad13f3",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "scoped-evidence-matches"
+    }
+  },
+  "findings": [],
+  "qualification": "Private configured before/after fence correspondence and archive-cut component under trusted administrative fixture. Does not authenticate verifier/issuer, establish complete installation/dependency source authority, host lifetime/final disclosure, complete accepted report, or backend acceptance. Raw archive and standalone fence omission populations are explicitly distinct from configured paths."
+}

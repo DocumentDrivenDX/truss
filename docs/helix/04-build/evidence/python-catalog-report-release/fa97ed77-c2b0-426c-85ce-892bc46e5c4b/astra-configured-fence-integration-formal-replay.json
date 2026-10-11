@@ -1,0 +1,160 @@
+{
+  "status": "independent-replay-passed",
+  "auditedAtUtc": "2026-10-11T16:12:51.374266+00:00",
+  "evidenceDirectory": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/archive-self-write-fence-formal/e6d9a719-d884-464c-a633-aa7a87258040",
+  "receiptSha256": "212dad572e38252cce7a60a445e9782f936255f20cc96218edb09e1abe8cbcd2",
+  "pythonExecutable": "/private/tmp/umf-security-proof-venv/bin/python",
+  "pythonVersion": "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]",
+  "z3Version": "4.15.4",
+  "producerExecuted": false,
+  "nativeExecuted": false,
+  "implementationFilesEdited": false,
+  "expectedPopulation": {
+    "queries": 7,
+    "unsat": 4,
+    "sat": 3,
+    "sourcePins": 4
+  },
+  "sourceChecks": [
+    {
+      "path": "packages/postgresql/native/catalog-report/archive-self-write-fence.sql",
+      "sha256": "b37e86e1531388738288c27df2b1fdbc67abcbde8a0beb4e687615a835c71fb2",
+      "bytes": 1424,
+      "currentEqualsRetainedPreimage": true,
+      "matchesReceipt": true
+    },
+    {
+      "path": "packages/python/tests/test_archive_self_write_fence_native.py",
+      "sha256": "e5dc136e8d23f5d2fec5849fd013b0b359e7dd748acbe1cb14037c94886ea0cb",
+      "bytes": 6408,
+      "currentEqualsRetainedPreimage": true,
+      "matchesReceipt": true
+    },
+    {
+      "path": "scripts/check-python-catalog-report-release-native.py",
+      "sha256": "ab9cf07bb420399e8917086bcbc63c3a9bdf25128664d20690dba6a01eaff7b4",
+      "bytes": 17419,
+      "currentEqualsRetainedPreimage": true,
+      "matchesReceipt": true
+    },
+    {
+      "path": "scripts/prove-archive-self-write-fence.py",
+      "sha256": "3879717a1c69572e6e01e4e77e1b121c965de6730f90f9dca47313f5ba6a3833",
+      "bytes": 3836,
+      "currentEqualsRetainedPreimage": true,
+      "matchesReceipt": true
+    }
+  ],
+  "queries": [
+    {
+      "id": "fenced_step_preserves_state",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2Sha256": "f74186bfa932e362c81134d3e4c8a8d0becec1189b906903241a4cd7cb6e0699",
+      "savedFormulaShaMatches": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 4
+    },
+    {
+      "id": "fenced_successful_mutation_unreachable",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2Sha256": "359fe3ae72bf3655671440404768e3512435ac5005ab8f74a0cacb69e7f12939",
+      "savedFormulaShaMatches": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 4
+    },
+    {
+      "id": "read_step_preserves_state_without_fence",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2Sha256": "452286777c55dca02c092db22c5a75bbff6fb4a3bfd50e05495732a54ab78a4a",
+      "savedFormulaShaMatches": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 3
+    },
+    {
+      "id": "fenced_two_step_change_restore_unreachable",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2Sha256": "4f95169127c4566fc75d601eb00b4006f3acc109b88481823bb65b5d43710c24",
+      "savedFormulaShaMatches": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 7
+    },
+    {
+      "id": "omitted_fence_allows_change_restore",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2Sha256": "a08f89411c54870d2a76e86fa6760757ac031b38d9d1c55380e7bb0508a39fc4",
+      "savedFormulaShaMatches": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 7,
+      "model": {
+        "alive": "True",
+        "desired": "1",
+        "final": "0",
+        "installed": "False",
+        "intermediate": "1",
+        "mutate": "True",
+        "state": "0"
+      },
+      "allSavedAssertionsTrueUnderModel": true
+    },
+    {
+      "id": "rollback_crossing_cut_allows_later_change",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2Sha256": "3905f4dc44a88204aeb87f51abf72f550a3b2177e23f1a3309e28c23dd956bbc",
+      "savedFormulaShaMatches": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 5,
+      "model": {
+        "alive": "False",
+        "desired": "1",
+        "installed": "True",
+        "intermediate": "1",
+        "mutate": "True",
+        "state": "0"
+      },
+      "allSavedAssertionsTrueUnderModel": true
+    },
+    {
+      "id": "disabled_trigger_allows_change",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2Sha256": "16d116b5f4c6547b47b0be7fa1e6d2b4411d94ebff07facb9557ebb24d3d372d",
+      "savedFormulaShaMatches": true,
+      "independentFormulaXorResult": "unsat",
+      "assertions": 5,
+      "model": {
+        "alive": "True",
+        "desired": "1",
+        "installed": "False",
+        "intermediate": "1",
+        "mutate": "True",
+        "state": "0"
+      },
+      "allSavedAssertionsTrueUnderModel": true
+    }
+  ],
+  "scopeAudit": {
+    "assessment": "coherent conditional transition algebra; no installed-verifier or SQL refinement claim",
+    "facts": [
+      "The four UNSAT queries follow from the supplied transition relation and alive/installed premises.",
+      "The three SAT queries supply concrete abstract-state changes when installed or alive is false.",
+      "Omitted and disabled trigger use the same installed=false abstraction; they are distinct query labels, not separate implementation-failure proofs.",
+      "Rollback crossing a cut is represented only as alive=false. No rollback, acquisition, reparenting or transaction transition is encoded.",
+      "Finite-history preservation is an ordinary induction consequence only while every step obeys the same relation and retains alive/installed premises.",
+      "Integer state is an opaque abstract carrier; no concrete archive rows, SQL execution, digests, trigger metadata, privilege semantics or pg_locks correspondence are encoded.",
+      "The new archive-write-fence-current.sql verifier and configured-stage.sql are outside this four-source pin set and are not proven by this artifact."
+    ],
+    "retainedScope": "Unbounded abstract one-step preservation and stated finite-history induction, with trigger installed, every successful mutation reaching this fence, actual original ShareLock observation and no privileged bypass as premises. State is opaque, not a digest or SQL catalog interpretation. Acquisition/reparenting/rollback, PostgreSQL pg_locks correspondence, trigger installation/effective privilege, complete source/authority cut and final disclosure are not proven by this model. Native lifetime tests provide separate scoped evidence; no implementation refinement or backend acceptance claim."
+  },
+  "sourceRecheckedAfterReplay": true,
+  "priorAttempt": {
+    "status": "audit-harness-error-before-solver-replay",
+    "error": "TypeError: zip() takes no keyword arguments",
+    "resolution": "Replaced unsupported zip(strict=True) with indexed access after exact ordered query inventory equality check; proof producer and evidence unchanged."
+  }
+}

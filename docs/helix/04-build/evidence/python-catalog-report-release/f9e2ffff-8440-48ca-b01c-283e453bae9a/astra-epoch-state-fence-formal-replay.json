@@ -1,0 +1,128 @@
+{
+  "status": "independent-replay-passed",
+  "receipt": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/epoch-state-fence-formal/57c7f6dd-d44e-4ad2-8c73-e78279d5e094/receipt.json",
+  "receiptSha256": "1ea05ba0b2cb2ea0b26c03d1cbe1dae971f1950a71b21716780600f9ea0e33c9",
+  "solver": "4.15.4",
+  "sourcePins": [
+    {
+      "path": "scripts/prove-epoch-state-fence.py",
+      "currentSha256": "3b1e4b899c03cac52adc46471be1be415bb4ec14b40e6c4795ad3435f6d288d6",
+      "preimageSha256": "3b1e4b899c03cac52adc46471be1be415bb4ec14b40e6c4795ad3435f6d288d6",
+      "expected": "3b1e4b899c03cac52adc46471be1be415bb4ec14b40e6c4795ad3435f6d288d6",
+      "matches": true
+    },
+    {
+      "path": "packages/postgresql/native/source-epoch-read-fence.sql",
+      "currentSha256": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+      "preimageSha256": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+      "expected": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+      "matches": true
+    },
+    {
+      "path": "packages/postgresql/native/source-epoch-fenced-fresh-lock.sql",
+      "currentSha256": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+      "preimageSha256": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+      "expected": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+      "matches": true
+    },
+    {
+      "path": "packages/postgresql/native/source-epoch-issue.sql",
+      "currentSha256": "f7c292a9a70715137c003232603877b58e862cd8476faf7a63992ff05b92326e",
+      "preimageSha256": "f7c292a9a70715137c003232603877b58e862cd8476faf7a63992ff05b92326e",
+      "expected": "f7c292a9a70715137c003232603877b58e862cd8476faf7a63992ff05b92326e",
+      "matches": true
+    },
+    {
+      "path": "packages/python/tests/test_epoch_state_fence_native.py",
+      "currentSha256": "83e32f0716a2188fd35c2216dd1ff1a46f90cae9510f744fd6a37677c76362af",
+      "preimageSha256": "83e32f0716a2188fd35c2216dd1ff1a46f90cae9510f744fd6a37677c76362af",
+      "expected": "83e32f0716a2188fd35c2216dd1ff1a46f90cae9510f744fd6a37677c76362af",
+      "matches": true
+    },
+    {
+      "path": "scripts/check-python-catalog-report-release-native.py",
+      "currentSha256": "a3d5c75b15705306f2377032e247502c790ff83a1ff76bafedea492dfe7577a7",
+      "preimageSha256": "a3d5c75b15705306f2377032e247502c790ff83a1ff76bafedea492dfe7577a7",
+      "expected": "a3d5c75b15705306f2377032e247502c790ff83a1ff76bafedea492dfe7577a7",
+      "matches": true
+    }
+  ],
+  "queries": [
+    {
+      "id": "issuer_entry_guard_preserves_state",
+      "sha256": "db53cd8118e878837420a6a98fdfda8fc98494cf14c505d98f8b4f3e1db9b642",
+      "digestMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat"
+    },
+    {
+      "id": "reverse_overlap_effect_guard_preserves_state",
+      "sha256": "48dead537544ee7b478945eadde2288f2af80151ffbb0b621bf22f17dbcafda2",
+      "digestMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat"
+    },
+    {
+      "id": "foreign_reader_excludes_participating_issuer",
+      "sha256": "d5c23e2099be62c5af9d7dfc27e085fdbc1e0694b7d7b606c8c97302010d88d9",
+      "digestMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat"
+    },
+    {
+      "id": "complete_fence_excludes_two_step_aba",
+      "sha256": "345f29e3d90d57449f30bb8be4040ade37b1dc501a10d4960a2d2f69d2effe8f",
+      "digestMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat"
+    },
+    {
+      "id": "ordered_modes_exclude_row_upgrade_cycle",
+      "sha256": "f93abcd2c6b0a8e81042b47548ba4425094414efc61f28c95bda7a5e0bb689af",
+      "digestMatches": true,
+      "expected": "unsat",
+      "independentReplay": "unsat"
+    },
+    {
+      "id": "old_row_only_reader_allows_same_writer_change",
+      "sha256": "7997344952360cc6b28f710ce21c8a45e4ea651ce735a161ee3b7619be91fc08",
+      "digestMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat"
+    },
+    {
+      "id": "omitted_effect_guard_allows_aba",
+      "sha256": "98712b949e5ea7ab44f4b1b267e262f53124154b7bdc38256275ab8ceda42c3c",
+      "digestMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat"
+    },
+    {
+      "id": "released_cut_allows_issuance",
+      "sha256": "ed908ab30173f165746782accbfc17add0a1d2bb3ba7268ef5661a2961db9df3",
+      "digestMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat"
+    },
+    {
+      "id": "rows_first_allows_upgrade_cycle",
+      "sha256": "5bff63ad8f9a4218ad9352a1190729859c91f9f835bfa005b04c5e3d31d9b63e",
+      "digestMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat"
+    },
+    {
+      "id": "omitted_entry_guard_permits_later_issuer_phase",
+      "sha256": "5bb60115134f15b615953eee902302149417f55157fa36b31c9c803fcb8b1ad5",
+      "digestMatches": true,
+      "expected": "sat",
+      "independentReplay": "sat"
+    }
+  ],
+  "counts": {
+    "unsat": 5,
+    "sat": 5
+  },
+  "findings": [],
+  "scope": "Retained formulas independently parsed in fresh Z3 contexts; not producer execution or SQL/native refinement. State invariant assumes every step is gated; ordering model assumes stated native compatibility/row dependencies, not arbitrary deadlock-freedom. Final disclosure and ordinary-role admission are not modeled."
+}

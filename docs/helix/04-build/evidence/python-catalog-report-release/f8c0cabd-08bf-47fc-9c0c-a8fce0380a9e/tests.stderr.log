@@ -1,0 +1,224 @@
+test_configured_source_substitutions_never_issue_report (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report) ... ok
+test_late_fence_source_change_refuses_and_rolls_back (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back) ... FAIL
+test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) ... 
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql="DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n") ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql="DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n") ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence') ... FAIL
+  test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence') ... FAIL
+test_missing_release_refuses_before_any_catalog_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect) ... ok
+test_one_configured_native_stage_retains_release_and_metadata (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata) ... ok
+test_resource_archive_damage_refuses_before_first_catalog_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect) ... ok
+test_same_writer_change_restore_is_fenced_inside_original_stage (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage) ... ok
+test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut) ... ok
+test_same_writer_resource_change_during_effect_refuses_and_rolls_back (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back) ... ok
+test_uncovered_or_populated_graph_still_refuses (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses) ... ok
+test_actual_policy_selected_from_original_configuration (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration) ... ok
+test_concurrent_archive_writes_excluded_until_transaction_end (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end) ... ok
+test_late_configuration_change_refuses (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses) ... ok
+test_later_rollback_and_savepoint_release_preserve_archive_cut (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut) ... ok
+test_missing_duplicate_and_changed_archive_refuse (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse) ... ok
+test_old_snapshot_and_readonly_release_selection_refuse (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse) ... ok
+test_preexisting_archive_row_locker_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting) ... ok
+test_preexisting_archive_writer_refuses_without_waiting (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting) ... ok
+test_release_resources_and_embedded_policy_are_exact (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact) ... ok
+test_rollback_across_selection_releases_archive_cut_same_xid (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid) ... ok
+test_unknown_ambiguous_or_changed_selection_refuses (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses) ... ok
+test_unrecognized_configuration_profile_cannot_select_release (test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release) ... ok
+
+======================================================================
+FAIL: test_late_fence_source_change_refuses_and_rolls_back (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 313, in test_late_fence_source_change_refuses_and_rolls_back
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive DISABLE TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TABLE truss.installation_archive ENABLE REPLICA TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SECURITY DEFINER')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() SET search_path=pg_temp,pg_catalog')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() IMMUTABLE')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() PARALLEL SAFE')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() STRICT')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() LEAKPROOF')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE OR REPLACE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $inner$\nBEGIN RETURN NULL; END;\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $inner$')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql="DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS SETOF trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\nREVOKE ALL ON FUNCTION truss.runtime_fence_selected_archive_writes() FROM PUBLIC;\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql="DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; DROP FUNCTION truss.runtime_fence_selected_archive_writes(); -- Private archive-cut component. Installation/trigger/source authority is separate.\n-- The held SHARE lock, not xid or an application flag, fences this backend's writes.\nCREATE FUNCTION truss.runtime_fence_selected_archive_writes() RETURNS trigger\nLANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$\nBEGIN\n IF TG_RELID<>'truss.installation_archive'::regclass OR TG_NARGS<>0\n  OR TG_WHEN<>'BEFORE' OR TG_LEVEL<>'STATEMENT'\n  OR TG_OP NOT IN ('INSERT','UPDATE','DELETE','TRUNCATE') THEN\n  RAISE EXCEPTION 'original archive write fence event required' USING ERRCODE='55000';\n END IF;\n IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l\n  WHERE l.locktype='relation' AND l.database=(SELECT oid FROM pg_catalog.pg_database\n   WHERE datname=pg_catalog.current_database())\n   AND l.relation=TG_RELID AND l.pid=pg_catalog.pg_backend_pid()\n   AND l.mode='ShareLock' AND l.granted) THEN\n  RAISE EXCEPTION 'selected archive cut excludes same-backend writes' USING ERRCODE='55000';\n END IF;\n RETURN NULL;\nEND;\n$$;\n-- Deliberate default PUBLIC ACL retained.\nCREATE TRIGGER runtime_selected_archive_write_fence\n BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive\n FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes();\nALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence;\n")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO PUBLIC')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='GRANT EXECUTE ON FUNCTION truss.runtime_fence_selected_archive_writes() TO pg_read_all_stats')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER FUNCTION truss.runtime_fence_selected_archive_writes() OWNER TO pg_read_all_stats')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE FUNCTION truss.runtime_fence_selected_archive_writes(text) RETURNS text LANGUAGE sql AS $$ SELECT $1 $$')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='CREATE TRIGGER extra_archive_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes()')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='ALTER TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive RENAME TO wrong_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT ON truss.installation_archive FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+======================================================================
+FAIL: test_missing_or_changed_fence_refuses_before_first_effect (test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect) (sql='DROP TRIGGER runtime_selected_archive_write_fence ON truss.installation_archive; CREATE TRIGGER runtime_selected_archive_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.installation_archive FOR EACH STATEMENT WHEN(false) EXECUTE FUNCTION truss.runtime_fence_selected_archive_writes(); ALTER TABLE truss.installation_archive ENABLE ALWAYS TRIGGER runtime_selected_archive_write_fence')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-1x87xk60/checkout/packages/python/tests/test_catalog_configured_release_stage_native.py", line 288, in test_missing_or_changed_fence_refuses_before_first_effect
+    with self.assertRaises(DatabaseError) as caught:self.invoke()
+AssertionError: DatabaseError not raised
+
+----------------------------------------------------------------------
+Ran 22 tests in 22.608s
+
+FAILED (failures=22)
