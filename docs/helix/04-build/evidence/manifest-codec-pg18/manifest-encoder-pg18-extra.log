@@ -1,0 +1,7 @@
+test_document_count_inclusive_and_one_over (__main__.Codec.test_document_count_inclusive_and_one_over) ... ok
+test_duplicate_key_and_malformed_native_tree (__main__.Codec.test_duplicate_key_and_malformed_native_tree) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 3.862s
+
+OK

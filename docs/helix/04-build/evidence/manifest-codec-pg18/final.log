@@ -1,0 +1,14 @@
+test_unconfirmed_stop_preserves_owned_directory (__main__.Cleanup.test_unconfirmed_stop_preserves_owned_directory) ... ok
+test_configuration_inclusive_and_one_over (__main__.Codec.test_configuration_inclusive_and_one_over) ... ok
+test_document_count_inclusive_and_one_over (__main__.Codec.test_document_count_inclusive_and_one_over) ... ok
+test_duplicate_key_and_malformed_native_tree (__main__.Codec.test_duplicate_key_and_malformed_native_tree) ... ok
+test_missing_extra_and_null_slots (__main__.Codec.test_missing_extra_and_null_slots) ... ok
+test_ordinary_and_lookalike_scalars_keep_limits (__main__.Codec.test_ordinary_and_lookalike_scalars_keep_limits) ... ok
+test_original_document_inclusive_and_one_over (__main__.Codec.test_original_document_inclusive_and_one_over) ... ok
+test_wide_originals_exact_independent_bytes (__main__.Codec.test_wide_originals_exact_independent_bytes) ... ok
+test_wrong_bytes_and_original_order (__main__.Codec.test_wrong_bytes_and_original_order) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 6.011s
+
+OK
