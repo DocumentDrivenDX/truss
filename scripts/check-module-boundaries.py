@@ -68,6 +68,7 @@ ALLOWED = {
     '_directory_resources': {'os', 'stat', 'threading', 'truss._installation_resources'},
     '_installation_resources': {'dataclasses', 'hashlib', 'json', 'truss._resource_account'},
     '_native_admission_capture': {'dataclasses', 'struct', 're', 'truss._native_result_custody', 'truss._native_pg8000'},
+    '_catalog_candidate': {'json','dataclasses','truss.preparation','truss._acceptance_json','truss._catalog_support','truss._catalog_owner_evidence','truss._catalog_report_semantics','truss._canonical_wire_tree'},
     '_native_catalog_request': {'truss._catalog_lifecycle','truss._catalog_index_declarations','dataclasses','re','truss.preparation','truss._acceptance_json','truss._catalog_support','truss._native_pg8000'},
     '_canonical_wire_tree': {'dataclasses','json','truss._acceptance_json'},
     '_report_schema_pins': set(),

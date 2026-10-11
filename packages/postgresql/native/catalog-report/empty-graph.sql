@@ -5,7 +5,7 @@ RETURNS TABLE(writer_xid text,operation_ordinal text,effect_generation text,empt
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER PARALLEL UNSAFE
 SET search_path=pg_catalog,pg_temp AS $$
 DECLARE op truss.row_home_operation%ROWTYPE; name text; relation_oid oid;
- kind "char"; populated boolean; filtered boolean;
+ kind "char"; populated boolean; filtered boolean; metadata bytea; configured boolean:=false;
  scope_names text[]:=ARRAY['object','edge','edge_limit','key_tombstone','record_source',
  'feed_consumer','journal','row_home_journal_stage','row_home_state','row_home_node',
  'row_home_scalar','row_home_touch','row_home_capacity','key_bucket_guard',
@@ -39,7 +39,12 @@ BEGIN
     IS DISTINCT FROM (to_regclass('truss.source_epoch_registry') IS NULL) THEN
   RAISE EXCEPTION 'complete source epoch relation pair required' USING ERRCODE='55000';
  END IF;
- IF to_regclass('truss.source_epoch_current') IS NOT NULL THEN
+ IF convert_from(op.original_context_bytes,'UTF8')::jsonb->>'interfaceVersion'
+   ='truss-native-operation-context/0.4' THEN
+  configured:=true;
+  metadata:=truss.runtime_capture_catalog_metadata_cut(op.original_writer_xid::text,
+   op.operation_ordinal::text,op.effect_generation::text);
+ ELSIF to_regclass('truss.source_epoch_current') IS NOT NULL THEN
   scope_names:=scope_names||ARRAY['source_epoch_registry','source_epoch_current'];
  END IF;
  IF EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
@@ -47,7 +52,9 @@ BEGIN
    AND NOT(c.relname=ANY(scope_names||ARRAY['setting','module_access','schema_rev',
     'schema_head','schema_doc','type_def','prop_def','key_def','rel_def','rel_endpoint',
     'row_home_operation','relationship_lineage','catalog_acceptance_report',
-    'installation_marker','installation_archive','installation_admission']))) THEN
+    'installation_marker','installation_archive','installation_admission']||
+    CASE WHEN configured THEN ARRAY['source_epoch_registry','source_epoch_current','operation_configuration']
+     ELSE ARRAY[]::text[] END))) THEN
   RAISE EXCEPTION 'uncovered physical graph scope' USING ERRCODE='0A000';
  END IF;
  IF op.effect_generation=0 AND EXISTS(SELECT 1 FROM pg_locks l
@@ -78,7 +85,10 @@ BEGIN
   END IF;
  END LOOP;
  RETURN QUERY SELECT op.original_writer_xid::text,op.operation_ordinal::text,
-  op.effect_generation::text,to_jsonb(scope_names)::text;
+  op.effect_generation::text,CASE WHEN configured THEN
+   jsonb_build_object('interfaceVersion','truss-configured-empty-graph/0.1',
+    'businessRelations',to_jsonb(scope_names),'metadataUtf8Hex',encode(metadata,'hex'))::text
+   ELSE to_jsonb(scope_names)::text END;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_collect_empty_catalog_graph() FROM PUBLIC;

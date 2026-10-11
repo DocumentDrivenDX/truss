@@ -12,7 +12,9 @@ class CanonicalWireTree:
     scope: str = 'original_numeric_free_wire_codec_handoff_only'
 
 
-def prepare_canonical_wire_tree(original):
+def prepare_canonical_wire_tree(original, *, maximum_carrier_bytes=4194304):
+    if type(maximum_carrier_bytes) is not int or not 1<=maximum_carrier_bytes<=4194304:
+        raise ValueError('Bounded native carrier capacity required')
     value=decode_acceptance_json(original)
     pending=[value];steps=0;length=0
     while pending:
@@ -29,7 +31,7 @@ def prepare_canonical_wire_tree(original):
                 length+=sum(len('{"keyUtf8Hex":"","node":}')+2*len(key.encode('utf8')) for key in node)
             pending.extend(children)
         if steps>32768:raise ValueError('Native canonical tree task capacity exceeded')
-        if length>4194304:raise ValueError('Native canonical tree carrier capacity exceeded')
+        if length>maximum_carrier_bytes:raise ValueError('Native canonical tree carrier capacity exceeded')
     def entries(node):
         # ECMAScript Object.entries orders array-index keys first. Preserve the
         # owner protocol even though the native codec independently sorts UTF-8.
