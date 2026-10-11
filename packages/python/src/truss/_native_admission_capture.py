@@ -16,8 +16,9 @@ class NativeAdmissionObservation:
     scope: str = 'native_response_only'
 
 class NativeAdmissionCapture(NativeResultCustody):
+    NAMES = _NAMES
     def __init__(self, session, limits, *, maximum_context_bytes=4096, entry=None):
-        if (type(limits) is not NativeTextLimits or limits.columns != 4 or limits.rows != 1
+        if (type(limits) is not NativeTextLimits or limits.columns != len(self.NAMES) or limits.rows != 1
                 or type(maximum_context_bytes) is not int
                 or not 1 <= maximum_context_bytes <= 1048576
                 or 2*maximum_context_bytes > limits.cell_bytes):
@@ -84,10 +85,10 @@ class NativeAdmissionCapture(NativeResultCustody):
             raise NativeBoundaryRefusal('Original active transaction Ready required')
         self.response_stage += 1
         if code == b'T':
-            if struct.unpack_from('!H', data)[0] != 4:
-                raise NativeBoundaryRefusal('Complete four-column admission description required')
+            if struct.unpack_from('!H', data)[0] != len(self.NAMES):
+                raise NativeBoundaryRefusal('Complete selected admission description required')
             offset = 2
-            for name in _NAMES:
+            for name in self.NAMES:
                 end = data.find(b'\0', offset)
                 if data[offset:end] != name:
                     raise NativeBoundaryRefusal('Original ordered admission columns required')
@@ -114,13 +115,17 @@ class NativeAdmissionCapture(NativeResultCustody):
                 or int(issued_ordinal) > 9223372036854775807):
             raise NativeBoundaryRefusal('Complete original admission response required')
         frozen = self.transfer(rows)
-        if len(frozen) != 1 or len(frozen[0]) != 4:
+        if len(frozen) != 1 or len(frozen[0]) != len(self.NAMES):
             raise NativeBoundaryRefusal('Complete original admission row required')
-        writer, ordinal, context_hex, actual_writer = frozen[0]
+        writer, ordinal, context_hex = frozen[0][:3]
+        actual_writer = frozen[0][-1]
         if (type(writer) is not str or re.fullmatch(r'[1-9][0-9]{0,19}', writer) is None
                 or int(writer) > 18446744073709551615 or writer != actual_writer
                 or ordinal != issued_ordinal or type(context_hex) is not str
                 or not 2 <= len(context_hex) <= 2*self.maximum_context_bytes
                 or len(context_hex) % 2 or re.fullmatch(r'[0-9a-f]+', context_hex) is None):
             raise NativeBoundaryRefusal('Exact original issuer/context response required')
-        return NativeAdmissionObservation(call, writer, ordinal, bytes.fromhex(context_hex))
+        return self._produce_observation(call, writer, ordinal, bytes.fromhex(context_hex), frozen[0])
+
+    def _produce_observation(self, call, writer, ordinal, context, row):
+        return NativeAdmissionObservation(call, writer, ordinal, context)
