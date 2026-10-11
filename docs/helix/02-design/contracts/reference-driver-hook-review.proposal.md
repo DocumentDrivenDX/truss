@@ -1,5 +1,9 @@
 # Reference driver hook review
 
+## Current disposition — optional transport experiment, 2026-10-11
+
+The predecode gate, private parser hooks and allocation instrumentation reviewed below are optional strict-profile candidates. They no longer select the baseline executor or block release. Python baseline qualification uses stock psycopg 3 supported APIs under ADR-003, practical limits, exact-value correspondence and transaction safety. Historical source deficiencies against this stronger experimental contract do not establish a deficiency against baseline requirements. Custom PostgreSQL protocol/private-hook work requires a reproduced necessary failure, comparison with simpler supported remedies and an owner-approved ADR under the PRD.
+
 Companion to CONTRACT-007 and STP-044. Documentation reviewed on 2026-10-08; no package version, native adapter or deployment is selected by this review. Bind a concrete build and verify its actual behavior before using any listed hook as evidence. Core remains driver-independent and browser-compatible.
 
 ## Documented candidate hooks

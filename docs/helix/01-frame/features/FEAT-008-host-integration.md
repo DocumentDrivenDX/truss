@@ -15,6 +15,14 @@ ddx:
 
 # Feature Specification: FEAT-008 — Host Integration
 
+## Baseline host requirements — owner decision 2026-10-11
+
+HST-07. The Python implementation uses maintained stock psycopg 3 through supported APIs. It accepts host-owned authenticated connections and preserves HST-03 transaction/pooling behavior; qualified exact version/mode/deployment claims remain required.
+
+HST-08 (RES-01/02). Operations enforce published input/value/page/batch and concurrency limits, deadlines and bounded toolkit processing. Measure peak memory under maximum admitted loads and failure schedules. Row limits alone do not bound a single value. No baseline guarantee of exact driver allocation accounting or a hard process memory ceiling is made.
+
+HST-09 (RES-03/04). Strict transport accounting is optional and cannot block baseline acceptance. Custom PostgreSQL protocol handling, private driver hooks, forks or a driver replacement require the PRD's reproduced-deficiency evidence and owner-approved ADR. Preserve exact-value, authority, atomicity and transaction safety acceptance; implementation mechanisms cannot add stronger requirements without explicit product adoption.
+
 **Feature ID**: FEAT-008
 **Status**: Draft
 **Priority**: P1

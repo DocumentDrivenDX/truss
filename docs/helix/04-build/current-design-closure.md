@@ -17,6 +17,12 @@ ddx:
 
 # Current design closure
 
+## Current resource/driver gate disposition — 2026-10-11
+
+The owner selected stock psycopg 3 as the Python baseline (ADR-003). Practical workload limits, deadlines, peak-memory tests, exact values, authorization, transaction ownership/containment and uncertain-outcome recovery remain required. Exact build/mode/deployment qualification and public APIs remain unfinished.
+
+Strict pre-read/predecode/frame/backing/copy-lifetime/native allocation accounting is optional. Missing custom driver hooks, strict producer manifests or DH allocation receipts no longer block baseline design closure or release. Earlier driver/resource gate rows are scoped by this decision: retain their semantic and practical-limit obligations, remove strict transport mechanisms from required prerequisites. Existing pg8000 and custom parser experiments neither select a replacement nor prove a baseline deficiency. Apply the PRD's hard documented necessary-failure and owner-approved ADR gate before custom wire/private-hook/fork/replacement implementation.
+
 ## Updated composition checkpoint — 2026-10-10
 
 The [bounded custody analysis](evidence/design-audit/python-custody-bounded-model-controls.json)
@@ -413,7 +419,7 @@ The remaining implementation-ready composition must bind actual allocator identi
 
 The [five-phase manifest](../02-design/contracts/reference-journal-phase-design-v0.1.proposal.json) now captures exact private signatures separately from the seven handler/validator routines, including original effect bytes for transition observation. Its source admission verifies governing pins and fifteen damaged-design refusals; native bodies, identities, complete privileges and dependency closure remain unresolved. The [H1–H7 worklist](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md#executable-history-design-handoff) orders full history installation and its acceptance evidence.
 
-The [driver handoff](../02-design/contracts/reference-driver-hook-review.proposal.md) now specifies the incremental predecode gate, original protocol capture and account-composition algorithm. It reconciles frozen node-postgres findings and pinned Bun declaration observations rather than treating raw/array results as sufficient. STP-044 DH-01–05 allocate malformed framing/UTF-8, preallocation, exact completion metadata, cancellation and build/hook substitution cases. Exact native integration hooks, transport-plan producers and installed runtime dependency tuples remain open.
+The optional strict-profile [driver handoff](../02-design/contracts/reference-driver-hook-review.proposal.md) specifies the incremental predecode gate, original protocol capture and account-composition algorithm; baseline Python delivery uses stock psycopg 3 and practical-limit/transaction qualification instead. It reconciles frozen node-postgres findings and pinned Bun declaration observations rather than treating raw/array results as sufficient. STP-044 DH-01–05 allocate malformed framing/UTF-8, preallocation, exact completion metadata, cancellation and build/hook substitution cases. Exact native integration hooks, transport-plan producers and installed runtime dependency tuples remain open.
 
 Current verification passes strict TypeScript binding-consumer checking, read-only 0.12 model/export/receipt reproduction, expected structural coverage for 45 stories/167 criteria/90 artifacts, thirteen original trigger references and five-phase source admission. These checks cover declarations, byte provenance and allocation structure only. They do not execute the planned native schedules, establish installed semantics, adopt a Weft binding or close the overall design goal. Implementation may use these concrete handoffs without reopening the selected history and transaction algorithms; complete coherent value/security/deployment/binding profiles are still required.
 

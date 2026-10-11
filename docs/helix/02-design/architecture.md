@@ -21,6 +21,14 @@ ddx:
 
 # Truss architecture
 
+## Baseline adapter and resource architecture — 2026-10-11
+
+Python uses maintained stock psycopg 3 and supported driver APIs under ADR-003. Keep database transport in the adapter and keep core, Weft and authorization boundaries unchanged. The adapter uses exact text projections/qualified loaders, parameterized statements, bounded pages/batches/values, supported incremental retrieval where needed, host-owned connection arbitration and tested transaction/error handling. Use ordinary driver completion/status/error APIs with independently observed native outcomes; an unavailable or contradictory outcome remains unknown. No custom frame parser, receive hook or libpq allocation instrumentation is required for this baseline.
+
+Finite workload controls, conservative toolkit budgets and peak-memory/load tests define the baseline resource profile. They do not prove a hard process-wide byte ceiling. Strict transport/native allocation accounting remains a separate optional profile, including stronger ledger/producer proposals elsewhere in this architecture. Its unresolved hooks, counters or manifests cannot block baseline readiness. Native integrity, current authority and safe transaction settlement remain release gates.
+
+Apply the PRD's reproduced-deficiency and owner-approved ADR gate before custom protocol code, private driver hooks, forks or replacement. Reuse maintained infrastructure; do not infer new mandatory capabilities from the machinery in an experimental design.
+
 ## Scope
 
 Truss is an embeddable property-graph storage toolkit with Truss-owned Python and TypeScript implementations over one PostgreSQL storage contract. The immediate delivery priority is the tested Python 3.11 implementation selected in [ADR-003](adr/ADR-003-conforming-implementations-and-shared-contracts.md), using Weft's Rust Python bridge and the shared authorization boundary. Python does not wait for a Rust port or a complete TypeScript engine. It consumes UMF meaning and exposes a versioned storage contract to Weft. The host owns deployment, authentication, connections and transaction lifetime. Public requirements and contracts remain drafts; this architecture does not claim implemented support.
@@ -205,7 +213,7 @@ Select helper implementation per responsibility, not by adopting one language fo
 
 If source-only bodies cannot meet a required invariant, record the exact failed responsibility and evidence before proposing a compiled extension. The compiled alternative must state original source/build/ABI/deployment requirements and how it supplies the missing observation or enforcement; selecting Rust for that artifact does not select a Rust core or duplicate Weft. A compiled artifact is not automatically sufficient for accounting, authority or rollback semantics either. Compare both alternatives against the same required acceptance cases; do not narrow the supported contract to make one pass.
 
-The selection review must produce actual entrypoint/type/source/security/dependency/resource manifests for each responsibility and explain every cross-language call. Unresolved resource-account custody remains a design prerequisite for native support. This matrix supplies a concrete evaluation order; it does not approve an extension, declare a source-only deployment installable or authorize production installation.
+The selection review must produce actual entrypoint/type/source/security/dependency/resource manifests for each responsibility and explain every cross-language call. Unresolved strict resource-account custody gates only the optional strict accounting profile; baseline native support requires practical limits and the unchanged semantic/security/transaction qualification. This matrix supplies a concrete evaluation order; it does not approve an extension, declare a source-only deployment installable or authorize production installation.
 
 
 ### Native routine attributes and current-state observation

@@ -1,5 +1,13 @@
 # Python consumer integration design
 
+## Selected baseline and implementation order — 2026-10-11
+
+PY-01 implements stock psycopg 3 through supported APIs; pg8000 and custom frame/receive candidates are optional historical experiments. Select a pinned psycopg implementation/libpq build and supported execution mode, then qualify public connection adoption, exact text results, operation-local rollback, native failure, cancellation, unknown commit and safe connection disposal/reuse. The host owns credentials, pooling and outer commit/rollback. Lakebase TLS, person-token authentication and pool credential refresh require actual target evidence.
+
+Baseline resource work enforces input/value/page/batch/iteration/concurrency limits, deadlines and conservative toolkit budgets, with peak-memory tests on maximum admitted and failure workloads. Supported incremental retrieval avoids whole-result accumulation; it is not a byte cap for one large field. Preserve SQL NULL, exact numeric/time/JSON values and unknown extensions without truncation.
+
+The strict transport producer packet and pg8000 hook/frame experiments in Exact transport are optional. Pre-read reservation, parser forwarding, backing identity, copy-lifetime proofs and full native allocation ledgers do not gate PY-01 or first release. Transaction custody and semantic correctness still do. A deficiency against optional instrumentation is not proof stock psycopg fails the product. Any custom wire handler, private hook, fork or baseline replacement requires the PRD's hard documented reproducer/comparison and an owner-approved ADR. Do not continue protocol implementation solely because an experimental packet already exists.
+
 This design implements the short-term consumer path in the [build plan](../04-build/implementation-plan.md#python-consumer-integration-priority--2026-10-09). ADR-001 and ADR-003 are accepted: Truss owns the tested embeddable Python implementation and does not wait for a Rust Truss core. CONTRACT-004/007/010/011/012 and the shared authorization design govern behavior. The [original consumer requirements](../04-build/evidence/consumer-python-requirements-2026-10-08.md) supply R1–R10.
 
 ## Owner delivery decision — 2026-10-09
@@ -962,9 +970,7 @@ The separate direct-principal option uses five TEXT fields: these are distinct
 profiles, not decoder fallbacks. Inspection on 2026-10-09 still observes this
 distinction; it does not adopt the uncommitted owner contract as a released ABI.
 
-PY-01/03 must demonstrate original raw field metadata/byte custody before
-decoded identity use. A driver-returned string tuple alone cannot prove the
-selected OIDs, formats or original connection observation. Verify actual
+PY-01/03 must bind ordered native field metadata and exact identity decoding to the adopted connection. Supported psycopg descriptor APIs, qualified lossless loaders/text projections and independent native actor/transaction observations satisfy baseline evidence; a string tuple without metadata/context does not. Predecode raw-frame custody is optional strict-profile work and is not required for baseline identity admission. Verify actual
 session actor, admitted effective actor/reset state, false superuser/bypass and
 UTF-8 through the owner's procedure. Missing/malformed facts close admission;
 do not substitute catalog lookup or a host-supplied role map.
@@ -1107,11 +1113,11 @@ controls; the snapshot does not prove native lowering or graph-source completene
 
 ## Exact transport
 
-### Initial Python driver qualification packet
+### Optional strict transport driver qualification packet
 
-PY-01 consumes the shared
+Only the optional strict accounting profile consumes the shared
 [original driver producer port](contracts/reference-driver-producer-port.proposal.md).
-The selected Python driver/mode must name its actual source/build and demonstrate
+For that optional profile, the selected Python driver/mode must name its actual source/build and demonstrate
 the original physical lease, ingress reservation before reads, retained backing
 capacity/lifetime, frame reservation before capture/parser copies, complete-frame
 consumption and callback/cycle correspondence. Metadata obtained from a completed
@@ -1134,7 +1140,7 @@ Reuse the shared port and original authority instead of creating a Python-only
 transaction/identity protocol. Unsupported sync/async modes remain explicitly
 unavailable until separately qualified.
 
-### Psycopg candidate review — 2026-10-09
+### Historical psycopg strict-profile source review — 2026-10-09
 
 Source review targets the tagged
 [Psycopg 3.2.12 ctypes wrapper](https://raw.githubusercontent.com/psycopg/psycopg/3.2.12/psycopg/psycopg/pq/pq_ctypes.py),
@@ -1150,9 +1156,9 @@ not a version pin for this candidate.
 
 The result layer is a plausible exact-value adapter. Ingress qualification is
 still incomplete; this review neither rules out a libpq-backed implementation
-nor establishes that a native bridge is sufficient. PY-01 must first select
+nor establishes that a native bridge is sufficient. An optional strict-profile investigation would first select
 one actual implementation and libpq source/build, then inspect its receive,
-TLS, parser and allocation paths against the shared producer port. A Python
+TLS, parser and allocation paths against the optional producer port. A Python
 wrapper around these two calls cannot infer the missing observations afterward.
 
 The execution packet must supply:
@@ -1909,7 +1915,7 @@ where native transport is involved.
 | Slice | Depends on | Deliverable and test gate |
 | --- | --- | --- |
 | PY-01a portable codecs and wire validation | CONTRACT-007/010 and independently authored exact vectors; no driver selection needed | Python 3.11 modules preserve original integer/decimal/time/JSON/presence meanings and original bytes; bool/int refusal and incompatible report/profile refusal. Pure codec passing does not qualify transport or database effects |
-| PY-01b original protocol adapter | Selected driver, PY-01a and admitted raw producer port | Inert construction; original connection adoption; no outer transaction commands; original pre-ingress bounds and lossless metadata/cells; failure containment and outcome correlation. A driver which exposes only already-decoded results cannot satisfy the port |
+| PY-01b baseline psycopg adapter | Pinned stock psycopg 3/libpq/server/mode, PY-01a and supported driver APIs | Inert construction; host connection/transaction adoption with no adapter-owned outer completion; qualified exact text projections/loaders and ordered metadata; practical value/page/batch/concurrency limits and deadlines; peak-memory tests; failure containment and outcome correlation. Raw producer hooks and pre-ingress allocation proofs are optional strict-profile work |
 | PY-02 compiler integration | Reproducibly built pinned Weft wheel and admitted mapping; public wheel distribution is a PY-07 release requirement | Clean Python 3.11 consumer compiles original supported queries; preserves parameters/obligations; rejects unsupported profiles before native submission. Development may build the wheel from exact committed owner source and features, retaining toolchain/build hashes. Do not use test-original configuration as production authority |
 | PY-03 identity/security | Security workstream's complete handoff | Writer succeeds; reader write refuses; outsider read refuses; no identity refuses before application SQL; conflicting actor refuses; definer execution retains original person; denied queries publish no protected facts |
 | PY-04 groups, dry-run and retries | Complete accepted catalog/install, PY-01/03, protected group/receipt procedures | Real group/preconditions; operation rollback preserves prior caller work; dry-run and apply violations agree; lost acknowledgment replays original ordered results; changed input conflicts; all-no-op receipt survives; commit_unknown remains unresolved |

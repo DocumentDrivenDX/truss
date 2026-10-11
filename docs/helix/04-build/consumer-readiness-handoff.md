@@ -1,5 +1,9 @@
 # Consumer readiness handoff — 2026-10-10
 
+## Baseline release profile update — 2026-10-11
+
+Truss now selects stock psycopg 3 as the Python baseline under ADR-003, with finite practical workload limits, deadlines, peak-memory evidence and full transaction/exact-value/authority qualification. Strict transport preallocation, parser hooks and exact backing/copy ledgers are optional profiles, not required readiness-bundle members or release blockers. Baseline release metadata must state those stronger guarantees are not claimed. Host-owned pooling and transaction adoption remain required; the decision supplies no callable executor or new native support evidence. Lakebase remains independently unqualified until its actual TLS/person-token/refresh and semantic schedules pass. Existing private pg8000/native receipts cannot be relabeled as psycopg or Lakebase evidence.
+
 Source checkpoint:98c8137ef93ebd01b4eb04c482a370c53b962143 on
 codex/refresh-helix-specs. This is a reviewable local integration handoff, not a
 released support manifest or an admitted installation. The complete Truss goal,

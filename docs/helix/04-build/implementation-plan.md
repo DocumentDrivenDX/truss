@@ -38,6 +38,15 @@ ddx:
 
 # Truss build plan
 
+## Current driver/resource delivery gate — owner decision 2026-10-11
+
+Implement and qualify stock psycopg 3 as the Python baseline under ADR-003. First publish a supported-API connection/transaction adoption design with a pinned driver implementation/libpq/server/mode tuple; then run the TP-001 baseline resource and STP-044 semantic schedules through the installed consumer path. No pg8000 dependency, custom frame scanner, private receive/parser hook or exact backing-allocation ledger is required for this path. Historical pg8000 and strict transport receipts remain component evidence only.
+
+Required release work is practical payload/value/page/batch/concurrency/iteration limits and deadlines, peak-memory/load qualification, exact values, protected native integrity/current authority, savepoint containment preserving caller work, and confirmed/pending/unknown settlement with safe discard/reuse and retained retry custody. Lakebase support requires actual TLS/person-token/refresh and transaction evidence on that target. Strict transport accounting and its hooks/producers/manifests are optional and removed from baseline dependency/exit gates, including earlier E01/PY-01 pre-materialization demands. Optional status is explicit in the release profile; not_run optional cases cannot fail the baseline corpus or milestone.
+
+Before custom PostgreSQL wire handling, private driver hooks, a fork or driver replacement, require the PRD's hard documented necessary deficiency, simpler-remedy comparison and owner-approved ADR. Existing source packets and component experiments do not authorize that work. Keep complete engine/corpus/installation/security acceptance; this decision removes an excessive mechanism, not those semantic requirements.
+
+
 ## Immediate Python delivery sequence — 2026-10-11
 
 The consumer-facing milestone is an installed-wheel workflow using ordinary
@@ -254,9 +263,9 @@ Preserve the complete existing 45-story corpus, concurrency, failure, retention,
 
 ### Selected driver integration delivery order
 
-CH-02/05 now selects the complete-frame/no-parser-residual branch in the [driver handoff](../02-design/contracts/reference-driver-hook-review.proposal.md#selected-complete-frame-integration-state-transitions). Deliver the adapter-owned incremental gate and strict original grammar/capture first, then the explicit versioned parser entry/assertion interface, original command-cycle callback correlation and issuer arbitration. Complete transport/backing/copy/containment account composition before enabling native commands. Only then connect the implementation to public owned/adopted scopes and packed consumers. No-residual failure refuses this profile; stock result metadata, a late listener or automatic residual-parser fallback cannot replace these deliverables.
+CH-02/05 implements stock psycopg 3 through supported APIs first. Pin the driver implementation/libpq/server/mode tuple, design host connection and transaction adoption, then qualify exact parameter/result/descriptor handling, practical limits and deadlines, exclusive operation use, savepoint containment, native errors, cancellation and confirmed/unknown outer settlement. Exercise public owned/adopted scopes against actual PostgreSQL with independent effects and recovery observations. Peak-memory tests cover maximum admitted workloads, large individual values and failure paths. Do not require a custom receive gate or parser before enabling this baseline path.
 
-The exact source/build/runtime/native ingress tuple and its full dependency custody remain required design composition inputs; running parser, socket/TLS, cancellation, native transaction and pool-return schedules supplies subsequent implementation evidence. The selected forwarding procedure closes that algorithm choice without claiming installed support. Keep original pending/unknown recovery and application disclosure separate from parser success, and retain the broad DH/OL/LR/SB and caller-ownership corpus.
+The complete-frame/no-residual and transport/backing/copy producer designs are optional strict-profile work. Preserve their historical evidence and do not schedule further custom protocol implementation without the PRD's reproduced-deficiency evidence and owner-approved ADR. DH strict allocation/hook cases apply only to that profile; OL/LR/SB and caller-ownership semantic/practical-limit cases remain required where applicable. Exactness, authority and transaction safety are unchanged.
 
 ### Concrete conversion and compiler integration substeps
 
@@ -274,7 +283,7 @@ These substeps are execution planning. They do not authorize implementation beyo
 
 The [history installation handoff](../02-design/contracts/weft-review-installation-gap-matrix.proposal.md#executable-history-design-handoff) orders H1–H7 within CH-01–03. Source 0.11 already contains the metadata operation, carrier constraints and stage child; do not create duplicates. The 0.12 review adds explicit original sequence settings with 479 unchanged source candidates and one reviewed allocator-evolution candidate; 87 unmatched candidates remain unresolved. The separate five-phase manifest preserves the transition routine's second original-effect argument and does not expand the seven-routine manifest into a full installer.
 
-Adapter delivery follows the [driver hook review](../02-design/contracts/reference-driver-hook-review.proposal.md): qualify predecode allocation/UTF-8 admission and original protocol capture before public conversion against an exact installed dependency tuple. STP-044 DH-01–05 distinguish controlled wire-peer evidence from actual native ownership/settlement evidence. A passing parser fixture cannot qualify pool reuse or adopted execution. No new UMF feature or duplicate Weft compiler is a prerequisite.
+Baseline Python adapter delivery follows ADR-003 and CONTRACT-007 using stock psycopg 3 supported APIs. Qualify exact values, practical limits, transaction ownership and settlement against the pinned installed tuple. The [driver hook review](../02-design/contracts/reference-driver-hook-review.proposal.md) and DH predecode/allocation controls apply only to an optional strict profile. Neither a parser fixture nor a driver query alone qualifies pool reuse or adopted execution. No custom wire handler, new UMF feature or duplicate Weft compiler is a baseline prerequisite.
 
 Weft owner source `2399e3051099c07532f1b3fd7a7949246dc61641` includes accepted B-005 candidate compiler scope and the corrected original-sales/mixed-home evidence, recorded in [coordination](design-coordination.md) and the [source review](evidence/design-audit/weft-candidate-acceptance-source-review.json). CH-04 requires Truss-specific original schema/domain/layout/executor admission. Candidate compiler acceptance is no longer an upstream blocker; it does not register the 0.12 review model, qualify production authority or supply the missing consumer reference schema.
 
@@ -931,7 +940,7 @@ Current authored procedure inventory is below. These candidates refine E01–E05
 | Boundary | Authored candidate | Remaining concrete selection/evidence |
 | --- | --- | --- |
 | E01 original lifetime | Host issuer/epoch/coordination-revision and atomic adoption/publication procedure; complete mediated host savepoint history | Actual host-object recognition, original begin/end/control mediation and native state/authority observers for each declared ownership/pool combination |
-| E02 transport | Exact parameter text, positional rows, original descriptor and actual-format correspondence; PostgreSQL command-tag/count grammar | Actual raw/null/encoding/type/format/tag or equivalent driver producers, prepared configuration and pre-materialization workload/buffer bounds |
+| E02 transport | Exact parameter text, positional rows, original descriptor and actual-format correspondence; PostgreSQL command-tag/count grammar | Actual raw/null/encoding/type/format/tag or equivalent driver producers, prepared configuration, practical input/value/result/workload limits and peak-memory tests; pre-materialization backing proofs are optional |
 | E04 savepoints | Original namespace/ordinal/explicit handle invalidation; finite normal/cleanup/total resource proposal | Adopted namespace/stack producer, measured record/work/native costs and independently confirmed serial control completion |
 | E04 recovery | Original query-cycle/state observation, distinct native outcome/resource release and cancellation-lifetime rules | Actual drain/termination/COMMIT confirmation, native-state correspondence and bounded original quarantine/reconciliation storage producers |
 | E05 classification | Native failure precedence preserving whole-transaction caller retry without host termination; fixed bounded diagnostics | Original structured error/cause extraction and selected code/disclosure/native containment mapping, canonical evidence retention |

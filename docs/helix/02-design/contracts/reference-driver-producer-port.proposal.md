@@ -1,5 +1,11 @@
 # Private reference driver producer port
 
+## Optional strict accounting profile — 2026-10-11
+
+This port is an optional stronger-profile proposal, not a dependency of baseline Python execution or release. ADR-003 selects stock psycopg 3 through supported APIs. The pre-read/frame/backing-allocation operations below require separate profile adoption and qualification; missing hooks or receipts cannot block baseline readiness.
+
+Transaction identity, exclusive use, savepoint lifetime, pending/committed/unknown outcomes and safe reuse remain required independently of this port. Baseline adapters implement and test them through supported driver APIs and native outcome observations; these semantic obligations do not require frame tickets or a custom parser. Before implementing this optional protocol machinery, satisfy the PRD's reproduced-deficiency gate and obtain an owner-approved ADR. Existing experiments establish no production adoption.
+
 Design-only interface for CONTRACT-007's frozen node-postgres complete-frame/no-residual candidate. This is adapter-owned integration, outside the browser core and public toolkit exports. It selects a concrete producer boundary; stock pg does not thereby gain the port. Exact installed source/build/runtime/transport and native qualification remain required.
 
 ## Port operations and original custody
