@@ -3,7 +3,7 @@
 The observed row is historical after return. Autocommit, savepoint rollback,
 same-writer issuance or transaction completion can end/change its lock scope.
 """
-from dataclasses import dataclass
+from ._native_epoch_acquisitions import NativeFreshEpochObservation
 import hashlib,re,struct
 from ._native_admission_capture import NativeAdmissionCapture
 from ._native_result_custody import NativeTextLimits
@@ -15,14 +15,6 @@ from ._native_deadline import NativeOperationDeadline
 FRESH_EPOCH_LIMITS=NativeTextLimits(columns=12,rows=1,cell_bytes=2097152,
     result_bytes=2359296,frame_bytes=2621440,wire_bytes=8388608,
     sql_bytes=32768,payload_capacity=268435456,cumulative_payload=268435456)
-
-@dataclass(frozen=True,slots=True,eq=False)
-class NativeFreshEpochObservation:
-    original_call: NativeCall
-    original_row: tuple
-    original_request: bytes
-    original_frames: tuple
-    scope: str='original_epoch_response_only'
 
 
 def _literal(value,maximum):
@@ -77,7 +69,7 @@ class NativeFreshEpochCapture(NativeAdmissionCapture):
         session.deadline.check()
         self.sql='SELECT * FROM truss.runtime_lock_fresh_source_epoch('+','.join(args)+')'
         if len(self.sql.encode())>FRESH_EPOCH_LIMITS.sql_bytes:raise NativeBoundaryRefusal('Epoch request bound')
-        self.expected=(installation,epoch,incarnation);self.started=False;self.original_observation=None;self.frames=[]
+        self.expected=(installation,epoch,incarnation);self.started=False;self.original_observation=None;self.frames=[];self.original_acquisition=None
         super().__init__(session,FRESH_EPOCH_LIMITS,maximum_context_bytes=1048576)
     def _validate(self,code,data,context):
         super()._validate(code,data,context)
@@ -125,5 +117,6 @@ class NativeFreshEpochCapture(NativeAdmissionCapture):
             if request!=b'Q'+struct.pack('!I',len(payload)+4)+payload:
                 raise NativeBoundaryRefusal('Exact original epoch request required')
             observation=NativeFreshEpochObservation(call,row,request,tuple(self.frames))
+            self.boundary._transaction_tracker._epoch_acquisitions.retain(self,observation)
             self._publish(observation);return observation
         finally:self.session.admission_closed=True

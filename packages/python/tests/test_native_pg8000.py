@@ -1,5 +1,6 @@
 """Private native-call evidence; no public adoption or protected admission."""
 import importlib.util
+import os,stat
 from pathlib import Path
 import tempfile
 import unittest
@@ -13,6 +14,14 @@ class NativeBoundaryFixture:
     @classmethod
     def setUpClass(cls):
         from pg8000.native import Connection
+        selected=os.environ.get('TRUSS_NATIVE_TEST_SOCKET')
+        if selected is not None:
+            path=Path(selected)
+            if not path.is_absolute() or not stat.S_ISSOCK(path.stat().st_mode):
+                raise ValueError('Explicit existing native Unix socket required')
+            cls.directory=None;cls.runtime=None;cls.Connection=Connection
+            cls.kwargs=dict(user='postgres',database='postgres',unix_sock=str(path),ssl_context=False)
+            return
         cls.directory = tempfile.TemporaryDirectory(prefix='truss-native-boundary-')
         cls.runtime = LocalPostgres(Path(cls.directory.name) / 'data').__enter__()
         uri = urlparse(cls.runtime.info.connection_uri)
@@ -25,8 +34,8 @@ class NativeBoundaryFixture:
 
     @classmethod
     def tearDownClass(cls):
-        cls.runtime.close()
-        cls.directory.cleanup()
+        if cls.runtime is not None:cls.runtime.close()
+        if cls.directory is not None:cls.directory.cleanup()
 
     def setUp(self):
         self.connection = self.Connection(**self.kwargs)

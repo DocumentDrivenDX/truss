@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-x35cafm2/worker.py", line 202, in <module>
+    check(label+':original-raised-completion-still-active',True,boundary.last_call.capture_complete and boundary.last_call.driver_raised and boundary.last_call.final_status==b'T')
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-python-census-execution-x35cafm2/worker.py", line 18, in check
+    if type(expected) is not type(observed) or expected!=observed:raise AssertionError(name)
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: lost-control-reply:original-raised-completion-still-active

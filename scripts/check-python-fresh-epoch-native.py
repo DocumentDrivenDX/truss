@@ -23,7 +23,7 @@ sql_inputs={'layout':'docs/helix/04-build/evidence/source-epoch-layout-0.16.owne
  'lock':'packages/postgresql/native/source-epoch-lock.sql',
  'issue':'packages/postgresql/native/source-epoch-issue.sql',
  'fresh':'packages/postgresql/native/source-epoch-fresh-lock.sql'}
-for q in ['scripts/check-python-fresh-epoch-native.py','scripts/python-fresh-epoch-worker.py','scripts/check-module-boundaries.py','packages/python/tests/test_native_fresh_epoch_capture.py',*sql_inputs.values()]:
+for q in ['scripts/check-python-fresh-epoch-native.py','scripts/python-fresh-epoch-worker.py','scripts/check-module-boundaries.py','packages/python/tests/test_native_fresh_epoch_capture.py','packages/python/tests/test_native_epoch_acquisitions.py','packages/python/tests/test_native_transactions.py','packages/python/tests/test_native_pg8000.py',*sql_inputs.values()]:
  p=root/q;inputs[str(p)]=p.read_bytes()
 pins={p:sha(b) for p,b in inputs.items()}
 with zipfile.ZipFile(folder/'sources.zip','w',zipfile.ZIP_DEFLATED) as archive:
@@ -47,16 +47,25 @@ if True:
  tests=captured/'tests';tests.mkdir();test=tests/'test_native_fresh_epoch_capture.py'
  test.write_bytes(inputs[str(root/'packages/python/tests/test_native_fresh_epoch_capture.py')])
  if test.read_bytes()!=inputs[str(root/'packages/python/tests/test_native_fresh_epoch_capture.py')]:raise RuntimeError('Captured test bytes differ')
+ acquisition_test=tests/'test_native_epoch_acquisitions.py'
+ acquisition_test.write_bytes(inputs[str(root/'packages/python/tests/test_native_epoch_acquisitions.py')])
+ if acquisition_test.read_bytes()!=inputs[str(root/'packages/python/tests/test_native_epoch_acquisitions.py')]:raise RuntimeError('Captured acquisition tests differ')
+ regressions=captured/'regression-tests';regressions.mkdir()
+ for name in ('test_native_transactions.py','test_native_pg8000.py'):
+  raw=inputs[str(root/'packages/python/tests'/name)];target=regressions/name;target.write_bytes(raw)
+  if target.read_bytes()!=raw:raise RuntimeError('Captured lifecycle regression bytes differ')
  python=os.sys.executable
  try:
   if any(Path(p).read_bytes()!=b for p,b in inputs.items()):raise RuntimeError('Source changed before execution')
-  host=run([python,'-m','unittest','discover','-s',str(tests),'-p','test_native_fresh_epoch_capture.py','-v'],env={**os.environ,'PYTHONPATH':str(modules)})
+  host=run([python,'-m','unittest','discover','-s',str(tests),'-p','test_native_*.py','-v'],env={**os.environ,'PYTHONPATH':str(modules)})
   (folder/'host.stdout.log').write_text(host.stdout);(folder/'host.stderr.log').write_text(host.stderr);require(host)
   checked=run([python,'scripts/check-module-boundaries.py']);(folder/'boundaries.stdout.log').write_text(checked.stdout);(folder/'boundaries.stderr.log').write_text(checked.stderr);require(checked)
   pgdata=captured/'pgdata';socket_dir=Path(tempfile.mkdtemp(prefix='pc-',dir='/private/tmp'))
   require(run([str(POSTGRES_BIN_PATH/'initdb'),'-D',str(pgdata),'-U','postgres','--auth=trust','--encoding=UTF8'],timeout=60))
   attempted=True
   require(run([str(POSTGRES_BIN_PATH/'pg_ctl'),'-D',str(pgdata),'-l',str(captured/'server.log'),'-w','-o',f"-h '' -k {socket_dir}",'start'],timeout=60))
+  regression=run([python,'-m','unittest','discover','-s',str(regressions),'-p','test_native_*.py','-v'],env={**os.environ,'PYTHONPATH':str(modules),'TRUSS_NATIVE_TEST_SOCKET':str(socket_dir/'.s.PGSQL.5432')},timeout=180)
+  (folder/'regression.stdout.log').write_text(regression.stdout);(folder/'regression.stderr.log').write_text(regression.stderr);require(regression)
   native=run([python,str(worker)],input=json.dumps({'capturedModules':str(modules),**selected,'unixSocket':str(socket_dir/'.s.PGSQL.5432'),'password':None,'evidence':str(folder)}),timeout=180)
   (folder/'native.stdout.log').write_text(native.stdout);(folder/'native.stderr.log').write_text(native.stderr);require(native)
   if any(Path(p).read_bytes()!=b for p,b in inputs.items()):raise RuntimeError('Current source pins changed')

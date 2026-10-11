@@ -13,7 +13,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
-    '_native_fresh_epoch_capture': {'dataclasses','hashlib','re','struct','truss._native_admission_capture','truss._native_result_custody','truss._native_pg8000','truss._native_arbitration','truss._native_driver_profile','truss._native_deadline'},
+    '_native_epoch_acquisitions': {'dataclasses','truss._native_pg8000'},
+    '_native_fresh_epoch_capture': {'truss._native_epoch_acquisitions','hashlib','re','struct','truss._native_admission_capture','truss._native_result_custody','truss._native_pg8000','truss._native_arbitration','truss._native_driver_profile','truss._native_deadline'},
     '_native_source_census': {'dataclasses','hashlib','re','struct','truss._native_pg8000','truss._native_arbitration','truss._native_result_custody','truss._native_driver_profile','truss._native_deadline'},
     '_native_operation_ordinals': {'truss._native_catalog_request','truss._native_catalog_capture','truss.preparation','truss._native_string_request','dataclasses','truss._operation_ordinal','truss._native_pg8000','truss._native_adoption','truss._native_admission_request','truss._native_admission_capture','truss._native_result_custody','truss._native_deadline','truss._native_driver_profile','pg8000.core'},
     '_startup_custody': {'dataclasses','threading','importlib.metadata','io','socket','pg8000','truss._native_driver_profile','truss._native_deadline'},
@@ -38,7 +39,7 @@ ALLOWED = {
     '_native_operation': {'truss._native_ingress_deadline', 'truss._native_deadline', 'truss._native_cancellation', 'truss._host_control_custody', 'dataclasses', 'pg8000.converters', 'pg8000.core', 'pg8000.native', 'threading', 'truss._native_arbitration', 'truss._native_pg8000', 'truss._native_result_custody', 'truss._native_driver_profile', 'truss._native_transactions', 'truss._operation_arbitration', 'truss.execution', 'uuid'},
     '_native_pg8000': {'truss._startup_custody','truss._native_driver_profile', 'dataclasses', 'importlib.metadata', 'pg8000.native', 'threading'},
     '_native_result_custody': {'truss._native_outbound', 'truss._native_ingress_deadline', 'io', 'dataclasses', 'pg8000.converters', 're', 'struct', 'truss._accounted_receive', 'truss._native_pg8000', 'truss._resource_account'},
-    '_native_transactions': {'truss._native_operation_ordinals', 'dataclasses', 're', 'truss._native_adoption', 'truss._native_pg8000', 'truss.execution', 'uuid'},
+    '_native_transactions': {'truss._native_epoch_acquisitions', 'truss._native_operation_ordinals', 'dataclasses', 're', 'truss._native_adoption', 'truss._native_pg8000', 'truss.execution', 'uuid'},
     '_operation_arbitration': {'dataclasses', 'threading', 'truss._host_execution', 'uuid'},
     'execution': {'dataclasses', 'typing'},
     '_installation_archive': {'dataclasses', 'hashlib'},

@@ -127,6 +127,8 @@ class NativeTransactions:
         self._next_epoch = 1
         from ._native_operation_ordinals import NativeOperationOrdinals
         self._operation_ordinals=NativeOperationOrdinals(self)
+        from ._native_epoch_acquisitions import NativeEpochAcquisitions
+        self._epoch_acquisitions=NativeEpochAcquisitions(self)
         with boundary._lock:
             if (boundary._transaction_tracker is not None or boundary._calling or
                     boundary._operation is not None or boundary._quarantined or
@@ -136,11 +138,18 @@ class NativeTransactions:
 
     def _before(self, control):
         if control is not None and (type(control) is not _Control or control.expected is not self._state):
+            self._epoch_acquisitions.invalidate('original-lifecycle-preflight-lost')
             raise NativeBoundaryRefusal('Original lifecycle changed before admission')
+        self._epoch_acquisitions.before(control)
 
     def _after(self, control, call):
-        try:return self._after_original(control,call)
+        before=self._state
+        try:
+            result=self._after_original(control,call)
+            self._epoch_acquisitions.after(control,call,before)
+            return result
         except BaseException:
+            self._epoch_acquisitions.invalidate('uncertain-native-completion')
             self._operation_ordinals.close_locked()
             raise
 
