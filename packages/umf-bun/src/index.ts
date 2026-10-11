@@ -1,10 +1,10 @@
 /** Trusted host-only original producer registration. No alternate UMF validation. */
 import {resolve} from 'node:path';
 import {requireUnchangedCatalogTransition} from './catalog-transition-correspondence';
-const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'>();
-function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'):T{assertionOwners.set(owner,mode);return owner;}
+const assertionOwners=new WeakMap<object,'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'>();
+function registerAssertionOwner<T extends object>(owner:T,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'):T{assertionOwners.set(owner,mode);return owner;}
 /** Private loaded-instance recognition; no external issuer or native qualification. */
-export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'):void{
+export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|'assertion-fields'|'scalar-types'|'record-members'|'reference-links'|'record-type-receipts'):void{
  if(assertionOwners.get(owner)!==mode)throw Error('Original loaded assertion owner required');
 }
 export const UMF_RUNTIME_SOURCE='c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3';
@@ -99,4 +99,12 @@ export async function loadUmfReferenceLinksProducer(directory:string){
  const {hash,captured}=await loadPinnedFunctions(directory,UMF_REFERENCE_LINKS_SOURCE,'reference-links',['inspectCoreReferenceLinks']);
  return registerAssertionOwner(Object.freeze({sourceRevision:UMF_REFERENCE_LINKS_SOURCE,bundleSha256:hash,
   inspectReferenceLinks:captured.inspectCoreReferenceLinks}),'reference-links');
+}
+
+/** Exact-current type receipt consistency owner; no authenticated issuer or native enforcement. */
+export const UMF_RECORD_TYPE_RECEIPT_SOURCE='ec3fae2bdb93bdbaff30c38ee370030da7db1760';
+export async function loadUmfRecordTypeReceiptProducer(directory:string){
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_RECORD_TYPE_RECEIPT_SOURCE,'record-type-receipts',['inspectCoreRecordTypeReceipt']);
+ return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RECORD_TYPE_RECEIPT_SOURCE,bundleSha256:hash,
+  inspectRecordTypeReceipt:captured.inspectCoreRecordTypeReceipt}),'record-type-receipts');
 }

@@ -1,0 +1,53 @@
+{
+  "status": "passed",
+  "method": "Independent read-only current-source/exact-ZIP/retained-log audit; no host/browser/native rerun",
+  "receiptSha256": "97433bbeec50a8efba5484e253e5c655a6bd518808e27475f61df06bd6546d55",
+  "sourcePins": 726,
+  "currentSourcesMatch": true,
+  "exactZipEntrySet": true,
+  "independentSelectedInputInventoryMatches": true,
+  "archiveSha256": "a6e4c59ca7ea8f5fb7fb59ef9643e15468fd37135d297820ab191bc004926de3",
+  "hostLogSha256": "74b4b08e0415eacc377d4492b6906f5c0c5b8f823cbbb96f907d97572da8f47d",
+  "typeLogSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "hostTests": 107,
+  "hostAssertions": 1289,
+  "testFiles": 11,
+  "strictTypecheckExit": 0,
+  "receiptIngressTests": [
+    "original receipt bytes qualified current document and appended occurrence stay distinct from authority",
+    "whole packet refuses missing wrong crossed duplicate and stale receipts without partial collections",
+    "receipt numeric parsing preserves supported decimal meaning and refuses silent Number loss",
+    "loaded owner result substitutions refuse before interpretation or report use",
+    "collection custody crosses neither preparations nor private report native boundaries"
+  ],
+  "receiptOwnerDirectory": "/private/tmp/truss-umf-runtime-kc09xk",
+  "receiptOwner": {
+    "revision": "ec3fae2bdb93bdbaff30c38ee370030da7db1760",
+    "producerMode": "record-type-receipts",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "cfde1eefe42b4ada27b59fe3a344ee9a1598772b15659b36bf7416f984f53958",
+    "bundleSha256": "2f3c5ca7a3bf8af05fe5429cf9b2ea32ef594efbaa839cf9685c8da875570098",
+    "operations": [
+      "inspectCoreRecordTypeReceipt",
+      "declareCoreElementKind",
+      "declareCoreRecordType"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "extraSourceArchiveCheck": "Temporary source.tar digest and Git commit comment match producer manifest; receipt owner module/schema match archived bytes. Not a fresh rebuild or authenticated bundle issuance.",
+  "remainingFindings": [],
+  "nativeExecution": false,
+  "acceptancePromoted": false,
+  "resolvedFindings": [
+    "Every supplied optional type-receipt sidecar now undergoes WeakMap preparation-custody validation before SQL, including false, zero, empty string and null; explicit zero-SQL controls passed."
+  ]
+}
