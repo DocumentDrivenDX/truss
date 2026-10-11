@@ -4,12 +4,25 @@ from ._psycopg_epoch_cut import _run_fenced_epoch_operation
 
 
 @dataclass(frozen=True)
+class _FactColumnComparison:
+    name: str
+    number: int
+    type_oid: int
+    type_modifier: int
+    not_null: bool
+    collation_oid: int
+    generated: str = ''
+    identity: str = ''
+
+
+@dataclass(frozen=True)
 class _FactRelationComparison:
     schema: str
     name: str
     oid: int
     owner_oid: int
     guard_source: str
+    columns: tuple = ()
 
 
 def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback):
@@ -31,7 +44,25 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
             raise ValueError('Exact native relation and owner OIDs required')
         if type(guard_source) is not str or not 1 <= len(guard_source.encode('utf8')) <= 65536:
             raise ValueError('Bounded original guard source comparison required')
-        recipe.append((schema,name,oid,owner,guard_source))
+        if type(relation.columns) is not tuple or len(relation.columns)>1600:
+            raise ValueError('Bounded exact column comparisons required')
+        columns=[]
+        for column in relation.columns:
+            if type(column) is not _FactColumnComparison:
+                raise ValueError('Exact native column comparison required')
+            n,a,t,m,nn,c,g,i=(column.name,column.number,column.type_oid,column.type_modifier,
+                            column.not_null,column.collation_oid,column.generated,column.identity)
+            if type(n) is not str or not 1<=len(n.encode('utf8'))<=63 or '\x00' in n:
+                raise ValueError('Exact native column name required')
+            if (type(a) is not int or not 1<=a<=1600 or type(t) is not int or not 1<=t<=4294967295
+                    or type(m) is not int or not -2147483648<=m<=2147483647
+                    or type(nn) is not bool or type(c) is not int or not 0<=c<=4294967295
+                    or type(g) is not str or g not in ('','s') or type(i) is not str or i not in ('','a','d')):
+                raise ValueError('Exact selected PostgreSQL16 column descriptor required')
+            columns.append((n,a,t,m,nn,c,g,i))
+        if len({c[0] for c in columns})!=len(columns) or len({c[1] for c in columns})!=len(columns):
+            raise ValueError('Duplicate native column binding')
+        recipe.append((schema,name,oid,owner,guard_source,tuple(columns)))
     recipe=tuple(sorted(recipe,key=lambda r:r[2]))
     if len({r[2] for r in recipe}) != len(recipe) or len({r[:2] for r in recipe}) != len(recipe):
         raise ValueError('Duplicate fact relation binding')
@@ -39,7 +70,7 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
 
     def acquire(cursor):
         from psycopg import sql
-        for schema,name,oid,owner,guard_source in recipe:
+        for schema,name,oid,owner,guard_source,columns in recipe:
             cursor.execute(sql.SQL('LOCK TABLE ONLY {} IN SHARE MODE NOWAIT').format(sql.Identifier(schema,name)),prepare=False)
             cursor.execute("SELECT c.oid::pg_catalog.text,c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,"
                            "EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text "
@@ -63,5 +94,17 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
             if (cursor.description is None or len(cursor.description)!=12
                     or any(d.type_code!=25 for d in cursor.description) or guards != [expected]):
                 raise ValueError('Exact installed ALWAYS fact guard required')
+            for n,a,t,m,nn,c,g,i in columns:
+                cursor.execute("SELECT attname::pg_catalog.text,attnum::pg_catalog.text,atttypid::pg_catalog.text,"
+                               "atttypmod::pg_catalog.text,attnotnull::pg_catalog.text,attcollation::pg_catalog.text,"
+                               "attgenerated::pg_catalog.text,attidentity::pg_catalog.text,attisdropped::pg_catalog.text "
+                               "FROM pg_catalog.pg_attribute WHERE attrelid OPERATOR(pg_catalog.=) %s::pg_catalog.oid "
+                               "AND attnum OPERATOR(pg_catalog.=) %s::pg_catalog.int2",
+                               (str(oid),str(a)),prepare=False,binary=False)
+                actual=cursor.fetchmany(2)
+                expected=(n,str(a),str(t),str(m),'true' if nn else 'false',str(c),g,i,'false')
+                if (cursor.description is None or len(cursor.description)!=9
+                        or any(d.type_code!=25 for d in cursor.description) or actual != [expected]):
+                    raise ValueError('Original native field descriptor correspondence required')
         return callback(cursor)
     return _run_fenced_epoch_operation(host,transaction,epoch_comparison,acquire)

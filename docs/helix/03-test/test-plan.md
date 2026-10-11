@@ -635,3 +635,36 @@ controls, not passed by symbolic countermodels. Flat columns and graph payloads
 must each prove decoding correspondence, including absence/null/type semantics.
 No public API, native admission or acceptance binding is promoted; checkpoint
 remains 26/132 with 106 missing and the objective stays active.
+
+
+### Original native field descriptor correspondence — 2026-10-11
+
+Private fact-table recipes now carry bounded exact column comparisons. Snapshot
+name, native attribute number, type OID/modifier, nullability, collation OID and
+stored-generation/identity markers before the original epoch scope. Reject duplicate
+names/numbers and malformed comparisons before native work. Under actual table
+SHARE and installed ALWAYS guard correspondence, read explicit pg_catalog attributes
+as nine text descriptors; require exact original descriptor and non-dropped column
+before callback. Retain the relation-only read subset separately: an empty column
+recipe does not establish field dependency coverage.
+
+Final native packet `evidence/python-psycopg-epoch-cut/613a92b8-17f9-4db8-8475-478496590c55`
+passes 68 tests (17 fact,16 graph/gateway,nine epoch,26 adoption), with current and
+archived source correspondence, native payload pins, module boundaries and three
+independent named fixture stop0/status3/socket-absent cleanups. Seven added controls
+cover original descriptor success, wrong valid type, actual native type/nullability
+changes, drop/recreate under the same name, duplicate recipe before xid assignment
+and hostile temporary pg_attribute shadow. Refusal preserves pre-existing lock
+baselines and prevents callback. Initial7889a5b7 passes its earlier66-test tuple;
+845be9f0 retains a failed assertion that incorrectly expected the preceding table
+rewrite's lock to disappear. The corrected baseline assertion passes in the final
+packet; historical evidence is unchanged.
+
+Field-cut model replay `evidence/security-field-cuts-formal/0a706a61-4f48-46c6-905e-32b82f9e03ac`
+retains the new module source and the same eight conditional queries, not a native
+refinement proof. Descriptor equality does not authenticate mappings or establish
+decoder/type/collation/generated-expression/role/config closure. The original
+semantic dependency-to-provider handoff and complete cuts remain required for flat
+and graph fields. This advances CONTRACT-063/STP-056 B11/B12/L03 and US-056 AC9/AC10
+prerequisites only; no public API, grants or backend acceptance binding changes.
+The full goal remains active at 26/132 with106 missing.

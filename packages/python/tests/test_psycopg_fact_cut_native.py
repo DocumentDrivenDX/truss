@@ -4,7 +4,7 @@ from pathlib import Path
 import psycopg
 from psycopg import sql
 import test_psycopg_epoch_cut_native as epoch_tests
-from truss._psycopg_fact_cut import _FactRelationComparison,_run_fenced_fact_operation
+from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison,_run_fenced_fact_operation
 from truss.execution import Ok,Error
 ROOT=Path(__file__).resolve().parents[3]
 
@@ -110,3 +110,36 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres') as w:
                 w.execute('UPDATE truss.flat_assignment SET active=true')
                 w.execute('INSERT INTO truss.edge(id,rel_type_id,source_id,source_type,target_id,target_type,rev) VALUES(100,100,100,100,200,101,0)')
+
+    def field_binding(self, column=None):
+        r=self.bindings['flat_assignment']
+        return _FactRelationComparison(r.schema,r.name,r.oid,r.owner_oid,r.guard_source,
+                                       (column or _FactColumnComparison('active',3,16,-1,True,0),))
+    def test_original_active_column_descriptor_passes_under_cut(self):
+        t=self.begin()
+        self.assertEqual(self.cut(t,lambda c:'original-field',(self.field_binding(),)),Ok('original-field'))
+    def test_valid_wrong_column_descriptor_refuses_before_callback(self):
+        t=self.begin();called=[]
+        wrong=_FactColumnComparison('active',3,20,-1,True,0)
+        result=self.cut(t,lambda c:called.append(True),(self.field_binding(wrong),))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+    def test_changed_native_nullability_refuses_before_callback(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.flat_assignment ALTER COLUMN active DROP NOT NULL');called=[]
+        result=self.cut(t,lambda c:called.append(True),(self.field_binding(),))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+    def test_drop_recreate_same_named_column_refuses_original_number(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.flat_assignment DROP COLUMN active');self.connection.execute('ALTER TABLE truss.flat_assignment ADD COLUMN active boolean NOT NULL DEFAULT true');called=[]
+        result=self.cut(t,lambda c:called.append(True),(self.field_binding(),))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+    def test_duplicate_column_recipe_refuses_before_native_assignment(self):
+        t=self.begin();r=self.field_binding();bad=_FactRelationComparison(r.schema,r.name,r.oid,r.owner_oid,r.guard_source,r.columns*2)
+        with self.assertRaises(ValueError):self.cut(t,lambda c:'unreachable',(bad,))
+        self.assertEqual(self.connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone(),(None,))
+
+    def test_changed_native_field_type_refuses_before_callback(self):
+        t=self.begin();self.connection.execute('ALTER TABLE truss.flat_assignment ALTER COLUMN active TYPE text USING active::text');called=[];prior_shares=self.fact_shares()
+        result=self.cut(t,lambda c:called.append(True),(self.field_binding(),))
+        self.assertIsInstance(result,Error);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),prior_shares)
+    def test_temp_attribute_catalog_cannot_substitute_original_field(self):
+        t=self.begin();self.connection.execute('CREATE TEMP TABLE pg_attribute(attname text,attnum smallint,atttypid oid,atttypmod integer,attnotnull boolean,attcollation oid,attgenerated text,attidentity text,attisdropped boolean,attrelid oid); SET LOCAL search_path=pg_temp,pg_catalog')
+        self.assertEqual(self.cut(t,lambda c:'original-field',(self.field_binding(),)),Ok('original-field'))
