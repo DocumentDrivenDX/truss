@@ -57,3 +57,37 @@ class NativeFreshEpochTests(unittest.TestCase):
   for stage,code,data in ((0,b'Z',b'T'),(2,b'C',b'SELECT 2\0'),(3,b'Z',b'I')):
    g=gate();g.response_stage=stage
    with self.subTest(stage=stage),self.assertRaises(NativeBoundaryRefusal):feed(g,code,data)
+
+class OriginalEpochRequestTests(unittest.TestCase):
+ def recipe(self,cls=None):
+  from truss._native_fresh_epoch_capture import NativeFencedFreshEpochCapture,_capture_profile,_EpochRequest
+  from truss._native_arbitration import NativeOperationSession
+  g=object.__new__(cls or NativeFencedFreshEpochCapture);s=object.__new__(NativeOperationSession)
+  g.session=s;g.sql='SELECT original';g.expected=EXPECTED;g._request_profile=_capture_profile(g)
+  g._request=_EpochRequest(g,s,g._request_profile,g.expected,g.sql);s._epoch_request=g._request
+  return g
+ def test_scopes_are_disjoint(self):
+  from truss._native_fresh_epoch_capture import validate_fenced_epoch_row
+  fenced=(*ROW[:-1],'transaction_epoch_state_fence_only')
+  self.assertEqual(validate_fenced_epoch_row(fenced,EXPECTED),fenced)
+  for validator,row in ((validate_epoch_row,fenced),(validate_fenced_epoch_row,ROW)):
+   with self.assertRaises(NativeBoundaryRefusal):validator(row,EXPECTED)
+ def test_frozen_owner_bound_request(self):
+  import copy
+  from dataclasses import FrozenInstanceError
+  g=self.recipe();self.assertIs(g._check_recipe(),g._request)
+  with self.assertRaises(FrozenInstanceError):g._request.sql='SELECT substituted'
+  with self.assertRaises(NativeBoundaryRefusal):copy.copy(g)._check_recipe()
+  original=g._request;g._request=copy.copy(original)
+  with self.assertRaises(NativeBoundaryRefusal):g._check_recipe()
+ def test_altered_crossed_and_nonprimitive_recipes_refuse(self):
+  class Text(str):pass
+  class Values(tuple):pass
+  for field,value in (('sql','SELECT altered'),('sql',Text('SELECT original')),('expected',('other',*EXPECTED[1:])),('expected',Values(EXPECTED)),('expected',(Text(EXPECTED[0]),*EXPECTED[1:])),('_request',self.recipe()._request),('session',self.recipe().session)):
+   g=self.recipe();setattr(g,field,value)
+   with self.subTest(field=field),self.assertRaises(NativeBoundaryRefusal):g._check_recipe()
+ def test_only_closed_concrete_classes(self):
+  from truss._native_fresh_epoch_capture import NativeFencedFreshEpochCapture,_capture_profile
+  class Derived(NativeFencedFreshEpochCapture):pass
+  with self.assertRaises(NativeBoundaryRefusal):_capture_profile(object.__new__(Derived))
+  self.assertNotEqual(self.recipe(NativeFreshEpochCapture)._request.profile,self.recipe()._request.profile)

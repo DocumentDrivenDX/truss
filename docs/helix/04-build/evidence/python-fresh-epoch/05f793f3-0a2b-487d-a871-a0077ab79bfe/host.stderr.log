@@ -1,0 +1,25 @@
+test_capacity_selection_is_exact_and_bounded (test_native_epoch_acquisitions.AcquisitionTests.test_capacity_selection_is_exact_and_bounded) ... ok
+test_generation_transition_and_unknown_target_close (test_native_epoch_acquisitions.AcquisitionTests.test_generation_transition_and_unknown_target_close) ... ok
+test_original_expected_state_is_required (test_native_epoch_acquisitions.AcquisitionTests.test_original_expected_state_is_required) ... ok
+test_release_reparents_then_rollback_parent_invalidates (test_native_epoch_acquisitions.AcquisitionTests.test_release_reparents_then_rollback_parent_invalidates) ... ok
+test_rollback_later_preserves_but_recreation_cannot_revive (test_native_epoch_acquisitions.AcquisitionTests.test_rollback_later_preserves_but_recreation_cannot_revive) ... ok
+test_unknown_or_failed_completion_closes_without_claiming_release (test_native_epoch_acquisitions.AcquisitionTests.test_unknown_or_failed_completion_closes_without_claiming_release) ... ok
+test_unqualified_call_invalidates_before_effect_and_never_rewinds (test_native_epoch_acquisitions.AcquisitionTests.test_unqualified_call_invalidates_before_effect_and_never_rewinds) ... ok
+test_bounded_lossless_sql_literal (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_bounded_lossless_sql_literal) ... ok
+test_comparison_scope_and_closed_tuple (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_comparison_scope_and_closed_tuple) ... ok
+test_default_profiles_unchanged (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_default_profiles_unchanged) ... ok
+test_descriptor_order_types_and_count (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_descriptor_order_types_and_count) ... ok
+test_exact_hex_and_evidence_digest (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_exact_hex_and_evidence_digest) ... ok
+test_native_identity_bounds (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_native_identity_bounds) ... ok
+test_prefix_wrong_completion_and_idle_refuse (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_prefix_wrong_completion_and_idle_refuse) ... ok
+test_singleton_active_response (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_singleton_active_response) ... ok
+test_valid_and_forged_shapes_are_not_authority (test_native_fresh_epoch_capture.NativeFreshEpochTests.test_valid_and_forged_shapes_are_not_authority) ... ok
+test_altered_crossed_and_nonprimitive_recipes_refuse (test_native_fresh_epoch_capture.OriginalEpochRequestTests.test_altered_crossed_and_nonprimitive_recipes_refuse) ... ok
+test_frozen_owner_bound_request (test_native_fresh_epoch_capture.OriginalEpochRequestTests.test_frozen_owner_bound_request) ... ok
+test_only_closed_concrete_classes (test_native_fresh_epoch_capture.OriginalEpochRequestTests.test_only_closed_concrete_classes) ... ok
+test_scopes_are_disjoint (test_native_fresh_epoch_capture.OriginalEpochRequestTests.test_scopes_are_disjoint) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.001s
+
+OK

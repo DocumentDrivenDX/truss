@@ -1,0 +1,392 @@
+{
+  "auditKind": "independent final configured-release regression for fenced epoch capture sources",
+  "auditedAtUtc": "2026-10-11T16:57:54.908040+00:00",
+  "integrationRoot": "/private/tmp/truss-security-main-integration",
+  "status": "scoped-evidence-matches",
+  "executionsPerformed": "Local file/hash/ZIP/AST/log inspection only; no native, tests, producers or repository edits.",
+  "sameRetainedSourceMaps": true,
+  "sameNativeMaps": true,
+  "packets": {
+    "ordinary": {
+      "runId": "da6adfd7-44b3-478f-a6c0-38831cbdd82b",
+      "kind": "ordinary",
+      "receiptStatus": "component-passed",
+      "receiptSha256": "7f4a1fbe8186eaed3b4a2ebbff6bd86096e295ac7e7aa128fe10769c4f7d3b7b",
+      "zipSha256": "e6834898ce2493a15ea510c8e713cde851f1977ce8ebfd3a6073f973b3645d48",
+      "integrityFailures": [],
+      "sourceCount": 282,
+      "currentSourceDrift": [],
+      "zip": {
+        "entryCount": 282,
+        "duplicates": 0,
+        "extra": [],
+        "missing": [],
+        "digestMismatches": []
+      },
+      "epochSourceClosure": {
+        "source-epoch-issue": {
+          "sha256": "f7c292a9a70715137c003232603877b58e862cd8476faf7a63992ff05b92326e",
+          "sourcePinMatches": true
+        },
+        "source-epoch-read-fence": {
+          "sha256": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+          "sourcePinMatches": true
+        },
+        "source-epoch-fenced-fresh-lock": {
+          "sha256": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+          "sourcePinMatches": true
+        },
+        "source-epoch-lock": {
+          "sha256": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
+          "sourcePinMatches": true
+        },
+        "source-epoch-fresh-lock": {
+          "sha256": "b9d48c570237cac5b69b959270b363862ec5f87d33ac5145cdd9d847e9640ebc",
+          "sourcePinMatches": true
+        },
+        "source-epoch-immutability": {
+          "sha256": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
+          "sourcePinMatches": true
+        }
+      },
+      "resources": {
+        "count": 21,
+        "totalBytes": 101453,
+        "rows": [
+          {
+            "path": "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json",
+            "bytes": 5917,
+            "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json",
+            "bytes": 7661,
+            "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json",
+            "bytes": 17292,
+            "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json",
+            "bytes": 6208,
+            "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json",
+            "bytes": 3336,
+            "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json",
+            "bytes": 9371,
+            "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json",
+            "bytes": 7284,
+            "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json",
+            "bytes": 10672,
+            "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json",
+            "bytes": 2184,
+            "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json",
+            "bytes": 7628,
+            "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json",
+            "bytes": 6593,
+            "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
+            "bytes": 2027,
+            "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",
+            "bytes": 427,
+            "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json",
+            "bytes": 561,
+            "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/absent-binding-index-declarations.json",
+            "bytes": 1007,
+            "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-capture.proposal.md",
+            "bytes": 4267,
+            "sha256": "dd047b5817322aa7dfd6b4e62218822c595ceaaad33c3bfbe8b75d8bc0b4d271",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/asserted-origin-map-v0.1.proposal.json",
+            "bytes": 1613,
+            "sha256": "c3f2645d6af8465366b49332d62cf696ee58acebf826e4abd5aa9de33aa7497d",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/acceptance-input-decoder-resource-v0.1.candidate.json",
+            "bytes": 2638,
+            "sha256": "79a9d77371cd2c1b6a06cee8f996c4d5f5a0d830c1dedad7002ea63e3f24157b",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/operation-arbitration-resource-v0.1.candidate.json",
+            "bytes": 775,
+            "sha256": "1468bf2b27153be99958b53d0244c09c36e22755d41819037f44531ac9060e36",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "docs/helix/02-design/contracts/bindings/feed-finalization-resource-v0.1.proposal.json",
+            "bytes": 3124,
+            "sha256": "e560fb142e536b603d37b90b4dbaee5cb69c74bdbe9a2b58cb789df560965ebc",
+            "matchesPolicyAndPin": true
+          },
+          {
+            "path": "packages/python/src/truss/_profiles/catalog-report-configuration.json",
+            "bytes": 868,
+            "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+            "matchesPolicyAndPin": true
+          }
+        ]
+      },
+      "dependencies": {
+        "pg8000": {
+          "pythonFiles": 8,
+          "metadataFiles": 1,
+          "versions": [
+            "1.31.5"
+          ]
+        },
+        "scramp": {
+          "pythonFiles": 3,
+          "metadataFiles": 1,
+          "versions": [
+            "1.4.17"
+          ]
+        },
+        "asn1crypto": {
+          "pythonFiles": 23,
+          "metadataFiles": 1,
+          "versions": [
+            "1.5.1"
+          ]
+        },
+        "dateutil": {
+          "pythonFiles": 18,
+          "metadataFiles": 1,
+          "versions": [
+            "2.9.0.post0"
+          ]
+        },
+        "six": {
+          "pythonFiles": 1,
+          "metadataFiles": 1,
+          "versions": [
+            "1.17.0"
+          ]
+        }
+      },
+      "currentPythonPackageFileCount": 148,
+      "uncapturedPythonFiles": [],
+      "nativeInventory": {
+        "expectedMethods": [
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_after_core_metadata_change_refuses_at_final_release_cut"
+        ],
+        "mainResults": {
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_after_core_metadata_change_refuses_at_final_release_cut": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_configured_source_substitutions_never_issue_report": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_late_fence_source_change_refuses_and_rolls_back": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_or_changed_fence_refuses_before_first_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_missing_release_refuses_before_any_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_one_configured_native_stage_retains_release_and_metadata": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_resource_archive_damage_refuses_before_first_catalog_effect": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_change_restore_is_fenced_inside_original_stage": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_equal_byte_resource_replacement_refuses_original_row_cut": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_same_writer_resource_change_during_effect_refuses_and_rolls_back": "ok",
+          "test_catalog_configured_release_stage_native.ConfiguredReleaseStageNativeTests.test_uncovered_or_populated_graph_still_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_actual_policy_selected_from_original_configuration": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_concurrent_archive_writes_excluded_until_transaction_end": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_late_configuration_change_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_later_rollback_and_savepoint_release_preserve_archive_cut": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_missing_duplicate_and_changed_archive_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_old_snapshot_and_readonly_release_selection_refuse": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_row_locker_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_preexisting_archive_writer_refuses_without_waiting": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_release_resources_and_embedded_policy_are_exact": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_rollback_across_selection_releases_archive_cut_same_xid": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unknown_ambiguous_or_changed_selection_refuses": "ok",
+          "test_catalog_report_release_native.CatalogReportReleaseNativeTests.test_unrecognized_configuration_profile_cannot_select_release": "ok"
+        },
+        "subtestResults": [],
+        "failureHeaders": [],
+        "assertions": [],
+        "summary": [
+          "Ran 23 tests in 22.204s",
+          "OK"
+        ]
+      },
+      "dispatch": {
+        "executed": true,
+        "expectedMethods": [
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback"
+        ],
+        "results": {
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_original_host_dispatch_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_configured_lost_publication_preserves_original_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_prepared_dispatch_and_replay_refusal": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_combined_sources_and_large_result_complete_ready_and_cleanup": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_python_composition_failure_retains_original_native_sources": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_source_cut_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_changed_lifecycle_policy_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_lost_observation_preserves_original_result_without_replay": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_foreign_nominal_request_refuses_before_dereference": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_incomplete_actual_native_response_never_publishes": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_well_shaped_substituted_document_hash_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_extra_native_response_field_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_substituted_native_inventory_count_refuses": "ok",
+          "test_native_catalog_dispatch.NativeCatalogDispatchTests.test_original_configured_encoder_capture_and_rollback": "ok"
+        },
+        "count": 14
+      },
+      "auxiliary": {
+        "executed": true,
+        "expectedMethods": [
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_original_revision_free_sources_and_exact_evidence",
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_copied_or_mutated_preparation_refused",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_exact_native_source_carrier",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_duplicate_missing_unknown_and_substituted_sources_refused",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_original_configuration_source_envelope_stages_actual_catalog",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_changed_metadata_and_second_origin_refuse_before_catalog_effects",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_late_marker_change_refuses_and_preserves_host_work",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_plain_candidate_cannot_bypass_configured_checks",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_concurrent_release_insert_after_selection_is_fenced",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_one_original_call_and_python_composition",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_hostile_rendering_settings_are_local_and_exact",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_substituted_native_metadata_and_context_refuse",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_context_overflow_rolls_back_admission_before_catalog_write",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_exact_context_limit_and_one_byte_evidence_overflow"
+        ],
+        "results": {
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_original_revision_free_sources_and_exact_evidence": "ok",
+          "test_catalog_source_candidate.OriginalCatalogCandidateTests.test_copied_or_mutated_preparation_refused": "ok",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_exact_native_source_carrier": "ok",
+          "test_catalog_source_candidate.NativeCatalogCandidateTests.test_duplicate_missing_unknown_and_substituted_sources_refused": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_original_configuration_source_envelope_stages_actual_catalog": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_changed_metadata_and_second_origin_refuse_before_catalog_effects": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_late_marker_change_refuses_and_preserves_host_work": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_plain_candidate_cannot_bypass_configured_checks": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_concurrent_release_insert_after_selection_is_fenced": "ok",
+          "test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_one_original_call_and_python_composition": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_hostile_rendering_settings_are_local_and_exact": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_substituted_native_metadata_and_context_refuse": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_context_overflow_rolls_back_admission_before_catalog_write": "ok",
+          "test_configured_catalog_stage.ConfiguredCatalogStageTests.test_exact_context_limit_and_one_byte_evidence_overflow": "ok"
+        },
+        "count": 15
+      },
+      "nativeBinaryCount": 1614,
+      "currentNativeBinaryMismatches": [],
+      "cleanup": {
+        "receipt": {
+          "attempted": true,
+          "stopExitCode": 0,
+          "statusExitCode": 3,
+          "socketAbsent": true
+        },
+        "executionDirectory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-hmv9wej9",
+        "executionDirectoryAbsent": true,
+        "socketPath": "/private/tmp/rl-d3_4vkjk/.s.PGSQL.5432",
+        "socketParentAbsent": true,
+        "serverShutdownLogged": true
+      },
+      "boundaries": "Python module boundaries passed (521 imports); TypeScript/native gates remain open",
+      "logHashes": {
+        "auxiliary.stderr.log": "9c0d92ee39a525f7c36384a2ebd97f40495203d9f7a96a38a2ae6eec83a4a0a1",
+        "regression.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "boundaries.stdout.log": "07d180959d809de10b34686866f6694d049c4cca3a33ca2d95d54d124897ca49",
+        "tests.stderr.log": "187aadcf2b4f99ca4146a5d14537d27ce502542a07a797024eb2d647b4611895",
+        "auxiliary.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "regression.stderr.log": "260468b71970849584d8b564990d6fc75bd36b407729e8ff454b35f6ee7f7f06",
+        "boundaries.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "server.log": "7d86a0c0445682602c3aae648d30c79c1503b6915698b638c0b8824238593952",
+        "tests.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "status": "scoped-evidence-matches"
+    }
+  },
+  "integrityFindings": [],
+  "qualificationLimits": [
+    "Read-only current source, ZIP, AST, log and native-file inspection; no test or native execution by the auditor.",
+    "The 52-test configured-release regression does not itself qualify the fenced epoch capture behavior; its separate native and formal evidence is outside this audit.",
+    "Private component evidence only; no authenticated source/provider, complete protected operation or backend acceptance qualification."
+  ]
+}

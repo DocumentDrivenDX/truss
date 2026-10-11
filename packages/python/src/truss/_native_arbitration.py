@@ -153,6 +153,7 @@ class NativeOperationSession:
     cancellation: object = None
     deadline: object = None
     _reserved_controls: object = None
+    _epoch_request: object = None
 
     def __post_init__(self):
         self._call_root = _OperationCallRoot.build((), ())

@@ -4,6 +4,7 @@ The observed row is historical after return. Autocommit, savepoint rollback,
 same-writer issuance or transaction completion can end/change its lock scope.
 """
 from ._native_epoch_acquisitions import NativeFreshEpochObservation
+from dataclasses import dataclass
 import hashlib,re,struct
 from ._native_admission_capture import NativeAdmissionCapture
 from ._native_result_custody import NativeTextLimits
@@ -27,10 +28,10 @@ def _literal(value,maximum):
     return "pg_catalog.convert_from(pg_catalog.decode('"+raw.hex()+"','hex'),'UTF8')"
 
 
-def validate_epoch_row(row,expected):
+def _validate_epoch_row(row,expected,scope):
     if type(row) is not tuple or len(row)!=12 or any(type(v) is not str for v in row):
         raise NativeBoundaryRefusal('Exact original epoch text tuple required')
-    if row[:3]!=expected or row[-1]!='transaction_source_epoch_lock_only':
+    if row[:3]!=expected or row[-1]!=scope:
         raise NativeBoundaryRefusal('Original epoch comparison/scope required')
     for value,maximum in ((row[3],131072),(row[4],2097152)):
         if not 2<=len(value)<=maximum or len(value)%2 or re.fullmatch(r'[0-9a-f]+',value) is None:
@@ -47,11 +48,42 @@ def validate_epoch_row(row,expected):
     return row
 
 
+def validate_epoch_row(row,expected):
+    return _validate_epoch_row(row,expected,'transaction_source_epoch_lock_only')
+
+
+def validate_fenced_epoch_row(row,expected):
+    return _validate_epoch_row(row,expected,'transaction_epoch_state_fence_only')
+
+
+_ROW_PROFILE=('runtime_lock_fresh_source_epoch','transaction_source_epoch_lock_only',
+              'original_epoch_response_only','original_acquisition_lifecycle_only')
+_FENCED_PROFILE=('runtime_lock_fenced_fresh_source_epoch','transaction_epoch_state_fence_only',
+                 'original_epoch_state_fence_response_only','original_epoch_state_fence_lifecycle_only')
+
+
+@dataclass(frozen=True,slots=True,eq=False)
+class _EpochRequest:
+    owner: object
+    session: object
+    profile: tuple
+    expected: tuple
+    sql: str
+
+
+def _capture_profile(gate):
+    # Concrete implementation choice, never a caller-provided authority/profile.
+    if type(gate) is NativeFreshEpochCapture:return _ROW_PROFILE
+    if type(gate) is NativeFencedFreshEpochCapture:return _FENCED_PROFILE
+    raise NativeBoundaryRefusal('Original concrete epoch capture required')
+
+
 class NativeFreshEpochCapture(NativeAdmissionCapture):
     NAMES=tuple(n.encode() for n in ('installation_id','source_epoch','target_incarnation',
         'profile_hex','evidence_hex','evidence_sha256','actual_writer_xid',
         'actual_database_oid','actual_backend_pid','original_actor','effective_actor','cut_scope'))
     def __init__(self,session,installation,epoch,incarnation):
+        profile=_capture_profile(self)
         args=tuple(_literal(v,n) for v,n in zip((installation,epoch,incarnation),(1024,256,1024)))
         if type(session) is not NativeOperationSession:raise NativeBoundaryRefusal('Original epoch session required')
         b=session.boundary
@@ -59,7 +91,7 @@ class NativeFreshEpochCapture(NativeAdmissionCapture):
                 or b._operation is not session.token or b._operation_ledger is not session
                 or b._pending_operation_ledger is not session or b._calling or b._quarantined
                 or session.admission_closed or session.released or session.calls
-                or session.cleanup_calls or session.result_custody is not None
+                or session.cleanup_calls or session.result_custody is not None or session._epoch_request is not None
                 or not original_control_profile(b)):
             raise NativeBoundaryRefusal('Fresh original epoch operation required')
         with b._lock:session._check_call(b,session.token)
@@ -67,10 +99,28 @@ class NativeFreshEpochCapture(NativeAdmissionCapture):
             session.deadline=NativeOperationDeadline(FRESH_EPOCH_LIMITS.ordinary_ms,FRESH_EPOCH_LIMITS.settlement_ms)
         if type(session.deadline) is not NativeOperationDeadline:raise NativeBoundaryRefusal('Original epoch deadline required')
         session.deadline.check()
-        self.sql='SELECT * FROM truss.runtime_lock_fresh_source_epoch('+','.join(args)+')'
+        self.sql='SELECT * FROM truss.'+profile[0]+'('+','.join(args)+')'
         if len(self.sql.encode())>FRESH_EPOCH_LIMITS.sql_bytes:raise NativeBoundaryRefusal('Epoch request bound')
         self.expected=(installation,epoch,incarnation);self.started=False;self.original_observation=None;self.frames=[];self.original_acquisition=None
+        self._request_profile=profile
         super().__init__(session,FRESH_EPOCH_LIMITS,maximum_context_bytes=1048576)
+        request=_EpochRequest(self,session,profile,self.expected,self.sql)
+        with b._lock:
+            session._check_call(b,session.token)
+            if session._epoch_request is not None:
+                raise NativeBoundaryRefusal('One original epoch request per session required')
+            self._request=request;session._epoch_request=request
+    def _check_recipe(self):
+        request=self._request
+        if (type(request) is not _EpochRequest or request.owner is not self
+                or type(self.session) is not NativeOperationSession or request.session is not self.session
+                or self.session._epoch_request is not request
+                or self._request_profile is not request.profile or request.profile is not _capture_profile(self)
+                or type(self.sql) is not str or type(self.expected) is not tuple
+                or any(type(v) is not str for v in self.expected)
+                or self.sql!=request.sql or self.expected!=request.expected):
+            raise NativeBoundaryRefusal('Original fixed epoch request/comparison required')
+        return request
     def _validate(self,code,data,context):
         super()._validate(code,data,context)
         if self._cleanup_mode() or self.boundary._active_control is not None:return
@@ -88,7 +138,8 @@ class NativeFreshEpochCapture(NativeAdmissionCapture):
         if self.started:raise NativeBoundaryRefusal('Retain original epoch observation; never replay')
         self.started=True
         try:
-            self.install();rows=self.boundary.run(self.sql,token=self.session.token);call=self.boundary.last_call
+            original_request=self._check_recipe()
+            self.install();rows=self.boundary.run(original_request.sql,token=self.session.token);call=self.boundary.last_call
             if (type(call) is not NativeCall or not call.capture_complete or call.driver_raised
                     or call.final_status!=b'T' or self.failed or self.response_stage!=4
                     or self.entry is None or self.entry.native_call is not call
@@ -106,17 +157,33 @@ class NativeFreshEpochCapture(NativeAdmissionCapture):
             self.account.terminate(self,permit)
             frozen=self.transfer(rows)
             if len(frozen)!=1:raise NativeBoundaryRefusal('Single original epoch row required')
-            row=validate_epoch_row(frozen[0],self.expected)
+            if self._check_recipe() is not original_request:
+                raise NativeBoundaryRefusal('Same original epoch request through capture required')
+            row=_validate_epoch_row(frozen[0],original_request.expected,original_request.profile[1])
             barrier=self.outbound.barrier if self.outbound is not None else None
             if (barrier is None or barrier.owner is not self.outbound or barrier.call is not self.entry
                     or barrier.revision!=call.revision or not barrier.writes
                     or not any(v is barrier for v in self.outbound.barriers)
                     or any(w.call is not self.entry or not w.native_returned or not w.settled for w in barrier.writes)):
                 raise NativeBoundaryRefusal('Original epoch outbound barrier required')
-            request=b''.join(w.data for w in barrier.writes);payload=self.sql.encode()+b'\0'
+            request=b''.join(w.data for w in barrier.writes);payload=original_request.sql.encode()+b'\0'
             if request!=b'Q'+struct.pack('!I',len(payload)+4)+payload:
                 raise NativeBoundaryRefusal('Exact original epoch request required')
-            observation=NativeFreshEpochObservation(call,row,request,tuple(self.frames))
+            observation=NativeFreshEpochObservation(call,row,request,tuple(self.frames),scope=original_request.profile[2])
             self.boundary._transaction_tracker._epoch_acquisitions.retain(self,observation)
             self._publish(observation);return observation
-        finally:self.session.admission_closed=True
+        finally:
+            request=self._request
+            if (type(request) is _EpochRequest and type(request.session) is NativeOperationSession
+                    and request.session._epoch_request is request):
+                request.session.admission_closed=True
+            if type(self.session) is NativeOperationSession:self.session.admission_closed=True
+
+
+class NativeFencedFreshEpochCapture(NativeFreshEpochCapture):
+    """Private epoch-state fence response/lifecycle; no protected-use permit.
+
+    The original installed administrative helper/guards and ordinary executor
+    qualification are separate. Any later ordinary call still invalidates the
+    lifecycle record before invocation, even when native table locks remain.
+    """

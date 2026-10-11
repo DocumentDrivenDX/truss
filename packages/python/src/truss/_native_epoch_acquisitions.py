@@ -73,7 +73,13 @@ class NativeEpochAcquisitions:
                     or gate.failed or gate.response_stage!=4 or gate.detached):
                 raise NativeBoundaryRefusal('Original complete acquisition custody required')
             session._check_call(b,session.token)
-            record=NativeEpochAcquisition(self,session,observation,state.generation,state.savepoints,capture=gate)
+            profile=gate._check_recipe().profile
+            if (type(observation.scope) is not str or type(observation.original_row) is not tuple
+                    or any(type(v) is not str for v in observation.original_row)
+                    or observation.scope!=profile[2] or len(observation.original_row)!=12
+                    or observation.original_row[-1]!=profile[1]):
+                raise NativeBoundaryRefusal('Original epoch response/lifecycle scope required')
+            record=NativeEpochAcquisition(self,session,observation,state.generation,state.savepoints,capture=gate,scope=profile[3])
             self.records=(*self.records,record);gate.original_acquisition=record
             return record
     def before(self,control):

@@ -1,0 +1,71 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-epoch-request-custody.py": "f08d7cc75b4f508de810b57d2a77702be8cd416cdc8d3444954d0dee0c9e7d0d",
+    "packages/python/src/truss/_native_fresh_epoch_capture.py": "49bb176a4b6e7d1dbc1872ec8bf5325665682b646534a3e4e2c35cb00ef7c137",
+    "packages/python/src/truss/_native_epoch_acquisitions.py": "8b10b499dac31fcea225186e7d74f2124e3ef5f371d81f2a60c9a645d77094b2",
+    "packages/python/src/truss/_native_arbitration.py": "5a777dad86a32ad7c1504609eff4111bce6f849027c64a9bd0edce7cee89192b",
+    "packages/python/tests/test_native_fresh_epoch_capture.py": "695e9e345adb2c7ea463f255f14715e28e90dd1f65032b9d19ca211df09c4984",
+    "scripts/python-fresh-epoch-worker.py": "e205e0a98770bbb76fd81d0dc793135974a5eb37b50b6eb84bd304532360c0d6"
+  },
+  "queries": [
+    {
+      "id": "accepted_request_excludes_owner_session_root_substitution",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "34693043c05b152ecc299c70d8b841fef1ddb0754df3d76092b32c8a70415aad"
+    },
+    {
+      "id": "accepted_request_excludes_recipe_substitution",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "e7228e07df5935a41b61796b277654c27088f9685fe191fd5ed7dcb809ac279a"
+    },
+    {
+      "id": "accepted_closed_family_excludes_scope_crossover",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "counterexample": null,
+      "smt2Sha256": "d471dc73bebde6721fc6dd0dde9a60aebb8f2259e209c64f0f6f52eee5c22137"
+    },
+    {
+      "id": "omitted_owner_check_allows_copied_gate",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[gate = 1,\n owner = 0,\n lifecycle = 0,\n original_comparison = 0,\n comparison = 0,\n exact_primitive_types = True,\n request_session = 0,\n session = 0,\n request = 0,\n root = 0,\n original_sql = 0,\n sql = 0,\n family = 0,\n response = 0]",
+      "smt2Sha256": "8b1b81314f4f0bdb9d59413f23b612d6da11417345707093e232f10594b906b4"
+    },
+    {
+      "id": "omitted_root_check_allows_copied_request",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[root = 1,\n request = 0,\n lifecycle = 0,\n owner = 0,\n gate = 0,\n exact_primitive_types = True,\n request_session = 0,\n session = 0,\n original_comparison = 0,\n comparison = 0,\n original_sql = 0,\n sql = 0,\n family = 0,\n response = 0]",
+      "smt2Sha256": "ee9ee0805906fe9eba90c31ceb181ddca3c9647f14303b95d36614b2f64e464f"
+    },
+    {
+      "id": "omitted_recipe_check_allows_substitution",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[sql = 1,\n original_sql = 0,\n lifecycle = 0,\n owner = 0,\n gate = 0,\n response = 0,\n request_session = 0,\n session = 0,\n request = 0,\n root = 0,\n family = 0]",
+      "smt2Sha256": "8f0add68da2e1deacd239cd582239e65b03ac1858fe35a10c5d68f277d9e957e"
+    },
+    {
+      "id": "omitted_scope_correspondence_allows_crossover",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "counterexample": "[owner = 0,\n gate = 0,\n request = 0,\n root = 0,\n original_sql = 0,\n sql = 0,\n lifecycle = 1,\n exact_primitive_types = True,\n request_session = 0,\n session = 0,\n response = 0,\n original_comparison = 0,\n comparison = 0,\n family = 1]",
+      "smt2Sha256": "a613e42b460574092ce4e9a4fa38479fda81e02cd5834b2cb960f3da305c276b"
+    }
+  ],
+  "scope": "Identity-sensitive fixed-request and closed-family constraints under trusted original implementation/module/session custody and immutable request premises. Integers model distinct original identities and opaque recipe values. This proves constraint consistency and detects omitted premises; it is not a Python runtime refinement, arbitrary monkeypatch resistance, native SQL/trigger proof, continuous held protected-use capability, authenticated source/issuer, full source/authority/data cut or final-disclosure proof. Separate native captures and pre-SQL controls qualify the selected administrative component."
+}

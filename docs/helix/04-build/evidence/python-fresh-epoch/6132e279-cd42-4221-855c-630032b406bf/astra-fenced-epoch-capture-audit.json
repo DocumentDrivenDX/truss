@@ -1,0 +1,71 @@
+{
+  "status": "scoped-review-passed",
+  "reviewedAtUtc": "2026-10-11T17:02:49.699499+00:00",
+  "findings": [],
+  "implementationEdits": false,
+  "nativeExecutionsByReviewer": false,
+  "formalFreshReplay": {
+    "queries": 7,
+    "unsat": 3,
+    "sat": 4,
+    "independentFullGuardNonvacuityFamilies": [
+      0,
+      1
+    ]
+  },
+  "native": {
+    "runId": "6132e279-cd42-4221-855c-630032b406bf",
+    "sourcePins": 143,
+    "observations": 676,
+    "reconstructedResponses": 14,
+    "hostTests": 20,
+    "existingNativeTests": 28,
+    "moduleImports": 521
+  },
+  "mergedRegression": {
+    "runId": "d5d116bf-8d5a-40b5-abd1-2f833d98d87d",
+    "sourcePins": 287,
+    "tests": 52
+  },
+  "reportWriteRegression": {
+    "runId": "e79bd872-a7e3-405d-80b5-40bda0e8d8c8",
+    "sourcePins": 287,
+    "tests": 44,
+    "scope": "artifact/execution custody and cleanup only"
+  },
+  "scope": "Private original epoch response custody and acquisition lifecycle only. No authenticated source/provider, ordinary executor qualification, protected-use permit, complete authority/source cut, final disclosure or backend promotion.",
+  "artifacts": [
+    {
+      "path": "/private/tmp/astra-fenced-epoch-capture-review.md",
+      "sha256": "093e9844e0f27c8b9fd64c052356fb186b1e470eb145caf09cf075c9ec56017b"
+    },
+    {
+      "path": "/private/tmp/astra-fenced-epoch-capture-native-audit.json",
+      "sha256": "a53f23aa5bf99208f301bb0296a8202d38af13e0cad46f0afbae2384a28c252f"
+    },
+    {
+      "path": "/private/tmp/astra-fenced-epoch-capture-native-reconstruction.json",
+      "sha256": "8323b47afca3f219e484965724fff6b64810e4af3670376e257104bc0972b1d5"
+    },
+    {
+      "path": "/private/tmp/astra-fenced-epoch-capture-formal-replay.json",
+      "sha256": "3d095318e656e2c13c13c6f5c546b6771ede0ba984ca47f53e86de070f36eb56"
+    },
+    {
+      "path": "/private/tmp/astra-fenced-epoch-capture-configured-regression-audit.json",
+      "sha256": "a069ea6942f39ed6929c233f8d5558da3fbf83a7c404979c0fa899034db496c1"
+    },
+    {
+      "path": "/private/tmp/astra-fenced-epoch-capture-postmerge-source-check.json",
+      "sha256": "5a0a18967bb8db39409e3b6837aa1ea414f7e6da465e6ef3a210afe0620bf055"
+    },
+    {
+      "path": "/private/tmp/astra-fenced-epoch-capture-merged-regression-audit.json",
+      "sha256": "d79fd28d3b269e4556e363dcd100170b9e28ccb24de02d58119c663e09a06590"
+    },
+    {
+      "path": "/private/tmp/astra-fenced-epoch-capture-report-write-regression-audit.json",
+      "sha256": "0188a480de038a0e9821d886069fcbd31b821e6e972ac9d1911f2d83d50b2fb4"
+    }
+  ]
+}
