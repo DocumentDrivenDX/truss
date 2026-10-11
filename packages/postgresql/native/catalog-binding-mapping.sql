@@ -34,18 +34,10 @@ REVOKE ALL ON FUNCTION truss.runtime_original_json_value_end(bytea,int) FROM PUB
 
 -- Source-only, before pending effects: the existing complete core/source gate is
 -- deliberately retained. Pending-aware inventory must be implemented separately.
-CREATE FUNCTION truss.runtime_extract_original_association_mapping(original bytea,original_pointer text)
-RETURNS bytea LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER
-SET search_path=pg_catalog,pg_temp AS $$
-DECLARE position int:=1; finish int; member text;
- size int; wanted bigint; current_index bigint; start_mapping int; found_array boolean:=false;
+CREATE FUNCTION truss.runtime_original_mapping_array_start(original bytea)
+RETURNS int LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE position int:=1; finish int; member text; size int; found_array boolean:=false;
 BEGIN
- IF original_pointer IS NULL OR octet_length(original_pointer)>4096
-  OR original_pointer !~ '^/mappings/(0|[1-9][0-9]{0,3})$' THEN
-  RAISE EXCEPTION 'original mapping pointer required' USING ERRCODE='22023';
- END IF;
- wanted:=substr(original_pointer,11)::bigint;
- IF wanted>=4096 THEN RAISE EXCEPTION 'original mapping index exceeded' USING ERRCODE='54000'; END IF;
  size:=length(original);
  IF original IS NULL OR octet_length(original) NOT BETWEEN 1 AND 1048576 THEN
   RAISE EXCEPTION 'unique original mapping JSON required' USING ERRCODE='22023';
@@ -87,7 +79,22 @@ BEGIN
  IF NOT found_array OR chr(get_byte(original,position-1))<>'[' THEN
   RAISE EXCEPTION 'original mapping array required' USING ERRCODE='22023';
  END IF;
- position:=position+1;current_index:=0;
+ RETURN position+1;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_original_mapping_array_start(bytea) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_extract_original_association_mapping(original bytea,original_pointer text)
+RETURNS bytea LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE position int; finish int; wanted bigint; current_index bigint:=0; start_mapping int;
+BEGIN
+ IF original_pointer IS NULL OR octet_length(original_pointer)>4096
+  OR original_pointer !~ '^/mappings/(0|[1-9][0-9]{0,3})$' THEN
+  RAISE EXCEPTION 'original mapping pointer required' USING ERRCODE='22023';
+ END IF;
+ wanted:=substr(original_pointer,11)::bigint;
+ IF wanted>=4096 THEN RAISE EXCEPTION 'original mapping index exceeded' USING ERRCODE='54000'; END IF;
+ position:=truss.runtime_original_mapping_array_start(original);
  LOOP
   WHILE chr(get_byte(original,position-1)) IN (' ',chr(9),chr(10),chr(13)) LOOP position:=position+1; END LOOP;
   IF chr(get_byte(original,position-1))=']' THEN
@@ -110,6 +117,29 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_extract_original_association_mapping(bytea,text) FROM PUBLIC;
+
+-- All exact object slices, with one whole-source validation pass per batch.
+CREATE FUNCTION truss.runtime_extract_original_association_mapping_batch(original bytea)
+RETURNS TABLE(mapping_index int,mapping_bytes bytea)
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE position int; finish int; current_index int:=0; start_mapping int;
+BEGIN
+ position:=truss.runtime_original_mapping_array_start(original);
+ LOOP
+  WHILE chr(get_byte(original,position-1)) IN (' ',chr(9),chr(10),chr(13)) LOOP position:=position+1; END LOOP;
+  IF chr(get_byte(original,position-1))=']' THEN RETURN; END IF;
+  IF current_index>=4096 THEN RAISE EXCEPTION 'original mapping batch count exceeded' USING ERRCODE='54000'; END IF;
+  IF chr(get_byte(original,position-1))<>'{' THEN RAISE EXCEPTION 'original mapping object required' USING ERRCODE='22023'; END IF;
+  start_mapping:=position;finish:=truss.runtime_original_json_value_end(original,position);
+  RETURN QUERY SELECT current_index,substr(original,start_mapping,finish-start_mapping);
+  current_index:=current_index+1;position:=finish;
+  WHILE chr(get_byte(original,position-1)) IN (' ',chr(9),chr(10),chr(13)) LOOP position:=position+1; END LOOP;
+  IF chr(get_byte(original,position-1))=']' THEN RETURN; END IF;
+  position:=position+1;
+ END LOOP;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_extract_original_association_mapping_batch(bytea) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_collect_original_association_mapping(original_revision int,original_pointer text)
 RETURNS bytea LANGUAGE plpgsql VOLATILE SECURITY INVOKER
