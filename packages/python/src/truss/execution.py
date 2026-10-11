@@ -14,8 +14,9 @@ AccessMode = Literal['read_only', 'read_write']
 class TransactionHandle:
     """Opaque caller-lifetime type. Construction never registers an adoption.
 
-    Only the original executor registry can admit an issued instance. There is
-    no public native executor/adoption factory in this contracts-only slice.
+    The selected HostSession.adopt_transaction issues the original handle.
+    Only the original executor registry can admit that issued instance;
+    constructing a handle alone grants no adoption.
     """
     def __init__(self, issuer: object, key: str, isolation: Isolation, access_mode: AccessMode) -> None:
         self._issuer, self._key = issuer, key
