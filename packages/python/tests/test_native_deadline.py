@@ -98,7 +98,7 @@ class NativeDeadlineTests(NativeBoundaryFixture, unittest.TestCase):
         self.assertEqual(self.t._state.savepoints,())
         called.assert_not_called()
 
-    def test_expiry_after_mutating_preflight_does_not_poison_prepared_resource(self):
+    def test_expiry_after_preflight_preserves_unfinished_ingress_custody(self):
         now=[0]; original=self.boundary._call
         def call(invoke,token=None,**kwargs):
             resource=kwargs.get('resource')
@@ -110,10 +110,10 @@ class NativeDeadlineTests(NativeBoundaryFixture, unittest.TestCase):
             return original(invoke,token,**kwargs)
         with self.clock(now),patch.object(self.boundary,'_call',side_effect=call):
             result=self.runner.execute(self.tx,self.statement(),{'value':'unsent'})
-        self.assertEqual(result.error.code,'cancelled')
-        self.assertFalse(self.boundary._quarantined)
-        self.assertIsNone(self.boundary._operation)
-        self.assertTrue(all(p._resource.phase=='closed' for p in self.runner._runs[-1].gate.inventory()))
+        self.assertEqual(result.error.code,'transaction_unusable')
+        self.assertTrue(self.boundary._quarantined)
+        self.assertIsNotNone(self.boundary._operation)
+        self.assertFalse(self.boundary.last_call.capture_complete)
     def test_expiry_before_savepoint_does_not_invent_containment(self):
         now=[0]; original=self.runner._state
         def state(*args,**kwargs):
@@ -139,26 +139,28 @@ class NativeDeadlineTests(NativeBoundaryFixture, unittest.TestCase):
         self.assertIsNone(self.boundary._operation)
         self.assertEqual(run.completion.deadline_basis[3],0)
 
-    def test_real_elapsed_native_call_settles_then_contains(self):
+    def test_real_elapsed_native_call_ingress_timeout_quarantines(self):
         # Explicit native timing fixture, never a shipped SQL registration.
         from time import monotonic
-        sql='SELECT :value::pg_catalog.text FROM pg_catalog.pg_sleep(0.35)'
+        sql='SELECT :value::pg_catalog.text FROM pg_catalog.pg_sleep(2)'
         self.runner.limits=NativeTextLimits(ordinary_ms=200)
         self.boundary.run("INSERT INTO truss_operation_fixture VALUES('host-before')")
         with patch.dict(self.runner.QUALIFIED_STATEMENTS,{sql:'SELECT'}):
             statement=self.runner.register(sql,'SELECT')
         started=monotonic()
         result=self.runner.execute(self.tx,statement,{'value':'settled-but-expired'})
-        self.assertGreaterEqual(monotonic()-started,0.2)
-        self.assertEqual(result.error.code,'cancelled')
-        self.assertFalse(self.boundary._quarantined)
-        self.assertIsNone(self.boundary._operation)
+        elapsed=monotonic()-started
+        self.assertGreaterEqual(elapsed,0.2)
+        self.assertLess(elapsed,1.5)
+        self.assertEqual(result.error.code,'transaction_unusable')
+        self.assertTrue(self.boundary._quarantined)
+        self.assertIsNotNone(self.boundary._operation)
         run=self.runner._runs[-1]
         calls=[c.native_call for c in run.session.calls if c.resource is not None and c.resource[0]=='execute']
         self.assertEqual(len(calls),1)
-        self.assertTrue(calls[0].capture_complete)
-        self.assertTrue(any(e.code==b'C' for e in calls[0].events))
-        self.assertEqual(self.boundary.run('SELECT value FROM truss_operation_fixture'),[['host-before']])
+        self.assertFalse(calls[0].capture_complete)
+        self.assertIsNone(self.connection._usock.gettimeout())
+        self.assertIsInstance(run.gate.ingress_deadline.failure,TimeoutError)
 
     def test_success_restoration_entry_expiry_keeps_unresolved_savepoint(self):
         from truss._native_result_custody import NativeResultCustody
@@ -179,3 +181,48 @@ class NativeDeadlineTests(NativeBoundaryFixture, unittest.TestCase):
         self.assertIsNone(self.runner._runs[-1].deadline.settlement_cutoff_ns)
         self.assertIsNone(self.runner._runs[-1].completion)
         called.assert_not_called()
+
+    def test_native_success_preserves_finite_host_timeout(self):
+        self.connection._usock.settimeout(0.5)
+        result=self.runner.execute(self.tx,self.statement(),{'value':'exact'})
+        self.assertIsInstance(result,Ok)
+        self.assertEqual(result.value,(('exact',),))
+        self.assertEqual(self.connection._usock.gettimeout(),0.5)
+        self.assertIs(self.connection._sock,self.boundary._original_stream)
+    def test_foreign_stream_refuses_before_native_acquisition(self):
+        original=self.connection._sock; before=self.boundary.last_call
+        try:
+            self.connection._sock=object()
+            result=self.runner.execute(self.tx,self.statement(),{'value':'unused'})
+        finally:self.connection._sock=original
+        self.assertEqual(result.error.code,'execution_obligation')
+        self.assertIs(self.boundary.last_call,before)
+        self.assertIsNone(self.boundary._operation)
+        self.assertFalse(self.boundary._quarantined)
+
+    def test_captured_command_complete_survives_later_ingress_expiry(self):
+        from truss._native_result_custody import NativeResultCustody
+        now=[0];cleanup_before=[];factory=NativeResultCustody._handler
+        def handler(gate,code,original):
+            invoke=factory(gate,code,original)
+            def capture(data,context):
+                value=invoke(data,context)
+                resource=gate.boundary._active_resource
+                if code==b'C' and resource is not None and resource[0]=='execute':
+                    cleanup_before.append(len(gate.session.cleanup_calls))
+                    now[0]=30000000000
+                return value
+            return capture
+        with self.clock(now),patch.object(NativeResultCustody,'_handler',handler):
+            result=self.runner.execute(self.tx,self.statement(),{'value':'native-complete'})
+        self.assertEqual(result.error.code,'transaction_unusable')
+        call=self.boundary.last_call
+        self.assertTrue(any(e.code==b'C' and e.payload.startswith(b'SELECT') for e in call.events))
+        self.assertFalse(any(e.code==b'Z' for e in call.events))
+        self.assertFalse(call.capture_complete)
+        self.assertTrue(self.boundary._quarantined)
+        self.assertIsNotNone(self.boundary._operation)
+        self.assertIsNone(self.runner._runs[-1].completion)
+        self.assertIsInstance(self.runner._runs[-1].gate.ingress_deadline.failure,NativeDeadlineExpired)
+        self.assertEqual(len(self.runner._runs[-1].session.cleanup_calls),cleanup_before[0])
+        self.assertIsNone(self.connection._usock.gettimeout())

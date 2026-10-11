@@ -9,6 +9,7 @@ import io
 from ._accounted_receive import AccountedReceiver
 from ._resource_account import BytePermitAccount
 from ._native_pg8000 import NativeBoundaryRefusal
+from ._native_ingress_deadline import NativeIngressDeadline
 
 @dataclass(frozen=True)
 class NativeTextLimits:
@@ -39,13 +40,16 @@ class NativeResultOwner:
     transferred: bool = False
 
 class _BufferedIngress:
-    def __init__(self, original):
+    def __init__(self, original, deadline=None):
+        self.deadline = deadline
         if type(original) is not io.BufferedRWPair:
             raise NativeBoundaryRefusal('Single raw-stream ingress required')
         self.original = original
     def recv_into(self, view):
         # One underlying raw-stream call at most, including buffered prefetch.
         # This is not a syscall count or an absolute elapsed-time guarantee.
+        if self.deadline is not None:
+            return self.deadline.receive(self.original, view)
         return io.BufferedRWPair.readinto1(self.original, view)
 
 class NativeResultCustody:
@@ -55,20 +59,22 @@ class NativeResultCustody:
         self.session, self.boundary, self.limits = session, session.boundary, limits
         con = self.boundary._connection
         self.original_sock = con._sock
+        self.ingress_deadline = (NativeIngressDeadline(self, session.deadline)
+            if getattr(session, 'deadline', None) is not None else None)
         self.original_context = con._context
         self.original_handle_messages = con.handle_messages
         self.original_handlers = dict(con.message_types)
         self.original_ready_error = self.boundary._ready_error
         self.account = BytePermitAccount(self, limits.payload_capacity,
             limits.cumulative_payload, limits.account_records)
-        self.receiver = AccountedReceiver(_BufferedIngress(self.original_sock), self.account, self,
+        self.receiver = AccountedReceiver(_BufferedIngress(self.original_sock, self.ingress_deadline), self.account, self,
             frame_bytes=limits.frame_bytes, total_bytes=limits.wire_bytes,
             messages=limits.messages, reads=limits.reads)
         # Independent preallocated ingress/account/context lanes. Ordinary work
         # cannot consume the budget reserved for original native cleanup.
         self.cleanup_account = BytePermitAccount(self, limits.payload_capacity,
             limits.cumulative_payload, limits.account_records)
-        self.cleanup_receiver = AccountedReceiver(_BufferedIngress(self.original_sock), self.cleanup_account, self,
+        self.cleanup_receiver = AccountedReceiver(_BufferedIngress(self.original_sock, self.ingress_deadline), self.cleanup_account, self,
             frame_bytes=limits.frame_bytes, total_bytes=limits.wire_bytes,
             messages=limits.messages, reads=limits.reads)
         self.contexts = [None] * limits.contexts
@@ -102,6 +108,10 @@ class NativeResultCustody:
             if (self.boundary._calling or con._sock is not self.original_sock
                     or self.boundary._operation_ledger is not self.session):
                 raise NativeBoundaryRefusal('Original frame custody changed')
+            if self.ingress_deadline is not None:
+                from ._native_ingress_deadline import original_ingress_profile
+                if not original_ingress_profile(self.boundary):
+                    raise NativeBoundaryRefusal('Original ingress changed before installation')
             self.session.result_custody = self
             try:
                 con._sock = self

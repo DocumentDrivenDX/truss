@@ -1,0 +1,1318 @@
+{
+  "scope": "Private original pending read deadline enforcement with exact timeout restoration; outbound not wall-clock-qualified",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "pg8000": "1.31.5",
+  "postgres": "16.15",
+  "transport": "AF_UNIX exact socket + BufferedRWPair, trusted untouched original pg8000 construction",
+  "testsPassed": 406,
+  "elapsedSeconds": 62.16,
+  "retainedWheel": "/private/tmp/truss-iteration19-final-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+  "wheelSha256": "cc6ebf6051ac7be09f6912666cce9ac860a7be80fdee6cfaba13f0c11fa9689a",
+  "installed": "/private/tmp/truss-iteration19-final-installed",
+  "sourceWheelInstalledBytesExact": true,
+  "files": {
+    "_operation_ordinal.py": "10d4717462ff14c7524ed793db0ac7b94f56e1d6b88158081a4f300981193977",
+    "_host_contracts.py": "97e464504590447190510200cef27519e812a7cc871d330c63b7846478e87ada",
+    "_operation_arbitration.py": "8077672c71406e30ba9885627374b9d415ee76dfea166c264730059a9ca25b42",
+    "_host_call_recovery.py": "8766e4533cc67f5c8f38ecaeb6ae15951850ca21ed45be6a5c9118ea1c189dfe",
+    "_row_operation_custody.py": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445",
+    "weft.py": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+    "execution.py": "0df49d51e760bfa36a814dd0cca31b8d266ae3378d46f63b9e94f2ef63cdcff5",
+    "_receipt_position.py": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba",
+    "_resource_account.py": "6a10966e502c16a3ab8972bba34a999ca675fdb7a59e5c3ac93a7c713b6468f1",
+    "_native_cancellation.py": "b199821a3a947c2fd7f01a357080d2d0ec5e22fceb06e1c1802c626402338bdf",
+    "_native_transactions.py": "3028ec4cbc2b95dd08ef82948fc6462da7463fd6783f27a4e580c18ce4b660fd",
+    "_operation_admission.py": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30",
+    "local_runtime.py": "1a837b5575c2f8b08e2b699256a90d971ed7e2112d40bccc7c197b92ad6023a9",
+    "_native_pg8000.py": "059d68cb99776096304f16760fc2cae33d8d9bc19286f8aec956ef8f2b53cf24",
+    "_native_operation.py": "aab47e42a35860278c0e2018c7c226e2f9aa0037ee71bd600c897f9bad3680f9",
+    "_directory_resources.py": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48",
+    "_installation_resources.py": "abaab39777891125da2f522cd2a0f3a6702896a05464cf344eddbc2acff08759",
+    "__init__.py": "bf1506e355d85a9a406689be1ee0751d98e6c1feaae1409a00a678b6f658411c",
+    "_row_operation_context.py": "aeaa86163233a597c554f977d3c82badcbf8290a336e47b5e1ff8c64c66794ca",
+    "_acceptance_json.py": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01",
+    "groups.py": "e6911d22e53fde65a6e9ebb441ab7d3a1428a312b8342e9e2e3c9e07b0228c00",
+    "_row_registry_correspondence.py": "f0229b5032aa1801dba1cf85ddf0d6be84a087baf1f51c9482475a5b1e6c2282",
+    "_native_ingress_deadline.py": "c1ba03023282b445c88c6a111ddc6f7a71ab5a0be550f1cca484e3b4538296ff",
+    "_row_image_capture.py": "377bb631b3dd939436dc89c50b6ca4f188a99e5352e8a18d8f6a30037f593125",
+    "imports.py": "22c151c516770c2284a386659c0884e666ae4780eaf7aa7920c0a8e8d2787592",
+    "_native_result_custody.py": "10ae7306aa7ee82ce74f0e42dd67a42d9a5da7dd2660468fb315f6aea40768ed",
+    "_row_image.py": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9",
+    "_host_execution.py": "f98a55df3db39331e9edab05ec35ee629166bab1226f97a95307f626e2d99a64",
+    "_native_arbitration.py": "c2c9b79cf88502c2dce351f0880a86367dd977aeeffa1fc22847eaf1b49381da",
+    "cli.py": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37",
+    "_row_event_attribution.py": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b",
+    "_installation_archive.py": "d1674fb5f8537873e3b41ce46618fd3aac1c73db7c8b34a90fe741cba6918f72",
+    "_native_deadline.py": "818b01a238d1722e81efff792b6abdbc037d67485e77d3bf9c8fa16226ecab56",
+    "numeric.py": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18",
+    "_operation_registry.py": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d",
+    "_native_driver_profile.py": "ea3e3e92fc5d4d064bbd42cd8d10dce611831376ef430157b1f6a4d6992e9958",
+    "contracts.py": "a5a71937709f3a8704de9e33b87e8aadcb743ea9adcdeea8037a7d76b069bdbd",
+    "py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "_installed_admission_inventory.py": "4904b011ba5c961179dd0ffc4ade03f7df725a04a0dd09d8c7708b59ddf159c2",
+    "_row_group_custody.py": "b39f7f4e17243d846fc60b3fff02807d168a93c23adf793a8be4fcd2abf3dcdd",
+    "_row_touch_registry.py": "332c37d656bbf825ab119422714330277d9988eef280fc6f72fff26e2d5e778b",
+    "_host_control_custody.py": "9aae9c014a3a02434fba4afb1449c7ee54bad9b684b1707d692fdb49bc23ae06",
+    "migration_planning.py": "1523a466555ab7b4075f501edd0570f9465c67a67558d2733b5c06984571c3a6",
+    "timestamp.py": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c",
+    "_host_session.py": "12257cfbe56309e9249c68efb11e61e8d6a886be16dad7ac95f2393c50155a69",
+    "_accounted_receive.py": "f1f6bc7d84d3cbdc4ba93ddb514d68898f60c99358c7cb2a719701139d674e78",
+    "_row_image_scalar_shape.py": "1e639bfed2680ce589d8af65fe255b4498a61246384fb593e3313d673fbdccdc",
+    "_row_operation_address.py": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08",
+    "_row_image_tree.py": "8ff76ee2a95ec60db0bdfecded4e1f35bc302d711be0f71f14d42178cabb5386",
+    "_native_adoption.py": "f2206bd90458ba5463afc31e0b06337b4dedea86982402073b6ee441dd45e207",
+    "_query_execution.py": "9cf9d08a45f0b31ef1621c9bed47eb879715771583dd467ecb57b8278115b0aa",
+    "_inventory_sql/routine-acl.sql": "7af67d9bc4e1a6873814197926d7f92cf69bbb299c83f0145731fcb6bebdbe7e",
+    "_inventory_sql/namespace-acl.sql": "b28027fe1b0c15780c3000988d5396dc83acfa5d8228fe5488a7bd5ec5d5af17",
+    "_inventory_sql/relation-acl.sql": "10ae36d576209b954b218908d2a9c4f4a4344803b18457eaa5bb42c12415c8eb",
+    "_inventory_sql/column-acl.sql": "f328a40200427d5e5b67179233e9d77b77c6ed4478608d1f5e269122976090fd",
+    "_inventory_sql/manifest.json": "3544d094ff90df4b6966414cfd203db607ae347dd2a4923dc72c92758188f890",
+    "_inventory_sql/dependency.sql": "b6d3b3eb4fe10d817a57c0e2d1ab723fc630233b4d15985bc5e6aaa366a3ba74"
+  },
+  "distributionMetadata": {
+    "truss_toolkit-0.0.1.dev0.dist-info/METADATA": "e2131d6e267b18d7c27b604fa66e254a6d38effcf8eed05c2b62ce924f4f64d9",
+    "truss_toolkit-0.0.1.dev0.dist-info/WHEEL": "4a63b1614ee9ccd281a804af409ec38d7dd719417dda5ac684c6f747afe28aa2",
+    "truss_toolkit-0.0.1.dev0.dist-info/entry_points.txt": "9cfae7be0d28d9c04aca93c02945984e4474c7a033b7e2b1037ee8e306af7275",
+    "truss_toolkit-0.0.1.dev0.dist-info/top_level.txt": "d9fb67a32b1db0d9fccb858e39c6ef44a2415490dd35b35e33aff15b1fad0e67"
+  },
+  "tests": {
+    "packages/python/tests/test_directory_resources.py": "928878bb47c12c90ee9f98033dda36e9838cce80c0de83c5e3ee25140494f7d4",
+    "packages/python/tests/test_row_registry_correspondence.py": "842dca68f100f06ea000075258ea4bb1652029bdfa5dc62b599ceba42dfd6c22",
+    "packages/python/tests/test_host_control_custody.py": "12ef71dbb4ffd979c2569834e0679df50c9bf9a26d4fb69b23cc14df8786d00b",
+    "packages/python/tests/test_native_deadline.py": "3c139c599d80501a3cffca4ca0163a6f7ded563fdaaffd7b35509a613abcbc92",
+    "packages/python/tests/test_row_image_tree.py": "7db423639a8fc2bf89358b2355c6faf8b84185b986a3bd44a850657f777ff2c8",
+    "packages/python/tests/test_operation_admission.py": "50ed2a3ebbd82e02f7e1a055ba66d38db347ec8c27965052d3cecfe68b1f98b7",
+    "packages/python/tests/test_weft.py": "7ff2541d371c16c8d8d84b573f20a7961c4cbb2f5d434db3ce45d207e83d7591",
+    "packages/python/tests/test_native_ingress_deadline.py": "9d18c8c687d5eb74935fe6eeda343e2b2ee1cb2a928daecd29a548f062dcfcb3",
+    "packages/python/tests/test_row_group_custody.py": "91c9ff5078d4f6e18414227487f6991db44785433c3761d481727c08d06aa0a3",
+    "packages/python/tests/test_native_transactions.py": "113006f757ed2d9b11805b8b59b1b11f06063c2a142e6b45bd6cb2b46e8b07b8",
+    "packages/python/tests/test_migration_planning.py": "f967bffffefc22e62378e8410f19c5f5ddd6b84895c53c0a9fccb0c65388e8d6",
+    "packages/python/tests/test_native_resources.py": "5979cf9acd42e5e5003b2f262ed06384061dca7a887cb4f5b8c7b1046dfdc2e8",
+    "packages/python/tests/test_native_cancellation.py": "88ed7bb854fc973f9baf460172f671315c9c3f4018d9a7130e06421068fc5d0c",
+    "packages/python/tests/test_row_operation_context.py": "f59a659d5afa1d543060c0ef4653ab946249c183f67e258c11ae18257615b35a",
+    "packages/python/tests/test_installed_admission_operator_routes.py": "db8f18355ff3cf3d518b0ef8dea579eab5ef6ca29d82904e6d512cd45b083a7e",
+    "packages/python/tests/test_touch_operation_correspondence.py": "fad338c7887d88294a4668b5d6e25612d993df1c7b1fd27d730df76626846031",
+    "packages/python/tests/test_host_call_recovery.py": "bef13442769461828a186c3ede5c2c9182bf1e45588fb7599d3a7b7ef7e2bbca",
+    "packages/python/tests/test_accounted_receive.py": "076cd45bae4ed12fd594aabad9674bbb5a2663cffcf865d76ff56c19954289f5",
+    "packages/python/tests/test_exact_timestamp.py": "8d9d1c2364d474d98f1ab63ad586a8c3c11148ff12950e94bef424f1e997379f",
+    "packages/python/tests/test_operation_arbitration.py": "2293196112e5a7c48b4a85c6f928c9b610b68b3c5cfd03ba061312dd15fa1088",
+    "packages/python/tests/test_native_adoption.py": "aa7b70a118538cc2b4d49e68f6b6c785c4f8f53503bc0b6f366e2ca2940fedd1",
+    "packages/python/tests/test_query_execution.py": "403759cc37ae7c1b5b0bdf025bed23e4eaa84fc0715ce362c605ffe4edc30ed0",
+    "packages/python/tests/test_row_operation_custody.py": "10384de66272d5dcfe296aa5387b463995cf4a8f3036ec7e116636076bece853",
+    "packages/python/tests/test_local_runtime.py": "9c690fa7be8839eca9d95663e3af2dae1289ba01909adbdf693e5a5dc7a176f5",
+    "packages/python/tests/test_installation_archive.py": "b8c4a03c04d7d919e9e506011b9de185c10af3ce53eb81709e983efaf5c6c51b",
+    "packages/python/tests/test_row_image_scalar_shape.py": "6638fa27e7c409009698971d0fca1be3066e3158a45f4ff5c87ac7210be3ee76",
+    "packages/python/tests/test_security_fixture_privacy.py": "d859290bc7c2518857c3066b547cd7ed9a3cb17f7625a8e553eef5ee393e59ae",
+    "packages/python/tests/test_host_execution.py": "2e8aac90abcc3c34cc8fa21d7e90e9a74d237f1a451795863550c08dbc063d7f",
+    "packages/python/tests/test_row_image.py": "306a88711bcd722d8fb5777aaa6e6f3e59c554ad6803d5a320ac9eb60e256c05",
+    "packages/python/tests/test_installed_admission_inventory.py": "61d315c0e529feb1f1949d71068e0e5d9b1553d290d1968b6f57f97c3e776ddb",
+    "packages/python/tests/test_operation_registry.py": "bb210a0e1ca1428ece5b63fbdae0a02ff09ad9807e0f6400c04da73e8e995db3",
+    "packages/python/tests/test_row_touch_registry.py": "9d46552a61b1dd3426be78152b410f575b7d272b086334074fa9afda8389cc83",
+    "packages/python/tests/test_public_contracts.py": "6e6eadada4c82a74988d9f3f42dba21fba888ebba769fa171bffec94b9482d5c",
+    "packages/python/tests/test_operation_ordinal.py": "a5fa4ede8f756767c7916e9e4cfba35496c43114247d82ebea914f186af3293a",
+    "packages/python/tests/test_row_operation_address.py": "71a468e516a3c3bdd257b9e1abc7cd18ffee114e1af889a425780aad61bd43ec",
+    "packages/python/tests/test_receipt_position.py": "deb2f95c0dc04bb6f615f680aadcf88bc7d707e0dabebb407f2d4212af4068a7",
+    "packages/python/tests/test_native_arbitration.py": "980ec7fb51bce827b864610ae4a5966692bddaf65c89f977832a828accec2158",
+    "packages/python/tests/test_import_contracts.py": "1e8a870c06f6cd139e4ca4d79e644bb7883c522cd5ee9aee698db36b1dc3fa6e",
+    "packages/python/tests/test_native_pg8000.py": "e5ece3a5a2a2dc4e3bb36f92aa6212c64d53e25e679255361f7c67064e9bd3f3",
+    "packages/python/tests/test_host_session.py": "cdca964787c647804d443b096d903a2c184ad15ee29020ff1de0978e654ef2f8",
+    "packages/python/tests/test_exact_numeric.py": "1b7753e6692cd19575e401612056159dae06df6c2769589800ce0429a165c458",
+    "packages/python/tests/test_buffered_ingress.py": "2a905f49c447d3fcd22f2ad0dd6d4e7a0fbd3d6f14b6011056b98137285612d9",
+    "packages/python/tests/test_resource_account.py": "c74ad5271cca163249e65dad15cfdbfb3ba2ff75bf42462f6fbf72aa5eba09b2",
+    "packages/python/tests/test_row_operation_json.py": "c99efd63b0a78b35bc8c7d9de0565bb2b5bd30244e1babf88550ecb5cceb910f",
+    "packages/python/tests/test_acceptance_json.py": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2",
+    "packages/python/tests/test_native_operation.py": "ab6fa9a27454a3146176491705419a7dd832483bb90f48c359297f9707c0b6d8",
+    "packages/python/tests/test_row_image_capture.py": "625cd53420fe2540a31fd4a9ffa662d341497a970bbbae04187abfdb26511d9a",
+    "packages/python/tests/test_row_event_attribution.py": "3b1492a678b12f182c546511c455ed1df951c92fd23473e1b5cb8582f50b45ac",
+    "packages/python/tests/test_installation_resources.py": "24a7baca8b7034360a01982dd09c6b88818f9518ac922ef73e5000f93f3703ee",
+    "packages/python/tests/test_resource_registration_preflight.py": "5f7ca57e291ba76645c37a7405005db81a0b30b2f3f034c6d6bd18706ded7ba1"
+  },
+  "snapshotUnchangedDuringFinalRun": true,
+  "moduleBoundary": {
+    "edgeCount": 231,
+    "edges": [
+      {
+        "line": 2,
+        "source": "__init__",
+        "target": "truss.execution"
+      },
+      {
+        "line": 3,
+        "source": "__init__",
+        "target": "truss.local_runtime"
+      },
+      {
+        "line": 6,
+        "source": "_acceptance_json",
+        "target": "json"
+      },
+      {
+        "line": 8,
+        "source": "_accounted_receive",
+        "target": "struct"
+      },
+      {
+        "line": 9,
+        "source": "_accounted_receive",
+        "target": "threading"
+      },
+      {
+        "line": 10,
+        "source": "_accounted_receive",
+        "target": "truss._resource_account"
+      },
+      {
+        "line": 2,
+        "source": "_directory_resources",
+        "target": "os"
+      },
+      {
+        "line": 3,
+        "source": "_directory_resources",
+        "target": "stat"
+      },
+      {
+        "line": 4,
+        "source": "_directory_resources",
+        "target": "threading"
+      },
+      {
+        "line": 5,
+        "source": "_directory_resources",
+        "target": "truss._installation_resources"
+      },
+      {
+        "line": 7,
+        "source": "_host_call_recovery",
+        "target": "dataclasses"
+      },
+      {
+        "line": 8,
+        "source": "_host_call_recovery",
+        "target": "threading"
+      },
+      {
+        "line": 9,
+        "source": "_host_call_recovery",
+        "target": "truss.execution"
+      },
+      {
+        "line": 2,
+        "source": "_host_contracts",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_host_contracts",
+        "target": "truss.execution"
+      },
+      {
+        "line": 8,
+        "source": "_host_control_custody",
+        "target": "dataclasses"
+      },
+      {
+        "line": 9,
+        "source": "_host_control_custody",
+        "target": "threading"
+      },
+      {
+        "line": 10,
+        "source": "_host_control_custody",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 11,
+        "source": "_host_control_custody",
+        "target": "truss._native_transactions"
+      },
+      {
+        "line": 12,
+        "source": "_host_control_custody",
+        "target": "truss._native_result_custody"
+      },
+      {
+        "line": 13,
+        "source": "_host_control_custody",
+        "target": "truss._native_driver_profile"
+      },
+      {
+        "line": 14,
+        "source": "_host_control_custody",
+        "target": "truss.execution"
+      },
+      {
+        "line": 133,
+        "source": "_host_control_custody",
+        "target": "pg8000.core"
+      },
+      {
+        "line": 156,
+        "source": "_host_control_custody",
+        "target": "truss._host_execution"
+      },
+      {
+        "line": 6,
+        "source": "_host_execution",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_host_execution",
+        "target": "uuid"
+      },
+      {
+        "line": 8,
+        "source": "_host_execution",
+        "target": "threading"
+      },
+      {
+        "line": 9,
+        "source": "_host_execution",
+        "target": "truss._host_contracts"
+      },
+      {
+        "line": 10,
+        "source": "_host_execution",
+        "target": "truss.execution"
+      },
+      {
+        "line": 40,
+        "source": "_host_execution",
+        "target": "truss._host_call_recovery"
+      },
+      {
+        "line": 55,
+        "source": "_host_execution",
+        "target": "truss._native_transactions"
+      },
+      {
+        "line": 57,
+        "source": "_host_execution",
+        "target": "truss._native_adoption"
+      },
+      {
+        "line": 7,
+        "source": "_host_session",
+        "target": "dataclasses"
+      },
+      {
+        "line": 8,
+        "source": "_host_session",
+        "target": "threading"
+      },
+      {
+        "line": 9,
+        "source": "_host_session",
+        "target": "truss._host_execution"
+      },
+      {
+        "line": 10,
+        "source": "_host_session",
+        "target": "truss._native_transactions"
+      },
+      {
+        "line": 11,
+        "source": "_host_session",
+        "target": "truss._native_arbitration"
+      },
+      {
+        "line": 12,
+        "source": "_host_session",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 13,
+        "source": "_host_session",
+        "target": "truss.execution"
+      },
+      {
+        "line": 58,
+        "source": "_host_session",
+        "target": "truss._host_control_custody"
+      },
+      {
+        "line": 2,
+        "source": "_installation_archive",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_installation_archive",
+        "target": "hashlib"
+      },
+      {
+        "line": 6,
+        "source": "_installation_resources",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_installation_resources",
+        "target": "hashlib"
+      },
+      {
+        "line": 8,
+        "source": "_installation_resources",
+        "target": "truss._resource_account"
+      },
+      {
+        "line": 69,
+        "source": "_installation_resources",
+        "target": "json"
+      },
+      {
+        "line": 7,
+        "source": "_installed_admission_inventory",
+        "target": "dataclasses"
+      },
+      {
+        "line": 8,
+        "source": "_installed_admission_inventory",
+        "target": "hashlib"
+      },
+      {
+        "line": 9,
+        "source": "_installed_admission_inventory",
+        "target": "json"
+      },
+      {
+        "line": 10,
+        "source": "_installed_admission_inventory",
+        "target": "importlib.resources"
+      },
+      {
+        "line": 11,
+        "source": "_installed_admission_inventory",
+        "target": "typing"
+      },
+      {
+        "line": 8,
+        "source": "_native_adoption",
+        "target": "dataclasses"
+      },
+      {
+        "line": 9,
+        "source": "_native_adoption",
+        "target": "uuid"
+      },
+      {
+        "line": 10,
+        "source": "_native_adoption",
+        "target": "truss.execution"
+      },
+      {
+        "line": 72,
+        "source": "_native_adoption",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 124,
+        "source": "_native_adoption",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 178,
+        "source": "_native_adoption",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 191,
+        "source": "_native_adoption",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 230,
+        "source": "_native_adoption",
+        "target": "truss._host_contracts"
+      },
+      {
+        "line": 231,
+        "source": "_native_adoption",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 6,
+        "source": "_native_arbitration",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_native_arbitration",
+        "target": "uuid"
+      },
+      {
+        "line": 8,
+        "source": "_native_arbitration",
+        "target": "threading"
+      },
+      {
+        "line": 9,
+        "source": "_native_arbitration",
+        "target": "truss._host_execution"
+      },
+      {
+        "line": 10,
+        "source": "_native_arbitration",
+        "target": "truss._native_transactions"
+      },
+      {
+        "line": 11,
+        "source": "_native_arbitration",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 12,
+        "source": "_native_arbitration",
+        "target": "truss._operation_arbitration"
+      },
+      {
+        "line": 129,
+        "source": "_native_arbitration",
+        "target": "truss._native_adoption"
+      },
+      {
+        "line": 6,
+        "source": "_native_cancellation",
+        "target": "socket"
+      },
+      {
+        "line": 7,
+        "source": "_native_cancellation",
+        "target": "struct"
+      },
+      {
+        "line": 8,
+        "source": "_native_cancellation",
+        "target": "threading"
+      },
+      {
+        "line": 9,
+        "source": "_native_cancellation",
+        "target": "time"
+      },
+      {
+        "line": 2,
+        "source": "_native_deadline",
+        "target": "time"
+      },
+      {
+        "line": 7,
+        "source": "_native_driver_profile",
+        "target": "pg8000.converters"
+      },
+      {
+        "line": 8,
+        "source": "_native_driver_profile",
+        "target": "pg8000.core"
+      },
+      {
+        "line": 9,
+        "source": "_native_driver_profile",
+        "target": "pg8000.native"
+      },
+      {
+        "line": 43,
+        "source": "_native_driver_profile",
+        "target": "pg8000.core"
+      },
+      {
+        "line": 2,
+        "source": "_native_ingress_deadline",
+        "target": "io"
+      },
+      {
+        "line": 3,
+        "source": "_native_ingress_deadline",
+        "target": "socket"
+      },
+      {
+        "line": 4,
+        "source": "_native_ingress_deadline",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 5,
+        "source": "_native_ingress_deadline",
+        "target": "truss._native_deadline"
+      },
+      {
+        "line": 6,
+        "source": "_native_operation",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_native_operation",
+        "target": "threading"
+      },
+      {
+        "line": 8,
+        "source": "_native_operation",
+        "target": "uuid"
+      },
+      {
+        "line": 9,
+        "source": "_native_operation",
+        "target": "truss.execution"
+      },
+      {
+        "line": 10,
+        "source": "_native_operation",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 11,
+        "source": "_native_operation",
+        "target": "truss._native_arbitration"
+      },
+      {
+        "line": 12,
+        "source": "_native_operation",
+        "target": "truss._operation_arbitration"
+      },
+      {
+        "line": 13,
+        "source": "_native_operation",
+        "target": "truss._native_result_custody"
+      },
+      {
+        "line": 14,
+        "source": "_native_operation",
+        "target": "truss._native_cancellation"
+      },
+      {
+        "line": 15,
+        "source": "_native_operation",
+        "target": "truss._native_deadline"
+      },
+      {
+        "line": 105,
+        "source": "_native_operation",
+        "target": "truss._native_driver_profile"
+      },
+      {
+        "line": 106,
+        "source": "_native_operation",
+        "target": "truss._host_control_custody"
+      },
+      {
+        "line": 107,
+        "source": "_native_operation",
+        "target": "truss._native_ingress_deadline"
+      },
+      {
+        "line": 154,
+        "source": "_native_operation",
+        "target": "truss._native_transactions"
+      },
+      {
+        "line": 346,
+        "source": "_native_operation",
+        "target": "pg8000.core"
+      },
+      {
+        "line": 358,
+        "source": "_native_operation",
+        "target": "pg8000.core"
+      },
+      {
+        "line": 196,
+        "source": "_native_operation",
+        "target": "truss._operation_arbitration"
+      },
+      {
+        "line": 9,
+        "source": "_native_pg8000",
+        "target": "dataclasses"
+      },
+      {
+        "line": 10,
+        "source": "_native_pg8000",
+        "target": "importlib.metadata"
+      },
+      {
+        "line": 11,
+        "source": "_native_pg8000",
+        "target": "threading"
+      },
+      {
+        "line": 56,
+        "source": "_native_pg8000",
+        "target": "pg8000.native"
+      },
+      {
+        "line": 6,
+        "source": "_native_result_custody",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_native_result_custody",
+        "target": "struct"
+      },
+      {
+        "line": 8,
+        "source": "_native_result_custody",
+        "target": "io"
+      },
+      {
+        "line": 9,
+        "source": "_native_result_custody",
+        "target": "truss._accounted_receive"
+      },
+      {
+        "line": 10,
+        "source": "_native_result_custody",
+        "target": "truss._resource_account"
+      },
+      {
+        "line": 11,
+        "source": "_native_result_custody",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 12,
+        "source": "_native_result_custody",
+        "target": "truss._native_ingress_deadline"
+      },
+      {
+        "line": 194,
+        "source": "_native_result_custody",
+        "target": "pg8000.converters"
+      },
+      {
+        "line": 112,
+        "source": "_native_result_custody",
+        "target": "truss._native_ingress_deadline"
+      },
+      {
+        "line": 245,
+        "source": "_native_result_custody",
+        "target": "re"
+      },
+      {
+        "line": 9,
+        "source": "_native_transactions",
+        "target": "dataclasses"
+      },
+      {
+        "line": 10,
+        "source": "_native_transactions",
+        "target": "re"
+      },
+      {
+        "line": 11,
+        "source": "_native_transactions",
+        "target": "uuid"
+      },
+      {
+        "line": 12,
+        "source": "_native_transactions",
+        "target": "truss.execution"
+      },
+      {
+        "line": 13,
+        "source": "_native_transactions",
+        "target": "truss._native_pg8000"
+      },
+      {
+        "line": 256,
+        "source": "_native_transactions",
+        "target": "truss._native_adoption"
+      },
+      {
+        "line": 298,
+        "source": "_native_transactions",
+        "target": "truss._native_adoption"
+      },
+      {
+        "line": 304,
+        "source": "_native_transactions",
+        "target": "truss._native_adoption"
+      },
+      {
+        "line": 294,
+        "source": "_native_transactions",
+        "target": "truss._native_adoption"
+      },
+      {
+        "line": 7,
+        "source": "_operation_admission",
+        "target": "dataclasses"
+      },
+      {
+        "line": 8,
+        "source": "_operation_admission",
+        "target": "inspect"
+      },
+      {
+        "line": 9,
+        "source": "_operation_admission",
+        "target": "threading"
+      },
+      {
+        "line": 8,
+        "source": "_operation_arbitration",
+        "target": "dataclasses"
+      },
+      {
+        "line": 9,
+        "source": "_operation_arbitration",
+        "target": "threading"
+      },
+      {
+        "line": 10,
+        "source": "_operation_arbitration",
+        "target": "uuid"
+      },
+      {
+        "line": 11,
+        "source": "_operation_arbitration",
+        "target": "truss._host_execution"
+      },
+      {
+        "line": 6,
+        "source": "_operation_ordinal",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_operation_ordinal",
+        "target": "threading"
+      },
+      {
+        "line": 6,
+        "source": "_query_execution",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_query_execution",
+        "target": "inspect"
+      },
+      {
+        "line": 8,
+        "source": "_query_execution",
+        "target": "threading"
+      },
+      {
+        "line": 9,
+        "source": "_query_execution",
+        "target": "types"
+      },
+      {
+        "line": 10,
+        "source": "_query_execution",
+        "target": "weakref"
+      },
+      {
+        "line": 11,
+        "source": "_query_execution",
+        "target": "truss.weft"
+      },
+      {
+        "line": 2,
+        "source": "_receipt_position",
+        "target": "base64"
+      },
+      {
+        "line": 3,
+        "source": "_receipt_position",
+        "target": "binascii"
+      },
+      {
+        "line": 4,
+        "source": "_receipt_position",
+        "target": "dataclasses"
+      },
+      {
+        "line": 5,
+        "source": "_receipt_position",
+        "target": "json"
+      },
+      {
+        "line": 6,
+        "source": "_receipt_position",
+        "target": "re"
+      },
+      {
+        "line": 7,
+        "source": "_receipt_position",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 6,
+        "source": "_resource_account",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "_resource_account",
+        "target": "threading"
+      },
+      {
+        "line": 2,
+        "source": "_row_event_attribution",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_event_attribution",
+        "target": "struct"
+      },
+      {
+        "line": 4,
+        "source": "_row_event_attribution",
+        "target": "truss._row_image"
+      },
+      {
+        "line": 2,
+        "source": "_row_group_custody",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_group_custody",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 4,
+        "source": "_row_group_custody",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_group_custody",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_image",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_image",
+        "target": "struct"
+      },
+      {
+        "line": 2,
+        "source": "_row_image_capture",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_image_capture",
+        "target": "truss._row_image"
+      },
+      {
+        "line": 4,
+        "source": "_row_image_capture",
+        "target": "truss._row_event_attribution"
+      },
+      {
+        "line": 2,
+        "source": "_row_image_scalar_shape",
+        "target": "truss._row_image"
+      },
+      {
+        "line": 2,
+        "source": "_row_image_tree",
+        "target": "truss._row_image_capture"
+      },
+      {
+        "line": 3,
+        "source": "_row_image_tree",
+        "target": "truss._row_event_attribution"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_address",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_address",
+        "target": "json"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_address",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_address",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_context",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_context",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_context",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_context",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 6,
+        "source": "_row_operation_context",
+        "target": "truss._row_group_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_operation_custody",
+        "target": "base64"
+      },
+      {
+        "line": 3,
+        "source": "_row_operation_custody",
+        "target": "dataclasses"
+      },
+      {
+        "line": 4,
+        "source": "_row_operation_custody",
+        "target": "hashlib"
+      },
+      {
+        "line": 5,
+        "source": "_row_operation_custody",
+        "target": "re"
+      },
+      {
+        "line": 6,
+        "source": "_row_operation_custody",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 2,
+        "source": "_row_registry_correspondence",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_registry_correspondence",
+        "target": "truss._operation_registry"
+      },
+      {
+        "line": 4,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_context"
+      },
+      {
+        "line": 6,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_group_custody"
+      },
+      {
+        "line": 7,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 99,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_touch_registry"
+      },
+      {
+        "line": 100,
+        "source": "_row_registry_correspondence",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "_row_touch_registry",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "_row_touch_registry",
+        "target": "truss._operation_registry"
+      },
+      {
+        "line": 4,
+        "source": "_row_touch_registry",
+        "target": "truss._row_operation_address"
+      },
+      {
+        "line": 5,
+        "source": "_row_touch_registry",
+        "target": "truss._row_operation_custody"
+      },
+      {
+        "line": 2,
+        "source": "cli",
+        "target": "argparse"
+      },
+      {
+        "line": 3,
+        "source": "cli",
+        "target": "json"
+      },
+      {
+        "line": 4,
+        "source": "cli",
+        "target": "pathlib"
+      },
+      {
+        "line": 5,
+        "source": "cli",
+        "target": "signal"
+      },
+      {
+        "line": 6,
+        "source": "cli",
+        "target": "threading"
+      },
+      {
+        "line": 20,
+        "source": "cli",
+        "target": "truss"
+      },
+      {
+        "line": 7,
+        "source": "contracts",
+        "target": "dataclasses"
+      },
+      {
+        "line": 8,
+        "source": "contracts",
+        "target": "enum"
+      },
+      {
+        "line": 9,
+        "source": "contracts",
+        "target": "types"
+      },
+      {
+        "line": 10,
+        "source": "contracts",
+        "target": "typing"
+      },
+      {
+        "line": 7,
+        "source": "execution",
+        "target": "dataclasses"
+      },
+      {
+        "line": 8,
+        "source": "execution",
+        "target": "typing"
+      },
+      {
+        "line": 6,
+        "source": "groups",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "groups",
+        "target": "typing"
+      },
+      {
+        "line": 8,
+        "source": "groups",
+        "target": "truss.contracts"
+      },
+      {
+        "line": 9,
+        "source": "groups",
+        "target": "truss.execution"
+      },
+      {
+        "line": 2,
+        "source": "imports",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "imports",
+        "target": "typing"
+      },
+      {
+        "line": 4,
+        "source": "imports",
+        "target": "truss.contracts"
+      },
+      {
+        "line": 5,
+        "source": "imports",
+        "target": "truss.execution"
+      },
+      {
+        "line": 2,
+        "source": "local_runtime",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "local_runtime",
+        "target": "importlib.metadata"
+      },
+      {
+        "line": 4,
+        "source": "local_runtime",
+        "target": "importlib.resources"
+      },
+      {
+        "line": 5,
+        "source": "local_runtime",
+        "target": "pathlib"
+      },
+      {
+        "line": 6,
+        "source": "local_runtime",
+        "target": "subprocess"
+      },
+      {
+        "line": 7,
+        "source": "local_runtime",
+        "target": "threading"
+      },
+      {
+        "line": 58,
+        "source": "local_runtime",
+        "target": "pgserver"
+      },
+      {
+        "line": 59,
+        "source": "local_runtime",
+        "target": "fasteners"
+      },
+      {
+        "line": 2,
+        "source": "migration_planning",
+        "target": "dataclasses"
+      },
+      {
+        "line": 3,
+        "source": "migration_planning",
+        "target": "re"
+      },
+      {
+        "line": 4,
+        "source": "migration_planning",
+        "target": "typing"
+      },
+      {
+        "line": 5,
+        "source": "migration_planning",
+        "target": "truss._acceptance_json"
+      },
+      {
+        "line": 8,
+        "source": "numeric",
+        "target": "dataclasses"
+      },
+      {
+        "line": 9,
+        "source": "numeric",
+        "target": "decimal"
+      },
+      {
+        "line": 6,
+        "source": "timestamp",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "timestamp",
+        "target": "datetime"
+      },
+      {
+        "line": 8,
+        "source": "timestamp",
+        "target": "re"
+      },
+      {
+        "line": 10,
+        "source": "timestamp",
+        "target": "truss.numeric"
+      },
+      {
+        "line": 6,
+        "source": "weft",
+        "target": "dataclasses"
+      },
+      {
+        "line": 7,
+        "source": "weft",
+        "target": "decimal"
+      },
+      {
+        "line": 8,
+        "source": "weft",
+        "target": "hashlib"
+      },
+      {
+        "line": 9,
+        "source": "weft",
+        "target": "inspect"
+      },
+      {
+        "line": 10,
+        "source": "weft",
+        "target": "json"
+      },
+      {
+        "line": 11,
+        "source": "weft",
+        "target": "threading"
+      },
+      {
+        "line": 12,
+        "source": "weft",
+        "target": "types"
+      },
+      {
+        "line": 13,
+        "source": "weft",
+        "target": "typing"
+      }
+    ],
+    "errors": [],
+    "passed": true,
+    "scope": "python-only",
+    "unqualified": [
+      "TypeScript imports",
+      "native SQL dependencies",
+      "reflection/indirect dynamic execution",
+      "runtime private-object visibility"
+    ]
+  },
+  "moduleCheckerSha256": "29ebeb8cc2cc1283a3bd8fd195e63e1703b745aa5bb3fd9bf7dee61236de96d4",
+  "logSha256": "93f1cc3661a76b258fe67082763c4c9dbce12afc98abd15aa37556d41b9b848c",
+  "astraSourcePlanApproved": true,
+  "astraIndependentCurrentTests": 26,
+  "astraIndependentCurrentElapsedSeconds": 5.378,
+  "securityMainSync": "7f29ae37",
+  "publicC02Qualified": false,
+  "completeEngineQualified": false,
+  "fullOutboundDeadlineQualified": false,
+  "limitations": [
+    "Exact types and attachment pins do not prove a foreign pre-attachment stream/socket association",
+    "CPython3.11.17 / native pg8000 1.31.5 / local PostgreSQL16.15 evidence only",
+    "Buffered write/flush and whole-operation wall-clock qualification remain open",
+    "Actual read timeout leaves the original poisoned buffered stream and transaction quarantined; no automatic cancellation/drain/reconnect",
+    "Cooperative original host custody required; arbitrary aliases or driver mutation unsupported",
+    "The separate cancellation profile still requires the original finite host timeout <=2 seconds"
+  ],
+  "astraFinalArtifactApproved": true
+}

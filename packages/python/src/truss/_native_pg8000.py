@@ -71,6 +71,8 @@ class NativeBoundary:
         self._native_arbitration_sessions = ()
         self._native_arbitration_bindings = ()
         self._connection = connection
+        self._original_stream = connection._sock
+        self._original_socket = connection._usock
         self._lock = Lock()
         self._ownership = _Ownership()
         self._calling = False

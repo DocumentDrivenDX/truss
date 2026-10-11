@@ -104,7 +104,8 @@ class NativeOperationRunner:
     def _profile(self, boundary):
         from ._native_driver_profile import original_driver_profile
         from ._host_control_custody import selected_resource_entry
-        return original_driver_profile(boundary) and (not boundary._host_control_records or selected_resource_entry(boundary))
+        from ._native_ingress_deadline import original_ingress_profile
+        return original_ingress_profile(boundary) and original_driver_profile(boundary) and (not boundary._host_control_records or selected_resource_entry(boundary))
 
     def cancellation(self):
         with self._lock:

@@ -798,3 +798,46 @@ changing confirmed native facts or reconstructing a timed-out buffered stream.
 Astra Ultra independently passes all12 deadline tests in3.671 seconds and
 approves the integrated source and plan, including the conservative restoration
 edge. Final artifact verification remains separate from those focused checks.
+
+### Iteration19: original pending ingress deadline
+
+Compose the original operation clock into each accounted `readinto1` visit.
+Require the original exact AF_UNIX socket and BufferedRWPair selected under
+cooperative host custody, capture the actual host socket timeout and preserve
+a stricter finite value. Clamp only that original read to remaining ordinary
+or settlement time, restore the exact original timeout in `finally`, and check
+the same clock after the read. No cleanup permit changes the clock phase.
+
+Timeout, partial/incomplete frame, restoration failure or changed original
+transport quarantines the original operation. Preserve its call/token/context
+and native facts; never rebuild the poisoned SocketIO wrapper, reconnect,
+repeat a query or claim savepoint rollback from a timer. Successful reads must
+restore timeout before buffered writes. Independently test actual pending
+PostgreSQL execution, existing shorter host limits, success restoration and
+failure custody. Astra Ultra reviews plan, source and installed evidence.
+Buffered write/flush and full operation wall-clock qualification remain open;
+this is the original receive enforcement path required by that larger profile.
+
+Constructor provenance remains trusted: pg8000's untouched original connection
+constructor creates the BufferedRWPair from its socket. Exact type and attachment
+pins detect later substitution; they cannot independently prove pre-attachment
+stream/socket correspondence, especially for injected `sock` construction.
+The original cooperative host profile remains mandatory. The iteration18 real
+slow-call fixture now correctly reaches pending ingress timeout quarantine,
+rather than waiting past the deadline and claiming post-drain containment.
+
+Security main7f29ae37 was fast-forwarded during iteration19. Its retained
+76-observation raw ontology candidate and seven formal formulas qualify only
+synthetic read admission. Production authenticated subject/owner artifact, typed
+graph closure and final publication/drain remain open. The handoff changes no
+Truss runtime or grants; Python original host custody remains mandatory.
+
+Iteration19 passes406 separately installed tests in62.160 seconds. All57
+package files and distribution metadata match the original source, retained
+wheel and installation; all50 test-module hashes remain unchanged. The Python
+module checker passes231 imports. Astra independently passes26 refined ingress
+and deadline tests in5.378 seconds, after47 earlier composition checks.
+See [receipt](evidence/python-contracts-iteration19.json) and
+[installed log](evidence/python-contracts-iteration19-installed.log).
+Next qualify original outbound write/flush deadline enforcement, then compose
+public adoption/readiness only for the supported original executor profile.
