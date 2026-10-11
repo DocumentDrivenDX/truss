@@ -1898,3 +1898,27 @@ This adjunct issues no source-epoch transition. The 0.16 registry accepts only i
 The closed six-tag barrier is not complete routine/source coverage. ALTER ROUTINE, aggregates, grants, cascading schema/type/extension operations, shared roles/objects, event-trigger administration, external executable/configuration and authorization data remain excluded. A privileged administrator can disable the hook; shared-role BYPASSRLS changes proceed under the selected cut. Complete installed hook/function owner/body/settings/effective-ACL and native caller custody must be qualified before ordinary use. Do not add source authority to the existing transaction_epoch_state_fence_only projection or grant ordinary epoch DML to acquire these locks. CONTRACT-063/STP-056 B09/B11/B12/L03 and US-056-AC7/AC9/AC10 plus US-057-AC2 retain their complete acceptance gates.
 
 PostgreSQL's [event-trigger behavior](https://www.postgresql.org/docs/16/event-trigger-definition.html) documents the per-database start boundary and excludes shared objects and event-trigger administration. Actual selected-tag participation and transaction lifetime require the retained native controls; documentation alone is not backend qualification.
+
+
+### Supported-driver within-operation epoch comparison — 2026-10-11
+
+The private `_run_fenced_epoch_operation` composition consumes the selected
+stock psycopg host and its original issued transaction handle. Snapshot bounded
+exact comparison primitives before native work; comparison values are expected
+installation/epoch/incarnation/profile/evidence, not caller authorization or an
+issued capability. Within the host's exclusive operation lease and owned savepoint,
+observe original native xid/database/backend/session/effective actor, acquire the
+fresh fenced epoch helper, compare all twelve exact native text fields/descriptors,
+and only then invoke the private guarded-cursor callback. Use supported per-cursor
+string adaptation independent of host codecs. The host confirms release/completion
+and contains callback/native failures before exposing a result.
+
+This comparison supplies no retained cut capability. Every invocation reacquires
+and compares the current epoch; rollback across a prior operation may release its
+locks while preserving parent xid. Raw connection aliases must remain unused
+within toolkit operations under the accepted host contract. Arbitrary callbacks
+are not a public extension API and receive no source/authority admission from this
+helper. Complete independently qualified helper/trigger/role/ACL closure, whole
+source census, shared-role/configuration/authorization-fact cuts, authenticated
+caller/issuer and protected final disclosure remain separate required producers.
+No literal comparison fixture or successful callback establishes their authority.

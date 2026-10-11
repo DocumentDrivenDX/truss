@@ -14,6 +14,7 @@ import sys
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
     'psycopg_host': {'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
+    '_psycopg_epoch_cut': {'dataclasses', 'hashlib', 'truss.psycopg_host', 'psycopg.types.string'},
     '_native_attachment': set(),
     '_borrowed_host': {'io','socket','importlib.metadata','pg8000.native','pg8000.core','pg8000.converters','truss.host','truss._native_attachment','truss._native_pg8000','truss._native_driver_profile','truss._host_execution','truss._native_transactions','truss._native_arbitration','truss._host_control_custody','truss._host_session'},
     '_native_catalog_metadata': {'json','re','hashlib','importlib.resources','truss._acceptance_json'},

@@ -3560,3 +3560,41 @@ source/role/configuration/authorization-data writer coverage, generation issuanc
 original authenticated held-cut production, protected dispatch and final disclosure
 remain required. The goal remains active. Publish this source/evidence directly to
 main under the user's standing authorization; do not create a PR.
+
+
+### Supported-driver epoch-cut composition — 2026-10-11
+
+Previous goal turn made progress by publishing retained-operation DDL exclusion
+b3ccc7f0 directly to main. This increment consumes the supported stock psycopg3
+host rather than extending its historical pg8000 driver experiment. The private
+`_psycopg_epoch_cut` module snapshots exact bounded comparison primitives, acquires
+and compares the actual native fresh fenced12-field projection inside the original
+host lease/savepoint, then invokes its private guarded-cursor callback. It emits no
+persisted capability and every call reacquires the cut. Expected bytes do not confer
+caller authority. Supported per-cursor string codecs isolate host customization.
+
+Final native evidence is
+`evidence/python-psycopg-epoch-cut/f03b64fd-bc47-4bae-ac23-f44b86d5b93e`:
+34 tests (eight epoch-cut controls and26 adoption regressions), module-boundary pass,
+source freeze/readback and independent owned stop0/status3/socket absence.
+Controls cover actual held locks and distinct writer refusal, own DDL and callback
+error containment, earlier host work preservation, wrong-profile/readonly refusal
+before callback, rollback under unchanged parent xid followed by reacquisition,
+host custom codecs and later comparison-carrier mutation. Native fixture uses
+PostgreSQL16.15, Python3.11.17, psycopg/binary3.3.6 and libpq18.6. Recorded server
+payload hashes are component evidence, not independently authenticated dependency
+or shipped package delivery.
+
+Initial packet9e48d20c records33 passing native tests but fails the boundary gate
+because the new module lacked classification. Packet42b1cb3c passes34 tests with
+the earlier imported test-class discovery recipe. Finalf03b64fd explicitly selects
+the eight new tests and26 adoption controls; source preimages match current bytes.
+All packets remain source-qualified. No new Astra review or formal runtime
+refinement is claimed for this increment.
+
+CONTRACT-008/test plan record the selected boundary and CONTRACT-063/STP-056
+B11/B12/L03, US-056 AC9/AC10 and US-057 AC2 prerequisites. Ordinary authenticated
+caller, complete installed source/trigger/role/ACL closure, whole source census,
+configuration/shared-role/authorization-data cuts, actual protected dispatch and
+final disclosure remain required. Backend acceptance stays26/132 with106 missing
+bindings; no acceptance profile is promoted and the goal remains active.

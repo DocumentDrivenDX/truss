@@ -499,3 +499,21 @@ For CONTRACT-008's automatic six-tag adjunct, retain exact tag order, ALWAYS mod
 Independently erase only actual own-ShareLock selection, early table modes and marker row exclusion in separate isolated schedules. Require same-backend body change while actual ShareLocks remain, pending foreign commit changing actual execution/census while reader ShareLocks remain, and simultaneous distinct selected DDL effects under both compatible writer modes, respectively. Use exact replacement preimages/counts, original native errors and bounded calls. Include privileged hook disable and relevant shared-role BYPASSRLS change as successful excluded-authority controls. Both must preserve epoch identity while falsifying any complete source/authority-cut claim. Retain complete compressed census bytes plus digest/octet readback where collected; these are administrative materialized observations, not original NativeCall/host disclosure custody.
 
 Require successful selected DDL with changed source body/census and unchanged epoch. Source snapshot equality cannot be inferred from the epoch. Saved formal one-step laws require continuously alive cuts, complete selected-tag participation, actual mode/marker compatibility and own entry guard; retain omitted-premise SAT controls and separate native scope. These prerequisites support CONTRACT-063/STP-056 B09/B11/B12/L03 and US-056-AC7/AC9/AC10/US-057-AC2 without promoting acceptance. Full source-epoch semantics, writer coverage, installed authority, ordinary executor and final disclosure remain required.
+
+
+### Supported psycopg epoch-cut composition — 2026-10-11
+
+For CONTRACT-008 and CONTRACT-063/STP-056 B11/B12/L03 prerequisites, acquire the
+actual fresh fenced helper through the original psycopg operation scope. Require
+exact twelve-field correspondence before callback, two actual native SHARE modes
+during callback, and independent selected routine writer refusal. Require own DDL
+refusal and callback error to roll back the cut while retaining earlier host work
+and timeout settings. Wrong expected profile and READ ONLY must not invoke the
+callback. Rollback across the outer host savepoint must release the earlier cut
+under the same parent xid; a later invocation must reacquire rather than reuse it.
+Exercise custom host string dumper/loader isolation and mutation of the comparison
+carrier after primitive snapshot. Run all26 supported adoption controls alongside
+these eight native composition controls. Freeze sources/preimages before execution,
+refuse drift, retain outcomes and independent owned stop/status/socket checks.
+These are administrative components, not a new132-case acceptance binding or a
+whole-source/authority/final-disclosure refinement proof.
