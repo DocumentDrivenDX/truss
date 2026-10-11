@@ -70,3 +70,26 @@ integrity and visibility, original current authority, logical definition/member
 semantics, native scalar codecs, candidate reconstruction, seals and deferred
 commit closure remain separate. This component performs no writes, issues no
 proof token and enables no public Python capability. PUBLIC execution is revoked.
+
+`numeric-witness.sql` implements the private NX02–NX05 mathematical component:
+`numeric_witness_original(text)` and `numeric_equal_original(text,text)`. The
+explicit candidate grammar is JSON numeric token syntax; it does not admit an
+original UMF Field or source codec. Each complete UTF8 token is bounded to 65,536
+bytes. Full grammar and signed-bigint exponent parsing run before zero handling,
+including arbitrary token-bounded leading exponent zeros. Checked normalization
+adds the net trailing-zero/fraction adjustment once. Mantissa digits are never
+cast to native numeric and exponents never cause power-of-ten expansion.
+
+The ephemeral witness contains mathematical sign, full coefficient digits and
+signed exponent. Mathematical zero does not overwrite retained negative-zero,
+scale or exponent spelling. Equality decodes both original operands itself and
+uses C-collated coefficient equality. PUBLIC execution is revoked; no caller
+witness can confer admission. Native tests execute eleven authored witnesses and
+seven pairs, malformed complete tokens, both signed exponent endpoints, zero and
+normalized exponent overflow, exact byte limit, and independent original-spelling
+custody in an administrative temporary table.
+
+This does not replace the registered UMF exact-number APIs, admit source facets,
+qualify native representability or shared allocation/work charging, register a
+Weft comparator, complete RF05, seal an operation or enable a public Python API.
+Million-exponent witnesses are mathematical cases, not PostgreSQL storage claims.
