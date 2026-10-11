@@ -64,23 +64,20 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_pending_association_fields(int,int,jsonb) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_stage_pending_association_candidate(original_revision int)
-RETURNS TABLE(mapping_pointer text,relationship_id text)
+CREATE FUNCTION truss.runtime_resolve_pending_association_candidate(original_revision int,original_binding bytea)
+RETURNS TABLE(mapping_pointer text,definition jsonb,source_type int,target_type int,mapping_bytes bytea)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE observed record; op truss.row_home_operation%ROWTYPE; binding jsonb; ontology json; entity_item json; association_item json; original_ref jsonb; seen_entity_refs jsonb[]:=ARRAY[]::jsonb[]; seen_association_refs jsonb[]:=ARRAY[]::jsonb[];
+DECLARE binding jsonb; ontology json; entity_item json; association_item json; original_ref jsonb; seen_entity_refs jsonb[]:=ARRAY[]::jsonb[]; seen_association_refs jsonb[]:=ARRAY[]::jsonb[];
  ontology_bytes bytea; mapping jsonb; original_association json; endpoint json; role jsonb;
  original_entity json; owner truss.type_def%ROWTYPE; source_id int; target_id int;
  target_key_id text; role_owner int; fields int[]; target_fields int[]; endpoint_fields int[];
- own_key int[]; seen int[]:=ARRAY[]::int[]; assigned bigint; high_water bigint;
+ own_key int[]; seen int[]:=ARRAY[]::int[];
  index int:=0; ontology_start int:=1; pointer text; fragment bytea; fragments bytea[]:=ARRAY[]::bytea[];
  roles_seen text[]; role_name text; original_name text;
 BEGIN
- -- Complete source/core checks occur once before any pending effect. They are
- -- intentionally not reused after a binding-derived row has been inserted.
- SELECT * INTO STRICT observed FROM truss.runtime_collect_original_catalog_binding(original_revision);
  SELECT array_agg(b.mapping_bytes ORDER BY b.mapping_index) INTO fragments
-  FROM truss.runtime_extract_original_association_mapping_batch(decode(observed.binding_hex,'hex')) b;
- binding:=convert_from(decode(observed.binding_hex,'hex'),'UTF8')::jsonb;
+  FROM truss.runtime_extract_original_association_mapping_batch(original_binding) b;
+ binding:=convert_from(original_binding,'UTF8')::jsonb;
  IF binding->>'profile' IS DISTINCT FROM 'truss-binary-association-candidate/0.2.0'
   OR NOT binding ?& ARRAY['profile','coreSha256','ontologySha256','modelRevision','ontologyRevision','mappings','ontologyArtifact']
   OR (SELECT count(*) FROM jsonb_object_keys(binding))<>7
@@ -144,12 +141,6 @@ BEGIN
   IF original_ref=ANY(seen_association_refs) THEN RAISE EXCEPTION 'duplicate original association identity' USING ERRCODE='55000'; END IF;
   seen_association_refs:=array_append(seen_association_refs,original_ref);
  END LOOP;
- SELECT o.* INTO STRICT op FROM truss.row_home_operation o
-  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted' AND o.operation_kind='catalog-acceptance' FOR UPDATE;
- SELECT greatest(coalesce(max(r.rel_type_id)::bigint,0),0) INTO high_water FROM truss.rel_def r;
- IF high_water+jsonb_array_length(binding->'mappings')>2147483647 THEN
-  RAISE EXCEPTION 'pending association identity capacity exhausted' USING ERRCODE='54000';
- END IF;
  index:=0;
  FOR mapping IN SELECT value FROM jsonb_array_elements(binding->'mappings') LOOP
   pointer:='/mappings/'||index::text;fragment:=fragments[index+1];index:=index+1;
@@ -167,7 +158,7 @@ BEGIN
    RAISE EXCEPTION 'single original association model required' USING ERRCODE='55000';
   END IF;
   SELECT t.* INTO STRICT owner FROM truss.type_def t WHERE t.type_id=truss.runtime_pending_association_type(original_revision,mapping->'association');
-  IF owner.type_id=ANY(seen) OR EXISTS(SELECT 1 FROM truss.rel_def r WHERE r.document_id=owner.document_id AND r.module=owner.module AND r.rel_id=owner.element) THEN
+  IF owner.type_id=ANY(seen) THEN
    RAISE EXCEPTION 'duplicate original association identity' USING ERRCODE='55000';
   END IF;
   seen:=array_append(seen,owner.type_id);
@@ -217,14 +208,38 @@ BEGIN
    CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
    CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
    WHERE d.rev=original_revision AND d.doc_id=owner.document_id AND m.value->>'id'=owner.module AND e.value->>'id'=owner.element;
-  assigned:=high_water+index;
-  INSERT INTO truss.rel_def(document_id,rel_type_id,module,rel_id,name,source_min,source_max,target_min,target_max,lifecycle,directed,target_key,composition,assoc_type_id,inverse,since_rev,doc_ord,definition_source_kind,pending_writer_xid,pending_operation_ordinal,pending_binding_revision,pending_mapping_pointer,pending_mapping_bytes)
-  VALUES(owner.document_id,assigned::int,owner.module,owner.element,original_name,0,NULL,0,NULL,'independent',true,target_key_id,false,owner.type_id,NULL,original_revision,owner.doc_ord,'operation_binding',op.original_writer_xid,op.operation_ordinal,original_revision,pointer,fragment);
-  INSERT INTO truss.rel_endpoint(rel_type_id,source_type,target_type) VALUES(assigned::int,source_id,target_id);
-  RETURN QUERY SELECT pointer,assigned::text;
+  RETURN QUERY SELECT pointer,jsonb_build_object('document_id',owner.document_id,'module',owner.module,'rel_id',owner.element,'name',original_name,
+   'source_min',0,'source_max',NULL,'target_min',0,'target_max',NULL,'lifecycle','independent','directed',true,
+   'target_key',target_key_id,'composition',false,'assoc_type_id',owner.type_id,'inverse',NULL,'since_rev',original_revision,'doc_ord',owner.doc_ord),source_id,target_id,fragment;
  END LOOP;
 EXCEPTION WHEN no_data_found OR too_many_rows THEN
  RAISE EXCEPTION 'unique original association dependency required' USING ERRCODE='55000';
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_resolve_pending_association_candidate(int,bytea) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_stage_pending_association_candidate(original_revision int)
+RETURNS TABLE(mapping_pointer text,relationship_id text)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE observed record; op truss.row_home_operation%ROWTYPE; item record; owner truss.rel_def%ROWTYPE;
+ high_water bigint; assigned bigint; index int:=0;
+BEGIN
+ SELECT * INTO STRICT observed FROM truss.runtime_collect_original_catalog_binding(original_revision);
+ SELECT o.* INTO STRICT op FROM truss.row_home_operation o
+  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned() AND o.phase='admitted' AND o.operation_kind='catalog-acceptance' FOR UPDATE;
+ SELECT greatest(coalesce(max(r.rel_type_id)::bigint,0),0) INTO high_water FROM truss.rel_def r;
+ FOR item IN SELECT * FROM truss.runtime_resolve_pending_association_candidate(original_revision,decode(observed.binding_hex,'hex')) LOOP
+  owner:=jsonb_populate_record(NULL::truss.rel_def,item.definition);
+  IF EXISTS(SELECT 1 FROM truss.rel_def r WHERE r.document_id=owner.document_id AND r.module=owner.module AND r.rel_id=owner.rel_id) THEN
+   RAISE EXCEPTION 'duplicate original association identity' USING ERRCODE='55000';
+  END IF;
+  index:=index+1;assigned:=high_water+index;
+  IF assigned>2147483647 THEN RAISE EXCEPTION 'pending association identity capacity exhausted' USING ERRCODE='54000'; END IF;
+  INSERT INTO truss.rel_def(document_id,rel_type_id,module,rel_id,name,source_min,source_max,target_min,target_max,lifecycle,directed,target_key,composition,assoc_type_id,inverse,since_rev,doc_ord,definition_source_kind,pending_writer_xid,pending_operation_ordinal,pending_binding_revision,pending_mapping_pointer,pending_mapping_bytes)
+  VALUES(owner.document_id,assigned::int,owner.module,owner.rel_id,owner.name,owner.source_min,owner.source_max,owner.target_min,owner.target_max,owner.lifecycle,owner.directed,owner.target_key,owner.composition,owner.assoc_type_id,owner.inverse,owner.since_rev,owner.doc_ord,'operation_binding',op.original_writer_xid,op.operation_ordinal,original_revision,item.mapping_pointer,item.mapping_bytes);
+  INSERT INTO truss.rel_endpoint(rel_type_id,source_type,target_type) VALUES(assigned::int,item.source_type,item.target_type);
+  RETURN QUERY SELECT item.mapping_pointer,assigned::text;
+ END LOOP;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_stage_pending_association_candidate(int) FROM PUBLIC;
@@ -287,3 +302,46 @@ EXCEPTION WHEN no_data_found OR too_many_rows THEN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_collect_pending_association_source_candidate(int) FROM PUBLIC;
+
+-- Qualified private new-effect verification, not registered admission/report/readiness.
+CREATE FUNCTION truss.runtime_collect_pending_association_effect_candidate(original_revision int)
+RETURNS TABLE(family text,identity jsonb)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE item record; retained truss.rel_def%ROWTYPE; expected truss.rel_def%ROWTYPE;
+ original_binding bytea; inventory jsonb; excluded text[]:=ARRAY['rel_type_id','definition_source_kind','pending_writer_xid','pending_operation_ordinal','pending_binding_revision','pending_mapping_pointer','pending_mapping_bytes'];
+BEGIN
+ -- Both complete original source custody and original core dependency parity
+ -- precede deriving/checking the physical association metadata.
+ PERFORM * FROM truss.runtime_collect_pending_association_source_candidate(original_revision);
+ PERFORM * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,true);
+ SELECT a.original_binding_bytes INTO STRICT original_binding FROM truss.catalog_binding_archive a WHERE a.revision=original_revision;
+ FOR item IN SELECT * FROM truss.runtime_resolve_pending_association_candidate(original_revision,original_binding) LOOP
+  SELECT r.* INTO STRICT retained FROM truss.rel_def r WHERE r.definition_source_kind='operation_binding'
+   AND r.pending_binding_revision=original_revision AND r.pending_mapping_pointer COLLATE "C"=item.mapping_pointer COLLATE "C";
+  expected:=jsonb_populate_record(NULL::truss.rel_def,item.definition);
+  IF (to_jsonb(retained)-excluded) IS DISTINCT FROM (to_jsonb(expected)-excluded)
+   OR EXISTS(SELECT 1 FROM truss.relationship_lineage l WHERE l.rel_type_id=retained.rel_type_id) THEN
+   RAISE EXCEPTION 'pending association exact physical definition correspondence required' USING ERRCODE='55000';
+  END IF;
+  IF (SELECT count(*) FROM truss.rel_endpoint e WHERE e.rel_type_id=retained.rel_type_id)<>1
+   OR NOT EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=retained.rel_type_id
+    AND e.source_type=item.source_type AND e.target_type=item.target_type) THEN
+   RAISE EXCEPTION 'pending association exact physical endpoint correspondence required' USING ERRCODE='55000';
+  END IF;
+
+ END LOOP;
+ SELECT coalesce(jsonb_agg(jsonb_build_object('family',q.family,'identity',q.identity) ORDER BY q.family COLLATE "C",q.identity::text COLLATE "C"),'[]'::jsonb)
+ INTO inventory FROM (
+  SELECT 'type'::text AS family,jsonb_build_array(t.type_id::text,t.document_id,t.module,t.element) AS identity FROM truss.type_def t WHERE t.since_rev=original_revision
+  UNION ALL SELECT 'property',jsonb_build_array(p.prop_id::text,p.type_id::text,p.declaration_module,p.element) FROM truss.prop_def p WHERE p.since_rev=original_revision
+  UNION ALL SELECT 'key',jsonb_build_array(k.type_id::text,k.key_id,k.key_num::text) FROM truss.key_def k WHERE k.since_rev=original_revision
+  UNION ALL SELECT 'relationship',jsonb_build_array(r.rel_type_id::text,r.document_id,r.module,r.rel_id) FROM truss.rel_def r WHERE r.since_rev=original_revision
+  UNION ALL SELECT 'endpoint',jsonb_build_array(e.rel_type_id::text,e.source_type::text,e.target_type::text) FROM truss.rel_endpoint e JOIN truss.rel_def r ON r.rel_type_id=e.rel_type_id WHERE r.since_rev=original_revision
+ ) q;
+ IF jsonb_array_length(inventory)>16384 OR octet_length(inventory::text)>1048576 THEN
+  RAISE EXCEPTION 'pending association combined inventory component capacity exceeded' USING ERRCODE='54000';
+ END IF;
+ RETURN QUERY SELECT value->>'family',value->'identity' FROM jsonb_array_elements(inventory);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_collect_pending_association_effect_candidate(int) FROM PUBLIC;

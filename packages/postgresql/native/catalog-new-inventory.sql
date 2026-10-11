@@ -1,5 +1,5 @@
 -- Private actual genuinely-new identity inventory. Not complete effects/report authority.
-CREATE FUNCTION truss.runtime_collect_new_core_catalog_inventory(original_revision int)
+CREATE FUNCTION truss.runtime_collect_core_catalog_inventory_candidate(original_revision int,allow_pending boolean)
 RETURNS TABLE(family text,identity jsonb)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE op truss.row_home_operation%ROWTYPE; item record; matched record; inventory jsonb; original_relationship jsonb; expected_endpoints jsonb; actual_endpoints jsonb; original_field jsonb; original_key jsonb; original_properties int[]; original_owner truss.type_def%ROWTYPE; incomplete boolean; archived_documents jsonb;
@@ -24,6 +24,13 @@ BEGIN
   OR EXISTS(SELECT 1 FROM truss.rel_def r WHERE r.retired_rev=original_revision OR (r.definition_rev=original_revision AND r.since_rev<>original_revision)) THEN
   RAISE EXCEPTION 'retained lifecycle requires complete effect collector' USING ERRCODE='0A000';
  END IF;
+ IF allow_pending IS NULL OR EXISTS(SELECT 1 FROM truss.rel_def r WHERE r.since_rev=original_revision
+  AND r.definition_source_kind NOT IN ('accepted_document','operation_binding')) THEN
+  RAISE EXCEPTION 'unsupported new relationship source inventory required' USING ERRCODE='0A000';
+ END IF;
+ IF NOT allow_pending AND EXISTS(SELECT 1 FROM truss.rel_def r WHERE r.since_rev=original_revision AND r.definition_source_kind='operation_binding') THEN
+  RAISE EXCEPTION 'unique original declaration required' USING ERRCODE='55000';
+ END IF;
  WITH original_records AS (
   SELECT d.doc_id,m.value->>'id' AS module_id,r.value AS declaration
   FROM truss.schema_doc d CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
@@ -39,7 +46,7 @@ BEGIN
     AND stored.key_id=k.value->>'id' AND stored.since_rev=original_revision))
   OR EXISTS(SELECT 1 FROM truss.schema_doc d CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m
    CROSS JOIN LATERAL jsonb_array_elements(m.value->'relationships') r WHERE d.rev=original_revision AND NOT EXISTS(
-    SELECT 1 FROM truss.rel_def stored WHERE stored.document_id=d.doc_id AND stored.module=m.value->>'id' AND stored.rel_id=r.value->>'id' AND stored.since_rev=original_revision)) INTO incomplete;
+    SELECT 1 FROM truss.rel_def stored WHERE stored.document_id=d.doc_id AND stored.module=m.value->>'id' AND stored.rel_id=r.value->>'id' AND stored.since_rev=original_revision AND stored.definition_source_kind='accepted_document')) INTO incomplete;
  IF incomplete THEN RAISE EXCEPTION 'complete original new declaration inventory required' USING ERRCODE='55000'; END IF;
  FOR item IN SELECT t.* FROM truss.type_def t WHERE t.since_rev=original_revision LOOP
   SELECT * INTO STRICT matched FROM truss.runtime_match_record_identity(original_revision,item.document_id,item.module,item.element);
@@ -86,7 +93,7 @@ BEGIN
    RAISE EXCEPTION 'stored original ordered Key definition correspondence' USING ERRCODE='55000';
   END IF;
  END LOOP;
- FOR item IN SELECT r.* FROM truss.rel_def r WHERE r.since_rev=original_revision LOOP
+ FOR item IN SELECT r.* FROM truss.rel_def r WHERE r.since_rev=original_revision AND r.definition_source_kind='accepted_document' LOOP
   SELECT * INTO STRICT matched FROM truss.runtime_match_relationship_identity(original_revision,item.document_id,item.module,item.rel_id);
   IF matched.match_state<>'active' OR matched.storage_id<>item.rel_type_id::text OR matched.creation_revision<>original_revision::text THEN
    RAISE EXCEPTION 'original new relationship correspondence' USING ERRCODE='55000';
@@ -123,13 +130,23 @@ BEGIN
   SELECT 'type'::text AS family,jsonb_build_array(t.type_id::text,t.document_id,t.module,t.element) AS identity FROM truss.type_def t WHERE t.since_rev=original_revision
   UNION ALL SELECT 'property',jsonb_build_array(p.prop_id::text,p.type_id::text,p.declaration_module,p.element) FROM truss.prop_def p WHERE p.since_rev=original_revision
   UNION ALL SELECT 'key',jsonb_build_array(k.type_id::text,k.key_id,k.key_num::text) FROM truss.key_def k WHERE k.since_rev=original_revision
-  UNION ALL SELECT 'relationship',jsonb_build_array(r.rel_type_id::text,r.document_id,r.module,r.rel_id) FROM truss.rel_def r WHERE r.since_rev=original_revision
-  UNION ALL SELECT 'endpoint',jsonb_build_array(e.rel_type_id::text,e.source_type::text,e.target_type::text) FROM truss.rel_endpoint e JOIN truss.rel_def r ON r.rel_type_id=e.rel_type_id WHERE r.since_rev=original_revision
+  UNION ALL SELECT 'relationship',jsonb_build_array(r.rel_type_id::text,r.document_id,r.module,r.rel_id) FROM truss.rel_def r WHERE r.since_rev=original_revision AND r.definition_source_kind='accepted_document'
+  UNION ALL SELECT 'endpoint',jsonb_build_array(e.rel_type_id::text,e.source_type::text,e.target_type::text) FROM truss.rel_endpoint e JOIN truss.rel_def r ON r.rel_type_id=e.rel_type_id WHERE r.since_rev=original_revision AND r.definition_source_kind='accepted_document'
  ) q;
  IF jsonb_array_length(inventory)>16384 OR octet_length(inventory::text)>1048576 THEN
   RAISE EXCEPTION 'new catalog inventory component capacity exceeded' USING ERRCODE='54000';
  END IF;
  RETURN QUERY SELECT value->>'family',value->'identity' FROM jsonb_array_elements(inventory);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_collect_core_catalog_inventory_candidate(int,boolean) FROM PUBLIC;
+
+-- Existing pre-stage collector retains its refusal of pending effects.
+CREATE FUNCTION truss.runtime_collect_new_core_catalog_inventory(original_revision int)
+RETURNS TABLE(family text,identity jsonb)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN QUERY SELECT * FROM truss.runtime_collect_core_catalog_inventory_candidate(original_revision,false);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_collect_new_core_catalog_inventory(int) FROM PUBLIC;
