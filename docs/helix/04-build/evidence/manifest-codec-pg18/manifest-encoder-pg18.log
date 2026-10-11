@@ -1,0 +1,11 @@
+test_configuration_inclusive_and_one_over (__main__.Codec.test_configuration_inclusive_and_one_over) ... ok
+test_missing_extra_and_null_slots (__main__.Codec.test_missing_extra_and_null_slots) ... ok
+test_ordinary_and_lookalike_scalars_keep_limits (__main__.Codec.test_ordinary_and_lookalike_scalars_keep_limits) ... ok
+test_original_document_inclusive_and_one_over (__main__.Codec.test_original_document_inclusive_and_one_over) ... ok
+test_wide_originals_exact_independent_bytes (__main__.Codec.test_wide_originals_exact_independent_bytes) ... ok
+test_wrong_bytes_and_original_order (__main__.Codec.test_wrong_bytes_and_original_order) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 5.644s
+
+OK
