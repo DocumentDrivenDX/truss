@@ -268,6 +268,9 @@ class NativeBoundary:
             if self._revision >= 18446744073709551615:
                 raise NativeBoundaryRefusal('Native coordination revision exhausted')
             if call_permit is not None:
+                if (closing or host_simple is not None or preflight is not None
+                        or on_complete is not None or on_settled is not None):
+                    raise NativeBoundaryRefusal('Reserved invocation overrides unavailable')
                 ledger = self._operation_ledger
                 if (ledger is None or self._pending_operation_ledger is not ledger
                         or not any(item is ledger for item in self._native_arbitration_sessions)):
@@ -276,7 +279,7 @@ class NativeBoundary:
                 reserve = getattr(ledger, '_reserve_call_permit', None)
                 if check is None or reserve is None:
                     raise NativeBoundaryRefusal('Original reserved call permit unavailable')
-                check(self, token, resource, lifecycle, cleanup, call_permit)
+                check(self, token, invoke, resource, lifecycle, cleanup, call_permit)
             elif self._operation_ledger is not None:
                 self._operation_ledger._check_call(self, token, cleanup)
             if self._transaction_tracker is not None:
@@ -288,7 +291,7 @@ class NativeBoundary:
             before_root = getattr(ledger, '_call_root', None)
             try:
                 if call_permit is not None:
-                    call_entry = reserve(self, token, resource, lifecycle, cleanup, call_permit)
+                    call_entry = reserve(self, token, invoke, resource, lifecycle, cleanup, call_permit)
                 elif ledger is not None:
                     call_entry = ledger._reserve_call(self, token, resource, lifecycle, cleanup)
                 cancellation = getattr(self._operation_ledger, 'cancellation', None)

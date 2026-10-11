@@ -27,6 +27,30 @@ class NativeArbitrationTests(NativeBoundaryFixture, unittest.TestCase):
         self.assertIsInstance(prepared, Prepared)
         self.attempt = prepared.attempt
 
+    def test_reserved_containment_survives_forward_native_call_and_excludes_cleanup(self):
+        from truss._native_arbitration import _OperationCall
+        session = self.service.bind(self.attempt)
+        session.cleanup_limit = 2
+        rollback = _OperationCall(0, None, None, session.cleanup_permit)
+        release = _OperationCall(0, None, None, session.cleanup_permit)
+        with self.boundary._lock:
+            session._reserve_containment(rollback, release)
+        self.assertEqual(self.boundary.run('SELECT 1', token=self.token), [[1]])
+        root = session._call_root
+        self.assertEqual(root.held_cleanup, 2)
+        self.assertEqual(root.rollback_release_state.calls, session.calls)
+        self.assertTrue(session.calls[-1].native_call.capture_complete)
+        before = self.boundary.last_call
+        invoked = []
+        with self.assertRaises(NativeBoundaryRefusal):
+            self.boundary._call(lambda: invoked.append(True), self.token,
+                                cleanup=session.cleanup_permit)
+        self.assertEqual(invoked, [])
+        self.assertIs(self.boundary.last_call, before)
+        self.assertIs(session._call_root, root)
+        self.assertEqual(session.cleanup_calls, ())
+        self.assertFalse(self.boundary._quarantined)
+
     def test_real_prepared_execution_retains_original_calls_in_one_lease(self):
         session = self.service.bind(self.attempt)
         self.assertIsInstance(session, NativeOperationSession)

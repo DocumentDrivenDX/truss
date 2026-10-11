@@ -124,5 +124,49 @@ class NativeCallRootTests(unittest.TestCase):
         self.assertEqual(invoked, [])
 
 
+    def test_complete_branch_states_are_preallocated_and_keep_original_entries(self):
+        session = self.session()
+        rollback = _OperationCall(0, None, None)
+        release = _OperationCall(0, None, None)
+        root = session._reserve_containment(rollback, release)
+        self.assertIs(root.rollback_state.release_state, root.rollback_release_state)
+        self.assertEqual(root.rollback_state.cleanup_calls, (rollback,))
+        self.assertEqual(root.rollback_state.held_cleanup, 1)
+        self.assertEqual(root.rollback_release_state.cleanup_calls, (rollback, release))
+        self.assertEqual(root.rollback_release_state.held_cleanup, 0)
+        self.assertEqual(root.release_state.cleanup_calls, (release,))
+        self.assertEqual(root.release_state.held_cleanup, 1)
+        self.assertIs(root.release_state.rollback_entry, rollback)
+        self.assertEqual(root.release_state.retirement_state.held_cleanup, 0)
+        self.assertEqual(root.release_state.retirement_state.cleanup_calls, (release,))
+        self.assertIsNotNone(root.rollback_release_state.retirement_state)
+        with patch.object(_OperationCallRoot, 'build', side_effect=MemoryError('no allocation')):
+            # Root consumption itself does not allocate a branch state.
+            session._publish_call_root(root.rollback_state)
+            session._publish_call_root(session._call_root.release_state)
+        self.assertIs(session._call_root, root.rollback_release_state)
+
+    def test_generic_cleanup_cannot_consume_held_containment_capacity(self):
+        from truss._native_arbitration import _CleanupPermit
+        from truss._native_pg8000 import NativeBoundaryRefusal
+        session = self.session()
+        generation = SimpleNamespace(ended=False)
+        token = object()
+        boundary = SimpleNamespace(_operation=token, _operation_ledger=session,
+                                   _transaction_tracker=SimpleNamespace(
+                                       _state=SimpleNamespace(generation=generation)))
+        session.boundary = boundary
+        session.token = token
+        session.generation = generation
+        session.cleanup_limit = 2
+        session.cleanup_permit = _CleanupPermit(session)
+        root = session._reserve_containment(_OperationCall(0, None, None),
+                                            _OperationCall(0, None, None))
+        with self.assertRaises(NativeBoundaryRefusal):
+            session._check_call(boundary, token, session.cleanup_permit)
+        self.assertIs(session._call_root, root)
+        self.assertEqual(session.cleanup_calls, ())
+
+
 if __name__ == '__main__':
     unittest.main()

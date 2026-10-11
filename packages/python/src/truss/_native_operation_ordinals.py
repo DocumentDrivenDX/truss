@@ -14,6 +14,7 @@ class IssuedOperationAttempt:
     generation: object
     reservation: OrdinalReservation
     issuer: object = None
+    controls: object = None
 
     @property
     def ordinal(self):
@@ -31,8 +32,10 @@ class NativeOperationOrdinals:
         self.attempts=()
         self.closed=False
 
-    def issue(self,session):
+    def issue(self,session,*,reserve_controls=False):
         from ._native_adoption import is_published
+        if type(reserve_controls) is not bool:
+            raise NativeBoundaryRefusal('Exact control reservation selection required')
         with self.boundary._lock:
             b=self.boundary;generation=self.tracker._state.generation
             if (self.tracker._operation_ordinals is not self
@@ -62,7 +65,10 @@ class NativeOperationOrdinals:
             issuer=self.registry.bind(self,b,generation)
             attempt.issuer=issuer
             self.attempts=(*self.attempts,attempt)
-            try:result=issuer.reserve_into(generation,reservation)
+            try:
+                if reserve_controls:
+                    session._prepare_reserved_controls(attempt)
+                result=issuer.reserve_into(generation,reservation)
             except BaseException:
                 issuer.close(generation)
                 session.admission_closed=True

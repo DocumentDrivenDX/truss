@@ -21,7 +21,7 @@
     "cases": 3,
     "seconds": 100.751,
     "unittest_result": "OK",
-    "process_exit": "pending session57829",
+    "process_exit": 0,
     "scope": "ordinary call-root paths before widened pre-invoke fault guard"
   },
   "remaining": [
@@ -29,5 +29,12 @@
     "original registered four-family admission",
     "seven native semantic bodies and complete installation",
     "public consumer operations"
-  ]
+  ],
+  "routing_native_regression": {
+    "cases": 2,
+    "seconds": 585.629,
+    "unittest_result": "OK",
+    "process_exit": 0,
+    "scope": "routing draft before retained-session guard and combined-root changes"
+  }
 }
