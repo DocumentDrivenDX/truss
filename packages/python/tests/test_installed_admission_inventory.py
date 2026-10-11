@@ -9,7 +9,7 @@ class InstalledInventoryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         root=Path(__file__).resolve().parents[3]
-        receipt=json.loads((root/'docs/helix/04-build/evidence/design-audit/installed-role-paths-reviewed-native.json').read_text())
+        receipt=json.loads((root/'docs/helix/04-build/evidence/design-audit/installed-definer-final-reviewed-native.json').read_text())
         def packet(label):
             row=next(i for i in receipt['inventories'] if i['id']==label)
             return Inventory(tuple(Section(s['name'],QueryResult(tuple(s['columns']),tuple(tuple(r) for r in s['rows']))) for s in row['sections']),4096,1048576,'inventory_ordinary')
@@ -85,3 +85,47 @@ class InstalledInventoryTests(unittest.TestCase):
             with self.subTest(variant=variant):
                 self.assertEqual(self.check(packet).result,'scoped_mismatch')
                 self.assertEqual(self.check(self.original,packet).result,'scoped_mismatch')
+
+    def test_external_definer_matching_baseline_cannot_bless_elevation(self):
+        packet=self.packet('external-public-definer')
+        result=self.check(packet,packet)
+        self.assertEqual(result.result,'scoped_mismatch')
+        self.assertIn('callable_definer_privilege',result.reasons)
+    def test_definer_route_restoration_and_absence(self):
+        for label in ('external-definer-execute-revoked','external-definer-removed'):
+            with self.subTest(label=label):self.assertEqual(self.check(self.packet(label)).result,'scoped_match')
+    def test_legacy_eleven_sections_cannot_assert_no_definer(self):
+        legacy=replace(self.original,sections=tuple(s for s in self.original.sections if s.name!='callable-definers'))
+        self.assertEqual(self.check(legacy,legacy).reasons,('shape',))
+    def test_definer_exact_elevation_rows_on_both_sides(self):
+        packet=self.packet('external-public-definer')
+        original=next(s for s in packet.sections if s.name=='callable-definers')
+        for variant in ('duplicate','false-definer','false-namespace','false-execute','integer-boolean','wrong-oid'):
+            rows=list(original.result.rows);row=list(rows[0])
+            if variant=='duplicate':rows.append(rows[0])
+            elif variant=='wrong-oid':row[0]='invalid';rows[0]=tuple(row)
+            else:
+                index={'false-definer':7,'false-namespace':8,'false-execute':9,'integer-boolean':7}[variant]
+                row[index]=1 if variant=='integer-boolean' else False;rows[0]=tuple(row)
+            damaged=replace(packet,sections=tuple(replace(s,result=replace(s.result,rows=tuple(rows))) if s.name=='callable-definers' else s for s in packet.sections))
+            with self.subTest(variant=variant):
+                self.assertEqual(self.check(damaged).result,'scoped_mismatch')
+                self.assertEqual(self.check(self.original,damaged).result,'scoped_mismatch')
+
+    def test_empty_final_section_columns_obey_exact_budget_on_both_sides(self):
+        self.assertEqual(self.original.sections[-1].name,'callable-definers')
+        self.assertEqual(self.original.sections[-1].result.rows,())
+        required=sum(len(c) for s in self.original.sections for c in s.result.columns)
+        required+=sum(len(c) for s in self.original.sections for row in s.result.rows for c in row if type(c) is str)
+        exact=replace(self.original,maximum_text_units=required)
+        self.assertEqual(self.check(exact,exact).result,'scoped_match')
+        short=replace(self.original,maximum_text_units=required-1)
+        self.assertEqual(self.check(short).reasons,('resource',))
+        self.assertEqual(self.check(self.original,short).reasons,('resource',))
+
+    def test_hidden_namespace_definer_is_retained_and_refuses_matching_baseline(self):
+        packet=self.packet('external-definer-namespace-revoked')
+        rows=next(s.result.rows for s in packet.sections if s.name=='callable-definers')
+        self.assertEqual(len(rows),1)
+        self.assertIs(rows[0][8],False)
+        self.assertIn('callable_definer_privilege',self.check(packet,packet).reasons)
