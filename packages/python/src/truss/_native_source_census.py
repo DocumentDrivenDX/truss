@@ -15,7 +15,7 @@ from ._native_deadline import NativeOperationDeadline
 
 MAXIMUM_IMAGE=16777216
 CHUNK_BYTES=4096
-SOURCE_SHA256='9c805b87f4eb631cbfa250d877e826484e5797795b5ae824b3a4b2cade524bfb'
+SOURCE_SHA256='494a647e449032e21ebc5e2eb9903619b9385bf99cbde72c63923da44ee23465'
 # Separate explicit observer profile, never the ordinary/default text profile.
 # Conservative retained payload charges are not measurements of the whole heap.
 CENSUS_LIMITS=NativeTextLimits(columns=3,rows=4096,cell_bytes=8192,

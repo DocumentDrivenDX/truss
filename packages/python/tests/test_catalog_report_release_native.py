@@ -50,7 +50,7 @@ class CatalogReportReleaseNativeTests(NativeBoundaryFixture,unittest.TestCase):
         return self.connection.run('SELECT * FROM truss.runtime_select_catalog_report_release(:w,\'0\',\'0\',:profile)',
             w=writer,profile=self.configuration_profile.hex())
     def test_actual_policy_selected_from_original_configuration(self):
-        self.assertEqual(self.connection.run("SELECT current_setting('server_version_num')"),[['170011']])
+        self.assertEqual(self.connection.run("SELECT current_setting('server_version_num')"),[['180006']])
         self.archive();writer,ordinal,context=self.admit()
         self.assertEqual(self.select(writer),[[self.policy.hex(),self.digest,'7']])
         self.assertEqual(self.connection.run('SELECT count(*) FROM truss.operation_configuration'),[[1]])

@@ -1,4 +1,4 @@
-"""Compile original release definitions on an independent disposable PG17.11.
+"""Compile original release definitions on an independent disposable PG18.6.
 
 No installation constructor, target observation or target snapshot is consumed.
 The same registered projection selects compared fields, not whole catalog closure.
@@ -11,6 +11,7 @@ import tempfile
 from urllib.parse import urlparse,parse_qs
 from pg8000.native import Connection
 from truss import LocalPostgres
+from truss._runtime_profile import RUNTIME_DISTRIBUTION
 from truss._installation_statement_release import STATEMENTS_SHA256
 
 root=Path(__file__).resolve().parents[1]
@@ -35,7 +36,7 @@ with tempfile.TemporaryDirectory(prefix='truss-independent-release-') as directo
             backend_sha256=sha256(runtime.psql_path.with_name('postgres').read_bytes()).hexdigest()
             backend_description=connection.run('SELECT pg_catalog.version()')[0][0]
             version=connection.run("SELECT pg_catalog.current_setting('server_version_num')")[0][0]
-            if version!='170011':raise ValueError('Independent compiler profile requires PostgreSQL17.11')
+            if version!='180006':raise ValueError('Independent compiler profile requires PostgreSQL18.6')
             if connection.run("SELECT pg_catalog.to_regnamespace('truss')::pg_catalog.text")!=[[None]]:raise ValueError('Independent fresh namespace required')
             connection.run('BEGIN');connection.run('SET LOCAL search_path = pg_catalog, pg_temp')
             try:
@@ -48,7 +49,7 @@ with tempfile.TemporaryDirectory(prefix='truss-independent-release-') as directo
         finally:connection.close()
 paths=[asset_path,owner_path,query_path,Path(__file__).resolve()]
 value={'interface':'truss-selected-native-definition-baseline/0.1.0','nativeVersion':version,
-       'backendSha256':backend_sha256,'backendDescription':backend_description,'pgserverVersion':package_version('pgserver'),'pg8000Version':package_version('pg8000'),'fixedSessionSettings':{'search_path':'pg_catalog, pg_temp'},
+       'backendSha256':backend_sha256,'backendDescription':backend_description,'pgserverVersion':package_version(RUNTIME_DISTRIBUTION),'pg8000Version':package_version('pg8000'),'fixedSessionSettings':{'search_path':'pg_catalog, pg_temp'},
        'statementReleaseSha256':STATEMENTS_SHA256,'modelSha256':profile['modelSha256'],
        'ownerExportSha256':profile['ownerExportSha256'],'querySha256':sha256(query).hexdigest(),
        'sources':{str(p.relative_to(root)):sha256(p.read_bytes()).hexdigest() for p in paths},

@@ -8,6 +8,7 @@ import socket
 import subprocess
 import os
 import sys
+from truss._runtime_profile import SERVER_VERSION
 import tempfile
 from unittest.mock import patch
 
@@ -163,7 +164,7 @@ try:
 finally:
     listener.close()
 
-receipt = {'scope': 'Two concurrent owned PostgreSQL17.11 Unix-socket workers with TCP5432 occupied; native cleanup and injected failure controls',
+receipt = {'scope': f'Two concurrent owned PostgreSQL{SERVER_VERSION} Unix-socket workers with TCP5432 occupied; native cleanup and injected failure controls',
            'checks': checks, 'tcp5432': tcp_occupied, 'workerPostmasterPids': pids,
            'passed': True, 'producerSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
            'fixtureSha256': hashlib.sha256((Path(__file__).parent / 'native_fixture.py').read_bytes()).hexdigest(),

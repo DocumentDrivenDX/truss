@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "scope": "Focused installed consumer, supported-driver adoption, retained restart, isolated lifecycle, shared fresh database/role cleanup, Unix socket/TCP collision, signals and transaction timeout; no full engine or Lakebase acceptance",
+  "runtimeDistribution": "pgserver-pg18",
+  "runtimeVersion": "18.6.0",
+  "postgresql": "18.6",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "libpq": 180006,
+  "payloads": {
+    "pgserver": {
+      "wheelSha256": "719c3dae72eded898976a4813ce6321cf4bf5bf2350d9c21a5c1c5f7023ce55b",
+      "members": 1714,
+      "loaded": "/private/tmp/truss-pg18-consumer-env-20261011/lib/python3.11/site-packages/pgserver"
+    },
+    "truss": {
+      "wheelSha256": "3822afee43d8c87018a79d1315f6fc200c95905f31b93079430b663efd6f0081",
+      "members": 165,
+      "loaded": "/private/tmp/truss-pg18-consumer-env-20261011/lib/python3.11/site-packages/truss"
+    }
+  },
+  "outcomes": [
+    {
+      "case": "owned-lifecycle",
+      "passed": true,
+      "returncode": 0,
+      "elapsedSeconds": 99.75760320795234,
+      "log": "owned-lifecycle.log",
+      "logSha256": "f087e584a2e4fd316ac67ea5c5278b757cbd01c1a2a23665e1aa8da2c29c80ad"
+    },
+    {
+      "case": "supported-driver",
+      "passed": true,
+      "returncode": 0,
+      "elapsedSeconds": 2.0882337080547586,
+      "log": "supported-driver.log",
+      "logSha256": "95da08e466fedb613eae0617ccda1e9eb9c399fff0aa802238d16c9abd967915"
+    },
+    {
+      "case": "worker-cleanup-collisions",
+      "passed": true,
+      "returncode": 0,
+      "elapsedSeconds": 38.0422780419467,
+      "log": "worker-cleanup-collisions.log",
+      "logSha256": "d8a0ca2636346da6b4a9a7a761a91883431a919af34fa37a3eceaf394a3fb562"
+    },
+    {
+      "case": "module-interruption",
+      "passed": true,
+      "returncode": 0,
+      "elapsedSeconds": 24.864675124990754,
+      "log": "module-interruption.log",
+      "logSha256": "c5a9ff02e6069277f73481881340b48f094a2fb7c645092e15d975548032c754"
+    },
+    {
+      "case": "cli-signals",
+      "passed": true,
+      "returncode": 0,
+      "elapsedSeconds": 7.145729042007588,
+      "log": "cli-signals.log",
+      "logSha256": "204436ec2a50871ed94e5154475ac51234e53f4393f3496e730b29f51abf283b"
+    },
+    {
+      "case": "transaction-timeout",
+      "passed": true,
+      "returncode": 0,
+      "elapsedSeconds": 3.8036727500148118,
+      "log": "transaction-timeout.log",
+      "logSha256": "40fbe3b7c8fe4be8e0dfbedf1d741b05b06566722ba66084ccfa4e5534cf9d42"
+    }
+  ],
+  "elapsedSeconds": 186.71296337503009,
+  "sourceSha256": {
+    "scripts/check-local-runtime-smoke.py": "c6464e41579a7ed1df9507f6fca572b8dd627a339cfe137bf76adeace294ab0d",
+    "scripts/native_fixture.py": "8a446601062553f423e0bc93a11225b5c2d3cb887ae0b6b7de091fc0cc6b66d0",
+    "scripts/run-python-test-module.py": "3e8fb4756f3195f5e66c3b2005ef8d283d3aea215e247a627c89de9b0b70d0dc",
+    "scripts/check-native-worker-fixtures.py": "bc6558012e1d20bd16e92875ee4d68bd362886754618061ba120f14e28fefaa7",
+    "scripts/check-native-module-interruption.py": "1d5e224abee66d8e9a16cea8cf1ab070efd54935b6a556ab93cff185321c1622",
+    "scripts/check-python-installed-cli-signals.py": "52529e0898e22d3f894faa26e61b63a3a1fd43c4a9d8dea3122f73477bea9420",
+    "scripts/check-pg17-transaction-timeout.py": "41c4edb6d1faeadedb530cc7ba9cfde28973a865e533fb93ec45c2c6e08b6e8a",
+    "packages/python/tests/test_local_runtime.py": "feea4de9aca2555efa75ca5aeacbe177fa1d9a1bcb2d214aeb94491eed3fcaf0",
+    "packages/python/tests/test_psycopg_host_native.py": "5b5c5179b7c1cf18e2d7a80d5f30386bb542a97a6b20b713a29056cb06d9deb4"
+  },
+  "completeRuntimeQualified": false,
+  "lakebaseQualified": false
+}

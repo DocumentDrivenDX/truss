@@ -53,7 +53,7 @@ Bun test runs TypeScript development tests under ADR-001. A real Chromium runner
 
 ### Local native test infrastructure — selected 2026-10-11
 
-Routine native experiments share an owned pgserver17.11 Unix-socket cluster per
+Routine native experiments share an owned pgserver18.6 Unix-socket cluster per
 suite/worker. Allocate a fresh database and owner/probe roles per experiment;
 verify native database/role/membership baseline before and after cleanup. Refuse
 same-worker overlap. Failed setup/cleanup or producer death invalidates the worker;
@@ -62,13 +62,12 @@ and destructive cluster-setting tests on isolated clusters. Separate workers
 have distinct socket directories and disable TCP listening, so concurrent tests
 can run with a pre-existing TCP5432 listener.
 
-The [execution checkpoint](../04-build/local-runtime-installation-migration-plan.md#shared-native-test-workers--owner-direction-2026-10-11)
-traces this test infrastructure to CONTRACT-007 host custody and CONTRACT-011
-qualified evidence. All15 component groups pass on two workers, including132
-installed Python tests, with21 native cleanup/collision/failure controls. These
-are local component results; story acceptance and full deployment support retain
-their own qualifications. Cached verified wheels avoid source rebuilds during
-ordinary tests. Reproduce with `scripts/qualify-pgserver-pg17.py WHEEL --run-id FRESH_ID --workers 2`.
+The [consumer checkpoint](../04-build/local-runtime-installation-migration-plan.md#current-embedded-runtime-delivery--owner-decision-2026-10-11)
+selects reusable PostgreSQL18.6 wheels and focused installed consumer, supported
+driver, restart, socket/collision, cleanup, interruption and timeout smoke checks.
+The optional comprehensive corpus remains separate; historical17.11 results do
+not establish18.6 or Lakebase acceptance. Reproduce with
+`scripts/check-local-runtime-smoke.py RUNTIME_WHEEL TRUSS_WHEEL --run-id FRESH_ID`.
 
 ## Test Data
 

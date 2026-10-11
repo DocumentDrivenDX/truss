@@ -1,3 +1,4 @@
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION
 """Original invoker admission versus selected definer role transition; no grant adoption."""
 import hashlib,importlib.metadata,json,sys,tempfile
 from pathlib import Path
@@ -9,7 +10,7 @@ from native_fixture import get_server, evidence_directory
 if len(sys.argv)!=2 or Path(sys.argv[1]).name!=sys.argv[1]:raise SystemExit('Fresh receipt basename required')
 out=evidence_directory()/sys.argv[1]
 if out.exists():raise SystemExit('Receipt exists')
-if importlib.metadata.version('pgserver') not in ('0.1.4+truss.pg16.15','0.1.4+truss.pg17.11') or importlib.metadata.version('pg8000')!='1.31.5':raise SystemExit('Original runtime/driver required')
+if importlib.metadata.version(RUNTIME_DISTRIBUTION) != RUNTIME_VERSION or importlib.metadata.version('pg8000')!='1.31.5':raise SystemExit('Original runtime/driver required')
 paths=['docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql','packages/postgresql/native/issued-operation-admission/operation-admission.sql','docs/helix/02-design/contracts/reference-routine-design-v0.1.proposal.json'];paths += ['packages/postgresql/native/issued-operation-admission/operation-asserted-origin-admission.sql','packages/postgresql/native/issued-operation-admission/operation-epoch-context-admission.sql','packages/postgresql/native/issued-operation-admission/operation-configuration-context-admission.sql'];frozen={p:(ROOT/p).read_bytes() for p in paths};checks=[]
 def expect(name,expected,observed):
  if expected!=observed:raise ValueError(name+': mismatch')
@@ -21,7 +22,7 @@ with tempfile.TemporaryDirectory(prefix='truss-admission-elevation-') as directo
   def connect(user):
    c=pg8000.native.Connection(user=user,database=uri.path.lstrip('/'),unix_sock=str(Path(host)/f'.s.PGSQL.{port}'),ssl_context=False,timeout=5);connections.append(c);return c
   admin=connect('postgres');version=admin.run('SHOW server_version')[0][0]
-  if version != {'0.1.4+truss.pg16.15':'16.15','0.1.4+truss.pg17.11':'17.11'}[importlib.metadata.version('pgserver')]:raise ValueError('Native version mismatch')
+  if version != SERVER_VERSION:raise ValueError('Native version mismatch')
   for p in [*paths[:2],*paths[3:]]:admin.run(frozen[p].decode())
   # Deliberately broad fixture grants exercise the invoker prototype; they are
   # explicitly forbidden as a shortcut to ordinary protected runtime adoption.

@@ -160,7 +160,7 @@ def collect_inventory(port: InventoryPort, *, ordinary_role: str,
         retained.append(Section(name,result))
         return result
     context=read('context',CONTEXT,{})
-    if len(context.rows)!=1 or context.rows[0][:2]!=('170011','pg_catalog, pg_temp'):
+    if len(context.rows)!=1 or context.rows[0][:2]!=('180006','pg_catalog, pg_temp'):
         raise InventoryRefusal('context')
     routines=read('routines',ROUTINES,{})
     relations=read('relations',RELATIONS,{'homes':list(HOMES)})
@@ -323,7 +323,7 @@ def _admit_packet(packet: Inventory) -> None:
                 if type(cell) is int and not -(2**63)<=cell<2**63: raise InventoryRefusal('shape')
                 if text<0: raise InventoryRefusal('resource')
     context=next(s.result for s in packet.sections if s.name=='context')
-    if len(context.rows)!=1 or (context.rows[0][0] not in ('160015','170011') or context.rows[0][1]!='pg_catalog, pg_temp'): raise InventoryRefusal('context')
+    if len(context.rows)!=1 or (context.rows[0][0] not in ('160015','170011','180006') or context.rows[0][1]!='pg_catalog, pg_temp'): raise InventoryRefusal('context')
     sections={s.name:s.result for s in packet.sections}
     for section in packet.sections:
         for row in section.result.rows:

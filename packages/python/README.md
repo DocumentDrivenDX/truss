@@ -6,9 +6,9 @@ preparation, selected native host transaction controls, installation footprint i
 and inert assembly construction.
 Mutation/query/installation APIs remain unfinished.
 
-The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL17.11. The initial
+The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
-3.3.6, libpq18.6 and PostgreSQL17.11 on the selected local tuple. Install the
+3.3.6, libpq18.6 and PostgreSQL18.6 on the selected local tuple. Install the
 `[native]` extra. Other wheels, servers and Lakebase remain unqualified.
 
 Supply a caller-owned synchronous connection with an already active transaction:
@@ -79,54 +79,41 @@ does not prove an installed runtime, layout version or accepted catalog. It does
 not read Truss table/view bodies, begin or settle a transaction, or retry. Native
 failures propagate without a new recovery reference; a failed query may abort the caller's transaction, whose rollback remains the host's responsibility.
 
-For local PostgreSQL, use the verified private PostgreSQL17.11 wheel. This
-checkout has a verified local wheelhouse at `.cache/pgserver/pg17.11/wheels`;
-copy it or rebuild once if that ignored cache is absent. Other toolkit/build
-dependencies may be resolved from the package index:
+For local PostgreSQL, install the reusable `pgserver-pg18==18.6.0` wheel from
+[DocumentDrivenDX/pgserver](https://github.com/DocumentDrivenDX/pgserver). Imports
+remain `pgserver`; install only one pgserver distribution in an environment.
+The checked-in `_profiles/local-postgres-runtime.json` selects the exact tuple.
+Ordinary installs and tests use binaries and never build PostgreSQL.
 
 ```sh
 python3.11 -m venv .venv
-.venv/bin/pip install --find-links .cache/pgserver/pg17.11/wheels './packages/python[local]'
-.venv/bin/truss-local-postgres --data-dir .local/truss-postgres-17 --probe
+.venv/bin/pip install --only-binary=:all: --find-links .cache/pgserver/pg18.6/wheels './packages/python[local,native]'
+.venv/bin/truss-local-postgres --data-dir .local/truss-postgres-18 --probe
 ```
 
-The wheelhouse must contain `pgserver0.1.4+truss.pg17.11`, fasteners0.20,
-platformdirs4.12.4 and psutil7.2.2. The local extra, runtime requirements and
-`constraints/local-corrected.txt` select the exact private distribution; the
-public pgserver0.1.4 package cannot satisfy it. The wheel remains unpublished.
-Build it once when PostgreSQL or its recipe changes, then reuse it for normal
-tests. The [runtime checkpoint](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#postgresql-1711-embedded-runtime--owner-direction-2026-10-11)
-records the pinned source/build procedure, wheel hash, installed payload verification
-and all15 passing component qualification groups on macOS27 arm64/Python3.11.
+The verified macOS arm64 Python3.11 wheel is cached locally. Public release
+`pg18.6-pgv0.8.6-r1` is pending the build repository's CI; once published, its
+[release asset listing](https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r1)
+can replace the local `--find-links` directory. Runtime requirements select that
+listing and the pinned distribution. Do not install upstream `pgserver` alongside
+`pgserver-pg18`, and do not upgrade retained PostgreSQL17 data in place.
 
-The initial [installed suite](../../docs/helix/04-build/evidence/design-audit/python-pg17.11-installed-suite.json)
-passes132 tests; the [native timeout probe](../../docs/helix/04-build/evidence/design-audit/pgserver-pg17.11-transaction-timeout.json)
-observes actual transaction_timeout connection termination. These component checks
-retain the existing complete-engine, protected-installation and managed-service gates.
-Earlier16.2/16.15 evidence below remains historical.
-
-To reproduce the selected embedded qualification lane with an installed Truss wheel:
+Reproduce the focused consumer checks with both installed wheels:
 
 ```sh
-.venv/bin/python scripts/qualify-pgserver-pg17.py /path/to/truss_toolkit-0.0.1.dev0-py3-none-any.whl --run-id pg17-my-run --workers 2
+.venv/bin/python scripts/check-local-runtime-smoke.py /path/to/pgserver_pg18.whl /path/to/truss_toolkit.whl --run-id FRESH_ID
 ```
 
-This command requires the pinned pg8000/Weft test dependencies and a fresh run id.
-It reuses installed binaries and performs no source build. Twelve native groups
-share one cluster per worker with fresh databases and roles; default `--workers 1`
-uses one suite cluster. The expanded installed suite also shares socket workers across ordinary native
-psycopg and pg8000 fixture classes; `TRUSS_INSTALLED_SUITE_WORKERS` defaults to2 and may select1–8.
-Direct startup/shutdown fixtures, CLI signal/restart and transaction-timeout
-observations use separate owned clusters. Set `TRUSS_INSTALLED_SUITE_TIMEOUT`
-within30–1800 seconds for the expanded suite (default1800).
-
-Workers use unique short Unix socket directories and disable TCP listening.
-The socket's port suffix is local to its directory; workers do not contend for a
-TCP5432 listener. Fixtures refuse overlap, terminate leaked sessions only in their
-owned database, remove fixture roles and compare original native inventory.
-Failed setup/cleanup or leaked state invalidates the worker; confirmed shutdown
-precedes directory removal. The [shared-worker checkpoint](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#shared-native-test-workers--owner-direction-2026-10-11)
-records all15 passing groups and21 native cleanup/collision controls.
+Ordinary psycopg and pg8000 native fixture classes reuse one owned Unix-socket
+cluster per worker, with fresh databases/roles and verified cleanup. Worker
+sockets have unique short paths and TCP is disabled; port5432 does not contend
+across those directories. Lifecycle and destructive cluster tests remain isolated.
+`TRUSS_INSTALLED_SUITE_WORKERS` defaults to2 (range1–8); the optional full suite
+has a default1800-second bound. Workers disable background autovacuum for explicit
+NOWAIT semantic probes; this does not qualify maintenance concurrency.
+The comprehensive `scripts/qualify-pgserver.py` remains available separately.
+Historical17.11 receipts retain their original subset and versions; they do not
+establish18.6 corpus or Lakebase acceptance.
 
 Embed the local runtime in Python3.11:
 
@@ -144,7 +131,7 @@ caller exception. Use a new context to restart. Same-directory contexts refuse
 immediately through process-local and interprocess leases. Existing postmaster
 custody, nonempty non-PostgreSQL directories and incompatible major versions
 refuse without automatic retry, takeover or migration. The local candidate admits
-bundled17.11 with its exact private package identity; retired16.x packages refuse
+bundled18.6 with its exact reusable package identity; retired16.x packages refuse
 before startup. Other platform/version
 tuples still require qualification.
 
@@ -611,7 +598,7 @@ executor/session. Omitted configuration fields use `truss.contracts.ABSENT`.
 This entry point is composition groundwork for install/register/apply/read, not
 a usable graph implementation.
 
-### Explicit PostgreSQL 17.11 host profile
+### Explicit PostgreSQL 18.6 host profile
 
 The current integration target can be selected explicitly for a caller-owned
 psycopg 3.3.6 binary connection using libpq 18.6:
@@ -619,11 +606,11 @@ psycopg 3.3.6 binary connection using libpq 18.6:
 ```python
 from truss import PsycopgProfile, adopt_psycopg_host
 
-host = adopt_psycopg_host(connection, profile=PsycopgProfile(server=170011))
+host = adopt_psycopg_host(connection, profile=PsycopgProfile(server=180006))
 ```
 
 Only the exact selected tuple is accepted. There is no automatic version
-fallback. The default profile selects PostgreSQL17.11. Retired16.15 packages are rejected
+fallback. The default profile selects PostgreSQL18.6. Retired16.15 packages are rejected
 before embedded startup; earlier receipts retain their original historical scope.
 Graph capabilities still require their separate scoped native qualification.
 The host owns transaction start/end, connection lifecycle and pooling. Truss

@@ -5,6 +5,7 @@ import importlib.resources
 from pathlib import Path
 import subprocess
 import threading
+from ._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION
 
 
 class LocalRuntimeError(RuntimeError):
@@ -57,10 +58,10 @@ class LocalPostgres:
         try:
             import pgserver
             import fasteners
-            runtime_version = importlib.metadata.version('pgserver')
-            expected_server = {'0.1.4+truss.pg17.11': '17.11'}.get(runtime_version)
-            if expected_server is None:
-                raise LocalRuntimeError('Expected pinned pgserver0.1.4+truss.pg17.11')
+            runtime_version = importlib.metadata.version(RUNTIME_DISTRIBUTION)
+            expected_server = SERVER_VERSION
+            if runtime_version != RUNTIME_VERSION:
+                raise LocalRuntimeError(f'Expected pinned {RUNTIME_DISTRIBUTION}=={RUNTIME_VERSION}')
         except (ImportError, importlib.metadata.PackageNotFoundError) as error:
             raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
         expected_major = expected_server.split('.')[0]

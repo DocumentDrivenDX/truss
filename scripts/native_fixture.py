@@ -16,6 +16,7 @@ import uuid
 import fasteners
 import pg8000.native
 import pgserver
+from truss._runtime_profile import SERVER_VERSION
 
 
 _lifecycle_lock = threading.RLock()
@@ -73,8 +74,8 @@ class WorkerCluster:
                     time.sleep(0.02)
                 self.baseline = inventory(admin)
                 self.settings = dict(admin.run("SELECT name, setting FROM pg_settings WHERE name IN ('listen_addresses','port','unix_socket_directories','server_version','autovacuum')"))
-                if self.settings['listen_addresses'] != '' or self.settings['server_version'] != '17.11' or self.settings['autovacuum'] != 'off':
-                    raise RuntimeError('Expected socket-only PostgreSQL17.11 worker')
+                if self.settings['listen_addresses'] != '' or self.settings['server_version'] != SERVER_VERSION or self.settings['autovacuum'] != 'off':
+                    raise RuntimeError(f'Expected socket-only PostgreSQL{SERVER_VERSION} worker')
                 socket_directory = Path(self.settings['unix_socket_directories']).resolve()
                 if socket_directory != self.root / 'data':
                     raise RuntimeError('Worker socket directory must belong to its short owned path')

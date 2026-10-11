@@ -1,5 +1,60 @@
 # Local runtime, installation and migration execution plan
 
+## Current embedded runtime delivery — owner decision 2026-10-11
+
+The production target is now the owner's Lakebase PostgreSQL18.6 tuple.
+Truss consumes `pgserver-pg18==18.6.0` from the public
+[reusable build repository](https://github.com/DocumentDrivenDX/pgserver), retaining
+its `pgserver` import API. The build repository owns source checksums, platform
+builds, relocation, licenses and release wheels. Truss owns its consumer profile,
+installation definition projection and focused smoke checks. Do not rebuild
+PostgreSQL for routine development or rerun the full semantic corpus for a wheel
+packaging change.
+
+The selected profile is `_profiles/local-postgres-runtime.json`. Older private
+16.x/17.11 packages refuse before local startup. Reuse shared socket workers with
+fresh databases/roles; lifecycle tests remain isolated. The earlier broad17.11
+run was stopped on owner direction and is not a passing18.6 receipt. Current
+checks and release availability are recorded below; complete runtime and actual
+Lakebase TLS/token/transaction acceptance remain separate gates.
+
+
+## PostgreSQL18.6 focused consumer evidence — 2026-10-11
+
+The [installed consumer smoke receipt](evidence/design-audit/pg18-consumer-smoke-final-20261011/receipt.json)
+passes all six focused groups on macOS arm64/Python3.11:6 owned lifecycle tests,
+26 supported-driver adoption tests,21 cleanup/collision controls,4 interruption
+controls, actual CLI SIGTERM/SIGINT retained restart and native transaction_timeout.
+The run took186.7 seconds including startup and cleanup. It verifies1714 runtime
+wheel members and165 toolkit members byte-for-byte against the installed packages.
+The runtime wheel SHA256 is
+`719c3dae72eded898976a4813ce6321cf4bf5bf2350d9c21a5c1c5f7023ce55b`;
+the toolkit source snapshot wheel SHA256 is
+`3822afee43d8c87018a79d1315f6fc200c95905f31b93079430b663efd6f0081`.
+The [final merged artifact verification](evidence/design-audit/pg18-final-merged-artifact-20261011.json)
+checks the final toolkit wheel SHA256
+`e6e465d16c8989f098d401f9f52ae9d81e88f75ed375ebf11222ebdc9448ece5`.
+All installed members match that wheel, and the exercised lifecycle/driver/profile
+modules remain byte-identical to the six-group smoke snapshot. A fresh native
+startup/query/shutdown passes after the security merge. No repeated full corpus
+is implied by this artifact check.
+The initial smoke attempt stopped at a test subprocess import syntax error before
+native startup; its log is retained separately. No full18.6 corpus pass is claimed.
+
+The [independent definition compilation](evidence/design-audit/pg18-installation-definitions-20261011.json)
+retains all298 prior constraints and adds345 PostgreSQL18 native NOT NULL constraints
+(kind n); all86 indexes and63 expressions remain unchanged. Original owner SQL
+and ordered statement release are unchanged, and rollback is independently
+confirmed. This qualifies the selected source projection, not a complete installer.
+
+The macOS14 arm64 CPython3.11 wheel is delivered in the verified local cache.
+Public release `pg18.6-pgv0.8.6-r1` remains pending the build repository's platform
+matrix. Install only `pgserver-pg18`, because upstream `pgserver` and the other
+major distributions share the same import files. Wheel build/release maintenance
+belongs to the public repository; the historical Truss build entrypoints now
+refuse with that pointer. Actual Lakebase TLS, identity/token refresh and transaction
+acceptance and the complete protected runtime retain separate gates.
+
 ## Current driver/resource delivery gate — owner decision 2026-10-11
 
 Implement and qualify stock psycopg 3 as the Python baseline under ADR-003. First publish a supported-API connection/transaction adoption design with a pinned driver implementation/libpq/server/mode tuple; then run the TP-001 baseline resource and STP-044 semantic schedules through the installed consumer path. No pg8000 dependency, custom frame scanner, private receive/parser hook or exact backing-allocation ledger is required for this path. Historical pg8000 and strict transport receipts remain component evidence only.
@@ -8,7 +63,7 @@ Required release work is practical payload/value/page/batch/concurrency/iteratio
 
 Before custom PostgreSQL wire handling, private driver hooks, a fork or driver replacement, require the PRD's hard documented necessary deficiency, simpler-remedy comparison and owner-approved ADR. Existing source packets and component experiments do not authorize that work. Keep complete engine/corpus/installation/security acceptance; this decision removes an excessive mechanism, not those semantic requirements.
 
-## Current-main integration of the embedded17.11 tuple — 2026-10-11
+## Historical main integration of the embedded17.11 tuple — 2026-10-11
 
 The stock psycopg3 baseline, default server profile, installation compiler,
 live inventory collection and security epoch fence now select PostgreSQL17.11
@@ -19,8 +74,10 @@ confirms identical projected definitions (86 indexes,298 constraints,63 expressi
 unchanged owner SQL and ordered statement release. Complete runtime and Lakebase
 acceptance remain separate gates.
 
-The expanded installed suite uses owned socket workers for both ordinary psycopg and pg8000 fixture classes. The frozen historical report-release CLI is retired; current report, dispatch and staging tests run through the installed suite. The expanded installed suite uses owned socket workers with fresh databases and
-roles per native fixture class. Explicit class teardown and registered cleanup
+The expanded installed suite shares owned socket workers across ordinary psycopg
+and pg8000 fixture classes, with fresh databases and roles per class. The frozen
+historical report-release CLI is retired; current report, dispatch and staging
+tests run through the installed suite. Explicit class teardown and registered cleanup
 both release fixtures, including tests that delegate another class's setup.
 Lifecycle tests keep isolated clusters. Each module must restore the database,
 role and membership baseline; any failure discards its worker. The installed
@@ -33,7 +90,25 @@ worker and20.3 seconds for two workers, including startup and cleanup. The compo
 15-group comparison was105.8/50.2/48.4 seconds on the earlier132-test source; it is
 not a timing claim for the expanded current-main suite.
 
-## Initial shared native test workers — owner direction 2026-10-11
+## Historical experiment disposition — 2026-10-11
+
+Active runtime/profile/compiler/census/security paths are ported to PostgreSQL
+17.11. The eight frozen PostgreSQL16.2 experiment commands and the frozen
+report-release wrapper now refuse with a retirement notice and direct callers
+to the current qualification lane. Original receipts, producer preimages and
+Git history remain intact; their narrower observations are historical evidence,
+not current support claims. The retained pg16 census filename is a deprecated
+alias of the exact17.11-only SQL; current producers use the pg17 filename.
+
+Ordinary psycopg and pg8000 tests share workers. Worker startup disables background
+autovacuum and verifies the setting after reload so deliberate NOWAIT semantic
+probes do not depend on maintenance scheduling. This lane qualifies explicit
+actors; maintenance concurrency needs separate evidence. Fixture cleanup uses
+45-second statement and5-second lock limits with a60-second administrative client
+bound. Full-suite attempts with timeout, leaked delegated fixtures, an undeclared
+ICU skip, shared-memory exhaustion or a NOWAIT conflict remain superseded receipts.
+
+## Shared native test workers — owner direction 2026-10-11
 
 Routine native qualification now reuses **one pgserver17.11 cluster per suite or
 worker**, with a fresh database and owner role for each experiment. The
@@ -565,7 +640,11 @@ Actual initial macOS arm64/Python3.11 probe observed pgserver0.1.4 and PostgreSQ
 Full Truss SQL compatibility and installer qualification remain required on that
 exact server; retained17.9 evidence is separate.
 
-## PostgreSQL16.2 installation frontier
+## Historical PostgreSQL16.2 installation frontier
+
+The following receipts describe retired experiments. Their original sources are
+retained in receipt preimages and Git history; the linked16.2 command entrypoints
+now refuse. Use the current17.11 qualification lane for new evidence.
 
 The rollback-only [generated-layout probe](../../../scripts/check-pgserver-layout.py)
 executes original source-epoch0.16 owner-export bytes without schema rewriting.
@@ -598,7 +677,7 @@ as release versions. PostgreSQL17.9 and managed-service evidence remain separate
 
 ## Exact local adjunct composition
 
-The [composed probe](../../../scripts/check-pgserver-adjuncts.py) now runs original
+The historical [composed probe](../../../scripts/check-pgserver-adjuncts.py) ran original
 base and both UMF-generated adjunct exports plus their immutable guard SQL in one
 rollback-only PostgreSQL16.2 transaction. Its [receipt](evidence/design-audit/pgserver-composed-adjunct-component.json)
 pins all five sources. All50 declared native table names are present; independent

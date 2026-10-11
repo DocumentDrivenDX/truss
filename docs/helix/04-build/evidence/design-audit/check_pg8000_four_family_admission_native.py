@@ -1,3 +1,4 @@
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION
 """Actual four-family original confirmation/admission, not a complete engine."""
 import hashlib
 import importlib.metadata
@@ -29,7 +30,7 @@ if destination.exists():raise SystemExit('Original receipt exists')
 CORE_SHA='cac1e50502901bcea3ddab588e0350149dd8fd771156ae1c531a2a04b3925e26'
 if importlib.metadata.version('pg8000')!='1.31.5' or hashlib.sha256(Path(pg8000.core.__file__).read_bytes()).hexdigest()!=CORE_SHA:
     raise SystemExit('Original pinned driver required')
-if importlib.metadata.version('pgserver') not in ('0.1.4+truss.pg16.15','0.1.4+truss.pg17.11'):raise SystemExit('Corrected pgserver required')
+if importlib.metadata.version(RUNTIME_DISTRIBUTION) != RUNTIME_VERSION:raise SystemExit('Corrected pgserver required')
 paths=['docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql',
  'docs/helix/04-build/evidence/operation-configuration-storage.owner-export.sql',
  'packages/postgresql/native/source-epoch-lock.sql',
@@ -68,7 +69,7 @@ with tempfile.TemporaryDirectory(prefix='truss-four-family-admission-') as direc
             supplied.file.remaining_writes=512;supplied.file.remaining_send_bytes=16777216
             connection=OriginalControlConnection(user='postgres',database=uri.path.lstrip('/'),sock=supplied,ssl_context=False,startup_params={'client_encoding':'UTF8'})
             version=connection.parameter_statuses['server_version']
-            if version != {'0.1.4+truss.pg16.15':'16.15','0.1.4+truss.pg17.11':'17.11'}[importlib.metadata.version('pgserver')]:raise ValueError('Actual corrected native version required')
+            if version != SERVER_VERSION:raise ValueError('Actual corrected native version required')
             connection.execute_simple('BEGIN')
             actual=cells(connection.execute_simple("SELECT pg_catalog.pg_current_xact_id()::text,current_user::text,session_user::text,current_database()::text,pg_backend_pid()::text,(SELECT oid::text FROM pg_catalog.pg_roles WHERE rolname=current_user),(SELECT oid::text FROM pg_catalog.pg_roles WHERE rolname=session_user)"))[0]
             xid,actor,session_actor,database,pid,actor_oid,session_oid=actual

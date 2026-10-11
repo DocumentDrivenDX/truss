@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Disposable caller-reset compatibility experiment, not R4/R5 qualification."""
+from truss._runtime_profile import RUNTIME_DISTRIBUTION, RUNTIME_VERSION, SERVER_VERSION, SERVER_VERSION_NUM
 import hashlib
 import importlib.metadata
 import importlib.resources
@@ -66,7 +67,7 @@ with tempfile.TemporaryDirectory(prefix='truss-caller-reset-') as directory:
         server.cleanup()
 
 receipt = {'scope': 'Role/session reset observations on disposable pgserver; no installed isolation or origin profile',
-    'pgserver': importlib.metadata.version('pgserver'), 'serverVersion': version,
+    'pgserver': importlib.metadata.version(RUNTIME_DISTRIBUTION), 'serverVersion': version,
     'advisory': 'https://www.postgresql.org/support/security/CVE-2024-10978/',
     'binaryHashes': {name: hashlib.sha256((psql.parent / name).read_bytes()).hexdigest()
         for name in ('psql', 'postgres')},
