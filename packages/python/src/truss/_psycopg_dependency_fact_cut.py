@@ -150,35 +150,38 @@ def _capture_epoch_bound_dependency_cells(host, transaction, epoch, original_byt
         else:group['associations'].append(p.reference)
     if len(groups)>32 or any(len(g['fields'])>32 for g in groups.values()):
         raise ValueError('Bounded selected raw capture profile required')
-    def capture(cursor):
-        results=[];total_rows=0;total_bytes=0
-        for oid,group in sorted(groups.items()):
-            r=group['relation'];fields=group['fields']
-            terms=[sql.SQL('COALESCE(pg_catalog.octet_length({}::pg_catalog.text),0)').format(sql.Identifier(c.name)) for _,c in fields]
-            size=sql.SQL(' OPERATOR(pg_catalog.+) ').join(terms) if terms else sql.SQL('0')
-            overflow=sql.SQL('({}) OPERATOR(pg_catalog.>) 65536').format(size)
-            columns=[sql.SQL('CASE WHEN {} THEN NULL ELSE {}::pg_catalog.text END AS {}').format(overflow,sql.Identifier(c.name),sql.Identifier('f'+str(i))) for i,(_,c) in enumerate(fields)]
-            columns.append(sql.SQL('({})::pg_catalog.text AS oversize').format(overflow))
-            cursor.execute(sql.SQL('SELECT {} FROM ONLY {} LIMIT 101').format(sql.SQL(',').join(columns),sql.Identifier(r.schema,r.name)),prepare=False,binary=False)
-            if (cursor.description is None or tuple(d.name for d in cursor.description)!=tuple('f'+str(i) for i in range(len(fields)))+('oversize',)
-                    or any(d.type_code!=25 for d in cursor.description)):
-                raise ValueError('Original native raw-cell text descriptors required')
-            rows=cursor.fetchmany(101)
-            if len(rows)>100:raise ValueError('Bounded complete raw relation capture required')
-            total_rows+=len(rows)
-            if total_rows>512:raise ValueError('Bounded complete raw fixture capture required')
-            captured=[]
-            for row in rows:
-                if type(row) is not tuple or len(row)!=len(fields)+1 or row[-1]!='false':
-                    raise ValueError('Oversize or malformed native raw row refuses capture')
-                values=row[:-1]
-                for value,(_,c) in zip(values,fields):
-                    if value is None:
-                        if c.not_null:raise ValueError('Original non-null native value required')
-                    elif type(value) is not str:raise ValueError('Original native text cell required')
-                    else:total_bytes+=len(value.encode('utf8'))
-                if total_bytes>1048576:raise ValueError('Bounded complete raw payload capture required')
-                captured.append(tuple(values))
-            results.append(_DependencyRelationCells((r.schema,r.name,oid),tuple((ref,c.number,c.type_oid) for ref,c in fields),tuple(group['associations']),tuple(captured)))
-        return tuple(results)
-    return _run_dependency_fact_operation(host,transaction,selected,original_bytes,expected_sha256,providers,capture)
+    return _run_dependency_fact_operation(host,transaction,selected,original_bytes,expected_sha256,providers,lambda cursor:_capture_dependency_relation_cells(cursor,groups))
+
+
+def _capture_dependency_relation_cells(cursor, groups):
+    from psycopg import sql
+    results=[];total_rows=0;total_bytes=0
+    for oid,group in sorted(groups.items()):
+        r=group['relation'];fields=group['fields']
+        terms=[sql.SQL('COALESCE(pg_catalog.octet_length({}::pg_catalog.text),0)').format(sql.Identifier(c.name)) for _,c in fields]
+        size=sql.SQL(' OPERATOR(pg_catalog.+) ').join(terms) if terms else sql.SQL('0')
+        overflow=sql.SQL('({}) OPERATOR(pg_catalog.>) 65536').format(size)
+        columns=[sql.SQL('CASE WHEN {} THEN NULL ELSE {}::pg_catalog.text END AS {}').format(overflow,sql.Identifier(c.name),sql.Identifier('f'+str(i))) for i,(_,c) in enumerate(fields)]
+        columns.append(sql.SQL('({})::pg_catalog.text AS oversize').format(overflow))
+        cursor.execute(sql.SQL('SELECT {} FROM ONLY {} LIMIT 101').format(sql.SQL(',').join(columns),sql.Identifier(r.schema,r.name)),prepare=False,binary=False)
+        if (cursor.description is None or tuple(d.name for d in cursor.description)!=tuple('f'+str(i) for i in range(len(fields)))+('oversize',)
+                or any(d.type_code!=25 for d in cursor.description)):
+            raise ValueError('Original native raw-cell text descriptors required')
+        rows=cursor.fetchmany(101)
+        if len(rows)>100:raise ValueError('Bounded complete raw relation capture required')
+        total_rows+=len(rows)
+        if total_rows>512:raise ValueError('Bounded complete raw fixture capture required')
+        captured=[]
+        for row in rows:
+            if type(row) is not tuple or len(row)!=len(fields)+1 or row[-1]!='false':
+                raise ValueError('Oversize or malformed native raw row refuses capture')
+            values=row[:-1]
+            for value,(_,c) in zip(values,fields):
+                if value is None:
+                    if c.not_null:raise ValueError('Original non-null native value required')
+                elif type(value) is not str:raise ValueError('Original native text cell required')
+                else:total_bytes+=len(value.encode('utf8'))
+            if total_bytes>1048576:raise ValueError('Bounded complete raw payload capture required')
+            captured.append(tuple(values))
+        results.append(_DependencyRelationCells((r.schema,r.name,oid),tuple((ref,c.number,c.type_oid) for ref,c in fields),tuple(group['associations']),tuple(captured)))
+    return tuple(results)

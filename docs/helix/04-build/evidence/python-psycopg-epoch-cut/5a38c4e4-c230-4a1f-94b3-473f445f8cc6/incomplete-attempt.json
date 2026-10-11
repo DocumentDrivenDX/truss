@@ -1,0 +1,4 @@
+{
+  "status": "incomplete-input-discovery",
+  "scope": "No native fixture launched; source collector used wrong shared-fixture module path. Correct module is scripts/native_fixture.py. No qualification claimed."
+}

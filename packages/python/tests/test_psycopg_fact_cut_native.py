@@ -857,3 +857,41 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         with patch.object(producer,'_inspect_original_fact_sources',mutate):
             result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
         self.assertIsInstance(result,Ok);self.assertTrue(sources.policy.endswith(b' '))
+
+    def owned_identity_read(self,t):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_owned_read import run_owned_identity_read
+        raw,profile,sources=self.source_bound_profile();comparison=self.issue_bound_profile(profile)
+        return run_owned_identity_read(self.host,t,comparison,raw,sources)
+    def test_owned_semantic_read_permits_with_original_withholding_inside_host(self):
+        t=self.begin();result=self.owned_identity_read(t)
+        self.assertEqual(result,Ok({'decision':'permit','output':[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}]}))
+        self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.sec_staff'::regclass,'truss.sec_project'::regclass,'truss.sec_resource'::regclass,'truss.sec_assignment'::regclass,'truss.sec_ownership'::regclass)").fetchone(),(5,))
+    def test_owned_semantic_read_denies_inactive_assignment_without_raw_output(self):
+        t=self.begin();self.connection.execute('UPDATE truss.sec_assignment SET active=false')
+        result=self.owned_identity_read(t);self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'deny')
+        self.assertNotIn('identities',result.value)
+    def test_owned_semantic_indeterminate_rolls_back_operation_preserving_caller_work(self):
+        t=self.begin();self.connection.execute("CREATE TEMP TABLE read_prior(v text); INSERT INTO read_prior VALUES('keep'); INSERT INTO truss.sec_assignment VALUES('a1','s1','p1',true)")
+        result=self.owned_identity_read(t);self.assertIsInstance(result,Error)
+        self.assertEqual(self.connection.execute('TABLE read_prior').fetchall(),[('keep',)])
+        self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_backend_pid() AND mode='ShareLock' AND granted AND relation='truss.sec_assignment'::regclass").fetchone(),(0,))
+
+    def test_owned_umf_evaluation_holds_original_fact_and_authority_cuts(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_run=tool.subprocess.run;observed=[]
+        def during(command,*args,**kwargs):
+            if command[0]=='/opt/homebrew/bin/bun' and str(command[1]).endswith('evaluate-security-captured-identity-fixture.ts'):
+                self.assertEqual(self.connection.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.sec_staff'::regclass,'truss.sec_project'::regclass,'truss.sec_resource'::regclass,'truss.sec_assignment'::regclass,'truss.sec_ownership'::regclass,'truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)").fetchone(),(7,))
+                with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as writer:
+                    for statement in ('UPDATE truss.sec_assignment SET active=false','SELECT truss.runtime_fence_shared_authority_writer()'):
+                        with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(statement)
+                observed.append(True)
+            return original_run(command,*args,**kwargs)
+        t=self.begin()
+        with patch.object(tool.subprocess,'run',during):result=self.owned_identity_read(t)
+        self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit');self.assertEqual(observed,[True])
