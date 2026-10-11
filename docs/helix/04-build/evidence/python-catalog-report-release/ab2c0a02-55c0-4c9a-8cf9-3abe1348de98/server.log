@@ -1,0 +1,31 @@
+2026-10-11 11:51:01.036 EDT [67739] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 11:51:01.037 EDT [67739] LOG:  listening on Unix socket "/private/tmp/rl-sjrq8gx1/.s.PGSQL.5432"
+2026-10-11 11:51:01.045 EDT [67742] LOG:  database system was shut down at 2026-10-11 11:51:00 EDT
+2026-10-11 11:51:01.049 EDT [67739] LOG:  database system is ready to accept connections
+2026-10-11 11:51:01.719 EDT [67764] ERROR:  selected archive cut excludes same-backend writes
+2026-10-11 11:51:01.719 EDT [67764] CONTEXT:  PL/pgSQL function truss.runtime_fence_selected_archive_writes() line 13 at RAISE
+2026-10-11 11:51:01.719 EDT [67764] STATEMENT:  UPDATE truss.installation_archive SET artifact_bytes=decode('02','hex')
+2026-10-11 11:51:01.720 EDT [67764] ERROR:  selected archive cut excludes same-backend writes
+2026-10-11 11:51:01.720 EDT [67764] CONTEXT:  PL/pgSQL function truss.runtime_fence_selected_archive_writes() line 13 at RAISE
+2026-10-11 11:51:01.720 EDT [67764] STATEMENT:  DELETE FROM truss.installation_archive
+2026-10-11 11:51:01.720 EDT [67764] ERROR:  cannot TRUNCATE "installation_archive" because it has pending trigger events
+2026-10-11 11:51:01.720 EDT [67764] STATEMENT:  TRUNCATE truss.installation_archive
+2026-10-11 11:51:01.720 EDT [67764] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-11 11:51:01.720 EDT [67764] STATEMENT:  SAVEPOINT refusal
+2026-10-11 11:51:01.720 EDT [67764] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-11 11:51:01.720 EDT [67764] STATEMENT:  SAVEPOINT refusal
+2026-10-11 11:51:01.721 EDT [67764] ERROR:  current transaction is aborted, commands ignored until end of transaction block
+2026-10-11 11:51:01.721 EDT [67764] STATEMENT:  SELECT encode(artifact_bytes,'hex') FROM truss.installation_archive
+2026-10-11 11:51:01.729 EDT [67766] ERROR:  selected archive cut excludes same-backend writes
+2026-10-11 11:51:01.729 EDT [67766] CONTEXT:  PL/pgSQL function truss.runtime_fence_selected_archive_writes() line 13 at RAISE
+2026-10-11 11:51:01.729 EDT [67766] STATEMENT:  UPDATE truss.installation_archive SET artifact_bytes=decode('02','hex')
+2026-10-11 11:51:01.732 EDT [67767] ERROR:  selected archive cut excludes same-backend writes
+2026-10-11 11:51:01.732 EDT [67767] CONTEXT:  PL/pgSQL function truss.runtime_fence_selected_archive_writes() line 13 at RAISE
+2026-10-11 11:51:01.732 EDT [67767] STATEMENT:  DELETE FROM truss.installation_archive
+2026-10-11 11:51:01.735 EDT [67768] ERROR:  selected archive cut excludes same-backend writes
+2026-10-11 11:51:01.735 EDT [67768] CONTEXT:  PL/pgSQL function truss.runtime_fence_selected_archive_writes() line 13 at RAISE
+2026-10-11 11:51:01.735 EDT [67768] STATEMENT:  DELETE FROM truss.installation_archive
+2026-10-11 11:51:01.743 EDT [67740] LOG:  checkpoint starting: immediate force wait
+2026-10-11 11:51:01.874 EDT [67740] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.129 s, sync=0.001 s, total=0.132 s; sync files=5, longest=0.001 s, average=0.001 s; distance=5853 kB, estimate=5853 kB; lsn=0/1A59908, redo lsn=0/1A598D0
+2026-10-11 11:51:01.956 EDT [67739] LOG:  received immediate shutdown request
+2026-10-11 11:51:01.959 EDT [67739] LOG:  database system is shut down

@@ -111,7 +111,10 @@ def validate_configured_metadata(encoded, raw_context, writer, ordinal, raw_meta
         if row['target_incarnation']!=selection['incarnation']:raise ValueError('Original incarnation correspondence required')
     if epoch['transition_reason']=='initial':
         if epoch['predecessor_epoch'] is not None:raise ValueError('Initial epoch predecessor')
-    else:raise ValueError('Selected first-catalog initial epoch required')
+    elif epoch['transition_reason']=='restore':
+        if type(epoch['predecessor_epoch']) is not str or not epoch['predecessor_epoch'] or epoch['predecessor_epoch']==epoch['source_epoch']:
+            raise ValueError('Restore epoch predecessor')
+    else:raise ValueError('Selected epoch transition required')
     if (_hex(epoch['profile_bytes'],65536,'\\x').hex()!=context['sourceEpochProfileHex']
             or _hex(epoch['evidence_bytes'],1048576,'\\x').hex()!=context['sourceEpochEvidenceHex']
             or _hex(epoch['evidence_sha256'],32,'\\x')!=sha256(bytes.fromhex(context['sourceEpochEvidenceHex'])).digest()):
@@ -151,3 +154,52 @@ def validate_configured_metadata(encoded, raw_context, writer, ordinal, raw_meta
             or _hex(row['artifact_identity_sha256'],32,'\\x')!=sha256(identity.encode()).digest()):
         raise ValueError('Original release archive correspondence required')
     return raw_metadata
+
+
+def require_compact_metadata_correspondence(raw_metadata, compact):
+    """Compare already validated full rows to the compact configured source."""
+    rows=_native_rows(raw_metadata);capsule=rows['configuration'];epoch=rows['epoch']
+    if epoch['transition_reason']!='initial' or epoch['predecessor_epoch'] is not None:
+        raise ValueError('Original strict first-installation epoch required')
+    expected={'installationId':capsule['installation_id'],'sourceEpoch':capsule['source_epoch'],
+        'targetIncarnation':capsule['target_incarnation'],
+        'configurationGeneration':str(capsule['configuration_generation']),
+        'contextSha256':_hex(capsule['original_context_sha256'],32,'\\x').hex(),
+        'epochProfileSha256':sha256(_hex(epoch['profile_bytes'],65536,'\\x')).hexdigest(),
+        'epochEvidenceSha256':sha256(_hex(epoch['evidence_bytes'],1048576,'\\x')).hexdigest()}
+    for key,stem in (('configurationSha256','configuration'),('selectedBindingSha256','selected_binding'),
+                     ('installedInventorySha256','installed_inventory')):
+        expected[key]=_hex(capsule[stem+'_sha256'],32,'\\x').hex()
+    if any(compact.get(k)!=v for k,v in expected.items()):
+        raise ValueError('Original full and compact metadata correspondence required')
+
+
+def validate_catalog_resource_selection(source, result, release, raw_metadata):
+    _closed(source,'interfaceVersion scope writerXid operationOrdinal configurationGeneration releaseSha256 resources totalBytes')
+    if (source['interfaceVersion']!='truss-catalog-report-resources/0.1'
+        or source['scope']!='original_declared_archive_inputs_only'
+        or source['writerXid']!=result['writerXid'] or source['operationOrdinal']!=result['ordinal']
+        or source['configurationGeneration']!=release['configurationGeneration']
+        or source['releaseSha256']!=release['policySha256']):
+        raise ValueError('Original report resource selection coordinates required')
+    policy=json.loads(bytes.fromhex(release['policyHex']));expected=policy['resources']
+    resources=source['resources'];total=0;ids=set()
+    release_row_id=_native_rows(raw_metadata)['releaseArchive'][0]['archive_row_id']
+    if type(resources) is not list or len(resources)!=len(expected):
+        raise ValueError('Complete original report resource inventory required')
+    for actual,declared in zip(resources,expected,strict=True):
+        _closed(actual,'path sha256 archiveRowId bytes')
+        if any(type(v) is not str for v in actual.values()):
+            raise ValueError('Original report resource string fields required')
+        if actual['path']!=declared['path'] or actual['sha256']!=declared['sha256']:
+            raise ValueError('Original declared report resource correspondence required')
+        for key,maximum in (('archiveRowId',9223372036854775807),('bytes',1048576)):
+            value=actual[key]
+            if len(value)>19 or re.fullmatch('[1-9][0-9]*',value) is None or int(value)>maximum:
+                raise ValueError('Original report resource native domain required')
+        if int(actual['archiveRowId'])==release_row_id:
+            raise ValueError('Distinct original release and resource archive rows required')
+        if actual['archiveRowId'] in ids:raise ValueError('Unique original report archive rows required')
+        ids.add(actual['archiveRowId']);total+=int(actual['bytes'])
+    if total>4194304 or type(source['totalBytes']) is not str or source['totalBytes']!=str(total):
+        raise ValueError('Original complete report resource size required')

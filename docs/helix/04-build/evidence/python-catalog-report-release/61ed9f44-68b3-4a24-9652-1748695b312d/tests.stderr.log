@@ -1,0 +1,12 @@
+test_all_write_events_and_noop_statements_are_fenced (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_all_write_events_and_noop_statements_are_fenced) ... ok
+test_always_enabled_and_public_execution_revoked (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_always_enabled_and_public_execution_revoked) ... ok
+test_change_restore_cannot_begin_under_original_cut (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_change_restore_cannot_begin_under_original_cut) ... ok
+test_release_reparents_fence_and_later_rollback_preserves_it (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_release_reparents_fence_and_later_rollback_preserves_it) ... ok
+test_replica_mode_does_not_disable_fence (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_replica_mode_does_not_disable_fence) ... ok
+test_rollback_across_acquisition_releases_fence_same_xid (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_rollback_across_acquisition_releases_fence_same_xid) ... ok
+test_unselected_writes_and_reads_remain_available (test_archive_self_write_fence_native.ArchiveSelfWriteFenceNativeTests.test_unselected_writes_and_reads_remain_available) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 1.410s
+
+OK

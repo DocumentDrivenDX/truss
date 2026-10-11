@@ -94,8 +94,7 @@ class NativeCatalogCapture(NativeAdmissionCapture):
         original = bytes.fromhex(encoded)
         result = decode_acceptance_json(original)
         if (type(result) is not dict
-                or result.get('interfaceVersion')!=('truss-native-provisional-catalog/0.3'
-                    if self.encoded.original_configuration is not None else 'truss-native-provisional-catalog/0.2')
+                or result.get('interfaceVersion') not in ('truss-native-provisional-catalog/0.2','truss-native-provisional-catalog/0.4')
                 or result.get('writerXid')!=writer or result.get('ordinal')!=ordinal
                 or result.get('accepted') is not False or not _result_shape(result)):
             raise NativeBoundaryRefusal('Original provisional operation correspondence required')

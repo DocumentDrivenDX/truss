@@ -102,7 +102,11 @@ BEGIN
   RAISE EXCEPTION 'selected original catalog staging profile required' USING ERRCODE='0A000';
  END IF;
  PERFORM truss.runtime_require_catalog_lifecycle_observers();
- SELECT * INTO STRICT original_graph FROM truss.runtime_collect_empty_catalog_graph();
+ IF convert_from(original_context,'UTF8')::jsonb->>'interfaceVersion'='truss-native-operation-context/0.4' THEN
+  SELECT * INTO STRICT original_graph FROM truss.runtime_collect_configured_catalog_graph();
+ ELSE
+  SELECT * INTO STRICT original_graph FROM truss.runtime_collect_empty_catalog_graph();
+ END IF;
  IF original_graph.writer_xid IS DISTINCT FROM admitted.writer_xid
   OR original_graph.operation_ordinal IS DISTINCT FROM admitted.ordinal
   OR original_graph.effect_generation IS DISTINCT FROM '0' THEN
@@ -212,7 +216,14 @@ BEGIN
   admitted.writer_xid,admitted.ordinal,final_generation::text,revision,lifecycle_policy);
  index_declarations:=truss.runtime_collect_absent_binding_index_declarations(
   admitted.writer_xid,admitted.ordinal,final_generation::text,revision,index_policy);
- SELECT * INTO STRICT final_graph FROM truss.runtime_collect_empty_catalog_graph();
+ IF convert_from(original_context,'UTF8')::jsonb->>'interfaceVersion'='truss-native-operation-context/0.4' THEN
+  SELECT * INTO STRICT final_graph FROM truss.runtime_collect_configured_catalog_graph();
+  IF final_graph.metadata_source IS DISTINCT FROM original_graph.metadata_source THEN
+   RAISE EXCEPTION 'original configured metadata source cut required' USING ERRCODE='55000';
+  END IF;
+ ELSE
+  SELECT * INTO STRICT final_graph FROM truss.runtime_collect_empty_catalog_graph();
+ END IF;
  IF final_graph.writer_xid IS DISTINCT FROM original_graph.writer_xid
   OR final_graph.operation_ordinal IS DISTINCT FROM original_graph.operation_ordinal
   OR final_graph.empty_scope IS DISTINCT FROM original_graph.empty_scope

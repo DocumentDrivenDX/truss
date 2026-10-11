@@ -13,9 +13,7 @@ class ConfiguredCatalogStageTests(ConfiguredCatalogSourceStageTests):
     def setUpClass(cls):
         super().setUpClass()
         c=cls.Connection(**cls.kwargs)
-        try:
-            c.run((ROOT/'packages/postgresql/native/catalog-report/configured-stage.sql').read_text())
-            c.run((ROOT/'packages/postgresql/native/catalog-stage-configured.sql').read_text())
+        try:c.run((ROOT/'packages/postgresql/native/catalog-stage-configured.sql').read_text())
         finally:c.close()
 
     def encoded(self, **changes):

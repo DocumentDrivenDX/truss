@@ -1,0 +1,31 @@
+test_original_revision_free_sources_and_exact_evidence (test_catalog_source_candidate.OriginalCatalogCandidateTests.test_original_revision_free_sources_and_exact_evidence) ... ok
+test_copied_or_mutated_preparation_refused (test_catalog_source_candidate.OriginalCatalogCandidateTests.test_copied_or_mutated_preparation_refused) ... ok
+test_exact_native_source_carrier (test_catalog_source_candidate.NativeCatalogCandidateTests.test_exact_native_source_carrier) ... ok
+test_duplicate_missing_unknown_and_substituted_sources_refused (test_catalog_source_candidate.NativeCatalogCandidateTests.test_duplicate_missing_unknown_and_substituted_sources_refused) ... ok
+test_original_configuration_source_envelope_stages_actual_catalog (test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_original_configuration_source_envelope_stages_actual_catalog) ... ok
+test_changed_metadata_and_second_origin_refuse_before_catalog_effects (test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_changed_metadata_and_second_origin_refuse_before_catalog_effects) ... ok
+test_late_marker_change_refuses_and_preserves_host_work (test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_late_marker_change_refuses_and_preserves_host_work) ... ok
+test_plain_candidate_cannot_bypass_configured_checks (test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_plain_candidate_cannot_bypass_configured_checks) ... ok
+test_concurrent_release_insert_after_selection_is_fenced (test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_concurrent_release_insert_after_selection_is_fenced) ... ok
+test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert (test_catalog_source_candidate.ConfiguredCatalogSourceStageTests.test_same_writer_release_duplicate_after_selection_refuses_before_catalog_insert) ... ok
+setUpClass (test_configured_catalog_stage.ConfiguredCatalogStageTests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_configured_catalog_stage.ConfiguredCatalogStageTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-tjg3btu6/checkout/packages/python/tests/test_configured_catalog_stage.py", line 17, in setUpClass
+    c.run((ROOT/'packages/postgresql/native/catalog-report/configured-stage.sql').read_text())
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-tjg3btu6/dependencies/pg8000/native.py", line 235, in run
+    self._context = self.execute_simple(sql)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-tjg3btu6/dependencies/pg8000/core.py", line 694, in execute_simple
+    self.handle_messages(context)
+  File "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-release-execution-tjg3btu6/dependencies/pg8000/core.py", line 844, in handle_messages
+    raise context.error
+pg8000.exceptions.DatabaseError: {'S': 'ERROR', 'V': 'ERROR', 'C': '42723', 'M': 'function "runtime_stage_catalog_with_release" already exists with same argument types', 'F': 'pg_proc.c', 'L': '377', 'R': 'ProcedureCreate'}
+
+----------------------------------------------------------------------
+Ran 10 tests in 12.763s
+
+FAILED (errors=1)

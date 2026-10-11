@@ -1,0 +1,8 @@
+2026-10-11 11:52:14.277 EDT [68212] LOG:  starting PostgreSQL 16.15 on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit
+2026-10-11 11:52:14.278 EDT [68212] LOG:  listening on Unix socket "/private/tmp/rl-6biea1po/.s.PGSQL.5432"
+2026-10-11 11:52:14.288 EDT [68215] LOG:  database system was shut down at 2026-10-11 11:52:14 EDT
+2026-10-11 11:52:14.291 EDT [68212] LOG:  database system is ready to accept connections
+2026-10-11 11:52:15.761 EDT [68213] LOG:  checkpoint starting: immediate force wait
+2026-10-11 11:52:15.769 EDT [68213] LOG:  checkpoint complete: wrote 6 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.003 s, total=0.009 s; sync files=5, longest=0.002 s, average=0.001 s; distance=5857 kB, estimate=5857 kB; lsn=0/1A5AA00, redo lsn=0/1A5A9C8
+2026-10-11 11:52:42.818 EDT [68212] LOG:  received immediate shutdown request
+2026-10-11 11:52:42.821 EDT [68212] LOG:  database system is shut down

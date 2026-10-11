@@ -136,29 +136,41 @@ def encode_unissued_complete_report_wire(source_projection, required_sources):
     return prepare_canonical_wire_tree(wire)
 
 
-def validate_configured_catalog_sources(encoded,start,end,release,original_context,result):
-    """Selected release candidate from the same validated full native metadata."""
-    from ._native_catalog_metadata import validate_configured_metadata, _hex, _native_rows
-    if start['empty_scope']!=end['empty_scope']:
+def validate_configured_catalog_sources(start,end,release,original_context,result):
+    """Recognize original configured candidate sources; never issue report authority."""
+    if type(original_context) is not bytes or not 1<=len(original_context)<=1048576:
+        raise ValueError('Original configured context bytes required')
+    context=decode_acceptance_json(original_context)
+    context_fields={'interfaceVersion','xid','ordinal','sessionUser','actingUser','actorRoleOid',
+        'sessionRoleOid','database','backendPid','assertedOriginUtf8Hex','assertedOriginCaptureProfileHex',
+        'installationId','sourceEpoch','targetIncarnation','sourceEpochProfileHex','sourceEpochEvidenceHex'}
+    if (type(context) is not dict or set(context)!=context_fields
+            or any(type(v) is not str for v in context.values()) or context.get('interfaceVersion')!='truss-native-operation-context/0.4'
+            or context.get('xid')!=result['writerXid'] or context.get('ordinal')!=result['ordinal']):
+        raise ValueError('Original configured context correspondence required')
+    if start['metadata_source']!=end['metadata_source']:
         raise ValueError('Original configured metadata cut required')
-    scope=decode_acceptance_json(start['empty_scope'].encode('utf8'))
-    if (type(scope) is not dict or set(scope)!={'interfaceVersion','businessRelations','metadataUtf8Hex'}
-            or scope['interfaceVersion']!='truss-configured-empty-graph/0.1'):
-        raise ValueError('Original configured full metadata scope required')
-    raw=_hex(scope['metadataUtf8Hex'],32768)
-    validate_configured_metadata(encoded,original_context,result['writerXid'],result['ordinal'],raw)
-    native=_native_rows(raw)
-    capsule=native['configuration'];epoch=native['epoch']
-    metadata={'interfaceVersion':'truss-configured-catalog-metadata/0.1',
-        'installationId':capsule['installation_id'],'sourceEpoch':capsule['source_epoch'],
-        'targetIncarnation':capsule['target_incarnation'],
-        'configurationGeneration':str(capsule['configuration_generation']),
-        'contextSha256':sha256(original_context).hexdigest(),
-        'configurationSha256':_hex(capsule['configuration_sha256'],32,'\\x').hex(),
-        'selectedBindingSha256':_hex(capsule['selected_binding_sha256'],32,'\\x').hex(),
-        'installedInventorySha256':_hex(capsule['installed_inventory_sha256'],32,'\\x').hex(),
-        'epochProfileSha256':sha256(_hex(epoch['profile_bytes'],65536,'\\x')).hexdigest(),
-        'epochEvidenceSha256':_hex(epoch['evidence_sha256'],32,'\\x').hex()}
+    metadata=decode_acceptance_json(start['metadata_source'].encode('utf8'))
+    fields={'interfaceVersion','installationId','sourceEpoch','targetIncarnation',
+            'configurationGeneration','contextSha256','configurationSha256',
+            'selectedBindingSha256','installedInventorySha256','epochProfileSha256','epochEvidenceSha256'}
+    if (type(metadata) is not dict or set(metadata)!=fields
+            or any(type(v) is not str for v in metadata.values())
+            or metadata['interfaceVersion']!='truss-configured-catalog-metadata/0.1'
+            or metadata['contextSha256']!=sha256(original_context).hexdigest()
+            or any(metadata[k]!=context.get(k) for k in ('installationId','sourceEpoch','targetIncarnation'))):
+        raise ValueError('Complete original configured metadata fields required')
+    for key in ('configurationSha256','selectedBindingSha256','installedInventorySha256'):
+        value=metadata[key]
+        if len(value)!=64 or any(c not in '0123456789abcdef' for c in value):
+            raise ValueError('Exact original configuration digest required')
+    for key,maximum in (('sourceEpochProfileHex',131072),('sourceEpochEvidenceHex',2097152)):
+        value=context.get(key)
+        if type(value) is not str or not 2<=len(value)<=maximum or len(value)%2 or any(c not in '0123456789abcdef' for c in value):
+            raise ValueError('Bounded original epoch bytes required')
+        target='epochProfileSha256' if key=='sourceEpochProfileHex' else 'epochEvidenceSha256'
+        if metadata[target]!=sha256(bytes.fromhex(value)).hexdigest():
+            raise ValueError('Original epoch metadata digest correspondence required')
     fields={'interfaceVersion','writerXid','operationOrdinal','initialEffectGeneration',
             'effectGeneration','configurationGeneration','policyHex','policySha256','scope'}
     if (type(release) is not dict or set(release)!=fields
@@ -179,3 +191,9 @@ def validate_configured_catalog_sources(encoded,start,end,release,original_conte
     return {'scope':'configured_native_release_candidate_only','metadata':metadata,
             'selectedReportProfile':{'identity':'truss-catalog-report-release','version':'0.1.0','sha256':RELEASE_SHA256},
             'registeredAuthority':False,'acceptedReportQualified':False,'currentStateRevalidated':False}
+
+
+def require_configuration_profile_source(profile_hex):
+    profile=files('truss').joinpath('_profiles/catalog-report-configuration.json').read_bytes()
+    if profile_hex!=profile.hex():
+        raise ValueError('Original selected configuration profile required')

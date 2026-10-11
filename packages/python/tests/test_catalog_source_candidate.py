@@ -96,6 +96,7 @@ class ConfiguredCatalogSourceStageTests(NativeBoundaryFixture,unittest.TestCase)
                 'catalog-epoch-context','operation-configuration-current','catalog-admission-configuration',
                 'canonical-string-bytes','canonical-tree-bytes','catalog-report/source-candidate',
                 'catalog-report/release-selection','catalog-report/configured-metadata',
+                'catalog-report/configured-graph','catalog-report/resource-selection','catalog-report/configured-stage',
                 'catalog-report/empty-graph','catalog-report/fresh-lifecycle',
                 'catalog-report/absent-binding-index-declarations','edge-limit/verify-current-scope','catalog-stage-issued'):
                 c.run((ROOT/f'packages/postgresql/native/{source}.sql').read_text())
@@ -121,6 +122,10 @@ class ConfiguredCatalogSourceStageTests(NativeBoundaryFixture,unittest.TestCase)
         self.connection.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
             artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
             'truss.catalog-report-release/0.1.0',:raw,sha256(convert_to('truss.catalog-report-release/0.1.0','UTF8')))""",raw=policy)
+        for item in json.loads(policy)['resources']:
+            self.connection.run("""INSERT INTO truss.installation_archive(installation_id,artifact_role,
+                artifact_identity,artifact_bytes,artifact_identity_sha256) VALUES('guard-fixture','input',
+                :identity,:raw,sha256(convert_to(:identity,'UTF8')))""",identity=item['path'],raw=(ROOT/item['path']).read_bytes())
     def tearDown(self):
         self.connection.run('ROLLBACK');self.connection.run('DELETE FROM truss.installation_admission');self.connection.close()
     def admit(self):

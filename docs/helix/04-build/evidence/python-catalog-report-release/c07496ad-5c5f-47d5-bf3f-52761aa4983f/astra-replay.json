@@ -1,0 +1,128 @@
+{
+  "kind": "independent retained SMT replay and exact source/preimage audit",
+  "auditedAtUtc": "2026-10-11T15:55:31.264550+00:00",
+  "receipt": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/archive-self-write-fence-formal/43b2b85f-e215-4086-94ac-cdd64424fd6c/receipt.json",
+  "receiptSha256": "5d936c15da7cf5bbf9b20047505b27dfdff9decf8d841d0c2aaed16d6b118242",
+  "solver": "4.15.4",
+  "sourcePins": [
+    {
+      "path": "scripts/prove-archive-self-write-fence.py",
+      "sha256": "3879717a1c69572e6e01e4e77e1b121c965de6730f90f9dca47313f5ba6a3833",
+      "currentMatches": true,
+      "preimageMatches": true,
+      "exactBytesMatch": true
+    },
+    {
+      "path": "packages/postgresql/native/catalog-report/archive-self-write-fence.sql",
+      "sha256": "b37e86e1531388738288c27df2b1fdbc67abcbde8a0beb4e687615a835c71fb2",
+      "currentMatches": true,
+      "preimageMatches": true,
+      "exactBytesMatch": true
+    },
+    {
+      "path": "packages/python/tests/test_archive_self_write_fence_native.py",
+      "sha256": "e5dc136e8d23f5d2fec5849fd013b0b359e7dd748acbe1cb14037c94886ea0cb",
+      "currentMatches": true,
+      "preimageMatches": true,
+      "exactBytesMatch": true
+    },
+    {
+      "path": "scripts/check-python-catalog-report-release-native.py",
+      "sha256": "3a4ec9ff8d950198e9119bfbb12566a2dfee2014607eb31da609092c07b1b4dc",
+      "currentMatches": true,
+      "preimageMatches": true,
+      "exactBytesMatch": true
+    }
+  ],
+  "queries": [
+    {
+      "id": "fenced_step_preserves_state",
+      "file": "fenced_step_preserves_state.smt2",
+      "sha256": "f74186bfa932e362c81134d3e4c8a8d0becec1189b906903241a4cd7cb6e0699",
+      "retainedDigestMatches": true,
+      "expected": "unsat",
+      "observed": "unsat",
+      "independentReplay": "unsat",
+      "matches": true,
+      "model": null
+    },
+    {
+      "id": "fenced_successful_mutation_unreachable",
+      "file": "fenced_successful_mutation_unreachable.smt2",
+      "sha256": "359fe3ae72bf3655671440404768e3512435ac5005ab8f74a0cacb69e7f12939",
+      "retainedDigestMatches": true,
+      "expected": "unsat",
+      "observed": "unsat",
+      "independentReplay": "unsat",
+      "matches": true,
+      "model": null
+    },
+    {
+      "id": "read_step_preserves_state_without_fence",
+      "file": "read_step_preserves_state_without_fence.smt2",
+      "sha256": "452286777c55dca02c092db22c5a75bbff6fb4a3bfd50e05495732a54ab78a4a",
+      "retainedDigestMatches": true,
+      "expected": "unsat",
+      "observed": "unsat",
+      "independentReplay": "unsat",
+      "matches": true,
+      "model": null
+    },
+    {
+      "id": "fenced_two_step_change_restore_unreachable",
+      "file": "fenced_two_step_change_restore_unreachable.smt2",
+      "sha256": "4f95169127c4566fc75d601eb00b4006f3acc109b88481823bb65b5d43710c24",
+      "retainedDigestMatches": true,
+      "expected": "unsat",
+      "observed": "unsat",
+      "independentReplay": "unsat",
+      "matches": true,
+      "model": null
+    },
+    {
+      "id": "omitted_fence_allows_change_restore",
+      "file": "omitted_fence_allows_change_restore.smt2",
+      "sha256": "a08f89411c54870d2a76e86fa6760757ac031b38d9d1c55380e7bb0508a39fc4",
+      "retainedDigestMatches": true,
+      "expected": "sat",
+      "observed": "sat",
+      "independentReplay": "sat",
+      "matches": true,
+      "model": "[desired = 1,\n state = 0,\n mutate = True,\n final = 0,\n alive = True,\n intermediate = 1,\n installed = False]"
+    },
+    {
+      "id": "rollback_crossing_cut_allows_later_change",
+      "file": "rollback_crossing_cut_allows_later_change.smt2",
+      "sha256": "3905f4dc44a88204aeb87f51abf72f550a3b2177e23f1a3309e28c23dd956bbc",
+      "retainedDigestMatches": true,
+      "expected": "sat",
+      "observed": "sat",
+      "independentReplay": "sat",
+      "matches": true,
+      "model": "[desired = 1,\n state = 0,\n mutate = True,\n alive = False,\n intermediate = 1,\n installed = True]"
+    },
+    {
+      "id": "disabled_trigger_allows_change",
+      "file": "disabled_trigger_allows_change.smt2",
+      "sha256": "16d116b5f4c6547b47b0be7fa1e6d2b4411d94ebff07facb9557ebb24d3d372d",
+      "retainedDigestMatches": true,
+      "expected": "sat",
+      "observed": "sat",
+      "independentReplay": "sat",
+      "matches": true,
+      "model": "[desired = 1,\n state = 0,\n mutate = True,\n alive = True,\n intermediate = 1,\n installed = False]"
+    }
+  ],
+  "counts": {
+    "sat": 3,
+    "unsat": 4,
+    "unknown": 0
+  },
+  "supplementalPremiseConsistency": {
+    "status": "sat",
+    "model": "[m = True,\n final = 7,\n state = 7,\n a = True,\n mid = 7,\n desired = 9,\n i = True]",
+    "scope": "Guard active and attempted mutation with distinct desired state; no native refinement."
+  },
+  "scope": "Conditional transition algebra only; every mutation reaching installed fence and truthful actual-lock predicate remain premises. No native execution or producer execution by reviewer.",
+  "status": "replay-and-pins-match"
+}
