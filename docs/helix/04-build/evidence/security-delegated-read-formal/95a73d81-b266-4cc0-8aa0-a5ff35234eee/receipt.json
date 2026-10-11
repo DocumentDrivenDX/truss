@@ -1,0 +1,58 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-delegated-read.py": "fe5725e4305db659dfd1cd43079e8c9283a8c9c48ac39ae019a0ac33b375026e",
+    "scripts/security_owned_read.py": "ec5395ac1260aa365f06c80a300b1f18d1cbe669bf6ec473ea6217e4aaeb5321",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "31000ae911067480d8b4ad40f073e580ab780866172d522ec70c1de3252fec29",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "52cefc7b764ad8b20706a86e46ab8d82663e360d2152e3fc8e153581438e4270"
+  },
+  "queries": [
+    {
+      "id": "missing_original_caller_prevents_release",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "2fa8d7b04d1c45d3ce7c7566a31f10b4590977df4634fd93ab3728ca294ded63",
+      "model": null
+    },
+    {
+      "id": "missing_original_executor_prevents_release",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "098e085c598e194452e512fada02784e1015686f49ff70027a477e343f14754d",
+      "model": null
+    },
+    {
+      "id": "retired_guard_prevents_protected_release",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "aabd77347ae9e157a0c96b3fe8744460ee2daa8bc93740f88604a24d5ad8fa1b",
+      "model": null
+    },
+    {
+      "id": "trusted_delegation_does_not_require_caller_private_access",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "7e41eb099ce9ba97454250320baa96270021463662cea4f1028fb3c7bd85cf1d",
+      "model": "[caller_private_access = False,\n caller_verified = True,\n executor_verified = True,\n release = True,\n guard_active = True,\n decision_permit = True]"
+    },
+    {
+      "id": "omitted_release_guard_can_publish_after_retirement",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "399c643c0b0eb7278b5fba5cb367c29fc57f1d8a03e9cc8dad4963199c3ae5b7",
+      "model": "[guard_active = False,\n release = True,\n decision_permit = True]"
+    }
+  ],
+  "scope": "Abstract original caller/executor verification and live release guard. The protected release rule excludes missing custody or retired guard. Trusted delegation can evaluate without caller private-table access; omitted guard permits release after retirement.",
+  "limitations": [
+    "No native privilege/host lease/SQL/JSON/UMF/connection-authentication refinement proof",
+    "Trusted service, original verified contexts and live guard are premises; installed issuer/mapping/package custody and complete lifetime remain unqualified",
+    "No authenticated caller/issuer, original writer installation/ACL closure, full authority admission or protected final release proof"
+  ]
+}

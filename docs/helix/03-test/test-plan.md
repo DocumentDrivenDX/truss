@@ -1017,3 +1017,87 @@ The owned within-host evaluator remains an administrative flat-table spike;
 ordinary caller, full original issuer/mapping/package custody, complete role/ACL
 lifetime, graph decoder and protected final release remain open. No new backend
 acceptance binding; last full checkpoint26/132,106 missing. Goal active.
+
+
+### Native caller-bound subject selection — 2026-10-11
+
+Private source-bound provider profile0.3 adds exact session/effective role OIDs
+and original typed Core subject-key values. Native role correspondence is observed
+inside the original host/fact cut before raw capture in both fixed capture and
+the owned semantic tool. UMF's original key encoder validates/normalizes the
+selected key; the evaluator receives exactly one matching subject, not all Staff
+rows. Missing/ambiguous subject or role mismatch refuses without semantic output.
+Legacy0.1/0.2 remain explicitly scoped subsets, not authenticated caller profiles.
+
+Five native methods exercise real nonowner session with multiple Staff records:
+assigneds1 permits with original withholding, unassigneds2 denies, mismatched
+native role refuses, missing subject refuses, and fixed raw capture cannot skip
+caller correspondence. Fixture-issued generations are restored after actor
+connection/role cleanup. Initial499b30da retains generation-contamination failures;
+c4df45ef retains two positive failures from plain strings instead of original
+Core typed key literals. Neither is qualification evidence.
+Final `evidence/python-psycopg-epoch-cut/d5a5b6ef-39f7-4ef8-9181-cc3f2f9e8982`
+passes152 methods on PostgreSQL18.6 (101 fact/dependency/role/caller,16 graph,nine
+epoch,26 adoption), module boundaries,142 current/archived Truss pins,363 original
+UMF sources,1705 native payload pins and three independent
+stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-caller-binding-formal/41315cae-22d0-4128-a0dc-45542dd20b46`
+passes five fresh-context queries (three UNSAT/two SAT), retaining four source
+preimages and SMT/model receipts. Under faithful native identity capture and
+retained canonical subject selection, session/effective mismatches and subject
+substitution refuse. Caller claims without capture and unauthorized issuer
+semantic mappings have countermodels. No database authentication/Core key
+encoding/JSON/Python/PostgreSQL refinement or full authority theorem.
+
+Trace CONTRACT-063/STP-056 B01/B05/B10/B11/B12 and US-056 AC1/AC5/AC8/AC9/AC10
+prerequisites only. Actor fixtures retain broad native grants and administrator-
+issued subject mapping/trusted=true premises. Direct private-fact protection,
+issuer/mapping authority, full reachable-role/routine/ACL/lifetime closure, graph
+decoding and ordinary protected final release remain open. No backend acceptance
+binding; last full checkpoint26/132,106 missing. Goal active. Next qualify original
+subject-mapping issuer custody and remove ordinary direct private-fact bypasses
+before exposing protected reads.
+
+
+### Privilege-separated owned read service boundary — 2026-10-11
+
+Private profile0.4 retains separate original caller and executor session/effective
+role OIDs. Caller subject selection remains original typed Core keys. A trusted
+owned application holds both host references: the ordinary caller host operation
+captures actual native caller identity; its scope encloses a separate executor
+host operation holding epoch/fact cuts and original UMF evaluation. Executor
+identity and observed database OID must correspond, alongside configured endpoint
+parameters. These comparisons are not independent server authentication. Neither
+existing invoker elevation guards nor fixed raw-capture caller checks are removed;
+raw capture cannot consume0.4 without the original delegated caller scope.
+
+Four native methods use a catalog-only caller with schema USAGE and no private
+table/internal function grants. Actual direct SELECT, COUNT and writer helper
+EXECUTE refuse42501 under caller savepoint containment, while original delegated
+evaluation permits assigneds1 with withholding and denies unassigneds2. Wrong
+executor identity refuses; raw-capture shortcut refuses before execution. Only
+original determinate decisions/dispositions leave the trusted service spike.
+Final `evidence/python-psycopg-epoch-cut/da76c214-655b-4a04-aeca-24916d4307ce`
+passes156 methods on PostgreSQL18.6 (105 fact/dependency/role/delegation,16 graph,
+nine epoch,26 adoption), module boundaries,142 current/archived Truss pins,363
+original UMF sources,1705 native payload pins and three independent
+stop0/status3/socket-absent cleanups. Earlierb069e2cd passes155 methods under its
+original source tuple, without the final database/raw-shortcut controls.
+
+Formal `evidence/security-delegated-read-formal/95a73d81-b266-4cc0-8aa0-a5ff35234eee`
+passes five fresh-context queries (three UNSAT/two SAT), retaining four exact
+source preimages and SMT/model receipts. Abstract original caller/executor
+verification plus live release guard exclude missing custody and retirement;
+trusted delegation can evaluate without caller private-table privilege. Omitting
+release guard admits publication after retirement. No native privilege/host lease/
+SQL/JSON/UMF/connection authentication refinement theorem.
+
+Trace CONTRACT-063/STP-056 B01/B04/B10/B11/B12/L03 and US-056 AC1/AC5/AC8/AC9/AC10
+prerequisites. This is an owned service architecture spike, not a database grant
+of executor authority or a public request API. Trusted application credential/
+target custody, original issuer/mapping/package provenance, all-role/ACL/source
+lifetime, graph decoding and protected final release remain open. No backend
+acceptance binding; last full checkpoint26/132,106 missing. Goal active. Next
+qualify trusted service caller/target/credential custody and complete reachable
+privilege inventory before admitting ordinary protected disclosure.
