@@ -1,0 +1,104 @@
+{
+  "interface": "truss-python-catalog-report-assembly-evidence/0.1",
+  "scope": "private_original_source_projection_and_unissued_complete_report_wire_codec_only",
+  "sourceSha256": {
+    "packages/postgresql/native/catalog-stage-issued.sql": "63e5bf8c91f7c99b96b6aeef69637ea167ed2de141e3973a1afba6dda4e71b64",
+    "packages/python/pyproject.toml": "9dd2f7a39eae700f4a2f9d267f985b3d7b3513bc0d7a3ea8660afee92fdfc978",
+    "packages/python/src/truss/_canonical_wire_tree.py": "0297e1f2cb813f3703a8ae42316d76fc4adecc5b01049a7e4349e77bc619df96",
+    "packages/python/src/truss/_catalog_report_assembly.py": "b06f60344f2d11bfbb7845b0ff51f47aa4989a8b384762d4e9be6b8a5bafc619",
+    "packages/python/src/truss/_native_catalog_capture.py": "b4a03f3626f333906d30e64f65a070204f649c2198f60aef29dd9b0a8e25ab38",
+    "packages/python/src/truss/_native_catalog_report_sources.py": "dda9bdaacbe0fd7e3091690c9524630579a1adcfad58f79e0dc338fbf8362f14",
+    "packages/python/src/truss/_report_schema.py": "47b8803a730d120160af85e438a5a47e7b1c47d71f4040d4db7492a3b4e49075",
+    "packages/python/src/truss/_report_schema_pins.py": "937669a940936ab8da9b5024b6ef35985b05f76aeb279a5aba3e4cd02df3b557",
+    "packages/python/tests/test_canonical_wire_tree.py": "c05acb3cb318b9444a76ecbd5cd8f7455e044b3d0fc00a1b13607835eae1d47f",
+    "packages/python/tests/test_catalog_report_assembly.py": "98eb21782cba8140865f617eb2a2c671778991ae3c3e5aa43ef3d25f71306dbc",
+    "packages/python/tests/test_native_catalog_dispatch.py": "837058509f69b5619373ca9234fb8695a42b41deb7d18be5a437cc0b01d3c5cb",
+    "packages/python/tests/tools/canonical-wire-tree.ts": "b6f5978c8a07efe1e0727c9fd221bca8153c0ca790fa495c33f14c73e510c5f1",
+    "scripts/check-module-boundaries.py": "24bb146989264b171a902b9b5a7428b354d3f575e880f022a7ee1da7f5694192",
+    "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+    "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+    "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+    "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+    "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+    "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+    "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+    "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+    "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+    "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+    "packages/python/src/truss/_profiles/catalog-enforcement-projection.json": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+    "packages/python/src/truss/_profiles/catalog-report-assembly.json": "ef0a39be769d74037a54f62a138fec47bb3a4fbe46e5e96c2891f70e18227ff5"
+  },
+  "tests": {
+    "sourceCombined": {
+      "count": 97,
+      "seconds": 27.599,
+      "status": "passed",
+      "note": "Before adding required-field rejection test; source report schema suite then rerun with all4tests passed"
+    },
+    "installedCombined": {
+      "count": 98,
+      "seconds": 28.343,
+      "status": "passed",
+      "modules": [
+        "test_native_catalog_dispatch",
+        "test_catalog_report_assembly",
+        "test_canonical_wire_tree"
+      ],
+      "log": "python-catalog-report-assembly-installed-tests.log",
+      "logSha256": "19ec359ad3cb6e8e919dba6673a91605965591becdecf6cbaa7f6b9ef6059e14",
+      "fixtureScope": "Development native SQL from checkout; administrative fixture only, not a released installation body"
+    },
+    "moduleBoundaries": {
+      "imports": 454,
+      "status": "passed"
+    },
+    "standaloneInstalledEncoding": {
+      "status": "passed",
+      "cwd": "/private/tmp",
+      "path": "/nonexistent",
+      "checkoutImports": false,
+      "bunAvailable": false,
+      "input": "Explicitly untrusted offline19fieldfixture; no accepted authority"
+    }
+  },
+  "wheel": {
+    "sha256": "54acc9749d47c8c09d74d2d231c7ae98f4389bf4d6de56fd422330d96c431dda",
+    "payloadFiles": 137,
+    "sourcePayloadEqual": true
+  },
+  "validator": {
+    "jsonschema": "4.26.0",
+    "referencing": "0.37.0",
+    "schemas": 11,
+    "schemaOwner": "Existing createProposedComposedAcceptanceReportHandoff pins",
+    "retrieval": "offline_registry_only"
+  },
+  "retention": {
+    "sourceSnapshotMaximumBytes": 4194304,
+    "assemblyMaximumBytes": 4194304,
+    "combinedLogicalMaximumBytes": 8388608,
+    "note": "Plus original native response; logical output bound only, not full heap/native-work qualification"
+  },
+  "requiredAuthoritySources": [
+    "originalInstalledExecution",
+    "admittedLayout",
+    "registeredEnforcementReportProfile",
+    "registeredAcceptanceReportProfile"
+  ],
+  "runtimeCompleteReportProduced": false,
+  "acceptedCatalogQualified": false,
+  "publicWorkflowQualified": false,
+  "installationQualified": false,
+  "commitBarrierReplaced": false,
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoningEffort": "ultra",
+    "status": "approved",
+    "scope": "Private source projection and unissued report encoding; source/artifact read-only review; no reviewer tests",
+    "verifiedSourcePins": 26,
+    "verifiedSchemaCopies": 11,
+    "verifiedPayloadFiles": 137,
+    "acceptedPublicWorkflowQualified": false
+  }
+}

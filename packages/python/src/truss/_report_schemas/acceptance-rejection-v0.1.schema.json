@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:acceptance-rejection:0.1.0",
+  "title": "Draft acceptance rejection",
+  "description": "Closed shape only. Diagnostic completeness, exact source/evidence provenance, current authority and confirmed rollback require semantic/native admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-acceptance-rejection/0.1.0"
+    },
+    "reportProfile": {
+      "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+    },
+    "completeness": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "complete"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "incomplete"
+            },
+            "reason": {
+              "enum": [
+                "resource",
+                "unsupported_profile",
+                "observation",
+                "transform_failure"
+              ]
+            }
+          },
+          "required": [
+            "state",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "const": "input"
+                  }
+                },
+                "required": [
+                  "kind"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "document",
+                      "binding"
+                    ]
+                  },
+                  "artifact": {
+                    "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+                  },
+                  "sourcePointer": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "artifact",
+                  "sourcePointer"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "diagnosticProfile": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/profilePin"
+          },
+          "diagnostic": {
+            "$ref": "urn:truss:acceptance-input:0.1.0#/$defs/exactArtifact"
+          },
+          "classification": {
+            "enum": [
+              "upstream_validation",
+              "truss_admission",
+              "conversion",
+              "transform"
+            ]
+          }
+        },
+        "required": [
+          "source",
+          "diagnosticProfile",
+          "diagnostic",
+          "classification"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "reportProfile",
+    "completeness",
+    "diagnostics"
+  ],
+  "additionalProperties": false
+}

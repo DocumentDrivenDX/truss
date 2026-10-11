@@ -5,7 +5,7 @@ from ._native_admission_capture import NativeAdmissionCapture
 from ._native_result_custody import NativeTextLimits
 from ._native_pg8000 import NativeBoundaryRefusal, NativeCall
 from ._acceptance_json import decode_acceptance_json
-from ._native_catalog_report_sources import compose_captured_catalog_sources
+from ._native_catalog_report_sources import CapturedReportSources, compose_captured_catalog_sources
 
 
 CATALOG_LIMITS = NativeTextLimits(columns=5, rows=1, cell_bytes=262144,
@@ -68,6 +68,7 @@ class NativeCatalogStageObservation:
     original_context: bytes
     original_provisional_result: bytes
     original_report_source_snapshot: bytes | None = None
+    original_report_assembly: bytes | None = None
     scope: str = 'provisional_native_catalog_effects_only'
 
 
@@ -106,7 +107,10 @@ class NativeCatalogCapture(NativeAdmissionCapture):
             snapshot=compose_captured_catalog_sources(self.encoded,result)
         except ValueError as error:
             raise NativeBoundaryRefusal('Original report source correspondence required') from error
-        observation = NativeCatalogStageObservation(call, writer, ordinal, context, original,snapshot)
+        if type(snapshot) is not CapturedReportSources:
+            raise NativeBoundaryRefusal('Original report source result required')
+        observation = NativeCatalogStageObservation(call, writer, ordinal, context, original,
+            snapshot.snapshot_bytes,snapshot.assembly_bytes)
         # Retain before publishing to the caller, including lost return replies.
         self.original_observation = observation
         return observation
