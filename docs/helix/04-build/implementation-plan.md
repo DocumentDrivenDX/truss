@@ -5704,3 +5704,49 @@ without inherit/set filtering; these are hypotheses requiring original native
 public-API controls before any bypass or policy-semantics claim. Keep callable
 public metadata and advanced business profiles distinct. The whole goal remains
 active at26/132 with106 unbound required cases.
+
+### Public catalog column/REFERENCES privilege drift — 2026-10-12
+
+The actual public catalog actor guard omitted column privileges and table
+REFERENCES from its private-storage exclusion. Independent public-API controls
+failed for all five late grants: SELECT, INSERT, UPDATE and REFERENCES on the
+installation_id column, plus table REFERENCES. Native status remained successful
+on the unmodified release; retained before.stderr.log records five failures.
+
+The native guard now excludes SELECT/INSERT/UPDATE/REFERENCES column privileges
+and includes table REFERENCES. The selected runtime SQL digest is updated in
+the packaged release manifest. The public test exercises each grant, requires
+refusal without quarantine or loss of prior caller work, revokes it explicitly
+and verifies current admission recovers. No new codec, metadata authority flag,
+whole-operation snapshot or blanket authentication release gate is introduced.
+
+`evidence/public-catalog-security-drift-20261012/receipt.json` retains198 source
+pins and a source-preimage zip, original pre-fix runtime/manifest from the stated
+baseline commit, failed/passing logs, six SQL owner round trips and Python boundary
+verification. Thirty complete public catalog/view/source tests pass from source
+and from an isolated installed wheel. Wheel SHA256
+`be2f929c3363696c145acb9b8ced32acb5cc7d5712a9cc3c86b22522373b3874`
+contains the exact fixed runtime and manifest; installed package origin is
+independently checked. Runtime is PostgreSQL18.6 / pgserver-pg18 18.6.1 with
+stock psycopg3.3.6 binary/libpq180006. Existing public harness cleanup completes
+without error; this packet does not claim an independent native cleanup receipt.
+
+Trace CONTRACT-005's private-owner/session-person boundary, CONTRACT-063/STP-056
+B04/B05/B10/B11/B12 and US-056 AC5/AC8/AC9/AC10 prerequisites. This is a verified
+public authorization gap and fix, not complete role/callable/diagnostic/writer
+closure or advanced business backend admission. All132 cases remain required;
+26 pass and106 remain unbound. Native inheritance-option and predefined-role
+controls remain the next public-path checks.
+
+Final public-path integration preserves main5d9888c2/c33042a5 module-access
+administration. `evidence/public-catalog-security-drift-20261012/merged-receipt.json`
+retains198 current/preimage source pins and final source/wheel/boundary logs.
+All33 public catalog/view/source/module-access tests pass from source and the
+isolated installed wheel. Final wheel SHA256
+`6492dddcdfd36f9d9bc0d4e343c5a0987d01808b08bcae2c1a1c9c5718297380`
+contains the exact merged Python facade and fixed native runtime/manifest;
+installed contents are independently matched. Prior30-test packet remains under
+its original source scope. Existing native owner round trips remain byte-identical
+after this Python-only concurrent merge. Current/archive/package/evidence hashes
+are checked before direct publication. No full backend acceptance case is
+promoted; the goal remains active.

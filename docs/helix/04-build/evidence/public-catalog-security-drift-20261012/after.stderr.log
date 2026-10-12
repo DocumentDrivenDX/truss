@@ -1,0 +1,6 @@
+test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 7.035s
+
+OK

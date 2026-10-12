@@ -1,0 +1,51 @@
+test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) ... 
+  test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='SELECT (installation_id)') ... FAIL
+  test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='INSERT (installation_id)') ... FAIL
+  test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='UPDATE (installation_id)') ... FAIL
+  test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='REFERENCES (installation_id)') ... FAIL
+  test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='REFERENCES') ... FAIL
+
+======================================================================
+FAIL: test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='SELECT (installation_id)')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 383, in test_public_actor_refuses_late_column_and_reference_privileges
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='f66c67bb-35ba-48db-a8e5-14475836c31c', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='INSERT (installation_id)')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 383, in test_public_actor_refuses_late_column_and_reference_privileges
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='f66c67bb-35ba-48db-a8e5-14475836c31c', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='UPDATE (installation_id)')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 383, in test_public_actor_refuses_late_column_and_reference_privileges
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='f66c67bb-35ba-48db-a8e5-14475836c31c', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='REFERENCES (installation_id)')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 383, in test_public_actor_refuses_late_column_and_reference_privileges
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='f66c67bb-35ba-48db-a8e5-14475836c31c', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_public_actor_refuses_late_column_and_reference_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_late_column_and_reference_privileges) (grant='REFERENCES')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 383, in test_public_actor_refuses_late_column_and_reference_privileges
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='f66c67bb-35ba-48db-a8e5-14475836c31c', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+----------------------------------------------------------------------
+Ran 1 test in 4.301s
+
+FAILED (failures=5)
