@@ -3137,3 +3137,58 @@ closure; they cannot inherit qualification from these explicit ACL tests. Unknow
 channel coverage refuses admission. Trace CONTRACT-063/STP-056 B04/B05/B10/B11/B12
 and US-056 AC5/AC8/AC9/AC10. No backend binding or complete privacy claim; full goal
 active at26/132 with106 unbound cases.
+
+### Owned semantic decision receiver candidate contract — 2026-10-11
+
+Under shared CONTRACT-063 / TD-056 C03, the private owned flat fixture selects
+wire interface `truss-owned-decision-request/0.1`. The request is exact UTF-8 JSON
+bytes of1–1024 bytes, one object with exactly interfaceVersion and operation,
+both strings. interfaceVersion is the selected value above; operation is read.
+Duplicate members, invalid UTF-8/JSON/constants, unknown fields/operations,
+non-byte carriers and oversized input refuse with the single generic ValueError
+message `Owned semantic request refused` before evaluator/native dispatch.
+The server-selected original fixture resource is fixed by the existing source
+bundle; this request does not select arbitrary resources or define a public API.
+
+Original caller/executor hosts, issued transaction handles, native epoch/profile,
+requirements and original policy/resolution are trusted application inputs captured
+in the private receiver. They are neither wire fields nor credentials granted by
+constructing the receiver. The receiver invokes only the existing owned delegated
+UMF read; success/error remains its original sanitized Outcome. It exposes no SQL,
+EXPLAIN/DDL, subject/actor/authority override, artifact path, decoder callback,
+connection or private fact cells. Authentication, endpoint/credential custody,
+full channel/source/lifetime closure and a public result grammar remain separate
+unimplemented qualification exits. This contract covers an owned C03 prototype
+only; it does not admit a backend or replace native enforcement.
+
+### Closed owned semantic receiver implementation evidence — 2026-10-11
+
+`scripts/security_owned_receiver.py` implements the private request contract
+above. It snapshots the original epoch/source bytes and retains application-owned
+host/issued transaction references in private scope. Request decoding admits only
+the exact fixed read grammar and forwards only to the original delegated UMF
+operation. It contains no user SQL/decoder dispatch or subject/profile/credential
+selection. Constructing this object is not authentication or endpoint closure.
+
+Two native methods execute the original read and reject23 adversarial carriers:
+SQL/EXPLAIN text, invalid UTF-8/JSON/constants/types/bounds/duplicates, actor/subject/
+profile/authority/host/credential/decoder/callback/artifact overrides and unsupported
+operations. The rejection schedule independently proves delegated native dispatch
+is never called, original native xid stays unchanged and no host pending operation
+appears. Original successful decision excludes cells/private identities. Final
+`evidence/python-psycopg-epoch-cut/1fadf098-d896-4014-8f08-4419dabf4387`
+passes187 methods, boundaries,144 current/preimage Truss sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-owned-receiver-formal/57268521-9120-4d11-af92-66d57d7cdad7`
+retains four exact source inputs and six Z3 4.15.4 SMT-LIB/fresh-context replays,
+four UNSAT/two SAT. Conditional grammar rejects extra/duplicate fields, explain
+and oversize. Countermodels show grammar does not authenticate a subject or close
+other channels. Faithful parsing/mapping remain premises; this is not Python/native
+or complete receiver refinement. Trace shared TD-056 C03, CONTRACT-063/STP-056
+B04/B06/B08/B10/B12 and US-056 AC5/AC7/AC8/AC10 prerequisites. C01/C02 actual
+route/credential/caller/issuer/mapping/target authentication and C04–C07 source/
+publication/recovery/full qualification remain open. No public endpoint, general
+resource selector or backend binding is promoted; full goal active at26/132 with
+106 unbound cases.

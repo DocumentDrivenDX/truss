@@ -1536,3 +1536,51 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
                 allocator.execute('DROP DATABASE opaque_diag_database')
             self.connection.execute('DROP ROLE opaque_diag_actor')
+
+    def owned_receiver(self,host,t,executor_t):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_owned_receiver import _OwnedDecisionReceiver
+        raw,profile,sources=self.source_bound_profile();value=json.loads(profile)
+        def roles(c):return c.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
+        caller=roles(host.connection);executor=roles(self.connection)
+        value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':'s1'}]};value['executor']={'sessionRoleOid':executor[0],'effectiveRoleOid':executor[1]}
+        epoch=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
+        return _OwnedDecisionReceiver(host,t,self.host,executor_t,epoch,raw,sources)
+
+    def test_owned_semantic_receiver_dispatches_original_read_without_private_output(self):
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                receiver=self.owned_receiver(host,t,executor_t)
+                result=receiver.dispatch(b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read"}')
+                self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit')
+                self.assertNotIn('identities',result.value);self.assertNotIn('cells',result.value)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_owned_semantic_receiver_rejects_wire_escape_before_native_dispatch(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_receiver as tool
+        valid={'interfaceVersion':'truss-owned-decision-request/0.1','operation':'read'}
+        attacks=[b'SELECT * FROM truss.sec_assignment',b'EXPLAIN ANALYZE SELECT 1',b'\xff',b'',b' '*1025,
+                 b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read","operation":"read"}',
+                 bytearray(json.dumps(valid).encode()),json.dumps(valid),b'[]',b'NaN']
+        attacks += [json.dumps({**valid,key:'untrusted'}).encode() for key in ['sql','actor','subjectKey','profile','authority','host','credentials','decoder','callback','artifactPath']]
+        attacks += [json.dumps({**valid,'operation':operation}).encode() for operation in ['explain','ddl','write']]
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                receiver=self.owned_receiver(host,t,executor_t)
+                before=self.connection.execute('SELECT pg_current_xact_id()::text').fetchone()
+                with patch.object(tool,'run_delegated_owned_identity_read',side_effect=AssertionError('native dispatch must not run')) as execute:
+                    for attack in attacks:
+                        with self.subTest(carrier=type(attack).__name__):
+                            with self.assertRaisesRegex(ValueError,'^Owned semantic request refused$'):receiver.dispatch(attack)
+                    execute.assert_not_called()
+                self.assertEqual(self.connection.execute('SELECT pg_current_xact_id()::text').fetchone(),before)
+                self.assertIsNone(host._custody.pending);self.assertIsNone(self.host._custody.pending)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
