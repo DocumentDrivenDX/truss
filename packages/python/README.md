@@ -882,3 +882,42 @@ read-write operations. READ COMMITTED and the current immutable revision-1
 catalog restrictions remain; this does not add read-only support to the registrar
 complete-view facade or group type-reference helper. Runtime 0.6 requires fresh
 installation; candidate upgrades remain unfinished.
+
+## Typed catalog failure codes: runtime 0.7
+
+Registration, reports, complete catalog views and status retain their existing
+`Error(ExecutionFailure(...))` result shape. Known catalog refusals additionally
+set the optional `catalog_code` field, without changing `code`, `sql_state`,
+`message` or `retry_scope`:
+
+```python
+from truss import Error
+
+result = assembly.accept_in_transaction(tx, prepared, request_key="register-model")
+if isinstance(result, Error):
+    reason = result.error.catalog_code  # typed code; never parse message prose
+    if reason == "unauthorized":
+        print("Registration refused")
+```
+
+| Code | Meaning |
+| --- | --- |
+| `unauthorized` | Native permission/person check refused the call. |
+| `invalid_input` | Known preparation, request, origin or revision validation failed. |
+| `request_conflict` | The same registration request key was reused with different original input. |
+| `unsupported_profile` | Unsupported preparation, transaction or installed-release profile, including the current fresh-catalog-only limitation. |
+| `resource` | A supported native resource limit was exceeded. |
+| `observation` | A required nonblocking lock could not be obtained. |
+| `installation` | A required runtime schema, function or table is absent. |
+
+`catalog_code=None` means no catalog classification was made. Coverage is
+deliberately non-exhaustive: transaction admission, retry, cancellation, unknown
+commit, decoder/integrity failures and a missing report for an otherwise valid
+revision retain their original error fields. Inspect the ordinary execution code
+for transaction recovery. Unrelated native uniqueness violations remain
+unclassified; the request-conflict branch alone uses native state `P1001`.
+The new reader methods retain their existing typed result carriers. This does
+not yet add typed group authorization failures or invalid-input paths.
+
+The native conflict-state change is pinned as runtime 0.7 and currently requires
+a fresh installation. Earlier candidate upgrades remain open.

@@ -28,3 +28,6 @@ from truss import NativeGroupCapability
 def selected_provider(provider: NativeGroupCapability, transaction: TransactionHandle, data: GroupSemanticInput) -> None:
     capability: GroupCapability = provider
     assert_type(capability.apply_in_transaction(transaction, data, RequestNone()), Outcome[RequestFreeGroupApplicationResult])
+
+def catalog_reason(result: Error) -> None:
+    assert_type(result.error.catalog_code, Literal['unauthorized', 'invalid_input', 'request_conflict', 'unsupported_profile', 'resource', 'observation', 'installation'] | None)

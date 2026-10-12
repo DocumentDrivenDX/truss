@@ -6,7 +6,7 @@ Ordinary-person catalog calls require READ COMMITTED, so authorization reads
 observe committed membership changes. Higher isolation returns a refusal.
 """
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from hashlib import sha256
 from importlib.resources import files
 import json
@@ -136,6 +136,21 @@ def _active_operation(method):
     return guarded
 
 
+def _catalog_failure(result, local_code=None):
+    # Annotate contained catalog failures only; transaction authority and retry
+    # outcomes remain unchanged. Codes never depend on diagnostic prose.
+    if not isinstance(result,Error):return result
+    failure=result.error
+    code=None
+    if failure.code=='execution_obligation':
+        code={'42501':'unauthorized','22023':'invalid_input','P1001':'request_conflict',
+              '0A000':'unsupported_profile','25006':'unsupported_profile','54000':'resource',
+              '55P03':'observation','42P01':'installation','42883':'installation','3F000':'installation'}.get(failure.sql_state)
+    if local_code is not None and failure.code=='invalid_transaction' and failure.sql_state is None:
+        code=local_code
+    return result if code is None else Error(replace(failure,catalog_code=code))
+
+
 class CatalogReferenceAssembly:
     """Actual installation/catalog provider. Settlement stays with the caller."""
     def __init__(self,configuration: CatalogRuntimeConfiguration,host: PsycopgHost) -> None:
@@ -194,29 +209,44 @@ class CatalogReferenceAssembly:
     def status_in_transaction(self,transaction: TransactionHandle) -> Outcome[CatalogRuntimeStatus]:
         self._available()
         manifest,digest,_=_release()
+        local_failure=[None]
         def observe(cursor,observed):
             _pin_cursor(cursor)
             cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname='truss')",prepare=False)
             if not cursor.fetchone()[0]:return CatalogRuntimeStatus(False)
             cursor.execute('SELECT * FROM truss.catalog_status()',prepare=False)
             row=cursor.fetchone()
-            if row is None or row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
+            if row is None:raise ValueError('Complete installed status required')
+            if row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
+                local_failure[0]='unsupported_profile'
                 raise ValueError('Unsupported installed catalog release')
             return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-string-create'))
-        return self._host._run_operation(transaction,observe)
+        return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration]:
         self._available()
+        local_failure=[None]
+        def reject(code,message):
+            local_failure[0]=code
+            raise ValueError(message)
+        def require_original():
+            try:_require_original_preparation(prepared)
+            except ValueError:reject('invalid_input','Original unchanged preparation required')
         def produce(ordinal):
-            _require_original_preparation(prepared)
+            require_original()
             choices={key:value for key,value in prepared.input().items() if key not in ('interfaceVersion','documents')}
-            if choices!=_configuration():raise ValueError('Exact selected catalog preparation required')
-            if type(request_key) is not str or not 1<=len(request_key.encode())<=1024 or '\0' in request_key:raise ValueError('Stable request key required')
+            if choices!=_configuration():reject('unsupported_profile','Exact selected catalog preparation required')
+            try:valid_request=type(request_key) is str and 1<=len(request_key.encode('utf8'))<=1024 and '\0' not in request_key
+            except UnicodeError:valid_request=False
+            if not valid_request:reject('invalid_input','Stable request key required')
             from ._acceptance_json import decode_acceptance_json
-            if type(origin_bytes) is not bytes or type(decode_acceptance_json(origin_bytes)) is not dict:raise ValueError('Original asserted origin object required')
+            if type(origin_bytes) is not bytes:reject('invalid_input','Original asserted origin object required')
+            try:origin=decode_acceptance_json(origin_bytes)
+            except (ValueError,UnicodeError):reject('invalid_input','Original asserted origin object required')
+            if type(origin) is not dict:reject('invalid_input','Original asserted origin object required')
             support=evaluate_catalog_support(prepared)
             semantic=compose_original_catalog_report_semantics(prepared,support)
-            if semantic['state']!='source_fields_ready':raise ValueError('Complete original source inventory required')
+            if semantic['state']!='source_fields_ready':reject('unsupported_profile','Complete original source inventory required')
             from ._owner_evidence_json import decode_owner_evidence_json
             evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
             source={'umf':semantic['umf'],'diagnostics':evidence['validation']['diagnostics'],
@@ -224,7 +254,7 @@ class CatalogReferenceAssembly:
                 'losses':evidence['ingress']['basis']['losses'],'extensions':semantic['extensions'],
                 'transformRegistrations':evidence['ingress']['basis']['transformRegistrations'],
                 'assertionEntries':semantic['assertionEntries']}
-            _require_original_preparation(prepared)
+            require_original()
             return (prepared.input_bytes,prepared.archive_documents_bytes,prepared.declarations_bytes,
                     canonical_numeric_free(source),origin_bytes,request_key)
         def execute(cursor,observed,ordinal,parameters):
@@ -237,19 +267,19 @@ class CatalogReferenceAssembly:
             if decoded['revision']!=revision or decoded['registrationId']!=identity or decoded['acceptedInput']!=prepared.input():
                 raise ValueError('Original catalog result correspondence required')
             return CatalogRegistration(int(revision),identity,report,replayed)
-        return self._host._run_semantic_operation(transaction,execute,parameter_producer=produce)
+        return _catalog_failure(self._host._run_semantic_operation(transaction,execute,parameter_producer=produce),local_failure[0])
     @_active_operation
     def report_in_transaction(self,transaction: TransactionHandle,revision: int=1) -> Outcome[CatalogReport]:
         self._available()
         if type(revision) is not int or not 1<=revision<=2147483647:
-            return Error(ExecutionFailure('execution_obligation','Valid catalog revision required'))
+            return Error(ExecutionFailure('execution_obligation','Valid catalog revision required',catalog_code='invalid_input'))
         def observe(cursor,observed):
             _pin_cursor(cursor)
             cursor.execute('SELECT truss.catalog_report(%s)',(revision,),prepare=False)
             raw=bytes(cursor.fetchone()[0])
             if json.loads(raw)['revision']!=str(revision):raise ValueError('Original report revision required')
             return CatalogReport(revision,raw)
-        return self._host._run_operation(transaction,observe)
+        return _catalog_failure(self._host._run_operation(transaction,observe))
 
     def catalog_view_request(self,*,definition_count: str='65536',encoded_bytes: str='16777216') -> CatalogViewRequest:
         from .catalog_view import CatalogViewRequest, CatalogViewLimits, CurrentCatalogSelection, CompleteCatalogScope
@@ -357,7 +387,7 @@ class CatalogReferenceAssembly:
         from .contracts import ProfilePin
         from ._catalog_view_build import VIEW_PROFILE, build_catalog_view
         if type(request) is not CatalogViewRequest:
-            return Error(ExecutionFailure('execution_obligation','Typed catalog view request required'))
+            return Error(ExecutionFailure('execution_obligation','Typed catalog view request required',catalog_code='invalid_input'))
         manifest,digest,_=_release()
         layout=ProfilePin(**manifest['layoutProfile'])
         if request.layout_profile!=layout or request.view_profile!=VIEW_PROFILE:
@@ -387,7 +417,7 @@ class CatalogReferenceAssembly:
         result=self._host._run_operation(transaction,observe)
         if isinstance(result,Error) and result.error.code=='execution_obligation' and result.error.sql_state=='54000':
             return Ok(CatalogViewUnavailable(reason='resource'))
-        return result
+        return _catalog_failure(result)
 
     @_active_operation
     def get_object_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,

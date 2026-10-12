@@ -1,0 +1,33 @@
+{
+  "scope": "runtime0.7 optional typed catalog_code on known register/report/view/status failures",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "b25f8f2d68d11072340d340d4e21e4ebc8172349947d10bf050dc5ff6108bfd6",
+  "installedTests": {
+    "modules": [
+      "test_catalog_codes_native",
+      "test_catalog_runtime_native"
+    ],
+    "passed": 36,
+    "elapsedSeconds": 66.336
+  },
+  "hostExecutionTests": 9,
+  "consumerTyping": "four fixtures passed; optional catalog_code closed literal union;20 expected negative errors",
+  "nativeControls": [
+    "invalid original prep/request/origin/revision distinguished from invalid transaction handle",
+    "explicit request mismatchP1001 classified; actual stagingunique23505 stays unclassified",
+    "unsupported second registration and unauthorized register/report/view/status",
+    "earlier caller work survives refusal; outerrollback removes pending registration",
+    "40001 preserves retry,whole_transaction,sql_state and catalog_codeNone",
+    "known installed status profile mismatch classified"
+  ],
+  "umfSqlOwner": "all10 SQL assets retain/reload/export unchanged",
+  "moduleBoundaries": "670 imports passed",
+  "review": "Astra Ultra scoped plan/source approved; README covers None and non-exhaustive classification",
+  "limitations": [
+    "unclassified missing valid report revision/decoder/integrity/transaction recovery errors preserved",
+    "group authorization and invalid-input paths remain separate unfinished R13 work",
+    "fresh installation required; candidate upgrades pending",
+    "full external-interface goal active"
+  ]
+}

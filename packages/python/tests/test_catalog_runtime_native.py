@@ -486,7 +486,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         result=assembly.accept_in_transaction(tx,prepared,request_key='one',origin_bytes=b'{"x-action":"initial"}')
         if isinstance(result,Error):self.fail(repr(result.error)+' '+str(host._custody.last_attempt.error))
         conflict=assembly.accept_in_transaction(tx,prepared,request_key='one',origin_bytes=b'{"x-action":"changed"}')
-        self.assertIsInstance(conflict,Error);self.assertEqual(conflict.error.sql_state,'23505')
+        self.assertIsInstance(conflict,Error);self.assertEqual(conflict.error.sql_state,'P1001')
         self.assertIsInstance(assembly.report_in_transaction(tx),Ok)
         host.detach();connection.commit()
     def test_suppressed_head_refuses_atomically_and_preserves_caller_work(self):

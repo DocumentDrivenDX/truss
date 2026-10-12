@@ -55,6 +55,22 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Catalog refusal-code iteration — 2026-10-12
+
+Runtime 0.7 adds optional typed `ExecutionFailure.catalog_code` to known public
+registration/report/view/status refusals while preserving the existing error ABI
+and transaction recovery fields. Native request mismatch alone uses `P1001`;
+ordinary staging uniqueness failures remain integrity errors. Explicit local
+validation branches annotate invalid inputs or unsupported profiles, and the
+known installed-status mismatch is classified. Unknown report revisions,
+decoder/integrity errors and transaction recovery stay outside this annotation.
+Native public tests exercise unauthorized calls, input validation, request replay
+conflict, unsupported second registration, actual unique-index failure and
+40001 whole-transaction retry without losing earlier caller work. Reader methods
+retain their separate typed carriers. Broader group R13 support, invalid-input
+paths, R15 registration evolution and the complete external interface remain open.
+Next functional implementation is business-key lookup on adopted transactions.
+
 ## Read-only reader iteration — 2026-10-12
 
 Runtime 0.6 adds actual adopted read-only READ COMMITTED support for public

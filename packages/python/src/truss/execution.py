@@ -42,8 +42,11 @@ class ExecutionFailure:
     message: str
     retry_scope: Literal['none', 'whole_transaction', 'qualified_request_lookup'] = 'none'
     sql_state: str | None = None
+    catalog_code: Literal['unauthorized', 'invalid_input', 'request_conflict', 'unsupported_profile', 'resource', 'observation', 'installation'] | None = None
 
     def __post_init__(self) -> None:
+        if self.catalog_code not in {None, 'unauthorized', 'invalid_input', 'request_conflict', 'unsupported_profile', 'resource', 'observation', 'installation'}:
+            raise ValueError('Unknown catalog failure code')
         scopes = {'retry': {'whole_transaction'},
                   'commit_unknown': {'none', 'qualified_request_lookup'}}
         if self.code not in {'invalid_transaction', 'retry', 'transaction_unusable',

@@ -229,7 +229,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
- IF installation.release_id<>'truss-catalog-runtime/0.6-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.7-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   IF raw IS NULL OR octet_length(raw) NOT BETWEEN 1 AND 1048576 THEN
@@ -244,7 +244,7 @@ BEGIN
  IF FOUND THEN
   IF existing.input_bytes IS DISTINCT FROM input_bytes OR existing.document_bytes IS DISTINCT FROM documents_bytes
    OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes OR existing.source_bytes IS DISTINCT FROM source_bytes OR existing.origin_bytes IS DISTINCT FROM origin_bytes THEN
-   RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='23505'; END IF;
+   RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
   PERFORM truss.catalog_actor();
   RETURN QUERY SELECT existing.revision::text,existing.registration_id::text,r.report_bytes,true FROM truss.catalog_acceptance_report r WHERE r.rev=existing.revision;
   IF NOT FOUND THEN RAISE EXCEPTION 'original registration report missing' USING ERRCODE='55000'; END IF;
