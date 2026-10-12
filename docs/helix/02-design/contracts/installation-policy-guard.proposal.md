@@ -502,3 +502,20 @@ committed-but-unacknowledged local native outcome, not all uncertain outcomes,
 crash/power-loss durability, authentic production issuer/sink/recovery, complete
 source/writer/bootstrap qualification or backend acceptance. No replacement
 token/rollback is inferred from transport loss; no original case is promoted.
+
+
+### Native original claim observation decoding — 2026-10-12
+
+The original observe SQL emits five explicit TEXT/OID25 columns including
+operation/installation/profile complete hex bytes, exact generation and settlement
+text. Actual native pending, absent and settled observations now pass the private
+portable decoder in Bun and Chromium; substituted expected original operation
+bytes refuse. The native observations run under original guard UPDATE with fresh
+statements. Zero rows remain only not-observed, never proof of abort/noncommit.
+
+Both native tests pass with222 security observations. Evidence:
+`../../04-build/evidence/security-native-claim-observation-20261012/receipt.json`.
+The decoder establishes carrier correspondence only; expected bytes remain
+assertions, not authenticated issuer/operation/source/freshness or AuthorityLease
+proof. Production recovery/custody/bootstrap/participant qualification and all
+remaining original acceptance cases stay open.
