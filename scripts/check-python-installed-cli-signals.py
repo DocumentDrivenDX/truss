@@ -17,7 +17,7 @@ import truss.cli
 root = Path(__file__).resolve().parents[1]
 if sys.argv[1:] not in ([], ['--corrected-pgserver']):
  raise SystemExit('usage: check-python-installed-cli-signals.py [--corrected-pgserver]')
-corrected = True  # All live executions select17.11.
+corrected = True  # Historical compatibility flag; profile selects the release.
 expected_package = RUNTIME_VERSION
 expected_server = SERVER_VERSION
 if importlib.metadata.version(RUNTIME_DISTRIBUTION) != expected_package:
@@ -28,7 +28,7 @@ if not loaded.is_relative_to(Path(sys.prefix).resolve()) or loaded.is_relative_t
 if loaded.read_bytes() != (root/'packages/python/src/truss/cli.py').read_bytes():
  raise RuntimeError('Installed CLI source drift')
 parent = Path(tempfile.mkdtemp(prefix='truss-cli-signals-'))
-directory = parent/'retained data'
+directory = parent/('retained data' if sys.platform == 'darwin' else 'retained-data')
 runs = []
 command = str(Path(sys.prefix)/'bin/truss-local-postgres')
 for signum in [signal.SIGTERM,signal.SIGINT]:
@@ -38,6 +38,9 @@ for signum in [signal.SIGTERM,signal.SIGINT]:
    selector.register(process.stdout,selectors.EVENT_READ)
    if not selector.select(timeout=60): raise RuntimeError('CLI readiness unavailable; retain '+str(parent))
    original = process.stdout.readline()
+  if not original:
+   _,startup_stderr = process.communicate(timeout=10)
+   raise RuntimeError('CLI failed before readiness: '+startup_stderr)
   observed = json.loads(original)
   if observed['serverVersion'] != expected_server or observed['runtimeVersion'] != expected_package or observed['trussInstallation'] != 'not_checked':
    raise RuntimeError('Unexpected local runtime profile')
