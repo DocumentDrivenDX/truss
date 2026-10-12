@@ -1,0 +1,44 @@
+{
+  "implementation": "Private trusted-administrator participating authority change: original installation and exclusive generation guard, fresh unsettled-claim check before qualified physical callback, pinned post-effect generation CAS with exact UPDATE1 descriptors/rows, stored generation readback and final claim check. Host contains failure; caller settles outer transaction.",
+  "validation": {
+    "focusedNativeTests": 1,
+    "focusedSeconds": 17.619,
+    "fullNativeTests": 8,
+    "fullSeconds": 29.869,
+    "boundaries": "815 imports pass",
+    "wheelSha256": "d5a605068efe767acea03f4240084e354125b5b2ab41b02eb45f0c0620671a15",
+    "moduleAndSql": "exact bytes",
+    "result": "pass"
+  },
+  "command": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-authority-change-r2-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "result": "No actionable findings in trusted-administrator/qualified-callback scope; readonly review, native replay separate"
+  },
+  "acceptanceTraceability": [
+    {
+      "case": "truss.L03",
+      "covers": "US-057-AC2",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L12",
+      "covers": "US-057-AC8",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L13",
+      "covers": "US-057-AC3",
+      "caseClosed": false
+    }
+  ],
+  "scope": "Actual installed current candidate catalog, private bootstrap and ontology role-change schedule on PostgreSQL18.6/stock psycopg3.3.6. Physical coordination and rollback only. Does not authorize logical actions/old-new state, authenticate profile/issuer, establish full source/guard/claim parity, complete participants or final sink/acknowledgment. Independently qualified synchronous transaction-local physical callback and original native host custody are premises. Pending security_ready remains false. No public ready service or policy activation; original 132 cases retained.",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_authority_change.py": "51d037dbc875b452e8dbdb6bfebd3ec08ed34d942e1f5691301931d6022b1cb8",
+    "packages/python/src/truss/_security_bootstrap/advance.sql": "d1772dd74faf7a52fd3a86fb7dec0889223a5c2e970c396d9a6f78bdb64c18a6",
+    "docs/helix/02-design/contracts/installation-policy-generation-advance-v0.3.tombstone.proposal.sql": "d1772dd74faf7a52fd3a86fb7dec0889223a5c2e970c396d9a6f78bdb64c18a6",
+    "packages/python/tests/test_security_public_ontology_native.py": "a036cd413fbca42b75c50c68c76675f8a8de6d91636d5b1b45ccdbad0e3f3369",
+    "scripts/check-module-boundaries.py": "cd8f5f19028f8c3a31f54c9f51d85289506ce6fc86b81f3e80c555b9b5bba313"
+  }
+}

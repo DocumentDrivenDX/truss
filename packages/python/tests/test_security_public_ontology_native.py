@@ -19,6 +19,35 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_private_authority_change_claim_gate_and_atomic_effects(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  from truss._security_authority_change import change_authority_in_transaction
+  self.install();self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  identity=self.installation.installation_id.encode();profile=b'authority-change-fixture/0.1'
+  self.assertIsInstance(bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=identity,authored_profile=profile,max_retained=6),Ok)
+  self.admin.execute("CREATE TEMP TABLE authority_action_work(value text);INSERT INTO authority_action_work VALUES('kept')")
+  self.admin.execute('INSERT INTO truss.policy_publication_claim VALUES(%s,%s,%s,1,false)',(b'original-operation',identity,profile))
+  calls=[]
+  def effect(cursor):calls.append('effect');cursor.execute("INSERT INTO authority_action_work VALUES('changed')")
+  def change(action=effect):return change_authority_in_transaction(self.host,tx,installation_identity=identity,authored_profile=profile,expected_generation=1,action=action)
+  self.assertIsInstance(change(),Error);self.assertEqual(calls,[])
+  self.admin.execute('UPDATE truss.policy_publication_claim SET settled=true')
+  def failed(cursor):effect(cursor);raise RuntimeError('failed physical action')
+  self.assertIsInstance(change(failed),Error)
+  self.assertEqual(self.admin.execute('TABLE authority_action_work').fetchall(),[('kept',)])
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(1,))
+  def late_claim(cursor):effect(cursor);cursor.execute('INSERT INTO truss.policy_publication_claim VALUES(%s,%s,%s,1,false)',(b'late-original',identity,profile))
+  self.assertIsInstance(change(late_claim),Error)
+  self.assertEqual(self.admin.execute('TABLE authority_action_work').fetchall(),[('kept',)])
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(1,))
+  changed=change();self.assertIsInstance(changed,Ok,str(self.host._custody.last_attempt.error));self.assertEqual(changed.value.generation,2);self.assertFalse(changed.value.security_ready)
+  self.assertEqual(self.admin.execute('TABLE authority_action_work').fetchall(),[('kept',),('changed',)])
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(2,))
+  before=list(calls);self.assertIsInstance(change(),Error);self.assertEqual(calls,before)
+  self.host.detach();self.admin.rollback()
+  self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_generation_guard')").fetchone()[0])
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.authority.json').write_text(json.dumps({'observations':['unsettled original claim blocks before physical callback','settled tombstone permits advancement','physical action error rolls back effects and generation','late unsettled claim rolls back callback effects and inserted claim','complete action and exact native generation2 stage together','stale original generation refuses before callback','outer caller rollback removes staged installation homes'],'scope':'Private native authority effect coordination under trusted administrator. Physical temp-table effect only; no logical action permission, original policy issuer, complete participant closure or security-ready profile.'},indent=2)+'\n')
  def test_supported_source_census_observes_bootstrap_and_body_drift(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction
@@ -406,10 +435,19 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   for ordinal in [1,2,3]:advance=advance.replace('$'+str(ordinal),'%s')
   authority_writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(authority_writer)
   authority_pid=authority_writer.execute('SELECT pg_backend_pid()').fetchone()[0];authority_errors=[];advanced=[]
+  observations.append({'id':'native-role-change-uses-private-authority-operation','observed':{'expectedGeneration':1,'nextGeneration':2,'securityReady':False},'qualification':'original direct trusted fixture administrator; permission, full participant and source parity not admitted'})
   def controlled_role_change():
    try:
-    authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('ALTER ROLE alice BYPASSRLS');rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,1)).fetchall()
-    if rows!=[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]:raise ValueError('Original generation advance refused')
+    from truss._security_authority_change import change_authority_in_transaction
+    authority_writer.execute('BEGIN');writer_host=adopt_psycopg_host(authority_writer,statement_timeout_ms=10000,operation_timeout_ms=30000)
+    try:
+     writer_tx=writer_host.adopt_transaction().value
+     def physical_role_change(cursor):cursor.execute('ALTER ROLE alice BYPASSRLS')
+     changed=change_authority_in_transaction(writer_host,writer_tx,installation_identity=installation_bytes,authored_profile=profile_bytes,expected_generation=1,action=physical_role_change)
+     if not isinstance(changed,Ok) or changed.value.generation!=2:raise ValueError('Original implemented authority change refused')
+    finally:writer_host.detach()
+    rows=authority_writer.execute("SELECT singleton::text,pg_catalog.encode(installation_identity_bytes,'hex'),pg_catalog.encode(policy_profile_bytes,'hex'),generation::text FROM truss.policy_generation_guard").fetchall()
+    if rows!=[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]:raise ValueError('Original stored generation advance refused')
     advanced.extend(rows);authority_writer.execute('COMMIT')
    except Exception as exc:authority_errors.append(type(exc).__name__);authority_writer.rollback()
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();guard_cursor=self.admin.execute(acquire);captured=guard_cursor.fetchall();self.assertEqual(captured,[('1',installation_bytes.hex(),profile_bytes.hex(),'1')]);observations.append({'id':'original-proposed-guard-acquisition','observed':[list(row) for row in captured]})
