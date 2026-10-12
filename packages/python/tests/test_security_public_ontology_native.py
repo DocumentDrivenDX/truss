@@ -336,6 +336,19 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
      observations.append({'id':'withheld-property-operator-has-no-value-carrier-'+namespace+'-'+login,'observed':'42703'})
      with self.assertRaises(psycopg.errors.InsufficientPrivilege):reader.execute('SELECT * FROM '+namespace+'.masked_resources()')
      observations.append({'id':'prior-transform-endpoint-revoked-'+namespace+'-'+login,'observed':'42501'})
+  # Conflicting candidate never publishes over the protected withholding surface.
+  for namespace,candidate in [('ontology_fixture',sql['graphConflict']),('relational_fixture',sql['flatConflict'])]:
+   original=self.admin.execute("SELECT pg_get_functiondef(oid),proacl::text,proowner::text FROM pg_proc WHERE oid=%s::regprocedure",(namespace+'.withheld_resources()',)).fetchone()
+   self.admin.execute('BEGIN')
+   try:
+    self.admin.execute('CREATE FUNCTION '+namespace+'.conflicting_candidate(text,text) RETURNS TABLE(decision text,disclosure jsonb) LANGUAGE SQL SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ '+candidate['sql']+' $$;REVOKE ALL ON FUNCTION '+namespace+'.conflicting_candidate(text,text) FROM PUBLIC')
+    candidate_result=self.admin.execute('SELECT * FROM '+namespace+'.conflicting_candidate(%s,%s)',('RA','staff-alice')).fetchone();self.assertEqual(candidate_result,('conflict',[]));observations.append({'id':'incompatible-native-masks-refuse-before-publication-'+namespace,'observed':list(candidate_result)})
+   finally:self.admin.rollback()
+   current=self.admin.execute("SELECT pg_get_functiondef(oid),proacl::text,proowner::text FROM pg_proc WHERE oid=%s::regprocedure",(namespace+'.withheld_resources()',)).fetchone();self.assertEqual(current,original);observations.append({'id':'conflict-refusal-preserves-prior-body-acl-owner-'+namespace,'observed':'exact-original'})
+   exists=self.admin.execute('SELECT to_regprocedure(%s)',(namespace+'.conflicting_candidate(text,text)',)).fetchone()[0];self.assertIsNone(exists);observations.append({'id':'conflicting-candidate-rollback-leaves-no-routine-'+namespace,'observed':None})
+   params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='alice'
+   with psycopg.connect(**params,autocommit=True) as reader:
+    rows=reader.execute('SELECT code,disposition FROM '+namespace+'.withheld_resources() ORDER BY code').fetchall();self.assertEqual([row[0] for row in rows],['RA','RAB']);self.assertTrue(all(row[1]['disposition']=='withheld' for row in rows));observations.append({'id':'prior-withholding-still-executes-after-conflict-refusal-'+namespace,'observed':[list(row) for row in rows]})
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']).write_text(json.dumps({'packet':packet,'sql':sql,'observations':observations,'publicCreatedIdentities':{alias:{'id':identity.id,'typeId':identity.type_id} for alias,identity in aliases.items()},'scope':'Actual public-created objects/edges, typed native joins to business keys and candidate typed Record/opaque Relationship membership lowering under ordinary native RLS. Private views are real graph projections, not seeded flat tables. Not complete source enrollment, held authority or released public API/security compiler admission.'},indent=2)+'\n')
 if __name__=='__main__':
  import unittest;unittest.main()

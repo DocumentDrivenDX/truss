@@ -470,3 +470,18 @@ Trace CONTRACT-062/063 / US-056-AC6 / STP-056 B07/B08. This is native withholdin
 for required nonnull String values. Original null/absence, source compiler
 query-use, conflict activation, full wire/trace privacy and feed/history/source/
 authority/publication remain separately required. No backend case is promoted.
+
+
+### Native conflicting-disclosure prepublication refusal — 2026-10-12
+
+Two scope-matching incompatible constant transforms now execute as private raw/
+graph candidates and return conflict with empty disclosure. Fixture publication
+is refused; rollback leaves no candidate routine and preserves the original
+withholding body's exact definition, owner and ACL. Ordinary Alice still receives
+RA/RAB with qualified withheld metadata. The combined regression passes174
+observations, strict producer typing and Python boundaries733imports. Evidence:
+`docs/helix/04-build/evidence/security-native-disclosure-conflict-20261012/receipt.json`.
+Trace CONTRACT-062/063 / US-056-AC6/7 / STP-056 B07/B09 / STP-057 L12.
+This is fixture prepublication conflict/rollback feasibility, not authenticated
+production installer, commit-uncertainty recovery or full source/authority/
+publication admission. No original backend case is promoted.

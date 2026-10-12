@@ -35,4 +35,8 @@ const flatDisclosure=lowerCandidateSecurityDisclosure({...disclosureInput,scans:
 const withheldInput={...disclosureInput,rules:disclosureInput.rules.map(rule=>({...rule,disclosure:[[ref('Resource-secret'),'withheld']]}))};
 const graphWithheld=lowerCandidateSecurityDisclosure(withheldInput);
 const flatWithheld=lowerCandidateSecurityDisclosure({...withheldInput,scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}}))});
-console.log(JSON.stringify({objects,edges,predicateSql,condition,scans,fold,flatFold,graphDisclosure,flatDisclosure,graphWithheld,flatWithheld}));
+const incompatible={transformed:{...mask.transformed,literal:{string:'OTHER'}}};
+const conflictInput={...disclosureInput,rules:[...disclosureInput.rules,{...disclosureInput.rules[0]!,id:'incompatible',disclosure:[[ref('Resource-secret'),incompatible]]}]};
+const graphConflict=lowerCandidateSecurityDisclosure(conflictInput);
+const flatConflict=lowerCandidateSecurityDisclosure({...conflictInput,scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}}))});
+console.log(JSON.stringify({objects,edges,predicateSql,condition,scans,fold,flatFold,graphDisclosure,flatDisclosure,graphWithheld,flatWithheld,graphConflict,flatConflict}));
