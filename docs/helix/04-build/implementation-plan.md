@@ -6047,3 +6047,29 @@ inherited-ADMIN countermodel. No arbitrary graph or native SQL refinement follow
 Trace CONTRACT-005 delegation, CONTRACT-063/STP-056 B04/B05/B11/B12 and
 US-056 AC5/AC9/AC10 prerequisites. No original backend case is promoted;
 all132 acceptance cases remain required and full goal active.
+
+
+### PUBLIC private-storage privilege correspondence — 2026-10-12
+
+Four actual native PUBLIC column grants (SELECT/INSERT/UPDATE/REFERENCES) become
+effective ordinary consumer rights without role-membership edges. The public
+runtime guard refuses42501 for each, and revocation restores status. SELECT
+independently reads the private installation column, confirming the raw privilege;
+no private business-data leak is claimed. The existing native effective-ACL probes
+already cover this path, so no security implementation change is necessary.
+
+Original targeted source/wheel controls pass underfc7a6e61. Integration preserves
+maine1cfb6fa's public create-group runtime and original caller-owned durable retry.
+`evidence/public-global-storage-grants-20261012/receipt.json` retains final source
+pins/archive and72 passing combined public catalog/view/source/key/object/create
+tests from source and installed wheel. Wheel/source/installed bytes match exactly.
+Python boundaries and nine original UMF SQL owner round trips pass. Runtime is
+PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary. Existing native unittest
+cleanup completes without error; no independent stop receipt or formal/native
+refinement is claimed. No whole-function/callable/delegation/current-authority/
+observation closure or advanced backend case follows from these controls.
+
+Trace CONTRACT-005 effective PUBLIC privileges, CONTRACT-063/STP-056 B04/B05/
+B11/B12 and US-056 AC5/AC9/AC10 prerequisites. Public module-level create support
+remains distinct from shared ontology-policy authorization and masking. All132
+original cases remain required and the full shared goal stays active.
