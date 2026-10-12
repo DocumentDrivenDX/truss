@@ -1,0 +1,19 @@
+test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint (test_group_create_native.PublicCreateGroupTests.test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint) ... ok
+test_changed_request_origin_and_none_has_no_cache (test_group_create_native.PublicCreateGroupTests.test_changed_request_origin_and_none_has_no_cache) ... ok
+test_create_commit_read_and_original_durable_replay (test_group_create_native.PublicCreateGroupTests.test_create_commit_read_and_original_durable_replay) ... ok
+test_current_writer_revocation_refuses_replay (test_group_create_native.PublicCreateGroupTests.test_current_writer_revocation_refuses_replay) ... ok
+test_deferred_corruption_aborts_outer_commit (test_group_create_native.PublicCreateGroupTests.test_deferred_corruption_aborts_outer_commit) ... ok
+test_genuine_type_reference_and_profile_definitions (test_group_create_native.PublicCreateGroupTests.test_genuine_type_reference_and_profile_definitions) ... ok
+test_group_failure_and_rollback_preserve_caller_work (test_group_create_native.PublicCreateGroupTests.test_group_failure_and_rollback_preserve_caller_work) ... ok
+test_native_late_journal_and_receipt_failures_are_atomic (test_group_create_native.PublicCreateGroupTests.test_native_late_journal_and_receipt_failures_are_atomic) ... ok
+test_native_retry_states_reach_host_without_internal_retry (test_group_create_native.PublicCreateGroupTests.test_native_retry_states_reach_host_without_internal_retry) ... ok
+test_noinherit_set_role_raw_privilege_is_refused_after_reset (test_group_create_native.PublicCreateGroupTests.test_noinherit_set_role_raw_privilege_is_refused_after_reset) ... ok
+test_raw_facade_rejects_missing_values_and_duplicate_json (test_group_create_native.PublicCreateGroupTests.test_raw_facade_rejects_missing_values_and_duplicate_json) ... ok
+test_reader_and_asserted_actor_cannot_authorize_first_create (test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create) ... ok
+test_rewritten_group_and_extra_entity_event_refuse (test_group_create_native.PublicCreateGroupTests.test_rewritten_group_and_extra_entity_event_refuse) ... ok
+test_selected_group_provider_is_callable_and_disposal_closes_it (test_group_create_native.PublicCreateGroupTests.test_selected_group_provider_is_callable_and_disposal_closes_it) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 62.303s
+
+OK

@@ -6097,3 +6097,14 @@ CONTRACT-063, STP-057 L01/L02/L05/L12, US-057 AC1/AC3/AC8 prerequisites. This
 qualifies current module-level refusal/recovery only; original field/ontology/
 ownership-change controls remain required. No full backend case is promoted;
 all132 original cases remain required and the full shared goal stays active.
+
+
+Final integration preserves main46e3a558/c8ea133d's new person-scoped catalog
+reader and updated runtime release. All14 create-group controls pass against the
+merged source and isolated installed wheel, including fresh-create refusal,
+zero object/group/receipt/journal effects, native attribution and authorized retry.
+`merged-receipt.json`/`merged-source.zip` retain final source pins and exact
+wheel/source/installed correspondence. Boundaries and ten original UMF SQL owner
+round trips pass. The separate reader-catalog native suite is not claimed as
+replayed; earlier72-test qualification retains its prior release/source scope.
+No shared field/ontology write case is promoted. Full goal remains active.
