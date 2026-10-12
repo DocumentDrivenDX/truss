@@ -1,0 +1,6 @@
+test_unknown_policy_extensions_refuse_without_losing_source_or_prior_work (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_unknown_policy_extensions_refuse_without_losing_source_or_prior_work) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 9.742s
+
+OK

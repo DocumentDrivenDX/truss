@@ -5908,3 +5908,27 @@ control reads only the granted column. Native unittest cleanup completes without
 error; no independent cleanup packet is claimed. Trace CONTRACT-005,
 CONTRACT-063/STP-056 B04/B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites.
 No backend case is promoted; the original132-case goal remains active.
+
+### Public unsupported policy semantics refusal — 2026-10-12
+
+`evidence/public-unknown-policy-refusal-20261012/receipt.json` exercises an
+opaque unknown security-next99.0.0 policy at document/module/record/field scopes.
+Original UMF preparation retains the exact parsed source and policy content.
+Actual public registration refuses every selection without document/type/request/
+report effects or catalog-head advancement, preserves prior caller work and
+subsequently accepts and commits a supported original registration. This verifies
+that the current scalar catalog profile cannot silently discard unknown policy
+meaning and activate its module-only interpretation in its place.
+
+The source control and installed-wheel control both pass, each with four refusal
+scopes and positive recovery. All package sources and installed contents remain
+byte-identical to the previous54-test source/wheel qualification. The initial
+import failure was test placement outside the class and is retained explicitly
+as harness error, not product counterevidence. Native unittest cleanup completes
+without error; no independent cleanup packet or formal refinement is claimed.
+
+Trace CONTRACT-062/063 and STP-056 B09/B15, STP-057 L12, US-056 AC7 /
+US-057 AC8 prerequisites. Unknown opaque-extension refusal does not implement
+or qualify the shared ontology security vocabulary, advanced policy compilation,
+existing-profile migration rollback or business enforcement. No full backend case
+is promoted; all132 original acceptance cases remain required and goal active.

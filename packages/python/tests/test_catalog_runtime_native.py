@@ -644,4 +644,29 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
             self.assertTrue(retry.value.replayed);self.assertEqual(retry.value.report_bytes,report.value.original_bytes)
             host.detach();connection.commit()
 
+
+    def test_unknown_policy_extensions_refuse_without_losing_source_or_prior_work(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        connection.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
+        payload={'opaquePolicy':{'subject':'Staff','resource':'Projects','rule':'active assignment required'}}
+        for scope in ('document','module','record','field'):
+            with self.subTest(scope=scope):
+                source=relational_document();source['id']='policy'
+                source['vocabularies']={'security-next':{'version':'99.0.0'}}
+                module=source['modules'][0]
+                target={'document':source,'module':module,'record':module['elements'][0],
+                    'field':next(e for e in module['elements'] if e['kind']=='field')}[scope]
+                target['extensions']={'security-next':payload}
+                prepared=assembly.prepare_catalog((CatalogDocument('policy','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+                self.assertEqual(prepared.documents[0].observation()['source'],source)
+                result=assembly.accept_in_transaction(tx,prepared,request_key='unsupported-'+scope)
+                self.assertIsInstance(result,Error)
+                self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
+                self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
+                for table in ('schema_doc','type_def','catalog_registration_request','catalog_acceptance_report'):
+                    self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='supported-after-refusal'),Ok)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.catalog_registration_request').fetchone(),(1,))
+
 if __name__=='__main__':unittest.main(verbosity=2)
