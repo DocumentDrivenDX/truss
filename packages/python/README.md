@@ -1431,9 +1431,55 @@ requiring mutation writer authority.
 These concrete profiles implement the documented scalar/independent-edge,
 host-adopted import and caller-asserted feed subsets. They do not claim the broader
 draft historical DirectRead, engine-owned Import or verified-application Feed
-protocols. History, compiled execution and standalone mutation selectors remain
-unavailable; supported mutations use the group provider.
+protocols. Compiled execution and standalone mutation selectors remain unavailable;
+supported mutations use the group provider. Retained native history is available
+as described below.
 
 `ReferenceAssemblyConfiguration` still selects the separately documented inert
 legacy profile. Use `CatalogRuntimeConfiguration` with the adopted psycopg host
 for these installed runtime capabilities.
+
+### Public retained history (runtime 0.21 candidate)
+
+Use `assembly.history(assembly.history_selection)` for the concrete
+`NativeHistoryCapability`. The same calls are also available on the assembly.
+They work after canonical object/edge deletion and require current read authority
+for the original record, property declarations and old/new edge endpoints.
+
+```python
+from truss import HistoryEntity, CapabilityAvailable
+
+selected = assembly.history(assembly.history_selection)
+if isinstance(selected, CapabilityAvailable):
+    entity = HistoryEntity(
+        kind="object", document_id="orders", module_id="sales",
+        definition_id="Order", id=123,
+    )
+    page = selected.capability.page_history_in_transaction(transaction, entity=entity)
+    version = selected.capability.reconstruct_in_transaction(
+        transaction, entity=entity, version=2,
+    )
+```
+
+Each page returns one complete committed entity mutation group in journal
+`(xid, seq)` order below a fixed safe xmin. This is journal order, which can
+differ from version chronology. Resume using `HistoryPage.continuation`; an
+empty page has no continuation. Each `RetainedHistoryEvent` carries the original
+UTF-8 event bytes, SHA256, writer xid, sequence and actual version. Scope binds
+installation, source epoch, release and authored/native entity identity.
+
+Reconstruction uses the retained full create/metadata witness and validates the
+entire original group. `HistoricalRecord.record` is the native JSONB projection
+of that stored image; `event.content` retains its exact original enclosing event.
+Each image keeps its own original catalog revision and definition pins across
+catalog evolution. `HistoricalDeleted` reports the actual deletion version and
+the unmodified previous image in `before`: deleting version3 does not relabel
+the version2 record as version3. Missing or unsafe requested versions return
+`HistoryUnavailable`, without inventing an absent or current state.
+
+Reads support adopted read-only READ COMMITTED transactions without assigning an
+xid. Whole-group event/encoded-byte limits default to 4,096 and 8MiB, with maxima
+65,536 and 16MiB. Oversized groups refuse without truncation. This profile covers
+the existing rootless scalar object and independent edge history; archive
+retrieval, cleanup, historical source-fact retrieval and generalized reducers/
+reconstruction evidence remain unfinished. Runtime0.21 requires fresh installation.

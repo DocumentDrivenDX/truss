@@ -1,0 +1,40 @@
+{
+  "runtime": "0.21",
+  "scope": "public committed native history groups and retained version reconstruction",
+  "wheelSha256": "7c68d18c8f4e777bd19392bcc7f6dd2a33d57fb40afeb0185ad9ec086d5202ad",
+  "environment": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6"
+  },
+  "installedBasicTests": {
+    "modules": [
+      "test_history_runtime_native",
+      "test_catalog_compatible_acceptance_native"
+    ],
+    "tests": 2,
+    "seconds": 27.911,
+    "passed": true
+  },
+  "ownerSqlRoundTrips": 19,
+  "pythonBoundaryImports": 776,
+  "publicTypingFixtures": 5,
+  "expectedNegativeTypeErrors": 20,
+  "review": "Astra Ultra approved original group/revision/pin validation, current authority, deletion semantics and selected provider",
+  "covered": [
+    "object create/update/delete history after canonical deletion",
+    "complete property+metadata group pages",
+    "exact original event bytes and physical correspondence",
+    "edge reconstruction after edge and source-object deletion",
+    "deleted version marker preserves previous image version",
+    "missing requested version unavailable",
+    "readonly read without xid assignment",
+    "original r1 and r2 image pins across compatible catalog evolution"
+  ],
+  "limits": [
+    "rootless scalar objects and independent directed edges",
+    "journal xid/seq ordering is not version chronology",
+    "one complete entity mutation group per page",
+    "no archive, cleanup, historical source-fact API or generalized reducer/evidence protocol",
+    "fresh installation"
+  ]
+}

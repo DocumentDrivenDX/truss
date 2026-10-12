@@ -18,6 +18,7 @@ from .import_runtime import ImportRuntimeContext
 from .groups import AuthoredValue
 from .feed import FeedPage, FeedAcknowledged, FeedUnavailable
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
+from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
 
 from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogReport)
 from .capability_contracts import NativeRuntimeOperations
@@ -124,3 +125,15 @@ class NativeFeedCapability(_NativeCapability[Literal['feed']]):
 
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]:
         return self._assembly.acknowledge_feed_in_transaction(transaction,page)
+
+
+@dataclass(frozen=True,slots=True,kw_only=True)
+class NativeHistoryCapability(_NativeCapability[Literal['history']]):
+    """Complete retained entity groups and their original version images."""
+    def page_history_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,cursor: HistoryCursor | None=None,
+                                    maximum_events: int=4096,maximum_bytes: int=8388608) -> Outcome[HistoryPage | HistoryUnavailable]:
+        return self._assembly.page_history_in_transaction(transaction,entity=entity,cursor=cursor,maximum_events=maximum_events,maximum_bytes=maximum_bytes)
+
+    def reconstruct_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,version: int,
+                                   maximum_events: int=4096,maximum_bytes: int=8388608) -> Outcome[HistoricalRecord | HistoricalDeleted | HistoryUnavailable]:
+        return self._assembly.reconstruct_in_transaction(transaction,entity=entity,version=version,maximum_events=maximum_events,maximum_bytes=maximum_bytes)

@@ -19,6 +19,25 @@ ddx:
 
 # Contract: Journal
 
+## Public native history reads — runtime 0.21
+
+The Python native history profile publishes one complete committed per-entity
+mutation group in `(xid,seq)` journal order below a fixed snapshot-xmin frontier.
+Journal order is not assumed to be version chronology. Original event/origin
+wrappers, physical row correspondence, member count and ordered group digest
+are verified. Current readers must cover the original entity, historical property
+declaration owners and old/new edge endpoints before release. Pages are scoped
+to the authority installation/epoch/release/entity and do not split a group.
+
+Reconstruction reads the retained full create/metadata witness at the requested
+actual version, without current canonical rows. Before and after images retain
+their own accepted revision and definition pins. Deletion at versionV returns a
+`deleted(V)` marker and the unchanged V−1 before-image. Unknown, missing or unsafe
+requested history is unavailable, not a fabricated record or absence proof.
+This implemented scalar/independent-edge profile retains local events indefinitely;
+archive retrieval, cleanup, source-fact history and generalized reducer/evidence
+interfaces remain separate unfinished work.
+
 ## Owner decisions — 2026-10-07
 
 Accepted by the owner: history supports reconstruction without current rows. Creates retain complete new records; deletes retain complete prior records; updates retain ordered property deltas plus the selected complete metadata boundary witness. The selected two-property mutation emits two property deltas and one witness. Local retention is deployment-configurable, including very short or zero retention. Continued reconstruction after local deletion requires a qualified durable archive handoff; otherwise return explicit unavailable history. Required consumer/receipt protections and atomic history production are not bypassed by a zero-retention setting. Native producers, archive continuity and selected encoding/profile qualification remain build gates.

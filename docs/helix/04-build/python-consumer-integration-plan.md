@@ -42,6 +42,16 @@ module-reader/writer and enrolled complete-source reader gates. The broader
 historical, engine-owned import, verified-application and compiled profiles
 remain incomplete. The legacy inert configuration is a separate profile.
 
+## Public retained history — runtime 0.21
+
+The selected native history provider now pages complete committed object/edge
+groups and reconstructs their original full version witnesses after canonical
+deletion. It validates group and physical correspondence, resolves every image
+against its own retained revision/pins, and rechecks current original-owner read
+authority. Deletion markers preserve the prior record's real version. The basic
+object/edge workflow and existing compatible-evolution workflow exercise those
+public calls. Broader source-fact/archive/reducer interfaces remain open.
+
 ## Next callable operations
 
 Runtime 0.20 implements public committed feed reads and ordinary-role
