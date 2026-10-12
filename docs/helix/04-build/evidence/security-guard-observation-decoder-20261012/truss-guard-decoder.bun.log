@@ -1,0 +1,14 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/security-guard-observation.test.ts:
+(pass) original four TEXT carriers preserve exact bytes and bigint maximum [0.40ms]
+(pass) missing extra or reordered descriptors and native domains refuse [0.12ms]
+(pass) zero extra sparse or extended rows refuse [0.08ms]
+(pass) null noncanonical wrong identity and overflow carriers refuse [0.22ms]
+(pass) exact binary limits qualify only the local decoder subset [0.10ms]
+(pass) getters iterators and unknown packet fields cannot become native evidence [0.06ms]
+
+ 6 pass
+ 0 fail
+ 36 expect() calls
+Ran 6 tests across 1 file. [725.00ms]
