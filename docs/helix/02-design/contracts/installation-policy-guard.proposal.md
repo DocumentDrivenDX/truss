@@ -519,3 +519,18 @@ The decoder establishes carrier correspondence only; expected bytes remain
 assertions, not authenticated issuer/operation/source/freshness or AuthorityLease
 proof. Production recovery/custody/bootstrap/participant qualification and all
 remaining original acceptance cases stay open.
+
+
+### Private buffered-result carrier refusal — 2026-10-12
+
+The private synchronous QueryCoordinator now requires exact dict input for
+decoded mappings. MappingProxyType can hide custom executable iteration and is
+therefore refused as input; the coordinator still creates immutable proxies as
+output. Regression checks confirm wrapped custom/plain mappings refuse without
+executing custom code, while cold deferred query/decoder generators are closed
+without running their bodies or publishing streams. Context cleanup runs once.
+Thirteen coordinator tests pass with synthetic hosts. Evidence:
+`../../04-build/evidence/security-query-carrier-refusal-20261012/receipt.json`.
+This is a private seam correction, not a native streaming/security service,
+authenticated callback/issuer/guard proof or full STP-057 L04 qualification.
+Production final-release integration and remaining acceptance cases stay open.

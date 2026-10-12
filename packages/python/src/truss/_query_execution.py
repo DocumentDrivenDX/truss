@@ -69,7 +69,9 @@ def _freeze_result(value):
         return value
     if type(value) in (tuple, list):
         return tuple(_freeze_result(child) for child in value)
-    if type(value) in (dict, MappingProxyType):
+    # A mapping proxy may hide a custom mapping with executable iteration.
+    # Input must be an exact dict; only this producer creates frozen proxies.
+    if type(value) is dict:
         if any(type(key) is not str for key in value):
             raise CompileRefusal('decoder', 'Exact string member names required')
         for key in value:

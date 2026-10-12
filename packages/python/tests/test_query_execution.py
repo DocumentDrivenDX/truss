@@ -91,6 +91,43 @@ class QueryExecutionTests(unittest.TestCase):
         self.assertEqual(events.count('cleanup'),1)
         self.assertEqual(sum(isinstance(e,tuple) and e[0]=='query' for e in events),1)
 
+    def test_mapping_proxy_cannot_hide_executable_decoded_carriers(self):
+        from types import MappingProxyType
+        callbacks=[]
+        class ExecutableMap(dict):
+            def __iter__(self):
+                callbacks.append('iteration');return super().__iter__()
+            def items(self):
+                callbacks.append('items');return super().items()
+        for mapping in [ExecutableMap(value='secret'), {'value':'ordinary'}]:
+            events=[];engine,plan=coordinator(self.host(events,decode=[MappingProxyType(mapping)]))
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'decoder')
+            self.assertEqual(callbacks,[])
+            self.assertEqual(events.count('cleanup'),1)
+
+    def test_deferred_query_and_decoder_results_never_publish_streams(self):
+        for stage in ['query','decode']:
+            events=[];streams=[];host=self.host(events)
+            def body():
+                events.append('stream body ran');yield ['secret']
+            def deferred(*_):
+                value=body();streams.append(value);return value
+            if stage=='decode':host.decode=deferred
+            else:
+                original=host.read_context
+                @contextmanager
+                def context():
+                    with original() as scope:
+                        scope.query=deferred;yield scope
+                host.read_context=context
+            engine,plan=coordinator(host)
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'execution_obligation')
+            self.assertNotIn('stream body ran',events)
+            self.assertEqual(events.count('cleanup'),1)
+            self.assertIsNone(streams[0].gi_frame)
+
     def test_disposal_and_reentrancy_do_not_repeat_native_work(self):
         events=[];host=self.host(events)
         def check(*_):
