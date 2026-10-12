@@ -160,3 +160,19 @@ authorization facts separately before qualifying their surfaces. Row RLS does
 not provide property masking. Keep the existing complete-read profile available
 and reject unsupported protected composition rather than changing all routines
 to row_security=on. Activation and rollback preserve prior qualified protection.
+
+
+Selected-source exclusion feasibility now has an executable native regression
+in `packages/python/tests/test_security_graph_source_cut_native.py`. In the
+disposable on-setting experiment, the excluded assessor holds SHARE table locks
+on object/prop_def/type_def before complete preflight. An independent writer's
+RowExclusiveLock is observed ungranted in pg_locks. The actual public read returns
+while that writer is blocked; releasing the guard lets its hidden-row corruption
+commit, and the next preflight detects the incomplete source. Thirty-four total
+observations are retained in
+`../../04-build/evidence/security-native-source-exclusion-20261012/receipt.json`.
+This is a candidate native mechanism for the selected row/property/type cut, not
+an admitted security guard. It blocks all writers to those relations, even other
+types; performance and finite contention outcomes must be qualified before
+adoption. Role/policy/routine/private-fact changes and buffered release are not
+covered by these table locks. Preserve their separate authority/coordinator gates.

@@ -1,0 +1,9 @@
+import {createCandidateGraphSource} from '../../packages/postgresql/src/security-graph-source';
+import {lowerSecurityRowPredicate,type SecurityPredicateType} from '../../packages/postgresql/src/security-predicate';
+const data=await Bun.stdin.json();const ref=(elementId:string)=>({documentId:'adoc',moduleId:'m',elementId});
+const source=createCandidateGraphSource({kind:'object',typeId:data.typeId,propertyOwnerTypeId:data.typeId,fields:[{propertyId:data.valueId,column:'value',scalar:'string'},{propertyId:data.labelId,column:'label',scalar:'string'},{propertyId:data.flagId,column:'flag',scalar:'boolean'}]});
+const domain={scalarType:'boolean',nullability:'required',cardinality:'one',facets:{},allowedValues:null};
+const sql=lowerSecurityRowPredicate({logicalPlan:{version:'weft.security.logical-ir/0.1.0',rules:[{id:'flag',effect:'permit',actions:['read'],target:ref('A'),disclosure:[],condition:{equal:[{field:{binding:'resource',field:ref('A-flag'),domain}},{constant:{field:ref('A-flag'),domain,literal:{boolean:true}}}]}}]},action:'read',target:ref('A'),subject:ref('B'),subjectLoginColumn:'login',resourceFieldParameters:[ref('A-flag')],types:[{type:ref('A'),keyId:'a-primary',keyFields:[{ref:ref('A-value'),column:'value'},{ref:ref('A-label'),column:'label'}],fields:[{ref:ref('A-value'),column:'value'},{ref:ref('A-label'),column:'label'},{ref:ref('A-flag'),column:'flag'}],home:{source}},{type:ref('B'),keyId:'pk',keyFields:[],fields:[],home:{schema:'fixture',table:'unused_subject'}}] as SecurityPredicateType[]});
+const expressions=Object.fromEntries([...source.sql.matchAll(/(CASE WHEN .*? END) AS "(value|label|flag)"/g)].map(m=>[m[2],m[1]!.replaceAll('g.props','props')]));
+if(Object.keys(expressions).length!==3)throw Error('fixture projection extraction failed');
+console.log(JSON.stringify({sourceSql:source.sql,validitySql:source.validitySql,predicateSql:sql,rowExpressions:expressions}));

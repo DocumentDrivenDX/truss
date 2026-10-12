@@ -6308,3 +6308,21 @@ and artifacts. TD-020 sequences complete collector/cut admission, separate read
 owner/original-person composition and native policy/release. STP-020 adds their
 required actual native controls. This advances design from an identified gap to
 a concrete implementation sequence; no original acceptance case is promoted.
+
+
+### Executable selected-source exclusion regression — 2026-10-12
+
+`test_security_graph_source_cut_native.py` and the real candidate producer fixture
+now reproduce public graph creation, source validity, ordinary forced-RLS reads,
+public-profile refusal/on-setting experiments, hidden malformed population and
+concurrent native source exclusion. Thirty-four observations pass on PostgreSQL
+18.6. pg_locks proves an independent hidden writer waits while three SHARE
+source locks cover complete preflight and actual API return; it commits after
+release and the next preflight rejects. Seventeen related Bun tests, strict
+security-source typing and Python boundaries(691imports) pass. Receipt and
+source preimages: `evidence/security-native-source-exclusion-20261012/receipt.json`.
+No runtime security setting changes; no original backend case is promoted.
+Table-level exclusion is a feasibility candidate with broad writer contention,
+not complete source/authority/publication guard admission. Next compose the
+original source enrollment and narrowly privileged read-owner/caller protocol,
+then qualify authority changes and final-release lifetime through actual APIs.

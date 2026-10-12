@@ -417,3 +417,11 @@ complete preflight or valid filtered row cannot satisfy the coherent-cut test.
 Integrity checks must continue to see invalid hidden rows and must not disclose
 their identities or values. All full-profile controls remain not-run until their
 actual admitted operation is implemented and independently exercised.
+
+
+The selected source-cut precursor now runs from the repository via
+`PYTHONPATH=packages/python/src:packages/python/tests python packages/python/tests/test_security_graph_source_cut_native.py`
+with stock psycopg, Bun and the selected pgserver-pg18 runtime installed. Optional
+TRUSS_SECURITY_COMPONENT_EVIDENCE retains the component JSON. The test confirms
+actual native lock wait/hold and ordering, not elapsed sleeps alone. This closes
+only the selected-source exclusion experiment, not the full controls above.
