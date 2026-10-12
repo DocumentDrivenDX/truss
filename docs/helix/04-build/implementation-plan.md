@@ -5157,3 +5157,58 @@ B11/B12/L03/L11/L13 and US-056 AC9/AC10 prerequisites. Exact remote-plan/outcome
 binding, issuer/mapping/target authentication, complete writer/current-state
 closure, graph capture and protected final release remain required. No new backend
 binding; full goal active at26/132 with106 unbound required cases.
+
+### Live role identity and cached role-setting replacement — 2026-10-11
+
+The newly selected CONTRACT-005 session-person fresh-catalog policy authorizes
+native session person A with exact role=none and registrar authority. It is a
+separate catalog-operation profile. It does not replace the owned delegated
+`truss-flat-fact-provider-fixture/0.4` data-read profile, which compares explicitly
+selected original session/effective role OIDs and retains its privilege exclusions.
+The similarly numbered native catalog context0.4 is not this provider profile.
+Neither profile derives identity from a cached role-setting name.
+
+Two native controls apply a controlled role rename/recreation before fresh fixture
+profile issuance. The active native role retains its OID under the renamed role,
+while current_setting(role) still names the replacement role with another OID.
+Live-OID-based delegated evaluation permits the original mapped fixture subject;
+a fixture issuer selecting the replacement hint OID refuses before executor
+execution. The replacement role has CREATEROLE but cannot donate its identity.
+This is fresh controlled identity correspondence, not an uncoordinated role-change
+lifetime guarantee, session-person catalog facade qualification or original
+subject-mapping authentication.
+
+Final `evidence/python-psycopg-epoch-cut/8a721750-03d0-4498-8322-efdc497192fb`
+passes183 methods, boundaries,143 current/preimage Truss sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups. Formal
+`evidence/security-caller-binding-formal/6a204e59-b195-4825-9569-4369f75ee22d`
+retains five exact source inputs and eight Z3 4.15.4 SMT-LIB/fresh-context replays,
+four UNSAT/four SAT. It adds live-versus-hint role correspondence; hint-only
+mapping admits a replacement-identity countermodel. Faithful native capture and
+semantic subject mapping remain separate premises; no native decoder/driver,
+authentication, source/role lifetime or protected-release refinement is claimed.
+Trace CONTRACT-063/STP-056 B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites.
+Complete issuer/mapping/target credentials, callable/writer/current-state closure,
+graph capture and protected publication remain open. No backend binding; full goal
+active at26/132 with106 unbound cases.
+
+Integrated-host requalification: main semantic-ordinal work changed psycopg_host
+and module boundary checker inputs. Pre-merge8a721750 keeps its original scope.
+Fresh `evidence/python-psycopg-epoch-cut/6e633de9-94eb-4514-a47e-9f35fd98cdee`
+passes183 methods and boundaries with143 current/preimage source pins and three
+cleanups on the integrated host. Earlierf94848cd runs183 and fails an existing
+permit control: journal records executor cancelled/caller invalid_transaction
+at11389ms. Unchanged-source rerun passes. Both packets are retained; no deadline,
+containment or authority check was weakened and deterministic availability is not
+claimed. Exact earlier cause remains unqualified beyond the observed cancellation.
+The eight-query abstract caller model remains unchanged and does not establish
+native host/ordinal refinement. Full backend acceptance stays26/132; goal active.
+
+Final source-inventory integration: a further main catalog-candidate change alters
+one retained input after6e633de9. Fresh
+`evidence/python-psycopg-epoch-cut/1ba2a07c-9f61-4b5c-aaa8-c6a53b9418f0`
+passes183 methods, boundaries and143 current/preimage inputs with three cleanups
+against both integrated changes. Earlier packets retain their own source scopes.
+This security composition run does not independently qualify the new catalog
+facade/dispatch workflow or promote any backend acceptance binding.

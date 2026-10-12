@@ -1,0 +1,83 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-caller-binding.py": "d143845ac9f3d28d4ad818d609da6cf0e22d0c88b40d61d3a65afa8d3f978842",
+    "packages/python/src/truss/_security_fact_coverage.py": "50bfd13be6b2ce0f82cc1e0d0ceffd2bc192020b2d4f5a96eaa27b72f2f34385",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "31000ae911067480d8b4ad40f073e580ab780866172d522ec70c1de3252fec29",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "17a8c0db410b469caadbba268110cacb71fcc955e25a4aae8fc58ab20b9ee512",
+    "scripts/security_owned_read.py": "53c93931c9789e00e8ffc12e043632867328ad10f380e9b44e8df83aff0d49e6"
+  },
+  "queries": [
+    {
+      "id": "cached_hint_replacement_cannot_match_original_native_role",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "5168f4692672f5701c244ba7a4c207a7a102e2abb94c446b3c17a187afa8b8b8",
+      "model": null
+    },
+    {
+      "id": "live_native_match_does_not_require_cached_hint_match",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "ee026d94a0f78f3006923e42eb052a08b58d59fd0799f0cfed5f61ec702314e9",
+      "model": "[role_setting_name_resolution_oid = 1,\n mapped_effective = 0,\n native_mapped_subject = \"\",\n selected_subject = \"\",\n actual_effective = 0,\n mapped_session = 0,\n actual_session = 0]"
+    },
+    {
+      "id": "hint_only_mapping_can_borrow_replacement_identity",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "6b299b9f524ce9aad83b3ce26739ea4d476e0705916208f82e52b7690ab003a6",
+      "model": "[role_setting_name_resolution_oid = 1,\n actual_effective = 0,\n mapped_session = 0,\n actual_session = 0,\n mapped_effective = 1]"
+    },
+    {
+      "id": "native_session_mismatch_refuses",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "ff7aa983e1e89af1d6fa938d01c5f819f929da64c5d1a184aeef988ee972281a",
+      "model": null
+    },
+    {
+      "id": "native_effective_role_mismatch_refuses",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "f5985dac097d38d6e497e67f45cf3c99dbead14d8fdfb39ded29dc832bb1ce59",
+      "model": null
+    },
+    {
+      "id": "caller_claim_without_native_capture_can_impersonate",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "3801f5ca349eba49f23f0a292ee0196e10cbe25a5c72daffd54711ab7d39f60d",
+      "model": "[mapped_session = 1,\n actual_session = 0,\n mapped_effective = 0,\n actual_effective = 0,\n claimed_session = 1]"
+    },
+    {
+      "id": "retained_mapping_prevents_caller_subject_substitution",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "940337c659cadb6fbb33da900358a65fb078bfc6f2df1a3ed85fc8441193ec4f",
+      "model": null
+    },
+    {
+      "id": "native_role_match_does_not_authenticate_semantic_mapping",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "08a5a2bb5f6c4fd6f46b933852883b54928cfd04f894ae6795eab6c9a2d244a1",
+      "model": "[independently_authorized_subject = \"\",\n native_mapped_subject = \"A\",\n selected_subject = \"A\",\n mapped_effective = 0,\n actual_effective = 0,\n mapped_session = 0,\n actual_session = 0]"
+    }
+  ],
+  "scope": "Unbounded native role identities and abstract canonical subject keys under faithful native capture and retained-profile key selection. Session/effective mismatches and subject replacement refuse. Live role identity remains independent of cached name-hint resolution; hint-only mapping admits replacement identity. Caller claims and unauthenticated semantic mappings have countermodels.",
+  "limitations": [
+    "No database authentication, JSON/Python/PostgreSQL or original Core key-encoding refinement proof",
+    "Native capture and retained mapping are premises; semantic mapping authorization and source/role lifetime remain unqualified",
+    "No authenticated caller/issuer, original writer installation/ACL closure, full authority admission or protected final release proof"
+  ]
+}

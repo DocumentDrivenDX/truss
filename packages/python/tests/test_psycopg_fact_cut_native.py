@@ -942,7 +942,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
 
-    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False,*,predecessor=None):
+    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False,*,predecessor=None,caller_effective_oid=None):
         import sys
         if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
         from security_owned_read import run_delegated_owned_identity_read
@@ -950,6 +950,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         def roles(c):return c.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
         caller=roles(caller_host.connection);executor=roles(self.connection)
         value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':subject}]};value['executor']={'sessionRoleOid':str(int(executor[0])+1) if wrong_executor else executor[0],'effectiveRoleOid':executor[1]}
+        if caller_effective_oid is not None:value['caller']['effectiveRoleOid']=str(caller_effective_oid)
         comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode(),predecessor=predecessor)
         self._last_delegated_epoch=comparison.epoch
         # Owned harness only: retain sanitized layer codes, never exception text,
@@ -1443,3 +1444,44 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'current transition bytes'):_finish_pending_authority_fixture(self.connection,pending,original)
         self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(restored.epoch,))
         self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),count)
+
+    def test_delegated_live_role_oid_survives_cached_setting_name_replacement(self):
+        self.connection.execute('CREATE ROLE fact_identity_assumed NOLOGIN')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_identity_assumed TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                connection.execute('SET LOCAL ROLE fact_identity_assumed')
+                original_oid=connection.execute('SELECT oid FROM pg_roles WHERE rolname=current_user').fetchone()[0]
+                self.connection.execute('ALTER ROLE fact_identity_assumed RENAME TO fact_identity_renamed; CREATE ROLE fact_identity_assumed NOLOGIN')
+                actual,hint,actual_oid,hint_oid=connection.execute("SELECT current_user::text,current_setting('role'),(SELECT oid FROM pg_roles WHERE rolname=current_user),(SELECT oid FROM pg_roles WHERE rolname=current_setting('role'))").fetchone()
+                self.assertEqual((actual,hint,actual_oid),('fact_identity_renamed','fact_identity_assumed',original_oid));self.assertNotEqual(hint_oid,original_oid)
+                executor_t=self.begin()
+                try:
+                    # Fresh issuer captures live OIDs after the controlled change.
+                    result=self.delegated_owned_read(host,t,executor_t)
+                    self.assertIsInstance(result,Ok,self._last_delegated_events);self.assertEqual(result.value['decision'],'permit')
+                finally:self.connection.execute('ROLLBACK');connection.execute('RESET ROLE')
+            self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute('DROP ROLE IF EXISTS fact_identity_assumed,fact_identity_renamed')
+
+    def test_delegated_cached_role_hint_replacement_oid_cannot_donate_identity(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        self.connection.execute('CREATE ROLE fact_identity_assumed NOLOGIN')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_identity_assumed TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                connection.execute('SET LOCAL ROLE fact_identity_assumed')
+                self.connection.execute('ALTER ROLE fact_identity_assumed RENAME TO fact_identity_renamed; CREATE ROLE fact_identity_assumed NOLOGIN CREATEROLE')
+                original_oid,replacement_oid=connection.execute("SELECT (SELECT oid FROM pg_roles WHERE rolname=current_user),(SELECT oid FROM pg_roles WHERE rolname=current_setting('role'))").fetchone()
+                self.assertNotEqual(original_oid,replacement_oid)
+                executor_t=self.begin()
+                try:
+                    with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                        result=self.delegated_owned_read(host,t,executor_t,caller_effective_oid=replacement_oid)
+                    self.assertIsInstance(result,Error);execute.assert_not_called()
+                finally:self.connection.execute('ROLLBACK');connection.execute('RESET ROLE')
+            self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute('DROP ROLE IF EXISTS fact_identity_assumed,fact_identity_renamed')
