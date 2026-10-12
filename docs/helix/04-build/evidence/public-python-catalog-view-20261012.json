@@ -1,0 +1,31 @@
+{
+  "scope": "public accepted catalog-view milestone; business engine unfinished",
+  "wheelSha256": "348328303df5758f2f21ee6b3835fb8f18d0b53bb3c6e4f0662a44c0d672a056",
+  "postgres": "18.6",
+  "python": "3.11.17",
+  "psycopg": "3.3.6",
+  "installedWheelTests": {
+    "count": 29,
+    "passed": true,
+    "seconds": 36.084
+  },
+  "sourceTests": {
+    "count": 29,
+    "passed": true,
+    "seconds": 33.47
+  },
+  "pythonBoundaryImports": 627,
+  "pythonBoundaryControls": 16,
+  "ownerSqlRoundTrips": 6,
+  "review": "Astra Ultra source approved; final installed wheel and boundary checks passed",
+  "releaseManifestSha256": "747e029b92ed7eac9cdb73e602492b1bd92a96038657da1a29de442bec9f8a2e",
+  "remaining": [
+    "business direct reads",
+    "Weft compiled reads",
+    "grouped mutations/idempotency",
+    "imports",
+    "receipt visibility",
+    "feed/ack",
+    "catalog migrations"
+  ]
+}

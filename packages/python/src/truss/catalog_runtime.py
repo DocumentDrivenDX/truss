@@ -14,6 +14,7 @@ from uuid import uuid4
 from threading import RLock
 from functools import wraps
 from .assembly_contracts import AssemblyDisposed
+from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, _require_original_preparation
@@ -73,7 +74,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -82,7 +83,7 @@ def _release():
 
 def _configuration():
     manifest,digest,_=_release()
-    pin={'identity':manifest['releaseId'],'version':'0.1','sha256':digest}
+    pin={'identity':manifest['releaseId'],'version':manifest.get('version','0.1'),'sha256':digest}
     umf_original=files('truss').joinpath('_umf','manifest.json').read_bytes()
     owner=json.loads(umf_original)['owner']
     return {'acceptanceProfile':pin,'layoutProfile':manifest['layoutProfile'],
@@ -147,9 +148,9 @@ class CatalogReferenceAssembly:
                 FROM truss.schema_rev WHERE rev=0 RETURNING installation_id::pg_catalog.text''',
                 (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),privileges.owner_oid,privileges.client_oid),prepare=False)
             identity=cursor.fetchone()[0]
-            for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()'):
+            for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss catalog runtime 0.1: fresh registration and reports; business writes unavailable'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss catalog runtime 0.2: fresh registration, reports and complete views; business writes unavailable'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
@@ -166,7 +167,7 @@ class CatalogReferenceAssembly:
             row=cursor.fetchone()
             if row is None or row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view'))
         return self._host._run_operation(transaction,observe)
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration]:
@@ -214,3 +215,51 @@ class CatalogReferenceAssembly:
             if json.loads(raw)['revision']!=str(revision):raise ValueError('Original report revision required')
             return CatalogReport(revision,raw)
         return self._host._run_operation(transaction,observe)
+
+    def catalog_view_request(self,*,definition_count: str='65536',encoded_bytes: str='16777216') -> CatalogViewRequest:
+        from .catalog_view import CatalogViewRequest, CatalogViewLimits, CurrentCatalogSelection, CompleteCatalogScope
+        from .contracts import ProfilePin
+        from ._catalog_view_build import VIEW_PROFILE
+        manifest,_,_=_release()
+        return CatalogViewRequest(layout_profile=ProfilePin(**manifest['layoutProfile']),view_profile=VIEW_PROFILE,
+            selection=CurrentCatalogSelection(),scope=CompleteCatalogScope(),
+            limits=CatalogViewLimits(definition_count=definition_count,encoded_bytes=encoded_bytes))
+
+    @_active_operation
+    def catalog_view_in_transaction(self,transaction: TransactionHandle,request: CatalogViewRequest) -> Outcome[CatalogViewAvailable | CatalogViewUnavailable]:
+        from .catalog_view import (CatalogViewRequest, CatalogViewUnavailable, CatalogViewAvailable,
+            HistoricalCatalogSelection, CompleteCatalogScope)
+        from .contracts import ProfilePin
+        from ._catalog_view_build import VIEW_PROFILE, build_catalog_view
+        if type(request) is not CatalogViewRequest:
+            return Error(ExecutionFailure('execution_obligation','Typed catalog view request required'))
+        manifest,digest,_=_release()
+        layout=ProfilePin(**manifest['layoutProfile'])
+        if request.layout_profile!=layout or request.view_profile!=VIEW_PROFILE:
+            return Ok(CatalogViewUnavailable(reason='profile'))
+        if type(request.scope) is not CompleteCatalogScope:return Ok(CatalogViewUnavailable(reason='closure'))
+        selected=None
+        if type(request.selection) is HistoricalCatalogSelection:
+            if request.selection.catalog_revision!='1':return Ok(CatalogViewUnavailable(reason='context'))
+            selected=1
+        def bounded(text,maximum):
+            bound=str(maximum)
+            return len(text)<len(bound) or (len(text)==len(bound) and text<=bound)
+        if not bounded(request.limits.definition_count,65536) or not bounded(request.limits.encoded_bytes,16777216):
+            return Ok(CatalogViewUnavailable(reason='resource'))
+        count=int(request.limits.definition_count);size=int(request.limits.encoded_bytes)
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.catalog_view_basis(%s,%s,%s)',(selected,count,16777216),prepare=False)
+            raw=cursor.fetchone()[0]
+            if raw is None:return CatalogViewUnavailable(reason='context')
+            basis=json.loads(bytes(raw))
+            if basis['releaseId']!=manifest['releaseId'] or basis['releaseSha256']!=digest or basis['layoutProfile']!=manifest['layoutProfile']:
+                raise ValueError('Exact selected installed catalog release required')
+            view=build_catalog_view(basis,layout)
+            if len(view.definitions)>count or len(view.original_bytes)>size:return CatalogViewUnavailable(reason='resource')
+            return CatalogViewAvailable(view=view)
+        result=self._host._run_operation(transaction,observe)
+        if isinstance(result,Error) and result.error.code=='execution_obligation' and result.error.sql_state=='54000':
+            return Ok(CatalogViewUnavailable(reason='resource'))
+        return result

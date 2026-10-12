@@ -34,7 +34,8 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.assembly=result.value
     def tearDown(self):
         for connection,host in self.consumer_connections:
-            host.detach();connection.rollback();connection.close()
+            host.detach()
+            if not connection.closed:connection.rollback();connection.close()
         self.host.detach();self.admin.rollback()
         self.admin.execute('DROP SCHEMA IF EXISTS truss CASCADE')
         self.admin.execute('DROP ROLE consumer')
@@ -167,6 +168,156 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
                 with self.assertRaises(psycopg.errors.FeatureNotSupported):
                     connection.execute('SELECT * FROM truss.catalog_status()')
                 connection.rollback()
+    def test_verified_catalog_basis_has_native_ids_and_atomic_limits(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        registered=assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='view')
+        self.assertIsInstance(registered,Ok)
+        original=connection.execute('SELECT truss.catalog_view_basis(NULL,100,1048576)').fetchone()[0]
+        basis=json.loads(bytes(original))
+        self.assertEqual(basis['revision'],'1')
+        self.assertEqual(len(basis['types']),4);self.assertEqual(len(basis['properties']),8)
+        self.assertEqual(len(basis['keys']),8);self.assertEqual(len(basis['relationships']),2)
+        self.assertEqual({t['document_id'] for t in basis['types']},{'adoc','zdoc'})
+        self.assertIsNone(connection.execute('SELECT truss.catalog_view_basis(2,100,1048576)').fetchone()[0])
+        for count,size in ((1,1048576),(100,1)):
+            connection.execute('SAVEPOINT budget')
+            with self.assertRaises(psycopg.errors.ProgramLimitExceeded):
+                connection.execute('SELECT truss.catalog_view_basis(1,%s,%s)',(count,size))
+            connection.execute('ROLLBACK TO budget');connection.execute('RELEASE budget')
+        for count,size in ((None,1048576),(100,None)):
+            connection.execute('SAVEPOINT budget')
+            with self.assertRaises(psycopg.errors.InvalidParameterValue):
+                connection.execute('SELECT truss.catalog_view_basis(1,%s,%s)',(count,size))
+            connection.execute('ROLLBACK TO budget');connection.execute('RELEASE budget')
+        host.detach();connection.commit()
+    def test_public_catalog_view_exact_sources_dependencies_and_limits(self):
+        import base64
+        from dataclasses import replace
+        from truss import CatalogViewAvailable, CatalogViewUnavailable, HistoricalCatalogSelection
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='public-view'),Ok)
+        request=assembly.catalog_view_request()
+        result=assembly.catalog_view_in_transaction(tx,request)
+        if isinstance(result,Error):self.fail(repr(result.error))
+        self.assertIsInstance(result.value,CatalogViewAvailable)
+        view=result.value.view
+        from jsonschema import Draft202012Validator
+        schema_path=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts/catalog-view-v0.1.schema.json'
+        Draft202012Validator(json.loads(schema_path.read_bytes())).validate(json.loads(view.original_bytes))
+        self.assertEqual(len(view.definitions),22)
+        self.assertEqual([entry.reference.kind for entry in view.definitions],['type']*4+['property']*8+['key']*8+['relationship']*2)
+        keys=[entry for entry in view.definitions if entry.reference.kind=='key']
+        self.assertTrue(all(entry.provenance.authored_pointer.endswith('/keys/1') for entry in keys[::2]))
+        self.assertTrue(all(entry.reference.authored_identity=='a-primary' for entry in keys[::2]))
+        self.assertTrue(all(len(entry.dependencies)==3 for entry in keys[::2]))
+        for entry in view.definitions:
+            import hashlib
+            self.assertEqual(hashlib.sha256(base64.b64decode(entry.definition.bytes_base64)).hexdigest(),entry.definition.sha256)
+        historical=assembly.catalog_view_in_transaction(tx,replace(request,selection=HistoricalCatalogSelection(catalog_revision='1')))
+        self.assertEqual(historical.value.view.original_bytes,view.original_bytes)
+        for limited in (assembly.catalog_view_request(definition_count='1'),assembly.catalog_view_request(encoded_bytes='1')):
+            refused=assembly.catalog_view_in_transaction(tx,limited)
+            self.assertIsInstance(refused.value,CatalogViewUnavailable);self.assertEqual(refused.value.reason,'resource')
+        host.detach();connection.commit()
+    def test_public_view_cross_module_fields_self_and_multiple_targets(self):
+        import copy
+        self.install();connection,host,assembly,tx=self.consumer()
+        source=relational_document();source['id']='cross-module'
+        module=source['modules'][0]
+        fields=[element for element in module['elements'] if element['kind']=='field']
+        module['elements']=[element for element in module['elements'] if element['kind']=='record']
+        for record in module['elements']:
+            for member in record['members']:member['module']='fields'
+            for key in record['keys']:
+                for member in key['fields']:member['module']='fields'
+        source['modules'].append({'id':'fields','namespace':'fields','extensions':{},'elements':fields})
+        prototype=module['relationships'][0]
+        self_relation=copy.deepcopy(prototype);self_relation['id']='self';self_relation['name']='self'
+        self_relation['target']=[{'module':'m','element':'A','key':'a-primary'}]
+        multi=copy.deepcopy(prototype);multi['id']='multi';multi['name']='multi'
+        multi['target']=[{'module':'m','element':'A','key':'a-primary'},{'module':'m','element':'B','key':'a-primary'}]
+        module['relationships']=[self_relation,multi]
+        prepared=assembly.prepare_catalog((CatalogDocument('cross-module','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+        accepted=assembly.accept_in_transaction(tx,prepared,request_key='cross-module')
+        if isinstance(accepted,Error):self.fail(repr(accepted.error))
+        result=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())
+        if isinstance(result,Error):self.fail(repr(result.error))
+        definitions=result.value.view.definitions
+        properties=[entry for entry in definitions if entry.reference.kind=='property']
+        self.assertTrue(all(entry.reference.owner.module_id=='fields' for entry in properties))
+        self.assertTrue(all(entry.provenance.authored_pointer.startswith('/modules/1/elements/') for entry in properties))
+        relationships={entry.reference.authored_identity:entry for entry in definitions if entry.reference.kind=='relationship'}
+        self.assertEqual([ref.authored_identity for ref in relationships['self'].dependencies],['A','A','a-primary'])
+        self.assertEqual([ref.authored_identity for ref in relationships['multi'].dependencies],['A','A','a-primary','B','a-primary'])
+        self.assertNotEqual(relationships['multi'].dependencies[2].type_id,relationships['multi'].dependencies[4].type_id)
+        host.detach();connection.commit()
+    def test_view_budget_failure_preserves_quarantined_cleanup_outcome(self):
+        from unittest.mock import patch
+        from truss import psycopg_host
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='cleanup-view'),Ok)
+        original=psycopg_host._Deadline;calls=[0]
+        def deadline(*args):
+            calls[0]+=1
+            if calls[0]==2:raise MemoryError('injected cleanup failure')
+            return original(*args)
+        with patch('truss.psycopg_host._Deadline',side_effect=deadline):
+            result=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request(definition_count='1'))
+        self.assertIsInstance(result,Error)
+        self.assertEqual(result.error.code,'transaction_unusable');self.assertEqual(result.error.sql_state,'54000')
+        self.assertTrue(host._custody.quarantined)
+        host.detach();connection.rollback()
+    def test_second_registrar_reads_catalog_without_becoming_origin_actor(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        registered=assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='actor-a')
+        self.assertIsInstance(registered,Ok)
+        first=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request()).value.view
+        host.detach();connection.commit()
+        self.admin.execute('CREATE ROLE reader_b LOGIN')
+        self.addCleanup(self.admin.execute,'DROP ROLE IF EXISTS reader_b')
+        self.admin.execute(psycopg.sql.SQL('GRANT {} TO reader_b WITH SET FALSE').format(psycopg.sql.Identifier(self.installation.registrar_role)))
+        params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='reader_b'
+        second_connection=psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000')
+        second_connection.execute('BEGIN');second_host=adopt_psycopg_host(second_connection)
+        self.consumer_connections.append((second_connection,second_host))
+        second_assembly=create_reference_assembly(CatalogRuntimeConfiguration(),second_host).value
+        second_tx=second_host.adopt_transaction().value
+        result=second_assembly.catalog_view_in_transaction(second_tx,second_assembly.catalog_view_request())
+        if isinstance(result,Error):self.fail(repr(result.error))
+        self.assertEqual(result.value.view.original_bytes,first.original_bytes)
+        report=second_assembly.report_in_transaction(second_tx)
+        self.assertEqual(json.loads(report.value.original_bytes)['actor'],'consumer')
+        second_host.detach();second_connection.commit()
+
+    def test_public_view_refuses_corrupt_archive_or_report(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='corruption'),Ok)
+        host.detach();connection.commit()
+        connection.execute('BEGIN');host=adopt_psycopg_host(connection)
+        self.consumer_connections.append((connection,host))
+        tx=host.adopt_transaction().value;assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value
+        for table,column,value in (('schema_doc','document','{}'),('catalog_acceptance_report','report_bytes',b'{}')):
+            with self.subTest(table=table):
+                self.admin.execute('BEGIN')
+                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} DISABLE TRIGGER USER').format(psycopg.sql.Identifier(table)))
+                self.admin.execute(psycopg.sql.SQL('UPDATE truss.{} SET {}=%s').format(psycopg.sql.Identifier(table),psycopg.sql.Identifier(column)),(value,))
+                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} ENABLE TRIGGER USER').format(psycopg.sql.Identifier(table)))
+                self.admin.commit()
+                result=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())
+                self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000')
+                # Restore this controlled administrative corruption from the
+                # original accepted request, keeping later cases independent.
+                self.admin.execute('BEGIN')
+                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} DISABLE TRIGGER USER').format(psycopg.sql.Identifier(table)))
+                if table=='schema_doc':
+                    self.admin.execute("""UPDATE truss.schema_doc d SET document=a.value->>'originalText'
+                     FROM truss.catalog_registration_request r CROSS JOIN LATERAL jsonb_array_elements(convert_from(r.document_bytes,'UTF8')::jsonb) a
+                     WHERE a.value->>'documentId'=d.doc_id""")
+                else:
+                    self.admin.execute('UPDATE truss.catalog_acceptance_report SET report_bytes=truss.catalog_make_report(r) FROM truss.catalog_registration_request r')
+                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} ENABLE ALWAYS TRIGGER catalog_immutable').format(psycopg.sql.Identifier(table)))
+                self.admin.commit()
+        host.detach();connection.commit()
     def test_install_rollback_leaves_no_schema_or_roles_and_keeps_prior_work(self):
         self.admin.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
         result=self.assembly.install_in_transaction(self.tx)
