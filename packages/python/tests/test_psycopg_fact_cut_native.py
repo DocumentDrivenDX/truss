@@ -951,7 +951,28 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         caller=roles(caller_host.connection);executor=roles(self.connection)
         value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':subject}]};value['executor']={'sessionRoleOid':str(int(executor[0])+1) if wrong_executor else executor[0],'effectiveRoleOid':executor[1]}
         comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
-        return run_delegated_owned_identity_read(caller_host,caller_t,self.host,executor_t,comparison,raw,sources)
+        # Owned harness only: retain sanitized layer codes, never exception text,
+        # private stdout/stderr, native identity, credentials or fact cells.
+        import security_owned_read as tool
+        from unittest.mock import patch
+        import time,os
+        original_read=tool._run_owned_identity_read;events=[];started=time.monotonic()
+        def observe(*args,**kwargs):
+            result=original_read(*args,**kwargs)
+            events.append({'layer':'executor','status':result.status,
+                           'code':result.error.code if type(result) is Error else None})
+            return result
+        with patch.object(tool,'_run_owned_identity_read',observe):
+            result=run_delegated_owned_identity_read(caller_host,caller_t,self.host,executor_t,comparison,raw,sources)
+        events.append({'layer':'caller','status':result.status,
+                       'code':result.error.code if type(result) is Error else None})
+        self._last_delegated_events=events
+        evidence=os.environ.get('TRUSS_PSYCOPG_EPOCH_EVIDENCE')
+        if evidence:
+            with (Path(evidence)/'delegated-layer-outcomes.jsonl').open('a') as output:
+                output.write(json.dumps({'test':self._testMethodName,'events':events,
+                    'elapsedMs':round((time.monotonic()-started)*1000)})+'\n')
+        return result
     def test_catalog_only_caller_cannot_read_private_facts_but_delegated_read_permits(self):
         def operation(host,t,original,connection):
             for query in ('SELECT * FROM truss.sec_assignment','SELECT count(*) FROM truss.sec_assignment','SELECT truss.runtime_fence_shared_authority_writer()'):
@@ -1177,3 +1198,20 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 finally:self.connection.execute('ROLLBACK')
             self.with_unprivileged_actor(operation,catalog_only=True)
         finally:self.connection.execute('DROP SCHEMA fact_hidden_routine CASCADE')
+
+    def test_delegated_evaluator_timeout_refuses_without_partial_private_output(self):
+        import sys,subprocess
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                timeout=subprocess.TimeoutExpired('fixture',4,output='private-fact-output',stderr='private-fact-diagnostic')
+                with patch.object(tool.subprocess,'run',side_effect=timeout):
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error)
+                self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'error','code':'cancelled'},{'layer':'caller','status':'error','code':'invalid_transaction'}])
+                self.assertNotIn('private-fact',repr(result));self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
