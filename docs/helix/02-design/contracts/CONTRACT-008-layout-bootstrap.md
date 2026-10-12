@@ -2646,3 +2646,23 @@ native refinement theorem or backend acceptance binding is claimed. Original
 issuer/mapping/credential/target authentication, source/role/ACL lifetime, graph
 capture and complete protected disclosure remain open. Last full backend gate
 checkpoint remains26/132 with106 missing bindings; goal active.
+
+### Formal release-observation limit — 2026-10-11
+
+`evidence/security-release-observation-formal/d568bc78-6f68-433b-9899-8e277afc42fd`
+retains five Z3 4.15.4 queries and fresh-context SMT-LIB replays: three UNSAT,
+two SAT. In the explicit capture/loss/reacquisition/check model, release requires
+an observed guard; loss without reacquisition refuses; no loss preserves the
+original cut. Countermodels show both that the same native xid can survive guard
+loss and that lost/reacquired guards can pass final observation without continuity.
+This explains the boundary of the160-method native packet, rather than proving a
+PostgreSQL or host refinement. No-loss remains a premise of exclusive toolkit
+custody and the prohibition on raw aliases. Trace CONTRACT-063/STP-056 L03/L11;
+no backend binding or complete final-release theorem is promoted.
+
+Post-main integration requalification: concurrent host receive/resource changes
+are preserved in main b3647328. Fresh
+`evidence/python-psycopg-epoch-cut/9880771d-a781-4414-b64e-a043dec60dce` passes160
+native methods and module boundaries on PostgreSQL18.6, with current source pins
+and three stop0/status3/socket-absent cleanups. The prior native packet retains
+its original pre-integration source scope; qualified exclusions remain unchanged.
