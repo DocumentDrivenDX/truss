@@ -1366,3 +1366,36 @@ prerequisites. No new formal native refinement theorem or backend binding. Compl
 original caller/issuer/mapping/package/target authentication, source/role/ACL and
 callable lifetime, graph capture and protected final publication remain open.
 Full goal remains active at26/132 with106 unbound required cases.
+
+### Delegated final caller privilege snapshot — 2026-10-11
+
+The owned delegated service rechecks original native caller identity, predefined
+privilege reachability and private-fact table/column/definer/administration
+exclusions after executor evaluation and existing native guard observation, before
+returning the decision. This detects final-state drift; it does not hold shared
+role/ACL lifetime guards or make the checks/publication atomic.
+
+Two native controls use separate original postgres administrative connections to
+GRANT inherited pg_read_all_data or EXECUTE on an existing SECURITY DEFINER
+private-count routine after successful original evaluation. These uncoordinated
+administrative grants actually complete under retained executor guards. The
+caller then refuses; sanitized layer journal retains executor ok/caller
+invalid_transaction, with no decision returned. Final
+`evidence/python-psycopg-epoch-cut/c17be521-afd0-41c0-b3fd-13e6a3668395`
+passes174 native methods and module boundaries on PostgreSQL18.6/psycopg3.3.6
+binary,142 current/preimage Truss sources,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+`evidence/security-caller-release-snapshot-formal/29d04440-5819-4401-98fd-378bdc6f31a9`
+retains five exact source inputs and five Z3 4.15.4 SMT-LIB/fresh-context replays:
+three UNSAT refusal results and two SAT controls. Admission-only checking admits
+late privilege; grant-and-revoke between admission/final snapshots remains
+compatible with release. Changes after the final check also remain unqualified.
+These are conditional endpoint-model results, not native role/catalog/SQL/host
+refinement or uninterrupted authority/revocation-drain theorems.
+
+Trace shared CONTRACT-063/STP-056 B04/B05/B10/B11/L03/L11/L13 and US-056 AC5/AC8/
+AC9 prerequisites. Complete authorized writer participation, original issuer/
+caller/mapping/package/target authentication, shared role/ACL and callable lifetime,
+graph capture and atomic protected publication remain required. No new backend
+binding; full goal stays active at26/132 with106 unbound cases.

@@ -135,6 +135,9 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
             return 'original-guards-retained'
         checked=executor_host._run_operation(executor_transaction,retained)
         if type(checked) is not Ok:raise ValueError('Original executor release guard refused')
+        _exclude_native_predefined_role_reachability(cursor)
+        _exclude_native_private_fact_privileges(cursor,providers)
+        _verify_native_profile_caller(cursor,selected.profile)
         return result.value
     from truss.psycopg_host import _HostPairReservation
     with _HostPairReservation(caller_host,executor_host):

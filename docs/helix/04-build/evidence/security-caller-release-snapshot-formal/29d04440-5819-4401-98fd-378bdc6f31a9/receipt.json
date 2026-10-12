@@ -1,0 +1,59 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-caller-release-snapshot.py": "7d344744210696801d3a7f213ce5e56a28271b04ad16316037eea58fb37403ab",
+    "scripts/security_owned_read.py": "53c93931c9789e00e8ffc12e043632867328ad10f380e9b44e8df83aff0d49e6",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "31000ae911067480d8b4ad40f073e580ab780866172d522ec70c1de3252fec29",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "dd9ba78a0832435e3c5d7b029322ffb5930784e90f7245b24175ca071f38f238",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "b6ac340805acb749fe3e66600e8697c6ab9c6320b8221e8c0c93b727ff2d9dc1"
+  },
+  "queries": [
+    {
+      "id": "initial_private_privilege_prevents_release",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "68fa218771b98dc4aa20f3d8a98e34066f6d9393f1fff0cbc2185e76c1bb7794",
+      "model": null
+    },
+    {
+      "id": "final_private_privilege_prevents_release",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "bf60ff015b91ada1e1d1bbad32b83b369ca17646d9a4a6b92e9e32bef7231a2a",
+      "model": null
+    },
+    {
+      "id": "late_grant_remaining_at_release_prevents_release",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "a15ea8487e78d3807b54bd007982198e78c397479cd7ac22750a91835fcdfd05",
+      "model": null
+    },
+    {
+      "id": "admission_only_filter_misses_late_privilege",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "573547e33787376cd51f44b1d93f9ec939599e2eff076c13a2f39e41ef089886",
+      "model": "[initial_private_privilege = False,\n final_private_privilege = True,\n release = True,\n permit = True]"
+    },
+    {
+      "id": "grant_revoke_between_snapshots_is_not_excluded",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "98a4c781f6addae3f0d53ae20c372dfcbcf71ee92d72fc0707cc8884df09cbff",
+      "model": "[initial_private_privilege = False,\n final_private_privilege = False,\n release = True,\n permit = True,\n intermediate_private_privilege = True]"
+    }
+  ],
+  "scope": "Abstract admission and final privilege snapshots. Present final privilege prevents release; admission-only checking misses late grants. Grant/revoke between snapshots remains compatible with release.",
+  "limitations": [
+    "No native catalog/role/ACL/SQL or host refinement proof",
+    "Endpoint observation does not prove uninterrupted authority lifetime or exclude changes after the last check",
+    "No authenticated caller/issuer/mapping, full mutation/privilege closure, revocation drain or admitted protected backend"
+  ]
+}

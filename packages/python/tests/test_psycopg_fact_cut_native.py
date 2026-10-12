@@ -1283,3 +1283,46 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 self.assertEqual(evaluator.read_bytes(),changed_bytes)
                 evaluator.write_bytes(original_bytes)
         self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_release_refuses_predefined_privilege_granted_after_evaluation(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_read=tool._run_owned_identity_read;observed=[]
+        def operation(host,t,original,connection):
+            def drift(*args,**kwargs):
+                result=original_read(*args,**kwargs);self.assertIsInstance(result,Ok)
+                with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=1500') as admin:
+                    admin.execute('GRANT pg_read_all_data TO fact_cut_actor WITH INHERIT TRUE, SET FALSE')
+                observed.append(True);return result
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',drift):result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);self.assertEqual(observed,[True])
+                self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'ok','code':None},{'layer':'caller','status':'error','code':'invalid_transaction'}])
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_release_refuses_definer_execute_granted_after_evaluation(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_read=tool._run_owned_identity_read;observed=[]
+        self.connection.execute("CREATE FUNCTION truss.late_private_count() RETURNS bigint LANGUAGE sql SECURITY DEFINER AS 'SELECT count(*) FROM truss.sec_assignment'; REVOKE ALL ON FUNCTION truss.late_private_count() FROM PUBLIC")
+        try:
+            def operation(host,t,original,connection):
+                def drift(*args,**kwargs):
+                    result=original_read(*args,**kwargs);self.assertIsInstance(result,Ok)
+                    with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=1500') as admin:
+                        admin.execute('GRANT EXECUTE ON FUNCTION truss.late_private_count() TO fact_cut_actor')
+                    observed.append(True);return result
+                executor_t=self.begin()
+                try:
+                    with patch.object(tool,'_run_owned_identity_read',drift):result=self.delegated_owned_read(host,t,executor_t)
+                    self.assertIsInstance(result,Error);self.assertEqual(observed,[True])
+                    self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'ok','code':None},{'layer':'caller','status':'error','code':'invalid_transaction'}])
+                finally:self.connection.execute('ROLLBACK')
+            self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute('DROP FUNCTION truss.late_private_count()')
