@@ -6415,3 +6415,9 @@ installed candidate successfully. Python boundaries pass723imports.
 source pins, changed preimages, runtime release and outputs. Only this component
 is refreshed; complete backend admission and broader runtime qualification remain
 open.
+
+
+The subsequent catalog-revision merge atae389fcb also passes the44-observation
+ontology replay. `security-public-ontology-20261012/catalog-revision-receipt.json`
+retains exact current source pins, changed preimages and terminal native output.
+This preserves the same component scope and supported bounded host deadlines.
