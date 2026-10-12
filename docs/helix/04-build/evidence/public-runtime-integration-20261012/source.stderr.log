@@ -1,0 +1,309 @@
+E................EEEEEEE
+======================================================================
+ERROR: setUpClass (test_catalog_runtime_native.PublicCatalogRuntimeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+
+======================================================================
+ERROR: setUpClass (test_object_read_native.PublicObjectReadTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+
+======================================================================
+ERROR: setUpClass (test_group_create_native.PublicCreateGroupTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+
+======================================================================
+ERROR: setUpClass (test_reader_catalog_native.ReaderCatalogTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+
+======================================================================
+ERROR: setUpClass (test_read_only_public_native.ReadOnlyPublicTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+
+======================================================================
+ERROR: setUpClass (test_key_lookup_native.KeyLookupTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+
+======================================================================
+ERROR: setUpClass (test_catalog_unchanged_native.CatalogUnchangedTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+
+======================================================================
+ERROR: setUpClass (test_catalog_codes_native.CatalogCodeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+
+----------------------------------------------------------------------
+Ran 16 tests in 2.860s
+
+FAILED (errors=8)
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10ba83e90>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10b7f2990>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10bb2fc90>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10ba99550>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10ba99d10>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10ba9b150>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10ab9d850>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10ba81d10>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'

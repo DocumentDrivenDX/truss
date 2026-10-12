@@ -1,0 +1,24 @@
+{
+  "python": {
+    "command": "/private/tmp/truss-psycopg-baseline-env/bin/python scripts/check-module-boundaries.py",
+    "exitCode": 0,
+    "observed": "Python module boundaries passed (671 imports); TypeScript/native gates remain open"
+  },
+  "sql": {
+    "command": "/opt/homebrew/bin/bun scripts/check-catalog-runtime-owner.ts",
+    "exitCode": 0,
+    "modelReloadExportEqual": [
+      "layout.sql",
+      "lineage.sql",
+      "plan.sql",
+      "runtime.sql",
+      "barrier.sql",
+      "view.sql",
+      "read.sql",
+      "keys.sql",
+      "groups.sql",
+      "reader.sql",
+      "key-read.sql"
+    ]
+  }
+}
