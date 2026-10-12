@@ -23,9 +23,9 @@
     "scalars.sql": "5bf626a72bd82e265528d20cb893e9b3bb55762e90f393befacdab39e3f2ed19",
     "pages.sql": "928a3f51bc876ba67b8fc294693ff8cb079301e60671cb0d0f5d6bf1fc4b64bb",
     "evolution.sql": "b68f9b026655be68f656f2308b9f4f418bd85c1dc720acb2b2700428fd6db631",
-    "operations.sql": "25e8ca98d54fd0a434d22ec10e81cc4e2999e46792eb6df93fb954a158db63e0",
+    "operations.sql": "6f4879c39f1707715888bd6f9e7ac5ca520132596cd406e9d9a5912362bd5b5f",
     "preconditions.sql": "32ea41dfd2b1312ad829704e35be426e27343aa1c6340a24d3574bab4776029b",
-    "imports.sql": "c4aadcc74574dbec1bef2fa0fd07bf4793a0730b9d6068902729c28d21433302"
+    "imports.sql": "a344aa66ef54b3b607f1effb7b47b0abc7c3890033016c79a1aaff7cc2c1ea6d"
   },
   "version": "0.15"
 }

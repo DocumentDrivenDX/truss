@@ -149,13 +149,18 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     operation_index=[0]
     def apply(cursor,observed):
         pin_cursor(cursor)
+        if request.state=='present':
+            cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s,%s,true)',
+                (original_input,original_documents,original_request,manifest['releaseId'],digest,b'[]'),prepare=False)
+            probe=json.loads(bytes(cursor.fetchone()[0]))
+            if probe['outcome']!='miss':return _result(_bytes(probe))
         condition_keys=[]
         if input.preconditions:
             cursor.execute('SELECT truss.group_condition_key_metadata(%s,%s,%s,%s)',
                 (original_input,original_documents,manifest['releaseId'],digest),prepare=False)
             for metadata in json.loads(bytes(cursor.fetchone()[0])):
-                request=KeyTupleRequest(metadata['moduleId'],metadata['recordId'],metadata['keyId'],tuple(v['text'] for v in metadata['values']))
-                original=encode_string_key_tuples(sources[metadata['documentId']],(request,),bun_executable=bun_executable)[0]
+                key_request=KeyTupleRequest(metadata['moduleId'],metadata['recordId'],metadata['keyId'],tuple(v['text'] for v in metadata['values']))
+                original=encode_string_key_tuples(sources[metadata['documentId']],(key_request,),bun_executable=bun_executable)[0]
                 condition_keys.append({'conditionIndex':str(metadata['index']),'tupleHex':original.tuple_bytes.hex(),
                     'receiptBase64':base64.b64encode(original.original_receipt_bytes).decode('ascii')})
         cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s,%s)',

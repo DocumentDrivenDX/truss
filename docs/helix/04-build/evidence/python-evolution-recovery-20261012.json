@@ -1,0 +1,38 @@
+{
+  "scope": "Historical group replay before current-definition/key-precondition admission and stable edge reservation recipe",
+  "runtime": "truss-catalog-runtime/0.18-candidate",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "wheelSha256": "17bbab185aa2a61a445b9e8869027cbd1257f274c3d2be77e2afe9210981e565",
+  "installedRegression": {
+    "modules": [
+      "test_group_preconditions_native",
+      "test_import_runtime_native"
+    ],
+    "count": 4,
+    "seconds": 86.837,
+    "result": "passed",
+    "coverage": [
+      "failed predicates leave no persistent group/guard effects",
+      "receipt replay with key predicates needs no Bun",
+      "current unauthorized writer still refused",
+      "pending imports, caller rollback, immutable source and edge reservation skip"
+    ]
+  },
+  "precedingSourceRegression": {
+    "count": 8,
+    "passed": 7,
+    "failed": 1,
+    "seconds": 200.294,
+    "failure": "Replay probe miss retained a new route guard across a native precondition refusal. Guard insertion is now restricted to normal begin; final installed regression passes."
+  },
+  "ownerSqlSources": 17,
+  "pythonImportsChecked": 723,
+  "astraReview": "Recovery source and final write-free probe correction approved; focused installed rerun passed",
+  "limits": [
+    "compatible changed-document acceptance remains unavailable",
+    "fresh installation; recipe0.1 reservations are not migrated",
+    "original namespaces/input/profile/correspondence and current owner permissions remain required",
+    "current document production and deterministic catalog revision fold still need implementation"
+  ]
+}
