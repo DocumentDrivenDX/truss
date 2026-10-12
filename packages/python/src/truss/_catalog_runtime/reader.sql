@@ -4,7 +4,11 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE person oid;policy truss.module_access%ROWTYPE;
 BEGIN
  person:=truss.runtime_person(false);
+ IF current_setting('transaction_read_only')='on' THEN
+ SELECT * INTO policy FROM truss.module_access p WHERE p.document_id=runtime_can_read.document_id AND p.module=module_id;
+ ELSE
  SELECT * INTO policy FROM truss.module_access p WHERE p.document_id=runtime_can_read.document_id AND p.module=module_id FOR SHARE NOWAIT;
+ END IF;
  IF NOT FOUND THEN RETURN false; END IF;
  RETURN EXISTS(WITH RECURSIVE memberships(role_oid) AS (
   SELECT person UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
@@ -21,7 +25,11 @@ BEGIN
  IF maximum_count IS NULL OR maximum_count NOT BETWEEN 1 AND 65536 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 THEN RAISE EXCEPTION 'bounded catalog limits required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected runtime required' USING ERRCODE='0A000';END IF;
+ IF current_setting('transaction_read_only')='on' THEN
+ SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;
+ ELSE
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
+ END IF;
  IF captured_revision<>1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
  FOR owner IN SELECT d.doc_id,d.doc_revision,d.content_sha256,m.value->>'id' AS module_id
   FROM truss.schema_doc d CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m(value)
@@ -92,7 +100,11 @@ BEGIN
  IF selected_document IS NULL OR octet_length(selected_document) NOT BETWEEN 1 AND 4096 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 THEN RAISE EXCEPTION 'bounded document selection required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected runtime required' USING ERRCODE='0A000';END IF;
+ IF current_setting('transaction_read_only')='on' THEN
+ SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;
+ ELSE
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
+ END IF;
  IF captured_revision<>1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
  SELECT * INTO archive FROM truss.schema_doc WHERE rev=captured_revision AND doc_id=selected_document;
  IF NOT FOUND OR jsonb_array_length(archive.document::jsonb->'modules')=0 THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;

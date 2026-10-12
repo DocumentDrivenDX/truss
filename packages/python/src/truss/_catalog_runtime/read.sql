@@ -11,14 +11,22 @@ BEGIN
  OR octet_length(selected_record) NOT BETWEEN 1 AND 4096 OR selected_id IS NULL OR selected_id<=0
  OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 THEN
   RAISE EXCEPTION 'bounded object selection required' USING ERRCODE='22023'; END IF;
+ IF current_setting('transaction_read_only')='on' THEN
+ SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;
+ ELSE
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
+ END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.5-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.6-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
  IF captured_revision<>1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.
+ IF current_setting('transaction_read_only')='on' THEN
+ SELECT * INTO policy FROM truss.module_access WHERE document_id=selected_document AND module=selected_module;
+ ELSE
  SELECT * INTO policy FROM truss.module_access WHERE document_id=selected_document AND module=selected_module FOR SHARE NOWAIT;
+ END IF;
  IF NOT FOUND THEN RETURN NULL; END IF;
  IF NOT EXISTS(WITH RECURSIVE memberships(role_oid) AS (
    SELECT actor_oid UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
@@ -70,6 +78,10 @@ BEGIN
  'values',values_json,'retained',retained_json)::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'object output budget exceeded' USING ERRCODE='54000'; END IF;
  actor_oid:=truss.runtime_person(false);
+ IF current_setting('transaction_read_only')='on' THEN
+  SELECT * INTO policy FROM truss.module_access WHERE document_id=selected_document AND module=selected_module;
+  IF NOT FOUND THEN RETURN NULL; END IF;
+ END IF;
  IF NOT EXISTS(WITH RECURSIVE memberships(role_oid) AS (
    SELECT actor_oid UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
    SELECT 1 FROM pg_roles r JOIN memberships m ON m.role_oid=r.oid

@@ -847,6 +847,38 @@ This typed mapping currently covers the new reader calls; the older registration
 and report calls still need their R13 result mapping.
 
 Current module membership is rechecked before returning. Limits refuse rather
-than truncate. Like the existing object reader, these calls currently require
-read-write READ COMMITTED; support on adopted read-only transactions is next.
+than truncate. Runtime 0.5 required read-write READ COMMITTED; runtime 0.6 adds the
+read-only support described below.
 Runtime 0.5 requires a fresh installation and does not upgrade 0.4 installations.
+
+## Public reads on read-only transactions: runtime 0.6
+
+`get_object_in_transaction`, `reader_catalog_in_transaction` and
+`accepted_document_in_transaction` support an actual READ COMMITTED read-only
+transaction. Supply the already active transaction with the matching adoption
+mode:
+
+```python
+from truss import Ok, adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration
+
+connection.execute("BEGIN READ ONLY")
+host = adopt_psycopg_host(connection)
+adopted = host.adopt_transaction(access_mode="read_only")
+assert isinstance(adopted, Ok)
+assembled = create_reference_assembly(CatalogRuntimeConfiguration(), host)
+assert isinstance(assembled, Ok)
+catalog = assembled.value.reader_catalog_in_transaction(adopted.value)
+# The caller still settles the transaction.
+host.detach()
+connection.rollback()
+```
+
+The native transaction mode determines whether reads use row locks. Read-only
+reads issue no writes and recheck current person/module/dependency authorization
+before returning. Object lookup re-reads current policy role names, so replacing
+a module policy while an object is buffered cannot authorize against old roles.
+The outer transaction stays read-only after a contained refusal. Writers remain
+read-write operations. READ COMMITTED and the current immutable revision-1
+catalog restrictions remain; this does not add read-only support to the registrar
+complete-view facade or group type-reference helper. Runtime 0.6 requires fresh
+installation; candidate upgrades remain unfinished.

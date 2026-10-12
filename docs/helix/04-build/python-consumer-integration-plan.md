@@ -55,6 +55,20 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Read-only reader iteration — 2026-10-12
+
+Runtime 0.6 adds actual adopted read-only READ COMMITTED support for public
+object identity reads, reader catalog projection and accepted-document retrieval.
+Native transaction mode chooses plain reads versus the existing read-write locks;
+final authorization remains mandatory. Object lookup rereads current policy role
+names in the read-only path. Public tests create/commit an object, read all three
+surfaces in READ ONLY, refuse a write without effects, preserve caller control,
+and replace module policy while an object is buffered to prove old roles cannot
+publish it. The registrar's complete view and group type-reference helper retain
+their existing restrictions. Fresh installation remains required. Next: finish
+R13 mappings for registration/report and business-key lookup, then catalog
+extension/evolution and exact property types, following the full consumer path.
+
 ## Reader catalog/source iteration — 2026-10-12
 
 The runtime 0.5 candidate connects `reader_catalog_in_transaction` and
