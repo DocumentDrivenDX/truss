@@ -1,0 +1,16 @@
+test_attempt_cap_refuses_without_callback_or_savepoint (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_attempt_cap_refuses_without_callback_or_savepoint) ... ok
+test_deadline_rechecked_after_parameter_production (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_deadline_rechecked_after_parameter_production) ... ok
+test_detach_and_readonly_change_keep_same_transaction_counter (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_detach_and_readonly_change_keep_same_transaction_counter) ... ok
+test_failed_savepoint_consumes_before_first_sql (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_failed_savepoint_consumes_before_first_sql) ... ok
+test_lost_reservation_publication_retains_consumed_ordinal (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_lost_reservation_publication_retains_consumed_ordinal) ... ok
+test_original_catalog_tuple_retained_and_bound_with_stock_dumpers (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_original_catalog_tuple_retained_and_bound_with_stock_dumpers) ... ok
+test_parameter_producer_and_mutable_tuple_fail_without_effect_callback (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_parameter_producer_and_mutable_tuple_fail_without_effect_callback) ... ok
+test_semantic_sql_failure_retains_parameters_and_caller_work (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_semantic_sql_failure_retains_parameters_and_caller_work) ... ok
+test_success_rollback_and_inspection_do_not_reuse (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_success_rollback_and_inspection_do_not_reuse) ... ok
+test_transaction_cap_preserves_caller_usability (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_transaction_cap_preserves_caller_usability) ... ok
+test_unconfirmed_completion_retains_parameters_on_quarantined_attempt (test_psycopg_semantic_ordinals_native.SemanticOrdinalTests.test_unconfirmed_completion_retains_parameters_on_quarantined_attempt) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 9.094s
+
+OK

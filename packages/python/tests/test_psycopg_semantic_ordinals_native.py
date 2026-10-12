@@ -129,4 +129,94 @@ class SemanticOrdinalTests(unittest.TestCase):
         self.assertEqual(self.host._run_operation(self.tx,lambda c,o:'usable'),Ok('usable'))
         self.assertEqual(self.connection.execute('TABLE caller_work').fetchall(), [('kept',)])
 
+    def test_original_catalog_tuple_retained_and_bound_with_stock_dumpers(self):
+        from test_catalog_support import selected
+        from truss._catalog_candidate import encode_fresh_catalog_dispatch_parameters
+        from psycopg.adapt import Dumper
+        from psycopg.pq import Format
+        class AlterText(Dumper):
+            def dump(self,obj): return b'changed'
+        class AlterBytes(Dumper):
+            format = Format.BINARY
+            oid = 17
+            def dump(self,obj): return b'changed'
+        self.connection.adapters.register_dumper(str,AlterText)
+        self.connection.adapters.register_dumper(bytes,AlterBytes)
+        prepared = selected()
+        origin = b' {"x-action":"register","note":"caf\\u00e9"} '
+        retained = []
+        def produce(ordinal):
+            result = encode_fresh_catalog_dispatch_parameters(prepared,ordinal,origin)
+            retained.append(result)
+            return result
+        def execute(cursor, observed, ordinal, parameters):
+            self.assertIs(parameters,retained[0])
+            self.assertIs(parameters,self.host._custody.pending.dispatch_parameters)
+            cursor.execute("SELECT %s::text,encode(%s::bytea,'hex'),encode(%s::bytea,'hex'),"
+                "encode(%s::bytea,'hex'),encode(%s::bytea,'hex'),encode(%s::bytea,'hex')",
+                parameters,prepare=False,binary=False)
+            row = cursor.fetchone()
+            self.assertEqual(row,(ordinal,*(raw.hex() for raw in parameters[1:])))
+            return ordinal
+        self.assertEqual(self.host._run_semantic_operation(self.tx,execute,parameter_producer=produce),Ok('0'))
+        self.assertIs(self.host._custody.last_attempt.dispatch_parameters,retained[0])
+        # Cursor-scoped pinning did not alter the host's original adapter choices.
+        self.assertEqual(self.connection.execute('SELECT %s::text',('original',)).fetchone(),('changed',))
+        self.assertEqual(self.connection.execute("SELECT encode(%s::bytea,'hex')",(b'original',)).fetchone(),(b'changed'.hex(),))
+
+    def test_semantic_sql_failure_retains_parameters_and_caller_work(self):
+        parameters = ('0', b'\x00original\xff')
+        def execute(cursor,observed,ordinal,retained):
+            self.assertIs(retained,parameters)
+            cursor.execute('SELECT 1/0',prepare=False)
+        result = self.host._run_semantic_operation(self.tx,execute,parameter_producer=lambda o:parameters)
+        self.assertIsInstance(result,Error)
+        self.assertIs(self.host._custody.last_attempt.dispatch_parameters,parameters)
+        self.assertEqual(self.host._custody.last_attempt.ordinal_reservation.result.ordinal,'0')
+        self.assertEqual(self.connection.execute('TABLE caller_work').fetchall(),[('kept',)])
+        self.assertEqual(self.run_semantic(),Ok('1'))
+
+    def test_parameter_producer_and_mutable_tuple_fail_without_effect_callback(self):
+        def bad(ordinal): raise ValueError('producer failure')
+        for producer in (bad,lambda o:[b'mutable'],lambda o:(bytearray(b'mutable'),)):
+            result = self.host._run_semantic_operation(self.tx,
+                lambda *args:self.fail('No effect callback expected'),parameter_producer=producer)
+            self.assertIsInstance(result,Error)
+            self.assertIsNone(self.host._custody.last_attempt.dispatch_parameters)
+            self.assertEqual(self.connection.execute('TABLE caller_work').fetchall(),[('kept',)])
+        self.assertEqual(self.run_semantic(),Ok('3'))
+
+    def test_deadline_rechecked_after_parameter_production(self):
+        import time
+        self.host._deadline_ms = 500
+        parameters = ('0',b'original')
+        def delayed(ordinal):
+            time.sleep(0.65)
+            return parameters
+        result = self.host._run_semantic_operation(self.tx,
+            lambda *args:self.fail('Expired parameters cannot enter effect callback'),
+            parameter_producer=delayed)
+        self.assertIsInstance(result,Error)
+        self.assertIs(self.host._custody.last_attempt.dispatch_parameters,parameters)
+        self.assertEqual(self.connection.execute('TABLE caller_work').fetchall(),[('kept',)])
+
+    def test_unconfirmed_completion_retains_parameters_on_quarantined_attempt(self):
+        parameters = ('0',b'original')
+        def execute(cursor,observed,ordinal,retained):
+            cursor.execute('SELECT encode(%s::bytea,\'hex\')',(retained[1],),prepare=False)
+            self.assertEqual(cursor.fetchone()[0],parameters[1].hex())
+            return ordinal
+        finish = host_module._Deadline.finish
+        def unconfirmed(deadline):
+            finish(deadline)
+            return False
+        with patch.object(host_module._Deadline,'finish',unconfirmed):
+            result = self.host._run_semantic_operation(self.tx,execute,
+                parameter_producer=lambda o:parameters)
+        self.assertIsInstance(result,Error)
+        self.assertTrue(self.host._custody.quarantined)
+        self.assertIs(self.host._custody.pending,self.host._custody.last_attempt)
+        self.assertIs(self.host._custody.pending.dispatch_parameters,parameters)
+        self.assertEqual(self.host._custody.pending.ordinal_reservation.result.ordinal,'0')
+
 if __name__ == '__main__': unittest.main(verbosity=2)

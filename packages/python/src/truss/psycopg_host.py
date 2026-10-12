@@ -91,6 +91,7 @@ class _Attempt:
     error: BaseException | None = None
     cleanup_error: BaseException | None = None
     ordinal_reservation: object = None
+    dispatch_parameters: tuple | None = None
 
 
 class _Deadline:
@@ -250,7 +251,7 @@ class PsycopgHost:
                 raise
             return False
 
-    def _attempt(self, callback, custody=None, publish=None, *, semantic=False):
+    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
         reservation=self._custody.reservation
@@ -310,6 +311,14 @@ class PsycopgHost:
 
                 deadline = _Deadline(self.connection, self._deadline_ms)
                 cursor = _GuardedCursor(self._cursor(), deadline)
+                if parameter_producer is not None:
+                    from psycopg.types.string import (StrBinaryDumper, StrDumperUnknown,
+                                                     BytesDumper, BytesBinaryDumper)
+                    # Retained semantic inputs use selected stock adapters, not
+                    # host custom dumpers. The caller connection is unchanged.
+                    for kind, dumper in ((str, StrBinaryDumper), (str, StrDumperUnknown),
+                                         (bytes, BytesDumper), (bytes, BytesBinaryDumper)):
+                        cursor.adapters.register_dumper(kind, dumper)
                 deadline.check()
                 semantic_preflight = False
                 cursor.execute(sql.SQL('SAVEPOINT {}').format(name), prepare=False)
@@ -327,8 +336,20 @@ class PsycopgHost:
                 cursor.execute("SET LOCAL statement_timeout = '" + str(self._timeout) + "ms'", prepare=False)
                 deadline.check()
                 attempt.phase = 'executing'
-                result = (callback(cursor, before, attempt.ordinal_reservation.result.ordinal)
-                          if semantic else callback(cursor, before))
+                if parameter_producer is not None:
+                    parameters = parameter_producer(attempt.ordinal_reservation.result.ordinal)
+                    if (type(parameters) is not tuple or not 1 <= len(parameters) <= 64
+                            or any(type(cell) not in (str, bytes) for cell in parameters)):
+                        raise ValueError('Exact immutable semantic parameters required')
+                    if sum(len(cell.encode('utf8')) if type(cell) is str else len(cell)
+                           for cell in parameters) > 4194304:
+                        raise ValueError('Semantic parameter capacity exceeded')
+                    attempt.dispatch_parameters = parameters
+                    deadline.check()
+                    result = callback(cursor, before, attempt.ordinal_reservation.result.ordinal, parameters)
+                else:
+                    result = (callback(cursor, before, attempt.ordinal_reservation.result.ordinal)
+                              if semantic else callback(cursor, before))
                 attempt.result = result
                 attempt.phase = 'command_returned'
                 deadline.check()
@@ -443,19 +464,24 @@ class PsycopgHost:
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         return self._attempt(callback, custody)
 
-    def _run_semantic_operation(self, transaction, callback):
+    def _run_semantic_operation(self, transaction, callback, *, parameter_producer=None):
         """Reserve a nonrewinding ordinal before SQL on the shared connection.
 
         Private execution primitive for protected catalog/group facades. An
         issued ordinal is host custody, never database authorization. Inspection
-        calls use _run_operation and consume no semantic ordinal.
+        calls use _run_operation and consume no semantic ordinal. An optional
+        trusted SDK producer derives exact immutable parameters after native
+        custody validation. The retained tuple is passed unchanged to the
+        callback; fixed statement/parameter correspondence belongs to that
+        registered executor. Bounds count every cell, including the ordinal,
+        using UTF-8 bytes for text.
         """
         custody = (self._transactions.get(transaction._key)
                    if type(transaction) is TransactionHandle and transaction._issuer is self._issuer else None)
         if (custody is None or custody.handle is not transaction
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required')
-        return self._attempt(callback, custody, semantic=True)
+        return self._attempt(callback, custody, semantic=True, parameter_producer=parameter_producer)
 
     def detach(self):
         self._closed = True
