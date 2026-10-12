@@ -335,9 +335,17 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    actual=[r[0] for r in restored_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-native-caller-authority-original-vector','observed':actual})
   # Exercise the existing installation-wide authority guard's original SQL.
   contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'
-  self.admin.execute((contracts/'installation-policy-guard-v0.1.proposal.sql').read_text())
+  from truss import adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
   installation_bytes=self.admin.execute('SELECT installation_id::text FROM truss.catalog_runtime_installation').fetchone()[0].encode();profile_bytes=b'ontology-authority-guard-fixture/0.1'
-  self.admin.execute('INSERT INTO truss.policy_generation_guard VALUES(1,%s,%s,1)',(installation_bytes,profile_bytes))
+  self.admin.execute('BEGIN');bootstrap_host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
+  try:
+   bootstrap_tx=bootstrap_host.adopt_transaction().value
+   bootstrapped=bootstrap_security_homes_in_transaction(bootstrap_host,bootstrap_tx,installation_identity=installation_bytes,authored_profile=profile_bytes,max_retained=6)
+   self.assertIsInstance(bootstrapped,Ok,str(bootstrap_host._custody.last_attempt.error));self.assertFalse(bootstrapped.value.security_ready)
+  finally:bootstrap_host.detach()
+  self.admin.commit()
+  observations.append({'id':'ontology-lifecycle-uses-private-bootstrap-homes','observed':{'installationHex':installation_bytes.hex(),'profileHex':profile_bytes.hex(),'maxRetained':6,'securityReady':False},'qualification':'implemented bootstrap custody and sealed homes; candidate source/issuer/participant admission remains unqualified'})
   acquire=(contracts/'installation-policy-guard-acquire-v0.1.proposal.sql').read_text()
   advance=(contracts/'installation-policy-generation-advance-v0.1.proposal.sql').read_text()
   for ordinal in [1,2,3]:advance=advance.replace('$'+str(ordinal),'%s')
@@ -417,7 +425,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   # Same logical Record/Relationship condition over independent raw tables.
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])));rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,4)).fetchall();self.assertEqual(rows,[('1',installation_bytes.hex(),profile_bytes.hex(),'5')]);authority_writer.execute('COMMIT')
   # Durable outstanding publication survives native coordinator death.
-  self.admin.execute((contracts/'installation-publication-claim-v0.2.tombstone.proposal.sql').read_text())
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(0,))
   def claim_sql(name,count):
    source=(contracts/name).read_text()
    for ordinal in range(1,count+1):source=source.replace('$'+str(ordinal),'%s')
@@ -542,7 +550,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
     if interruption_thread is not None:interruption_thread.join(12)
     interrupted.rollback();interrupted.close()
   # Source capacity from original protected native profile, not a fifth argument.
-  self.admin.execute((contracts/'installation-publication-capacity-profile-v0.1.proposal.sql').read_text());self.admin.execute('INSERT INTO truss.policy_publication_capacity VALUES(1,%s,%s,6)',(installation_bytes,profile_bytes))
+  self.assertEqual(self.admin.execute('SELECT installation_identity_bytes,policy_profile_bytes,max_retained FROM truss.policy_publication_capacity').fetchall(),[(installation_bytes,profile_bytes,6)])
   profile_register=(contracts/'installation-publication-claim-register-v0.4.profile.proposal.sql').read_text()
   for ordinal in range(1,5):profile_register=profile_register.replace('$'+str(ordinal),'%(p'+str(ordinal)+')s')
   def profile_execute(connection,parameters):return connection.execute(profile_register,{'p'+str(i):value for i,value in enumerate(parameters,1)})
