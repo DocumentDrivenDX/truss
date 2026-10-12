@@ -42,8 +42,11 @@ export function createCandidateGraphSource(input:{kind:'object'|'edge';typeId:st
   const property=integer(field.propertyId),column=identifier(field.column);
   if(!['string','boolean'].includes(field.scalar)||seenColumns.has(field.column)||seenProperties.has(property))return fail();seenColumns.add(field.column);seenProperties.add(property);
   const value=`g.props OPERATOR(pg_catalog.->) '${property}'::pg_catalog.text`;
-  const kind=`pg_catalog.jsonb_typeof(${value}) OPERATOR(pg_catalog.=) '${field.scalar}'::pg_catalog.text`;
-  columns.push(`CASE WHEN ${kind} THEN (g.props OPERATOR(pg_catalog.->>) '${property}'::pg_catalog.text)::pg_catalog.${field.scalar==='boolean'?'bool':'text'} ELSE NULL END AS ${column}`);
+  // Public writes store exact typed envelopes, not bare JSON scalars.
+  const payload=field.scalar==='boolean'?'value':'text';
+  const decoded=`(${value}) OPERATOR(pg_catalog.->) '${payload}'::pg_catalog.text`;
+  const kind=`pg_catalog.jsonb_typeof(${value}) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (${value}) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) '${field.scalar}'::pg_catalog.text AND pg_catalog.jsonb_typeof(${decoded}) OPERATOR(pg_catalog.=) '${field.scalar}'::pg_catalog.text AND (${value}) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) '${payload}'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb`;
+  columns.push(`CASE WHEN ${kind} THEN ((${value}) OPERATOR(pg_catalog.->>) '${payload}'::pg_catalog.text)::pg_catalog.${field.scalar==='boolean'?'bool':'text'} ELSE NULL END AS ${column}`);
   valid.push('('+kind+') IS TRUE');
   metadata.push(`EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id OPERATOR(pg_catalog.=) ${cast(owner!)} AND p.prop_id OPERATOR(pg_catalog.=) ${cast(property)} AND p.home OPERATOR(pg_catalog.=) 'json'::pg_catalog.text AND p.scalar_type OPERATOR(pg_catalog.=) '${field.scalar}'::pg_catalog.text AND p.nullability OPERATOR(pg_catalog.=) 'required'::pg_catalog.text AND p.cardinality OPERATOR(pg_catalog.=) 'one'::pg_catalog.text AND p.retired_rev IS NULL)`);
  }

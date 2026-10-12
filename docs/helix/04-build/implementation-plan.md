@@ -6232,3 +6232,25 @@ source preimages and logs. Prior native/browser observations retain their earlie
 source qualifications; they are not refreshed by these declaration controls.
 No original-row/native authority or backend case is admitted. Trace shared
 CONTRACT-063/STP-056 B08/B12/B15 prerequisites; the full132-case goal stays active.
+
+
+### Public graph envelope ABAC correction — 2026-10-12
+
+Actual public-created Truss objects store typed property envelopes. The candidate
+graph source previously expected bare scalars and refused that population. It now
+validates exact string(kind,text) and Boolean(kind,value) envelopes and projects
+only correctly typed payloads. Missing/extra members, wrong tags/types and bare
+values fail complete population validity. Validity must precede filtering; the
+filter can hide malformed rows. This remains candidate machinery, not admission.
+
+Seventeen related Bun tests and strict security type checking pass. One native
+public-catalog/create graph spike retains nine observations: original validity,
+eligible values, five malformed-envelope controls, filter-only visibility and
+rollback restoration. Failed fixture attempts and the original adapter refusal
+are retained alongside sources in
+`evidence/security-graph-envelope-abac-20261012/receipt.json`. Excluded-assessor
+queries do not establish ordinary graph policy enforcement, mapping authentication,
+compiler equivalence or authority lifetime. Earlier bare-scalar graph fixtures
+do not qualify the current public writer representation. Trace CONTRACT-063 /
+STP-056 B01/B04/B08/B12/B15 prerequisites; no original case is promoted and the
+full132-case goal remains active.

@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_public_graph_creation_and_original_source_validity (__main__.GraphABACTests.test_public_graph_creation_and_original_source_validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/test_graph_resource_abac_native.py", line 16, in test_public_graph_creation_and_original_source_validity
+    inp,_=self.input(assembly,tx,operations);result=assembly.apply_in_transaction(tx,inp,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun');self.assertIsInstance(result,Ok);self.assertIsInstance(result.value,GroupSuccess);host.detach();c.commit()
+                                                                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: GroupFailed(failure=InvalidGroupInput(diagnostic_profile=ProfilePin(identity='truss-native-create-diagnostic', version='0.1', sha256='27c241fa37e64bbabb5c24f257690f98f2dcb1c3b8d8b3c273254ba31a6499e2'), diagnostic=ExactArtifact(identity='8286c896310bd2d19c0f96dbec62cd8485e0bb1d443deb5cf1cf773118016961', bytes_base64='eyJjb2RlIjoiaW52YWxpZF9pbnB1dCIsIm5hdGl2ZVN0YXRlIjoiMjIwMjMiLCJvcGVyYXRpb25JbmRleCI6IjAiLCJvdXRjb21lIjoiZmFpbGVkIn0=', sha256='8286c896310bd2d19c0f96dbec62cd8485e0bb1d443deb5cf1cf773118016961'), code='invalid'), outcome='failed') is not an instance of <class 'truss.groups.GroupSuccess'>
+
+----------------------------------------------------------------------
+Ran 1 test in 8.404s
+
+FAILED (failures=1)

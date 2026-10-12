@@ -1,0 +1,14 @@
+E
+======================================================================
+ERROR: test_public_graph_creation_and_original_source_validity (__main__.GraphABACTests.test_public_graph_creation_and_original_source_validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/test_graph_resource_abac_native.py", line 18, in test_public_graph_creation_and_original_source_validity
+    props={row[0]:str(row[1]) for row in self.admin.execute('SELECT name,prop_id FROM truss.prop_def WHERE type_id=%s',(int(type_id),))};packet={'typeId':type_id,'valueId':props['A-value'],'labelId':props['A-label'],'flagId':props['A-flag']}
+                                                                                                                                                                                                                                 ~~~~~^^^^^^^^^^
+KeyError: 'A-flag'
+
+----------------------------------------------------------------------
+Ran 1 test in 6.224s
+
+FAILED (errors=1)
