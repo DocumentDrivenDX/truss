@@ -1,7 +1,7 @@
 """Public logical identity reads; scalar-string profile, not historical DirectRecord."""
 from dataclasses import dataclass, field
 from typing import Literal
-from .contracts import TextValue
+from .contracts import TextValue, TypedIdentity, QualifiedOwner
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ScalarObject:
@@ -10,6 +10,7 @@ class ScalarObject:
     record_id: str
     id: int
     type_id: int
+    definition_pin: str
     version: int
     catalog_revision: int
     record_revision: int
@@ -17,7 +18,14 @@ class ScalarObject:
     updated_at: str
     values: tuple[tuple[str, str | bool | TextValue | None], ...]
     retained: tuple[tuple[str, str | bool | TextValue | None], ...]
-    profile: Literal['truss-python-scalar-object/0.2'] = field(default='truss-python-scalar-object/0.2', init=False)
+    profile: Literal['truss-python-scalar-object/0.3'] = field(default='truss-python-scalar-object/0.3', init=False)
+
+    @property
+    def identity(self) -> TypedIdentity:
+        """Current document-qualified identity usable by object and edge operations."""
+        return TypedIdentity(id=str(self.id), type_id=str(self.type_id),
+            definition_pin=self.definition_pin,
+            owner=QualifiedOwner(document_id=self.document_id, module_id=self.module_id))
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ObjectFound:

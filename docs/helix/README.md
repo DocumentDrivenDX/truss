@@ -7,9 +7,10 @@ definition slices and native document-qualified identities on PostgreSQL18.6.
 The public Python assembly now provides exact scalar object/key/page reads,
 grouped object and independent edge mutations, atomic caller preconditions,
 relationship pages and committed receipt visibility on PostgreSQL18.6.
-Caller-owned imports are the current implementation iteration. Compiled query
-execution, committed feed/ACK, compatible catalog evolution and managed
-installation/upgrades remain unfinished. Older private component evidence below
+Caller-owned imports and compatible catalog evolution are implemented within
+the documented scalar and independent-relationship subset. Object reads return
+identities usable directly for updates and links. Compiled query execution,
+committed feed/ACK and managed installation/upgrades remain unfinished. Older private component evidence below
 does not qualify those public operations.
 
 [Query and execution ownership](01-frame/prd.md#query-and-execution-ownership--owner-direction-2026-10-11): Truss exposes the full Weft query surface. Weft owns evolving SQL coverage; Truss owns table layout, query execution, actions and other executions. Direct read/traversal APIs are convenience operations, not SQL coverage limits.

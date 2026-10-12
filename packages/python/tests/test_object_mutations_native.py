@@ -26,6 +26,7 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         result,_,_=self.run_group(assembly,tx,(self.create(),),'create')
         self.assertIsInstance(result,GroupSuccess);identity=result.response.semantic.results[0].identity
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        identity=self.read(assembly,tx,identity).object.identity
         update=UpdateObject(target=StoredObjectReference(identity=identity),set=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='two')),),unset=(),expected_version='1')
         result,update_input,update_request=self.run_group(assembly,tx,(update,),'update')
         self.assertIsInstance(result,GroupSuccess);self.assertIsInstance(result.response.semantic.results[0],Changed)

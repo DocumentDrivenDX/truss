@@ -735,6 +735,12 @@ retains the original failure, quarantines the connection and refuses reuse.
 
 ## Public object identity read
 
+Object, key and page reads return `ScalarObject.identity`: an exact
+`TypedIdentity` with the current definition pin and document/module owner.
+Use it directly in mutation and relationship operations. After catalog evolution,
+read again for the current identity; historical receipt retry keeps its original
+request. Integer `id` and `type_id` remain available for Python convenience.
+
 After registration, an installation administrator configures module access using
 `configure_module_access_in_transaction`. This grants only schema usage and
 execution of the protected reader to the selected module roles. The host grants
@@ -750,6 +756,8 @@ result = assembly.get_object_in_transaction(
 if isinstance(result, Ok) and isinstance(result.value, ObjectFound):
     order = result.value.object
     print(order.id, order.version, dict(order.values))
+    # Pass this directly to StoredObjectReference for updates or edge endpoints.
+    identity = order.identity
 ```
 
 The `truss-python-scalar-object/0.1` result uses authored document/module/Record
