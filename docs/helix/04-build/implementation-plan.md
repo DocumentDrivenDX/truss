@@ -4773,3 +4773,34 @@ are preserved in main b3647328. Fresh
 native methods and module boundaries on PostgreSQL18.6, with current source pins
 and three stop0/status3/socket-absent cleanups. The prior native packet retains
 its original pre-integration source scope; qualified exclusions remain unchanged.
+
+### Conservative predefined-role privilege snapshot — 2026-10-11
+
+Private `_run_predefined_role_excluded_ddl_fenced_epoch_operation` composes the
+original epoch/DDL/role/definer checks with a native predefined-role exclusion.
+For every identity SET-reachable from actual session/effective users, inspect
+USAGE or SET reachability to reserved pg_ roles. This conservatively refuses
+predefined capabilities without treating MEMBER, SET and inherited privilege as
+equivalent or assigning portable meanings to version-dependent built-in roles.
+It is an optional private composition, not automatically applied to the delegated
+service spike or a new public admitted backend profile.
+
+Three native controls observe a real private Assignment count after SELECT is
+revoked but pg_read_all_data is inherited with SET FALSE, refusal before callback
+for that case and SET-only pg_write_all_data, and acceptance of inactive membership
+with both INHERIT and SET FALSE. Final
+`evidence/python-psycopg-epoch-cut/7ddffb08-f18c-4d54-b497-901a6de7e0e4`
+passes163 methods on PostgreSQL18.6/psycopg3.3.6 binary, module boundaries,
+141 current/preimage Truss pins,363 UMF sources and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+Final `evidence/security-predefined-role-formal/ec82bd53-2246-4b50-a071-77d0df523de7`
+retains five source inputs and five Z3 4.15.4 queries with independent-context
+SMT-LIB replay: three UNSAT active-path refusal results and two SAT inherited-
+privilege/inactive-membership controls. Initial651651f8 retains the same model
+with only four source pins; final packet adds exact native check source custody.
+No PostgreSQL role graph/SQL or host refinement theorem is claimed. Role/ACL
+lifetime, ordinary grants, complete routine closure, original authentication,
+protected graph and final disclosure remain open. Trace shared CONTRACT-063 /
+STP-056 B04/B05/B10/B11 and US-056 AC5/AC8/AC9 prerequisites. No new backend
+binding: fresh full gate remains26/132 with106 unbound cases; goal active.

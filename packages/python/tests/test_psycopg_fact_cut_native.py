@@ -1060,3 +1060,31 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 self.assertIsInstance(result,Error);self.assertEqual(observed,[True])
             finally:self.connection.execute('ROLLBACK')
         self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_inherited_read_all_data_without_set_bypasses_private_select_grant(self):
+        from truss._psycopg_epoch_cut import _run_predefined_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.connection.execute('REVOKE SELECT ON truss.sec_assignment FROM fact_cut_actor')
+            self.connection.execute('GRANT pg_read_all_data TO fact_cut_actor WITH INHERIT TRUE, SET FALSE')
+            self.assertEqual(connection.execute("SELECT pg_has_role(current_user,'pg_read_all_data','USAGE'),pg_has_role(current_user,'pg_read_all_data','SET')").fetchone(),(True,False))
+            self.assertEqual(connection.execute('SELECT count(*) FROM truss.sec_assignment').fetchone(),(1,))
+            called=[];result=_run_predefined_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertEqual(called,[])
+        self.with_unprivileged_actor(operation)
+
+    def test_set_only_write_all_data_refuses_before_callback(self):
+        from truss._psycopg_epoch_cut import _run_predefined_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.connection.execute('GRANT pg_write_all_data TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+            self.assertEqual(connection.execute("SELECT pg_has_role(current_user,'pg_write_all_data','USAGE'),pg_has_role(current_user,'pg_write_all_data','SET')").fetchone(),(False,True))
+            called=[];result=_run_predefined_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertEqual(called,[])
+        self.with_unprivileged_actor(operation)
+
+    def test_inactive_predefined_membership_does_not_imply_privilege(self):
+        from truss._psycopg_epoch_cut import _run_predefined_role_excluded_ddl_fenced_epoch_operation
+        def operation(host,t,original,connection):
+            self.connection.execute('GRANT pg_read_all_data TO fact_cut_actor WITH INHERIT FALSE, SET FALSE')
+            self.assertEqual(connection.execute("SELECT pg_has_role(current_user,'pg_read_all_data','MEMBER'),pg_has_role(current_user,'pg_read_all_data','USAGE'),pg_has_role(current_user,'pg_read_all_data','SET')").fetchone(),(True,False,False))
+            self.assertEqual(_run_predefined_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'inactive-membership'),Ok('inactive-membership'))
+        self.with_unprivileged_actor(operation)

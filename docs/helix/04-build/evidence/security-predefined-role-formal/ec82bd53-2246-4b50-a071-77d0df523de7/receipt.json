@@ -1,0 +1,59 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-predefined-role.py": "c194394586b4222844a1efb1039831ba9b8228bfab1bad0a3a9774c6bff1d7b6",
+    "scripts/security_owned_read.py": "40d2e6c3d852ffbeddf4494b8cfaece6ee6c7661fe278e4dab6ed0dfe5ef67c4",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "31000ae911067480d8b4ad40f073e580ab780866172d522ec70c1de3252fec29",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "2e9d9ac00af7292c3fc9a966743fadddf63086ffc89e0f1fb21a41bc92ab92bb",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "f72fa5d48da1baa8c26f02fe6236f77240faa202dec97e4c5e66f70ea1df6ec2"
+  },
+  "queries": [
+    {
+      "id": "inherited_predefined_excludes_callback",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "080542d9e5e12e1ac90d62a2f65b79a5979b5477d15fad7a7d35a96afacc0182",
+      "model": null
+    },
+    {
+      "id": "set_predefined_excludes_callback",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "fde4f0e48a05bbcbd0988e62fafc022879354e1d5bd27e3ca00cc9c902c6ca5e",
+      "model": null
+    },
+    {
+      "id": "set_bridge_with_inherited_predefined_excludes_callback",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "df0fa37650d26342dcc9ed9e1c74641182936351838f4dcfeae11045690b4c14",
+      "model": null
+    },
+    {
+      "id": "set_only_filter_misses_inherited_privilege",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "ba7529d471ab9c0a242e769d2d6c2f9ee05466b9d2b67c1bb3a594cc083adb76",
+      "model": "[direct_set_predefined = False,\n callback = True,\n inherited_predefined = True]"
+    },
+    {
+      "id": "inactive_membership_does_not_require_refusal",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "7fc2055804e2a6a794acb3a49c8aed3a3a3628c692d40ef83464396f2a063d97",
+      "model": "[bridge_inherited_predefined = False,\n direct_set_predefined = False,\n membership = True,\n callback = True,\n inherited_predefined = False,\n set_bridge = False]"
+    }
+  ],
+  "scope": "Abstract predefined-role inherited and SET reachability, including a SET-reachable identity with inherited predefined privileges. Three active paths exclude callback. A SET-only filter misses inherited privileges; inactive membership permits callback in this dimension.",
+  "limitations": [
+    "No native pg_has_role, SQL, role graph or host refinement proof",
+    "Role reachability observations are snapshots; concurrent authority mutation remains unqualified",
+    "Predefined-role exclusion does not qualify ordinary grants, routine closure, caller/issuer authentication or a complete protected backend"
+  ]
+}
