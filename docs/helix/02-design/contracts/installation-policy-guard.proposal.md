@@ -89,3 +89,22 @@ Trace CONTRACT-005/063 and STP-057 L03/L11. This is native loss plus fixture
 arbitration, not production lease/quarantine/recovery or streaming/cached-buffer
 release. Full participant/source/caller/publication integration remains required;
 no original backend case is promoted.
+
+
+### Portable candidate guard observation decoder — 2026-10-12
+
+`security-guard-observation.ts` now checks the original acquisition's four TEXT
+OID25 descriptors, one four-cell row, canonical singleton/hex/positive bigint
+and exact supplied identity/profile bytes. It rejects missing/extra/reordered
+descriptors, sparse/extra rows, null/noncanonical/overflow values and getter/
+iterator substitution. Local bound is32KiB per identity/profile, not a product
+ceiling. Generation stays exact TEXT, including bigint maximum.
+
+Six tests, strict security-source typing,102 native ontology observations and
+Python boundaries723imports pass. Actual native descriptors/row decode identically
+in Bun and Chromium153. Evidence:
+`docs/helix/04-build/evidence/security-guard-observation-decoder-20261012/receipt.json`.
+Trace original guard acquisition under CONTRACT-005/063. This returns candidate
+values only: supplied expectations are not trusted issuers, copied values are
+not native exclusion/completion evidence, and no AuthorityLease is created.
+Production original source/caller/liveness, bootstrap and release remain required.

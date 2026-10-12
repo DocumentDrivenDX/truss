@@ -1,0 +1,11 @@
+{
+  "browser": "153.0.8010.12",
+  "matched": true,
+  "actual": {
+    "singleton": "1",
+    "installationIdentityHex": "63343538363362392d633031332d346139342d623766352d343132616239653930623231",
+    "policyProfileHex": "6f6e746f6c6f67792d617574686f726974792d67756172642d666978747572652f302e31",
+    "generation": "1"
+  },
+  "scope": "Actual native row/descriptor packet decoded identically in Chromium; no native lease authority."
+}

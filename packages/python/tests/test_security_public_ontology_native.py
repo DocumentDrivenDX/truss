@@ -210,7 +210,9 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
     if rows!=[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]:raise ValueError('Original generation advance refused')
     advanced.extend(rows);authority_writer.execute('COMMIT')
    except Exception as exc:authority_errors.append(type(exc).__name__);authority_writer.rollback()
-  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();captured=self.admin.execute(acquire).fetchall();self.assertEqual(captured,[('1',installation_bytes.hex(),profile_bytes.hex(),'1')]);observations.append({'id':'original-proposed-guard-acquisition','observed':[list(row) for row in captured]})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();guard_cursor=self.admin.execute(acquire);captured=guard_cursor.fetchall();self.assertEqual(captured,[('1',installation_bytes.hex(),profile_bytes.hex(),'1')]);observations.append({'id':'original-proposed-guard-acquisition','observed':[list(row) for row in captured]})
+  decoder_packet={'columns':[{'name':column.name,'typeOid':str(column.type_code)} for column in guard_cursor.description],'rows':[list(row) for row in captured],'expected':{'installationIdentityHex':installation_bytes.hex(),'policyProfileHex':profile_bytes.hex()}}
+  decoder=subprocess.run(['/opt/homebrew/bin/bun',str(Path(__file__).resolve().parents[3]/'tests/fixtures/security-authority-guard-decode.ts')],input=json.dumps(decoder_packet),text=True,capture_output=True,timeout=30);self.assertEqual(decoder.returncode,0,decoder.stderr);decoded=json.loads(decoder.stdout);self.assertEqual(decoded['generation'],'1');observations.append({'id':'actual-native-guard-descriptors-and-row-decoded','input':decoder_packet,'observed':decoded,'qualification':'local decoding, not a lease'})
   holder_pid=self.admin.execute('SELECT pg_backend_pid()').fetchone()[0];authority_thread=threading.Thread(target=controlled_role_change);authority_thread.start()
   try:
    deadline=time.monotonic()+5;blockers=[]
