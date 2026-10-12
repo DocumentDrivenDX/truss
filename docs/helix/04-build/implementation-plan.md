@@ -5089,3 +5089,44 @@ The task-owned environment is separate from historical runtime environments.
 This is native/release correspondence, not hermetic build or publisher identity
 qualification. Formal five-input model source remains unchanged; no backend
 binding or complete cross-database issuer/qualification/recovery claim is promoted.
+
+### Pending transition current-image correspondence and fresh producer cut — 2026-10-11
+
+Private transition issuance now opens its own fresh administrative READ COMMITTED
+transaction after requiring an idle connection. It invokes the installed native
+participating-writer fence before reading current pointer/registry correspondence.
+Six exact OID25 text fields compare installation, epoch, incarnation, original
+profile/evidence hex and actual read-committed isolation. The marker/write modes
+remain held through native successor issuance and commit/abort. This excludes
+participating writers; uncoordinated administrators and complete cross-database
+routing remain unqualified. No borrowed caller transaction is weakened.
+
+Native controls reject a fabricated pending kind for an otherwise current epoch
+and changed pending evidence, with unchanged pointer and registry count. An
+inherited repeatable-read session default still permits the fresh producer path;
+the native isolation readback verifies READ COMMITTED and the session default
+remains unchanged afterwards. Final
+`evidence/python-psycopg-epoch-cut/ff7b9635-e298-456f-9dc8-7a5c1b36f0e0`
+passes179 methods, boundaries,143 current/preimage sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins
+with three stop0/status3/socket-absent cleanups. Earlierb96528b2 runs178 and fails
+ancillary database creation under the3-second fixture default; that isolated
+administrative allocation/deallocation now uses its own bounded15-second connection.
+Security-operation deadlines are unchanged. Then32e6bc7f runs179 and fails existing
+fixture DDL timeout and delegated containment under pressure; unchanged-source
+final rerun passes. Both failed packets remain retained. Observed system load
+41.77/59.78/65.17 may explain timing pressure but does not prove every failure cause
+or deterministic availability. Required complete recovery/availability remains open.
+
+Formal `evidence/security-pending-authority-formal/891218fc-7449-414c-a934-c534c5705315`
+retains five exact source inputs and eight Z3 4.15.4 SMT-LIB/fresh-context replays,
+five UNSAT/three SAT. It adds current-image and fresh post-fence snapshot guards;
+self-asserted pending kind without native correspondence admits a countermodel.
+Initiale20cbfba retains seven queries/four UNSAT/three SAT before explicit freshness.
+This remains a conditional ordering model, not native SQL/commit/driver refinement,
+authenticated issuer or successor-qualification enforcement. Trace shared
+CONTRACT-063/STP-056 B11/B12/L03/L11/L13 and US-056 AC9/AC10 prerequisites.
+Complete issuer/mapping/target authentication, known remote outcome recovery,
+writer/callable/current-state closure, graph capture and atomic protected release
+remain required. No backend binding; full goal stays active at26/132 with106
+unbound required cases.

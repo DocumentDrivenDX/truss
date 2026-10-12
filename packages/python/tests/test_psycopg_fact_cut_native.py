@@ -1334,7 +1334,8 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         from truss._psycopg_dependency_fact_cut import _epoch_dependency_recipe
         original=self.comparison();pending=None
         self.connection.execute('CREATE ROLE authority_other_actor')
-        self.connection.execute('CREATE DATABASE authority_other_database')
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
+            allocator.execute('CREATE DATABASE authority_other_database')
         try:
             with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True) as publisher:
                 pending=_begin_pending_authority_fixture(publisher,original)
@@ -1358,7 +1359,8 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         finally:
             self.connection.execute('ROLLBACK')
             if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
-            self.connection.execute('DROP DATABASE authority_other_database')
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
+                allocator.execute('DROP DATABASE authority_other_database')
             self.connection.execute('DROP ROLE authority_other_actor')
 
     def test_pending_authority_cannot_publish_before_original_reader_retirement(self):
@@ -1378,3 +1380,43 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         finally:
             self.connection.execute('ROLLBACK')
             if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+
+    def test_pending_completion_refuses_fabricated_pending_kind_for_current_epoch(self):
+        import sys
+        from dataclasses import replace
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _finish_pending_authority_fixture
+        original=self.comparison()
+        forged=replace(original,profile=b'{"kind":"truss-authority-transition-pending/0.1"}',evidence=b'owned-pending-authority-fixture')
+        count=self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone()
+        with self.assertRaisesRegex(ValueError,'current transition bytes'):_finish_pending_authority_fixture(self.connection,forged,original)
+        self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(original.epoch,))
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),count)
+
+    def test_pending_completion_refuses_changed_original_evidence_without_issuance(self):
+        import sys
+        from dataclasses import replace
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        original=self.comparison();pending=_begin_pending_authority_fixture(self.connection,original)
+        try:
+            count=self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone()
+            with self.assertRaisesRegex(ValueError,'current transition bytes'):_finish_pending_authority_fixture(self.connection,replace(pending,evidence=b'changed-pending-evidence'),original)
+            self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(pending.epoch,))
+            self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),count)
+        finally:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+
+    def test_pending_producer_uses_fresh_read_committed_without_changing_session_default(self):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        original=self.comparison();pending=None
+        self.connection.execute("SET default_transaction_isolation='repeatable read'")
+        try:
+            pending=_begin_pending_authority_fixture(self.connection,original)
+            self.assertEqual(self.connection.execute('SHOW default_transaction_isolation').fetchone(),('repeatable read',))
+            type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch;pending=None
+            self.assertEqual(self.connection.execute('SHOW default_transaction_isolation').fetchone(),('repeatable read',))
+        finally:
+            if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+            self.connection.execute('RESET default_transaction_isolation')

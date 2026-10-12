@@ -1,0 +1,83 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-pending-authority.py": "f27bb4230e066c336791ba19948c14750458298891c2046cb43bc244a9543266",
+    "scripts/security_authority_transition.py": "e7261799566661f2f14295a4b67f7b2e4b55557821368dda73f9089aa00a9965",
+    "packages/postgresql/native/source-epoch-issue.sql": "f7c292a9a70715137c003232603877b58e862cd8476faf7a63992ff05b92326e",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "31000ae911067480d8b4ad40f073e580ab780866172d522ec70c1de3252fec29",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "399a9e27389b0c69c6bcd8a9f4342d8b6dc32ff1a4d0ebe394d043e3c3a0c38c"
+  },
+  "queries": [
+    {
+      "id": "inherited_old_snapshot_prevents_pending_publication",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "f529ab71789bd18267c4dd3d4e7b4065cf92d6843d85ee575a7dcee5e7e7d7b5",
+      "model": null
+    },
+    {
+      "id": "changed_native_image_prevents_successor",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "3f7da82b5187539b5e8571d6e016e3175371c2b3927cf9e3b3c9c709acd08bfc",
+      "model": null
+    },
+    {
+      "id": "self_asserted_pending_kind_without_image_guard_allows_successor",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "d7faf913269698d665effa7aa608072c4fd3f358d39a746f3ebd1690b56b0d4c",
+      "model": "[pending_committed = True,\n successor_committed = True,\n admit = True,\n native_image_matches = False]"
+    },
+    {
+      "id": "pending_without_successor_prevents_admission",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "e986481d1d8b7aadc1f23ffe14001ca4834f09bd286bb553333dc9742eea5003",
+      "model": null
+    },
+    {
+      "id": "undrained_readers_prevent_pending_publication",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "cc091f297de7adf98c5f47073d7d8ac49daa6cd756441418335807764dc58685",
+      "model": null
+    },
+    {
+      "id": "unknown_remote_outcome_prevents_successor_admission",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "d365004d6a03ed23686a29f008a4fc85da098d1e258311c58efa379e5c28a761",
+      "model": null
+    },
+    {
+      "id": "remote_change_without_committed_pending_allows_old_admission",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "b501bf807ea3f0be009f6ef10f319a30d1ba52ecabfcc78464f03bd4cd5c1001",
+      "model": "[pending_committed = False,\n remote_committed = True,\n successor_committed = False,\n admit = True]"
+    },
+    {
+      "id": "unqualified_successor_without_completion_guard_allows_admission",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "8e1a572588f1f0c39267a88f9abf030833f09297efa61d8dbc775c8ef09839c9",
+      "model": "[pending_committed = True,\n requalified = False,\n remote_outcome_known = False,\n successor_committed = True,\n admit = True]"
+    }
+  ],
+  "scope": "Abstract drain, committed pending marker, remote mutation, exact native-image correspondence and qualified successor ordering. Pending excludes admission; undrained readers exclude pending publication; unknown remote outcome excludes successor admission. Omitted pending or qualification guards admit countermodels.",
+  "limitations": [
+    "No PostgreSQL commit/WAL/SQL, multi-database driver or concrete distributed state-machine refinement proof",
+    "Durable pending, complete writer routing and authenticated requalification are premises; native fixture only observes successful commits and writer disconnect",
+    "No automatic cross-database role interception, authenticated issuer/mapping/target, complete recovery/commit-unknown or admitted protected backend"
+  ]
+}
