@@ -1,0 +1,32 @@
+{
+  "scope": "Public caller-owned scalar object and independent edge imports",
+  "runtime": "truss-catalog-runtime/0.18-candidate",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "wheelSha256": "b7749952d2deea3f8f9137ccc4b3fe77f4eb91bd5ec33861418c434547f8cf7f",
+  "installedTests": {
+    "finalImportWorkflows": 2,
+    "finalImportSeconds": 26.309,
+    "priorCombinedWorkflows": 10,
+    "priorCombinedSeconds": 72.994,
+    "result": "passed",
+    "note": "Final review corrections rerun on installed import workflows; preceding object/edge/precondition/receipt regression passed on prior wheel."
+  },
+  "typing": {
+    "fixtures": 4,
+    "expectedNegativeErrors": 20,
+    "result": "passed"
+  },
+  "umfOwnerSqlSources": 17,
+  "pythonImportsChecked": 723,
+  "astraReview": "Conditional approval; central report ceiling correction applied. Canonical digest, authority withholding, native source guards and recovery classification corrected.",
+  "limits": [
+    "host-adopted pending settlement only",
+    "rootless exact scalar objects with string primary keys",
+    "independent directed edges with existing native endpoint identities",
+    "per-record standalone invariants; mandatory new-object import unavailable",
+    "128 records;1MiB payload;4MiB canonical input;8MiB report",
+    "null failure report never proves zero writes or rollback",
+    "engine-owned batches, generic import selector, public source lookup and migrations unfinished"
+  ]
+}

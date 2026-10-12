@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-catalog-runtime-release/0.1",
-  "releaseId": "truss-catalog-runtime/0.17-candidate",
+  "releaseId": "truss-catalog-runtime/0.18-candidate",
   "postgresVersion": "180006",
   "layoutProfile": {
     "identity": "truss-layout",
@@ -11,20 +11,21 @@
     "layout.sql": "421a9bb88bcc1293f4fcbb66d2b443ccd08ccfc7845c79e5d3ee21b5494666a7",
     "lineage.sql": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc",
     "plan.sql": "ddb1d498df5f56d7fd5a3ec363b2023f201925876d9a7946315aa87c013d38dd",
-    "runtime.sql": "60d354ef591929cf6743a8862124c25c61acb0069c245aabb8d7ba59d91c60dc",
+    "runtime.sql": "7daf2ac379bbbc91aa85bdc963a161e3efb8be9ec6b1a6941d0894775dce739e",
     "barrier.sql": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
     "view.sql": "6c7c510c951174a266e4ef06029edb31902da6034aae0b3008c7d7cc08784bfb",
-    "read.sql": "1e6bcae160616a3a181ac632dfad0c78f33c5399490f7001a41b30974a778b9d",
+    "read.sql": "875662769ec5ab01d2a1e795df7d5cc17ab165190b7789df882d634cd512eb08",
     "keys.sql": "d74dc2e4048331bafd6f1f68f7fd931818fb52beb720b51f5cfd8950b0f7a869",
     "groups.sql": "ad80c5a93866e931b3efd3d7ed427ab484a449ceff1fca982e176c88153546b2",
-    "group-profiles.json": "ef0f151e509a803680097e99b3df4883396488ad9bd1da166a97a2880c9fd1c6",
+    "group-profiles.json": "d9944cdff274f9b001dc78837f221c0a42f248869d1898ab2033e857a9c041fd",
     "reader.sql": "af68f7296aa9ff5b535af9795712391bce32f7ade4c5b218a63a95d0d7e65149",
     "key-read.sql": "baaf99eae2635980d884c1fad899e28718dec012aabbde818723d40a0ae1a6ac",
     "scalars.sql": "5bf626a72bd82e265528d20cb893e9b3bb55762e90f393befacdab39e3f2ed19",
     "pages.sql": "928a3f51bc876ba67b8fc294693ff8cb079301e60671cb0d0f5d6bf1fc4b64bb",
     "evolution.sql": "b68f9b026655be68f656f2308b9f4f418bd85c1dc720acb2b2700428fd6db631",
-    "operations.sql": "de5455655b763cf30de9e63519ff3fb82307302e95dbb720ab69577a1fd7f1d6",
-    "preconditions.sql": "32ea41dfd2b1312ad829704e35be426e27343aa1c6340a24d3574bab4776029b"
+    "operations.sql": "25e8ca98d54fd0a434d22ec10e81cc4e2999e46792eb6df93fb954a158db63e0",
+    "preconditions.sql": "32ea41dfd2b1312ad829704e35be426e27343aa1c6340a24d3574bab4776029b",
+    "imports.sql": "c4aadcc74574dbec1bef2fa0fd07bf4793a0730b9d6068902729c28d21433302"
   },
   "version": "0.15"
 }

@@ -19,7 +19,7 @@ if(capability.status==='ok') {
 }
 // @ts-expect-error Invalid envelope cannot return prior writer progress.
 const mixed:ImportExecutionResult<ImportReport>={outcome:'invalid',diagnosticProfile:{identity:'fixture',version:'0.1.0',sha256:'digest'},diagnostic:{identity:'fixture',bytesBase64:'e30=',sha256:'digest'},report};
-// @ts-expect-error Execution failure must explicitly preserve report or prove no submission via null.
+// @ts-expect-error Execution failure must explicitly explicitly carry the report or a null disclosure state.
 const lost:ImportExecutionResult<ImportReport>={outcome:'execution_failed',error:{code:'cancelled',retryScope:'none',message:'fixture'}};
 void [mixed,lost];
 

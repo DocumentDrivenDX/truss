@@ -122,7 +122,7 @@ def group_context(host,transaction,manifest,digest,pin_cursor):
     return host._run_operation(transaction,observe)
 
 
-def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cursor,*,bun_executable='bun'):
+def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_cursor=None,_attempt_capture=None):
     if type(input) is not GroupSemanticInput or type(request) not in (RequestNone,RequestPresent):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"shape"}'))))
     if (type(input.catalog) is not CurrentCatalog or type(input.asserted_origin) is not MapValue
@@ -163,6 +163,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         begin=json.loads(bytes(cursor.fetchone()[0]))
         if begin['outcome']!='execute':return _result(_bytes(begin))
         attempt_id=begin['attemptId']
+        if _attempt_capture is not None:_attempt_capture.append(attempt_id)
         for index,operation in enumerate(input.operations):
             operation_index[0]=index
             cursor.execute('SELECT truss.object_group_metadata(%s::uuid,%s)',(attempt_id,index),prepare=False)
@@ -183,6 +184,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
             cursor.fetchone()
         cursor.execute('SELECT truss.object_group_finish(%s::uuid)',(attempt_id,),prepare=False)
         return _result(bytes(cursor.fetchone()[0]))
+    if _cursor is not None:return Ok(apply(_cursor,None))
     result=host._run_operation(transaction,apply)
     if isinstance(result,Error) and result.error.code=='execution_obligation':
         state=result.error.sql_state

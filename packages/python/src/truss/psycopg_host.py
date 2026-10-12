@@ -75,6 +75,13 @@ class _HostPairReservation:
             custody.reservation=None;custody.lease.release()
 
 
+class _HostOperationReservation(_HostPairReservation):
+    """Private exclusive caller-host scope for sequential contained operations."""
+    def __init__(self,host):
+        if type(host) is not PsycopgHost:raise ValueError('Original host required')
+        self.hosts=(host,);self.thread=get_ident();self.active=False;self.custodies=(host._custody,)
+
+
 @dataclass
 class _TransactionCustody:
     handle: TransactionHandle
@@ -255,7 +262,7 @@ class PsycopgHost:
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
         reservation=self._custody.reservation
-        reserved=(type(reservation) is _HostPairReservation and reservation.active
+        reserved=(type(reservation) in (_HostPairReservation,_HostOperationReservation) and reservation.active
                   and reservation.thread==get_ident() and any(h is self for h in reservation.hosts))
         if reserved:
             if self._custody.pending is not None:

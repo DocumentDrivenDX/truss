@@ -62,6 +62,42 @@
         "sha256": "97d54f46af687510fd3ae10aaa37c761d17d6b371d12171ea15a0d402b8855e9"
       },
       "definition": "truss-authority-receipt-visibility/0.1;stock PostgreSQL18.6 authority;READ COMMITTED read-only caller transaction;canonical receipt-position0.1 locator;original immutable request-enabled group receipt and attempt;position retained atomically with effects;token exposed only after independent committed replay;all-no-op groups retain original xid;current original-operation and endpoint readers;no token authority grant;visible original committed receipt certifies atomic Truss effects;missing evidence unavailable never false;no replica or repeatable-read claim;bounded token and evidence bytes;ordinary deadlines;no waiting or retry"
+    },
+    {
+      "name": "importProfile",
+      "pin": {
+        "identity": "truss-host-scalar-import",
+        "version": "0.1",
+        "sha256": "3f8ec350d3184ef4239e3193afb48ed0b37213f36db8fe4f636d55585a2c3b9d"
+      },
+      "definition": "Host-adopted scalar imports;objects before edges preserving submitted indices;explicit admitted primary-key/typed endpoint identity;live/reserved skips before replacement payload decode;eligible-only creates via native group provider;per-record standalone final invariants;immutable load/source provenance;pending caller settlement;finite record/input/report byte limits;no internal retry"
+    },
+    {
+      "name": "importPayloadProfile",
+      "pin": {
+        "identity": "truss-scalar-import-payload",
+        "version": "0.1",
+        "sha256": "bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"
+      },
+      "definition": "truss-import-payload/0.1.0 numeric-free duplicate-free UTF8 JSON;rootless object values or independent directed edge values/order;exact scalar cells;optional exact map source;known author/at/system string or null;identity-bearing payload fields must agree;decode only after eligible identity"
+    },
+    {
+      "name": "importKeyProfile",
+      "pin": {
+        "identity": "truss-selected-umf-string-key",
+        "version": "0.1",
+        "sha256": "07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"
+      },
+      "definition": "Bundled original UMF encode-core-key-tuple2.0.0 umf-key-tuple-v1;accepted original core0.7.0 source;declared primary key and exact ordered string components;original native definition pins;no alternative tuple/equality implementation"
+    },
+    {
+      "name": "configurationProfile",
+      "pin": {
+        "identity": "truss-installed-engine-forbid",
+        "version": "0.1",
+        "sha256": "502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"
+      },
+      "definition": "Immutable initial installed import policy generation1;engine journal;forbid object primary-key reuse and imported deleted edge identity reuse;ordinary edge recreation remains explicit;manifest release digest identifies protected installed producer source inventory;caller settlement"
     }
   ]
 }

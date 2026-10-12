@@ -4,10 +4,13 @@ The [Python catalog runtime](../../packages/python/README.md#public-catalog-work
 now provides caller-owned installation, fresh registration, report/retry and
 complete accepted catalog views. The 0.2 candidate exposes exact archived
 definition slices and native document-qualified identities on PostgreSQL18.6.
-Runtime 0.3 adds module-authorized scalar-string object identity reads through the
-public Python assembly. Key/page reads, compiled queries, mutations, imports and
-feed remain under implementation; older
-private component evidence below does not qualify those public operations.
+The public Python assembly now provides exact scalar object/key/page reads,
+grouped object and independent edge mutations, atomic caller preconditions,
+relationship pages and committed receipt visibility on PostgreSQL18.6.
+Caller-owned imports are the current implementation iteration. Compiled query
+execution, committed feed/ACK, compatible catalog evolution and managed
+installation/upgrades remain unfinished. Older private component evidence below
+does not qualify those public operations.
 
 [Query and execution ownership](01-frame/prd.md#query-and-execution-ownership--owner-direction-2026-10-11): Truss exposes the full Weft query surface. Weft owns evolving SQL coverage; Truss owns table layout, query execution, actions and other executions. Direct read/traversal APIs are convenience operations, not SQL coverage limits.
 

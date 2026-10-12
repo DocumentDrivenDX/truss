@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:truss:proposal:import-execution-result:0.1.0",
   "title": "Existing progress-bearing import execution result compositions",
-  "description": "Definitions only for the existing ImportExecutionResult declaration. Select engineOwned for runBatches or inTransaction for applyInTransaction. Report custody/count/durability and null only before writer submission require original semantic admission. No generic Outcome or automatic replay.",
+  "description": "Definitions only for the existing ImportExecutionResult declaration. Select engineOwned for runBatches or inTransaction for applyInTransaction. Report custody/count/durability require original semantic admission. Null means no submission or withheld current-authority/bounded report; it never proves zero writes or rollback. No generic Outcome or automatic replay.",
   "not": {},
   "$defs": {
     "engineOwned": {
