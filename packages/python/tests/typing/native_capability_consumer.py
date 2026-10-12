@@ -1,6 +1,6 @@
 """Type the same capability selection used by native adopter workflows."""
 from truss import (CatalogReferenceAssembly,CapabilityAvailable,TransactionHandle,
-    CatalogDocument,Ok,ObjectFound,FeedPage)
+    CatalogDocument,Ok,ObjectFound,FeedPage,HistoryEntity)
 from truss.capability_contracts import NativeRuntimeOperations
 
 
@@ -26,3 +26,7 @@ def consume(assembly: CatalogReferenceAssembly, transaction: TransactionHandle,
         if isinstance(page,Ok) and isinstance(page.value,FeedPage):
             feed.capability.acknowledge_feed_in_transaction(transaction,page.value)
     operations.reader_catalog_in_transaction(transaction)
+    history=assembly.history(assembly.history_selection)
+    if isinstance(history,CapabilityAvailable):
+        history.capability.reconstruct_in_transaction(transaction,entity=HistoryEntity(
+            kind='object',document_id='orders',module_id='sales',definition_id='Order',id=1),version=1)

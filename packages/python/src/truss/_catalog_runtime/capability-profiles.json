@@ -53,6 +53,21 @@
         "version": "0.1",
         "sha256": "7df46533a28f3f396fd74e30f79d889c7349c1ec8def42552cc7b4e7f79119f5"
       }
+    },
+    {
+      "name": "history",
+      "pin": {
+        "identity": "truss-native-retained-history-capability",
+        "version": "0.1",
+        "sha256": "6868f944ad5b69196aab2ad854d2418fb47dcf3d28270da3bb586a22187870f7"
+      },
+      "definition": "Native retained history capability/0.1: committed entity mutation groups in xid/seq journal order below fixed snapshot xmin; exact wrapper/origin/physical correspondence and complete ordered group digest; original image revisions and definition pins; direct retained create/metadata version image or deleted version with its unmodified previous record; no current canonical row dependence; rootless scalar objects and independent edges; no archive, cleanup, general reducer, source-fact retrieval or broad reconstruction evidence claims.",
+      "policyPin": {
+        "identity": "truss-native-retained-history-policy",
+        "version": "0.1",
+        "sha256": "b973d1f9a9466298ccd23113f2329a0a66dcd77eb17664bf51ed814d96c2ddb0"
+      },
+      "policyDefinition": "Native retained history policy/0.1: ordinary authenticated current module reader or writer; every historical property declaration owner and old/new edge endpoint owner required; original accepted revision/pin interpretation; read-only READ COMMITTED allowed; selected authority installation, source epoch and release; no live endpoint requirement; no raw-table privilege."
     }
   ]
 }

@@ -1,7 +1,7 @@
 """One real adopter workflow through compatible acceptance and recovery."""
 import json
 import psycopg
-from truss import CatalogDocument,CatalogRegistration,Ok,ObjectFound
+from truss import CatalogDocument,CatalogRegistration,Ok,ObjectFound,HistoryEntity,HistoricalRecord
 from truss.contracts import TextValue,MapValue
 from truss.groups import (CreateEdge,Delete,NullOrderKey,StoredObjectReference,AliasObjectReference,
     AuthoredValue,UpdateObject,GroupSuccess,CommittedReceiptReplay,RequestNone,KeyAbsent)
@@ -88,3 +88,13 @@ class CompatibleCatalogTests(mutation_tests.ObjectMutationTests):
         self.assertIsInstance(default_documents.value,GroupSuccess)
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(2,))
+        connection,host,assembly,tx=self.consumer()
+        entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(a.id))
+        before=assembly.reconstruct_in_transaction(tx,entity=entity,version=1).value
+        after=assembly.reconstruct_in_transaction(tx,entity=entity,version=2).value
+        self.assertIsInstance(before,HistoricalRecord);self.assertIsInstance(after,HistoricalRecord)
+        self.assertEqual(json.loads(before.record)['identity']['definitionPin'],a.definition_pin)
+        self.assertEqual(json.loads(before.record)['catalogRevision'],'1')
+        self.assertEqual(json.loads(after.record)['identity']['definitionPin'],current_a_identity.definition_pin)
+        self.assertEqual(json.loads(after.record)['catalogRevision'],'2')
+        host.detach();connection.rollback()

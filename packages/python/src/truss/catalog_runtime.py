@@ -17,7 +17,9 @@ from functools import wraps
 from typing import Literal, overload, TypeVar
 from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogReport)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
-    NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability)
+    NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability)
+from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
+    HistoricalRecord,HistoricalDeleted,HistoryUnavailable)
 from .feed import FeedPage,FeedConsumer,FeedAcknowledged,FeedUnavailable
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
@@ -99,7 +101,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','preconditions.sql','imports.sql','feed.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','preconditions.sql','imports.sql','feed.sql','history.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -181,7 +183,7 @@ def _catalog_failure(result, local_code=None):
     return result if code is None else Error(replace(failure,catalog_code=code))
 
 
-_SelectedFamily=TypeVar('_SelectedFamily',Literal['catalog'],Literal['direct_read'],Literal['import'],Literal['feed'])
+_SelectedFamily=TypeVar('_SelectedFamily',Literal['catalog'],Literal['direct_read'],Literal['import'],Literal['feed'],Literal['history'])
 
 
 class CatalogReferenceAssembly:
@@ -255,8 +257,15 @@ class CatalogReferenceAssembly:
             if type(selection) is not CapabilitySelection or selection!=self.feed_selection:return CapabilityUnavailable(reason='selection')
             return CapabilityAvailable(capability=NativeFeedCapability(selection=self.feed_selection,_assembly=self))
 
-    def history(self,selection: CapabilitySelection[Literal['history']]) -> CapabilityUnavailable:
-        with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')
+    @property
+    def history_selection(self) -> CapabilitySelection[Literal['history']]:
+        return self._native_selection('history')
+
+    def history(self,selection: CapabilitySelection[Literal['history']]) -> CapabilityAvailable[NativeHistoryCapability] | CapabilityUnavailable:
+        with self._lock:
+            if self._disposed:return CapabilityUnavailable(reason='disposed')
+            if type(selection) is not CapabilitySelection or selection!=self.history_selection:return CapabilityUnavailable(reason='selection')
+            return CapabilityAvailable(capability=NativeHistoryCapability(selection=self.history_selection,_assembly=self))
 
     def compiled_execution(self,selection: CapabilitySelection[Literal['weft_execution']]) -> CapabilityUnavailable:
         with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')
@@ -322,7 +331,7 @@ class CatalogReferenceAssembly:
             if row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 local_failure[0]='unsupported_profile'
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority','history:retained-native-groups'))
         return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
@@ -497,7 +506,7 @@ class CatalogReferenceAssembly:
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
                                       'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
-                                      'page_objects(text,text,text,int,int,bytea,text,text)'):
+                                      'page_objects(text,text,text,int,int,bytea,text,text)','read_history(jsonb,bytea,bigint,int,int,text,text)'):
                         cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
@@ -817,6 +826,48 @@ class CatalogReferenceAssembly:
             if state=='42501':return Ok(CatalogRefused())
             reason={'0A000':'profile','25006':'profile','54000':'resource','55P03':'observation','42P01':'installation','42883':'installation'}.get(state)
             if reason:return Ok(CatalogUnavailable(code=reason))
+        return result
+
+    @_active_operation
+    def page_history_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,cursor: HistoryCursor | None=None,
+                                    maximum_events: int=4096,maximum_bytes: int=8388608) -> Outcome[HistoryPage | HistoryUnavailable]:
+        """Read one complete committed entity mutation group in journal order."""
+        return self._read_history(transaction,entity,cursor,None,maximum_events,maximum_bytes)
+
+    @_active_operation
+    def reconstruct_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,version: int,
+                                   maximum_events: int=4096,maximum_bytes: int=8388608) -> Outcome[HistoricalRecord | HistoricalDeleted | HistoryUnavailable]:
+        """Return a retained full version image, or the real deletion marker."""
+        if type(version) is not int or not 1<=version<=9223372036854775807:return Ok(HistoryUnavailable(reason='context'))
+        return self._read_history(transaction,entity,None,version,maximum_events,maximum_bytes)
+
+    def _read_history(self,transaction,entity,cursor,version,maximum_events,maximum_bytes):
+        try:
+            valid=type(entity) is HistoryEntity and entity.kind in ('object','edge') and type(entity.id) is int and 1<=entity.id<=9223372036854775807
+            valid=valid and all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (entity.document_id,entity.module_id,entity.definition_id))
+        except (UnicodeError,TypeError):valid=False
+        if not valid or cursor is not None and (type(cursor) is not HistoryCursor or type(cursor.content) is not bytes or not 1<=len(cursor.content)<=16384):return Ok(HistoryUnavailable(reason='context'))
+        if type(maximum_events) is not int or not 1<=maximum_events<=65536 or type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:return Ok(HistoryUnavailable(reason='resource'))
+        manifest,digest,_=_release()
+        selection=json.dumps({'kind':entity.kind,'documentId':entity.document_id,'moduleId':entity.module_id,'definitionId':entity.definition_id,'id':str(entity.id)})
+        def retained(value):
+            content=base64.b64decode(value['contentBase64'],validate=True)
+            if sha256(content).hexdigest()!=value['sha256']:raise ValueError('Original retained event required')
+            return RetainedHistoryEvent(content=content,sha256=value['sha256'],writer_xid=value['writerXid'],seq=value['seq'],version=int(value['version']))
+        def read(native_cursor,observed):
+            _pin_cursor(native_cursor)
+            native_cursor.execute('SELECT truss.read_history(%s::jsonb,%s,%s,%s,%s,%s,%s)',(selection,None if cursor is None else cursor.content,version,maximum_events,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(native_cursor.fetchone()[0]))
+            if value['outcome']=='page':
+                continuation=None if 'cursorBase64' not in value else HistoryCursor(content=base64.b64decode(value['cursorBase64'],validate=True))
+                return HistoryPage(events=tuple(retained(v) for v in value['events']),continuation=continuation,safe_watermark_xid=value['safeWatermarkXid'])
+            record=base64.b64decode(value['recordBase64'],validate=True);event=retained(value['event'])
+            if value['outcome']=='deleted':return HistoricalDeleted(deletion_version=int(value['version']),before=record,event=event)
+            return HistoricalRecord(record=record,event=event)
+        result=self._host._run_operation(transaction,read)
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            reason={'42501':'authorization','54000':'resource','55P03':'observation','0A000':'profile','55000':'integrity','22023':'context','P1010':'history'}.get(result.error.sql_state)
+            if reason:return Ok(HistoryUnavailable(reason=reason))
         return result
 
     @_active_operation
