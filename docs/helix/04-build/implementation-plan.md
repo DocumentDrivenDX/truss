@@ -5840,3 +5840,10 @@ B05/B09/B11/B12 and US-056 AC5/AC7/AC9/AC10 prerequisites. Native role/callable/
 diagnostic/writer/authentication closure remains independent; source/currentness
 checks are not a general role-lifetime proof. No advanced backend case is
 promoted; all132 cases remain required and the goal remains active at26/132.
+
+Final merge preserves mainc2f9fa72/9519b035's independent actual-object string-key
+verifier and its tests/owner checks. These files do not alter the public package
+or any source/test covered by the44-test module-role qualification. All211
+current/preimage source pins and retained evidence digests are verified unchanged
+after merge. The separate native object-key receipt is not claimed as replayed
+here. Public module-role validation retains its recorded scoped qualification.
