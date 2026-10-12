@@ -1,0 +1,7 @@
+test_exact_names_and_reserved_none (__main__.RoleSettingTests.test_exact_names_and_reserved_none) ... ok
+test_role_setting_name_can_resolve_to_replacement_oid (__main__.RoleSettingTests.test_role_setting_name_can_resolve_to_replacement_oid) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 7.592s
+
+OK

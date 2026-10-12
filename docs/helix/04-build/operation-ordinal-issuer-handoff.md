@@ -2365,3 +2365,17 @@ FK/shape evidence proves referenced row existence and completeness, not that the
 Astra ultra independently verified214/711,206/711 and121/702 matching observations/current-preimage pins, exact ZIPs, original accepted predicates, NULL-safe pending separation, isolated revision equality, full restoration and required cleanup. Both requested control refinements are resolved; no blocker for tuple/FK shape only. Review was read-only and did not execute native probes.
 
 Exact source-capture/native harnesses, final receipts and retained historical attempts are on [UMF mainaa0e323b](https://github.com/DocumentDrivenDX/umf/commit/aa0e323bf5f52887585b81c6e91ea3539e69a3a6).
+
+
+### Session-person alternative to PA02
+
+The separately selected
+`truss-protected-session-fresh-catalog/0.1-candidate` policy in CONTRACT-005
+authorizes native session person A only when role is exactly `none`. It checks
+A's explicit fresh-catalog registrar authority regardless of a wrapper owner B.
+An outsider cannot borrow B's rights; entitled A may call through B. This makes
+no immediate-caller or call-chain provenance claim and does not satisfy or
+replace PA02 or PA-N03 for existing profiles. Original SDK input/attempt custody,
+protected body/owner correspondence and guarded publication remain required.
+The connected protected implementation must use its own versioned context and
+semantic bodies; existing invoker/superuser guards remain unchanged.

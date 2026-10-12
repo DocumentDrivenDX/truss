@@ -206,3 +206,19 @@ publication with original quarantine/recovery intact. A full positive source use
 independently expected complete object/association-edge/typed endpoint membership;
 row counts alone cannot qualify it. These are authored integration exits, not
 execution of the owner's native or browser tests.
+
+
+## Session-person composition alternative
+
+The separately selected `truss-protected-session-fresh-catalog/0.1-candidate`
+profile follows [CONTRACT-005's session-person policy](CONTRACT-005-module-isolation.md#protected-session-person-fresh-catalog-profile).
+For that profile, composition step 1 authorizes native session person A under
+exact `role=none`, with explicit installed fresh-catalog registrar authority;
+it does not recover the pre-elevation owner of an intervening wrapper.
+All effects/disclosure use A's permissions, so B cannot donate authority.
+Original SDK preparation/input/attempt custody and protected installed body
+correspondence remain required. New context and protected semantic bodies
+must carry distinct actor/session and runtime-owner identities through
+stage/report/feed/head and final authorization checks. Existing invoker/PA02
+profiles and their wrapper refusals remain unchanged. Public activation and
+commit wiring are still unfinished.
