@@ -4,14 +4,28 @@ UMF owns decoding, keys and policy semantics. Administrative issuer/mapping and
 trusted=true remain fixture premises. This tool never exposes raw cells as output.
 """
 from pathlib import Path
-from dataclasses import asdict
+from dataclasses import asdict,dataclass
 import hashlib,json,subprocess
 from truss._psycopg_dependency_fact_cut import (_epoch_dependency_recipe,_OriginalFactSources,
     _inspect_original_fact_sources,_capture_dependency_relation_cells,_run_dependency_fact_operation,_verify_native_profile_caller)
 ROOT=Path(__file__).resolve().parent.parent
 
 
-def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None):
+@dataclass(frozen=True)
+class _OwnedEvaluatorSourcePins:
+    tool: Path
+    pins: tuple
+
+
+def _pin_owned_evaluator_sources():
+    """Private administrative source snapshot, never an authority capability."""
+    tool=ROOT/'scripts/evaluate-security-captured-identity-fixture.ts'
+    owner=Path('/Users/erik/.codex/worktrees/security-main-integration/umf')
+    paths=[tool]+[p for p in (owner/'src').rglob('*') if p.is_file() and p.suffix in ('.ts','.json')]+[owner/'tests/security/fixture.ts']
+    return _OwnedEvaluatorSourcePins(tool,tuple((p,hashlib.sha256(p.read_bytes()).digest()) for p in paths))
+
+
+def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None):
     if type(sources) is not _OriginalFactSources:raise ValueError('Original fixture sources required')
     sources=_OriginalFactSources(sources.policy,sources.resolution)
     digest=hashlib.sha256(requirements).hexdigest()
@@ -31,10 +45,9 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
             group['fields'].append((p.reference,c))
         else:group['associations'].append(p.reference)
     if len(groups)>32 or any(len(g['fields'])>32 for g in groups.values()):raise ValueError('Bounded fixture capture required')
-    tool=ROOT/'scripts/evaluate-security-captured-identity-fixture.ts'
-    owner=Path('/Users/erik/.codex/worktrees/security-main-integration/umf')
-    paths=[tool]+[p for p in (owner/'src').rglob('*') if p.is_file() and p.suffix in ('.ts','.json')]+[owner/'tests/security/fixture.ts']
-    pins={p:hashlib.sha256(p.read_bytes()).digest() for p in paths}
+    prepared=_pin_owned_evaluator_sources() if evaluator_sources is None else evaluator_sources
+    if type(prepared) is not _OwnedEvaluatorSourcePins:raise ValueError('Original private evaluator preparation required')
+    tool,pins=prepared.tool,dict(prepared.pins)
     def execute(cursor):
         caller=profile.get('caller')
         if caller_database is not None:
@@ -93,6 +106,7 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
     if caller_host is executor_host:raise ValueError('Separate original caller/executor hosts required')
     selected,providers=_epoch_dependency_recipe(epoch,hashlib.sha256(requirements).hexdigest(),sources)
     if not json.loads(selected.profile)['kind'].endswith('/0.4'):raise ValueError('Original delegated profile required')
+    prepared=_pin_owned_evaluator_sources()
     left,right=caller_host.connection.info,executor_host.connection.info
     if (left.host,left.port,left.dbname)!=(right.host,right.port,right.dbname):raise ValueError('Original configured endpoint correspondence required')
     def capture(cursor,observed):
@@ -103,7 +117,7 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
         cursor.execute('SELECT oid::pg_catalog.text FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()',prepare=False,binary=False)
         database=cursor.fetchone()
         if database is None or len(database)!=1:raise ValueError('Original caller database observation required')
-        result=_run_owned_identity_read(executor_host,executor_transaction,selected,requirements,sources,delegated=True,caller_database=database)
+        result=_run_owned_identity_read(executor_host,executor_transaction,selected,requirements,sources,delegated=True,caller_database=database,evaluator_sources=prepared)
         # Return only a successful original executor decision. The outer caller
         # operation still confirms its native custody before publication.
         from truss.execution import Ok

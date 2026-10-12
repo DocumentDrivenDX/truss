@@ -234,8 +234,8 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
     def bound_profile(self,providers=None):
         raw=(ROOT/'docs/helix/04-build/evidence/security-fact-requirements/requirements.json').read_bytes()
         return raw,json.dumps({'kind':'truss-flat-fact-provider-fixture/0.1','requirementsSha256':hashlib.sha256(raw).hexdigest(),'providers':[asdict(p) for p in (self.dependency_providers() if providers is None else providers)]},sort_keys=True,separators=(',',':')).encode()
-    def issue_bound_profile(self,raw_profile):
-        epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(self.epoch,raw_profile,b'bound-fixture')).fetchone()[0]
+    def issue_bound_profile(self,raw_profile,*,predecessor=None):
+        epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(self.epoch if predecessor is None else predecessor,raw_profile,b'bound-fixture')).fetchone()[0]
         return epoch_tests._EpochComparison('fixture',epoch,'target',raw_profile,b'bound-fixture')
     def test_epoch_original_profile_derives_complete_native_provider_cuts(self):
         t=self.begin();raw,profile=self.bound_profile();comparison=self.issue_bound_profile(profile)
@@ -942,7 +942,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
 
-    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False):
+    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False,*,predecessor=None):
         import sys
         if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
         from security_owned_read import run_delegated_owned_identity_read
@@ -950,7 +950,8 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         def roles(c):return c.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
         caller=roles(caller_host.connection);executor=roles(self.connection)
         value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':subject}]};value['executor']={'sessionRoleOid':str(int(executor[0])+1) if wrong_executor else executor[0],'effectiveRoleOid':executor[1]}
-        comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
+        comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode(),predecessor=predecessor)
+        self._last_delegated_epoch=comparison.epoch
         # Owned harness only: retain sanitized layer codes, never exception text,
         # private stdout/stderr, native identity, credentials or fact cells.
         import security_owned_read as tool
@@ -1214,4 +1215,71 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'error','code':'cancelled'},{'layer':'caller','status':'error','code':'invalid_transaction'}])
                 self.assertNotIn('private-fact',repr(result));self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
             finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_repeated_native_completion_preserves_subject_decisions(self):
+        def operation(host,t,original,connection):
+            for subject,decision in [('s1','permit'),('s2','deny'),('s1','permit')]:
+                executor_t=self.begin()
+                try:
+                    result=self.delegated_owned_read(host,t,executor_t,subject)
+                    self.assertIsInstance(result,Ok,self._last_delegated_events)
+                    self.assertEqual(result.value['decision'],decision)
+                    self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+                finally:self.connection.execute('ROLLBACK')
+        self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
+        try:self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute("DELETE FROM truss.sec_staff WHERE staff_id='s2'")
+
+    def test_delegated_evaluator_cancellation_allows_explicit_same_host_recovery(self):
+        import sys,subprocess
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                with patch.object(tool.subprocess,'run',side_effect=subprocess.TimeoutExpired('fixture',4)):
+                    failed=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(failed,Error)
+                self.assertEqual(self._last_delegated_events[0]['code'],'cancelled')
+                self.assertFalse(host._custody.quarantined);self.assertFalse(self.host._custody.quarantined)
+                # Explicit retry obtains and verifies a fresh issued fixture
+                # generation; it does not publish the cancelled decision.
+                recovered=self.delegated_owned_read(host,t,executor_t,predecessor=self._last_delegated_epoch)
+                self.assertIsInstance(recovered,Ok,self._last_delegated_events)
+                self.assertEqual(recovered.value['decision'],'permit')
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_prepared_evaluator_source_change_refuses_under_native_guards(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_prepare=tool._pin_owned_evaluator_sources
+        evaluator=ROOT/'scripts/evaluate-security-captured-identity-fixture.ts'
+        original_bytes=evaluator.read_bytes();changed_bytes=original_bytes+b'\n// owned source-drift control\n';observed=[]
+        def operation(host,t,original,connection):
+            def prepare():
+                self.assertIsNone(host._custody.pending);self.assertIsNone(self.host._custody.pending)
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+                prepared=original_prepare()
+                self.assertEqual(evaluator.read_bytes(),original_bytes)
+                evaluator.write_bytes(changed_bytes);observed.append(True)
+                return prepared
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_pin_owned_evaluator_sources',prepare):
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error)
+                self.assertEqual(self._last_delegated_events[0]['code'],'invalid_transaction')
+                self.assertEqual(observed,[True])
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+            finally:
+                self.connection.execute('ROLLBACK')
+                # Do not overwrite unrelated concurrent edits.
+                self.assertEqual(evaluator.read_bytes(),changed_bytes)
+                evaluator.write_bytes(original_bytes)
         self.with_unprivileged_actor(operation,catalog_only=True)

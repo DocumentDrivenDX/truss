@@ -2803,3 +2803,40 @@ binding is claimed. Original authentication, full routine/source/privilege/lifet
 closure and complete protected disclosure remain open; full goal active at26/132,
 106 unbound required cases. Use these layer outcomes to diagnose any future
 reproduction before making availability claims.
+
+### Delegated preparation deadline, repeated decisions and cancellation recovery — 2026-10-11
+
+Initial evaluator source pinning now occurs before delegated caller operation
+custody/deadline acquisition. A private frozen administrative preparation retains
+the selected tool and exact source digest tuples. Guarded evaluation still checks
+those original bytes before returning a decision. Public delegated inputs cannot
+supply a preparation; the constructible private dataclass is not authentication,
+a reusable authority capability or a complete package-delivery proof. Native
+caller/executor/epoch/fact checks and4-second evaluator/5-second host bounds remain.
+
+Repeated actual calls across fresh executor transactions yield permit/deny/permit
+for authored assigned/unassigned Staff fixtures. A contained evaluator cancellation
+allows an explicit same-host retry with a freshly issued generation and the exact
+previously issued predecessor; no cancelled decision is reused. A real owned
+source-file edit after preparation refuses guarded publication, and exact edit
+restoration preserves unrelated concurrent content. Preparation is independently
+observed before either host has pending operation custody or pair reservation.
+
+Final `evidence/python-psycopg-epoch-cut/9ed3269a-0edd-4aba-8aa3-1ab66b4e815f`
+passes172 methods, module boundaries and142 current/preimage Truss pins on
+PostgreSQL18.6/psycopg3.3.6 binary,363 UMF sources,1705 native payload pins and
+three stop0/status3/socket-absent cleanups. Earlier64ce211a passes171 before the
+source-drift control. Initial5a8176ee fails two new fixture controls: absent s2 row
+and stale predecessor. Those fixtures were corrected without weakening admission.
+Thenf46b8c09 passes both new schedules but the existing permit case records executor
+ok/caller cancelled at6965ms. This reproduces a caller deadline refusal; initial
+source pinning inside that window was an avoidable workload. The earlier71a6ff76
+refusal remains without layer diagnostics and cannot be retroactively assigned
+this cause. Passing finite schedules after preparation refactoring do not prove
+unrestricted availability or exclude every deadline/refusal cause under load.
+
+Trace CONTRACT-063/STP-056 B10/B11/B12/B16/L03/L11 and US-056 AC8/AC9/AC10
+prerequisites. No new formal native refinement theorem or backend binding. Complete
+original caller/issuer/mapping/package/target authentication, source/role/ACL and
+callable lifetime, graph capture and protected final publication remain open.
+Full goal remains active at26/132 with106 unbound required cases.
