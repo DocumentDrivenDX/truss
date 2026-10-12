@@ -31,6 +31,32 @@ ddx:
 
 The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized exact scalar object and independent directed edge groups, object/key/page reads, relationship reads and atomic caller preconditions. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
 
+## Compatible catalog acceptance — connected implementation scope
+
+Fold original immutable registration requests into a complete expected catalog;
+match document-qualified authored identities against that reconstructed prestate
+and allocate IDs only for new definitions. Persist the typed delta under the
+existing complete-record and deferred completion gates. Admit compatible
+additions, optional fields and supported relationship widening after current-data
+validation; preserve original reports and exact request-key replay. Removal,
+retirement and transforms require their own declared semantics.
+
+The connected change must qualify archive addresses by accepted revision,
+ordinal and document ID, including a key's own retained source archive. New-key
+unchanged registration compares the current document state, while original
+request-key replay remains historical. Current whole-document input for UMF key
+production must be separate from retained individual definition-pin archives.
+Receipt recovery must precede current-definition admission for original requests.
+Import edge reservations need stable authored/native endpoint identities rather
+than mutable definition pins. A changed Record must not make unchanged sibling
+Records unusable with the assembly's current document cache. These are acceptance
+prerequisites, not a new conformance campaign; use one public add-field/update/
+read/replay workflow plus the existing incompatible-count case.
+
+The revision-qualified catalog composer has a focused mixed-revision source test.
+It does not establish native evolution acceptance, which remains unavailable
+until the connected persistence and recovery changes are implemented.
+
 ## Caller-owned import iteration — 2026-10-12
 
 Runtime 0.18 exposes `import_context_in_transaction`,
