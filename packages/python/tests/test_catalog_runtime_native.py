@@ -381,6 +381,51 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.assertEqual(self.admin.execute('SELECT document_id,module FROM truss.module_access ORDER BY document_id').fetchall(),[('adoc','m'),('zdoc','m')])
         with self.assertRaises(ValueError):ModuleAccessGrant('adoc','m','r'*63+'suffix','app_writer')
 
+    def test_module_configuration_refuses_server_capability_permission_roles(self):
+        from truss import ModuleAccessGrant
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='module-capabilities'),Ok)
+        host.detach();connection.commit()
+        for role in ('app_reader','app_writer'):
+            self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
+            self.addCleanup(self.admin.execute,'DROP ROLE IF EXISTS '+role)
+        self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin)
+        self.tx=self.host.adopt_transaction().value
+        self.assembly=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
+        for role in ('pg_read_server_files','pg_write_server_files','pg_execute_server_program'):
+            for position in ('reader','writer'):
+                with self.subTest(role=role,position=position):
+                    self.admin.execute('SAVEPOINT variant')
+                    try:
+                        grant=ModuleAccessGrant('adoc','m',role if position=='reader' else 'app_reader',role if position=='writer' else 'app_writer')
+                        result=self.assembly.configure_module_access_in_transaction(self.tx,(grant,))
+                        self.assertIsInstance(result,Error)
+                        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
+                    finally:
+                        self.admin.execute('ROLLBACK TO variant');self.admin.execute('RELEASE variant')
+
+    def test_module_configuration_refuses_indirect_server_capability_roles(self):
+        from truss import ModuleAccessGrant
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='indirect-module-capabilities'),Ok)
+        host.detach();connection.commit()
+        for role in ('app_reader','app_writer'):
+            self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
+            self.addCleanup(self.admin.execute,'DROP ROLE IF EXISTS '+role)
+        self.admin.execute('GRANT pg_read_server_files TO app_reader WITH INHERIT FALSE, SET TRUE')
+        self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin)
+        self.tx=self.host.adopt_transaction().value
+        self.assembly=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
+        self.admin.execute("CREATE TEMP TABLE caller_module_sentinel(value text); INSERT INTO caller_module_sentinel VALUES ('kept')")
+        grant=ModuleAccessGrant('adoc','m','app_reader','app_writer')
+        result=self.assembly.configure_module_access_in_transaction(self.tx,(grant,))
+        self.assertIsInstance(result,Error)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
+        self.assertEqual(self.admin.execute('SELECT value FROM caller_module_sentinel').fetchall(),[('kept',)])
+        self.admin.execute('REVOKE pg_read_server_files FROM app_reader')
+        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),Ok)
+        self.assertEqual(self.admin.execute('SELECT reader_role,writer_role FROM truss.module_access').fetchall(),[('app_reader','app_writer')])
+
     def test_module_configuration_refuses_ordinary_caller_and_stale_isolation(self):
         from truss import ModuleAccessGrant
         self.install();connection,host,assembly,tx=self.consumer()

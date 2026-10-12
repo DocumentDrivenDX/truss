@@ -1,0 +1,60 @@
+test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) ... 
+  test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_read_server_files', position='reader') ... FAIL
+  test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_read_server_files', position='writer') ... FAIL
+  test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_write_server_files', position='reader') ... FAIL
+  test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_write_server_files', position='writer') ... FAIL
+  test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_execute_server_program', position='reader') ... FAIL
+  test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_execute_server_program', position='writer') ... FAIL
+
+======================================================================
+FAIL: test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_read_server_files', position='reader')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 402, in test_module_configuration_refuses_server_capability_permission_roles
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=PendingModuleAccessConfiguration(grants=(ModuleAccessGrant(document_id='adoc', module_id='m', reader_role='pg_read_server_files', writer_role='app_writer'),), status='pending_commit'), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_read_server_files', position='writer')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 402, in test_module_configuration_refuses_server_capability_permission_roles
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=PendingModuleAccessConfiguration(grants=(ModuleAccessGrant(document_id='adoc', module_id='m', reader_role='app_reader', writer_role='pg_read_server_files'),), status='pending_commit'), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_write_server_files', position='reader')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 402, in test_module_configuration_refuses_server_capability_permission_roles
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=PendingModuleAccessConfiguration(grants=(ModuleAccessGrant(document_id='adoc', module_id='m', reader_role='pg_write_server_files', writer_role='app_writer'),), status='pending_commit'), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_write_server_files', position='writer')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 402, in test_module_configuration_refuses_server_capability_permission_roles
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=PendingModuleAccessConfiguration(grants=(ModuleAccessGrant(document_id='adoc', module_id='m', reader_role='app_reader', writer_role='pg_write_server_files'),), status='pending_commit'), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_execute_server_program', position='reader')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 402, in test_module_configuration_refuses_server_capability_permission_roles
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=PendingModuleAccessConfiguration(grants=(ModuleAccessGrant(document_id='adoc', module_id='m', reader_role='pg_execute_server_program', writer_role='app_writer'),), status='pending_commit'), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_module_configuration_refuses_server_capability_permission_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_module_configuration_refuses_server_capability_permission_roles) (role='pg_execute_server_program', position='writer')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 402, in test_module_configuration_refuses_server_capability_permission_roles
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=PendingModuleAccessConfiguration(grants=(ModuleAccessGrant(document_id='adoc', module_id='m', reader_role='app_reader', writer_role='pg_execute_server_program'),), status='pending_commit'), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+----------------------------------------------------------------------
+Ran 1 test in 5.108s
+
+FAILED (failures=6)
