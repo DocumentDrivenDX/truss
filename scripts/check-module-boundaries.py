@@ -13,6 +13,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_umf_keys_release': set(),
+    '_umf_key_tuples': {'decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     'catalog_view': {'dataclasses','typing','truss.contracts'},
     '_catalog_view_build': {'base64','dataclasses','hashlib','json','truss.contracts','truss.catalog_view','truss._catalog_definition_source','truss._owner_evidence_json'},
