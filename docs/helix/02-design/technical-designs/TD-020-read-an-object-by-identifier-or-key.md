@@ -107,3 +107,56 @@ CONTRACT-004's direct-lookup-observation-v0.1.proposal.sql authors four fixed st
 CONTRACT-005's protected bucket-read boundary restricts complete original context to registered private observation/owner admission; the read owner cannot inherit hidden integrity-observer privileges. Native protected entrypoint signatures/bodies, original-context registry/caller linkage, current-authority coordinator and exact value/metadata/codec profiles remain concrete authoring outputs. Ordinary app grants cannot expose matched context by treating the draft as public SQL.
 
 The named direct-lookup resource candidate bounds request, full namespace/key/context carriers, native/public bytes, both observed rows, owner/submission/allocation/time dimensions. These values are proposals, not producer/feasibility evidence. Sixteen pinned UMF source drafts pass preservation/reload/export; the lookup's four SELECT statements remain unhandled by partial DDL extraction. Neither source preservation nor future native test names closes these design/adoption gaps. STP-020 now contains the fixed-query, collision, read-only, private-context, resource and current-authority controls.
+
+
+### Protected disclosure and complete source admission — 2026-10-12
+
+CONTRACT-005 already separates public read ownership from private integrity
+observation; shared UMF CONTRACT-063 requires complete admitted facts, original
+source correspondence and held current authority. The current Python get routine
+is a complete-read candidate: its non-bypass definer owner and row_security=off
+refuse forced RLS. It is not the protected-disclosure owner realization.
+
+A disposable native experiment changes only that routine's setting to on.
+Public get then returns the eligible object and hides the denied object, but
+still returns the eligible object after a hidden required field is removed.
+Excluded complete-source validity returns false. This is a counterexample to
+using filtered success as source admission, not a proposed production setting
+change. Original settings are restored. Twenty-eight native observations, five
+conditional Z3 checks/replays and an independent64-assignment Boolean oracle are
+retained in `../../04-build/evidence/security-filtered-read-completeness-20261012/receipt.json`.
+The model is exactly two rows/two validity cuts; it proves no native guard or
+implementation refinement. Old preflight with a changed cut admits a modeled
+malformation; coherent complete preflight excludes it under the stated premises.
+
+Implement the existing contract boundary in this order:
+
+1. The protected collector owns complete selected catalog/object/property/key/
+   edge coverage, original native mapping and exact codecs. Capture invalid or
+   hidden carriers before filtering. It emits no public row, count or raw fact.
+2. Bind complete validation to the disclosure's actual source/data cut. Select
+   and qualify native exclusion or integrity-preserving writer participation;
+   a preceding statement, catalog revision or unchanged counts is insufficient.
+   READ COMMITTED statements may observe different data cuts. Original schema/
+   policy/role/fact changes remain covered by the authority protocol as well.
+3. Install a separate narrowly privileged read owner and its exact registered
+   original-person capture/check path under CONTRACT-005. The current runtime
+   person helper requires the installation owner: granting a new read role alone
+   cannot compose that helper. Adopt and qualify the role/context transition
+   before exposing the protected entrypoint; preserve rejection of direct native
+   grants on ordinary API callers. No caller-selected elevation is admitted.
+4. Apply native row policy to disclosure under that read owner and original
+   caller, preserving business keys and current module/policy authority. Keep
+   complete collector/integrity owners and callbacks outside filtered visibility.
+5. Decode privately, revalidate the held source/authority/context through final
+   publication and return the contract's found/not-found/refusal outcomes.
+   Missing complete admission cannot become not_found or a partial success.
+
+Reuse the existing coordinator, mapping and decoder contracts; no additional
+SQL dialect, policy evaluator or request-supplied trusted evidence is introduced.
+Exact installed owner/capture/collector/coherent-cut profile realization remains
+unimplemented. Test key, page, count, traversal, retained carriers and hidden
+authorization facts separately before qualifying their surfaces. Row RLS does
+not provide property masking. Keep the existing complete-read profile available
+and reject unsupported protected composition rather than changing all routines
+to row_security=on. Activation and rollback preserve prior qualified protection.

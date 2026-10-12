@@ -394,3 +394,26 @@ selection then completed offline; no dependency upgrade, download or owner
 working-source adoption was needed. Recheck this feature closure after any
 selected feature, dependency, source or build tuple change. Native writer/read
 byte correspondence and full Unicode/boundary/refusal cases remain not_run.
+
+
+### Protected-read completeness controls — 2026-10-12
+
+Expand original lookup safety under TD-020 / CONTRACT-005 and shared
+CONTRACT-063 / US-056-AC2/5/7/10; these do not substitute for key or backend cases.
+The disposable on-setting experiment is retained in
+`../../04-build/evidence/security-filtered-read-completeness-20261012/receipt.json`.
+It identifies the missing integration, not protected-profile acceptance.
+
+Required native runner controls: positive public lookup before/after admitted
+protection; hidden row with missing/wrong/extra required cell must invalidate
+complete admission before visible output; omission/duplicate/type collision in
+collector population; source change between preflight and lookup; catalog, role,
+policy and private-fact drift under explicit barriers; missing/foreign source-cut
+receipt; read-owner inheritance/SET/callable integrity escalation; hidden facts
+through direct/count/diagnostic paths; actual public decoder/release cancellation;
+and rollback retaining prior protection. Observe native settings, owners, complete
+call/ACL/source closure and actual ordinary identities independently. An earlier
+complete preflight or valid filtered row cannot satisfy the coherent-cut test.
+Integrity checks must continue to see invalid hidden rows and must not disclose
+their identities or values. All full-profile controls remain not-run until their
+actual admitted operation is implemented and independently exercised.

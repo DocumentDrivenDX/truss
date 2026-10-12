@@ -1,0 +1,176 @@
+{
+  "packet": {
+    "typeId": "1",
+    "valueId": "3",
+    "labelId": "2",
+    "flagId": "1"
+  },
+  "sql": {
+    "sourceSql": "SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4",
+    "validitySql": "SELECT (EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND p.prop_id OPERATOR(pg_catalog.=) '3'::pg_catalog.int4 AND p.home OPERATOR(pg_catalog.=) 'json'::pg_catalog.text AND p.scalar_type OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND p.nullability OPERATOR(pg_catalog.=) 'required'::pg_catalog.text AND p.cardinality OPERATOR(pg_catalog.=) 'one'::pg_catalog.text AND p.retired_rev IS NULL) AND EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND p.prop_id OPERATOR(pg_catalog.=) '2'::pg_catalog.int4 AND p.home OPERATOR(pg_catalog.=) 'json'::pg_catalog.text AND p.scalar_type OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND p.nullability OPERATOR(pg_catalog.=) 'required'::pg_catalog.text AND p.cardinality OPERATOR(pg_catalog.=) 'one'::pg_catalog.text AND p.retired_rev IS NULL) AND EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND p.prop_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND p.home OPERATOR(pg_catalog.=) 'json'::pg_catalog.text AND p.scalar_type OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND p.nullability OPERATOR(pg_catalog.=) 'required'::pg_catalog.text AND p.cardinality OPERATOR(pg_catalog.=) 'one'::pg_catalog.text AND p.retired_rev IS NULL) AND EXISTS(SELECT 1 FROM truss.type_def t WHERE t.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND t.kind OPERATOR(pg_catalog.=) 'record'::pg_catalog.text AND NOT t.provisional AND t.retired_rev IS NULL) AND NOT EXISTS(SELECT 1 FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND NOT ((pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb) IS TRUE AND (pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb) IS TRUE AND (pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb) IS TRUE)))::pg_catalog.text AS valid",
+    "predicateSql": "((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE))",
+    "rowExpressions": {
+      "value": "CASE WHEN pg_catalog.jsonb_typeof(props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END",
+      "label": "CASE WHEN pg_catalog.jsonb_typeof(props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END",
+      "flag": "CASE WHEN pg_catalog.jsonb_typeof(props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END"
+    }
+  },
+  "observations": [
+    {
+      "id": "original-public-graph-validity",
+      "observed": "true"
+    },
+    {
+      "id": "original-graph-eligible-values",
+      "expected": [
+        [
+          "yes"
+        ]
+      ],
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "malformed-graph-field-refuses-global-preflight",
+      "observed": "false"
+    },
+    {
+      "id": "filter-alone-can-hide-invalid-source",
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "wrong-tag",
+      "observed": "false"
+    },
+    {
+      "id": "wrong-payload",
+      "observed": "false"
+    },
+    {
+      "id": "extra-envelope-member",
+      "observed": "false"
+    },
+    {
+      "id": "missing-payload",
+      "observed": "false"
+    },
+    {
+      "id": "restored-original-source",
+      "observed": "true"
+    },
+    {
+      "id": "public-get-before-policy-yes",
+      "observed": "ObjectFound"
+    },
+    {
+      "id": "public-get-before-policy-no",
+      "observed": "ObjectFound"
+    },
+    {
+      "id": "native-version",
+      "observed": "180006"
+    },
+    {
+      "id": "forced-policy-and-ordinary-table-owner",
+      "observed": [
+        true,
+        true,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "original-public-get-settings",
+      "observed": [
+        "search_path=pg_catalog, pg_temp",
+        "row_security=off"
+      ]
+    },
+    {
+      "id": "ordinary-native-session",
+      "observed": [
+        "graph_direct",
+        "graph_direct",
+        83732
+      ]
+    },
+    {
+      "id": "ordinary-native-flags",
+      "observed": [
+        false,
+        false
+      ]
+    },
+    {
+      "id": "ordinary-direct-graph-rows",
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "ordinary-direct-graph-count",
+      "observed": 1
+    },
+    {
+      "id": "ordinary-public-get-yes-composition-refusal",
+      "observed": {
+        "sqlState": "42501",
+        "outcome": "contained-refusal"
+      }
+    },
+    {
+      "id": "ordinary-public-get-no-composition-refusal",
+      "observed": {
+        "sqlState": "42501",
+        "outcome": "contained-refusal"
+      }
+    },
+    {
+      "id": "experimental-filtered-public-get-yes",
+      "observed": "ObjectFound"
+    },
+    {
+      "id": "experimental-filtered-public-get-no",
+      "observed": "ObjectNotFound"
+    },
+    {
+      "id": "hidden-malformed-source-invalid",
+      "observed": "false"
+    },
+    {
+      "id": "filtered-public-get-alone-misses-hidden-malformation",
+      "observed": "ObjectFound",
+      "qualification": "counterexample to filtered read implying complete source"
+    },
+    {
+      "id": "original-complete-read-settings-restored",
+      "observed": [
+        "search_path=pg_catalog, pg_temp",
+        "row_security=off"
+      ]
+    },
+    {
+      "id": "forged-expression-alone-is-not-authority",
+      "observed": true
+    },
+    {
+      "id": "forged-argument-cannot-bypass-original-row-policy",
+      "observed": []
+    },
+    {
+      "id": "excluded-admin-bypass",
+      "observed": 2
+    }
+  ],
+  "scope": "Actual public creation, candidate projection and forced native RLS with an ordinary direct graph reader. Current public get API refuses forced RLS because its complete-read profile sets row_security=off; no API RLS composition qualified. Isolated Boolean attribute fixture, not ontology membership or complete graph admission. Global source validity is excluded-assessor preflight and must precede filtering.",
+  "cleanup": "Native unittest fixture cleanup"
+}

@@ -6292,3 +6292,19 @@ changes and repeats the same23 graph/RLS observations successfully.
 `security-public-graph-rls-composition-20261012/merged-receipt.json` retains exact
 current source pins, changed source preimages and outputs. Only this component
 is refreshed; broader runtime/package and backend acceptance remain open.
+
+
+### Filtered-read/complete-source split experiment — 2026-10-12
+
+Twenty-eight native observations show that a disposable get routine with
+row_security=on can filter actual public-created graph objects but still return
+a visible object while a hidden required field is missing. Complete excluded
+preflight rejects the same population. The original setting is restored and
+installed runtime code is unchanged. Five Z3 two-row/two-cut checks, five formula
+replays and an independent64-assignment oracle retain the conditional coherent-
+cut requirement and old-preflight counterexample.
+`evidence/security-filtered-read-completeness-20261012/receipt.json` pins sources
+and artifacts. TD-020 sequences complete collector/cut admission, separate read
+owner/original-person composition and native policy/release. STP-020 adds their
+required actual native controls. This advances design from an identified gap to
+a concrete implementation sequence; no original acceptance case is promoted.
