@@ -277,6 +277,34 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    self.assertEqual(stale_buffer,['RA','RAB']);self.assertNotEqual(stale_buffer,actual);observations.append({'id':'positive-liveness-probe-retains-stale-buffer-counterexample','observed':{'bufferBeforeLoss':stale_buffer,'freshAfterRevocation':actual},'qualification':'would leak if published using only the earlier positive probe; actual fixture withheld it'})
   # Same logical Record/Relationship condition over independent raw tables.
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])));rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,4)).fetchall();self.assertEqual(rows,[('1',installation_bytes.hex(),profile_bytes.hex(),'5')]);authority_writer.execute('COMMIT')
+  # Durable outstanding publication survives native coordinator death.
+  self.admin.execute((contracts/'installation-publication-claim-v0.1.proposal.sql').read_text())
+  def claim_sql(name,count):
+   source=(contracts/name).read_text()
+   for ordinal in range(1,count+1):source=source.replace('$'+str(ordinal),'%s')
+   return source
+  register=claim_sql('installation-publication-claim-register-v0.1.proposal.sql',4)
+  settle=claim_sql('installation-publication-claim-settle-v0.1.proposal.sql',4)
+  claim_advance=claim_sql('installation-policy-generation-advance-v0.2.claim.proposal.sql',3)
+  operation_bytes=b'fixture-original-publication-1'
+  claim_coordinator=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(claim_coordinator.close)
+  claim_pid=claim_coordinator.execute('SELECT pg_backend_pid()').fetchone()[0]
+  claim_coordinator.execute('BEGIN');claim_coordinator.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');claim_coordinator.execute(acquire).fetchall()
+  registered=claim_coordinator.execute(register,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(registered,[(operation_bytes.hex(),)]);claim_coordinator.execute('COMMIT')
+  observations.append({'id':'durable-publication-claim-commit-confirmed','observed':registered})
+  self.assertIs(self.admin.execute('SELECT pg_terminate_backend(%s)',(claim_pid,)).fetchone()[0],True)
+  outstanding=self.admin.execute("SELECT pg_catalog.encode(operation_identity_bytes,'hex'),generation::text FROM truss.policy_publication_claim").fetchall();self.assertEqual(outstanding,[(operation_bytes.hex(),'5')]);observations.append({'id':'publication-claim-survives-native-coordinator-loss','observed':outstanding})
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone()
+  blocked=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(blocked,[]);authority_writer.execute('ROLLBACK');observations.append({'id':'outstanding-publication-refuses-participating-authority-advance','observed':blocked})
+  for wrong in [(b'foreign-operation',installation_bytes,profile_bytes,5),(operation_bytes,b'foreign-installation',profile_bytes,5),(operation_bytes,installation_bytes,b'foreign-profile',5),(operation_bytes,installation_bytes,profile_bytes,4)]:
+   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();deleted=self.admin.execute(settle,wrong).fetchall();self.assertEqual(deleted,[]);self.admin.execute('ROLLBACK')
+  observations.append({'id':'publication-claim-original-settlement-mismatch-refuses','observed':'four mismatches preserve original claim'})
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute('DELETE FROM truss.policy_publication_claim')
+  observations.append({'id':'ordinary-publication-claim-reset-refuses','observed':'42501'})
+  # Fixture establishes withheld completion; no production sink/issuer proof.
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();deleted=self.admin.execute(settle,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(deleted,[(operation_bytes.hex(),)]);self.admin.execute('COMMIT');observations.append({'id':'original-publication-claim-settles-after-fixture-withholding','observed':deleted,'qualification':'fixture completion premise only'})
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();advanced=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),'6')]);authority_writer.execute('ROLLBACK');observations.append({'id':'settled-publication-allows-participating-advance','observed':advanced,'qualification':'rolled back to preserve generation5; no production authority-delta proof'})
   self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.client(code text PRIMARY KEY);CREATE TABLE relational_fixture.project(code text PRIMARY KEY);CREATE TABLE relational_fixture.staff(code text PRIMARY KEY,login text NOT NULL);CREATE TABLE relational_fixture.resource(code text PRIMARY KEY,secret text NOT NULL);CREATE TABLE relational_fixture.assignment(code text PRIMARY KEY,active boolean NOT NULL)')
   for table,codes in [('client',['C']),('project',['A','B']),('resource',['RA','RB','RAB','RO'])]:
    for code in codes:

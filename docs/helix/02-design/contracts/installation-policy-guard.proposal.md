@@ -133,3 +133,54 @@ Trace CONTRACT-063, STP-057 L03/L11 and US-057-AC2/AC7. No required case is
 promoted. A future production admission path must refuse buffered publication
 when continuous release exclusion cannot be established; merely adding a final
 pre-publication probe does not close this race.
+
+
+### Durable publication custody candidate — 2026-10-12
+
+The transaction-held guard alone cannot exclude an authority acknowledgment
+after coordinator loss but before final protected release. The candidate
+`installation-publication-claim-v0.1.proposal.sql` adds a private durable claim
+with exact original operation, installation, profile and generation bytes. It is
+not adopted in the layout and is not an AuthorityLease issuer.
+
+The original operation owner acquires schema-head then guard SHARE, registers
+the original claim through `installation-publication-claim-register-v0.1.proposal.sql`,
+and confirms its commit before any protected disclosure. An uncertain registration
+retains recovery custody and withholds disclosure; it never retries with a new
+operation identity. The claim persists after disconnect. Participating authority
+writers acquire schema-head then guard UPDATE and freshly establish zero
+outstanding claims before effects. Any claim, including one with incompatible
+identity/profile, refuses the complete authority change. The
+`installation-policy-generation-advance-v0.2.claim.proposal.sql` repeats that
+condition at the post-effect generation gate; zero rows requires whole rollback.
+Version0.1 writers are incompatible with this candidate and cannot coexist as
+admitted participants. Complete native parity must enforce that distinction.
+
+Only the original publication/recovery owner may settle the exact claim through
+`installation-publication-claim-settle-v0.1.proposal.sql`, under the same SHARE
+lock order, after every protected release has finished or was conclusively
+withheld. Settlement commit must be confirmed. A timeout, coordinator death,
+positive probe, copied token or caller statement never proves completion. No
+TTL or automatic deletion is permitted. An unresolved claim can deny authority
+changes indefinitely; recovery must establish original sink/resource completion
+before settlement. Availability does not override this safety requirement.
+
+The actual four new SQL sources execute in the public ontology fixture. A
+committed claim survives termination of its owned coordinator; guarded generation
+advance returns zero; four operation/installation/profile/generation mismatches
+leave it intact; ordinary deletion refuses42501. Fixture-confirmed withholding
+then permits exact settlement and a generation advance, which rolls back to
+preserve the original subsequent fixture state. Native total183 observations.
+Three finite formal queries retain durable stale-release UNSAT, successful
+release after loss SAT and automatic-clear stale-release SAT; an independent
+oracle enumerates all120 event orders. UNSAT assumes authentic settlement only
+after release and complete writer participation. It proves neither premise nor
+arbitrary concurrency/native SQL/driver/sink refinement.
+
+Evidence and exact source delta:
+`../../04-build/evidence/security-durable-publication-claim-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11, US-057-AC2/AC7. Production original
+operation issuance, durable registry capacity/admission, bootstrap/privilege
+parity, complete source/fact/authority participants, commit uncertainty and
+final sink/recovery integration remain required. No original required case
+is promoted and no ordinary security API is enabled.
