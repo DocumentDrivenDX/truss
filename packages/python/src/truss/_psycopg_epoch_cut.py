@@ -198,6 +198,33 @@ def _run_set_role_excluded_ddl_fenced_epoch_operation(host, transaction, compari
     return _run_no_definer_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,exclude)
 
 
+def _exclude_native_predefined_role_reachability(cursor):
+    """Actual native role snapshot only; neither authentication nor lifetime."""
+    cursor.execute("SELECT p.oid::pg_catalog.text FROM pg_catalog.pg_roles r CROSS JOIN pg_catalog.pg_roles p "
+                   "WHERE (pg_catalog.pg_has_role(session_user,r.oid,'SET') OR pg_catalog.pg_has_role(current_user,r.oid,'SET')) "
+                   "AND pg_catalog.left(p.rolname::pg_catalog.text,3) OPERATOR(pg_catalog.=) 'pg_' "
+                   "AND (pg_catalog.pg_has_role(r.oid,p.oid,'USAGE') OR pg_catalog.pg_has_role(r.oid,p.oid,'SET')) LIMIT 1",
+                   prepare=False,binary=False)
+    rows=cursor.fetchmany(2)
+    if (cursor.description is None or len(cursor.description)!=1
+            or cursor.description[0].type_code!=25 or rows!=[]):
+        raise ValueError('Selected predefined-role exclusion required')
+
+
+def _run_predefined_role_excluded_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, callback):
+    """Conservative predefined-role snapshot; no complete privilege/lifetime proof.
+
+    Inspect inherited privileges of every SET-reachable identity, not membership
+    alone. Reserved pg_ roles are excluded without assigning portable meanings to
+    their version-dependent capabilities. Ordinary object grants remain separate.
+    """
+    def exclude(cursor):
+        _exclude_native_predefined_role_reachability(cursor)
+        return callback(cursor)
+    if not callable(callback):raise ValueError('Original callback required')
+    return _run_set_role_excluded_ddl_fenced_epoch_operation(host,transaction,comparison,barrier,exclude)
+
+
 @dataclass(frozen=True)
 class _AuthorityIssuerComparison:
     owner_oid: int

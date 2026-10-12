@@ -51,6 +51,18 @@ Qualification is per implementation, adapter, database version, layout, UMF mode
 
 Bun test runs TypeScript development tests under ADR-001. A real Chromium runner exercises the pure browser-compatible core. Bun and Node adapters must independently pass exact transport and host transaction tests; browser success cannot qualify a database adapter. Native tests use ordinary driver clients and independent SQL, not an in-memory database imitation. CI provider and browser harness versions are not yet selected; pin them before B-001 closeout.
 
+### Released binary runtime in CI and development
+
+The normal setup command is `python scripts/install-local-runtime.py`. It selects
+the runtime profile's public release, requires binary wheels, verifies published
+checksums and rejects conflicting historical distributions. No source fallback
+is allowed. `.github/workflows/python-runtime.yml` builds only Truss's pure Python
+wheel and runs the focused installed smoke checks against released PostgreSQL18.6
+on Linux x64/Python3.11, retaining logs and cleanup evidence even on failure.
+Broader corpus qualification is an explicit separate lane. The historical Truss
+PostgreSQL recipe/build commands remain retired; native compilation belongs to
+DocumentDrivenDX/pgserver.
+
 ### Local native test infrastructure — selected 2026-10-11
 
 Routine native experiments share an owned pgserver18.6 Unix-socket cluster per
@@ -1173,3 +1185,64 @@ are preserved in main b3647328. Fresh
 native methods and module boundaries on PostgreSQL18.6, with current source pins
 and three stop0/status3/socket-absent cleanups. The prior native packet retains
 its original pre-integration source scope; qualified exclusions remain unchanged.
+
+### Conservative predefined-role privilege snapshot — 2026-10-11
+
+Private `_run_predefined_role_excluded_ddl_fenced_epoch_operation` composes the
+original epoch/DDL/role/definer checks with a native predefined-role exclusion.
+For every identity SET-reachable from actual session/effective users, inspect
+USAGE or SET reachability to reserved pg_ roles. This conservatively refuses
+predefined capabilities without treating MEMBER, SET and inherited privilege as
+equivalent or assigning portable meanings to version-dependent built-in roles.
+It is an optional private composition, not automatically applied to the delegated
+service spike or a new public admitted backend profile.
+
+Three native controls observe a real private Assignment count after SELECT is
+revoked but pg_read_all_data is inherited with SET FALSE, refusal before callback
+for that case and SET-only pg_write_all_data, and acceptance of inactive membership
+with both INHERIT and SET FALSE. Final
+`evidence/python-psycopg-epoch-cut/7ddffb08-f18c-4d54-b497-901a6de7e0e4`
+passes163 methods on PostgreSQL18.6/psycopg3.3.6 binary, module boundaries,
+141 current/preimage Truss pins,363 UMF sources and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+Final `evidence/security-predefined-role-formal/ec82bd53-2246-4b50-a071-77d0df523de7`
+retains five source inputs and five Z3 4.15.4 queries with independent-context
+SMT-LIB replay: three UNSAT active-path refusal results and two SAT inherited-
+privilege/inactive-membership controls. Initial651651f8 retains the same model
+with only four source pins; final packet adds exact native check source custody.
+No PostgreSQL role graph/SQL or host refinement theorem is claimed. Role/ACL
+lifetime, ordinary grants, complete routine closure, original authentication,
+protected graph and final disclosure remain open. Trace shared CONTRACT-063 /
+STP-056 B04/B05/B10/B11 and US-056 AC5/AC8/AC9 prerequisites. No new backend
+binding: fresh full gate remains26/132 with106 unbound cases; goal active.
+
+### Delegated caller predefined-role admission — 2026-10-11
+
+The owned delegated profile0.4 service now executes the extracted original native
+predefined-role reachability check inside caller custody before caller/profile
+verification or executor fact capture. The optional epoch/DDL role composition
+uses that same check. It excludes active predefined privileges of every identity
+SET-reachable from original session/effective users; it does not authorize an
+executor, authenticate an issuer or replace original native identity verification.
+
+Two native controls refuse before the executor runs: directly inherited
+pg_read_all_data with SET FALSE, and a caller that can SET a bridge role which
+inherits pg_read_all_data. In the latter, original caller USAGE and SET paths to
+the predefined role are both false; actual SET LOCAL ROLE bridge nevertheless
+exposes the private Assignment count. Rollback restores caller identity before
+admission, and the service refuses without invoking the evaluator. Existing
+catalog-only delegated permit/deny and transaction/guard-retirement controls pass.
+
+Final `evidence/python-psycopg-epoch-cut/be21743a-f9f9-4ba6-a468-3a56030a37df`
+passes165 methods on PostgreSQL18.6/psycopg3.3.6 binary, module boundaries,
+141 current/preimage Truss source pins,363 original UMF sources,1705 native
+payload pins and three stop0/status3/socket-absent cleanups. Formal replay
+`evidence/security-predefined-role-formal/beadcd6f-3b03-42dd-a98f-a03643a8a717`
+retains five exact inputs and five original queries, three UNSAT/two SAT with
+fresh-context replay. It remains an abstract role-path model, not native SQL/role
+or host refinement. Trace CONTRACT-063/STP-056 B04/B05/B10/B11 and US-056 AC5/
+AC8/AC9 prerequisites. Role/grant lifetime, ordinary grants, complete routine
+closure, trusted caller/executor/issuer/mapping/target authentication and protected
+publication remain open. No new backend binding; full goal stays active at26/132,
+106 unbound required cases.

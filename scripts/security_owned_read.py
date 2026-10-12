@@ -76,6 +76,8 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
     left,right=caller_host.connection.info,executor_host.connection.info
     if (left.host,left.port,left.dbname)!=(right.host,right.port,right.dbname):raise ValueError('Original configured endpoint correspondence required')
     def capture(cursor,observed):
+        from truss._psycopg_epoch_cut import _exclude_native_predefined_role_reachability
+        _exclude_native_predefined_role_reachability(cursor)
         _verify_native_profile_caller(cursor,selected.profile)
         cursor.execute('SELECT oid::pg_catalog.text FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()',prepare=False,binary=False)
         database=cursor.fetchone()

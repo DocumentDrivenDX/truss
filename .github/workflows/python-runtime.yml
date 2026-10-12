@@ -1,0 +1,39 @@
+name: Released Python runtime
+on:
+  push:
+    paths: ['packages/python/**', 'scripts/**', '.github/workflows/python-runtime.yml']
+  pull_request:
+    paths: ['packages/python/**', 'scripts/**', '.github/workflows/python-runtime.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  released-runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: packages/python/pyproject.toml
+      - name: Build the pure Python Truss wheel
+        run: python -m pip wheel --no-deps packages/python --wheel-dir /tmp/truss-wheels
+      - name: Install checksum-verified released PostgreSQL wheels
+        run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel /tmp/truss-wheels/truss_toolkit-0.0.1.dev0-py3-none-any.whl
+      - name: Run focused installed runtime checks
+        shell: bash
+        run: |
+          runtime_wheel=$(find /tmp/runtime-wheels -maxdepth 1 -name '*.whl' -print -quit)
+          test -n "$runtime_wheel"
+          python scripts/check-local-runtime-smoke.py "$runtime_wheel" /tmp/truss-wheels/truss_toolkit-0.0.1.dev0-py3-none-any.whl --run-id "ci-release-${{ github.run_id }}-${{ github.run_attempt }}"
+      - name: Retain native checks and cleanup evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: released-runtime-evidence
+          path: docs/helix/04-build/evidence/design-audit/ci-release-*
+          if-no-files-found: warn

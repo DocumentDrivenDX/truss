@@ -49,13 +49,13 @@ commands = [
      f'pgserver-pg{SERVER_VERSION}-transaction-timeout.json'),
 ]
 for family in ('base', 'asserted', 'epoch', 'configuration'):
-    receipt = f'pgserver-pg17.11-issued-{family}-native.json'
+    receipt = f'pgserver-pg{SERVER_VERSION}-issued-{family}-native.json'
     commands.append(('issued-' + family,
                      ['scripts/check-issued-operation-ordinal.py', family, receipt], receipt))
 for label, producer in [('four-family-driver', 'check_pg8000_four_family_admission_native.py'),
                         ('private-callable-inventory', 'check_private_callable_inventory_native.py'),
                         ('elevation', 'check_four_family_elevation_native.py')]:
-    receipt = f'pgserver-pg17.11-{label}-native.json'
+    receipt = f'pgserver-pg{SERVER_VERSION}-{label}-native.json'
     commands.append((label, [str((ROOT / 'docs/helix/04-build/evidence/design-audit' / producer).relative_to(ROOT)), receipt], receipt))
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -84,7 +84,7 @@ def execute(case, environment, worker=None):
         except Exception as error:
             cleanup = False
             log += ('\nWorker cleanup failure: ' + str(error)).encode()
-    log_path = EVIDENCE / f'pgserver-pg17.11-{label}.log.gz'
+    log_path = EVIDENCE / f'pgserver-pg{SERVER_VERSION}-{label}.log.gz'
     with log_path.open('xb') as output:
         output.write(gzip.compress(log, mtime=0))
     receipt_path = EVIDENCE / receipt_name

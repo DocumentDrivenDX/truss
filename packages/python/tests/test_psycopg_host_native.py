@@ -27,7 +27,7 @@ class PsycopgHostNativeTests(unittest.TestCase):
             from native_fixture import configure_shared_psycopg_fixture
             configure_shared_psycopg_fixture(cls)
             return
-        cls.directory = tempfile.TemporaryDirectory(prefix='truss-psy-', dir='/private/tmp')
+        cls.directory = tempfile.TemporaryDirectory(prefix='truss-psy-', dir='/tmp')
         cls.root = Path(cls.directory.name)
         cls.data = cls.root/'data'
         cls.socket = cls.root/'socket'; cls.socket.mkdir()
