@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_public_graph_creation_and_original_source_validity (__main__.GraphABACTests.test_public_graph_creation_and_original_source_validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/test_graph_resource_abac_native.py", line 46, in test_public_graph_creation_and_original_source_validity
+    read=ra.get_object_in_transaction(rt,document_id='adoc',module_id='m',record_id='A',object_id=ids[label]);self.assertIsInstance(read,Ok,str(ra._host._custody.last_attempt.error));self.assertIsInstance(read.value,expected);observations.append({'id':'ordinary-public-get-'+label,'observed':type(read.value).__name__})
+                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42501', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : query would be affected by row-level security policy for table "object"
+HINT:  To disable the policy for the table's owner, use ALTER TABLE NO FORCE ROW LEVEL SECURITY.
+CONTEXT:  SQL statement "SELECT *                     FROM truss.object WHERE id=selected_id AND type_id=selected_type.type_id"
+PL/pgSQL function truss.get_object(text,text,text,bigint,integer,text,text) line 36 at SQL statement
+
+----------------------------------------------------------------------
+Ran 1 test in 6.644s
+
+FAILED (failures=1)

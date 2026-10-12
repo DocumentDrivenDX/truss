@@ -6254,3 +6254,34 @@ compiler equivalence or authority lifetime. Earlier bare-scalar graph fixtures
 do not qualify the current public writer representation. Trace CONTRACT-063 /
 STP-056 B01/B04/B08/B12/B15 prerequisites; no original case is promoted and the
 full132-case goal remains active.
+
+
+### Public graph/native RLS composition gap — 2026-10-12
+
+A public-created graph fixture now exercises forced RLS with original generated
+string/Boolean envelope projections. PostgreSQL18.6 retains23 observations: two
+public get positives before policy activation; actual ordinary direct-reader
+identity/flags and exact filtered rows/count; forged argument rejection by the
+actual-row policy; excluded administrator bypass; complete source validity and
+malformed-envelope controls; original owner/FORCE/settings inventory; and two
+public get contained refusals after activation. Sources, attempts and results are
+in `evidence/security-public-graph-rls-composition-20261012/receipt.json`.
+
+The runtime's public get SECURITY DEFINER body pins row_security=off. With FORCE
+RLS and a non-bypass table owner it refuses42501 rather than accepting filtered
+rows. Its caller check also refuses a person with direct native table grants;
+the direct-reader and API identities must remain separate. This establishes a
+current composition gap, not an API security profile or completed Truss B01.
+No guard or grant policy in the runtime has been weakened.
+
+Required continuation under shared CONTRACT-063 / TD-056 / STP-056 and
+US-056-AC2/5/7/8/9/10: define and adopt an explicit protected-read execution
+profile that separates policy-filtered disclosure from complete catalog/fact/
+integrity collection. Preserve complete collector refusal and original-person
+checks. Bind each read's native policy, mapping, exact caller, source cut and
+current authority before release; qualify definer/owner policy applicability.
+Then exercise public lookup/list/count/page and native bypass vectors against
+the full Clients/Projects/Staff oracle. Mutation/integrity callbacks must not
+inherit filtered visibility. Until that profile exists, retain forced-RLS public
+read refusal rather than changing row_security globally. No original backend
+case is promoted; full132-case acceptance remains required.
