@@ -1,0 +1,59 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-pending-authority.py": "96c94db16b0f41eb43c686e4254f6309f7c9ef065b227a415de6a9e4468dbeca",
+    "scripts/security_authority_transition.py": "37efb4d0ec6aeac3daf4a259e1f88b9e39b8574ff285ef9e07403f5924f60ef0",
+    "packages/postgresql/native/source-epoch-issue.sql": "f7c292a9a70715137c003232603877b58e862cd8476faf7a63992ff05b92326e",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "31000ae911067480d8b4ad40f073e580ab780866172d522ec70c1de3252fec29",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "99772239e80b390b53a65596c7bc0b9617420a44f2dff45d1f307417ede38d06"
+  },
+  "queries": [
+    {
+      "id": "pending_without_successor_prevents_admission",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "b6e69c0675735d14d3319482e9507ade680e5577ae0030902cff6dcb0bbc17a5",
+      "model": null
+    },
+    {
+      "id": "undrained_readers_prevent_pending_publication",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "f3c2c4defdb5eff352c72299bd2468eb64164f2128276e285eef907094e618a4",
+      "model": null
+    },
+    {
+      "id": "unknown_remote_outcome_prevents_successor_admission",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "7356ff7affa90c29787b1e84aacf0f4e5b594eb64120b95bbc1b7ef51b6110a4",
+      "model": null
+    },
+    {
+      "id": "remote_change_without_committed_pending_allows_old_admission",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "b501bf807ea3f0be009f6ef10f319a30d1ba52ecabfcc78464f03bd4cd5c1001",
+      "model": "[pending_committed = False,\n remote_committed = True,\n successor_committed = False,\n admit = True]"
+    },
+    {
+      "id": "unqualified_successor_without_completion_guard_allows_admission",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "8e1a572588f1f0c39267a88f9abf030833f09297efa61d8dbc775c8ef09839c9",
+      "model": "[pending_committed = True,\n requalified = False,\n remote_outcome_known = False,\n successor_committed = True,\n admit = True]"
+    }
+  ],
+  "scope": "Abstract drain, committed pending marker, remote mutation and qualified successor ordering. Pending excludes admission; undrained readers exclude pending publication; unknown remote outcome excludes successor admission. Omitted pending or qualification guards admit countermodels.",
+  "limitations": [
+    "No PostgreSQL commit/WAL/SQL, multi-database driver or concrete distributed state-machine refinement proof",
+    "Durable pending, complete writer routing and authenticated requalification are premises; native fixture only observes successful commits and writer disconnect",
+    "No automatic cross-database role interception, authenticated issuer/mapping/target, complete recovery/commit-unknown or admitted protected backend"
+  ]
+}

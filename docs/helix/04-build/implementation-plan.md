@@ -5020,3 +5020,58 @@ AC9 prerequisites. Complete authorized writer participation, original issuer/
 caller/mapping/package/target authentication, shared role/ACL and callable lifetime,
 graph capture and atomic protected publication remain required. No new backend
 binding; full goal stays active at26/132 with106 unbound cases.
+
+### Cross-database committed-pending authority transition spike — 2026-10-11
+
+Governing shared CONTRACT-063 requires complete writer participation, fresh cuts
+and reader drain through protected release. Database-local advisory or relation
+fences do not intercept shared-role mutations made in another database. A private
+backend transition may first commit an unadmitted pending generation in the
+original source realm, then perform the remote mutation, and only after explicit
+original requalification issue a fresh successor. Existing epoch registry opaque
+profile/evidence fields carry this spike without a core-envelope or layout change.
+This lifecycle mechanism belongs to the backend enforcement/issuer implementation;
+the portable ordering and refusal obligations remain shared security semantics.
+
+| Phase | Required behavior |
+|---|---|
+| Original admitted generation | Original readers retain their source-realm guard through release. |
+| Publish pending | Original native issuer must exclude retained readers before committing pending; no remote change precedes that commit. |
+| Pending / remote mutation | Old generation comparisons and all existing semantic provider-profile parsers refuse. Pending remains closed after publisher disconnect. |
+| Requalify successor | Original issuer independently proves complete current state and known remote outcome, then issues a fresh successor with exact pending predecessor. |
+| Interrupted or unknown outcome | Remain pending; inspect original native state. No blind replay, guessed commit or automatic reopening. |
+
+`scripts/security_authority_transition.py` implements only the private successful
+commit/explicit-successor fixture mechanics using the original installed native
+issuer. It requires an idle administrative connection, returns after successful
+transaction completion, preserves installation/incarnation and exact predecessor,
+and uses an unsupported pending profile kind. Successor qualification is a trusted
+fixture premise, not authenticated or independently enforced by this helper.
+Comparison dataclasses and hashes grant no authority. Complete writer routing,
+issuer credentials, malicious/incorrect administrative bypass, remote commit-unknown,
+crash/WAL/refinement and recovery require separate qualification. This is not a
+shipped public coordinator or distributed atomic-commit implementation.
+
+Native controls commit pending in the source database, disconnect its publisher,
+change a shared role through a second database and independently observe pending
+still current. Old fenced read refuses before callback; the original dependency
+recipe rejects pending. Explicit successor issuance restores the administrative
+fixture and receives a fresh native epoch. Another control proves pending cannot
+publish while an original retained reader holds SHARE; after reader retirement
+pending succeeds. This proves finite native commit/connection-disconnect schedules,
+not power-loss durability or all writer coverage. Final
+`evidence/python-psycopg-epoch-cut/42d80ee6-9171-47ab-860c-1c234160581c`
+passes176 methods, module boundaries,143 current/preimage Truss source pins on
+PostgreSQL18.6/psycopg3.3.6 binary,363 UMF and1705 native payload pins and three
+stop0/status3/socket-absent cleanups.
+
+`evidence/security-pending-authority-formal/b021be50-a63f-4b93-8b06-eb2d1ba4095f`
+retains five exact inputs and five Z3 4.15.4 SMT-LIB/fresh-context replays, three
+UNSAT/two SAT. Conditional ordering excludes pending admission, undrained pending
+publication and reopening under unknown remote outcome. Omitting committed
+pending or qualification yields countermodels. The qualification guard is an
+obligation, not implemented authenticated receipt ingestion or a native distributed
+refinement theorem. Trace CONTRACT-063/STP-056 B11/B12/L03/L11/L13 and US-056
+AC9/AC10 prerequisites. No backend binding is promoted; complete authentication,
+writer/current-state closure, graph capture and protected final release remain
+required. Full goal active at26/132 with106 unbound cases.

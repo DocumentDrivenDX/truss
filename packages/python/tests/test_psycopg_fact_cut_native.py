@@ -1326,3 +1326,55 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 finally:self.connection.execute('ROLLBACK')
             self.with_unprivileged_actor(operation,catalog_only=True)
         finally:self.connection.execute('DROP FUNCTION truss.late_private_count()')
+
+    def test_committed_pending_authority_closes_read_before_other_database_role_change(self):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        from truss._psycopg_dependency_fact_cut import _epoch_dependency_recipe
+        original=self.comparison();pending=None
+        self.connection.execute('CREATE ROLE authority_other_actor')
+        self.connection.execute('CREATE DATABASE authority_other_database')
+        try:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True) as publisher:
+                pending=_begin_pending_authority_fixture(publisher,original)
+            # Original publisher is now disconnected. A second database changes
+            # the shared role while source-realm admission remains closed.
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname='authority_other_database',autocommit=True) as remote:
+                remote.execute('ALTER ROLE authority_other_actor CREATEROLE')
+                self.assertEqual(remote.execute("SELECT rolcreaterole FROM pg_roles WHERE rolname='authority_other_actor'").fetchone(),(True,))
+            self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(pending.epoch,))
+            raw=self.identity_raw()
+            with self.assertRaises(ValueError):_epoch_dependency_recipe(pending,hashlib.sha256(raw).hexdigest())
+            t=self.begin();called=[]
+            result=epoch_tests._run_fenced_epoch_operation(self.host,t,original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertEqual(called,[])
+            self.connection.execute('ROLLBACK')
+            restored=_finish_pending_authority_fixture(self.connection,pending,original)
+            type(self).epoch=restored.epoch;pending=None
+            t=self.begin()
+            self.assertEqual(epoch_tests._run_fenced_epoch_operation(self.host,t,self.comparison(),lambda c:'explicit-successor-fixture'),Ok('explicit-successor-fixture'))
+            self.connection.execute('ROLLBACK')
+        finally:
+            self.connection.execute('ROLLBACK')
+            if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+            self.connection.execute('DROP DATABASE authority_other_database')
+            self.connection.execute('DROP ROLE authority_other_actor')
+
+    def test_pending_authority_cannot_publish_before_original_reader_retirement(self):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        original=self.comparison();pending=None;t=self.begin()
+        self.assertEqual(epoch_tests._run_fenced_epoch_operation(self.host,t,original,lambda c:'retained-reader'),Ok('retained-reader'))
+        try:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True) as publisher:
+                with self.assertRaises(psycopg.errors.LockNotAvailable):_begin_pending_authority_fixture(publisher,original)
+                self.assertEqual(publisher.info.transaction_status,psycopg.pq.TransactionStatus.IDLE)
+                self.assertEqual(publisher.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(original.epoch,))
+                self.connection.execute('ROLLBACK')
+                pending=_begin_pending_authority_fixture(publisher,original)
+            type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch;pending=None
+        finally:
+            self.connection.execute('ROLLBACK')
+            if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
