@@ -129,3 +129,39 @@ class ReaderCatalogTests(group_tests.PublicCreateGroupTests):
                 self.assertEqual(connection.execute('TABLE reader_prior').fetchall(),[('kept',)])
         finally:
             self.admin.execute('SELECT pg_advisory_unlock_all()');self.admin.execute(original)
+
+    def test_relationship_endpoint_metadata_requires_both_module_scopes(self):
+        def mixed(source):
+            module=source['modules'][0]
+            endpoint=next(e for e in module['elements'] if e['id']=='B');module['elements'].remove(endpoint)
+            source['modules'].append({'id':'hidden','namespace':'hidden','extensions':{},'elements':[endpoint],'relationships':[]})
+            module['relationships'][0]['target'][0]['module']='hidden'
+        connection,host,assembly,tx=self.reader(mixed)
+        catalog=assembly.reader_catalog_in_transaction(tx).value
+        self.assertEqual([(m['documentId'],m['moduleId']) for m in catalog.modules],[('adoc','m')])
+        self.assertEqual([t['recordId'] for t in catalog.modules[0]['types']],['A'])
+        self.assertEqual(catalog.modules[0]['relationships'],[])
+        self.assertIsInstance(assembly.accepted_document_in_transaction(tx,document_id='adoc').value,CatalogRefused)
+        from truss import ModuleAccessGrant,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
+        self.admin.execute('CREATE ROLE endpoint_reader NOLOGIN;CREATE ROLE endpoint_writer NOLOGIN')
+        try:
+            self.admin.execute('BEGIN');admin_host=adopt_psycopg_host(self.admin);admin_tx=admin_host.adopt_transaction().value
+            admin_assembly=create_reference_assembly(CatalogRuntimeConfiguration(),admin_host).value
+            self.assertIsInstance(admin_assembly.configure_module_access_in_transaction(admin_tx,(ModuleAccessGrant('adoc','hidden','endpoint_reader','endpoint_writer'),)),Ok)
+            admin_host.detach();self.admin.commit()
+            self.admin.execute('GRANT endpoint_reader TO consumer WITH SET FALSE')
+            visible=assembly.reader_catalog_in_transaction(tx).value
+            modules={m['moduleId']:m for m in visible.modules}
+            self.assertEqual([t['recordId'] for t in modules['hidden']['types']],['B'])
+            relation=modules['m']['relationships'][0]
+            self.assertEqual(relation['endpoints'],[{'sourceType':modules['m']['types'][0]['typeId'],'targetType':modules['hidden']['types'][0]['typeId']}])
+            self.assertIsInstance(assembly.accepted_document_in_transaction(tx,document_id='adoc').value,AcceptedDocument)
+            self.admin.execute('REVOKE endpoint_reader FROM consumer')
+            hidden=assembly.reader_catalog_in_transaction(tx).value
+            self.assertEqual(hidden.modules[0]['relationships'],[])
+            self.assertEqual([t['recordId'] for t in hidden.modules[0]['types']],['A'])
+        finally:
+            host.detach();connection.rollback()
+            self.admin.execute('REVOKE endpoint_reader FROM consumer')
+            self.admin.execute('DELETE FROM truss.module_access WHERE document_id=\'adoc\' AND module=\'hidden\'')
+            self.admin.execute('DROP OWNED BY endpoint_reader,endpoint_writer;DROP ROLE endpoint_reader,endpoint_writer')

@@ -6108,3 +6108,32 @@ wheel/source/installed correspondence. Boundaries and ten original UMF SQL owner
 round trips pass. The separate reader-catalog native suite is not claimed as
 replayed; earlier72-test qualification retains its prior release/source scope.
 No shared field/ontology write case is promoted. Full goal remains active.
+
+
+### Public relationship metadata endpoint scope — 2026-10-12
+
+A relationship declared in readable adoc/m targets record B in unreadable adoc/
+hidden. Public metadata returns only visible record A and omits the relationship
+entirely; whole accepted-document disclosure refuses. Granting actual endpoint
+reader membership publishes the relationship with exact native source/target type
+IDs. Revocation hides it again while retaining the authorized source module.
+This covers both endpoint owner scopes, rather than only relationship declaration
+or field/key dependencies. It does not qualify business-edge traversal or mutation.
+
+Initial endpoint assertions passed, but fixture cleanup timed out deleting a
+policy row still locked by the caller's read transaction. The retained first log
+is explicitly harness cleanup error. Corrected cleanup settles that transaction
+before policy deletion. Five baseline reader tests pass source/wheel. Integration
+preserves main45edf4e2/56a5fc9a's read-only reader support; all seven combined
+reader/read-only tests pass from merged source and installed wheel.
+`evidence/public-reader-endpoint-scope-20261012/receipt.json` retains source pins,
+archive, exact wheel correspondence and logs. Boundaries and ten original UMF SQL
+owner round trips pass. Existing native unittest cleanup then completes without
+error; no independent stop receipt or formal/native refinement is claimed.
+
+Trace CONTRACT-005 complete declaring/endpoint owner scopes, CONTRACT-063/
+STP-056 B02/B03/B09/B11/B12 and US-056 AC2/AC7/AC9/AC10 prerequisites.
+Current catalog projection remains separate from advanced ontology membership,
+installed masking, complete authority lifetime and business enforcement. No
+original backend case is promoted; all132 original cases remain required and
+full shared security goal remains active.

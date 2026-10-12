@@ -1,0 +1,10 @@
+test_dependency_revoked_before_its_module_visit_refuses_buffered_projection (test_reader_catalog_native.ReaderCatalogTests.test_dependency_revoked_before_its_module_visit_refuses_buffered_projection) ... ok
+test_hidden_field_and_key_dependencies_are_not_projected (test_reader_catalog_native.ReaderCatalogTests.test_hidden_field_and_key_dependencies_are_not_projected) ... ok
+test_reader_catalog_and_exact_document_without_registrar (test_reader_catalog_native.ReaderCatalogTests.test_reader_catalog_and_exact_document_without_registrar) ... ok
+test_relationship_endpoint_metadata_requires_both_module_scopes (test_reader_catalog_native.ReaderCatalogTests.test_relationship_endpoint_metadata_requires_both_module_scopes) ... ok
+test_unreadable_empty_module_prevents_whole_document_disclosure (test_reader_catalog_native.ReaderCatalogTests.test_unreadable_empty_module_prevents_whole_document_disclosure) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 18.150s
+
+OK

@@ -1,0 +1,21 @@
+test_dependency_revoked_before_its_module_visit_refuses_buffered_projection (test_reader_catalog_native.ReaderCatalogTests.test_dependency_revoked_before_its_module_visit_refuses_buffered_projection) ... ok
+test_hidden_field_and_key_dependencies_are_not_projected (test_reader_catalog_native.ReaderCatalogTests.test_hidden_field_and_key_dependencies_are_not_projected) ... ok
+test_reader_catalog_and_exact_document_without_registrar (test_reader_catalog_native.ReaderCatalogTests.test_reader_catalog_and_exact_document_without_registrar) ... ok
+test_relationship_endpoint_metadata_requires_both_module_scopes (test_reader_catalog_native.ReaderCatalogTests.test_relationship_endpoint_metadata_requires_both_module_scopes) ... ERROR
+test_unreadable_empty_module_prevents_whole_document_disclosure (test_reader_catalog_native.ReaderCatalogTests.test_unreadable_empty_module_prevents_whole_document_disclosure) ... ok
+
+======================================================================
+ERROR: test_relationship_endpoint_metadata_requires_both_module_scopes (test_reader_catalog_native.ReaderCatalogTests.test_relationship_endpoint_metadata_requires_both_module_scopes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_reader_catalog_native.py", line 165, in test_relationship_endpoint_metadata_requires_both_module_scopes
+    self.admin.execute('DELETE FROM truss.module_access WHERE document_id=\'adoc\' AND module=\'hidden\'')
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.QueryCanceled: canceling statement due to statement timeout
+CONTEXT:  while deleting tuple (0,2) in relation "module_access"
+
+----------------------------------------------------------------------
+Ran 5 tests in 27.128s
+
+FAILED (errors=1)
