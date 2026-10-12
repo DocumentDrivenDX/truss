@@ -5811,3 +5811,39 @@ test source covered by the42-test public security qualification; all213 current/
 preimage source pins and retained evidence digests are verified unchanged after
 merge. Its separate native key-verifier receipt is not claimed as replayed here.
 The public role-exclusion fix remains qualified under the recorded scope.
+
+### Public module permission-role capability exclusion — 2026-10-12
+
+Public module-access administration previously accepted pg_read_server_files,
+pg_write_server_files and pg_execute_server_program as either reader or writer
+roles. All six original native public-API controls failed before the fix. The
+existing current permission-role membership closure now rejects these three
+roles and transitive membership in them before any module policy row is written.
+This is the same conservative any-membership exclusion as the ordinary public
+actor guard; flags do not make a connected path acceptable. It does not add
+raw privileges, activate business capabilities or reinterpret UMF policy meaning.
+
+Direct six-variant and indirect bridge controls pass. Refusal leaves no module
+row and preserves prior caller work; explicit unsafe-grant revocation restores
+configuration. `evidence/public-module-capability-roles-20261012/receipt.json`
+retains current source/preimage pins, original pre-fix facade, failure logs,
+44 passing source and44 passing installed-wheel tests, and Python boundaries.
+Wheel SHA256
+`8c6ec48debb01a96a041045693d8cafb7f4b82652d6cb1c5c56c5559797c02a9`
+contains the exact fixed facade, independently matched to installed contents.
+Runtime is PostgreSQL18.6 / pgserver-pg18 18.6.1 / stock psycopg3.3.6 binary/
+libpq180006. Existing public unittest cleanup completes without error; no
+independent native cleanup packet is claimed. No file/program access occurred.
+
+Trace CONTRACT-005 unsafe effective permission roles, CONTRACT-063/STP-056
+B05/B09/B11/B12 and US-056 AC5/AC7/AC9/AC10 prerequisites. Native role/callable/
+diagnostic/writer/authentication closure remains independent; source/currentness
+checks are not a general role-lifetime proof. No advanced backend case is
+promoted; all132 cases remain required and the goal remains active at26/132.
+
+Final merge preserves mainc2f9fa72/9519b035's independent actual-object string-key
+verifier and its tests/owner checks. These files do not alter the public package
+or any source/test covered by the44-test module-role qualification. All211
+current/preimage source pins and retained evidence digests are verified unchanged
+after merge. The separate native object-key receipt is not claimed as replayed
+here. Public module-role validation retains its recorded scoped qualification.

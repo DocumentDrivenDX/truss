@@ -285,6 +285,7 @@ class CatalogReferenceAssembly:
                     CROSS JOIN truss.catalog_runtime_installation i
                     WHERE r.rolcanlogin OR r.rolsuper OR r.rolcreaterole OR r.rolcreatedb
                       OR r.rolreplication OR r.rolbypassrls OR r.oid IN (i.owner_oid,i.registrar_oid)
+                      OR r.rolname::pg_catalog.text IN ('pg_read_server_files','pg_write_server_files','pg_execute_server_program')
                       OR pg_catalog.has_schema_privilege(r.oid,'truss','CREATE')
                       OR EXISTS(SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
                         WHERE n.nspname='truss' AND ((c.relkind IN ('r','p') AND
