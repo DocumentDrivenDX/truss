@@ -1,0 +1,18 @@
+{
+  "testedCommit": "d9439baa131803003f5d380c75dfeeb02532312b",
+  "reason": "Replay after preserving concurrent compiled-query/runtime0.26 changes on main",
+  "runtime": "truss-catalog-runtime/0.26-candidate",
+  "nativeTests": 8,
+  "seconds": 31.987,
+  "result": "pass",
+  "boundaries": "836 imports pass",
+  "command": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-authority-change-merged-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+  "scope": "Same qualified private physical authority coordination/component scope as parent receipt. No new logical permission/profile readiness or backend acceptance. Earlier wheel receipt remains pinned to pre-merge package; this replay proves source/runtime composition, not a new wheel.",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_authority_change.py": "51d037dbc875b452e8dbdb6bfebd3ec08ed34d942e1f5691301931d6022b1cb8",
+    "packages/python/src/truss/catalog_runtime.py": "c18e4f3980be173848c56455eb94b5e292529d9dc178d11945c6bc01106d9966",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "145fd167a0746c7845b1439822cd588359bea678dbfa7b77e4b20c24f8da9e81",
+    "packages/python/src/truss/_catalog_runtime/query.sql": "5aefb0f5797a71525fab41117f3828d253299a8f07641b80286525186087f278",
+    "packages/python/tests/test_security_public_ontology_native.py": "a036cd413fbca42b75c50c68c76675f8a8de6d91636d5b1b45ccdbad0e3f3369"
+  }
+}
