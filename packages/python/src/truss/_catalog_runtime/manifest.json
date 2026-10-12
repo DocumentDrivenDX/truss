@@ -23,7 +23,7 @@
     "scalars.sql": "5bf626a72bd82e265528d20cb893e9b3bb55762e90f393befacdab39e3f2ed19",
     "pages.sql": "928a3f51bc876ba67b8fc294693ff8cb079301e60671cb0d0f5d6bf1fc4b64bb",
     "evolution.sql": "b68f9b026655be68f656f2308b9f4f418bd85c1dc720acb2b2700428fd6db631",
-    "operations.sql": "01833135bc6b4c1eb9ac66e3989f4f586851a4a4effef00f655bc78c1e46ab56",
+    "operations.sql": "3fd0d83935e32142934e70a8523eb3bf9855ae7eb7d19d0b795a6210a415e507",
     "preconditions.sql": "32ea41dfd2b1312ad829704e35be426e27343aa1c6340a24d3574bab4776029b"
   },
   "version": "0.15"

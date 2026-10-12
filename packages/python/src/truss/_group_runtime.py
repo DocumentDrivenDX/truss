@@ -68,16 +68,16 @@ def _semantic(value):
     for entry in value['results']:
         events=tuple(JournalEventReference(source_epoch=e['sourceEpoch'],history_profile=e['historyProfile'],xid=e['xid'],seq=e['seq']) for e in entry['events'])
         identity=_identity(entry['identity'])
-        if entry['outcome']=='created' and entry['operation']=='create_object':
-            results.append(Created(operation='create_object',identity=identity,version=entry['version'],events=events,alias=entry.get('alias',ABSENT)))
-        elif entry['outcome']=='changed' and entry['operation']=='update_object':
-            results.append(Changed(operation='update_object',identity=identity,version=entry['version'],events=events))
-        elif entry['outcome']=='unchanged' and entry['operation']=='update_object' and not events:
-            results.append(Unchanged(operation='update_object',identity=identity,version=entry['version']))
-        elif entry['outcome']=='deleted' and entry['operation']=='delete_object':
-            results.append(Deleted(operation='delete_object',identity=identity,deletion_version=entry['deletionVersion'],
+        if entry['outcome']=='created' and entry['operation'] in ('create_object','create_edge'):
+            results.append(Created(operation=entry['operation'],identity=identity,version=entry['version'],events=events,alias=entry.get('alias',ABSENT)))
+        elif entry['outcome']=='changed' and entry['operation'] in ('update_object','update_edge'):
+            results.append(Changed(operation=entry['operation'],identity=identity,version=entry['version'],events=events))
+        elif entry['outcome']=='unchanged' and entry['operation'] in ('update_object','update_edge') and not events:
+            results.append(Unchanged(operation=entry['operation'],identity=identity,version=entry['version']))
+        elif entry['outcome']=='deleted' and entry['operation'] in ('delete_object','delete_edge'):
+            results.append(Deleted(operation=entry['operation'],identity=identity,deletion_version=entry['deletionVersion'],
                 deleted=tuple(DeletedIdentity(identity=_identity(v['identity']),deletion_version=v['deletionVersion']) for v in entry['deleted']),events=events))
-        else:raise ValueError('Selected native object result required')
+        else:raise ValueError('Selected native object or edge result required')
     return GroupSemanticResult(executed_catalog_revision=value['executedCatalogRevision'],
         layout_profile=ProfilePin(**value['layoutProfile']),mutation_profile=ProfilePin(**value['mutationProfile']),results=tuple(results),
         aliases=tuple(AliasIdentity(alias=a['alias'],identity=_identity(a['identity'])) for a in value['aliases']))
