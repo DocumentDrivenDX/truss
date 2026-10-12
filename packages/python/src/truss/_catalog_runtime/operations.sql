@@ -44,11 +44,11 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_operation_type(jsonb,jsonb,int) FROM PUBLIC;
 
-CREATE FUNCTION truss.object_group_begin(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.object_group_begin(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,original_condition_keys bytea DEFAULT convert_to('[]','UTF8')) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input jsonb;documents jsonb;request jsonb;context jsonb;selected truss.type_def%ROWTYPE;archive truss.schema_doc%ROWTYPE;
  operation jsonb;source_text text;person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
- raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;
+ raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;failure_detail text;
 BEGIN
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;person:=truss.runtime_person(false);writer:=pg_current_xact_id();
  IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576 OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304
@@ -57,7 +57,7 @@ BEGIN
  OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE
  OR (convert_from(original_request,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'unique original JSON members required' USING ERRCODE='22023';END IF;
  input:=convert_from(original_input,'UTF8')::jsonb;documents:=convert_from(original_documents,'UTF8')::jsonb;request:=convert_from(original_request,'UTF8')::jsonb;
- IF input-ARRAY['interfaceVersion','layoutProfile','mutationProfile','valueProfile','catalog','operations','assertedOrigin']<>'{}'::jsonb
+ IF input-ARRAY['interfaceVersion','layoutProfile','mutationProfile','valueProfile','catalog','operations','assertedOrigin','preconditions']<>'{}'::jsonb
  OR input->>'interfaceVersion' IS DISTINCT FROM 'truss-group-input/0.1.0' OR input->'catalog' IS DISTINCT FROM '{"selection":"current"}'::jsonb
  OR input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile' OR input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile'
  OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile' OR jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
@@ -116,12 +116,17 @@ BEGIN
     'semantic',raw->'semantic','observationBase64',replace(encode(observation,'base64'),chr(10),''),'observationSha256',encode(sha256(observation),'hex'))::text,'UTF8');
   END IF;
  END IF;
+ PERFORM truss.runtime_evaluate_preconditions(input,original_condition_keys);
  INSERT INTO truss.runtime_object_attempt(writer_xid,actor_oid,input_bytes,documents_bytes,request_bytes,context)
  VALUES(writer,person,original_input,original_documents,original_request,context) RETURNING * INTO attempt;
  RETURN convert_to(jsonb_build_object('outcome','execute','attemptId',attempt.id::text)::text,'UTF8');
+EXCEPTION WHEN SQLSTATE 'P1006' THEN
+ GET STACKED DIAGNOSTICS failure_detail=PG_EXCEPTION_DETAIL;
+ -- The function subtransaction rolls back guard setup and all other effects.
+ RETURN convert_to(failure_detail,'UTF8');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.object_group_begin(bytea,bytea,bytea,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.object_group_begin(bytea,bytea,bytea,text,text,bytea) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_object_metadata(attempt_id uuid,operation_index int) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
@@ -134,7 +139,7 @@ BEGIN
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->operation_index;
  selected:=truss.runtime_operation_type(operation,input->'operations',operation_index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);
  IF operation->>'operation'='create_object' THEN
-  RETURN convert_from(truss.group_create_metadata(convert_to(jsonb_set(input,'{operations}',jsonb_build_array(operation))::text,'UTF8'),attempt.documents_bytes,
+  RETURN convert_from(truss.group_create_metadata(convert_to(jsonb_set(input-'preconditions','{operations}',jsonb_build_array(operation))::text,'UTF8'),attempt.documents_bytes,
    (SELECT release_id FROM truss.catalog_runtime_installation),(SELECT release_sha256 FROM truss.catalog_runtime_installation)),'UTF8')::jsonb->0
    ||jsonb_build_object('values',operation->'values');
  END IF;
@@ -298,7 +303,7 @@ BEGIN
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->operation_index;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
  IF operation->>'operation'='create_object' THEN
-  raw:=convert_from(truss.apply_create_group(convert_to(jsonb_set(input,'{operations}',jsonb_build_array(operation))::text,'UTF8'),attempt.documents_bytes,
+  raw:=convert_from(truss.apply_create_group(convert_to(jsonb_set(input-'preconditions','{operations}',jsonb_build_array(operation))::text,'UTF8'),attempt.documents_bytes,
    original_keys,convert_to('{"state":"none"}','UTF8'),installation.release_id,installation.release_sha256),'UTF8')::jsonb;
   IF raw->>'outcome'<>'success' THEN
    native_state:=coalesce(raw->>'nativeState',CASE raw->>'reason' WHEN 'resource' THEN '54000' WHEN 'observation' THEN '55P03' ELSE '0A000' END);

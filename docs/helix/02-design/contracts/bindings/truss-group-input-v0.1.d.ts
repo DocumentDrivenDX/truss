@@ -45,6 +45,13 @@ export type GroupOperation = {
   readonly target: {readonly state: 'stored'; readonly identity: TypedIdentity} | {readonly state: 'alias'; readonly alias: string};
   readonly expectedVersion?: string;
 };
+export type GroupPrecondition = {readonly id:string;readonly reason:string} & (
+ {readonly condition:'object_exists';readonly target:TypedIdentity} |
+ {readonly condition:'key_absent';readonly typeDefinitionPin:string;readonly keyId:string;readonly values:readonly ExactValue[]} |
+ {readonly condition:'property_equals';readonly target:TypedIdentity;readonly name:string;readonly value:ExactValue} |
+ {readonly condition:'relationship_absent';readonly relationshipDefinitionPin:string;readonly source:TypedIdentity;readonly target:TypedIdentity} |
+ {readonly condition:'relationship_count';readonly relationshipDefinitionPin:string;readonly anchor:TypedIdentity;readonly direction:'outgoing'|'incoming';readonly minimum:string;readonly maximum?:string}
+);
 export interface GroupSemanticInput {
   readonly interfaceVersion: 'truss-group-input/0.1.0';
   readonly layoutProfile: ProfilePin;
@@ -55,6 +62,7 @@ export interface GroupSemanticInput {
     {readonly selection: 'pinned'; readonly revision: string; readonly modelBundleSha256: string};
   readonly operations: readonly [GroupOperation, ...GroupOperation[]];
   readonly assertedOrigin: ExactValue;
+  readonly preconditions?:readonly GroupPrecondition[];
 }
 export interface RequestIdentity {
   readonly interfaceVersion: 'truss-request-identity/0.1.0';

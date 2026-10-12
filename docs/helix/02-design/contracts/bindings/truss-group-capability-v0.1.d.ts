@@ -1,5 +1,5 @@
 /** CONTRACT-009/007 candidate in-transaction group facade. */
-import type {GroupSemanticInput, RequestIdentity} from './truss-group-input-v0.1';
+import type {GroupSemanticInput, RequestIdentity, GroupPrecondition} from './truss-group-input-v0.1';
 import type {GroupResponse, GroupSemanticResult} from './truss-group-result-v0.1';
 import type {ProfilePin, ExactArtifact} from './truss-acceptance-input-v0.1';
 import type {CapabilitySelection} from './truss-capability-readiness-v0.1';
@@ -11,6 +11,7 @@ export type InTransactionGroupResponse = {
   readonly disposition:'applied'; readonly durability:'pending';
   readonly semantic:GroupSemanticResult;
 } | Extract<GroupResponse,{readonly disposition:'replayed'}>;
+export interface FailedPrecondition {readonly conditionId:string;readonly reason:string;readonly rule:GroupPrecondition['condition']}
 export type GroupApplicationResult = {
   readonly outcome:'success'; readonly response:InTransactionGroupResponse;
 } | {
@@ -21,6 +22,9 @@ export type GroupApplicationResult = {
   } | {
     readonly code:'invalid' | 'request_conflict';
     readonly diagnosticProfile:ProfilePin; readonly diagnostic:ExactArtifact;
+  } | {readonly code:'unauthorized_person'} | {
+    readonly code:'precondition_failed';
+    readonly failures:readonly [FailedPrecondition,...FailedPrecondition[]];
   };
   readonly response?:never;
 } | {
@@ -35,7 +39,7 @@ export type RequestFreeGroupApplicationResult = {
   readonly response:Extract<InTransactionGroupResponse,{readonly disposition:'applied'}>;
 } | {
   readonly outcome:'failed';
-  readonly failure:Extract<GroupFailure,{readonly code:'group_failed'}> |
+  readonly failure:Extract<GroupFailure,{readonly code:'group_failed'|'unauthorized_person'|'precondition_failed'}> |
     (Omit<Extract<GroupFailure,{readonly code:'invalid'|'request_conflict'}>,'code'> &
       {readonly code:'invalid'});
   readonly response?:never;
