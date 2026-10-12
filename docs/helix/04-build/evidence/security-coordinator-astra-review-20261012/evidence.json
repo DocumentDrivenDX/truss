@@ -1,0 +1,22 @@
+{
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "reviewedCommit": "48852453e42f968530e3a5ea3405e813e6b95c1f",
+    "findings": [
+      "Successful original entry returning deferred value skipped captured cleanup",
+      "None host and handler callbacks bypassed constructor validation"
+    ],
+    "resolution": "Both findings fixed with ordering and cleanup regressions"
+  },
+  "validation": {
+    "command": "PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_query_execution.py",
+    "tests": 18,
+    "result": "pass"
+  },
+  "scope": "Synthetic private coordinator only; no native host qualification or acceptance-case promotion. Required scope remains 132 cases, with 106 lacking exercising commands at latest audit.",
+  "sha256": {
+    "packages/python/src/truss/_query_execution.py": "682f9dd9bbbdc6d7eadeccffb6b275c9c856b8305c29da354db41041f3a1ce93",
+    "packages/python/tests/test_query_execution.py": "4737494f7ae751074f60007c0383c7cc1009c3228788cf7412e95e135de141e9"
+  }
+}

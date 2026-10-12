@@ -50,7 +50,14 @@ class _SynchronousContext:
             raise CompileRefusal('execution_obligation', 'Synchronous original context lifecycle required')
 
     def __enter__(self):
-        return _synchronous(self._enter())
+        entered = self._enter()
+        try:
+            return _synchronous(entered)
+        except BaseException as error:
+            # Original entry completed: cleanup belongs to this wrapper even
+            # though Python will not call __exit__ after a rejected entry.
+            self.__exit__(type(error), error, error.__traceback__)
+            raise
 
     def __exit__(self, error_type, error, traceback):
         result = _synchronous(self._exit(error_type,error,traceback))
@@ -145,8 +152,8 @@ class QueryCoordinator:
         self._handlers = MappingProxyType({
             key:(handler.accepts,handler.check) for key,handler in host.handlers.items()
         }) if host is not None else MappingProxyType({})
-        callbacks = [self._context,self._decode] + [f for pair in self._handlers.values() for f in pair]
-        if any(not callable(f) or _deferred_callable(f) for f in callbacks if f is not None):
+        callbacks = ([self._context,self._decode] + [f for pair in self._handlers.values() for f in pair]) if host is not None else []
+        if any(not callable(f) or _deferred_callable(f) for f in callbacks):
             raise CompileRefusal('execution_obligation', 'Synchronous original host functions required')
         self._plans = WeakValueDictionary()
         self._disposed = False

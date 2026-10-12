@@ -49,6 +49,51 @@ class QueryExecutionTests(unittest.TestCase):
         with self.assertRaises(CompileRefusal) as error:unknown.execute(unknown_plan)
         self.assertEqual(error.exception.code,'obligation');self.assertEqual(events,[])
 
+    def test_missing_supplied_callbacks_refuse_before_acquisition(self):
+        for member in ['read_context', 'decode', 'accepts', 'check']:
+            events=[];host=self.host(events)
+            if member in ('accepts', 'check'):
+                handler=SimpleNamespace(accepts=lambda *_:True, check=lambda *_:None)
+                setattr(handler, member, None);host.handlers={'fixture':handler}
+            else:
+                setattr(host, member, None)
+            with self.subTest(member=member),self.assertRaises(CompileRefusal):
+                coordinator(host)
+            self.assertEqual(events, [])
+
+    def test_rejected_successful_entry_cleans_once_and_cannot_suppress(self):
+        for cleanup_failure in [False, True]:
+            events=[];host=self.host(events)
+            def deferred():
+                events.append('deferred body');yield None
+            class Manager:
+                def __enter__(self):
+                    events.append('acquired');return deferred()
+                def __exit__(self, kind, error, traceback):
+                    events.append('cleanup')
+                    self_error=error
+                    if not isinstance(self_error, CompileRefusal):
+                        raise AssertionError('original refusal missing')
+                    if cleanup_failure:raise RuntimeError('cleanup unavailable')
+                    return True
+            host.read_context=lambda:Manager()
+            engine,plan=coordinator(host)
+            for _ in range(2):
+                with self.assertRaises(RuntimeError if cleanup_failure else CompileRefusal):
+                    engine.execute(plan)
+            self.assertEqual(events, ['acquired','cleanup','acquired','cleanup'])
+
+    def test_original_entry_failure_does_not_call_exit(self):
+        events=[];host=self.host(events)
+        class Manager:
+            def __enter__(self):
+                events.append('entry failure');raise RuntimeError('entry unavailable')
+            def __exit__(self, *_):events.append('cleanup')
+        host.read_context=lambda:Manager()
+        engine,plan=coordinator(host)
+        with self.assertRaises(RuntimeError):engine.execute(plan)
+        self.assertEqual(events, ['entry failure'])
+
     def test_obligations_and_publication_recheck_have_original_order(self):
         events=[];host=self.host(events)
         host.handlers={'fixture':SimpleNamespace(accepts=lambda *_:True,
