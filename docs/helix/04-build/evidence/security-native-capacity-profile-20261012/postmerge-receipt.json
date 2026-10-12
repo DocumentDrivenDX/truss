@@ -1,0 +1,11 @@
+{
+  "executedCommit": "a6168849535252d3363245c0a52ff8d633f4c074",
+  "reason": "Replay before push after preserving concurrent feed reread runtime changes.",
+  "nativeObservations": 205,
+  "scope": "Same candidate subset; no original acceptance promotion.",
+  "sha256": {
+    "security-native-capacity-profile-postmerge.json": "d67af5f0c83273dd258f67f5fe15d2efc1c6a4fabb5f5e7f55c98437a6c3109f",
+    "security-native-capacity-profile-postmerge.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-native-capacity-profile-postmerge.stderr.log": "c1a19d6ee3d5b39a2cebfa4425b584e2a55e0cbfd2bccd658245b42e14839bd1"
+  }
+}

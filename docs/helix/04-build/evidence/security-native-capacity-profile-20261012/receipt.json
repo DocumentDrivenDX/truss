@@ -1,0 +1,21 @@
+{
+  "executedBaseCommit": "29cf0b6c7dbedb2b49bb1ba8745f3279179a748c",
+  "sourceDelta": "source-delta.zip",
+  "nativeObservations": 205,
+  "trace": [
+    "CONTRACT-005 original installation/profile custody",
+    "CONTRACT-063 original admission/resource profile",
+    "STP-057 L03/L11",
+    "US-057-AC2/AC7"
+  ],
+  "developmentFailure": "Fixture positional binding did not account for repeated token parameter; corrected with supported named bindings. Failed/successful terminal logs retained.",
+  "scope": "Native protected capacity-row binding and exact identity/profile join refusal only. Verified bootstrap, current profile issuer/census/immutability, complete participant/callable/resource/sink/recovery qualification remain open. No original132-case acceptance promotion.",
+  "sha256": {
+    "security-native-capacity-profile-r2.json": "3582dec812f1b074ce3a82d9f378d261e2128b723b53a8a4cf8aa3c7f84d4dea",
+    "security-native-capacity-profile-r2.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-native-capacity-profile.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-native-capacity-profile-r2.stderr.log": "f69409f8eb087c2b9e2b0fd202a5b32361980e695063bc10c33128c5cb09f400",
+    "security-native-capacity-profile.stderr.log": "bcddb1bb4f47760f9a052a542b3289cc5792ee05be7fe50450f657b8256deee9",
+    "source-delta.zip": "f0e0d6626c142d2df2bf7f0be3fa8f35bacb9c57b0448766add1529103059633"
+  }
+}
