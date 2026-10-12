@@ -204,3 +204,29 @@ Selected props column access is row protection only; field masking and decoder
 privacy require separate faithful projection. Policy installation must drain
 earlier read transactions; native policy DDL cannot be inserted into their held
 read transaction. Rollback must retain the prior registered protected profile.
+
+
+### Selected native policy correspondence — 2026-10-12
+
+The native regression now retains71 observations. Independent fixture inventory
+includes native object owner/RLS/FORCE flags, every policy on object, selected
+original caller/read/wrapper role attributes and every overload/definition/owner/
+configuration/ACL for its three routines. An added permissive policy leaves
+source validity true while exposing the denied row. Changing only the predicate
+helper body also exposes it. Changing read-owner BYPASSRLS exposes it on fresh
+connections and defeats the nested original-caller restriction. Each mutation
+invalidates exact retained correspondence; originals restore exactly. A reused
+transaction still hid the row after role drift; retain that observation without
+inferring a cache/freshness mechanism or using it as authority.
+
+Four conditional Boolean policy-composition checks/replays and an independent
+16-assignment oracle distinguish permissive widening from restrictive narrowing.
+Sources, formulas, failed expectation and native outputs reside in
+`../../04-build/evidence/security-native-policy-correspondence-20261012/receipt.json`.
+The inventory comparator is still a fixture primitive. Production adoption must
+authenticate its original installation closure, observe the complete reachable
+call/role/ACL/dependency inventory and hold authority exclusion through release.
+Checking only known policy names, source row validity or old successful plans
+cannot discharge these obligations. Unknown additional policy or callable
+dependency blocks the selected closed profile; no capability is inferred from
+a successful label-only lookup. Current public runtime code remains unchanged.

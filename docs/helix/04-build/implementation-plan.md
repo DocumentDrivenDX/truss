@@ -6362,3 +6362,21 @@ entrypoint, not a released API profile. Next adopt a registered narrow read-owne
 context in the original public read/decoder path, compose original complete
 source enrollment and current module/ontology authority, and qualify complete
 callable closure and held final release. No original acceptance case is promoted.
+
+
+### Native policy/helper/role drift correspondence — 2026-10-12
+
+The graph regression retains71 observations. Selected original native inventory
+detects an extra permissive policy, changed helper definition and read-owner
+BYPASSRLS. Deliberately bypassing correspondence exposes denied rows, while
+source validity still passes policy widening. Fresh connections additionally
+expose failure of the nested caller restriction under bypass ownership. Original
+policies, body and role flags restore exactly. Reused transaction behavior is
+retained separately without a cache explanation. Python boundaries pass691imports.
+Four Z3 Boolean composition checks/replays plus16-assignment oracle are scoped
+conditional evidence. Receipt: `evidence/security-native-policy-correspondence-20261012/receipt.json`.
+Trace shared CONTRACT-063 / STP-056 B05/B06/B11/B12 and TD-020 / STP-020.
+No production inventory issuer or held authority gate is implemented by this
+fixture comparison; no original backend case is promoted. Next bind authenticated
+original installation custody and complete callable/privilege closure to the
+protected read context, preserving authority through final publication.

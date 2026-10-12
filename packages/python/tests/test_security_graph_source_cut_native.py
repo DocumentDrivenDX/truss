@@ -149,6 +149,40 @@ class GraphABACTests(groups.PublicCreateGroupTests):
   self.addCleanup(self.admin.execute,'DROP OWNED BY graph_wrapper_owner;DROP ROLE graph_wrapper_owner')
   rows=rc.execute('SELECT label FROM public.graph_read_wrapper()').fetchall();self.assertEqual(rows,[('yes',)]);observations.append({'id':'nested-definer-keeps-authorized-original-caller','observed':[list(r) for r in rows]})
   rows=direct.execute('SELECT label FROM public.graph_read_wrapper()').fetchall();self.assertEqual(rows,[]);observations.append({'id':'nested-definer-cannot-substitute-owner-for-original-caller','observed':rows})
+  # Independently retained selected native correspondence, not receipt self-report.
+  rh.detach();rc.commit()
+  def selected_inventory():
+   return {'table':list(self.admin.execute("SELECT relowner::text,relrowsecurity,relforcerowsecurity FROM pg_class WHERE oid='truss.object'::regclass").fetchone()),
+    'policies':[list(r) for r in self.admin.execute("SELECT polname,polpermissive,polcmd,polroles::text,pg_get_expr(polqual,polrelid),pg_get_expr(polwithcheck,polrelid) FROM pg_policy WHERE polrelid='truss.object'::regclass ORDER BY polname").fetchall()],
+    'roles':[list(r) for r in self.admin.execute("SELECT oid::text,rolname,rolcanlogin,rolinherit,rolsuper,rolcreatedb,rolcreaterole,rolreplication,rolbypassrls FROM pg_roles WHERE rolname IN ('graph_read_owner','graph_wrapper_owner','consumer','graph_direct') ORDER BY oid").fetchall()],
+    'readRoutines':[list(r) for r in self.admin.execute("SELECT oid::text,proowner::text,prosecdef,proconfig,proacl::text,prosrc,pg_get_functiondef(oid) FROM pg_proc WHERE pronamespace='public'::regnamespace AND proname IN ('graph_read','graph_read_wrapper','graph_candidate') ORDER BY oid").fetchall()]}
+  baseline=selected_inventory();observations.append({'id':'retained-original-selected-native-inventory','observed':baseline})
+  self.admin.execute('CREATE POLICY widened_graph_reader ON truss.object FOR SELECT TO graph_read_owner USING(true)')
+  widened=selected_inventory();self.assertNotEqual(widened,baseline);observations.append({'id':'extra-permissive-policy-invalidates-native-correspondence','observed':widened,'admission':'refused-before-read-by-fixture-comparison'})
+  complete=self.admin.execute(sql['validitySql']).fetchone()[0];self.assertEqual(complete,'true');observations.append({'id':'valid-source-alone-does-not-detect-policy-widening','observed':complete})
+  rc,rh,ra,rt=self.consumer();rows=rc.execute("SELECT label FROM public.graph_read('value','no')").fetchall();self.assertEqual(rows,[('no',)]);observations.append({'id':'bypassing-correspondence-gate-exposes-denied-row','observed':[list(r) for r in rows],'qualification':'deliberate widening counterexample in disposable fixture'})
+  rh.detach();rc.commit();self.admin.execute('DROP POLICY widened_graph_reader ON truss.object')
+  restored=selected_inventory();self.assertEqual(restored,baseline);observations.append({'id':'exact-selected-policy-inventory-restored','observed':restored})
+  rc,rh,ra,rt=self.consumer();rows=rc.execute("SELECT label FROM public.graph_read('value','no')").fetchall();self.assertEqual(rows,[]);observations.append({'id':'restored-native-policy-hides-denied-row','observed':rows})
+  self.admin.execute('CREATE OR REPLACE FUNCTION public.graph_candidate(text,text,bool) RETURNS bool LANGUAGE SQL AS $$ SELECT true $$')
+  try:
+   drift=selected_inventory();self.assertNotEqual(drift,baseline);observations.append({'id':'selected-policy-helper-body-invalidates-correspondence','observed':drift,'admission':'refused-before-read-by-fixture-comparison'})
+   with psycopg.connect(**probe_params,autocommit=True) as fresh:
+    rows=fresh.execute("SELECT label FROM public.graph_read('value','no')").fetchall();self.assertEqual(rows,[('no',)]);observations.append({'id':'bypassing-helper-source-correspondence-exposes-denied-row','observed':[list(r) for r in rows]})
+  finally:self.admin.execute('CREATE OR REPLACE FUNCTION public.graph_candidate(text,text,bool) RETURNS bool LANGUAGE SQL AS $$ SELECT '+sql['predicateSql']+' $$')
+  restored=selected_inventory();self.assertEqual(restored,baseline);observations.append({'id':'exact-original-policy-helper-source-restored','observed':restored})
+  self.admin.execute('ALTER ROLE graph_read_owner BYPASSRLS')
+  try:
+   drift=selected_inventory();self.assertNotEqual(drift,baseline);observations.append({'id':'read-owner-bypass-attribute-invalidates-correspondence','observed':drift,'admission':'refused-before-read-by-fixture-comparison'})
+   rows=rc.execute("SELECT label FROM public.graph_read('value','no')").fetchall();observations.append({'id':'existing-connection-after-read-owner-role-drift','observed':[list(r) for r in rows],'qualification':'observed outcome, no cache/freshness mechanism inferred'})
+   with psycopg.connect(**probe_params,autocommit=True) as fresh:
+    rows=fresh.execute("SELECT label FROM public.graph_read('value','no')").fetchall();self.assertEqual(rows,[('no',)]);observations.append({'id':'fresh-connection-bypassing-role-correspondence-exposes-denied-row','observed':[list(r) for r in rows]})
+   fresh_direct_params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);fresh_direct_params['user']='graph_direct'
+   with psycopg.connect(**fresh_direct_params,autocommit=True) as fresh_direct:
+    rows=fresh_direct.execute('SELECT label FROM public.graph_read_wrapper()').fetchall();self.assertEqual(rows,[('yes',)]);observations.append({'id':'fresh-bypass-owner-invalidates-policy-based-original-caller-restriction','observed':[list(r) for r in rows],'qualification':'deliberate bypass counterexample'})
+  finally:self.admin.execute('ALTER ROLE graph_read_owner NOBYPASSRLS')
+  restored=selected_inventory();self.assertEqual(restored,baseline);observations.append({'id':'original-read-owner-flags-restored','observed':restored})
+  rows=direct.execute('SELECT label FROM public.graph_read_wrapper()').fetchall();self.assertEqual(rows,[]);observations.append({'id':'restored-role-retains-original-caller-restriction','observed':rows})
   forged=direct.execute("SELECT public.graph_candidate('value','no',true)").fetchone()[0];self.assertIs(forged,True);observations.append({'id':'forged-expression-alone-is-not-authority','observed':forged})
   rows=direct.execute("SELECT id FROM truss.object WHERE id=%s AND public.graph_candidate('value','no',true)",(ids['no'],)).fetchall();self.assertEqual(rows,[]);observations.append({'id':'forged-argument-cannot-bypass-original-row-policy','observed':rows})
   admin_count=self.admin.execute('SELECT count(*) FROM truss.object').fetchone()[0];self.assertEqual(admin_count,2);observations.append({'id':'excluded-admin-bypass','observed':admin_count})

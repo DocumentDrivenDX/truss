@@ -1,0 +1,21 @@
+F
+======================================================================
+FAIL: test_public_graph_creation_and_original_source_validity (__main__.GraphABACTests.test_public_graph_creation_and_original_source_validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_graph_source_cut_native.py", line 170, in test_public_graph_creation_and_original_source_validity
+    rows=rc.execute("SELECT label FROM public.graph_read('value','no')").fetchall();self.assertEqual(rows,[('no',)]);observations.append({'id':'bypassing-role-correspondence-exposes-denied-row','observed':[list(r) for r in rows]})
+                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != [('no',)]
+
+Second list contains 1 additional elements.
+First extra element 0:
+('no',)
+
+- []
++ [('no',)]
+
+----------------------------------------------------------------------
+Ran 1 test in 7.138s
+
+FAILED (failures=1)

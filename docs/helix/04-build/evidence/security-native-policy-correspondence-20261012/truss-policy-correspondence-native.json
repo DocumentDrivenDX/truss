@@ -1,0 +1,1158 @@
+{
+  "packet": {
+    "typeId": "1",
+    "valueId": "3",
+    "labelId": "2",
+    "flagId": "1"
+  },
+  "sql": {
+    "sourceSql": "SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4",
+    "validitySql": "SELECT (EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND p.prop_id OPERATOR(pg_catalog.=) '3'::pg_catalog.int4 AND p.home OPERATOR(pg_catalog.=) 'json'::pg_catalog.text AND p.scalar_type OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND p.nullability OPERATOR(pg_catalog.=) 'required'::pg_catalog.text AND p.cardinality OPERATOR(pg_catalog.=) 'one'::pg_catalog.text AND p.retired_rev IS NULL) AND EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND p.prop_id OPERATOR(pg_catalog.=) '2'::pg_catalog.int4 AND p.home OPERATOR(pg_catalog.=) 'json'::pg_catalog.text AND p.scalar_type OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND p.nullability OPERATOR(pg_catalog.=) 'required'::pg_catalog.text AND p.cardinality OPERATOR(pg_catalog.=) 'one'::pg_catalog.text AND p.retired_rev IS NULL) AND EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND p.prop_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND p.home OPERATOR(pg_catalog.=) 'json'::pg_catalog.text AND p.scalar_type OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND p.nullability OPERATOR(pg_catalog.=) 'required'::pg_catalog.text AND p.cardinality OPERATOR(pg_catalog.=) 'one'::pg_catalog.text AND p.retired_rev IS NULL) AND EXISTS(SELECT 1 FROM truss.type_def t WHERE t.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND t.kind OPERATOR(pg_catalog.=) 'record'::pg_catalog.text AND NOT t.provisional AND t.retired_rev IS NULL) AND NOT EXISTS(SELECT 1 FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4 AND NOT ((pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb) IS TRUE AND (pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb) IS TRUE AND (pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb) IS TRUE)))::pg_catalog.text AS valid",
+    "predicateSql": "((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE))",
+    "rowExpressions": {
+      "value": "CASE WHEN pg_catalog.jsonb_typeof(props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END",
+      "label": "CASE WHEN pg_catalog.jsonb_typeof(props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END",
+      "flag": "CASE WHEN pg_catalog.jsonb_typeof(props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END"
+    }
+  },
+  "observations": [
+    {
+      "id": "original-public-graph-validity",
+      "observed": "true"
+    },
+    {
+      "id": "original-graph-eligible-values",
+      "expected": [
+        [
+          "yes"
+        ]
+      ],
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "malformed-graph-field-refuses-global-preflight",
+      "observed": "false"
+    },
+    {
+      "id": "filter-alone-can-hide-invalid-source",
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "wrong-tag",
+      "observed": "false"
+    },
+    {
+      "id": "wrong-payload",
+      "observed": "false"
+    },
+    {
+      "id": "extra-envelope-member",
+      "observed": "false"
+    },
+    {
+      "id": "missing-payload",
+      "observed": "false"
+    },
+    {
+      "id": "restored-original-source",
+      "observed": "true"
+    },
+    {
+      "id": "public-get-before-policy-yes",
+      "observed": "ObjectFound"
+    },
+    {
+      "id": "public-get-before-policy-no",
+      "observed": "ObjectFound"
+    },
+    {
+      "id": "native-version",
+      "observed": "180006"
+    },
+    {
+      "id": "forced-policy-and-ordinary-table-owner",
+      "observed": [
+        true,
+        true,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "original-public-get-settings",
+      "observed": [
+        "search_path=pg_catalog, pg_temp",
+        "row_security=off"
+      ]
+    },
+    {
+      "id": "ordinary-native-session",
+      "observed": [
+        "graph_direct",
+        "graph_direct",
+        94335
+      ]
+    },
+    {
+      "id": "ordinary-native-flags",
+      "observed": [
+        false,
+        false
+      ]
+    },
+    {
+      "id": "ordinary-direct-graph-rows",
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "ordinary-direct-graph-count",
+      "observed": 1
+    },
+    {
+      "id": "ordinary-public-get-yes-composition-refusal",
+      "observed": {
+        "sqlState": "42501",
+        "outcome": "contained-refusal"
+      }
+    },
+    {
+      "id": "ordinary-public-get-no-composition-refusal",
+      "observed": {
+        "sqlState": "42501",
+        "outcome": "contained-refusal"
+      }
+    },
+    {
+      "id": "experimental-filtered-public-get-yes",
+      "observed": "ObjectFound"
+    },
+    {
+      "id": "experimental-filtered-public-get-no",
+      "observed": "ObjectNotFound"
+    },
+    {
+      "id": "hidden-malformed-source-invalid",
+      "observed": "false"
+    },
+    {
+      "id": "filtered-public-get-alone-misses-hidden-malformation",
+      "observed": "ObjectFound",
+      "qualification": "counterexample to filtered read implying complete source"
+    },
+    {
+      "id": "concurrent-hidden-writer-native-lock-wait",
+      "writerPid": 94337,
+      "observed": [
+        "RowExclusiveLock",
+        false
+      ]
+    },
+    {
+      "id": "complete-selected-source-locks-held",
+      "observed": 3
+    },
+    {
+      "id": "complete-preflight-during-writer-exclusion",
+      "observed": "true"
+    },
+    {
+      "id": "public-read-returns-before-hidden-writer-release",
+      "observed": "ObjectFound"
+    },
+    {
+      "id": "writer-completes-after-source-guard-release",
+      "observed": "committed"
+    },
+    {
+      "id": "next-source-preflight-detects-post-release-malformation",
+      "observed": "false"
+    },
+    {
+      "id": "source-exclusion-finite-lock-timeout",
+      "observed": "55P03",
+      "readIssued": false
+    },
+    {
+      "id": "timeout-savepoint-releases-partial-source-locks",
+      "observed": 0
+    },
+    {
+      "id": "timeout-preserves-prior-transaction-work",
+      "observed": [
+        [
+          "kept"
+        ]
+      ]
+    },
+    {
+      "id": "cancel-guard-native-lock-wait",
+      "observed": [
+        "ShareLock",
+        false
+      ]
+    },
+    {
+      "id": "cancel-guard-holds-two-partial-source-locks",
+      "observed": 2
+    },
+    {
+      "id": "source-exclusion-cancellation",
+      "observed": [
+        "57014"
+      ],
+      "readIssued": false
+    },
+    {
+      "id": "cancel-savepoint-releases-partial-source-locks",
+      "observed": 0
+    },
+    {
+      "id": "cancel-preserves-prior-transaction-work",
+      "observed": [
+        [
+          "kept"
+        ]
+      ]
+    },
+    {
+      "id": "original-complete-read-settings-restored",
+      "observed": [
+        "search_path=pg_catalog, pg_temp",
+        "row_security=off"
+      ]
+    },
+    {
+      "id": "narrow-read-owner-and-routine-settings",
+      "observed": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        [
+          "search_path=pg_catalog, pg_temp",
+          "row_security=on"
+        ]
+      ]
+    },
+    {
+      "id": "narrow-read-owner-native-privileges",
+      "observed": [
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "id": "narrow-owner-original-caller-lookup-yes",
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "narrow-owner-original-caller-lookup-no",
+      "observed": []
+    },
+    {
+      "id": "narrow-owner-original-caller-lookup-not-present",
+      "observed": []
+    },
+    {
+      "id": "narrow-owner-exact-key-parameter",
+      "observed": []
+    },
+    {
+      "id": "ordinary-caller-invokes-without-owner-membership",
+      "observed": [
+        false,
+        true
+      ]
+    },
+    {
+      "id": "ordinary-narrow-owner-boundary-set-read-owner",
+      "observed": "42501"
+    },
+    {
+      "id": "ordinary-narrow-owner-boundary-direct-property-bag",
+      "observed": "42501"
+    },
+    {
+      "id": "ordinary-narrow-owner-boundary-direct-retained",
+      "observed": "42501"
+    },
+    {
+      "id": "ordinary-narrow-owner-boundary-direct-journal",
+      "observed": "42501"
+    },
+    {
+      "id": "ungranted-original-caller-entrypoint-refuses",
+      "observed": "42501"
+    },
+    {
+      "id": "nested-definer-keeps-authorized-original-caller",
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "nested-definer-cannot-substitute-owner-for-original-caller",
+      "observed": []
+    },
+    {
+      "id": "retained-original-selected-native-inventory",
+      "observed": {
+        "table": [
+          "18096",
+          true,
+          true
+        ],
+        "policies": [
+          [
+            "graph_candidate_rows",
+            true,
+            "*",
+            "{0}",
+            "graph_candidate(\nCASE\n    WHEN ((jsonb_typeof((props -> '3'::text)) = 'object'::text) AND (((props -> '3'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '3'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '3'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '3'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '2'::text)) = 'object'::text) AND (((props -> '2'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '2'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '2'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '2'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '1'::text)) = 'object'::text) AND (((props -> '1'::text) ->> 'kind'::text) = 'boolean'::text) AND (jsonb_typeof(((props -> '1'::text) -> 'value'::text)) = 'boolean'::text) AND ((((props -> '1'::text) - 'kind'::text) - 'value'::text) = '{}'::jsonb)) THEN (((props -> '1'::text) ->> 'value'::text))::boolean\n    ELSE NULL::boolean\nEND)",
+            null
+          ],
+          [
+            "graph_read_context",
+            false,
+            "r",
+            "{18199}",
+            "((CURRENT_USER = 'graph_read_owner'::name) AND (SESSION_USER = 'consumer'::name))",
+            null
+          ]
+        ],
+        "roles": [
+          [
+            "16384",
+            "consumer",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18189",
+            "graph_direct",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18199",
+            "graph_read_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18202",
+            "graph_wrapper_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "readRoutines": [
+          [
+            "18187",
+            "10",
+            false,
+            null,
+            null,
+            " SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) ",
+            "CREATE OR REPLACE FUNCTION public.graph_candidate(text, text, boolean)\n RETURNS boolean\n LANGUAGE sql\nAS $function$ SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) $function$\n"
+          ],
+          [
+            "18201",
+            "18199",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp",
+              "row_security=on"
+            ],
+            "{graph_read_owner=X/graph_read_owner,consumer=X/graph_read_owner,graph_wrapper_owner=X/graph_read_owner}",
+            " SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 ",
+            "CREATE OR REPLACE FUNCTION public.graph_read(text, text)\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'on'\nAS $function$ SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 $function$\n"
+          ],
+          [
+            "18203",
+            "18202",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp"
+            ],
+            "{graph_wrapper_owner=X/graph_wrapper_owner,consumer=X/graph_wrapper_owner,graph_direct=X/graph_wrapper_owner}",
+            " SELECT label FROM public.graph_read('value','yes') ",
+            "CREATE OR REPLACE FUNCTION public.graph_read_wrapper()\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$ SELECT label FROM public.graph_read('value','yes') $function$\n"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "extra-permissive-policy-invalidates-native-correspondence",
+      "observed": {
+        "table": [
+          "18096",
+          true,
+          true
+        ],
+        "policies": [
+          [
+            "graph_candidate_rows",
+            true,
+            "*",
+            "{0}",
+            "graph_candidate(\nCASE\n    WHEN ((jsonb_typeof((props -> '3'::text)) = 'object'::text) AND (((props -> '3'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '3'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '3'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '3'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '2'::text)) = 'object'::text) AND (((props -> '2'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '2'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '2'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '2'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '1'::text)) = 'object'::text) AND (((props -> '1'::text) ->> 'kind'::text) = 'boolean'::text) AND (jsonb_typeof(((props -> '1'::text) -> 'value'::text)) = 'boolean'::text) AND ((((props -> '1'::text) - 'kind'::text) - 'value'::text) = '{}'::jsonb)) THEN (((props -> '1'::text) ->> 'value'::text))::boolean\n    ELSE NULL::boolean\nEND)",
+            null
+          ],
+          [
+            "graph_read_context",
+            false,
+            "r",
+            "{18199}",
+            "((CURRENT_USER = 'graph_read_owner'::name) AND (SESSION_USER = 'consumer'::name))",
+            null
+          ],
+          [
+            "widened_graph_reader",
+            true,
+            "r",
+            "{18199}",
+            "true",
+            null
+          ]
+        ],
+        "roles": [
+          [
+            "16384",
+            "consumer",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18189",
+            "graph_direct",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18199",
+            "graph_read_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18202",
+            "graph_wrapper_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "readRoutines": [
+          [
+            "18187",
+            "10",
+            false,
+            null,
+            null,
+            " SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) ",
+            "CREATE OR REPLACE FUNCTION public.graph_candidate(text, text, boolean)\n RETURNS boolean\n LANGUAGE sql\nAS $function$ SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) $function$\n"
+          ],
+          [
+            "18201",
+            "18199",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp",
+              "row_security=on"
+            ],
+            "{graph_read_owner=X/graph_read_owner,consumer=X/graph_read_owner,graph_wrapper_owner=X/graph_read_owner}",
+            " SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 ",
+            "CREATE OR REPLACE FUNCTION public.graph_read(text, text)\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'on'\nAS $function$ SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 $function$\n"
+          ],
+          [
+            "18203",
+            "18202",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp"
+            ],
+            "{graph_wrapper_owner=X/graph_wrapper_owner,consumer=X/graph_wrapper_owner,graph_direct=X/graph_wrapper_owner}",
+            " SELECT label FROM public.graph_read('value','yes') ",
+            "CREATE OR REPLACE FUNCTION public.graph_read_wrapper()\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$ SELECT label FROM public.graph_read('value','yes') $function$\n"
+          ]
+        ]
+      },
+      "admission": "refused-before-read-by-fixture-comparison"
+    },
+    {
+      "id": "valid-source-alone-does-not-detect-policy-widening",
+      "observed": "true"
+    },
+    {
+      "id": "bypassing-correspondence-gate-exposes-denied-row",
+      "observed": [
+        [
+          "no"
+        ]
+      ],
+      "qualification": "deliberate widening counterexample in disposable fixture"
+    },
+    {
+      "id": "exact-selected-policy-inventory-restored",
+      "observed": {
+        "table": [
+          "18096",
+          true,
+          true
+        ],
+        "policies": [
+          [
+            "graph_candidate_rows",
+            true,
+            "*",
+            "{0}",
+            "graph_candidate(\nCASE\n    WHEN ((jsonb_typeof((props -> '3'::text)) = 'object'::text) AND (((props -> '3'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '3'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '3'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '3'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '2'::text)) = 'object'::text) AND (((props -> '2'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '2'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '2'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '2'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '1'::text)) = 'object'::text) AND (((props -> '1'::text) ->> 'kind'::text) = 'boolean'::text) AND (jsonb_typeof(((props -> '1'::text) -> 'value'::text)) = 'boolean'::text) AND ((((props -> '1'::text) - 'kind'::text) - 'value'::text) = '{}'::jsonb)) THEN (((props -> '1'::text) ->> 'value'::text))::boolean\n    ELSE NULL::boolean\nEND)",
+            null
+          ],
+          [
+            "graph_read_context",
+            false,
+            "r",
+            "{18199}",
+            "((CURRENT_USER = 'graph_read_owner'::name) AND (SESSION_USER = 'consumer'::name))",
+            null
+          ]
+        ],
+        "roles": [
+          [
+            "16384",
+            "consumer",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18189",
+            "graph_direct",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18199",
+            "graph_read_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18202",
+            "graph_wrapper_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "readRoutines": [
+          [
+            "18187",
+            "10",
+            false,
+            null,
+            null,
+            " SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) ",
+            "CREATE OR REPLACE FUNCTION public.graph_candidate(text, text, boolean)\n RETURNS boolean\n LANGUAGE sql\nAS $function$ SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) $function$\n"
+          ],
+          [
+            "18201",
+            "18199",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp",
+              "row_security=on"
+            ],
+            "{graph_read_owner=X/graph_read_owner,consumer=X/graph_read_owner,graph_wrapper_owner=X/graph_read_owner}",
+            " SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 ",
+            "CREATE OR REPLACE FUNCTION public.graph_read(text, text)\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'on'\nAS $function$ SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 $function$\n"
+          ],
+          [
+            "18203",
+            "18202",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp"
+            ],
+            "{graph_wrapper_owner=X/graph_wrapper_owner,consumer=X/graph_wrapper_owner,graph_direct=X/graph_wrapper_owner}",
+            " SELECT label FROM public.graph_read('value','yes') ",
+            "CREATE OR REPLACE FUNCTION public.graph_read_wrapper()\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$ SELECT label FROM public.graph_read('value','yes') $function$\n"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "restored-native-policy-hides-denied-row",
+      "observed": []
+    },
+    {
+      "id": "selected-policy-helper-body-invalidates-correspondence",
+      "observed": {
+        "table": [
+          "18096",
+          true,
+          true
+        ],
+        "policies": [
+          [
+            "graph_candidate_rows",
+            true,
+            "*",
+            "{0}",
+            "graph_candidate(\nCASE\n    WHEN ((jsonb_typeof((props -> '3'::text)) = 'object'::text) AND (((props -> '3'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '3'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '3'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '3'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '2'::text)) = 'object'::text) AND (((props -> '2'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '2'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '2'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '2'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '1'::text)) = 'object'::text) AND (((props -> '1'::text) ->> 'kind'::text) = 'boolean'::text) AND (jsonb_typeof(((props -> '1'::text) -> 'value'::text)) = 'boolean'::text) AND ((((props -> '1'::text) - 'kind'::text) - 'value'::text) = '{}'::jsonb)) THEN (((props -> '1'::text) ->> 'value'::text))::boolean\n    ELSE NULL::boolean\nEND)",
+            null
+          ],
+          [
+            "graph_read_context",
+            false,
+            "r",
+            "{18199}",
+            "((CURRENT_USER = 'graph_read_owner'::name) AND (SESSION_USER = 'consumer'::name))",
+            null
+          ]
+        ],
+        "roles": [
+          [
+            "16384",
+            "consumer",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18189",
+            "graph_direct",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18199",
+            "graph_read_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18202",
+            "graph_wrapper_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "readRoutines": [
+          [
+            "18187",
+            "10",
+            false,
+            null,
+            null,
+            " SELECT true ",
+            "CREATE OR REPLACE FUNCTION public.graph_candidate(text, text, boolean)\n RETURNS boolean\n LANGUAGE sql\nAS $function$ SELECT true $function$\n"
+          ],
+          [
+            "18201",
+            "18199",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp",
+              "row_security=on"
+            ],
+            "{graph_read_owner=X/graph_read_owner,consumer=X/graph_read_owner,graph_wrapper_owner=X/graph_read_owner}",
+            " SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 ",
+            "CREATE OR REPLACE FUNCTION public.graph_read(text, text)\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'on'\nAS $function$ SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 $function$\n"
+          ],
+          [
+            "18203",
+            "18202",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp"
+            ],
+            "{graph_wrapper_owner=X/graph_wrapper_owner,consumer=X/graph_wrapper_owner,graph_direct=X/graph_wrapper_owner}",
+            " SELECT label FROM public.graph_read('value','yes') ",
+            "CREATE OR REPLACE FUNCTION public.graph_read_wrapper()\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$ SELECT label FROM public.graph_read('value','yes') $function$\n"
+          ]
+        ]
+      },
+      "admission": "refused-before-read-by-fixture-comparison"
+    },
+    {
+      "id": "bypassing-helper-source-correspondence-exposes-denied-row",
+      "observed": [
+        [
+          "no"
+        ]
+      ]
+    },
+    {
+      "id": "exact-original-policy-helper-source-restored",
+      "observed": {
+        "table": [
+          "18096",
+          true,
+          true
+        ],
+        "policies": [
+          [
+            "graph_candidate_rows",
+            true,
+            "*",
+            "{0}",
+            "graph_candidate(\nCASE\n    WHEN ((jsonb_typeof((props -> '3'::text)) = 'object'::text) AND (((props -> '3'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '3'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '3'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '3'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '2'::text)) = 'object'::text) AND (((props -> '2'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '2'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '2'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '2'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '1'::text)) = 'object'::text) AND (((props -> '1'::text) ->> 'kind'::text) = 'boolean'::text) AND (jsonb_typeof(((props -> '1'::text) -> 'value'::text)) = 'boolean'::text) AND ((((props -> '1'::text) - 'kind'::text) - 'value'::text) = '{}'::jsonb)) THEN (((props -> '1'::text) ->> 'value'::text))::boolean\n    ELSE NULL::boolean\nEND)",
+            null
+          ],
+          [
+            "graph_read_context",
+            false,
+            "r",
+            "{18199}",
+            "((CURRENT_USER = 'graph_read_owner'::name) AND (SESSION_USER = 'consumer'::name))",
+            null
+          ]
+        ],
+        "roles": [
+          [
+            "16384",
+            "consumer",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18189",
+            "graph_direct",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18199",
+            "graph_read_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18202",
+            "graph_wrapper_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "readRoutines": [
+          [
+            "18187",
+            "10",
+            false,
+            null,
+            null,
+            " SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) ",
+            "CREATE OR REPLACE FUNCTION public.graph_candidate(text, text, boolean)\n RETURNS boolean\n LANGUAGE sql\nAS $function$ SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) $function$\n"
+          ],
+          [
+            "18201",
+            "18199",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp",
+              "row_security=on"
+            ],
+            "{graph_read_owner=X/graph_read_owner,consumer=X/graph_read_owner,graph_wrapper_owner=X/graph_read_owner}",
+            " SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 ",
+            "CREATE OR REPLACE FUNCTION public.graph_read(text, text)\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'on'\nAS $function$ SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 $function$\n"
+          ],
+          [
+            "18203",
+            "18202",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp"
+            ],
+            "{graph_wrapper_owner=X/graph_wrapper_owner,consumer=X/graph_wrapper_owner,graph_direct=X/graph_wrapper_owner}",
+            " SELECT label FROM public.graph_read('value','yes') ",
+            "CREATE OR REPLACE FUNCTION public.graph_read_wrapper()\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$ SELECT label FROM public.graph_read('value','yes') $function$\n"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "read-owner-bypass-attribute-invalidates-correspondence",
+      "observed": {
+        "table": [
+          "18096",
+          true,
+          true
+        ],
+        "policies": [
+          [
+            "graph_candidate_rows",
+            true,
+            "*",
+            "{0}",
+            "graph_candidate(\nCASE\n    WHEN ((jsonb_typeof((props -> '3'::text)) = 'object'::text) AND (((props -> '3'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '3'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '3'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '3'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '2'::text)) = 'object'::text) AND (((props -> '2'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '2'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '2'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '2'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '1'::text)) = 'object'::text) AND (((props -> '1'::text) ->> 'kind'::text) = 'boolean'::text) AND (jsonb_typeof(((props -> '1'::text) -> 'value'::text)) = 'boolean'::text) AND ((((props -> '1'::text) - 'kind'::text) - 'value'::text) = '{}'::jsonb)) THEN (((props -> '1'::text) ->> 'value'::text))::boolean\n    ELSE NULL::boolean\nEND)",
+            null
+          ],
+          [
+            "graph_read_context",
+            false,
+            "r",
+            "{18199}",
+            "((CURRENT_USER = 'graph_read_owner'::name) AND (SESSION_USER = 'consumer'::name))",
+            null
+          ]
+        ],
+        "roles": [
+          [
+            "16384",
+            "consumer",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18189",
+            "graph_direct",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18199",
+            "graph_read_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ],
+          [
+            "18202",
+            "graph_wrapper_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "readRoutines": [
+          [
+            "18187",
+            "10",
+            false,
+            null,
+            null,
+            " SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) ",
+            "CREATE OR REPLACE FUNCTION public.graph_candidate(text, text, boolean)\n RETURNS boolean\n LANGUAGE sql\nAS $function$ SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) $function$\n"
+          ],
+          [
+            "18201",
+            "18199",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp",
+              "row_security=on"
+            ],
+            "{graph_read_owner=X/graph_read_owner,consumer=X/graph_read_owner,graph_wrapper_owner=X/graph_read_owner}",
+            " SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 ",
+            "CREATE OR REPLACE FUNCTION public.graph_read(text, text)\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'on'\nAS $function$ SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 $function$\n"
+          ],
+          [
+            "18203",
+            "18202",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp"
+            ],
+            "{graph_wrapper_owner=X/graph_wrapper_owner,consumer=X/graph_wrapper_owner,graph_direct=X/graph_wrapper_owner}",
+            " SELECT label FROM public.graph_read('value','yes') ",
+            "CREATE OR REPLACE FUNCTION public.graph_read_wrapper()\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$ SELECT label FROM public.graph_read('value','yes') $function$\n"
+          ]
+        ]
+      },
+      "admission": "refused-before-read-by-fixture-comparison"
+    },
+    {
+      "id": "existing-connection-after-read-owner-role-drift",
+      "observed": [],
+      "qualification": "observed outcome, no cache/freshness mechanism inferred"
+    },
+    {
+      "id": "fresh-connection-bypassing-role-correspondence-exposes-denied-row",
+      "observed": [
+        [
+          "no"
+        ]
+      ]
+    },
+    {
+      "id": "fresh-bypass-owner-invalidates-policy-based-original-caller-restriction",
+      "observed": [
+        [
+          "yes"
+        ]
+      ],
+      "qualification": "deliberate bypass counterexample"
+    },
+    {
+      "id": "original-read-owner-flags-restored",
+      "observed": {
+        "table": [
+          "18096",
+          true,
+          true
+        ],
+        "policies": [
+          [
+            "graph_candidate_rows",
+            true,
+            "*",
+            "{0}",
+            "graph_candidate(\nCASE\n    WHEN ((jsonb_typeof((props -> '3'::text)) = 'object'::text) AND (((props -> '3'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '3'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '3'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '3'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '2'::text)) = 'object'::text) AND (((props -> '2'::text) ->> 'kind'::text) = 'string'::text) AND (jsonb_typeof(((props -> '2'::text) -> 'text'::text)) = 'string'::text) AND ((((props -> '2'::text) - 'kind'::text) - 'text'::text) = '{}'::jsonb)) THEN ((props -> '2'::text) ->> 'text'::text)\n    ELSE NULL::text\nEND,\nCASE\n    WHEN ((jsonb_typeof((props -> '1'::text)) = 'object'::text) AND (((props -> '1'::text) ->> 'kind'::text) = 'boolean'::text) AND (jsonb_typeof(((props -> '1'::text) -> 'value'::text)) = 'boolean'::text) AND ((((props -> '1'::text) - 'kind'::text) - 'value'::text) = '{}'::jsonb)) THEN (((props -> '1'::text) ->> 'value'::text))::boolean\n    ELSE NULL::boolean\nEND)",
+            null
+          ],
+          [
+            "graph_read_context",
+            false,
+            "r",
+            "{18199}",
+            "((CURRENT_USER = 'graph_read_owner'::name) AND (SESSION_USER = 'consumer'::name))",
+            null
+          ]
+        ],
+        "roles": [
+          [
+            "16384",
+            "consumer",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18189",
+            "graph_direct",
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18199",
+            "graph_read_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            "18202",
+            "graph_wrapper_owner",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "readRoutines": [
+          [
+            "18187",
+            "10",
+            false,
+            null,
+            null,
+            " SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) ",
+            "CREATE OR REPLACE FUNCTION public.graph_candidate(text, text, boolean)\n RETURNS boolean\n LANGUAGE sql\nAS $function$ SELECT ((((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE)) $function$\n"
+          ],
+          [
+            "18201",
+            "18199",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp",
+              "row_security=on"
+            ],
+            "{graph_read_owner=X/graph_read_owner,consumer=X/graph_read_owner,graph_wrapper_owner=X/graph_read_owner}",
+            " SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 ",
+            "CREATE OR REPLACE FUNCTION public.graph_read(text, text)\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\n SET row_security TO 'on'\nAS $function$ SELECT q.label FROM (SELECT g.id::pg_catalog.text AS native_id,g.type_id::pg_catalog.text AS native_type,CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '3'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"value\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->) 'text'::pg_catalog.text) OPERATOR(pg_catalog.=) 'string'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'text'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '2'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'text'::pg_catalog.text)::pg_catalog.text ELSE NULL END AS \"label\",CASE WHEN pg_catalog.jsonb_typeof(g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.=) 'object'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'kind'::pg_catalog.text OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND pg_catalog.jsonb_typeof((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->) 'value'::pg_catalog.text) OPERATOR(pg_catalog.=) 'boolean'::pg_catalog.text AND (g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.-) 'kind'::pg_catalog.text OPERATOR(pg_catalog.-) 'value'::pg_catalog.text OPERATOR(pg_catalog.=) '{}'::pg_catalog.jsonb THEN ((g.props OPERATOR(pg_catalog.->) '1'::pg_catalog.text) OPERATOR(pg_catalog.->>) 'value'::pg_catalog.text)::pg_catalog.bool ELSE NULL END AS \"flag\" FROM truss.object g WHERE g.type_id OPERATOR(pg_catalog.=) '1'::pg_catalog.int4) q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2 $function$\n"
+          ],
+          [
+            "18203",
+            "18202",
+            true,
+            [
+              "search_path=pg_catalog, pg_temp"
+            ],
+            "{graph_wrapper_owner=X/graph_wrapper_owner,consumer=X/graph_wrapper_owner,graph_direct=X/graph_wrapper_owner}",
+            " SELECT label FROM public.graph_read('value','yes') ",
+            "CREATE OR REPLACE FUNCTION public.graph_read_wrapper()\n RETURNS TABLE(label text)\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO 'pg_catalog', 'pg_temp'\nAS $function$ SELECT label FROM public.graph_read('value','yes') $function$\n"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "restored-role-retains-original-caller-restriction",
+      "observed": []
+    },
+    {
+      "id": "forged-expression-alone-is-not-authority",
+      "observed": true
+    },
+    {
+      "id": "forged-argument-cannot-bypass-original-row-policy",
+      "observed": []
+    },
+    {
+      "id": "excluded-admin-bypass",
+      "observed": 2
+    }
+  ],
+  "scope": "Actual public creation, candidate projection and forced native RLS with an ordinary direct graph reader. Current public get API refuses forced RLS because its complete-read profile sets row_security=off; no API RLS composition qualified. Isolated Boolean attribute fixture, not ontology membership or complete graph admission. Global source validity is excluded-assessor preflight and must precede filtering.",
+  "cleanup": "Native unittest fixture cleanup"
+}

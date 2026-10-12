@@ -448,3 +448,16 @@ Fifty-six component observations pass; see
 `../../04-build/evidence/security-narrow-read-owner-20261012/receipt.json`.
 The fixed fixture caller policy cannot qualify production module/subject mapping,
 public get adoption, complete callable inventory or source/authority lifetime.
+
+
+Selected correspondence precursor controls now add an extra permissive policy,
+replace the predicate helper body and grant BYPASSRLS to the read owner. Compare
+independently retained selected native descriptors before any admission; use
+explicitly bypassed comparisons only as disposable widening counterexamples.
+Source validity alone must not pass policy/helper/role drift. Restore native
+source and flags exactly and repeat denied-row/caller controls. Exercise fresh
+connections as well as original transactions; old filtered results cannot
+qualify changed authority. Seventy-one observations and four bounded composition
+proofs are retained in
+`../../04-build/evidence/security-native-policy-correspondence-20261012/receipt.json`.
+Complete issuer/callable closure and held authority/publication remain not-run.

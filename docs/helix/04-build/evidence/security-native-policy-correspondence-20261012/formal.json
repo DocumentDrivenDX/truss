@@ -1,0 +1,44 @@
+{
+  "solver": "4.15.4",
+  "scope": "Four Boolean predicate-match flags, exactly16 assignments. Retained original predicates unchanged; closed-set premise excludes added permissive matches. Not native correspondence, source authenticity, unknown-value refinement, held authority or general policy-engine proof.",
+  "observations": [
+    {
+      "id": "added-permissive-can-widen",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "added-permissive-can-widen.smt2",
+      "model": "[added_permissive = True,\n original_permissive = False,\n caller_restriction = True]"
+    },
+    {
+      "id": "closed-original-policy-set-excludes-widening",
+      "expected": "unsat",
+      "observed": "unsat",
+      "formula": "closed-original-policy-set-excludes-widening.smt2",
+      "model": null
+    },
+    {
+      "id": "added-restriction-cannot-widen",
+      "expected": "unsat",
+      "observed": "unsat",
+      "formula": "added-restriction-cannot-widen.smt2",
+      "model": null
+    },
+    {
+      "id": "original-policy-positive",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "original-policy-positive.smt2",
+      "model": "[original_permissive = True, caller_restriction = True]"
+    }
+  ],
+  "replays": 4,
+  "independentBooleanOracle": {
+    "assignments": 16,
+    "satisfyingAssignmentCounts": [
+      2,
+      0,
+      0,
+      4
+    ]
+  }
+}
