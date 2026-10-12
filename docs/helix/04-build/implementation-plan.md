@@ -5868,3 +5868,14 @@ admission gap, not complete delegation/callable/lifetime closure.
 Trace CONTRACT-005 and CONTRACT-063/STP-056 B05/B10/B11/B12, US-056
 AC5/AC8/AC9/AC10 prerequisites. No advanced backend case is promoted; the shared
 132-case goal remains active at26/132 with106 unbound cases.
+
+Final integration preserves main295aab3d's public module-authorized object
+identity read and main8abad2aa's private key-bucket implementation. The storage
+exclusion now resides in their shared `runtime_person` guard; registrar checks
+remain required only for catalog operations. The merged0.3 manifest includes
+main's read.sql and the exact combined runtime.sql hash. All54 combined public
+catalog/view/source/key/object-read tests pass from source and installed wheel.
+`merged-receipt.json` and `merged-source.zip` retain final source pins, package
+correspondence and wheel digest. Python boundaries and all seven original UMF
+SQL owner round trips pass. The separate key-bucket native suite is not claimed
+as replayed here. No formal/native refinement or advanced backend promotion.
