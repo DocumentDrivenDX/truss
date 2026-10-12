@@ -318,6 +318,112 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
                 self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} ENABLE ALWAYS TRIGGER catalog_immutable').format(psycopg.sql.Identifier(table)))
                 self.admin.commit()
         host.detach();connection.commit()
+    def test_public_module_access_configuration_is_qualified_atomic_and_host_owned(self):
+        from truss import ModuleAccessGrant
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='module-config'),Ok)
+        host.detach();connection.commit()
+        for role in ('app_reader','app_writer'):
+            self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
+            self.addCleanup(self.admin.execute,'DROP ROLE IF EXISTS '+role)
+        self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin)
+        self.tx=self.host.adopt_transaction().value
+        self.assembly=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
+        valid=ModuleAccessGrant('adoc','m','app_reader','app_writer')
+        second=ModuleAccessGrant('zdoc','m','app_reader','app_writer')
+        invalid=ModuleAccessGrant('absent','m','app_reader','app_writer')
+        failed=self.assembly.configure_module_access_in_transaction(self.tx,(valid,invalid))
+        self.assertIsInstance(failed,Error)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
+        for unsafe in ('consumer','postgres',self.installation.owner_role,self.installation.registrar_role):
+            with self.subTest(unsafe=unsafe):
+                denied=self.assembly.configure_module_access_in_transaction(self.tx,(ModuleAccessGrant('adoc','m','app_reader',unsafe),))
+                self.assertIsInstance(denied,Error)
+        self.admin.execute("""CREATE FUNCTION truss.fixture_suppress_module_grant() RETURNS trigger LANGUAGE plpgsql AS $$
+          BEGIN IF NEW.document_id='zdoc' THEN RETURN NULL; END IF; RETURN NEW; END $$;
+          CREATE TRIGGER fixture_suppress_module_grant BEFORE INSERT ON truss.module_access
+          FOR EACH ROW EXECUTE FUNCTION truss.fixture_suppress_module_grant()""")
+        suppressed=self.assembly.configure_module_access_in_transaction(self.tx,(valid,second))
+        self.assertIsInstance(suppressed,Error)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
+        self.admin.execute('DROP TRIGGER fixture_suppress_module_grant ON truss.module_access')
+        self.admin.execute('DROP FUNCTION truss.fixture_suppress_module_grant()')
+        self.admin.execute("""CREATE FUNCTION truss.fixture_rewrite_earlier_grant() RETURNS trigger LANGUAGE plpgsql AS $$
+          BEGIN IF NEW.document_id='zdoc' THEN UPDATE truss.module_access SET writer_role='consumer' WHERE document_id='adoc'; END IF;
+          RETURN NEW; END $$;
+          CREATE TRIGGER fixture_rewrite_earlier_grant BEFORE INSERT ON truss.module_access
+          FOR EACH ROW EXECUTE FUNCTION truss.fixture_rewrite_earlier_grant()""")
+        rewritten=self.assembly.configure_module_access_in_transaction(self.tx,(valid,second))
+        self.assertIsInstance(rewritten,Error)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
+        self.admin.execute('DROP TRIGGER fixture_rewrite_earlier_grant ON truss.module_access')
+        self.admin.execute('DROP FUNCTION truss.fixture_rewrite_earlier_grant()')
+        self.admin.execute('CREATE SCHEMA hostile')
+        self.admin.execute("""CREATE FUNCTION hostile.reject_eq(text,text) RETURNS boolean LANGUAGE plpgsql AS $$
+          BEGIN RAISE EXCEPTION 'host equality used'; END $$;
+          CREATE OPERATOR hostile.= (LEFTARG=pg_catalog.text,RIGHTARG=pg_catalog.text,FUNCTION=hostile.reject_eq)""")
+        self.admin.execute('SET LOCAL search_path=hostile,pg_catalog,pg_temp')
+        original_path=self.admin.execute('SHOW search_path').fetchone()[0]
+        result=self.assembly.configure_module_access_in_transaction(self.tx,(valid,))
+        self.assertIsInstance(result,Ok);self.assertEqual(result.value.status,'pending_commit')
+        self.assertEqual(self.admin.execute('SHOW search_path').fetchone()[0],original_path)
+        unchanged=self.admin.execute('SELECT ctid::text FROM truss.module_access').fetchone()
+        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(valid,)),Ok)
+        self.assertEqual(self.admin.execute('SELECT ctid::text FROM truss.module_access').fetchone(),unchanged)
+        self.assertEqual(self.admin.execute('SELECT document_id,module,reader_role,writer_role FROM truss.module_access').fetchall(),[('adoc','m','app_reader','app_writer')])
+        self.host.detach();self.admin.rollback()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
+        self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin)
+        self.tx=self.host.adopt_transaction().value
+        self.assembly=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
+        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(valid,second)),Ok)
+        self.host.detach();self.admin.commit()
+        self.assertEqual(self.admin.execute('SELECT document_id,module FROM truss.module_access ORDER BY document_id').fetchall(),[('adoc','m'),('zdoc','m')])
+        with self.assertRaises(ValueError):ModuleAccessGrant('adoc','m','r'*63+'suffix','app_writer')
+
+    def test_module_configuration_refuses_ordinary_caller_and_stale_isolation(self):
+        from truss import ModuleAccessGrant
+        self.install();connection,host,assembly,tx=self.consumer()
+        grant=ModuleAccessGrant('adoc','m','unused_reader','unused_writer')
+        self.assertIsInstance(assembly.configure_module_access_in_transaction(tx,(grant,)),Error)
+        self.assertEqual(connection.execute('SELECT 1').fetchone(),(1,))
+        host.detach();connection.rollback()
+        for mode in ('ISOLATION LEVEL REPEATABLE READ','ISOLATION LEVEL SERIALIZABLE','READ ONLY'):
+            with self.subTest(mode=mode):
+                self.admin.execute('BEGIN '+mode)
+                admin_host=adopt_psycopg_host(self.admin)
+                isolation={'ISOLATION LEVEL REPEATABLE READ':'repeatable_read','ISOLATION LEVEL SERIALIZABLE':'serializable','READ ONLY':'read_committed'}[mode]
+                adopted=admin_host.adopt_transaction(isolation=isolation,access_mode='read_only' if mode=='READ ONLY' else 'read_write')
+                self.assertIsInstance(adopted,Ok);admin_tx=adopted.value
+                admin_assembly=create_reference_assembly(CatalogRuntimeConfiguration(),admin_host).value
+                self.assertIsInstance(admin_assembly.configure_module_access_in_transaction(admin_tx,(grant,)),Error)
+                admin_host.detach();self.admin.rollback()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
+
+    def test_module_configuration_refuses_inherited_owner_and_raw_privileges(self):
+        from truss import ModuleAccessGrant
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='unsafe-grant'),Ok)
+        host.detach();connection.commit()
+        for role in ('safe_reader','unsafe_writer'):
+            self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
+            self.addCleanup(self.admin.execute,'DROP ROLE IF EXISTS '+role)
+        self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin)
+        self.tx=self.host.adopt_transaction().value
+        self.assembly=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
+        grant=ModuleAccessGrant('adoc','m','safe_reader','unsafe_writer')
+        self.admin.execute(psycopg.sql.SQL('GRANT {} TO unsafe_writer').format(psycopg.sql.Identifier(self.installation.owner_role)))
+        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),Error)
+        self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM unsafe_writer').format(psycopg.sql.Identifier(self.installation.owner_role)))
+        self.admin.execute('GRANT SELECT ON truss.object TO unsafe_writer')
+        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),Error)
+        self.admin.execute('REVOKE SELECT ON truss.object FROM unsafe_writer')
+        self.admin.execute('GRANT SELECT(id) ON truss.object TO unsafe_writer')
+        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),Error)
+        self.admin.execute('REVOKE SELECT(id) ON truss.object FROM unsafe_writer')
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
+        self.host.detach();self.admin.rollback()
+
     def test_install_rollback_leaves_no_schema_or_roles_and_keeps_prior_work(self):
         self.admin.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
         result=self.assembly.install_in_transaction(self.tx)

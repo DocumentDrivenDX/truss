@@ -127,6 +127,22 @@ Count or full-output byte overflow returns unavailable without truncation. Faile
 transaction cleanup remains an error requiring host recovery. The 0.2 candidate
 does not migrate an existing 0.1 installation.
 
+Trusted installation administrators can configure document-qualified policy rows
+with `configure_module_access_in_transaction(transaction, grants)`, where `grants`
+is a tuple of `ModuleAccessGrant(document_id, module_id, reader_role, writer_role)`.
+Modules must exist in the original accepted archives. Permission roles must already
+exist as safe, distinct non-login roles without paths into protected owners or raw
+Truss privileges. Role names must fit 63 UTF-8 bytes and are compared as exact text.
+The method creates no roles, memberships or privilege grants.
+
+Configuration is an exact upsert of only the supplied addresses; omitted addresses
+remain unchanged and identical rows are a no-op. A batch validates before writing,
+verifies native effects, and returns `pending_commit`. The caller commits or rolls
+back. Role names resolve live: administrators must quiesce role replacement,
+renaming and membership changes and reconfigure policy deliberately. Removal is
+not implicit in an omitted address. This administration API prepares policy
+metadata; business authorization and mutation capabilities remain under implementation.
+
 The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
 prioritizes complete installation, catalog acceptance, apply/import and direct
 key/edge reads, with per-person isolation and origin capture included in the
