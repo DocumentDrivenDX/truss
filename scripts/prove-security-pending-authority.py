@@ -9,7 +9,11 @@ for n in paths:
 drained,pending_committed,remote_committed,remote_known,requalified,successor,admit,native_image_matches,fresh=z3.Bools('readers_drained pending_committed remote_committed remote_outcome_known requalified successor_committed admit native_image_matches fresh_post_barrier_snapshot')
 ordering=z3.And(z3.Implies(pending_committed,z3.And(drained,fresh)),z3.Implies(remote_committed,pending_committed),z3.Implies(successor,z3.And(pending_committed,remote_known,requalified,native_image_matches,fresh)))
 publication=admit==z3.Or(z3.Not(pending_committed),successor)
+already_pending,begin_transition=z3.Bools('already_pending begin_transition')
+single_transition=z3.Implies(begin_transition,z3.Not(already_pending))
 queries=[
+ ('active_pending_prevents_second_begin','unsat',[single_transition,already_pending,begin_transition]),
+ ('omitted_overlap_guard_allows_second_begin','sat',[already_pending,begin_transition]),
  ('inherited_old_snapshot_prevents_pending_publication','unsat',[ordering,z3.Not(fresh),pending_committed]),
  ('changed_native_image_prevents_successor','unsat',[ordering,z3.Not(native_image_matches),successor]),
  ('self_asserted_pending_kind_without_image_guard_allows_successor','sat',[publication,pending_committed,successor,z3.Not(native_image_matches),admit]),

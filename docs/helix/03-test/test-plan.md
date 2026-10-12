@@ -1511,3 +1511,30 @@ Complete issuer/mapping/target authentication, known remote outcome recovery,
 writer/callable/current-state closure, graph capture and atomic protected release
 remain required. No backend binding; full goal stays active at26/132 with106
 unbound required cases.
+
+### Single pending transition and stale completion replay — 2026-10-11
+
+The private canonical pending fixture refuses a begin from an already-pending
+comparison. A forged nonpending comparison still must match the actual pointer/
+registry bytes under the native writer fence before issuance. This prevents the
+helper's own overlapping transitions from superseding an unresolved pending
+phase. Unknown/foreign administrative profiles and all external writer coverage
+remain unqualified; this is not a generic issuer authorization rule.
+
+Two native controls prove an overlapping begin and completion replay after a
+successful successor leave both current pointer and registry count unchanged.
+Final `evidence/python-psycopg-epoch-cut/750ff122-d396-44a2-8e1e-2990172ed62a`
+passes181 methods, boundaries and143 current/preimage Truss sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-pending-authority-formal/2904ff32-8353-4cc2-975b-dfe6a22c992f`
+retains five original inputs and ten Z3 4.15.4 SMT-LIB/fresh-context replays,
+six UNSAT/four SAT. The added single-pending obligation excludes second begin;
+omitting it admits overlap. Existing native-image guard excludes stale successor
+correspondence. This is a conditional ordering model, not native SQL/commit/driver
+refinement, authenticated issuer or recovery proof. Trace CONTRACT-063/STP-056
+B11/B12/L03/L11/L13 and US-056 AC9/AC10 prerequisites. Exact remote-plan/outcome
+binding, issuer/mapping/target authentication, complete writer/current-state
+closure, graph capture and protected final release remain required. No new backend
+binding; full goal active at26/132 with106 unbound required cases.

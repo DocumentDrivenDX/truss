@@ -41,6 +41,8 @@ def _issue_fixture_successor(connection, expected, profile, evidence):
 
 def _begin_pending_authority_fixture(connection, original):
     profile=json.dumps({'kind':'truss-authority-transition-pending/0.1'},sort_keys=True,separators=(',',':')).encode()
+    if type(original) is not _EpochComparison or original.profile==profile:
+        raise ValueError('Pending authority fixture already active or original comparison unavailable')
     return _issue_fixture_successor(connection,original,profile,b'owned-pending-authority-fixture')
 
 
