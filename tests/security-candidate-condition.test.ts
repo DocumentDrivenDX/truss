@@ -220,3 +220,10 @@ test('intrinsic subject and resource keys are required outside short-circuit bra
  const compound=lowerCandidateSecurityCondition({condition:{literal:false},scans:[],resource:{target:ref('Resource'),keyId:'pair',keyFields:[ref('first'),ref('second')],parameters:[1,3]}});
  expect(compound).toContain('($1 IS NOT NULL)');expect(compound).toContain('($3 IS NOT NULL)');
 });
+
+test('Record associations cannot substitute an unrelated keyed Record owner',()=>{
+ const changed=structuredClone(scans);changed[0]!.record!.owner=ref('UnrelatedRecord');
+ expect(()=>lowerCandidateSecurityCondition({...input,condition:{literal:true},scans:changed})).toThrow();
+ const backed=structuredClone(scans[0]!);backed.association={documentId:'domain',moduleId:'m',relationshipId:'BackedRelationship'};backed.endpoints=[];
+ expect(lowerCandidateSecurityCondition({condition:{literal:true},scans:[backed]})).toContain('TRUE');
+});

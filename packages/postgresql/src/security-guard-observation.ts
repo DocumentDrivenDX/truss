@@ -5,13 +5,13 @@ const names=['singleton','installation_identity_bytes_hex','policy_profile_bytes
 const fail=():never=>{throw Error('TRUSS_SECURITY_GUARD_OBSERVATION_UNSUPPORTED');};
 function data(value:unknown,keys:readonly string[]):Record<string,unknown>{
  if(!value||typeof value!=='object'||Array.isArray(value)||![Object.prototype,null].includes(Object.getPrototypeOf(value)))return fail();
- const ds=Object.getOwnPropertyDescriptors(value);if(Reflect.ownKeys(ds).length!==keys.length)return fail();
- return Object.fromEntries(keys.map(key=>{const d=ds[key];if(!d||!Object.hasOwn(d,'value')||!d.enumerable)return fail();return [key,d.value];}));
+ if(Reflect.ownKeys(value).length!==keys.length)return fail();
+ return Object.fromEntries(keys.map(key=>{const d=Object.getOwnPropertyDescriptor(value,key);if(!d||!Object.hasOwn(d,'value')||!d.enumerable)return fail();return [key,d.value];}));
 }
 function array(value:unknown,length:number):unknown[]{
- if(!Array.isArray(value)||Object.getPrototypeOf(value)!==Array.prototype)return fail();const ds=Object.getOwnPropertyDescriptors(value) as Record<string,PropertyDescriptor>;
- if(ds.length?.value!==length||Reflect.ownKeys(ds).length!==length+1)return fail();
- return Array.from({length},(_,i)=>{const d=ds[String(i)];if(!d||!Object.hasOwn(d,'value')||!d.enumerable)return fail();return d.value;});
+ if(!Array.isArray(value)||Object.getPrototypeOf(value)!==Array.prototype)return fail();const size=Object.getOwnPropertyDescriptor(value,'length');
+ if(size?.value!==length||Reflect.ownKeys(value).length!==length+1)return fail();
+ return Array.from({length},(_,i)=>{const d=Object.getOwnPropertyDescriptor(value,String(i));if(!d||!Object.hasOwn(d,'value')||!d.enumerable)return fail();return d.value;});
 }
 function hex(value:unknown):string{if(typeof value!=='string'||!value.length||value.length>65536||value.length%2||/[^0-9a-f]/.test(value))return fail();return value;}
 /** TEXT OID25 descriptors and one four-cell row from the original acquisition
