@@ -5804,3 +5804,10 @@ producer merge; four replays retain two UNSAT/two SAT. Earlier35-test packet is
 historical under its original source scope. No whole-role/callable/diagnostic/
 writer/authentication closure or advanced backend case is promoted; the goal
 remains active at26/132 with106 unbound required cases.
+
+Final non-force integration also preserves mainab9a76ab's separate native
+UMF string-key verifier and tests. This addition changes no package/resource or
+test source covered by the42-test public security qualification; all213 current/
+preimage source pins and retained evidence digests are verified unchanged after
+merge. Its separate native key-verifier receipt is not claimed as replayed here.
+The public role-exclusion fix remains qualified under the recorded scope.
