@@ -1573,3 +1573,15 @@ Trace CONTRACT-063/STP-056 B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites.
 Complete issuer/mapping/target credentials, callable/writer/current-state closure,
 graph capture and protected publication remain open. No backend binding; full goal
 active at26/132 with106 unbound cases.
+
+Integrated-host requalification: main semantic-ordinal work changed psycopg_host
+and module boundary checker inputs. Pre-merge8a721750 keeps its original scope.
+Fresh `evidence/python-psycopg-epoch-cut/6e633de9-94eb-4514-a47e-9f35fd98cdee`
+passes183 methods and boundaries with143 current/preimage source pins and three
+cleanups on the integrated host. Earlierf94848cd runs183 and fails an existing
+permit control: journal records executor cancelled/caller invalid_transaction
+at11389ms. Unchanged-source rerun passes. Both packets are retained; no deadline,
+containment or authority check was weakened and deterministic availability is not
+claimed. Exact earlier cause remains unqualified beyond the observed cancellation.
+The eight-query abstract caller model remains unchanged and does not establish
+native host/ordinal refinement. Full backend acceptance stays26/132; goal active.
