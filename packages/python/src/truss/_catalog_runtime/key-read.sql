@@ -26,7 +26,7 @@ BEGIN
   IF component.scalar_type IS DISTINCT FROM 'string' OR component.nullability IS DISTINCT FROM 'required' OR component.cardinality IS DISTINCT FROM 'one' OR component.home IS DISTINCT FROM 'json' OR component.retired_rev IS NOT NULL THEN RAISE EXCEPTION 'supported string key required' USING ERRCODE='0A000';END IF;
  END LOOP;
  IF counted<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete native key definition required' USING ERRCODE='55000';END IF;
- SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=record_type.definition_rev AND ord=record_type.definition_doc_ord AND doc_id=record_type.definition_document_id;
+ SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=record_type.document_id ORDER BY rev DESC LIMIT 1;
  IF original_document IS DISTINCT FROM convert_to(archive.document,'UTF8') OR archive.doc_id IS DISTINCT FROM selected_document OR encode(sha256(original_document),'hex') IS DISTINCT FROM archive.content_sha256 THEN RAISE EXCEPTION 'original accepted key source required' USING ERRCODE='22023';END IF;
  PERFORM truss.runtime_person(false);
  IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RETURN NULL;END IF;

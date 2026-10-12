@@ -82,7 +82,7 @@ class CatalogCompatibilityViolation:
     record_id: str
     field_module_id: str
     field_id: str
-    rule: Literal['property.required','property.scalar_type']
+    rule: Literal['property.required','property.scalar_type','property.retained_name_collision']
     affected_object_count: int
 
 @dataclass(frozen=True,slots=True)
@@ -289,6 +289,7 @@ class CatalogReferenceAssembly:
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
         self._available()
         local_failure=[None]
+        cache_current=[True]
         def reject(code,message):
             local_failure[0]=code
             raise ValueError(message)
@@ -333,7 +334,7 @@ class CatalogReferenceAssembly:
                 if type(entries) is not list or not entries:raise ValueError('Nonempty compatibility violations required')
                 parsed=[]
                 for entry in entries:
-                    if set(entry)!={'documentId','moduleId','recordId','fieldModuleId','fieldId','rule','affectedObjectCount'} or entry['rule'] not in ('property.required','property.scalar_type'):
+                    if set(entry)!={'documentId','moduleId','recordId','fieldModuleId','fieldId','rule','affectedObjectCount'} or entry['rule'] not in ('property.required','property.scalar_type','property.retained_name_collision'):
                         raise ValueError('Qualified compatibility violation required')
                     count=entry['affectedObjectCount']
                     if type(count) is not str or not count.isascii() or not count.isdecimal() or count.startswith('0') or len(count)>19:
@@ -343,10 +344,13 @@ class CatalogReferenceAssembly:
             report=bytes(report);decoded=json.loads(report)
             if decoded['revision']!=revision or decoded['registrationId']!=identity or decoded['acceptedInput']!=prepared.input():
                 raise ValueError('Original catalog result correspondence required')
+            if replayed:
+                cursor.execute('SELECT revision FROM truss.catalog_status()',prepare=False)
+                cache_current[0]=cursor.fetchone()[0]==revision
             if unchanged:return CatalogUnchanged(int(revision),identity,report,replayed,request_key,origin_bytes,actor)
             return CatalogRegistration(int(revision),identity,report,replayed)
         result=_catalog_failure(self._host._run_semantic_operation(transaction,execute,parameter_producer=produce),local_failure[0])
-        if isinstance(result,Ok) and not isinstance(result.value,CatalogAcceptanceRefused):
+        if isinstance(result,Ok) and not isinstance(result.value,CatalogAcceptanceRefused) and cache_current[0]:
             known={document.document_id:document for document in self._group_documents}
             for interpretation in prepared.documents:
                 known[interpretation.document.document_id]=interpretation.document

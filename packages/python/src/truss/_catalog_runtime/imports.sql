@@ -68,7 +68,7 @@ BEGIN
  IF jsonb_typeof(identity->'keyNumber') IS DISTINCT FROM 'string' OR jsonb_typeof(identity->'keyDefinitionPin') IS DISTINCT FROM 'string' OR identity->'type' IS DISTINCT FROM metadata->'type' OR identity->>'keyNumber' IS DISTINCT FROM metadata->>'keyNumber'
   OR identity->>'keyDefinitionPin' IS DISTINCT FROM metadata->>'keyDefinitionPin' OR identity->'keyEncodingProfile' IS DISTINCT FROM metadata->'keyEncodingProfile'
   OR jsonb_array_length(identity->'components')<>jsonb_array_length(metadata->'components') THEN RAISE EXCEPTION 'actual complete primary definition required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=selected.definition_rev AND ord=selected.definition_doc_ord AND doc_id=selected.definition_document_id;
+ SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
  IF original_document IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'caller-known original document required' USING ERRCODE='22023';END IF;
  FOR component IN SELECT value FROM jsonb_array_elements(identity->'components') LOOP
   IF jsonb_typeof(component->'propertyId') IS DISTINCT FROM 'string' OR jsonb_typeof(component->'definitionPin') IS DISTINCT FROM 'string' OR component-ARRAY['propertyId','definitionPin','value']<>'{}'::jsonb OR component->>'propertyId' IS DISTINCT FROM metadata->'components'->component_index->>'propertyId'

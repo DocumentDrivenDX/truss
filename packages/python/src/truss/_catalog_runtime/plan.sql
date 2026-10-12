@@ -1,4 +1,146 @@
 -- Compact native catalog plan. Original source meaning; no full-operation snapshots.
+CREATE FUNCTION truss.catalog_planned_changes(records jsonb) RETURNS SETOF truss.schema_change
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT (ROW((r.value->>'rev')::int,(r.value->>'seq')::int,r.value->>'kind',(r.value->>'def_id')::int,
+  r.value->'before',r.value->'after')::truss.schema_change).* FROM jsonb_array_elements(records) r;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_planned_changes(jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.catalog_plan_source(records jsonb,definition jsonb) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE original jsonb;selected jsonb;
+BEGIN
+ SELECT (d.value->>'document')::jsonb INTO STRICT original FROM jsonb_array_elements(records->'schema_doc') d
+  WHERE d.value->>'rev'=definition->>'definition_rev' AND d.value->>'ord'=definition->>'definition_doc_ord'
+   AND d.value->>'doc_id'=definition->>'definition_document_id';
+ SELECT e.value INTO STRICT selected FROM jsonb_array_elements(original->'modules') m
+  CROSS JOIN LATERAL jsonb_array_elements(CASE WHEN definition ? 'rel_id' THEN m.value->'relationships' ELSE m.value->'elements' END) e
+  WHERE m.value->>'id'=definition->>'module' AND e.value->>'id'=coalesce(definition->>'rel_id',definition->>'element');
+ RETURN selected;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_plan_source(jsonb,jsonb) FROM PUBLIC;
+
+-- Compute a complete revision from an independently reconstructed prestate.
+-- This planner is private; acceptance and its protected persistence are separate.
+CREATE FUNCTION truss.catalog_revision_plan(prior jsonb,fresh jsonb) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET bytea_output=hex AS $$
+DECLARE result jsonb:=prior;types jsonb:=coalesce(prior->'type_def','[]');properties jsonb:=coalesce(prior->'prop_def','[]');
+ keys jsonb:=coalesce(prior->'key_def','[]');relations jsonb:=coalesce(prior->'rel_def','[]');
+ lineages jsonb:=coalesce(prior->'relationship_lineage','[]');endpoints jsonb:=coalesce(prior->'rel_endpoint','[]');
+ changes jsonb:=coalesce(prior->'schema_change','[]');type_map jsonb:='{}';property_map jsonb:='{}';relationship_map jsonb:='{}';
+ row jsonb;old jsonb;candidate jsonb;old_source jsonb;new_source jsonb;component jsonb;remapped jsonb;
+ assigned int;type_next int;property_next int;relationship_next int;sequence int:=0;revision int;
+BEGIN
+ SELECT coalesce(max((v.value->>'type_id')::int),0) INTO type_next FROM jsonb_array_elements(types) v;
+ SELECT coalesce(max((v.value->>'prop_id')::int),0) INTO property_next FROM jsonb_array_elements(properties) v;
+ SELECT coalesce(max((v.value->>'rel_type_id')::int),0) INTO relationship_next FROM jsonb_array_elements(relations) v;
+ SELECT max((v.value->>'rev')::int) INTO STRICT revision FROM jsonb_array_elements(fresh->'schema_rev') v;
+ -- A submitted document cannot implicitly retire an omitted declaration.
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(types) p WHERE EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'schema_doc') d WHERE d.value->>'doc_id'=p.value->>'document_id')
+  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'type_def') n WHERE n.value->>'document_id'=p.value->>'document_id' AND n.value->>'module'=p.value->>'module' AND n.value->>'element'=p.value->>'element')) THEN
+  RAISE EXCEPTION 'record retirement requires explicit support' USING ERRCODE='0A000';END IF;
+ FOR row IN SELECT value FROM jsonb_array_elements(fresh->'type_def') LOOP
+  SELECT v.value INTO old FROM jsonb_array_elements(types) v WHERE v.value->>'document_id'=row->>'document_id' AND v.value->>'module'=row->>'module' AND v.value->>'element'=row->>'element';
+  IF old IS NULL THEN type_next:=type_next+1;assigned:=type_next;
+  ELSE assigned:=(old->>'type_id')::int;END IF;
+  type_map:=type_map||jsonb_build_object(row->>'type_id',assigned);
+  candidate:=row||jsonb_build_object('type_id',assigned);
+  IF old IS NOT NULL THEN
+   old_source:=truss.catalog_plan_source(prior,old);new_source:=truss.catalog_plan_source(fresh,row);
+   IF old_source=new_source THEN CONTINUE;END IF;
+   IF old_source-'members' IS DISTINCT FROM new_source-'members'
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'members') WITH ORDINALITY m(value,n) WHERE new_source->'members'->(m.n::int-1) IS DISTINCT FROM m.value) THEN
+    RAISE EXCEPTION 'existing record keys, names and retained members require explicit evolution support' USING ERRCODE='0A000';END IF;
+   candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
+   SELECT coalesce(jsonb_agg(v.value),'[]') INTO types FROM jsonb_array_elements(types) v WHERE v.value->>'type_id'<>assigned::text;
+  END IF;
+  types:=types||jsonb_build_array(candidate);sequence:=sequence+1;
+  changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','type','def_id',assigned,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.type_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.type_def,candidate))));
+ END LOOP;
+ FOR row IN SELECT value FROM jsonb_array_elements(fresh->'prop_def') LOOP
+  assigned:=(type_map->> (row->>'type_id'))::int;
+  SELECT v.value INTO old FROM jsonb_array_elements(properties) v WHERE v.value->>'type_id'=assigned::text AND v.value->>'declaration_module'=row->>'declaration_module' AND v.value->>'element'=row->>'element';
+  IF old IS NULL THEN
+   IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) AND row->>'nullability' IS DISTINCT FROM 'absent-allowed' THEN
+    RAISE EXCEPTION 'new retained field must allow absence' USING ERRCODE='0A000';END IF;
+   property_next:=property_next+1;
+  END IF;
+  property_map:=property_map||jsonb_build_object(row->>'prop_id',CASE WHEN old IS NULL THEN property_next ELSE (old->>'prop_id')::int END);
+  candidate:=row||jsonb_build_object('type_id',assigned,'prop_id',(property_map->> (row->>'prop_id'))::int);
+  IF old IS NOT NULL THEN
+   IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;
+   IF (old->'_originalField')-'nullability' IS DISTINCT FROM (row->'_originalField')-'nullability'
+    OR old->>'nullability' IS DISTINCT FROM 'required' OR row->>'nullability' IS DISTINCT FROM 'absent-allowed'
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text AND k.value->'prop_ids' @> jsonb_build_array((old->>'prop_id')::int)) THEN
+    RAISE EXCEPTION 'existing field change requires explicit evolution support' USING ERRCODE='0A000';END IF;
+   candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
+   SELECT coalesce(jsonb_agg(v.value),'[]') INTO properties FROM jsonb_array_elements(properties) v WHERE v.value->>'prop_id'<>old->>'prop_id';
+  END IF;
+  IF EXISTS(SELECT 1 FROM jsonb_array_elements(properties) p WHERE p.value->>'type_id'=assigned::text AND p.value->>'name'=candidate->>'name') THEN
+   RAISE EXCEPTION 'retained field name collision requires rebind support' USING ERRCODE='0A000';END IF;
+  properties:=properties||jsonb_build_array(candidate);sequence:=sequence+1;
+  changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','prop','def_id',(candidate->>'prop_id')::int,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.prop_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.prop_def,candidate))));
+ END LOOP;
+ FOR row IN SELECT value FROM jsonb_array_elements(fresh->'key_def') LOOP
+  assigned:=(type_map->> (row->>'type_id'))::int;remapped:='[]';
+  FOR component IN SELECT value FROM jsonb_array_elements(row->'prop_ids') LOOP remapped:=remapped||jsonb_build_array((property_map->> (component#>>'{}'))::int);END LOOP;
+  SELECT v.value INTO old FROM jsonb_array_elements(keys) v WHERE v.value->>'type_id'=assigned::text AND v.value->>'key_id'=row->>'key_id';
+  IF old IS NOT NULL THEN
+   IF old->'prop_ids' IS DISTINCT FROM remapped OR old->'is_primary' IS DISTINCT FROM row->'is_primary' THEN RAISE EXCEPTION 'existing key change requires backfill support' USING ERRCODE='0A000';END IF;
+  ELSE
+   IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) THEN RAISE EXCEPTION 'new key on retained record requires backfill support' USING ERRCODE='0A000';END IF;
+   keys:=keys||jsonb_build_array(row||jsonb_build_object('type_id',assigned,'prop_ids',remapped));
+  END IF;
+ END LOOP;
+ -- Relationship IDs and lineage remain stable; only independent widening is admitted.
+ FOR row IN SELECT value FROM jsonb_array_elements(fresh->'rel_def') LOOP
+  SELECT v.value INTO old FROM jsonb_array_elements(relations) v WHERE v.value->>'document_id'=row->>'document_id' AND v.value->>'module'=row->>'module' AND v.value->>'rel_id'=row->>'rel_id';
+  IF old IS NULL THEN relationship_next:=relationship_next+1;assigned:=relationship_next;ELSE assigned:=(old->>'rel_type_id')::int;END IF;
+  relationship_map:=relationship_map||jsonb_build_object(row->>'rel_type_id',assigned);
+  candidate:=row||jsonb_build_object('rel_type_id',assigned);
+  IF old IS NOT NULL THEN
+   old_source:=truss.catalog_plan_source(prior,old);new_source:=truss.catalog_plan_source(fresh,row);
+   IF old_source=new_source THEN CONTINUE;END IF;
+   IF (old_source-ARRAY['source','target','sourceMultiplicity','targetMultiplicity']) IS DISTINCT FROM (new_source-ARRAY['source','target','sourceMultiplicity','targetMultiplicity'])
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'source') x WHERE NOT (new_source->'source') @> jsonb_build_array(x.value))
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'target') x WHERE NOT (new_source->'target') @> jsonb_build_array(x.value)) THEN
+    RAISE EXCEPTION 'relationship source meaning must be retained' USING ERRCODE='0A000';END IF;
+   IF old->>'lifecycle' IS DISTINCT FROM 'independent' OR candidate->>'lifecycle' IS DISTINCT FROM 'independent'
+    OR (old-ARRAY['source_min','source_max','target_min','target_max','definition_rev','definition_doc_ord','definition_document_id','doc_ord','since_rev']) IS DISTINCT FROM (candidate-ARRAY['source_min','source_max','target_min','target_max','definition_rev','definition_doc_ord','definition_document_id','doc_ord','since_rev'])
+    OR (candidate->>'source_min')::int>(old->>'source_min')::int OR (candidate->>'target_min')::int>(old->>'target_min')::int
+    OR old->'source_max'='null'::jsonb AND candidate->'source_max'<>'null'::jsonb
+    OR old->'target_max'='null'::jsonb AND candidate->'target_max'<>'null'::jsonb
+    OR candidate->'source_max'<>'null'::jsonb AND (candidate->>'source_max')::int<(old->>'source_max')::int
+    OR candidate->'target_max'<>'null'::jsonb AND (candidate->>'target_max')::int<(old->>'target_max')::int THEN
+    RAISE EXCEPTION 'relationship change must be independent widening' USING ERRCODE='0A000';END IF;
+   candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
+   SELECT coalesce(jsonb_agg(v.value),'[]') INTO relations FROM jsonb_array_elements(relations) v WHERE v.value->>'rel_type_id'<>assigned::text;
+  END IF;
+  relations:=relations||jsonb_build_array(candidate);sequence:=sequence+1;
+  changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','rel','def_id',assigned,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.rel_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.rel_def,candidate))));
+ END LOOP;
+ FOR row IN SELECT value FROM jsonb_array_elements(fresh->'relationship_lineage') LOOP
+  assigned:=(relationship_map->> (row->>'rel_type_id'))::int;
+  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(lineages) p WHERE p.value->>'rel_type_id'=assigned::text) THEN lineages:=lineages||jsonb_build_array(row||jsonb_build_object('rel_type_id',assigned));END IF;
+ END LOOP;
+ FOR row IN SELECT value FROM jsonb_array_elements(fresh->'rel_endpoint') LOOP
+  candidate:=jsonb_build_object('rel_type_id',(relationship_map->> (row->>'rel_type_id'))::int,'source_type',(type_map->> (row->>'source_type'))::int,'target_type',(type_map->> (row->>'target_type'))::int);
+  IF NOT endpoints @> jsonb_build_array(candidate) THEN endpoints:=endpoints||jsonb_build_array(candidate);END IF;
+ END LOOP;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(relations) p WHERE EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'schema_doc') d WHERE d.value->>'doc_id'=p.value->>'document_id')
+  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'rel_def') n WHERE n.value->>'document_id'=p.value->>'document_id' AND n.value->>'module'=p.value->>'module' AND n.value->>'rel_id'=p.value->>'rel_id')) THEN
+  RAISE EXCEPTION 'relationship retirement requires explicit support' USING ERRCODE='0A000';END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'schema_rev') p JOIN jsonb_array_elements(fresh->'schema_rev') f ON p.value->>'rev'=f.value->>'rev' WHERE p.value IS DISTINCT FROM f.value) THEN
+  RAISE EXCEPTION 'original revision history required' USING ERRCODE='55000';END IF;
+ SELECT coalesce(jsonb_agg(f.value),'[]') INTO remapped FROM jsonb_array_elements(fresh->'schema_rev') f WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'schema_rev') p WHERE p.value->>'rev'=f.value->>'rev');
+ result:=result||jsonb_build_object('schema_rev',coalesce(prior->'schema_rev','[]')||remapped,'schema_doc',coalesce(prior->'schema_doc','[]')||(fresh->'schema_doc'),
+  'type_def',types,'prop_def',properties,'key_def',keys,'rel_def',relations,'relationship_lineage',lineages,'rel_endpoint',endpoints,'schema_change',changes);
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_revision_plan(jsonb,jsonb) FROM PUBLIC;
+
 CREATE FUNCTION truss.catalog_expected_records(declarations_bytes bytea,documents_bytes bytea,
  origin_bytes bytea,accepted_clock timestamptz,genesis_clock timestamptz,
  selected_revision int DEFAULT 1,type_offset int DEFAULT 0,property_offset int DEFAULT 0,relationship_offset int DEFAULT 0)

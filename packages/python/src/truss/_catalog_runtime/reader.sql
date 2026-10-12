@@ -33,7 +33,7 @@ BEGIN
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
  FOR owner IN SELECT d.doc_id,d.doc_revision,d.content_sha256,m.value->>'id' AS module_id
   FROM truss.schema_doc d CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m(value)
-  WHERE d.rev<=captured_revision ORDER BY d.doc_id COLLATE "C",m.value->>'id' COLLATE "C" LOOP
+  WHERE d.rev<=captured_revision AND d.rev=(SELECT max(latest.rev) FROM truss.schema_doc latest WHERE latest.doc_id=d.doc_id AND latest.rev<=captured_revision) ORDER BY d.doc_id COLLATE "C",m.value->>'id' COLLATE "C" LOOP
   IF NOT truss.runtime_can_read(owner.doc_id,owner.module_id) THEN CONTINUE;END IF;
   module:=jsonb_build_object('documentId',owner.doc_id,'moduleId',owner.module_id,'documentRevision',owner.doc_revision,'documentSha256',owner.content_sha256,
    'types',(SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',t.type_id,'recordId',t.element,'kind',t.kind,'provisional',t.provisional) ORDER BY t.type_id),'[]') FROM truss.type_def t WHERE t.document_id=owner.doc_id AND t.module=owner.module_id AND t.retired_rev IS NULL),
@@ -108,7 +108,7 @@ BEGIN
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
- SELECT * INTO archive FROM truss.schema_doc WHERE rev<=captured_revision AND doc_id=selected_document;
+ SELECT * INTO archive FROM truss.schema_doc WHERE rev<=captured_revision AND doc_id=selected_document ORDER BY rev DESC LIMIT 1;
  IF NOT FOUND OR jsonb_array_length(archive.document::jsonb->'modules')=0 THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
  FOR module IN SELECT value FROM jsonb_array_elements(archive.document::jsonb->'modules') LOOP
   IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;

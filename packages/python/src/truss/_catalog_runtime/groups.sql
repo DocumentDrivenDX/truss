@@ -2,22 +2,33 @@
 ALTER TABLE truss.catalog_runtime_installation ADD COLUMN source_epoch uuid NOT NULL DEFAULT pg_catalog.gen_random_uuid();
 
 -- Match the existing original-definition pin recipe without reserializing source.
-CREATE FUNCTION truss.runtime_definition(selected_kind text,selected_type int,selected_number int DEFAULT NULL)
+CREATE FUNCTION truss.runtime_definition(selected_kind text,selected_type int,selected_number int DEFAULT NULL,historical_revision int DEFAULT NULL)
 RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,document_id text,module_id text,element_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE definition jsonb; archive truss.schema_doc%ROWTYPE; native_type truss.type_def%ROWTYPE;
+DECLARE basis jsonb;definition jsonb; archive truss.schema_doc%ROWTYPE; native_type truss.type_def%ROWTYPE;
  source_module text;source_element text;module_json json;module_index int;element_json json;element_index int;
  key_json json;key_index int;fragment json;pointer text;pin_input text;
 BEGIN
- SELECT * INTO STRICT native_type FROM truss.type_def WHERE type_id=selected_type AND NOT provisional AND retired_rev IS NULL;
+ IF historical_revision IS NULL THEN
+  SELECT * INTO STRICT native_type FROM truss.type_def WHERE type_id=selected_type AND NOT provisional AND retired_rev IS NULL;
+ ELSE
+  basis:=truss.catalog_all_expected_records(historical_revision);
+  SELECT * INTO STRICT native_type FROM jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t WHERE t.type_id=selected_type;
+ END IF;
  IF selected_kind='type' THEN
   definition:=to_jsonb(native_type);source_module:=native_type.module;source_element:=native_type.element;
  ELSIF selected_kind='property' THEN
-  SELECT to_jsonb(p),p.declaration_module,p.element INTO STRICT definition,source_module,source_element
-   FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=selected_number AND p.retired_rev IS NULL;
+  IF historical_revision IS NULL THEN
+   SELECT to_jsonb(p),p.declaration_module,p.element INTO STRICT definition,source_module,source_element FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=selected_number AND p.retired_rev IS NULL;
+  ELSE
+   SELECT to_jsonb(p),p.declaration_module,p.element INTO STRICT definition,source_module,source_element FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=selected_type AND p.prop_id=selected_number;
+  END IF;
  ELSIF selected_kind='key' THEN
-  SELECT to_jsonb(k) INTO STRICT definition FROM truss.key_def k
-   WHERE k.type_id=selected_type AND k.key_num=selected_number AND k.retired_rev IS NULL;
+  IF historical_revision IS NULL THEN
+   SELECT to_jsonb(k) INTO STRICT definition FROM truss.key_def k WHERE k.type_id=selected_type AND k.key_num=selected_number AND k.retired_rev IS NULL;
+  ELSE
+   SELECT to_jsonb(k) INTO STRICT definition FROM jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k WHERE k.type_id=selected_type AND k.key_num=selected_number;
+  END IF;
   source_module:=native_type.module;source_element:=native_type.element;
  ELSE RAISE EXCEPTION 'supported definition kind required' USING ERRCODE='22023'; END IF;
  IF definition->>'definition_source_kind'<>'accepted_document' OR (definition->>'definition_rev')::int<1 THEN
@@ -43,7 +54,7 @@ BEGIN
  RETURN NEXT;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
 'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-graph','version','0.1','sha256','1c337a6650a9b0cfe5eafc06f84ac6080dd75ed4e9cae4e26a42491cecb25114'),
@@ -114,8 +125,7 @@ BEGIN
   SELECT t.* INTO STRICT selected_type FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
    WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=operation->>'typeDefinitionPin';
   PERFORM truss.runtime_module_writer(selected_type.document_id,selected_type.module);
-  SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=selected_type.definition_rev
-   AND d.ord=selected_type.definition_doc_ord AND d.doc_id=selected_type.definition_document_id;
+  SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.doc_id=selected_type.document_id ORDER BY d.rev DESC LIMIT 1;
   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d
    WHERE d.value->>'documentId'=archive.doc_id;
   IF convert_to(source_text,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN
@@ -429,7 +439,7 @@ BEGIN
     OR owner_receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex')
     OR owner_receipt->'identity' IS DISTINCT FROM jsonb_build_object('module',selected_type.module,'element',selected_type.element,'key',key_definition.key_id)
     OR owner_receipt->'values' IS DISTINCT FROM (SELECT jsonb_agg(jsonb_build_object('string',v) ORDER BY n) FROM unnest(values_text) WITH ORDINALITY x(v,n))
-    OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.schema_doc d WHERE d.rev=selected_type.definition_rev AND d.ord=selected_type.definition_doc_ord) THEN
+    OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.schema_doc d WHERE d.doc_id=selected_type.document_id ORDER BY d.rev DESC LIMIT 1) THEN
     RAISE EXCEPTION 'original owner key receipt required' USING ERRCODE='22023'; END IF;
    SELECT * INTO STRICT source_pin FROM truss.runtime_definition('key',selected_type.type_id,key_definition.key_num);
    namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
