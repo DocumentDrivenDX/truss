@@ -122,6 +122,18 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
     self.assertEqual(failure.exception.sqlstate,'55000');observations.append({'id':'incomplete-endpoint-key-refuses-count-'+login,'observed':'55000'})
   self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(project_key,json.dumps({'kind':'string','text':'B'}),int(aliases['B'].id),int(project['typeId'])))
   decision=self.admin.execute("SELECT ontology_fixture.decision_bound('RA','staff-alice')").fetchone()[0];self.assertEqual(decision,'permit');observations.append({'id':'restored-project-key-restores-original-decision','observed':decision})
+  # Ownerless data must not short-circuit a missing intrinsic subject binding.
+  for resource_key,subject_key in [('RO',None),(None,'staff-alice')]:
+   decision=self.admin.execute('SELECT ontology_fixture.decision_bound(%s,%s)',(resource_key,subject_key)).fetchone()[0];self.assertEqual(decision,'indeterminate');observations.append({'id':'missing-intrinsic-key-indeterminate-'+('subject' if subject_key is None else 'resource'),'observed':decision})
+  staff=packet['records']['Staff'];login_id=staff['fields']['login']['id']
+  self.admin.execute('UPDATE truss.object SET props=props-%s WHERE id=%s AND type_id=%s',(login_id,int(aliases['staff-alice'].id),int(staff['typeId'])))
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='alice'
+  with psycopg.connect(**params,autocommit=True) as reader:
+   with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState) as failure:reader.execute("SELECT ontology_fixture.eligible('RO')").fetchall()
+   self.assertEqual(failure.exception.sqlstate,'55000');observations.append({'id':'missing-original-caller-binding-refuses-even-ownerless-resource','observed':'55000'})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(login_id,json.dumps({'kind':'string','text':'alice'}),int(aliases['staff-alice'].id),int(staff['typeId'])))
+  with psycopg.connect(**params,autocommit=True) as reader:
+   result=reader.execute("SELECT ontology_fixture.eligible('RO'),ontology_fixture.eligible('RA')").fetchone();self.assertEqual(result,(False,True));observations.append({'id':'restored-caller-binding-distinguishes-denial-and-permit','observed':list(result)})
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']).write_text(json.dumps({'packet':packet,'sql':sql,'observations':observations,'publicCreatedIdentities':{alias:{'id':identity.id,'typeId':identity.type_id} for alias,identity in aliases.items()},'scope':'Actual public-created objects/edges, typed native joins to business keys and candidate typed Record/opaque Relationship membership lowering under ordinary native RLS. Private views are real graph projections, not seeded flat tables. Not complete source enrollment, held authority or released public API/security compiler admission.'},indent=2)+'\n')
 if __name__=='__main__':
  import unittest;unittest.main()

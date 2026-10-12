@@ -500,3 +500,13 @@ matches the actual ontology fold emission. Evidence:
 `../../04-build/evidence/security-required-endpoint-keys-20261012/receipt.json`.
 Nullable keys, omitted source populations, full mapping/issuer custody and
 publication remain required separate controls.
+
+
+Intrinsic binding controls now cover null subject with ownerless RO, null resource
+and removal/restoration of actual Alice login mapping. Missing intrinsic keys
+must remain indeterminate outside false/true/OR branches; a missing binding cannot
+be ordinary denial. Native lookup refuses55000 and repair restores deny/permit.
+Sixty-four observations and27 tests are retained in
+`../../04-build/evidence/security-intrinsic-key-bindings-20261012/receipt.json`.
+Typed parameter domains, nullable Key semantics and ambiguous/foreign/stale
+subject issuer admission remain separate required controls.

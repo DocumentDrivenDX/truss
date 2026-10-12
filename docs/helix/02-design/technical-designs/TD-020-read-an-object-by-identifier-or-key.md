@@ -308,3 +308,19 @@ Visible supplied-source checks cannot detect omitted/filtered populations or
 authenticate original mappings and native source custody. Keep complete collector
 enrollment and held data/authority/release admission as separate prerequisites.
 No full backend case or released public read profile is promoted.
+
+
+### Intrinsic Key binding must precede denial shortcuts — 2026-10-12
+
+Candidate condition guards now require every selected intrinsic subject/resource
+Key parameter to be nonnull, outside authored branch evaluation. A false branch
+or ownerless Resource cannot turn an unavailable original-caller binding into
+a successful ordinary denial. Native missing-subject/ownerless and missing-
+resource calls return indeterminate; removing Alice's actual login mapping makes
+the private lookup raise generic55000 for RO. Repair restores ROdeny/RApermit.
+Sixty-four native observations,27 focused tests, strict security-source typing,
+Python boundaries and Chromium153 emission comparison pass. Receipt:
+`../../04-build/evidence/security-intrinsic-key-bindings-20261012/receipt.json`.
+Native parameter domains and original binding provenance remain host/backend
+responsibilities. This nonnull subset does not admit nullable Key codecs, resolve
+ambiguous subject mapping or authenticate complete source/cut/authority lifetime.

@@ -211,3 +211,12 @@ test('required record and opaque endpoint keys are checked outside authored filt
  expect(sql).toContain('"candidate_key_admission_1"."project_key" IS NOT NULL');
  expect(sql).toContain('ELSE NULL::pg_catalog.bool END');
 });
+
+test('intrinsic subject and resource keys are required outside short-circuit branches',()=>{
+ for(const condition of [{literal:false},{literal:true},{or:[{literal:true},{literal:false}]}]){
+  const sql=lowerCandidateSecurityCondition({...input,condition});
+  expect(sql).toContain('($1 IS NOT NULL)');expect(sql).toContain('($2 IS NOT NULL)');expect(sql).toStartWith('(CASE WHEN');
+ }
+ const compound=lowerCandidateSecurityCondition({condition:{literal:false},scans:[],resource:{target:ref('Resource'),keyId:'pair',keyFields:[ref('first'),ref('second')],parameters:[1,3]}});
+ expect(compound).toContain('($1 IS NOT NULL)');expect(compound).toContain('($3 IS NOT NULL)');
+});

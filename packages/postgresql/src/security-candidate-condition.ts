@@ -125,6 +125,9 @@ export function lowerCandidateSecurityCondition(input:{condition:unknown;scans:r
   return '('+checks.join(' AND ')+')';
  }
  const guards:string[]=[...new Set(sources.values())].map(source=>'((SELECT valid FROM ('+source.validitySql+') candidate_source_validity)::pg_catalog.bool) IS TRUE');
+ // Intrinsic Key bindings are required even if an authored branch skips them.
+ // Native parameter domains remain the registered host/backend's obligation.
+ for(const name of ['subject','resource'] as const){const intrinsic=input[name];if(intrinsic)for(const parameter of intrinsic.parameters)guards.push('($'+parameter+' IS NOT NULL)');}
  for(const value of values.values()){const d=candidateDomain(value.domain),carrier=d==='string'?'text':d==='boolean'?'bool':d==='binary'?'bytea':'numeric';guards.push(valid('$'+value.parameter+'::pg_catalog.'+carrier,d));}
  // Required original Key/incidence carriers must remain visible before filters.
  // This is local supplied-source validity, not authenticated population coverage.

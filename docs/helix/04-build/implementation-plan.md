@@ -6459,3 +6459,17 @@ Trace shared CONTRACT-063 / STP-056 B02/B13/B15 and TD-020/STP-020. This extends
 local required-key validity only, not nullable-key support or complete population
 authentication. Original source enrollment, mapping, authority/cut and final
 release remain required; no original backend case is promoted.
+
+
+### Intrinsic subject/resource Key availability — 2026-10-12
+
+Candidate intrinsic Key parameters now have nonnull guards outside authored
+short-circuit branches. Missing original caller binding remains unavailable even
+for ownerless data. The real ontology regression retains64 observations; missing
+subject/resource returns indeterminate, actual caller-mapping removal refuses
+55000 and repair restores denial/permit. Twenty-seven tests, strict security
+typing, Python boundaries723imports and real Chromium153 fold comparison pass.
+Evidence: `evidence/security-intrinsic-key-bindings-20261012/receipt.json`.
+Trace CONTRACT-063 / STP-056 B05/B12/B15 and TD-020/STP-020. Native domains,
+nullable-key profiles, issuer/subject ambiguity and complete source/authority/
+publication remain unadmitted; no original backend case is promoted.
