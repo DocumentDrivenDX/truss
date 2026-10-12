@@ -46,7 +46,10 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
         captured=[asdict(c) for c in cells]
         payload=json.dumps(captured if caller is None else {'cells':captured,'subjectKey':caller['subjectKey']})
         if len(payload.encode('utf8'))>1048576:raise ValueError('Bounded semantic fixture input required')
-        result=subprocess.run(['/opt/homebrew/bin/bun',str(tool)],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=4)
+        try:
+            result=subprocess.run(['/opt/homebrew/bin/bun',str(tool)],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=4)
+        except subprocess.TimeoutExpired:
+            raise TimeoutError('Original evaluator deadline expired') from None
         if result.returncode or len(result.stdout.encode('utf8'))>65536:raise ValueError('Original UMF fixture evaluation refused')
         if any(hashlib.sha256(p.read_bytes()).digest()!=h for p,h in pins.items()):raise ValueError('Original evaluator sources changed')
         receipt=json.loads(result.stdout)

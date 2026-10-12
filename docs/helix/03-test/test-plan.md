@@ -1291,3 +1291,34 @@ passes168 native methods and boundaries against integrated main a69788bf, with14
 current/preimage Truss source pins and three stop0/status3/socket-absent cleanups.
 This requalifies the finite composition; the retained intermittent refusal and
 complete backend admission/lifetime obligations remain open.
+
+### Sanitized delegated layer diagnostics and evaluator timeout — 2026-10-11
+
+Owned evaluator subprocess TimeoutExpired now becomes a sanitized TimeoutError,
+so the original executor host classifies it as locally contained cancellation.
+The owned native harness records only test name, executor/caller status and safe
+result code plus elapsed milliseconds in `delegated-layer-outcomes.jsonl`. No
+fact cells, subjects, credentials, identities, stdout/stderr or exception text are
+retained in that journal. Production caller results remain sanitized and raw
+executor diagnostics remain private.
+
+A deterministic TimeoutExpired carrying private partial stdout/stderr produces
+executor cancelled, outer caller invalid_transaction, no private text in the
+returned result and both original reservations retired. This distinguishes the
+refusal layer without weakening the4-second evaluator or5-second host bounds.
+Final `evidence/python-psycopg-epoch-cut/10a9cf97-62a9-4d56-8b0d-c9ab4579a068`
+passes169 methods, module boundaries and142 current/preimage source pins on
+PostgreSQL18.6/psycopg3.3.6 binary, with363 UMF and1705 native payload pins and
+three stop0/status3/socket-absent cleanups. Journal observations distinguish
+pre-executor privilege refusal, executor cancellation, executor identity refusal
+and caller guard-retirement refusal after successful evaluation; ordinary permit
+and deny succeed. These finite schedules do not identify the earlier71a6ff76
+intermittent permit refusal or prove deterministic availability under load.
+
+Trace shared CONTRACT-063/STP-056 B10/B12/B16/L11 and US-056 AC8/AC10 custody/
+diagnostic prerequisites. The journal is owned test evidence, not a public audit
+API or receipt that grants authority. No new formal native refinement or backend
+binding is claimed. Original authentication, full routine/source/privilege/lifetime
+closure and complete protected disclosure remain open; full goal active at26/132,
+106 unbound required cases. Use these layer outcomes to diagnose any future
+reproduction before making availability claims.
