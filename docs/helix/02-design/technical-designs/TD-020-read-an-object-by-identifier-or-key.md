@@ -324,3 +324,17 @@ Python boundaries and Chromium153 emission comparison pass. Receipt:
 Native parameter domains and original binding provenance remain host/backend
 responsibilities. This nonnull subset does not admit nullable Key codecs, resolve
 ambiguous subject mapping or authenticate complete source/cut/authority lifetime.
+
+
+### Single-subject mapping ambiguity — 2026-10-12
+
+The fixture's private original-caller resolver now requires exactly one Staff
+match before passing its Key to the decision function. Zero/duplicate matches
+raise generic55000; count and candidate selection remain private. Adding a second
+Staff login matching Alice refuses ownerless lookup and count with the same
+primary message, then repair restores original RA/RAB visibility. The zero-match
+control remains passing. Sixty-seven observations and Python boundaries pass;
+evidence: `../../04-build/evidence/security-subject-ambiguity-20261012/receipt.json`.
+This selects single-subject semantics only. Federation, explicit multi-subject
+profiles, issuer authenticity, coherent mapping/authority lifetime and full
+diagnostic privacy remain separate production obligations.

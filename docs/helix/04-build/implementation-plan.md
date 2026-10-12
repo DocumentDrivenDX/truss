@@ -6473,3 +6473,17 @@ Evidence: `evidence/security-intrinsic-key-bindings-20261012/receipt.json`.
 Trace CONTRACT-063 / STP-056 B05/B12/B15 and TD-020/STP-020. Native domains,
 nullable-key profiles, issuer/subject ambiguity and complete source/authority/
 publication remain unadmitted; no original backend case is promoted.
+
+
+### Native single-subject resolver ambiguity refusal — 2026-10-12
+
+The actual ontology fixture now requires one privately resolved Staff Key for
+the native caller. Missing or duplicate matches produce generic55000 before
+condition evaluation; ownerless lookup cannot hide ambiguity. Repair restores
+original visibility. Sixty-seven native observations and Python boundaries723
+imports pass. Source/output evidence:
+`evidence/security-subject-ambiguity-20261012/receipt.json`.
+Trace CONTRACT-063 / STP-056 B05/B10/B12/B15 and TD-020/STP-020. This is a
+single-subject fixture profile, not authenticated production mapping or explicit
+multi-subject support. Source/authority lifetime, complete diagnostics and public
+read integration remain required; no original backend case is promoted.

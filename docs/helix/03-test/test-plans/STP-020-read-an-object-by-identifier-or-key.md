@@ -510,3 +510,13 @@ Sixty-four observations and27 tests are retained in
 `../../04-build/evidence/security-intrinsic-key-bindings-20261012/receipt.json`.
 Typed parameter domains, nullable Key semantics and ambiguous/foreign/stale
 subject issuer admission remain separate required controls.
+
+
+Single-subject profile controls now add a second actual Staff record matching
+Alice's native login. Ownerless lookup and count must raise the same generic
+55000 unavailable message; no arbitrary match or raw cardinality diagnostic is
+accepted. Restore uniqueness and exact visibility; retain zero-match refusal.
+Sixty-seven observations pass in
+`../../04-build/evidence/security-subject-ambiguity-20261012/receipt.json`.
+Original issuer/source custody and mapping changes under held admission remain
+required; this does not define multi-subject or federation semantics.
