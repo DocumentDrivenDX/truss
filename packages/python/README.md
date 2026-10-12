@@ -3,8 +3,10 @@
 Truss owns the tested embeddable Python implementation. The complete engine
 package is under implementation; current public components provide local runtime lifecycle, UMF acceptance-input
 preparation, selected native host transaction controls, installation footprint inspection
-and inert assembly construction.
-Mutation/query/installation APIs remain unfinished.
+and assembly construction. The selected catalog runtime additionally provides
+transactional installation, status, fresh catalog registration, report retrieval
+and durable registration retry. Business mutations, queries, imports and feed
+operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -62,6 +64,49 @@ Construction failures retain `BorrowedHostAttachmentFailure` with original
 attachment custody and a `restored` flag. Unconfirmed restoration requires host
 recovery before reuse. This API supplies transaction embedding; it grants no
 catalog, read or mutation authority.
+
+## Public catalog workflow
+
+Select `CatalogRuntimeConfiguration()` with `create_reference_assembly(config,
+host)`. The returned `Ok.value` provides `install_in_transaction`,
+`status_in_transaction`, `prepare_catalog`, `accept_in_transaction` and
+`report_in_transaction`. Installation requires a privileged caller with no existing
+`truss` namespace; it creates private owner and registrar roles and returns their
+names in `PendingCatalogInstallation`. Grant the registrar role to each eligible
+ordinary login person. The toolkit never commits your outer transaction.
+
+```python
+from truss import CatalogRuntimeConfiguration, create_reference_assembly, Ok
+
+assembly_result = create_reference_assembly(CatalogRuntimeConfiguration(), host)
+if not isinstance(assembly_result, Ok):
+    raise RuntimeError(assembly_result)
+assembly = assembly_result.value
+prepared = assembly.prepare_catalog(documents)  # tuple of CatalogDocument
+registered = assembly.accept_in_transaction(
+    transaction, prepared, request_key="register-orders-v1",
+    origin_bytes=b'{"x-action":"register"}',
+)
+if not isinstance(registered, Ok):
+    raise RuntimeError(registered.error.message)
+# Result is pending_commit. The caller settles its transaction.
+host.detach()
+connection.commit()
+```
+
+The current release supports one fresh scalar-string catalog with authored keys
+and relationships on PostgreSQL 18.6. Preparation uses the bundled UMF producer
+through Bun. Original documents are retained; accepted identities come from
+native catalog rows. Registration records the authenticated session person as
+actor separately from asserted origin. Exact `SET ROLE` must be `none`.
+
+Ordinary-person catalog calls require `READ COMMITTED`; higher isolation refuses
+because membership authorization must observe committed revocations. Repeating
+the same request key as the same person with identical original inputs and origin
+returns the original report and `replayed=True`. Changing the request returns a
+conflict. Retry still requires current authorization. There are no internal retry
+loops. Catalog evolution and business writes are unavailable in this release.
+`dispose()` closes this assembly's admission without closing or settling the host.
 
 The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
 prioritizes complete installation, catalog acceptance, apply/import and direct
@@ -572,13 +617,14 @@ checks reject changed effects even when a generation counter is reused.
 
 This is report preparation, not accepted report publication. Missing report fields
 and partial extension qualification are explicit. Successful public UMF preparation
-remains usable when optional report evidence is unavailable. Public registration,
-installation and the apply/read workflow remain unfinished.
+remains usable when optional report evidence is unavailable. This legacy private
+profile does not provide public registration or installation. The separate public
+catalog runtime above provides those operations; apply/read remains unfinished.
 
 
 ## Selected host transaction entry point
 
-Install `./packages/python[native]` for the selected pg8000 1.31.5 Unix-socket
+Install `./packages/python[experimental-pg8000]` for the historical pg8000 1.31.5 Unix-socket
 route. Base package import does not load pg8000. This factory opens a fresh
 connection; adoption of an existing arbitrary driver connection remains unfinished.
 
@@ -604,7 +650,9 @@ not the exact Truss query interface. Known idle/capacity/failed-state savepoint
 refusals preserve rollback; actually submitted control errors may retain unresolved
 custody. Do not treat cleanup closure as server rollback evidence.
 
-`create_reference_assembly` currently supports only `INERT_ASSEMBLY_PROFILE`.
+With `ReferenceAssemblyConfiguration`, `create_reference_assembly` selects the
+legacy `INERT_ASSEMBLY_PROFILE`. The catalog and inspection configurations select
+their separate public providers.
 It captures immutable configuration and original service registrations without
 calling host services. Capability selectors return unavailable and configured
 readiness remains unverified. Assembly disposal does not dispose the shared host
