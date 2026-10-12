@@ -1,3 +1,4 @@
+--only-binary=:all:
 --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r1
 # Selected reusable PostgreSQL18.6 local-runtime tuple; full Truss package is not yet released.
 pgserver-pg18==18.6.0

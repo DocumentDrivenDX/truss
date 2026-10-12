@@ -59,6 +59,13 @@ checksums and rejects conflicting historical distributions. No source fallback
 is allowed. `.github/workflows/python-runtime.yml` builds only Truss's pure Python
 wheel and runs the focused installed smoke checks against released PostgreSQL18.6
 on Linux x64/Python3.11, retaining logs and cleanup evidence even on failure.
+[The first passing CI checkpoint](../04-build/evidence/design-audit/pg18-ci-released-runtime-20261011/summary.json)
+records all six groups passing atb494b275 on the published Linux wheel, including
+owned lifecycle, supported driver, cleanup/collision, interruption, CLI signals
+and timeout. Installer controls also confirm corrupted cache refusal and a
+consistent binary installation. Linux whitespace socket paths remain an observed
+upstream limitation of the current .0 package; CI uses the short no-space worker
+paths, while macOS retains its original whitespace lifecycle case.
 Broader corpus qualification is an explicit separate lane. The historical Truss
 PostgreSQL recipe/build commands remain retired; native compilation belongs to
 DocumentDrivenDX/pgserver.

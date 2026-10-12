@@ -1,0 +1,200 @@
+{
+  "status": "component-passed",
+  "ci": {
+    "conclusion": "success",
+    "headSha": "b494b2754386f2eff3b638788208fe612c2c59be",
+    "jobs": [
+      {
+        "completedAt": "2026-10-12T00:25:22Z",
+        "conclusion": "success",
+        "databaseId": 114614101367,
+        "name": "released-runtime",
+        "startedAt": "2026-10-12T00:24:39Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-12T00:24:40Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-12T00:24:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:24:52Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v6",
+            "number": 2,
+            "startedAt": "2026-10-12T00:24:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:24:55Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-python@v5",
+            "number": 3,
+            "startedAt": "2026-10-12T00:24:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:24:59Z",
+            "conclusion": "success",
+            "name": "Build the pure Python Truss wheel",
+            "number": 4,
+            "startedAt": "2026-10-12T00:24:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:25:06Z",
+            "conclusion": "success",
+            "name": "Install checksum-verified released PostgreSQL wheels",
+            "number": 5,
+            "startedAt": "2026-10-12T00:24:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:25:19Z",
+            "conclusion": "success",
+            "name": "Run focused installed runtime checks",
+            "number": 6,
+            "startedAt": "2026-10-12T00:25:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:25:19Z",
+            "conclusion": "success",
+            "name": "Retain native checks and cleanup evidence",
+            "number": 7,
+            "startedAt": "2026-10-12T00:25:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:25:20Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-python@v5",
+            "number": 13,
+            "startedAt": "2026-10-12T00:25:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:25:20Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v6",
+            "number": 14,
+            "startedAt": "2026-10-12T00:25:20Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-12T00:25:20Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 15,
+            "startedAt": "2026-10-12T00:25:20Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/DocumentDrivenDX/truss/actions/runs/38187888862/job/114614101367"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/DocumentDrivenDX/truss/actions/runs/38187888862"
+  },
+  "scope": "Linux x64 Python3.11 released wheel installation and six focused installed runtime groups; no PostgreSQL source compilation in the workflow; full corpus remains separate",
+  "runtimeReceipt": {
+    "passed": true,
+    "scope": "Focused installed consumer, supported-driver adoption, retained restart, isolated lifecycle, shared fresh database/role cleanup, Unix socket/TCP collision, signals and transaction timeout; no full engine or Lakebase acceptance",
+    "runtimeDistribution": "pgserver-pg18",
+    "runtimeVersion": "18.6.0",
+    "postgresql": "18.6",
+    "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "libpq": 180006,
+    "payloads": {
+      "pgserver": {
+        "wheelSha256": "db84e995828a119ece3e0e4411449742a154967c2b71565fb90297fcec599552",
+        "members": 1718,
+        "loaded": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/pgserver"
+      },
+      "truss": {
+        "wheelSha256": "8a151edf4c982f1a193997b1b73d0d94c260efa350c9c2f228fbf7268eef8bd5",
+        "members": 178,
+        "loaded": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss"
+      }
+    },
+    "outcomes": [
+      {
+        "case": "owned-lifecycle",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 4.0069155350000045,
+        "log": "owned-lifecycle.log",
+        "logSha256": "b1ceabffc11b5db128b5977e5b02e50a59e93f1abdd4448803c4c20d5d82d11e"
+      },
+      {
+        "case": "supported-driver",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 0.6104377479999954,
+        "log": "supported-driver.log",
+        "logSha256": "81c3291bd1d1d9deb47552580f380ec7a81f2875e1a21cb7a8fa0e21b4f8c911"
+      },
+      {
+        "case": "worker-cleanup-collisions",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 2.3191671600000063,
+        "log": "worker-cleanup-collisions.log",
+        "logSha256": "d8a0ca2636346da6b4a9a7a761a91883431a919af34fa37a3eceaf394a3fb562"
+      },
+      {
+        "case": "module-interruption",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 1.964454576999998,
+        "log": "module-interruption.log",
+        "logSha256": "c5a9ff02e6069277f73481881340b48f094a2fb7c645092e15d975548032c754"
+      },
+      {
+        "case": "cli-signals",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 1.4308323780000052,
+        "log": "cli-signals.log",
+        "logSha256": "204436ec2a50871ed94e5154475ac51234e53f4393f3496e730b29f51abf283b"
+      },
+      {
+        "case": "transaction-timeout",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 1.0431922420000035,
+        "log": "transaction-timeout.log",
+        "logSha256": "40fbe3b7c8fe4be8e0dfbedf1d741b05b06566722ba66084ccfa4e5534cf9d42"
+      }
+    ],
+    "elapsedSeconds": 12.171605819999996,
+    "sourceSha256": {
+      "scripts/check-local-runtime-smoke.py": "c6464e41579a7ed1df9507f6fca572b8dd627a339cfe137bf76adeace294ab0d",
+      "scripts/native_fixture.py": "8a446601062553f423e0bc93a11225b5c2d3cb887ae0b6b7de091fc0cc6b66d0",
+      "scripts/run-python-test-module.py": "3e8fb4756f3195f5e66c3b2005ef8d283d3aea215e247a627c89de9b0b70d0dc",
+      "scripts/check-native-worker-fixtures.py": "bc6558012e1d20bd16e92875ee4d68bd362886754618061ba120f14e28fefaa7",
+      "scripts/check-native-module-interruption.py": "8544acd6102c9b351f93b979b8c7b5a1d33d349b17e205504475a2b6a27e7825",
+      "scripts/check-python-installed-cli-signals.py": "f950c6c09ae45fc29b203beab89e8417f09a993e7abd5f3292ce027362ab7e9c",
+      "scripts/check-pg17-transaction-timeout.py": "41c4edb6d1faeadedb530cc7ba9cfde28973a865e533fb93ec45c2c6e08b6e8a",
+      "packages/python/tests/test_local_runtime.py": "0daf56832b77a5418d463c88ef5c976064de4d54274ef31665ed005425013696",
+      "packages/python/tests/test_psycopg_host_native.py": "8127a54a165087ea2bba849184e8896ab45a8e3ff1f97352137058ece0b9e48d"
+    },
+    "completeRuntimeQualified": false,
+    "lakebaseQualified": false
+  },
+  "artifactSha256": "2678820a88694769793d9dfa97b61e7927452d3dab89c10f54ba3ecb28646728",
+  "localInstallerChecks": {
+    "publishedChecksumVerified": true,
+    "corruptCachedWheelRefused": true,
+    "binaryInstallAndDependencyCheckPassed": true
+  },
+  "sourceSha256": {
+    "scripts/install-local-runtime.py": "d90b9993be6308b829b0235fcecac4d5ff78d1c6caa31dc5720c79acf71880aa",
+    ".github/workflows/python-runtime.yml": "314ad1619a8421a482df87c4062e80585b7ca3b55c9c052705b6abf45e4753df",
+    "packages/python/local-runtime-requirements.txt": "0de1dbc5c2509641c772a6d658050bacc426e0bce3577dd7710bcb9d10ca9902"
+  }
+}
