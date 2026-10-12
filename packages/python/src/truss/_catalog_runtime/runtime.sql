@@ -264,7 +264,7 @@ BEGIN
     SELECT e.value INTO STRICT source_field FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
      WHERE m.value->>'id'=field->>'fieldModule' AND e.value->>'id'=field->>'fieldId' AND e.value->>'kind'='field';
     IF field->'reference' IS DISTINCT FROM jsonb_build_object('module',field->>'fieldModule','element',field->>'fieldId')
-     OR field->'declaration' IS DISTINCT FROM source_field OR source_field->>'scalarType' IS DISTINCT FROM 'string'
+     OR field->'declaration' IS DISTINCT FROM source_field OR coalesce(source_field->>'scalarType','') NOT IN ('string','integer','decimal','boolean','timestamp','binary')
      OR source_field->>'cardinality' IS DISTINCT FROM 'one' OR source_field->>'nullability' NOT IN ('required','absent-allowed')
      OR EXISTS(SELECT 1 FROM jsonb_object_keys(source_field) k WHERE k NOT IN ('id','kind','name','scalarType','cardinality','nullability','extensions'))
      OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(source_record->'members') m WHERE m.value=field->'reference') THEN
@@ -301,18 +301,20 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  alias_request truss.catalog_unchanged_request%ROWTYPE;
  stored_alias truss.catalog_unchanged_request%ROWTYPE;
  expected jsonb; prior_expected jsonb; origin bytea; original_report bytea; table_name text; columns text; rows jsonb; raw bytea; total bigint:=0; request_count bigint;
- prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;
+ prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
- IF installation.release_id<>'truss-catalog-runtime/0.10-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.11-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
-  IF raw IS NULL OR octet_length(raw) NOT BETWEEN 1 AND 1048576 THEN
+  component_index:=component_index+1;
+  component_limit:=CASE WHEN component_index=4 THEN 4194304 ELSE 1048576 END;
+  IF raw IS NULL OR octet_length(raw) NOT BETWEEN 1 AND component_limit THEN
    RAISE EXCEPTION 'catalog input byte limit exceeded' USING ERRCODE='22023'; END IF;
   total:=total+octet_length(raw);
  END LOOP;
- IF total>4194304 OR jsonb_typeof(convert_from(origin_bytes,'UTF8')::jsonb) IS DISTINCT FROM 'object' THEN
+ IF total>8388608 OR jsonb_typeof(convert_from(origin_bytes,'UTF8')::jsonb) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'bounded catalog request required' USING ERRCODE='22023'; END IF;
  -- Bound concurrency without an automatic retry loop.
  SELECT rev INTO STRICT prior_revision FROM truss.schema_head WHERE id=1 FOR UPDATE NOWAIT;

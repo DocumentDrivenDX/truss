@@ -18,7 +18,7 @@ BEGIN
  END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.10-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.11-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.
@@ -50,7 +50,7 @@ BEGIN
    SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL AND p.prop_id::text=k)) THEN
   RAISE EXCEPTION 'unsupported complete object representation' USING ERRCODE='0A000'; END IF;
  FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
-  IF property.scalar_type IS DISTINCT FROM 'string' OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.since_rev>current_object.rev OR property.nullability NOT IN ('required','absent-allowed')
+  IF coalesce(property.scalar_type,'') NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.since_rev>current_object.rev OR property.nullability NOT IN ('required','absent-allowed')
    OR property.item IS NOT NULL OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb) THEN
    RAISE EXCEPTION 'unsupported property profile' USING ERRCODE='0A000'; END IF;
   IF NOT current_object.props ? property.prop_id::text THEN
@@ -58,20 +58,15 @@ BEGIN
    CONTINUE;
   END IF;
   cell:=current_object.props->property.prop_id::text;
-  IF cell=jsonb_build_object('kind','null') AND property.nullability='absent-allowed' THEN cell:='null'::jsonb;
-  ELSIF jsonb_typeof(cell)='object' AND cell->>'kind'='string' AND jsonb_typeof(cell->'text')='string'
-    AND cell=jsonb_build_object('kind','string','text',cell->'text') THEN cell:=cell->'text';
-  ELSE RAISE EXCEPTION 'malformed logical string value' USING ERRCODE='55000'; END IF;
+  IF truss.valid_scalar_cell(cell,property.scalar_type,property.nullability='absent-allowed') IS NOT TRUE THEN RAISE EXCEPTION 'malformed exact logical value' USING ERRCODE='55000';END IF;
+  cell:=truss.logical_scalar_cell(cell);
   values_json:=values_json||jsonb_build_array(jsonb_build_array(property.name,cell));
  END LOOP;
  FOR cell IN SELECT jsonb_build_array(key,value) FROM jsonb_each(coalesce(current_object.retained,'{}'::jsonb)) ORDER BY key COLLATE "C" LOOP
-  IF cell->1=jsonb_build_object('kind','null') THEN cell:=jsonb_build_array(cell->0,NULL);
-  ELSIF jsonb_typeof(cell->1)='object' AND cell->1->>'kind'='string' AND jsonb_typeof(cell->1->'text')='string'
-    AND cell->1=jsonb_build_object('kind','string','text',cell->1->'text') THEN cell:=jsonb_build_array(cell->0,cell->1->'text');
-  ELSE RAISE EXCEPTION 'unsupported retained logical value' USING ERRCODE='0A000'; END IF;
+  cell:=jsonb_build_array(cell->0,truss.logical_scalar_cell(cell->1));
   retained_json:=retained_json||jsonb_build_array(cell);
  END LOOP;
- result:=convert_to(jsonb_build_object('profile','truss-python-scalar-object/0.1','releaseId',installation.release_id,
+ result:=convert_to(jsonb_build_object('profile','truss-python-scalar-object/0.2','releaseId',installation.release_id,
  'releaseSha256',installation.release_sha256,'documentId',selected_document,'moduleId',selected_module,'recordId',selected_record,
  'id',current_object.id::text,'typeId',current_object.type_id::text,'version',current_object.ver::text,
  'catalogRevision',captured_revision::text,'recordRevision',current_object.rev::text,

@@ -81,7 +81,10 @@ class PublicObjectReadTests(catalog_tests.PublicCatalogRuntimeTests):
             result=self.lookup(assembly,tx)
             self.assertTrue(isinstance(result,Error) or isinstance(result.value,ObjectReadUnavailable))
         self.admin.execute('UPDATE truss.object SET props=%s::jsonb,retained=%s::jsonb WHERE id=%s',(json.dumps(self.props),json.dumps({'numeric':{'kind':'decimal','text':'1.1'}}),self.object_id))
-        self.assertIsInstance(self.lookup(assembly,tx).value,ObjectReadUnavailable)
+        from truss.contracts import TextValue
+        retained=self.lookup(assembly,tx)
+        self.assertIsInstance(retained.value,ObjectFound)
+        self.assertEqual(dict(retained.value.object.retained)['numeric'],TextValue(kind='decimal',text='1.1'))
 
     def test_absent_null_and_empty_values_remain_distinct(self):
         connection,host,assembly,tx=self.seed(optional=True)

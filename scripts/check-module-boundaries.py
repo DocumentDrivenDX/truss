@@ -17,7 +17,7 @@ ALLOWED = {
     '_umf_key_tuples': {'decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     '_group_runtime': {'typing','dataclasses','hashlib','base64','json','truss.contracts','truss.execution','truss.groups','truss.preparation','truss._umf_key_tuples'},
-    'object_read': {'dataclasses','typing'},
+    'object_read': {'truss.contracts','dataclasses','typing'},
     'catalog_view': {'dataclasses','typing','truss.contracts'},
     '_catalog_view_build': {'base64','dataclasses','hashlib','json','truss.contracts','truss.catalog_view','truss._catalog_definition_source','truss._owner_evidence_json'},
     'reader_catalog': {'dataclasses','typing'},

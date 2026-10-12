@@ -1,0 +1,48 @@
+-- Exact scalar cells: lexical numbers/timestamps never pass through floats or
+-- PostgreSQL's finite precision numeric/timestamp projections.
+CREATE FUNCTION truss.valid_scalar_cell(cell jsonb,expected_family text DEFAULT NULL,allow_null boolean DEFAULT true) RETURNS boolean
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE family text;token text;calendar date;offset_text text;
+BEGIN
+ IF cell IS NULL OR jsonb_typeof(cell)<>'object' THEN RETURN false;END IF;
+ IF cell='{"kind":"null"}'::jsonb THEN RETURN allow_null;END IF;
+ family:=cell->>'kind';
+ IF expected_family IS NOT NULL AND family IS DISTINCT FROM expected_family THEN RETURN false;END IF;
+ IF family='boolean' THEN RETURN jsonb_typeof(cell->'value')='boolean' AND cell=jsonb_build_object('kind',family,'value',cell->'value');END IF;
+ IF family NOT IN ('string','integer','decimal','timestamp','binary') OR jsonb_typeof(cell->'text') IS DISTINCT FROM 'string'
+  OR cell IS DISTINCT FROM jsonb_build_object('kind',family,'text',cell->'text') THEN RETURN false;END IF;
+ token:=cell->>'text';
+ IF octet_length(token)>1048576 THEN RETURN false;END IF;
+ IF family='string' THEN RETURN true;
+ ELSIF family='integer' THEN RETURN token ~ '^-?(0|[1-9][0-9]*)$';
+ ELSIF family='decimal' THEN RETURN token ~ '^-?(0|[1-9][0-9]*)([.][0-9]+)?([eE][+-]?[0-9]+)?$';
+ ELSIF family='binary' THEN
+  IF token !~ '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$' THEN RETURN false;END IF;
+  RETURN replace(encode(decode(token,'base64'),'base64'),chr(10),'')=token;
+ ELSIF family='timestamp' THEN
+  IF token !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]+)?([Zz]|[+-][0-9]{2}:[0-9]{2})$'
+   OR substring(token,1,4)::int=0 OR substring(token,12,2)::int>23 OR substring(token,15,2)::int>59 OR substring(token,18,2)::int>59 THEN RETURN false;END IF;
+  calendar:=make_date(substring(token,1,4)::int,substring(token,6,2)::int,substring(token,9,2)::int);
+  IF lower(right(token,1))<>'z' THEN
+   offset_text:=right(token,6);
+   IF substring(offset_text,2,2)::int>23 OR substring(offset_text,5,2)::int>59 THEN RETURN false;END IF;
+  END IF;
+  RETURN true;
+ END IF;
+ RETURN false;
+EXCEPTION WHEN invalid_text_representation OR datetime_field_overflow OR invalid_parameter_value THEN RETURN false;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.valid_scalar_cell(jsonb,text,boolean) FROM PUBLIC;
+
+CREATE FUNCTION truss.logical_scalar_cell(cell jsonb) RETURNS jsonb
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ IF truss.valid_scalar_cell(cell) IS NOT TRUE THEN RAISE EXCEPTION 'valid exact scalar cell required' USING ERRCODE='55000';END IF;
+ IF cell->>'kind'='null' THEN RETURN 'null'::jsonb;
+ ELSIF cell->>'kind'='string' THEN RETURN cell->'text';
+ ELSIF cell->>'kind'='boolean' THEN RETURN cell->'value';
+ ELSE RETURN cell;END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.logical_scalar_cell(jsonb) FROM PUBLIC;

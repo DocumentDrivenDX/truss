@@ -55,6 +55,47 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Exact scalar properties iteration — 2026-10-12
+
+Runtime 0.11 extends catalog/create/read to integer, decimal, boolean, timestamp
+and binary properties alongside strings. It uses the existing `BooleanValue`
+and `TextValue` contracts. Stored cells, journal values and retries preserve exact
+numeric tokens, timestamp offsets/fractions and canonical base64; no numeric,
+float or finite-precision timestamp projection determines the stored value.
+Reads return ordinary strings/null/booleans and shared `TextValue` instances for
+integer/decimal/timestamp/binary, preserving family and original text.
+
+One protected native scalar validator checks supplied, stored and retained cells
+against their declared family and nullability. Integer/decimal tokens follow the
+complete JSON number grammar (integer excludes fractions/exponents). Timestamp
+support is Gregorian years 0001..9999, valid calendar/time/offset fields, seconds
+00..59, lowercase or uppercase t/z, arbitrary fractional digits and retained
+unknown offset -00:00. Leap seconds refuse in this selected profile. Binary is
+canonical padded base64, including empty bytes. Non-string keys, facets, broader
+nullability/cardinality, structured values and property evolution remain open.
+Origin remains a separate string/null map.
+
+Support/value/mutation/read/history profiles advance explicitly to 0.3.0/0.2/
+0.3/0.2/`truss-native-scalar-create/0.2`; old pins are not silently broadened.
+Original UMF 0.7 metadata producers remain unchanged. A small mixed catalog exposed
+two undersized evidence bounds: the exact owner decoder now permits one million
+nodes within its unchanged 8MiB byte/depth128/container4096 limits, and native
+registration permits a 4MiB producer-source component with 1MiB each for input,
+documents, declarations and origin, total 8MiB. Ordinary deadlines remain.
+These are native bounds; the Python host's complete semantic parameter tuple
+still has a separate 4MiB ceiling. This is not an 8MiB Python ingress promise.
+
+Focused public native checks cover a 2500-digit integer, extreme decimal exponent
+with original zeros/spelling, boolean, a submicrosecond timestamp with unknown
+offset, binary NUL/non-UTF8, retained decimal, commit/read-only/key-read/replay,
+malformed/family-mismatched values without effects, and empty-binary caller
+rollback. Fresh installation and all remaining external-interface work remain
+explicit; this does not qualify numeric business keys or complete migrations.
+The first-invocation nonstandard-string control also found original bytea
+parameters were altered by text adaptation under `standard_conforming_strings=off`.
+Fixed binary bytea adaptation now preserves original JSON/source bytes regardless
+of that setting; invalid decimal/timestamp separators still refuse as intended.
+
 ## Additional-document registration iteration — 2026-10-12
 
 Runtime 0.10 extends the public assembly to append new, document-qualified

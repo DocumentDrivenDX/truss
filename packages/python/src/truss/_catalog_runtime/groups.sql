@@ -46,8 +46,8 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
-'mutationProfile',jsonb_build_object('identity','truss-rootless-string-create','version','0.2','sha256','efbb7a608e98730d5fbb44f5f8f44ca8ba8cb38d81f8e51b414e37fc1ca25b9d'),
-'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.1','sha256','3123c9089fab2fe869b82a55cdbe4cf708107be8eacb3f2d94666dfb21cfb1ac'),
+'mutationProfile',jsonb_build_object('identity','truss-rootless-string-create','version','0.3','sha256','b75b29e082384623671cae3b880fa195c082ae87e70b2630e4fd6c70fb07e730'),
+'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.2','sha256','5e6a7f879e17066a8ffdeb8731da89906f0e5cb231e4b4357bd4fbea0158163f'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),
 'adapterProfile',jsonb_build_object('identity','truss-psycopg-create-provider','version','0.1','sha256','f20735a94e87213d77f713cbbabd2bdf2e4f2b459041c53bb984f5b706112ba9'),
@@ -81,7 +81,7 @@ BEGIN
  IF revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000'; END IF;
  RETURN convert_to((truss.runtime_group_profiles()||jsonb_build_object('layoutProfile',installation.layout_profile,
   'authorizedScopeIdentity','truss-person:'||installation.installation_id||':'||person::text,
-  'sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-string-create/0.1'))::text,'UTF8');
+  'sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-scalar-create/0.2'))::text,'UTF8');
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.group_context(text,text) FROM PUBLIC;
@@ -373,13 +373,12 @@ BEGIN
    RAISE EXCEPTION 'mandatory relationship unsupported by create-only profile' USING ERRCODE='0A000'; END IF;
   IF EXISTS(SELECT 1 FROM jsonb_array_elements(operation->'values') v WHERE jsonb_typeof(v.value->'name') IS DISTINCT FROM 'string'
    OR octet_length(v.value->>'name') NOT BETWEEN 1 AND 4096 OR v.value-ARRAY['name','value']<>'{}'::jsonb
-   OR (v.value->'value'='{"kind":"null"}'::jsonb OR (v.value->'value'->>'kind'='string'
-    AND jsonb_typeof(v.value->'value'->'text')='string' AND (v.value->'value')-ARRAY['kind','text']='{}'::jsonb)) IS NOT TRUE)
+   OR truss.valid_scalar_cell(v.value->'value') IS NOT TRUE)
    OR jsonb_array_length(operation->'values')<>(SELECT count(DISTINCT v.value->>'name') FROM jsonb_array_elements(operation->'values') v) THEN
    RAISE EXCEPTION 'unique exact scalar authored values required' USING ERRCODE='22023'; END IF;
   props:='{}';retained:='{}';
   FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
-   IF property.scalar_type IS DISTINCT FROM 'string' OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json'
+   IF coalesce(property.scalar_type,'') NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json'
     OR property.nullability NOT IN ('required','absent-allowed') OR property.item IS NOT NULL
     OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb) THEN
     RAISE EXCEPTION 'selected scalar property profile required' USING ERRCODE='0A000'; END IF;
@@ -387,8 +386,8 @@ BEGIN
    IF NOT FOUND THEN
     IF property.nullability='required' THEN RAISE EXCEPTION 'missing required value' USING ERRCODE='22023'; END IF;
    ELSE
-    IF supplied_value='{"kind":"null"}'::jsonb AND property.nullability='required' THEN
-     RAISE EXCEPTION 'required string cannot be null' USING ERRCODE='22023'; END IF;
+    IF truss.valid_scalar_cell(supplied_value,property.scalar_type,property.nullability='absent-allowed') IS NOT TRUE THEN
+     RAISE EXCEPTION 'exact property family and value required' USING ERRCODE='22023'; END IF;
     props:=props||jsonb_build_object(property.prop_id::text,supplied_value);
    END IF;
   END LOOP;
@@ -508,7 +507,7 @@ BEGIN
   journal_row.entity_kind:='o';journal_row.entity_id:=object_row.id;journal_row.entity_type:=object_row.type_id;
   journal_row.ver:=1;journal_row.op:='create';journal_row.prop_id:=NULL;journal_row.old_value:=NULL;journal_row.rev:=captured_revision;
   event:=jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal','sourceEpoch',installation.source_epoch::text,
-   'historyProfile','truss-native-string-create/0.1','xid',writer::text,'seq',journal_row.seq::text,'identity',object_identity,
+   'historyProfile','truss-native-scalar-create/0.2','xid',writer::text,'seq',journal_row.seq::text,'identity',object_identity,
    'eventVersion','1','eventCatalogRevision',captured_revision::text,'operation','create','after',after_record,
    'origin',jsonb_build_object('asserted',input->'assertedOrigin','databaseRole',session_user::text));
   event_digest:=encode(sha256(convert_to(jsonb_build_array(event)::text,'UTF8')),'hex');
@@ -520,7 +519,7 @@ BEGIN
   IF actual_journal IS DISTINCT FROM expected_journal THEN RAISE EXCEPTION 'exact complete journal append required' USING ERRCODE='55000'; END IF;
   members:=members||jsonb_build_array(jsonb_build_object('object',to_jsonb(object_row),'keys',member_keys,'journal',expected_journal));
   outcome:=jsonb_build_object('operation','create_object','outcome','created','identity',object_identity,'version','1',
-   'events',jsonb_build_array(jsonb_build_object('sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-string-create/0.1',
+   'events',jsonb_build_array(jsonb_build_object('sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-scalar-create/0.2',
     'xid',writer::text,'seq',journal_row.seq::text)));
   IF operation ? 'alias' THEN outcome:=outcome||jsonb_build_object('alias',operation->>'alias');
    aliases:=aliases||jsonb_build_array(jsonb_build_object('alias',operation->>'alias','identity',object_identity)); END IF;

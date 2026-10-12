@@ -11,6 +11,7 @@ caller rollback and durable request replay. Runtime 0.5 also provides ordinary-r
 catalog metadata and exact accepted-document retrieval. Runtime 0.8 provides public
 business-key lookup, and runtime 0.9 reports exact-input unchanged registration.
 Runtime 0.10 accepts additional documents while preserving existing definitions.
+Runtime 0.11 adds exact integer, decimal, boolean, timestamp and binary properties.
 Updates/deletes, pages, compiled queries, imports and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
@@ -1012,3 +1013,33 @@ The cumulative catalog limits are 512 documents, 65,536 definitions and a 16MiB
 native expected image, with ordinary operation deadlines. Changes to an existing
 document still refuse as `unsupported_profile`; compatible evolution and exact
 non-string values remain unfinished. This candidate requires fresh installation.
+
+### Exact scalar properties (runtime 0.11 candidate)
+
+Use the existing value contracts when constructing `AuthoredValue`:
+
+```python
+from truss.contracts import TextValue, BooleanValue
+
+integer = TextValue(kind="integer", text="9007199254740993123456789")
+decimal = TextValue(kind="decimal", text="1.2300e+1000")
+flag = BooleanValue(value=True)
+timestamp = TextValue(kind="timestamp", text="2024-02-29T23:59:59.123456789+05:30")
+binary = TextValue(kind="binary", text="AP8=")  # bytes 00 ff, canonical base64
+```
+
+Scalar object reads return strings, `None`, booleans and `TextValue` instances
+for the four exact textual families. Stored values and journals preserve the
+original numeric tokens and timestamp offsets/fractions. Truss does not round
+through float, database numeric or timestamp projections. Unknown retained scalar
+values use the same representation. Business keys remain string-only in this
+profile, and asserted origin remains a string/null map.
+
+Integers accept JSON integer tokens; decimals accept JSON number tokens, including
+exponents and original trailing zeros. Timestamp support accepts valid Gregorian
+years 0001..9999, seconds 00..59, explicit offsets or Z, lowercase t/z, arbitrary
+fractional digits and unknown offset -00:00. Leap seconds refuse. Binary requires
+canonical padded base64; empty binary is valid. Family mismatches and malformed
+values refuse before object/journal effects. Facets, structured values and broader
+nullability/cardinality remain unfinished. Obtain the updated value/mutation pins
+through the assembly. Fresh installation is required.

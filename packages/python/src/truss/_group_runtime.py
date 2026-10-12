@@ -3,7 +3,7 @@ from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256
 import base64
 import json
-from .contracts import ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, TextValue, NullValue
+from .contracts import ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, TextValue, NullValue, BooleanValue
 from .execution import Ok, Error, Outcome
 from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, RootlessOwnership,
     RequestNone, RequestPresent, RequestIdentity, GroupSuccess, GroupFailed, GroupUnavailable,
@@ -115,8 +115,9 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         return Ok(GroupUnavailable(reason='profile'))
     if not 1<=len(input.operations)<=128 or any(len(op.values)>1024 for op in input.operations):
         return Ok(GroupUnavailable(reason='resource'))
-    def scalar(value):return type(value) is NullValue or (type(value) is TextValue and value.kind=='string')
-    if any(not scalar(v.value) for op in input.operations for v in op.values) or any(not scalar(e.value) for e in input.asserted_origin.entries):
+    def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
+    def origin_scalar(value):return type(value) is NullValue or (type(value) is TextValue and value.kind=='string')
+    if any(not scalar(v.value) for op in input.operations for v in op.values) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
         return Ok(GroupUnavailable(reason='profile'))
     if type(documents) is not tuple or not 1<=len(documents)<=512 or any(type(d) is not CatalogDocument or type(d.document_id) is not str or type(d.content) is not bytes for d in documents):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"original_documents"}'))))

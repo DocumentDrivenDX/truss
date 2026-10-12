@@ -1,0 +1,38 @@
+{
+  "scope": "runtime0.11 public exact integer/decimal/boolean/timestamp/binary non-key properties",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "05785e4d07e8e73c3cf95a988e2dd1c7d3e5139ff514f3039d8c325cd3572d4f",
+  "installedTests": {
+    "modules": ["test_exact_scalar_values_native", "test_group_create_native", "test_key_lookup_native", "test_read_only_public_native", "test_catalog_additions_native", "test_object_read_native", "test_catalog_runtime_native.PublicCatalogRuntimeTests.test_host_custom_adapters_cannot_change_catalog_parameters_or_results"],
+    "passed": 36,
+    "elapsedSeconds": 284.882
+  },
+  "controls": [
+    "2500-digit integer and extreme-exponent decimal tokens retained without numeric/float conversion",
+    "boolean remains boolean; original lowercase timestamp, unknown offset and arbitrary fractional digits retained",
+    "binary NUL/non-UTF8 and empty canonical binary; retained decimal",
+    "actual create/commit/read-only object and business-key read/original durable receipt replay",
+    "malformed number/calendar/leap-second/base64 and family mismatch refuse without object effects",
+    "real RequestNone create followed by caller rollback leaves no object or journal",
+    "first invocation with standard_conforming_strings off refuses invalid literal separators",
+    "fixed binary bytea transport preserves original JSON/source bytes under caller string settings",
+    "legacy string, cross-revision and hostile-adapter controls remain passing"
+  ],
+  "corrections": [
+    "Use [.] regex literals to avoid caller string-literal settings changing grammar",
+    "Support policy explicitly lists six families and separates catalog key metadata from string-only key execution",
+    "Replace text bytea default adaptation with fixed binary adaptation after real off-setting JSON corruption",
+    "Prior installed35 run had33 passes plus transport-control failure and an obsolete unsupported-decimal assertion; corrected final run passes36"
+  ],
+  "umfSqlOwner": "12 retained SQL sources reload/export unchanged",
+  "moduleBoundaries": "673 imports passed",
+  "consumerTyping": "4 installed fixtures passed;20 expected negative errors",
+  "review": "Astra Ultra approved plan and corrected scalar/profile/transport source; installed promotion checks passed",
+  "limits": [
+    "string business keys; non-string keys, facets, structured values and broader cardinality/nullability remain incomplete",
+    "timestamp Gregorian0001..9999, seconds00..59, explicit offsets/Z; original -00:00 and lowercase t/z retained; leap seconds refuse",
+    "owner evidence8MiB/depth128/container4096/1m nodes; Python semantic tuple4MiB; native source component4MiB with other components1MiB and8MiB aggregate",
+    "fresh installation required; migrations and full external interface remain open"
+  ]
+}

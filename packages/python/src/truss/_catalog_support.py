@@ -11,6 +11,7 @@ POLICY_SHA256='1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd'
 PROFILE={'identity':'truss-fresh-catalog-support','version':'0.1.0','sha256':POLICY_SHA256}
 RELATIONAL_POLICY_SHA256='bc7aa15a3c2ab55368a3eb7fc2c4c18c8a316cc8ac7c783930c38a2ba825f557'
 RELATIONAL_PROFILE={'identity':'truss-fresh-catalog-support','version':'0.2.0','sha256':RELATIONAL_POLICY_SHA256}
+SCALAR_PROFILE={'identity':'truss-fresh-catalog-support','version':'0.3.0','sha256':'aec460c192bd831ed713f9bc8e42f2c31a99adfdf1cfcf4edecff8cd8f047b9f'}
 
 
 def evaluate_catalog_support(prepared):
@@ -22,10 +23,11 @@ def evaluate_catalog_support(prepared):
     _require_original_preparation(prepared)
     choices=prepared.input()
     selected=choices['supportProfile']
-    if selected not in (PROFILE,RELATIONAL_PROFILE):
+    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE):
         return {'state':'unavailable','reason':'unregistered_support_policy'}
-    relational=selected==RELATIONAL_PROFILE
-    policy=files('truss').joinpath('_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
+    scalars=selected==SCALAR_PROFILE
+    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE)
+    policy=files('truss').joinpath('_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=selected['sha256']:
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
@@ -92,14 +94,14 @@ def evaluate_catalog_support(prepared):
             'observationCoverage':coverage,'assertionInventoryComplete':False,
             'enforcementQualified':False,'supportSemanticsQualified':False,
             'acceptedReportQualified':False,
-            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational)}
+            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars)}
 
     if len(json.dumps(decision,ensure_ascii=True,separators=(',',':')).encode('utf8'))>4194304:
         raise ValueError('Selected catalog support decision capacity exceeded')
     return decision
 
 
-def _closed_source_inventory(prepared, observations, core, *, relational=False):
+def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False):
     """Complete source occurrence inventory for explicit scalar string Records.
 
     Profile 0.2 additionally covers known authored Keys and Relationships.
@@ -155,7 +157,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False):
                         owned.add((member['module'],member['element']))
                         expected[(document.document.document_id,pointer+f'/members/{index}')]='core.members.member'
                 else:
-                    if (element.get('scalarType')!='string' or element.get('cardinality')!='one'
+                    if (element.get('scalarType') not in (('string','integer','decimal','boolean','timestamp','binary') if scalars else ('string',)) or element.get('cardinality')!='one'
                         or element.get('nullability') not in ('required','absent-allowed')
                         or type(element.get('name')) is not str or not element['name']):
                         return unavailable
@@ -245,7 +247,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False):
             raise ValueError('Original closed-source meaning correspondence required')
     if seen!=set(expected):
         raise ValueError('Complete closed-source assertion occurrence coverage required')
-    return {'state':'inventoried','scope':('original_0.7_explicit_scalar_string_records_keys_relationships' if relational else 'original_0.7_explicit_scalar_string_records'),
+    return {'state':'inventoried','scope':('original_0.7_explicit_exact_scalar_records_string_keys_relationships' if scalars else 'original_0.7_explicit_scalar_string_records_keys_relationships' if relational else 'original_0.7_explicit_scalar_string_records'),
             'assertionOccurrenceCoverageComplete':True,'entries':entries,'extensions':[],
             'observationClassifications':classifications,
             'enforcementQualified':False,'acceptedReportQualified':False}

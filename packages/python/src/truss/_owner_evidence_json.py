@@ -42,7 +42,7 @@ def decode_owner_evidence_json(original):
     pending = [(value, 0)]; nodes = 0
     while pending:
         item, depth = pending.pop(); nodes += 1
-        if nodes > 100_000 or depth > 128:
+        if nodes > 1_000_000 or depth > 128:
             raise ValueError('Owner evidence tree capacity exceeded')
         if type(item) is dict:
             if len(item) > 4096:

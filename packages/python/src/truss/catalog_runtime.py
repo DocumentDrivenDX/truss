@@ -25,7 +25,7 @@ from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationR
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, _require_original_preparation
-from ._catalog_support import evaluate_catalog_support, RELATIONAL_PROFILE
+from ._catalog_support import evaluate_catalog_support, SCALAR_PROFILE
 from ._catalog_report_semantics import compose_original_catalog_report_semantics, canonical_numeric_free
 
 
@@ -105,8 +105,8 @@ def _pin_cursor(cursor):
     for oid in (18,19,25):cursor.adapters.register_loader(oid,TextLoader)
     for oid in (20,21,23,26):cursor.adapters.register_loader(oid,IntLoader)
     cursor.adapters.register_loader(16,BoolLoader);cursor.adapters.register_loader(17,ByteaLoader)
-    for kind,dumper in ((str,StrBinaryDumper),(str,StrDumperUnknown),(bytes,BytesBinaryDumper),
-                        (bytes,BytesDumper),(int,IntBinaryDumper),(int,IntDumper)):
+    for kind,dumper in ((str,StrBinaryDumper),(str,StrDumperUnknown),(bytes,BytesDumper),
+                        (bytes,BytesBinaryDumper),(int,IntBinaryDumper),(int,IntDumper)):
         cursor.adapters.register_dumper(kind,dumper)
 
 
@@ -115,7 +115,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -133,7 +133,7 @@ def _configuration():
     owner=json.loads(umf_original)['owner']
     return {'acceptanceProfile':pin,'layoutProfile':manifest['layoutProfile'],
         'policy':{'loss':'strict','profile':pin,'unknownEndpoint':'reject'},
-        'supportProfile':RELATIONAL_PROFILE,'validatorProfile':{
+        'supportProfile':SCALAR_PROFILE,'validatorProfile':{
             'identity':'truss-packaged-umf-preparation','version':owner['revision'],'sha256':sha256(umf_original).hexdigest()},
         'binding':{'state':'absent'},'transforms':[]}
 
@@ -152,11 +152,16 @@ def _object_result(raw,manifest,digest):
     basis=json.loads(bytes(raw))
     if basis['releaseId']!=manifest['releaseId'] or basis['releaseSha256']!=digest:
         raise ValueError('Exact selected installed runtime required')
+    def logical(value):
+        if type(value) is dict:
+            from .contracts import TextValue
+            return TextValue(kind=value['kind'],text=value['text'])
+        return value
     return ObjectFound(object=ScalarObject(document_id=basis['documentId'],module_id=basis['moduleId'],
         record_id=basis['recordId'],id=int(basis['id']),type_id=int(basis['typeId']),version=int(basis['version']),
         catalog_revision=int(basis['catalogRevision']),record_revision=int(basis['recordRevision']),
         created_at=basis['createdAt'],updated_at=basis['updatedAt'],
-        values=tuple(tuple(v) for v in basis['values']),retained=tuple(tuple(v) for v in basis['retained'])))
+        values=tuple((v[0],logical(v[1])) for v in basis['values']),retained=tuple((v[0],logical(v[1])) for v in basis['retained'])))
 
 
 def _catalog_failure(result, local_code=None):
