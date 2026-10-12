@@ -583,3 +583,20 @@ Both native tests pass with224 security observations. Evidence:
 Trace CONTRACT-005/063 and STP-057 L03/L11. This known rollback schedule does
 not qualify unknown original producer/source/issuer/bootstrap or production
 recovery. No original required acceptance case is promoted.
+
+
+### Original settlement COMMIT acknowledgment loss — 2026-10-12
+
+The owned native relay now also drops the exact COMMIT response after original
+claim settlement. Stock psycopg reports transport failure with no SQLSTATE.
+Recovery takes original guard UPDATE and a fresh observe statement; the exact
+original token/installation/profile/generation row decodes settled=true. It does
+not infer rollback or issue a replacement operation. A separate post-reconciliation
+negative control returns zero for repeated settlement, and retained-token replay
+still refuses23505. Both native tests pass with226 security observations.
+Evidence:
+`../../04-build/evidence/security-settlement-commit-ack-loss-20261012/receipt.json`.
+Trace CONTRACT-005/063 and STP-057 L11/L12. The fixture knows no data query was
+dispatched before settlement; this is not authentic production sink completion,
+original issuer/unknown-outcome recovery or complete bootstrap/participant
+qualification. No original required acceptance case is promoted.
