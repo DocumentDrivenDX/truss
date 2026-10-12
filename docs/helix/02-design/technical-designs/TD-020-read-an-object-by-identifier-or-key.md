@@ -437,3 +437,21 @@ conditional model, not arbitrary-world equivalence or SQL/compiler/native codec
 refinement. Native original mapping, complete population, caller, coherent cut,
 authority and final-release premises remain independently required. No backend
 case or production admission is promoted.
+
+
+### Native constant-transformed field disclosure — 2026-10-12
+
+Resource now has a required String secret in both physical fixtures. After the
+row-only phase, explicit mask activation revokes ordinary raw graph props and
+raw secret column access, and exposes narrow native functions consuming actual
+candidate disclosure output. Eligible callers receive MASKED plus the complete
+constant0.1.0 transformed disposition; native filters use that disclosed value.
+Canonical raw-RA remains unchanged in both stores. The fixture passes148 native
+observations,27 candidate tests, strict producer typing and Python boundaries723.
+Evidence: `docs/helix/04-build/evidence/security-native-constant-disclosure-20261012/receipt.json`.
+Trace CONTRACT-062/063 / US-056-AC6 / STP-056 B07/B08. This is a required
+nonnull String/constant transform physical subset. It does not implement original
+null/absence/withholding, arbitrary transforms, conflict activation, authenticated
+policy/source/callable closure or public driver release. Native disclosed-value
+behavior does not qualify compiler source query-use admission, prohibited/withheld
+operators or separate original-authorized actions. No full backend case is promoted.

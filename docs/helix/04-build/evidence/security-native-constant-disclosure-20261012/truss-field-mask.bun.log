@@ -1,0 +1,35 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/security-candidate-condition.test.ts:
+(pass) actual mixed compiler condition retains outer Project correlation [2.53ms]
+(pass) source negation retains three valued quantifier SQL [0.61ms]
+(pass) unknown profiles and substituted endpoint mappings refuse [2.06ms]
+(pass) lexical slot collisions refuse and unsupported terms do not disappear [0.69ms]
+(pass) array method substitution cannot turn False into True [0.06ms]
+(pass) packet, nested scan, identity and array getters never run [0.59ms]
+(pass) unused ambiguous endpoint declarations refuse eagerly [0.68ms]
+(pass) same nominal compound Key cannot cross ordered components [0.75ms]
+(pass) original Record Key metadata and all intrinsic mappings are checked [0.64ms]
+(pass) supplied falsy intrinsic carriers are never omissions [0.06ms]
+(pass) shared homes require disjoint compatible typed selectors [1.05ms]
+(pass) selector bounds and malformed unused carriers refuse eagerly [3.53ms]
+(pass) scalar channels retain field ownership, context separation and exact text equality [0.96ms]
+(pass) record scalar fields remain on the bound witness; opaque scalar access refuses [1.02ms]
+(pass) scalar declarations cannot contradict Key carriers or qualified field domains [0.57ms]
+(pass) numeric constants normalize exactly without value-number conversion [0.51ms]
+(pass) binary constants retain exact octets and empty value [0.12ms]
+(pass) native validity guards enclose negation and successful disjunctions [0.14ms]
+(pass) rule fold retains all matching effects and unknown precedence [0.73ms]
+(pass) splitting a qualified-field domain contradiction across rules refuses [0.17ms]
+(pass) disclosure SQL applies protected defaults and withhold before mask conflicts [1.15ms]
+(pass) disclosure SQL preserves ordered fields beyond the PostgreSQL function argument limit [2.10ms]
+(pass) issued opaque sources preserve local validity outside negation and successful siblings [0.48ms]
+(pass) copied graph SQL and home accessors cannot enter candidate condition lowering [0.13ms]
+(pass) native population identity survives keyed and property projection wrappers [0.24ms]
+(pass) required record and opaque endpoint keys are checked outside authored filters [0.14ms]
+(pass) intrinsic subject and resource keys are required outside short-circuit branches [0.28ms]
+
+ 27 pass
+ 0 fail
+ 171 expect() calls
+Ran 27 tests across 1 file. [9.62s]
