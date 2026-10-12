@@ -1,0 +1,13 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/security-claim-observation.test.ts:
+(pass) original identity generation and settlement retain exact frozen values [0.75ms]
+(pass) zero rows are only not observed [0.07ms]
+(pass) extra reordered wrong-domain descriptors and conflicting originals refuse [0.45ms]
+(pass) invalid expected carriers cannot make absence proof [0.08ms]
+(pass) accessors and oversized arrays refuse without getter or bulk descriptor reads [0.12ms]
+
+ 5 pass
+ 0 fail
+ 24 expect() calls
+Ran 5 tests across 1 file. [7.27s]

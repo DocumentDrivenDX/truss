@@ -1,0 +1,20 @@
+{
+  "baseCommit": "73af28bef6b1c34765e400506ec8a4f17f63650e",
+  "securityObservations": 222,
+  "nativeTests": 2,
+  "scope": "Actual native TEXT descriptors/rows decode in Bun and Chromium; absent remains not-observed. Candidate only, no original issuer/fresh cut/lease/completion proof or acceptance promotion.",
+  "trace": [
+    "CONTRACT-005 original response custody",
+    "CONTRACT-063 original reconciliation"
+  ],
+  "sha256": {
+    "security-native-claim-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-native-claim-decode.stderr.log": "683a7bbc993f76bffdd7bb11c4ac265d621d6dc8f3a54918a6ead180ba48e081",
+    "security-native-claim-decode.json": "105c72e40b439bbd2d0f9f40adb36dd87e82083fa0af77be8cf9f7336acd529f",
+    "security-native-claim-browser-result.json": "7e0877f227151ab1907563e5692c9a034881a97d6e164a18fdbba7e3023c6a42",
+    "security-native-claim-browser-build.log": "63107e8cd8607fa00c486da89ae1a0c132290181e998ab8ad7bc3633f5260a14",
+    "source-delta.zip": "1a345cd620d4c7ec378ebdb9f54f98b3d827963fe284b7a646460f8b550522be",
+    "security-native-claim-decode.json.cleanup.json": "7ef2ef64075ee2d0889f2f68597001016c6efa7379660bc5f3946e3b178e9e51",
+    "security-native-claim-decode.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

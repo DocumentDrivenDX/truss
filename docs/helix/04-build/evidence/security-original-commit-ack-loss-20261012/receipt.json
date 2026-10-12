@@ -1,0 +1,23 @@
+{
+  "executedBaseCommit": "0bad4cbb8d4c5e067e63ca4f6efaa4013e28e469",
+  "sourceDelta": "source-delta.zip",
+  "nativeTests": 2,
+  "observedDurationSeconds": 47.559,
+  "securityObservations": 219,
+  "cleanupObservations": 2,
+  "trace": [
+    "CONTRACT-005 original response/uncertain completion custody",
+    "CONTRACT-063 original durable claim reconciliation",
+    "STP-057 L11/L12",
+    "US-057-AC7/AC8"
+  ],
+  "scope": "Actual native COMMIT response loss through owned local unencrypted Unix-backend relay, stock psycopg unchanged, exact guarded claim reconciliation and fixture no-disclosure settlement. Not production recovery, arbitrary network/crash/power-loss durability, authenticated issuer/sink or complete profile/participant/bootstrap admission. No original132-case promotion.",
+  "sha256": {
+    "security-original-commit-ack-loss.json.cleanup.json": "7ef2ef64075ee2d0889f2f68597001016c6efa7379660bc5f3946e3b178e9e51",
+    "astra-review.json": "112dac7f1237ec199ee78a72a1afafede8e02c2b0e2270fc2200c11c782ef86e",
+    "security-original-commit-ack-loss.stderr.log": "64b092cdaff73849ad080d2882b3920650f23367f43579bc8e6ffa8b378e8542",
+    "security-original-commit-ack-loss.json": "548eea81304acec1e6ebfd9066161d7efbef38069fd9fe3c92ade1e37bf246a3",
+    "source-delta.zip": "7afaada7bac91d464e63ee2ce5e302a3a3a1914922399704bd1c44fe1d5a4ce5",
+    "security-original-commit-ack-loss.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
