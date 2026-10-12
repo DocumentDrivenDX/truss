@@ -1,0 +1,34 @@
+{
+  "scope": "Public Python committed receipt token and authority READ COMMITTED/read-only visibility",
+  "runtime": "truss-catalog-runtime/0.17-candidate",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "wheelSha256": "3210a149afef714c7f233f5c9b8cafde987e52e8a181eabf7ebe1eaa114e07c3",
+  "installedTests": {
+    "modules": [
+      "test_receipt_visibility_native",
+      "test_edge_mutations_native",
+      "test_group_preconditions_native",
+      "test_object_mutations_native"
+    ],
+    "count": 8,
+    "seconds": 49.486,
+    "result": "passed"
+  },
+  "typing": {
+    "fixtures": 4,
+    "expectedNegativeErrors": 20,
+    "result": "passed"
+  },
+  "umfOwnerSqlSources": 16,
+  "pythonImportsChecked": 691,
+  "astraReview": "Plan and runtime source approved; disclosure ordering and bytea GUC corrections verified; shared limit schema/prose aligned",
+  "limits": [
+    "authority only; recovery replicas refused",
+    "true or unavailable; no false from missing or hidden evidence",
+    "request-enabled groups; pending and same-transaction responses tokenless",
+    "indefinite retained receipts; no expiry API",
+    "fresh installation required",
+    "imports, full Weft execution, feed/ACK and managed upgrades unfinished"
+  ]
+}

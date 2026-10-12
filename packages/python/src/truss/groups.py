@@ -302,6 +302,7 @@ class SameTransactionReplay(_Carrier):
 class CommittedReceiptReplay(_Carrier):
     semantic: GroupSemanticResult
     replay: CommittedReceiptReplayEvidence
+    receipt_token: str | Absent = ABSENT
     disposition: Literal['replayed'] = field(default='replayed', init=False)
     durability: Literal['committed'] = field(default='committed', init=False)
 

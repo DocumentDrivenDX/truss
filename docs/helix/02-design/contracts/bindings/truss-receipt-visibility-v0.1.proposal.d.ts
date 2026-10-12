@@ -1,4 +1,5 @@
-/** Draft R7 facade; syntax/types never grant receipt, read or publication authority. */
+/** R7 facade; the Python authority-only realization is documented in the receipt design.
+ * Syntax/types never grant receipt, read or publication authority. */
 import type {Outcome,TransactionHandle} from './truss-execution-v0.1';
 import type {ProfilePin} from './truss-acceptance-input-v0.1';
 export interface ReceiptVisibilityRequest {
@@ -7,8 +8,7 @@ export interface ReceiptVisibilityRequest {
  readonly token:string;
  /** Canonical positive exact text; reductions of the selected profile ceilings. */
  readonly limits:Readonly<{
-  tokenBytes:string; evidenceBytes:string; retainedBytes:string;
-  workUnits:string; nativeStatements:string;
+  tokenBytes:string; evidenceBytes:string;
  }>;
 }
 export type ReceiptVisibilityResult = Readonly<{

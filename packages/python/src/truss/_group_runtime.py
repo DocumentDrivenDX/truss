@@ -11,6 +11,7 @@ from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, Cu
     CommittedReceiptReplay, SameTransactionReplayEvidence, CommittedReceiptReplayEvidence,
     GroupPrecondition, UnauthorizedPerson, PreconditionFailed, FailedPrecondition, Created, Changed, Unchanged, Deleted, DeletedIdentity, AliasIdentity, JournalEventReference)
 from .preparation import CatalogDocument
+from ._receipt_position import decode_receipt_position
 from ._umf_key_tuples import KeyTupleRequest, encode_string_key_tuples
 
 _DIAGNOSTIC=ProfilePin(identity='truss-native-create-diagnostic',version='0.1',
@@ -103,8 +104,10 @@ def _result(raw: bytes):
         return GroupSuccess(response=SameTransactionReplay(semantic=semantic,
             replay=SameTransactionReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence)))
     if value['durability']=='committed':
+        token=value.get('receiptToken',ABSENT)
+        if token is not ABSENT:decode_receipt_position(token)
         return GroupSuccess(response=CommittedReceiptReplay(semantic=semantic,
-            replay=CommittedReceiptReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence)))
+            replay=CommittedReceiptReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence),receipt_token=token))
     raise ValueError('Actual native receipt durability required')
 
 

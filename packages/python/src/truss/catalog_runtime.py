@@ -18,6 +18,7 @@ from typing import Literal
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
+from .receipt_visibility import ReceiptIncluded,ReceiptVisibilityUnavailable
 from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
@@ -278,7 +279,7 @@ class CatalogReferenceAssembly:
             if row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 local_failure[0]='unsupported_profile'
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility'))
         return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
@@ -443,7 +444,7 @@ class CatalogReferenceAssembly:
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(role)),prepare=False)
-                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.reached(bytea,int,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
@@ -530,6 +531,31 @@ class CatalogReferenceAssembly:
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
+        return result
+
+    @_active_operation
+    def reached_in_transaction(self,transaction: TransactionHandle,token: str,*,maximum_token_bytes: int=16384,
+                               maximum_evidence_bytes: int=1048576) -> Outcome[ReceiptIncluded | ReceiptVisibilityUnavailable]:
+        """Resolve committed Truss effects in this authority read-only transaction; never wait."""
+        from ._receipt_position import decode_receipt_position
+        from .contracts import ProfilePin
+        if type(maximum_token_bytes) is not int or not 1<=maximum_token_bytes<=16384 or type(maximum_evidence_bytes) is not int or not 1<=maximum_evidence_bytes<=16777216:
+            return Ok(ReceiptVisibilityUnavailable(reason='resource'))
+        if type(token) is not str:return Ok(ReceiptVisibilityUnavailable(reason='invalid_token'))
+        if len(token)>maximum_token_bytes:return Ok(ReceiptVisibilityUnavailable(reason='resource'))
+        try:locator=decode_receipt_position(token)
+        except (ValueError,UnicodeError):return Ok(ReceiptVisibilityUnavailable(reason='invalid_token'))
+        manifest,digest,_=_release()
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.reached(%s,%s,%s,%s)',(locator.original_bytes,maximum_evidence_bytes,manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]))
+            if value['outcome']=='unavailable':return ReceiptVisibilityUnavailable(reason=value['reason'])
+            return ReceiptIncluded(included=value['included'],comparison_profile=ProfilePin(**value['comparisonProfile']))
+        result=self._host._run_operation(transaction,observe)
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            reason={'42501':'authorization','0A000':'epoch_profile','54000':'resource','55P03':'observation_integrity'}.get(result.error.sql_state)
+            if reason:return Ok(ReceiptVisibilityUnavailable(reason=reason))
         return result
 
     @_active_operation

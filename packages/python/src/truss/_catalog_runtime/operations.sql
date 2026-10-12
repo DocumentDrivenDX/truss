@@ -3,10 +3,11 @@ CREATE TABLE truss.runtime_object_attempt (
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),writer_xid xid8 NOT NULL,actor_oid oid NOT NULL,
  input_bytes bytea NOT NULL,documents_bytes bytea NOT NULL,request_bytes bytea NOT NULL,
  context jsonb NOT NULL,next_index int NOT NULL DEFAULT 0,results jsonb NOT NULL DEFAULT '[]',aliases jsonb NOT NULL DEFAULT '[]',
- complete boolean NOT NULL DEFAULT false,receipt_id bigint,expected_receipt jsonb,
+ complete boolean NOT NULL DEFAULT false,receipt_id bigint,expected_receipt jsonb,position_bytes bytea,
  CHECK(octet_length(input_bytes) BETWEEN 1 AND 1048576),CHECK(octet_length(documents_bytes) BETWEEN 1 AND 4194304),
  CHECK(octet_length(request_bytes) BETWEEN 1 AND 65536),CHECK(next_index BETWEEN 0 AND 128));
 CREATE INDEX runtime_object_attempt_writer ON truss.runtime_object_attempt(writer_xid);
+CREATE UNIQUE INDEX runtime_object_attempt_receipt ON truss.runtime_object_attempt(receipt_id) WHERE receipt_id IS NOT NULL;
 CREATE SEQUENCE truss.runtime_object_transition_seq;
 CREATE TABLE truss.runtime_object_transition (
  transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_object_transition_seq'),attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt(id),
@@ -158,13 +159,19 @@ BEGIN
     SELECT * INTO STRICT selected FROM truss.runtime_operation_owner(operation,input->'operations',index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
    END LOOP;
    PERFORM truss.runtime_edge_authorize((raw->>'attemptId')::uuid);
+   SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=(raw->>'attemptId')::uuid;
+   IF NOT attempt.complete OR attempt.receipt_id IS DISTINCT FROM receipt.storage_row_id OR attempt.writer_xid IS DISTINCT FROM receipt.original_writer_xid
+    OR to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt OR attempt.input_bytes IS DISTINCT FROM original_input
+    OR attempt.position_bytes IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,receipt.original_writer_xid)
+    OR raw->'semantic' IS DISTINCT FROM jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',raw->'semantic'->>'executedCatalogRevision',
+     'layoutProfile',input->'layoutProfile','mutationProfile',input->'mutationProfile','results',attempt.results,'aliases',attempt.aliases) THEN RAISE EXCEPTION 'original receipt position correspondence required' USING ERRCODE='55000';END IF;
    observation:=convert_to(jsonb_build_object('profile','truss-native-create-replay-observation/0.1','sourceEpoch',context->>'sourceEpoch',
     'observingXid',writer::text,'originalWriterXid',receipt.original_writer_xid::text,'receiptStorageId',receipt.storage_row_id::text,
     'receiptGeneration',receipt.lifecycle_generation::text,'receiptSha256',encode(sha256(receipt.original_receipt_bytes),'hex'),
     'actorOid',person::text,'actor',session_user::text,'scopeIdentity',context->>'authorizedScopeIdentity',
     'releaseId',expected_release,'releaseSha256',expected_digest,'basis',CASE WHEN writer=receipt.original_writer_xid THEN 'same_transaction' ELSE 'committed_receipt' END)::text,'UTF8');
    RETURN convert_to(jsonb_build_object('outcome','success','disposition','replayed','durability',CASE WHEN writer=receipt.original_writer_xid THEN 'pending' ELSE 'committed' END,
-    'semantic',raw->'semantic','observationBase64',replace(encode(observation,'base64'),chr(10),''),'observationSha256',encode(sha256(observation),'hex'))::text,'UTF8');
+    'semantic',raw->'semantic','receiptToken',CASE WHEN writer<>receipt.original_writer_xid THEN truss.runtime_receipt_token(attempt.position_bytes) END,'observationBase64',replace(encode(observation,'base64'),chr(10),''),'observationSha256',encode(sha256(observation),'hex'))::text,'UTF8');
   END IF;
  END IF;
  PERFORM truss.runtime_evaluate_preconditions(input,original_condition_keys);
@@ -481,7 +488,8 @@ BEGIN
    'xid',attempt.writer_xid::text,'actorOid',attempt.actor_oid::text,'actor',session_user::text)::text,'UTF8'),0,'complete',receipt_bytes) RETURNING * INTO receipt;
   UPDATE truss.request_receipt_route_guard SET generation=generation+1 WHERE namespace_sha256=sha256(ns) AND request_sha256=sha256(rk);
  END IF;
- UPDATE truss.runtime_object_attempt SET complete=true,receipt_id=receipt.storage_row_id,expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL THEN to_jsonb(receipt) END WHERE id=attempt_id;
+ UPDATE truss.runtime_object_attempt SET complete=true,receipt_id=receipt.storage_row_id,expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL THEN to_jsonb(receipt) END,
+  position_bytes=CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid) END WHERE id=attempt_id;
  FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP PERFORM truss.runtime_object_validate(owner.object_id,owner.type_id);END LOOP;
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   SELECT * INTO STRICT selected FROM truss.runtime_operation_owner(operation,input->'operations',index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
@@ -495,8 +503,8 @@ CREATE FUNCTION truss.runtime_object_attempt_guard() RETURNS trigger
 LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
  IF TG_OP='DELETE' OR OLD.complete THEN RAISE EXCEPTION 'settled attempt immutable' USING ERRCODE='55000';END IF;
- IF (to_jsonb(OLD)-ARRAY['next_index','results','aliases','complete','receipt_id','expected_receipt']) IS DISTINCT FROM
-  (to_jsonb(NEW)-ARRAY['next_index','results','aliases','complete','receipt_id','expected_receipt']) THEN RAISE EXCEPTION 'original attempt immutable' USING ERRCODE='55000';END IF;
+ IF (to_jsonb(OLD)-ARRAY['next_index','results','aliases','complete','receipt_id','expected_receipt','position_bytes']) IS DISTINCT FROM
+  (to_jsonb(NEW)-ARRAY['next_index','results','aliases','complete','receipt_id','expected_receipt','position_bytes']) THEN RAISE EXCEPTION 'original attempt immutable' USING ERRCODE='55000';END IF;
  RETURN NEW;
 END;
 $$;
@@ -516,6 +524,7 @@ BEGIN
   IF attempt.receipt_id IS NOT NULL THEN
    SELECT to_jsonb(r) INTO actual FROM truss.request_receipt r WHERE storage_row_id=attempt.receipt_id;
    IF actual IS DISTINCT FROM attempt.expected_receipt THEN RAISE EXCEPTION 'exact original group receipt required' USING ERRCODE='55000';END IF;
+   IF attempt.position_bytes IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,attempt.receipt_id,attempt.writer_xid) THEN RAISE EXCEPTION 'exact original receipt position required' USING ERRCODE='55000';END IF;
   END IF;
  ELSIF TG_TABLE_NAME='object' THEN
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_object_validate(OLD.id,OLD.type_id);ELSE PERFORM truss.runtime_object_validate(NEW.id,NEW.type_id);END IF;
@@ -918,3 +927,97 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_receipt_position(context jsonb,receipt_id bigint,writer xid8) RETURNS bytea
+LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT convert_to(format('{"interfaceVersion":"truss-receipt-position/0.1.0","positionProfile":{"identity":%s,"version":%s,"sha256":%s},"installationId":%s,"sourceEpoch":%s,"receiptStorageRowId":%s,"writerXid":%s}',
+  to_json(context->'positionProfile'->>'identity')::text,to_json(context->'positionProfile'->>'version')::text,to_json(context->'positionProfile'->>'sha256')::text,
+  to_json(context->>'installationId')::text,to_json(context->>'sourceEpoch')::text,to_json(receipt_id::text)::text,to_json(writer::text)::text),'UTF8');
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_receipt_position(jsonb,bigint,xid8) FROM PUBLIC;
+CREATE FUNCTION truss.runtime_receipt_token(locator_bytes bytea) RETURNS text
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT rtrim(translate(replace(encode(locator_bytes,'base64'),chr(10),''),'+/','-_'),'=');
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_receipt_token(bytea) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_receipt_can_read(selected_attempt uuid) RETURNS boolean
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;operation jsonb;owner record;entry jsonb;index int:=0;
+BEGIN
+ SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
+ input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
+  SELECT * INTO STRICT owner FROM truss.runtime_operation_owner(operation,input->'operations',index);
+  IF NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RETURN false;END IF;
+  index:=index+1;
+ END LOOP;
+ FOR entry IN SELECT DISTINCT i.value FROM truss.runtime_edge_transition t
+  CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i
+  WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb LOOP
+  IF NOT truss.runtime_can_read(entry->'owner'->>'documentId',entry->'owner'->>'moduleId') THEN RETURN false;END IF;
+ END LOOP;
+ RETURN true;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_receipt_can_read(uuid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_receipt_refusal(selected_attempt uuid,reason text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ IF NOT truss.runtime_receipt_can_read(selected_attempt) THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ RETURN convert_to(jsonb_build_object('outcome','unavailable','reason',reason)::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_receipt_refusal(uuid,text) FROM PUBLIC;
+
+CREATE FUNCTION truss.reached(original_position bytea,maximum_evidence_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET bytea_output=hex AS $$
+DECLARE locator jsonb;installation truss.catalog_runtime_installation%ROWTYPE;receipt truss.request_receipt%ROWTYPE;
+ attempt truss.runtime_object_attempt%ROWTYPE;payload jsonb;included boolean;actual jsonb;
+BEGIN
+ PERFORM truss.runtime_person(false);
+ IF pg_is_in_recovery() THEN RETURN convert_to('{"outcome":"unavailable","reason":"epoch_profile"}','UTF8');END IF;
+ IF current_setting('transaction_read_only')<>'on' THEN RAISE EXCEPTION 'read-only receipt observation required' USING ERRCODE='0A000';END IF;
+ IF original_position IS NULL OR octet_length(original_position) NOT BETWEEN 1 AND 16384 OR maximum_evidence_bytes IS NULL OR maximum_evidence_bytes NOT BETWEEN 1 AND 16777216 THEN
+  RETURN convert_to('{"outcome":"unavailable","reason":"resource"}','UTF8');END IF;
+ IF (convert_from(original_position,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RETURN convert_to('{"outcome":"unavailable","reason":"invalid_token"}','UTF8');END IF;
+ locator:=convert_from(original_position,'UTF8')::jsonb;
+ IF locator-ARRAY['interfaceVersion','positionProfile','installationId','sourceEpoch','receiptStorageRowId','writerXid']<>'{}'::jsonb
+  OR locator->>'interfaceVersion' IS DISTINCT FROM 'truss-receipt-position/0.1.0'
+  OR jsonb_typeof(locator->'receiptStorageRowId') IS DISTINCT FROM 'string' OR locator->>'receiptStorageRowId' !~ '^[1-9][0-9]{0,18}$'
+  OR length(locator->>'receiptStorageRowId')=19 AND (locator->>'receiptStorageRowId') COLLATE "C">'9223372036854775807' THEN
+  RETURN convert_to('{"outcome":"unavailable","reason":"invalid_token"}','UTF8');END IF;
+ SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest
+  OR locator->>'installationId' IS DISTINCT FROM installation.installation_id::text OR locator->>'sourceEpoch' IS DISTINCT FROM installation.source_epoch::text
+  OR locator->'positionProfile' IS DISTINCT FROM truss.runtime_group_profiles()->'positionProfile' THEN RETURN convert_to('{"outcome":"unavailable","reason":"epoch_profile"}','UTF8');END IF;
+ -- Admit original retained scope before any receipt-derived disclosure.
+ SELECT * INTO attempt FROM truss.runtime_object_attempt WHERE receipt_id=(locator->>'receiptStorageRowId')::bigint;
+ IF NOT FOUND OR attempt.position_bytes IS DISTINCT FROM original_position THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ -- Receipt and snapshot come from one original native statement.
+ SELECT to_jsonb(r),pg_visible_in_snapshot(r.original_writer_xid,pg_current_snapshot()) INTO actual,included FROM truss.request_receipt r WHERE storage_row_id=attempt.receipt_id;
+ IF NOT FOUND THEN RETURN truss.runtime_receipt_refusal(attempt.id,'retention');END IF;
+ receipt:=jsonb_populate_record(NULL::truss.request_receipt,actual);
+ IF receipt.payload_state<>'complete' THEN RETURN truss.runtime_receipt_refusal(attempt.id,'retention');END IF;
+ IF octet_length(attempt.input_bytes)+octet_length(receipt.original_receipt_bytes)+octet_length(original_position)>maximum_evidence_bytes THEN RETURN truss.runtime_receipt_refusal(attempt.id,'resource');END IF;
+ payload:=convert_from(receipt.original_receipt_bytes,'UTF8')::jsonb;
+ IF payload->>'profile' IS DISTINCT FROM 'truss-object-group-receipt/0.1' THEN RETURN truss.runtime_receipt_refusal(attempt.id,'epoch_profile');END IF;
+ IF payload->>'attemptId' IS DISTINCT FROM attempt.id::text THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ IF NOT attempt.complete OR receipt.original_writer_xid IS NOT DISTINCT FROM pg_current_xact_id_if_assigned()
+  OR attempt.receipt_id IS DISTINCT FROM receipt.storage_row_id OR attempt.writer_xid IS DISTINCT FROM receipt.original_writer_xid
+  OR to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt OR attempt.position_bytes IS DISTINCT FROM original_position
+  OR original_position IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,receipt.original_writer_xid)
+  OR decode(payload->>'inputBase64','base64') IS DISTINCT FROM attempt.input_bytes
+  OR payload->'semantic' IS DISTINCT FROM jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',payload->'semantic'->>'executedCatalogRevision',
+    'layoutProfile',convert_from(attempt.input_bytes,'UTF8')::jsonb->'layoutProfile','mutationProfile',convert_from(attempt.input_bytes,'UTF8')::jsonb->'mutationProfile','results',attempt.results,'aliases',attempt.aliases) THEN
+  RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ SELECT to_jsonb(r) INTO actual FROM truss.request_receipt r WHERE storage_row_id=receipt.storage_row_id;
+ IF actual IS DISTINCT FROM attempt.expected_receipt THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ IF included IS NOT TRUE THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ RETURN convert_to(jsonb_build_object('outcome','available','included',included,'comparisonProfile',attempt.context->'positionProfile')::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.reached(bytea,int,text,text) FROM PUBLIC;

@@ -2,6 +2,29 @@
 
 Candidate design for consumer R7 under ADR-005 and CONTRACT-004/006/007. The existing [complete transaction and coverage domains](bindings/truss-feed-transaction-v0.1.d.ts) govern feed inclusion; [request receipts](bindings/truss-request-receipt-v0.1.d.ts) govern exact replay. This proposal adds a consumer-facing opaque position, not an alternative feed order or journal-only acknowledgment. Public registration, native producer and wire adoption remain open.
 
+## Selected Python authority realization
+
+Runtime 0.17 candidate implements the authority-only READ COMMITTED/read-only
+subset. The selected `truss-authority-receipt-visibility/0.1` profile is retained in
+`packages/python/src/truss/_catalog_runtime/group-profiles.json`. Its private producer
+stores canonical position bytes separately on the immutable original attempt,
+using the actual allocated receipt ID and original trusted context. Deferred commit
+checks bind these bytes to the complete protected receipt. The receipt body itself
+keeps its existing wire; the position profile explicitly selects this separate basis.
+
+Only independently confirmed committed replay exposes the original token. Public
+`reached_in_transaction` checks complete original correspondence and current scope
+under the caller's authority read transaction. A visible original committed receipt
+proves inclusion; this selected profile returns true or unavailable. Missing/hidden
+locators share observation-integrity unavailability; receipt-specific retention,
+resource and profile results follow original-scope admission and final reauthorization.
+Replica/seed comparison and repeatable-read false results below remain proposals.
+
+The realized resource profile uses logical token/evidence byte limits and ordinary
+PostgreSQL deadlines. Exact cumulative work/allocation instrumentation is not a
+requirement of this release. Receipts are retained indefinitely; no expiry procedure
+or replica/restore lineage is claimed.
+
 ## Meaning
 
 `reached` answers whether the original committed group's Truss effects are included in the data visible through the supplied read transaction and admitted scope. It does not promise that current records still equal the original result: later authorized changes may supersede them. It does not prove that arbitrary host writes in the same transaction were replicated. The complete Truss transaction boundary is required even when the group is a subset of a larger caller transaction.
@@ -164,7 +187,7 @@ The existing safe-watermark rule matters: transaction 124 may commit while 123 r
 
 Recommend `reachedInTransaction(token, transaction, limits)` on a selected read-visibility capability. This is a proposed semantic name, not a callable export today. The supplied handle is the original caller read-only transaction, never a transaction ID. Explicit selection binds authority versus replica implementation, exact position/resolver/application/seed profiles and current authorization; construction is inert.
 
-The result identifies its versioned comparison domain and includes only the available boolean or an unavailable reason (authorization, epoch/profile, retention, observation/integrity, or controlled-work limit). Exact public error/detail disclosure follows the security workstream. Require bounded token bytes, evidence bytes, retained resolution work and native statements. No waiting or polling occurs inside reached; the host may retry in a new snapshot. It cannot start a feed worker, extend retention or acknowledge data as a side effect.
+The result identifies its versioned comparison domain and includes only the available boolean or an unavailable reason (authorization, epoch/profile, retention, observation/integrity, or controlled-work limit). Exact public error/detail disclosure follows the security workstream. Require bounded token and evidence bytes under the selected stock PostgreSQL profile and ordinary deadlines. No waiting or polling occurs inside reached; the host may retry in a new snapshot. It cannot start a feed worker, extend retention or acknowledge data as a side effect.
 
 ## Retention and dependencies
 
@@ -225,16 +248,17 @@ TransactionHandle and wraps its semantic result in the original execution Outcom
 It introduces no commit-by-ID method, database connection factory or caller
 comparison-profile override. The available branch carries the boolean and exact
 comparison profile; unavailable carries no included field. Strict type controls
-reject unavailable/false conflation and numeric JavaScript work limits. Runtime
-admission and decoder correspondence still need implementation.
+reject unavailable/false conflation and numeric JavaScript byte limits. The selected
+Python authority profile implements runtime admission and original correspondence;
+other comparison profiles remain proposals.
 
-Request limits are canonical positive integer text for token bytes, evidence
-bytes, retained bytes, work units and native statements. Each can only reduce
-the original selected cumulative profile ceiling; they are not operation-account
-permits or proof of available resources. Before decoding, intersect token limit
-with the existing16KiB wire cap. Reserve complete decoding/lookup/correspondence/
-publication/containment capacity before their effects. Exhaustion returns once.
-Missing/unregistered bounds refuse instead of inferring limits from input size.
+Request limits are canonical positive integer text for token and evidence bytes.
+Each reduces the selected logical byte ceiling. The Python convenience API accepts
+bounded integer `maximum_token_bytes` and `maximum_evidence_bytes`. Intersect the
+token limit with the existing 16KiB wire cap before decoding; ordinary connection
+deadlines bound execution. A resource refusal returns once, with no internal retry.
+Cumulative work/allocation accounting and native statement counters are not part
+of the selected release contract.
 
 Admission order is original handle/profile/current-person and resource custody,
 canonical locator checks, private original receipt lookup/correspondence, selected

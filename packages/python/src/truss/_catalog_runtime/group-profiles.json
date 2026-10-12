@@ -53,6 +53,15 @@
         "sha256": "398cee9241e057bb95c415a165b1812ac689433eaac2684c70a15084e681b88b"
       },
       "definition": "Direct ordinary session person;SET ROLE none;READ COMMITTED;private owner;current recursive native role memberships;qualified document/module writer;no elevated/server-capability/private-owner/raw-Truss role access;trusted administrative maintenance quiesces;v1"
+    },
+    {
+      "name": "positionProfile",
+      "pin": {
+        "identity": "truss-authority-receipt-visibility",
+        "version": "0.1",
+        "sha256": "97d54f46af687510fd3ae10aaa37c761d17d6b371d12171ea15a0d402b8855e9"
+      },
+      "definition": "truss-authority-receipt-visibility/0.1;stock PostgreSQL18.6 authority;READ COMMITTED read-only caller transaction;canonical receipt-position0.1 locator;original immutable request-enabled group receipt and attempt;position retained atomically with effects;token exposed only after independent committed replay;all-no-op groups retain original xid;current original-operation and endpoint readers;no token authority grant;visible original committed receipt certifies atomic Truss effects;missing evidence unavailable never false;no replica or repeatable-read claim;bounded token and evidence bytes;ordinary deadlines;no waiting or retry"
     }
   ]
 }
