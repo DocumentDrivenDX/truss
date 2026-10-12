@@ -17,7 +17,7 @@ CREATE TABLE truss.catalog_registration_request (
 CREATE FUNCTION truss.catalog_actor() RETURNS oid
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE actor record; installation truss.catalog_runtime_installation%ROWTYPE;
- member_of_owner boolean; member_of_registrar boolean;
+ member_of_owner boolean; member_of_registrar boolean; member_of_server_capability boolean;
 BEGIN
  IF current_setting('transaction_isolation')<>'read committed' THEN
   RAISE EXCEPTION 'catalog authorization requires READ COMMITTED' USING ERRCODE='0A000'; END IF;
@@ -30,11 +30,13 @@ BEGIN
   SELECT actor.oid UNION
   SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid
  ) SELECT coalesce(bool_or(role_oid=installation.owner_oid),false),
-          coalesce(bool_or(role_oid=installation.registrar_oid),false)
- INTO member_of_owner,member_of_registrar FROM memberships;
+          coalesce(bool_or(role_oid=installation.registrar_oid),false),
+          coalesce(bool_or(role_oid IN (SELECT oid FROM pg_roles WHERE rolname IN
+           ('pg_read_server_files','pg_write_server_files','pg_execute_server_program'))),false)
+ INTO member_of_owner,member_of_registrar,member_of_server_capability FROM memberships;
  IF current_setting('server_version_num')<>'180006' OR current_setting('role')<>'none' OR NOT actor.rolcanlogin OR actor.rolsuper
   OR actor.rolcreaterole OR actor.rolcreatedb OR actor.rolreplication OR actor.rolbypassrls
-  OR actor.oid=installation.owner_oid OR member_of_owner
+  OR actor.oid=installation.owner_oid OR member_of_owner OR member_of_server_capability
   OR NOT EXISTS(SELECT 1 FROM pg_namespace n JOIN pg_roles r ON r.oid=n.nspowner
    WHERE n.nspname='truss' AND r.oid=installation.owner_oid AND NOT r.rolcanlogin AND NOT r.rolsuper
     AND NOT r.rolcreaterole AND NOT r.rolcreatedb AND NOT r.rolreplication AND NOT r.rolbypassrls AND NOT r.rolinherit)

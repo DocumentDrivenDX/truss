@@ -1,0 +1,33 @@
+test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) ... 
+  test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_read_server_files') ... FAIL
+  test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_write_server_files') ... FAIL
+  test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_execute_server_program') ... FAIL
+
+======================================================================
+FAIL: test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_read_server_files')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 484, in test_public_actor_refuses_predefined_file_and_program_roles
+    self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='e5887e7c-867e-4ebf-83c9-b7600a8cf915', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_write_server_files')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 484, in test_public_actor_refuses_predefined_file_and_program_roles
+    self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='e5887e7c-867e-4ebf-83c9-b7600a8cf915', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_execute_server_program')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 484, in test_public_actor_refuses_predefined_file_and_program_roles
+    self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='e5887e7c-867e-4ebf-83c9-b7600a8cf915', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+----------------------------------------------------------------------
+Ran 1 test in 3.825s
+
+FAILED (failures=3)

@@ -473,6 +473,32 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
         host.detach();connection.commit()
 
+    def test_public_actor_refuses_predefined_file_and_program_roles(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        for role in ('pg_read_server_files','pg_write_server_files','pg_execute_server_program'):
+            with self.subTest(role=role):
+                self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH INHERIT TRUE, SET FALSE').format(psycopg.sql.Identifier(role)))
+                try:
+                    self.assertEqual(connection.execute("SELECT m.inherit_option,m.set_option FROM pg_auth_members m JOIN pg_roles r ON r.oid=m.roleid JOIN pg_roles a ON a.oid=m.member WHERE a.rolname=session_user AND r.rolname=%s",(role,)).fetchone(),(True,False))
+                    self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+                    self.assertFalse(host._custody.quarantined)
+                finally:self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(role)))
+                self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+
+    def test_public_actor_refuses_indirect_server_capability_membership(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.admin.execute('CREATE ROLE server_capability_bridge NOLOGIN')
+        try:
+            self.admin.execute('GRANT pg_read_server_files TO server_capability_bridge WITH INHERIT TRUE, SET FALSE')
+            self.admin.execute('GRANT server_capability_bridge TO consumer WITH INHERIT FALSE, SET TRUE')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+            self.admin.execute('REVOKE server_capability_bridge FROM consumer')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        finally:
+            self.admin.execute('REVOKE server_capability_bridge FROM consumer')
+            self.admin.execute('DROP ROLE server_capability_bridge')
+
     def test_public_actor_refuses_late_column_and_reference_privileges(self):
         self.install();connection,host,assembly,tx=self.consumer()
         connection.execute("CREATE TEMP TABLE caller_privilege_sentinel(value text); INSERT INTO caller_privilege_sentinel VALUES ('kept')")

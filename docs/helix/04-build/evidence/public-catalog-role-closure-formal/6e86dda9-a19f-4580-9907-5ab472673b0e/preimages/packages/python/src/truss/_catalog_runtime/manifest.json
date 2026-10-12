@@ -1,0 +1,19 @@
+{
+  "interfaceVersion": "truss-catalog-runtime-release/0.1",
+  "releaseId": "truss-catalog-runtime/0.2-candidate",
+  "postgresVersion": "180006",
+  "layoutProfile": {
+    "identity": "truss-layout",
+    "version": "0.16",
+    "sha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368"
+  },
+  "files": {
+    "layout.sql": "421a9bb88bcc1293f4fcbb66d2b443ccd08ccfc7845c79e5d3ee21b5494666a7",
+    "lineage.sql": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc",
+    "plan.sql": "060f74698e891dbf3cf36629ae9293d05ea9507d78a6c539c4d299591367c537",
+    "runtime.sql": "a1753606b2f31f0b19974e84cc34a65d3150383143c8f035ff62c0ad54758a11",
+    "barrier.sql": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
+    "view.sql": "298959b53f82b2ceaa3929fb409dd609567ff06975daeca0c891cd7b8a16a793"
+  },
+  "version": "0.2"
+}

@@ -1,0 +1,47 @@
+test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) ... 
+  test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_read_server_files') ... FAIL
+  test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_write_server_files') ... FAIL
+  test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_execute_server_program') ... FAIL
+
+======================================================================
+FAIL: test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_read_server_files')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 484, in test_public_actor_refuses_predefined_file_and_program_roles
+    self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='6d0ec9cb-2892-4e0e-ad8b-72ee6a538474', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+======================================================================
+FAIL: test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_write_server_files')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 483, in test_public_actor_refuses_predefined_file_and_program_roles
+    self.assertEqual(connection.execute("SELECT pg_has_role(session_user,%s,'USAGE')",(role,)).fetchone(),(True,))
+AssertionError: Tuples differ: (False,) != (True,)
+
+First differing element 0:
+False
+True
+
+- (False,)
++ (True,)
+
+======================================================================
+FAIL: test_public_actor_refuses_predefined_file_and_program_roles (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_predefined_file_and_program_roles) (role='pg_execute_server_program')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 483, in test_public_actor_refuses_predefined_file_and_program_roles
+    self.assertEqual(connection.execute("SELECT pg_has_role(session_user,%s,'USAGE')",(role,)).fetchone(),(True,))
+AssertionError: Tuples differ: (False,) != (True,)
+
+First differing element 0:
+False
+True
+
+- (False,)
++ (True,)
+
+----------------------------------------------------------------------
+Ran 1 test in 3.018s
+
+FAILED (failures=3)
