@@ -1,0 +1,72 @@
+{
+  "scope": "Implemented private security-home installation only; authored profile is not authenticated issuer, no activated policy or security readiness. Original 132 required cases retained, 106 missing commands at current audit.",
+  "validation": {
+    "native": {
+      "tests": 5,
+      "seconds": 18.974,
+      "result": "pass"
+    },
+    "supportedUpgrade": {
+      "tests": 1,
+      "seconds": 7.459,
+      "result": "pass",
+      "predecessorManifestSha256": "8cb52bb9cbf7b67eb11c9b965463465c32811fb7809c51df914cea97c0e40312"
+    },
+    "coordinator": {
+      "tests": 18,
+      "result": "pass"
+    },
+    "boundaries": {
+      "imports": 797,
+      "result": "pass"
+    },
+    "wheel": {
+      "sha256": "b6d1838fd9fdb528677531a51eaee834d64632c1373594f3f5024d9e292d214d",
+      "moduleAndThreeSqlSources": "exact byte equality"
+    }
+  },
+  "commands": {
+    "native": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-home-operation-r4-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+    "upgrade": "TRUSS_UPGRADE_SOURCE_PACKAGE=/private/tmp/truss-source-lookup-023-r2-installed PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python -m unittest test_runtime_upgrade_native"
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "findings": [
+      "Missing cursor-local adapter pinning",
+      "Genesis release compared with current package instead of current release"
+    ],
+    "resolution": "Both fixed; second read-only source review no residual actionable findings within private scope. Native replay separately retained."
+  },
+  "acceptanceTraceability": [
+    {
+      "case": "truss.B05",
+      "covers": "US-056-AC5",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.B11",
+      "covers": "US-056-AC9",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L12",
+      "covers": "US-057-AC8",
+      "caseClosed": false
+    }
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_security_home_installation.py": "51eb90eebf9d3d1bdd7daf7b1d9de377a2a9a13b1a8ac021e4f5d52032edeccf",
+    "packages/python/src/truss/_security_bootstrap/guard.sql": "0e1d881a2eccbcaf3d34ab8c4729a1aa21361c8c64b4ac142d706ee1da1312cf",
+    "packages/python/src/truss/_security_bootstrap/claims.sql": "09515ed389247cea307ca04fc4ef45f90213a7881cd489758e5a1f854ce8e323",
+    "packages/python/src/truss/_security_bootstrap/capacity.sql": "1ce1e6680dc681134423120e005df9161232e61fe1495495da177b82dbf69474",
+    "packages/python/src/truss/catalog_runtime.py": "4f9cb4a03cb2bbd1680582ffe93dd8b17f5212ead67e44fb963b4679bebbf72a",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "dbb2cd96137d9d6215ddfe4271ba10b77a9327f6950191b662a43b91e6e67fc5",
+    "packages/python/tests/test_runtime_upgrade_native.py": "ccf5f738d734be45ab4c23a7c2f76e4483a17742cae5560ee90f6fdab59c8130",
+    "packages/python/tests/test_security_public_ontology_native.py": "309c2c8e9c410afe6475c1b6005a99538fd798dcabe9b06913bb2a15d6fef1f7",
+    "packages/python/pyproject.toml": "980e597193eab5407362a52143d386e95a5d7d7d09c27300aee993424991a30d",
+    "scripts/check-module-boundaries.py": "db1bf7d06852cb62387617e18259f4ef8a57e32a66551c78ddb53dc0486fb757",
+    "docs/helix/02-design/contracts/installation-policy-guard.proposal.md": "e43d26457bb2f84ee934da19b4ed2298475fd73487a51d877ac34ee905aa786c"
+  }
+}

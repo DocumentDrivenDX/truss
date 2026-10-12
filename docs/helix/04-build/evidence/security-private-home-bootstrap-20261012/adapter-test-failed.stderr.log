@@ -1,0 +1,24 @@
+...F.
+======================================================================
+FAIL: test_private_security_home_operation_preserves_transaction_and_refuses_repair (__main__.PublicOntologySecurityTests.test_private_security_home_operation_preserves_transaction_and_refuses_repair)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 46, in test_private_security_home_operation_preserves_transaction_and_refuses_repair
+    self.assertEqual(self.admin.execute('SELECT %s::bytea,%s::int',(b'caller',6)).fetchone(),(b'caller-changed',9))
+AssertionError: Tuples differ: (b'caller-changed', 6) != (b'caller-changed', 9)
+
+First differing element 1:
+6
+9
+
+- (b'caller-changed', 6)
+?                     ^
+
++ (b'caller-changed', 9)
+?                     ^
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 24.786s
+
+FAILED (failures=1)

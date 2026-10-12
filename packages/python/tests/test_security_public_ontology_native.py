@@ -19,6 +19,53 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_private_security_home_operation_preserves_transaction_and_refuses_repair(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  self.install()
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);tx=self.host.adopt_transaction().value
+  identity=self.installation.installation_id.encode();profile=b'private-bootstrap-native/0.1'
+  self.admin.execute("CREATE TEMP TABLE bootstrap_caller_work(value text);INSERT INTO bootstrap_caller_work VALUES('kept')")
+  def bootstrap(original=identity):return bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=original,authored_profile=profile,max_retained=6)
+  self.assertIsInstance(bootstrap(b'foreign'),Error)
+  self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_generation_guard')").fetchone()[0])
+  self.admin.execute('ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO consumer')
+  self.assertIsInstance(bootstrap(),Error)
+  self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_generation_guard')").fetchone()[0])
+  self.assertEqual(self.admin.execute('TABLE bootstrap_caller_work').fetchall(),[('kept',)])
+  self.admin.execute('ALTER DEFAULT PRIVILEGES REVOKE SELECT ON TABLES FROM consumer')
+  from psycopg.types.string import BytesDumper
+  from psycopg.adapt import Dumper
+  class ChangedBytes(BytesDumper):
+   def dump(self,value):return super().dump(value+b'-changed')
+  class ChangedCapacity(Dumper):
+   oid=23
+   def dump(self,value):return str(9 if value==6 else value).encode()
+  self.admin.adapters.register_dumper(bytes,ChangedBytes)
+  self.admin.adapters.register_dumper(int,ChangedCapacity)
+  installed=bootstrap();self.assertIsInstance(installed,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(installed.value.security_ready)
+  self.assertEqual(self.admin.execute('SELECT %s::bytea,%s::int',(b'caller',6)).fetchone(),(b'caller-changed',9))
+  self.assertEqual(self.admin.execute('SELECT installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard').fetchall(),[(identity,profile,1)])
+  self.assertEqual(self.admin.execute('SELECT installation_identity_bytes,policy_profile_bytes,max_retained FROM truss.policy_publication_capacity').fetchall(),[(identity,profile,6)])
+  self.assertIsInstance(bootstrap(),Error)
+  self.assertEqual(self.admin.execute('TABLE bootstrap_caller_work').fetchall(),[('kept',)])
+  self.host.detach();self.admin.rollback()
+  self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_generation_guard')").fetchone()[0])
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);tx=self.host.adopt_transaction().value
+  committed=bootstrap();self.assertIsInstance(committed,Ok,str(self.host._custody.last_attempt.error));self.host.detach();self.admin.commit()
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(0,))
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   for home in ['policy_generation_guard','policy_publication_claim','policy_publication_capacity']:
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('TABLE truss.{}').format(psycopg.sql.Identifier(home)))
+   ordinary.execute("SET statement_timeout='10000'");ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=10000)
+   try:
+    ordinary_tx=ordinary_host.adopt_transaction().value
+    denied=bootstrap_security_homes_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,max_retained=6)
+    self.assertIsInstance(denied,Error)
+    self.assertEqual(ordinary.execute('SELECT 1').fetchone(),(1,))
+   finally:ordinary_host.detach();ordinary.rollback()
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.operation.json').write_text(json.dumps({'observations':['foreign original identity refused','hostile default ACL refused with full home rollback','prior caller work preserved','exact original guard and capacity seeded despite caller custom bytes/int adapters; caller adapters preserved','existing homes refused without repair','outer rollback removes homes','original caller commit persists homes','ordinary native consumer denied all three homes and private bootstrap; transaction remains usable'],'scope':'Private installation operation only; no security-ready profile, policy activation, authority issuer, complete participant/native source qualification or backend acceptance.'},indent=2)+'\n')
  def test_fresh_installer_seals_candidate_homes_and_refuses_inherited_acl(self):
   from unittest.mock import patch
   from truss import Error

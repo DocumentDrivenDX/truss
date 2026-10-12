@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/_seed_runtime_upgrade_023.py", line 6, in <module>
+    from test_feed_runtime_native import FeedRuntimeTests
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_feed_runtime_native.py", line 8, in <module>
+    import test_receipt_visibility_native as receipt_tests
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_receipt_visibility_native.py", line 6, in <module>
+    import test_object_mutations_native as mutation_tests
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_object_mutations_native.py", line 6, in <module>
+    import test_group_create_native as group_tests
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_group_create_native.py", line 6, in <module>
+    import psycopg
+ModuleNotFoundError: No module named 'psycopg'
+E
+======================================================================
+ERROR: test_preserve_original_facts_rollback_upgrade_and_continue (test_runtime_upgrade_native.RuntimeUpgradeTests.test_preserve_original_facts_rollback_upgrade_and_continue)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_runtime_upgrade_native.py", line 19, in test_preserve_original_facts_rollback_upgrade_and_continue
+    subprocess.run([sys.executable,str(tests/'_seed_runtime_upgrade_023.py'),runtime.info.connection_uri,str(artifact)],env=env,check=True,timeout=120)
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/private/tmp/truss-security-pg18-r2-20261011/bin/python', '/private/tmp/truss-security-main-integration/packages/python/tests/_seed_runtime_upgrade_023.py', 'postgresql://postgres:@/postgres?host=/private/tmp/truss-upgrade-rcf18cku/data', '/private/tmp/truss-upgrade-rcf18cku/original-facts.pickle']' returned non-zero exit status 1.
+
+----------------------------------------------------------------------
+Ran 1 test in 3.521s
+
+FAILED (errors=1)

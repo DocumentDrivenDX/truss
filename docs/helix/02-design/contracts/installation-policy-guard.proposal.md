@@ -600,3 +600,34 @@ Trace CONTRACT-005/063 and STP-057 L11/L12. The fixture knows no data query was
 dispatched before settlement; this is not authentic production sink completion,
 original issuer/unknown-outcome recovery or complete bootstrap/participant
 qualification. No original required acceptance case is promoted.
+
+
+### Private transaction-owned home bootstrap (2026-10-12)
+
+`packages/python/src/truss/_security_home_installation.py` now implements an
+explicit private bootstrap for the three candidate homes. It uses the original
+PsycopgHost operation savepoint, supported cursor-local adapters and a direct
+trusted installation administrator. It compares original installation identity,
+namespace/role ownership and resolved current runtime release, serializes on the
+original installation head, rejects existing homes and third-party default ACLs,
+checks bundled SQL digests, seals ownership/ACLs, and seeds generation one plus
+the authored capacity configuration. The caller alone commits or rolls back.
+There is no repair, token deletion, policy activation or public ready-engine API.
+
+The profile bytes are authored configuration, not authenticated issuer evidence.
+Administrative quiescence remains a premise. This operation does not qualify the
+complete source census, authority participants, native fact producers, original
+caller/context, publication sink or recovery issuer. The returned pending value
+explicitly has `security_ready=False`; installing these homes does not admit a
+security profile or enable Weft lowering. The ordinary catalog release manifest
+and public capability inventory remain unchanged.
+
+Native and package evidence, including failed attempts and Astra Ultra review
+corrections, is retained under
+`docs/helix/04-build/evidence/security-private-home-bootstrap-20261012/`.
+The tests cover foreign identity, default ACL refusal and rollback, prior caller
+work, original bytes/capacity despite caller adapters, preservation of caller
+adapters, outer rollback/commit, repeated-bootstrap refusal, and ordinary native
+access/invocation refusal. Bootstrap after an actual supported runtime upgrade
+is a separate regression. These are partial prerequisites for truss.B05/B11 and
+L12; none of the thirty Truss backend cases is promoted by this seam.
