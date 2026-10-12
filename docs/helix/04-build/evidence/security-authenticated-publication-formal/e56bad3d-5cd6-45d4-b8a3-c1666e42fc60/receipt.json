@@ -1,0 +1,58 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-authenticated-publication.py": "879d8ec744cb4ddf2c45bb3579ddbade0272c604644a2f1f73d44a7d6d1d5dca",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "932eb504853e5abc2e3df2d796ccba66e4f48e1edc607921933958551c4365a6",
+    "scripts/security_owned_read.py": "f686890862163e492506555f64889ad0c07cbe656729ea76cbe9f3503c7e65b6",
+    "scripts/security_owned_receiver.py": "70cac7f420f52ad90df855df0abc5ff4cd75820a166fa74a7757d83cf9d4485f",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "5965ae835d1099740a24e47d0452df6f6ae8e4ee516622f69a2c603908bea161",
+    "docs/helix/04-build/evidence/python-psycopg-epoch-cut/06f572a7-cc8b-405b-9965-c4b66e1943b6/receipt.json": "0590a9f47a0b24a177db2c612ee4dce820ee378f7bbacba98e13f238b97ced20"
+  },
+  "queries": [
+    {
+      "id": "trust_null_excludes_executor_and_publication",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "582b4c0bc90e125cb7925597cadbb06ceb3789ff742c9c1c27515b8c0caf6fe9",
+      "model": null
+    },
+    {
+      "id": "unchanged_role_oid_does_not_bypass_changed_login_name",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "b0c66222c1a81939350f47fb7073a952e29268246944e0af5bf46b7b130c8845",
+      "model": null
+    },
+    {
+      "id": "caller_login_does_not_pin_other_routes",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "a0009ad123e772bdb89d697d04f13d454e0fa4f2ae48be30104f61f3acce2e2a",
+      "model": "[login_name_at_admission = \"\",\n login_name_at_publication = \"\",\n original_native_authentication = \"scram-sha-256:\",\n original_semantic_permit = True,\n original_source_cut = True,\n entry_role_oid_matches = True,\n final_role_oid_matches = True,\n other_routes_authenticated = False,\n native_authentication_present = True,\n decision_published = True,\n executor_invoked = True,\n original_guards_retained = True]"
+    },
+    {
+      "id": "caller_login_does_not_authenticate_subject_mapping",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "9a92529edfe133bcc4adc2e5a986300ee6b814e1dcbc6003e67b14567c4abddd",
+      "model": "[login_name_at_admission = \"\",\n login_name_at_publication = \"\",\n original_native_authentication = \"scram-sha-256:\",\n original_semantic_permit = True,\n original_source_cut = True,\n entry_role_oid_matches = True,\n final_role_oid_matches = True,\n native_authentication_present = True,\n ontology_subject_binding = False,\n decision_published = True,\n executor_invoked = True,\n original_guards_retained = True]"
+    }
+  ],
+  "nativePacket": "docs/helix/04-build/evidence/python-psycopg-epoch-cut/06f572a7-cc8b-405b-9965-c4b66e1943b6/receipt.json",
+  "scope": "Selected owned0.5 caller requires original native SCRAM/role correspondence before executor and before publication.",
+  "limitations": [
+    "Source cut, native role/OID observations, immutable original authentication and original guard custody are premises",
+    "No Python/SQL/driver parsing or native/semantic refinement proof",
+    "No production subject/target/executor/issuer/credential/routing/public-catalog admission"
+  ],
+  "acceptancePrerequisites": [
+    "TD-056 C02/C04/C05",
+    "STP-056 B05/B11/B12",
+    "US-056 AC5/AC9/AC10"
+  ]
+}

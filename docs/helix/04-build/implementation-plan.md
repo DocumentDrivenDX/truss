@@ -5678,3 +5678,29 @@ retains six current source/native-receipt inputs and the same four fresh-context
 replays, two UNSAT/two SAT. All current/archive/SMT digests are rechecked before
 publication. Formal and native scope remain caller-only owned0.5; public catalog
 and all advanced backend cases keep their independent acceptance obligations.
+
+### Accepted-catalog views merge and security continuation — 2026-10-12
+
+A second non-force push rejection preserved main's b9a0dc12 accepted-catalog
+views. The merge retains the public view facade, original definition-source
+correspondence and bounded extractor. Existing owner-reported
+`public-python-catalog-view-20261012.json` records29 source/installed-wheel tests
+under its catalog-view scope; this is not independently replayed by the security
+composition or full business backend acceptance.
+
+Final `evidence/python-psycopg-epoch-cut/06f572a7-cc8b-405b-9965-c4b66e1943b6`
+passes197 methods and boundaries on the combined source, with149 Truss,363 UMF
+and1705 native payload pins and three confirmed cleanups. Earlier3ab7359a retains
+the pre-view-merge source scope. Final conditional formal packet
+`evidence/security-authenticated-publication-formal/e56bad3d-5cd6-45d4-b8a3-c1666e42fc60`
+replays four queries, two UNSAT/two SAT, with six exact current/native-receipt
+inputs. Earlier b75d3127 preserves its original intermediate scope. Verify all
+current/preimage/archive/runtime/SMT digests before publication.
+
+Next execute adversarial public actor checks for column privilege and REFERENCES
+drift, predefined-role access and inheritance-option semantics. Source review
+found table-level denial without column/REFERENCES checks and recursive membership
+without inherit/set filtering; these are hypotheses requiring original native
+public-API controls before any bypass or policy-semantics claim. Keep callable
+public metadata and advanced business profiles distinct. The whole goal remains
+active at26/132 with106 unbound required cases.
