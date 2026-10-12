@@ -44,6 +44,40 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_operation_type(jsonb,jsonb,int) FROM PUBLIC;
 
+-- Edge identities are relationship-qualified, never record-type-qualified.
+CREATE FUNCTION truss.runtime_operation_relationship(operation jsonb,operations jsonb,operation_index int) RETURNS truss.rel_def
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE pin text;identity jsonb;creation jsonb;selected truss.rel_def%ROWTYPE;
+BEGIN
+ IF operation->>'operation'='create_edge' THEN pin:=operation->>'relationshipDefinitionPin';
+ ELSIF operation->>'operation' IN ('update_edge','delete_edge') THEN
+  IF operation->'target'->>'state'='stored' THEN
+   identity:=operation->'target'->'identity';pin:=identity->>'definitionPin';
+  ELSIF operation->'target'->>'state'='alias' THEN
+   IF (SELECT count(*) FROM jsonb_array_elements(operations) WITH ORDINALITY x(value,ord)
+    WHERE ord<=operation_index AND value->>'operation'='create_edge' AND value->>'alias'=operation->'target'->>'alias')<>1 THEN
+    RAISE EXCEPTION 'one prior edge alias required' USING ERRCODE='22023';END IF;
+   SELECT value INTO STRICT creation FROM jsonb_array_elements(operations) WITH ORDINALITY x(value,ord)
+    WHERE ord<=operation_index AND value->>'operation'='create_edge' AND value->>'alias'=operation->'target'->>'alias';
+   pin:=creation->>'relationshipDefinitionPin';
+  ELSE RAISE EXCEPTION 'stored or prior edge alias target required' USING ERRCODE='22023';END IF;
+ ELSE RAISE EXCEPTION 'selected edge operation required' USING ERRCODE='22023';END IF;
+ SELECT r.* INTO selected FROM truss.rel_def r
+  WHERE r.retired_rev IS NULL AND truss.runtime_relationship_pin(r.rel_type_id)=pin;
+ IF NOT FOUND THEN RAISE EXCEPTION 'accepted relationship pin required' USING ERRCODE='22023';END IF;
+ IF identity IS NOT NULL AND (jsonb_typeof(identity->'typeId') IS DISTINCT FROM 'string'
+  OR jsonb_typeof(identity->'definitionPin') IS DISTINCT FROM 'string'
+  OR identity->>'typeId' IS DISTINCT FROM selected.rel_type_id::text
+  OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module)
+  OR identity-ARRAY['id','typeId','definitionPin','owner']<>'{}'::jsonb
+  OR jsonb_typeof(identity->'id') IS DISTINCT FROM 'string' OR identity->>'id' !~ '^[1-9][0-9]{0,18}$'
+  OR length(identity->>'id')=19 AND (identity->>'id') COLLATE "C">'9223372036854775807') THEN
+  RAISE EXCEPTION 'qualified exact edge identity required' USING ERRCODE='22023';END IF;
+ RETURN selected;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_operation_relationship(jsonb,jsonb,int) FROM PUBLIC;
+
 CREATE FUNCTION truss.object_group_begin(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,original_condition_keys bytea DEFAULT convert_to('[]','UTF8')) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input jsonb;documents jsonb;request jsonb;context jsonb;selected truss.type_def%ROWTYPE;archive truss.schema_doc%ROWTYPE;
