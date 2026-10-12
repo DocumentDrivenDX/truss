@@ -1,0 +1,26 @@
+{
+  "unitTests": 17,
+  "typecheckExitCode": 0,
+  "sourcePins": {
+    "packages/postgresql/src/security-predicate.ts": "55097899026f42ecf979e9917fa1aa6c4ad0ce40f2674fcc320ef1cdf9c858cf",
+    "tests/security-resource-parameters.test.ts": "f8dc9c22db3573a3c4cc294d22706282af9067fd8fcd96887d3161b85f86c51a",
+    "tests/fixtures/security-resource-parameters.ts": "f146b92338485b93f1bbabc513dadd0ea76ba971f33eb6f2c02eaf83b9725574"
+  },
+  "scope": "Selected resource argument layout validation and order; prior native/browser evidence is not rerun or refreshed",
+  "controls": [
+    "null layout refuses even with field-free literal policy",
+    "empty/NUL/overlong native column refuses",
+    "duplicate selected mapping refuses",
+    "two-field explicit order determines scalar slot"
+  ],
+  "limits": [
+    "No original row/codec/source authority or full backend case admission."
+  ],
+  "artifacts": {
+    "security-resource-parameters.ts": "f146b92338485b93f1bbabc513dadd0ea76ba971f33eb6f2c02eaf83b9725574",
+    "typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-predicate.ts": "55097899026f42ecf979e9917fa1aa6c4ad0ce40f2674fcc320ef1cdf9c858cf",
+    "unit.log": "93adb70561894d692ac803b920c9310b9ce279b2e7d203f34adcb7941e0b0321",
+    "security-resource-parameters.test.ts": "f8dc9c22db3573a3c4cc294d22706282af9067fd8fcd96887d3161b85f86c51a"
+  }
+}
