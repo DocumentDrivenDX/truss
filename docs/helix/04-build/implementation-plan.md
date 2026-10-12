@@ -6678,3 +6678,18 @@ Post-merge constant-disclosure replay at59d5903c preserves feed runtime work and
 passes148 native observations. Current pins/preimages/output are retained in
 `security-native-constant-disclosure-20261012/merged-receipt.json`. Feed/history
 disclosure and original compiler query-use admission remain outside this subset.
+
+
+### Native value-free withholding surface — 2026-10-12
+
+Candidate withheld disclosure now drives raw/graph native read functions that
+return qualified Resource-secret field/disposition metadata with no secret value
+column. Original membership vectors remain; field operators have no carrier
+(42703) and the prior transformed-value endpoints are revoked(42501). Raw bag/
+column grants remain revoked. The combined fixture passes166 observations,
+strict producer typing and Python boundaries733imports. Evidence:
+`docs/helix/04-build/evidence/security-native-withholding-20261012/receipt.json`.
+Trace CONTRACT-062/063 / US-056-AC6 / STP-056 B07/B08. This is native withholding
+for required nonnull String values. Original null/absence, source compiler
+query-use, conflict activation, full wire/trace privacy and feed/history/source/
+authority/publication remain separately required. No backend case is promoted.

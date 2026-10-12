@@ -32,4 +32,7 @@ const mask={transformed:{transform:'constant',version:'0.1.0',outputField:ref('R
 const disclosureInput={rules:[{id:'membership',effect:'permit',actions:['read'],target:ref('Resource'),disclosure:[[ref('Resource-secret'),mask]],condition}],action:'read',target:ref('Resource'),scans,resource:{target:ref('Resource'),keyId:'pk',keyFields:[ref('Resource-code')],parameters:[1]},subject:{target:ref('Staff'),keyId:'pk',keyFields:[ref('Staff-code')],parameters:[2]},fields:[{owner:ref('Resource'),field:ref('Resource-code'),domain:stringDomain,protection:'unprotected' as const},{owner:ref('Resource'),field:ref('Resource-secret'),domain:stringDomain,protection:'protected' as const},{owner:ref('Assignment'),field:ref('Assignment-active'),domain,protection:'unprotected' as const}],outputFields:[ref('Resource-code'),ref('Resource-secret')]};
 const graphDisclosure=lowerCandidateSecurityDisclosure(disclosureInput);
 const flatDisclosure=lowerCandidateSecurityDisclosure({...disclosureInput,scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}}))});
-console.log(JSON.stringify({objects,edges,predicateSql,condition,scans,fold,flatFold,graphDisclosure,flatDisclosure}));
+const withheldInput={...disclosureInput,rules:disclosureInput.rules.map(rule=>({...rule,disclosure:[[ref('Resource-secret'),'withheld']]}))};
+const graphWithheld=lowerCandidateSecurityDisclosure(withheldInput);
+const flatWithheld=lowerCandidateSecurityDisclosure({...withheldInput,scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}}))});
+console.log(JSON.stringify({objects,edges,predicateSql,condition,scans,fold,flatFold,graphDisclosure,flatDisclosure,graphWithheld,flatWithheld}));
