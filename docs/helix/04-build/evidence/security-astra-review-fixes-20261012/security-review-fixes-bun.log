@@ -1,0 +1,45 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/security-guard-observation.test.ts:
+(pass) original four TEXT carriers preserve exact bytes and bigint maximum [0.48ms]
+(pass) missing extra or reordered descriptors and native domains refuse [0.24ms]
+(pass) zero extra sparse or extended rows refuse [0.17ms]
+(pass) null noncanonical wrong identity and overflow carriers refuse [0.18ms]
+(pass) exact binary limits qualify only the local decoder subset [0.15ms]
+(pass) getters iterators and unknown packet fields cannot become native evidence [0.11ms]
+(pass) oversized carriers refuse before acquiring element descriptors [1.72ms]
+
+tests/security-candidate-condition.test.ts:
+(pass) actual mixed compiler condition retains outer Project correlation [1.99ms]
+(pass) source negation retains three valued quantifier SQL [0.53ms]
+(pass) unknown profiles and substituted endpoint mappings refuse [1.45ms]
+(pass) lexical slot collisions refuse and unsupported terms do not disappear [0.39ms]
+(pass) array method substitution cannot turn False into True [0.04ms]
+(pass) packet, nested scan, identity and array getters never run [0.33ms]
+(pass) unused ambiguous endpoint declarations refuse eagerly [0.18ms]
+(pass) same nominal compound Key cannot cross ordered components [0.29ms]
+(pass) original Record Key metadata and all intrinsic mappings are checked [0.52ms]
+(pass) supplied falsy intrinsic carriers are never omissions [0.05ms]
+(pass) shared homes require disjoint compatible typed selectors [0.76ms]
+(pass) selector bounds and malformed unused carriers refuse eagerly [2.58ms]
+(pass) scalar channels retain field ownership, context separation and exact text equality [1.40ms]
+(pass) record scalar fields remain on the bound witness; opaque scalar access refuses [1.00ms]
+(pass) scalar declarations cannot contradict Key carriers or qualified field domains [0.64ms]
+(pass) numeric constants normalize exactly without value-number conversion [1.13ms]
+(pass) binary constants retain exact octets and empty value [0.19ms]
+(pass) native validity guards enclose negation and successful disjunctions [0.25ms]
+(pass) rule fold retains all matching effects and unknown precedence [0.50ms]
+(pass) splitting a qualified-field domain contradiction across rules refuses [0.10ms]
+(pass) disclosure SQL applies protected defaults and withhold before mask conflicts [1.41ms]
+(pass) disclosure SQL preserves ordered fields beyond the PostgreSQL function argument limit [2.39ms]
+(pass) issued opaque sources preserve local validity outside negation and successful siblings [0.57ms]
+(pass) copied graph SQL and home accessors cannot enter candidate condition lowering [0.23ms]
+(pass) native population identity survives keyed and property projection wrappers [0.29ms]
+(pass) required record and opaque endpoint keys are checked outside authored filters [0.19ms]
+(pass) intrinsic subject and resource keys are required outside short-circuit branches [0.28ms]
+(pass) Record associations cannot substitute an unrelated keyed Record owner [0.14ms]
+
+ 35 pass
+ 0 fail
+ 213 expect() calls
+Ran 35 tests across 2 files. [772.00ms]

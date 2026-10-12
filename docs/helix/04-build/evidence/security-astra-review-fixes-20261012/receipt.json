@@ -1,0 +1,41 @@
+{
+  "reviewer": "gpt-6-astra ultra",
+  "executedCommit": "448ba09896e2b4c199690a9e1a88c08a112e3fc0",
+  "findings": [
+    "Record association owner contradiction",
+    "pre-validation descriptor allocation amplification"
+  ],
+  "fixes": [
+    "Eager original Record association/owner equality; backed Relationships remain valid",
+    "Array length and own-key cardinality before bounded descriptor reads; object cardinality before descriptor reads"
+  ],
+  "validation": {
+    "bunTests": 35,
+    "assertions": 213,
+    "strictTypecheck": "passed",
+    "nativeObservations": 174,
+    "chromium": {
+      "chromium": "153.0.8010.12",
+      "result": {
+        "accepted": {
+          "singleton": "1",
+          "installationIdentityHex": "00ff",
+          "policyProfileHex": "0102",
+          "generation": "9223372036854775807"
+        },
+        "rejected": true,
+        "descriptors": 1
+      }
+    }
+  },
+  "scope": "Local candidate consistency and guard decoding only. Own-key enumeration and proxy reflection traps remain possible. Native fixture remains precursor evidence, not full backend acceptance; 106 of 132 required cases still lack exercising commands.",
+  "sha256": {
+    "security-review-fixes-postmerge.stderr.log": "5608f9b953ae733407dbb10e403c42ee03a42fc894b38d77a67ed390b9fb8982",
+    "security-review-fixes-bun.log": "8825d5393c67fa09bff9dc1ff6f612b955917183a8c02761e2702eb17c8b8b09",
+    "security-review-fixes-postmerge.json": "80f00a0e083a0e7998788dfe74347e7c16b6527d10e5b60afe2e29775fd25e18",
+    "security-review-browser-build.log": "acf83b787ea2fafe26548bdd02b39efedf2d3b719a2730a327a9dafa5581b042",
+    "security-review-fixes-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-review-fixes-postmerge.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-review-browser.log": "aad0d611d4d021d48b3329d6848a9c5c687ed4d33211a36c154250a001aa8ccd"
+  }
+}
