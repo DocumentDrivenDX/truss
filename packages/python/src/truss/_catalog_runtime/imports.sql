@@ -181,7 +181,8 @@ ALTER TABLE truss.record_source ENABLE ALWAYS TRIGGER runtime_record_source_comm
 
 CREATE FUNCTION truss.runtime_edge_business_key(relation int,source_identity jsonb,target_identity jsonb) RETURNS text
 LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
- SELECT jsonb_build_object('profile','truss-edge-import-identity/0.1','relationshipId',relation::text,'relationshipDefinitionPin',truss.runtime_relationship_pin(relation),'source',source_identity,'target',target_identity)::text;
+ SELECT jsonb_build_object('profile','truss-edge-import-identity/0.2','installationId',installation_id::text,'sourceEpoch',source_epoch::text,'relationshipId',relation::text,
+  'source',source_identity-'definitionPin','target',target_identity-'definitionPin')::text FROM truss.catalog_runtime_installation;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_business_key(int,jsonb,jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_lock_edge_business_key(key text) RETURNS void

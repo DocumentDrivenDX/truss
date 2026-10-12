@@ -57,6 +57,26 @@ The revision-qualified catalog composer has a focused mixed-revision source test
 It does not establish native evolution acceptance, which remains unavailable
 until the connected persistence and recovery changes are implemented.
 
+### Historical group recovery and stable reservations
+
+Request-present groups probe original receipts inside the same host callback
+before current definition/source admission or UMF key-condition preparation.
+A miss creates no attempt and evaluates no predicates; normal fresh admission
+then runs unchanged. Replay establishes exact original receipt/attempt/input
+correspondence, resolves immutable completed result owners by stable native ID
+and original operation category, and rechecks current writer/endpoint permission
+before publication. Authority receipt visibility uses the same retained owners.
+The existing precondition workflow now recovers with an unavailable Bun executable
+to demonstrate that original key conditions are not recomputed.
+
+Edge import reservation recipe 0.2 includes native installation/source epoch,
+relationship ID and directed typed endpoint identities, excluding mutable
+individual definition pins. Import lookup and ordinary edge creation, retargeting
+and deletion share the recipe. Fresh pin/owner admission still applies to new
+operations. Existing recipe 0.1 installations have no upgrade path in this change.
+Compatible catalog acceptance remains unavailable until deterministic planning,
+typed persistence/history and current-document owner production are connected.
+
 ## Caller-owned import iteration — 2026-10-12
 
 Runtime 0.18 exposes `import_context_in_transaction`,

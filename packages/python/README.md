@@ -1224,6 +1224,10 @@ the caller commits, retry the identical group input and request in a new adopted
 transaction. `CommittedReceiptReplay.receipt_token` is the opaque original token;
 repeated recovery returns the same token. Request-free groups have no token.
 All-no-op groups still receive a request receipt and original transaction basis.
+Request-enabled recovery checks the retained receipt before current-definition
+or key-precondition admission. It uses original completed operation owners and
+current module permissions, so deleted targets do not prevent replay. Recovering
+a receipt with key preconditions does not invoke Bun or reevaluate those keys.
 
 ```python
 # After caller commit, recover using the exact original input and request.
@@ -1280,6 +1284,10 @@ use their returned identities to construct edge records with
 
 An admitted live identity skips before decoding its replacement payload.
 Deleted primary keys and imported edge pairs remain reserved and also skip.
+Edge reservation recipe 0.2 uses the native installation/source epoch,
+relationship ID and directed typed endpoint identities. Mutable definition pins
+grant no reservation namespace; current pins still govern fresh admission.
+This recipe requires a fresh installation and does not migrate recipe 0.1 rows.
 Eligible invalid records are rejected inside a per-record savepoint; earlier
 successful records remain pending. Execution failures return indexed progress
 and transaction disposition without an internal retry.
