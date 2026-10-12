@@ -1,18 +1,37 @@
 """Reuse pinned UMF browser assets with the current reviewed Truss catalog."""
 from pathlib import Path
-import subprocess, json, hashlib, sys
+import subprocess, json, hashlib, sys, re
 root=Path(__file__).resolve().parents[1]
 owner=Path('/Users/erik/Projects/umf')
-revision='322b193cef7c940d07b741860cf0170272628868'
+revision='e24965aa3b7b806e6b5743015a1df5890213c3cf'
 base='docs/helix/05-deploy/microsite/dist/'
 def upstream(name):
  return subprocess.check_output(['git','show',revision+':'+base+name],cwd=owner)
-outputs={name:upstream(name) for name in ['explorer.js','explorer.css','style.css','logo.svg']}
+outputs={name:upstream(name) for name in ['explorer.js','explorer.css','browser-style.css','style.css','logo.svg']}
+# New owner bundles split the browser into local ES modules. Retain its complete
+# relative dependency closure; never rewrite or inline owner source.
+queue=['explorer.js','explorer.css','browser-style.css','style.css']
+while queue:
+ name=queue.pop()
+ if name.endswith('.js'):
+  imports=json.loads(subprocess.check_output(['bun','-e',
+   'console.log(JSON.stringify(new Bun.Transpiler({loader:"js"}).scanImports(await Bun.stdin.text()).map(x=>x.path)))'],input=outputs[name]))
+ else:
+  imports=re.findall(r'''@import\s+(?:url\(\s*)?["']?([^"'\s)]+)''',outputs[name].decode())
+  imports=['./'+reference if not reference.startswith('./') else reference for reference in imports if not reference.startswith(('https:','http:','//'))]
+ for reference in sorted(set(imports)):
+  if not reference.startswith('./'): raise ValueError('Unexpected nonlocal owner import: '+reference)
+  dependency=reference[2:]
+  if '/' in dependency or dependency in ('.','..'):
+   raise ValueError('Unexpected owner browser dependency: '+reference)
+  if dependency not in outputs:
+   outputs[dependency]=upstream(dependency)
+   if dependency.endswith(('.js','.css')): queue.append(dependency)
 html=upstream('explorer.html').decode()
 main=html[html.index('<main'):html.index('</main>')+7]
 main=main.replace('Explore the shape<br><em>and the meaning.</em>','Explore the Truss storage schema.').replace('Browse domain packs, follow their references, and inspect the details that travel with each schema.','Inspect native layout 0.16 plus the uncomposed configuration, migration, capacity reservation and commit cache adjuncts: tables, columns, keys, relationships, and retained native metadata.')
 main=main.replace('</main>','<p style="padding:1rem;overflow-wrap:anywhere">Review candidate: installation and complete native semantics remain unqualified. <a href="truss-layout.native.umf.json" download>Download retained native source</a>. <a href="truss-operation-configuration.native.umf.json" download>Download configuration adjunct source</a>. <a href="truss-layout-migration.native.umf.json" download>Download migration adjunct source</a>. <a href="truss-capacity-reservation.native.umf.json" download>Download reservation adjunct source</a>. <a href="truss-capacity-cache.native.umf.json" download>Download commit cache adjunct source</a>.</p></main>')
-outputs['index.html']=('''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Truss schema browser</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explorer.css"></head><body>'''+main+'<script type="module" src="explorer.js"></script></body></html>\n').encode()
+outputs['index.html']=('''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Truss schema browser</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="browser-style.css"><link rel="stylesheet" href="explorer.css"></head><body>'''+main+'<script type="module" src="explorer.js"></script></body></html>\n').encode()
 source=root/'docs/helix/02-design/models/truss-layout-core-structural-0.8.proposal.umf.json'
 outputs['schema-catalog.json']=(json.dumps({'version':1,'entries':[{'id':'truss-layout','title':'Truss storage layout','category':'domain','path':'truss-layout.umf.json','text':source.read_text(),'format':'json','description':'Structural projection 0.8 of native layout 0.16 plus uncomposed configuration, migration, reservation and commit-cache adjuncts. Native-only semantics remain retained; inspection does not certify installation or complete DDL equivalence.'}]},indent=2)+'\n').encode()
 outputs['truss-layout.umf.json']=source.read_bytes()

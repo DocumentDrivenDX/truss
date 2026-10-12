@@ -5,6 +5,7 @@ if(!/^[a-z0-9-]+\.json$/.test(receiptName))throw Error('Receipt basename require
 const receiptPath='docs/helix/04-build/evidence/design-audit/'+receiptName;
 if(await Bun.file(receiptPath).exists())throw Error('Receipt already exists; supply a new name');
 const ownerManifest=await Bun.file('website/static/schema/manifest.json').json();
+if(ownerManifest.revision!=='e24965aa3b7b806e6b5743015a1df5890213c3cf')throw Error('Current committed UMF browser revision required');
 if(ownerManifest.owner!=='DocumentDrivenDX/umf'||!(/^[a-f0-9]{40}$/).test(ownerManifest.revision))throw Error('Original UMF browser owner pin required');
 for(const [name,expected] of Object.entries(ownerManifest.assets)){
  const actual=new Bun.CryptoHasher('sha256').update(await Bun.file('website/static/schema/'+name).arrayBuffer()).digest('hex');
@@ -17,6 +18,7 @@ const browser=await chromium.launch({headless:true});
 try{
  const page=await browser.newPage();const errors:string[]=[];page.on('pageerror',(e:unknown)=>errors.push(String(e)));
  const base=`http://127.0.0.1:${server.port}/truss/`;
+ page.on('response',(response:any)=>{if(response.url().startsWith(base)&&response.status()>=400)errors.push(`HTTP ${response.status()}: ${response.url()}`);});
  await page.goto(base+'model/');const frame=page.frameLocator('iframe[title="Truss storage schema — UMF browser"]');
  await frame.locator('.definition-list').waitFor();
  if(!(await frame.locator('#inspector').innerText()).includes('Core structure valid'))throw Error('Core model did not validate');
