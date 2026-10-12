@@ -5212,3 +5212,36 @@ passes183 methods, boundaries and143 current/preimage inputs with three cleanups
 against both integrated changes. Earlier packets retain their own source scopes.
 This security composition run does not independently qualify the new catalog
 facade/dispatch workflow or promote any backend acceptance binding.
+
+### Private authorization-fact statistics counterexample — 2026-10-11
+
+An actual catalog-only native caller with no table/column SELECT can distinguish
+private Assignment populations through pg_catalog.pg_class.reltuples. After
+excluded admin ANALYZE, controlled populations1 and2 yield text statistics1 and2;
+private SELECT/count still refuse42501. The extra inactive fixture row is removed
+and statistics restored. This is finite analyzed-table statistics evidence, not
+an exact general-purpose row-count oracle or graph logical-association count proof.
+Final `evidence/python-psycopg-epoch-cut/9e6718b6-281d-4c0c-8e4d-ab3c5f0318d9`
+passes184 methods, module boundaries,143 current/preimage sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+This confirms that `_exclude_native_private_fact_privileges` establishes only its
+named table/column/definer privilege snapshot, not B10 observation isolation. RLS,
+column masking and ACL denial alone do not remove system-catalog/statistics access.
+The owned delegated tool's trusted application host references are not evidence
+that an end user lacks another SQL credential/endpoint. A positive hidden-fact
+profile must qualify every untrusted observation channel, including system
+catalogs, statistics, plans/errors and alternate endpoints. Select an enforced
+mediated channel with private executor credentials and complete receiver routing,
+or independently qualify native diagnostic/callable/catalog restrictions. Merely
+adding a request/configuration boolean such as sqlExposure=false is forbidden.
+Unknown coverage refuses positive admission. This obligation applies equally to
+raw tables and graph stores; the concrete counterexample covers this flat fixture.
+
+Trace CONTRACT-063/STP-056 B04/B05/B10/B11/B12 and US-056 AC5/AC8/AC9/AC10. The
+next protected service integration must prove credential/receiver channel custody
+and native source privacy, alongside original issuer/subject/mapping/target,
+writer/current-state and final-release closure. No backend binding or complete
+privacy/noninterference claim is promoted. Full goal remains active at26/132 with
+106 unbound cases; the original acceptance scope is unchanged.

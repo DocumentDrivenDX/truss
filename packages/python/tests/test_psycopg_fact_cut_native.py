@@ -1485,3 +1485,24 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 finally:self.connection.execute('ROLLBACK');connection.execute('RESET ROLE')
             self.with_unprivileged_actor(operation,catalog_only=True)
         finally:self.connection.execute('DROP ROLE IF EXISTS fact_identity_assumed,fact_identity_renamed')
+
+    def test_catalog_only_actor_can_observe_private_fact_statistics_counterexample(self):
+        def operation(host,t,original,connection):
+            connection.execute('SAVEPOINT private_count_refusal')
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('SELECT count(*) FROM truss.sec_assignment')
+            connection.execute('ROLLBACK TO private_count_refusal')
+            oid=self.semantic_relations['sec_assignment'].oid
+            self.connection.execute('ANALYZE truss.sec_assignment')
+            first=connection.execute('SELECT reltuples::text FROM pg_catalog.pg_class WHERE oid=%s::oid',(oid,)).fetchone()
+            self.connection.execute("INSERT INTO truss.sec_assignment VALUES('metadata-counterexample','s1','p1',false)")
+            try:
+                self.connection.execute('ANALYZE truss.sec_assignment')
+                second=connection.execute('SELECT reltuples::text FROM pg_catalog.pg_class WHERE oid=%s::oid',(oid,)).fetchone()
+                self.assertEqual((first,second),(('1',),('2',)))
+                connection.execute('SAVEPOINT private_rows_refusal')
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('SELECT * FROM truss.sec_assignment')
+                connection.execute('ROLLBACK TO private_rows_refusal')
+            finally:
+                self.connection.execute("DELETE FROM truss.sec_assignment WHERE assignment_id='metadata-counterexample'")
+                self.connection.execute('ANALYZE truss.sec_assignment')
+        self.with_unprivileged_actor(operation,catalog_only=True)
