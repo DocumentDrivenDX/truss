@@ -4,7 +4,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_type int;
 BEGIN
  PERFORM truss.runtime_person(false);
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest
  OR pg_is_in_recovery() THEN RAISE EXCEPTION 'selected retained authority history required' USING ERRCODE='0A000';END IF;
  IF selection-ARRAY['kind','documentId','moduleId','definitionId','id']<>'{}'::jsonb

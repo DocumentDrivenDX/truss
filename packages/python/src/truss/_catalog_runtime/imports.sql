@@ -10,7 +10,7 @@ LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SE
 DECLARE context jsonb;installation truss.catalog_runtime_installation%ROWTYPE;bundle text;profiles jsonb;
 BEGIN
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;profiles:=truss.runtime_import_profiles();
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();profiles:=truss.runtime_import_profiles();
  IF (SELECT value FROM truss.setting WHERE key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb OR (SELECT value FROM truss.setting WHERE key='journal_mode') IS DISTINCT FROM '"engine"'::jsonb THEN
   RAISE EXCEPTION 'installed engine/forbid import policy required' USING ERRCODE='0A000';END IF;
  SELECT encode(sha256(convert_to(coalesce(jsonb_agg(jsonb_build_object('documentId',doc_id,'revision',doc_revision,'sha256',content_sha256) ORDER BY doc_id COLLATE "C"),'[]')::text,'UTF8')),'hex') INTO bundle
@@ -76,7 +76,7 @@ BEGIN
   values_text:=array_append(values_text,component->'value'->>'text');fields:=fields||jsonb_build_array(jsonb_build_object('name',metadata->'components'->component_index->>'name','value',component->'value'));component_index:=component_index+1;
  END LOOP;
  IF truss.verify_umf_string_key_tuple(tuple_bytes,values_text) IS NOT TRUE THEN RAISE EXCEPTION 'original UMF primary tuple required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
   'typeId',metadata->'type'->>'typeId','keyNumber',metadata->>'keyNumber','definitionPin',metadata->>'keyDefinitionPin','encoding','umf-key-tuple-v1')::text,'UTF8');
  transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(namespace,transport);
@@ -123,7 +123,7 @@ BEGIN
    OR operation->'values' IS DISTINCT FROM value->'values' OR operation->'ownership' IS DISTINCT FROM value->'ownership' THEN RAISE EXCEPTION 'original object payload creation required' USING ERRCODE='22023';END IF;
   SELECT * INTO STRICT selected_type FROM truss.type_def WHERE type_id=(result->'identity'->>'typeId')::int;
   metadata:=convert_from(truss.import_key_selection(selected_type.document_id,selected_type.module,selected_type.element,
-   (SELECT release_id FROM truss.catalog_runtime_installation),(SELECT release_sha256 FROM truss.catalog_runtime_installation)),'UTF8')::jsonb;
+   (SELECT release_id FROM truss.runtime_current_installation()),(SELECT release_sha256 FROM truss.runtime_current_installation())),'UTF8')::jsonb;
   IF (record->'identity')-ARRAY['operation','type','keyNumber','keyDefinitionPin','keyEncodingProfile','components']<>'{}'::jsonb OR record->'identity'->>'operation' IS DISTINCT FROM 'object_key' OR jsonb_typeof(record->'identity'->'components') IS DISTINCT FROM 'array' OR record->'identity'->'type' IS DISTINCT FROM metadata->'type' OR record->'identity'->>'keyNumber' IS DISTINCT FROM metadata->>'keyNumber'
    OR record->'identity'->>'keyDefinitionPin' IS DISTINCT FROM metadata->>'keyDefinitionPin' OR record->'identity'->'keyEncodingProfile' IS DISTINCT FROM metadata->'keyEncodingProfile'
    OR jsonb_array_length(record->'identity'->'components') IS DISTINCT FROM jsonb_array_length(metadata->'components') THEN RAISE EXCEPTION 'actual complete import primary key required' USING ERRCODE='22023';END IF;
@@ -182,7 +182,7 @@ ALTER TABLE truss.record_source ENABLE ALWAYS TRIGGER runtime_record_source_comm
 CREATE FUNCTION truss.runtime_edge_business_key(relation int,source_identity jsonb,target_identity jsonb) RETURNS text
 LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
  SELECT jsonb_build_object('profile','truss-edge-import-identity/0.2','installationId',installation_id::text,'sourceEpoch',source_epoch::text,'relationshipId',relation::text,
-  'source',source_identity-'definitionPin','target',target_identity-'definitionPin')::text FROM truss.catalog_runtime_installation;
+  'source',source_identity-'definitionPin','target',target_identity-'definitionPin')::text FROM truss.runtime_current_installation();
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_business_key(int,jsonb,jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_lock_edge_business_key(key text) RETURNS void

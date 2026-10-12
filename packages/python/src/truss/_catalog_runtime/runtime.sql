@@ -33,7 +33,7 @@ DECLARE actor record; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  IF current_setting('transaction_isolation')<>'read committed' THEN
   RAISE EXCEPTION 'catalog authorization requires READ COMMITTED' USING ERRCODE='0A000'; END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  SELECT oid,rolcanlogin,rolsuper,rolcreaterole,rolcreatedb,rolreplication,rolbypassrls INTO STRICT actor
  FROM pg_roles WHERE rolname=session_user;
  -- Read membership rows under the current snapshot instead of a role cache
@@ -107,7 +107,7 @@ LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $
 DECLARE request truss.catalog_registration_request%ROWTYPE;expected jsonb:='{}';part jsonb;name text;origin bytea;
  genesis timestamptz;next_revision bigint:=1;types int:=0;properties int:=0;relationships int:=0;
 BEGIN
- SELECT genesis_at INTO STRICT genesis FROM truss.catalog_runtime_installation;
+ SELECT genesis_at INTO STRICT genesis FROM truss.runtime_current_installation();
  expected:=jsonb_build_object('schema_rev',jsonb_build_array(jsonb_build_object('rev',0,'accepted_at',genesis,'origin','{}'::jsonb)),
   'schema_doc','[]'::jsonb,'type_def','[]'::jsonb,'prop_def','[]'::jsonb,'key_def','[]'::jsonb,'rel_def','[]'::jsonb,'relationship_lineage','[]'::jsonb,'rel_endpoint','[]'::jsonb,'schema_change','[]'::jsonb);
  FOR request IN SELECT * FROM truss.catalog_registration_request WHERE selected_revision IS NULL OR revision<=selected_revision ORDER BY revision LOOP
@@ -160,7 +160,7 @@ DECLARE request truss.catalog_registration_request%ROWTYPE; installation truss.c
 BEGIN
  IF TG_TABLE_SCHEMA<>'truss' OR TG_TABLE_NAME<>'schema_head' OR NEW.id<>1 OR NEW.rev<1 THEN
   RAISE EXCEPTION 'selected catalog completion required' USING ERRCODE='55000'; END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE revision=NEW.rev;
  IF request.actor_oid IS DISTINCT FROM truss.catalog_actor() THEN
   RAISE EXCEPTION 'current original registration authority required' USING ERRCODE='42501'; END IF;
@@ -193,7 +193,7 @@ BEGIN
  IF stored IS DISTINCT FROM NEW THEN RAISE EXCEPTION 'original unchanged request required' USING ERRCODE='55000'; END IF;
  SELECT * INTO STRICT original FROM truss.catalog_registration_request r WHERE r.registration_id=NEW.registration_id;
  IF original.installation_id IS DISTINCT FROM NEW.installation_id
-  OR NOT EXISTS(SELECT 1 FROM truss.catalog_runtime_installation i WHERE i.installation_id=NEW.installation_id)
+  OR NOT EXISTS(SELECT 1 FROM truss.runtime_current_installation() i WHERE i.installation_id=NEW.installation_id)
   OR NOT EXISTS(SELECT 1 FROM truss.schema_head h WHERE h.id=1 AND h.rev>=original.revision)
   OR jsonb_typeof(convert_from(NEW.origin_bytes,'UTF8')::jsonb) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'original current registration required' USING ERRCODE='55000'; END IF;
@@ -266,8 +266,8 @@ DECLARE input jsonb; documents jsonb; declarations jsonb; doc jsonb; source json
 BEGIN
  input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
  declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
- IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR (input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.catalog_runtime_installation)
-  OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.catalog_runtime_installation)
+ IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR (input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation())
+  OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.runtime_current_installation())
   OR input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
   OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512
   OR jsonb_typeof(declarations) IS DISTINCT FROM 'array' OR jsonb_array_length(declarations)<>jsonb_array_length(documents)
@@ -347,8 +347,8 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;violations bytea;
 BEGIN
  actor:=truss.catalog_actor();
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
- IF installation.release_id<>'truss-catalog-runtime/0.23-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ IF installation.release_id<>'truss-catalog-runtime/0.24-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -486,7 +486,7 @@ CREATE FUNCTION truss.catalog_status() RETURNS TABLE(installation_id text,releas
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
  IF NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN PERFORM truss.catalog_actor(); END IF;
- RETURN QUERY SELECT i.installation_id::text,i.release_id,i.release_sha256,i.layout_profile::text,h.rev::text FROM truss.catalog_runtime_installation i CROSS JOIN truss.schema_head h WHERE h.id=1;
+ RETURN QUERY SELECT i.installation_id::text,i.release_id,i.release_sha256,i.layout_profile::text,h.rev::text FROM truss.runtime_current_installation() i CROSS JOIN truss.schema_head h WHERE h.id=1;
 END;
 $$;
 REVOKE ALL ON ALL FUNCTIONS IN SCHEMA truss FROM PUBLIC;

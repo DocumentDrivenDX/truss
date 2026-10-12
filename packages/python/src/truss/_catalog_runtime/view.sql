@@ -13,7 +13,7 @@ BEGIN
  IF selected_revision IS NOT NULL AND selected_revision<>captured_revision THEN RETURN NULL; END IF;
  -- This append-only profile exposes the current complete catalog; genesis is not accepted.
  IF captured_revision<1 THEN RETURN NULL; END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE revision=captured_revision;
  IF request.installation_id<>installation.installation_id THEN
   RAISE EXCEPTION 'installed catalog provenance required' USING ERRCODE='55000'; END IF;

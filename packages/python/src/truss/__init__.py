@@ -92,3 +92,6 @@ __all__ += ["ImportRuntimeContext"]
 
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 __all__ += ["ImportSourceFound","ImportSourceAbsent","ImportSourceUnavailable"]
+
+from .catalog_runtime import PendingRuntimeUpgrade
+__all__ += ["PendingRuntimeUpgrade"]

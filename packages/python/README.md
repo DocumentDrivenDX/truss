@@ -1528,3 +1528,30 @@ unknown or unsafe history returns `ImportSourceUnavailable`. Returned bytes are
 the retained native source representation, rather than the original ImportInput
 syntax. Object property payloads are not included. This does not implement
 archives, cleanup, general source history or upgrades; 0.23 needs fresh installation.
+
+### Additive runtime upgrade (0.23 → 0.24 candidate)
+
+A trusted installation administrator can upgrade an existing 0.23 authority
+database without rebuilding its catalog or data:
+
+```python
+result = assembly.upgrade_in_transaction(admin_transaction)
+# PendingRuntimeUpgrade is pending until the host commits this transaction.
+```
+
+The host must quiesce consumers first. A native NOWAIT fence refuses active
+transactions rather than retrying. The operation replaces supported runtime
+functions, preserves their OIDs, owner and grants, and records the active release
+separately from immutable installation genesis. Rollback restores the old runtime.
+Already current installations return `unchanged`. Unknown releases refuse.
+
+Installation/epoch, accepted IDs, original reports, data, receipts, receipt tokens,
+feed registration/checkpoints and saved feed payloads remain intact. The original
+0.23 preparation configuration and genesis/report basis stay frozen; upgrading
+does not relabel producer evidence. Object, edge and history page cursors contain
+a runtime digest and become stale—start a new page sequence after upgrade.
+Receipt tokens and feed cursors remain usable under current reader authority.
+
+This first route is PostgreSQL18.6, requires a direct superuser administrator,
+and upgrades only the exact 0.23 candidate to 0.24. Earlier candidates, layout
+changes, managed-database installation and Lakebase support remain unfinished.

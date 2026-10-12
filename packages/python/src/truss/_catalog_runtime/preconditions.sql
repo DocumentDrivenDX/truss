@@ -139,7 +139,7 @@ BEGIN
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608 OR (convert_from(original_keys,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original predicate key inventory required' USING ERRCODE='22023';END IF;
  keys:=convert_from(original_keys,'UTF8')::jsonb;
  IF jsonb_array_length(keys)<>(SELECT count(*) FROM jsonb_array_elements(inventory) WHERE value->'condition'->>'condition'='key_absent') THEN RAISE EXCEPTION 'complete predicate keys required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  -- Acquire the complete object cut before evaluating any predicate.
  FOR target IN SELECT DISTINCT (o.value->>'id')::bigint AS id,(o.value->>'typeId')::int AS type_id FROM jsonb_array_elements(inventory) e CROSS JOIN LATERAL jsonb_array_elements(e.value->'objects') o ORDER BY id,type_id LOOP
   PERFORM 1 FROM truss.object WHERE id=target.id AND type_id=target.type_id FOR UPDATE NOWAIT;

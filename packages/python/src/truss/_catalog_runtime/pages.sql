@@ -12,7 +12,7 @@ BEGIN
   OR octet_length(selected_record) NOT BETWEEN 1 AND 4096 OR page_limit IS NULL OR page_limit NOT BETWEEN 1 AND 1000
   OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 THEN
   RAISE EXCEPTION 'bounded page selection and limits required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN
   RAISE EXCEPTION 'selected object page runtime required' USING ERRCODE='0A000';END IF;
  IF current_setting('transaction_read_only')='on' THEN SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;

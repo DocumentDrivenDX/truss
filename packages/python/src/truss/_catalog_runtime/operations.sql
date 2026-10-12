@@ -232,7 +232,7 @@ BEGIN
  selected:=truss.runtime_operation_type(operation,input->'operations',operation_index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);
  IF operation->>'operation'='create_object' THEN
   RETURN convert_from(truss.group_create_metadata(convert_to(jsonb_set(input-'preconditions','{operations}',jsonb_build_array(operation))::text,'UTF8'),attempt.documents_bytes,
-   (SELECT release_id FROM truss.catalog_runtime_installation),(SELECT release_sha256 FROM truss.catalog_runtime_installation)),'UTF8')::jsonb->0
+   (SELECT release_id FROM truss.runtime_current_installation()),(SELECT release_sha256 FROM truss.runtime_current_installation())),'UTF8')::jsonb->0
    ||jsonb_build_object('values',operation->'values');
  END IF;
  IF operation->'target'->>'state'='stored' THEN identity:=operation->'target'->'identity';
@@ -330,7 +330,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;key_definition t
  keys jsonb;key_input jsonb;tuple_bytes bytea;owner_receipt jsonb;pin record;ns bytea;transport bytea;planned jsonb:='[]';entry jsonb;
  old truss.object_key_bucket%ROWTYPE;members bigint[];reservations bigint[];observed record;unchanged boolean;route record;
 BEGIN
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608 OR (convert_from(original_keys,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN
   RAISE EXCEPTION 'bounded original key inventory required' USING ERRCODE='22023';END IF;
  keys:=convert_from(original_keys,'UTF8')::jsonb;
@@ -400,7 +400,7 @@ BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->operation_index;
  IF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN RETURN truss.runtime_edge_step(attempt_id,operation_index,metadata);END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
  IF operation->>'operation'='create_object' THEN
   raw:=convert_from(truss.apply_create_group(convert_to(jsonb_set(input-'preconditions','{operations}',jsonb_build_array(operation))::text,'UTF8'),attempt.documents_bytes,
    original_keys,convert_to('{"state":"none"}','UTF8'),installation.release_id,installation.release_sha256),'UTF8')::jsonb;
@@ -736,7 +736,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;operation jsonb;input jsonb
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->operation_index;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
  before_image:=nullif(metadata->'prior','null'::jsonb);identity:=metadata->'identity';
  IF operation->>'operation'='create_edge' THEN
   row_image.id:=nextval('truss.id_seq');row_image.rel_type_id:=(metadata->>'typeId')::int;row_image.props:='{}';
@@ -900,7 +900,7 @@ DECLARE relation truss.rel_def%ROWTYPE;edge_row truss.edge%ROWTYPE;installation 
 BEGIN
  PERFORM truss.runtime_person(false);
  IF selected_id IS NULL OR selected_id<1 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 THEN RAISE EXCEPTION 'bounded edge selection required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected edge runtime required' USING ERRCODE='0A000';END IF;
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;
  IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RETURN NULL;END IF;
@@ -935,7 +935,7 @@ DECLARE relation truss.rel_def%ROWTYPE;selected truss.type_def%ROWTYPE;installat
 BEGIN
  PERFORM truss.runtime_person(false);
  IF page_limit IS NULL OR page_limit NOT BETWEEN 1 AND 1000 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 OR direction NOT IN ('outgoing','incoming') OR direction IS NULL THEN RAISE EXCEPTION 'bounded directed page required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected edge page runtime required' USING ERRCODE='0A000';END IF;
  SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
  IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RETURN NULL;END IF;
@@ -1043,7 +1043,7 @@ BEGIN
   OR jsonb_typeof(locator->'receiptStorageRowId') IS DISTINCT FROM 'string' OR locator->>'receiptStorageRowId' !~ '^[1-9][0-9]{0,18}$'
   OR length(locator->>'receiptStorageRowId')=19 AND (locator->>'receiptStorageRowId') COLLATE "C">'9223372036854775807' THEN
   RETURN convert_to('{"outcome":"unavailable","reason":"invalid_token"}','UTF8');END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest
   OR locator->>'installationId' IS DISTINCT FROM installation.installation_id::text OR locator->>'sourceEpoch' IS DISTINCT FROM installation.source_epoch::text
   OR locator->'positionProfile' IS DISTINCT FROM truss.runtime_group_profiles()->'positionProfile' THEN RETURN convert_to('{"outcome":"unavailable","reason":"epoch_profile"}','UTF8');END IF;

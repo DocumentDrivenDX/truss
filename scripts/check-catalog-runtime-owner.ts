@@ -4,7 +4,7 @@ import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
 import {importPostgresqlSql,exportPostgresqlSql} from '/Users/erik/Projects/umf/src/adapters/postgresql';
 
 const root='packages/python/src/truss/_catalog_runtime';
-for (const name of ['layout','lineage','plan','runtime','barrier','view','scalars','read','keys','groups','reader','key-read','pages','evolution','operations','preconditions','imports','feed','history']) {
+for (const name of ['layout','lineage','plan','runtime','migrations','barrier','view','scalars','read','keys','groups','reader','key-read','pages','evolution','operations','preconditions','imports','feed','history']) {
   const source=await Bun.file(`${root}/${name}.sql`).text();
   const model=await importPostgresqlSql(source,backend,{id:`truss-catalog-runtime-${name}`});
   const serialized=JSON.stringify(model)+'\n';
