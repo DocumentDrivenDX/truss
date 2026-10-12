@@ -1506,3 +1506,33 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 self.connection.execute("DELETE FROM truss.sec_assignment WHERE assignment_id='metadata-counterexample'")
                 self.connection.execute('ANALYZE truss.sec_assignment')
         self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_opaque_definer_explain_buffers_survive_catalog_privilege_denial(self):
+        # Separate owned database: catalog-wide PUBLIC ACL changes never touch
+        # the main fixture or a foreign installation.
+        self.connection.execute('CREATE ROLE opaque_diag_actor LOGIN NOSUPERUSER NOCREATEROLE NOCREATEDB NOREPLICATION NOBYPASSRLS')
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
+            allocator.execute('CREATE DATABASE opaque_diag_database')
+        try:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname='opaque_diag_database',autocommit=True,options='-c statement_timeout=5000') as admin:
+                admin.execute("CREATE SCHEMA diag_private; REVOKE ALL ON SCHEMA diag_private FROM PUBLIC; CREATE TABLE diag_private.facts(v text); INSERT INTO diag_private.facts VALUES('private'); CREATE SCHEMA diag_api; GRANT USAGE ON SCHEMA diag_api TO opaque_diag_actor; CREATE FUNCTION diag_api.opaque_read() RETURNS text LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$ BEGIN PERFORM v FROM diag_private.facts; RETURN 'opaque'; END $$; REVOKE ALL ON FUNCTION diag_api.opaque_read() FROM PUBLIC; GRANT EXECUTE ON FUNCTION diag_api.opaque_read() TO opaque_diag_actor")
+                admin.execute('REVOKE SELECT ON ALL TABLES IN SCHEMA pg_catalog FROM PUBLIC; REVOKE EXECUTE ON ALL FUNCTIONS IN SCHEMA pg_catalog FROM PUBLIC')
+                with psycopg.connect(host=str(self.socket),user='opaque_diag_actor',dbname='opaque_diag_database',autocommit=True,options='-c statement_timeout=3000') as actor:
+                    self.assertEqual(actor.execute('SELECT diag_api.opaque_read()').fetchone(),('opaque',))
+                    for query in ('SELECT count(*) FROM diag_private.facts','SELECT reltuples FROM pg_catalog.pg_class'):
+                        with self.assertRaises(psycopg.errors.InsufficientPrivilege):actor.execute(query)
+                    first=actor.execute('EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) SELECT diag_api.opaque_read()').fetchone()[0][0]['Plan']
+                    admin.execute("INSERT INTO diag_private.facts SELECT repeat('private',30) FROM generate_series(1,10000)")
+                    self.assertEqual(actor.execute('SELECT diag_api.opaque_read()').fetchone(),('opaque',))
+                    second=actor.execute('EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) SELECT diag_api.opaque_read()').fetchone()[0][0]['Plan']
+                    def buffers(plan):return plan.get('Shared Hit Blocks',0)+plan.get('Shared Read Blocks',0)
+                    self.assertGreater(buffers(second),buffers(first))
+                    self.assertEqual((first['Actual Rows'],second['Actual Rows']),(1,1))
+                    import os
+                    evidence=os.environ.get('TRUSS_PSYCOPG_EPOCH_EVIDENCE')
+                    if evidence:
+                        (Path(evidence)/'opaque-explain-counterexample.json').write_text(json.dumps({'profile':'owned-opaque-definer-command-counterexample','firstPlan':first,'secondPlan':second,'scope':'One fixed private scan and opaque output; buffer observables vary under explicit catalog privilege denial. Not a policy evaluator, exact row-count oracle or complete diagnostic closure.'},indent=2)+'\n')
+        finally:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
+                allocator.execute('DROP DATABASE opaque_diag_database')
+            self.connection.execute('DROP ROLE opaque_diag_actor')

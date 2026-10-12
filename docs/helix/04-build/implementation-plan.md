@@ -5252,3 +5252,35 @@ changes two source inputs. Original9e6718b6 keeps its pre-merge scope. Fresh
 passes184 methods, boundaries,143 current/preimage sources and three cleanups
 against the integrated host/catalog. This qualifies the finite counterexample
 and composition only; hidden-fact B10 and protected channel admission stay open.
+
+### Opaque definer execution-plan buffer counterexample — 2026-10-11
+
+A separate owned database revokes ordinary SELECT on every pg_catalog relation
+and explicit EXECUTE on pg_catalog routines. Its ordinary non-superuser/no-role-
+admin/no-bypass actor receives only schema USAGE and EXECUTE on a fixed-search-path
+opaque SECURITY DEFINER routine scanning a private table. Private count and
+pg_class SELECT refuse; the routine returns the same literal opaque value in both
+worlds. EXPLAIN ANALYZE BUFFERS remains callable: one result row in each world,
+shared hit blocks1 then304 after10,000 private rows are added. Actual plan JSON is
+retained in `opaque-explain-counterexample.json`. This is one fixed private scan
+and command surface, not a policy evaluator, exact row-count oracle, timing
+noninterference proof or proof that every protected routine has the same footprint.
+
+Final `evidence/python-psycopg-epoch-cut/f79cd220-5c0d-4b1d-beb2-9f662aa40d2d`
+passes185 methods, boundaries,143 current/preimage Truss inputs on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three standard cleanups. The separate database/role are explicitly dropped;
+PUBLIC ACL changes never affect the main or any foreign database. This strengthens
+the existing PostgreSQL17.9 deny-first design limitation with native18.6 command
+observability evidence. Excluding table/catalog privileges cannot independently
+qualify B10 when arbitrary SQL can instrument a granted opaque routine.
+
+Protected integration should retain native RLS/ACL/masking/cut enforcement behind
+an independently qualified receiver/credential boundary. That boundary must expose
+only registered semantic operations and results, not user SQL/EXPLAIN/DDL/decoder
+callbacks or raw executor handles. Native SQL profiles remain possible only under
+independently qualified complete command/operator/type/diagnostic and deployment
+closure; they cannot inherit qualification from these explicit ACL tests. Unknown
+channel coverage refuses admission. Trace CONTRACT-063/STP-056 B04/B05/B10/B11/B12
+and US-056 AC5/AC8/AC9/AC10. No backend binding or complete privacy claim; full goal
+active at26/132 with106 unbound cases.
