@@ -58,3 +58,6 @@ __all__ += ["CatalogViewRequest", "CatalogViewLimits", "CurrentCatalogSelection"
     "HistoricalCatalogSelection", "CompleteCatalogScope", "ProjectedCatalogScope",
     "CatalogDefinitionReference", "CatalogDocumentProvenance", "CatalogDefinitionEntry",
     "CatalogView", "CatalogViewAvailable", "CatalogViewUnavailable"]
+
+from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable
+__all__ += ["ScalarObject", "ObjectFound", "ObjectNotFound", "ObjectReadInvalid", "ObjectReadUnavailable"]

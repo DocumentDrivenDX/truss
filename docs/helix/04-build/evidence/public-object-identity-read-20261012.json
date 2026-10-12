@@ -1,0 +1,61 @@
+{
+  "milestone": "public Python object identity read",
+  "date": "2026-10-12",
+  "release": "truss-catalog-runtime/0.3-candidate",
+  "resultProfile": "truss-python-scalar-object/0.1",
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "psycopg": "3.3.6",
+    "driver": "stock psycopg binary"
+  },
+  "sourceReaderTests": {
+    "count": 8,
+    "seconds": 21.126,
+    "result": "PASS"
+  },
+  "installedWheelTests": {
+    "count": 36,
+    "seconds": 69.917,
+    "result": "PASS",
+    "scope": "28 existing public catalog tests and 8 public identity read tests"
+  },
+  "wheel": {
+    "sha256": "a63f62f0c1146d23dbcc375d24c1ba109677992fe77cf02d7d613f51f71e6696",
+    "fiveRuntimeFilesMatchSource": true
+  },
+  "umf": {
+    "revision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+    "sqlReloadExportFiles": [
+      "layout",
+      "lineage",
+      "plan",
+      "runtime",
+      "barrier",
+      "view",
+      "read"
+    ],
+    "result": "PASS",
+    "scope": "original SQL retention and reload/export correspondence; not a behavior oracle"
+  },
+  "pythonBoundaryImports": 641,
+  "review": "Astra Ultra scoped plan and final source review approved; required installed tests and owner check passed",
+  "sourceSha256": {
+    "packages/python/src/truss/catalog_runtime.py": "521a6bc5b08c8916bcb342a481a5f60d542ae1d20cab3d4da6c98d671cc8914a",
+    "packages/python/src/truss/object_read.py": "bf24ab504828766186fb533cf899a6c0cb8d2c10914eaea5ece51ce95828ad04",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "0da902cc01f3b5f718f0cbea6e9f2d325a96a6311d95374c3f85ffe9b80d7488",
+    "packages/python/src/truss/_catalog_runtime/read.sql": "6eb5443176aaa05247fd737189ebe47d95e8e6fbb42acdfd10b5d97baa3142d0",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "2656d7eaad78d31ff26eb3475a25f8cb233c80ff978c230d51d4205b55f49d37",
+    "packages/python/tests/test_object_read_native.py": "c70f9914acd7e233a633ce4aaaa06debd4f85697e793ad0f475f14c605c41477",
+    "scripts/check-catalog-runtime-owner.ts": "5769f0641e0c31eaff38217653ad00dbd74bd9a978f4291e89b7c744702d2006",
+    "scripts/check-module-boundaries.py": "dba0fa9e2060fdb8f18f1bcbc5e3eb6dc5eefce21b1824bfe721582e8799436f"
+  },
+  "limitations": [
+    "Administrative object fixtures establish read behavior only; public writes remain unavailable.",
+    "Only rootless JSON-home scalar-string object identity reads, with explicit null/absence and supported retained string/null values.",
+    "Fresh installation only; earlier candidate migration not implemented.",
+    "Full DirectRecord definition-pin carrier, key/page/edge reads and full Weft execution remain unfinished.",
+    "Trusted administrative maintenance requires quiescence; no hostile administrator source-rewrite claim.",
+    "Grouped writes, durable write retry, imports, receipt visibility, committed feed and acknowledgement remain in full active goal."
+  ]
+}

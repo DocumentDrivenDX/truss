@@ -29,11 +29,26 @@ ddx:
 
 # Python consumer integration: first real workflow
 
-The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. Current Python exports provide local-server lifecycle, execution outcomes and draft group/import contracts with local report consistency; callable graph capabilities remain unbuilt. TypeScript capability declarations describe intended contracts, not implemented Python behavior. The next release must provide a tested embeddable Python implementation, rather than merely translating interfaces or emitting administrative fixture identities.
+The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. Business object reads and writes remain unavailable. Draft interfaces and private native components do not count as those operations.
 
-Prioritize this plan ahead of more isolated component probes. It narrows the first test input to a synthetic commerce catalog, not the required authority, durability, exact-value or recovery behavior. Full corpus, broader schema coverage, managed deployment profiles and migrations remain required follow-on exits in the existing implementation plan.
+## Current implementation priority: public object workflow — 2026-10-12
 
-## Current implementation priority: finish the installed runtime
+Owner direction: stop expanding codecs, custom instrumentation and generic custody machinery as prerequisites for the usable Python interface. Consumers supply logical Python values; the existing UMF key encoder is an internal dependency for unambiguous key equality, not a public codec API. Preserve existing completed components without making their expansion the next milestone.
+
+Implement and test through the public assembly in this order:
+
+1. Document-qualified module authorization and object identity lookup on the caller's adopted transaction. Separate catalog registrar authority from business reader/writer membership; retain direct-session identity, current membership checks, protected owner execution and refusal without retry. Return complete logical values, including absent versus present null, and qualify unsupported storage/value profiles explicitly.
+2. Grouped object create, update and delete, with returned native identities and pending-commit results. Resolve actual accepted definitions, enforce required values and key uniqueness, keep version/no-op behavior, journal changes atomically and preserve earlier caller work on refusal. Dry-run uses the same path followed by caller rollback. Administrative fixture writes only qualify read behavior; they are not proof of public mutation support.
+3. Prove the first consumer workflow: prepare/register model, configure module policy, adopt an ordinary person's transaction, apply a group, caller commit, read the returned identity, and retry the original request without another object or journal event. A changed input under the same request key must refuse. Exercise rollback and current-permission revocation as well.
+4. Connect imports, receipt visibility, committed feed/acknowledgement and full Weft execution to the same installed profile. Edges, ownership, exact numeric values and the remaining external interface stay in the full objective; the first workflow is an implementation milestone, not a reduced release definition.
+
+Use practical stock-PostgreSQL limits and ordinary deadlines. No exact backend allocation accounting, whole-database snapshots or custom tracing/metrics are prerequisites. Retain evidence required to establish actual permissions, atomic mutation/history, durable idempotency and complete committed feed behavior. Every plan and completed iteration receives the owner's requested Astra Ultra review before promotion. Commit reviewed completed work to main and merge concurrent security fixes rather than developing a separate runtime fork.
+
+Identity read milestone completed: runtime 0.3 exposes `get_object_in_transaction` through the public assembly. A shared private session-person helper preserves catalog safety while registrar membership stays specific to catalog operations; the protected reader uses current document-qualified module roles. Its explicitly named scalar-string result avoids claiming historical definition-pin support. Eight source reader tests and 36 installed-wheel catalog/reader tests pass after Astra review; see [the scoped receipt](evidence/public-object-identity-read-20261012.json). The next implementation output is public grouped mutations and their committed read/retry workflow. Definition pins required by those contracts must come from retained accepted source; callers cannot manufacture accepted authority by supplying identifiers.
+
+## Historical component execution sequence
+
+The sequence below describes the earlier private row-custody approach. It is retained as historical evidence and is superseded as an implementation priority by the public workflow above. Its unfinished instrumentation or generic artifact decoders must not block the practical Python baseline. Any correctness requirement reused from it must be tied to a concrete public operation and tested in that operation.
 
 The next connected workstream is PY-C04 installation plus PA05 native observation
 and finalization. Commit `3d09a566` supplies first-registration lifecycle report

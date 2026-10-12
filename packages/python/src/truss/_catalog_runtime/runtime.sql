@@ -14,7 +14,7 @@ CREATE TABLE truss.catalog_registration_request (
  UNIQUE(installation_id,actor_oid,request_key),CHECK(revision=1),
  CHECK(octet_length(request_key) BETWEEN 1 AND 1024),CHECK(octet_length(report_sha256)=32));
 
-CREATE FUNCTION truss.catalog_actor() RETURNS oid
+CREATE FUNCTION truss.runtime_person(require_registrar boolean) RETURNS oid
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE actor record; installation truss.catalog_runtime_installation%ROWTYPE;
  member_of_owner boolean; member_of_registrar boolean; member_of_server_capability boolean; unsafe_switchable boolean;
@@ -56,11 +56,16 @@ BEGIN
       OR has_any_column_privilege(actor.oid,c.oid,'SELECT,INSERT,UPDATE,REFERENCES')))
      OR (c.relkind='S' AND has_sequence_privilege(actor.oid,c.oid,'USAGE,SELECT,UPDATE'))))
   OR (SELECT oid FROM pg_roles WHERE rolname=current_user) IS DISTINCT FROM installation.owner_oid
-  OR NOT member_of_registrar THEN
+  OR require_registrar IS NULL OR (require_registrar AND NOT member_of_registrar) THEN
   RAISE EXCEPTION 'catalog registration authorization required' USING ERRCODE='42501'; END IF;
  RETURN actor.oid;
 END;
 $$;
+
+CREATE FUNCTION truss.catalog_actor() RETURNS oid
+LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp
+AS 'SELECT truss.runtime_person(true)';
+REVOKE ALL ON FUNCTION truss.runtime_person(boolean) FROM PUBLIC;
 
 CREATE FUNCTION truss.catalog_check_records(expected jsonb) RETURNS void
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
@@ -221,7 +226,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
- IF installation.release_id<>'truss-catalog-runtime/0.2-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.3-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   IF raw IS NULL OR octet_length(raw) NOT BETWEEN 1 AND 1048576 THEN
