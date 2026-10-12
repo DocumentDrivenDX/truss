@@ -5982,3 +5982,32 @@ receipt is claimed. Trace CONTRACT-062/063 composition, STP-056 B01/B09/B15 and
 US-056 AC2/AC7 prerequisites. Original Weft source/IR custody, complete fact cuts,
 ordinary authentication, installed masks/current authority/final release and
 all132 original cases remain required. No backend case is promoted; goal active.
+
+
+### Public role ADMIN storage delegation — 2026-10-12
+
+The original public guard admitted consumer with ADMIN TRUE/INHERIT FALSE/
+SET FALSE on a role holding private installation-column SELECT. An ordinary native
+consumer connection actually self-grants SET, switches to that role and reads the
+private column. After rolling that escalation back, the original unsafe ADMIN
+grant remains and public status incorrectly accepts it. The original failing
+control is retained; this is a raw-storage authority exclusion gap, not evidence
+that installation_id is secret business data.
+
+The runtime-person closure now traverses SET or ADMIN edges before checking each
+state's native unsafe attributes and effective private-storage privileges. The
+reproduced delegation route refuses; revoking the original unsafe membership
+restores public availability. Existing dormant and INHERIT→SET nonreachability
+controls still pass. Complete native grantor/inherited-administration/delegation
+interpretation remains independent; no complete closure claim follows from this
+single direct ADMIN witness.
+
+`evidence/public-role-admin-storage-20261012/receipt.json` retains preimage,
+source archive/pins, failing native control and57 passing source +57 installed-wheel
+public catalog/view/source/key/object tests. Wheel/source/installed contents match
+exactly. Python boundaries and seven original UMF SQL round trips pass. Engine
+PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary. Native unittest cleanup
+completes without error; no independent cleanup packet or formal refinement is
+claimed. Trace CONTRACT-005 protected delegation, CONTRACT-063/STP-056
+B04/B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites. No original backend case
+is promoted; the full132-case security goal remains active.

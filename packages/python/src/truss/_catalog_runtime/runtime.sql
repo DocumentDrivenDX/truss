@@ -36,7 +36,7 @@ BEGIN
  INTO member_of_owner,member_of_registrar,member_of_server_capability FROM memberships;
  WITH RECURSIVE switchable(role_oid) AS (
   SELECT actor.oid UNION
-  SELECT m.roleid FROM pg_auth_members m JOIN switchable s ON m.member=s.role_oid WHERE m.set_option
+  SELECT m.roleid FROM pg_auth_members m JOIN switchable s ON m.member=s.role_oid WHERE m.set_option OR m.admin_option
  ) SELECT EXISTS(SELECT 1 FROM switchable s JOIN pg_roles r ON r.oid=s.role_oid
    WHERE r.rolsuper OR r.rolcreaterole OR r.rolcreatedb OR r.rolreplication OR r.rolbypassrls
     OR has_schema_privilege(r.oid,'truss','CREATE')

@@ -1,0 +1,7 @@
+Processing /private/tmp/truss-admin-storage-wheel-20261012/truss_toolkit-0.0.1.dev0-py3-none-any.whl
+Installing collected packages: truss-toolkit
+  Attempting uninstall: truss-toolkit
+    Found existing installation: truss-toolkit 0.0.1.dev0
+    Uninstalling truss-toolkit-0.0.1.dev0:
+      Successfully uninstalled truss-toolkit-0.0.1.dev0
+Successfully installed truss-toolkit-0.0.1.dev0

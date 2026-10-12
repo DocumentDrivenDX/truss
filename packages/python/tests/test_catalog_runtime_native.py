@@ -669,4 +669,26 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.catalog_registration_request').fetchone(),(1,))
 
+
+    def test_public_actor_refuses_admin_option_private_storage_escalation(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.admin.execute('CREATE ROLE admin_storage_bridge NOLOGIN')
+        try:
+            self.admin.execute('GRANT USAGE ON SCHEMA truss TO admin_storage_bridge')
+            self.admin.execute('GRANT SELECT(installation_id) ON truss.catalog_runtime_installation TO admin_storage_bridge')
+            self.admin.execute('GRANT admin_storage_bridge TO consumer WITH ADMIN TRUE, INHERIT FALSE, SET FALSE')
+            # Independently demonstrate the actual native self-grant route.
+            connection.execute('SAVEPOINT native_escalation')
+            connection.execute('GRANT admin_storage_bridge TO consumer WITH SET TRUE')
+            connection.execute('SET ROLE admin_storage_bridge')
+            self.assertEqual(len(connection.execute('SELECT installation_id FROM truss.catalog_runtime_installation').fetchall()),1)
+            connection.execute('RESET ROLE')
+            connection.execute('ROLLBACK TO SAVEPOINT native_escalation');connection.execute('RELEASE SAVEPOINT native_escalation')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+            self.admin.execute('REVOKE admin_storage_bridge FROM consumer')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        finally:
+            self.admin.execute('REVOKE admin_storage_bridge FROM consumer')
+            self.admin.execute('DROP OWNED BY admin_storage_bridge; DROP ROLE admin_storage_bridge')
+
 if __name__=='__main__':unittest.main(verbosity=2)
