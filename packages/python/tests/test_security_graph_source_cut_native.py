@@ -86,6 +86,39 @@ class GraphABACTests(groups.PublicCreateGroupTests):
   self.assertFalse(thread.is_alive());self.assertEqual(errors,[]);observations.append({'id':'writer-completes-after-source-guard-release','observed':'committed'})
   valid=self.admin.execute(sql['validitySql']).fetchone()[0];self.assertEqual(valid,'false');observations.append({'id':'next-source-preflight-detects-post-release-malformation','observed':valid})
   self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s',(props['flag'],json.dumps({'kind':'boolean','value':False}),ids['no']))
+  # Partial acquisition failure must contain only the guard's savepoint work.
+  guard=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(guard.close)
+  guard_pid=guard.execute('SELECT pg_backend_pid()').fetchone()[0]
+  writer.execute('BEGIN');writer.execute('LOCK TABLE truss.object IN ROW EXCLUSIVE MODE')
+  try:
+   guard.execute('BEGIN');guard.execute("CREATE TEMP TABLE prior_guard_work(value text);INSERT INTO prior_guard_work VALUES('kept')");guard.execute('SAVEPOINT source_timeout');guard.execute("SET LOCAL lock_timeout='150ms'")
+   with self.assertRaises(psycopg.errors.LockNotAvailable) as failure:guard.execute('LOCK TABLE truss.prop_def,truss.type_def,truss.object IN SHARE MODE')
+   self.assertEqual(failure.exception.sqlstate,'55P03');observations.append({'id':'source-exclusion-finite-lock-timeout','observed':failure.exception.sqlstate,'readIssued':False})
+   guard.execute('ROLLBACK TO SAVEPOINT source_timeout')
+   held=guard.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND mode='ShareLock' AND granted AND relation IN ('truss.object'::regclass,'truss.prop_def'::regclass,'truss.type_def'::regclass)").fetchone()[0];self.assertEqual(held,0);observations.append({'id':'timeout-savepoint-releases-partial-source-locks','observed':held})
+   prior=guard.execute('TABLE prior_guard_work').fetchall();self.assertEqual(prior,[('kept',)]);observations.append({'id':'timeout-preserves-prior-transaction-work','observed':[list(r) for r in prior]})
+   guard.execute('SAVEPOINT source_cancel');guard.execute("SET LOCAL lock_timeout='10s'");cancel_errors=[]
+   def acquire_for_cancel():
+    try:guard.execute('LOCK TABLE truss.prop_def,truss.type_def,truss.object IN SHARE MODE')
+    except psycopg.Error as exc:cancel_errors.append(exc.sqlstate)
+   cancel_thread=threading.Thread(target=acquire_for_cancel);cancel_thread.start()
+   try:
+    deadline=time.monotonic()+5;waiting=None
+    while time.monotonic()<deadline:
+     waiting=self.admin.execute("SELECT mode,granted FROM pg_locks WHERE pid=%s AND relation='truss.object'::regclass AND mode='ShareLock'",(guard_pid,)).fetchone()
+     if waiting==('ShareLock',False):break
+     time.sleep(.01)
+    self.assertEqual(waiting,('ShareLock',False));observations.append({'id':'cancel-guard-native-lock-wait','observed':list(waiting)})
+    partial=self.admin.execute("SELECT count(*) FROM pg_locks WHERE pid=%s AND mode='ShareLock' AND granted AND relation IN ('truss.prop_def'::regclass,'truss.type_def'::regclass)",(guard_pid,)).fetchone()[0];self.assertEqual(partial,2);observations.append({'id':'cancel-guard-holds-two-partial-source-locks','observed':partial})
+   finally:
+    guard.cancel();cancel_thread.join(12)
+   self.assertFalse(cancel_thread.is_alive());self.assertEqual(cancel_errors,['57014']);observations.append({'id':'source-exclusion-cancellation','observed':cancel_errors,'readIssued':False})
+   guard.execute('ROLLBACK TO SAVEPOINT source_cancel')
+   held=guard.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND mode='ShareLock' AND granted AND relation IN ('truss.object'::regclass,'truss.prop_def'::regclass,'truss.type_def'::regclass)").fetchone()[0];self.assertEqual(held,0);observations.append({'id':'cancel-savepoint-releases-partial-source-locks','observed':held})
+   prior=guard.execute('TABLE prior_guard_work').fetchall();self.assertEqual(prior,[('kept',)]);observations.append({'id':'cancel-preserves-prior-transaction-work','observed':[list(r) for r in prior]})
+   guard.execute('COMMIT')
+  finally:
+   guard.rollback();writer.rollback()
   self.admin.execute('ALTER FUNCTION truss.get_object(text,text,text,bigint,integer,text,text) SET row_security=off')
   settings=self.admin.execute("SELECT proconfig FROM pg_proc WHERE oid='truss.get_object(text,text,text,bigint,integer,text,text)'::regprocedure").fetchone()[0];self.assertIn('row_security=off',settings);observations.append({'id':'original-complete-read-settings-restored','observed':settings})
   forged=direct.execute("SELECT public.graph_candidate('value','no',true)").fetchone()[0];self.assertIs(forged,True);observations.append({'id':'forged-expression-alone-is-not-authority','observed':forged})

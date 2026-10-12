@@ -425,3 +425,15 @@ with stock psycopg, Bun and the selected pgserver-pg18 runtime installed. Option
 TRUSS_SECURITY_COMPONENT_EVIDENCE retains the component JSON. The test confirms
 actual native lock wait/hold and ordering, not elapsed sleeps alone. This closes
 only the selected-source exclusion experiment, not the full controls above.
+
+
+Native source-exclusion acquisition controls now additionally exercise a150ms
+lock_timeout(55P03) and supported psycopg cancel(57014) while two source locks
+have been acquired and a third is waiting. Native pg_locks confirms the partial
+state before cancellation. ROLLBACK TO the engine savepoint releases every
+selected source lock and preserves prior transaction work. Neither failed
+acquisition path issues a read. The same repository regression retains42 total
+observations in
+`../../04-build/evidence/security-source-exclusion-failures-20261012/receipt.json`.
+Guard issuer loss/crash, actual protected-entrypoint publication, complete
+authority participation and retry outcomes remain separate required controls.

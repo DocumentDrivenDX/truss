@@ -6326,3 +6326,20 @@ Table-level exclusion is a feasibility candidate with broad writer contention,
 not complete source/authority/publication guard admission. Next compose the
 original source enrollment and narrowly privileged read-owner/caller protocol,
 then qualify authority changes and final-release lifetime through actual APIs.
+
+
+### Selected-source acquisition timeout and cancellation — 2026-10-12
+
+The native graph source-cut regression now retains42 observations. A contended
+third source lock times out55P03 at the selected150ms lock_timeout. An independent
+pg_locks observation proves two locks held and the third waiting before supported
+psycopg cancellation57014. Engine savepoint rollback releases partial locks and
+keeps prior transaction work; neither failure path issues a read. Python module
+boundaries pass691imports. Current pins, changed source preimage and logs reside
+in `evidence/security-source-exclusion-failures-20261012/receipt.json`.
+
+Trace CONTRACT-005 / TD-020 / STP-020 and shared CONTRACT-063 / STP-056 B15/B16 /
+STP-057 L11 prerequisites. Native acquisition/recovery feasibility is now tested;
+protected issuer/enrollment, narrowed read-owner/original-person composition,
+authority changes, lost-guard containment and publication remain unimplemented.
+No current runtime setting is changed and no original backend case is promoted.
