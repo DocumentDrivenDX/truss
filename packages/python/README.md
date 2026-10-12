@@ -17,7 +17,7 @@ Runtime 0.14 adds public scalar object updates/deletes and ordered mixed batches
 Runtime 0.15 adds atomic caller preconditions and explicit invalid/unauthorized group failures.
 Runtime 0.16 adds independent directed edge create/update/delete, identity reads and ordered relationship pages, including mandatory relationships satisfied in the same batch.
 Runtime 0.17 adds original committed receipt tokens and authority-side `reached_in_transaction` on caller read-only transactions.
-Runtime 0.18 adds caller-owned scalar object and independent edge imports with immutable source facts and indexed partial progress.
+Runtime 0.19 adds compatible changed-document acceptance through the public Python assembly. Runtime 0.18 added caller-owned scalar object and independent edge imports with immutable source facts and indexed partial progress.
 Compiled queries, engine-owned import batches and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
@@ -117,7 +117,7 @@ because membership authorization must observe committed revocations. Repeating
 the same request key as the same person with identical original inputs and origin
 returns the original report and `replayed=True`. Changing the request returns a
 conflict. Retry still requires current authorization. There are no internal retry
-loops. Changed-document catalog evolution remains unavailable. The selected runtime provides module-authorized scalar object and independent directed relationship groups and reads described below.
+loops. Supported compatible changed documents can now be accepted; see runtime 0.19 below. The selected runtime provides module-authorized scalar object and independent directed relationship groups and reads described below.
 `dispose()` closes this assembly's admission without closing or settling the host.
 
 The catalog runtime 0.2 candidate also provides
@@ -1067,8 +1067,7 @@ transaction remains usable. Exact original retry/unchanged handling runs first.
 
 Counts require current read-or-write permission for the record and field modules;
 a registrar without that permission receives `unauthorized`, without counts.
-Other changed-document cases remain `unsupported_profile`: passing these scalar
-checks does not yet enable compatible evolution, retirement or transforms.
+Runtime 0.19 enables the compatible changes described below. Retirement, transforms and changes requiring key backfill remain `unsupported_profile`.
 Runtime 0.13 currently requires a fresh installation.
 
 ### Exact-input unchanged registration (runtime 0.9 candidate)
@@ -1112,7 +1111,7 @@ reports both `catalog_revision` (the observed current head) and
 the original `registration_id`. A read-only observation whose head advances
 during publication returns unavailable with reason `observation`.
 
-The complete-view and mutation profiles are version 0.2. Obtain their current
+The complete-view profile is version 0.3; obtain the mutation profile from the assembly. Obtain their current
 pins through the assembly; old profile requests refuse. Preparing another
 document does not discard the same assembly's previously accepted source cache.
 Fresh assemblies should pass their caller-known original documents explicitly
@@ -1120,8 +1119,7 @@ to grouped writes; native code checks those sources against the accepted archive
 
 The cumulative catalog limits are 512 documents, 65,536 definitions and a 16MiB
 native expected image, with ordinary operation deadlines. Changes to an existing
-document still refuse as `unsupported_profile`; compatible evolution and exact
-non-string values remain unfinished. This candidate requires fresh installation.
+document are supported within the runtime 0.19 subset below. Exact scalar properties are supported as described below. This candidate requires fresh installation.
 
 ### Exact scalar properties (runtime 0.11 candidate)
 
@@ -1309,3 +1307,28 @@ not yet supported. Limits are 128 records, 1 MiB per payload, 4 MiB per canonica
 input and 8 MiB per report. Original UMF key production still requires Bun. Engine-owned batches,
 the generic import capability selector, public source lookup, structured source
 facts and migrations remain unfinished.
+
+### Compatible document acceptance (runtime 0.19 candidate)
+
+Use the existing `prepare_catalog` and `accept_in_transaction` calls to register
+a changed document. The caller still owns commit or rollback. Supported changes
+are new record declarations, appended optional scalar properties, relaxation of
+a non-key property to allow absence, and widening independent relationship
+multiplicity or adding endpoints. Existing native IDs and unchanged definition
+pins remain stable. Changed definitions receive pins qualified by their exact
+accepted document. Accepted source reads return the latest document bytes.
+
+Existing objects can omit a newly optional property; accepting the catalog does
+not manufacture object updates. Current reads and writes use the new catalog.
+Original request retries return their original report or committed receipt,
+including after a later catalog revision.
+
+Key changes requiring backfill, removals, retirement, identity rebinding and
+unsupported structured changes refuse. Scalar incompatibility and retained-name
+collisions return typed rules and affected object counts, subject to module
+access. The retained-name rule is `property.retained_name_collision`.
+
+The basic public workflow covers changed registration, accepted source and
+module views, reads, updates, new-type creation, key lookup, reserved-edge import
+and recovery of original catalog/group requests. Installation upgrades remain
+unimplemented; this release requires a fresh installation.

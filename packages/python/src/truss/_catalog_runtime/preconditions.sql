@@ -1,9 +1,13 @@
 -- Caller predicates observe the locked group prestate, before effects.
-CREATE FUNCTION truss.runtime_relationship_pin(selected_relationship int) RETURNS text
+CREATE FUNCTION truss.runtime_relationship_pin(selected_relationship int,historical_revision int DEFAULT NULL) RETURNS text
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE relation truss.rel_def%ROWTYPE;archive truss.schema_doc%ROWTYPE;module_json json;fragment json;mi int;ri int;pointer text;original bytea;pin_input text;
 BEGIN
- SELECT * INTO STRICT relation FROM truss.rel_def WHERE rel_type_id=selected_relationship AND retired_rev IS NULL;
+ IF historical_revision IS NULL THEN
+  SELECT * INTO STRICT relation FROM truss.rel_def WHERE rel_type_id=selected_relationship AND retired_rev IS NULL;
+ ELSE
+  SELECT * INTO STRICT relation FROM jsonb_populate_recordset(NULL::truss.rel_def,truss.catalog_all_expected_records(historical_revision)->'rel_def') r WHERE r.rel_type_id=selected_relationship;
+ END IF;
  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=relation.definition_rev AND ord=relation.definition_doc_ord AND doc_id=relation.definition_document_id;
  SELECT value,ordinality::int-1 INTO STRICT module_json,mi FROM json_array_elements(archive.document::json->'modules') WITH ORDINALITY m WHERE value->>'id'=relation.module;
  SELECT value,ordinality::int-1 INTO STRICT fragment,ri FROM json_array_elements(module_json->'relationships') WITH ORDINALITY r WHERE value->>'id'=relation.rel_id;
@@ -13,7 +17,7 @@ BEGIN
  RETURN encode(sha256(convert_to(pin_input,'UTF8')),'hex');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_relationship_pin(int) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_relationship_pin(int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_condition_type(identity jsonb) RETURNS truss.type_def
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
@@ -114,7 +118,7 @@ BEGIN
  input:=convert_from(original_input,'UTF8')::jsonb;inventory:=truss.runtime_condition_inventory(input);
  FOR entry IN SELECT value FROM jsonb_array_elements(inventory) WHERE value->'condition'->>'condition'='key_absent' LOOP
   SELECT * INTO STRICT selected FROM truss.type_def WHERE type_id=(entry->>'typeId')::int;
-  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=selected.definition_rev AND ord=selected.definition_doc_ord AND doc_id=selected.definition_document_id;
+  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
   SELECT value->>'sourceText' INTO STRICT source FROM jsonb_array_elements(convert_from(original_documents,'UTF8')::jsonb) WHERE value->>'documentId'=archive.doc_id;
   IF convert_to(source,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'original key document required' USING ERRCODE='22023';END IF;
  END LOOP;
@@ -148,7 +152,7 @@ BEGIN
   IF receipt->>'operation' IS DISTINCT FROM 'encode-core-key-tuple' OR receipt->>'profile' IS DISTINCT FROM 'umf-key-tuple-v1' OR receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex')
    OR receipt->'identity' IS DISTINCT FROM jsonb_build_object('module',entry->>'moduleId','element',entry->>'recordId','key',entry->>'keyId')
    OR receipt->'values' IS DISTINCT FROM (SELECT jsonb_agg(jsonb_build_object('string',v) ORDER BY ord) FROM unnest(values_text) WITH ORDINALITY x(v,ord))
-   OR receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.type_def t JOIN truss.schema_doc d ON d.rev=t.definition_rev AND d.ord=t.definition_doc_ord WHERE t.type_id=(entry->>'typeId')::int) THEN RAISE EXCEPTION 'original UMF predicate key receipt required' USING ERRCODE='22023';END IF;
+   OR receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.type_def t JOIN truss.schema_doc d ON d.doc_id=t.document_id WHERE t.type_id=(entry->>'typeId')::int ORDER BY d.rev DESC LIMIT 1) THEN RAISE EXCEPTION 'original UMF predicate key receipt required' USING ERRCODE='22023';END IF;
   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
    'typeId',entry->>'typeId','keyNumber',entry->>'keyNumber','definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');

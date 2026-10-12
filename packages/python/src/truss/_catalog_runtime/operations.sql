@@ -202,7 +202,7 @@ BEGIN
  -- Authorize the full original owner inventory without requiring live targets.
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   SELECT * INTO STRICT selected FROM truss.runtime_operation_owner(operation,input->'operations',index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);
-  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=selected.definition_rev AND ord=selected.definition_doc_ord AND doc_id=selected.definition_document_id;
+  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d WHERE d.value->>'documentId'=archive.doc_id;
   IF convert_to(source_text,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'exact original source required' USING ERRCODE='22023';END IF;
   index:=index+1;
@@ -303,11 +303,14 @@ REVOKE ALL ON FUNCTION truss.object_group_metadata(uuid,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_object_history(object_image jsonb,identity jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;
+DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
 BEGIN
- FOR property IN SELECT * FROM truss.prop_def WHERE type_id=(object_image->>'type_id')::int AND retired_rev IS NULL ORDER BY prop_id LOOP
+ basis:=truss.catalog_all_expected_records(written_revision);
+ SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(object_image->>'type_id')::int,NULL,written_revision);
+ identity:=jsonb_set(identity,'{definitionPin}',to_jsonb(pin.definition_pin));
+ FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(object_image->>'type_id')::int ORDER BY prop_id LOOP
   IF object_image->'props' ? property.prop_id::text THEN
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('property',property.type_id,property.prop_id);
+   SELECT * INTO STRICT pin FROM truss.runtime_definition('property',property.type_id,property.prop_id,written_revision);
    properties:=properties||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text));
   END IF;
  END LOOP;
@@ -346,7 +349,7 @@ BEGIN
    OR owner_receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex') OR owner_receipt->'identity' IS DISTINCT FROM
     (SELECT jsonb_build_object('module',t.module,'element',t.element,'key',key_definition.key_id) FROM truss.type_def t WHERE t.type_id=selected_type)
    OR owner_receipt->'values' IS DISTINCT FROM (SELECT jsonb_agg(jsonb_build_object('string',v) ORDER BY n) FROM unnest(values_text) WITH ORDINALITY x(v,n))
-   OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.type_def t JOIN truss.schema_doc d ON d.rev=t.definition_rev AND d.ord=t.definition_doc_ord WHERE t.type_id=selected_type) THEN
+   OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.type_def t JOIN truss.schema_doc d ON d.doc_id=t.document_id WHERE t.type_id=selected_type ORDER BY d.rev DESC LIMIT 1) THEN
    RAISE EXCEPTION 'original UMF key receipt required' USING ERRCODE='22023';END IF;
   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected_type,key_definition.key_num);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
@@ -704,17 +707,26 @@ CREATE INDEX runtime_edge_transition_owner ON truss.runtime_edge_transition(edge
 CREATE TRIGGER runtime_edge_transition_immutable BEFORE UPDATE OR DELETE ON truss.runtime_edge_transition
  FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 
-CREATE FUNCTION truss.runtime_edge_history(image jsonb,identity jsonb,source_identity jsonb,target_identity jsonb) RETURNS jsonb
-LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
- SELECT jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','edge','identity',identity,
+-- Stored history defaults to its last-written catalog; direct reads pass their current read catalog.
+CREATE FUNCTION truss.runtime_edge_history(image jsonb,identity jsonb,source_identity jsonb,target_identity jsonb,interpretation_revision int DEFAULT NULL) RETURNS jsonb
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE selected_revision int:=coalesce(interpretation_revision,(image->>'rev')::int);pin record;
+BEGIN
+ identity:=jsonb_set(identity,'{definitionPin}',to_jsonb(truss.runtime_relationship_pin((image->>'rel_type_id')::int,selected_revision)));
+ SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(source_identity->>'typeId')::int,NULL,selected_revision);
+ source_identity:=jsonb_set(source_identity,'{definitionPin}',to_jsonb(pin.definition_pin));
+ SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(target_identity->>'typeId')::int,NULL,selected_revision);
+ target_identity:=jsonb_set(target_identity,'{definitionPin}',to_jsonb(pin.definition_pin));
+ RETURN jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','edge','identity',identity,
   'recordVersion',image->>'ver','catalogRevision',image->>'rev',
   'createdAt',to_char((image->>'created_at')::timestamptz AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
   'updatedAt',to_char((image->>'updated_at')::timestamptz AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
   'properties','[]'::jsonb,'retained',(SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb)
     FROM jsonb_each(coalesce(nullif(image->'retained','null'::jsonb),'{}'))),
   'source',source_identity,'target',target_identity,'orderKey',CASE WHEN image->>'order_key' IS NULL THEN '{"state":"null"}'::jsonb ELSE jsonb_build_object('state','text','text',image->>'order_key') END);
+END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_edge_history(jsonb,jsonb,jsonb,jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_edge_history(jsonb,jsonb,jsonb,jsonb,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_edge_step(attempt_id uuid,operation_index int,metadata jsonb) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
@@ -822,6 +834,11 @@ BEGIN
   SELECT DISTINCT object_id,type_id FROM (
    SELECT m.object_id,m.type_id FROM truss.runtime_create_member m JOIN truss.runtime_create_group g USING(group_id) WHERE g.writer_xid=pg_current_xact_id()
    UNION ALL SELECT object_id,type_id FROM truss.runtime_object_transition WHERE writer_xid=pg_current_xact_id()
+   UNION ALL SELECT o.id,o.type_id FROM truss.object o
+    JOIN truss.rel_endpoint e ON o.type_id IN(e.source_type,e.target_type)
+    JOIN truss.schema_change c ON c.kind='rel' AND c.def_id=e.rel_type_id
+    JOIN truss.catalog_registration_request r ON r.revision=c.rev
+    WHERE r.writer_xid=pg_current_xact_id()
    UNION ALL SELECT (i.value->>'id')::bigint,(i.value->>'typeId')::int FROM truss.runtime_edge_transition t
     CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i
     WHERE t.writer_xid=pg_current_xact_id() AND i.value<>'null'::jsonb) o ORDER BY object_id,type_id LOOP
@@ -901,7 +918,7 @@ BEGIN
  SELECT * INTO STRICT pin FROM truss.runtime_definition('type',endpoint.type_id);
  target_identity:=jsonb_build_object('id',edge_row.target_id::text,'typeId',endpoint.type_id::text,'definitionPin',pin.definition_pin,'owner',jsonb_build_object('documentId',endpoint.document_id,'moduleId',endpoint.module));
  identity:=jsonb_build_object('id',edge_row.id::text,'typeId',relation.rel_type_id::text,'definitionPin',truss.runtime_relationship_pin(relation.rel_type_id),'owner',jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module));
- result:=convert_to((truss.runtime_edge_history(to_jsonb(edge_row),identity,source_identity,target_identity)||jsonb_build_object('executedCatalogRevision',captured_revision::text))::text,'UTF8');
+ result:=convert_to((truss.runtime_edge_history(to_jsonb(edge_row),identity,source_identity,target_identity,captured_revision)||jsonb_build_object('executedCatalogRevision',captured_revision::text))::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'bounded complete edge required' USING ERRCODE='54000';END IF;
  IF NOT truss.runtime_can_read(relation.document_id,relation.module) OR NOT truss.runtime_can_read(source_identity->'owner'->>'documentId',source_identity->'owner'->>'moduleId')
   OR NOT truss.runtime_can_read(target_identity->'owner'->>'documentId',target_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current edge reader required' USING ERRCODE='42501';END IF;

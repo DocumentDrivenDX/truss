@@ -1,7 +1,7 @@
 -- Real-data validation prerequisite; compatible persistence remains unavailable.
 CREATE FUNCTION truss.catalog_scalar_violations(declarations_bytes bytea) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE rec jsonb;field jsonb;selected_type int;property_id int;missing_count bigint;family_count bigint;
+DECLARE rec jsonb;field jsonb;selected_type int;property_id int;missing_count bigint;family_count bigint;retained_count bigint;
  violations jsonb:='[]';scope jsonb;scopes jsonb:='[]';owner record;
 BEGIN
  -- The caller holds the exclusive head lock, excluding supported graph writers.
@@ -26,9 +26,11 @@ BEGIN
     count(*) FILTER (WHERE property_id IS NOT NULL AND o.props ? property_id::text
      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS NOT TRUE)
-    INTO missing_count,family_count FROM truss.object o WHERE o.type_id=selected_type;
+    ,count(*) FILTER (WHERE property_id IS NULL AND o.retained ? (field->'declaration'->>'name'))
+    INTO missing_count,family_count,retained_count FROM truss.object o WHERE o.type_id=selected_type;
    IF missing_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.required','affectedObjectCount',missing_count::text));END IF;
    IF family_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.scalar_type','affectedObjectCount',family_count::text));END IF;
+   IF retained_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.retained_name_collision','affectedObjectCount',retained_count::text));END IF;
   END LOOP;
  END LOOP;
  FOR owner IN SELECT DISTINCT value->>'documentId' AS document_id,value->>'moduleId' AS module_id FROM jsonb_array_elements(scopes) LOOP

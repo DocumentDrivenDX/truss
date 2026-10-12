@@ -1,0 +1,37 @@
+{
+  "runtime": "0.19",
+  "scope": "public compatible catalog acceptance and connected adopter workflow",
+  "wheelSha256": "bf34b2282314e821f70c5f1b95a44410a96d094b46d24dd233ae9b9753afd255",
+  "environment": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6"
+  },
+  "installedBasicTests": {
+    "modules": [
+      "test_catalog_compatible_acceptance_native",
+      "test_catalog_evolution_native"
+    ],
+    "tests": 3,
+    "seconds": 32.697,
+    "passed": true
+  },
+  "ownerSqlRoundTrips": 17,
+  "pythonBoundaryImports": 723,
+  "typingFixtures": 4,
+  "expectedNegativeTypeErrors": 20,
+  "review": "Astra Ultra approved scoped runtime and public test; final installed tests passed",
+  "limits": [
+    "fresh installation only",
+    "no key backfill or retirement",
+    "no broader structured ownership"
+  ],
+  "publicWorkflow": [
+    "changed document acceptance",
+    "current document and module reads",
+    "old object read with optional field absent",
+    "updates and new type creation",
+    "key lookup",
+    "historical catalog and group recovery",
+    "reserved edge import continuity"
+  ]
+}

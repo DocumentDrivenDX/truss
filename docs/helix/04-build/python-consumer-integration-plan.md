@@ -31,6 +31,16 @@ ddx:
 
 The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized exact scalar object and independent directed edge groups, object/key/page reads, relationship reads and atomic caller preconditions. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
 
+## Public compatible catalog acceptance — runtime 0.19
+
+The public `prepare_catalog` / `accept_in_transaction` workflow now accepts
+new records, optional scalar additions, non-key absence relaxation and
+independent relationship widening while preserving native IDs. The basic
+adopter test exercises registration, current source/read views, mutations,
+new-type creation, key lookup, imports and original request recovery.
+Retirement, backfill, structured ownership and installation upgrades remain open.
+The next public implementation priorities are compiled execution and the feed.
+
 ## Compatible catalog acceptance — connected implementation scope
 
 Fold original immutable registration requests into a complete expected catalog;

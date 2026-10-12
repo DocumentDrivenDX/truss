@@ -11,8 +11,8 @@ from ._owner_evidence_json import decode_owner_evidence_json
 
 _EXTRACTION_RULE=b'UTF-8 JSON value slice at RFC6901 pointer; exclude surrounding whitespace; preserve original tokens; v1'
 EXTRACTION_PROFILE=ProfilePin(identity='truss-original-json-definition',version='0.1',sha256=sha256(_EXTRACTION_RULE).hexdigest())
-_VIEW_RULE=b"""truss-complete-catalog-view/0.2
-Supported accepted revisions: positive current revision, cumulative append-only archives. Existing definition IDs and original archive pins remain unchanged. Complete scope only. Maximum definitions65536, bytes16777216.
+_VIEW_RULE=b"""truss-complete-catalog-view/0.3
+Supported accepted revisions: positive current revision, immutable cumulative archives with compatible evolution. Native definition IDs remain stable; unchanged definitions retain original archive pins and changed definitions resolve their accepted revision/ordinal/document archive. Complete scope only. Maximum definitions65536, bytes16777216.
 Hash serialization: json.dumps(ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf-8'). SHA256 lowercase hex.
 Definition pin input array: [document.rev integer,document.ord integer,original document SHA256 string,authored JSON pointer string,extraction profile wire object,exact value-slice SHA256 string]. Artifact identity equals definition pin.
 Inventory hash input: exact ordered definition-entry wire array, including artifacts, provenance and dependency references.
@@ -22,7 +22,7 @@ Type dependencies: authored Record.members order. Property dependencies: owning 
 Key pointers use authored keys array position, not native key_num. Property source owner module is declaration_module. Relationship identity is numeric rel_type_id.
 Complete encoded-byte budget includes all view fields. Internal native basis has a separate16MiB bound. No truncation.
 """
-VIEW_PROFILE=ProfilePin(identity='truss-complete-catalog-view',version='0.2',sha256=sha256(_VIEW_RULE).hexdigest())
+VIEW_PROFILE=ProfilePin(identity='truss-complete-catalog-view',version='0.3',sha256=sha256(_VIEW_RULE).hexdigest())
 
 
 def wire(value):
