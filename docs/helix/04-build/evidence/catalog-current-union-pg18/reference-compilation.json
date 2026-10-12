@@ -1,0 +1,14 @@
+{
+  "scope": "owned independent administrative reference compilation",
+  "stop": 0,
+  "status": 3,
+  "nativeVersion": "180006",
+  "referenceSha256": "fd634fa397414bcfab753f58f9f64b28daf7ea85ad3c091931400f4f44b551a0",
+  "routineCount": 115,
+  "referenceBytes": 954993,
+  "adjunctBytes": 2396755,
+  "sourceCount": 96,
+  "socketAbsent": true,
+  "cleanupConfirmed": true,
+  "retainedFixture": null
+}

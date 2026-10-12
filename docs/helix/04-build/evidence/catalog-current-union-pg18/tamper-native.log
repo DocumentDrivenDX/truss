@@ -1,0 +1,6 @@
+test_posthead_operation_tampering_refuses_without_repair (__main__.Current.test_posthead_operation_tampering_refuses_without_repair) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 27.577s
+
+OK

@@ -48,13 +48,17 @@ def freeze(entries, *, count, total_limit):
     return frozen
 
 
-def compile_reference(selection,postgres_bin,output):
+def compile_reference(selection,postgres_bin,output, *, profile='catalog-finalization'):
+    resource_count, interface = {
+        'catalog-finalization': (100, 'truss-catalog-custody-finalization-independent-reference/0.1-candidate'),
+        'catalog-current-union': (114, 'truss-current-catalog-union-independent-reference/0.1-candidate'),
+    }[profile]
     raw_selection=bounded_read(selection,1048576)
     roster=json.loads(raw_selection,object_pairs_hook=unique_object)
     if type(roster) is not dict or set(roster)!={'sources','resources'}:
         raise ValueError('Closed reference selection required')
     sources=freeze(roster['sources'],count=(1,128),total_limit=16777216)
-    resources=freeze(roster['resources'],count=(100,100),total_limit=16777216)
+    resources=freeze(roster['resources'],count=(resource_count,resource_count),total_limit=16777216)
     compiled=dict(sources)
     if any(identity in compiled and raw!=compiled[identity] for identity,raw in resources):
         raise ValueError('Compiled and archived originals differ for the same source identity')
@@ -72,7 +76,7 @@ def compile_reference(selection,postgres_bin,output):
         return subprocess.run([str(postgres_bin/name),*args],check=True,capture_output=True,text=True,timeout=60)
     try:
         version=run('postgres','--version').stdout.strip()
-        if version!='postgres (PostgreSQL) 18.6':raise ValueError('Exact PostgreSQL18.11 compiler required')
+        if version!='postgres (PostgreSQL) 18.6':raise ValueError('Exact PostgreSQL18.6 compiler required')
         run('initdb','-D',str(data),'-U','postgres','--auth=trust','--encoding=UTF8')
         started=True
         run('pg_ctl','-D',str(data),'-l',str(root/'server.log'),'-w','-o',f"-h '' -k {socket}",'start')
@@ -83,7 +87,7 @@ def compile_reference(selection,postgres_bin,output):
             connection.execute('BEGIN')
             routines=connection.execute('SELECT truss.runtime_collect_catalog_custody_declarations_candidate()::text',prepare=False).fetchone()[0]
             schema=connection.execute('SELECT truss.runtime_collect_catalog_custody_schema_candidate()::text',prepare=False).fetchone()[0]
-            manifest={'interfaceVersion':'truss-catalog-custody-finalization-independent-reference/0.1-candidate',
+            manifest={'interfaceVersion':interface,
                 'scope':'administrative_rollback_only_catalog_custody','nativeVersion':'180006',
                 'sourceFiles':[{'path':p,'sha256':sha(b)} for p,b in sources],
                 'resources':[{'path':p,'sha256':sha(b)} for p,b in resources],
@@ -119,5 +123,6 @@ if __name__=='__main__':
     parser.add_argument('--selection',type=Path,required=True)
     parser.add_argument('--postgres-bin',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--profile',choices=('catalog-finalization','catalog-current-union'),default='catalog-finalization')
     args=parser.parse_args()
-    print(json.dumps(compile_reference(args.selection,args.postgres_bin,args.output)))
+    print(json.dumps(compile_reference(args.selection,args.postgres_bin,args.output,profile=args.profile)))

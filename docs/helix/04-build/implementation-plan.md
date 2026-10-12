@@ -4725,3 +4725,31 @@ native refinement theorem or backend acceptance binding is claimed. Original
 issuer/mapping/credential/target authentication, source/role/ACL lifetime, graph
 capture and complete protected disclosure remain open. Last full backend gate
 checkpoint remains26/132 with106 missing bindings; goal active.
+
+
+### Current catalog union validation — 2026-10-11
+
+The private catalog-current-union composition derives its scope from the actual
+PostgreSQL transaction, validates the post-head operation against retained
+original capture, and reconstructs the full finalized feed tuple from original
+inputs. It performs no publication or repair. The capture-generation inverse
+changes only the local generation used to reconstruct the retained original;
+readiness, phase and final feed values remain independently checked.
+
+The corrected independent PostgreSQL 18.6 reference contains 96 sources,
+114 resources and 115 routines; SHA-256
+`fd634fa397414bcfab753f58f9f64b28daf7ea85ad3c091931400f4f44b551a0`.
+All new routine names fit PostgreSQL's 63-byte identifier limit. Repeat validation,
+corrupted finalized tuple and missing current scope passed. A first tamper test
+incorrectly set readiness without changing phase and hit the layout CHECK;
+the corrected legal effects-ready state and extra-generation control passed
+without repair. The portable repeat/write-free control also passed from main
+in 38.874 seconds with confirmed local runtime cleanup. See
+`evidence/catalog-current-union-pg18/`.
+
+Business refusal triggers are installed before admission; full composition
+validation runs before capture/registration. The raw commit barrier remains
+unchanged. This is an administrative first-revision composition, not public
+acceptance or ordinary-role qualification. The next catalog delivery work is
+ordinary-role and metadata protection, the conditional commit dispatcher, and
+the public Python catalog assembly using the same original-input workflow.

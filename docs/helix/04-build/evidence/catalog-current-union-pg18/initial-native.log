@@ -1,0 +1,24 @@
+test_posthead_repeat_validation_is_write_free (__main__.Current.test_posthead_repeat_validation_is_write_free) ... ok
+test_corrupt_final_tuple_refuses_without_repair (__main__.Current.test_corrupt_final_tuple_refuses_without_repair) ... ok
+test_missing_current_scope_refuses (__main__.Current.test_missing_current_scope_refuses) ... ok
+test_posthead_operation_tampering_refuses_without_repair (__main__.Current.test_posthead_operation_tampering_refuses_without_repair) ... 
+  test_posthead_operation_tampering_refuses_without_repair (__main__.Current.test_posthead_operation_tampering_refuses_without_repair) (change='readiness_generation=effect_generation') ... ERROR
+
+======================================================================
+ERROR: test_posthead_operation_tampering_refuses_without_repair (__main__.Current.test_posthead_operation_tampering_refuses_without_repair) (change='readiness_generation=effect_generation')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-current-union-draft/check-current-union.py", line 45, in test_posthead_operation_tampering_refuses_without_repair
+    self.query('UPDATE truss.row_home_operation SET '+change)
+  File "/private/tmp/truss-main-integration-20261010/packages/python/tests/test_catalog_prerequisites_psycopg_native.py", line 103, in query
+    return self.connection.execute(sql,params,prepare=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-pg18-consumer-env-20261011/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.CheckViolation: new row for relation "row_home_operation" violates check constraint "row_home_operation_phase"
+DETAIL:  Failing row contains (878, 0, catalog-acceptance, admitted, 6, 6, null, null, \x7b22786964223a2022383738222c20226f7264696e616c223a202230222c20..., \x01, \x7b22696e7465726661636556657273696f6e223a2274727573732d61636365..., \x7b2268656164223a207b226964223a20312c2022726576223a20307d2c2022..., \x7b226465636c61726174696f6e7355746638486578223a2235623762323237..., \x05, \x06, null).
+
+----------------------------------------------------------------------
+Ran 4 tests in 82.861s
+
+FAILED (errors=1)
