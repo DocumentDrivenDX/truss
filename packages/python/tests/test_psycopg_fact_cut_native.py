@@ -1420,3 +1420,26 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         finally:
             if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
             self.connection.execute('RESET default_transaction_isolation')
+
+    def test_pending_authority_refuses_overlapping_begin_without_new_issuance(self):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        original=self.comparison();pending=_begin_pending_authority_fixture(self.connection,original)
+        try:
+            count=self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone()
+            with self.assertRaisesRegex(ValueError,'already active'):_begin_pending_authority_fixture(self.connection,pending)
+            self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(pending.epoch,))
+            self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),count)
+        finally:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+
+    def test_pending_authority_completion_replay_cannot_replace_current_successor(self):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        original=self.comparison();pending=_begin_pending_authority_fixture(self.connection,original)
+        restored=_finish_pending_authority_fixture(self.connection,pending,original);type(self).epoch=restored.epoch
+        count=self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone()
+        with self.assertRaisesRegex(ValueError,'current transition bytes'):_finish_pending_authority_fixture(self.connection,pending,original)
+        self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(restored.epoch,))
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),count)
