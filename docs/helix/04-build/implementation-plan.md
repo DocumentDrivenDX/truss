@@ -5409,3 +5409,14 @@ authentication, route closure or backend admission. The private fixed read spike
 does not limit the full Weft query surface selected by CONTRACT-007. Native
 selected source behavior is unchanged. C01/C02 and C04–C07 remain open; the full
 goal remains26/132 with106 unbound required cases.
+
+Concurrent main's exact numeric catalog-owner evidence changes were integrated
+before publication. Fresh native packet
+`evidence/python-psycopg-epoch-cut/ce23892d-8857-4096-a994-d9edfe4ee870`
+passes192 methods and the module boundary gate with145 current/preimage Truss
+sources,363 current/archive UMF sources and1705 original runtime payload pins.
+Engine18.6 / pgserver-pg18 18.6.1 / stock psycopg3.3.6 binary remains selected;
+all three fixture cleanups confirm stop0/status3/socket absent. Source/archive/
+runtime digests were independently rechecked after completion. The six
+`test_owner_evidence_json` tests also pass. These are component checks on the
+merged source set; the complete backend acceptance bindings remain unqualified.
