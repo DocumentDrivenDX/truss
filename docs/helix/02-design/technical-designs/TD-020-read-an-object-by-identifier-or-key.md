@@ -387,3 +387,20 @@ DDL or validate a source lease as authority. If control-plane participation or
 equivalent independently qualified exclusion is unavailable, refuse that profile
 and deny direct unguarded paths. Existing CONTRACT-063/005 coordinator and final-
 publication obligations remain unchanged; no new substitute guard is selected.
+
+
+### Shared condition over raw tables and real graph — 2026-10-12
+
+The same typed keyed-Record/opaque-Relationship condition now runs against raw
+relational tables and public-created graph projections through the existing
+candidate fold. Only physical scan homes change; semantic references, Key fields,
+endpoint roles, witnesses and active condition stay identical. Independently
+seeded raw tables and restored graph both return AliceRA/RAB, BobRB/RAB and
+outsiderempty; raw private Assignment access denies. The combined regression
+passes108 native observations, strict fixture typing and Python boundaries723.
+Evidence: `docs/helix/04-build/evidence/security-shared-raw-graph-policy-20261012/receipt.json`.
+Trace shared US-056-AC1/2/8/10 and CONTRACT-062/063. This is single-key string/
+Boolean membership feasibility, not general storage equivalence, authenticated
+Weft output, nullable/composite/parallel/masking/history support or complete
+native admission. Source/mapping/authority/publication and original backend
+cases remain open; no separate policy semantics are created for raw storage.

@@ -26,4 +26,5 @@ for(const name of ['staff_assignment','assignment_project','resource_project']){
 }
 const fold=lowerCandidateSecurityRuleFold({rules:[{id:'membership',effect:'permit',actions:['read'],target:ref('Resource'),disclosure:[],condition}],action:'read',target:ref('Resource'),scans,resource:{target:ref('Resource'),keyId:'pk',keyFields:[ref('Resource-code')],parameters:[1]},subject:{target:ref('Staff'),keyId:'pk',keyFields:[ref('Staff-code')],parameters:[2]}});
 const predicateSql='('+fold.sql+') OPERATOR(pg_catalog.=) '+"E'permit'::pg_catalog.text";
-console.log(JSON.stringify({objects,edges,predicateSql,condition,scans,fold}));
+const flatFold=lowerCandidateSecurityRuleFold({rules:[{id:'membership',effect:'permit',actions:['read'],target:ref('Resource'),disclosure:[],condition}],action:'read',target:ref('Resource'),scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}})),resource:{target:ref('Resource'),keyId:'pk',keyFields:[ref('Resource-code')],parameters:[1]},subject:{target:ref('Staff'),keyId:'pk',keyFields:[ref('Staff-code')],parameters:[2]}});
+console.log(JSON.stringify({objects,edges,predicateSql,condition,scans,fold,flatFold}));

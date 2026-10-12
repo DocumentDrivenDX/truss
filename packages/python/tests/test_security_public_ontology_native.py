@@ -11,7 +11,7 @@ LINKS={'staff_assignment':('Staff','Assignment'),'assignment_project':('Assignme
 class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  for name in tuple(n for n in dir(groups.PublicCreateGroupTests) if n.startswith('test_')):locals()[name]=None
  def tearDown(self):
-  self.admin.rollback();self.admin.execute('DROP SCHEMA IF EXISTS ontology_fixture CASCADE')
+  self.admin.rollback();self.admin.execute('DROP SCHEMA IF EXISTS relational_fixture CASCADE;DROP SCHEMA IF EXISTS ontology_fixture CASCADE')
   super().tearDown()
  def consumer(self):
   # Larger atomic ontology seed; retain an explicit finite native deadline.
@@ -272,6 +272,27 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   pending_buffer=[];observations.append({'id':'lost-coordinator-buffer-withheld-by-fixture','observed':pending_buffer,'qualification':'explicit fixture release arbitration, not a production lease'})
   with psycopg.connect(**params,autocommit=True) as fresh:
    actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'new-read-after-coordinator-loss-observes-revocation','observed':actual})
+  # Same logical Record/Relationship condition over independent raw tables.
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])));rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,4)).fetchall();self.assertEqual(rows,[('1',installation_bytes.hex(),profile_bytes.hex(),'5')]);authority_writer.execute('COMMIT')
+  self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.client(code text PRIMARY KEY);CREATE TABLE relational_fixture.project(code text PRIMARY KEY);CREATE TABLE relational_fixture.staff(code text PRIMARY KEY,login text NOT NULL);CREATE TABLE relational_fixture.resource(code text PRIMARY KEY);CREATE TABLE relational_fixture.assignment(code text PRIMARY KEY,active boolean NOT NULL)')
+  for table,codes in [('client',['C']),('project',['A','B']),('resource',['RA','RB','RAB','RO'])]:
+   for code in codes:self.admin.execute('INSERT INTO relational_fixture.'+table+' VALUES(%s)',(code,))
+  for login in ['alice','bob','outsider']:self.admin.execute('INSERT INTO relational_fixture.staff VALUES(%s,%s)',('staff-'+login,login))
+  for code,active in [('AA',True),('AB',False),('BB',True)]:self.admin.execute('INSERT INTO relational_fixture.assignment VALUES(%s,%s)',(code,active))
+  for link,(source,target) in LINKS.items():
+   self.admin.execute('CREATE TABLE relational_fixture.'+link+'(occurrence_id text PRIMARY KEY,source_code text NOT NULL REFERENCES relational_fixture.'+source.lower()+'(code),target_code text NOT NULL REFERENCES relational_fixture.'+target.lower()+'(code))')
+   for index,(left,right) in enumerate(connections[link]):self.admin.execute('INSERT INTO relational_fixture.'+link+' VALUES(%s,%s,%s)',('raw-'+link+str(index),left,right))
+  self.admin.execute('GRANT USAGE ON SCHEMA relational_fixture TO ontology_facts;GRANT SELECT ON ALL TABLES IN SCHEMA relational_fixture TO ontology_facts;GRANT CREATE ON SCHEMA relational_fixture TO ontology_facts')
+  self.admin.execute('CREATE FUNCTION relational_fixture.decision_bound(text,text) RETURNS text LANGUAGE SQL SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ '+sql['flatFold']['sql']+' $$;REVOKE ALL ON FUNCTION relational_fixture.decision_bound(text,text) FROM PUBLIC;ALTER FUNCTION relational_fixture.decision_bound(text,text) OWNER TO ontology_facts')
+  self.admin.execute("CREATE FUNCTION relational_fixture.eligible(text) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ DECLARE n bigint;subject_key text;decision text;BEGIN IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'security authority profile unavailable' USING ERRCODE='0A000';END IF;SELECT count(*),min(code) INTO n,subject_key FROM relational_fixture.staff WHERE login=SESSION_USER::text;IF n<>1 THEN RAISE EXCEPTION 'security facts unavailable' USING ERRCODE='55000';END IF;decision:=relational_fixture.decision_bound($1,subject_key);IF decision IS NULL OR decision NOT IN ('permit','deny') THEN RAISE EXCEPTION 'security facts unavailable' USING ERRCODE='55000';END IF;RETURN decision='permit';END $$;REVOKE ALL ON FUNCTION relational_fixture.eligible(text) FROM PUBLIC;ALTER FUNCTION relational_fixture.eligible(text) OWNER TO ontology_facts;REVOKE CREATE ON SCHEMA relational_fixture FROM ontology_facts")
+  self.admin.execute('ALTER TABLE relational_fixture.resource ENABLE ROW LEVEL SECURITY;ALTER TABLE relational_fixture.resource FORCE ROW LEVEL SECURITY;CREATE POLICY resource_membership ON relational_fixture.resource TO alice,bob,outsider USING(relational_fixture.eligible(code))')
+  for login in ['alice','bob','outsider']:
+   self.admin.execute('GRANT USAGE ON SCHEMA relational_fixture TO '+login+';GRANT SELECT ON relational_fixture.resource TO '+login+';GRANT EXECUTE ON FUNCTION relational_fixture.eligible(text) TO '+login)
+   params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']=login
+   with psycopg.connect(**params,autocommit=True) as reader:
+    flat=[r[0] for r in reader.execute('SELECT code FROM relational_fixture.resource ORDER BY code')];graph=[r[0] for r in reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(flat,expected[login]);self.assertEqual(graph,expected[login]);observations.append({'id':'same-policy-raw-and-graph-oracle-'+login,'expected':expected[login],'raw':flat,'graph':graph})
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):reader.execute('SELECT * FROM relational_fixture.assignment')
+    observations.append({'id':'raw-private-assignment-table-denied-'+login,'observed':'42501'})
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']).write_text(json.dumps({'packet':packet,'sql':sql,'observations':observations,'publicCreatedIdentities':{alias:{'id':identity.id,'typeId':identity.type_id} for alias,identity in aliases.items()},'scope':'Actual public-created objects/edges, typed native joins to business keys and candidate typed Record/opaque Relationship membership lowering under ordinary native RLS. Private views are real graph projections, not seeded flat tables. Not complete source enrollment, held authority or released public API/security compiler admission.'},indent=2)+'\n')
 if __name__=='__main__':
  import unittest;unittest.main()
