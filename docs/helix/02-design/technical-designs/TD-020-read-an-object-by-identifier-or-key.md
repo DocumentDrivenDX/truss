@@ -387,3 +387,53 @@ DDL or validate a source lease as authority. If control-plane participation or
 equivalent independently qualified exclusion is unavailable, refuse that profile
 and deny direct unguarded paths. Existing CONTRACT-063/005 coordinator and final-
 publication obligations remain unchanged; no new substitute guard is selected.
+
+
+### Shared condition over raw tables and real graph — 2026-10-12
+
+The same typed keyed-Record/opaque-Relationship condition now runs against raw
+relational tables and public-created graph projections through the existing
+candidate fold. Only physical scan homes change; semantic references, Key fields,
+endpoint roles, witnesses and active condition stay identical. Independently
+seeded raw tables and restored graph both return AliceRA/RAB, BobRB/RAB and
+outsiderempty; raw private Assignment access denies. The combined regression
+passes108 native observations, strict fixture typing and Python boundaries723.
+Evidence: `docs/helix/04-build/evidence/security-shared-raw-graph-policy-20261012/receipt.json`.
+Trace shared US-056-AC1/2/8/10 and CONTRACT-062/063. This is single-key string/
+Boolean membership feasibility, not general storage equivalence, authenticated
+Weft output, nullable/composite/parallel/masking/history support or complete
+native admission. Source/mapping/authority/publication and original backend
+cases remain open; no separate policy semantics are created for raw storage.
+
+
+### Shared native collection operator controls — 2026-10-12
+
+The same raw/graph membership fixture now exercises exact RA/RB/RO lookups,
+count, sorted LIMIT/OFFSET pages and self-join counts for Alice/Bob/outsider.
+Every result matches independently authored eligibility, including all-hidden
+empty pages and zero counts. The combined fixture retains132 native observations
+in `docs/helix/04-build/evidence/security-shared-collection-operators-20261012/receipt.json`.
+That observation count is unrelated to the original132 required acceptance cases.
+Trace US-056-AC1/2 and STP-056 B03. This is per-statement native operator
+feasibility, not cursor/cache authority lifetime, edge traversal, protected-field
+query use, authenticated compilation/installation or full backend qualification.
+No original case is promoted; complete admission and publication remain required.
+
+
+### Bounded typed raw/graph correspondence proof — 2026-10-12
+
+A symbolic two-instance model for each disjoint Staff/Assignment/Project/Resource
+key space proves membership equivalence under bounded typed key bijections,
+complete incidence correspondence and exact active flags(UNSAT difference).
+Omitting owner incidence, active-value correspondence or bijective key mapping
+producesSAT counterexamples; an authorized population isSAT. All five formulas
+replay. Independent Python enumeration checks16,384 Boolean worlds across16
+key-permutation combinations, totaling262,144 mapped worlds and1,048,576
+caller/resource comparisons, with6,543 positive Boolean worlds.
+
+Evidence: `docs/helix/04-build/evidence/security-raw-graph-correspondence-formal-20261012/receipt.json`.
+Trace shared CONTRACT-062/063 / US-056-AC1/2/10. This is the exact declared finite
+conditional model, not arbitrary-world equivalence or SQL/compiler/native codec
+refinement. Native original mapping, complete population, caller, coherent cut,
+authority and final-release premises remain independently required. No backend
+case or production admission is promoted.

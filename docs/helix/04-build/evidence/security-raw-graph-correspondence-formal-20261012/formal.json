@@ -1,0 +1,43 @@
+{
+  "solver": "4.15.4",
+  "bound": "Exactly two instances in each of four disjoint typed key spaces; arbitrary Boolean incidences/active flags and independent native key permutations.",
+  "assumptions": "Decoded native keys are bounded typed bijections; complete incidence and active values correspond exactly. No unknown-value/codec, SQL/TS refinement, authentic population, caller, cut or authority proof.",
+  "observations": [
+    {
+      "id": "exact-typed-correspondence-preserves-membership",
+      "expected": "unsat",
+      "observed": "unsat",
+      "formula": "exact-typed-correspondence-preserves-membership.smt2",
+      "model": null
+    },
+    {
+      "id": "missing-owner-incidence-can-change-membership",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "missing-owner-incidence-can-change-membership.smt2",
+      "model": "[assignment_native_key_0 = 1,\n graph_rp_1_1 = True,\n raw_rp_0_1 = False,\n project_native_key_0 = 1,\n raw_sa_0_1 = True,\n graph_rp_1_0 = True,\n staff_native_key_0 = 1,\n raw_ap_0_1 = True,\n graph_rp_0_1 = True,\n raw_ap_1_0 = True,\n raw_sa_0_0 = True,\n resource_native_key_1 = 0,\n raw_active_0 = True,\n assignment_native_key_1 = 0,\n raw_sa_1_1 = True,\n graph_rp_0_0 = True,\n raw_active_1 = True,\n raw_ap_0_0 = True,\n resource_native_key_0 = 1,\n project_native_key_1 = 0,\n raw_rp_1_0 = False,\n raw_ap_1_1 = True,\n raw_rp_0_0 = False,\n staff_native_key_1 = 0,\n raw_rp_1_1 = False,\n raw_sa_1_0 = True,\n native_active_0 = True,\n graph_sa_0_1 = True,\n graph_sa_0_0 = True,\n graph_sa_1_1 = True,\n graph_ap_0_0 = True,\n native_active_1 = True,\n graph_ap_0_1 = True,\n graph_sa_1_0 = True,\n graph_ap_1_0 = True,\n graph_ap_1_1 = True]"
+    },
+    {
+      "id": "missing-active-attribute-can-change-membership",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "missing-active-attribute-can-change-membership.smt2",
+      "model": "[raw_active_1 = True,\n raw_ap_0_0 = True,\n assignment_native_key_1 = 0,\n project_native_key_0 = 1,\n assignment_native_key_0 = 1,\n raw_ap_1_1 = True,\n raw_rp_0_0 = True,\n staff_native_key_1 = 0,\n raw_active_0 = False,\n native_active_1 = True,\n raw_sa_0_0 = True,\n native_active_0 = True,\n raw_rp_1_1 = True,\n raw_ap_0_1 = True,\n resource_native_key_1 = 0,\n raw_sa_1_1 = True,\n staff_native_key_0 = 1,\n project_native_key_1 = 0,\n raw_ap_1_0 = True,\n raw_rp_1_0 = True,\n raw_rp_0_1 = True,\n raw_sa_1_0 = True,\n raw_sa_0_1 = False,\n resource_native_key_0 = 1,\n graph_rp_1_0 = True,\n graph_sa_0_1 = True,\n graph_sa_0_0 = True,\n graph_rp_0_0 = True,\n graph_sa_1_1 = True,\n graph_ap_0_0 = True,\n graph_rp_1_1 = True,\n graph_ap_0_1 = True,\n graph_sa_1_0 = False,\n graph_ap_1_0 = True,\n graph_ap_1_1 = True,\n graph_rp_0_1 = True]"
+    },
+    {
+      "id": "nonbijective-key-projection-can-lose-membership",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "nonbijective-key-projection-can-lose-membership.smt2",
+      "model": "[raw_active_1 = True,\n raw_ap_0_0 = True,\n staff_native_key_1 = 0,\n raw_sa_1_0 = True,\n raw_rp_0_1 = True,\n resource_native_key_0 = 0,\n raw_ap_1_1 = True,\n raw_rp_0_0 = False,\n raw_sa_1_1 = True,\n raw_sa_0_1 = True,\n assignment_native_key_0 = 0,\n raw_rp_1_1 = True,\n raw_active_0 = True,\n assignment_native_key_1 = 0,\n resource_native_key_1 = 0,\n raw_ap_1_0 = True,\n raw_sa_0_0 = True,\n project_native_key_0 = 0,\n raw_rp_1_0 = True,\n raw_ap_0_1 = True,\n project_native_key_1 = 0,\n staff_native_key_0 = 0,\n graph_rp_1_0 = False,\n graph_sa_1_1 = True,\n graph_rp_1_1 = False,\n graph_ap_1_0 = True,\n graph_ap_1_1 = True,\n graph_sa_0_1 = True,\n graph_sa_0_0 = True,\n native_active_0 = True,\n graph_rp_0_0 = False,\n graph_ap_0_0 = True,\n native_active_1 = True,\n graph_ap_0_1 = True,\n graph_sa_1_0 = True,\n graph_rp_0_1 = False]"
+    },
+    {
+      "id": "nonvacuous-authorized-population",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "nonvacuous-authorized-population.smt2",
+      "model": "[raw_ap_1_0 = True,\n raw_sa_0_0 = True,\n resource_native_key_0 = 1,\n raw_sa_0_1 = True,\n raw_active_1 = True,\n raw_ap_0_0 = True,\n project_native_key_0 = 1,\n raw_rp_0_1 = True,\n staff_native_key_1 = 0,\n raw_rp_1_1 = False,\n raw_ap_1_1 = True,\n resource_native_key_1 = 0,\n raw_rp_0_0 = True,\n raw_sa_1_0 = False,\n raw_active_0 = True,\n project_native_key_1 = 0,\n assignment_native_key_1 = 0,\n raw_sa_1_1 = False,\n raw_ap_0_1 = True,\n raw_rp_1_0 = False,\n assignment_native_key_0 = 1,\n staff_native_key_0 = 1,\n graph_rp_1_0 = True,\n graph_sa_1_1 = True,\n graph_rp_1_1 = True,\n graph_ap_1_0 = True,\n graph_ap_1_1 = True,\n graph_sa_0_1 = False,\n graph_sa_0_0 = False,\n native_active_0 = True,\n graph_rp_0_0 = False,\n graph_ap_0_0 = True,\n native_active_1 = True,\n graph_ap_0_1 = True,\n graph_sa_1_0 = True,\n graph_rp_0_1 = False]"
+    }
+  ],
+  "replays": 5
+}

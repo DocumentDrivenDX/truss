@@ -1,0 +1,8 @@
+{
+  "booleanWorlds": 16384,
+  "keyPermutationCombinations": 16,
+  "mappedWorlds": 262144,
+  "callerResourceComparisons": 1048576,
+  "positiveBooleanWorlds": 6543,
+  "scope": "Same exact two-instance finite correspondence model; independent Python enumeration, not implementation refinement."
+}

@@ -1,0 +1,23 @@
+{
+  "status": "bounded-conditional-proof-passed",
+  "baseCommit": "c0e01395893784e259570733ee2026377e124023",
+  "solver": "4.15.4",
+  "checks": 5,
+  "replays": 5,
+  "oracleMappedWorlds": 262144,
+  "oracleCallerResourceComparisons": 1048576,
+  "scope": "Exactly two instances in each of four disjoint typed key spaces; arbitrary Boolean incidences/active flags and independent native key permutations.",
+  "assumptions": "Decoded native keys are bounded typed bijections; complete incidence and active values correspond exactly. No unknown-value/codec, SQL/TS refinement, authentic population, caller, cut or authority proof.",
+  "qualification": "Finite typed correspondence theorem and weakened-premise controls only. Does not prove arbitrary populations, SQL/TS/Python refinement, native codecs/mapping authenticity, caller, coherent cut, current authority or production admission. No original backend case promoted.",
+  "artifacts": {
+    "nonvacuous-authorized-population.smt2": "84285bf6fec515ca4b0aa5a2ca585fbde638ddae78ec71e03af63805fb55049b",
+    "missing-owner-incidence-can-change-membership.smt2": "d832fdc711e81542483c86b190773dbf0d368fb5296f793c4b686e7b382a8b29",
+    "nonbijective-key-projection-can-lose-membership.smt2": "807f60962c32a388fa51e28e022caff7dcada5f63055e1cd6f7dcdeb3ea10ece",
+    "oracle.json": "854c01051ebc587ae4a289b76b440e6a7b11b5c84acb8acb530330feee1a496c",
+    "missing-active-attribute-can-change-membership.smt2": "7aadc493762a05d23db6f6f1fc13a09fd7c6db8913d73a65932760ac85ae1f4a",
+    "prove.py": "cacbcace2fa80264cf2954740537c96e1adb2605cbf7afb9e76cef1e1c620f9d",
+    "formal.json": "f585c522010c9fcdad3af7a42d16479a4824af9bf55f7fb43d18aee4d15908e1",
+    "oracle.py": "560b8f6efd1b047f0a44b767f9e199c203853d842dcb8f68fc422897228253f7",
+    "exact-typed-correspondence-preserves-membership.smt2": "67861a11e22c3512624832c5e2dcffdea18a50152766d4f40cf6c28f4409a547"
+  }
+}
