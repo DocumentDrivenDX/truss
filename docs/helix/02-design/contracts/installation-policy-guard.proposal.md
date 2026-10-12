@@ -568,3 +568,18 @@ These are local development limits and synthetic host evidence. They do not
 bound prior driver/producer allocations or establish native query/resource/
 issuer/guard/publication qualification. Production admission and original
 backend acceptance cases remain open.
+
+
+### Recovery drains pending original registration — 2026-10-12
+
+While the original profile registration remains uncommitted, an independent
+unguarded read sees zero claim rows. A recovery scope takes schema-head SHARE
+then guard UPDATE and actually waits on that original producer PID. Only after
+the known original rollback does its separate fresh observe statement return
+zero rows. This demonstrates why early absence cannot substitute for producer
+drain/freshness; the decoder still returns only not-observed, not an abort proof.
+Both native tests pass with224 security observations. Evidence:
+`../../04-build/evidence/security-recovery-registration-drain-20261012/receipt.json`.
+Trace CONTRACT-005/063 and STP-057 L03/L11. This known rollback schedule does
+not qualify unknown original producer/source/issuer/bootstrap or production
+recovery. No original required acceptance case is promoted.

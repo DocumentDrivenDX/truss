@@ -465,14 +465,31 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.assertEqual(replay.exception.sqlstate,'23505');self.admin.execute('ROLLBACK');observations.append({'id':'lost-registration-ack-never-replaced-original-token','observed':'original settled tombstone refuses23505'})
   publication_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self._track_owned_connection(publication_owner);publication_pid=publication_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
   for failure_mode in ['explicit_rollback','native_failure']:
+   recovery_thread=None;recovery_rows=[];recovery_errors=[]
    publication_owner.execute('BEGIN');publication_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');publication_owner.execute(acquire).fetchall();publication_owner.execute(capacity_lock)
    try:
     pending_registration=profile_execute(publication_owner,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(pending_registration,[(b'profile-bound-operation'.hex(),)])
     self.assertEqual(publication_owner.execute('SELECT settled FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(False,));self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(0,))
+    if failure_mode=='explicit_rollback':
+     recovery_reader=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(recovery_reader);recovery_pid=recovery_reader.execute('SELECT pg_backend_pid()').fetchone()[0]
+     def recover_after_original_drain():
+      try:
+       recovery_reader.execute('BEGIN');recovery_reader.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');recovery_reader.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();recovery_rows.extend(recovery_reader.execute(observe_claim,(b'profile-bound-operation',)).fetchall());recovery_reader.execute('COMMIT')
+      except BaseException as error:recovery_errors.append(type(error).__name__);recovery_reader.rollback()
+     recovery_thread=threading.Thread(target=recover_after_original_drain);recovery_thread.start();blockers=[];wait_until=time.monotonic()+8
+     while time.monotonic()<wait_until:
+      blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(recovery_pid,)).fetchone()[0]
+      if publication_pid in blockers:break
+      time.sleep(.02)
+     self.assertIn(publication_pid,blockers);observations.append({'id':'original-claim-recovery-drains-invisible-pending-registration','observed':{'blockers':blockers,'unguardedVisibleRows':0}})
     if failure_mode=='native_failure':
      with self.assertRaises(psycopg.errors.DivisionByZero) as error:publication_owner.execute('SELECT 1/0')
      self.assertEqual(error.exception.sqlstate,'22012');self.assertEqual(publication_owner.info.transaction_status,psycopg.pq.TransactionStatus.INERROR)
-   finally:publication_owner.rollback()
+   finally:
+    publication_owner.rollback()
+    if recovery_thread is not None:recovery_thread.join(12)
+   if recovery_thread is not None:
+    self.assertFalse(recovery_thread.is_alive());self.assertEqual(recovery_errors,[]);self.assertEqual(recovery_rows,[]);observations.append({'id':'fresh-original-claim-recovery-after-drained-rollback-is-not-observed','observed':recovery_rows,'qualification':'native absence after known rollback; decoder still supplies no issuer/abort proof'})
    self.assertEqual(publication_owner.info.transaction_status,psycopg.pq.TransactionStatus.IDLE);self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(0,));self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(5,));observations.append({'id':'profile-registration-'+failure_mode+'-preserves-capacity-and-original-token','observed':{'retained':5,'originalTokenRows':0,'commit':'not-published'},'qualification':'confirmed rollback only; no unknown-commit retry'})
   publication_owner.execute('BEGIN');publication_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');publication_owner.execute(acquire).fetchall();publication_owner.execute(capacity_lock);profile_registered=profile_execute(publication_owner,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(profile_registered,[(b'profile-bound-operation'.hex(),)]);publication_owner.execute('COMMIT');observations.append({'id':'native-profile-capacity-registers-original-next-slot','observed':profile_registered})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=profile_execute(self.admin,(b'profile-bound-overflow',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK');observations.append({'id':'native-profile-capacity-exhaustion-refuses','observed':refused})
