@@ -91,7 +91,7 @@ def encode_fresh_catalog_dispatch_parameters(prepared, ordinal, origin_bytes):
     parameters = (ordinal, prepared.input_bytes, candidate,
                   prepared.archive_documents_bytes, prepared.declarations_bytes,
                   origin_bytes)
-    if sum(len(raw) for raw in parameters[1:]) > 4194304:
+    if sum(len(raw) for raw in parameters) > 4194304:
         raise ValueError('Catalog dispatch aggregate capacity exceeded')
     _require_original_preparation(prepared)
     return parameters
