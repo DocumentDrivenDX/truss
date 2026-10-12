@@ -31,6 +31,32 @@ ddx:
 
 The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized exact scalar object and independent directed edge groups, object/key/page reads, relationship reads and atomic caller preconditions. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
 
+## Next callable operations
+
+Committed feed and ordinary-role acknowledgement are next. The source scan must
+carry complete transactions below the snapshot-xmin frontier, including catalog
+prerequisites, journal changes, import source facts and reservations; never skip
+a forbidden or oversized sibling. Use ordinary limits and a single refusal,
+without retry loops or instrumentation. Attach each transaction's exact retained
+catalog prerequisites before its changes: xid order alone does not guarantee
+catalog-before-data. Capture an edge reservation's original producer xid when
+the tombstone is inserted. Check every original owner before disclosure.
+
+The first ACK profile is the authenticated consumer's assertion of durable
+application, with source-verified complete next-interval digest and full prior
+boundary CAS. Enroll from retained genesis using a fresh registration identity;
+equal ACK is idempotent. It provides no automatic retention release or verified
+downstream/replica/exactly-once claim. The stronger application-proof capability
+remains separate.
+
+Public Weft execution has an owner integration dependency: the frozen Truss
+backend requires fixture `{}` basis artifacts and PostgreSQL17.9 settings. It
+cannot admit the installed PostgreSQL18.6 catalog. Its scalar projection also
+expects native JSON leaves, while Truss uses exact tagged cells. Reuse an
+owner-supported real-catalog profile and explicit read projection; do not invent
+fixture catalog identities, silently change the compiler profile or duplicate
+SQL lowering. Compiled execution remains part of the delivery goal.
+
 ## Public compatible catalog acceptance — runtime 0.19
 
 The public `prepare_catalog` / `accept_in_transaction` workflow now accepts

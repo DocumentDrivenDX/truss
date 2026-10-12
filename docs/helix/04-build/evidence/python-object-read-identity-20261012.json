@@ -1,0 +1,25 @@
+{
+  "scope": "public object reads return current TypedIdentity usable directly in mutations",
+  "wheelSha256": "c2d7ceb746f8a39ef3bde465c289097b2492ebea9ff75a8d4e978b20f99419bd",
+  "environment": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6"
+  },
+  "installedBasicTests": {
+    "tests": 2,
+    "seconds": 22.24,
+    "passed": true,
+    "workflows": [
+      "catalog evolution read/write/recovery",
+      "object create/read/update/dry-run/delete/retry"
+    ]
+  },
+  "ownerSqlRoundTrips": 17,
+  "review": "Astra Ultra approved current-pin read identity and feed implementation plan",
+  "remaining": [
+    "public Weft execution",
+    "committed feed and acknowledgement",
+    "managed installation and migrations",
+    "full external interface"
+  ]
+}

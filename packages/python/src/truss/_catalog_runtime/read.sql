@@ -66,9 +66,10 @@ BEGIN
   cell:=jsonb_build_array(cell->0,truss.logical_scalar_cell(cell->1));
   retained_json:=retained_json||jsonb_build_array(cell);
  END LOOP;
- result:=convert_to(jsonb_build_object('profile','truss-python-scalar-object/0.2','releaseId',installation.release_id,
+ result:=convert_to(jsonb_build_object('profile','truss-python-scalar-object/0.3','releaseId',installation.release_id,
  'releaseSha256',installation.release_sha256,'documentId',selected_document,'moduleId',selected_module,'recordId',selected_record,
- 'id',current_object.id::text,'typeId',current_object.type_id::text,'version',current_object.ver::text,
+ 'id',current_object.id::text,'typeId',current_object.type_id::text,
+ 'definitionPin',(SELECT definition_pin FROM truss.runtime_definition('type',selected_type.type_id)),'version',current_object.ver::text,
  'catalogRevision',captured_revision::text,'recordRevision',current_object.rev::text,
  'createdAt',to_char(current_object.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
  'updatedAt',to_char(current_object.updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),

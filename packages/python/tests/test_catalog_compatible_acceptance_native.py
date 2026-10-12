@@ -1,6 +1,5 @@
 """One real adopter workflow through compatible acceptance and recovery."""
 import json
-from dataclasses import replace
 import psycopg
 from truss import CatalogDocument,CatalogRegistration,Ok,ObjectFound
 from truss.contracts import TextValue,MapValue
@@ -58,7 +57,7 @@ class CompatibleCatalogTests(mutation_tests.ObjectMutationTests):
         self.assertEqual(next(v['documentRevision'] for v in modules if v['documentId']=='adoc'),'r2')
         current_a=self.read(assembly,tx,a).object
         self.assertNotIn('A-note',dict(current_a.values));self.assertEqual(current_a.version,1)
-        current_a_identity=replace(a,definition_pin=self.types[('adoc','A')].definition_pin)
+        current_a_identity=current_a.identity
         self.assertEqual(str(current_a.type_id),a.type_id);self.assertNotEqual(current_a_identity.definition_pin,a.definition_pin)
         self.assertEqual(self.types[('adoc','B')].definition_pin,b.definition_pin)
         context=assembly.group_context_in_transaction(tx).value
@@ -74,7 +73,7 @@ class CompatibleCatalogTests(mutation_tests.ObjectMutationTests):
         self.assertIsInstance(looked.value,ObjectFound);self.assertEqual(str(looked.value.object.id),a.id)
         recovered=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/no-owner-producer-needed')
         self.assertIsInstance(recovered.value.response,CommittedReceiptReplay);self.assertEqual(recovered.value.response.semantic,created.response.semantic)
-        current_b=replace(b,definition_pin=self.types[('adoc','B')].definition_pin)
+        current_b=assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='B',object_id=int(b.id)).value.object.identity
         new_pin=assembly.get_relationship_reference_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
         self.assertNotEqual(new_pin,old_pin)
         context=assembly.import_context_in_transaction(tx).value
