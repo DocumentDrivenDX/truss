@@ -7,7 +7,8 @@ and assembly construction. The selected catalog runtime additionally provides
 transactional installation, status, fresh catalog registration, report retrieval
 and durable registration retry. Runtime 0.4 provides module-authorized scalar-string object identity reads and
 rootless string object creation through a selected group provider, including
-caller rollback and durable request replay. Updates/deletes, key/page reads,
+caller rollback and durable request replay. Runtime 0.5 also provides ordinary-reader
+catalog metadata and exact accepted-document retrieval. Updates/deletes, key/page reads,
 compiled queries, imports and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
@@ -817,3 +818,35 @@ route or Python-compatible producer is future work, not an existing deployment
 claim. The checked driver/server tuple is psycopg3.3.6 binary/libpq18.6 with
 PostgreSQL18.6; Lakebase requires an actual platform privilege, install, transaction
 and public workflow qualification.
+
+## Ordinary-reader catalog and accepted source: runtime 0.5
+
+On the live assembly, `reader_catalog_in_transaction(tx)` returns a
+`ReaderCatalog` containing only modules readable by the current person. Modules
+are qualified by document ID and module ID, with accepted source revision/digest,
+native types, properties, ordered key property IDs and relationships. This is an
+authorized metadata projection, separate from the registrar's complete catalog
+view. Dependencies on unreadable declaration modules are excluded; relationships
+are included only with complete visible endpoint/key/association scope. Empty
+authored modules participate in access checks and may appear with empty lists.
+
+`accepted_document_in_transaction(tx, document_id=...)` returns an
+`AcceptedDocument`: exact original `content` bytes, SHA256, source
+`document_revision`, source `artifact_identity`, native `catalog_revision` and
+`registration_id`. Source revision is caller-provided (`r1`, a content digest, or
+another application version); artifact identity defaults to the document ID.
+Registration ID is Truss's native UUID for the acceptance, not a source digest.
+The full document is returned only when every declared module is readable. A
+missing or unreadable document yields the same `CatalogRefused(code='unauthorized')`
+without source bytes. Source is never silently redacted.
+
+These calls return `CatalogInvalid` for invalid selections/limits and
+`CatalogUnavailable` for unsupported profile, resource, observation or absent
+installation. Native transaction retry/unusable errors remain `Error` outcomes.
+This typed mapping currently covers the new reader calls; the older registration
+and report calls still need their R13 result mapping.
+
+Current module membership is rechecked before returning. Limits refuse rather
+than truncate. Like the existing object reader, these calls currently require
+read-write READ COMMITTED; support on adopted read-only transactions is next.
+Runtime 0.5 requires a fresh installation and does not upgrade 0.4 installations.

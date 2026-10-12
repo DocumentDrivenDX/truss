@@ -10,10 +10,12 @@ from dataclasses import dataclass
 from hashlib import sha256
 from importlib.resources import files
 import json
+import base64
 from uuid import uuid4
 from threading import RLock
 from functools import wraps
 from typing import Literal
+from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
 from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable
@@ -101,7 +103,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','read.sql','keys.sql','groups.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','read.sql','keys.sql','groups.sql','reader.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -335,6 +337,10 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
+                    for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)'):
+                        cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),prepare=False)
+            for grant in grants:
+                for role in (grant.reader_role,grant.writer_role):
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_context(text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_type_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                 for signature in ('group_create_metadata(bytea,bytea,text,text)','apply_create_group(bytea,bytea,bytea,bytea,text,text)'):
@@ -470,3 +476,38 @@ class CatalogReferenceAssembly:
             def apply(transaction,input,request):
                 return self.apply_in_transaction(transaction,input,request,documents=documents,bun_executable=bun_executable)
             return GroupCapabilityAvailable(capability=NativeGroupCapability(selection=self.group_selection,_apply=apply))
+
+    def _reader_result(self,result):
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            state=result.error.sql_state
+            if state=='42501':return Ok(CatalogRefused())
+            reason={'0A000':'profile','25006':'profile','54000':'resource','55P03':'observation','42P01':'installation','42883':'installation'}.get(state)
+            if reason:return Ok(CatalogUnavailable(code=reason))
+        return result
+
+    @_active_operation
+    def reader_catalog_in_transaction(self,transaction: TransactionHandle,*,maximum_count: int=65536,maximum_bytes: int=1048576) -> Outcome[ReaderCatalog | CatalogInvalid | CatalogRefused | CatalogUnavailable]:
+        if type(maximum_count) is not int or not 1<=maximum_count<=65536 or type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:
+            return Ok(CatalogInvalid(code='limits'))
+        manifest,digest,_=_release()
+        def read(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.reader_catalog(%s,%s,%s,%s)',(maximum_count,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            basis=json.loads(bytes(cursor.fetchone()[0]))
+            return ReaderCatalog(catalog_revision=basis['catalogRevision'],layout_profile=basis['layoutProfile'],modules=tuple(basis['modules']))
+        return self._reader_result(self._host._run_operation(transaction,read))
+
+    @_active_operation
+    def accepted_document_in_transaction(self,transaction: TransactionHandle,*,document_id: str,maximum_bytes: int=1048576) -> Outcome[AcceptedDocument | CatalogInvalid | CatalogRefused | CatalogUnavailable]:
+        try: valid=type(document_id) is str and 1<=len(document_id.encode('utf8'))<=4096 and '\0' not in document_id
+        except UnicodeError:valid=False
+        if not valid:return Ok(CatalogInvalid(code='selection'))
+        if type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:return Ok(CatalogInvalid(code='limits'))
+        manifest,digest,_=_release()
+        def read(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.accepted_document(%s,%s,%s,%s)',(document_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            basis=json.loads(bytes(cursor.fetchone()[0]));content=base64.b64decode(basis['contentBase64'])
+            if sha256(content).hexdigest()!=basis['sha256']:raise ValueError('Exact accepted document digest required')
+            return AcceptedDocument(document_id=basis['documentId'],document_revision=basis['documentRevision'],artifact_identity=basis['artifactIdentity'],content=content,sha256=basis['sha256'],catalog_revision=basis['catalogRevision'],registration_id=basis['registrationId'])
+        return self._reader_result(self._host._run_operation(transaction,read))
