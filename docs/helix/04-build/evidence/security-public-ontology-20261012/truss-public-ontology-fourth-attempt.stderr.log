@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_public_created_membership_graph (__main__.PublicOntologySecurityTests.test_public_created_membership_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 39, in test_public_created_membership_graph
+    inp,_=self.input(a,t,tuple(ops));result=a.apply_in_transaction(t,inp,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun');self.assertIsInstance(result,Ok);self.assertIsInstance(result.value,GroupSuccess);h.detach();c.commit()
+                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'>
+
+----------------------------------------------------------------------
+Ran 1 test in 13.311s
+
+FAILED (failures=1)

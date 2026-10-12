@@ -6380,3 +6380,29 @@ No production inventory issuer or held authority gate is implemented by this
 fixture comparison; no original backend case is promoted. Next bind authenticated
 original installation custody and complete callable/privilege closure to the
 protected read context, preserving authority through final publication.
+
+
+### Real public graph ontology membership — 2026-10-12
+
+`test_security_public_ontology_native.py` plus the actual candidate producer now
+executes Clients/Projects/Staff membership on13 public-created objects and12
+public-created opaque relationship edges. Keyed Assignment Records carry active
+state; typed graph endpoints project actual business keys. Native RLS matches
+AliceRA/RAB, BobRB/RAB and outsiderempty despite shared Client C, inactive
+assignment, multiple owners and ownerless data. Native private-fact and caller-
+binding negatives pass. Committed excluded-admin assignment changes affect
+fresh statements and restoration restores the original vector.
+
+Forty-four observations,25 candidate-condition tests, strict fixture typing and
+Python boundaries691imports pass. Source/preimage/failed attempt evidence:
+`evidence/security-public-ontology-20261012/receipt.json`. Duplicated ontology
+exceeded the existing4-MiB support-decision cap. Whole ontology is now authored
+in adoc, with original zdoc baseline retained; no ontology element was removed.
+The atomic seed selects supported60-second host limits after default cancellations.
+No production limit or runtime security setting changes.
+
+Trace shared US-056-AC2/5/8/10, US-057-AC3 and STP-056 B01/B02/B03/B10/B13 /
+STP-057 L05 prerequisites. Actual graph feasibility does not discharge complete
+backend cases. Next integrate authenticated compiler/mapping/source enrollment,
+original public read context and authority/release protocol; qualify enrolled
+writers and revocation ordering before admitting the profile.

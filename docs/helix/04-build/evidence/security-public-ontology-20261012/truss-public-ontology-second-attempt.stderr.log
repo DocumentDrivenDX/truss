@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_public_created_membership_graph (__main__.PublicOntologySecurityTests.test_public_created_membership_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 23, in test_public_created_membership_graph
+    c,h,a,t=self.ready(self.model);ops=[]
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_group_create_native.py", line 30, in ready
+    self.assertIsInstance(registered,Ok)
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'>
+
+----------------------------------------------------------------------
+Ran 1 test in 6.772s
+
+FAILED (failures=1)

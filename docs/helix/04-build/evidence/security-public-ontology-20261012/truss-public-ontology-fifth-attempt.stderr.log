@@ -1,0 +1,32 @@
+F
+======================================================================
+FAIL: test_public_created_membership_graph (__main__.PublicOntologySecurityTests.test_public_created_membership_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 43, in test_public_created_membership_graph
+    inp,_=self.input(a,t,tuple(ops));result=a.apply_in_transaction(t,inp,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun');self.assertIsInstance(result,Ok,str(a._host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess);h.detach();c.commit()
+                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : canceling statement due to user request
+CONTEXT:  SQL statement "WITH RECURSIVE role_states(active_oid,privilege_oid) AS (
+  SELECT actor.oid,actor.oid UNION
+  SELECT CASE WHEN m.admin_option OR (m.set_option AND s.active_oid=s.privilege_oid)
+              THEN m.roleid ELSE s.active_oid END,m.roleid
+  FROM pg_auth_members m JOIN role_states s ON m.member=s.privilege_oid
+  WHERE m.inherit_option OR m.admin_option OR (m.set_option AND s.active_oid=s.privilege_oid)
+ ) SELECT EXISTS(SELECT 1 FROM (SELECT DISTINCT active_oid FROM role_states) s JOIN pg_roles r ON r.oid=s.active_oid
+   WHERE r.rolsuper OR r.rolcreaterole OR r.rolcreatedb OR r.rolreplication OR r.rolbypassrls
+    OR has_schema_privilege(r.oid,'truss','CREATE')
+    OR EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'
+      AND ((c.relkind IN ('r','p') AND (has_table_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
+        OR has_any_column_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,REFERENCES')))
+       OR (c.relkind='S' AND has_sequence_privilege(r.oid,c.oid,'USAGE,SELECT,UPDATE')))))"
+PL/pgSQL function truss.runtime_person(boolean) line 20 at SQL statement
+PL/pgSQL function truss.runtime_can_read(text,text) line 4 at assignment
+PL/pgSQL function truss.runtime_graph_validate(boolean) line 17 at IF
+SQL statement "SELECT truss.runtime_graph_validate(true)"
+PL/pgSQL function truss.object_group_finish(uuid) line 9 at PERFORM
+
+----------------------------------------------------------------------
+Ran 1 test in 19.273s
+
+FAILED (failures=1)
