@@ -906,7 +906,7 @@ class CatalogReferenceAssembly:
                 checkpoint=bytes(cursor.fetchone()[0])
                 cursor.execute('UPDATE truss.runtime_feed_consumer SET checkpoint_bytes=%s WHERE consumer_id=%s',(checkpoint,consumer_id),prepare=False)
             cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(reader_role)),prepare=False)
-            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.read_feed(text,int,int,text,text),truss.acknowledge_feed(text,bytea,bytea,text,text,text) TO {}').format(sql.Identifier(reader_role)),prepare=False)
+            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.read_feed(text,int,int,text,text),truss.reread_feed(text,bytea,bytea,text,int,int,text,text),truss.acknowledge_feed(text,bytea,bytea,text,text,text) TO {}').format(sql.Identifier(reader_role)),prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return FeedConsumer(consumer_id=consumer_id,registration_id=registration,checkpoint=FeedCursor(content=checkpoint))
@@ -938,6 +938,37 @@ class CatalogReferenceAssembly:
             if sha256(content).hexdigest()!=value['sha256']:raise ValueError('Original complete feed payload required')
             return FeedPage(consumer_id=value['consumerId'],registration_id=value['registrationId'],
                 prior=FeedCursor(content=base64.b64decode(value['priorBase64'],validate=True)),next=FeedCursor(content=base64.b64decode(value['nextBase64'],validate=True)),
+                content=content,sha256=value['sha256'],writer_xid=value['writerXid'],safe_watermark_xid=value['safeWatermarkXid'],outcome=value['outcome'])
+        return self._feed_result(self._host._run_operation(transaction,read))
+
+    @_active_operation
+    def reread_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,maximum_facts: int=4096,maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]:
+        """Reproduce an original retained delivery, including after committed ACK.
+
+        Requires current source authority and the original consumer registration.
+        Does not change the checkpoint. Supports read-only READ COMMITTED.
+        The returned watermark describes this reproduction's interval frontier.
+        """
+        from .feed import FeedPage,FeedCursor,FeedUnavailable
+        if type(page) is not FeedPage or type(page.content) is not bytes or type(page.sha256) is not str or sha256(page.content).hexdigest()!=page.sha256:
+            return Ok(FeedUnavailable(reason='integrity'))
+        if type(maximum_facts) is not int or not 1<=maximum_facts<=65536 or type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:
+            return Ok(FeedUnavailable(reason='resource'))
+        if type(page.prior) is not FeedCursor or type(page.next) is not FeedCursor or type(page.prior.content) is not bytes or type(page.next.content) is not bytes:
+            return Ok(FeedUnavailable(reason='integrity'))
+        manifest,digest,_=_release()
+        def read(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.reread_feed(%s,%s,%s,%s,%s,%s,%s,%s)',
+                (page.consumer_id,page.prior.content,page.next.content,page.sha256,maximum_facts,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]));content=base64.b64decode(value['payloadBase64'],validate=True)
+            prior=FeedCursor(content=base64.b64decode(value['priorBase64'],validate=True))
+            next_cursor=FeedCursor(content=base64.b64decode(value['nextBase64'],validate=True))
+            if (content!=page.content or sha256(content).hexdigest()!=value['sha256'] or value['sha256']!=page.sha256
+                or prior!=page.prior or next_cursor!=page.next or value['consumerId']!=page.consumer_id
+                or value['registrationId']!=page.registration_id or value['writerXid']!=page.writer_xid or value['outcome']!=page.outcome):
+                return FeedUnavailable(reason='integrity')
+            return FeedPage(consumer_id=value['consumerId'],registration_id=value['registrationId'],prior=prior,next=next_cursor,
                 content=content,sha256=value['sha256'],writer_xid=value['writerXid'],safe_watermark_xid=value['safeWatermarkXid'],outcome=value['outcome'])
         return self._feed_result(self._host._run_operation(transaction,read))
 

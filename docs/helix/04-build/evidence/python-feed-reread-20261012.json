@@ -1,0 +1,36 @@
+{
+  "runtime": "0.22",
+  "scope": "public read-only reproduction of original retained complete feed deliveries after committed source ACK",
+  "wheelSha256": "38f2b8d69ab0846185ab832c479afd81fecacdd869a42efe1c0e6c76305740ee",
+  "environment": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6"
+  },
+  "installedBasicTests": {
+    "modules": [
+      "test_feed_runtime_native"
+    ],
+    "tests": 1,
+    "seconds": 16.839,
+    "passed": true
+  },
+  "ownerSqlRoundTrips": 19,
+  "pythonBoundaryImports": 777,
+  "publicTypingFixtures": 5,
+  "expectedNegativeTypeErrors": 20,
+  "review": "Astra Ultra approved plan and completed source; existing basic installed workflow passed",
+  "covered": [
+    "exact payload/digest and prior/next cursors after committed ACK",
+    "public selected feed provider",
+    "read-only caller transaction without xid assignment",
+    "ordinary-role current complete-source authority",
+    "checkpoint unchanged by reread"
+  ],
+  "limits": [
+    "authority database only",
+    "retention cleanup unimplemented",
+    "fresh installation; no upgrade path",
+    "no destination durability verification",
+    "no internal retry"
+  ]
+}

@@ -52,6 +52,16 @@ authority. Deletion markers preserve the prior record's real version. The basic
 object/edge workflow and existing compatible-evolution workflow exercise those
 public calls. Broader source-fact/archive/reducer interfaces remain open.
 
+## Read-only feed recovery — runtime 0.22
+
+The public selected feed provider now re-admits a saved original delivery after
+committed acknowledgement. `reread_feed_in_transaction` reconstructs the full
+retained interval with exact payload/digest/boundary/registration correspondence,
+checks current complete-source reader authority, and leaves the checkpoint
+untouched. Its observational watermark is the reproduced endpoint. The existing
+installed feed workflow exercises delivery, committed ACK and read-only reread
+without assigning an xid. Archive cleanup and upgrades remain unfinished.
+
 ## Next callable operations
 
 Runtime 0.20 implements public committed feed reads and ordinary-role

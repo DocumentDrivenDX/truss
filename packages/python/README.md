@@ -1483,3 +1483,21 @@ xid. Whole-group event/encoded-byte limits default to 4,096 and 8MiB, with maxim
 the existing rootless scalar object and independent edge history; archive
 retrieval, cleanup, historical source-fact retrieval and generalized reducers/
 reconstruction evidence remain unfinished. Runtime0.21 requires fresh installation.
+
+### Read-only feed recovery (runtime 0.22 candidate)
+
+After a source ACK commits, a consumer can re-admit its saved original delivery
+through the selected public feed capability:
+
+```python
+result = feed.reread_feed_in_transaction(read_transaction, saved_page)
+```
+
+This reproduces the exact retained payload, digest and prior/next cursors for
+the original installation, source epoch and consumer registration. It checks
+current reader authority and does not move the checkpoint, lock a row or assign
+a transaction ID. Read-only READ COMMITTED transactions are supported. The
+returned safe watermark is the reproduced interval endpoint, rather than the
+original polling observation. Unavailable or mismatched retained facts refuse
+reproduction; there is no internal retry. Retention cleanup is not implemented.
+Runtime 0.22 requires a fresh installation; upgrades remain unfinished.

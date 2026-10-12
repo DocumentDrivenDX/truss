@@ -12,7 +12,7 @@ the documented scalar and independent-relationship subset. Object reads return
 identities usable directly for updates and links. Concrete catalog/read/group/
 host-import/feed/history providers are selected through the runtime assembly.
 Retained history reconstructs actual committed scalar/edge versions after deletion. Caller-asserted committed
-feed/ACK is available on the authority database. Compiled query execution,
+feed/ACK and read-only reproduction of saved deliveries after ACK are available on the authority database. Compiled query execution,
 managed installation/upgrades and verified downstream application remain unfinished. Older private component evidence below
 does not qualify those public operations.
 
