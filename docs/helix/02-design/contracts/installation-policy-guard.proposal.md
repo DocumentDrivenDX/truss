@@ -214,3 +214,37 @@ the actual authority writer PID and a blocker deadline below statement timeout.
 Production issuer/sink authentication, capacity, uncertainty/recovery, bootstrap
 and complete participant parity remain required; no backend acceptance case
 is promoted.
+
+
+### Arbitrary-claim inductive safety — 2026-10-12
+
+The abstract publication model now has an inductive invariant over arbitrary
+integer-indexed claim arrays: every pending protected release has an active
+durable claim whose generation equals the current installation generation.
+Initialization, registration, completion, settlement, native-loss stuttering and
+guarded generation advance preserve it. A writer acknowledgment requires absence
+of every active claim, so it cannot overlap a pending protected release. This
+extends the formal cardinality scope beyond the earlier fixed two operations to
+arbitrary finite sequences of these abstract atomic transitions.
+
+Twelve Z3 obligations and retained-formula replays pass: eight UNSAT safety/gate
+checks, one SAT reachable pending operation and three SAT premise-breaking
+controls for early settlement, loss-triggered deletion and partial writer checks.
+The prior independent two-claim finite explorer replays separately. Native loss
+is modeled as leaving durable arrays unchanged; that is a premise of this model,
+not an inferred guarantee for a concrete connection. Stale-registration refusal
+checks the exact generation-equality gate, not source/issuer authentication.
+
+The proof does not establish those transition premises for the SQL/driver/sink.
+It assumes serialized complete registration/writer checks, authentic original
+completion and settlement, durable state on loss, and complete participation.
+Identity anti-reuse, registry capacity, commit uncertainty, fresh native snapshots,
+source/fact coverage, sink authenticity, clock expiry, fairness/liveness and
+production adoption remain open. In particular, the current delete-based0.1
+claim candidate retains no native tombstone preventing reuse of settled operation
+bytes; original issuer lifetime uniqueness is not established by this proof.
+
+Exact formulas, proof source, counterexample witnesses, replay and hashes:
+`../../04-build/evidence/security-publication-induction-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Native190-observation
+feasibility remains separately qualified; no required backend case is promoted.

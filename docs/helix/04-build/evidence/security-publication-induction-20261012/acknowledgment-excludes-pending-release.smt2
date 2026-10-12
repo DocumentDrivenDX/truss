@@ -1,0 +1,25 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun generation () Int)
+(declare-fun claim_generation () (Array Int Int))
+(declare-fun active () (Array Int Bool))
+(declare-fun pending () (Array Int Bool))
+(assert
+ (let (($x29 (forall ((identity Int) )(let ((?x23 (select claim_generation identity)))
+ (let (($x24 (= ?x23 generation)))
+ (let (($x25 (select active identity)))
+ (let (($x26 (and $x25 $x24)))
+ (let (($x27 (select pending identity)))
+ (=> $x27 $x26)))))))
+ ))
+ (let (($x15 (<= generation 9223372036854775807)))
+ (let (($x13 (> generation 0)))
+ (and $x13 $x15 $x29)))))
+(assert
+ (forall ((identity Int) )(let (($x25 (select active identity)))
+ (not $x25)))
+ )
+(assert
+ (exists ((identity Int) )(select pending identity))
+)
+(check-sat)

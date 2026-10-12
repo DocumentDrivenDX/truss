@@ -1,0 +1,96 @@
+{
+  "solver": "4.15.4",
+  "queries": {
+    "initial-invariant": {
+      "result": "unsat",
+      "witness": null
+    },
+    "registration-preserves": {
+      "result": "unsat",
+      "witness": null
+    },
+    "completion-preserves": {
+      "result": "unsat",
+      "witness": null
+    },
+    "settlement-preserves": {
+      "result": "unsat",
+      "witness": null
+    },
+    "native-loss-preserves": {
+      "result": "unsat",
+      "witness": null
+    },
+    "generation-advance-preserves": {
+      "result": "unsat",
+      "witness": null
+    },
+    "acknowledgment-excludes-pending-release": {
+      "result": "unsat",
+      "witness": null
+    },
+    "stale-registration-refuses": {
+      "result": "unsat",
+      "witness": null
+    },
+    "pending-operation-is-reachable": {
+      "result": "sat",
+      "witness": {
+        "generation": "1",
+        "operation": "0",
+        "requested_generation": "1",
+        "active[operation]": "False",
+        "pending[operation]": "False",
+        "claim_generation[operation]": "0",
+        "active[operation + 1]": "False",
+        "pending[operation + 1]": "False",
+        "claim_generation[operation + 1]": "0"
+      }
+    },
+    "unsafe-settlement-counterexample": {
+      "result": "sat",
+      "witness": {
+        "generation": "1",
+        "operation": "0",
+        "requested_generation": "0",
+        "active[operation]": "True",
+        "pending[operation]": "True",
+        "claim_generation[operation]": "1",
+        "active[operation + 1]": "True",
+        "pending[operation + 1]": "False",
+        "claim_generation[operation + 1]": "2"
+      }
+    },
+    "loss-auto-clear-counterexample": {
+      "result": "sat",
+      "witness": {
+        "generation": "1",
+        "operation": "0",
+        "requested_generation": "0",
+        "active[operation]": "True",
+        "pending[operation]": "True",
+        "claim_generation[operation]": "1",
+        "active[operation + 1]": "False",
+        "pending[operation + 1]": "False",
+        "claim_generation[operation + 1]": "2"
+      }
+    },
+    "partial-writer-check-counterexample": {
+      "result": "sat",
+      "witness": {
+        "generation": "1",
+        "operation": "38",
+        "requested_generation": "0",
+        "active[operation]": "False",
+        "pending[operation]": "False",
+        "claim_generation[operation]": "5",
+        "active[operation + 1]": "True",
+        "pending[operation + 1]": "True",
+        "claim_generation[operation + 1]": "1"
+      }
+    }
+  },
+  "invariant": "Every pending protected release has a durable active claim in the current generation.",
+  "induction": "Initialization and each modeled transition preserve the invariant. An authority acknowledgment requires absence of all active claims, therefore no pending protected release.",
+  "scope": "Arbitrary integer-indexed claims and arbitrary finite sequences of these abstract atomic transitions, subject to the stated invariant and transition premises. Registration, completion and settlement are trusted original-owner events. Native loss leaves durable state unchanged. Writers check all claims; registration/generation transitions are serialized. Not concrete SQL/driver/native refinement, identity anti-reuse/custody, commit uncertainty, source/fact coverage, sink authenticity, clocks, fairness/liveness or deployment admission."
+}

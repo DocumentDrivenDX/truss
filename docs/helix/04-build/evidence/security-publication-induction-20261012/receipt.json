@@ -1,0 +1,31 @@
+{
+  "executedBaseCommit": "0208f70f9a720bacd2bf316947d99c6dcd77b953",
+  "trace": [
+    "CONTRACT-005 original publication custody",
+    "CONTRACT-063 protected final release",
+    "STP-057 L03/L11",
+    "US-057-AC2/AC7"
+  ],
+  "proofQueries": 12,
+  "formalScope": "Inductive invariant for arbitrary integer-indexed claims and arbitrary finite sequences of abstract atomic transitions. All writer participation, serialized registration, authentic completion/settlement, and durable loss behavior are premises.",
+  "nativeScope": "Existing190-observation native candidate evidence remains separate; these formulas do not establish concrete SQL/native refinement or backend admission.",
+  "acceptance": "No original132-case promotion.",
+  "sha256": {
+    "native-loss-preserves.smt2": "d47410d3cdafdaa71a5f32e91879860a05c2bece8b9deff18b659ca6709016f9",
+    "settlement-preserves.smt2": "0c7581dfb793b6744075b710a172d5e4e0dbb693fb16163f17bb97cb3296f8ab",
+    "initial-invariant.smt2": "8ec0e58ee47b8394c8b0404c368bad32a866d6555f53f44e7cbdbdc55ef1f4cd",
+    "generation-advance-preserves.smt2": "bb57f590c5e39eaedd3f876a038980baab2660f201bf0d85c1097b6c2bf6ffd1",
+    "results.json": "8742062fbd2752bc2628c2bb0d4236d7c8041096ccefcb52cd4cf7ff61ebbd6f",
+    "replay.json": "59f409b4eeedc25521302478a183c7a4592967f57970c4e1d11e6995254b10ac",
+    "registration-preserves.smt2": "442a0121775ed1cd578f8ee6c2b6bae01d071d7a490c31888dfc77d135d628b1",
+    "unsafe-settlement-counterexample.smt2": "47e8f54f88e588323cab3036f21222c8b54f30ec52b793f89677aabb263b9d6f",
+    "stale-registration-refuses.smt2": "a8dc8946c301af7e1835524f7967704bff0904ff8575652006ef2d0003b80d75",
+    "acknowledgment-excludes-pending-release.smt2": "96700a63736d4ba1c2f42b8f8a46073058dfe9fdc260781e78ba615452f8773a",
+    "prove.py": "d68679f73886d6f4be5767b11f9cdbb27ec15c6ee23ae8efc5b4e59cce3946d5",
+    "pending-operation-is-reachable.smt2": "9fd248ac9bce637fef748240fe65a5ff0d2a0a07596ad5844d506fd11589568a",
+    "loss-auto-clear-counterexample.smt2": "47e8f54f88e588323cab3036f21222c8b54f30ec52b793f89677aabb263b9d6f",
+    "partial-writer-check-counterexample.smt2": "5bcabe43e474a89201f0af2c66cd592941847d84ad969f2011c1fc9429531194",
+    "two-claim-oracle-replay.json": "e6b3fd00cc0a85de8654aee9dc7148c2ab8a533405c5bccd06ce8750e9de2d6a",
+    "completion-preserves.smt2": "e42a05dff910c155602586f106e12af650d68950ae31b003b97df373f65c9ee2"
+  }
+}
