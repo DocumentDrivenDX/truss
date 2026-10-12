@@ -18,7 +18,7 @@ Runtime 0.15 adds atomic caller preconditions and explicit invalid/unauthorized 
 Runtime 0.16 adds independent directed edge create/update/delete, identity reads and ordered relationship pages, including mandatory relationships satisfied in the same batch.
 Runtime 0.17 adds original committed receipt tokens and authority-side `reached_in_transaction` on caller read-only transactions.
 Runtime 0.19 adds compatible changed-document acceptance through the public Python assembly. Runtime 0.18 added caller-owned scalar object and independent edge imports with immutable source facts and indexed partial progress.
-Compiled queries, engine-owned import batches and feed operations remain unfinished.
+Runtime 0.20 adds complete committed transaction feed reads and caller-asserted source acknowledgements. Compiled queries and engine-owned import batches remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -1221,7 +1221,7 @@ Edge mutations share object groups' expected versions, exact no-op results,
 caller rollback and durable idempotent replay, including replay after unlink.
 A failed final multiplicity check rolls back the entire group. Source/target,
 order key and exact retained values are recorded in complete before/after history.
-Composition, ownership, association records, imports, feed and full Weft execution
+Composition, ownership, association records, engine-owned imports and full Weft execution
 remain unfinished; independent edge support does not claim those capabilities.
 
 ### Committed receipt tokens and reached (runtime 0.17 candidate)
@@ -1341,3 +1341,50 @@ The basic public workflow covers changed registration, accepted source and
 module views, reads, updates, new-type creation, key lookup, reserved-edge import
 and recovery of original catalog/group requests. Installation upgrades remain
 unimplemented; this release requires a fresh installation.
+
+### Public committed feed and source ACK (runtime 0.20 candidate)
+
+An installation administrator enrolls a consumer using
+`register_feed_consumer_in_transaction(transaction, consumer_id=..., reader_role=...)`
+and commits. Enrollment starts at retained genesis with a fresh registration
+identity. The ordinary consumer needs that role and read access to every module
+in the database's historical source documents. This profile delivers a complete
+database feed; it refuses insufficient authority instead of filtering records.
+
+```python
+from truss import Ok, FeedPage, FeedAcknowledged
+
+result = assembly.read_feed_in_transaction(transaction, consumer_id="adapter")
+if isinstance(result, Ok) and isinstance(result.value, FeedPage):
+    page = result.value
+    # Apply page.content with durable downstream deduplication, then commit there.
+    acknowledged = assembly.acknowledge_feed_in_transaction(transaction, page)
+    if isinstance(acknowledged, Ok) and isinstance(acknowledged.value, FeedAcknowledged):
+        host.detach()
+        connection.commit()  # Makes the source checkpoint durable.
+```
+
+`FeedPage.content` retains the complete native JSON payload as immutable UTF-8
+bytes, with its SHA256 and opaque prior/next cursors. It contains journal changes,
+import source facts, object-key and edge reservations, and exact retained catalog
+prerequisites including original accepted reports and configuration. Catalog
+prerequisites precede dependent changes even when catalog and data writer IDs
+have a different order. A delete carries its original complete history event.
+
+Reads support read-only READ COMMITTED transactions and do not assign an xid.
+One call returns one complete committed writer transaction below the safe xmin
+frontier, or a safe empty interval. The default bounds are 4,096 facts and 8MiB
+of encoded output; callers can select up to 65,536 facts and 16MiB. Oversized or
+forbidden transactions refuse without truncation or checkpoint advancement.
+
+ACK validates the exact next source interval and expected prior checkpoint. It
+returns `advanced` or idempotent `equal`, subject to caller commit; rollback keeps
+the prior checkpoint. ACK is the authenticated consumer's assertion that its
+downstream application is durable. It does not independently verify another
+database's commit, claim exactly-once downstream effects, or release retention.
+The stronger verified-application capability remains separate and unfinished.
+
+This profile retains source history indefinitely and supplies no cleanup, archive
+offload, consumer removal, replica freshness or installation upgrade API. Reads
+may redeliver until ACK commits. Runtime 0.20 requires a fresh installation on the
+selected PostgreSQL18.6/psycopg3.3.6 profile.

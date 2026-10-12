@@ -1,0 +1,39 @@
+{
+  "runtime": "0.20",
+  "scope": "public complete authority feed and caller-asserted source acknowledgement",
+  "wheelSha256": "6c4b74949acb82a7a86a5f9f054f88c5995141f054e820a0b744f101d90c655c",
+  "environment": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6"
+  },
+  "installedBasicTests": {
+    "modules": [
+      "test_feed_runtime_native",
+      "test_catalog_compatible_acceptance_native"
+    ],
+    "tests": 2,
+    "seconds": 51.175,
+    "passed": true
+  },
+  "ownerSqlRoundTrips": 18,
+  "pythonBoundaryImports": 733,
+  "review": "Astra Ultra approved source; four review corrections implemented; installed workflows passed",
+  "publicWorkflow": [
+    "admin enrollment from genesis",
+    "readonly polling without xid assignment",
+    "catalog source and exact accepted reports",
+    "complete journal create/import/link/unlink/delete transaction",
+    "import provenance and object/edge reservations",
+    "ACK rollback",
+    "ACK caller commit",
+    "idempotent equal ACK retry",
+    "full-source authorization refusal"
+  ],
+  "limits": [
+    "caller-asserted downstream durability; no independent verified-application result",
+    "no cleanup or retention release",
+    "authority database only",
+    "fresh installation",
+    "whole transaction row/byte bounds; oversize refuses"
+  ]
+}
