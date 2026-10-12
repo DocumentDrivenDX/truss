@@ -1,0 +1,6 @@
+test_public_actor_refuses_public_private_storage_grants (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_public_private_storage_grants) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 3.953s
+
+OK
