@@ -1,0 +1,22 @@
+{
+  "executedBaseCommit": "52f6978942be2655f5bd401e33748ab924b996bf",
+  "sourceDelta": "source-delta.zip",
+  "nativeTests": 2,
+  "observedDurationSeconds": 31.657,
+  "securityObservations": 216,
+  "cleanupObservations": 2,
+  "trace": [
+    "CONTRACT-005 original native completion custody",
+    "CONTRACT-063 durable registration before publication",
+    "STP-057 L11/L12",
+    "US-057-AC7/AC8"
+  ],
+  "scope": "Own pending INSERT visibility plus explicit/native-failure confirmed rollback before later original operation commit. No unknown commit reconciliation/retry, authentic production issuer/sink/bootstrap or complete participant qualification. No original132-case promotion.",
+  "sha256": {
+    "security-registration-rollback.json": "047bb0cb4fcf16be363a978a1f1052132d8d48689aacf02558ec977e4c23d7bd",
+    "security-registration-rollback.stderr.log": "27d05f965880f5081177d7f82c8fa6095afa3a1941af35a155482af550557361",
+    "security-registration-rollback.json.cleanup.json": "7ef2ef64075ee2d0889f2f68597001016c6efa7379660bc5f3946e3b178e9e51",
+    "source-delta.zip": "ebd56f29bc28cb432e8a5c0b799a838da1e99872204d85ce55fc7d3b359deaa3",
+    "security-registration-rollback.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

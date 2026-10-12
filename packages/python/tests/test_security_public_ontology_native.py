@@ -439,6 +439,16 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    self.assertEqual(failure.exception.sqlstate,'42501')
   observations.append({'id':'ordinary-native-capacity-profile-change-refuses','observed':'42501'})
   publication_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self._track_owned_connection(publication_owner);publication_pid=publication_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
+  for failure_mode in ['explicit_rollback','native_failure']:
+   publication_owner.execute('BEGIN');publication_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');publication_owner.execute(acquire).fetchall();publication_owner.execute(capacity_lock)
+   try:
+    pending_registration=profile_execute(publication_owner,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(pending_registration,[(b'profile-bound-operation'.hex(),)])
+    self.assertEqual(publication_owner.execute('SELECT settled FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(False,));self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(0,))
+    if failure_mode=='native_failure':
+     with self.assertRaises(psycopg.errors.DivisionByZero) as error:publication_owner.execute('SELECT 1/0')
+     self.assertEqual(error.exception.sqlstate,'22012');self.assertEqual(publication_owner.info.transaction_status,psycopg.pq.TransactionStatus.INERROR)
+   finally:publication_owner.rollback()
+   self.assertEqual(publication_owner.info.transaction_status,psycopg.pq.TransactionStatus.IDLE);self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(0,));self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(4,));observations.append({'id':'profile-registration-'+failure_mode+'-preserves-capacity-and-original-token','observed':{'retained':4,'originalTokenRows':0,'commit':'not-published'},'qualification':'confirmed rollback only; no unknown-commit retry'})
   publication_owner.execute('BEGIN');publication_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');publication_owner.execute(acquire).fetchall();publication_owner.execute(capacity_lock);profile_registered=profile_execute(publication_owner,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(profile_registered,[(b'profile-bound-operation'.hex(),)]);publication_owner.execute('COMMIT');observations.append({'id':'native-profile-capacity-registers-original-fifth-slot','observed':profile_registered})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=profile_execute(self.admin,(b'profile-bound-overflow',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK');observations.append({'id':'native-profile-capacity-exhaustion-refuses','observed':refused})
   read_params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);read_params['user']='alice'

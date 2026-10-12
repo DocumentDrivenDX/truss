@@ -450,3 +450,23 @@ confirmed owned native fixture branches, not uncertain COMMIT/ROLLBACK outcomes,
 production recovery, authentic sink/issuer or complete bootstrap/participant
 qualification. Unknown completion still retains original custody; no replay or
 replacement generation is inferred. No required backend case is promoted.
+
+
+### Original registration rollback and capacity — 2026-10-12
+
+The original profile-bound fifth claim now exercises explicit rollback and actual
+22012 native failure after INSERT. The owning transaction sees its unsettled row;
+an independent fresh native observer sees no row before commit. Confirmed
+rollback leaves the owner IDLE, retains exactly four existing identities and
+leaves no claim/tombstone for the original uncommitted operation. The same
+original operation subsequently registers and confirms COMMIT before the
+composed protected read. An INSERT result alone never proves durable admission.
+
+Both native tests pass with216 security observations plus separate cleanup
+observations. Sources, terminal results and hashes:
+`../../04-build/evidence/security-registration-rollback-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L11/L12 and US-057-AC7/AC8. These are known
+rollback branches only, not permission to retry uncertain COMMIT or issue a
+replacement token. Production original issuer, reconciliation, authentic
+settlement/sink and complete native bootstrap/participant qualification remain
+required. No original required backend case is promoted.
