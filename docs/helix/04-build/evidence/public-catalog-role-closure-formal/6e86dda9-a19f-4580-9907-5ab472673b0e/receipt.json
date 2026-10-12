@@ -1,0 +1,54 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-public-catalog-role-closure.py": "3a4b439dd05f9d1313a1a80cc0cf3ba5ea7124fb9421a213a648cbe991b22c22",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "a1753606b2f31f0b19974e84cc34a65d3150383143c8f035ff62c0ad54758a11",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "a5e3fa61011f514af454e68ee0c9d17febf33286ed621603cabf774760e71fd2",
+    "packages/python/tests/test_catalog_runtime_native.py": "068860c853f1e9002df9f59f7ea91aea7795d318703210c3157b5da794721d54"
+  },
+  "queries": [
+    {
+      "id": "direct_server_capability_excludes_admission",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "3d8a3fdcc8065bd91f0754fac80c7ccf75728304d08b8dfb6d5ad5fac5419022",
+      "model": null
+    },
+    {
+      "id": "indirect_server_capability_excludes_admission",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "31ed6e7e0c833edaa8d7ff080f4126146336dbe16198c67d15e63376f850e30d",
+      "model": null
+    },
+    {
+      "id": "unrelated_membership_can_remain_admitted",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "35bd6a99d58ea9aa26d10ee38600af456743607e475813fc1c7b400fe46c6a04",
+      "model": "[member_0_of_4 = False,\n member_2_of_6 = False,\n member_1_of_4 = False,\n member_0_of_6 = False,\n member_5_of_4 = False,\n member_1_of_5 = False,\n member_3_of_5 = False,\n member_1_of_6 = False,\n member_5_of_1 = False,\n member_3_of_4 = False,\n member_4_of_1 = False,\n member_2_of_5 = False,\n member_5_of_2 = False,\n member_2_of_3 = False,\n member_3_of_6 = False,\n member_3_of_0 = False,\n member_0_of_2 = False,\n member_0_of_5 = False,\n member_3_of_2 = False,\n member_4_of_6 = False,\n member_4_of_5 = False,\n member_5_of_0 = False,\n member_5_of_3 = False,\n member_1_of_2 = False,\n member_2_of_4 = False,\n member_5_of_6 = False,\n member_4_of_2 = False,\n member_4_of_0 = False,\n member_3_of_1 = False,\n member_4_of_3 = False,\n member_1_of_3 = False,\n member_2_of_1 = False,\n member_0_of_1 = True,\n member_2_of_0 = False,\n member_0_of_3 = True,\n member_1_of_0 = False]"
+    },
+    {
+      "id": "known_role_exclusion_does_not_close_all_capabilities",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "fc288afc57e48bdb5e1317abb0d3f6e0f419f7300101a11e789bb8dd07a65e45",
+      "model": "[member_6_of_2 = True,\n member_0_of_4 = False,\n member_2_of_6 = False,\n unmodeled_capability = True,\n member_1_of_4 = False,\n member_0_of_6 = False,\n member_5_of_4 = False,\n member_1_of_5 = False,\n member_3_of_5 = False,\n member_1_of_6 = False,\n member_5_of_1 = True,\n member_6_of_1 = True,\n member_3_of_4 = False,\n member_4_of_1 = True,\n member_2_of_5 = True,\n member_5_of_2 = True,\n member_2_of_3 = False,\n member_3_of_6 = False,\n member_6_of_3 = False,\n member_3_of_0 = False,\n member_0_of_2 = False,\n member_0_of_5 = False,\n member_3_of_2 = False,\n member_4_of_6 = False,\n member_4_of_5 = True,\n member_5_of_3 = False,\n member_5_of_0 = True,\n member_1_of_2 = False,\n member_2_of_4 = True,\n member_5_of_6 = False,\n member_4_of_2 = False,\n member_6_of_0 = True,\n member_6_of_5 = False,\n member_6_of_4 = False,\n member_4_of_0 = True,\n member_3_of_1 = True,\n member_4_of_3 = False,\n member_1_of_3 = False,\n member_2_of_1 = True,\n member_2_of_0 = True,\n member_0_of_1 = False,\n member_0_of_3 = True,\n member_1_of_0 = True]"
+    }
+  ],
+  "scope": "Seven-role conservative any-membership closure matching selected public actor owner/server-capability exclusion.",
+  "limitations": [
+    "Membership/current-snapshot/correspondence and complete relevant-role inventory are premises",
+    "Inheritance/SET/ADMIN flags are deliberately not used; dormant paths are conservatively excluded too",
+    "No PostgreSQL/Psycopg/SQL refinement, complete capability/diagnostic/writer closure or advanced backend admission"
+  ],
+  "acceptancePrerequisites": [
+    "CONTRACT-005",
+    "STP-056 B05/B11/B12"
+  ]
+}

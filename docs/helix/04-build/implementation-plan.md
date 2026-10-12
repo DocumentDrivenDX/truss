@@ -5750,3 +5750,43 @@ its original source scope. Existing native owner round trips remain byte-identic
 after this Python-only concurrent merge. Current/archive/package/evidence hashes
 are checked before direct publication. No full backend acceptance case is
 promoted; the goal remains active.
+
+### Public server-file/program capability exclusion — 2026-10-12
+
+Native public catalog authorization previously accepted a session person with
+inherited pg_read_server_files, pg_write_server_files or
+pg_execute_server_program membership. Confirmed-before public controls fail for
+all three after direct current membership flags are independently observed.
+Initial before controls instead failed on a cache-based pg_has_role premise
+after a nested definer call; retain both packets and distinguish that failure
+from the confirmed public actor admission gap. No file read or program execution
+was attempted.
+
+The current native membership-row closure now excludes direct or transitive
+membership in those three roles. This is deliberately conservative, matching
+the existing private-owner membership exclusion: INHERIT/SET/ADMIN flags do not
+make a connected path acceptable, including dormant paths. It is not complete
+predefined-role/callable/diagnostic/writer analysis or a new general RBAC meaning.
+An indirect bridge with SET enabled and inherited file capability also refuses;
+revocation restores public admission without quarantine. Native release manifest
+selects the fixed runtime bytes.
+
+`evidence/public-catalog-predefined-roles-20261012/receipt.json` retains199 source
+pins/preimages, original pre-fix runtime and manifest, both failed controls,
+35 passing source tests and35 passing isolated installed-wheel tests, six native
+SQL owner round trips and module boundaries. Wheel SHA256
+`fa112261f74199e8672f2d3cc70a91e183efb321e4e9d1e52cc22b09e920f5cc`
+contains the exact fixed runtime/manifest, independently matched to installed
+contents. Runtime is PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6
+binary/libpq180006. Existing public unittest cleanup completes without error;
+no independent native cleanup packet is claimed.
+
+`evidence/public-catalog-role-closure-formal/6e86dda9-a19f-4580-9907-5ab472673b0e`
+retains four source inputs and four Z3 4.15.4 SMT-LIB/fresh-context replays, two
+UNSAT/two SAT. The finite seven-role closure excludes direct/indirect dangerous
+membership, permits an unrelated membership and admits an unmodeled-capability
+counterexample. Membership correspondence/currentness and complete relevant-role
+inventory are premises; no PostgreSQL/Psycopg/SQL refinement is proved.
+Trace CONTRACT-005, CONTRACT-063/STP-056 B05/B10/B11/B12 and US-056
+AC5/AC8/AC9/AC10 prerequisites. No advanced business backend case or whole
+132-case profile is promoted; the full goal remains active at26/132.
