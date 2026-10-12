@@ -184,3 +184,33 @@ operation issuance, durable registry capacity/admission, bootstrap/privilege
 parity, complete source/fact/authority participants, commit uncertainty and
 final sink/recovery integration remain required. No original required case
 is promoted and no ordinary security API is enabled.
+
+
+### Overlapping publication and pending registration — 2026-10-12
+
+Two exact original operation claims coexist. Duplicate registration refuses23505
+without replacing either; stale generation registration returns zero. Settling
+one claim leaves participating generation advance refused; rolled-back settlement
+of the other leaves its durable row. Exact confirmed settlement of both permits
+the existing guarded advance. A separate pending registration holds native guard
+SHARE before commit. The participating authority writer actually waits on that
+original PID, then a fresh post-drain statement sees the committed claim and
+returns zero advance. Native suite total190 observations.
+
+A finite transition explorer visits all58 reachable states/107 edges for exactly
+two one-shot operations in one generation, with no acknowledgment while any
+publication remains pending. Its automatic-clear-on-loss mutant reaches74 states
+and9 unsafe states, including register/loss/ack before completion. This is bounded
+model exploration, not arbitrary-cardinality induction or native refinement.
+Original serialized registration, settlement after completion, fresh snapshot
+and complete writer participation are premises.
+
+Retained original SQL/test sources, successful and failed native logs, explorer
+and receipt:
+`../../04-build/evidence/security-overlapping-publication-claims-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. The first concurrent
+observer incorrectly used an earlier data-writer PID; the corrected test uses
+the actual authority writer PID and a blocker deadline below statement timeout.
+Production issuer/sink authentication, capacity, uncertainty/recovery, bootstrap
+and complete participant parity remain required; no backend acceptance case
+is promoted.

@@ -302,9 +302,42 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   with psycopg.connect(**params,autocommit=True) as ordinary:
    with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute('DELETE FROM truss.policy_publication_claim')
   observations.append({'id':'ordinary-publication-claim-reset-refuses','observed':'42501'})
+  second_operation=b'fixture-original-publication-2'
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();second_registered=self.admin.execute(register,(second_operation,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(second_registered,[(second_operation.hex(),)]);self.admin.execute('COMMIT');observations.append({'id':'overlapping-publication-claims-independently-register','observed':second_registered})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall()
+  with self.assertRaises(psycopg.errors.UniqueViolation) as duplicate:self.admin.execute(register,(second_operation,installation_bytes,profile_bytes,5)).fetchall()
+  self.assertEqual(duplicate.exception.sqlstate,'23505');self.admin.execute('ROLLBACK');observations.append({'id':'duplicate-original-publication-claim-refuses-replacement','observed':'23505'})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();stale_registered=self.admin.execute(register,(b'stale-publication',installation_bytes,profile_bytes,4)).fetchall();self.assertEqual(stale_registered,[]);self.admin.execute('ROLLBACK');observations.append({'id':'stale-publication-generation-cannot-register','observed':stale_registered})
   # Fixture establishes withheld completion; no production sink/issuer proof.
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();deleted=self.admin.execute(settle,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(deleted,[(operation_bytes.hex(),)]);self.admin.execute('COMMIT');observations.append({'id':'original-publication-claim-settles-after-fixture-withholding','observed':deleted,'qualification':'fixture completion premise only'})
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();still_blocked=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(still_blocked,[]);authority_writer.execute('ROLLBACK');observations.append({'id':'settling-one-publication-preserves-other-operation-exclusion','observed':still_blocked})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(second_operation,installation_bytes,profile_bytes,5)).fetchall(),[(second_operation.hex(),)]);self.admin.execute('ROLLBACK')
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(1,));observations.append({'id':'rolled-back-publication-settlement-retains-claim','observed':1})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(second_operation,installation_bytes,profile_bytes,5)).fetchall(),[(second_operation.hex(),)]);self.admin.execute('COMMIT')
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();advanced=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),'6')]);authority_writer.execute('ROLLBACK');observations.append({'id':'settled-publication-allows-participating-advance','observed':advanced,'qualification':'rolled back to preserve generation5; no production authority-delta proof'})
+  # A pending registration SHARE scope drains before writer's fresh claim check.
+  pending_operation=b'fixture-pending-publication'
+  pending_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(pending_owner.close)
+  pending_pid=pending_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
+  pending_owner.execute('BEGIN');pending_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');pending_owner.execute(acquire).fetchall();self.assertEqual(pending_owner.execute(register,(pending_operation,installation_bytes,profile_bytes,5)).fetchall(),[(pending_operation.hex(),)])
+  pending_errors=[];pending_advances=[]
+  def advance_after_pending_registration():
+   try:
+    authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();pending_advances.extend(authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall());authority_writer.execute('ROLLBACK')
+   except BaseException as error:pending_errors.append(type(error).__name__);authority_writer.execute('ROLLBACK')
+  pending_thread=threading.Thread(target=advance_after_pending_registration);pending_thread.start()
+  try:
+   blockers=[];wait_until=time.monotonic()+8
+   while time.monotonic()<wait_until:
+    blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(authority_pid,)).fetchone()[0]
+    if pending_pid in blockers:break
+    time.sleep(.02)
+   self.assertIn(pending_pid,blockers);observations.append({'id':'authority-writer-drains-pending-publication-registration','observed':blockers})
+   pending_owner.execute('COMMIT')
+  finally:
+   pending_owner.rollback();pending_thread.join(12)
+  self.assertFalse(pending_thread.is_alive());self.assertEqual(pending_errors,[]);self.assertEqual(pending_advances,[]);observations.append({'id':'fresh-post-drain-authority-check-sees-committed-claim','observed':pending_advances})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(pending_operation,installation_bytes,profile_bytes,5)).fetchall(),[(pending_operation.hex(),)]);self.admin.execute('COMMIT')
   self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.client(code text PRIMARY KEY);CREATE TABLE relational_fixture.project(code text PRIMARY KEY);CREATE TABLE relational_fixture.staff(code text PRIMARY KEY,login text NOT NULL);CREATE TABLE relational_fixture.resource(code text PRIMARY KEY,secret text NOT NULL);CREATE TABLE relational_fixture.assignment(code text PRIMARY KEY,active boolean NOT NULL)')
   for table,codes in [('client',['C']),('project',['A','B']),('resource',['RA','RB','RAB','RO'])]:
    for code in codes:

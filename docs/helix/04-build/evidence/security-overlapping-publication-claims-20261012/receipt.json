@@ -1,0 +1,23 @@
+{
+  "executedBaseCommit": "b9f251a478e339e2c18ca1fa7ff91ec84a15c097",
+  "sourceDelta": "source-delta.zip",
+  "nativeObservations": 190,
+  "trace": [
+    "CONTRACT-005 original publication custody",
+    "CONTRACT-063 final release and fresh post-barrier observation",
+    "STP-057 L03/L11",
+    "US-057-AC2/AC7"
+  ],
+  "developmentFailure": "First concurrent observer used earlier data writer PID. Native run failed without promoting results. Corrected to actual authority_pid and shortened blocker deadline below statement timeout; failed and successful logs retained.",
+  "scope": "Two-operation finite model and candidate native schedules only. Complete production original issuer, registry capacity/commit recovery, sink completion, bootstrap and participant parity remain required; no original132-case acceptance promotion.",
+  "sha256": {
+    "security-overlapping-claim-native.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "formal-results.json": "e6b3fd00cc0a85de8654aee9dc7148c2ab8a533405c5bccd06ce8750e9de2d6a",
+    "security-overlapping-claim-native-r2.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-delta.zip": "4d5e4a4ee2522479b0cfcd667eb62eade4970ec6b97df797d434a3fd0b9ef5c7",
+    "security-overlapping-claim-native-r2.stderr.log": "afe3eb8b7012b394bf70782d253d4499dd076f7844a3ea0f5211c9e4534f1a5b",
+    "security-overlapping-claim-native.stderr.log": "4ae6b20d935707c85e8334b48a79f07d5ad6baba40b62afb92250f79f4e101ee",
+    "check-two-claims.py": "9b0e8150b3e387b7b064c198e9519f652bb3eb7242986bbf4e57e9613be493e1",
+    "security-overlapping-claim-native-r2.json": "5ca373ccf57c7017e3f28d401db8357e8bf4d2b0b088457da13de790571409ef"
+  }
+}
