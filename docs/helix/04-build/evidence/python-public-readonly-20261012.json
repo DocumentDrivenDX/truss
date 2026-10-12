@@ -1,0 +1,31 @@
+{
+  "scope": "runtime0.6 public object identity, reader catalog and accepted-document reads on adopted READ COMMITTED READ ONLY",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "3fd538fcc48593a5e762c7f8e912f4fa3322005236bb649d18cabb408ecc3695",
+  "installedTests": {
+    "modules": [
+      "test_read_only_public_native",
+      "test_reader_catalog_native",
+      "test_object_read_native"
+    ],
+    "passed": 15,
+    "elapsedSeconds": 68.065
+  },
+  "controls": [
+    "public create, caller commit, actual BEGIN READ ONLY adoption and three reads",
+    "writer remains authorized during attempted mutation; native25006, no extra object, transaction still RO and subsequent read succeeds",
+    "current reader revocation then restoration",
+    "actual policy role replacement from another connection while object buffered; old roles do not publish object; restore and read succeeds"
+  ],
+  "umfSqlOwner": "10 retained SQL sources reload/export unchanged",
+  "moduleBoundaries": "670 imports passed",
+  "review": "Astra Ultra scoped plan/source approved; test corrected to require native25006 with writer authorization",
+  "limits": [
+    "READ COMMITTED only",
+    "current immutable revision1 catalog",
+    "registrar complete view and group type-reference helper not newly qualified for RO",
+    "fresh installation required; candidate migration still pending",
+    "full external interface goal remains active"
+  ]
+}
