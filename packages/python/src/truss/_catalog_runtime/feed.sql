@@ -188,3 +188,32 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.acknowledge_feed(text,bytea,bytea,text,text,text) FROM PUBLIC;
+
+-- Reproduce a retained delivery after acknowledgement without moving its checkpoint.
+CREATE FUNCTION truss.reread_feed(selected_consumer text,expected_prior bytea,target bytea,payload_sha256 text,
+ maximum_facts int,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE target_json jsonb;frontier numeric;result bytea;envelope jsonb;captured_revision int;
+BEGIN
+ PERFORM truss.runtime_feed_authorize(selected_consumer,expected_release,expected_digest);
+ captured_revision:=(SELECT rev FROM truss.schema_head WHERE id=1);
+ IF target IS NULL OR octet_length(target) NOT BETWEEN 1 AND 16384 OR payload_sha256 IS NULL OR payload_sha256 !~ '^[0-9a-f]{64}$'
+ OR (convert_from(target,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
+  RAISE EXCEPTION 'exact delivered boundary required' USING ERRCODE='22023';END IF;
+ target_json:=convert_from(target,'UTF8')::jsonb;
+ IF jsonb_typeof(target_json->'nextXid') IS DISTINCT FROM 'string' OR target_json->>'nextXid' !~ '^(0|[1-9][0-9]{0,19})$' THEN
+  RAISE EXCEPTION 'exact delivered position required' USING ERRCODE='22023';END IF;
+ frontier:=(target_json->>'nextXid')::numeric;
+ IF frontier>pg_snapshot_xmin(pg_current_snapshot())::text::numeric THEN
+  RAISE EXCEPTION 'committed interval required' USING ERRCODE='55000';END IF;
+ result:=truss.runtime_feed_page(selected_consumer,expected_prior,frontier,maximum_facts,maximum_bytes);
+ envelope:=convert_from(result,'UTF8')::jsonb;
+ IF decode(envelope->>'nextBase64','base64') IS DISTINCT FROM target OR envelope->>'sha256' IS DISTINCT FROM payload_sha256 THEN
+  RAISE EXCEPTION 'original complete retained interval required' USING ERRCODE='55000';END IF;
+ PERFORM truss.runtime_feed_authorize(selected_consumer,expected_release,expected_digest);
+ IF captured_revision IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1) THEN
+  RAISE EXCEPTION 'feed context changed' USING ERRCODE='55P03';END IF;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.reread_feed(text,bytea,bytea,text,int,int,text,text) FROM PUBLIC;

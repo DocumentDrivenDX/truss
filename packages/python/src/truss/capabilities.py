@@ -123,6 +123,10 @@ class NativeFeedCapability(_NativeCapability[Literal['feed']]):
                                  maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]:
         return self._assembly.read_feed_in_transaction(transaction,consumer_id=consumer_id,maximum_facts=maximum_facts,maximum_bytes=maximum_bytes)
 
+    def reread_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,maximum_facts: int=4096,
+                                   maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]:
+        return self._assembly.reread_feed_in_transaction(transaction,page,maximum_facts=maximum_facts,maximum_bytes=maximum_bytes)
+
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]:
         return self._assembly.acknowledge_feed_in_transaction(transaction,page)
 

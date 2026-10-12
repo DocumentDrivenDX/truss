@@ -24,6 +24,7 @@ def consume(assembly: CatalogReferenceAssembly, transaction: TransactionHandle,
     if isinstance(feed,CapabilityAvailable):
         page = feed.capability.read_feed_in_transaction(transaction,consumer_id='warehouse')
         if isinstance(page,Ok) and isinstance(page.value,FeedPage):
+            feed.capability.reread_feed_in_transaction(transaction,page.value)
             feed.capability.acknowledge_feed_in_transaction(transaction,page.value)
     operations.reader_catalog_in_transaction(transaction)
     history=assembly.history(assembly.history_selection)

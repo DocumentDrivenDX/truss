@@ -43,10 +43,10 @@
       "name": "feed",
       "pin": {
         "identity": "truss-native-caller-asserted-feed-capability",
-        "version": "0.1",
-        "sha256": "d0235dac42ebbcc552560a23eab588ee6fb34914f82519354227d1845911092d"
+        "version": "0.2",
+        "sha256": "f9da4a3df76314e130c6fabbcefd7640cfe597b6f13f024eec82728629957ab1"
       },
-      "definition": "Native caller-asserted feed capability/0.1: complete authority-database transactions below snapshot xmin; original catalog/report/configuration prerequisites; journal/source/reservation union; full historical module authority; ordinary-role full-prior source interval CAS ACK; caller asserts downstream durability; no verified application or retention release; no administration.",
+      "definition": "Native caller-asserted feed capability/0.2: complete authority-database transactions below snapshot xmin; original catalog/report/configuration prerequisites; journal/source/reservation union; full historical module authority; read-only reproduction of original retained deliveries after ACK; ordinary-role full-prior source interval CAS ACK; caller asserts downstream durability; no verified application or retention release; no administration.",
       "policyDefinition": "Native caller-asserted feed policy/0.1: ordinary authenticated person enrolled under the consumer role and fresh registration; current reader or writer authority for every module in historical source documents; complete source scope with no filtered sibling; authority database and READ COMMITTED; source-only expected-prior ACK; no downstream verifier or retention release.",
       "policyPin": {
         "identity": "truss-native-feed-policy",

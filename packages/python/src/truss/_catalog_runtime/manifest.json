@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-catalog-runtime-release/0.1",
-  "releaseId": "truss-catalog-runtime/0.21-candidate",
+  "releaseId": "truss-catalog-runtime/0.22-candidate",
   "postgresVersion": "180006",
   "layoutProfile": {
     "identity": "truss-layout",
@@ -11,10 +11,10 @@
     "layout.sql": "421a9bb88bcc1293f4fcbb66d2b443ccd08ccfc7845c79e5d3ee21b5494666a7",
     "lineage.sql": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc",
     "plan.sql": "230e5e92612aef36d79a8cc7bb937ecfee554ed243d00def7e789e2788e03827",
-    "runtime.sql": "dfd4ee3ceb650bbfcf500daa1064569d877c8cd7f4312700147f96b35bb87f1d",
+    "runtime.sql": "29f671f4bcc9eade2658269b9a18cc62616409ae762c32852fa0923b757bfdfc",
     "barrier.sql": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
     "view.sql": "6c7c510c951174a266e4ef06029edb31902da6034aae0b3008c7d7cc08784bfb",
-    "read.sql": "51971ea68b377b770a6a97103bf72edab3e459ff14fba470474768c739e73ea3",
+    "read.sql": "318c6202f2d80ce2faf641d9b352833aa8e7d592f7dcdf6682f02cc7af279ea5",
     "keys.sql": "d74dc2e4048331bafd6f1f68f7fd931818fb52beb720b51f5cfd8950b0f7a869",
     "groups.sql": "f085384b0d6c9a84a3b206ba34e0d82f97afc1682943fe288acfaa992a7f1ab8",
     "group-profiles.json": "d9944cdff274f9b001dc78837f221c0a42f248869d1898ab2033e857a9c041fd",
@@ -26,9 +26,9 @@
     "operations.sql": "019369b4c66dcb410054a9f0a38188c72b215951782749ddc21934dfb893b73c",
     "preconditions.sql": "d4c961fe307aaebaf042992ebfba7ab997d80d8576e1df2eadf7283c4a59ff51",
     "imports.sql": "428ba7a233043ce57d6663b82126317d459807471730c7e8b0a6d183709c43e2",
-    "feed.sql": "c9329b3ffdcaeea41ed9e1b03ec2d485e96ee445a73c4b77b507bae2c95d4f72",
-    "capability-profiles.json": "b239a154b79ead3f6ce08db1b5d3e0a1e98aebc2600995f1d8d68b6b5bdad98d",
+    "feed.sql": "bd8e7de81efbe355c87d41124986d38edfceb29e6e76e36c03c69888ed79271e",
+    "capability-profiles.json": "55b336e8520c8dffeeda84b2c968f8802196df0900f377bd725fc79e8ca00dc0",
     "history.sql": "75e42e8c660b8050a76304dcac347ed46329d578cdd15a374b181204a27ce479"
   },
-  "version": "0.21"
+  "version": "0.22"
 }
