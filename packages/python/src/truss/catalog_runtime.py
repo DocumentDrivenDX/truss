@@ -15,6 +15,7 @@ from uuid import uuid4
 from threading import RLock
 from functools import wraps
 from typing import Literal
+from .feed import FeedPage,FeedConsumer,FeedAcknowledged,FeedUnavailable
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
@@ -138,7 +139,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','preconditions.sql','imports.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','preconditions.sql','imports.sql','feed.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -263,7 +264,7 @@ class CatalogReferenceAssembly:
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.16 candidate: catalog, scalar objects and independent directed relationships; feed unavailable'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.20 candidate: catalog, scalar graph, imports and caller-asserted authority feed'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
@@ -283,7 +284,7 @@ class CatalogReferenceAssembly:
             if row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 local_failure[0]='unsupported_profile'
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority'))
         return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
@@ -779,6 +780,95 @@ class CatalogReferenceAssembly:
             reason={'0A000':'profile','25006':'profile','54000':'resource','55P03':'observation','42P01':'installation','42883':'installation'}.get(state)
             if reason:return Ok(CatalogUnavailable(code=reason))
         return result
+
+    @_active_operation
+    def register_feed_consumer_in_transaction(self, transaction: TransactionHandle, *, consumer_id: str, reader_role: str) -> Outcome[FeedConsumer]:
+        """Installation administrator enrolls a full-source consumer from genesis.
+
+        Registration and role grants remain subject to the caller's commit.
+        """
+        from .feed import FeedConsumer, FeedCursor
+        from ._installation_privileges import _name
+        from psycopg import sql
+        if type(consumer_id) is not str or not consumer_id or '\0' in consumer_id or len(consumer_id.encode('utf8'))>4096 or not _name(reader_role):
+            return Error(ExecutionFailure('execution_obligation','Bounded consumer and role required'))
+        manifest,digest,_=_release()
+        def register(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
+            original_path=cursor.fetchone()[0]
+            cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+            cursor.execute("SELECT current_user=session_user,current_setting('role')='none',rolsuper FROM pg_roles WHERE rolname=session_user",prepare=False)
+            if cursor.fetchone()!=(True,True,True):raise ValueError('Trusted installation administrator required')
+            cursor.execute('SELECT release_id,release_sha256 FROM truss.catalog_runtime_installation',prepare=False)
+            if cursor.fetchone()!=(manifest['releaseId'],digest):raise ValueError('Exact installed feed release required')
+            cursor.execute('SELECT oid FROM pg_roles WHERE rolname=%s AND NOT rolsuper AND NOT rolcreaterole AND NOT rolcreatedb AND NOT rolreplication AND NOT rolbypassrls',(reader_role,),prepare=False)
+            role=cursor.fetchone()
+            if role is None:raise ValueError('Ordinary native consumer role required')
+            cursor.execute('SELECT reader_oid,registration_id::text,checkpoint_bytes FROM truss.runtime_feed_consumer WHERE consumer_id=%s FOR UPDATE NOWAIT',(consumer_id,),prepare=False)
+            existing=cursor.fetchone()
+            if existing is not None:
+                if existing[0]!=role[0]:raise ValueError('Original consumer role required')
+                registration,checkpoint=existing[1],bytes(existing[2])
+            else:
+                cursor.execute("INSERT INTO truss.runtime_feed_consumer(consumer_id,reader_oid,checkpoint_bytes) VALUES(%s,%s,''::bytea) RETURNING registration_id::text",(consumer_id,role[0]),prepare=False)
+                registration=cursor.fetchone()[0]
+                cursor.execute("SELECT truss.runtime_feed_cursor(%s,'0')",(consumer_id,),prepare=False)
+                checkpoint=bytes(cursor.fetchone()[0])
+                cursor.execute('UPDATE truss.runtime_feed_consumer SET checkpoint_bytes=%s WHERE consumer_id=%s',(checkpoint,consumer_id),prepare=False)
+            cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(reader_role)),prepare=False)
+            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.read_feed(text,int,int,text,text),truss.acknowledge_feed(text,bytea,bytea,text,text,text) TO {}').format(sql.Identifier(reader_role)),prepare=False)
+            cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
+            if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
+            return FeedConsumer(consumer_id=consumer_id,registration_id=registration,checkpoint=FeedCursor(content=checkpoint))
+        return self._host._run_operation(transaction,register)
+
+    def _feed_result(self,result):
+        from .feed import FeedUnavailable
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            reasons={'42501':'authorization','54000':'resource','55P03':'context','0A000':'profile','P1001':'conflict','22023':'context','55000':'integrity','25006':'context'}
+            reason=reasons.get(result.error.sql_state)
+            if reason:return Ok(FeedUnavailable(reason=reason))
+        return result
+
+    @_active_operation
+    def read_feed_in_transaction(self,transaction: TransactionHandle,*,consumer_id: str,maximum_facts: int=4096,maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]:
+        """Read the next whole committed transaction or a safe empty interval.
+
+        Polling does not acknowledge or assign a transaction ID. Read-only
+        READ COMMITTED caller transactions are supported.
+        """
+        from .feed import FeedPage,FeedCursor,FeedUnavailable
+        if type(consumer_id) is not str or not consumer_id or '\0' in consumer_id or len(consumer_id.encode('utf8'))>4096 or type(maximum_facts) is not int or not 1<=maximum_facts<=65536 or type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:
+            return Ok(FeedUnavailable(reason='resource'))
+        manifest,digest,_=_release()
+        def read(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.read_feed(%s,%s,%s,%s,%s)',(consumer_id,maximum_facts,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]));content=base64.b64decode(value['payloadBase64'],validate=True)
+            if sha256(content).hexdigest()!=value['sha256']:raise ValueError('Original complete feed payload required')
+            return FeedPage(consumer_id=value['consumerId'],registration_id=value['registrationId'],
+                prior=FeedCursor(content=base64.b64decode(value['priorBase64'],validate=True)),next=FeedCursor(content=base64.b64decode(value['nextBase64'],validate=True)),
+                content=content,sha256=value['sha256'],writer_xid=value['writerXid'],safe_watermark_xid=value['safeWatermarkXid'],outcome=value['outcome'])
+        return self._feed_result(self._host._run_operation(transaction,read))
+
+    @_active_operation
+    def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]:
+        """Assert durable downstream application; CAS the exact source interval.
+
+        The caller must commit this transaction for a durable source checkpoint.
+        This does not verify downstream durability or release retention.
+        """
+        from .feed import FeedPage,FeedCursor,FeedAcknowledged,FeedUnavailable
+        if type(page) is not FeedPage or sha256(page.content).hexdigest()!=page.sha256:
+            return Ok(FeedUnavailable(reason='integrity'))
+        manifest,digest,_=_release()
+        def acknowledge(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.acknowledge_feed(%s,%s,%s,%s,%s,%s)',(page.consumer_id,page.prior.content,page.next.content,page.sha256,manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]))
+            return FeedAcknowledged(outcome=value['outcome'],checkpoint=FeedCursor(content=base64.b64decode(value['checkpointBase64'],validate=True)))
+        return self._feed_result(self._host._run_operation(transaction,acknowledge))
 
     @_active_operation
     def reader_catalog_in_transaction(self,transaction: TransactionHandle,*,maximum_count: int=65536,maximum_bytes: int=1048576) -> Outcome[ReaderCatalog | CatalogInvalid | CatalogRefused | CatalogUnavailable]:

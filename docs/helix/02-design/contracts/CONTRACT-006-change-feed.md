@@ -19,6 +19,28 @@ ddx:
 
 # Contract: Change feed
 
+## Python caller-asserted source checkpoint profile — runtime 0.20
+
+The public Python `read_feed_in_transaction` and
+`acknowledge_feed_in_transaction` calls implement a practical authority-database
+profile on PostgreSQL18.6/psycopg3.3.6. It delivers complete committed writer
+transactions below one safe snapshot-xmin frontier, with retained catalog/source
+reports and configuration prerequisites before dependent journal changes, import
+provenance and reservations. Full historical module authorization is required;
+a forbidden or oversized sibling blocks the complete interval. Enrollment starts
+at retained genesis with installation/epoch and a fresh consumer registration.
+
+ACK recomputes the complete next source interval and digest, checks current
+authority and compares the entire expected prior checkpoint. Its effects become
+durable only when the caller commits; equal retry does not refresh progress.
+This ACK is the authenticated consumer's assertion of durable downstream
+application. It is not the stronger `VerifiedApplication` result specified
+below, does not independently attest another system's commit, and does not
+release retention or establish replica/exactly-once claims. Downstream durable
+deduplication and commit remain the consumer's responsibility. This profile
+retains source history indefinitely; cleanup/offload/removal and the stronger
+verified-application capability remain unimplemented.
+
 ## Owner decisions — 2026-10-07
 
 Complete reconstructable history is selected under ADR-007. Local retention may be short or zero, but required durable archive/consumer handoff precedes deletion when continued reconstruction/delivery is promised. Transactional event production, complete group/transaction boundaries and registered consumer protection still apply. Missing both local and qualified archive history yields explicit unavailable history. Request-receipt replay/protection is independent of local journal retention; trimming cannot make an old request reapply.

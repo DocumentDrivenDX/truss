@@ -33,7 +33,8 @@ The consumer needs host-supplied PostgreSQL transactions, accepted UMF registrat
 
 ## Next callable operations
 
-Committed feed and ordinary-role acknowledgement are next. The source scan must
+Runtime 0.20 implements public committed feed reads and ordinary-role
+caller-asserted source acknowledgement. The source scan must
 carry complete transactions below the snapshot-xmin frontier, including catalog
 prerequisites, journal changes, import source facts and reservations; never skip
 a forbidden or oversized sibling. Use ordinary limits and a single refusal,
@@ -65,7 +66,8 @@ independent relationship widening while preserving native IDs. The basic
 adopter test exercises registration, current source/read views, mutations,
 new-type creation, key lookup, imports and original request recovery.
 Retirement, backfill, structured ownership and installation upgrades remain open.
-The next public implementation priorities are compiled execution and the feed.
+The next public implementation priorities are owner-supported compiled execution,
+engine-owned import batches and managed installation/upgrades.
 
 ## Compatible catalog acceptance — connected implementation scope
 

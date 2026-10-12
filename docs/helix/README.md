@@ -9,8 +9,9 @@ grouped object and independent edge mutations, atomic caller preconditions,
 relationship pages and committed receipt visibility on PostgreSQL18.6.
 Caller-owned imports and compatible catalog evolution are implemented within
 the documented scalar and independent-relationship subset. Object reads return
-identities usable directly for updates and links. Compiled query execution,
-committed feed/ACK and managed installation/upgrades remain unfinished. Older private component evidence below
+identities usable directly for updates and links. Caller-asserted committed
+feed/ACK is available on the authority database. Compiled query execution,
+managed installation/upgrades and verified downstream application remain unfinished. Older private component evidence below
 does not qualify those public operations.
 
 [Query and execution ownership](01-frame/prd.md#query-and-execution-ownership--owner-direction-2026-10-11): Truss exposes the full Weft query surface. Weft owns evolving SQL coverage; Truss owns table layout, query execution, actions and other executions. Direct read/traversal APIs are convenience operations, not SQL coverage limits.
