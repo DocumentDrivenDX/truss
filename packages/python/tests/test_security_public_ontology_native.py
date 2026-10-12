@@ -402,6 +402,21 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
     capacity_owner.rollback()
     if interruption_thread is not None:interruption_thread.join(12)
     interrupted.rollback();interrupted.close()
+  # Source capacity from original protected native profile, not a fifth argument.
+  self.admin.execute((contracts/'installation-publication-capacity-profile-v0.1.proposal.sql').read_text());self.admin.execute('INSERT INTO truss.policy_publication_capacity VALUES(1,%s,%s,5)',(installation_bytes,profile_bytes))
+  profile_register=(contracts/'installation-publication-claim-register-v0.4.profile.proposal.sql').read_text()
+  for ordinal in range(1,5):profile_register=profile_register.replace('$'+str(ordinal),'%(p'+str(ordinal)+')s')
+  def profile_execute(connection,parameters):return connection.execute(profile_register,{'p'+str(i):value for i,value in enumerate(parameters,1)})
+  for mutation in ["DELETE FROM truss.policy_publication_capacity","UPDATE truss.policy_publication_capacity SET installation_identity_bytes='foreign'::bytea","UPDATE truss.policy_publication_capacity SET policy_profile_bytes='foreign'::bytea","UPDATE truss.policy_publication_capacity SET max_retained=4"]:
+   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();self.admin.execute(mutation);self.admin.execute(capacity_lock);refused=profile_execute(self.admin,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK')
+  observations.append({'id':'native-capacity-profile-missing-mismatched-full-refuses','observed':'four zero-row refusals; fixture mutations rolled back'})
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege) as failure:ordinary.execute('UPDATE truss.policy_publication_capacity SET max_retained=100')
+   self.assertEqual(failure.exception.sqlstate,'42501')
+  observations.append({'id':'ordinary-native-capacity-profile-change-refuses','observed':'42501'})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);profile_registered=profile_execute(self.admin,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(profile_registered,[(b'profile-bound-operation'.hex(),)]);self.admin.execute('COMMIT');observations.append({'id':'native-profile-capacity-registers-original-fifth-slot','observed':profile_registered})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=profile_execute(self.admin,(b'profile-bound-overflow',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK');observations.append({'id':'native-profile-capacity-exhaustion-refuses','observed':refused})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall(),[(b'profile-bound-operation'.hex(),)]);self.admin.execute('COMMIT')
   self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.client(code text PRIMARY KEY);CREATE TABLE relational_fixture.project(code text PRIMARY KEY);CREATE TABLE relational_fixture.staff(code text PRIMARY KEY,login text NOT NULL);CREATE TABLE relational_fixture.resource(code text PRIMARY KEY,secret text NOT NULL);CREATE TABLE relational_fixture.assignment(code text PRIMARY KEY,active boolean NOT NULL)')
   for table,codes in [('client',['C']),('project',['A','B']),('resource',['RA','RB','RAB','RO'])]:
    for code in codes:

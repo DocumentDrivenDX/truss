@@ -346,3 +346,36 @@ outcomes still require original custody/quarantine; elapsed time or cancellation
 request alone never establishes containment. Production host recovery, profile
 binding, registry/issuer/sink and complete bootstrap/participant qualification
 remain required. No original backend acceptance case is promoted.
+
+
+### Native profile-bound publication capacity — 2026-10-12
+
+The0.4 registration candidate removes the fifth capacity parameter. It joins
+the original guard to a private native `policy_publication_capacity` row by
+singleton and complete installation/profile bytes, then uses that row's checked
+capacity. The new capacity home has a singleton PK, nonempty original bytes and
+nonnull integer capacity1..1048576. Ordinary roles receive no access. Missing
+or mismatched capacity homes refuse without repair. This is fresh fixture DDL,
+not an adopted installation/migration or authenticated profile issuer.
+
+Profile changes must take original guard UPDATE and complete native profile
+transition/parity; registration retains schema-head/guard SHARE and the capacity
+serialization lock through commit. Every admitted registrant must use the same
+profile-bound source. Caller-supplied-capacity0.3/uncapped sources cannot coexist
+as admitted alternatives. The native JOIN establishes byte correspondence only;
+verified bootstrap, exact full native source/census and current issuer custody
+remain required before production admission.
+
+The fixture separately rolls back missing-row, wrong-installation, wrong-profile
+and exhausted-profile mutations, each yielding zero registration rows. Ordinary
+capacity UPDATE refuses42501. A matching original capacity5 admits the fifth
+retained identity; the next operation refuses. Suite total205 observations.
+Supported named psycopg bindings handle the repeated token parameter; the first
+failed positional-binding run remains retained.
+
+Sources, successful/failed terminal logs and hashes:
+`../../04-build/evidence/security-native-capacity-profile-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Resource budgets,
+complete profile/source/participant/callable parity, original operation issuer,
+authentic sink settlement and uncertainty/recovery remain unqualified. No
+required backend acceptance case is promoted.
