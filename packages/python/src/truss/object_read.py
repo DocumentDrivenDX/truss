@@ -35,5 +35,27 @@ class ObjectReadInvalid:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ObjectReadUnavailable:
-    reason: Literal['profile','resource','observation']
+    reason: Literal['profile','resource','observation','context']
     outcome: Literal['unavailable'] = field(default='unavailable', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ObjectPageCursor:
+    installation_id: str
+    source_epoch: str
+    release_sha256: str
+    document_id: str
+    module_id: str
+    record_id: str
+    type_id: int
+    definition_pin: str
+    catalog_revision: int
+    after_id: int
+    profile: Literal['truss-python-object-page/0.1'] = field(default='truss-python-object-page/0.1', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ObjectPage:
+    objects: tuple[ScalarObject, ...]
+    catalog_revision: int
+    continuation: ObjectPageCursor | None
+    outcome: Literal['page'] = field(default='page', init=False)
+    consistency: Literal['live'] = field(default='live', init=False)

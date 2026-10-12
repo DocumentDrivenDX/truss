@@ -55,6 +55,35 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Live object pages iteration — 2026-10-12
+
+Runtime 0.12 adds `page_objects_in_transaction` to the public scalar-object
+assembly. The caller selects a qualified document/module/record and receives
+complete exact `ScalarObject` values in ascending native ID order, a typed
+continuation or terminal page. Read-only/read-write READ COMMITTED transactions
+remain caller-owned. The existing `(type_id,id)` index supports a bounded
+`limit+1` ID-only lookahead; continuation records the last returned ID.
+
+The unsigned cursor pins installation/source epoch/release, exact native type and
+definition pin, catalog revision and qualified selection. It is routing input,
+not authority or tamper-proof issuance. Canonical shape and current bindings are
+checked; a valid edited position is simply another position. Current owner
+authority is checked before selection and after buffering. A disappearing or
+no-longer-admitted selected row refuses the whole page; no row is silently skipped.
+Context mismatch returns unavailable/context. Native retry/unusable failures
+retain their original outcomes. Pages are live observations, not frozen data
+snapshots; ID order is not commit order or proof of cross-page completeness.
+
+Limits are 1..1000 records, 64KiB cursor and a 1..16MiB complete encoded-page
+budget including metadata/continuation. Values are never truncated; a page that
+does not fit refuses. Tests use public create/commit then actual read-only
+pagination, exact mixed values, empty and hidden selections, cursor/limit/stale
+catalog refusals, and real reader-role revocation after rows are buffered. The
+provider remains scoped to scalar objects; complete DirectRecord/traversal,
+compiled queries, mutations beyond creates, imports, receipt visibility/feed/ack
+and migrations remain in the full external-interface objective. Fresh
+installation remains required.
+
 ## Exact scalar properties iteration — 2026-10-12
 
 Runtime 0.11 extends catalog/create/read to integer, decimal, boolean, timestamp

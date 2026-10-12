@@ -18,7 +18,7 @@ from typing import Literal
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
-from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable
+from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
 from .contracts import CapabilitySelection
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult
@@ -115,7 +115,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -403,7 +403,8 @@ class CatalogReferenceAssembly:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
-                                      'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)'):
+                                      'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
+                                      'page_objects(text,text,text,int,int,bytea,text,text)'):
                         cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
@@ -482,6 +483,52 @@ class CatalogReferenceAssembly:
         result=self._host._run_operation(transaction,observe)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
+            if reason:return Ok(ObjectReadUnavailable(reason=reason))
+        return result
+
+    @_active_operation
+    def page_objects_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
+                                    limit: int=100,cursor: ObjectPageCursor | None=None,maximum_bytes: int=1048576) -> Outcome[ObjectPage | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+        try:
+            valid=all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (document_id,module_id,record_id))
+        except UnicodeError:valid=False
+        if not valid:return Ok(ObjectReadInvalid(code='selection'))
+        if type(limit) is not int or not 1<=limit<=1000 or type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:
+            return Ok(ObjectReadInvalid(code='limits'))
+        cursor_bytes=None
+        if cursor is not None:
+            if type(cursor) is not ObjectPageCursor:return Ok(ObjectReadInvalid(code='cursor'))
+            if (cursor.document_id,cursor.module_id,cursor.record_id)!=(document_id,module_id,record_id):return Ok(ObjectReadInvalid(code='cursor_selection'))
+            if any(type(v) is not int or not 1<=v<=maximum for v,maximum in ((cursor.type_id,2147483647),(cursor.catalog_revision,2147483647),(cursor.after_id,9223372036854775807))):
+                return Ok(ObjectReadInvalid(code='cursor'))
+            try:
+                if cursor.profile!='truss-python-object-page/0.1' or any(type(v) is not str or not 1<=len(v.encode('utf8'))<=4096 or '\0' in v for v in (cursor.installation_id,cursor.source_epoch,cursor.release_sha256,cursor.definition_pin)):
+                    return Ok(ObjectReadInvalid(code='cursor'))
+                cursor_bytes=json.dumps({'profile':cursor.profile,'installationId':cursor.installation_id,'sourceEpoch':cursor.source_epoch,
+                    'releaseSha256':cursor.release_sha256,'documentId':document_id,'moduleId':module_id,'recordId':record_id,
+                    'typeId':str(cursor.type_id),'definitionPin':cursor.definition_pin,'catalogRevision':str(cursor.catalog_revision),'afterId':str(cursor.after_id)},ensure_ascii=False).encode('utf8')
+            except UnicodeError:return Ok(ObjectReadInvalid(code='cursor'))
+            if len(cursor_bytes)>65536:return Ok(ObjectReadInvalid(code='cursor'))
+        manifest,digest,_=_release()
+        def observe(native_cursor,observed):
+            _pin_cursor(native_cursor)
+            native_cursor.execute('SELECT truss.page_objects(%s,%s,%s,%s,%s,%s,%s,%s)',
+                (document_id,module_id,record_id,limit,maximum_bytes,cursor_bytes,manifest['releaseId'],digest),prepare=False)
+            raw=native_cursor.fetchone()[0]
+            if raw is None:return ObjectNotFound()
+            basis=json.loads(bytes(raw))
+            if basis['profile']!='truss-python-object-page/0.1':raise ValueError('Exact page profile required')
+            continuation=basis['continuation'];following=None
+            if continuation is not None:
+                following=ObjectPageCursor(installation_id=continuation['installationId'],source_epoch=continuation['sourceEpoch'],
+                    release_sha256=continuation['releaseSha256'],document_id=continuation['documentId'],module_id=continuation['moduleId'],record_id=continuation['recordId'],
+                    type_id=int(continuation['typeId']),definition_pin=continuation['definitionPin'],catalog_revision=int(continuation['catalogRevision']),after_id=int(continuation['afterId']))
+            return ObjectPage(objects=tuple(_object_result(json.dumps(value).encode(),manifest,digest).object for value in basis['objects']),
+                catalog_revision=basis['catalogRevision'],continuation=following)
+        result=self._host._run_operation(transaction,observe)
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='cursor'))
+            reason={'0A000':'profile','P1002':'context','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
         return result
 

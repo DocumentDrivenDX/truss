@@ -59,8 +59,8 @@ __all__ += ["CatalogViewRequest", "CatalogViewLimits", "CurrentCatalogSelection"
     "CatalogDefinitionReference", "CatalogDocumentProvenance", "CatalogDefinitionEntry",
     "CatalogView", "CatalogViewAvailable", "CatalogViewUnavailable"]
 
-from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable
-__all__ += ["ScalarObject", "ObjectFound", "ObjectNotFound", "ObjectReadInvalid", "ObjectReadUnavailable"]
+from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
+__all__ += ["ScalarObject", "ObjectFound", "ObjectNotFound", "ObjectReadInvalid", "ObjectReadUnavailable", "ObjectPage", "ObjectPageCursor"]
 
 from ._group_runtime import GroupRuntimeContext
 __all__ += ["GroupRuntimeContext"]

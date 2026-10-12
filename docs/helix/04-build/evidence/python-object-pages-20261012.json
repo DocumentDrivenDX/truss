@@ -1,0 +1,27 @@
+{
+  "scope": "runtime0.12 public live object pages in caller-owned transactions",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "4e1814044a4277060c2a2fd053852f19fdc0afb2e947b19e1bec36095ed63565",
+  "installedTests": {
+    "modules": ["test_object_pages_native", "test_exact_scalar_values_native", "test_read_only_public_native", "test_key_lookup_native", "test_catalog_additions_native"],
+    "passed": 16,
+    "elapsedSeconds": 212.193
+  },
+  "controls": [
+    "committed creates paged through real read-only transactions, using last returned ID and terminal empty continuation",
+    "qualified cursor context, catalog advancement and limits refuse explicitly",
+    "permission revoked after buffering prevents publication",
+    "exact scalar values survive paging; whole-page byte limit refuses without truncation"
+  ],
+  "umfSqlOwner": "13 retained SQL sources reload/export unchanged",
+  "moduleBoundaries": "673 imports passed",
+  "consumerTyping": "4 installed fixtures passed;20 expected negative errors",
+  "review": "Astra Ultra approved plan and implementation; installed promotion checks passed",
+  "limits": [
+    "live pages do not promise a snapshot or cross-page completeness; IDs are not commit order",
+    "unsigned continuation routes reads; current authorization is checked on every call",
+    "rootless scalar objects; full traversal and shared DirectRecord capability remain open",
+    "fresh installation required; migrations and full external interface remain open"
+  ]
+}

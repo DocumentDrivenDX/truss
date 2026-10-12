@@ -12,7 +12,8 @@ catalog metadata and exact accepted-document retrieval. Runtime 0.8 provides pub
 business-key lookup, and runtime 0.9 reports exact-input unchanged registration.
 Runtime 0.10 accepts additional documents while preserving existing definitions.
 Runtime 0.11 adds exact integer, decimal, boolean, timestamp and binary properties.
-Updates/deletes, pages, compiled queries, imports and feed operations remain unfinished.
+Runtime 0.12 adds bounded live object pages.
+Updates/deletes, compiled queries, imports and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -1043,3 +1044,35 @@ canonical padded base64; empty binary is valid. Family mismatches and malformed
 values refuse before object/journal effects. Facets, structured values and broader
 nullability/cardinality remain unfinished. Obtain the updated value/mutation pins
 through the assembly. Fresh installation is required.
+
+### Live object pages (runtime 0.12 candidate)
+
+```python
+result = assembly.page_objects_in_transaction(
+    transaction, document_id="model", module_id="orders", record_id="Order",
+    limit=100, cursor=previous_page.continuation if previous_page else None,
+)
+```
+
+An `ObjectPage` contains complete `ScalarObject` values, the observed catalog
+revision and `continuation` (`ObjectPageCursor` or `None`). Authorized empty
+types return a terminal empty page. Records use ascending native ID order,
+continuing after the last returned record. Read-only caller transactions work.
+
+The cursor binds the qualified selection, installation, source epoch, release,
+type/definition pin and catalog revision. A stale binding returns
+`ObjectReadUnavailable(reason="context")`. Malformed/wrong-selection cursors
+return `ObjectReadInvalid`. The cursor is unsigned routing data; editing a valid
+position does not grant access. Current permissions are always checked. Role
+revocation may return a native permission failure when function EXECUTE is also
+removed. A page whose buffered observation loses authority is not published.
+
+Limits are 1..1000 records and 1..16MiB for the complete encoded page, including
+metadata and continuation; cursors are bounded to 64KiB. Oversized pages return
+unavailable/resource, without truncating values or returning a partial page.
+Reduce the page size explicitly to fit individual large records.
+
+These are live reads. Separate pages do not share a frozen data snapshot, and
+native ID order does not establish commit order or exactly-once enumeration.
+Full DirectRecord/relationship/traversal and compiled-query profiles remain
+unfinished. This candidate requires fresh installation.
