@@ -1,0 +1,29 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/security-graph-source-lowering.test.ts:
+(pass) candidate association lowering carries local source validity and same-row field test [0.60ms]
+(pass) copied source or source metadata accessor cannot enter lowering [0.30ms]
+
+tests/security-graph-source.test.ts:
+(pass) opaque edges explicitly omit association record and property fields [0.17ms]
+(pass) source issuance survives caller mutation and refuses copied source [0.07ms]
+(pass) metadata accessors never execute [0.03ms]
+(pass) custom collection iterators never execute [0.02ms]
+(pass) native metadata identifiers retain exact domain limits [0.10ms]
+(pass) unsupported domains, conflicting aliases and hidden metadata refuse [0.15ms]
+(pass) sparse or excessive candidate fields refuse [0.15ms]
+(pass) array proxy cannot grow captured length or invoke a length getter [0.10ms]
+(pass) endpoint keys refuse unissued sources and malformed exact namespace metadata [0.21ms]
+(pass) endpoint validity checks original typed object existence and live record metadata [0.06ms]
+(pass) endpoint key metadata is captured without accessor execution [0.03ms]
+
+tests/security-resource-parameters.test.ts:
+(pass) nonkey resource ABAC requires explicit original field parameter layout [0.36ms]
+(pass) resource field slots follow a separately declared row discriminator [0.07ms]
+(pass) selected resource layouts reject null and malformed native mapping [0.12ms]
+(pass) resource argument order is explicit and cannot be inferred from field mapping order [0.09ms]
+
+ 17 pass
+ 0 fail
+ 67 expect() calls
+Ran 17 tests across 3 files. [458.00ms]

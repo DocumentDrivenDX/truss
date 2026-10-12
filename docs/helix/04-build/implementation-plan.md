@@ -6216,3 +6216,19 @@ Trace shared CONTRACT-063/STP-056 B01/B04/B08/B12/B15 and US-056 AC1/AC5/AC6/AC1
 prerequisites. Complete compiler-owned row/codec/mapping correspondence, private
 fact privacy, authority cut and final publication remain required. No original
 backend case is promoted; all132 remain required and the full goal stays active.
+
+
+### Selected resource argument layout validation — 2026-10-12
+
+The candidate lowerer now refuses null resourceFieldParameters rather than
+treating null as omission, and validates the native column identifier for each
+selected nonkey argument. Explicit ordered arguments remain independent of field
+mapping order. Tests cover a field-free literal policy with null layout, empty/
+NUL/overlong columns, duplicate selected mappings and a two-field order reversal.
+
+All17 related tests and strict security-source type checking pass.
+`evidence/security-resource-layout-validation-20261012/receipt.json` retains
+source preimages and logs. Prior native/browser observations retain their earlier
+source qualifications; they are not refreshed by these declaration controls.
+No original-row/native authority or backend case is admitted. Trace shared
+CONTRACT-063/STP-056 B08/B12/B15 prerequisites; the full132-case goal stays active.

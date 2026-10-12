@@ -88,12 +88,13 @@ export function lowerSecurityRowPredicate(input: {
   };
   const resourceSelection = selections.get(ref(resource.type));
   if (resourceSelection ? input.resourceDiscriminatorParameter !== resource.keyFields.length + 1 : input.resourceDiscriminatorParameter !== undefined) return refuse();
-  const resourceFields = input.resourceFieldParameters ?? [];
+  const resourceFields = input.resourceFieldParameters === undefined ? [] : input.resourceFieldParameters;
   if (!Array.isArray(resourceFields) || resourceFields.length > 64) return refuse();
   const resourcePositions = new Map<string, number>();
   for (const [index, field] of resourceFields.entries()) {
     const identity = ref(field);
     if (resourcePositions.has(identity) || resource.keyFields.some(f => ref(f.ref) === identity) || resource.fields.filter(f => ref(f.ref) === identity).length !== 1) return refuse();
+    identifier(resource.fields.find(f => ref(f.ref) === identity)!.column);
     resourcePositions.set(identity, resource.keyFields.length + (resourceSelection ? 1 : 0) + index + 1);
   }
   const column = (t: SecurityPredicateType, r: unknown) => identifier(t.fields.find(f => ref(f.ref) === ref(r))?.column ?? refuse());
