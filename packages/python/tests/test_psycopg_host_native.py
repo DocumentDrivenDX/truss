@@ -365,3 +365,21 @@ class PsycopgHostNativeTests(unittest.TestCase):
                 self.assertEqual(self.connection.execute('TABLE timeout_prior').fetchall(), [('keep',)])
                 self.assertEqual(self.connection.execute("SELECT setting FROM pg_settings WHERE name='statement_timeout'").fetchone(), (str(timeout),))
                 self.connection.rollback()
+
+    def test_copied_host_cannot_borrow_attachment_or_invalidate_original_handles(self):
+        import copy
+        from unittest.mock import patch
+        t=self.begin();cloned=copy.copy(self.host);called=[]
+        with patch.object(cloned,'_cursor',side_effect=AssertionError('copied host must not submit SQL')) as cursor:
+            result=cloned._run_operation(t,lambda c,o:called.append(True))
+            self.assertIsInstance(result,Error);self.assertEqual(result.error.code,'invalid_transaction')
+            cursor.assert_not_called();self.assertEqual(called,[])
+        self.assertFalse(cloned.detach())
+        self.assertEqual(self.scalar(t,'SELECT 17::pg_catalog.text'),Ok('17'))
+
+    def test_detached_original_host_preserves_unusable_outcome(self):
+        t=self.begin();called=[]
+        self.assertTrue(self.host.detach())
+        result=self.host._run_operation(t,lambda c,o:called.append(True))
+        self.assertIsInstance(result,Error);self.assertEqual(result.error.code,'transaction_unusable')
+        self.assertEqual(called,[])

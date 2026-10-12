@@ -1,0 +1,68 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-host-attachment.py": "8b84e014127e3d0f0cc811629880bb7ccdc2501237284cb775195eb7ad07beea",
+    "packages/python/src/truss/psycopg_host.py": "1f7902e88a452830d42d835439bc03c039dbc1567209a033cdb2cfa1c7d35c7e",
+    "scripts/security_owned_receiver.py": "3d014f6d3210af47879a6fc6aa7f40b6af5c6f75d307415d51a17e209966ee37",
+    "packages/python/src/truss/execution.py": "abec20686d182fe66c1744dc1a5e25fcef53ae58bb242a4eb1632274d48aeffd",
+    "packages/python/tests/test_psycopg_host_native.py": "6b08fd001a6f41c81104226431c45dddc4deb7f90c4c36787a02324c48b9e4c1",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "56718c41a7ed92e3e9e8da844b030d469dd8a1542ab2deb55eeb5fc637b8a3a2"
+  },
+  "queries": [
+    {
+      "id": "copied_host_cannot_borrow_original_attachment",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "31cef8c38dd2c86a6af298053120250c6d4d4502d1b98ac4961b5e9ad941a50d",
+      "model": null
+    },
+    {
+      "id": "copied_handle_cannot_borrow_original_registration",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "bcb440d157414291fe3b785b0dfc1cfabc213171f0deffbb6631edec436775b8",
+      "model": null
+    },
+    {
+      "id": "copied_host_detach_preserves_original_handle",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "2f16102393fa9c3a66b0fdfbc5a19c955c90d205cd3f084b7c2b823de80180fc",
+      "model": null
+    },
+    {
+      "id": "metadata_only_host_check_admits_copy",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "35b2640abc45737ba936d87d7552117901831d980aa74401f6939799fae537ea",
+      "model": "[claimed_host = 1,\n registered_host = 0,\n allowed = True,\n metadata_matches = True]"
+    },
+    {
+      "id": "metadata_only_handle_check_admits_copy",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "9a0fa337143fc5855544e0d4fbbd7787990f8a128b621371103df86ffb9fe255",
+      "model": "[claimed_handle = 1,\n registered_handle = 0,\n allowed = True,\n metadata_matches = True]"
+    },
+    {
+      "id": "original_object_identity_does_not_authenticate_subject",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "5789ec6fadc939c22bd61cae1002ee171ae2a18032a3949a827a84ad7bda3e1d",
+      "model": "[registered_handle = 0,\n claimed_handle = 0,\n authenticated = False,\n allowed = True,\n metadata_matches = True,\n registered_host = 0,\n claimed_host = 0]"
+    }
+  ],
+  "scope": "Abstract registered host/handle identity and detach guard. Metadata equality cannot replace original object registration. An unrelated detach preserves original usability. Original identity does not establish authenticated subject authority.",
+  "limitations": [
+    "Faithful registry/object identity and lease exclusion are premises; no Python weak-reference/native driver/thread refinement proof",
+    "Trusted host process and private registry are assumptions, not protection against arbitrary same-process mutation",
+    "No caller/issuer authentication, credential/channel/source/lifetime closure or admitted protected backend"
+  ]
+}

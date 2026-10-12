@@ -1584,3 +1584,23 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 self.assertIsNone(host._custody.pending);self.assertIsNone(self.host._custody.pending)
             finally:self.connection.execute('ROLLBACK')
         self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_owned_receiver_copied_executor_handle_refuses_original_scope_borrowing(self):
+        from truss.execution import TransactionHandle
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                receiver=self.owned_receiver(host,t,executor_t)
+                scope=receiver._OwnedDecisionReceiver__scope
+                copied=TransactionHandle(executor_t._issuer,executor_t._key,executor_t.isolation,executor_t.access_mode)
+                receiver._OwnedDecisionReceiver__scope=(*scope[:3],copied,*scope[4:])
+                result=receiver.dispatch(b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read"}')
+                self.assertIsInstance(result,Error)
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+                # Original application scope remains usable; metadata copying
+                # cannot register the substitute handle or consume its authority.
+                receiver._OwnedDecisionReceiver__scope=scope
+                original_result=receiver.dispatch(b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read"}')
+                self.assertIsInstance(original_result,Ok);self.assertEqual(original_result.value['decision'],'permit')
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)

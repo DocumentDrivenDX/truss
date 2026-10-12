@@ -3192,3 +3192,38 @@ route/credential/caller/issuer/mapping/target authentication and C04–C07 sourc
 publication/recovery/full qualification remain open. No public endpoint, general
 resource selector or backend binding is promoted; full goal active at26/132 with
 106 unbound cases.
+
+### Original host attachment and receiver handle ownership — 2026-10-11
+
+Psycopg operation entry now compares the original physical-connection registry
+custody and attached weak reference to this exact host while its connection lease
+is retained, before cursor/SQL or semantic reservation. A shallow host copy cannot
+reuse the original issuer/transaction registry as an attached host. Copied-host
+detach refuses before invalidating shared original handles. Existing original
+closed/quarantined host outcome ordering remains transaction_unusable; no new
+public liveness/capability flag is introduced. Arbitrary same-process registry
+mutation remains outside the trusted embedding-host contract.
+
+Native controls prove copied host operation submits no cursor/SQL/callback,
+copied detach leaves the original handle usable, original disposed outcome is
+preserved, and a receiver with a metadata-identical newly constructed executor
+handle refuses while the original receiver scope can still produce its decision.
+The actual host registry's exact issued-handle instance check remains authoritative;
+the receiver does not copy it into an unguarded preflight claim. Final
+`evidence/python-psycopg-epoch-cut/4eeac22c-ea91-4afd-bfc8-1043495ac4ec`
+passes190 methods, boundaries,144 current/preimage sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups. Earlier645dcb61 passes189 before
+the explicit disposed-outcome compatibility control and reordered check.
+
+Formal `evidence/security-host-attachment-formal/8aff015a-174f-4e98-93de-f5db10cd812f`
+retains six exact source inputs and six Z3 4.15.4 SMT-LIB/fresh-context replays,
+three UNSAT/three SAT. Matching metadata cannot replace registered object identity;
+an unrelated detach preserves original usability. Original object identity does
+not authenticate a subject. Registry fidelity and lease exclusion are premises,
+not Python weak-reference/thread/native driver refinement proofs. Trace ADR-008,
+CONTRACT-063/STP-056 B12/L03/L11 and TD-056 C03 prerequisites. Original caller/
+issuer/subject/mapping/target credentials, all receiver routes and source/current-
+authority/publication/recovery closure remain required. No backend binding or
+C01/C02 authentication qualification; full goal active at26/132 with106 unbound
+cases.
