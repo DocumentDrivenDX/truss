@@ -66,6 +66,8 @@ and timeout. Installer controls also confirm corrupted cache refusal and a
 consistent binary installation. The .0 checkpoint excluded Linux whitespace socket paths due to an observed
 upstream quoting bug. Packaging version18.6.1 fixes that bug; current lifecycle
 and CLI checks restore short paths with spaces and apostrophes on all platforms.
+[Patch-release CI evidence](../04-build/evidence/design-audit/pg18-packaging-patch-ci-20261011/summary.json)
+records all six installed groups passing against18.6.1 at347ac2be.
 Broader corpus qualification is an explicit separate lane. The historical Truss
 PostgreSQL recipe/build commands remain retired; native compilation belongs to
 DocumentDrivenDX/pgserver.

@@ -95,7 +95,9 @@ Public release `pg18.6-pgv0.8.6-r2` is published. Packaging version18.6.1
 fixes quoting/URI handling for short Unix socket paths containing spaces and
 apostrophes. PostgreSQL remains18.6. The macOS arm64 CPython3.11 wheel SHA256 is
 `fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649`.
-Earlier .0 receipts retain their original wheel digests. The shared installer
+[Patch-release CI](https://github.com/DocumentDrivenDX/truss/actions/runs/38189066679)
+passes all six focused groups, including short whitespace/apostrophe lifecycle
+and CLI paths. Earlier .0 receipts retain their original wheel digests. The shared installer
 verifies release checksums and requires binary wheels on every setup.
 Do not install upstream `pgserver` alongside
 `pgserver-pg18`, and do not upgrade retained PostgreSQL17 data in place.
