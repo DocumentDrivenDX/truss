@@ -1,0 +1,74 @@
+{
+  "version": "180006",
+  "observations": [
+    {
+      "id": "original-role",
+      "observed": [
+        "abac_reader",
+        "abac_reader",
+        60031
+      ]
+    },
+    {
+      "id": "ordinary-rows",
+      "expected": [
+        [
+          "yes"
+        ]
+      ],
+      "observed": [
+        [
+          "yes"
+        ]
+      ]
+    },
+    {
+      "id": "ordinary-count",
+      "expected": [
+        [
+          1
+        ]
+      ],
+      "observed": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "id": "denied-key",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "id": "forged-predicate-is-not-resource-authority",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "id": "forged-outer-argument-does-not-bypass-rls",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "id": "new-statement-observes-attribute-change",
+      "expected": [],
+      "observed": []
+    },
+    {
+      "id": "excluded-admin-bypass",
+      "expected": [
+        "no",
+        "unknown",
+        "yes"
+      ],
+      "observed": [
+        "no",
+        "unknown",
+        "yes"
+      ]
+    }
+  ],
+  "scope": "Actual native ordinary-role RLS field-argument route in synthetic raw fixture; direct predicate result is deliberately shown forgeable and not authority. Not compiler-owned source/binding admission or complete lifecycle/privacy profile.",
+  "cleanup": "LocalPostgres context exited; no independent stop receipt"
+}

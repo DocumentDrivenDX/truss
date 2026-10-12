@@ -6192,3 +6192,27 @@ installation and final publication remain required for raw and graph homes.
 Trace shared CONTRACT-063/STP-056 B01/B08/B12/B15 and US-056 AC1/AC6/AC10
 prerequisites. No original backend case is promoted; all132 remain required and
 the full goal stays active.
+
+
+### Actual resource-row RLS argument route — 2026-10-12
+
+PostgreSQL18.6 now exercises the generated resource-field predicate through an
+actual ordinary abac_reader connection and RLS USING eligible(id,active). Eight
+observations retain original session/current user and PID, exact eligible list/
+count, denied-key lookup, attribute change and excluded administrator bypass.
+A direct eligible('no',true) call deliberately returns true; the same forged
+condition cannot retrieve the denied row because the row policy supplies its
+stored active=false value. Predicate results are not execution credentials.
+
+Z3 4.15.4 executes a conditional three-valued row-binding implication (UNSAT)
+and two widening witnesses for using asserted arguments alone (SAT). Formulas,
+source pins and native code/results are retained in
+`evidence/security-resource-rls-route-20261012/receipt.json`. The model assumes
+actual-row policy conjunction; it does not formally refine the TS/SQL or prove
+source/authentication/lifetime. The native fixture uses its local connection
+profile, not production authentication or a complete Truss business surface.
+
+Trace shared CONTRACT-063/STP-056 B01/B04/B08/B12/B15 and US-056 AC1/AC5/AC6/AC10
+prerequisites. Complete compiler-owned row/codec/mapping correspondence, private
+fact privacy, authority cut and final publication remain required. No original
+backend case is promoted; all132 remain required and the full goal stays active.
