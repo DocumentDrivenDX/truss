@@ -1234,3 +1234,39 @@ AC8/AC9 prerequisites. Role/grant lifetime, ordinary grants, complete routine
 closure, trusted caller/executor/issuer/mapping/target authentication and protected
 publication remain open. No new backend binding; full goal stays active at26/132,
 106 unbound required cases.
+
+### Delegated caller private-fact privilege exclusion — 2026-10-11
+
+Owned profile0.4 caller admission now inspects all SET-reachable original caller
+identities for superuser/CREATEROLE/BYPASSRLS, EXECUTE on any SECURITY DEFINER
+routine, and table or column privileges on the original provider relation OIDs.
+The table probe includes SELECT/INSERT/UPDATE/DELETE/TRUNCATE/REFERENCES/TRIGGER/
+MAINTAIN; the column probe includes SELECT/INSERT/UPDATE/REFERENCES. The native
+OID-based definer probe intentionally does not depend on current schema USAGE.
+This is conservative private-service snapshot exclusion, not complete callable
+closure, grant/role lifetime or authorization of the executor.
+
+Three controls establish actual column-only and full-table private reads, and
+EXECUTE reachability to a definer without schema USAGE, then refuse before executor
+evaluation. Final `evidence/python-psycopg-epoch-cut/37e19ef3-7536-45c8-bfc4-2c86f63b7e8d`
+passes168 native methods on PostgreSQL18.6/psycopg3.3.6 binary, module boundaries,
+141 current/preimage source pins,363 original UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups. Earlier5e0d4404 ran zero tests due
+to shared-memory-ID exhaustion; bdba4985 ran168 with one incorrect name-resolution
+probe denied by schema USAGE. The corrected probe captures the routine OID as the
+installer. Then71a6ff76 ran168 with one existing delegated-permit refusal; the final
+unchanged-source rerun passes. That intermittent refusal remains unexplained and
+retained, not evidence of general availability or deterministic load performance.
+No refusal or resource bound was weakened to obtain the passing run.
+
+Formal `evidence/security-private-fact-privilege-formal/9611d128-bf44-495a-95ed-62ca5a7d64df`
+retains five source inputs and five Z3 4.15.4 SMT-LIB queries/fresh-context replays:
+three UNSAT exclusion results and two SAT controls, including a table-only filter
+admitting column-only access. Initial38563687 retains the pre-correction test input.
+This is an abstract conditional model, not native privilege/role/SQL refinement.
+Trace CONTRACT-063/STP-056 B04/B05/B10/B11 and US-056 AC5/AC8/AC9 prerequisites.
+Complete routine/alternate-source/diagnostic closure, grant/role lifetime, original
+caller/issuer/mapping/target credentials and protected publication remain open.
+No backend binding is promoted; full goal stays active at26/132 with106 unbound
+required cases. Diagnose the retained intermittent refusal before any availability
+or complete protected-service qualification.

@@ -1,0 +1,89 @@
+setUpClass (test_psycopg_epoch_cut_native.PsycopgEpochCutNativeTests) ... ERROR
+setUpClass (test_psycopg_host_native.PsycopgHostNativeTests) ... ERROR
+setUpClass (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests) ... ERROR
+setUpClass (test_psycopg_graph_projection_native.PsycopgGraphProjectionNativeTests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_psycopg_epoch_cut_native.PsycopgEpochCutNativeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py", line 16, in setUpClass
+    host_tests.PsycopgHostNativeTests.setUpClass.__func__(cls)
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+    cls.run_pg('initdb', '-D', str(cls.data), '-U', 'postgres', '--auth=trust', '--encoding=UTF8')
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 42, in run_pg
+    if result.returncode: raise RuntimeError(result.stderr[-1000:])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: 2026-10-11 20:12:26.020 EDT [64993] FATAL:  could not create shared memory segment: No space left on device
+2026-10-11 20:12:26.020 EDT [64993] DETAIL:  Failed system call was shmget(key=74569399, size=56, 03600).
+2026-10-11 20:12:26.020 EDT [64993] HINT:  This error does *not* mean that you have run out of disk space.  It occurs either if all available shared memory IDs have been taken, in which case you need to raise the SHMMNI parameter in your kernel, or because the system's overall limit for shared memory has been reached.
+	The PostgreSQL documentation contains more information about shared memory configuration.
+child process exited with exit code 1
+initdb: removing data directory "/private/tmp/truss-psy-cdbedee1/data"
+
+
+======================================================================
+ERROR: setUpClass (test_psycopg_host_native.PsycopgHostNativeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+    cls.run_pg('initdb', '-D', str(cls.data), '-U', 'postgres', '--auth=trust', '--encoding=UTF8')
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 42, in run_pg
+    if result.returncode: raise RuntimeError(result.stderr[-1000:])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: 2026-10-11 20:12:27.402 EDT [65108] FATAL:  could not create shared memory segment: No space left on device
+2026-10-11 20:12:27.402 EDT [65108] DETAIL:  Failed system call was shmget(key=74570489, size=56, 03600).
+2026-10-11 20:12:27.402 EDT [65108] HINT:  This error does *not* mean that you have run out of disk space.  It occurs either if all available shared memory IDs have been taken, in which case you need to raise the SHMMNI parameter in your kernel, or because the system's overall limit for shared memory has been reached.
+	The PostgreSQL documentation contains more information about shared memory configuration.
+child process exited with exit code 1
+initdb: removing data directory "/private/tmp/truss-psy-1dj90vh7/data"
+
+
+======================================================================
+ERROR: setUpClass (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py", line 17, in setUpClass
+    epoch_tests.PsycopgEpochCutNativeTests.setUpClass.__func__(cls)
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py", line 16, in setUpClass
+    host_tests.PsycopgHostNativeTests.setUpClass.__func__(cls)
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+    cls.run_pg('initdb', '-D', str(cls.data), '-U', 'postgres', '--auth=trust', '--encoding=UTF8')
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 42, in run_pg
+    if result.returncode: raise RuntimeError(result.stderr[-1000:])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: 2026-10-11 20:12:28.479 EDT [65164] FATAL:  could not create shared memory segment: No space left on device
+2026-10-11 20:12:28.479 EDT [65164] DETAIL:  Failed system call was shmget(key=74571486, size=56, 03600).
+2026-10-11 20:12:28.479 EDT [65164] HINT:  This error does *not* mean that you have run out of disk space.  It occurs either if all available shared memory IDs have been taken, in which case you need to raise the SHMMNI parameter in your kernel, or because the system's overall limit for shared memory has been reached.
+	The PostgreSQL documentation contains more information about shared memory configuration.
+child process exited with exit code 1
+initdb: removing data directory "/private/tmp/truss-psy-jdx60pdg/data"
+
+
+======================================================================
+ERROR: setUpClass (test_psycopg_graph_projection_native.PsycopgGraphProjectionNativeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_graph_projection_native.py", line 14, in setUpClass
+    fact_tests.PsycopgFactCutNativeTests.setUpClass.__func__(cls)
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py", line 17, in setUpClass
+    epoch_tests.PsycopgEpochCutNativeTests.setUpClass.__func__(cls)
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py", line 16, in setUpClass
+    host_tests.PsycopgHostNativeTests.setUpClass.__func__(cls)
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+    cls.run_pg('initdb', '-D', str(cls.data), '-U', 'postgres', '--auth=trust', '--encoding=UTF8')
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 42, in run_pg
+    if result.returncode: raise RuntimeError(result.stderr[-1000:])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: 2026-10-11 20:12:29.545 EDT [65223] FATAL:  could not create shared memory segment: No space left on device
+2026-10-11 20:12:29.545 EDT [65223] DETAIL:  Failed system call was shmget(key=74572541, size=56, 03600).
+2026-10-11 20:12:29.545 EDT [65223] HINT:  This error does *not* mean that you have run out of disk space.  It occurs either if all available shared memory IDs have been taken, in which case you need to raise the SHMMNI parameter in your kernel, or because the system's overall limit for shared memory has been reached.
+	The PostgreSQL documentation contains more information about shared memory configuration.
+child process exited with exit code 1
+initdb: removing data directory "/private/tmp/truss-psy-74w1rklm/data"
+
+
+----------------------------------------------------------------------
+Ran 0 tests in 4.905s
+
+FAILED (errors=4)

@@ -1,0 +1,59 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-private-fact-privilege.py": "3e9e597b1592ef13296285dcf46ec42eb4d56547b8f78aad2e59ea36dc323c93",
+    "scripts/security_owned_read.py": "2faf7b22167f4fabe94bdb7aab2b13f00666489525cca2b25f3e9a67bc517915",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "31000ae911067480d8b4ad40f073e580ab780866172d522ec70c1de3252fec29",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "dd9ba78a0832435e3c5d7b029322ffb5930784e90f7245b24175ca071f38f238",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "3a5ee29bb1e2c80d24caafcdcf825a6a91f1b7d690222f4151185ce60398da97"
+  },
+  "queries": [
+    {
+      "id": "private_table_privilege_excludes_callback",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "6050d2bfced2598ebb7303b8d57534122061b2852752565851bfc4065a9ea6f3",
+      "model": null
+    },
+    {
+      "id": "private_column_privilege_excludes_callback",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "d91d7baa259dc0facd4014d0b6d038bbf662b9e8dc37e98ec8b838b9bea53ad5",
+      "model": null
+    },
+    {
+      "id": "reachable_definer_excludes_callback",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "e32ae181a189e50772e7c687773ea129eba05d01654db6411e5e7a6dbcb3058b",
+      "model": null
+    },
+    {
+      "id": "table_only_filter_misses_column_privilege",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "b737b34d42235b7254512eceab28b8a1505801ca27e8889c6a92b54385ca3ad3",
+      "model": "[callback = True,\n table_privilege = False,\n column_privilege = True]"
+    },
+    {
+      "id": "excluded_privileges_absent_allows_callback_in_this_dimension",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "c4ca79957ebea2788b8f2542fef2f8b5d21ab272f04d4cd4f252e6716872fdc1",
+      "model": "[callback = True,\n definer_execute = False,\n privileged_role = False,\n table_privilege = False,\n column_privilege = False]"
+    }
+  ],
+  "scope": "Abstract active table/column/definer/administration privilege exclusion. A table-only filter admits a column-only bypass. Absence of these excluded paths is compatible with callback in this dimension.",
+  "limitations": [
+    "No native privilege-function, role-path, SQL, callable closure or host refinement proof",
+    "These checks are snapshots and do not prove role/grant/routine lifetime",
+    "No original caller/issuer/mapping authentication, complete private-fact isolation or protected backend admission"
+  ]
+}
