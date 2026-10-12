@@ -393,3 +393,53 @@ Protected procedure-only canonical writes do not implicitly withdraw advertised 
 For a declared direct SQL result, specify whether it returns physical storage cells or complete logical values. Raw physical-cell access carries only its explicit storage/disclosure guarantee; it cannot claim the Truss decoder's whole-record, exact token or three-state presence guarantees without the corresponding complete registered projection and validation procedure. Compiled SQL additionally executes every original Weft prerequisite and publication obligation through CONTRACT-007; independent SQL clients cannot inherit those guarantees from a view name or matching query text. All exposed surfaces still require their own exact current-policy behavior, including cross-module relationships and retained historical owner unions.
 
 Activation compares the complete original advertised surface inventory with actual native privileges and definitions under the installation exclusion. Missing surfaces, broader unexpected access, stale role interpretation or incomplete owner provenance prevents readiness for the affected profile. Preserve the prior admitted profile on confirmed rollback; unknown administrative settlement retains original recovery custody. The 46-store security worklist supplies source inventory, not permission to expose all stores and not proof that any SQL read surface is implemented.
+
+
+## Protected session-person fresh-catalog profile
+
+`truss-protected-session-fresh-catalog/0.1-candidate` is a separately selected
+policy for the first protected Python catalog workflow. Its actor is the native
+session person A. It requires the native role setting to be exactly lowercase
+`none`; every admitted SET ROLE setting is refused without retry. The runtime
+owner remains a separate non-login, non-superuser identity. No request argument
+can choose the actor, registrar role, owner or authority profile.
+
+The installed registrar role explicitly grants permission to define every
+module in the selected fresh catalog. Generic client/schema USAGE does not
+grant that permission. Resolve the live session identity and OID, require
+ordinary role attributes, exclude effective runtime-owner and owner-admin
+paths, and check registrar membership before effects and again before
+publication. Bind the exact facade signature, body, grants and dependencies.
+Privileged administrators must quiesce runtime operations before role or
+metadata changes and reinstall/requalify the affected profile.
+
+This profile authorizes A independently of an intervening definer B. An
+outsider A cannot borrow B's registrar permission through a wrapper. An
+already-entitled A may use such a wrapper; all effects and disclosure remain
+authorized and attributed to A. This policy makes no immediate-caller, call-chain
+or request-intent provenance claim. Trusted SDK preparation and original
+input/attempt custody remain separate requirements.
+
+For this profile only, the prior pre-definer capture and blanket wrapper-refusal
+rules are replaced by session-person authorization. Existing invoker and PA02
+profiles retain those rules. Existing context0.4 and administrator-only bodies
+are incompatible with the new profile and must not be placed beneath a thin
+definer wrapper. Protected admission, collection, stage/report/feed/head and
+publication must be versioned together, retaining separate actor/session and
+runtime-owner identities. The unconditional commit barrier remains until the
+connected protected implementation and installed correspondence pass.
+
+Required native controls: ordinary authorized direct success; outsider direct
+refusal; outsider through an authorized definer refusal; entitled A through that
+wrapper retains A; non-`none` role settings refuse; revoked registrar membership
+refuses; owner/private-helper escalation refuses; late acceptance failure
+preserves caller work. This is the selected implementation direction, not a
+claim that public acceptance is already available.
+
+The trusted semantic producer is the pinned SDK path from
+`_require_original_preparation` through the closed source inventory and
+`encode_original_catalog_candidate` to exact dispatch-byte custody. Native
+report hashes establish consistency of submitted assertions; they do not
+independently establish assertion completeness for arbitrary SQL submissions.
+The protected SQL facade therefore does not claim the SDK's semantic producer
+qualification for direct SQL using the same credentials.
