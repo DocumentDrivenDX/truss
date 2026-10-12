@@ -69,19 +69,22 @@ def main():
                                          'effectiveRoleOid': roles[1]}}).encode()
         host = PsycopgHost(connection)
         called = []
+        entered = []
         try:
             connection.execute('BEGIN')
             adopted = host.adopt_transaction()
             assert type(adopted) is Ok
             def check(cursor, observed):
+                entered.append(True)
                 _verify_native_scram_profile_caller(cursor, profile)
                 called.append(True)
                 return 'original-native-authentication-checked'
             result = host._run_operation(adopted.value, check)
             assert (type(result) is Ok) == expected
             assert (type(result) is Error) == (not expected)
+            assert entered == [True]
             assert called == ([True] if expected else [])
-            observations.append({'id': label, 'passed': expected, 'callbackReached': bool(called),
+            observations.append({'id': label, 'passed': expected, 'gateEntered': True, 'callbackReached': bool(called),
                                  'code': None if expected else result.error.code})
         finally:
             connection.execute('ROLLBACK')
