@@ -2,12 +2,13 @@
 import json
 from dataclasses import asdict
 from .preparation import _require_original_preparation
-from ._acceptance_json import decode_row_operation_json, decode_acceptance_json
+from ._acceptance_json import decode_acceptance_json
 from ._catalog_support import evaluate_catalog_support
 from ._catalog_owner_evidence import require_catalog_owner_evidence
 from ._catalog_report_semantics import (canonical_numeric_free,
     compose_original_catalog_report_semantics)
 from ._canonical_wire_tree import prepare_canonical_wire_tree
+from ._owner_evidence_json import decode_owner_evidence_json
 
 INTERFACE='truss-catalog-source-candidate/0.1'
 SOURCE_FIELDS=('umf','diagnostics','documentInterpretations','losses','extensions',
@@ -25,7 +26,7 @@ def encode_original_catalog_candidate(prepared):
     hex_length=2*(len(prepared.declarations_bytes)+len(prepared.report_evidence_bytes))
     if hex_length>1048576:raise ValueError('Catalog candidate capacity exceeded')
     support=evaluate_catalog_support(prepared)
-    evidence=decode_row_operation_json(prepared.report_evidence_bytes)
+    evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
     require_catalog_owner_evidence(prepared,evidence)
     semantics=compose_original_catalog_report_semantics(prepared,support)
     if semantics['state']!='source_fields_ready':

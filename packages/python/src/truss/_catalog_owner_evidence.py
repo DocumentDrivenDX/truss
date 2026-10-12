@@ -3,11 +3,12 @@ import base64
 import hashlib
 import json
 from .preparation import _require_original_preparation
+from ._owner_evidence_json import decode_owner_evidence_json, same_owner_evidence
 
 
 def require_catalog_owner_evidence(prepared, evidence):
     _require_original_preparation(prepared)
-    if type(evidence) is not dict or evidence!=json.loads(prepared.report_evidence_bytes):
+    if type(evidence) is not dict or not same_owner_evidence(evidence,decode_owner_evidence_json(prepared.report_evidence_bytes)):
         raise ValueError('Original retained preparation report evidence required')
     collection=evidence.get('ownerObservations')
     coverage=evidence.get('observationCoverage')
@@ -64,11 +65,11 @@ def require_catalog_owner_evidence(prepared, evidence):
         raw=base64.b64decode(artifact['bytesBase64'],validate=True)
         if base64.b64encode(raw).decode()!=artifact['bytesBase64'] or hashlib.sha256(raw).hexdigest()!=artifact['sha256']:
             raise ValueError('Original observation bytes required')
-        payload=json.loads(raw)
+        payload=decode_owner_evidence_json(raw)
         expected={'profile':collection[profiles[operation]],'documentId':document,
                   'contentSha256':documents[document],'basis':observed['basis'],
                   'operation':operation,'identity':observed['identity'],'result':observed['result']}
-        if payload!=expected:
+        if not same_owner_evidence(payload,expected):
             raise ValueError('Original document and observation correspondence required')
         document_index=list(documents).index(document)
         if artifact['identity']!=f'truss.owner-declaration-observation/{document_index}/{index}':
