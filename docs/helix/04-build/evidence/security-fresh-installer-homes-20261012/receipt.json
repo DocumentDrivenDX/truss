@@ -1,0 +1,36 @@
+{
+  "tests": 4,
+  "result": "pass",
+  "elapsedSeconds": 29.585,
+  "command": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-installer-homes-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+  "acceptanceTraceability": [
+    {
+      "case": "truss.B05",
+      "covers": "US-056-AC5",
+      "partialAssertion": "Ordinary consumer cannot adopt original installation owner for the candidate homes",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.B11",
+      "covers": "US-056-AC9",
+      "partialAssertion": "Fresh installer refuses third-party default relation and column grants before source publication",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L12",
+      "covers": "US-057-AC8",
+      "partialAssertion": "Failed fresh installation savepoint retains prior caller work and leaves no namespace or newly created installation roles",
+      "caseClosed": false
+    }
+  ],
+  "scope": "Existing production installer with test-only candidate source injection. No released manifest change, security profile activation, migration, full role/source closure, issuer qualification or backend acceptance. Matrix re-audited: 132 required; 106 commands missing (pg-raw16,truss30,delta-raw30,ashlar30).",
+  "sourceSha256": {
+    "packages/python/tests/test_security_public_ontology_native.py": "16efa01beb4f90187c5a3f82241b4365a6c85914c4a6043c02df3e22f433bd38",
+    "packages/python/src/truss/catalog_runtime.py": "4f9cb4a03cb2bbd1680582ffe93dd8b17f5212ead67e44fb963b4679bebbf72a",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "dbb2cd96137d9d6215ddfe4271ba10b77a9327f6950191b662a43b91e6e67fc5",
+    "docs/helix/02-design/contracts/installation-policy-guard-v0.1.proposal.sql": "0e1d881a2eccbcaf3d34ab8c4729a1aa21361c8c64b4ac142d706ee1da1312cf",
+    "docs/helix/02-design/contracts/installation-publication-claim-v0.2.tombstone.proposal.sql": "09515ed389247cea307ca04fc4ef45f90213a7881cd489758e5a1f854ce8e323",
+    "docs/helix/02-design/contracts/installation-publication-capacity-profile-v0.1.proposal.sql": "1ce1e6680dc681134423120e005df9161232e61fe1495495da177b82dbf69474"
+  }
+}

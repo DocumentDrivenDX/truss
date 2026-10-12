@@ -19,6 +19,39 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_fresh_installer_seals_candidate_homes_and_refuses_inherited_acl(self):
+  from unittest.mock import patch
+  from truss import Error
+  import truss.catalog_runtime as runtime
+  contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'
+  sources=[(contracts/name).read_text() for name in ['installation-policy-guard-v0.1.proposal.sql','installation-publication-claim-v0.2.tombstone.proposal.sql','installation-publication-capacity-profile-v0.1.proposal.sql']]
+  manifest,digest,original=runtime._release()
+  self.admin.execute("CREATE TEMP TABLE caller_bootstrap_work(value text);INSERT INTO caller_bootstrap_work VALUES('kept')")
+  observations=[]
+  for mode in ['default-table-grant','direct-column-grant']:
+   if mode=='default-table-grant':self.admin.execute('ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO consumer')
+   extra=sources+(['GRANT SELECT(generation) ON truss.policy_generation_guard TO consumer'] if mode=='direct-column-grant' else [])
+   with patch('truss.catalog_runtime._release',return_value=(manifest,digest,tuple(original)+tuple(extra))):
+    refused=self.assembly.install_in_transaction(self.tx,owner_role='security_bootstrap_owner',registrar_role='security_bootstrap_client')
+   self.assertIsInstance(refused,Error)
+   self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regnamespace('truss')").fetchone()[0])
+   self.assertEqual(self.admin.execute("SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname IN ('security_bootstrap_owner','security_bootstrap_client')").fetchone(),(0,))
+   self.assertEqual(self.admin.execute('TABLE caller_bootstrap_work').fetchall(),[('kept',)])
+   observations.append({'id':'production-installer-refuses-'+mode,'observed':{'namespace':None,'createdRoles':0,'callerWork':'kept'}})
+   if mode=='default-table-grant':self.admin.execute('ALTER DEFAULT PRIVILEGES REVOKE SELECT ON TABLES FROM consumer')
+  # The release source injection is test-only, not an adopted release manifest.
+  with patch('truss.catalog_runtime._release',return_value=(manifest,digest,tuple(original)+tuple(sources))):self.install()
+  homes=['policy_generation_guard','policy_publication_claim','policy_publication_capacity']
+  owners=self.admin.execute("SELECT c.relname,r.rolname FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace JOIN pg_catalog.pg_roles r ON r.oid=c.relowner WHERE n.nspname='truss' AND c.relname=ANY(%s) ORDER BY c.relname",(homes,)).fetchall()
+  self.assertEqual(owners,sorted((home,self.installation.owner_role) for home in homes))
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   for home in homes:
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('TABLE truss.{}').format(psycopg.sql.Identifier(home)))
+    self.assertFalse(ordinary.execute("SELECT pg_catalog.has_any_column_privilege(current_user,%s,'SELECT,INSERT,UPDATE,REFERENCES')",('truss.'+home,)).fetchone()[0])
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('SET ROLE {}').format(psycopg.sql.Identifier(self.installation.owner_role)))
+  observations.append({'id':'production-fresh-installer-seals-proposed-security-homes','observed':owners,'ordinaryRead':'42501','ordinaryColumnPrivileges':False,'ownerAdoption':'42501'})
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.installer.json').write_text(json.dumps({'observations':observations,'scope':'Existing production fresh-install savepoint and privilege sealing primitive with explicit test-only source injection. Original release manifest is unchanged; security homes/profile are not adopted or activated. No complete issuer/source/caller/bootstrap qualification or acceptance-case promotion.'},indent=2)+'\n')
  def test_candidate_security_bootstrap_atomicity_and_owner_isolation(self):
   self.install();self.host.detach();self.admin.commit()
   contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'

@@ -1,0 +1,41 @@
+{
+  "observations": [
+    {
+      "id": "production-installer-refuses-default-table-grant",
+      "observed": {
+        "namespace": null,
+        "createdRoles": 0,
+        "callerWork": "kept"
+      }
+    },
+    {
+      "id": "production-installer-refuses-direct-column-grant",
+      "observed": {
+        "namespace": null,
+        "createdRoles": 0,
+        "callerWork": "kept"
+      }
+    },
+    {
+      "id": "production-fresh-installer-seals-proposed-security-homes",
+      "observed": [
+        [
+          "policy_generation_guard",
+          "truss_owner_5ef496a6637a42ea"
+        ],
+        [
+          "policy_publication_capacity",
+          "truss_owner_5ef496a6637a42ea"
+        ],
+        [
+          "policy_publication_claim",
+          "truss_owner_5ef496a6637a42ea"
+        ]
+      ],
+      "ordinaryRead": "42501",
+      "ordinaryColumnPrivileges": false,
+      "ownerAdoption": "42501"
+    }
+  ],
+  "scope": "Existing production fresh-install savepoint and privilege sealing primitive with explicit test-only source injection. Original release manifest is unchanged; security homes/profile are not adopted or activated. No complete issuer/source/caller/bootstrap qualification or acceptance-case promotion."
+}
