@@ -1,0 +1,9 @@
+Looking in links: https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r1
+Collecting pgserver-pg18==18.6.0
+  File was already downloaded /private/tmp/truss-runtime-bad-cache-20261011/pgserver_pg18-18.6.0-cp311-cp311-macosx_14_0_arm64.whl
+Successfully downloaded pgserver-pg18
+Traceback (most recent call last):
+  File "/private/tmp/truss-pg18-integration-20261011/scripts/install-local-runtime.py", line 24, in <module>
+    if hashlib.sha256(wheel.read_bytes()).hexdigest()!=entries.get(wheel.name):raise RuntimeError('Released wheel checksum mismatch; remove stale or preliminary cache: '+str(wheel))
+                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Released wheel checksum mismatch; remove stale or preliminary cache: /private/tmp/truss-runtime-bad-cache-20261011/pgserver_pg18-18.6.0-cp311-cp311-macosx_14_0_arm64.whl
