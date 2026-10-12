@@ -6,6 +6,7 @@ import {securityIdentityTransportDependencies} from '/Users/erik/.codex/worktree
 import {evaluateSecurityAccess,type SecurityFact,type SecurityFactCut} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/evaluate';
 import {checkSchemaLiteral,type CoreLiteral} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/schema-literals';
 import {encodeCoreKeyTuple,type CoreKeyTupleValue} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/key-tuple';
+import {validateSecurityDisclosure} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/disclosure';
 const model=securityFixture(),transport=securityIdentityTransportDependencies(model.policy,model.resolution);
 const base='docs/helix/04-build/evidence/security-identity-requirements';
 for(const [name,value] of [['policy',model.policy],['resolution',model.resolution],['transport',transport]] as const)
@@ -60,4 +61,5 @@ const resources=groups.get(id(ref('Resource')))!;
 if(resources.length!==1)throw Error('Selected fixture resource required');
 const cut:SecurityFactCut={trusted:true,generation:'owned-identity-fixture',expectedGeneration:'owned-identity-fixture',policyId:model.policy.id,policyRevision:model.policy.revision,ontologyDocumentId:model.resolution.ontology.documentId,ontologyRevision:model.resolution.ontology.revision,subjects:subject,facts:[...groups].filter(([key])=>key!==id(model.resolution.ontology.subject)&&key!==id(ref('Resource'))).flatMap(([,rows])=>rows),coverage,context:[],maxFacts:100,maxSteps:10000};
 const decision=evaluateSecurityAccess(model.policy,model.resolution,cut,{action:'read',output:[ref('salary')]},resources[0]!);
+if(decision.decision==='permit')decision.output=validateSecurityDisclosure({version:'umf.security.disclosure/0.1.0',target:ref('Resource'),fields:[ref('salary')],rows:[decision.output]},model.policy,model.resolution).rows[0]!;
 console.log(JSON.stringify({decision,identities:[...groups.values()].flat().map(f=>({type:f.type,key:f.key}))}));
