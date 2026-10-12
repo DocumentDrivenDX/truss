@@ -31,7 +31,9 @@ class LocalRuntimeTests(unittest.TestCase):
 
     def test_retained_commit_and_exception_cleanup(self):
         with tempfile.TemporaryDirectory(prefix='truss-python-runtime-') as parent:
-            directory = Path(parent) / 'retained data'
+            # Released Linux pgserver leaves short socket paths unquoted;
+            # preserve Mac whitespace coverage and qualify worker-style paths on Linux.
+            directory = Path(parent) / ('retained data' if sys.platform == 'darwin' else 'retained-data')
             runtime = LocalPostgres(directory)
             with self.assertRaisesRegex(ValueError, 'caller failure'):
                 with runtime:
