@@ -5932,3 +5932,28 @@ US-057 AC8 prerequisites. Unknown opaque-extension refusal does not implement
 or qualify the shared ontology security vocabulary, advanced policy compilation,
 existing-profile migration rollback or business enforcement. No full backend case
 is promoted; all132 original acceptance cases remain required and goal active.
+
+
+### Native candidate string literal fidelity — 2026-10-12
+
+The experimental predicate lowerer incorrectly reused nonempty identifier text
+validation for scalar string constants and rejected every valid astral Unicode
+character through its UTF16 surrogate test. Original controls show empty/emoji
+refusal while lambda and quote/backslash constants already lower. The fixed
+scalar path admits empty strings and validates Unicode by UTF8 round-trip fidelity.
+Identifiers retain nonempty checks and now accept valid astral scalars under their
+existing byte limit. Native NUL and lone high/low surrogates still refuse. The
+existing65536 UTF16-unit literal limit is preserved, without a new language ceiling.
+
+`evidence/security-string-predicate-20261012/receipt.json` retains preimage,
+source archive/pins, Bun generator outputs, eight actual PostgreSQL18.6 equality
+controls and real Chromium153.0.8010.12 correspondence. Required TypeScript
+security checking passes. Native LocalPostgres context cleanup completes without
+error; no independent native stop receipt is claimed. Generated SQL is exercised
+under an excluded administrative fixture, not an ordinary policy admission.
+
+Trace shared CONTRACT-062/063 exact original literal/value meaning and STP-056
+B01/B13/B15, US-056 AC2/AC7 prerequisites. Hand-authored logical IR is not compiler
+source custody; native collation/codec/source/current authority and actual ordinary
+API enforcement remain unqualified. Nullable-domain predicate support remains
+refused. No original backend case is promoted; the shared132-case goal stays active.
