@@ -1,0 +1,98 @@
+{
+  "status": "component-passed",
+  "ci": {
+    "conclusion": "success",
+    "headSha": "347ac2be9f8d991674c3d27d3516ff29a03a66f0",
+    "status": "completed",
+    "url": "https://github.com/DocumentDrivenDX/truss/actions/runs/38189066679"
+  },
+  "runtimeReceipt": {
+    "passed": true,
+    "scope": "Focused installed consumer, supported-driver adoption, retained restart, isolated lifecycle, shared fresh database/role cleanup, Unix socket/TCP collision, signals and transaction timeout; no full engine or Lakebase acceptance",
+    "runtimeDistribution": "pgserver-pg18",
+    "runtimeVersion": "18.6.1",
+    "postgresql": "18.6",
+    "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "libpq": 180006,
+    "payloads": {
+      "pgserver": {
+        "wheelSha256": "e1b99a6971fa869885398fe8a77d5e718e77572aa6d85b03d5c2f207496ab56c",
+        "members": 1718,
+        "loaded": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/pgserver"
+      },
+      "truss": {
+        "wheelSha256": "8530fe34bca9568fdb93499619ee7ce57c7d8e828438a06d80268b97dcedd53d",
+        "members": 178,
+        "loaded": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss"
+      }
+    },
+    "outcomes": [
+      {
+        "case": "owned-lifecycle",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 9.617314653000001,
+        "log": "owned-lifecycle.log",
+        "logSha256": "0cfa308550bf829e10bc7b217b10e3d3940fcd60946383ed63ab167b44f5f3a1"
+      },
+      {
+        "case": "supported-driver",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 0.4822756110000057,
+        "log": "supported-driver.log",
+        "logSha256": "098f08cf66ca148a9313e786816f20fcd3d23d60dce7d9951dbce913825f2e76"
+      },
+      {
+        "case": "worker-cleanup-collisions",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 2.470172032999997,
+        "log": "worker-cleanup-collisions.log",
+        "logSha256": "d8a0ca2636346da6b4a9a7a761a91883431a919af34fa37a3eceaf394a3fb562"
+      },
+      {
+        "case": "module-interruption",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 1.9232113000000055,
+        "log": "module-interruption.log",
+        "logSha256": "c5a9ff02e6069277f73481881340b48f094a2fb7c645092e15d975548032c754"
+      },
+      {
+        "case": "cli-signals",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 1.3341104819999998,
+        "log": "cli-signals.log",
+        "logSha256": "204436ec2a50871ed94e5154475ac51234e53f4393f3496e730b29f51abf283b"
+      },
+      {
+        "case": "transaction-timeout",
+        "passed": true,
+        "returncode": 0,
+        "elapsedSeconds": 1.0438661419999988,
+        "log": "transaction-timeout.log",
+        "logSha256": "40fbe3b7c8fe4be8e0dfbedf1d741b05b06566722ba66084ccfa4e5534cf9d42"
+      }
+    ],
+    "elapsedSeconds": 17.706229069999992,
+    "sourceSha256": {
+      "scripts/check-local-runtime-smoke.py": "c6464e41579a7ed1df9507f6fca572b8dd627a339cfe137bf76adeace294ab0d",
+      "scripts/native_fixture.py": "8a446601062553f423e0bc93a11225b5c2d3cb887ae0b6b7de091fc0cc6b66d0",
+      "scripts/run-python-test-module.py": "3e8fb4756f3195f5e66c3b2005ef8d283d3aea215e247a627c89de9b0b70d0dc",
+      "scripts/check-native-worker-fixtures.py": "bc6558012e1d20bd16e92875ee4d68bd362886754618061ba120f14e28fefaa7",
+      "scripts/check-native-module-interruption.py": "8544acd6102c9b351f93b979b8c7b5a1d33d349b17e205504475a2b6a27e7825",
+      "scripts/check-python-installed-cli-signals.py": "39ba1d7adf4502f8ff78d65668738be3a6979b66fdd74a0a52e335efdc668e6e",
+      "scripts/check-pg17-transaction-timeout.py": "41c4edb6d1faeadedb530cc7ba9cfde28973a865e533fb93ec45c2c6e08b6e8a",
+      "packages/python/tests/test_local_runtime.py": "f7f6fae6ca9ce6847bf82b059cb203aa1ae99b72d12d24678d6070212d28c413",
+      "packages/python/tests/test_psycopg_host_native.py": "8127a54a165087ea2bba849184e8896ab45a8e3ff1f97352137058ece0b9e48d"
+    },
+    "completeRuntimeQualified": false,
+    "lakebaseQualified": false
+  },
+  "artifactSha256": "684d49c9ffb07555c88f5d036f63ffbeb9219ae563bf43850f20ea1ecae40041",
+  "macosPublishedWheelSha256": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649",
+  "scope": "Published pgserver18.6.1 packaging patch on unchanged PostgreSQL18.6, six Linux installed consumer groups including short socket/data paths with spaces and apostrophes; no full protected runtime or Lakebase acceptance"
+}

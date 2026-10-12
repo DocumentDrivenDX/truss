@@ -30,8 +30,8 @@ class LocalRuntimeTests(unittest.TestCase):
                 self.assertFalse(directory.exists())
 
     def test_retained_commit_and_exception_cleanup(self):
-        with tempfile.TemporaryDirectory(prefix='truss-python-runtime-') as parent:
-            directory = Path(parent) / 'retained data'
+        with tempfile.TemporaryDirectory(prefix='truss-python-runtime-', dir='/tmp') as parent:
+            directory = Path(parent) / "retained data's"
             runtime = LocalPostgres(directory)
             with self.assertRaisesRegex(ValueError, 'caller failure'):
                 with runtime:
@@ -52,7 +52,7 @@ class LocalRuntimeTests(unittest.TestCase):
                 self.assertEqual(query(restarted, 'SELECT value FROM persistence_probe'), '9223372036854775807')
 
     def test_nested_directory_custody_and_independent_servers(self):
-        with tempfile.TemporaryDirectory(prefix='truss-python-runtime-') as parent:
+        with tempfile.TemporaryDirectory(prefix='truss-python-runtime-', dir='/tmp') as parent:
             directory = Path(parent) / 'one'
             with LocalPostgres(directory) as first:
                 child = subprocess.run([sys.executable, '-c',

@@ -234,8 +234,8 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
     def bound_profile(self,providers=None):
         raw=(ROOT/'docs/helix/04-build/evidence/security-fact-requirements/requirements.json').read_bytes()
         return raw,json.dumps({'kind':'truss-flat-fact-provider-fixture/0.1','requirementsSha256':hashlib.sha256(raw).hexdigest(),'providers':[asdict(p) for p in (self.dependency_providers() if providers is None else providers)]},sort_keys=True,separators=(',',':')).encode()
-    def issue_bound_profile(self,raw_profile):
-        epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(self.epoch,raw_profile,b'bound-fixture')).fetchone()[0]
+    def issue_bound_profile(self,raw_profile,*,predecessor=None):
+        epoch=self.connection.execute("SELECT truss.runtime_issue_source_epoch('fixture',%s,'target',%s,%s)",(self.epoch if predecessor is None else predecessor,raw_profile,b'bound-fixture')).fetchone()[0]
         return epoch_tests._EpochComparison('fixture',epoch,'target',raw_profile,b'bound-fixture')
     def test_epoch_original_profile_derives_complete_native_provider_cuts(self):
         t=self.begin();raw,profile=self.bound_profile();comparison=self.issue_bound_profile(profile)
@@ -942,7 +942,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
 
-    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False):
+    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False,*,predecessor=None):
         import sys
         if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
         from security_owned_read import run_delegated_owned_identity_read
@@ -950,8 +950,30 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         def roles(c):return c.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
         caller=roles(caller_host.connection);executor=roles(self.connection)
         value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':subject}]};value['executor']={'sessionRoleOid':str(int(executor[0])+1) if wrong_executor else executor[0],'effectiveRoleOid':executor[1]}
-        comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
-        return run_delegated_owned_identity_read(caller_host,caller_t,self.host,executor_t,comparison,raw,sources)
+        comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode(),predecessor=predecessor)
+        self._last_delegated_epoch=comparison.epoch
+        # Owned harness only: retain sanitized layer codes, never exception text,
+        # private stdout/stderr, native identity, credentials or fact cells.
+        import security_owned_read as tool
+        from unittest.mock import patch
+        import time,os
+        original_read=tool._run_owned_identity_read;events=[];started=time.monotonic()
+        def observe(*args,**kwargs):
+            result=original_read(*args,**kwargs)
+            events.append({'layer':'executor','status':result.status,
+                           'code':result.error.code if type(result) is Error else None})
+            return result
+        with patch.object(tool,'_run_owned_identity_read',observe):
+            result=run_delegated_owned_identity_read(caller_host,caller_t,self.host,executor_t,comparison,raw,sources)
+        events.append({'layer':'caller','status':result.status,
+                       'code':result.error.code if type(result) is Error else None})
+        self._last_delegated_events=events
+        evidence=os.environ.get('TRUSS_PSYCOPG_EPOCH_EVIDENCE')
+        if evidence:
+            with (Path(evidence)/'delegated-layer-outcomes.jsonl').open('a') as output:
+                output.write(json.dumps({'test':self._testMethodName,'events':events,
+                    'elapsedMs':round((time.monotonic()-started)*1000)})+'\n')
+        return result
     def test_catalog_only_caller_cannot_read_private_facts_but_delegated_read_permits(self):
         def operation(host,t,original,connection):
             for query in ('SELECT * FROM truss.sec_assignment','SELECT count(*) FROM truss.sec_assignment','SELECT truss.runtime_fence_shared_authority_writer()'):
@@ -1125,3 +1147,276 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 finally:self.connection.execute('ROLLBACK')
             self.with_unprivileged_actor(operation,catalog_only=True)
         finally:self.connection.execute('DROP OWNED BY fact_privilege_bridge; DROP ROLE fact_privilege_bridge')
+
+    def test_delegated_caller_column_only_fact_select_refuses_before_executor(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            self.connection.execute('GRANT SELECT(staff_id) ON truss.sec_assignment TO fact_cut_actor')
+            self.assertEqual(connection.execute('SELECT staff_id FROM truss.sec_assignment').fetchall(),[('s1',)])
+            self.assertEqual(connection.execute("SELECT has_table_privilege(current_user,'truss.sec_assignment','SELECT'),has_any_column_privilege(current_user,'truss.sec_assignment','SELECT')").fetchone(),(False,True))
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);execute.assert_not_called()
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_caller_private_fact_table_grant_refuses_before_executor(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            self.connection.execute('GRANT SELECT ON truss.sec_assignment TO fact_cut_actor')
+            self.assertEqual(connection.execute('SELECT count(*) FROM truss.sec_assignment').fetchone(),(1,))
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);execute.assert_not_called()
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_caller_reachable_definer_without_schema_usage_refuses(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        self.connection.execute("CREATE SCHEMA fact_hidden_routine; CREATE FUNCTION fact_hidden_routine.private_count() RETURNS bigint LANGUAGE sql SECURITY DEFINER AS 'SELECT count(*) FROM truss.sec_assignment'")
+        routine_oid=self.connection.execute("SELECT 'fact_hidden_routine.private_count()'::regprocedure::oid").fetchone()[0]
+        try:
+            def operation(host,t,original,connection):
+                self.assertEqual(connection.execute("SELECT has_schema_privilege(current_user,'fact_hidden_routine','USAGE'),has_function_privilege(current_user,%s::oid,'EXECUTE')",(routine_oid,)).fetchone(),(False,True))
+                executor_t=self.begin()
+                try:
+                    with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                        result=self.delegated_owned_read(host,t,executor_t)
+                    self.assertIsInstance(result,Error);execute.assert_not_called()
+                finally:self.connection.execute('ROLLBACK')
+            self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute('DROP SCHEMA fact_hidden_routine CASCADE')
+
+    def test_delegated_evaluator_timeout_refuses_without_partial_private_output(self):
+        import sys,subprocess
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                timeout=subprocess.TimeoutExpired('fixture',4,output='private-fact-output',stderr='private-fact-diagnostic')
+                with patch.object(tool.subprocess,'run',side_effect=timeout):
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error)
+                self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'error','code':'cancelled'},{'layer':'caller','status':'error','code':'invalid_transaction'}])
+                self.assertNotIn('private-fact',repr(result));self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_repeated_native_completion_preserves_subject_decisions(self):
+        def operation(host,t,original,connection):
+            for subject,decision in [('s1','permit'),('s2','deny'),('s1','permit')]:
+                executor_t=self.begin()
+                try:
+                    result=self.delegated_owned_read(host,t,executor_t,subject)
+                    self.assertIsInstance(result,Ok,self._last_delegated_events)
+                    self.assertEqual(result.value['decision'],decision)
+                    self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+                finally:self.connection.execute('ROLLBACK')
+        self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
+        try:self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute("DELETE FROM truss.sec_staff WHERE staff_id='s2'")
+
+    def test_delegated_evaluator_cancellation_allows_explicit_same_host_recovery(self):
+        import sys,subprocess
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                with patch.object(tool.subprocess,'run',side_effect=subprocess.TimeoutExpired('fixture',4)):
+                    failed=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(failed,Error)
+                self.assertEqual(self._last_delegated_events[0]['code'],'cancelled')
+                self.assertFalse(host._custody.quarantined);self.assertFalse(self.host._custody.quarantined)
+                # Explicit retry obtains and verifies a fresh issued fixture
+                # generation; it does not publish the cancelled decision.
+                recovered=self.delegated_owned_read(host,t,executor_t,predecessor=self._last_delegated_epoch)
+                self.assertIsInstance(recovered,Ok,self._last_delegated_events)
+                self.assertEqual(recovered.value['decision'],'permit')
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_prepared_evaluator_source_change_refuses_under_native_guards(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_prepare=tool._pin_owned_evaluator_sources
+        evaluator=ROOT/'scripts/evaluate-security-captured-identity-fixture.ts'
+        original_bytes=evaluator.read_bytes();changed_bytes=original_bytes+b'\n// owned source-drift control\n';observed=[]
+        def operation(host,t,original,connection):
+            def prepare():
+                self.assertIsNone(host._custody.pending);self.assertIsNone(self.host._custody.pending)
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+                prepared=original_prepare()
+                self.assertEqual(evaluator.read_bytes(),original_bytes)
+                evaluator.write_bytes(changed_bytes);observed.append(True)
+                return prepared
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_pin_owned_evaluator_sources',prepare):
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error)
+                self.assertEqual(self._last_delegated_events[0]['code'],'invalid_transaction')
+                self.assertEqual(observed,[True])
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+            finally:
+                self.connection.execute('ROLLBACK')
+                # Do not overwrite unrelated concurrent edits.
+                self.assertEqual(evaluator.read_bytes(),changed_bytes)
+                evaluator.write_bytes(original_bytes)
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_release_refuses_predefined_privilege_granted_after_evaluation(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_read=tool._run_owned_identity_read;observed=[]
+        def operation(host,t,original,connection):
+            def drift(*args,**kwargs):
+                result=original_read(*args,**kwargs);self.assertIsInstance(result,Ok)
+                with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=1500') as admin:
+                    admin.execute('GRANT pg_read_all_data TO fact_cut_actor WITH INHERIT TRUE, SET FALSE')
+                observed.append(True);return result
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',drift):result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);self.assertEqual(observed,[True])
+                self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'ok','code':None},{'layer':'caller','status':'error','code':'invalid_transaction'}])
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_release_refuses_definer_execute_granted_after_evaluation(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_read=tool._run_owned_identity_read;observed=[]
+        self.connection.execute("CREATE FUNCTION truss.late_private_count() RETURNS bigint LANGUAGE sql SECURITY DEFINER AS 'SELECT count(*) FROM truss.sec_assignment'; REVOKE ALL ON FUNCTION truss.late_private_count() FROM PUBLIC")
+        try:
+            def operation(host,t,original,connection):
+                def drift(*args,**kwargs):
+                    result=original_read(*args,**kwargs);self.assertIsInstance(result,Ok)
+                    with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=1500') as admin:
+                        admin.execute('GRANT EXECUTE ON FUNCTION truss.late_private_count() TO fact_cut_actor')
+                    observed.append(True);return result
+                executor_t=self.begin()
+                try:
+                    with patch.object(tool,'_run_owned_identity_read',drift):result=self.delegated_owned_read(host,t,executor_t)
+                    self.assertIsInstance(result,Error);self.assertEqual(observed,[True])
+                    self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'ok','code':None},{'layer':'caller','status':'error','code':'invalid_transaction'}])
+                finally:self.connection.execute('ROLLBACK')
+            self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute('DROP FUNCTION truss.late_private_count()')
+
+    def test_committed_pending_authority_closes_read_before_other_database_role_change(self):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        from truss._psycopg_dependency_fact_cut import _epoch_dependency_recipe
+        original=self.comparison();pending=None
+        self.connection.execute('CREATE ROLE authority_other_actor')
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
+            allocator.execute('CREATE DATABASE authority_other_database')
+        try:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True) as publisher:
+                pending=_begin_pending_authority_fixture(publisher,original)
+            # Original publisher is now disconnected. A second database changes
+            # the shared role while source-realm admission remains closed.
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname='authority_other_database',autocommit=True) as remote:
+                remote.execute('ALTER ROLE authority_other_actor CREATEROLE')
+                self.assertEqual(remote.execute("SELECT rolcreaterole FROM pg_roles WHERE rolname='authority_other_actor'").fetchone(),(True,))
+            self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(pending.epoch,))
+            raw=self.identity_raw()
+            with self.assertRaises(ValueError):_epoch_dependency_recipe(pending,hashlib.sha256(raw).hexdigest())
+            t=self.begin();called=[]
+            result=epoch_tests._run_fenced_epoch_operation(self.host,t,original,lambda c:called.append(True))
+            self.assertIsInstance(result,Error);self.assertEqual(called,[])
+            self.connection.execute('ROLLBACK')
+            restored=_finish_pending_authority_fixture(self.connection,pending,original)
+            type(self).epoch=restored.epoch;pending=None
+            t=self.begin()
+            self.assertEqual(epoch_tests._run_fenced_epoch_operation(self.host,t,self.comparison(),lambda c:'explicit-successor-fixture'),Ok('explicit-successor-fixture'))
+            self.connection.execute('ROLLBACK')
+        finally:
+            self.connection.execute('ROLLBACK')
+            if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
+                allocator.execute('DROP DATABASE authority_other_database')
+            self.connection.execute('DROP ROLE authority_other_actor')
+
+    def test_pending_authority_cannot_publish_before_original_reader_retirement(self):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        original=self.comparison();pending=None;t=self.begin()
+        self.assertEqual(epoch_tests._run_fenced_epoch_operation(self.host,t,original,lambda c:'retained-reader'),Ok('retained-reader'))
+        try:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True) as publisher:
+                with self.assertRaises(psycopg.errors.LockNotAvailable):_begin_pending_authority_fixture(publisher,original)
+                self.assertEqual(publisher.info.transaction_status,psycopg.pq.TransactionStatus.IDLE)
+                self.assertEqual(publisher.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(original.epoch,))
+                self.connection.execute('ROLLBACK')
+                pending=_begin_pending_authority_fixture(publisher,original)
+            type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch;pending=None
+        finally:
+            self.connection.execute('ROLLBACK')
+            if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+
+    def test_pending_completion_refuses_fabricated_pending_kind_for_current_epoch(self):
+        import sys
+        from dataclasses import replace
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _finish_pending_authority_fixture
+        original=self.comparison()
+        forged=replace(original,profile=b'{"kind":"truss-authority-transition-pending/0.1"}',evidence=b'owned-pending-authority-fixture')
+        count=self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone()
+        with self.assertRaisesRegex(ValueError,'current transition bytes'):_finish_pending_authority_fixture(self.connection,forged,original)
+        self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(original.epoch,))
+        self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),count)
+
+    def test_pending_completion_refuses_changed_original_evidence_without_issuance(self):
+        import sys
+        from dataclasses import replace
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        original=self.comparison();pending=_begin_pending_authority_fixture(self.connection,original)
+        try:
+            count=self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone()
+            with self.assertRaisesRegex(ValueError,'current transition bytes'):_finish_pending_authority_fixture(self.connection,replace(pending,evidence=b'changed-pending-evidence'),original)
+            self.assertEqual(self.connection.execute('SELECT source_epoch FROM truss.source_epoch_current').fetchone(),(pending.epoch,))
+            self.assertEqual(self.connection.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),count)
+        finally:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+
+    def test_pending_producer_uses_fresh_read_committed_without_changing_session_default(self):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_authority_transition import _begin_pending_authority_fixture,_finish_pending_authority_fixture
+        original=self.comparison();pending=None
+        self.connection.execute("SET default_transaction_isolation='repeatable read'")
+        try:
+            pending=_begin_pending_authority_fixture(self.connection,original)
+            self.assertEqual(self.connection.execute('SHOW default_transaction_isolation').fetchone(),('repeatable read',))
+            type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch;pending=None
+            self.assertEqual(self.connection.execute('SHOW default_transaction_isolation').fetchone(),('repeatable read',))
+        finally:
+            if pending is not None:type(self).epoch=_finish_pending_authority_fixture(self.connection,pending,original).epoch
+            self.connection.execute('RESET default_transaction_isolation')

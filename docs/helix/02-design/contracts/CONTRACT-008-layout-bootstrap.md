@@ -2727,3 +2727,259 @@ AC8/AC9 prerequisites. Role/grant lifetime, ordinary grants, complete routine
 closure, trusted caller/executor/issuer/mapping/target authentication and protected
 publication remain open. No new backend binding; full goal stays active at26/132,
 106 unbound required cases.
+
+### Delegated caller private-fact privilege exclusion — 2026-10-11
+
+Owned profile0.4 caller admission now inspects all SET-reachable original caller
+identities for superuser/CREATEROLE/BYPASSRLS, EXECUTE on any SECURITY DEFINER
+routine, and table or column privileges on the original provider relation OIDs.
+The table probe includes SELECT/INSERT/UPDATE/DELETE/TRUNCATE/REFERENCES/TRIGGER/
+MAINTAIN; the column probe includes SELECT/INSERT/UPDATE/REFERENCES. The native
+OID-based definer probe intentionally does not depend on current schema USAGE.
+This is conservative private-service snapshot exclusion, not complete callable
+closure, grant/role lifetime or authorization of the executor.
+
+Three controls establish actual column-only and full-table private reads, and
+EXECUTE reachability to a definer without schema USAGE, then refuse before executor
+evaluation. Final `evidence/python-psycopg-epoch-cut/37e19ef3-7536-45c8-bfc4-2c86f63b7e8d`
+passes168 native methods on PostgreSQL18.6/psycopg3.3.6 binary, module boundaries,
+141 current/preimage source pins,363 original UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups. Earlier5e0d4404 ran zero tests due
+to shared-memory-ID exhaustion; bdba4985 ran168 with one incorrect name-resolution
+probe denied by schema USAGE. The corrected probe captures the routine OID as the
+installer. Then71a6ff76 ran168 with one existing delegated-permit refusal; the final
+unchanged-source rerun passes. That intermittent refusal remains unexplained and
+retained, not evidence of general availability or deterministic load performance.
+No refusal or resource bound was weakened to obtain the passing run.
+
+Formal `evidence/security-private-fact-privilege-formal/9611d128-bf44-495a-95ed-62ca5a7d64df`
+retains five source inputs and five Z3 4.15.4 SMT-LIB queries/fresh-context replays:
+three UNSAT exclusion results and two SAT controls, including a table-only filter
+admitting column-only access. Initial38563687 retains the pre-correction test input.
+This is an abstract conditional model, not native privilege/role/SQL refinement.
+Trace CONTRACT-063/STP-056 B04/B05/B10/B11 and US-056 AC5/AC8/AC9 prerequisites.
+Complete routine/alternate-source/diagnostic closure, grant/role lifetime, original
+caller/issuer/mapping/target credentials and protected publication remain open.
+No backend binding is promoted; full goal stays active at26/132 with106 unbound
+required cases. Diagnose the retained intermittent refusal before any availability
+or complete protected-service qualification.
+
+Integrated-main requalification: concurrent installation privilege work changed
+native host test and boundary checker inputs. The pre-merge37e19ef3 packet retains
+its original source scope. Fresh
+`evidence/python-psycopg-epoch-cut/9c3297e7-8705-4d75-81b4-f893d8d21140`
+passes168 native methods and boundaries against integrated main a69788bf, with142
+current/preimage Truss source pins and three stop0/status3/socket-absent cleanups.
+This requalifies the finite composition; the retained intermittent refusal and
+complete backend admission/lifetime obligations remain open.
+
+### Sanitized delegated layer diagnostics and evaluator timeout — 2026-10-11
+
+Owned evaluator subprocess TimeoutExpired now becomes a sanitized TimeoutError,
+so the original executor host classifies it as locally contained cancellation.
+The owned native harness records only test name, executor/caller status and safe
+result code plus elapsed milliseconds in `delegated-layer-outcomes.jsonl`. No
+fact cells, subjects, credentials, identities, stdout/stderr or exception text are
+retained in that journal. Production caller results remain sanitized and raw
+executor diagnostics remain private.
+
+A deterministic TimeoutExpired carrying private partial stdout/stderr produces
+executor cancelled, outer caller invalid_transaction, no private text in the
+returned result and both original reservations retired. This distinguishes the
+refusal layer without weakening the4-second evaluator or5-second host bounds.
+Final `evidence/python-psycopg-epoch-cut/10a9cf97-62a9-4d56-8b0d-c9ab4579a068`
+passes169 methods, module boundaries and142 current/preimage source pins on
+PostgreSQL18.6/psycopg3.3.6 binary, with363 UMF and1705 native payload pins and
+three stop0/status3/socket-absent cleanups. Journal observations distinguish
+pre-executor privilege refusal, executor cancellation, executor identity refusal
+and caller guard-retirement refusal after successful evaluation; ordinary permit
+and deny succeed. These finite schedules do not identify the earlier71a6ff76
+intermittent permit refusal or prove deterministic availability under load.
+
+Trace shared CONTRACT-063/STP-056 B10/B12/B16/L11 and US-056 AC8/AC10 custody/
+diagnostic prerequisites. The journal is owned test evidence, not a public audit
+API or receipt that grants authority. No new formal native refinement or backend
+binding is claimed. Original authentication, full routine/source/privilege/lifetime
+closure and complete protected disclosure remain open; full goal active at26/132,
+106 unbound required cases. Use these layer outcomes to diagnose any future
+reproduction before making availability claims.
+
+### Delegated preparation deadline, repeated decisions and cancellation recovery — 2026-10-11
+
+Initial evaluator source pinning now occurs before delegated caller operation
+custody/deadline acquisition. A private frozen administrative preparation retains
+the selected tool and exact source digest tuples. Guarded evaluation still checks
+those original bytes before returning a decision. Public delegated inputs cannot
+supply a preparation; the constructible private dataclass is not authentication,
+a reusable authority capability or a complete package-delivery proof. Native
+caller/executor/epoch/fact checks and4-second evaluator/5-second host bounds remain.
+
+Repeated actual calls across fresh executor transactions yield permit/deny/permit
+for authored assigned/unassigned Staff fixtures. A contained evaluator cancellation
+allows an explicit same-host retry with a freshly issued generation and the exact
+previously issued predecessor; no cancelled decision is reused. A real owned
+source-file edit after preparation refuses guarded publication, and exact edit
+restoration preserves unrelated concurrent content. Preparation is independently
+observed before either host has pending operation custody or pair reservation.
+
+Final `evidence/python-psycopg-epoch-cut/9ed3269a-0edd-4aba-8aa3-1ab66b4e815f`
+passes172 methods, module boundaries and142 current/preimage Truss pins on
+PostgreSQL18.6/psycopg3.3.6 binary,363 UMF sources,1705 native payload pins and
+three stop0/status3/socket-absent cleanups. Earlier64ce211a passes171 before the
+source-drift control. Initial5a8176ee fails two new fixture controls: absent s2 row
+and stale predecessor. Those fixtures were corrected without weakening admission.
+Thenf46b8c09 passes both new schedules but the existing permit case records executor
+ok/caller cancelled at6965ms. This reproduces a caller deadline refusal; initial
+source pinning inside that window was an avoidable workload. The earlier71a6ff76
+refusal remains without layer diagnostics and cannot be retroactively assigned
+this cause. Passing finite schedules after preparation refactoring do not prove
+unrestricted availability or exclude every deadline/refusal cause under load.
+
+Trace CONTRACT-063/STP-056 B10/B11/B12/B16/L03/L11 and US-056 AC8/AC9/AC10
+prerequisites. No new formal native refinement theorem or backend binding. Complete
+original caller/issuer/mapping/package/target authentication, source/role/ACL and
+callable lifetime, graph capture and protected final publication remain open.
+Full goal remains active at26/132 with106 unbound required cases.
+
+### Delegated final caller privilege snapshot — 2026-10-11
+
+The owned delegated service rechecks original native caller identity, predefined
+privilege reachability and private-fact table/column/definer/administration
+exclusions after executor evaluation and existing native guard observation, before
+returning the decision. This detects final-state drift; it does not hold shared
+role/ACL lifetime guards or make the checks/publication atomic.
+
+Two native controls use separate original postgres administrative connections to
+GRANT inherited pg_read_all_data or EXECUTE on an existing SECURITY DEFINER
+private-count routine after successful original evaluation. These uncoordinated
+administrative grants actually complete under retained executor guards. The
+caller then refuses; sanitized layer journal retains executor ok/caller
+invalid_transaction, with no decision returned. Final
+`evidence/python-psycopg-epoch-cut/c17be521-afd0-41c0-b3fd-13e6a3668395`
+passes174 native methods and module boundaries on PostgreSQL18.6/psycopg3.3.6
+binary,142 current/preimage Truss sources,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+`evidence/security-caller-release-snapshot-formal/29d04440-5819-4401-98fd-378bdc6f31a9`
+retains five exact source inputs and five Z3 4.15.4 SMT-LIB/fresh-context replays:
+three UNSAT refusal results and two SAT controls. Admission-only checking admits
+late privilege; grant-and-revoke between admission/final snapshots remains
+compatible with release. Changes after the final check also remain unqualified.
+These are conditional endpoint-model results, not native role/catalog/SQL/host
+refinement or uninterrupted authority/revocation-drain theorems.
+
+Trace shared CONTRACT-063/STP-056 B04/B05/B10/B11/L03/L11/L13 and US-056 AC5/AC8/
+AC9 prerequisites. Complete authorized writer participation, original issuer/
+caller/mapping/package/target authentication, shared role/ACL and callable lifetime,
+graph capture and atomic protected publication remain required. No new backend
+binding; full goal stays active at26/132 with106 unbound cases.
+
+### Cross-database committed-pending authority transition spike — 2026-10-11
+
+Governing shared CONTRACT-063 requires complete writer participation, fresh cuts
+and reader drain through protected release. Database-local advisory or relation
+fences do not intercept shared-role mutations made in another database. A private
+backend transition may first commit an unadmitted pending generation in the
+original source realm, then perform the remote mutation, and only after explicit
+original requalification issue a fresh successor. Existing epoch registry opaque
+profile/evidence fields carry this spike without a core-envelope or layout change.
+This lifecycle mechanism belongs to the backend enforcement/issuer implementation;
+the portable ordering and refusal obligations remain shared security semantics.
+
+| Phase | Required behavior |
+|---|---|
+| Original admitted generation | Original readers retain their source-realm guard through release. |
+| Publish pending | Original native issuer must exclude retained readers before committing pending; no remote change precedes that commit. |
+| Pending / remote mutation | Old generation comparisons and all existing semantic provider-profile parsers refuse. Pending remains closed after publisher disconnect. |
+| Requalify successor | Original issuer independently proves complete current state and known remote outcome, then issues a fresh successor with exact pending predecessor. |
+| Interrupted or unknown outcome | Remain pending; inspect original native state. No blind replay, guessed commit or automatic reopening. |
+
+`scripts/security_authority_transition.py` implements only the private successful
+commit/explicit-successor fixture mechanics using the original installed native
+issuer. It requires an idle administrative connection, returns after successful
+transaction completion, preserves installation/incarnation and exact predecessor,
+and uses an unsupported pending profile kind. Successor qualification is a trusted
+fixture premise, not authenticated or independently enforced by this helper.
+Comparison dataclasses and hashes grant no authority. Complete writer routing,
+issuer credentials, malicious/incorrect administrative bypass, remote commit-unknown,
+crash/WAL/refinement and recovery require separate qualification. This is not a
+shipped public coordinator or distributed atomic-commit implementation.
+
+Native controls commit pending in the source database, disconnect its publisher,
+change a shared role through a second database and independently observe pending
+still current. Old fenced read refuses before callback; the original dependency
+recipe rejects pending. Explicit successor issuance restores the administrative
+fixture and receives a fresh native epoch. Another control proves pending cannot
+publish while an original retained reader holds SHARE; after reader retirement
+pending succeeds. This proves finite native commit/connection-disconnect schedules,
+not power-loss durability or all writer coverage. Final
+`evidence/python-psycopg-epoch-cut/42d80ee6-9171-47ab-860c-1c234160581c`
+passes176 methods, module boundaries,143 current/preimage Truss source pins on
+PostgreSQL18.6/psycopg3.3.6 binary,363 UMF and1705 native payload pins and three
+stop0/status3/socket-absent cleanups.
+
+`evidence/security-pending-authority-formal/b021be50-a63f-4b93-8b06-eb2d1ba4095f`
+retains five exact inputs and five Z3 4.15.4 SMT-LIB/fresh-context replays, three
+UNSAT/two SAT. Conditional ordering excludes pending admission, undrained pending
+publication and reopening under unknown remote outcome. Omitting committed
+pending or qualification yields countermodels. The qualification guard is an
+obligation, not implemented authenticated receipt ingestion or a native distributed
+refinement theorem. Trace CONTRACT-063/STP-056 B11/B12/L03/L11/L13 and US-056
+AC9/AC10 prerequisites. No backend binding is promoted; complete authentication,
+writer/current-state closure, graph capture and protected final release remain
+required. Full goal active at26/132 with106 unbound cases.
+
+Integrated-main runtime requalification: concurrent packaging work changes the
+selected distribution to pgserver-pg18 18.6.1, engine18.6. Historical42d80ee6
+retains its original18.6.0 declaration/payload scope. Fresh
+`evidence/python-psycopg-epoch-cut/d1962dc8-ef99-4968-9540-d9da358c7adb`
+passes176 methods, boundaries and143 current/preimage Truss inputs on the selected
+18.6.1 release, with363 UMF and1705 native payload pins and three cleanups.
+Supplementary `runtime-release-provenance.json` retains exact macOS arm64 wheel
+SHA256 fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649,
+published r2 checksum URL/file digest and installed distribution metadata match.
+The task-owned environment is separate from historical runtime environments.
+This is native/release correspondence, not hermetic build or publisher identity
+qualification. Formal five-input model source remains unchanged; no backend
+binding or complete cross-database issuer/qualification/recovery claim is promoted.
+
+### Pending transition current-image correspondence and fresh producer cut — 2026-10-11
+
+Private transition issuance now opens its own fresh administrative READ COMMITTED
+transaction after requiring an idle connection. It invokes the installed native
+participating-writer fence before reading current pointer/registry correspondence.
+Six exact OID25 text fields compare installation, epoch, incarnation, original
+profile/evidence hex and actual read-committed isolation. The marker/write modes
+remain held through native successor issuance and commit/abort. This excludes
+participating writers; uncoordinated administrators and complete cross-database
+routing remain unqualified. No borrowed caller transaction is weakened.
+
+Native controls reject a fabricated pending kind for an otherwise current epoch
+and changed pending evidence, with unchanged pointer and registry count. An
+inherited repeatable-read session default still permits the fresh producer path;
+the native isolation readback verifies READ COMMITTED and the session default
+remains unchanged afterwards. Final
+`evidence/python-psycopg-epoch-cut/ff7b9635-e298-456f-9dc8-7a5c1b36f0e0`
+passes179 methods, boundaries,143 current/preimage sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins
+with three stop0/status3/socket-absent cleanups. Earlierb96528b2 runs178 and fails
+ancillary database creation under the3-second fixture default; that isolated
+administrative allocation/deallocation now uses its own bounded15-second connection.
+Security-operation deadlines are unchanged. Then32e6bc7f runs179 and fails existing
+fixture DDL timeout and delegated containment under pressure; unchanged-source
+final rerun passes. Both failed packets remain retained. Observed system load
+41.77/59.78/65.17 may explain timing pressure but does not prove every failure cause
+or deterministic availability. Required complete recovery/availability remains open.
+
+Formal `evidence/security-pending-authority-formal/891218fc-7449-414c-a934-c534c5705315`
+retains five exact source inputs and eight Z3 4.15.4 SMT-LIB/fresh-context replays,
+five UNSAT/three SAT. It adds current-image and fresh post-fence snapshot guards;
+self-asserted pending kind without native correspondence admits a countermodel.
+Initiale20cbfba retains seven queries/four UNSAT/three SAT before explicit freshness.
+This remains a conditional ordering model, not native SQL/commit/driver refinement,
+authenticated issuer or successor-qualification enforcement. Trace shared
+CONTRACT-063/STP-056 B11/B12/L03/L11/L13 and US-056 AC9/AC10 prerequisites.
+Complete issuer/mapping/target authentication, known remote outcome recovery,
+writer/callable/current-state closure, graph capture and atomic protected release
+remain required. No backend binding; full goal stays active at26/132 with106
+unbound required cases.

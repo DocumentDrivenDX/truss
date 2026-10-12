@@ -79,7 +79,7 @@ does not prove an installed runtime, layout version or accepted catalog. It does
 not read Truss table/view bodies, begin or settle a transaction, or retry. Native
 failures propagate without a new recovery reference; a failed query may abort the caller's transaction, whose rollback remains the host's responsibility.
 
-For local PostgreSQL, install the reusable `pgserver-pg18==18.6.0` wheel from
+For local PostgreSQL, install the reusable `pgserver-pg18==18.6.1` wheel from
 [DocumentDrivenDX/pgserver](https://github.com/DocumentDrivenDX/pgserver). Imports
 remain `pgserver`; install only one pgserver distribution in an environment.
 The checked-in `_profiles/local-postgres-runtime.json` selects the exact tuple.
@@ -91,15 +91,14 @@ python3.11 -m venv .venv
 .venv/bin/truss-local-postgres --data-dir .local/truss-postgres-18 --probe
 ```
 
-Public release `pg18.6-pgv0.8.6-r1` is published. A fresh Truss installation
-from its macOS arm64 CPython3.11 wheel, dependency check, native retained restart,
-26 driver tests and21 worker cleanup/collision controls pass. The
-[released consumer receipt](../../docs/helix/04-build/evidence/design-audit/pg18-released-consumer-20261011/receipt.json)
-records the exact published wheel SHA256
-`8abba22528fc6f35ca1bf2d7d7638ca4515101d6830909a432e524b05d488ae8`.
-The public release asset listing also resolves with `--no-index --only-binary`.
-Runtime requirements select that listing and pinned distribution; local caches
-remain an optional convenience.
+Public release `pg18.6-pgv0.8.6-r2` is published. Packaging version18.6.1
+fixes quoting/URI handling for short Unix socket paths containing spaces and
+apostrophes. PostgreSQL remains18.6. The macOS arm64 CPython3.11 wheel SHA256 is
+`fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649`.
+[Patch-release CI](https://github.com/DocumentDrivenDX/truss/actions/runs/38189066679)
+passes all six focused groups, including short whitespace/apostrophe lifecycle
+and CLI paths. Earlier .0 receipts retain their original wheel digests. The shared installer
+verifies release checksums and requires binary wheels on every setup.
 Do not install upstream `pgserver` alongside
 `pgserver-pg18`, and do not upgrade retained PostgreSQL17 data in place.
 
@@ -111,12 +110,13 @@ Reproduce the focused consumer checks with both installed wheels:
 
 `scripts/install-local-runtime.py` is the shared CI/development setup command.
 It resolves only released binary runtime wheels, verifies their release checksums,
-refuses conflicting pgserver distributions, and replaces preliminary18.6.0 bytes
+refuses conflicting pgserver distributions, and replaces preliminary same-version bytes
 explicitly. Missing wheels or checksum failures stop installation; no PostgreSQL
 source build is attempted. Truss's own pure Python wheel may still be built.
 The `Released Python runtime` CI job uses the same installer and focused installed
 smoke checks on Linux x64/Python3.11. PostgreSQL compilation belongs exclusively
-to the reusable pgserver repository.
+to the reusable pgserver repository. The .1 runtime fixes short whitespace socket paths; lifecycle and CLI checks
+exercise spaces and apostrophes on all platforms.
 
 Ordinary psycopg and pg8000 native fixture classes reuse one owned Unix-socket
 cluster per worker, with fresh databases/roles and verified cleanup. Worker

@@ -1,0 +1,8 @@
+{
+  "ownerCommit": "fc6265c7591fcfa3cc553e73f0cde8ec60fdde77",
+  "scope": "Original owner SQL import and exact saved-model reload/export only; no core layout/installed authority/profile qualification",
+  "sourceSha256": "aa0c81c69fe07a0fb65dd2f5b27fc8609b169dd68b912fc2c05f653972e0e11e",
+  "modelSha256": "97cce3b8b49cff9e6e306b309e34690853e6d81c84e8b661a5eda8bcb358d751",
+  "ddlSha256": "cc4aae69bf62ad17d0ef7bca4cc49e994acfd076c020dc21a56c7214a6bafa0b",
+  "reloadExact": true
+}
