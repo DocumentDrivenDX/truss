@@ -19,6 +19,41 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_candidate_security_bootstrap_atomicity_and_owner_isolation(self):
+  self.install();self.host.detach();self.admin.commit()
+  contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'
+  homes=[('policy_generation_guard','installation-policy-guard-v0.1.proposal.sql'),('policy_publication_claim','installation-publication-claim-v0.2.tombstone.proposal.sql'),('policy_publication_capacity','installation-publication-capacity-profile-v0.1.proposal.sql')]
+  installation=self.admin.execute('SELECT installation_id::text FROM truss.catalog_runtime_installation').fetchone()[0].encode()
+  profile=b'bootstrap-ownership-fixture/0.1';observations=[]
+  # Every partial prefix must disappear with its original failed transaction.
+  for prefix in range(1,len(homes)+1):
+   self.admin.execute('BEGIN')
+   for home,source in homes[:prefix]:self.admin.execute((contracts/source).read_text())
+   with self.assertRaises(psycopg.errors.DivisionByZero):self.admin.execute('SELECT 1/0')
+   self.admin.rollback()
+   absent=[self.admin.execute('SELECT pg_catalog.to_regclass(%s)',('truss.'+home,)).fetchone()[0] for home,_ in homes]
+   self.assertEqual(absent,[None]*3)
+   observations.append({'id':'failed-bootstrap-prefix-'+str(prefix),'observed':absent})
+  self.admin.execute('BEGIN')
+  for home,source in homes:
+   self.admin.execute((contracts/source).read_text())
+   self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} OWNER TO {}').format(psycopg.sql.Identifier(home),psycopg.sql.Identifier(self.installation.owner_role)))
+   self.admin.execute(psycopg.sql.SQL('REVOKE ALL ON truss.{} FROM PUBLIC').format(psycopg.sql.Identifier(home)))
+  self.admin.execute('INSERT INTO truss.policy_generation_guard VALUES(1,%s,%s,1)',(installation,profile))
+  self.admin.execute('INSERT INTO truss.policy_publication_capacity VALUES(1,%s,%s,6)',(installation,profile))
+  self.admin.commit()
+  ownership=self.admin.execute("SELECT c.relname,r.rolname FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace JOIN pg_catalog.pg_roles r ON r.oid=c.relowner WHERE n.nspname='truss' AND c.relname=ANY(%s) ORDER BY c.relname",([home for home,_ in homes],)).fetchall()
+  self.assertEqual(ownership,sorted((home,self.installation.owner_role) for home,_ in homes))
+  observations.append({'id':'candidate-security-homes-original-installation-owner','observed':ownership})
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   for home,_ in homes:
+    for privilege in ['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER']:
+     allowed=ordinary.execute('SELECT pg_catalog.has_table_privilege(current_user,%s,%s)',('truss.'+home,privilege)).fetchone()[0]
+     self.assertFalse(allowed)
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('TABLE truss.{}').format(psycopg.sql.Identifier(home)))
+    observations.append({'id':'ordinary-consumer-security-home-denied-'+home,'observed':'42501','privilegesAbsent':['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER']})
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.bootstrap.json').write_text(json.dumps({'observations':observations,'scope':'Candidate DDL under explicit trusted fixture administrator, atomic rollback and existing installation-owner isolation only. No public runtime adoption, authenticated profile issuer, complete native source census or production bootstrap admission.'},indent=2)+'\n')
  def test_owned_connections_close_before_schema_teardown(self):
   import time
   self.install();self.host.detach();self.admin.commit()

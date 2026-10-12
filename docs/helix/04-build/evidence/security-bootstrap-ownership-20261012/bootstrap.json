@@ -1,0 +1,85 @@
+{
+  "observations": [
+    {
+      "id": "failed-bootstrap-prefix-1",
+      "observed": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "failed-bootstrap-prefix-2",
+      "observed": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "failed-bootstrap-prefix-3",
+      "observed": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "id": "candidate-security-homes-original-installation-owner",
+      "observed": [
+        [
+          "policy_generation_guard",
+          "truss_owner_8b06df5e701a4155"
+        ],
+        [
+          "policy_publication_capacity",
+          "truss_owner_8b06df5e701a4155"
+        ],
+        [
+          "policy_publication_claim",
+          "truss_owner_8b06df5e701a4155"
+        ]
+      ]
+    },
+    {
+      "id": "ordinary-consumer-security-home-denied-policy_generation_guard",
+      "observed": "42501",
+      "privilegesAbsent": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE",
+        "TRUNCATE",
+        "REFERENCES",
+        "TRIGGER"
+      ]
+    },
+    {
+      "id": "ordinary-consumer-security-home-denied-policy_publication_claim",
+      "observed": "42501",
+      "privilegesAbsent": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE",
+        "TRUNCATE",
+        "REFERENCES",
+        "TRIGGER"
+      ]
+    },
+    {
+      "id": "ordinary-consumer-security-home-denied-policy_publication_capacity",
+      "observed": "42501",
+      "privilegesAbsent": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE",
+        "TRUNCATE",
+        "REFERENCES",
+        "TRIGGER"
+      ]
+    }
+  ],
+  "scope": "Candidate DDL under explicit trusted fixture administrator, atomic rollback and existing installation-owner isolation only. No public runtime adoption, authenticated profile issuer, complete native source census or production bootstrap admission."
+}

@@ -1,0 +1,13 @@
+{
+  "tests": 3,
+  "result": "pass",
+  "elapsedSeconds": 22.16,
+  "command": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-bootstrap-ownership-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+  "scope": "Native candidate bootstrap transactional prefix rollback, installation-owner isolation and ordinary consumer privileges; existing ontology and fixture cleanup regression. Not public runtime adoption, migration, authenticated issuer, complete source census, native host factory or backend acceptance. Original 132 required cases remain in scope.",
+  "sourceSha256": {
+    "packages/python/tests/test_security_public_ontology_native.py": "9f5f1e848fb6c0871063ce90e009a6c427412c0892ff072ac3f246ef592b23a5",
+    "docs/helix/02-design/contracts/installation-policy-guard-v0.1.proposal.sql": "0e1d881a2eccbcaf3d34ab8c4729a1aa21361c8c64b4ac142d706ee1da1312cf",
+    "docs/helix/02-design/contracts/installation-publication-claim-v0.2.tombstone.proposal.sql": "09515ed389247cea307ca04fc4ef45f90213a7881cd489758e5a1f854ce8e323",
+    "docs/helix/02-design/contracts/installation-publication-capacity-profile-v0.1.proposal.sql": "1ce1e6680dc681134423120e005df9161232e61fe1495495da177b82dbf69474"
+  }
+}
