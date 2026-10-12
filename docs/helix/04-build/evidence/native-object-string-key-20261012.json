@@ -1,0 +1,21 @@
+{
+  "scope": "Private actual-object string-key verifier; administrative fixture only, not public mutation/uniqueness",
+  "sourceSha256": "c0c21bdd72a93e2b8aba0a869d92dcbefb457f775dae89bac91c3cc5c823cfec",
+  "postgres": "18.6",
+  "nativeTests": {
+    "count": 1,
+    "passed": true,
+    "seconds": 5.7
+  },
+  "controls": [
+    "genuine ordered key values",
+    "wrong key/document-type",
+    "changed/missing/wrong-kind/null/extra-field cells",
+    "retired Record",
+    "row-home shadow",
+    "nonsingular or nonrequired field"
+  ],
+  "ownerModelReloadExportEqual": true,
+  "review": "Astra Ultra approved scoped helper commit",
+  "remaining": "Protected writer locking, qualified namespace, buckets/reservations, journal/feed and complete commit validation"
+}
