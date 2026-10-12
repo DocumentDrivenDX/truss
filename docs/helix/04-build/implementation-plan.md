@@ -6487,3 +6487,17 @@ Trace CONTRACT-063 / STP-056 B05/B10/B12/B15 and TD-020/STP-020. This is a
 single-subject fixture profile, not authenticated production mapping or explicit
 multi-subject support. Source/authority lifetime, complete diagnostics and public
 read integration remain required; no original backend case is promoted.
+
+
+### First protected read under old authority snapshot — 2026-10-12
+
+The native ontology fixture now refuses non-READ-COMMITTED entrypoint execution.
+An actual ordinary repeatable-read snapshot starts before committed assignment
+change, then first protected count refuses0A000; fresh read sees revocation and
+repair restores original visibility. Seventy-one observations and Python
+boundaries723imports pass. Receipt:
+`evidence/security-old-snapshot-refusal-20261012/receipt.json`.
+Trace CONTRACT-063 / US-057-AC3 / STP-057 L05/L06 and TD-020/STP-020. This is
+a selected profile restriction, not admitted revocation/current-authority drain
+or a historical read profile. Complete source/authority exclusion and final
+publication remain required; no original backend case is promoted.

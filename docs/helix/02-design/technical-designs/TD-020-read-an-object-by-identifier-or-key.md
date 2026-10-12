@@ -338,3 +338,18 @@ evidence: `../../04-build/evidence/security-subject-ambiguity-20261012/receipt.j
 This selects single-subject semantics only. Federation, explicit multi-subject
 profiles, issuer authenticity, coherent mapping/authority lifetime and full
 diagnostic privacy remain separate production obligations.
+
+
+### Old snapshot/current authority incompatibility — 2026-10-12
+
+The fixture entrypoint now selects READ COMMITTED and refuses incompatible
+transaction isolation before private fact lookup. An actual ordinary transaction
+establishes repeatable-read snapshot before committed AA deactivation; its first
+protected count refuses0A000 with generic authority-profile unavailability. A
+fresh ordinary statement sees revocation and repair restores RA/RAB. Seventy-one
+observations and Python boundaries pass; evidence:
+`../../04-build/evidence/security-old-snapshot-refusal-20261012/receipt.json`.
+This enforces only the selected isolation restriction. READ COMMITTED does not
+provide admission-linearized revocation, complete current authority or held final
+release. Keep the coordinator/generation and writer/control-plane participation
+requirements; a historical data profile needs separately fresh authority facts.

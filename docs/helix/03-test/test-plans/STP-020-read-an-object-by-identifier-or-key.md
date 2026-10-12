@@ -520,3 +520,13 @@ Sixty-seven observations pass in
 `../../04-build/evidence/security-subject-ambiguity-20261012/receipt.json`.
 Original issuer/source custody and mapping changes under held admission remain
 required; this does not define multi-subject or federation semantics.
+
+
+Old-snapshot precursor: establish repeatable-read snapshot before an excluded
+committed assignment change, then attempt the first protected count. Require
+0A000 profile refusal before stale facts authorize output; fresh statement sees
+revocation and restoration restores the vector. Seventy-one observations pass
+in `../../04-build/evidence/security-old-snapshot-refusal-20261012/receipt.json`.
+Shared STP-057 L05/L06 remains open until actual enrolled revocation/current-
+authority/publication protocol executes. Isolation restriction alone cannot
+close revocation drain or historical data/current authority composition.
