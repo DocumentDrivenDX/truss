@@ -77,6 +77,14 @@ def bootstrap_security_homes_in_transaction(host, transaction, *, installation_i
                 raise ValueError('Exact private security-home ownership and ACL required')
         cursor.execute('INSERT INTO truss.policy_generation_guard VALUES(1,%s,%s,1)',(installation_identity,authored_profile),prepare=False)
         cursor.execute('INSERT INTO truss.policy_publication_capacity VALUES(1,%s,%s,%s)',(installation_identity,authored_profile,max_retained),prepare=False)
+        cursor.execute('SELECT singleton,installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard',prepare=False)
+        if cursor.fetchall()!=[(1,installation_identity,authored_profile,1)]:
+            raise ValueError('Exact original native guard seed required')
+        cursor.execute('SELECT singleton,installation_identity_bytes,policy_profile_bytes,max_retained FROM truss.policy_publication_capacity',prepare=False)
+        if cursor.fetchall()!=[(1,installation_identity,authored_profile,max_retained)]:
+            raise ValueError('Exact original native capacity seed required')
+        cursor.execute('SELECT 1 FROM truss.policy_publication_claim LIMIT 1',prepare=False)
+        if cursor.fetchall():raise ValueError('Original empty publication registry required')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
         if cursor.fetchone()!=(original_path,):raise ValueError('Original search path restoration required')
         return PendingSecurityHomes(installation_identity,authored_profile,max_retained)

@@ -19,6 +19,23 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_private_bootstrap_refuses_suppressed_native_seed(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  self.install()
+  self.admin.execute("CREATE SCHEMA bootstrap_fault_fixture;CREATE FUNCTION bootstrap_fault_fixture.skip_seed() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RETURN NULL;END $$")
+  self.admin.execute("CREATE FUNCTION bootstrap_fault_fixture.attach_fault() RETURNS event_trigger LANGUAGE plpgsql AS $$ DECLARE command record;BEGIN FOR command IN SELECT * FROM pg_catalog.pg_event_trigger_ddl_commands() LOOP IF command.object_identity='truss.policy_generation_guard' THEN EXECUTE 'CREATE TRIGGER skip_seed BEFORE INSERT ON truss.policy_generation_guard FOR EACH ROW EXECUTE FUNCTION bootstrap_fault_fixture.skip_seed()';END IF;END LOOP;END $$")
+  self.admin.execute("CREATE EVENT TRIGGER bootstrap_seed_fault ON ddl_command_end WHEN TAG IN ('CREATE TABLE') EXECUTE FUNCTION bootstrap_fault_fixture.attach_fault()")
+  self.addCleanup(self.admin.execute,'DROP SCHEMA bootstrap_fault_fixture CASCADE')
+  self.addCleanup(self.admin.execute,'DROP EVENT TRIGGER bootstrap_seed_fault')
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);tx=self.host.adopt_transaction().value
+  self.admin.execute("CREATE TEMP TABLE bootstrap_fault_work(value text);INSERT INTO bootstrap_fault_work VALUES('kept')")
+  result=bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=self.installation.installation_id.encode(),authored_profile=b'suppressed-seed-fixture/0.1',max_retained=6)
+  self.assertIsInstance(result,Error)
+  for home in ['policy_generation_guard','policy_publication_claim','policy_publication_capacity']:
+   self.assertIsNone(self.admin.execute('SELECT pg_catalog.to_regclass(%s)',('truss.'+home,)).fetchone()[0])
+  self.assertEqual(self.admin.execute('TABLE bootstrap_fault_work').fetchall(),[('kept',)])
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.seed.json').write_text(json.dumps({'observations':['actual native event hook attaches BEFORE INSERT suppression','bootstrap refuses without pending success','all three homes roll back','original caller work preserved'],'scope':'Native suppressed-seed containment; excluded administrator injects fixture fault. Not full event-hook census or security profile admission.'},indent=2)+'\n')
  def test_private_security_home_operation_preserves_transaction_and_refuses_repair(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction

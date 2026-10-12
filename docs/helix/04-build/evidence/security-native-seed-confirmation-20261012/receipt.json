@@ -1,0 +1,32 @@
+{
+  "before": {
+    "sourceCommit": "48c51ca0b75239b1f64af251bc2666f1c4bc9506",
+    "result": "confirmed defect: suppressed native guard INSERT returned pending success"
+  },
+  "after": {
+    "nativeTests": 6,
+    "nativeSeconds": 21.004,
+    "upgradeTests": 1,
+    "upgradeSeconds": 7.226,
+    "result": "pass",
+    "boundaries": "797 imports pass"
+  },
+  "commands": {
+    "native": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-seed-after-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+    "upgrade": "TRUSS_UPGRADE_SOURCE_PACKAGE=/private/tmp/truss-source-lookup-023-r2-installed PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python -m unittest test_runtime_upgrade_native"
+  },
+  "acceptanceTraceability": [
+    {
+      "case": "truss.L12",
+      "covers": "US-057-AC8",
+      "partialAssertion": "Suppressed native initialization causes contained refusal, complete home rollback and retention of prior caller work",
+      "caseClosed": false
+    }
+  ],
+  "scope": "Private bootstrap confirms exact guard and capacity rows and empty claim registry before pending success. Original administrator event-hook injection is a native negative control, not a complete native hook/source census or activated security profile. All 132 required cases retained.",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_home_installation.py": "a2119d47a23e0833bfc91aed2bf86211578102b3083c59a0699bae4d3c4787fa",
+    "packages/python/tests/test_security_public_ontology_native.py": "13fd8a6f65c9bd74d8b271c7637bb57c8f387cce5bcb9076902cec77f3213156",
+    "packages/python/tests/test_runtime_upgrade_native.py": "ccf5f738d734be45ab4c23a7c2f76e4483a17742cae5560ee90f6fdab59c8130"
+  }
+}
