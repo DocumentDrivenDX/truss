@@ -1,0 +1,18 @@
+{
+  "baseCommit": "ac49604b491f87da92e70aa6607015758c791dd0",
+  "tests": 14,
+  "localDevelopmentBounds": {
+    "visitedNodes": 4096,
+    "depth": 64,
+    "utf8TextBytes": 1048576
+  },
+  "scope": "Private buffered-result seam, synthetic hosts. Cycle/depth/shared-reference/size refusal, full cleanup and slot settlement; no native security streaming/release/resource issuer qualification or acceptance promotion. Bounds exclude producer allocation and total Python heap.",
+  "trace": [
+    "CONTRACT-063 resource admission/final release",
+    "STP-057 L04/L11"
+  ],
+  "sha256": {
+    "packages/python/src/truss/_query_execution.py": "193407bb47a18c20962b30cad2f0e342db74939ffbf80b137a446ab8f811defc",
+    "packages/python/tests/test_query_execution.py": "e0aabb0b596586aa475ebffcdbb15251b459906d6d1911d0c8344f9d53dba9c8"
+  }
+}

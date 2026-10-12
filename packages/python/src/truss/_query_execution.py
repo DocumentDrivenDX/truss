@@ -60,24 +60,49 @@ class _SynchronousContext:
 
 
 def _freeze_result(value):
-    if type(value) is str:
-        try: value.encode('utf-8', errors='strict')
-        except UnicodeError as error:
-            raise CompileRefusal('decoder', 'Lossless Unicode required') from error
-        return value
-    if value is None or type(value) is bool:
-        return value
-    if type(value) in (tuple, list):
-        return tuple(_freeze_result(child) for child in value)
-    # A mapping proxy may hide a custom mapping with executable iteration.
-    # Input must be an exact dict; only this producer creates frozen proxies.
-    if type(value) is dict:
-        if any(type(key) is not str for key in value):
-            raise CompileRefusal('decoder', 'Exact string member names required')
-        for key in value:
-            _freeze_result(key)
-        return MappingProxyType({key:_freeze_result(child) for key,child in value.items()})
-    raise CompileRefusal('decoder', 'Stored values require admitted exact carriers')
+    # Private development profile bounds, not shared semantic/product ceilings.
+    nodes, text = 4096, 1048576
+    ancestors = set()
+    def visit(value, depth):
+        nonlocal nodes, text
+        nodes -= 1
+        if nodes < 0 or depth > 64:
+            raise CompileRefusal('decoder', 'Decoded result exceeds admitted bounds')
+        if type(value) is str:
+            if len(value) > text:
+                raise CompileRefusal('decoder', 'Decoded text exceeds admitted bounds')
+            try: size = len(value.encode('utf-8', errors='strict'))
+            except UnicodeError as error:
+                raise CompileRefusal('decoder', 'Lossless Unicode required') from error
+            text -= size
+            if text < 0:
+                raise CompileRefusal('decoder', 'Decoded text exceeds admitted bounds')
+            return value
+        if value is None or type(value) is bool:
+            return value
+        if type(value) not in (tuple, list, dict):
+            raise CompileRefusal('decoder', 'Stored values require admitted exact carriers')
+        identity = id(value)
+        if identity in ancestors:
+            raise CompileRefusal('decoder', 'Cyclic decoded result refused')
+        # Bound cardinality before scanning/allocating or inspecting every key.
+        if len(value) > nodes:
+            raise CompileRefusal('decoder', 'Decoded result exceeds admitted bounds')
+        ancestors.add(identity)
+        try:
+            if type(value) in (tuple, list):
+                return tuple(visit(child, depth + 1) for child in value)
+            # Only this producer creates proxies; input proxies can hide callbacks.
+            frozen = {}
+            for key, child in value.items():
+                if type(key) is not str:
+                    raise CompileRefusal('decoder', 'Exact string member names required')
+                visit(key, depth + 1)
+                frozen[key] = visit(child, depth + 1)
+            return MappingProxyType(frozen)
+        finally:
+            ancestors.remove(identity)
+    return visit(value, 0)
 
 
 class QueryCoordinator:

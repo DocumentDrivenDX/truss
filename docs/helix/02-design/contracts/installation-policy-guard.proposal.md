@@ -534,3 +534,21 @@ Thirteen coordinator tests pass with synthetic hosts. Evidence:
 This is a private seam correction, not a native streaming/security service,
 authenticated callback/issuer/guard proof or full STP-057 L04 qualification.
 Production final-release integration and remaining acceptance cases stay open.
+
+
+### Bounded private result freezing — 2026-10-12
+
+The private synchronous coordinator now counts decoded visits, depth and UTF-8
+text before publishing its complete immutable result. Its development subset
+is4096 visited nodes, depth64 and1MiB text, including keys. It rejects cycles,
+shared-reference expansion, oversized collections and text rather than returning
+a prefix. Cardinality/character bounds precede collection scanning and encoding;
+UTF-8 bytes are checked exactly. These are local implementation bounds, not
+shared semantics/product ceilings or producer/whole-Python-heap qualification.
+
+Fourteen tests pass, including repeated execution after each refusal to verify
+slot settlement and cleanup, plus the exact text boundary. Evidence:
+`../../04-build/evidence/security-result-bounds-20261012/receipt.json`.
+Synthetic host checks do not qualify native original producer/cut/issuer, guarded
+publication or a streaming service. Production admission and original backend
+acceptance cases remain open.

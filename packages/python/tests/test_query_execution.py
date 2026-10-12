@@ -128,6 +128,23 @@ class QueryExecutionTests(unittest.TestCase):
             self.assertEqual(events.count('cleanup'),1)
             self.assertIsNone(streams[0].gi_frame)
 
+    def test_result_resource_refusal_preserves_cleanup_and_never_returns_prefix(self):
+        cycle=[];cycle.append(cycle)
+        shared=['leaf']
+        for _ in range(20):shared=[shared,shared]
+        deep='leaf'
+        for _ in range(66):deep=[deep]
+        for decoded in [[cycle],[shared],[deep],['x'*1048577],['😀'*262145],[None]*4097]:
+            events=[];engine,plan=coordinator(self.host(events,decode=decoded))
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'decoder')
+            self.assertEqual(events.count('cleanup'),1)
+            # The operation slot settles on refusal; it is not left busy.
+            with self.assertRaises(CompileRefusal) as again:engine.execute(plan)
+            self.assertEqual(again.exception.code,'decoder')
+        events=[];engine,plan=coordinator(self.host(events,decode=['x'*1048576]))
+        self.assertEqual(engine.execute(plan),('x'*1048576,))
+
     def test_disposal_and_reentrancy_do_not_repeat_native_work(self):
         events=[];host=self.host(events)
         def check(*_):
