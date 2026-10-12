@@ -55,6 +55,41 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Adopter completion priorities — 2026-10-12
+
+Runtime 0.14 delivers real object update/delete and mixed batches, but does not
+close the remaining adopter requirements. Prioritize the following callable
+features with basic public workflows rather than more qualification slices:
+
+1. R11 caller preconditions are evaluated by Truss inside the same atomic group
+   as its effects, under the corresponding locks. Do not delegate a preliminary
+   check to the host. Define existence, key absence, exact property equality,
+   relationship absence and relationship-count bounds; preserve caller IDs and
+   reasons and report all failed conditions without effects.
+2. Implement `CreateEdge`/edge deletion as Link/Unlink counterparts, relationship
+   reads and final-batch multiplicity checks. A mandatory relationship may be
+   satisfied by the same batch that creates its endpoints. Keep ordinary-owner
+   authorization and document-qualified definitions in that path.
+3. Expose explicit typed unauthorized and invalid group failures, so consumers
+   can map results without decoding generic diagnostic artifacts.
+4. Deliver imports and original receipt tokens/`reached` through the public
+   assembly, followed by Weft execution and committed feed/ordinary-role ACK.
+   Preserve caller settlement, exact values, idempotent recovery and current
+   disclosure authority.
+5. Accept compatible changed documents under stable native identities; the
+   scalar-refusal comparator alone does not qualify evolution acceptance.
+6. Provide migrations and managed installation. Remove the application's Bun
+   dependency by consuming owner-supported Python/native UMF key/registration
+   surfaces; do not write competing UMF semantics. A local Python shim around
+   Bun does not satisfy that deployment requirement.
+
+These core capabilities need implementation, not rejection of the consumer's
+requirements. Platform support is a separate claim: installer privileges must
+match managed role/schema administration rather than assuming `rolsuper`, and
+Lakebase requires an actual supplied platform connection/privilege profile and
+basic deployment tests before Truss advertises support. Rootless scalar-only and
+fresh-install-only remain explicit interim limits, not release completion.
+
 ## Public object mutations implementation — 2026-10-12
 
 Runtime 0.14 extends the existing `GroupCapability` and `UpdateObject`/`Delete` shapes to real
