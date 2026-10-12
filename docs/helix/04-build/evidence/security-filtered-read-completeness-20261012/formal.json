@@ -1,0 +1,42 @@
+{
+  "solver": "4.15.4",
+  "bound": "Exactly two abstract rows and two validity cuts; Boolean eligibility requires validity.",
+  "assumptions": "Complete preflight covers both rows; coherent means unchanged per-row validity across cuts. No implementation refinement, complete population authentication or held native authority proof.",
+  "observations": [
+    {
+      "id": "complete-current-gate-rejects-malformation",
+      "expected": "unsat",
+      "observed": "unsat",
+      "formula": "complete-current-gate-rejects-malformation.smt2",
+      "model": null
+    },
+    {
+      "id": "filtered-success-does-not-imply-completeness",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "filtered-success-does-not-imply-completeness.smt2",
+      "model": "[valid_cut1_1 = False,\n valid_cut1_0 = True,\n active_1 = False,\n active_0 = True]"
+    },
+    {
+      "id": "old-preflight-does-not-establish-current-completeness",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "old-preflight-does-not-establish-current-completeness.smt2",
+      "model": "[valid_cut1_1 = False,\n valid_cut0_1 = True,\n valid_cut0_0 = True,\n valid_cut1_0 = True,\n active_1 = False,\n active_0 = True]"
+    },
+    {
+      "id": "coherent-preflight-rejects-malformation",
+      "expected": "unsat",
+      "observed": "unsat",
+      "formula": "coherent-preflight-rejects-malformation.smt2",
+      "model": null
+    },
+    {
+      "id": "valid-eligible-positive",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "valid-eligible-positive.smt2",
+      "model": "[valid_cut1_1 = True,\n valid_cut0_1 = True,\n valid_cut0_0 = True,\n valid_cut1_0 = True,\n active_1 = True,\n active_0 = True]"
+    }
+  ]
+}

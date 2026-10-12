@@ -1,0 +1,11 @@
+{
+  "assignments": 64,
+  "satisfyingAssignmentCounts": [
+    0,
+    16,
+    4,
+    0,
+    3
+  ],
+  "scope": "Exactly the two-row Boolean model, not implementation refinement."
+}

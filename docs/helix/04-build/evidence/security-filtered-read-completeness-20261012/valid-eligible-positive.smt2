@@ -1,0 +1,18 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun active_1 () Bool)
+(declare-fun valid_cut1_1 () Bool)
+(declare-fun active_0 () Bool)
+(declare-fun valid_cut1_0 () Bool)
+(declare-fun valid_cut0_1 () Bool)
+(declare-fun valid_cut0_0 () Bool)
+(assert
+ (let (($x12 (and valid_cut1_1 active_1)))
+(let (($x11 (and valid_cut1_0 active_0)))
+(let (($x15 (or $x11 $x12)))
+(let (($x17 (= valid_cut0_1 valid_cut1_1)))
+(let (($x16 (= valid_cut0_0 valid_cut1_0)))
+(let (($x18 (and $x16 $x17)))
+(let (($x13 (and valid_cut0_0 valid_cut0_1)))
+(and $x13 $x18 $x15)))))))))
+(check-sat)

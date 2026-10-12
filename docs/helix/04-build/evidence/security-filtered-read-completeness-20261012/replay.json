@@ -1,0 +1,22 @@
+[
+  {
+    "id": "complete-current-gate-rejects-malformation",
+    "observed": "unsat"
+  },
+  {
+    "id": "filtered-success-does-not-imply-completeness",
+    "observed": "sat"
+  },
+  {
+    "id": "old-preflight-does-not-establish-current-completeness",
+    "observed": "sat"
+  },
+  {
+    "id": "coherent-preflight-rejects-malformation",
+    "observed": "unsat"
+  },
+  {
+    "id": "valid-eligible-positive",
+    "observed": "sat"
+  }
+]

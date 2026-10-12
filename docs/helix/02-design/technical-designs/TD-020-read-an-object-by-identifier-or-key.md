@@ -107,3 +107,126 @@ CONTRACT-004's direct-lookup-observation-v0.1.proposal.sql authors four fixed st
 CONTRACT-005's protected bucket-read boundary restricts complete original context to registered private observation/owner admission; the read owner cannot inherit hidden integrity-observer privileges. Native protected entrypoint signatures/bodies, original-context registry/caller linkage, current-authority coordinator and exact value/metadata/codec profiles remain concrete authoring outputs. Ordinary app grants cannot expose matched context by treating the draft as public SQL.
 
 The named direct-lookup resource candidate bounds request, full namespace/key/context carriers, native/public bytes, both observed rows, owner/submission/allocation/time dimensions. These values are proposals, not producer/feasibility evidence. Sixteen pinned UMF source drafts pass preservation/reload/export; the lookup's four SELECT statements remain unhandled by partial DDL extraction. Neither source preservation nor future native test names closes these design/adoption gaps. STP-020 now contains the fixed-query, collision, read-only, private-context, resource and current-authority controls.
+
+
+### Protected disclosure and complete source admission — 2026-10-12
+
+CONTRACT-005 already separates public read ownership from private integrity
+observation; shared UMF CONTRACT-063 requires complete admitted facts, original
+source correspondence and held current authority. The current Python get routine
+is a complete-read candidate: its non-bypass definer owner and row_security=off
+refuse forced RLS. It is not the protected-disclosure owner realization.
+
+A disposable native experiment changes only that routine's setting to on.
+Public get then returns the eligible object and hides the denied object, but
+still returns the eligible object after a hidden required field is removed.
+Excluded complete-source validity returns false. This is a counterexample to
+using filtered success as source admission, not a proposed production setting
+change. Original settings are restored. Twenty-eight native observations, five
+conditional Z3 checks/replays and an independent64-assignment Boolean oracle are
+retained in `../../04-build/evidence/security-filtered-read-completeness-20261012/receipt.json`.
+The model is exactly two rows/two validity cuts; it proves no native guard or
+implementation refinement. Old preflight with a changed cut admits a modeled
+malformation; coherent complete preflight excludes it under the stated premises.
+
+Implement the existing contract boundary in this order:
+
+1. The protected collector owns complete selected catalog/object/property/key/
+   edge coverage, original native mapping and exact codecs. Capture invalid or
+   hidden carriers before filtering. It emits no public row, count or raw fact.
+2. Bind complete validation to the disclosure's actual source/data cut. Select
+   and qualify native exclusion or integrity-preserving writer participation;
+   a preceding statement, catalog revision or unchanged counts is insufficient.
+   READ COMMITTED statements may observe different data cuts. Original schema/
+   policy/role/fact changes remain covered by the authority protocol as well.
+3. Install a separate narrowly privileged read owner and its exact registered
+   original-person capture/check path under CONTRACT-005. The current runtime
+   person helper requires the installation owner: granting a new read role alone
+   cannot compose that helper. Adopt and qualify the role/context transition
+   before exposing the protected entrypoint; preserve rejection of direct native
+   grants on ordinary API callers. No caller-selected elevation is admitted.
+4. Apply native row policy to disclosure under that read owner and original
+   caller, preserving business keys and current module/policy authority. Keep
+   complete collector/integrity owners and callbacks outside filtered visibility.
+5. Decode privately, revalidate the held source/authority/context through final
+   publication and return the contract's found/not-found/refusal outcomes.
+   Missing complete admission cannot become not_found or a partial success.
+
+Reuse the existing coordinator, mapping and decoder contracts; no additional
+SQL dialect, policy evaluator or request-supplied trusted evidence is introduced.
+Exact installed owner/capture/collector/coherent-cut profile realization remains
+unimplemented. Test key, page, count, traversal, retained carriers and hidden
+authorization facts separately before qualifying their surfaces. Row RLS does
+not provide property masking. Keep the existing complete-read profile available
+and reject unsupported protected composition rather than changing all routines
+to row_security=on. Activation and rollback preserve prior qualified protection.
+
+
+Selected-source exclusion feasibility now has an executable native regression
+in `packages/python/tests/test_security_graph_source_cut_native.py`. In the
+disposable on-setting experiment, the excluded assessor holds SHARE table locks
+on object/prop_def/type_def before complete preflight. An independent writer's
+RowExclusiveLock is observed ungranted in pg_locks. The actual public read returns
+while that writer is blocked; releasing the guard lets its hidden-row corruption
+commit, and the next preflight detects the incomplete source. Thirty-four total
+observations are retained in
+`../../04-build/evidence/security-native-source-exclusion-20261012/receipt.json`.
+This is a candidate native mechanism for the selected row/property/type cut, not
+an admitted security guard. It blocks all writers to those relations, even other
+types; performance and finite contention outcomes must be qualified before
+adoption. Role/policy/routine/private-fact changes and buffered release are not
+covered by these table locks. Preserve their separate authority/coordinator gates.
+
+
+### Narrow native read-owner feasibility — 2026-10-12
+
+The same native regression now instantiates a distinct nonlogin/noninherit/
+nonbypass read owner for an isolated fixed business-key lookup. It has SELECT
+only on object id/type_id/props, no table-wide SELECT and no retained/journal/
+mutation/sequence/schema-create rights. Its routine uses qualified dependencies,
+fixed search_path and row_security=on; ordinary callers get EXECUTE only. Native
+policy verifies the original session caller while current_user is the read owner.
+Authorized exact-key lookup returns the eligible label; denied/missing/injection-
+looking keys return no rows. Caller SET ROLE and raw bag/retained/journal reads
+refuse42501. An independently owned nested definer wrapper keeps the original
+authorized caller and cannot replace an unauthorized original caller with its
+own execution privilege. Fifty-six total observations and failed attempts are
+retained in
+`../../04-build/evidence/security-narrow-read-owner-20261012/receipt.json`.
+
+This realizes the native privilege transition in a test entrypoint, not the
+Python public get API. That API still requires installation-owner context under
+runtime_person. Production adoption must implement its registered read-role/
+original-person check, current module and ontology authority, complete source
+enrollment and held publication protocol before selecting this owner. Never
+change the existing helper to accept an arbitrary current_user or caller role.
+Selected props column access is row protection only; field masking and decoder
+privacy require separate faithful projection. Policy installation must drain
+earlier read transactions; native policy DDL cannot be inserted into their held
+read transaction. Rollback must retain the prior registered protected profile.
+
+
+### Selected native policy correspondence — 2026-10-12
+
+The native regression now retains71 observations. Independent fixture inventory
+includes native object owner/RLS/FORCE flags, every policy on object, selected
+original caller/read/wrapper role attributes and every overload/definition/owner/
+configuration/ACL for its three routines. An added permissive policy leaves
+source validity true while exposing the denied row. Changing only the predicate
+helper body also exposes it. Changing read-owner BYPASSRLS exposes it on fresh
+connections and defeats the nested original-caller restriction. Each mutation
+invalidates exact retained correspondence; originals restore exactly. A reused
+transaction still hid the row after role drift; retain that observation without
+inferring a cache/freshness mechanism or using it as authority.
+
+Four conditional Boolean policy-composition checks/replays and an independent
+16-assignment oracle distinguish permissive widening from restrictive narrowing.
+Sources, formulas, failed expectation and native outputs reside in
+`../../04-build/evidence/security-native-policy-correspondence-20261012/receipt.json`.
+The inventory comparator is still a fixture primitive. Production adoption must
+authenticate its original installation closure, observe the complete reachable
+call/role/ACL/dependency inventory and hold authority exclusion through release.
+Checking only known policy names, source row validity or old successful plans
+cannot discharge these obligations. Unknown additional policy or callable
+dependency blocks the selected closed profile; no capability is inferred from
+a successful label-only lookup. Current public runtime code remains unchanged.

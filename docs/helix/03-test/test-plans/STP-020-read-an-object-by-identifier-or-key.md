@@ -394,3 +394,70 @@ selection then completed offline; no dependency upgrade, download or owner
 working-source adoption was needed. Recheck this feature closure after any
 selected feature, dependency, source or build tuple change. Native writer/read
 byte correspondence and full Unicode/boundary/refusal cases remain not_run.
+
+
+### Protected-read completeness controls — 2026-10-12
+
+Expand original lookup safety under TD-020 / CONTRACT-005 and shared
+CONTRACT-063 / US-056-AC2/5/7/10; these do not substitute for key or backend cases.
+The disposable on-setting experiment is retained in
+`../../04-build/evidence/security-filtered-read-completeness-20261012/receipt.json`.
+It identifies the missing integration, not protected-profile acceptance.
+
+Required native runner controls: positive public lookup before/after admitted
+protection; hidden row with missing/wrong/extra required cell must invalidate
+complete admission before visible output; omission/duplicate/type collision in
+collector population; source change between preflight and lookup; catalog, role,
+policy and private-fact drift under explicit barriers; missing/foreign source-cut
+receipt; read-owner inheritance/SET/callable integrity escalation; hidden facts
+through direct/count/diagnostic paths; actual public decoder/release cancellation;
+and rollback retaining prior protection. Observe native settings, owners, complete
+call/ACL/source closure and actual ordinary identities independently. An earlier
+complete preflight or valid filtered row cannot satisfy the coherent-cut test.
+Integrity checks must continue to see invalid hidden rows and must not disclose
+their identities or values. All full-profile controls remain not-run until their
+actual admitted operation is implemented and independently exercised.
+
+
+The selected source-cut precursor now runs from the repository via
+`PYTHONPATH=packages/python/src:packages/python/tests python packages/python/tests/test_security_graph_source_cut_native.py`
+with stock psycopg, Bun and the selected pgserver-pg18 runtime installed. Optional
+TRUSS_SECURITY_COMPONENT_EVIDENCE retains the component JSON. The test confirms
+actual native lock wait/hold and ordering, not elapsed sleeps alone. This closes
+only the selected-source exclusion experiment, not the full controls above.
+
+
+Native source-exclusion acquisition controls now additionally exercise a150ms
+lock_timeout(55P03) and supported psycopg cancel(57014) while two source locks
+have been acquired and a third is waiting. Native pg_locks confirms the partial
+state before cancellation. ROLLBACK TO the engine savepoint releases every
+selected source lock and preserves prior transaction work. Neither failed
+acquisition path issues a read. The same repository regression retains42 total
+observations in
+`../../04-build/evidence/security-source-exclusion-failures-20261012/receipt.json`.
+Guard issuer loss/crash, actual protected-entrypoint publication, complete
+authority participation and retry outcomes remain separate required controls.
+
+
+Narrow-owner precursor controls in the same repository regression independently
+inspect native role/function/column/sequence/schema privileges, exact eligible/
+denied/missing business-key lookup, injection-looking parameters, ungranted
+caller entrypoint denial and original caller retention through nested definers.
+Ordinary owner adoption and direct bag/retained/journal access must refuse.
+Fifty-six component observations pass; see
+`../../04-build/evidence/security-narrow-read-owner-20261012/receipt.json`.
+The fixed fixture caller policy cannot qualify production module/subject mapping,
+public get adoption, complete callable inventory or source/authority lifetime.
+
+
+Selected correspondence precursor controls now add an extra permissive policy,
+replace the predicate helper body and grant BYPASSRLS to the read owner. Compare
+independently retained selected native descriptors before any admission; use
+explicitly bypassed comparisons only as disposable widening counterexamples.
+Source validity alone must not pass policy/helper/role drift. Restore native
+source and flags exactly and repeat denied-row/caller controls. Exercise fresh
+connections as well as original transactions; old filtered results cannot
+qualify changed authority. Seventy-one observations and four bounded composition
+proofs are retained in
+`../../04-build/evidence/security-native-policy-correspondence-20261012/receipt.json`.
+Complete issuer/callable closure and held authority/publication remain not-run.

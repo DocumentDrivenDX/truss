@@ -6254,3 +6254,129 @@ compiler equivalence or authority lifetime. Earlier bare-scalar graph fixtures
 do not qualify the current public writer representation. Trace CONTRACT-063 /
 STP-056 B01/B04/B08/B12/B15 prerequisites; no original case is promoted and the
 full132-case goal remains active.
+
+
+### Public graph/native RLS composition gap — 2026-10-12
+
+A public-created graph fixture now exercises forced RLS with original generated
+string/Boolean envelope projections. PostgreSQL18.6 retains23 observations: two
+public get positives before policy activation; actual ordinary direct-reader
+identity/flags and exact filtered rows/count; forged argument rejection by the
+actual-row policy; excluded administrator bypass; complete source validity and
+malformed-envelope controls; original owner/FORCE/settings inventory; and two
+public get contained refusals after activation. Sources, attempts and results are
+in `evidence/security-public-graph-rls-composition-20261012/receipt.json`.
+
+The runtime's public get SECURITY DEFINER body pins row_security=off. With FORCE
+RLS and a non-bypass table owner it refuses42501 rather than accepting filtered
+rows. Its caller check also refuses a person with direct native table grants;
+the direct-reader and API identities must remain separate. This establishes a
+current composition gap, not an API security profile or completed Truss B01.
+No guard or grant policy in the runtime has been weakened.
+
+Required continuation under shared CONTRACT-063 / TD-056 / STP-056 and
+US-056-AC2/5/7/8/9/10: define and adopt an explicit protected-read execution
+profile that separates policy-filtered disclosure from complete catalog/fact/
+integrity collection. Preserve complete collector refusal and original-person
+checks. Bind each read's native policy, mapping, exact caller, source cut and
+current authority before release; qualify definer/owner policy applicability.
+Then exercise public lookup/list/count/page and native bypass vectors against
+the full Clients/Projects/Staff oracle. Mutation/integrity callbacks must not
+inherit filtered visibility. Until that profile exists, retain forced-RLS public
+read refusal rather than changing row_security globally. No original backend
+case is promoted; full132-case acceptance remains required.
+
+
+Post-merge replay at17a1406d preserves the concurrent receipt-visibility runtime
+changes and repeats the same23 graph/RLS observations successfully.
+`security-public-graph-rls-composition-20261012/merged-receipt.json` retains exact
+current source pins, changed source preimages and outputs. Only this component
+is refreshed; broader runtime/package and backend acceptance remain open.
+
+
+### Filtered-read/complete-source split experiment — 2026-10-12
+
+Twenty-eight native observations show that a disposable get routine with
+row_security=on can filter actual public-created graph objects but still return
+a visible object while a hidden required field is missing. Complete excluded
+preflight rejects the same population. The original setting is restored and
+installed runtime code is unchanged. Five Z3 two-row/two-cut checks, five formula
+replays and an independent64-assignment oracle retain the conditional coherent-
+cut requirement and old-preflight counterexample.
+`evidence/security-filtered-read-completeness-20261012/receipt.json` pins sources
+and artifacts. TD-020 sequences complete collector/cut admission, separate read
+owner/original-person composition and native policy/release. STP-020 adds their
+required actual native controls. This advances design from an identified gap to
+a concrete implementation sequence; no original acceptance case is promoted.
+
+
+### Executable selected-source exclusion regression — 2026-10-12
+
+`test_security_graph_source_cut_native.py` and the real candidate producer fixture
+now reproduce public graph creation, source validity, ordinary forced-RLS reads,
+public-profile refusal/on-setting experiments, hidden malformed population and
+concurrent native source exclusion. Thirty-four observations pass on PostgreSQL
+18.6. pg_locks proves an independent hidden writer waits while three SHARE
+source locks cover complete preflight and actual API return; it commits after
+release and the next preflight rejects. Seventeen related Bun tests, strict
+security-source typing and Python boundaries(691imports) pass. Receipt and
+source preimages: `evidence/security-native-source-exclusion-20261012/receipt.json`.
+No runtime security setting changes; no original backend case is promoted.
+Table-level exclusion is a feasibility candidate with broad writer contention,
+not complete source/authority/publication guard admission. Next compose the
+original source enrollment and narrowly privileged read-owner/caller protocol,
+then qualify authority changes and final-release lifetime through actual APIs.
+
+
+### Selected-source acquisition timeout and cancellation — 2026-10-12
+
+The native graph source-cut regression now retains42 observations. A contended
+third source lock times out55P03 at the selected150ms lock_timeout. An independent
+pg_locks observation proves two locks held and the third waiting before supported
+psycopg cancellation57014. Engine savepoint rollback releases partial locks and
+keeps prior transaction work; neither failure path issues a read. Python module
+boundaries pass691imports. Current pins, changed source preimage and logs reside
+in `evidence/security-source-exclusion-failures-20261012/receipt.json`.
+
+Trace CONTRACT-005 / TD-020 / STP-020 and shared CONTRACT-063 / STP-056 B15/B16 /
+STP-057 L11 prerequisites. Native acquisition/recovery feasibility is now tested;
+protected issuer/enrollment, narrowed read-owner/original-person composition,
+authority changes, lost-guard containment and publication remain unimplemented.
+No current runtime setting is changed and no original backend case is promoted.
+
+
+### Native narrow read-owner boundary — 2026-10-12
+
+The executable graph regression now retains56 observations, adding separate
+nonlogin read ownership with selected column-only privileges, native forced-RLS
+lookup and original caller binding. Ordinary callers cannot SET the owner role
+or read raw object bags, retained data or journals. Nested definers preserve the
+authorized session caller and cannot substitute privileged owners for the
+unauthorized caller. Native settings/privileges and failed attempts are pinned
+in `evidence/security-narrow-read-owner-20261012/receipt.json`; Python boundaries
+pass691imports. Existing runtime code and public get ownership are unchanged.
+
+Trace CONTRACT-005 / TD-020 / STP-020 and shared CONTRACT-063 / STP-056 B01/B04/
+B05/B06/B12 prerequisites. The disposable fixed lookup is an implemented test
+entrypoint, not a released API profile. Next adopt a registered narrow read-owner
+context in the original public read/decoder path, compose original complete
+source enrollment and current module/ontology authority, and qualify complete
+callable closure and held final release. No original acceptance case is promoted.
+
+
+### Native policy/helper/role drift correspondence — 2026-10-12
+
+The graph regression retains71 observations. Selected original native inventory
+detects an extra permissive policy, changed helper definition and read-owner
+BYPASSRLS. Deliberately bypassing correspondence exposes denied rows, while
+source validity still passes policy widening. Fresh connections additionally
+expose failure of the nested caller restriction under bypass ownership. Original
+policies, body and role flags restore exactly. Reused transaction behavior is
+retained separately without a cache explanation. Python boundaries pass691imports.
+Four Z3 Boolean composition checks/replays plus16-assignment oracle are scoped
+conditional evidence. Receipt: `evidence/security-native-policy-correspondence-20261012/receipt.json`.
+Trace shared CONTRACT-063 / STP-056 B05/B06/B11/B12 and TD-020 / STP-020.
+No production inventory issuer or held authority gate is implemented by this
+fixture comparison; no original backend case is promoted. Next bind authenticated
+original installation custody and complete callable/privilege closure to the
+protected read context, preserving authority through final publication.
