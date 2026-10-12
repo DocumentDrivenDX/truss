@@ -63,9 +63,9 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
     _inspect_original_fact_sources(requirements,digest,sources)
     selected,providers=_epoch_dependency_recipe(epoch,digest,sources)
     profile=json.loads(selected.profile)
-    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3','truss-flat-fact-provider-fixture/0.4'):
+    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3','truss-flat-fact-provider-fixture/0.4','truss-flat-fact-provider-fixture/0.5'):
         raise ValueError('Original source-bound fixture profile required')
-    if profile['kind'].endswith('/0.4')!=delegated:
+    if profile['kind'].endswith(('/0.4','/0.5'))!=delegated:
         raise ValueError('Original delegated caller scope required')
     groups={}
     for p in providers:
@@ -133,7 +133,7 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
     """
     if caller_host is executor_host:raise ValueError('Separate original caller/executor hosts required')
     selected,providers=_epoch_dependency_recipe(epoch,hashlib.sha256(requirements).hexdigest(),sources)
-    if not json.loads(selected.profile)['kind'].endswith('/0.4'):raise ValueError('Original delegated profile required')
+    if not json.loads(selected.profile)['kind'].endswith(('/0.4','/0.5')):raise ValueError('Original delegated profile required')
     prepared=_pin_owned_evaluator_sources()
     left,right=caller_host.connection.info,executor_host.connection.info
     if (left.host,left.port,left.dbname)!=(right.host,right.port,right.dbname):raise ValueError('Original configured endpoint correspondence required')

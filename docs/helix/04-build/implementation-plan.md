@@ -5601,3 +5601,106 @@ completion of the callable installation/registration/report milestone. Productio
 integration must use the selected public assembly and original minimum security
 handoff without restoring historical snapshot/codec release gates. No backend
 binding or C01/C02 exit is promoted;26/132 remains accepted with106 unbound.
+
+### Source-bound authenticated delegated read — 2026-10-12
+
+Owned `truss-flat-fact-provider-fixture/0.5` retains0.4's exact original
+requirement/policy/resolution/provider, caller-role/subject-key and executor-role
+correspondence, and requires native SCRAM login correspondence on the caller.
+The original profile bytes select this stricter requirement; no request-carried
+authentication flag or copied metadata can satisfy it. Admission and final caller
+publication both execute the actual native check. Original0.4 remains a separate
+administrative fixture profile; Core/ontology/key/disclosure semantics still
+belong to the original UMF implementation.
+
+The dependency recipe, guarded delegated read and closed receiver now support
+this owned0.5 subset. Standalone/nondelegated capture refuses it. The private
+executor still uses the original0.4 native role scope: this is caller credential
+authentication, not executor/issuer/target authentication or a public admitted
+backend. No custom custody codec or whole-operation snapshot pipeline is added.
+At initial inspection the inert public assembly and unqualified installation
+asset could not supply the selected callable registration/report milestone.
+Public catalog implementation subsequently landed during this turn and is
+preserved below. These authentication components do not substitute for public
+workflow qualification or impose a blanket catalog SCRAM requirement.
+
+Three new native controls exercise the actual composed path. A matching trust
+session refuses before executor invocation. A genuine SCRAM caller invokes the
+closed receiver and original UMF evaluator, returning the original permitted,
+withheld salary output. An excluded administrator renames the login role after
+successful executor evaluation; original authentication identity stays unchanged
+while the native session name changes, and final caller publication refuses.
+Authentication policy mutation is confined to an isolated owned class lifecycle;
+the test restores original HBA bytes and removes the credential-bearing role.
+
+Final `evidence/python-psycopg-epoch-cut/48ac1b2b-5fca-487a-8e15-c3f231ee7cc7`
+passes197 methods, including144 fact/identity controls, and the module boundary
+gate. It retains145 original/current/preimage Truss sources,363 original/current/
+archive UMF sources and1705 native payload pins on PostgreSQL18.6 /
+pgserver-pg18 18.6.1 / stock psycopg3.3.6 binary/libpq180006. Three fixture cleanups
+confirm stop0/status3/socket absent. Initial d76eb4fd also passes197 before the
+runner's scope-description count was corrected; preserve its original scope.
+
+Formal `evidence/security-authenticated-publication-formal/cd4b2824-d19b-449f-84cd-8cab455ff5da`
+retains six exact source/native-receipt inputs and four Z3 4.15.4 SMT-LIB/fresh-
+context replays, two UNSAT/two SAT. NULL authentication excludes executor and
+publication; matching role OIDs do not bypass a changed login name at publication.
+Other-route authentication and ontology-subject mapping remain independent SAT
+countermodels. Faithful native role/name/source-cut observations, immutable
+original authentication and retained custody are premises, not Python/native or
+complete semantic refinement proofs. Trace TD-056 C02/C04/C05, CONTRACT-063/
+STP-056 B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites. No backend binding is
+promoted; all132 cases remain required,26 pass and106 remain unbound.
+
+### Public catalog merge and authenticated-read requalification — 2026-10-12
+
+The initial non-force push was rejected because main had acquired the public
+catalog milestone at6c934ea5/d9349175. Merge preserves the actual
+`CatalogReferenceAssembly`, caller-owned installation, registration/report/status
+facades, selected deferred barrier, privileges and packaged SQL. Its existing
+`public-python-catalog-20261012.json` records14 native source and14 installed-wheel
+checks under the catalog-only scope; these owner-reported results are distinct
+from this turn's independent security composition and do not close advanced
+business security cases. Public registration/report review is now possible from
+actual source rather than an inert selector or administrative staging helper.
+
+Fresh `evidence/python-psycopg-epoch-cut/3ab7359a-12bc-433d-86b4-6caadae1d96c`
+passes197 methods and the boundary gate on the combined executable source,
+retaining146 Truss,363 UMF and1705 native payload pins and three confirmed
+cleanups. Prior48ac1b2b/d76eb4fd packets retain their pre-merge source scopes.
+The new native public catalog SQL, its actual routing/credential/privilege
+inventory and minimum security handoff require independent qualification; this
+197-method fixture does not execute the public catalog workflow. No blanket
+SCRAM release gate or advanced business-write/read capability is inferred.
+
+Merged formal `evidence/security-authenticated-publication-formal/b75d3127-9778-40d9-b023-88d5cb752a79`
+retains six current source/native-receipt inputs and the same four fresh-context
+replays, two UNSAT/two SAT. All current/archive/SMT digests are rechecked before
+publication. Formal and native scope remain caller-only owned0.5; public catalog
+and all advanced backend cases keep their independent acceptance obligations.
+
+### Accepted-catalog views merge and security continuation — 2026-10-12
+
+A second non-force push rejection preserved main's b9a0dc12 accepted-catalog
+views. The merge retains the public view facade, original definition-source
+correspondence and bounded extractor. Existing owner-reported
+`public-python-catalog-view-20261012.json` records29 source/installed-wheel tests
+under its catalog-view scope; this is not independently replayed by the security
+composition or full business backend acceptance.
+
+Final `evidence/python-psycopg-epoch-cut/06f572a7-cc8b-405b-9965-c4b66e1943b6`
+passes197 methods and boundaries on the combined source, with149 Truss,363 UMF
+and1705 native payload pins and three confirmed cleanups. Earlier3ab7359a retains
+the pre-view-merge source scope. Final conditional formal packet
+`evidence/security-authenticated-publication-formal/e56bad3d-5cd6-45d4-b8a3-c1666e42fc60`
+replays four queries, two UNSAT/two SAT, with six exact current/native-receipt
+inputs. Earlier b75d3127 preserves its original intermediate scope. Verify all
+current/preimage/archive/runtime/SMT digests before publication.
+
+Next execute adversarial public actor checks for column privilege and REFERENCES
+drift, predefined-role access and inheritance-option semantics. Source review
+found table-level denial without column/REFERENCES checks and recursive membership
+without inherit/set filtering; these are hypotheses requiring original native
+public-API controls before any bypass or policy-semantics claim. Keep callable
+public metadata and advanced business profiles distinct. The whole goal remains
+active at26/132 with106 unbound required cases.

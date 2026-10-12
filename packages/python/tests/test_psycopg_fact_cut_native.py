@@ -11,6 +11,8 @@ from truss._psycopg_dependency_fact_cut import _DependencyFactProvider,_run_depe
 ROOT=Path(__file__).resolve().parents[3]
 
 class PsycopgFactCutNativeTests(unittest.TestCase):
+    # Authentication policy mutation is confined to this owned lifecycle fixture.
+    isolated_lifecycle=True
     run_pg=classmethod(epoch_tests.PsycopgEpochCutNativeTests.run_pg.__func__)
     @classmethod
     def setUpClass(cls):
@@ -523,11 +525,12 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
         self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
 
-    def with_unprivileged_actor(self, operation, grant_owner=False, attribute=None, catalog_only=False):
+    def with_unprivileged_actor(self, operation, grant_owner=False, attribute=None, catalog_only=False, scram=False):
         from truss.psycopg_host import PsycopgHost,PsycopgProfile
         self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
         original=self.ddl_comparison()
         self.connection.execute('CREATE ROLE fact_cut_actor LOGIN')
+        hba=None;original_hba=None;password=None
         try:
             self.connection.execute('GRANT USAGE ON SCHEMA truss TO fact_cut_actor')
             if not catalog_only:
@@ -537,7 +540,25 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             self.connection.execute('REVOKE ALL ON FUNCTION truss.catalog_global_high_water_v01(),truss.catalog_key_high_water_v01(integer) FROM fact_cut_actor')
             if grant_owner:self.connection.execute('GRANT postgres TO fact_cut_actor')
             if attribute:self.connection.execute('ALTER ROLE fact_cut_actor '+attribute)
-            with psycopg.connect(host=str(self.socket),user='fact_cut_actor',dbname='postgres',autocommit=True,options='-c statement_timeout=3s') as connection:
+            if scram:
+                import secrets,time
+                password=secrets.token_urlsafe(32)
+                self.connection.execute("SET password_encryption='scram-sha-256'")
+                self.connection.execute(sql.SQL('ALTER ROLE fact_cut_actor PASSWORD {}').format(sql.Literal(password)))
+                hba=Path(self.connection.execute('SHOW hba_file').fetchone()[0]).resolve()
+                self.assertTrue(hba.is_relative_to(self.root.resolve()))
+                original_hba=hba.read_bytes()
+                hba.write_bytes(b'local all fact_cut_actor scram-sha-256\n'+original_hba)
+                self.connection.execute('SELECT pg_reload_conf()')
+            deadline=None
+            if scram:deadline=time.monotonic()+3
+            while True:
+                connection=psycopg.connect(host=str(self.socket),user='fact_cut_actor',dbname='postgres',password=password,autocommit=True,options='-c statement_timeout=3s')
+                if not scram or connection.execute('SELECT system_user').fetchone()==('scram-sha-256:fact_cut_actor',):break
+                connection.close()
+                if time.monotonic()>=deadline:raise RuntimeError('Owned SCRAM reload not observed')
+                time.sleep(0.02)
+            with connection:
                 host=PsycopgHost(connection,profile=PsycopgProfile())
                 try:
                     connection.execute('BEGIN');adopted=host.adopt_transaction();self.assertIsInstance(adopted,Ok)
@@ -545,6 +566,9 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     connection.execute('ROLLBACK')
                 finally:host.detach()
         finally:
+            if original_hba is not None:
+                hba.write_bytes(original_hba)
+                self.connection.execute('SELECT pg_reload_conf()')
             self.connection.execute('DROP OWNED BY fact_cut_actor; DROP ROLE fact_cut_actor; DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
             pending=getattr(self,'_caller_generation_pending',None)
             if pending is not None:
@@ -942,7 +966,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         result=_capture_epoch_bound_dependency_cells(self.host,t,comparison,raw,hashlib.sha256(raw).hexdigest(),sources=sources)
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state)
 
-    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False,*,predecessor=None,caller_effective_oid=None):
+    def delegated_owned_read(self,caller_host,caller_t,executor_t,subject='s1',wrong_executor=False,*,predecessor=None,caller_effective_oid=None,authenticated=False):
         import sys
         if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
         from security_owned_read import run_delegated_owned_identity_read
@@ -950,6 +974,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         def roles(c):return c.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
         caller=roles(caller_host.connection);executor=roles(self.connection)
         value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':subject}]};value['executor']={'sessionRoleOid':str(int(executor[0])+1) if wrong_executor else executor[0],'effectiveRoleOid':executor[1]}
+        if authenticated:value['kind']='truss-flat-fact-provider-fixture/0.5'
         if caller_effective_oid is not None:value['caller']['effectiveRoleOid']=str(caller_effective_oid)
         comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode(),predecessor=predecessor)
         self._last_delegated_epoch=comparison.epoch
@@ -975,6 +1000,57 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 output.write(json.dumps({'test':self._testMethodName,'events':events,
                     'elapsedMs':round((time.monotonic()-started)*1000)})+'\n')
         return result
+    def test_authenticated_delegated_profile_refuses_trust_before_executor(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                    result=self.delegated_owned_read(host,t,executor_t,authenticated=True)
+                self.assertIsInstance(result,Error);execute.assert_not_called()
+                self.assertEqual(self._last_delegated_events,[{'layer':'caller','status':'error','code':'invalid_transaction'}])
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_authenticated_receiver_preserves_original_semantic_decision(self):
+        def operation(host,t,original,connection):
+            self.assertEqual(connection.execute('SELECT system_user').fetchone(),('scram-sha-256:fact_cut_actor',))
+            executor_t=self.begin()
+            try:
+                receiver=self.owned_receiver(host,t,executor_t,authenticated=True)
+                result=receiver.dispatch(b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read"}')
+                self.assertEqual(result,Ok({'decision':'permit','output':[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}]}))
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True,scram=True)
+
+    def test_authenticated_release_refuses_late_native_login_name_change(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        original_read=tool._run_owned_identity_read;renamed=[]
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname='postgres',autocommit=True,options='-c statement_timeout=3s') as admin:
+            def drift(*args,**kwargs):
+                result=original_read(*args,**kwargs);self.assertIsInstance(result,Ok)
+                admin.execute('ALTER ROLE fact_cut_actor RENAME TO fact_cut_actor_renamed')
+                renamed.append(True)
+                return result
+            def operation(host,t,original,connection):
+                executor_t=self.begin()
+                try:
+                    with patch.object(tool,'_run_owned_identity_read',drift):result=self.delegated_owned_read(host,t,executor_t,authenticated=True)
+                    self.assertIsInstance(result,Error)
+                    self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'ok','code':None},{'layer':'caller','status':'error','code':'invalid_transaction'}])
+                    self.assertEqual(connection.execute('SELECT system_user,session_user::text').fetchone(),('scram-sha-256:fact_cut_actor','fact_cut_actor_renamed'))
+                finally:
+                    self.connection.execute('ROLLBACK')
+                    if renamed:admin.execute('ALTER ROLE fact_cut_actor_renamed RENAME TO fact_cut_actor')
+            self.with_unprivileged_actor(operation,catalog_only=True,scram=True)
+
     def test_catalog_only_caller_cannot_read_private_facts_but_delegated_read_permits(self):
         def operation(host,t,original,connection):
             for query in ('SELECT * FROM truss.sec_assignment','SELECT count(*) FROM truss.sec_assignment','SELECT truss.runtime_fence_shared_authority_writer()'):
@@ -1589,7 +1665,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 allocator.execute('DROP DATABASE opaque_diag_database')
             self.connection.execute('DROP ROLE opaque_diag_actor')
 
-    def owned_receiver(self,host,t,executor_t):
+    def owned_receiver(self,host,t,executor_t,authenticated=False):
         import sys
         if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
         from security_owned_receiver import _OwnedDecisionReceiver
@@ -1597,6 +1673,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         def roles(c):return c.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
         caller=roles(host.connection);executor=roles(self.connection)
         value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':'s1'}]};value['executor']={'sessionRoleOid':executor[0],'effectiveRoleOid':executor[1]}
+        if authenticated:value['kind']='truss-flat-fact-provider-fixture/0.5'
         epoch=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
         return _OwnedDecisionReceiver(host,t,self.host,executor_t,epoch,raw,sources)
 
