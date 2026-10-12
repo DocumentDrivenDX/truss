@@ -18,9 +18,9 @@ BEGIN
  END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.9-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.10-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
- IF captured_revision<>1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
+ IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.
  IF current_setting('transaction_read_only')='on' THEN
  SELECT * INTO policy FROM truss.module_access WHERE document_id=selected_document AND module=selected_module;
@@ -33,13 +33,15 @@ BEGIN
    SELECT 1 FROM pg_roles r JOIN memberships m ON m.role_oid=r.oid
    WHERE r.rolname::text IN (policy.reader_role,policy.writer_role)) THEN RETURN NULL; END IF;
  SELECT * INTO selected_type FROM truss.type_def WHERE document_id=selected_document AND module=selected_module
-   AND element=selected_record AND retired_rev IS NULL AND kind='record' AND NOT provisional;
+   AND element=selected_record AND retired_rev IS NULL AND kind='record' AND NOT provisional AND since_rev<=captured_revision;
  IF NOT FOUND THEN RETURN NULL; END IF;
  SELECT * INTO current_object FROM truss.object WHERE id=selected_id AND type_id=selected_type.type_id;
  IF NOT FOUND THEN RETURN NULL; END IF;
+ IF current_object.rev>captured_revision THEN
+  RAISE EXCEPTION 'catalog changed during object observation' USING ERRCODE='55P03';END IF;
  IF octet_length(current_object.props::text)+coalesce(octet_length(current_object.retained::text),0)>maximum_bytes THEN
   RAISE EXCEPTION 'object output budget exceeded' USING ERRCODE='54000'; END IF;
- IF current_object.root_id IS NOT NULL OR current_object.ver<=0 OR current_object.rev<>1 OR selected_type.since_rev<>1
+ IF current_object.root_id IS NOT NULL OR current_object.ver<=0 OR current_object.rev<selected_type.since_rev OR current_object.rev>captured_revision OR selected_type.since_rev>captured_revision
  OR NOT isfinite(current_object.created_at) OR NOT isfinite(current_object.updated_at)
  OR current_object.created_at<'0001-01-01 00:00:00+00'::timestamptz OR current_object.created_at>='10000-01-01 00:00:00+00'::timestamptz
  OR current_object.updated_at<'0001-01-01 00:00:00+00'::timestamptz OR current_object.updated_at>='10000-01-01 00:00:00+00'::timestamptz
@@ -48,7 +50,7 @@ BEGIN
    SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL AND p.prop_id::text=k)) THEN
   RAISE EXCEPTION 'unsupported complete object representation' USING ERRCODE='0A000'; END IF;
  FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
-  IF property.scalar_type IS DISTINCT FROM 'string' OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.since_rev<>1 OR property.nullability NOT IN ('required','absent-allowed')
+  IF property.scalar_type IS DISTINCT FROM 'string' OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.since_rev>current_object.rev OR property.nullability NOT IN ('required','absent-allowed')
    OR property.item IS NOT NULL OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb) THEN
    RAISE EXCEPTION 'unsupported property profile' USING ERRCODE='0A000'; END IF;
   IF NOT current_object.props ? property.prop_id::text THEN
@@ -86,6 +88,8 @@ BEGIN
    SELECT actor_oid UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
    SELECT 1 FROM pg_roles r JOIN memberships m ON m.role_oid=r.oid
    WHERE r.rolname::text IN (policy.reader_role,policy.writer_role)) THEN RETURN NULL; END IF;
+ IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN
+  RAISE EXCEPTION 'catalog changed during object observation' USING ERRCODE='55P03';END IF;
  RETURN result;
 END;
 $$;

@@ -11,7 +11,8 @@ CREATE TABLE truss.catalog_registration_request (
  input_bytes bytea NOT NULL,document_bytes bytea NOT NULL,declaration_bytes bytea NOT NULL,
  source_bytes bytea NOT NULL,origin_bytes bytea NOT NULL,
  revision int NOT NULL UNIQUE REFERENCES truss.schema_rev(rev),report_sha256 bytea NOT NULL,
- UNIQUE(installation_id,actor_oid,request_key),CHECK(revision=1),
+ type_offset int NOT NULL CHECK(type_offset>=0),property_offset int NOT NULL CHECK(property_offset>=0),relationship_offset int NOT NULL CHECK(relationship_offset>=0),
+ UNIQUE(installation_id,actor_oid,request_key),CHECK(revision>=1),
  CHECK(octet_length(request_key) BETWEEN 1 AND 1024),CHECK(octet_length(report_sha256)=32));
 
 -- A new request for exactly the current accepted input observes the original
@@ -95,6 +96,33 @@ BEGIN
 END;
 $$;
 
+-- Reconstruct the complete append-only catalog from its original immutable
+-- requests, rather than treating current rows as their own expected result.
+CREATE FUNCTION truss.catalog_all_expected_records() RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE request truss.catalog_registration_request%ROWTYPE;expected jsonb:='{}';part jsonb;name text;origin bytea;
+ genesis timestamptz;next_revision bigint:=1;types int:=0;properties int:=0;relationships int:=0;
+BEGIN
+ SELECT genesis_at INTO STRICT genesis FROM truss.catalog_runtime_installation;
+ FOR request IN SELECT * FROM truss.catalog_registration_request ORDER BY revision LOOP
+  IF request.revision<>next_revision OR request.type_offset<>types OR request.property_offset<>properties OR request.relationship_offset<>relationships THEN
+   RAISE EXCEPTION 'original contiguous catalog allocation required' USING ERRCODE='55000';END IF;
+  origin:=convert_to((convert_from(request.origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',request.actor_name,'db_role',request.actor_name))::text,'UTF8');
+  part:=truss.catalog_expected_records(request.declaration_bytes,request.document_bytes,origin,request.accepted_at,genesis,
+    request.revision,request.type_offset,request.property_offset,request.relationship_offset);
+  FOR name IN SELECT jsonb_object_keys(part) LOOP expected:=jsonb_set(expected,ARRAY[name],coalesce(expected->name,'[]'::jsonb)||(part->name));END LOOP;
+  types:=types+jsonb_array_length(part->'type_def');properties:=properties+jsonb_array_length(part->'prop_def');relationships:=relationships+jsonb_array_length(part->'rel_def');
+  next_revision:=next_revision+1;
+  IF octet_length(expected::text)>16777216 THEN RAISE EXCEPTION 'complete catalog byte limit' USING ERRCODE='54000';END IF;
+ END LOOP;
+ IF next_revision=1 THEN
+  expected:=jsonb_build_object('schema_rev',jsonb_build_array(jsonb_build_object('rev',0,'accepted_at',genesis,'origin','{}'::jsonb)),
+   'schema_doc','[]'::jsonb,'type_def','[]'::jsonb,'prop_def','[]'::jsonb,'key_def','[]'::jsonb,'rel_def','[]'::jsonb,'relationship_lineage','[]'::jsonb,'rel_endpoint','[]'::jsonb);
+ END IF;
+ RETURN expected;
+END;
+$$;
+
 CREATE FUNCTION truss.catalog_make_report(request truss.catalog_registration_request) RETURNS bytea
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET bytea_output='hex' AS $$
 DECLARE report jsonb; source jsonb;
@@ -109,9 +137,9 @@ BEGIN
   'acceptedInput',convert_from(request.input_bytes,'UTF8')::jsonb,'source',source,
   'assertedOrigin',convert_from(request.origin_bytes,'UTF8')::jsonb,
   'documents',(SELECT jsonb_agg(jsonb_build_object('documentId',d.doc_id,'revision',d.doc_revision,'sha256',d.content_sha256,'ordinal',d.ord::text) ORDER BY d.ord) FROM truss.schema_doc d WHERE d.rev=request.revision),
-  'types',(SELECT coalesce(jsonb_agg(jsonb_build_object('documentId',t.document_id,'moduleId',t.module,'elementId',t.element,'typeId',t.type_id::text) ORDER BY t.type_id),'[]'::jsonb) FROM truss.type_def t),
-  'properties',(SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',p.type_id::text,'propertyId',p.prop_id::text,'moduleId',p.declaration_module,'elementId',p.element) ORDER BY p.prop_id),'[]'::jsonb) FROM truss.prop_def p),
-  'relationships',(SELECT coalesce(jsonb_agg(jsonb_build_object('documentId',r.document_id,'moduleId',r.module,'relationshipId',r.rel_id,'typeId',r.rel_type_id::text) ORDER BY r.rel_type_id),'[]'::jsonb) FROM truss.rel_def r));
+  'types',(SELECT coalesce(jsonb_agg(jsonb_build_object('documentId',t.document_id,'moduleId',t.module,'elementId',t.element,'typeId',t.type_id::text) ORDER BY t.type_id),'[]'::jsonb) FROM truss.type_def t WHERE t.since_rev<=request.revision),
+  'properties',(SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',p.type_id::text,'propertyId',p.prop_id::text,'moduleId',p.declaration_module,'elementId',p.element) ORDER BY p.prop_id),'[]'::jsonb) FROM truss.prop_def p WHERE p.since_rev<=request.revision),
+  'relationships',(SELECT coalesce(jsonb_agg(jsonb_build_object('documentId',r.document_id,'moduleId',r.module,'relationshipId',r.rel_id,'typeId',r.rel_type_id::text) ORDER BY r.rel_type_id),'[]'::jsonb) FROM truss.rel_def r WHERE r.since_rev<=request.revision));
  RETURN convert_to(report::text,'UTF8');
 END;
 $$;
@@ -121,16 +149,16 @@ LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS
 DECLARE request truss.catalog_registration_request%ROWTYPE; installation truss.catalog_runtime_installation%ROWTYPE;
  expected jsonb; origin bytea; original_report bytea;
 BEGIN
- IF TG_TABLE_SCHEMA<>'truss' OR TG_TABLE_NAME<>'schema_head' OR NEW.id<>1 OR NEW.rev<>1 THEN
+ IF TG_TABLE_SCHEMA<>'truss' OR TG_TABLE_NAME<>'schema_head' OR NEW.id<>1 OR NEW.rev<1 THEN
   RAISE EXCEPTION 'selected catalog completion required' USING ERRCODE='55000'; END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE revision=NEW.rev;
  IF request.actor_oid IS DISTINCT FROM truss.catalog_actor() THEN
   RAISE EXCEPTION 'current original registration authority required' USING ERRCODE='42501'; END IF;
- IF request.installation_id<>installation.installation_id OR NOT EXISTS(SELECT 1 FROM truss.schema_head WHERE id=1 AND rev=request.revision) THEN
+ IF request.installation_id<>installation.installation_id OR NOT EXISTS(SELECT 1 FROM truss.schema_head WHERE id=1 AND rev>=request.revision) THEN
   RAISE EXCEPTION 'complete catalog publication required' USING ERRCODE='55000'; END IF;
  origin:=convert_to((convert_from(request.origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',request.actor_name,'db_role',request.actor_name))::text,'UTF8');
- expected:=truss.catalog_expected_records(request.declaration_bytes,request.document_bytes,origin,request.accepted_at,installation.genesis_at);
+ expected:=truss.catalog_all_expected_records();
  PERFORM truss.catalog_check_records(expected);
  SELECT report_bytes INTO STRICT original_report FROM truss.catalog_acceptance_report WHERE rev=request.revision;
  IF sha256(original_report) IS DISTINCT FROM request.report_sha256 OR original_report IS DISTINCT FROM truss.catalog_make_report(request) THEN
@@ -156,7 +184,7 @@ BEGIN
  SELECT * INTO STRICT original FROM truss.catalog_registration_request r WHERE r.registration_id=NEW.registration_id;
  IF original.installation_id IS DISTINCT FROM NEW.installation_id
   OR NOT EXISTS(SELECT 1 FROM truss.catalog_runtime_installation i WHERE i.installation_id=NEW.installation_id)
-  OR NOT EXISTS(SELECT 1 FROM truss.schema_head h WHERE h.id=1 AND h.rev=original.revision)
+  OR NOT EXISTS(SELECT 1 FROM truss.schema_head h WHERE h.id=1 AND h.rev>=original.revision)
   OR jsonb_typeof(convert_from(NEW.origin_bytes,'UTF8')::jsonb) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'original current registration required' USING ERRCODE='55000'; END IF;
  SELECT count(*) INTO request_count FROM (
@@ -164,8 +192,7 @@ BEGIN
   UNION ALL SELECT 1 FROM truss.catalog_unchanged_request r WHERE r.installation_id=NEW.installation_id AND r.actor_oid=NEW.actor_oid AND r.request_key=NEW.request_key) requests;
  IF request_count<>1 THEN RAISE EXCEPTION 'unambiguous catalog request required' USING ERRCODE='55000'; END IF;
  original_origin:=convert_to((convert_from(original.origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',original.actor_name,'db_role',original.actor_name))::text,'UTF8');
- expected:=truss.catalog_expected_records(original.declaration_bytes,original.document_bytes,original_origin,original.accepted_at,
-  (SELECT genesis_at FROM truss.catalog_runtime_installation));
+ expected:=truss.catalog_all_expected_records();
  PERFORM truss.catalog_check_records(expected);
  SELECT report_bytes INTO STRICT report FROM truss.catalog_acceptance_report WHERE rev=original.revision;
  IF sha256(report) IS DISTINCT FROM original.report_sha256 OR report IS DISTINCT FROM truss.catalog_make_report(original) THEN
@@ -273,11 +300,12 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  request truss.catalog_registration_request%ROWTYPE; existing truss.catalog_registration_request%ROWTYPE;
  alias_request truss.catalog_unchanged_request%ROWTYPE;
  stored_alias truss.catalog_unchanged_request%ROWTYPE;
- expected jsonb; origin bytea; original_report bytea; table_name text; columns text; rows jsonb; raw bytea; total bigint:=0; request_count bigint;
+ expected jsonb; prior_expected jsonb; origin bytea; original_report bytea; table_name text; columns text; rows jsonb; raw bytea; total bigint:=0; request_count bigint;
+ prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
- IF installation.release_id<>'truss-catalog-runtime/0.9-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.10-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   IF raw IS NULL OR octet_length(raw) NOT BETWEEN 1 AND 1048576 THEN
@@ -287,7 +315,9 @@ BEGIN
  IF total>4194304 OR jsonb_typeof(convert_from(origin_bytes,'UTF8')::jsonb) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'bounded catalog request required' USING ERRCODE='22023'; END IF;
  -- Bound concurrency without an automatic retry loop.
- PERFORM 1 FROM truss.schema_head WHERE id=1 FOR UPDATE NOWAIT;
+ SELECT rev INTO STRICT prior_revision FROM truss.schema_head WHERE id=1 FOR UPDATE NOWAIT;
+ prior_expected:=truss.catalog_all_expected_records();
+ PERFORM truss.catalog_check_records(prior_expected);
  SELECT count(*) INTO request_count FROM (
   SELECT 1 FROM truss.catalog_registration_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept.request_key
   UNION ALL SELECT 1 FROM truss.catalog_unchanged_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept.request_key) requests;
@@ -316,9 +346,9 @@ BEGIN
   IF NOT FOUND THEN RAISE EXCEPTION 'original registration report missing' USING ERRCODE='55000'; END IF;
   RETURN;
  END IF;
- SELECT r.* INTO existing FROM truss.catalog_registration_request r JOIN truss.schema_head h ON h.rev=r.revision WHERE h.id=1;
- IF FOUND AND existing.input_bytes IS NOT DISTINCT FROM input_bytes AND existing.document_bytes IS NOT DISTINCT FROM documents_bytes
-  AND existing.declaration_bytes IS NOT DISTINCT FROM declarations_bytes AND existing.source_bytes IS NOT DISTINCT FROM source_bytes THEN
+ SELECT r.* INTO existing FROM truss.catalog_registration_request r
+  WHERE r.input_bytes=catalog_accept.input_bytes AND r.document_bytes=catalog_accept.documents_bytes AND r.declaration_bytes=catalog_accept.declarations_bytes AND r.source_bytes=catalog_accept.source_bytes;
+ IF FOUND THEN
   PERFORM truss.catalog_require_sources(input_bytes,documents_bytes,declarations_bytes);
   INSERT INTO truss.catalog_unchanged_request VALUES(installation.installation_id,actor,session_user::text,request_key,existing.registration_id,origin_bytes)
    RETURNING * INTO alias_request;
@@ -335,33 +365,54 @@ BEGIN
   IF NOT FOUND THEN RAISE EXCEPTION 'original registration report missing' USING ERRCODE='55000'; END IF;
   RETURN;
  END IF;
- IF NOT EXISTS(SELECT 1 FROM truss.schema_head WHERE id=1 AND rev=0) OR EXISTS(SELECT 1 FROM truss.type_def)
-  OR EXISTS(SELECT 1 FROM truss.prop_def) OR EXISTS(SELECT 1 FROM truss.rel_def) OR EXISTS(SELECT 1 FROM truss.schema_doc) THEN
-  RAISE EXCEPTION 'fresh catalog registration only in this release' USING ERRCODE='0A000'; END IF;
  PERFORM truss.catalog_require_sources(input_bytes,documents_bytes,declarations_bytes);
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) d
+  JOIN truss.schema_doc s ON s.doc_id=d.value->>'documentId') THEN
+  RAISE EXCEPTION 'existing document changes require supported evolution' USING ERRCODE='0A000';END IF;
+ IF prior_revision<> (SELECT coalesce(max(r.revision),0) FROM truss.catalog_registration_request r) THEN
+  RAISE EXCEPTION 'complete current catalog head required' USING ERRCODE='55000';END IF;
+ IF prior_revision=2147483647 THEN RAISE EXCEPTION 'catalog revision exhausted' USING ERRCODE='54000';END IF;
+ new_revision:=prior_revision+1;
+ SELECT coalesce(max(type_id),0) INTO type_start FROM truss.type_def;
+ SELECT coalesce(max(prop_id),0) INTO property_start FROM truss.prop_def;
+ SELECT coalesce(max(rel_type_id),0) INTO relationship_start FROM truss.rel_def;
+ IF type_start>2147418111 OR property_start>2147418111 OR relationship_start>2147418111 THEN
+  RAISE EXCEPTION 'catalog identity range exhausted' USING ERRCODE='54000';END IF;
  origin:=convert_to((convert_from(origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',session_user::text,'db_role',session_user::text))::text,'UTF8');
- expected:=truss.catalog_expected_records(declarations_bytes,documents_bytes,origin,transaction_timestamp(),installation.genesis_at);
+ expected:=truss.catalog_expected_records(declarations_bytes,documents_bytes,origin,transaction_timestamp(),installation.genesis_at,new_revision,type_start,property_start,relationship_start);
+ IF jsonb_array_length(prior_expected->'schema_doc')+jsonb_array_length(expected->'schema_doc')>512
+  OR jsonb_array_length(prior_expected->'type_def')+jsonb_array_length(expected->'type_def')
+   +jsonb_array_length(prior_expected->'prop_def')+jsonb_array_length(expected->'prop_def')
+   +jsonb_array_length(prior_expected->'key_def')+jsonb_array_length(expected->'key_def')
+   +jsonb_array_length(prior_expected->'rel_def')+jsonb_array_length(expected->'rel_def')>65536
+  OR octet_length(expected::text)+octet_length(prior_expected::text)>16777216 THEN
+  RAISE EXCEPTION 'complete catalog resource limit' USING ERRCODE='54000';END IF;
  FOREACH table_name IN ARRAY ARRAY['schema_rev','schema_doc','type_def','prop_def','key_def','rel_def','relationship_lineage','rel_endpoint'] LOOP
   rows:=expected->table_name;
-  IF table_name='schema_rev' THEN rows:=jsonb_build_array(rows->1); END IF;
+  IF table_name='schema_rev' AND new_revision=1 THEN rows:=jsonb_build_array(rows->1); END IF;
   SELECT string_agg(format('%I',a.attname),',' ORDER BY a.attnum) INTO columns FROM pg_attribute a
    WHERE a.attrelid=to_regclass('truss.'||table_name) AND a.attnum>0 AND NOT a.attisdropped AND a.attgenerated='';
   EXECUTE format('INSERT INTO truss.%I(%s) SELECT %s FROM jsonb_populate_recordset(NULL::truss.%I,$1)',table_name,columns,columns,table_name) USING rows;
  END LOOP;
+ FOR table_name IN SELECT jsonb_object_keys(expected) LOOP
+  IF table_name='schema_rev' AND new_revision=1 THEN CONTINUE;END IF;
+  expected:=jsonb_set(expected,ARRAY[table_name],(prior_expected->table_name)||(expected->table_name));
+ END LOOP;
  PERFORM truss.catalog_check_records(expected);
  request.registration_id:=gen_random_uuid();request.installation_id:=installation.installation_id;
  request.actor_oid:=actor;request.actor_name:=session_user::text;request.request_key:=request_key;
- request.writer_xid:=pg_current_xact_id();request.accepted_at:=transaction_timestamp();request.revision:=1;
+ request.writer_xid:=pg_current_xact_id();request.accepted_at:=transaction_timestamp();request.revision:=new_revision;
+ request.type_offset:=type_start;request.property_offset:=property_start;request.relationship_offset:=relationship_start;
  request.input_bytes:=input_bytes;request.document_bytes:=documents_bytes;request.declaration_bytes:=declarations_bytes;
  request.source_bytes:=source_bytes;request.origin_bytes:=origin_bytes;
  original_report:=truss.catalog_make_report(request);request.report_sha256:=sha256(original_report);
- INSERT INTO truss.catalog_acceptance_report VALUES(1,original_report);
+ INSERT INTO truss.catalog_acceptance_report VALUES(new_revision,original_report);
  INSERT INTO truss.catalog_registration_request SELECT request.*;
  PERFORM truss.catalog_actor();
- UPDATE truss.schema_head SET rev=1 WHERE id=1 AND rev=0;
+ UPDATE truss.schema_head SET rev=new_revision WHERE id=1 AND rev=prior_revision;
  IF NOT FOUND THEN RAISE EXCEPTION 'complete head transition required' USING ERRCODE='55000'; END IF;
  -- The deferred validator runs at commit; verify the same result before return.
- IF NOT EXISTS(SELECT 1 FROM truss.schema_head WHERE id=1 AND rev=1) OR NOT EXISTS(SELECT 1 FROM truss.catalog_acceptance_report WHERE rev=1 AND catalog_acceptance_report.report_bytes=original_report) THEN
+ IF NOT EXISTS(SELECT 1 FROM truss.schema_head WHERE id=1 AND rev=new_revision) OR NOT EXISTS(SELECT 1 FROM truss.catalog_acceptance_report WHERE rev=new_revision AND catalog_acceptance_report.report_bytes=original_report) THEN
   RAISE EXCEPTION 'catalog publication incomplete' USING ERRCODE='55000'; END IF;
  RETURN QUERY SELECT request.revision::text,request.registration_id::text,original_report,false,false,request.actor_name;
 END;

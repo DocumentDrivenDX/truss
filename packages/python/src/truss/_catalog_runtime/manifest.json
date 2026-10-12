@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-catalog-runtime-release/0.1",
-  "releaseId": "truss-catalog-runtime/0.9-candidate",
+  "releaseId": "truss-catalog-runtime/0.10-candidate",
   "postgresVersion": "180006",
   "layoutProfile": {
     "identity": "truss-layout",
@@ -10,16 +10,16 @@
   "files": {
     "layout.sql": "421a9bb88bcc1293f4fcbb66d2b443ccd08ccfc7845c79e5d3ee21b5494666a7",
     "lineage.sql": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc",
-    "plan.sql": "060f74698e891dbf3cf36629ae9293d05ea9507d78a6c539c4d299591367c537",
-    "runtime.sql": "cece6aaf9f0a3dd67120bf2d2cf7152462d465c3025b445b287a7d86b2e58747",
+    "plan.sql": "ddb1d498df5f56d7fd5a3ec363b2023f201925876d9a7946315aa87c013d38dd",
+    "runtime.sql": "62c4113f1c0c0144259684bbdc5db37c0c33396c8c400c7fecd055c637b1556b",
     "barrier.sql": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
-    "view.sql": "298959b53f82b2ceaa3929fb409dd609567ff06975daeca0c891cd7b8a16a793",
-    "read.sql": "40cd2429dd0ef678e85bd338675d31faa01e353256606c70fe270a957e54c864",
+    "view.sql": "6c7c510c951174a266e4ef06029edb31902da6034aae0b3008c7d7cc08784bfb",
+    "read.sql": "73793c37b10f529ab2818384b02271a4d5771d4ee76b4541210338ce07c1ad64",
     "keys.sql": "d74dc2e4048331bafd6f1f68f7fd931818fb52beb720b51f5cfd8950b0f7a869",
-    "groups.sql": "dacafbcd85c70c8a9b7bf3e33cf43cd5efca9d29c0c8821f7f973868c4839fd2",
-    "group-profiles.json": "f71e07615f6bbf5f2474d1cf8d8e7ac9a575e18edd1a43ef7c1b5e40e3294a54",
-    "reader.sql": "841e5ffcf053d5670e6d7500d709bdc201dc3335e0dd940cebaf02376864f1bc",
-    "key-read.sql": "79d6cb4de6c1cd3b68eae3748142fe60d28578d413bdeb102a5f0869334ce4a4"
+    "groups.sql": "23778c1b4b558530ef27145c987d313559815d3b8108b30a9263cb872165c38c",
+    "group-profiles.json": "4d07c9848997d1f6df5e11e04fbc0a67a9b22a7db42e3b07a62c4fe392dfcf3d",
+    "reader.sql": "af68f7296aa9ff5b535af9795712391bce32f7ade4c5b218a63a95d0d7e65149",
+    "key-read.sql": "baaf99eae2635980d884c1fad899e28718dec012aabbde818723d40a0ae1a6ac"
   },
-  "version": "0.9"
+  "version": "0.10"
 }

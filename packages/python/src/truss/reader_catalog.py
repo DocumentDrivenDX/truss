@@ -33,3 +33,4 @@ class AcceptedDocument:
     sha256: str
     catalog_revision: int
     registration_id: str
+    source_catalog_revision: int

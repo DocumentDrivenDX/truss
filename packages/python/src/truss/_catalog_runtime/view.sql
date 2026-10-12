@@ -11,15 +11,15 @@ BEGIN
   RAISE EXCEPTION 'bounded catalog view limits required' USING ERRCODE='22023'; END IF;
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  IF selected_revision IS NOT NULL AND selected_revision<>captured_revision THEN RETURN NULL; END IF;
- -- This profile exposes retained revision one; genesis is not an accepted view.
- IF captured_revision<>1 THEN RETURN NULL; END IF;
+ -- This append-only profile exposes the current complete catalog; genesis is not accepted.
+ IF captured_revision<1 THEN RETURN NULL; END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE revision=captured_revision;
  IF request.installation_id<>installation.installation_id THEN
   RAISE EXCEPTION 'installed catalog provenance required' USING ERRCODE='55000'; END IF;
  PERFORM truss.catalog_require_sources(request.input_bytes,request.document_bytes,request.declaration_bytes);
  origin:=convert_to((convert_from(request.origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',request.actor_name,'db_role',request.actor_name))::text,'UTF8');
- expected:=truss.catalog_expected_records(request.declaration_bytes,request.document_bytes,origin,request.accepted_at,installation.genesis_at);
+ expected:=truss.catalog_all_expected_records();
  PERFORM truss.catalog_check_records(expected);
  SELECT report_bytes INTO STRICT original_report FROM truss.catalog_acceptance_report WHERE rev=captured_revision;
  IF sha256(original_report) IS DISTINCT FROM request.report_sha256 OR original_report IS DISTINCT FROM truss.catalog_make_report(request) THEN
@@ -31,7 +31,7 @@ BEGIN
   'installationId',installation.installation_id::text,'registrationId',request.registration_id::text,
   'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,
   'reportSha256',encode(request.report_sha256,'hex'),
-  'documents',(SELECT coalesce(jsonb_agg(to_jsonb(d) ORDER BY ord),'[]'::jsonb) FROM truss.schema_doc d WHERE rev=captured_revision),
+  'documents',(SELECT coalesce(jsonb_agg(to_jsonb(d) ORDER BY rev,ord),'[]'::jsonb) FROM truss.schema_doc d WHERE rev<=captured_revision),
   'types',(SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY type_id),'[]'::jsonb) FROM truss.type_def t),
   'properties',(SELECT coalesce(jsonb_agg(to_jsonb(p) ORDER BY prop_id),'[]'::jsonb) FROM truss.prop_def p),
   'keys',(SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY type_id,key_num),'[]'::jsonb) FROM truss.key_def k),

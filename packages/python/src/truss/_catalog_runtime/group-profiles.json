@@ -4,10 +4,10 @@
       "name": "mutationProfile",
       "pin": {
         "identity": "truss-rootless-string-create",
-        "version": "0.1",
-        "sha256": "f77c86906a35d8ca16bb00b7b068eaa023d224b3792353365089e8d718f92b71"
+        "version": "0.2",
+        "sha256": "efbb7a608e98730d5fbb44f5f8f44ca8ba8cb38d81f8e51b414e37fc1ca25b9d"
       },
-      "definition": "truss-rootless-string-create/0.1;128 creates;1024 authored values per object;current revision one;complete original definitions;required string keys;unknown string/null values retained;native IDs;atomic exact journals;caller settlement;current module writers;durable exact request replay;feed unavailable"
+      "definition": "truss-rootless-string-create/0.2;128 creates;1024 authored values per object;positive current append-only catalog revision;retain original definition revision pins;new effects use current revision;replay preserves original receipt revision;complete original definitions;required string keys;unknown string/null values retained;native IDs;atomic exact journals;caller settlement;current module writers;durable exact request replay;feed unavailable"
     },
     {
       "name": "valueProfile",

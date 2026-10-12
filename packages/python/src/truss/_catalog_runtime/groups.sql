@@ -20,9 +20,9 @@ BEGIN
    WHERE k.type_id=selected_type AND k.key_num=selected_number AND k.retired_rev IS NULL;
   source_module:=native_type.module;source_element:=native_type.element;
  ELSE RAISE EXCEPTION 'supported definition kind required' USING ERRCODE='22023'; END IF;
- IF definition->>'definition_source_kind'<>'accepted_document' OR definition->>'definition_rev'<>'1' THEN
+ IF definition->>'definition_source_kind'<>'accepted_document' OR (definition->>'definition_rev')::int<1 THEN
   RAISE EXCEPTION 'original accepted definition source required' USING ERRCODE='0A000'; END IF;
- SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=1 AND d.ord=(definition->>'definition_doc_ord')::int
+ SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=(definition->>'definition_rev')::int AND d.ord=(definition->>'definition_doc_ord')::int
   AND d.doc_id=definition->>'definition_document_id';
  SELECT m.value,m.ordinality::int-1 INTO STRICT module_json,module_index
   FROM json_array_elements(archive.document::json->'modules') WITH ORDINALITY m WHERE m.value->>'id'=source_module;
@@ -46,7 +46,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
-'mutationProfile',jsonb_build_object('identity','truss-rootless-string-create','version','0.1','sha256','f77c86906a35d8ca16bb00b7b068eaa023d224b3792353365089e8d718f92b71'),
+'mutationProfile',jsonb_build_object('identity','truss-rootless-string-create','version','0.2','sha256','efbb7a608e98730d5fbb44f5f8f44ca8ba8cb38d81f8e51b414e37fc1ca25b9d'),
 'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.1','sha256','3123c9089fab2fe869b82a55cdbe4cf708107be8eacb3f2d94666dfb21cfb1ac'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),
@@ -78,7 +78,7 @@ BEGIN
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN
   RAISE EXCEPTION 'selected installed group runtime required' USING ERRCODE='0A000'; END IF;
  SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
- IF revision<>1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000'; END IF;
+ IF revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000'; END IF;
  RETURN convert_to((truss.runtime_group_profiles()||jsonb_build_object('layoutProfile',installation.layout_profile,
   'authorizedScopeIdentity','truss-person:'||installation.installation_id||':'||person::text,
   'sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-string-create/0.1'))::text,'UTF8');
@@ -277,12 +277,13 @@ DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;
  membership truss.object_key_bucket%ROWTYPE;reservation truss.object_key_reservation_bucket%ROWTYPE;
  receipt truss.request_receipt%ROWTYPE;existing truss.request_receipt%ROWTYPE;receipt_json jsonb;receipt_bytes bytea;
  semantic jsonb;semantic_bytes bytea;observation_bytes bytea;request_namespace bytea;request_bytes bytea;request_route bigint;new_generation bigint;
- old_request_generation bigint;intended_group truss.runtime_create_group%ROWTYPE;scope_identity text;outcome jsonb;native_state text;candidate_count int;
+ captured_revision int;old_request_generation bigint;intended_group truss.runtime_create_group%ROWTYPE;scope_identity text;outcome jsonb;native_state text;candidate_count int;
 BEGIN
  -- Metadata locks head and every requested policy, then revalidates full sources.
  metadata:=convert_from(truss.group_create_metadata(original_input,original_documents,expected_release,expected_digest),'UTF8')::jsonb;
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
  actor_oid:=truss.runtime_person(false);writer:=pg_current_xact_id();
+ SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608
  OR original_request IS NULL OR octet_length(original_request) NOT BETWEEN 1 AND 65536 THEN
@@ -414,7 +415,7 @@ BEGIN
     OR owner_receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex')
     OR owner_receipt->'identity' IS DISTINCT FROM jsonb_build_object('module',selected_type.module,'element',selected_type.element,'key',key_definition.key_id)
     OR owner_receipt->'values' IS DISTINCT FROM (SELECT jsonb_agg(jsonb_build_object('string',v) ORDER BY n) FROM unnest(values_text) WITH ORDINALITY x(v,n))
-    OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.schema_doc d WHERE d.rev=1 AND d.ord=selected_type.definition_doc_ord) THEN
+    OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.schema_doc d WHERE d.rev=selected_type.definition_rev AND d.ord=selected_type.definition_doc_ord) THEN
     RAISE EXCEPTION 'original owner key receipt required' USING ERRCODE='22023'; END IF;
    SELECT * INTO STRICT source_pin FROM truss.runtime_definition('key',selected_type.type_id,key_definition.key_num);
    namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
@@ -449,7 +450,7 @@ BEGIN
   object_row.id:=nextval('truss.id_seq');object_row.type_id:=selected_type.type_id;
   IF object_row.id<=0 THEN RAISE EXCEPTION 'positive native object id required' USING ERRCODE='54000'; END IF;
   object_row.props:=key_plan->'props';object_row.retained:=NULLIF(key_plan->'retained','{}'::jsonb);
-  object_row.root_id:=NULL;object_row.root_type:=NULL;object_row.rev:=1;object_row.ver:=1;
+  object_row.root_id:=NULL;object_row.root_type:=NULL;object_row.rev:=captured_revision;object_row.ver:=1;
   object_row.created_at:=clock_timestamp();object_row.updated_at:=object_row.created_at;
   planned_row:=to_jsonb(object_row);
   INSERT INTO truss.object SELECT (jsonb_populate_record(NULL::truss.object,planned_row)).* RETURNING to_jsonb(object) INTO actual_row;
@@ -500,15 +501,15 @@ BEGIN
   SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb) INTO retained_json
    FROM jsonb_each(coalesce(object_row.retained,'{}'::jsonb));
   after_record:=jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','object','identity',object_identity,
-   'recordVersion','1','catalogRevision','1','createdAt',to_char(object_row.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
+   'recordVersion','1','catalogRevision',captured_revision::text,'createdAt',to_char(object_row.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
    'updatedAt',to_char(object_row.updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
    'properties',properties_json,'retained',retained_json,'ownership',jsonb_build_object('state','rootless'));
   journal_row.seq:=nextval('truss.journal_seq');journal_row.at:=clock_timestamp();journal_row.xid:=writer;
   journal_row.entity_kind:='o';journal_row.entity_id:=object_row.id;journal_row.entity_type:=object_row.type_id;
-  journal_row.ver:=1;journal_row.op:='create';journal_row.prop_id:=NULL;journal_row.old_value:=NULL;journal_row.rev:=1;
+  journal_row.ver:=1;journal_row.op:='create';journal_row.prop_id:=NULL;journal_row.old_value:=NULL;journal_row.rev:=captured_revision;
   event:=jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal','sourceEpoch',installation.source_epoch::text,
    'historyProfile','truss-native-string-create/0.1','xid',writer::text,'seq',journal_row.seq::text,'identity',object_identity,
-   'eventVersion','1','eventCatalogRevision','1','operation','create','after',after_record,
+   'eventVersion','1','eventCatalogRevision',captured_revision::text,'operation','create','after',after_record,
    'origin',jsonb_build_object('asserted',input->'assertedOrigin','databaseRole',session_user::text));
   event_digest:=encode(sha256(convert_to(jsonb_build_array(event)::text,'UTF8')),'hex');
   event:=event||jsonb_build_object('mutationGroup',jsonb_build_object('profile','truss-history-group/0.1.0','eventCount','1','orderedEventDigest',event_digest));
@@ -525,7 +526,7 @@ BEGIN
    aliases:=aliases||jsonb_build_array(jsonb_build_object('alias',operation->>'alias','identity',object_identity)); END IF;
   results:=results||jsonb_build_array(outcome);current_index:=current_index+1;
  END LOOP;
- semantic:=jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision','1',
+ semantic:=jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',captured_revision::text,
   'layoutProfile',input->'layoutProfile','mutationProfile',input->'mutationProfile','results',results,'aliases',aliases);
  semantic_bytes:=convert_to(semantic::text,'UTF8');
  IF octet_length(semantic_bytes)>16777216 THEN RAISE EXCEPTION 'bounded group result required' USING ERRCODE='54000'; END IF;

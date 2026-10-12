@@ -30,10 +30,10 @@ BEGIN
  ELSE
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  END IF;
- IF captured_revision<>1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
+ IF captured_revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
  FOR owner IN SELECT d.doc_id,d.doc_revision,d.content_sha256,m.value->>'id' AS module_id
   FROM truss.schema_doc d CROSS JOIN LATERAL jsonb_array_elements(d.document::jsonb->'modules') m(value)
-  WHERE d.rev=captured_revision ORDER BY d.doc_id COLLATE "C",m.value->>'id' COLLATE "C" LOOP
+  WHERE d.rev<=captured_revision ORDER BY d.doc_id COLLATE "C",m.value->>'id' COLLATE "C" LOOP
   IF NOT truss.runtime_can_read(owner.doc_id,owner.module_id) THEN CONTINUE;END IF;
   module:=jsonb_build_object('documentId',owner.doc_id,'moduleId',owner.module_id,'documentRevision',owner.doc_revision,'documentSha256',owner.content_sha256,
    'types',(SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',t.type_id,'recordId',t.element,'kind',t.kind,'provisional',t.provisional) ORDER BY t.type_id),'[]') FROM truss.type_def t WHERE t.document_id=owner.doc_id AND t.module=owner.module_id AND t.retired_rev IS NULL),
@@ -87,6 +87,8 @@ BEGIN
  PERFORM truss.runtime_person(false);
  encoded:=convert_to(jsonb_build_object('catalogRevision',captured_revision,'layoutProfile',installation.layout_profile,'modules',modules)::text,'UTF8');
  IF octet_length(encoded)>maximum_bytes THEN RAISE EXCEPTION 'catalog byte limit' USING ERRCODE='54000';END IF;
+ IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN
+  RAISE EXCEPTION 'catalog changed during reader observation' USING ERRCODE='55P03';END IF;
  RETURN encoded;
 END;
 $$;
@@ -105,23 +107,25 @@ BEGIN
  ELSE
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  END IF;
- IF captured_revision<>1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
- SELECT * INTO archive FROM truss.schema_doc WHERE rev=captured_revision AND doc_id=selected_document;
+ IF captured_revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
+ SELECT * INTO archive FROM truss.schema_doc WHERE rev<=captured_revision AND doc_id=selected_document;
  IF NOT FOUND OR jsonb_array_length(archive.document::jsonb->'modules')=0 THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
  FOR module IN SELECT value FROM jsonb_array_elements(archive.document::jsonb->'modules') LOOP
   IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
  END LOOP;
  IF octet_length(archive.document)>maximum_bytes THEN RAISE EXCEPTION 'document byte limit' USING ERRCODE='54000';END IF;
  IF encode(sha256(convert_to(archive.document,'UTF8')),'hex') IS DISTINCT FROM archive.content_sha256 THEN RAISE EXCEPTION 'exact accepted source required' USING ERRCODE='55000';END IF;
- SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE catalog_registration_request.revision=captured_revision;
+ SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE catalog_registration_request.revision=archive.rev;
  SELECT value INTO STRICT source FROM jsonb_array_elements(convert_from(request.input_bytes,'UTF8')::jsonb->'documents') WHERE value->>'documentId'=selected_document;
  IF source->>'documentRevision' IS DISTINCT FROM archive.doc_revision OR source->'artifact'->>'sha256' IS DISTINCT FROM archive.content_sha256 OR decode(source->'artifact'->>'bytesBase64','base64') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'original accepted source required' USING ERRCODE='55000';END IF;
- encoded:=convert_to(jsonb_build_object('documentId',selected_document,'documentRevision',archive.doc_revision,'artifactIdentity',source->'artifact'->>'identity','contentBase64',encode(convert_to(archive.document,'UTF8'),'base64'),'sha256',archive.content_sha256,'catalogRevision',captured_revision,'registrationId',request.registration_id::text)::text,'UTF8');
+ encoded:=convert_to(jsonb_build_object('documentId',selected_document,'documentRevision',archive.doc_revision,'artifactIdentity',source->'artifact'->>'identity','contentBase64',encode(convert_to(archive.document,'UTF8'),'base64'),'sha256',archive.content_sha256,'catalogRevision',captured_revision,'sourceCatalogRevision',archive.rev,'registrationId',request.registration_id::text)::text,'UTF8');
  IF octet_length(encoded)>maximum_bytes THEN RAISE EXCEPTION 'encoded document byte limit' USING ERRCODE='54000';END IF;
  FOR module IN SELECT value FROM jsonb_array_elements(archive.document::jsonb->'modules') LOOP
   IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'current reader required' USING ERRCODE='42501';END IF;
  END LOOP;
  PERFORM truss.runtime_person(false);
+ IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN
+  RAISE EXCEPTION 'catalog changed during document observation' USING ERRCODE='55P03';END IF;
  RETURN encoded;
 END;
 $$;

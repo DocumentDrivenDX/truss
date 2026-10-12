@@ -11,9 +11,9 @@ BEGIN
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected installed runtime required' USING ERRCODE='0A000';END IF;
  IF current_setting('transaction_read_only')='on' THEN SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
  ELSE SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;END IF;
- IF revision<>1 THEN RAISE EXCEPTION 'accepted key catalog required' USING ERRCODE='0A000';END IF;
+ IF revision<1 THEN RAISE EXCEPTION 'accepted key catalog required' USING ERRCODE='0A000';END IF;
  IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RETURN NULL;END IF;
- SELECT * INTO record_type FROM truss.type_def WHERE document_id=selected_document AND module=selected_module AND element=selected_record AND kind='record' AND NOT provisional AND retired_rev IS NULL;
+ SELECT * INTO record_type FROM truss.type_def WHERE document_id=selected_document AND module=selected_module AND element=selected_record AND kind='record' AND NOT provisional AND retired_rev IS NULL AND since_rev<=revision;
  IF NOT FOUND THEN RETURN NULL;END IF;
  SELECT * INTO key_definition FROM truss.key_def WHERE type_id=record_type.type_id AND key_id=selected_key AND retired_rev IS NULL;
  IF NOT FOUND THEN RETURN NULL;END IF;
@@ -26,7 +26,7 @@ BEGIN
   IF component.scalar_type IS DISTINCT FROM 'string' OR component.nullability IS DISTINCT FROM 'required' OR component.cardinality IS DISTINCT FROM 'one' OR component.home IS DISTINCT FROM 'json' OR component.retired_rev IS NOT NULL THEN RAISE EXCEPTION 'supported string key required' USING ERRCODE='0A000';END IF;
  END LOOP;
  IF counted<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete native key definition required' USING ERRCODE='55000';END IF;
- SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=1 AND ord=record_type.definition_doc_ord;
+ SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=record_type.definition_rev AND ord=record_type.definition_doc_ord AND doc_id=record_type.definition_document_id;
  IF original_document IS DISTINCT FROM convert_to(archive.document,'UTF8') OR archive.doc_id IS DISTINCT FROM selected_document OR encode(sha256(original_document),'hex') IS DISTINCT FROM archive.content_sha256 THEN RAISE EXCEPTION 'original accepted key source required' USING ERRCODE='22023';END IF;
  PERFORM truss.runtime_person(false);
  IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RETURN NULL;END IF;
@@ -34,7 +34,9 @@ BEGIN
   IF NOT truss.runtime_can_read(selected_document,component.declaration_module) THEN RETURN NULL;END IF;
  END LOOP;
  PERFORM truss.runtime_person(false);
- RETURN convert_to(jsonb_build_object('typeId',record_type.type_id,'keyNumber',key_definition.key_num,'componentCount',counted)::text,'UTF8');
+ IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM revision THEN
+  RAISE EXCEPTION 'catalog changed during key selection' USING ERRCODE='55P03';END IF;
+ RETURN convert_to(jsonb_build_object('typeId',record_type.type_id,'keyNumber',key_definition.key_num,'componentCount',counted,'catalogRevision',revision)::text,'UTF8');
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.key_read_selection(text,text,text,text,bytea,text,text) FROM PUBLIC;
@@ -83,6 +85,8 @@ BEGIN
  IF truss.verify_object_string_key(member.object_id,member.type_id,member.key_num,tuple_bytes) IS NOT TRUE THEN RAISE EXCEPTION 'current object key membership required' USING ERRCODE='55000';END IF;
  result:=truss.get_object(selected_document,selected_module,selected_record,member.object_id,maximum_bytes,expected_release,expected_digest);
  IF result IS NULL THEN RETURN NULL;END IF;
+ IF convert_from(result,'UTF8')::jsonb->>'catalogRevision' IS DISTINCT FROM selection->>'catalogRevision' THEN
+  RAISE EXCEPTION 'catalog changed during key observation' USING ERRCODE='55P03';END IF;
  SELECT array_agg(cell.value->>1 ORDER BY i.n) INTO buffered_values
   FROM truss.key_def k CROSS JOIN LATERAL unnest(k.prop_ids) WITH ORDINALITY i(prop_id,n)
   JOIN truss.prop_def p ON p.prop_id=i.prop_id AND p.type_id=k.type_id

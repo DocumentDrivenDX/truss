@@ -11,8 +11,8 @@ from ._owner_evidence_json import decode_owner_evidence_json
 
 _EXTRACTION_RULE=b'UTF-8 JSON value slice at RFC6901 pointer; exclude surrounding whitespace; preserve original tokens; v1'
 EXTRACTION_PROFILE=ProfilePin(identity='truss-original-json-definition',version='0.1',sha256=sha256(_EXTRACTION_RULE).hexdigest())
-_VIEW_RULE=b"""truss-complete-catalog-view/0.1
-Supported accepted revision: 1. Complete scope only. Maximum definitions65536, bytes16777216.
+_VIEW_RULE=b"""truss-complete-catalog-view/0.2
+Supported accepted revisions: positive current revision, cumulative append-only archives. Existing definition IDs and original archive pins remain unchanged. Complete scope only. Maximum definitions65536, bytes16777216.
 Hash serialization: json.dumps(ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf-8'). SHA256 lowercase hex.
 Definition pin input array: [document.rev integer,document.ord integer,original document SHA256 string,authored JSON pointer string,extraction profile wire object,exact value-slice SHA256 string]. Artifact identity equals definition pin.
 Inventory hash input: exact ordered definition-entry wire array, including artifacts, provenance and dependency references.
@@ -22,7 +22,7 @@ Type dependencies: authored Record.members order. Property dependencies: owning 
 Key pointers use authored keys array position, not native key_num. Property source owner module is declaration_module. Relationship identity is numeric rel_type_id.
 Complete encoded-byte budget includes all view fields. Internal native basis has a separate16MiB bound. No truncation.
 """
-VIEW_PROFILE=ProfilePin(identity='truss-complete-catalog-view',version='0.1',sha256=sha256(_VIEW_RULE).hexdigest())
+VIEW_PROFILE=ProfilePin(identity='truss-complete-catalog-view',version='0.2',sha256=sha256(_VIEW_RULE).hexdigest())
 
 
 def wire(value):
@@ -44,7 +44,7 @@ def encoded(value):
 
 
 def build_catalog_view(basis,layout_profile):
-    if basis['revision']!='1':raise ValueError('Retained accepted revision required')
+    if not basis['revision'].isascii() or not basis['revision'].isdigit() or not 1<=int(basis['revision'])<=2147483647:raise ValueError('Retained accepted revision required')
     archives={};occurrences={}
     for document in basis['documents']:
         original=document['document'].encode('utf-8')
@@ -128,7 +128,7 @@ def build_catalog_view(basis,layout_profile):
             definition=artifact,provenance=provenance,dependencies=tuple(dependencies)))
     inventory=sha256(encoded([wire(entry) for entry in definitions])).hexdigest()
     evidence=sha256(encoded({key:basis[key] for key in ('installationId','releaseId','releaseSha256','revision','registrationId','reportSha256')})).hexdigest()
-    view=CatalogView(catalog_revision='1',layout_profile=layout_profile,view_profile=VIEW_PROFILE,
+    view=CatalogView(catalog_revision=basis['revision'],layout_profile=layout_profile,view_profile=VIEW_PROFILE,
         consistency_evidence_sha256=evidence,definitions=tuple(definitions),inventory_sha256=inventory,original_bytes=b'')
     from dataclasses import replace
     return replace(view,original_bytes=encoded(wire(view)))

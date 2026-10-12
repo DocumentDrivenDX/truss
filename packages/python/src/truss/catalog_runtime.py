@@ -193,7 +193,6 @@ class CatalogReferenceAssembly:
         with self._lock:
             self._available()
             prepared=prepare_acceptance(documents,canonical_numeric_free(_configuration()),bun_executable=bun_executable)
-            self._group_documents=documents
             return prepared
     @_active_operation
     def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None) -> Outcome[PendingCatalogInstallation]:
@@ -291,7 +290,13 @@ class CatalogReferenceAssembly:
                 raise ValueError('Original catalog result correspondence required')
             if unchanged:return CatalogUnchanged(int(revision),identity,report,replayed,request_key,origin_bytes,actor)
             return CatalogRegistration(int(revision),identity,report,replayed)
-        return _catalog_failure(self._host._run_semantic_operation(transaction,execute,parameter_producer=produce),local_failure[0])
+        result=_catalog_failure(self._host._run_semantic_operation(transaction,execute,parameter_producer=produce),local_failure[0])
+        if isinstance(result,Ok):
+            known={document.document_id:document for document in self._group_documents}
+            for interpretation in prepared.documents:
+                known[interpretation.document.document_id]=interpretation.document
+            self._group_documents=tuple(known.values())
+        return result
     @_active_operation
     def report_in_transaction(self,transaction: TransactionHandle,revision: int=1) -> Outcome[CatalogReport]:
         self._available()
@@ -339,7 +344,7 @@ class CatalogReferenceAssembly:
             cursor.execute('SELECT release_id,release_sha256 FROM truss.catalog_runtime_installation',prepare=False)
             if cursor.fetchone()!=(manifest['releaseId'],digest):raise ValueError('Selected installed runtime required')
             cursor.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT',prepare=False)
-            if cursor.fetchone()!=(1,):raise ValueError('Accepted catalog head required')
+            if cursor.fetchone()[0]<1:raise ValueError('Accepted catalog head required')
             for grant in grants:
                 cursor.execute("""SELECT EXISTS(SELECT 1 FROM truss.schema_doc d
                   CROSS JOIN LATERAL pg_catalog.jsonb_array_elements(d.document::pg_catalog.jsonb->'modules') m
@@ -421,8 +426,8 @@ class CatalogReferenceAssembly:
         if type(request.scope) is not CompleteCatalogScope:return Ok(CatalogViewUnavailable(reason='closure'))
         selected=None
         if type(request.selection) is HistoricalCatalogSelection:
-            if request.selection.catalog_revision!='1':return Ok(CatalogViewUnavailable(reason='context'))
-            selected=1
+            if len(request.selection.catalog_revision)>10 or int(request.selection.catalog_revision)>2147483647:return Ok(CatalogViewUnavailable(reason='context'))
+            selected=int(request.selection.catalog_revision)
         def bounded(text,maximum):
             bound=str(maximum)
             return len(text)<len(bound) or (len(text)==len(bound) and text<=bound)
@@ -558,7 +563,7 @@ class CatalogReferenceAssembly:
             cursor.execute('SELECT truss.accepted_document(%s,%s,%s,%s)',(document_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             basis=json.loads(bytes(cursor.fetchone()[0]));content=base64.b64decode(basis['contentBase64'])
             if sha256(content).hexdigest()!=basis['sha256']:raise ValueError('Exact accepted document digest required')
-            return AcceptedDocument(document_id=basis['documentId'],document_revision=basis['documentRevision'],artifact_identity=basis['artifactIdentity'],content=content,sha256=basis['sha256'],catalog_revision=basis['catalogRevision'],registration_id=basis['registrationId'])
+            return AcceptedDocument(document_id=basis['documentId'],document_revision=basis['documentRevision'],artifact_identity=basis['artifactIdentity'],content=content,sha256=basis['sha256'],catalog_revision=basis['catalogRevision'],registration_id=basis['registrationId'],source_catalog_revision=basis['sourceCatalogRevision'])
         return self._reader_result(self._host._run_operation(transaction,read))
 
     @_active_operation

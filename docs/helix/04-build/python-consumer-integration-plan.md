@@ -55,6 +55,42 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Additional-document registration iteration — 2026-10-12
+
+Runtime 0.10 extends the public assembly to append new, document-qualified
+catalogs at the next actual native revision. Existing documents and definitions
+are retained unchanged. Allocation offsets captured under head exclusion are
+stored with original immutable requests; complete catalog validation reconstructs
+the union from those requests, original clocks, sources and offsets. It validates
+the final union while binding each deferred head event to its own registration,
+including multiple acceptances in one caller transaction. Reports retain their
+original revision inventory and byte representation. Exact-input unchanged
+requests may refer to an earlier registration under the current head.
+
+Reads and creates now use actual current revisions and original definition archive
+revision/ordinal/document IDs. Existing native IDs, definition pins, key namespaces
+and committed receipt semantics survive an added document. New objects/journal
+events carry the executing revision. Read-only publication checks the captured
+head and refuses an advanced observation without retry. Accepted-document results
+separate observed `catalog_revision` from original `source_catalog_revision` and
+registration identity. Convenience group sources retain caller-known originals
+only after successful acceptance; native calls still validate them in full.
+Each successful acceptance replaces its document's cached original, so caller
+rollback followed by reacceptance of different bytes does not strand stale data.
+
+The mutation and complete-view profiles advance to 0.2 with new pins, preserving
+the original definition-pin recipe. Stale profile requests refuse. Focused native
+workflows cover old create/commit, added document, preserved read/key/replay, new
+create and journal revision, old/new sources in read-only mode, two pending
+registrations in one commit, rollback, unchanged earlier registration, and a real
+concurrent head advance while an object is buffered. Cumulative limits are 512
+documents; a focused default-source workflow also covers rollback/reacceptance
+on the same public assembly. Other cumulative limits are 65,536 definitions and
+a 16MiB native expected image. Existing-document
+changes, compatible evolution, incompatibility rule/count reports and non-string
+property families remain open. Fresh installation is required; this does not
+complete the external-interface goal or qualify candidate migrations.
+
 ## Exact-input unchanged registration iteration — 2026-10-12
 
 Runtime 0.9 adds a distinct public `CatalogUnchanged` result when a new request

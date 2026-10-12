@@ -10,6 +10,7 @@ rootless string object creation through a selected group provider, including
 caller rollback and durable request replay. Runtime 0.5 also provides ordinary-reader
 catalog metadata and exact accepted-document retrieval. Runtime 0.8 provides public
 business-key lookup, and runtime 0.9 reports exact-input unchanged registration.
+Runtime 0.10 accepts additional documents while preserving existing definitions.
 Updates/deletes, pages, compiled queries, imports and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
@@ -981,3 +982,33 @@ The equality profile compares original input, archive, declarations and retained
 source bytes. It does not claim semantic equivalence of rewritten documents.
 Later documents and changed definitions still require the pending lifecycle
 implementation. This candidate requires fresh installation.
+
+### Additional documents (runtime 0.10 candidate)
+
+Prepare the new documents and call `accept_in_transaction` on the caller's
+transaction. New document IDs append at the next catalog revision; they do not
+replace existing definitions. Multiple registrations may share one transaction.
+Commit publishes them together, and rollback removes all their effects.
+
+Existing type/property/key/relationship IDs and original definition pins remain
+stable. Current views include all accepted documents; reports for earlier
+registrations retain their original bytes. Exact repeats of an earlier accepted
+input can return `CatalogUnchanged` even after another document was registered.
+
+Old objects remain readable and old durable group receipts replay unchanged.
+New creates and journal events use the current revision. `AcceptedDocument`
+reports both `catalog_revision` (the observed current head) and
+`source_catalog_revision` (the revision that accepted those exact bytes), plus
+the original `registration_id`. A read-only observation whose head advances
+during publication returns unavailable with reason `observation`.
+
+The complete-view and mutation profiles are version 0.2. Obtain their current
+pins through the assembly; old profile requests refuse. Preparing another
+document does not discard the same assembly's previously accepted source cache.
+Fresh assemblies should pass their caller-known original documents explicitly
+to grouped writes; native code checks those sources against the accepted archives.
+
+The cumulative catalog limits are 512 documents, 65,536 definitions and a 16MiB
+native expected image, with ordinary operation deadlines. Changes to an existing
+document still refuse as `unsupported_profile`; compatible evolution and exact
+non-string values remain unfinished. This candidate requires fresh installation.

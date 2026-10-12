@@ -32,8 +32,8 @@ class CatalogCodeTests(catalog_tests.PublicCatalogRuntimeTests):
         from test_catalog_relational_support import relational_document
         unchanged=assembly.accept_in_transaction(tx,prepared,request_key='second')
         self.assertIsInstance(unchanged,Ok);self.assertIsInstance(unchanged.value,CatalogUnchanged)
-        source=relational_document();source['id']='different'
-        changed=assembly.prepare_catalog((CatalogDocument('different','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+        source=relational_document();source['id']='adoc'
+        changed=assembly.prepare_catalog((CatalogDocument('adoc','r2',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
         self.code(assembly.accept_in_transaction(tx,changed,request_key='changed'),'unsupported_profile','0A000')
         self.assertIsInstance(assembly.report_in_transaction(tx),Ok)
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
