@@ -230,3 +230,39 @@ Checking only known policy names, source row validity or old successful plans
 cannot discharge these obligations. Unknown additional policy or callable
 dependency blocks the selected closed profile; no capability is inferred from
 a successful label-only lookup. Current public runtime code remains unchanged.
+
+
+### Public-created ontology membership realization — 2026-10-12
+
+A separate repository regression creates13 objects and12 edges through the
+actual public catalog/group API: Clients, Projects, Staff, Resources and keyed
+Assignments with active flags. Assignment remains a Record; staff-assignment,
+assignment-project and resource-project remain opaque Relationships. Candidate
+condition/fold lowering consumes actual Record Key witnesses and typed incidence
+carriers, without inventing a Record or field for an edge. Private views project
+real native graph rows with typed locator joins to original business keys.
+Original subject binding comes from SESSION_USER inside the private definer;
+ordinary callers cannot execute the two-argument binding helper or adopt the
+fact owner. No storage ID substitutes for a business key.
+
+Forty-four native observations pass on PostgreSQL18.6/runtime0.17-candidate.
+Alice seesRA/RAB, Bob seesRB/RAB, outsider seesnone; common Client C does not
+widen visibility, inactive assignments grant none, multiple owners grant only
+through a matching Project and ownerless data stays hidden. Private Assignment
+view/native edge reads refuse and Assignment object counts remain zero. Fresh
+statements observe a committed excluded-admin AA deactivation; Bob stays
+unchanged and restoration restores Alice. These are data-change observations,
+not revocation drain or enrolled-writer acceptance.
+
+The producer fixture passes strict typing;25 candidate-condition tests and Python
+boundaries pass. Evidence: `../../04-build/evidence/security-public-ontology-20261012/receipt.json`.
+The ontology lives in adoc with zdoc's independent baseline retained. Duplicating
+the whole ontology hit the existing4-MiB decision cap; the larger atomic seed
+uses supported60-second operation/statement limits after default-deadline
+cancellations. Those failed attempts and exact bounds remain explicit.
+
+This is actual public-created graph membership feasibility, not protected Python
+read adoption or a complete backend case. Fixture-authored candidate conditions
+are not authenticated compiler output. Complete source enrollment, current
+mapping and authority exclusion, callable closure, final release and original
+public writer/revocation integration remain required before profile admission.

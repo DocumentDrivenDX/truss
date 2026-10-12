@@ -1,0 +1,22 @@
+E
+======================================================================
+ERROR: test_public_created_membership_graph (__main__.PublicOntologySecurityTests.test_public_created_membership_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 23, in test_public_created_membership_graph
+    c,h,a,t=self.ready(self.model);ops=[]
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_group_create_native.py", line 27, in ready
+    prepared=assembly.prepare_catalog(tuple(documents),bun_executable='/opt/homebrew/bin/bun')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/catalog_runtime.py", line 232, in prepare_catalog
+    prepared=prepare_acceptance(documents,canonical_numeric_free(_configuration()),bun_executable=bun_executable)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/preparation.py", line 206, in prepare_acceptance
+    raise PreparationRejected(reason,diagnostics=diagnostics)
+truss.preparation.PreparationRejected: Truss preparation refused: invalid_document
+
+----------------------------------------------------------------------
+Ran 1 test in 8.514s
+
+FAILED (errors=1)

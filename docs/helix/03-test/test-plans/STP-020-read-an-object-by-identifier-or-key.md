@@ -461,3 +461,19 @@ qualify changed authority. Seventy-one observations and four bounded composition
 proofs are retained in
 `../../04-build/evidence/security-native-policy-correspondence-20261012/receipt.json`.
 Complete issuer/callable closure and held authority/publication remain not-run.
+
+
+Actual public-created ontology regression:
+`PYTHONPATH=packages/python/src:packages/python/tests python packages/python/tests/test_security_public_ontology_native.py`
+with stock psycopg, Bun and pgserver-pg18. Optional
+TRUSS_SECURITY_COMPONENT_EVIDENCE retains exact native outputs. It seeds all
+13 objects/12 edges atomically using supported bounded60-second host deadlines,
+then compares independently authored membership vectors under three actual
+ordinary native connections. Preserve inactive/sibling/common-Client/multiple-
+owner/ownerless controls, original keyed Assignment versus opaque edge meanings,
+private view/table/count denial, subject-binding and fact-owner adoption denial,
+storage-ID substitution refusal and fresh statements after committed assignment
+change/restoration. Forty-four observations are retained in
+`../../04-build/evidence/security-public-ontology-20261012/receipt.json`.
+This precursor does not close shared STP-056 B01/B02/B03/B10/B13 or STP-057 L05;
+their complete source/authority/publication and public-driver scope remains open.
