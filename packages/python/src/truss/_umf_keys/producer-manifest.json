@@ -1,0 +1,23 @@
+{
+  "revision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "producerMode": "key-tuples",
+  "buildDependencies": {
+    "yaml": {
+      "version": "2.9.1",
+      "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+    },
+    "ajv": {
+      "version": "8.20.0",
+      "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+    }
+  },
+  "archiveSha256": "8edaa0d2719809aaffddf80110abdd2c619d02f482f5cf9e4ba06073820923f6",
+  "bundleSha256": "f005ab0edc21852dae7d3cd9f42e29faec0ddaf465573db8a364f133e0601300",
+  "operations": [
+    "encodeCoreKeyTuple",
+    "verifyCoreKeyTuple",
+    "readCoreKeyTupleBytes",
+    "readJsonValue"
+  ],
+  "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+}

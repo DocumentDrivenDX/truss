@@ -1,0 +1,54 @@
+{
+  "ownerRevision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "ownerPath": "fixtures/key/tuple-encoding-v1.json",
+  "ownerFileSha256": "160310faa99e5337157cab9f77afedfb3385c937f3f2683d8a15e2c5d906b80b",
+  "scope": "Original UMFK1 string byte vectors; exercised with genuine UMF0.7/v2 key receipts",
+  "vectors": [
+    {
+      "id": "unicode-precomposed",
+      "fields": [
+        {
+          "id": "name",
+          "scalarType": "string"
+        }
+      ],
+      "values": [
+        {
+          "string": "é"
+        }
+      ],
+      "expectedHex": "554d464b31010402c3a9"
+    },
+    {
+      "id": "unicode-decomposed",
+      "fields": [
+        {
+          "id": "name",
+          "scalarType": "string"
+        }
+      ],
+      "values": [
+        {
+          "string": "é"
+        }
+      ],
+      "expectedHex": "554d464b3101040365cc81",
+      "notEqualTo": "unicode-precomposed"
+    },
+    {
+      "id": "empty-string-present",
+      "fields": [
+        {
+          "id": "name",
+          "scalarType": "string"
+        }
+      ],
+      "values": [
+        {
+          "string": ""
+        }
+      ],
+      "expectedHex": "554d464b31010400"
+    }
+  ]
+}

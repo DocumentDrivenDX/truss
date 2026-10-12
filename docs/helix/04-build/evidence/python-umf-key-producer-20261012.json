@@ -1,0 +1,20 @@
+{
+  "scope": "Original UMF string-key producer dependency; no native uniqueness/mutation authority",
+  "ownerRevision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "ownerManifestSha256": "4e90f95322267ed1e7297a3eb2850f47ff86cdbba107c6859ea70a93b88b6537",
+  "wheelSha256": "896288ad620d9c7713b83f9db5ab7c7683831b057af59c8c634e7b4435845677",
+  "sourceTests": {
+    "count": 7,
+    "passed": true,
+    "seconds": 2.763
+  },
+  "installedWheelTests": {
+    "count": 7,
+    "passed": true,
+    "seconds": 2.691
+  },
+  "maximumBatchTest": 512,
+  "pythonBoundaryImports": 636,
+  "review": "Astra Ultra approved corrected source; installed-wheel pass completed",
+  "buildScope": "Committed UMF archive and exact bundled bytes; dependency packages supplied by owner node_modules, not a hermetic rebuild"
+}

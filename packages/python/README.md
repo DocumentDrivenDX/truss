@@ -143,6 +143,13 @@ renaming and membership changes and reconfigure policy deliberately. Removal is
 not implicit in an omitted address. This administration API prepares policy
 metadata; business authorization and mutation capabilities remain under implementation.
 
+The package also retains a separately pinned original UMF key-tuple producer as
+an internal dependency for grouped writes. It parses original source through UMF,
+preserves ordered string components, and returns exact owner receipts and tuple
+bytes in bounded batches. Equal tuple bytes can occur in different documents or
+Keys: native uniqueness must bind the accepted qualified Key namespace separately.
+This dependency does not enable mutation or uniqueness enforcement by itself.
+
 The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
 prioritizes complete installation, catalog acceptance, apply/import and direct
 key/edge reads, with per-person isolation and origin capture included in the
