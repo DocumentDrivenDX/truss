@@ -70,6 +70,23 @@ class CatalogUnchanged:
     status: str = 'pending_commit'
 
 @dataclass(frozen=True,slots=True)
+class CatalogCompatibilityViolation:
+    document_id: str
+    module_id: str
+    record_id: str
+    field_module_id: str
+    field_id: str
+    rule: Literal['property.required','property.scalar_type']
+    affected_object_count: int
+
+@dataclass(frozen=True,slots=True)
+class CatalogAcceptanceRefused:
+    revision: int
+    violations: tuple[CatalogCompatibilityViolation,...]
+    outcome: Literal['refused'] = 'refused'
+    code: Literal['incompatible'] = 'incompatible'
+
+@dataclass(frozen=True,slots=True)
 class CatalogReport:
     revision: int
     original_bytes: bytes
@@ -115,7 +132,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -250,7 +267,7 @@ class CatalogReferenceAssembly:
             return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-string-create'))
         return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
-    def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged]:
+    def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
         self._available()
         local_failure=[None]
         def reject(code,message):
@@ -289,14 +306,28 @@ class CatalogReferenceAssembly:
             cursor.execute('SELECT * FROM truss.catalog_accept(%s,%s,%s,%s,%s,%s)',parameters,prepare=False)
             rows=cursor.fetchmany(2)
             if len(rows)!=1:raise ValueError('Complete catalog result required')
-            revision,identity,report,replayed,unchanged,actor=rows[0]
+            revision,identity,report,replayed,unchanged,actor,violations=rows[0]
+            if violations is not None:
+                if identity is not None or report is not None or replayed or unchanged:
+                    raise ValueError('Refusal must not publish an acceptance')
+                entries=json.loads(bytes(violations))
+                if type(entries) is not list or not entries:raise ValueError('Nonempty compatibility violations required')
+                parsed=[]
+                for entry in entries:
+                    if set(entry)!={'documentId','moduleId','recordId','fieldModuleId','fieldId','rule','affectedObjectCount'} or entry['rule'] not in ('property.required','property.scalar_type'):
+                        raise ValueError('Qualified compatibility violation required')
+                    count=entry['affectedObjectCount']
+                    if type(count) is not str or not count.isascii() or not count.isdecimal() or count.startswith('0') or len(count)>19:
+                        raise ValueError('Positive exact affected-object count required')
+                    parsed.append(CatalogCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['recordId'],entry['fieldModuleId'],entry['fieldId'],entry['rule'],int(count)))
+                return CatalogAcceptanceRefused(int(revision),tuple(parsed))
             report=bytes(report);decoded=json.loads(report)
             if decoded['revision']!=revision or decoded['registrationId']!=identity or decoded['acceptedInput']!=prepared.input():
                 raise ValueError('Original catalog result correspondence required')
             if unchanged:return CatalogUnchanged(int(revision),identity,report,replayed,request_key,origin_bytes,actor)
             return CatalogRegistration(int(revision),identity,report,replayed)
         result=_catalog_failure(self._host._run_semantic_operation(transaction,execute,parameter_producer=produce),local_failure[0])
-        if isinstance(result,Ok):
+        if isinstance(result,Ok) and not isinstance(result.value,CatalogAcceptanceRefused):
             known={document.document_id:document for document in self._group_documents}
             for interpretation in prepared.documents:
                 known[interpretation.document.document_id]=interpretation.document

@@ -963,6 +963,23 @@ object read lock. The returned record is verified against the requested key, wit
 current record and key-field permissions rechecked before publication. The
 profile remains rootless/string-only and revision 1; pages, broader value types
 and catalog evolution remain unfinished. Runtime 0.8 currently needs fresh install.
+### Changed-document scalar refusal (runtime 0.13 candidate)
+
+`accept_in_transaction` returns `Ok(CatalogAcceptanceRefused(...))` when an
+incoming required scalar field is missing/null on existing objects, or existing
+values fail its scalar-family rule. Each `CatalogCompatibilityViolation` names
+the document, record module/ID, field module/ID, stable rule (`property.required`
+or `property.scalar_type`) and exact integer `affected_object_count`. Counts are
+per field/rule and may overlap. The refusal names the current revision and
+publishes no registration, accepted report or catalog/data changes. The caller's
+transaction remains usable. Exact original retry/unchanged handling runs first.
+
+Counts require current read-or-write permission for the record and field modules;
+a registrar without that permission receives `unauthorized`, without counts.
+Other changed-document cases remain `unsupported_profile`: passing these scalar
+checks does not yet enable compatible evolution, retirement or transforms.
+Runtime 0.13 currently requires a fresh installation.
+
 ### Exact-input unchanged registration (runtime 0.9 candidate)
 
 `accept_in_transaction` returns `CatalogRegistration` for a new accepted catalog

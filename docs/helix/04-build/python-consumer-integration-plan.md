@@ -55,6 +55,43 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Changed-document validation implementation — 2026-10-12
+
+Owner priority update: deliver the complete callable public Python interface
+with basic adopter workflow tests. Defer extra performance, qualification and
+edge-case expansion until the interface shape has been exercised. Preserve
+ordinary transaction ownership, authorization, exact values and real effects;
+review plans and completed source with Astra without turning each increment into
+a separate qualification project. Next work prioritizes update/delete, imports,
+receipt visibility, feed and compiled queries over further diagnostic refinement.
+
+The next native evolution step compares incoming qualified fields against real
+objects under the exclusive catalog-head lock. For supported scalar fields,
+report required missing/null values and scalar-family violations by qualified
+document/module/record/field and actual affected-object count. An added required
+field is checked against existing objects too. Reuse the exact scalar validator;
+never coerce values or infer compatibility from names. Exact retry/unchanged
+branches remain first, and failed validation publishes no revision, archive,
+registration, report or mutation. Return a typed refusal through the public
+assembly and retain caller transaction usability.
+
+Registrar membership alone cannot disclose business populations. Require current
+read-or-write authority for each record and field module before counting, and
+recheck all observed scopes before returning. Missing authority refuses without
+counts; it never returns an invented zero. The Python result is
+`CatalogAcceptanceRefused` with `CatalogCompatibilityViolation` entries. Counts
+are per rule and field, so one object may occur in more than one count.
+
+Removing declarations is not inherently incompatible: retirement and transforms
+have separate governed semantics. Unsupported lifecycle, key, relationship,
+facet or structured changes remain explicit unavailable outcomes. Passing this
+selected validation does not establish full compatibility or enable acceptance
+until immutable identity reuse, updated source custody and complete native
+post-state validation are implemented. Focus tests on real create/commit then
+changed-document refusal, exact rule/count results, unchanged/retry precedence,
+and absence of effects. This prerequisite does not close R15 or reduce the full
+external-interface goal.
+
 ## Live object pages iteration — 2026-10-12
 
 Runtime 0.12 adds `page_objects_in_transaction` to the public scalar-object

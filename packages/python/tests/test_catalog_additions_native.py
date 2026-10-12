@@ -110,7 +110,7 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
         connection,host,assembly,tx=self.consumer()
         changed=assembly.prepare_catalog((replace(document,document_revision='r2'),),bun_executable='/opt/homebrew/bin/bun')
         denied=assembly.accept_in_transaction(tx,changed,request_key='changed-first')
-        self.assertIsInstance(denied,Error);self.assertEqual(denied.error.catalog_code,'unsupported_profile')
+        self.assertIsInstance(denied,Error);self.assertEqual(denied.error.catalog_code,'unauthorized')
         host.detach();connection.rollback()
 
     def test_readonly_head_advance_refuses_buffered_observation(self):

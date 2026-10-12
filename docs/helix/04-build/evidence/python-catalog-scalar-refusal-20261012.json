@@ -1,0 +1,22 @@
+{
+  "scope": "public changed-document scalar refusal; compatible persistence remains incomplete",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "e97a1df4c2d2ebde3a32c6314a1622f5f91e300dfed3830ac9eba39ae91b6a38",
+  "installedTests": {
+    "passed": 3,
+    "elapsedSeconds": 57.492,
+    "modules": ["test_catalog_evolution_native", "test_catalog_additions_native.CatalogAdditionTests.test_multiple_pending_registrations_rollback_and_changed_document_refusal"]
+  },
+  "behavior": [
+    "real committed objects produce qualified required-field and scalar-family affected-object counts",
+    "refusal preserves caller transaction and creates no acceptance or source-cache changes",
+    "registrar without business-module access receives unauthorized without counts",
+    "additional registrations, unchanged and caller rollback remain callable"
+  ],
+  "correction": "Initial source run passed five of six; old changed-document assertion expected unsupported without module access. Updated to unauthorized, then focused installed run passed.",
+  "review": "Astra Ultra approved source. Owner deferred suggested additional edge-case qualification in favor of completing the public interface.",
+  "ownerSql": "14 SQL sources retain/reload/export unchanged via UMF",
+  "moduleBoundaries": "673 imports passed",
+  "remaining": "compatible evolution, updates/deletes, imports, receipt visibility, feed, compiled execution and complete external interface remain active work"
+}

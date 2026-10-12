@@ -294,18 +294,18 @@ $$;
 
 CREATE FUNCTION truss.catalog_accept(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,
  source_bytes bytea,origin_bytes bytea,request_key text)
-RETURNS TABLE(revision text,registration_id text,report_bytes bytea,replayed boolean,unchanged boolean,actor_name text)
+RETURNS TABLE(revision text,registration_id text,report_bytes bytea,replayed boolean,unchanged boolean,actor_name text,violations_bytes bytea)
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output='hex' AS $$
 DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  request truss.catalog_registration_request%ROWTYPE; existing truss.catalog_registration_request%ROWTYPE;
  alias_request truss.catalog_unchanged_request%ROWTYPE;
  stored_alias truss.catalog_unchanged_request%ROWTYPE;
  expected jsonb; prior_expected jsonb; origin bytea; original_report bytea; table_name text; columns text; rows jsonb; raw bytea; total bigint:=0; request_count bigint;
- prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;
+ prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;violations bytea;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
- IF installation.release_id<>'truss-catalog-runtime/0.12-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.13-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -330,7 +330,7 @@ BEGIN
    OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes OR existing.source_bytes IS DISTINCT FROM source_bytes OR existing.origin_bytes IS DISTINCT FROM origin_bytes THEN
    RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
   PERFORM truss.catalog_actor();
-  RETURN QUERY SELECT existing.revision::text,existing.registration_id::text,r.report_bytes,true,false,existing.actor_name FROM truss.catalog_acceptance_report r WHERE r.rev=existing.revision;
+  RETURN QUERY SELECT existing.revision::text,existing.registration_id::text,r.report_bytes,true,false,existing.actor_name,NULL::bytea FROM truss.catalog_acceptance_report r WHERE r.rev=existing.revision;
   IF NOT FOUND THEN RAISE EXCEPTION 'original registration report missing' USING ERRCODE='55000'; END IF;
   RETURN;
  END IF;
@@ -343,7 +343,7 @@ BEGIN
    OR alias_request.origin_bytes IS DISTINCT FROM origin_bytes THEN
    RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
   PERFORM truss.catalog_actor();
-  RETURN QUERY SELECT existing.revision::text,existing.registration_id::text,r.report_bytes,true,true,alias_request.actor_name
+  RETURN QUERY SELECT existing.revision::text,existing.registration_id::text,r.report_bytes,true,true,alias_request.actor_name,NULL::bytea
    FROM truss.catalog_acceptance_report r WHERE r.rev=existing.revision;
   IF NOT FOUND THEN RAISE EXCEPTION 'original registration report missing' USING ERRCODE='55000'; END IF;
   RETURN;
@@ -362,7 +362,7 @@ BEGIN
    WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept.request_key;
   IF stored_alias IS DISTINCT FROM alias_request THEN RAISE EXCEPTION 'original unchanged request readback required' USING ERRCODE='55000'; END IF;
   PERFORM truss.catalog_actor();
-  RETURN QUERY SELECT existing.revision::text,existing.registration_id::text,r.report_bytes,false,true,alias_request.actor_name
+  RETURN QUERY SELECT existing.revision::text,existing.registration_id::text,r.report_bytes,false,true,alias_request.actor_name,NULL::bytea
    FROM truss.catalog_acceptance_report r WHERE r.rev=existing.revision;
   IF NOT FOUND THEN RAISE EXCEPTION 'original registration report missing' USING ERRCODE='55000'; END IF;
   RETURN;
@@ -370,6 +370,12 @@ BEGIN
  PERFORM truss.catalog_require_sources(input_bytes,documents_bytes,declarations_bytes);
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) d
   JOIN truss.schema_doc s ON s.doc_id=d.value->>'documentId') THEN
+  violations:=truss.catalog_scalar_violations(declarations_bytes);
+  IF violations IS NOT NULL THEN
+   PERFORM truss.catalog_actor();
+   RETURN QUERY SELECT prior_revision::text,NULL::text,NULL::bytea,false,false,session_user::text,violations;
+   RETURN;
+  END IF;
   RAISE EXCEPTION 'existing document changes require supported evolution' USING ERRCODE='0A000';END IF;
  IF prior_revision<> (SELECT coalesce(max(r.revision),0) FROM truss.catalog_registration_request r) THEN
   RAISE EXCEPTION 'complete current catalog head required' USING ERRCODE='55000';END IF;
@@ -416,7 +422,7 @@ BEGIN
  -- The deferred validator runs at commit; verify the same result before return.
  IF NOT EXISTS(SELECT 1 FROM truss.schema_head WHERE id=1 AND rev=new_revision) OR NOT EXISTS(SELECT 1 FROM truss.catalog_acceptance_report WHERE rev=new_revision AND catalog_acceptance_report.report_bytes=original_report) THEN
   RAISE EXCEPTION 'catalog publication incomplete' USING ERRCODE='55000'; END IF;
- RETURN QUERY SELECT request.revision::text,request.registration_id::text,original_report,false,false,request.actor_name;
+ RETURN QUERY SELECT request.revision::text,request.registration_id::text,original_report,false,false,request.actor_name,NULL::bytea;
 END;
 $$;
 
