@@ -448,18 +448,27 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.assertIs(self.admin.execute('SELECT pg_terminate_backend(%s)',(publication_pid,)).fetchone()[0],True)
   with self.assertRaises(psycopg.OperationalError):publication_owner.execute('SELECT 1')
   self.assertEqual(self.admin.execute('SELECT settled FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(False,));observations.append({'id':'real-protected-buffer-original-coordinator-loss-retains-claim','observed':'unsettled'})
-  def participating_assignment_change(active,expected_generation):
+  def participating_assignment_change(active,expected_generation,fault=None):
    authority_writer.execute('BEGIN')
    try:
     authority_writer.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone()
     if authority_writer.execute('SELECT EXISTS(SELECT 1 FROM truss.policy_publication_claim WHERE NOT settled)').fetchone()[0]:authority_writer.execute('ROLLBACK');return 'refused'
     authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':active}),int(aliases['AA'].id),int(assignment['typeId'])))
-    advanced=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,expected_generation)).fetchall();self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),str(expected_generation+1))]);authority_writer.execute('COMMIT');return advanced
+    if fault=='after_effects':
+     self.assertEqual(authority_writer.execute('SELECT props->%s FROM truss.object WHERE id=%s AND type_id=%s',(active_id,int(aliases['AA'].id),int(assignment['typeId']))).fetchone(),({'kind':'boolean','value':False},));authority_writer.execute('SELECT 1/0')
+    advanced=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,expected_generation)).fetchall();self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),str(expected_generation+1))])
+    if fault=='after_generation':
+     self.assertEqual(authority_writer.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone(),(str(expected_generation+1),));authority_writer.execute('SELECT 1/0')
+    authority_writer.execute('COMMIT');return advanced
    except BaseException:authority_writer.rollback();raise
   self.assertEqual(participating_assignment_change(False,5),'refused');self.assertEqual(protected_codes(),['RA','RAB']);self.assertEqual(self.admin.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone(),('5',));observations.append({'id':'durable-real-read-refuses-assignment-revocation-before-effects','observed':{'generation':'5','freshCodes':['RA','RAB']}})
   # Explicit fixture withholding is the completion premise, not a production sink.
   real_buffer=[];observations.append({'id':'durable-real-read-withholds-buffer-before-original-settlement','observed':real_buffer,'qualification':'fixture completion only'})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall(),[(b'profile-bound-operation'.hex(),)]);self.admin.execute('COMMIT')
+  for fault in ['after_effects','after_generation']:
+   with self.assertRaises(psycopg.errors.DivisionByZero) as failure:participating_assignment_change(False,5,fault=fault)
+   self.assertEqual(failure.exception.sqlstate,'22012');self.assertEqual(authority_writer.info.transaction_status,psycopg.pq.TransactionStatus.IDLE)
+   self.assertEqual(self.admin.execute('SELECT props->%s FROM truss.object WHERE id=%s AND type_id=%s',(active_id,int(aliases['AA'].id),int(assignment['typeId']))).fetchone(),({'kind':'boolean','value':True},));self.assertEqual(self.admin.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone(),('5',));self.assertEqual(protected_codes(),['RA','RAB']);observations.append({'id':'durable-assignment-'+fault+'-native-failure-rolls-back-effect-and-generation','observed':{'sqlState':'22012','generation':'5','active':True,'freshCodes':['RA','RAB']}})
   committed=participating_assignment_change(False,5);self.assertEqual(committed,[('1',installation_bytes.hex(),profile_bytes.hex(),'6')]);observations.append({'id':'durable-real-read-settlement-permits-committed-assignment-revocation','observed':committed})
   fresh_codes=protected_codes();self.assertEqual(fresh_codes,[]);observations.append({'id':'durable-real-read-fresh-admission-after-revocation-denies','observed':fresh_codes})
   restored=participating_assignment_change(True,6);self.assertEqual(restored,[('1',installation_bytes.hex(),profile_bytes.hex(),'7')]);self.assertEqual(protected_codes(),['RA','RAB']);observations.append({'id':'durable-real-read-controlled-restoration-advances-generation','observed':restored})

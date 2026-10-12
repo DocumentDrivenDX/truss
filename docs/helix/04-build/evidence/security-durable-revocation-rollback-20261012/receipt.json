@@ -1,0 +1,22 @@
+{
+  "executedBaseCommit": "c04fa66875f22526bf64beab1bbff91a4d3ed209",
+  "sourceDelta": "source-delta.zip",
+  "nativeTests": 2,
+  "observedDurationSeconds": 41.698,
+  "securityObservations": 214,
+  "cleanupObservations": 2,
+  "trace": [
+    "CONTRACT-005 original native transaction containment",
+    "CONTRACT-063 generation/effect atomicity",
+    "STP-057 L05/L12",
+    "US-057-AC3/AC8"
+  ],
+  "scope": "Real native22012 before commit after actual assignment effect and checked generation effect, followed by confirmed owned transaction rollback and fresh ordinary reads. No unknown rollback/commit acknowledgment, production recovery/issuer/sink/bootstrap or complete participant qualification. No original132-case promotion.",
+  "sha256": {
+    "security-durable-revocation-rollback.stderr.log": "82b90fa5572d791414db33ea64b69c609c367a870f78542f19fc23fdd360732a",
+    "security-durable-revocation-rollback.json.cleanup.json": "7ef2ef64075ee2d0889f2f68597001016c6efa7379660bc5f3946e3b178e9e51",
+    "security-durable-revocation-rollback.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-delta.zip": "eade8ef27c957ca3e45bda91a0f2b2ec8f45c3624711fdc282ebe61cccd2442a",
+    "security-durable-revocation-rollback.json": "f6a1ef2b3be989094f760ebeb74ae24c16ca0b6ce500cb35957dde84ecbf5bbf"
+  }
+}

@@ -429,3 +429,24 @@ completion, original production issuer, unknown commit recovery, complete
 source/fact/participant/callable closure or verified bootstrap. The audit still
 has132 required cases and106 missing commands, and production Weft lowering
 remains closed. No original backend case is promoted.
+
+
+### Real assignment/generation rollback containment — 2026-10-12
+
+The composed participating assignment changer now has two explicit native failure
+schedules before COMMIT. After actual AA active=false, a division-by-zero query
+returns22012; confirmed rollback preserves active=true, generation5 and fresh
+ordinary RA/RAB reads. Separately, the original generation source actually
+returns6 and the owned transaction reads6 before the same native failure;
+confirmed rollback restores both assignment and generation5. The writer is IDLE
+after containment. Later successful revocation/generation6 and restoration7
+still commit and produce the independently checked ordinary results.
+
+Both native tests pass with214 security observations and the separate two cleanup
+observations. Sources, native results and terminal logs:
+`../../04-build/evidence/security-durable-revocation-rollback-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L05/L12 and US-057-AC3/AC8. This proves the
+confirmed owned native fixture branches, not uncertain COMMIT/ROLLBACK outcomes,
+production recovery, authentic sink/issuer or complete bootstrap/participant
+qualification. Unknown completion still retains original custody; no replay or
+replacement generation is inferred. No required backend case is promoted.
