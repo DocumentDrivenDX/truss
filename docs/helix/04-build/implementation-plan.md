@@ -4910,3 +4910,12 @@ caller/issuer/mapping/target credentials and protected publication remain open.
 No backend binding is promoted; full goal stays active at26/132 with106 unbound
 required cases. Diagnose the retained intermittent refusal before any availability
 or complete protected-service qualification.
+
+Integrated-main requalification: concurrent installation privilege work changed
+native host test and boundary checker inputs. The pre-merge37e19ef3 packet retains
+its original source scope. Fresh
+`evidence/python-psycopg-epoch-cut/9c3297e7-8705-4d75-81b4-f893d8d21140`
+passes168 native methods and boundaries against integrated main a69788bf, with142
+current/preimage Truss source pins and three stop0/status3/socket-absent cleanups.
+This requalifies the finite composition; the retained intermittent refusal and
+complete backend admission/lifetime obligations remain open.
