@@ -470,3 +470,35 @@ rollback branches only, not permission to retry uncertain COMMIT or issue a
 replacement token. Production original issuer, reconciliation, authentic
 settlement/sink and complete native bootstrap/participant qualification remain
 required. No original required backend case is promoted.
+
+
+### Original COMMIT acknowledgment transport loss — 2026-10-12
+
+A test-only owned local relay now forwards stock psycopg/libpq bytes unchanged
+and, when explicitly armed, drops the exact native CommandComplete(COMMIT)
+response before closing both sockets. It bounds backend frames and supports
+fragmented/coalesced responses for this local unencrypted Unix-backend fixture.
+It is neither a production driver shim nor an authorization/recovery service.
+The driver actually raises OperationalError with no SQLSTATE; no native error
+or completed rollback is manufactured.
+
+The original claim insertion has committed despite the lost acknowledgment.
+Without re-inserting or dispatching a data query, recovery takes schema-head
+SHARE then original guard UPDATE and freshly reads the unique original operation
+row. Complete installation/profile bytes, generation5 and unsettled state match.
+The fixture's original ledger dispatched no protected data query, so it records
+withholding and settles only that exact original token. Replay refuses23505.
+The private fixture profile starts with capacity6 to retain this extra identity;
+subsequent known-rollback and composed protected-read/revocation schedules still
+pass. No profile capacity is silently changed during the admitted operation.
+
+Both native tests pass with219 security observations plus separate cleanup
+observations. Astra Ultra independently reviewed source/frame handling, original
+reconciliation ordering and assertions with no actionable defect; it did not
+rerun native mutations. Sources, review and actual results:
+`../../04-build/evidence/security-original-commit-ack-loss-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L11/L12 and US-057-AC7/AC8. This is one actual
+committed-but-unacknowledged local native outcome, not all uncertain outcomes,
+crash/power-loss durability, authentic production issuer/sink/recovery, complete
+source/writer/bootstrap qualification or backend acceptance. No replacement
+token/rollback is inferred from transport loss; no original case is promoted.
