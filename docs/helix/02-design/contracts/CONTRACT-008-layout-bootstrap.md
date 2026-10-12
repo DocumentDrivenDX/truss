@@ -3098,3 +3098,10 @@ and native source privacy, alongside original issuer/subject/mapping/target,
 writer/current-state and final-release closure. No backend binding or complete
 privacy/noninterference claim is promoted. Full goal remains active at26/132 with
 106 unbound cases; the original acceptance scope is unchanged.
+
+Integrated-main requalification: concurrent retained-parameter host/catalog work
+changes two source inputs. Original9e6718b6 keeps its pre-merge scope. Fresh
+`evidence/python-psycopg-epoch-cut/ed2ea7b9-ad94-40ed-b12d-84e346e20a7e`
+passes184 methods, boundaries,143 current/preimage sources and three cleanups
+against the integrated host/catalog. This qualifies the finite counterexample
+and composition only; hidden-fact B10 and protected channel admission stay open.
