@@ -5790,3 +5790,17 @@ inventory are premises; no PostgreSQL/Psycopg/SQL refinement is proved.
 Trace CONTRACT-005, CONTRACT-063/STP-056 B05/B10/B11/B12 and US-056
 AC5/AC8/AC9/AC10 prerequisites. No advanced business backend case or whole
 132-case profile is promoted; the full goal remains active at26/132.
+
+Final merge preserves main82970093/0d522700 original-UMF key tuple production,
+without a Python semantic fork.
+`evidence/public-catalog-predefined-roles-20261012/merged-receipt.json` retains213
+current source/preimage pins, final native/wheel/boundary logs and installed
+package correspondence. All42 combined public catalog/view/source/key tests pass
+from source and isolated installed wheel. Final wheel SHA256
+`c99c5c68947b95381cb889f8f902aea7c26ecf45682a9d62b78b504472eddf39`
+contains the exact fixed runtime, selected manifest and original key producer.
+The four formal source inputs remain byte-identical after this independent key
+producer merge; four replays retain two UNSAT/two SAT. Earlier35-test packet is
+historical under its original source scope. No whole-role/callable/diagnostic/
+writer/authentication closure or advanced backend case is promoted; the goal
+remains active at26/132 with106 unbound required cases.
