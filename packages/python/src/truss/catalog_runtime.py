@@ -103,7 +103,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','read.sql','keys.sql','groups.sql','reader.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -134,6 +134,17 @@ def _active_operation(method):
                 return Error(ExecutionFailure('execution_obligation','Assembly disposed'))
             return method(self,*args,**kwargs)
     return guarded
+
+
+def _object_result(raw,manifest,digest):
+    basis=json.loads(bytes(raw))
+    if basis['releaseId']!=manifest['releaseId'] or basis['releaseSha256']!=digest:
+        raise ValueError('Exact selected installed runtime required')
+    return ObjectFound(object=ScalarObject(document_id=basis['documentId'],module_id=basis['moduleId'],
+        record_id=basis['recordId'],id=int(basis['id']),type_id=int(basis['typeId']),version=int(basis['version']),
+        catalog_revision=int(basis['catalogRevision']),record_revision=int(basis['recordRevision']),
+        created_at=basis['createdAt'],updated_at=basis['updatedAt'],
+        values=tuple(tuple(v) for v in basis['values']),retained=tuple(tuple(v) for v in basis['retained'])))
 
 
 def _catalog_failure(result, local_code=None):
@@ -367,7 +378,9 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
-                    for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)'):
+                    for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
+                                      'key_read_selection(text,text,text,text,bytea,text,text)',
+                                      'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)'):
                         cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
@@ -442,14 +455,7 @@ class CatalogReferenceAssembly:
                 (document_id,module_id,record_id,object_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:return ObjectNotFound()
-            basis=json.loads(bytes(raw))
-            if basis['releaseId']!=manifest['releaseId'] or basis['releaseSha256']!=digest:
-                raise ValueError('Exact selected installed runtime required')
-            return ObjectFound(object=ScalarObject(document_id=basis['documentId'],module_id=basis['moduleId'],
-                record_id=basis['recordId'],id=int(basis['id']),type_id=int(basis['typeId']),version=int(basis['version']),
-                catalog_revision=int(basis['catalogRevision']),record_revision=int(basis['recordRevision']),
-                created_at=basis['createdAt'],updated_at=basis['updatedAt'],
-                values=tuple(tuple(v) for v in basis['values']),retained=tuple(tuple(v) for v in basis['retained'])))
+            return _object_result(raw,manifest,digest)
         result=self._host._run_operation(transaction,observe)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
@@ -541,3 +547,45 @@ class CatalogReferenceAssembly:
             if sha256(content).hexdigest()!=basis['sha256']:raise ValueError('Exact accepted document digest required')
             return AcceptedDocument(document_id=basis['documentId'],document_revision=basis['documentRevision'],artifact_identity=basis['artifactIdentity'],content=content,sha256=basis['sha256'],catalog_revision=basis['catalogRevision'],registration_id=basis['registrationId'])
         return self._reader_result(self._host._run_operation(transaction,read))
+
+    @_active_operation
+    def lookup_key_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,key_id: str,
+                                  values: tuple[str,...],original_document: bytes | None=None,maximum_bytes: int=1048576,
+                                  bun_executable: str='bun') -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+        """Resolve an authored business key into complete values, native identity and version."""
+        try:selection_valid=all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (document_id,module_id,record_id,key_id))
+        except UnicodeError:selection_valid=False
+        if not selection_valid:return Ok(ObjectReadInvalid(code='selection'))
+        try:
+            values_valid=type(values) is tuple and 1<=len(values)<=1024 and all(type(v) is str and '\0' not in v for v in values)
+            encoded_values=json.dumps(values,ensure_ascii=False,separators=(',',':')).encode('utf8') if values_valid else b''
+        except (UnicodeError,TypeError):values_valid=False;encoded_values=b''
+        if not values_valid:return Ok(ObjectReadInvalid(code='key_values'))
+        if len(encoded_values)>1048576:return Ok(ObjectReadUnavailable(reason='resource'))
+        if type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:return Ok(ObjectReadInvalid(code='limits'))
+        if original_document is not None and (type(original_document) is not bytes or not 1<=len(original_document)<=1048576):return Ok(ObjectReadInvalid(code='source'))
+        manifest,digest,_=_release()
+        def read(cursor,observed):
+            from ._umf_key_tuples import encode_string_key_tuples,KeyTupleRequest
+            _pin_cursor(cursor);source=original_document
+            if source is None:
+                cursor.execute('SELECT truss.accepted_document(%s,%s,%s,%s)',(document_id,16777216,manifest['releaseId'],digest),prepare=False)
+                archive=json.loads(bytes(cursor.fetchone()[0]));source=base64.b64decode(archive['contentBase64'])
+                if sha256(source).hexdigest()!=archive['sha256']:raise ValueError('Exact accepted source required')
+            cursor.execute('SELECT truss.key_read_selection(%s,%s,%s,%s,%s,%s,%s)',
+                (document_id,module_id,record_id,key_id,source,manifest['releaseId'],digest),prepare=False)
+            selection=cursor.fetchone()[0]
+            if selection is None:return ObjectNotFound()
+            if json.loads(bytes(selection))['componentCount']!=len(values):return ObjectReadInvalid(code='key_values')
+            try:encoded=encode_string_key_tuples(source,(KeyTupleRequest(module_id,record_id,key_id,values),),bun_executable=bun_executable)[0]
+            except (ValueError,FileNotFoundError):return ObjectReadUnavailable(reason='profile')
+            cursor.execute('SELECT truss.lookup_string_key(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                (document_id,module_id,record_id,key_id,source,encoded_values,encoded.tuple_bytes,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            raw=cursor.fetchone()[0]
+            return ObjectNotFound() if raw is None else _object_result(raw,manifest,digest)
+        result=self._host._run_operation(transaction,read)
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='source_or_key'))
+            reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
+            if reason:return Ok(ObjectReadUnavailable(reason=reason))
+        return result

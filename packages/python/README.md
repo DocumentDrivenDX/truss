@@ -921,3 +921,41 @@ not yet add typed group authorization failures or invalid-input paths.
 
 The native conflict-state change is pinned as runtime 0.7 and currently requires
 a fresh installation. Earlier candidate upgrades remain open.
+
+## Business-key lookup: runtime 0.8
+
+`lookup_key_in_transaction` resolves an authored UMF key to the same complete
+`ObjectFound.object` returned by identity lookup, including native `id` and current
+`version`. Supply key components in the key's authored field order:
+
+```python
+result = assembly.lookup_key_in_transaction(
+    tx, document_id="customer-model", module_id="customers",
+    record_id="Customer", key_id="primary", values=("customer-123",),
+)
+```
+
+The assembly obtains the accepted original document through the ordinary-reader
+source API and uses the bundled UMF encoder internally. No public codec calls are
+required. If the application already holds the exact accepted document, pass
+`original_document=source_bytes`; native equality checks still bind it to the
+accepted source. This also supports a reader of a subset of a multi-module
+document when the application supplies its already-known source. Every key-field
+declaration module must still be readable. Bun remains required for this path.
+
+This string-key profile supports primary and alternate keys, composite authored
+order, Unicode and empty string values. Unknown native key selections and missing
+data return `ObjectNotFound`; wrong arity or source bytes are invalid. Owner
+encoding failures never become `not_found`. Input/output limits and a bounded
+indexed route query refuse excessive work; the route examines at most 10,001
+candidates and refuses above 10,000 rows or 16 MiB of candidate bytes. Full
+namespace and key bytes decide equality, and duplicate/inconsistent memberships
+are integrity failures. The namespace includes the actual installation, source
+epoch, native type/key and original definition pin. Reservations are not objects.
+
+Lookup creates no route, guard or reservation. It supports adopted read-only and
+read-write READ COMMITTED transactions; read-write lookup takes a nonblocking
+object read lock. The returned record is verified against the requested key, with
+current record and key-field permissions rechecked before publication. The
+profile remains rootless/string-only and revision 1; pages, broader value types
+and catalog evolution remain unfinished. Runtime 0.8 currently needs fresh install.

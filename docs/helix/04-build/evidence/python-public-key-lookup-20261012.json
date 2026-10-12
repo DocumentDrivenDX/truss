@@ -1,0 +1,29 @@
+{
+  "scope": "runtime0.8 public primary/alternate string-key lookup on adopted READ COMMITTED transactions",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "305b771c4ced9e6a49798c4e795b727a2bc87ef44cf013862bc5167e3099f4f3",
+  "installedTests": {
+    "modules": ["test_key_lookup_native", "test_object_read_native", "test_read_only_public_native", "test_reader_catalog_native"],
+    "passed": 19,
+    "elapsedSeconds": 66.278
+  },
+  "controls": [
+    "public create, pending lookup, caller commit and actual read-only primary/alternate lookup",
+    "Unicode and empty strings, authored field order, arity and exact accepted source",
+    "missing selections return not-found; encoder failures are not mapped to not-found",
+    "duplicate exact membership refuses with native integrity error",
+    "hidden key-field declaration owner protects both correct and incorrect source comparisons",
+    "reader revocation and existing reader-catalog/read-only regressions",
+    "lookup does not mutate key guards or reservations"
+  ],
+  "umfSqlOwner": "11 retained SQL sources reload/export unchanged",
+  "moduleBoundaries": "671 imports passed",
+  "review": "Astra Ultra approved scoped plan and corrected source; promotion conditioned on installed-wheel checks, now passed",
+  "limits": [
+    "rootless scalar-string profile and current revision1 catalog",
+    "Bun required for internal UMF key production",
+    "fresh installation required; candidate migration remains open",
+    "pages, exact numeric families, evolution and full external interface remain incomplete"
+  ]
+}

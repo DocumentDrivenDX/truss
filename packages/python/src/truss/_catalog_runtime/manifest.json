@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-catalog-runtime-release/0.1",
-  "releaseId": "truss-catalog-runtime/0.7-candidate",
+  "releaseId": "truss-catalog-runtime/0.8-candidate",
   "postgresVersion": "180006",
   "layoutProfile": {
     "identity": "truss-layout",
@@ -11,14 +11,15 @@
     "layout.sql": "421a9bb88bcc1293f4fcbb66d2b443ccd08ccfc7845c79e5d3ee21b5494666a7",
     "lineage.sql": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc",
     "plan.sql": "060f74698e891dbf3cf36629ae9293d05ea9507d78a6c539c4d299591367c537",
-    "runtime.sql": "f7034284fa15289ac30ace6d85fcb86df731c32ae1cff2f0443c04332213559f",
+    "runtime.sql": "62652f7d26e1a5270f2cc58d2456ce31e6e126c29294c57c5f695098849afc08",
     "barrier.sql": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
     "view.sql": "298959b53f82b2ceaa3929fb409dd609567ff06975daeca0c891cd7b8a16a793",
-    "read.sql": "4cf969ad4a0a7054fb5edb1aa583a42f1f8950c265c3188d614c85458c4a62b1",
+    "read.sql": "4151525e4038f418c18e123d4b6f52ff92799f82c9954db160f2cc2b07fe6426",
     "keys.sql": "d74dc2e4048331bafd6f1f68f7fd931818fb52beb720b51f5cfd8950b0f7a869",
     "groups.sql": "dacafbcd85c70c8a9b7bf3e33cf43cd5efca9d29c0c8821f7f973868c4839fd2",
     "group-profiles.json": "f71e07615f6bbf5f2474d1cf8d8e7ac9a575e18edd1a43ef7c1b5e40e3294a54",
-    "reader.sql": "841e5ffcf053d5670e6d7500d709bdc201dc3335e0dd940cebaf02376864f1bc"
+    "reader.sql": "841e5ffcf053d5670e6d7500d709bdc201dc3335e0dd940cebaf02376864f1bc",
+    "key-read.sql": "79d6cb4de6c1cd3b68eae3748142fe60d28578d413bdeb102a5f0869334ce4a4"
   },
-  "version": "0.7"
+  "version": "0.8"
 }

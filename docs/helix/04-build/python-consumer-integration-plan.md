@@ -55,6 +55,25 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Business-key reader iteration — 2026-10-12
+
+Runtime 0.8 connects authored primary/alternate string-key lookup through the
+public assembly, returning actual native identity/current version and complete
+supported logical values. The UMF encoder stays internal; native selection and
+exact source checks precede encoding. The protected reader reuses the writer's
+installation/epoch/type/key/definition namespace, scans one bounded indexed
+candidate snapshot and compares full bytes. Duplicate/inconsistent membership
+refuses, while reservations never count as objects. It verifies both actual
+object fields and the returned buffer against the key and rechecks record/key-field
+owners. Read-only and read-write caller transactions are supported, with no
+new guard/reservation writes. Native tests cover create→lookup→commit→read-only
+primary/alternate lookup, Unicode/empty strings, order/arity, missing selections,
+source mismatch, wrong owner, duplicate membership and unreadable key-field
+scope. The remaining full objective includes paging, exact property families,
+additional/evolved registrations, conditional mutations/preconditions, imports,
+receipt visibility, feed/ack and complete Weft execution. No claim of full direct
+read conformance is made by this scoped provider; candidate upgrades remain open.
+
 ## Catalog refusal-code iteration — 2026-10-12
 
 Runtime 0.7 adds optional typed `ExecutionFailure.catalog_code` to known public
