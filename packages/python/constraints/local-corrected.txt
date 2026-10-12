@@ -1,5 +1,5 @@
 # Reusable local runtime; select a separately verified artifact wheelhouse.
-pgserver-pg18==18.6.0
+pgserver-pg18==18.6.1
 fasteners==0.20
 platformdirs==4.12.4
 psutil==7.2.2

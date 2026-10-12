@@ -63,9 +63,9 @@ on Linux x64/Python3.11, retaining logs and cleanup evidence even on failure.
 records all six groups passing atb494b275 on the published Linux wheel, including
 owned lifecycle, supported driver, cleanup/collision, interruption, CLI signals
 and timeout. Installer controls also confirm corrupted cache refusal and a
-consistent binary installation. Linux whitespace socket paths remain an observed
-upstream limitation of the current .0 package; CI uses the short no-space worker
-paths, while macOS retains its original whitespace lifecycle case.
+consistent binary installation. The .0 checkpoint excluded Linux whitespace socket paths due to an observed
+upstream quoting bug. Packaging version18.6.1 fixes that bug; current lifecycle
+and CLI checks restore short paths with spaces and apostrophes on all platforms.
 Broader corpus qualification is an explicit separate lane. The historical Truss
 PostgreSQL recipe/build commands remain retired; native compilation belongs to
 DocumentDrivenDX/pgserver.
