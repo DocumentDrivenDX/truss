@@ -145,6 +145,19 @@ class QueryExecutionTests(unittest.TestCase):
         events=[];engine,plan=coordinator(self.host(events,decode=['x'*1048576]))
         self.assertEqual(engine.execute(plan),('x'*1048576,))
 
+    def test_transport_bounds_refuse_before_decoder_and_preserve_cleanup(self):
+        for rows in [[[None]]*4097, [['x'*1048577]], [['😀'*262145]], [['\ud800']]]:
+            events=[];host=self.host(events,rows=rows)
+            def forbidden_decoder(*_):
+                events.append('unexpected decoder');raise AssertionError('decoder invoked')
+            host.decode=forbidden_decoder;engine,plan=coordinator(host)
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'transport')
+            self.assertNotIn('unexpected decoder',events)
+            self.assertEqual(events.count('cleanup'),1)
+        events=[];host=self.host(events,rows=[['x'*1048576]],decode=[])
+        engine,plan=coordinator(host);self.assertEqual(engine.execute(plan),())
+
     def test_disposal_and_reentrancy_do_not_repeat_native_work(self):
         events=[];host=self.host(events)
         def check(*_):

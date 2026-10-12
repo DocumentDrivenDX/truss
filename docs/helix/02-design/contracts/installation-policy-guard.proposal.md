@@ -552,3 +552,19 @@ slot settlement and cleanup, plus the exact text boundary. Evidence:
 Synthetic host checks do not qualify native original producer/cut/issuer, guarded
 publication or a streaming service. Production admission and original backend
 acceptance cases remain open.
+
+
+### Private transport validation bounds — 2026-10-12
+
+Before invoking the original decoder, the private buffered coordinator now
+requires exact list/tuple rows with exact text/null cells, bounds rows/cells
+to4096 each and checks aggregate UTF-8 text within1MiB. Cardinality and character
+checks precede scanning/encoding. Oversized or malformed transport refuses the
+whole invocation; no decoder callback or result prefix is published. Fifteen
+coordinator tests pass, including oversized batches/text, Unicode refusal,
+cleanup and the exact byte boundary. Evidence:
+`../../04-build/evidence/security-transport-bounds-20261012/receipt.json`.
+These are local development limits and synthetic host evidence. They do not
+bound prior driver/producer allocations or establish native query/resource/
+issuer/guard/publication qualification. Production admission and original
+backend acceptance cases remain open.

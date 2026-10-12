@@ -105,6 +105,32 @@ def _freeze_result(value):
     return visit(value, 0)
 
 
+def _validate_transport_rows(rows, column_count):
+    # Local buffered profile: bound work before original decoder invocation.
+    if type(rows) not in (tuple, list) or len(rows) > 4096:
+        raise CompileRefusal('transport', 'Bounded complete row sequence required')
+    cells, text = 4096, 1048576
+    for row in rows:
+        if type(row) not in (tuple, list) or len(row) != column_count:
+            raise CompileRefusal('transport', 'Complete exact text/null rows required')
+        cells -= len(row)
+        if cells < 0:
+            raise CompileRefusal('transport', 'Transport cells exceed admitted bounds')
+        for cell in row:
+            if cell is None:
+                continue
+            if type(cell) is not str:
+                raise CompileRefusal('transport', 'Exact text/null carriers required')
+            if len(cell) > text:
+                raise CompileRefusal('transport', 'Transport text exceeds admitted bounds')
+            try: size = len(cell.encode('utf-8', errors='strict'))
+            except UnicodeError as error:
+                raise CompileRefusal('transport', 'Lossless transport Unicode required') from error
+            text -= size
+            if text < 0:
+                raise CompileRefusal('transport', 'Transport text exceeds admitted bounds')
+
+
 class QueryCoordinator:
     """Implementation seam for the existing host/handler/read-scope contract.
 
@@ -181,11 +207,7 @@ class QueryCoordinator:
                     _completed_check(check(scope,obligation,artifact))
                     self._admitting()
                 rows = _synchronous(query(artifact['sql'],tuple(p['value'] for p in artifact['parameters'])))
-                if type(rows) not in (tuple,list) or any(
-                    type(row) not in (tuple,list) or len(row) != len(artifact['columns'])
-                    or any(cell is not None and type(cell) is not str for cell in row) for row in rows
-                ):
-                    raise CompileRefusal('transport', 'Complete exact text/null rows required')
+                _validate_transport_rows(rows, len(artifact['columns']))
                 self._admitting()
                 decoded = _synchronous(self._decode(artifact,rows))
                 _completed_check(verify_context(artifact))
