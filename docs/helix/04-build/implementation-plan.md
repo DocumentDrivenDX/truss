@@ -56,6 +56,23 @@ Required release work is practical payload/value/page/batch/concurrency/iteratio
 Before custom PostgreSQL wire handling, private driver hooks, a fork or driver replacement, require the PRD's hard documented necessary deficiency, simpler-remedy comparison and owner-approved ADR. Existing source packets and component experiments do not authorize that work. Keep complete engine/corpus/installation/security acceptance; this decision removes an excessive mechanism, not those semantic requirements.
 
 
+## Public API priority — owner correction 2026-10-11
+
+The owner rejected codec and snapshot work as a distraction from core Python API
+functionality. Stop custom custody codecs and widening whole-operation snapshot
+pipelines. Their historical experimental profiles are not dependencies of the
+usable Python implementation. Use stock psycopg parameters/results, PostgreSQL
+transactions/constraints, original UMF document retention, exact numeric values,
+current-person authorization and durable request receipts.
+
+Next completed iterations must deliver callable public installation, catalog
+registration/report retrieval, apply and reads through the public assembly.
+Retain existing security and transaction gates until their production replacements
+are implemented and tested. Do not promote administrative fixtures or return
+accepted identities from provisional staging. Review which legacy custody clauses
+need explicit replacement as part of the compact production catalog procedure;
+adding another evidence helper is not that deliverable.
+
 ## Immediate Python delivery sequence — 2026-10-11
 
 Owner update: use practical stock-PostgreSQL logical limits, bounded queries and
