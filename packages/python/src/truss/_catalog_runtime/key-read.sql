@@ -7,7 +7,7 @@ BEGIN
  IF selected_document IS NULL OR selected_module IS NULL OR selected_record IS NULL OR selected_key IS NULL
  OR octet_length(selected_document) NOT BETWEEN 1 AND 4096 OR octet_length(selected_module) NOT BETWEEN 1 AND 4096 OR octet_length(selected_record) NOT BETWEEN 1 AND 4096 OR octet_length(selected_key) NOT BETWEEN 1 AND 4096
  OR original_document IS NULL OR octet_length(original_document) NOT BETWEEN 1 AND 1048576 THEN RAISE EXCEPTION 'bounded key selection required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected installed runtime required' USING ERRCODE='0A000';END IF;
  IF current_setting('transaction_read_only')='on' THEN SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
  ELSE SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;END IF;
@@ -53,7 +53,7 @@ BEGIN
  IF jsonb_typeof(values_json) IS DISTINCT FROM 'array' OR jsonb_array_length(values_json)<>(selection->>'componentCount')::int OR EXISTS(SELECT 1 FROM jsonb_array_elements(values_json) v WHERE jsonb_typeof(v.value) IS DISTINCT FROM 'string') THEN RAISE EXCEPTION 'ordered string key values required' USING ERRCODE='22023';END IF;
  SELECT array_agg(v.value ORDER BY v.n) INTO actual_values FROM jsonb_array_elements_text(values_json) WITH ORDINALITY v(value,n);
  IF truss.verify_umf_string_key_tuple(tuple_bytes,actual_values) IS NOT TRUE THEN RAISE EXCEPTION 'original key encoding required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  SELECT * INTO STRICT source_pin FROM truss.runtime_definition('key',(selection->>'typeId')::int,(selection->>'keyNumber')::int);
  namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
   'sourceEpoch',installation.source_epoch::text,'typeId',selection->>'typeId','keyNumber',selection->>'keyNumber',

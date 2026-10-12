@@ -13,7 +13,7 @@ identities usable directly for updates and links. Concrete catalog/read/group/
 host-import/feed/history providers are selected through the runtime assembly.
 Retained history reconstructs actual committed scalar/edge versions after deletion. Caller-asserted committed
 feed/ACK and read-only reproduction of saved deliveries after ACK are available on the authority database. Compiled query execution,
-managed installation/upgrades and verified downstream application remain unfinished. Older private component evidence below
+the exact .23-to-.24 additive upgrade is implemented; managed installation, broader migrations and verified downstream application remain unfinished. Older private component evidence below
 does not qualify those public operations.
 
 [Query and execution ownership](01-frame/prd.md#query-and-execution-ownership--owner-direction-2026-10-11): Truss exposes the full Weft query surface. Weft owns evolving SQL coverage; Truss owns table layout, query execution, actions and other executions. Direct read/traversal APIs are convenience operations, not SQL coverage limits.

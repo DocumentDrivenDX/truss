@@ -44,7 +44,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE person oid;consumer truss.runtime_feed_consumer%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;owner record;
 BEGIN
  person:=truss.runtime_person(false);
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest
  OR pg_is_in_recovery() THEN RAISE EXCEPTION 'selected authority feed profile required' USING ERRCODE='0A000';END IF;
  SELECT * INTO consumer FROM truss.runtime_feed_consumer WHERE consumer_id=selected_consumer;
@@ -68,7 +68,7 @@ LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
  SELECT convert_to(jsonb_build_object('profile','truss-caller-asserted-feed/0.1',
   'installationId',i.installation_id::text,'sourceEpoch',i.source_epoch::text,
   'consumerId',c.consumer_id,'registrationId',c.registration_id::text,'nextXid',next_xid)::text,'UTF8')
- FROM truss.runtime_feed_consumer c CROSS JOIN truss.catalog_runtime_installation i WHERE c.consumer_id=selected_consumer;
+ FROM truss.runtime_feed_consumer c CROSS JOIN truss.runtime_current_installation() i WHERE c.consumer_id=selected_consumer;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_feed_cursor(text,text) FROM PUBLIC;
 

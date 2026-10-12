@@ -1,5 +1,22 @@
 # Local runtime, installation and migration execution plan
 
+## First public additive upgrade — 0.23 to 0.24
+
+The Python runtime implements `upgrade_in_transaction` for the exact .23
+PostgreSQL18.6 candidate. The host owns commit/rollback and quiesces consumers;
+a short native NOWAIT fence returns one failure for active transactions. The
+upgrade adds a private immutable release ledger and replaces owned runtime
+functions while preserving original OIDs and grants. It does not disable
+immutable triggers, rewrite genesis, change accepted IDs or relabel evidence.
+
+Full .23 preparation, genesis catalog-report and feed payload configuration
+bases remain fixed. Receipt positions and feed registration/cursors stay valid;
+object, edge and history page cursors containing the old runtime digest become
+stale. Original saved feed delivery can still be reproduced through the public
+read-only API after ACK. No generic old-candidate or destructive layout route
+is provided. Managed-database administration and actual Lakebase qualification
+remain unfinished; this route requires a direct superuser administrator.
+
 ## Current embedded runtime delivery — owner decision 2026-10-11
 
 The production target is now the owner's Lakebase PostgreSQL18.6 tuple.

@@ -16,9 +16,9 @@ BEGIN
  ELSE
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.23-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.24-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.

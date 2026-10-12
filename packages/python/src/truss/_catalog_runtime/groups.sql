@@ -86,7 +86,7 @@ LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SE
 DECLARE person oid;installation truss.catalog_runtime_installation%ROWTYPE;revision int;
 BEGIN
  person:=truss.runtime_person(false);
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN
   RAISE EXCEPTION 'selected installed group runtime required' USING ERRCODE='0A000'; END IF;
  SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
@@ -306,7 +306,7 @@ BEGIN
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
  actor_oid:=truss.runtime_person(false);writer:=pg_current_xact_id();
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608
  OR original_request IS NULL OR octet_length(original_request) NOT BETWEEN 1 AND 65536 THEN
   RAISE EXCEPTION 'bounded group keys and request required' USING ERRCODE='54000'; END IF;

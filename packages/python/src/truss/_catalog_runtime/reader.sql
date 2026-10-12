@@ -23,7 +23,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;captured_revisio
 BEGIN
  PERFORM truss.runtime_person(false);
  IF maximum_count IS NULL OR maximum_count NOT BETWEEN 1 AND 65536 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 THEN RAISE EXCEPTION 'bounded catalog limits required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected runtime required' USING ERRCODE='0A000';END IF;
  IF current_setting('transaction_read_only')='on' THEN
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;
@@ -100,7 +100,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;captured_revisio
 BEGIN
  PERFORM truss.runtime_person(false);
  IF selected_document IS NULL OR octet_length(selected_document) NOT BETWEEN 1 AND 4096 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 THEN RAISE EXCEPTION 'bounded document selection required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected runtime required' USING ERRCODE='0A000';END IF;
  IF current_setting('transaction_read_only')='on' THEN
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;

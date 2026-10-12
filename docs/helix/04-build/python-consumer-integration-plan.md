@@ -72,6 +72,19 @@ owner and edge endpoint access. Absence requires verified committed creation.
 The two existing installed import workflows exercise read-only retrieval after
 deleting the object or edge. General source history, archives and upgrades remain open.
 
+## Public additive upgrade — runtime 0.24
+
+`upgrade_in_transaction` upgrades the exact .23 candidate under a caller-owned
+trusted administrator transaction. A short NOWAIT fence quiesces native callers;
+all existing runtime function identities/owners/ACLs are preserved. Active runtime
+release is an append-only adjunct, separate from immutable installation genesis.
+The original preparation, catalog report and feed configuration bases are retained
+so committed receipts, tokens, reports and saved deliveries remain interpretable.
+Runtime-bound object/edge/history page cursors become stale. The basic installed
+workflow exercises old-version production, upgrade rollback and commit, original
+evidence recovery and a new public mutation; a fresh provider workflow remains
+required. This does not establish arbitrary layout migrations or managed installation.
+
 ## Next callable operations
 
 Runtime 0.20 implements public committed feed reads and ordinary-role

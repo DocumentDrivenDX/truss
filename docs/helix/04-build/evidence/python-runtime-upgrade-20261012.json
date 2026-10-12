@@ -1,0 +1,44 @@
+{
+  "runtime": "0.24",
+  "scope": "public additive exact .23-to-.24 upgrade with caller-owned rollback/commit",
+  "wheelSha256": "9addcfbca9af5e4d0f989b2541ee9c061282cdf6a7b7ae5c7ad9ca3b0c301c7f",
+  "sourceWheelSha256": "c8dfb663951c32dd3a9ebbabc5a8c4f674d7f813f5bb70dff6da773ccbb34df0",
+  "environment": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6"
+  },
+  "installedBasicTests": {
+    "modules": [
+      "test_runtime_upgrade_native",
+      "test_selected_capabilities_native"
+    ],
+    "tests": 2,
+    "seconds": 35.788,
+    "passed": true,
+    "sourcePackageRequired": "TRUSS_UPGRADE_SOURCE_PACKAGE points to the exact installed .23 wheel"
+  },
+  "ownerSqlRoundTrips": 20,
+  "pythonBoundaryImports": 786,
+  "publicTypingFixtures": 5,
+  "expectedNegativeTypeErrors": 20,
+  "review": "Astra Ultra reviewed additive plan and completed native/Python source; corrections to privileged path and original routine OID/owner/ACL preservation approved",
+  "covered": [
+    "original .23 accepted catalog/create/receipt/feed/ACK through installed public APIs",
+    "caller rollback restores .23 without release ledger",
+    "caller commit activates .24 with unchanged installation and epoch",
+    "immutable genesis release and preparation unchanged",
+    "exact original catalog report bytes",
+    "old committed receipt replay and same token",
+    "old receipt visibility in read-only transaction",
+    "saved acknowledged feed reproduced exactly",
+    "new public grouped mutation after upgrade",
+    "fresh .24 public capability workflow"
+  ],
+  "limits": [
+    "only exact .23 source and .24 target, same layout and group/value/key/position semantics",
+    "direct trusted superuser administrator, quiesced consumers",
+    "no arbitrary layout migration or managed installer/Lakebase claim",
+    "object/edge/history page cursors become stale",
+    "receipt tokens and feed cursor identities retain original context"
+  ]
+}
