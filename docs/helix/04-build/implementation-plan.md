@@ -6285,3 +6285,10 @@ the full Clients/Projects/Staff oracle. Mutation/integrity callbacks must not
 inherit filtered visibility. Until that profile exists, retain forced-RLS public
 read refusal rather than changing row_security globally. No original backend
 case is promoted; full132-case acceptance remains required.
+
+
+Post-merge replay at17a1406d preserves the concurrent receipt-visibility runtime
+changes and repeats the same23 graph/RLS observations successfully.
+`security-public-graph-rls-composition-20261012/merged-receipt.json` retains exact
+current source pins, changed source preimages and outputs. Only this component
+is refreshed; broader runtime/package and backend acceptance remain open.
