@@ -5,9 +5,10 @@ package is under implementation; current public components provide local runtime
 preparation, selected native host transaction controls, installation footprint inspection
 and assembly construction. The selected catalog runtime additionally provides
 transactional installation, status, fresh catalog registration, report retrieval
-and durable registration retry. Runtime 0.3 also provides module-authorized
-scalar-string object identity reads. Business mutations, key/page reads, compiled
-queries, imports and feed operations remain unfinished.
+and durable registration retry. Runtime 0.4 provides module-authorized scalar-string object identity reads and
+rootless string object creation through a selected group provider, including
+caller rollback and durable request replay. Updates/deletes, key/page reads,
+compiled queries, imports and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -106,7 +107,7 @@ because membership authorization must observe committed revocations. Repeating
 the same request key as the same person with identical original inputs and origin
 returns the original report and `replayed=True`. Changing the request returns a
 conflict. Retry still requires current authorization. There are no internal retry
-loops. Catalog evolution and business writes are unavailable in this release. The selected 0.3 runtime adds module-authorized object identity reads as described below.
+loops. Catalog evolution remains unavailable. The selected runtime adds module-authorized object identity reads and the create-only group provider described below.
 `dispose()` closes this assembly's admission without closing or settling the host.
 
 The catalog runtime 0.2 candidate also provides
@@ -765,3 +766,54 @@ implemented. Accepted catalog rows are protected from ordinary callers; trusted
 administrative maintenance requires quiescence. Native reader fixtures seed rows
 administratively and qualify reads only. Public grouped mutations remain the next
 implementation milestone.
+
+## Public create-only group provider: runtime 0.4
+
+This candidate requires a fresh installation on the qualified PostgreSQL 18.6
+profile. A caller supplies the original accepted UMF documents and selects
+`assembly.groups(assembly.group_selection, documents=documents)`. The returned
+`GroupCapabilityAvailable.capability` implements `GroupCapability`; its operation
+is `apply_in_transaction(tx, input, request)`. The same operation is available on
+the live assembly. This is the `CatalogRuntimeConfiguration` factory route.
+
+Obtain the native profiles and request scope with
+`assembly.group_context_in_transaction(tx)`, and obtain an accepted type pin with
+`assembly.get_type_reference_in_transaction(tx, document_id=..., module_id=..., record_id=...)`.
+Build `CreateObject` operations using logical `AuthoredValue` string/null values
+and `RootlessOwnership`; use `context.input(operations, asserted_origin)` and
+`context.request(your_idempotency_key)`. No public key codec calls are required.
+
+A successful `GroupSuccess` contains `AppliedPending`: the host still owns commit.
+Read the returned identity in the same transaction, or detach and commit the
+connection, adopt a new transaction and retry the identical input/request. The
+latter returns `CommittedReceiptReplay` with the original result and no new object
+or journal event. A same-transaction retry returns `SameTransactionReplay`.
+Changing the input under a request key refuses. `RequestNone()` creates without a
+retry receipt. Dry-run follows this same path and rolls back the caller transaction.
+The request fingerprint is the retained profile's duplicate-free input UTF-8 byte
+hash, distinct from earlier proposed framed canonical fingerprints.
+
+Current writer membership is required for every module, including on replay. The
+authenticated PostgreSQL session person is recorded separately from asserted
+origin, such as `x-action`. Roles reachable through SET/INHERIT/ADMIN paths must also lack
+elevated or raw Truss access, including NOINHERIT/SET memberships. The supplied transaction remains READ COMMITTED and read-write.
+There are no internal retries. Unsupported ownership, relationships, numeric or
+structured values, and shapes requiring mandatory relationships refuse.
+
+The create provider stores the complete native objects, exact key membership and
+reservations, journal events and optional request receipt atomically. It does not
+activate the full feed/history provider. Business-key lookup, updates/deletes,
+preconditions, explicit unauthorized-person result carriers, receipt visibility,
+imports, relationship reads, full Weft execution and Lakebase remain outstanding.
+
+Current deployment dependencies: installation and module-access configuration
+require a superuser and permission to create the private owner/registrar roles.
+They are privileged provisioning operations, separate from ordinary application
+registration and writes. This installer is not yet qualified for managed systems
+without superuser access. Registration preparation currently needs Bun; the
+create-only provider also runs the bundled UMF key producer through Bun.
+Applications using those paths must include Bun today. A build-time preparation
+route or Python-compatible producer is future work, not an existing deployment
+claim. The checked driver/server tuple is psycopg3.3.6 binary/libpq18.6 with
+PostgreSQL18.6; Lakebase requires an actual platform privilege, install, transaction
+and public workflow qualification.

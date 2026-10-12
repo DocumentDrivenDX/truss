@@ -1,0 +1,58 @@
+{
+  "profiles": [
+    {
+      "name": "mutationProfile",
+      "pin": {
+        "identity": "truss-rootless-string-create",
+        "version": "0.1",
+        "sha256": "f77c86906a35d8ca16bb00b7b068eaa023d224b3792353365089e8d718f92b71"
+      },
+      "definition": "truss-rootless-string-create/0.1;128 creates;1024 authored values per object;current revision one;complete original definitions;required string keys;unknown string/null values retained;native IDs;atomic exact journals;caller settlement;current module writers;durable exact request replay;feed unavailable"
+    },
+    {
+      "name": "valueProfile",
+      "pin": {
+        "identity": "truss-scalar-string-values",
+        "version": "0.1",
+        "sha256": "3123c9089fab2fe869b82a55cdbe4cf708107be8eacb3f2d94666dfb21cfb1ac"
+      },
+      "definition": "truss-scalar-string-values/0.1;required/absent-allowed scalar strings;Python string and explicit null;absence omitted;unknown string/null retained;asserted origin exact scalar string/null map;no lossy numeric conversion"
+    },
+    {
+      "name": "canonicalizationProfile",
+      "pin": {
+        "identity": "truss-pg18-jsonb-text",
+        "version": "0.1",
+        "sha256": "e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97"
+      },
+      "definition": "truss-pg18-jsonb-text/0.1;UTF-8 PostgreSQL18.6 jsonb::text;exact value text preserved;group digest SHA256 of jsonb array of ordered events excluding mutationGroup;wrapper SHA256 includes complete event;canonical RFC4648 base64 without LF"
+    },
+    {
+      "name": "requestFingerprintProfile",
+      "pin": {
+        "identity": "truss-python-create-request-bytes",
+        "version": "0.1",
+        "sha256": "69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa"
+      },
+      "definition": "truss-python-create-request-bytes/0.1;SHA256 of complete duplicate-free original UTF-8 GroupSemanticInput JSON bytes, without domain prefix;Python facade uses json.dumps(ensure_ascii=False,sort_keys=True,separators=(comma,colon));standard short JSON control escapes;omit ABSENT;preserve original operation, values and origin entry order;inputProfile names semantic carrier only;not truss-canonical fingerprint framing;exact input bytes are compared on retry"
+    },
+    {
+      "name": "adapterProfile",
+      "pin": {
+        "identity": "truss-psycopg-create-provider",
+        "version": "0.1",
+        "sha256": "f20735a94e87213d77f713cbbabd2bdf2e4f2b459041c53bb984f5b706112ba9"
+      },
+      "definition": "Stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6;caller supplies connection and active transaction;fixed scalar adapters;native savepoint containment;caller settlement;no internal retry;v1"
+    },
+    {
+      "name": "policyProfile",
+      "pin": {
+        "identity": "truss-qualified-module-writer",
+        "version": "0.1",
+        "sha256": "398cee9241e057bb95c415a165b1812ac689433eaac2684c70a15084e681b88b"
+      },
+      "definition": "Direct ordinary session person;SET ROLE none;READ COMMITTED;private owner;current recursive native role memberships;qualified document/module writer;no elevated/server-capability/private-owner/raw-Truss role access;trusted administrative maintenance quiesces;v1"
+    }
+  ]
+}

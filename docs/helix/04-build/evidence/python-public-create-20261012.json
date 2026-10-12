@@ -1,0 +1,22 @@
+{
+  "scope": "truss-catalog-runtime/0.4-candidate rootless string create; broader API unfinished",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "9dc8462798b58b640f88df94eccca80374c89d9ab209a5716847d6aeea05d456",
+  "installedTests": {
+    "modules": [
+      "test_group_create_native",
+      "test_catalog_runtime_native",
+      "test_object_read_native"
+    ],
+    "passed": 49,
+    "elapsedSeconds": 149.042
+  },
+  "typing": "public concrete GroupCapability assignment and RequestNone narrowing; four consumer fixtures, 20 expected negative errors",
+  "umfSqlOwner": "9 packaged SQL sources retained/reloaded/exported without change",
+  "moduleBoundaries": "665 imports passed",
+  "review": "Astra Ultra scoped source and amended consumer plan approved; final native/wheel/type conditions met",
+  "consumerRequirementsCommit": "9e38962",
+  "securitySourceCommit": "fc7a6e61",
+  "earlierAttempt": "48-test installed attempt had one setup deadline cancellation during concurrent native work; superseded by sequential final 49-test pass"
+}

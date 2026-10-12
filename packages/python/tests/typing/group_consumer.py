@@ -22,3 +22,9 @@ def exact(data: CreateObject) -> None:
     flag = BooleanValue(value=False)
     assert_type(data.alias, str | Absent)
     assert decimal.text and integer.text and explicit_null.present and not flag.value
+
+from truss import NativeGroupCapability
+
+def selected_provider(provider: NativeGroupCapability, transaction: TransactionHandle, data: GroupSemanticInput) -> None:
+    capability: GroupCapability = provider
+    assert_type(capability.apply_in_transaction(transaction, data, RequestNone()), Outcome[RequestFreeGroupApplicationResult])
