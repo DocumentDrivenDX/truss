@@ -248,3 +248,41 @@ Exact formulas, proof source, counterexample witnesses, replay and hashes:
 `../../04-build/evidence/security-publication-induction-20261012/receipt.json`.
 Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Native190-observation
 feasibility remains separately qualified; no required backend case is promoted.
+
+
+### Retained original publication identities — 2026-10-12
+
+The separately versioned0.2 tombstone candidate adds nonnull `settled` to the
+private claim table. Registration still inserts exact original operation bytes
+under a permanent primary key. Settlement updates only an unsettled matching
+operation/installation/profile/generation to `settled=true`, retaining all original
+bytes and generation. It never deletes the row. Repeated settlement returns zero
+and requires original reconciliation, not an invented new completion.
+
+The0.3 tombstone generation-advance source checks absence of every **unsettled**
+claim, so completed identities do not block authority advancement. Earlier0.1
+delete-based settlement and0.2 all-row generation gating are incompatible with
+this candidate; production bootstrap/callable parity must forbid mixing them.
+These are fresh fixture DDL/profile sources, not an installed layout migration.
+
+Actual native SQL retains both original settled identities, rejects each replay
+with23505 and returns zero for repeated settlement. Overlapping/pending
+registration drain and generation advancement still pass; total193 observations.
+The seven abstract lifetime checks include monotone retention across registration,
+settlement and loss, replay refusal, a reachable fresh token, delete-based replay
+and removal counterexamples. The latter proof assumes never-used registration
+and retained tokens; native PK execution provides separate limited feasibility.
+Neither establishes original issuer identity, authentic sink completion, concrete
+SQL refinement or complete administration/privilege closure.
+
+Permanent tombstones introduce retention and resource obligations. Production
+must bound/admit registry work, refuse before disclosure on capacity exhaustion,
+and preserve lifetime token uniqueness across cleanup, profile transitions and
+restores. Compaction may not simply remove settled identities and reopen reuse.
+Original commit uncertainty/reconciliation, bootstrap, complete participant
+coverage and trusted settlement remain required.
+
+Sources,193 native observations, seven formulas/results and hashes:
+`../../04-build/evidence/security-publication-tombstones-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L09/L11 and US-057-AC2/AC5/AC7. This extends
+the candidate only; no required backend acceptance case is promoted.

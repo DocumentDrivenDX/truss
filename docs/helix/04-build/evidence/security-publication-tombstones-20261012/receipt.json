@@ -1,0 +1,28 @@
+{
+  "executedBaseCommit": "8d4c4902b8aed31e929df2e71f3f84383e37b8d4",
+  "sourceDelta": "source-delta.zip",
+  "nativeObservations": 193,
+  "proofQueries": 7,
+  "trace": [
+    "CONTRACT-005 original publication custody",
+    "CONTRACT-063 release/authentication/custody",
+    "STP-057 L03/L09/L11",
+    "US-057-AC2/AC5/AC7"
+  ],
+  "scope": "Separately versioned fresh-install tombstone SQL candidate and conditional monotone-token model. No migration/adoption, complete native privilege/issuer/sink/capacity/uncertainty qualification or original backend acceptance promotion.",
+  "sha256": {
+    "prove-token-lifetime.py": "9e37d284d1183e7a03f4c8bce52ff8dfc42f879d374cc8aa3c7d95a16822a2e2",
+    "delete-based-replay-counterexample.smt2": "985b451f8182a5ffd119a95977aeac1d4ad0a19d31bf62582039c2cf507946e8",
+    "security-tombstone-claim-native.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "formal-results.json": "107f903b3d220b333ef0cf079c4108b8cfa98029447f3c6f701935fc38a78bfb",
+    "fresh-token-registration-possible.smt2": "ec8faba42a811c8d49586ab341139711659005d9fd2e10d664e27c8bd4fd493d",
+    "registration-retains-all-prior-tokens.smt2": "4ac56444408390088fa8475302d5c91eac21fc4af55047556221fc7d2679bb9e",
+    "settled-token-cannot-register.smt2": "771217eb9c6959beb9607ed96bdd0a0cde7b49e3887889d7fa51b7e56fb0d32d",
+    "security-tombstone-claim-native.json": "973338e9fa56cbb50f95866e59719b63282a7508f4e9bcb937de4c9194d54dd6",
+    "loss-retains-all-prior-tokens.smt2": "dd4585045e8a9388280a280719e10cc808661c396a18acc76260018e1aa67380",
+    "security-tombstone-claim-native.stderr.log": "472dab58c610a28ff6349e1159249e7f0f678787fc93ccef778b6ae7b4088013",
+    "source-delta.zip": "8d9acb0f9dbd9a7ac4e0967877772b818b313d33896d20c05441ba46502e34ef",
+    "settlement-retains-all-prior-tokens.smt2": "dd4585045e8a9388280a280719e10cc808661c396a18acc76260018e1aa67380",
+    "tombstone-removal-breaks-monotonicity.smt2": "bfc43787201a56f09216ff5c26488e9bc0636544f193e64e3ae920a600feeff1"
+  }
+}

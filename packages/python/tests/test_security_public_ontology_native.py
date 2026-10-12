@@ -278,14 +278,14 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   # Same logical Record/Relationship condition over independent raw tables.
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])));rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,4)).fetchall();self.assertEqual(rows,[('1',installation_bytes.hex(),profile_bytes.hex(),'5')]);authority_writer.execute('COMMIT')
   # Durable outstanding publication survives native coordinator death.
-  self.admin.execute((contracts/'installation-publication-claim-v0.1.proposal.sql').read_text())
+  self.admin.execute((contracts/'installation-publication-claim-v0.2.tombstone.proposal.sql').read_text())
   def claim_sql(name,count):
    source=(contracts/name).read_text()
    for ordinal in range(1,count+1):source=source.replace('$'+str(ordinal),'%s')
    return source
-  register=claim_sql('installation-publication-claim-register-v0.1.proposal.sql',4)
-  settle=claim_sql('installation-publication-claim-settle-v0.1.proposal.sql',4)
-  claim_advance=claim_sql('installation-policy-generation-advance-v0.2.claim.proposal.sql',3)
+  register=claim_sql('installation-publication-claim-register-v0.2.tombstone.proposal.sql',4)
+  settle=claim_sql('installation-publication-claim-settle-v0.2.tombstone.proposal.sql',4)
+  claim_advance=claim_sql('installation-policy-generation-advance-v0.3.tombstone.proposal.sql',3)
   operation_bytes=b'fixture-original-publication-1'
   claim_coordinator=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(claim_coordinator.close)
   claim_pid=claim_coordinator.execute('SELECT pg_backend_pid()').fetchone()[0]
@@ -312,9 +312,16 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();deleted=self.admin.execute(settle,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(deleted,[(operation_bytes.hex(),)]);self.admin.execute('COMMIT');observations.append({'id':'original-publication-claim-settles-after-fixture-withholding','observed':deleted,'qualification':'fixture completion premise only'})
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();still_blocked=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(still_blocked,[]);authority_writer.execute('ROLLBACK');observations.append({'id':'settling-one-publication-preserves-other-operation-exclusion','observed':still_blocked})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(second_operation,installation_bytes,profile_bytes,5)).fetchall(),[(second_operation.hex(),)]);self.admin.execute('ROLLBACK')
-  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(1,));observations.append({'id':'rolled-back-publication-settlement-retains-claim','observed':1})
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE NOT settled').fetchone(),(1,));observations.append({'id':'rolled-back-publication-settlement-retains-claim','observed':1})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(second_operation,installation_bytes,profile_bytes,5)).fetchall(),[(second_operation.hex(),)]);self.admin.execute('COMMIT')
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();advanced=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),'6')]);authority_writer.execute('ROLLBACK');observations.append({'id':'settled-publication-allows-participating-advance','observed':advanced,'qualification':'rolled back to preserve generation5; no production authority-delta proof'})
+  retained=self.admin.execute("SELECT pg_catalog.encode(operation_identity_bytes,'hex'),generation::text,settled FROM truss.policy_publication_claim ORDER BY operation_identity_bytes").fetchall();self.assertEqual(retained,[(operation_bytes.hex(),'5',True),(second_operation.hex(),'5',True)]);observations.append({'id':'settled-publication-identities-retain-native-tombstones','observed':retained})
+  for replay in [operation_bytes,second_operation]:
+   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall()
+   with self.assertRaises(psycopg.errors.UniqueViolation) as duplicate:self.admin.execute(register,(replay,installation_bytes,profile_bytes,5)).fetchall()
+   self.assertEqual(duplicate.exception.sqlstate,'23505');self.admin.execute('ROLLBACK')
+  observations.append({'id':'settled-original-operation-token-replay-refuses','observed':'two23505 refusals; no replacement claims'})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();repeated_settlement=self.admin.execute(settle,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(repeated_settlement,[]);self.admin.execute('ROLLBACK');observations.append({'id':'settled-original-operation-cannot-settle-twice','observed':repeated_settlement})
   # A pending registration SHARE scope drains before writer's fresh claim check.
   pending_operation=b'fixture-pending-publication'
   pending_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(pending_owner.close)
