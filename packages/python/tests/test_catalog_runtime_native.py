@@ -720,4 +720,22 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
        self.admin.execute('REVOKE grantor_path FROM consumer')
        self.admin.execute('DROP OWNED BY grantor_path,grantable_storage;DROP ROLE grantor_path,grantable_storage')
 
+
+    def test_public_actor_refuses_public_private_storage_grants(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        for privilege in ('SELECT','INSERT','UPDATE','REFERENCES'):
+            with self.subTest(privilege=privilege):
+                self.admin.execute(psycopg.sql.SQL('GRANT {}(installation_id) ON truss.catalog_runtime_installation TO PUBLIC').format(psycopg.sql.SQL(privilege)))
+                try:
+                    self.assertEqual(connection.execute('SELECT has_column_privilege(session_user,%s,%s,%s)',
+                        ('truss.catalog_runtime_installation','installation_id',privilege)).fetchone(),(True,))
+                    if privilege=='SELECT':
+                        self.assertEqual(len(connection.execute('SELECT installation_id FROM truss.catalog_runtime_installation').fetchall()),1)
+                    refused=assembly.status_in_transaction(tx)
+                    self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+                finally:
+                    self.admin.execute(psycopg.sql.SQL('REVOKE {}(installation_id) ON truss.catalog_runtime_installation FROM PUBLIC').format(psycopg.sql.SQL(privilege)))
+                self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+
 if __name__=='__main__':unittest.main(verbosity=2)
