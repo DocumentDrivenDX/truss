@@ -5737,3 +5737,16 @@ public authorization gap and fix, not complete role/callable/diagnostic/writer
 closure or advanced business backend admission. All132 cases remain required;
 26 pass and106 remain unbound. Native inheritance-option and predefined-role
 controls remain the next public-path checks.
+
+Final public-path integration preserves main5d9888c2/c33042a5 module-access
+administration. `evidence/public-catalog-security-drift-20261012/merged-receipt.json`
+retains198 current/preimage source pins and final source/wheel/boundary logs.
+All33 public catalog/view/source/module-access tests pass from source and the
+isolated installed wheel. Final wheel SHA256
+`6492dddcdfd36f9d9bc0d4e343c5a0987d01808b08bcae2c1a1c9c5718297380`
+contains the exact merged Python facade and fixed native runtime/manifest;
+installed contents are independently matched. Prior30-test packet remains under
+its original source scope. Existing native owner round trips remain byte-identical
+after this Python-only concurrent merge. Current/archive/package/evidence hashes
+are checked before direct publication. No full backend acceptance case is
+promoted; the goal remains active.
