@@ -6421,3 +6421,19 @@ The subsequent catalog-revision merge atae389fcb also passes the44-observation
 ontology replay. `security-public-ontology-20261012/catalog-revision-receipt.json`
 retains exact current source pins, changed preimages and terminal native output.
 This preserves the same component scope and supported bounded host deadlines.
+
+
+### Explicit incomplete-fact native refusal — 2026-10-12
+
+The real public graph ontology regression now retains54 observations. A private
+text-decision function preserves indeterminate; its native Boolean adapter
+raises generic55000 for unknown/unavailable outcomes. Missing required active
+content on inactive AB causes all ordinary list/count operations to refuse,
+including Bob with otherwise valid assignment. Restoration restores complete
+source and original visibility. Python boundaries pass723imports. Receipt:
+`evidence/security-incomplete-ontology-facts-20261012/receipt.json`.
+Trace shared CONTRACT-063 / US-056-AC7/8/10 / STP-056 B10/B15 and TD-020/STP-020.
+This fixture realizes the refusal distinction; complete source/authority lifetime,
+all endpoint/key/subject obligations, public driver mapping and full diagnostic/
+publication privacy remain unimplemented. No runtime setting or acceptance case
+is promoted.

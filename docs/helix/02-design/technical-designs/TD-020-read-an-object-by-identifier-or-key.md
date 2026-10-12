@@ -266,3 +266,25 @@ read adoption or a complete backend case. Fixture-authored candidate conditions
 are not authenticated compiler output. Complete source enrollment, current
 mapping and authority exclusion, callable closure, final release and original
 public writer/revocation integration remain required before profile admission.
+
+
+### Indeterminate private facts require operation refusal — 2026-10-12
+
+The real ontology regression now separates the private text decision fold from
+the Boolean native row-predicate adapter. Only permit/deny may become Boolean.
+NULL, indeterminate or unknown states raise generic55000 rather than silently
+become false. Removing the required active cell from inactive AB invalidates
+complete Assignment source and produces indeterminate even for otherwise
+authorized Bob. All three ordinary callers' list/count operations refuse with
+primary message `security facts unavailable`; restoring the cell restores
+source validity and original Bob visibility. Fifty-four native observations
+and Python boundary checks pass; sources/results are retained in
+`../../04-build/evidence/security-incomplete-ontology-facts-20261012/receipt.json`.
+
+Adopt this refusal distinction when composing the real protected entrypoint.
+Do not translate unavailable facts into a successful empty collection. This
+fixture guard covers the selected required Boolean domain only; complete missing
+endpoint/key/subject coverage still requires original source enrollment and
+coherent authority/data admission. Whole native diagnostic/wire/trace privacy,
+streaming release and public driver outcome mapping remain separately required.
+Current runtime code is unchanged and no full backend case is promoted.

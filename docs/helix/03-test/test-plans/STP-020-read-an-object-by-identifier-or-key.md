@@ -477,3 +477,14 @@ change/restoration. Forty-four observations are retained in
 `../../04-build/evidence/security-public-ontology-20261012/receipt.json`.
 This precursor does not close shared STP-056 B01/B02/B03/B10/B13 or STP-057 L05;
 their complete source/authority/publication and public-driver scope remains open.
+
+
+The real ontology regression additionally removes a required field from an
+inactive hidden Assignment while an unrelated valid Bob assignment remains.
+Complete source preflight must fail and the rule fold must return indeterminate.
+The native adapter must raise generic55000 for every ordinary list/count rather
+than return an empty or partial successful result. Restore the original cell and
+repeat visibility. Fifty-four observations are retained in
+`../../04-build/evidence/security-incomplete-ontology-facts-20261012/receipt.json`.
+This does not replace missing endpoint/key/source enumeration or full error/
+transport privacy controls. Shared STP-056 B10/B15 remains open as a full case.
