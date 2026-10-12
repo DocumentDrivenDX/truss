@@ -125,7 +125,16 @@ export function lowerCandidateSecurityCondition(input:{condition:unknown;scans:r
   return '('+checks.join(' AND ')+')';
  }
  const guards:string[]=[...new Set(sources.values())].map(source=>'((SELECT valid FROM ('+source.validitySql+') candidate_source_validity)::pg_catalog.bool) IS TRUE');
+ // Intrinsic Key bindings are required even if an authored branch skips them.
+ // Native parameter domains remain the registered host/backend's obligation.
+ for(const name of ['subject','resource'] as const){const intrinsic=input[name];if(intrinsic)for(const parameter of intrinsic.parameters)guards.push('($'+parameter+' IS NOT NULL)');}
  for(const value of values.values()){const d=candidateDomain(value.domain),carrier=d==='string'?'text':d==='boolean'?'bool':d==='binary'?'bytea':'numeric';guards.push(valid('$'+value.parameter+'::pg_catalog.'+carrier,d));}
+ // Required original Key/incidence carriers must remain visible before filters.
+ // This is local supplied-source validity, not authenticated population coverage.
+ let keyIndex=0;for(const scan of scans.values()){
+  const columns=[...new Set([...(scan.record?.columns??[]),...scan.endpoints.flatMap((endpoint:CandidateEndpointColumns)=>endpoint.columns)])];
+  if(columns.length){const alias='candidate_key_admission_'+keyIndex++;guards.push('(NOT EXISTS(SELECT 1 FROM '+relation(scan)+' AS '+quote(alias)+' WHERE '+selected(scan,alias)+'('+columns.map(column=>quote(alias)+'.'+quote(column)+' IS NOT NULL').join(' AND ')+') IS NOT TRUE))');}
+ }
  let index=0;for(const scan of scans.values())if(scan.fields?.length){const alias='candidate_admission_'+index++,fields=scan.fields.map((f:CandidateConditionField)=>valid(quote(alias)+'.'+quote(f.column),candidateDomain(f.domain)));guards.push('(NOT EXISTS(SELECT 1 FROM '+relation(scan)+' AS '+quote(alias)+' WHERE '+selected(scan,alias)+'('+fields.join(' AND ')+') IS NOT TRUE))');}
  // The guard is outside authored NOT/OR/EXISTS: invalid mappings cannot become
  // True through negation or disappear behind a successful sibling expression.

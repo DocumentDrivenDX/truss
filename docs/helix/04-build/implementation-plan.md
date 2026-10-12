@@ -6421,3 +6421,155 @@ The subsequent catalog-revision merge atae389fcb also passes the44-observation
 ontology replay. `security-public-ontology-20261012/catalog-revision-receipt.json`
 retains exact current source pins, changed preimages and terminal native output.
 This preserves the same component scope and supported bounded host deadlines.
+
+
+### Explicit incomplete-fact native refusal — 2026-10-12
+
+The real public graph ontology regression now retains54 observations. A private
+text-decision function preserves indeterminate; its native Boolean adapter
+raises generic55000 for unknown/unavailable outcomes. Missing required active
+content on inactive AB causes all ordinary list/count operations to refuse,
+including Bob with otherwise valid assignment. Restoration restores complete
+source and original visibility. Python boundaries pass723imports. Receipt:
+`evidence/security-incomplete-ontology-facts-20261012/receipt.json`.
+Trace shared CONTRACT-063 / US-056-AC7/8/10 / STP-056 B10/B15 and TD-020/STP-020.
+This fixture realizes the refusal distinction; complete source/authority lifetime,
+all endpoint/key/subject obligations, public driver mapping and full diagnostic/
+publication privacy remain unimplemented. No runtime setting or acceptance case
+is promoted.
+
+
+Post-merge incomplete-fact replay at17a4fe3c preserves concurrent public group
+recovery changes and passes54 native observations.
+`security-incomplete-ontology-facts-20261012/merged-receipt.json` retains current
+source pins, changed preimages and terminal native output. Only this component
+is refreshed; original backend acceptance remains open.
+
+
+### Required nonnull graph endpoint Key guards — 2026-10-12
+
+Candidate source checks now include supplied selected Record/endpoint Key columns
+outside authored filtering and negation. Real public-created graph mutation keeps
+all ownership edges but removes Project B's key; a valid Alice/A path cannot hide
+it. Counts refuse and restoration restores the original decision. Sixty native
+observations,26 candidate tests, strict security typing, Python boundaries723
+imports and one real Chromium153 fold comparison pass. Retained evidence:
+`evidence/security-required-endpoint-keys-20261012/receipt.json`.
+Trace shared CONTRACT-063 / STP-056 B02/B13/B15 and TD-020/STP-020. This extends
+local required-key validity only, not nullable-key support or complete population
+authentication. Original source enrollment, mapping, authority/cut and final
+release remain required; no original backend case is promoted.
+
+
+### Intrinsic subject/resource Key availability — 2026-10-12
+
+Candidate intrinsic Key parameters now have nonnull guards outside authored
+short-circuit branches. Missing original caller binding remains unavailable even
+for ownerless data. The real ontology regression retains64 observations; missing
+subject/resource returns indeterminate, actual caller-mapping removal refuses
+55000 and repair restores denial/permit. Twenty-seven tests, strict security
+typing, Python boundaries723imports and real Chromium153 fold comparison pass.
+Evidence: `evidence/security-intrinsic-key-bindings-20261012/receipt.json`.
+Trace CONTRACT-063 / STP-056 B05/B12/B15 and TD-020/STP-020. Native domains,
+nullable-key profiles, issuer/subject ambiguity and complete source/authority/
+publication remain unadmitted; no original backend case is promoted.
+
+
+### Native single-subject resolver ambiguity refusal — 2026-10-12
+
+The actual ontology fixture now requires one privately resolved Staff Key for
+the native caller. Missing or duplicate matches produce generic55000 before
+condition evaluation; ownerless lookup cannot hide ambiguity. Repair restores
+original visibility. Sixty-seven native observations and Python boundaries723
+imports pass. Source/output evidence:
+`evidence/security-subject-ambiguity-20261012/receipt.json`.
+Trace CONTRACT-063 / STP-056 B05/B10/B12/B15 and TD-020/STP-020. This is a
+single-subject fixture profile, not authenticated production mapping or explicit
+multi-subject support. Source/authority lifetime, complete diagnostics and public
+read integration remain required; no original backend case is promoted.
+
+
+### First protected read under old authority snapshot — 2026-10-12
+
+The native ontology fixture now refuses non-READ-COMMITTED entrypoint execution.
+An actual ordinary repeatable-read snapshot starts before committed assignment
+change, then first protected count refuses0A000; fresh read sees revocation and
+repair restores original visibility. Seventy-one observations and Python
+boundaries723imports pass. Receipt:
+`evidence/security-old-snapshot-refusal-20261012/receipt.json`.
+Trace CONTRACT-063 / US-057-AC3 / STP-057 L05/L06 and TD-020/STP-020. This is
+a selected profile restriction, not admitted revocation/current-authority drain
+or a historical read profile. Complete source/authority exclusion and final
+publication remain required; no original backend case is promoted.
+
+
+### Real graph assignment buffered-release ordering — 2026-10-12
+
+The real ontology fixture retains75 observations. Six source/catalog SHARE locks
+exclude an independent actual assignment UPDATE; pg_locks verifies waiting.
+Ordinary buffered RA/RAB is recorded before source release, then writer commit
+completes and a later read sees revocation. Python boundaries pass723imports.
+Receipt: `evidence/security-graph-buffered-drain-20261012/receipt.json`.
+Trace CONTRACT-063 / US-057-AC2/3 / STP-057 L03/L05 and TD-020/STP-020. The
+fixture boundary does not admit production leases, enrolled public revokers,
+complete control-plane participation or streaming/cached output. Source/authority
+issuer and public final-release integration remain required; no backend case
+is promoted.
+
+
+### Native authority changes bypass source-table exclusion — 2026-10-12
+
+The real ontology regression retains79 observations. An excluded native role
+change commits while six source locks remain held; fresh BYPASSRLS identity sees
+all13 objects. Original role flags and RA/RAB visibility restore. Python boundaries
+pass723imports. Retained counterexample:
+`evidence/security-control-plane-exclusion-gap-20261012/receipt.json`.
+Trace CONTRACT-063 / STP-056 B05/B11 / STP-057 L03/L13. Source locking is not
+a complete authority protocol. Enroll and exclude all relevant control-plane
+changes under the existing coordinator, or refuse the profile; preserve original
+native caller/inventory checks and deny unguarded direct paths. No admitted
+identity/profile or original backend case is promoted.
+
+
+### Existing proposed authority guard native realization — 2026-10-12
+
+The real graph regression now exercises original installation-policy-guard table,
+acquisition and checked advance SQL. Exact actual installation bytes/fixture
+profile/generation1 are captured. Participating role change waits on share guard
+through buffered read, then commits role effect and generation2; restoration
+advances3. Stale expected2 fails and rollback retains original role/generation.
+Eighty-eight observations and Python boundaries723imports pass. Evidence:
+`evidence/security-proposed-authority-guard-native-20261012/receipt.json`.
+Trace CONTRACT-005/063, existing guard PG-02/03/05 and STP-057 L03/L13/L12.
+This adopts no new profile or ready marker: verified bootstrap, full effective
+authority parity/participants, original source/caller lease/liveness and guarded
+publication/recovery remain unimplemented. Unmediated administrative changes
+still invalidate qualification; no original backend case is promoted.
+
+
+### Native generation boundary controls — 2026-10-12
+
+The existing ontology/authority regression now passes94 native observations.
+Foreign installation/profile bytes produce zero generation advance; ordinary
+reset refuses42501. Signed-bigint maximum remains exact and refuses advance
+without wrap; rollback restores original role flags and generation3. Sources
+and terminal output are retained under
+`docs/helix/04-build/evidence/security-authority-generation-boundaries-20261012/receipt.json`.
+This is partial original guard PG-01/05/06 evidence under CONTRACT-005/063, not
+verified bootstrap, complete authority/participant parity or coordinator/public
+release admission. No full PG schedule or original backend case is promoted.
+
+
+### Native original coordinator loss — 2026-10-12
+
+The ontology/authority regression now passes101 observations. After native
+blocking evidence, termination of only the owned original coordinator releases
+its exclusion; the participating authority writer commits generation4. Native
+liveness probing fails before local close. The fixture withholds its pending
+buffer, preserves the separate data transaction's INTRANS/prior work and a fresh
+read sees revocation. Failed attempt and exact sources/results:
+`docs/helix/04-build/evidence/security-coordinator-loss-20261012/receipt.json`.
+Trace CONTRACT-005/063 and STP-057 L03/L11. This is native loss plus fixture
+arbitration, not production lease/quarantine/recovery or streaming/cached-buffer
+release. Full participant/source/caller/publication integration remains required;
+no original backend case is promoted.

@@ -58,8 +58,9 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.admin.execute('CREATE ROLE ontology_facts NOLOGIN NOINHERIT NOSUPERUSER NOBYPASSRLS;GRANT USAGE ON SCHEMA truss,ontology_fixture TO ontology_facts;GRANT SELECT(id,type_id,props) ON truss.object TO ontology_facts;GRANT SELECT(id,rel_type_id,source_id,source_type,target_id,target_type) ON truss.edge TO ontology_facts')
   self.addCleanup(self.admin.execute,'DROP OWNED BY ontology_facts;DROP ROLE ontology_facts')
   for name in [*RECORDS,*LINKS,'assignments']:self.admin.execute('ALTER VIEW ontology_fixture.'+name.lower()+' OWNER TO ontology_facts')
-  self.admin.execute('CREATE FUNCTION ontology_fixture.eligible_bound(text,text) RETURNS bool LANGUAGE SQL SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=on AS $$ SELECT '+sql['predicateSql']+' $$;REVOKE ALL ON FUNCTION ontology_fixture.eligible_bound(text,text) FROM PUBLIC;GRANT CREATE ON SCHEMA ontology_fixture TO ontology_facts;ALTER FUNCTION ontology_fixture.eligible_bound(text,text) OWNER TO ontology_facts')
-  self.admin.execute("CREATE FUNCTION ontology_fixture.eligible(text) RETURNS bool LANGUAGE SQL SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=on AS $$ SELECT ontology_fixture.eligible_bound($1,(SELECT code FROM ontology_fixture.staff WHERE login OPERATOR(pg_catalog.=) SESSION_USER::pg_catalog.text)) $$;REVOKE ALL ON FUNCTION ontology_fixture.eligible(text) FROM PUBLIC;ALTER FUNCTION ontology_fixture.eligible(text) OWNER TO ontology_facts;REVOKE CREATE ON SCHEMA ontology_fixture FROM ontology_facts")
+  self.admin.execute('CREATE FUNCTION ontology_fixture.decision_bound(text,text) RETURNS text LANGUAGE SQL SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=on AS $$ '+sql['fold']['sql']+' $$;REVOKE ALL ON FUNCTION ontology_fixture.decision_bound(text,text) FROM PUBLIC;GRANT CREATE ON SCHEMA ontology_fixture TO ontology_facts;ALTER FUNCTION ontology_fixture.decision_bound(text,text) OWNER TO ontology_facts')
+  self.admin.execute("CREATE FUNCTION ontology_fixture.eligible_bound(text,text) RETURNS bool LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=on AS $$ DECLARE decision text;BEGIN decision:=ontology_fixture.decision_bound($1,$2);IF decision IS NULL OR decision NOT IN ('permit','deny') THEN RAISE EXCEPTION 'security facts unavailable' USING ERRCODE='55000';END IF;RETURN decision='permit';END $$;REVOKE ALL ON FUNCTION ontology_fixture.eligible_bound(text,text) FROM PUBLIC;ALTER FUNCTION ontology_fixture.eligible_bound(text,text) OWNER TO ontology_facts")
+  self.admin.execute("CREATE FUNCTION ontology_fixture.eligible(text) RETURNS bool LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=on AS $$ DECLARE subject_count bigint;subject_key text;BEGIN IF current_setting('transaction_isolation')<>'read committed' THEN RAISE EXCEPTION 'security authority profile unavailable' USING ERRCODE='0A000';END IF;SELECT count(*),min(code) INTO subject_count,subject_key FROM ontology_fixture.staff WHERE login OPERATOR(pg_catalog.=) SESSION_USER::pg_catalog.text;IF subject_count<>1 THEN RAISE EXCEPTION 'security facts unavailable' USING ERRCODE='55000';END IF;RETURN ontology_fixture.eligible_bound($1,subject_key);END $$;REVOKE ALL ON FUNCTION ontology_fixture.eligible(text) FROM PUBLIC;ALTER FUNCTION ontology_fixture.eligible(text) OWNER TO ontology_facts;REVOKE CREATE ON SCHEMA ontology_fixture FROM ontology_facts")
   self.admin.execute('ALTER TABLE truss.object ENABLE ROW LEVEL SECURITY;ALTER TABLE truss.object FORCE ROW LEVEL SECURITY;CREATE POLICY complete_private_facts ON truss.object FOR SELECT TO ontology_facts USING(true)')
   resource=packet['records']['Resource'];key=resource['fields']['code']['id']
   for login in ['alice','bob','outsider']:
@@ -94,6 +95,181 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='alice'
   with psycopg.connect(**params,autocommit=True) as reader:
    actual=[r[0] for r in reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-assignment-original-visibility','observed':actual})
+  # A malformed hidden assignment must not look like a complete empty result.
+  self.admin.execute('UPDATE truss.object SET props=props-%s WHERE id=%s AND type_id=%s',(active_id,int(aliases['AB'].id),int(assignment['typeId'])))
+  valid=self.admin.execute(sql['objects']['Assignment']['validitySql']).fetchone()[0];self.assertEqual(valid,'false');observations.append({'id':'hidden-assignment-required-field-preflight-invalid','observed':valid})
+  decision=self.admin.execute("SELECT ontology_fixture.decision_bound('RB','staff-bob')").fetchone()[0];self.assertEqual(decision,'indeterminate');observations.append({'id':'unrelated-valid-permit-cannot-hide-incomplete-facts','observed':decision})
+  for login in ['alice','bob','outsider']:
+   params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']=login
+   with psycopg.connect(**params,autocommit=True) as reader:
+    for operation,query in [('list','SELECT id FROM truss.object'),('count','SELECT count(*) FROM truss.object')]:
+     with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState) as failure:reader.execute(query).fetchall()
+     self.assertEqual(failure.exception.sqlstate,'55000');self.assertEqual(failure.exception.diag.message_primary,'security facts unavailable');observations.append({'id':'incomplete-private-facts-refuse-'+operation+'-'+login,'observed':{'sqlState':'55000','message':'security facts unavailable'}})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':False}),int(aliases['AB'].id),int(assignment['typeId'])))
+  valid=self.admin.execute(sql['objects']['Assignment']['validitySql']).fetchone()[0];self.assertEqual(valid,'true');observations.append({'id':'complete-assignment-facts-restored','observed':valid})
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='bob'
+  with psycopg.connect(**params,autocommit=True) as reader:
+   actual=[r[0] for r in reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RAB','RB']);observations.append({'id':'restored-facts-original-bob-visibility','observed':actual})
+  # An endpoint object exists, but a required business key cannot be decoded.
+  project=packet['records']['Project'];project_key=project['fields']['code']['id']
+  self.admin.execute('UPDATE truss.object SET props=props-%s WHERE id=%s AND type_id=%s',(project_key,int(aliases['B'].id),int(project['typeId'])))
+  rows=self.admin.execute('SELECT occurrence_id,source_code,target_code FROM ontology_fixture.resource_project ORDER BY occurrence_id').fetchall();self.assertEqual(len(rows),4);self.assertEqual(sum(row[2] is None for row in rows),2);observations.append({'id':'malformed-project-key-preserves-original-edge-population','edgeCount':len(rows),'nullTargetKeys':2})
+  decision=self.admin.execute("SELECT ontology_fixture.decision_bound('RA','staff-alice')").fetchone()[0];self.assertEqual(decision,'indeterminate');observations.append({'id':'valid-other-project-does-not-hide-null-endpoint-key','observed':decision})
+  for login in ['alice','bob','outsider']:
+   params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']=login
+   with psycopg.connect(**params,autocommit=True) as reader:
+    with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState) as failure:reader.execute('SELECT count(*) FROM truss.object').fetchall()
+    self.assertEqual(failure.exception.sqlstate,'55000');observations.append({'id':'incomplete-endpoint-key-refuses-count-'+login,'observed':'55000'})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(project_key,json.dumps({'kind':'string','text':'B'}),int(aliases['B'].id),int(project['typeId'])))
+  decision=self.admin.execute("SELECT ontology_fixture.decision_bound('RA','staff-alice')").fetchone()[0];self.assertEqual(decision,'permit');observations.append({'id':'restored-project-key-restores-original-decision','observed':decision})
+  # Ownerless data must not short-circuit a missing intrinsic subject binding.
+  for resource_key,subject_key in [('RO',None),(None,'staff-alice')]:
+   decision=self.admin.execute('SELECT ontology_fixture.decision_bound(%s,%s)',(resource_key,subject_key)).fetchone()[0];self.assertEqual(decision,'indeterminate');observations.append({'id':'missing-intrinsic-key-indeterminate-'+('subject' if subject_key is None else 'resource'),'observed':decision})
+  staff=packet['records']['Staff'];login_id=staff['fields']['login']['id']
+  self.admin.execute('UPDATE truss.object SET props=props-%s WHERE id=%s AND type_id=%s',(login_id,int(aliases['staff-alice'].id),int(staff['typeId'])))
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='alice'
+  with psycopg.connect(**params,autocommit=True) as reader:
+   with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState) as failure:reader.execute("SELECT ontology_fixture.eligible('RO')").fetchall()
+   self.assertEqual(failure.exception.sqlstate,'55000');observations.append({'id':'missing-original-caller-binding-refuses-even-ownerless-resource','observed':'55000'})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(login_id,json.dumps({'kind':'string','text':'alice'}),int(aliases['staff-alice'].id),int(staff['typeId'])))
+  with psycopg.connect(**params,autocommit=True) as reader:
+   result=reader.execute("SELECT ontology_fixture.eligible('RO'),ontology_fixture.eligible('RA')").fetchone();self.assertEqual(result,(False,True));observations.append({'id':'restored-caller-binding-distinguishes-denial-and-permit','observed':list(result)})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(login_id,json.dumps({'kind':'string','text':'alice'}),int(aliases['staff-outsider'].id),int(staff['typeId'])))
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='alice'
+  with psycopg.connect(**params,autocommit=True) as reader:
+   for operation,query in [('ownerless',"SELECT ontology_fixture.eligible('RO')"),('count','SELECT count(*) FROM truss.object')]:
+    with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState) as failure:reader.execute(query).fetchall()
+    self.assertEqual(failure.exception.sqlstate,'55000');self.assertEqual(failure.exception.diag.message_primary,'security facts unavailable');observations.append({'id':'ambiguous-original-caller-refuses-'+operation,'observed':{'sqlState':'55000','message':'security facts unavailable'}})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(login_id,json.dumps({'kind':'string','text':'outsider'}),int(aliases['staff-outsider'].id),int(staff['typeId'])))
+  with psycopg.connect(**params,autocommit=True) as reader:
+   actual=[r[0] for r in reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'unique-original-caller-mapping-restores-visibility','observed':actual})
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='alice'
+  with psycopg.connect(**params,autocommit=True) as old_snapshot:
+   old_snapshot.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
+   old_snapshot.execute('SELECT count(*) FROM pg_class').fetchone() # Establish original snapshot before change.
+   isolation=old_snapshot.execute('SHOW transaction_isolation').fetchone()[0];self.assertEqual(isolation,'repeatable read');observations.append({'id':'old-authority-snapshot-established-before-change','observed':isolation})
+   self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':False}),int(aliases['AA'].id),int(assignment['typeId'])))
+   with self.assertRaises(psycopg.errors.FeatureNotSupported) as failure:old_snapshot.execute('SELECT count(*) FROM truss.object').fetchall()
+   self.assertEqual(failure.exception.sqlstate,'0A000');self.assertEqual(failure.exception.diag.message_primary,'security authority profile unavailable');observations.append({'id':'first-protected-read-under-old-snapshot-refuses','observed':{'sqlState':'0A000','message':'security authority profile unavailable'}})
+   old_snapshot.rollback()
+  with psycopg.connect(**params,autocommit=True) as fresh:
+   actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'fresh-read-after-committed-authority-change-denies','observed':actual})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])))
+  with psycopg.connect(**params,autocommit=True) as fresh:
+   actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-authority-fresh-read-original-vector','observed':actual})
+  # Actual graph assignment writer waits through the fixture's buffered release.
+  import threading,time
+  writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(writer.close)
+  writer_pid=writer.execute('SELECT pg_backend_pid()').fetchone()[0];errors=[]
+  def revoke_assignment():
+   try:writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':False}),int(aliases['AA'].id),int(assignment['typeId'])))
+   except Exception as exc:errors.append(type(exc).__name__)
+  self.admin.execute('BEGIN');self.admin.execute('LOCK TABLE truss.object,truss.edge,truss.type_def,truss.prop_def,truss.rel_def,truss.rel_endpoint IN SHARE MODE')
+  thread=threading.Thread(target=revoke_assignment);thread.start()
+  try:
+   deadline=time.monotonic()+5;waiting=None
+   while time.monotonic()<deadline:
+    waiting=self.admin.execute("SELECT mode,granted FROM pg_locks WHERE pid=%s AND relation='truss.object'::regclass AND mode='RowExclusiveLock'",(writer_pid,)).fetchone()
+    if waiting==('RowExclusiveLock',False):break
+    time.sleep(.01)
+   self.assertEqual(waiting,('RowExclusiveLock',False));observations.append({'id':'graph-assignment-revoker-native-wait','writerPid':writer_pid,'observed':list(waiting)})
+   with psycopg.connect(**params,autocommit=True) as guarded_reader:
+    buffered=[r[0] for r in guarded_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(buffered,['RA','RAB'])
+   self.assertTrue(thread.is_alive());observations.append({'id':'buffered-graph-read-released-before-revoker-commit','observed':buffered,'boundary':'fixture records final buffered return before releasing native source locks'})
+  finally:self.admin.rollback();thread.join(12)
+  self.assertFalse(thread.is_alive());self.assertEqual(errors,[]);observations.append({'id':'graph-assignment-revoker-completes-after-release','observed':'committed'})
+  with psycopg.connect(**params,autocommit=True) as fresh:
+   actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'new-read-after-drained-graph-change-denies','observed':actual})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])))
+  # Source-table exclusion cannot fence native role authority changes.
+  control=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=5000');self.addCleanup(control.close)
+  self.admin.execute('BEGIN');self.admin.execute('LOCK TABLE truss.object,truss.edge,truss.type_def,truss.prop_def,truss.rel_def,truss.rel_endpoint IN SHARE MODE')
+  try:
+   control.execute('ALTER ROLE alice BYPASSRLS')
+   held=self.admin.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND mode='ShareLock' AND granted AND relation IN ('truss.object'::regclass,'truss.edge'::regclass,'truss.type_def'::regclass,'truss.prop_def'::regclass,'truss.rel_def'::regclass,'truss.rel_endpoint'::regclass)").fetchone()[0];self.assertEqual(held,6);observations.append({'id':'native-role-change-commits-while-six-source-locks-held','observed':held})
+   with psycopg.connect(**params,autocommit=True) as changed_reader:
+    flags=changed_reader.execute('SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user').fetchone();self.assertEqual(flags,(False,True));observations.append({'id':'changed-original-caller-bypass-attribute','observed':list(flags)})
+    count=changed_reader.execute('SELECT count(*) FROM truss.object').fetchone()[0];self.assertEqual(count,13);observations.append({'id':'bypass-authority-defeats-source-lock-only-profile','observed':count,'qualification':'deliberate disposable authority-widening counterexample'})
+  finally:
+   control.execute('ALTER ROLE alice NOBYPASSRLS');self.admin.rollback()
+  with psycopg.connect(**params,autocommit=True) as restored_reader:
+   actual=[r[0] for r in restored_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-native-caller-authority-original-vector','observed':actual})
+  # Exercise the existing installation-wide authority guard's original SQL.
+  contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'
+  self.admin.execute((contracts/'installation-policy-guard-v0.1.proposal.sql').read_text())
+  installation_bytes=self.admin.execute('SELECT installation_id::text FROM truss.catalog_runtime_installation').fetchone()[0].encode();profile_bytes=b'ontology-authority-guard-fixture/0.1'
+  self.admin.execute('INSERT INTO truss.policy_generation_guard VALUES(1,%s,%s,1)',(installation_bytes,profile_bytes))
+  acquire=(contracts/'installation-policy-guard-acquire-v0.1.proposal.sql').read_text()
+  advance=(contracts/'installation-policy-generation-advance-v0.1.proposal.sql').read_text()
+  for ordinal in [1,2,3]:advance=advance.replace('$'+str(ordinal),'%s')
+  authority_writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(authority_writer.close)
+  authority_pid=authority_writer.execute('SELECT pg_backend_pid()').fetchone()[0];authority_errors=[];advanced=[]
+  def controlled_role_change():
+   try:
+    authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('ALTER ROLE alice BYPASSRLS');rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,1)).fetchall()
+    if rows!=[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]:raise ValueError('Original generation advance refused')
+    advanced.extend(rows);authority_writer.execute('COMMIT')
+   except Exception as exc:authority_errors.append(type(exc).__name__);authority_writer.rollback()
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();captured=self.admin.execute(acquire).fetchall();self.assertEqual(captured,[('1',installation_bytes.hex(),profile_bytes.hex(),'1')]);observations.append({'id':'original-proposed-guard-acquisition','observed':[list(row) for row in captured]})
+  holder_pid=self.admin.execute('SELECT pg_backend_pid()').fetchone()[0];authority_thread=threading.Thread(target=controlled_role_change);authority_thread.start()
+  try:
+   deadline=time.monotonic()+5;blockers=[]
+   while time.monotonic()<deadline:
+    blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(authority_pid,)).fetchone()[0]
+    if holder_pid in blockers:break
+    time.sleep(.01)
+   self.assertIn(holder_pid,blockers);observations.append({'id':'participating-native-role-changer-waits-on-authority-guard','blockerPid':holder_pid,'observed':blockers})
+   with psycopg.connect(**params,autocommit=True) as admitted_fixture_reader:
+    actual=[r[0] for r in admitted_fixture_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);self.assertTrue(authority_thread.is_alive());observations.append({'id':'guarded-buffered-result-before-authority-change','observed':actual})
+  finally:self.admin.rollback();authority_thread.join(12)
+  self.assertFalse(authority_thread.is_alive());self.assertEqual(authority_errors,[]);self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]);observations.append({'id':'controlled-role-effect-and-generation-advance-commit','observed':[list(row) for row in advanced]})
+  fresh_guard=self.admin.execute(acquire).fetchall();self.assertEqual(fresh_guard,[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]);observations.append({'id':'next-authority-observation-sees-new-generation','observed':[list(row) for row in fresh_guard]})
+  flags=self.admin.execute("SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname='alice'").fetchone();self.assertEqual(flags,(False,True));observations.append({'id':'new-generation-requires-original-caller-bypass-exclusion','observed':list(flags),'qualification':'new generation is not authorization'})
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('ALTER ROLE alice NOBYPASSRLS');restored_generation=authority_writer.execute(advance,(installation_bytes,profile_bytes,2)).fetchall();self.assertEqual(restored_generation,[('1',installation_bytes.hex(),profile_bytes.hex(),'3')]);authority_writer.execute('COMMIT');observations.append({'id':'controlled-restoration-preserves-generation-continuity','observed':[list(row) for row in restored_generation]})
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('ALTER ROLE alice BYPASSRLS')
+  stale=authority_writer.execute(advance,(installation_bytes,profile_bytes,2)).fetchall();self.assertEqual(stale,[]);observations.append({'id':'stale-expected-generation-refuses-advance','observed':stale});authority_writer.rollback()
+  flags=self.admin.execute("SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname='alice'").fetchone();generation=self.admin.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone()[0];self.assertEqual(flags,(False,False));self.assertEqual(generation,'3');observations.append({'id':'failed-controlled-delta-rolls-back-role-and-generation','observed':{'flags':list(flags),'generation':generation}})
+  for invalid_identity,invalid_profile,kind in [(b'foreign-installation',profile_bytes,'installation'),(installation_bytes,b'foreign-profile','profile')]:
+   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone()
+   rows=authority_writer.execute(advance,(invalid_identity,invalid_profile,3)).fetchall();self.assertEqual(rows,[]);authority_writer.rollback();observations.append({'id':'foreign-authority-'+kind+'-refuses-generation-advance','observed':rows})
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege) as failure:ordinary.execute('UPDATE truss.policy_generation_guard SET generation=1')
+   self.assertEqual(failure.exception.sqlstate,'42501');observations.append({'id':'ordinary-authority-generation-reset-denied','observed':'42501'})
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.policy_generation_guard SET generation=9223372036854775807 WHERE singleton=1');authority_writer.execute('ALTER ROLE alice BYPASSRLS')
+  exhausted=authority_writer.execute(advance,(installation_bytes,profile_bytes,9223372036854775807)).fetchall();self.assertEqual(exhausted,[]);observations.append({'id':'authority-generation-maximum-refuses-instead-of-wrap','observed':exhausted})
+  maximum=authority_writer.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone()[0];self.assertEqual(maximum,'9223372036854775807');observations.append({'id':'maximum-generation-remains-exact-before-rollback','observed':maximum});authority_writer.rollback()
+  flags=self.admin.execute("SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname='alice'").fetchone();generation=self.admin.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone()[0];self.assertEqual(flags,(False,False));self.assertEqual(generation,'3');observations.append({'id':'exhausted-authority-delta-rolls-back-role-and-generation','observed':{'flags':list(flags),'generation':generation}})
+  # Losing the original coordinator cannot authorize its buffered result.
+  coordinator=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(coordinator.close)
+  coordinator_pid=coordinator.execute('SELECT pg_backend_pid()').fetchone()[0];coordinator.execute('BEGIN');coordinator.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();held_generation=coordinator.execute(acquire).fetchall();self.assertEqual(held_generation,[('1',installation_bytes.hex(),profile_bytes.hex(),'3')])
+  data_reader=psycopg.connect(**params,autocommit=True);self.addCleanup(data_reader.close);data_reader.execute('BEGIN');data_reader.execute("CREATE TEMP TABLE prior_data_work(value text);INSERT INTO prior_data_work VALUES('kept')")
+  pending_buffer=[r[0] for r in data_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))]
+  self.assertEqual(pending_buffer,['RA','RAB']);lost_errors=[];lost_advance=[]
+  def change_after_coordinator_loss():
+   try:
+    authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':False}),int(aliases['AA'].id),int(assignment['typeId'])))
+    rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,3)).fetchall()
+    if rows!=[('1',installation_bytes.hex(),profile_bytes.hex(),'4')]:raise ValueError('Original generation advance refused')
+    lost_advance.extend(rows);authority_writer.execute('COMMIT')
+   except Exception as exc:lost_errors.append(type(exc).__name__);authority_writer.rollback()
+  loss_thread=threading.Thread(target=change_after_coordinator_loss);loss_thread.start()
+  try:
+   deadline=time.monotonic()+5;blockers=[]
+   while time.monotonic()<deadline:
+    blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(authority_pid,)).fetchone()[0]
+    if coordinator_pid in blockers:break
+    time.sleep(.01)
+   self.assertIn(coordinator_pid,blockers);observations.append({'id':'authority-writer-waits-on-original-coordinator','observed':blockers,'coordinatorPid':coordinator_pid})
+   terminated=self.admin.execute('SELECT pg_terminate_backend(%s)',(coordinator_pid,)).fetchone()[0];self.assertIs(terminated,True);observations.append({'id':'owned-original-coordinator-terminated','observed':True})
+   with self.assertRaises(psycopg.OperationalError) as loss:coordinator.execute('SELECT 1')
+   observations.append({'id':'original-coordinator-native-liveness-probe-fails','observed':{'kind':type(loss.exception).__name__,'sqlState':loss.exception.sqlstate}})
+  finally:
+   coordinator.close();loss_thread.join(12)
+  self.assertFalse(loss_thread.is_alive());self.assertEqual(lost_errors,[]);self.assertEqual(lost_advance,[('1',installation_bytes.hex(),profile_bytes.hex(),'4')]);observations.append({'id':'authority-change-commits-after-native-coordinator-loss','observed':[list(row) for row in lost_advance]})
+  self.assertEqual(data_reader.info.transaction_status,psycopg.pq.TransactionStatus.INTRANS);prior=data_reader.execute('TABLE prior_data_work').fetchall();self.assertEqual(prior,[('kept',)]);observations.append({'id':'coordinator-loss-preserves-original-data-transaction-work','observed':[list(row) for row in prior]});data_reader.rollback()
+  pending_buffer=[];observations.append({'id':'lost-coordinator-buffer-withheld-by-fixture','observed':pending_buffer,'qualification':'explicit fixture release arbitration, not a production lease'})
+  with psycopg.connect(**params,autocommit=True) as fresh:
+   actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'new-read-after-coordinator-loss-observes-revocation','observed':actual})
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']).write_text(json.dumps({'packet':packet,'sql':sql,'observations':observations,'publicCreatedIdentities':{alias:{'id':identity.id,'typeId':identity.type_id} for alias,identity in aliases.items()},'scope':'Actual public-created objects/edges, typed native joins to business keys and candidate typed Record/opaque Relationship membership lowering under ordinary native RLS. Private views are real graph projections, not seeded flat tables. Not complete source enrollment, held authority or released public API/security compiler admission.'},indent=2)+'\n')
 if __name__=='__main__':
  import unittest;unittest.main()

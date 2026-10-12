@@ -477,3 +477,113 @@ change/restoration. Forty-four observations are retained in
 `../../04-build/evidence/security-public-ontology-20261012/receipt.json`.
 This precursor does not close shared STP-056 B01/B02/B03/B10/B13 or STP-057 L05;
 their complete source/authority/publication and public-driver scope remains open.
+
+
+The real ontology regression additionally removes a required field from an
+inactive hidden Assignment while an unrelated valid Bob assignment remains.
+Complete source preflight must fail and the rule fold must return indeterminate.
+The native adapter must raise generic55000 for every ordinary list/count rather
+than return an empty or partial successful result. Restore the original cell and
+repeat visibility. Fifty-four observations are retained in
+`../../04-build/evidence/security-incomplete-ontology-facts-20261012/receipt.json`.
+This does not replace missing endpoint/key/source enumeration or full error/
+transport privacy controls. Shared STP-056 B10/B15 remains open as a full case.
+
+
+Required endpoint-key control now removes Project B's decoded business key
+while keeping the native object and edge incidences present. Retain exact edge
+occurrence count and NULL target projections, require indeterminate despite a
+valid sibling Project path, refuse every ordinary count and restore the original
+decision after repair. The candidate's global selected-key guards must enclose
+NOT/OR/filters. Sixty native observations and26 focused tests pass; Chromium153
+matches the actual ontology fold emission. Evidence:
+`../../04-build/evidence/security-required-endpoint-keys-20261012/receipt.json`.
+Nullable keys, omitted source populations, full mapping/issuer custody and
+publication remain required separate controls.
+
+
+Intrinsic binding controls now cover null subject with ownerless RO, null resource
+and removal/restoration of actual Alice login mapping. Missing intrinsic keys
+must remain indeterminate outside false/true/OR branches; a missing binding cannot
+be ordinary denial. Native lookup refuses55000 and repair restores deny/permit.
+Sixty-four observations and27 tests are retained in
+`../../04-build/evidence/security-intrinsic-key-bindings-20261012/receipt.json`.
+Typed parameter domains, nullable Key semantics and ambiguous/foreign/stale
+subject issuer admission remain separate required controls.
+
+
+Single-subject profile controls now add a second actual Staff record matching
+Alice's native login. Ownerless lookup and count must raise the same generic
+55000 unavailable message; no arbitrary match or raw cardinality diagnostic is
+accepted. Restore uniqueness and exact visibility; retain zero-match refusal.
+Sixty-seven observations pass in
+`../../04-build/evidence/security-subject-ambiguity-20261012/receipt.json`.
+Original issuer/source custody and mapping changes under held admission remain
+required; this does not define multi-subject or federation semantics.
+
+
+Old-snapshot precursor: establish repeatable-read snapshot before an excluded
+committed assignment change, then attempt the first protected count. Require
+0A000 profile refusal before stale facts authorize output; fresh statement sees
+revocation and restoration restores the vector. Seventy-one observations pass
+in `../../04-build/evidence/security-old-snapshot-refusal-20261012/receipt.json`.
+Shared STP-057 L05/L06 remains open until actual enrolled revocation/current-
+authority/publication protocol executes. Isolation restriction alone cannot
+close revocation drain or historical data/current authority composition.
+
+
+Actual graph drain precursor: hold selected source locks, observe an independent
+assignment writer's native lock wait, record the ordinary buffered result before
+release, then require writer completion and fresh-read revocation. Use native
+wait/commit observations rather than elapsed sleeps. Seventy-five observations
+pass in `../../04-build/evidence/security-graph-buffered-drain-20261012/receipt.json`.
+Shared STP-057 L03/L05 remains open until the actual admitted operation/public
+writer/revocation and final publication boundary is integrated and exercised.
+
+
+Control-plane exclusion negative: keep six graph/catalog source locks held,
+commit a separate native caller BYPASSRLS change and observe fresh-role flags
+and widened object count. Restore flags and exact original visibility. This
+must invalidate admission; source locks alone cannot satisfy authority exclusion.
+Seventy-nine fixture observations pass in
+`../../04-build/evidence/security-control-plane-exclusion-gap-20261012/receipt.json`.
+Shared STP-056 B05/B11 and STP-057 L03/L13 require actual enrolled control-plane
+and final-release integration, not this intentionally unguarded counterexample.
+
+
+Existing authority-guard SQL precursor now uses the original table/acquisition/
+advance statements from installation-policy-guard.proposal.md. Assert original
+identity/profile/generation1, native role-changer blocking, buffered result before
+release, effect plus generation2 commit, restoration3 and stale-generation zero
+advance with original role/generation rollback. Eighty-eight observations pass
+in `../../04-build/evidence/security-proposed-authority-guard-native-20261012/receipt.json`.
+Full PG-01..06, complete participant/delta parity and original runtime/coordinator
+source/caller/release custody remain required; this does not adopt the profile.
+
+
+### Native generation boundary controls — 2026-10-12
+
+The existing ontology/authority regression now passes94 native observations.
+Foreign installation/profile bytes produce zero generation advance; ordinary
+reset refuses42501. Signed-bigint maximum remains exact and refuses advance
+without wrap; rollback restores original role flags and generation3. Sources
+and terminal output are retained under
+`docs/helix/04-build/evidence/security-authority-generation-boundaries-20261012/receipt.json`.
+This is partial original guard PG-01/05/06 evidence under CONTRACT-005/063, not
+verified bootstrap, complete authority/participant parity or coordinator/public
+release admission. No full PG schedule or original backend case is promoted.
+
+
+### Native original coordinator loss — 2026-10-12
+
+The ontology/authority regression now passes101 observations. After native
+blocking evidence, termination of only the owned original coordinator releases
+its exclusion; the participating authority writer commits generation4. Native
+liveness probing fails before local close. The fixture withholds its pending
+buffer, preserves the separate data transaction's INTRANS/prior work and a fresh
+read sees revocation. Failed attempt and exact sources/results:
+`docs/helix/04-build/evidence/security-coordinator-loss-20261012/receipt.json`.
+Trace CONTRACT-005/063 and STP-057 L03/L11. This is native loss plus fixture
+arbitration, not production lease/quarantine/recovery or streaming/cached-buffer
+release. Full participant/source/caller/publication integration remains required;
+no original backend case is promoted.

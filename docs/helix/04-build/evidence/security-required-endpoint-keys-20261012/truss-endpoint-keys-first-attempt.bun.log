@@ -1,0 +1,50 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/security-candidate-condition.test.ts:
+(pass) actual mixed compiler condition retains outer Project correlation [3.90ms]
+ 9 | walk(condition);
+10 | const input={condition,scans,subject:{target:ref('Staff'),keyId:'pk',keyFields:[ref('staffId')],parameters:[2]},resource:{target:ref('Resource'),keyId:'pk',keyFields:[ref('resourceId')],parameters:[1]}};
+11 | test('actual mixed compiler condition retains outer Project correlation',()=>{
+12 |  const sql=lowerCandidateSecurityCondition(input);expect(sql).toContain('"candidate_1"."project_key" OPERATOR(pg_catalog.=) "candidate_0"."project_key"');expect(sql).toContain('"candidate_0"."resource_key" OPERATOR(pg_catalog.=) $1');expect(sql).toContain('"candidate_1"."staff_key" OPERATOR(pg_catalog.=) $2');expect(sql).toContain('IS NULL');expect(sql).toContain('NULL::pg_catalog.bool');
+13 | });
+14 | test('source negation retains three valued quantifier SQL',()=>{const negated=proof.artifacts.find(a=>a.id==='mixed-negated')!.rules[0]!.condition;expect(lowerCandidateSecurityCondition({...input,condition:negated})).toStartWith('(NOT (CASE WHEN EXISTS');});
+                                                                                                                                                                                                                              ^
+error: expect(received).toStartWith(expected)
+
+Expected to start with: "(NOT (CASE WHEN EXISTS"
+Received: "(CASE WHEN ((NOT EXISTS(SELECT 1 FROM \"candidate\".\"ownership\" AS \"candidate_key_admission_0\" WHERE (\"candidate_key_admission_0\".\"own_id\" IS NOT NULL AND \"candidate_key_admission_0\".\"resource_key\" IS NOT NULL AND \"candidate_key_admission_0\".\"project_key\" IS NOT NULL) IS NOT TRUE)) AND (NOT EXISTS(SELECT 1 FROM \"candidate\".\"works_on\" AS \"candidate_key_admission_1\" WHERE (\"candidate_key_admission_1\".\"staff_key\" IS NOT NULL AND \"candidate_key_admission_1\".\"project_key\" IS NOT NULL) IS NOT TRUE))) IS TRUE THEN (NOT (CASE WHEN EXISTS(SELECT 1 FROM \"candidate\".\"ownership\" AS \"candidate_0\" WHERE ((((\"candidate_0\".\"resource_key\" OPERATOR(pg_catalog.=) $1)) AND (CASE WHEN EXISTS(SELECT 1 FROM \"candidate\".\"works_on\" AS \"candidate_1\" WHERE ((((\"candidate_1\".\"staff_key\" OPERATOR(pg_catalog.=) $2)) AND ((\"candidate_1\".\"project_key\" OPERATOR(pg_catalog.=) \"candidate_0\".\"project_key\")))) IS TRUE) THEN TRUE WHEN EXISTS(SELECT 1 FROM \"candidate\".\"works_on\" AS \"candidate_1\" WHERE ((((\"candidate_1\".\"staff_key\" OPERATOR(pg_catalog.=) $2)) AND ((\"candidate_1\".\"project_key\" OPERATOR(pg_catalog.=) \"candidate_0\".\"project_key\")))) IS NULL) THEN NULL::pg_catalog.bool ELSE FALSE END))) IS TRUE) THEN TRUE WHEN EXISTS(SELECT 1 FROM \"candidate\".\"ownership\" AS \"candidate_0\" WHERE ((((\"candidate_0\".\"resource_key\" OPERATOR(pg_catalog.=) $1)) AND (CASE WHEN EXISTS(SELECT 1 FROM \"candidate\".\"works_on\" AS \"candidate_1\" WHERE ((((\"candidate_1\".\"staff_key\" OPERATOR(pg_catalog.=) $2)) AND ((\"candidate_1\".\"project_key\" OPERATOR(pg_catalog.=) \"candidate_0\".\"project_key\")))) IS TRUE) THEN TRUE WHEN EXISTS(SELECT 1 FROM \"candidate\".\"works_on\" AS \"candidate_1\" WHERE ((((\"candidate_1\".\"staff_key\" OPERATOR(pg_catalog.=) $2)) AND ((\"candidate_1\".\"project_key\" OPERATOR(pg_catalog.=) \"candidate_0\".\"project_key\")))) IS NULL) THEN NULL::pg_catalog.bool ELSE FALSE END))) IS NULL) THEN NULL::pg_catalog.bool ELSE FALSE END)) ELSE NULL::pg_catalog.bool END)"
+
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/security-candidate-condition.test.ts:14:218)
+(fail) source negation retains three valued quantifier SQL [0.96ms]
+(pass) unknown profiles and substituted endpoint mappings refuse [5.95ms]
+(pass) lexical slot collisions refuse and unsupported terms do not disappear [0.90ms]
+(pass) array method substitution cannot turn False into True [0.09ms]
+(pass) packet, nested scan, identity and array getters never run [0.57ms]
+(pass) unused ambiguous endpoint declarations refuse eagerly [0.89ms]
+(pass) same nominal compound Key cannot cross ordered components [0.61ms]
+(pass) original Record Key metadata and all intrinsic mappings are checked [1.20ms]
+(pass) supplied falsy intrinsic carriers are never omissions [0.12ms]
+(pass) shared homes require disjoint compatible typed selectors [2.07ms]
+(pass) selector bounds and malformed unused carriers refuse eagerly [8.39ms]
+(pass) scalar channels retain field ownership, context separation and exact text equality [2.03ms]
+(pass) record scalar fields remain on the bound witness; opaque scalar access refuses [1.56ms]
+(pass) scalar declarations cannot contradict Key carriers or qualified field domains [0.97ms]
+(pass) numeric constants normalize exactly without value-number conversion [0.94ms]
+(pass) binary constants retain exact octets and empty value [0.49ms]
+(pass) native validity guards enclose negation and successful disjunctions [0.28ms]
+(pass) rule fold retains all matching effects and unknown precedence [0.95ms]
+(pass) splitting a qualified-field domain contradiction across rules refuses [0.44ms]
+(pass) disclosure SQL applies protected defaults and withhold before mask conflicts [2.27ms]
+(pass) disclosure SQL preserves ordered fields beyond the PostgreSQL function argument limit [7.01ms]
+(pass) issued opaque sources preserve local validity outside negation and successful siblings [1.03ms]
+(pass) copied graph SQL and home accessors cannot enter candidate condition lowering [0.23ms]
+(pass) native population identity survives keyed and property projection wrappers [0.37ms]
+(pass) required record and opaque endpoint keys are checked outside authored filters [0.21ms]
+
+1 tests failed:
+(fail) source negation retains three valued quantifier SQL [0.96ms]
+
+ 25 pass
+ 1 fail
+ 159 expect() calls
+Ran 26 tests across 1 file. [19.30s]

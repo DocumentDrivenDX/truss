@@ -266,3 +266,124 @@ read adoption or a complete backend case. Fixture-authored candidate conditions
 are not authenticated compiler output. Complete source enrollment, current
 mapping and authority exclusion, callable closure, final release and original
 public writer/revocation integration remain required before profile admission.
+
+
+### Indeterminate private facts require operation refusal — 2026-10-12
+
+The real ontology regression now separates the private text decision fold from
+the Boolean native row-predicate adapter. Only permit/deny may become Boolean.
+NULL, indeterminate or unknown states raise generic55000 rather than silently
+become false. Removing the required active cell from inactive AB invalidates
+complete Assignment source and produces indeterminate even for otherwise
+authorized Bob. All three ordinary callers' list/count operations refuse with
+primary message `security facts unavailable`; restoring the cell restores
+source validity and original Bob visibility. Fifty-four native observations
+and Python boundary checks pass; sources/results are retained in
+`../../04-build/evidence/security-incomplete-ontology-facts-20261012/receipt.json`.
+
+Adopt this refusal distinction when composing the real protected entrypoint.
+Do not translate unavailable facts into a successful empty collection. This
+fixture guard covers the selected required Boolean domain only; complete missing
+endpoint/key/subject coverage still requires original source enrollment and
+coherent authority/data admission. Whole native diagnostic/wire/trace privacy,
+streaming release and public driver outcome mapping remain separately required.
+Current runtime code is unchanged and no full backend case is promoted.
+
+
+### Required Key/incidence carrier completeness — 2026-10-12
+
+The candidate condition lowerer now checks every supplied selected Record Key
+and endpoint Key column for nonnull presence before authored filtering/negation.
+A valid sibling witness cannot conceal an undecodable required endpoint. In the
+real public ontology fixture, removing Project B's required business key retains
+all four ownership edges with two NULL target-key projections. The fold becomes
+indeterminate even for valid Alice/A access, all ordinary counts refuse55000 and
+repair restores the original permit. Sixty native observations,26 focused tests,
+strict security-source typing, Python boundaries and one Chromium153 actual fold
+emission comparison pass. Sources and failures:
+`../../04-build/evidence/security-required-endpoint-keys-20261012/receipt.json`.
+
+This is the required nonnull-key subset; it does not admit a nullable-key codec.
+Visible supplied-source checks cannot detect omitted/filtered populations or
+authenticate original mappings and native source custody. Keep complete collector
+enrollment and held data/authority/release admission as separate prerequisites.
+No full backend case or released public read profile is promoted.
+
+
+### Intrinsic Key binding must precede denial shortcuts — 2026-10-12
+
+Candidate condition guards now require every selected intrinsic subject/resource
+Key parameter to be nonnull, outside authored branch evaluation. A false branch
+or ownerless Resource cannot turn an unavailable original-caller binding into
+a successful ordinary denial. Native missing-subject/ownerless and missing-
+resource calls return indeterminate; removing Alice's actual login mapping makes
+the private lookup raise generic55000 for RO. Repair restores ROdeny/RApermit.
+Sixty-four native observations,27 focused tests, strict security-source typing,
+Python boundaries and Chromium153 emission comparison pass. Receipt:
+`../../04-build/evidence/security-intrinsic-key-bindings-20261012/receipt.json`.
+Native parameter domains and original binding provenance remain host/backend
+responsibilities. This nonnull subset does not admit nullable Key codecs, resolve
+ambiguous subject mapping or authenticate complete source/cut/authority lifetime.
+
+
+### Single-subject mapping ambiguity — 2026-10-12
+
+The fixture's private original-caller resolver now requires exactly one Staff
+match before passing its Key to the decision function. Zero/duplicate matches
+raise generic55000; count and candidate selection remain private. Adding a second
+Staff login matching Alice refuses ownerless lookup and count with the same
+primary message, then repair restores original RA/RAB visibility. The zero-match
+control remains passing. Sixty-seven observations and Python boundaries pass;
+evidence: `../../04-build/evidence/security-subject-ambiguity-20261012/receipt.json`.
+This selects single-subject semantics only. Federation, explicit multi-subject
+profiles, issuer authenticity, coherent mapping/authority lifetime and full
+diagnostic privacy remain separate production obligations.
+
+
+### Old snapshot/current authority incompatibility — 2026-10-12
+
+The fixture entrypoint now selects READ COMMITTED and refuses incompatible
+transaction isolation before private fact lookup. An actual ordinary transaction
+establishes repeatable-read snapshot before committed AA deactivation; its first
+protected count refuses0A000 with generic authority-profile unavailability. A
+fresh ordinary statement sees revocation and repair restores RA/RAB. Seventy-one
+observations and Python boundaries pass; evidence:
+`../../04-build/evidence/security-old-snapshot-refusal-20261012/receipt.json`.
+This enforces only the selected isolation restriction. READ COMMITTED does not
+provide admission-linearized revocation, complete current authority or held final
+release. Keep the coordinator/generation and writer/control-plane participation
+requirements; a historical data profile needs separately fresh authority facts.
+
+
+### Actual graph buffered-release exclusion — 2026-10-12
+
+The ontology regression now holds native SHARE locks over object/edge/type/
+property/relationship/endpoint sources while an independent assignment writer
+waits. pg_locks proves its RowExclusiveLock is ungranted. Ordinary Alice's
+buffered RA/RAB result is recorded before releasing the guard; the writer then
+commits and the next read sees revocation. Seventy-five native observations and
+Python boundaries pass. Evidence:
+`../../04-build/evidence/security-graph-buffered-drain-20261012/receipt.json`.
+The declared release boundary belongs to the fixture, not a production issuer/
+lease or public revocation acknowledgment. Table-wide contention, complete
+role/policy/routine participation, lost guards and streaming/application buffer
+release remain separate qualification obligations under CONTRACT-063.
+
+
+### Source exclusion is not complete authority exclusion — 2026-10-12
+
+A separate native control connection changes Alice to BYPASSRLS while all six
+selected graph/catalog SHARE locks remain granted. A fresh changed-role
+connection sees all13 objects rather than RA/RAB. Restoring the flag restores
+the original vector. Seventy-nine native observations and Python boundaries
+pass; counterexample evidence:
+`../../04-build/evidence/security-control-plane-exclusion-gap-20261012/receipt.json`.
+The broadened identity is deliberately outside admission, not a supported role.
+
+Production adoption must enroll every relevant role/grant/subject/policy/routine/
+assignment change in the authority protocol and retain independent original
+caller/native inventory checks. Source-table locks cannot protect native role
+DDL or validate a source lease as authority. If control-plane participation or
+equivalent independently qualified exclusion is unavailable, refuse that profile
+and deny direct unguarded paths. Existing CONTRACT-063/005 coordinator and final-
+publication obligations remain unchanged; no new substitute guard is selected.

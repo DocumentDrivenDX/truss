@@ -41,3 +41,51 @@ PG-05 forces failure after authority effects and around generation/commit acknow
 PG-06 tests no-op delta, generation maximum, owner-union change and lock-order inversion. No wrap/reset, stale union or acquisition of an earlier lock after the guard is allowed.
 
 These tests remain not_run. Native locking, current observation, bounded inventory/resource admission, exact types/security/grants and deployment behavior require selected profiles and actual evidence. The guard supplies exclusion, not authorization or semantic equality by itself.
+
+
+## Native proposal-source precursor — 2026-10-12
+
+The actual three SQL files above now run in the public-created graph fixture on
+PostgreSQL18.6. Native acquisition returns exact actual installation identity
+bytes, fixture-profile bytes and generation1. A participating role changer waits
+on the original share guard while an ordinary buffered read finishes, then
+commits its role effect and checked generation2 together. Controlled restoration
+advances3 without reset. A stale expected generation returns zero rows, and
+rollback preserves both role flags and generation3. Source pins and88 total
+ontology observations are retained in
+`../../04-build/evidence/security-proposed-authority-guard-native-20261012/receipt.json`.
+
+This is partial PG-02/03/05 feasibility, not their complete qualification. The
+table is added as a standalone test extension after public installation; verified
+bootstrap, protected routine/privilege parity, complete native authority-delta
+comparison, all control-plane participants and coordinator lease/release remain
+unimplemented. The proposed profile stays unadopted. Unmediated administration
+can still bypass this cooperative guard and invalidate qualification.
+
+
+### Native generation boundary controls — 2026-10-12
+
+The existing ontology/authority regression now passes94 native observations.
+Foreign installation/profile bytes produce zero generation advance; ordinary
+reset refuses42501. Signed-bigint maximum remains exact and refuses advance
+without wrap; rollback restores original role flags and generation3. Sources
+and terminal output are retained under
+`docs/helix/04-build/evidence/security-authority-generation-boundaries-20261012/receipt.json`.
+This is partial original guard PG-01/05/06 evidence under CONTRACT-005/063, not
+verified bootstrap, complete authority/participant parity or coordinator/public
+release admission. No full PG schedule or original backend case is promoted.
+
+
+### Native original coordinator loss — 2026-10-12
+
+The ontology/authority regression now passes101 observations. After native
+blocking evidence, termination of only the owned original coordinator releases
+its exclusion; the participating authority writer commits generation4. Native
+liveness probing fails before local close. The fixture withholds its pending
+buffer, preserves the separate data transaction's INTRANS/prior work and a fresh
+read sees revocation. Failed attempt and exact sources/results:
+`docs/helix/04-build/evidence/security-coordinator-loss-20261012/receipt.json`.
+Trace CONTRACT-005/063 and STP-057 L03/L11. This is native loss plus fixture
+arbitration, not production lease/quarantine/recovery or streaming/cached-buffer
+release. Full participant/source/caller/publication integration remains required;
+no original backend case is promoted.
