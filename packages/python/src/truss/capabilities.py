@@ -18,6 +18,7 @@ from .import_runtime import ImportRuntimeContext
 from .groups import AuthoredValue
 from .feed import FeedPage, FeedAcknowledged, FeedUnavailable
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
+from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
 
 from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogReport)
@@ -70,6 +71,10 @@ class NativeCatalogCapability(_NativeCapability[Literal['catalog']]):
 @dataclass(frozen=True,slots=True,kw_only=True)
 class NativeDirectReadCapability(_NativeCapability[Literal['direct_read']]):
     """Logical scalar object/key/page and independent relationship reads."""
+    def lookup_import_source_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,
+                                            maximum_bytes: int=1048576) -> Outcome[ImportSourceFound | ImportSourceAbsent | ImportSourceUnavailable]:
+        return self._assembly.lookup_import_source_in_transaction(transaction,entity=entity,maximum_bytes=maximum_bytes)
+
     def get_object_in_transaction(self, transaction: TransactionHandle, *, document_id: str,module_id: str,record_id: str,
                                   object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
         return self._assembly.get_object_in_transaction(transaction,document_id=document_id,module_id=module_id,record_id=record_id,object_id=object_id,maximum_bytes=maximum_bytes)

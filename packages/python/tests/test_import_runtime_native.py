@@ -2,7 +2,7 @@
 import base64,json
 from dataclasses import replace
 from hashlib import sha256
-from truss import Ok
+from truss import (Ok,HistoryEntity,ImportSourceFound,ImportSourceAbsent,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration)
 from truss.contracts import MapValue,MapEntry,TextValue,NullValue,ExactArtifact
 from truss.groups import GroupSuccess,Delete,StoredObjectReference,NullOrderKey
 from truss.imports import ImportReported,ImportCreated,ImportSkipped,ImportRejected,EdgeImportRecord,EdgeImportIdentity
@@ -11,6 +11,23 @@ import test_object_mutations_native as mutation_tests
 class ImportRuntimeTests(mutation_tests.ObjectMutationTests):
     for _name in tuple(n for n in dir(mutation_tests.ObjectMutationTests) if n.startswith('test_')):
         locals()[_name]=None
+
+    def assert_retained_source(self,identity,*,kind,definition,load,source,not_imported=None):
+        connection,host,assembly,tx=self.consumer();host.detach();connection.execute('SET TRANSACTION READ ONLY')
+        host=adopt_psycopg_host(connection);self.addCleanup(host.detach)
+        assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value
+        tx=host.adopt_transaction(access_mode='read_only').value
+        reader=assembly.direct_reads(assembly.direct_read_selection).capability
+        result=reader.lookup_import_source_in_transaction(tx,entity=HistoryEntity(kind=kind,document_id='adoc',module_id='m',definition_id=definition,id=int(identity.id)))
+        if not isinstance(result,Ok):self.fail(repr(result)+' '+str(host._custody.last_attempt.error))
+        self.assertIsInstance(result.value,ImportSourceFound)
+        self.assertEqual(result.value.load_id,load)
+        self.assertEqual(json.loads(result.value.content)['source'],source)
+        self.assertEqual(sha256(result.value.content).hexdigest(),result.value.sha256)
+        if not_imported is not None:
+            absent=reader.lookup_import_source_in_transaction(tx,entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(not_imported.id)))
+            self.assertIsInstance(absent,Ok);self.assertIsInstance(absent.value,ImportSourceAbsent)
+        host.detach();self.assertIsNone(connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0]);connection.rollback()
 
     def artifact(self,raw):
         digest=sha256(raw).hexdigest();return ExactArtifact(identity=digest,sha256=digest,bytes_base64=base64.b64encode(raw).decode())
@@ -43,6 +60,7 @@ class ImportRuntimeTests(mutation_tests.ObjectMutationTests):
         deleted,_,_=self.run_group(assembly,tx,(Delete(operation='delete_object',target=StoredObjectReference(identity=identity)),));self.assertIsInstance(deleted,GroupSuccess)
         reserved=self.execute(assembly,tx,context,(duplicate,));self.assertEqual(reserved.outcomes[0].reason,'reserved_identity')
         host.detach();connection.commit();self.assertEqual(self.admin.execute('SELECT load_id FROM truss.record_source').fetchall(),[('load',)])
+        self.assert_retained_source(identity,kind='object',definition='A',load='load',source={'author':None,'at':'2020-01-01','system':'old'})
 
     def test_objects_before_edges_rollback_and_deleted_edge_reservation(self):
         connection,host,assembly,tx=self.ready();created,_,_=self.run_group(assembly,tx,(self.create(),self.create(label='two',value='two',record='B',alias='b')))
@@ -60,3 +78,4 @@ class ImportRuntimeTests(mutation_tests.ObjectMutationTests):
         bad=replace(edge,payload=self.artifact(b'invalid replacement'))
         reserved=self.execute(assembly,tx,context,(bad,));self.assertEqual(reserved.outcomes[0].reason,'reserved_identity')
         host.detach();connection.commit();self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.record_source').fetchone(),(1,))
+        self.assert_retained_source(identity,kind='edge',definition='A-B',load='load',source={},not_imported=a)

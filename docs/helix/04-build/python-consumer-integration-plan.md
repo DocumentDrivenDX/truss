@@ -50,7 +50,7 @@ deletion. It validates group and physical correspondence, resolves every image
 against its own retained revision/pins, and rechecks current original-owner read
 authority. Deletion markers preserve the prior record's real version. The basic
 object/edge workflow and existing compatible-evolution workflow exercise those
-public calls. Broader source-fact/archive/reducer interfaces remain open.
+public calls. Broader archive/reducer interfaces remain open.
 
 ## Read-only feed recovery — runtime 0.22
 
@@ -61,6 +61,16 @@ checks current complete-source reader authority, and leaves the checkpoint
 untouched. Its observational watermark is the reproduced endpoint. The existing
 installed feed workflow exercises delivery, committed ACK and read-only reread
 without assigning an xid. Archive cleanup and upgrades remain unfinished.
+
+## Public retained import provenance — runtime 0.23
+
+The selected direct-read provider now retrieves immutable committed native
+import source facts and load IDs for qualified scalar objects and independent
+edges after deletion. It binds the source ledger to the actual one-create
+attempt, validates the retained physical source row, and checks current original
+owner and edge endpoint access. Absence requires verified committed creation.
+The two existing installed import workflows exercise read-only retrieval after
+deleting the object or edge. General source history, archives and upgrades remain open.
 
 ## Next callable operations
 

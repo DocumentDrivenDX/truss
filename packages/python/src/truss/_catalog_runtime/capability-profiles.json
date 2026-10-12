@@ -19,10 +19,10 @@
       "name": "direct_read",
       "pin": {
         "identity": "truss-native-direct-read-capability",
-        "version": "0.1",
-        "sha256": "b8fb7e01d24f240a116fb9847a110f3b52fded9d0b51d3c790d4897e04647a2b"
+        "version": "0.2",
+        "sha256": "f3750084da8a4a21da878fbf95c124ed3025048a953747f54e3026739f26da03"
       },
-      "definition": "Native direct read capability/0.1: rootless exact scalar object identity/key/live pages; independent directed edge identity/relationship pages; authority receipt visibility; current document-qualified module authority; read-only READ COMMITTED supported; no structured ownership, general historical records or compiler execution.",
+      "definition": "Native direct read capability/0.2: rootless exact scalar object identity/key/live pages; independent directed edge identity/relationship pages; authority receipt visibility; committed native import provenance after deletion; current document-qualified module authority; read-only READ COMMITTED supported; no structured ownership, general historical records or compiler execution.",
       "policyDefinition": "Native direct-read policy/0.1: ordinary authenticated person; current document-qualified reader or writer for object, property, relationship and endpoint dependencies used by each supported read; no writer-only gate; READ COMMITTED and supported read-only transactions; exact installed release; no raw table privileges.",
       "policyPin": {
         "identity": "truss-native-direct-read-policy",

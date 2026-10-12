@@ -16,6 +16,7 @@ from .import_runtime import ImportRuntimeContext
 from .groups import AuthoredValue
 from .feed import FeedPage, FeedAcknowledged, FeedUnavailable
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
+from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
 
 from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogReport)
@@ -44,6 +45,9 @@ class NativeRuntimeOperations(Protocol):
 
     def accepted_document_in_transaction(self, transaction: TransactionHandle, *, document_id: str,
                                             maximum_bytes: int=1048576) -> Outcome[AcceptedDocument | CatalogInvalid | CatalogRefused | CatalogUnavailable]: ...
+
+    def lookup_import_source_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,
+                                            maximum_bytes: int=1048576) -> Outcome[ImportSourceFound | ImportSourceAbsent | ImportSourceUnavailable]: ...
 
     def get_object_in_transaction(self, transaction: TransactionHandle, *, document_id: str,module_id: str,record_id: str,
                                       object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]: ...
