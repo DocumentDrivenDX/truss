@@ -1,0 +1,20 @@
+{
+  "scope": "Private PostgreSQL UMFK1 string verifier only; no installed writer/uniqueness claim",
+  "postgres": "18.6",
+  "ownerRevision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+  "nativeSourceSha256": "e593786b38fae433c384ab26c3d780e0d24f86b405fb25cb0a64d7e9c64d4466",
+  "nativeTests": {
+    "count": 5,
+    "passed": true,
+    "seconds": 5.169
+  },
+  "inclusiveLimits": {
+    "components": 1024,
+    "tupleBytes": 1048576,
+    "oneOverRefused": true
+  },
+  "ownerModelReloadExportEqual": true,
+  "ownerModelScope": "SQL source retention only",
+  "review": "Astra Ultra approved scoped private verifier commit",
+  "remaining": "Protected writer must derive actual ordered values from accepted qualified key and native effects, then call verifier before uniqueness/publication"
+}
