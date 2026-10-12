@@ -1604,3 +1604,48 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 self.assertIsInstance(original_result,Ok);self.assertEqual(original_result.value['decision'],'permit')
             finally:self.connection.execute('ROLLBACK')
         self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_owned_receiver_source_snapshot_ignores_later_original_carrier_mutation(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_receiver as tool
+        original_init=tool._OwnedDecisionReceiver.__init__;captured=[]
+        def capture(receiver,*args,**kwargs):
+            original_init(receiver,*args,**kwargs);captured.append((args[4],args[6]))
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                with patch.object(tool._OwnedDecisionReceiver,'__init__',capture):receiver=self.owned_receiver(host,t,executor_t)
+                epoch,sources=captured[0]
+                object.__setattr__(epoch,'profile',b'changed-carrier')
+                object.__setattr__(epoch,'evidence',b'changed-carrier')
+                object.__setattr__(sources,'policy',b'changed-carrier')
+                object.__setattr__(sources,'resolution',b'changed-carrier')
+                result=receiver.dispatch(b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read"}')
+                self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit')
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_owned_receiver_rejects_changed_or_nondelegated_server_source_context(self):
+        import sys
+        from dataclasses import replace
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_receiver as tool
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                receiver=self.owned_receiver(host,t,executor_t);scope=receiver._OwnedDecisionReceiver__scope
+                value=json.loads(scope[4].profile);value['kind']='truss-flat-fact-provider-fixture/0.3';del value['executor']
+                variants=[(*scope[:4],replace(scope[4],profile=json.dumps(value).encode()),*scope[5:]),
+                          (*scope[:6],replace(scope[6],policy=scope[6].policy+b' ')),
+                          (*scope[:6],replace(scope[6],resolution=scope[6].resolution+b' ')),
+                          (*scope[:4],replace(scope[4],profile=bytearray(scope[4].profile)),*scope[5:])]
+                with patch.object(tool,'run_delegated_owned_identity_read',side_effect=AssertionError('dispatch must not run')) as execute:
+                    for variant in variants:
+                        with self.assertRaises(ValueError):tool._OwnedDecisionReceiver(*variant)
+                    execute.assert_not_called()
+                self.assertIsNone(host._custody.pending);self.assertIsNone(self.host._custody.pending)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)

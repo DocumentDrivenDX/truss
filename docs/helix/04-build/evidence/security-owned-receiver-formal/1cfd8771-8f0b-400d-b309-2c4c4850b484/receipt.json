@@ -1,0 +1,90 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-owned-receiver.py": "a95613de207bb2d38f002c0b3ffc6bdb6e5571bbba8639ebb19dd504736abed2",
+    "scripts/security_owned_receiver.py": "0ad10e5fab362c525940f164d34e2c7c0f0e24a92867f20e513ca9fca1410d5c",
+    "scripts/security_owned_read.py": "53c93931c9789e00e8ffc12e043632867328ad10f380e9b44e8df83aff0d49e6",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "c66c0ed2639f3c471115092ee2a902feb18203d8f78a10f18786cdbeff5aee37"
+  },
+  "queries": [
+    {
+      "id": "invalid_server_source_prevents_dispatch",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "a8849cb5029638e1e3930bbccf9aa975e2ddf432590d01f8648c8c7fce4d1750",
+      "model": null
+    },
+    {
+      "id": "carrier_mutation_cannot_change_captured_selection",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "f442a631578b1386f3507152ea22214b3273717c27b612290ed290505cb637fe",
+      "model": null
+    },
+    {
+      "id": "alias_selection_without_snapshot_follows_mutation",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "55390b37910d899f8f5f9e234c37ff7dfd5bab4b07ec0e3749c2171a9508fcd1",
+      "model": "[original_source_before = \"\",\n original_source_after = \"A\",\n captured_source = \"\",\n selected_source = \"A\"]"
+    },
+    {
+      "id": "extra_wire_fields_prevent_dispatch",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "f8f4f51673c36e229a87fd77c57d7e8e94739783eed97ea448db3f43e7d2edc0",
+      "model": null
+    },
+    {
+      "id": "duplicate_members_prevent_dispatch",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "8679a2b5da263eb0fdce3bd4ca197de9eac733b5852eb6d1a42d52bd9b4e7113",
+      "model": null
+    },
+    {
+      "id": "explain_operation_prevents_dispatch",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "2716cd47d368dabfed7f255f1319a136e5b72e5c12dc5dba7e6e9cb5bae297d1",
+      "model": null
+    },
+    {
+      "id": "unbounded_carrier_prevents_dispatch",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "845743f83e55963268da81a302bb09c301c3ccd247e950440a221d07ff9b1469",
+      "model": null
+    },
+    {
+      "id": "closed_grammar_does_not_authenticate_subject",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "e6f460603d223b168a75bdaa999733a477b8dcfcb8a1681a5c66e83bc1e21eb7",
+      "model": "[dispatch = True,\n wire_version = \"truss-owned-decision-request/0.1\",\n bounded_bytes = True,\n valid_utf8 = True,\n exact_keys = True,\n authenticated_subject = False,\n wire_operation = \"read\",\n delegated_profile = True,\n duplicate_members = False,\n captured_valid = True,\n receiver_constructed = True]"
+    },
+    {
+      "id": "closed_grammar_does_not_prove_other_channels_closed",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "87e908f0aac9cb65380d327a93fc35514d8d5b17fd082e36d499713171106b57",
+      "model": "[dispatch = True,\n wire_version = \"truss-owned-decision-request/0.1\",\n bounded_bytes = True,\n valid_utf8 = True,\n exact_keys = True,\n wire_operation = \"read\",\n delegated_profile = True,\n duplicate_members = False,\n channels_closed = False,\n captured_valid = True,\n receiver_constructed = True]"
+    }
+  ],
+  "scope": "Abstract exact wire grammar to fixed read dispatch. Extra/duplicate members, wrong operation and oversize prevent dispatch. Matching grammar does not authenticate the subject or close other channels.",
+  "limitations": [
+    "Faithful JSON/UTF-8 parsing and exact dispatch mapping are premises; no Python/native driver refinement proof",
+    "Private server context is a trusted application premise, not an authenticated principal or capability",
+    "No credential/routing/native source/lifetime/diagnostic closure or admitted protected backend"
+  ]
+}
