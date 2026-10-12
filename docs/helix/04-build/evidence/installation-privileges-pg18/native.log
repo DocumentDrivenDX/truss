@@ -1,0 +1,11 @@
+test_protects_generated_layout_and_future_routines (test_installation_privileges_native.InstallationPrivilegeTests.test_protects_generated_layout_and_future_routines) ... ok
+test_public_column_grant_removed (test_installation_privileges_native.InstallationPrivilegeTests.test_public_column_grant_removed) ... ok
+test_late_failure_restores_roles_owners_and_caller_work (test_installation_privileges_native.InstallationPrivilegeTests.test_late_failure_restores_roles_owners_and_caller_work) ... ok
+test_collisions_third_party_grants_and_unsupported_objects_refuse (test_installation_privileges_native.InstallationPrivilegeTests.test_collisions_third_party_grants_and_unsupported_objects_refuse) ... ok
+test_hostile_search_path_is_ignored_and_restored (test_installation_privileges_native.InstallationPrivilegeTests.test_hostile_search_path_is_ignored_and_restored) ... ok
+test_restored_public_default_refuses_and_rolls_back (test_installation_privileges_native.InstallationPrivilegeTests.test_restored_public_default_refuses_and_rolls_back) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 11.078s
+
+OK

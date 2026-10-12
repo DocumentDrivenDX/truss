@@ -4774,6 +4774,46 @@ native methods and module boundaries on PostgreSQL18.6, with current source pins
 and three stop0/status3/socket-absent cleanups. The prior native packet retains
 its original pre-integration source scope; qualified exclusions remain unchanged.
 
+
+### Transactional installation privilege boundary — 2026-10-11
+
+Private `_installation_privileges.protect_installation_in_transaction` protects
+fresh existing Truss objects through the psycopg host's owned savepoint. The
+trusted direct administrator must quiesce other administrative changes. It
+rejects role collisions, unsupported and extension-owned objects, foreign
+owners and third-party direct/column grants before changes. New owner/client
+roles are non-login, non-superuser, cannot create roles/databases, replicate or
+bypass RLS, and do not inherit roles. The owner receives schema, relation,
+routine and independent type ownership; generated row/array ownership follows
+its parent. PUBLIC access is removed, including column and row-type access.
+Clients receive only schema USAGE without grant authority. Exact object OIDs,
+ownership, effective client permissions and private function/type defaults
+are checked before returning a private report.
+
+The installer uses a fixed trusted search path and restores the caller's exact
+setting. Failure restores installation roles/objects and preserves earlier
+caller work. No transaction settlement, facade grant, actor adoption, installed
+marker or readiness claim is introduced. Historical invoker-only security and
+administrative catalog profiles remain unchanged. A future protected facade
+needs its own compatible composition and native original actor capture; an
+admitted SET ROLE actor cannot silently be replaced by session_user.
+
+Six native methods pass on PostgreSQL 18.6 against the UMF-generated 0.16
+layout plus an enum, domain and overloaded private routines. Controls include
+ordinary-person native session-context SELECT/INSERT/TRUNCATE/ALTER/EXECUTE/
+owner-SET-ROLE refusals, future private routines, PUBLIC column removal, role
+collisions, third-party column grants, extension ownership, late failure,
+hostile search paths and restored PUBLIC defaults. Session-context controls
+use SET LOCAL SESSION AUTHORIZATION in the owned fixture; they do not qualify
+network login or SCRAM. See `evidence/installation-privileges-pg18/native.log`.
+Initial checks exposed generated row-type usage and the review identified
+search-path/default-ACL gaps; these were corrected before the passing run.
+
+Run installer-owned metadata checks (including epoch-helper ownership checks)
+before ownership transfer, and transfer before admitting runtime operations.
+The old administrative inventory cannot certify the post-transfer ownership
+state; protected activation requires a separately selected inventory.
+
 ### Conservative predefined-role privilege snapshot — 2026-10-11
 
 Private `_run_predefined_role_excluded_ddl_fenced_epoch_operation` composes the

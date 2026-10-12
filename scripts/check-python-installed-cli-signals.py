@@ -6,6 +6,7 @@ import importlib.metadata
 import json
 from pathlib import Path
 import selectors
+import platform
 import shutil
 import signal
 import subprocess
@@ -51,7 +52,7 @@ for signum in [signal.SIGTERM,signal.SIGINT]:
   # This is only our recorded child command; never terminate other processes.
   if process.poll() is None: process.terminate()
   raise
-receipt = {'scope':'Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on '+('macOS arm64 PostgreSQL' + SERVER_VERSION)+'; no crash/installer qualification',
+receipt = {'scope':'Actual installed CLI SIGTERM/SIGINT shutdown and retained restart on '+(platform.system() + ' ' + platform.machine() + ' PostgreSQL' + SERVER_VERSION)+'; no crash/installer qualification',
  'correctedPgserverCandidate':corrected,
  'loadedCli':str(loaded),'cliSha256':hashlib.sha256(loaded.read_bytes()).hexdigest(),
  'producerSha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'runs':runs,

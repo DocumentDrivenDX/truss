@@ -9,7 +9,7 @@ receipt_name=sys.argv[1]
 sys.path.insert(0,str(root/'scripts'))
 from native_fixture import WorkerCluster,connect,evidence_directory
 if (evidence_directory()/receipt_name).exists():raise SystemExit("Receipt exists")
-with tempfile.TemporaryDirectory(prefix='truss-module-interrupt-',dir='/private/tmp') as folder:
+with tempfile.TemporaryDirectory(prefix='truss-module-interrupt-',dir='/tmp') as folder:
  folder=Path(folder);ready=folder/'ready.json'
  (folder/'test_owned_interrupt.py').write_text('''import json,os,signal,unittest
 from pathlib import Path
