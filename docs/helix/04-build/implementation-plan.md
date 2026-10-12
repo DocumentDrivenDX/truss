@@ -5847,3 +5847,203 @@ or any source/test covered by the44-test module-role qualification. All211
 current/preimage source pins and retained evidence digests are verified unchanged
 after merge. The separate native object-key receipt is not claimed as replayed
 here. Public module-role validation retains its recorded scoped qualification.
+
+### Public catalog SET-reachable storage authority — 2026-10-12
+
+The inherited private-column control passes under the original guard. The
+SET-only bridge control fails before this fix: the original session actor is
+admitted despite being able to switch to a role with private-column SELECT.
+The public actor guard now traverses all-SET membership paths and checks each
+reachable role's effective native schema/table/column/sequence rights and unsafe
+role attributes. Native privilege probes preserve each state's inheritance
+semantics. Registrar permission remains the selected membership-based policy.
+
+`evidence/public-inherited-storage-20261012/receipt.json` retains source pins,
+source archive, the positive inherited baseline, failing SET-only control,
+46 passing source tests and46 installed-wheel tests with exact SQL/manifest
+correspondence. PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary.
+Native unittest cleanup completes without error; no independent cleanup receipt
+or formal SQL refinement is claimed. This closes the observed raw-storage
+admission gap, not complete delegation/callable/lifetime closure.
+Trace CONTRACT-005 and CONTRACT-063/STP-056 B05/B10/B11/B12, US-056
+AC5/AC8/AC9/AC10 prerequisites. No advanced backend case is promoted; the shared
+132-case goal remains active at26/132 with106 unbound cases.
+
+Final integration preserves main295aab3d's public module-authorized object
+identity read and main8abad2aa's private key-bucket implementation. The storage
+exclusion now resides in their shared `runtime_person` guard; registrar checks
+remain required only for catalog operations. The merged0.3 manifest includes
+main's read.sql and the exact combined runtime.sql hash. All54 combined public
+catalog/view/source/key/object-read tests pass from source and installed wheel.
+`merged-receipt.json` and `merged-source.zip` retain final source pins, package
+correspondence and wheel digest. Python boundaries and all seven original UMF
+SQL owner round trips pass. The separate key-bucket native suite is not claimed
+as replayed here. No formal/native refinement or advanced backend promotion.
+
+### Native public object role-state correspondence — 2026-10-12
+
+`evidence/public-role-state-paths-20261012/receipt.json` binds four native
+consumer→bridge→storage graphs to public object reads. SET→SET and
+SET→INHERIT admit actual native private-column access after SET ROLE and cause
+the original-person public guard to refuse. INHERIT→SET and dormant edges admit
+neither the tested SET nor direct private-column access; public reads remain
+available. Revoking each original unsafe path restores public availability.
+This supplies actual API/ordinary-session correspondence for the shared guard,
+including the positive no-overrejection controls, rather than relying only on
+synthetic membership reachability or a superuser SET ROLE observation.
+
+The source matrix passes; all9 installed-wheel object-read tests pass. Every
+package source and installed file remains byte-identical to the previous54-test
+qualification. Six retained Z3 4.15.4 queries and fresh-context replays give
+five UNSAT/one SAT: finite three-role closure agrees with an independently
+bounded path construction, all four native graph expectations agree with the
+logical model, and generic mixed-membership reachability admits a countermodel.
+The SMT model is conditional; native correspondence covers only those four
+graphs and is not complete SQL/ACL/owner/delegation/currentness refinement.
+
+The first harness run incorrectly predicates on ungranted id while testing
+props-only SELECT, leaving later subcases in an aborted transaction. Its log is
+retained explicitly as a harness error, not a product failure. The corrected
+control reads only the granted column. Native unittest cleanup completes without
+error; no independent cleanup packet is claimed. Trace CONTRACT-005,
+CONTRACT-063/STP-056 B04/B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites.
+No backend case is promoted; the original132-case goal remains active.
+
+### Public unsupported policy semantics refusal — 2026-10-12
+
+`evidence/public-unknown-policy-refusal-20261012/receipt.json` exercises an
+opaque unknown security-next99.0.0 policy at document/module/record/field scopes.
+Original UMF preparation retains the exact parsed source and policy content.
+Actual public registration refuses every selection without document/type/request/
+report effects or catalog-head advancement, preserves prior caller work and
+subsequently accepts and commits a supported original registration. This verifies
+that the current scalar catalog profile cannot silently discard unknown policy
+meaning and activate its module-only interpretation in its place.
+
+The source control and installed-wheel control both pass, each with four refusal
+scopes and positive recovery. All package sources and installed contents remain
+byte-identical to the previous54-test source/wheel qualification. The initial
+import failure was test placement outside the class and is retained explicitly
+as harness error, not product counterevidence. Native unittest cleanup completes
+without error; no independent cleanup packet or formal refinement is claimed.
+
+Trace CONTRACT-062/063 and STP-056 B09/B15, STP-057 L12, US-056 AC7 /
+US-057 AC8 prerequisites. Unknown opaque-extension refusal does not implement
+or qualify the shared ontology security vocabulary, advanced policy compilation,
+existing-profile migration rollback or business enforcement. No full backend case
+is promoted; all132 original acceptance cases remain required and goal active.
+
+
+### Native candidate string literal fidelity — 2026-10-12
+
+The experimental predicate lowerer incorrectly reused nonempty identifier text
+validation for scalar string constants and rejected every valid astral Unicode
+character through its UTF16 surrogate test. Original controls show empty/emoji
+refusal while lambda and quote/backslash constants already lower. The fixed
+scalar path admits empty strings and validates Unicode by UTF8 round-trip fidelity.
+Identifiers retain nonempty checks and now accept valid astral scalars under their
+existing byte limit. Native NUL and lone high/low surrogates still refuse. The
+existing65536 UTF16-unit literal limit is preserved, without a new language ceiling.
+
+`evidence/security-string-predicate-20261012/receipt.json` retains preimage,
+source archive/pins, Bun generator outputs, eight actual PostgreSQL18.6 equality
+controls and real Chromium153.0.8010.12 correspondence. Required TypeScript
+security checking passes. Native LocalPostgres context cleanup completes without
+error; no independent native stop receipt is claimed. Generated SQL is exercised
+under an excluded administrative fixture, not an ordinary policy admission.
+
+Trace shared CONTRACT-062/063 exact original literal/value meaning and STP-056
+B01/B13/B15, US-056 AC2/AC7 prerequisites. Hand-authored logical IR is not compiler
+source custody; native collation/codec/source/current authority and actual ordinary
+API enforcement remain unqualified. Nullable-domain predicate support remains
+refused. No original backend case is promoted; the shared132-case goal stays active.
+
+
+### Native permit/require/forbid truth correspondence — 2026-10-12
+
+`evidence/security-native-composition-20261012/receipt.json` retains exhaustive
+four-rule controls: two permits, one require and one forbid, each with T/F/U.
+All81 actual PostgreSQL18.6 combinations agree with the independently authored
+truth table and original UMF composition:3 permit,13 deny,65 indeterminate.
+Native eligibility is true only for the three permits; both refusal classes map
+to false. A true permit cannot override an unknown sibling permit. No field
+mask/disclosure contract is exercised by this row-only control.
+
+Chromium153.0.8010.12 and Bun1.4.2 produce identical SQL and semantic outcomes.
+Two Z3 4.15.4 queries replay in fresh contexts: one UNSAT for the fixed finite
+row-eligibility formula equivalence, one SAT showing an unguarded unknown permit
+would broaden admission. Actual native SQL execution separately covers all81
+truth assignments. This is not a general compiler/SQL/snapshot refinement proof.
+
+The fixture uses excluded administrative SQL; nullable columns exercise abstract
+unknown truth only and do not admit nullable domain mappings or incomplete facts.
+Native LocalPostgres context cleanup completes without error; no independent stop
+receipt is claimed. Trace CONTRACT-062/063 composition, STP-056 B01/B09/B15 and
+US-056 AC2/AC7 prerequisites. Original Weft source/IR custody, complete fact cuts,
+ordinary authentication, installed masks/current authority/final release and
+all132 original cases remain required. No backend case is promoted; goal active.
+
+
+### Public role ADMIN storage delegation — 2026-10-12
+
+The original public guard admitted consumer with ADMIN TRUE/INHERIT FALSE/
+SET FALSE on a role holding private installation-column SELECT. An ordinary native
+consumer connection actually self-grants SET, switches to that role and reads the
+private column. After rolling that escalation back, the original unsafe ADMIN
+grant remains and public status incorrectly accepts it. The original failing
+control is retained; this is a raw-storage authority exclusion gap, not evidence
+that installation_id is secret business data.
+
+The runtime-person closure now traverses SET or ADMIN edges before checking each
+state's native unsafe attributes and effective private-storage privileges. The
+reproduced delegation route refuses; revoking the original unsafe membership
+restores public availability. Existing dormant and INHERIT→SET nonreachability
+controls still pass. Complete native grantor/inherited-administration/delegation
+interpretation remains independent; no complete closure claim follows from this
+single direct ADMIN witness.
+
+`evidence/public-role-admin-storage-20261012/receipt.json` retains preimage,
+source archive/pins, failing native control and57 passing source +57 installed-wheel
+public catalog/view/source/key/object tests. Wheel/source/installed contents match
+exactly. Python boundaries and seven original UMF SQL round trips pass. Engine
+PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary. Native unittest cleanup
+completes without error; no independent cleanup packet or formal refinement is
+claimed. Trace CONTRACT-005 protected delegation, CONTRACT-063/STP-056
+B04/B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites. No original backend case
+is promoted; the full132-case security goal remains active.
+
+
+### Public inherited ADMIN grantor correspondence — 2026-10-12
+
+A native ordinary consumer with INHERIT TRUE/SET FALSE on grantor_path can use
+that inherited role's ADMIN option on grantable_storage, grant itself SET and
+read a private installation column. The previous SET/ADMIN-only active-role
+closure incorrectly admits the actor. The original four-path observational probe
+is retained as observation, not mislabeled as a failing regression assertion.
+
+The native guard now tracks `(active_oid,privilege_oid)` separately. INHERIT
+expands effective privilege/grantor scope, ADMIN upgrades the granted target to a
+future active state, and SET follows only the active role's own edges. Active
+states alone supply noninherited role attributes; native ACL probes retain actual
+inherited object rights. A switch/admin upgrade can replace the inherited node
+with the target active state without losing the tested authority reachability.
+The previous INHERIT→SET nonreachability and dormant controls remain admitted.
+
+All four native grantor paths are frozen in the public regression: inherited,
+SET-only and combined paths expose native private access and must refuse;
+dormant paths give no private access and public status stays available. The
+observed dormant native GRANT error is XX000 on selected18.6 and is preserved
+exactly, not fabricated as42501. Installation_id is not claimed secret business
+data. Complete native grantor/delegation/source-lifetime closure remains separate.
+
+`evidence/public-admin-grantor-paths-20261012/receipt.json` retains preimage,
+source archive/pins,58 passing source +58 installed-wheel tests and exact package
+correspondence. Python boundaries and all seven original UMF SQL round trips
+pass. PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary. Existing native
+unittest cleanup completes without error; no independent stop packet is claimed.
+Two Z3 4.15.4 queries replay fresh contexts: one UNSAT for compressed/full active
+state exposure over64 three-role linear assignments, one SAT preserving the old
+inherited-ADMIN countermodel. No arbitrary graph or native SQL refinement follows.
+Trace CONTRACT-005 delegation, CONTRACT-063/STP-056 B04/B05/B11/B12 and
+US-056 AC5/AC9/AC10 prerequisites. No original backend case is promoted;
+all132 acceptance cases remain required and full goal active.

@@ -1,0 +1,55 @@
+{
+  "version": "180006",
+  "observations": [
+    {
+      "constant": "",
+      "subject": "",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "constant": "",
+      "subject": "different",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "constant": "\u03bb",
+      "subject": "\u03bb",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "constant": "\u03bb",
+      "subject": "\u03bbdifferent",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "constant": "\ud83d\ude00",
+      "subject": "\ud83d\ude00",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "constant": "\ud83d\ude00",
+      "subject": "\ud83d\ude00different",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "constant": "quote'\\slash",
+      "subject": "quote'\\slash",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "constant": "quote'\\slash",
+      "subject": "quote'\\slashdifferent",
+      "expected": false,
+      "observed": false
+    }
+  ],
+  "cleanup": "LocalPostgres context exited without error; no independent stop receipt",
+  "scope": "SQL expression correctness only; excluded administrative fixture, no authenticated ordinary policy admission"
+}

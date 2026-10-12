@@ -1,0 +1,29 @@
+{
+  "z3": "4.15.4",
+  "closure_equivalence": "unsat",
+  "controls": [
+    {
+      "native_control": "set_set",
+      "expected_exposed": true,
+      "contradiction": "unsat"
+    },
+    {
+      "native_control": "set_inherit",
+      "expected_exposed": true,
+      "contradiction": "unsat"
+    },
+    {
+      "native_control": "inherit_set",
+      "expected_exposed": false,
+      "contradiction": "unsat"
+    },
+    {
+      "native_control": "dormant",
+      "expected_exposed": false,
+      "contradiction": "unsat"
+    }
+  ],
+  "arbitrary_mixed_edges_countermodel": "sat",
+  "countermodel": "[i_1_2 = False,\n s_1_2 = True,\n i_0_1 = True,\n s_0_2 = False,\n s_0_1 = False,\n i_0_2 = False]",
+  "limits": "Three-role finite logical model. Native correspondence is exercised for four concrete graphs only; no complete SQL, membership-currentness, owner, delegation, callable, diagnostic, or lifetime proof."
+}

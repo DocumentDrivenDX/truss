@@ -1,0 +1,9 @@
+{
+  "z3": "4.15.4",
+  "results": {
+    "row-eligibility-equivalence": "unsat",
+    "unknown-permit-guard-required": "sat"
+  },
+  "fresh_replays": 2,
+  "limits": "Fixed four-rule finite truth model. Actual generated SQL separately exercises81 assignments, not general SQL/routine/snapshot/source/caller/mask/publication refinement."
+}

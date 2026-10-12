@@ -1,0 +1,898 @@
+{
+  "postgres": "180006",
+  "observations": [
+    {
+      "truths": [
+        "T",
+        "T",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "T",
+        "T",
+        "F"
+      ],
+      "expected": true,
+      "semanticDecision": "permit",
+      "observed": true
+    },
+    {
+      "truths": [
+        "T",
+        "T",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "T",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "T",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "T",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "T",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "T",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "T",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "T",
+        "F"
+      ],
+      "expected": true,
+      "semanticDecision": "permit",
+      "observed": true
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "F",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "T",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "T",
+        "U",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "T",
+        "F"
+      ],
+      "expected": true,
+      "semanticDecision": "permit",
+      "observed": true
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "T",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "T",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "deny",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "F",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "T",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "F",
+        "U",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "T",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "T",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "T",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "F",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "T",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "T",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "T",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "F",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "F",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "F",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "U",
+        "T"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "U",
+        "F"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    },
+    {
+      "truths": [
+        "U",
+        "U",
+        "U",
+        "U"
+      ],
+      "expected": false,
+      "semanticDecision": "indeterminate",
+      "observed": false
+    }
+  ],
+  "cleanup": "LocalPostgres context exited without error; no independent stop receipt",
+  "limits": "Administrative raw truth fixture. NULL exercises U only; required source domains do not admit nullable physical bindings. No complete fact/issuer/source/caller/mask/publication admission."
+}

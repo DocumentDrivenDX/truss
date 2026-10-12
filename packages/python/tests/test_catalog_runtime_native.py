@@ -544,6 +544,35 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
             self.admin.execute('REVOKE server_capability_bridge FROM consumer')
             self.admin.execute('DROP ROLE server_capability_bridge')
 
+    def test_public_actor_refuses_inherited_private_column_privileges(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        self.admin.execute('CREATE ROLE column_privilege_bridge NOLOGIN')
+        try:
+            self.admin.execute('GRANT SELECT (installation_id) ON truss.catalog_runtime_installation TO column_privilege_bridge')
+            self.admin.execute('GRANT column_privilege_bridge TO consumer WITH INHERIT TRUE, SET FALSE')
+            try:
+                self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+            finally:self.admin.execute('REVOKE column_privilege_bridge FROM consumer')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        finally:
+            self.admin.execute('DROP OWNED BY column_privilege_bridge')
+            self.admin.execute('DROP ROLE column_privilege_bridge')
+
+    def test_public_actor_refuses_switchable_private_column_privileges(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        self.admin.execute('CREATE ROLE switchable_column_bridge NOLOGIN')
+        try:
+            self.admin.execute('GRANT SELECT (installation_id) ON truss.catalog_runtime_installation TO switchable_column_bridge')
+            self.admin.execute('GRANT switchable_column_bridge TO consumer WITH INHERIT FALSE, SET TRUE')
+            try:self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+            finally:self.admin.execute('REVOKE switchable_column_bridge FROM consumer')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        finally:
+            self.admin.execute('DROP OWNED BY switchable_column_bridge')
+            self.admin.execute('DROP ROLE switchable_column_bridge')
+
     def test_public_actor_refuses_late_column_and_reference_privileges(self):
         self.install();connection,host,assembly,tx=self.consumer()
         connection.execute("CREATE TEMP TABLE caller_privilege_sentinel(value text); INSERT INTO caller_privilege_sentinel VALUES ('kept')")
@@ -614,5 +643,81 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
             if isinstance(retry,Error):self.fail(repr(retry.error)+' '+str(host._custody.last_attempt.error))
             self.assertTrue(retry.value.replayed);self.assertEqual(retry.value.report_bytes,report.value.original_bytes)
             host.detach();connection.commit()
+
+
+    def test_unknown_policy_extensions_refuse_without_losing_source_or_prior_work(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        connection.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
+        payload={'opaquePolicy':{'subject':'Staff','resource':'Projects','rule':'active assignment required'}}
+        for scope in ('document','module','record','field'):
+            with self.subTest(scope=scope):
+                source=relational_document();source['id']='policy'
+                source['vocabularies']={'security-next':{'version':'99.0.0'}}
+                module=source['modules'][0]
+                target={'document':source,'module':module,'record':module['elements'][0],
+                    'field':next(e for e in module['elements'] if e['kind']=='field')}[scope]
+                target['extensions']={'security-next':payload}
+                prepared=assembly.prepare_catalog((CatalogDocument('policy','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+                self.assertEqual(prepared.documents[0].observation()['source'],source)
+                result=assembly.accept_in_transaction(tx,prepared,request_key='unsupported-'+scope)
+                self.assertIsInstance(result,Error)
+                self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
+                self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
+                for table in ('schema_doc','type_def','catalog_registration_request','catalog_acceptance_report'):
+                    self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))
+        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='supported-after-refusal'),Ok)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.catalog_registration_request').fetchone(),(1,))
+
+
+    def test_public_actor_refuses_admin_option_private_storage_escalation(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.admin.execute('CREATE ROLE admin_storage_bridge NOLOGIN')
+        try:
+            self.admin.execute('GRANT USAGE ON SCHEMA truss TO admin_storage_bridge')
+            self.admin.execute('GRANT SELECT(installation_id) ON truss.catalog_runtime_installation TO admin_storage_bridge')
+            self.admin.execute('GRANT admin_storage_bridge TO consumer WITH ADMIN TRUE, INHERIT FALSE, SET FALSE')
+            # Independently demonstrate the actual native self-grant route.
+            connection.execute('SAVEPOINT native_escalation')
+            connection.execute('GRANT admin_storage_bridge TO consumer WITH SET TRUE')
+            connection.execute('SET ROLE admin_storage_bridge')
+            self.assertEqual(len(connection.execute('SELECT installation_id FROM truss.catalog_runtime_installation').fetchall()),1)
+            connection.execute('RESET ROLE')
+            connection.execute('ROLLBACK TO SAVEPOINT native_escalation');connection.execute('RELEASE SAVEPOINT native_escalation')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+            self.admin.execute('REVOKE admin_storage_bridge FROM consumer')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        finally:
+            self.admin.execute('REVOKE admin_storage_bridge FROM consumer')
+            self.admin.execute('DROP OWNED BY admin_storage_bridge; DROP ROLE admin_storage_bridge')
+
+    def test_public_actor_refuses_effective_admin_grantor_paths(self):
+     self.install();connection,host,assembly,tx=self.consumer()
+     for inherit,set_role in [(True,False),(False,True),(False,False),(True,True)]:
+      self.admin.execute('CREATE ROLE grantor_path NOLOGIN;CREATE ROLE grantable_storage NOLOGIN')
+      try:
+       self.admin.execute('GRANT USAGE ON SCHEMA truss TO grantable_storage')
+       self.admin.execute('GRANT SELECT(installation_id) ON truss.catalog_runtime_installation TO grantable_storage')
+       self.admin.execute('GRANT grantable_storage TO grantor_path WITH ADMIN TRUE, INHERIT FALSE, SET FALSE')
+       self.admin.execute(f'GRANT grantor_path TO consumer WITH INHERIT {inherit}, SET {set_role}')
+       admitted=isinstance(assembly.status_in_transaction(tx),Ok)
+       connection.execute('SAVEPOINT native_grantor')
+       exposed=False;state=None
+       try:
+        if set_role:connection.execute('SET ROLE grantor_path')
+        connection.execute('GRANT grantable_storage TO consumer WITH SET TRUE')
+        if set_role:connection.execute('RESET ROLE')
+        connection.execute('SET ROLE grantable_storage')
+        exposed=len(connection.execute('SELECT installation_id FROM truss.catalog_runtime_installation').fetchall())==1
+        connection.execute('RESET ROLE')
+       except psycopg.Error as e:state=e.sqlstate
+       finally:
+        connection.execute('ROLLBACK TO SAVEPOINT native_grantor');connection.execute('RELEASE SAVEPOINT native_grantor')
+       self.assertEqual(exposed,inherit or set_role)
+       self.assertEqual(state,None if (inherit or set_role) else "XX000")
+       self.assertEqual(admitted,not (inherit or set_role))
+      finally:
+       self.admin.execute('REVOKE grantor_path FROM consumer')
+       self.admin.execute('DROP OWNED BY grantor_path,grantable_storage;DROP ROLE grantor_path,grantable_storage')
 
 if __name__=='__main__':unittest.main(verbosity=2)

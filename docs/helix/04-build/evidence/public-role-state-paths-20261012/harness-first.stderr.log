@@ -1,0 +1,48 @@
+test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) ... 
+  test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) (path='set_set') ... ERROR
+  test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) (path='set_inherit') ... FAIL
+  test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) (path='inherit_set') ... ERROR
+  test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) (path='dormant') ... ERROR
+
+======================================================================
+ERROR: test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) (path='set_set')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_object_read_native.py", line 148, in test_native_set_then_inherit_paths_and_nonreachable_mixed_paths
+    self.assertEqual(connection.execute('SELECT props FROM truss.object WHERE id=%s',(self.object_id,)).fetchone()[0],self.props)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.InsufficientPrivilege: permission denied for table object
+
+======================================================================
+ERROR: test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) (path='inherit_set')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_object_read_native.py", line 151, in test_native_set_then_inherit_paths_and_nonreachable_mixed_paths
+    self.assertIsInstance(result.value,ObjectFound)
+                          ^^^^^^^^^^^^
+AttributeError: 'Error' object has no attribute 'value'
+
+======================================================================
+ERROR: test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) (path='dormant')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_object_read_native.py", line 151, in test_native_set_then_inherit_paths_and_nonreachable_mixed_paths
+    self.assertIsInstance(result.value,ObjectFound)
+                          ^^^^^^^^^^^^
+AttributeError: 'Error' object has no attribute 'value'
+
+======================================================================
+FAIL: test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) (path='set_inherit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_object_read_native.py", line 146, in test_native_set_then_inherit_paths_and_nonreachable_mixed_paths
+    self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'42501')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: None != '42501'
+
+----------------------------------------------------------------------
+Ran 1 test in 7.232s
+
+FAILED (failures=1, errors=3)

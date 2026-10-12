@@ -18,7 +18,7 @@ function object(v: unknown, keys: string[]): Record<string, any> {
   return v as Record<string, any>;
 }
 function text(v: unknown): string {
-  if (typeof v !== 'string' || !v || v.includes('\0') || [...v].some(c => c.charCodeAt(0) >= 0xd800 && c.charCodeAt(0) <= 0xdfff)) return refuse();
+  if (typeof v !== 'string' || !v || v.includes('\0') || new TextDecoder('utf-8', {fatal: true}).decode(new TextEncoder().encode(v)) !== v) return refuse();
   return v;
 }
 function ref(v: unknown): string {
@@ -128,7 +128,8 @@ export function lowerSecurityRowPredicate(input: {
     const c = object(t.constant, ['field', 'domain', 'literal']); ref(c.field); const d = domain(c.domain);
     const literal = object(c.literal, [d]); if (Object.keys(literal).length !== 1) return refuse();
     if (d === 'boolean') { if (typeof literal.boolean !== 'boolean') return refuse(); return { sql: [literal.boolean ? 'TRUE' : 'FALSE'], domain: d }; }
-    const value = text(literal.string); if (value.length > 65536) return refuse();
+    const value = literal.string;
+    if (typeof value !== 'string' || value.includes('\0') || new TextDecoder('utf-8', {fatal: true}).decode(new TextEncoder().encode(value)) !== value || value.length > 65536) return refuse();
     return { sql: ["E'" + value.replaceAll('\\', '\\\\').replaceAll("'", "\\'") + "'::pg_catalog.text"], domain: d };
   };
   const expression = (v: unknown, vars: Map<number, Bound>, depth: number): string => {

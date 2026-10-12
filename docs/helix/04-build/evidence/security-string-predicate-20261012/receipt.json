@@ -1,0 +1,19 @@
+{
+  "base": "8983abb0753b1d79dcd8783ff48b53eca95b7380",
+  "gap": "Empty and valid astral string constants incorrectly used nonempty identifier validation; malformed UTF16 still refuses",
+  "source_pins": {
+    "packages/postgresql/src/security-predicate.ts": "f0a00c7bfbcc8b42bc7caa930f1d350cf3875a803ee3b2a819a879062adb5507",
+    "packages/postgresql/src/security-graph-source.ts": "c5732745038b27d0f7c54adead5e5c090a9855053161f720c0f962a7095cdc27",
+    "docs/helix/04-build/evidence/security-string-predicate-20261012/produce.ts": "681f9cc4368d1ec049b9fafbcb958997b61444f9489f6207080af1749abd1eed",
+    "docs/helix/04-build/evidence/security-string-predicate-20261012/native.py": "27254e255375f44eb666516cb74f8f62eab201d525aafb2735ce37b18e4b7e07",
+    "docs/helix/04-build/evidence/security-string-predicate-20261012/browser.ts": "db944c8fdde97c63b70bbeab29c853f11ebd6e8755cb1dab84105a9b4381e950",
+    "scripts/typecheck-security.ts": "43329c946306455836b16e31ca5a214f9cf19d24dac274502828143e9a7baf18"
+  },
+  "native": "PostgreSQL18.6 pgserver-pg18 18.6.1 psycopg3.3.6 binary",
+  "native_assertions": 8,
+  "browser": "153.0.8010.12",
+  "browser_bun_equal": true,
+  "invalid_native_text_controls": 3,
+  "generated_sql_sha256": "405d44edd32d7ed2e97e54eb4414fa02e1f7b625ce895a5355a33743a9f5ed23",
+  "limits": "Hand-authored logical IR expression-correctness fixture under excluded administrator. No original Weft source/IR admission, ordinary caller authentication, optional-domain support, native policy/profile, complete Unicode/collation refinement, or backend acceptance. Literal length limit remains65536 UTF16 code units."
+}

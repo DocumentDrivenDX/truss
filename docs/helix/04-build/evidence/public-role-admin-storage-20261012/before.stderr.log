@@ -1,0 +1,14 @@
+test_public_actor_refuses_admin_option_private_storage_escalation (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_admin_option_private_storage_escalation) ... FAIL
+
+======================================================================
+FAIL: test_public_actor_refuses_admin_option_private_storage_escalation (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_admin_option_private_storage_escalation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 687, in test_public_actor_refuses_admin_option_private_storage_escalation
+    self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='786d116b-f0ce-44e5-bda0-eed8e2aca734', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view', 'direct_read:scalar-object-id')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+----------------------------------------------------------------------
+Ran 1 test in 4.202s
+
+FAILED (failures=1)

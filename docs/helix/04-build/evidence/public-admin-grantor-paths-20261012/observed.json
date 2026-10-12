@@ -1,0 +1,30 @@
+[
+  {
+    "inherit": true,
+    "set": false,
+    "native_private_access": true,
+    "native_refusal_sqlstate": null,
+    "public_admitted": false
+  },
+  {
+    "inherit": false,
+    "set": true,
+    "native_private_access": true,
+    "native_refusal_sqlstate": null,
+    "public_admitted": false
+  },
+  {
+    "inherit": false,
+    "set": false,
+    "native_private_access": false,
+    "native_refusal_sqlstate": "XX000",
+    "public_admitted": true
+  },
+  {
+    "inherit": true,
+    "set": true,
+    "native_private_access": true,
+    "native_refusal_sqlstate": null,
+    "public_admitted": false
+  }
+]

@@ -1,0 +1,6 @@
+test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.147s
+
+OK

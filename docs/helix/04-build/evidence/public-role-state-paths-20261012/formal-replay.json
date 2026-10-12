@@ -1,0 +1,8 @@
+{
+  "closure.smt2": "unsat",
+  "dormant.smt2": "unsat",
+  "inherit_set.smt2": "unsat",
+  "mixed-countermodel.smt2": "sat",
+  "set_inherit.smt2": "unsat",
+  "set_set.smt2": "unsat"
+}
