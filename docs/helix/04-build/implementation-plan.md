@@ -6011,3 +6011,39 @@ completes without error; no independent cleanup packet or formal refinement is
 claimed. Trace CONTRACT-005 protected delegation, CONTRACT-063/STP-056
 B04/B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites. No original backend case
 is promoted; the full132-case security goal remains active.
+
+
+### Public inherited ADMIN grantor correspondence — 2026-10-12
+
+A native ordinary consumer with INHERIT TRUE/SET FALSE on grantor_path can use
+that inherited role's ADMIN option on grantable_storage, grant itself SET and
+read a private installation column. The previous SET/ADMIN-only active-role
+closure incorrectly admits the actor. The original four-path observational probe
+is retained as observation, not mislabeled as a failing regression assertion.
+
+The native guard now tracks `(active_oid,privilege_oid)` separately. INHERIT
+expands effective privilege/grantor scope, ADMIN upgrades the granted target to a
+future active state, and SET follows only the active role's own edges. Active
+states alone supply noninherited role attributes; native ACL probes retain actual
+inherited object rights. A switch/admin upgrade can replace the inherited node
+with the target active state without losing the tested authority reachability.
+The previous INHERIT→SET nonreachability and dormant controls remain admitted.
+
+All four native grantor paths are frozen in the public regression: inherited,
+SET-only and combined paths expose native private access and must refuse;
+dormant paths give no private access and public status stays available. The
+observed dormant native GRANT error is XX000 on selected18.6 and is preserved
+exactly, not fabricated as42501. Installation_id is not claimed secret business
+data. Complete native grantor/delegation/source-lifetime closure remains separate.
+
+`evidence/public-admin-grantor-paths-20261012/receipt.json` retains preimage,
+source archive/pins,58 passing source +58 installed-wheel tests and exact package
+correspondence. Python boundaries and all seven original UMF SQL round trips
+pass. PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary. Existing native
+unittest cleanup completes without error; no independent stop packet is claimed.
+Two Z3 4.15.4 queries replay fresh contexts: one UNSAT for compressed/full active
+state exposure over64 three-role linear assignments, one SAT preserving the old
+inherited-ADMIN countermodel. No arbitrary graph or native SQL refinement follows.
+Trace CONTRACT-005 delegation, CONTRACT-063/STP-056 B04/B05/B11/B12 and
+US-056 AC5/AC9/AC10 prerequisites. No original backend case is promoted;
+all132 acceptance cases remain required and full goal active.

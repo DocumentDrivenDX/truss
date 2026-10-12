@@ -1,0 +1,10 @@
+{
+  "z3": "4.15.4",
+  "linear_graph_assignments": 64,
+  "queries": {
+    "compressed-active-state-equivalence": "unsat",
+    "inherited-admin-missing-from-old-closure": "sat"
+  },
+  "fresh_replays": 2,
+  "limits": "Three-role linear model with native effective inherited ACLs and inherited ADMIN grantor behavior as premises. No arbitrary/cyclic graph, SQL/driver/source-currentness/delegation/lifetime refinement or backend qualification."
+}

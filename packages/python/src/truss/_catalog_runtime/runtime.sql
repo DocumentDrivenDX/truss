@@ -34,10 +34,13 @@ BEGIN
           coalesce(bool_or(role_oid IN (SELECT oid FROM pg_roles WHERE rolname IN
            ('pg_read_server_files','pg_write_server_files','pg_execute_server_program'))),false)
  INTO member_of_owner,member_of_registrar,member_of_server_capability FROM memberships;
- WITH RECURSIVE switchable(role_oid) AS (
-  SELECT actor.oid UNION
-  SELECT m.roleid FROM pg_auth_members m JOIN switchable s ON m.member=s.role_oid WHERE m.set_option OR m.admin_option
- ) SELECT EXISTS(SELECT 1 FROM switchable s JOIN pg_roles r ON r.oid=s.role_oid
+ WITH RECURSIVE role_states(active_oid,privilege_oid) AS (
+  SELECT actor.oid,actor.oid UNION
+  SELECT CASE WHEN m.admin_option OR (m.set_option AND s.active_oid=s.privilege_oid)
+              THEN m.roleid ELSE s.active_oid END,m.roleid
+  FROM pg_auth_members m JOIN role_states s ON m.member=s.privilege_oid
+  WHERE m.inherit_option OR m.admin_option OR (m.set_option AND s.active_oid=s.privilege_oid)
+ ) SELECT EXISTS(SELECT 1 FROM (SELECT DISTINCT active_oid FROM role_states) s JOIN pg_roles r ON r.oid=s.active_oid
    WHERE r.rolsuper OR r.rolcreaterole OR r.rolcreatedb OR r.rolreplication OR r.rolbypassrls
     OR has_schema_privilege(r.oid,'truss','CREATE')
     OR EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'
