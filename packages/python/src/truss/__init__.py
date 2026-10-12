@@ -1,11 +1,15 @@
 """Experimental Python components; complete Truss engine APIs are unfinished."""
 from .execution import ExecutionFailure, Ok, Error, Outcome, TransactionHandle, Isolation, AccessMode
 from .feed import FeedCursor, FeedPage, FeedConsumer, FeedAcknowledged, FeedUnavailable
+from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
+    NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability)
 from .local_runtime import LocalPostgres, LocalRuntimeError, RuntimeInfo
 
 __all__ = ["LocalPostgres", "LocalRuntimeError", "RuntimeInfo", "ExecutionFailure", "Ok", "Error", "Outcome",
            "TransactionHandle", "Isolation", "AccessMode"]
 __all__ += ["FeedCursor", "FeedPage", "FeedConsumer", "FeedAcknowledged", "FeedUnavailable"]
+__all__ += ["CapabilityAvailable", "NativeCatalogCapability", "NativeDirectReadCapability",
+            "NativeImportCapability", "NativeFeedCapability"]
 
 from .preparation import (CatalogDocument, DocumentInterpretation, PreparationProvenance,
                           PreparedAcceptance, PreparationRejected, prepare_acceptance)

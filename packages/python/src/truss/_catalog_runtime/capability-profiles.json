@@ -1,0 +1,58 @@
+{
+  "profiles": [
+    {
+      "name": "catalog",
+      "pin": {
+        "identity": "truss-native-catalog-capability",
+        "version": "0.1",
+        "sha256": "1140fcc6a9023db96acbd9bb66ee06b6254f19fae08c41188a5ff9351ec1180d"
+      },
+      "definition": "Native catalog capability/0.1: explicit original UMF preparation; current compatible acceptance and unchanged/historical retry; exact original reports; complete native catalog view; person-scoped module/source reads; caller-owned transaction; no administrative installation or module grants.",
+      "policyDefinition": "Native catalog policy/0.1: ordinary authenticated person; registrar membership for acceptance, original reports and complete catalog view; current module reader or writer for person-scoped catalog and accepted document reads; exact installed release; READ COMMITTED; no installation administration authority.",
+      "policyPin": {
+        "identity": "truss-native-catalog-policy",
+        "version": "0.1",
+        "sha256": "179811eea96539288c0540b22386c0b5e0d645fe5b2a048d083a82d8a6717388"
+      }
+    },
+    {
+      "name": "direct_read",
+      "pin": {
+        "identity": "truss-native-direct-read-capability",
+        "version": "0.1",
+        "sha256": "b8fb7e01d24f240a116fb9847a110f3b52fded9d0b51d3c790d4897e04647a2b"
+      },
+      "definition": "Native direct read capability/0.1: rootless exact scalar object identity/key/live pages; independent directed edge identity/relationship pages; authority receipt visibility; current document-qualified module authority; read-only READ COMMITTED supported; no structured ownership, general historical records or compiler execution.",
+      "policyDefinition": "Native direct-read policy/0.1: ordinary authenticated person; current document-qualified reader or writer for object, property, relationship and endpoint dependencies used by each supported read; no writer-only gate; READ COMMITTED and supported read-only transactions; exact installed release; no raw table privileges.",
+      "policyPin": {
+        "identity": "truss-native-direct-read-policy",
+        "version": "0.1",
+        "sha256": "a7d91b894bb1cf75b71f0a8ea25bf7b5f92499f2fa7ff274f7587395dd26798c"
+      }
+    },
+    {
+      "name": "import",
+      "pin": {
+        "identity": "truss-native-host-import-capability",
+        "version": "0.1",
+        "sha256": "03ee29199d83d1b365870092709fe75e5a2ddfed4f0530e7e9d68857e09ef42b"
+      },
+      "definition": "Native host-adopted import capability/0.1: immutable explicit original source documents; context and primary identity construction; per-record scalar object/independent edge import dispositions; original provenance and reservations; pending caller settlement; no engine-owned batches or verified commit."
+    },
+    {
+      "name": "feed",
+      "pin": {
+        "identity": "truss-native-caller-asserted-feed-capability",
+        "version": "0.1",
+        "sha256": "d0235dac42ebbcc552560a23eab588ee6fb34914f82519354227d1845911092d"
+      },
+      "definition": "Native caller-asserted feed capability/0.1: complete authority-database transactions below snapshot xmin; original catalog/report/configuration prerequisites; journal/source/reservation union; full historical module authority; ordinary-role full-prior source interval CAS ACK; caller asserts downstream durability; no verified application or retention release; no administration.",
+      "policyDefinition": "Native caller-asserted feed policy/0.1: ordinary authenticated person enrolled under the consumer role and fresh registration; current reader or writer authority for every module in historical source documents; complete source scope with no filtered sibling; authority database and READ COMMITTED; source-only expected-prior ACK; no downstream verifier or retention release.",
+      "policyPin": {
+        "identity": "truss-native-feed-policy",
+        "version": "0.1",
+        "sha256": "7df46533a28f3f396fd74e30f79d889c7349c1ec8def42552cc7b4e7f79119f5"
+      }
+    }
+  ]
+}

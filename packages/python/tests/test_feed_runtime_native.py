@@ -28,13 +28,17 @@ class FeedRuntimeTests(receipt_tests.ReceiptVisibilityTests):
         return self.consumer()
 
     def read_page(self,assembly,tx,**limits):
-        result=assembly.read_feed_in_transaction(tx,consumer_id='adapter',**limits)
+        provider=assembly.feed(assembly.feed_selection)
+        self.assertEqual(provider.status,'ok')
+        result=provider.capability.read_feed_in_transaction(tx,consumer_id='adapter',**limits)
         if not isinstance(result,Ok):self.fail(repr(result)+' '+str(assembly._host._custody.last_attempt.error))
         self.assertIsInstance(result.value,FeedPage)
         return result.value
 
     def ack(self,assembly,tx,page):
-        result=assembly.acknowledge_feed_in_transaction(tx,page)
+        provider=assembly.feed(assembly.feed_selection)
+        self.assertEqual(provider.status,'ok')
+        result=provider.capability.acknowledge_feed_in_transaction(tx,page)
         if not isinstance(result,Ok):self.fail(repr(result)+' '+str(assembly._host._custody.last_attempt.error))
         self.assertIsInstance(result.value,FeedAcknowledged)
         return result.value
