@@ -41,3 +41,23 @@ PG-05 forces failure after authority effects and around generation/commit acknow
 PG-06 tests no-op delta, generation maximum, owner-union change and lock-order inversion. No wrap/reset, stale union or acquisition of an earlier lock after the guard is allowed.
 
 These tests remain not_run. Native locking, current observation, bounded inventory/resource admission, exact types/security/grants and deployment behavior require selected profiles and actual evidence. The guard supplies exclusion, not authorization or semantic equality by itself.
+
+
+## Native proposal-source precursor — 2026-10-12
+
+The actual three SQL files above now run in the public-created graph fixture on
+PostgreSQL18.6. Native acquisition returns exact actual installation identity
+bytes, fixture-profile bytes and generation1. A participating role changer waits
+on the original share guard while an ordinary buffered read finishes, then
+commits its role effect and checked generation2 together. Controlled restoration
+advances3 without reset. A stale expected generation returns zero rows, and
+rollback preserves both role flags and generation3. Source pins and88 total
+ontology observations are retained in
+`../../04-build/evidence/security-proposed-authority-guard-native-20261012/receipt.json`.
+
+This is partial PG-02/03/05 feasibility, not their complete qualification. The
+table is added as a standalone test extension after public installation; verified
+bootstrap, protected routine/privilege parity, complete native authority-delta
+comparison, all control-plane participants and coordinator lease/release remain
+unimplemented. The proposed profile stays unadopted. Unmediated administration
+can still bypass this cooperative guard and invalidate qualification.

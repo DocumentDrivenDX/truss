@@ -194,6 +194,41 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    control.execute('ALTER ROLE alice NOBYPASSRLS');self.admin.rollback()
   with psycopg.connect(**params,autocommit=True) as restored_reader:
    actual=[r[0] for r in restored_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-native-caller-authority-original-vector','observed':actual})
+  # Exercise the existing installation-wide authority guard's original SQL.
+  contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'
+  self.admin.execute((contracts/'installation-policy-guard-v0.1.proposal.sql').read_text())
+  installation_bytes=self.admin.execute('SELECT installation_id::text FROM truss.catalog_runtime_installation').fetchone()[0].encode();profile_bytes=b'ontology-authority-guard-fixture/0.1'
+  self.admin.execute('INSERT INTO truss.policy_generation_guard VALUES(1,%s,%s,1)',(installation_bytes,profile_bytes))
+  acquire=(contracts/'installation-policy-guard-acquire-v0.1.proposal.sql').read_text()
+  advance=(contracts/'installation-policy-generation-advance-v0.1.proposal.sql').read_text()
+  for ordinal in [1,2,3]:advance=advance.replace('$'+str(ordinal),'%s')
+  authority_writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(authority_writer.close)
+  authority_pid=authority_writer.execute('SELECT pg_backend_pid()').fetchone()[0];authority_errors=[];advanced=[]
+  def controlled_role_change():
+   try:
+    authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('ALTER ROLE alice BYPASSRLS');rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,1)).fetchall()
+    if rows!=[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]:raise ValueError('Original generation advance refused')
+    advanced.extend(rows);authority_writer.execute('COMMIT')
+   except Exception as exc:authority_errors.append(type(exc).__name__);authority_writer.rollback()
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();captured=self.admin.execute(acquire).fetchall();self.assertEqual(captured,[('1',installation_bytes.hex(),profile_bytes.hex(),'1')]);observations.append({'id':'original-proposed-guard-acquisition','observed':[list(row) for row in captured]})
+  holder_pid=self.admin.execute('SELECT pg_backend_pid()').fetchone()[0];authority_thread=threading.Thread(target=controlled_role_change);authority_thread.start()
+  try:
+   deadline=time.monotonic()+5;blockers=[]
+   while time.monotonic()<deadline:
+    blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(authority_pid,)).fetchone()[0]
+    if holder_pid in blockers:break
+    time.sleep(.01)
+   self.assertIn(holder_pid,blockers);observations.append({'id':'participating-native-role-changer-waits-on-authority-guard','blockerPid':holder_pid,'observed':blockers})
+   with psycopg.connect(**params,autocommit=True) as admitted_fixture_reader:
+    actual=[r[0] for r in admitted_fixture_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);self.assertTrue(authority_thread.is_alive());observations.append({'id':'guarded-buffered-result-before-authority-change','observed':actual})
+  finally:self.admin.rollback();authority_thread.join(12)
+  self.assertFalse(authority_thread.is_alive());self.assertEqual(authority_errors,[]);self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]);observations.append({'id':'controlled-role-effect-and-generation-advance-commit','observed':[list(row) for row in advanced]})
+  fresh_guard=self.admin.execute(acquire).fetchall();self.assertEqual(fresh_guard,[('1',installation_bytes.hex(),profile_bytes.hex(),'2')]);observations.append({'id':'next-authority-observation-sees-new-generation','observed':[list(row) for row in fresh_guard]})
+  flags=self.admin.execute("SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname='alice'").fetchone();self.assertEqual(flags,(False,True));observations.append({'id':'new-generation-requires-original-caller-bypass-exclusion','observed':list(flags),'qualification':'new generation is not authorization'})
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('ALTER ROLE alice NOBYPASSRLS');restored_generation=authority_writer.execute(advance,(installation_bytes,profile_bytes,2)).fetchall();self.assertEqual(restored_generation,[('1',installation_bytes.hex(),profile_bytes.hex(),'3')]);authority_writer.execute('COMMIT');observations.append({'id':'controlled-restoration-preserves-generation-continuity','observed':[list(row) for row in restored_generation]})
+  authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('ALTER ROLE alice BYPASSRLS')
+  stale=authority_writer.execute(advance,(installation_bytes,profile_bytes,2)).fetchall();self.assertEqual(stale,[]);observations.append({'id':'stale-expected-generation-refuses-advance','observed':stale});authority_writer.rollback()
+  flags=self.admin.execute("SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname='alice'").fetchone();generation=self.admin.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone()[0];self.assertEqual(flags,(False,False));self.assertEqual(generation,'3');observations.append({'id':'failed-controlled-delta-rolls-back-role-and-generation','observed':{'flags':list(flags),'generation':generation}})
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']).write_text(json.dumps({'packet':packet,'sql':sql,'observations':observations,'publicCreatedIdentities':{alias:{'id':identity.id,'typeId':identity.type_id} for alias,identity in aliases.items()},'scope':'Actual public-created objects/edges, typed native joins to business keys and candidate typed Record/opaque Relationship membership lowering under ordinary native RLS. Private views are real graph projections, not seeded flat tables. Not complete source enrollment, held authority or released public API/security compiler admission.'},indent=2)+'\n')
 if __name__=='__main__':
  import unittest;unittest.main()

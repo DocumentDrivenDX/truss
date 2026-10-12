@@ -6529,3 +6529,19 @@ a complete authority protocol. Enroll and exclude all relevant control-plane
 changes under the existing coordinator, or refuse the profile; preserve original
 native caller/inventory checks and deny unguarded direct paths. No admitted
 identity/profile or original backend case is promoted.
+
+
+### Existing proposed authority guard native realization — 2026-10-12
+
+The real graph regression now exercises original installation-policy-guard table,
+acquisition and checked advance SQL. Exact actual installation bytes/fixture
+profile/generation1 are captured. Participating role change waits on share guard
+through buffered read, then commits role effect and generation2; restoration
+advances3. Stale expected2 fails and rollback retains original role/generation.
+Eighty-eight observations and Python boundaries723imports pass. Evidence:
+`evidence/security-proposed-authority-guard-native-20261012/receipt.json`.
+Trace CONTRACT-005/063, existing guard PG-02/03/05 and STP-057 L03/L13/L12.
+This adopts no new profile or ready marker: verified bootstrap, full effective
+authority parity/participants, original source/caller lease/liveness and guarded
+publication/recovery remain unimplemented. Unmediated administrative changes
+still invalidate qualification; no original backend case is promoted.

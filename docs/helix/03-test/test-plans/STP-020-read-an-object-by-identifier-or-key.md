@@ -549,3 +549,13 @@ Seventy-nine fixture observations pass in
 `../../04-build/evidence/security-control-plane-exclusion-gap-20261012/receipt.json`.
 Shared STP-056 B05/B11 and STP-057 L03/L13 require actual enrolled control-plane
 and final-release integration, not this intentionally unguarded counterexample.
+
+
+Existing authority-guard SQL precursor now uses the original table/acquisition/
+advance statements from installation-policy-guard.proposal.md. Assert original
+identity/profile/generation1, native role-changer blocking, buffered result before
+release, effect plus generation2 commit, restoration3 and stale-generation zero
+advance with original role/generation rollback. Eighty-eight observations pass
+in `../../04-build/evidence/security-proposed-authority-guard-native-20261012/receipt.json`.
+Full PG-01..06, complete participant/delta parity and original runtime/coordinator
+source/caller/release custody remain required; this does not adopt the profile.
