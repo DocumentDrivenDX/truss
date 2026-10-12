@@ -1,0 +1,39 @@
+{
+  "z3": "4.15.4",
+  "truthDomain": "0=False,1=True,2=Unknown",
+  "observations": [
+    {
+      "id": "actual-row-policy-excludes-denied-values",
+      "expected": "unsat",
+      "observed": "unsat",
+      "formula": "(declare-fun actual () Int)\n(declare-fun asserted () Int)\n(assert (>= actual 0))\n(assert (<= actual 2))\n(assert (>= asserted 0))\n(assert (<= asserted 2))\n(assert (= actual 1))\n(assert (= asserted 1))\n(assert (distinct actual 1))\n"
+    },
+    {
+      "id": "asserted-predicate-alone-can-lie",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "(declare-fun asserted () Int)\n(declare-fun actual () Int)\n(assert (>= actual 0))\n(assert (<= actual 2))\n(assert (>= asserted 0))\n(assert (<= asserted 2))\n(assert (= asserted 1))\n(assert (= actual 0))\n(model-add asserted () Int 1)\n(model-add actual () Int 0)\n",
+      "witness": {
+        "actual": "0",
+        "asserted": "1"
+      }
+    },
+    {
+      "id": "wrong-argument-binding-can-broaden-access",
+      "expected": "sat",
+      "observed": "sat",
+      "formula": "(declare-fun asserted () Int)\n(declare-fun actual () Int)\n(assert (>= actual 0))\n(assert (<= actual 2))\n(assert (>= asserted 0))\n(assert (<= asserted 2))\n(assert (= asserted 1))\n(assert (= actual 2))\n(model-add asserted () Int 1)\n(model-add actual () Int 2)\n",
+      "witness": {
+        "actual": "2",
+        "asserted": "1"
+      }
+    }
+  ],
+  "sourcePins": {
+    "/private/tmp/truss-security-main-integration/packages/postgresql/src/security-predicate.ts": "c38f289ddc9d6751e633f63e5b865e9b6dd011b8a000e65995f2b309b765c0aa",
+    "/private/tmp/truss-resource-param-native-20261012/sql.json": "ffc6e1ab6b072b0426ef90930f0b160761a4be26d6d7d7a04dae5f83e957e80e",
+    "/private/tmp/truss-resource-param-native-20261012/rls.py": "da2edb3c0390ee592fd24f35eb08f93b7a25a20c46edb98d46882c46befc7bf8",
+    "/private/tmp/truss-resource-param-native-20261012/prove.py": "f8e41812663e8fcfa2913a851d8df1972387f67c1744d965d8b0f3708d357e79"
+  },
+  "scope": "Conditional row-binding implication plus concrete widening witnesses; native SQL/function/source authenticity and general Rust/TS refinement are not proved"
+}

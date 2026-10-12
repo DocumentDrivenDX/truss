@@ -1,0 +1,33 @@
+{
+  "baseCommit": "13a3ad85170d4365d41ac593bfb5266110298e78",
+  "postgres": "18.6",
+  "z3": "4.15.4",
+  "nativeObservations": 8,
+  "formalChecks": 3,
+  "sourcePin": {
+    "packages/postgresql/src/security-predicate.ts": "c38f289ddc9d6751e633f63e5b865e9b6dd011b8a000e65995f2b309b765c0aa"
+  },
+  "scope": "Synthetic ordinary-role raw-table RLS argument route plus conditional finite Boolean/Unknown implication. No compiler-owned source/binding/row authenticity or complete security profile.",
+  "controls": [
+    "ordinary actual session/current role and PID",
+    "eligible list and count only",
+    "denied key stays hidden",
+    "direct forged predicate deliberately returns true",
+    "outer forged condition cannot bypass actual-row RLS",
+    "new statement observes stored attribute change",
+    "excluded admin reads all resources"
+  ],
+  "limits": [
+    "Local fixture connection profile is not production authentication.",
+    "No native source/cut/privacy/authority lifetime proof or general SQL/TS refinement.",
+    "No independent native stop receipt; runtime context exits without error.",
+    "No original backend case promoted."
+  ],
+  "artifacts": {
+    "rls.json": "0566a10f30e81e68710d88b5414f67e54ea3a954114b0eb582c54db94115ab4f",
+    "sql.json": "ffc6e1ab6b072b0426ef90930f0b160761a4be26d6d7d7a04dae5f83e957e80e",
+    "prove.py": "f8e41812663e8fcfa2913a851d8df1972387f67c1744d965d8b0f3708d357e79",
+    "formal.json": "ff466e7f3fed8c8e9327f5f028b85f3ecab2a52bf5855f7d541917601c241f3e",
+    "rls.py": "da2edb3c0390ee592fd24f35eb08f93b7a25a20c46edb98d46882c46befc7bf8"
+  }
+}
