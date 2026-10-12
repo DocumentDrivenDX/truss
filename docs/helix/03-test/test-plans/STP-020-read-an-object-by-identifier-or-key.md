@@ -656,3 +656,51 @@ conditional model, not arbitrary-world equivalence or SQL/compiler/native codec
 refinement. Native original mapping, complete population, caller, coherent cut,
 authority and final-release premises remain independently required. No backend
 case or production admission is promoted.
+
+
+### Native constant-transformed field disclosure — 2026-10-12
+
+Resource now has a required String secret in both physical fixtures. After the
+row-only phase, explicit mask activation revokes ordinary raw graph props and
+raw secret column access, and exposes narrow native functions consuming actual
+candidate disclosure output. Eligible callers receive MASKED plus the complete
+constant0.1.0 transformed disposition; native filters use that disclosed value.
+Canonical raw-RA remains unchanged in both stores. The fixture passes148 native
+observations,27 candidate tests, strict producer typing and Python boundaries723.
+Evidence: `docs/helix/04-build/evidence/security-native-constant-disclosure-20261012/receipt.json`.
+Trace CONTRACT-062/063 / US-056-AC6 / STP-056 B07/B08. This is a required
+nonnull String/constant transform physical subset. It does not implement original
+null/absence/withholding, arbitrary transforms, conflict activation, authenticated
+policy/source/callable closure or public driver release. Native disclosed-value
+behavior does not qualify compiler source query-use admission, prohibited/withheld
+operators or separate original-authorized actions. No full backend case is promoted.
+
+
+### Native value-free withholding surface — 2026-10-12
+
+Candidate withheld disclosure now drives raw/graph native read functions that
+return qualified Resource-secret field/disposition metadata with no secret value
+column. Original membership vectors remain; field operators have no carrier
+(42703) and the prior transformed-value endpoints are revoked(42501). Raw bag/
+column grants remain revoked. The combined fixture passes166 observations,
+strict producer typing and Python boundaries733imports. Evidence:
+`docs/helix/04-build/evidence/security-native-withholding-20261012/receipt.json`.
+Trace CONTRACT-062/063 / US-056-AC6 / STP-056 B07/B08. This is native withholding
+for required nonnull String values. Original null/absence, source compiler
+query-use, conflict activation, full wire/trace privacy and feed/history/source/
+authority/publication remain separately required. No backend case is promoted.
+
+
+### Native conflicting-disclosure prepublication refusal — 2026-10-12
+
+Two scope-matching incompatible constant transforms now execute as private raw/
+graph candidates and return conflict with empty disclosure. Fixture publication
+is refused; rollback leaves no candidate routine and preserves the original
+withholding body's exact definition, owner and ACL. Ordinary Alice still receives
+RA/RAB with qualified withheld metadata. The combined regression passes174
+observations, strict producer typing and Python boundaries733imports. Evidence:
+`docs/helix/04-build/evidence/security-native-disclosure-conflict-20261012/receipt.json`.
+Trace CONTRACT-062/063 / US-056-AC6/7 / STP-056 B07/B09 / STP-057 L12.
+This is fixture prepublication conflict/rollback feasibility, not authenticated
+production installer, commit-uncertainty recovery or full source/authority/
+publication admission. No original backend case is promoted.

@@ -1,5 +1,5 @@
 import {createCandidateGraphSource} from '../../packages/postgresql/src/security-graph-source';
-import {lowerCandidateSecurityRuleFold,type CandidateConditionScan} from '../../packages/postgresql/src/security-candidate-condition';
+import {lowerCandidateSecurityRuleFold,lowerCandidateSecurityDisclosure,type CandidateConditionScan} from '../../packages/postgresql/src/security-candidate-condition';
 const packet=await Bun.stdin.json();const ref=(elementId:string)=>({documentId:'adoc',moduleId:'m',elementId});
 const objects:Record<string,ReturnType<typeof createCandidateGraphSource>>={};
 for(const [name,raw] of Object.entries(packet.records) as [string,any][])objects[name]=createCandidateGraphSource({kind:'object',typeId:raw.typeId,propertyOwnerTypeId:raw.typeId,fields:Object.entries(raw.fields).map(([column,f]:[string,any])=>({propertyId:f.id,column,scalar:f.scalar}))});
@@ -27,4 +27,16 @@ for(const name of ['staff_assignment','assignment_project','resource_project']){
 const fold=lowerCandidateSecurityRuleFold({rules:[{id:'membership',effect:'permit',actions:['read'],target:ref('Resource'),disclosure:[],condition}],action:'read',target:ref('Resource'),scans,resource:{target:ref('Resource'),keyId:'pk',keyFields:[ref('Resource-code')],parameters:[1]},subject:{target:ref('Staff'),keyId:'pk',keyFields:[ref('Staff-code')],parameters:[2]}});
 const predicateSql='('+fold.sql+') OPERATOR(pg_catalog.=) '+"E'permit'::pg_catalog.text";
 const flatFold=lowerCandidateSecurityRuleFold({rules:[{id:'membership',effect:'permit',actions:['read'],target:ref('Resource'),disclosure:[],condition}],action:'read',target:ref('Resource'),scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}})),resource:{target:ref('Resource'),keyId:'pk',keyFields:[ref('Resource-code')],parameters:[1]},subject:{target:ref('Staff'),keyId:'pk',keyFields:[ref('Staff-code')],parameters:[2]}});
-console.log(JSON.stringify({objects,edges,predicateSql,condition,scans,fold,flatFold}));
+const stringDomain={scalarType:'string',nullability:'required',cardinality:'one',facets:{},allowedValues:null};
+const mask={transformed:{transform:'constant',version:'0.1.0',outputField:ref('Resource-secret'),domain:stringDomain,literal:{string:'MASKED'}}};
+const disclosureInput={rules:[{id:'membership',effect:'permit',actions:['read'],target:ref('Resource'),disclosure:[[ref('Resource-secret'),mask]],condition}],action:'read',target:ref('Resource'),scans,resource:{target:ref('Resource'),keyId:'pk',keyFields:[ref('Resource-code')],parameters:[1]},subject:{target:ref('Staff'),keyId:'pk',keyFields:[ref('Staff-code')],parameters:[2]},fields:[{owner:ref('Resource'),field:ref('Resource-code'),domain:stringDomain,protection:'unprotected' as const},{owner:ref('Resource'),field:ref('Resource-secret'),domain:stringDomain,protection:'protected' as const},{owner:ref('Assignment'),field:ref('Assignment-active'),domain,protection:'unprotected' as const}],outputFields:[ref('Resource-code'),ref('Resource-secret')]};
+const graphDisclosure=lowerCandidateSecurityDisclosure(disclosureInput);
+const flatDisclosure=lowerCandidateSecurityDisclosure({...disclosureInput,scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}}))});
+const withheldInput={...disclosureInput,rules:disclosureInput.rules.map(rule=>({...rule,disclosure:[[ref('Resource-secret'),'withheld']]}))};
+const graphWithheld=lowerCandidateSecurityDisclosure(withheldInput);
+const flatWithheld=lowerCandidateSecurityDisclosure({...withheldInput,scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}}))});
+const incompatible={transformed:{...mask.transformed,literal:{string:'OTHER'}}};
+const conflictInput={...disclosureInput,rules:[...disclosureInput.rules,{...disclosureInput.rules[0]!,id:'incompatible',disclosure:[[ref('Resource-secret'),incompatible]]}]};
+const graphConflict=lowerCandidateSecurityDisclosure(conflictInput);
+const flatConflict=lowerCandidateSecurityDisclosure({...conflictInput,scans:scans.map(scan=>({...scan,home:{schema:'relational_fixture',table:(scan.home as {table:string}).table}}))});
+console.log(JSON.stringify({objects,edges,predicateSql,condition,scans,fold,flatFold,graphDisclosure,flatDisclosure,graphWithheld,flatWithheld,graphConflict,flatConflict}));
