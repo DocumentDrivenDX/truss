@@ -46,7 +46,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
-'mutationProfile',jsonb_build_object('identity','truss-rootless-string-create','version','0.3','sha256','b75b29e082384623671cae3b880fa195c082ae87e70b2630e4fd6c70fb07e730'),
+'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-objects','version','0.1','sha256','46473c65138e656efbf85ac3e532a288df9693a58624f89bfef0db7d77c928a9'),
 'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.2','sha256','5e6a7f879e17066a8ffdeb8731da89906f0e5cb231e4b4357bd4fbea0158163f'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),
@@ -188,6 +188,16 @@ BEGIN
  IF group_row.writer_xid<>pg_current_xact_id() OR group_row.actor_name<>session_user::text OR group_row.actor_oid IS DISTINCT FROM (SELECT oid FROM pg_roles WHERE rolname=session_user) THEN
   RAISE EXCEPTION 'current actual group member required' USING ERRCODE='55000'; END IF;
  expected:=group_row.expected_members->member.operation_index;
+ IF EXISTS(SELECT 1 FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) THEN
+  PERFORM truss.runtime_object_validate(selected_id,selected_type);
+  SELECT to_jsonb(j) INTO actual_journal FROM truss.journal j WHERE j.at=(expected->'journal'->>'at')::timestamptz AND j.seq=(expected->'journal'->>'seq')::bigint;
+  IF actual_journal IS DISTINCT FROM expected->'journal' THEN RAISE EXCEPTION 'original creation journal required' USING ERRCODE='55000';END IF;
+  FOR key_expected IN SELECT value FROM jsonb_array_elements(expected->'keys') LOOP
+   SELECT to_jsonb(r) INTO actual_reservation FROM truss.object_key_reservation_bucket r WHERE storage_row_id=(key_expected->'reservation'->>'storage_row_id')::bigint;
+   IF actual_reservation IS DISTINCT FROM key_expected->'reservation' THEN RAISE EXCEPTION 'original creation reservation required' USING ERRCODE='55000';END IF;
+  END LOOP;
+  RETURN;
+ END IF;
  IF (expected->'object'->>'id')::bigint<>selected_id OR (expected->'object'->>'type_id')::int<>selected_type THEN
   RAISE EXCEPTION 'exact operation member required' USING ERRCODE='55000'; END IF;
  SELECT to_jsonb(o) INTO actual_object FROM truss.object o WHERE id=selected_id AND type_id=selected_type;
@@ -230,9 +240,9 @@ BEGIN
  END IF;
  IF (SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb)
      FROM truss.journal j WHERE j.xid=group_row.writer_xid)
- IS DISTINCT FROM (SELECT coalesce(jsonb_agg(e.value->'journal' ORDER BY (e.value->'journal'->>'at')::timestamptz,(e.value->'journal'->>'seq')::bigint),'[]'::jsonb)
-     FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e(value)
-     WHERE g.writer_xid=group_row.writer_xid) THEN
+ IS DISTINCT FROM (SELECT coalesce(jsonb_agg(e.value ORDER BY (e.value->>'at')::timestamptz,(e.value->>'seq')::bigint),'[]'::jsonb) FROM (
+     SELECT e.value->'journal' AS value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e(value) WHERE g.writer_xid=group_row.writer_xid
+     UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid) e) THEN
   RAISE EXCEPTION 'complete transaction create journal required' USING ERRCODE='55000'; END IF;
  FOR member IN SELECT * FROM truss.runtime_create_member WHERE group_id=selected_group ORDER BY operation_index LOOP
   entry:=semantic->'results'->member.operation_index;

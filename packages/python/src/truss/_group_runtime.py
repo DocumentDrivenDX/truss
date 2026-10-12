@@ -5,11 +5,11 @@ import base64
 import json
 from .contracts import ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, TextValue, NullValue, BooleanValue
 from .execution import Ok, Error, Outcome
-from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, RootlessOwnership,
+from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, UpdateObject, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership,
     RequestNone, RequestPresent, RequestIdentity, GroupSuccess, GroupFailed, GroupUnavailable,
     InvalidGroupInput, RequestConflict, GroupOperationFailure, AppliedPending, SameTransactionReplay,
     CommittedReceiptReplay, SameTransactionReplayEvidence, CommittedReceiptReplayEvidence,
-    Created, AliasIdentity, JournalEventReference)
+    Created, Changed, Unchanged, Deleted, DeletedIdentity, AliasIdentity, JournalEventReference)
 from .preparation import CatalogDocument
 from ._umf_key_tuples import KeyTupleRequest, encode_string_key_tuples
 
@@ -66,10 +66,18 @@ def _identity(value):
 def _semantic(value):
     results=[]
     for entry in value['results']:
-        if entry['outcome']!='created' or entry['operation']!='create_object':raise ValueError('Selected native create result required')
         events=tuple(JournalEventReference(source_epoch=e['sourceEpoch'],history_profile=e['historyProfile'],xid=e['xid'],seq=e['seq']) for e in entry['events'])
-        results.append(Created(operation='create_object',identity=_identity(entry['identity']),version=entry['version'],
-            events=events,alias=entry.get('alias',ABSENT)))
+        identity=_identity(entry['identity'])
+        if entry['outcome']=='created' and entry['operation']=='create_object':
+            results.append(Created(operation='create_object',identity=identity,version=entry['version'],events=events,alias=entry.get('alias',ABSENT)))
+        elif entry['outcome']=='changed' and entry['operation']=='update_object':
+            results.append(Changed(operation='update_object',identity=identity,version=entry['version'],events=events))
+        elif entry['outcome']=='unchanged' and entry['operation']=='update_object' and not events:
+            results.append(Unchanged(operation='update_object',identity=identity,version=entry['version']))
+        elif entry['outcome']=='deleted' and entry['operation']=='delete_object':
+            results.append(Deleted(operation='delete_object',identity=identity,deletion_version=entry['deletionVersion'],
+                deleted=tuple(DeletedIdentity(identity=_identity(v['identity']),deletion_version=v['deletionVersion']) for v in entry['deleted']),events=events))
+        else:raise ValueError('Selected native object result required')
     return GroupSemanticResult(executed_catalog_revision=value['executedCatalogRevision'],
         layout_profile=ProfilePin(**value['layoutProfile']),mutation_profile=ProfilePin(**value['mutationProfile']),results=tuple(results),
         aliases=tuple(AliasIdentity(alias=a['alias'],identity=_identity(a['identity'])) for a in value['aliases']))
@@ -111,13 +119,13 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     if type(input) is not GroupSemanticInput or type(request) not in (RequestNone,RequestPresent):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"shape"}'))))
     if (type(input.catalog) is not CurrentCatalog or type(input.asserted_origin) is not MapValue
-        or any(type(op) is not CreateObject or type(op.ownership) is not RootlessOwnership for op in input.operations)):
+        or any(not (type(op) is CreateObject and type(op.ownership) is RootlessOwnership or type(op) is UpdateObject and op.ownership_change is ABSENT and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) is Delete and op.operation=='delete_object' and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
         return Ok(GroupUnavailable(reason='profile'))
-    if not 1<=len(input.operations)<=128 or any(len(op.values)>1024 for op in input.operations):
+    if not 1<=len(input.operations)<=128 or any(len(op.values if type(op) is CreateObject else op.set if type(op) is UpdateObject else ())>1024 for op in input.operations):
         return Ok(GroupUnavailable(reason='resource'))
     def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
     def origin_scalar(value):return type(value) is NullValue or (type(value) is TextValue and value.kind=='string')
-    if any(not scalar(v.value) for op in input.operations for v in op.values) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
+    if any(not scalar(v.value) for op in input.operations for v in (op.values if type(op) is CreateObject else op.set if type(op) is UpdateObject else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
         return Ok(GroupUnavailable(reason='profile'))
     if type(documents) is not tuple or not 1<=len(documents)<=512 or any(type(d) is not CatalogDocument or type(d.document_id) is not str or type(d.content) is not bytes for d in documents):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"original_documents"}'))))
@@ -131,38 +139,42 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     if len(original_input)>1048576 or len(original_request)>65536 or len(original_documents)>4194304:
         return Ok(GroupUnavailable(reason='resource'))
     sources={d.document_id:d.content for d in documents}
+    operation_index=[0]
     def apply(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.group_create_metadata(%s,%s,%s,%s)',
-            (original_input,original_documents,manifest['releaseId'],digest),prepare=False)
-        metadata=json.loads(bytes(cursor.fetchone()[0]));encoded_keys=[]
-        for document_id in sorted({entry['documentId'] for entry in metadata}):
-            requests=[];addresses=[]
-            for entry in metadata:
-                if entry['documentId']!=document_id:continue
-                operation=input.operations[entry['operationIndex']]
-                values={v.name:v.value for v in operation.values}
-                for key in entry['keys']:
-                    if any(name not in values or type(values[name]) is not TextValue or values[name].kind!='string' for name in key['names']):
-                        # Native semantic validation returns the precise group failure;
-                        # omit this key rather than inventing a carrier or default.
-                        continue
-                    requests.append(KeyTupleRequest(entry['moduleId'],entry['recordId'],key['keyId'],tuple(values[name].text for name in key['names'])))
-                    addresses.append((entry['operationIndex'],key['keyNumber']))
+        cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s)',
+            (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
+        begin=json.loads(bytes(cursor.fetchone()[0]))
+        if begin['outcome']!='execute':return _result(_bytes(begin))
+        attempt_id=begin['attemptId']
+        for index,operation in enumerate(input.operations):
+            operation_index[0]=index
+            cursor.execute('SELECT truss.object_group_metadata(%s::uuid,%s)',(attempt_id,index),prepare=False)
+            metadata=json.loads(bytes(cursor.fetchone()[0]));encoded_keys=[];requests=[];addresses=[]
+            values={v['name']:v['value'] for v in metadata['values']}
+            for key in metadata['keys']:
+                if any(name not in values or values[name].get('kind')!='string' for name in key['names']):continue
+                requests.append(KeyTupleRequest(metadata['moduleId'],metadata['recordId'],key['keyId'],tuple(values[name]['text'] for name in key['names'])))
+                addresses.append(key['keyNumber'])
             if requests:
-                originals=encode_string_key_tuples(sources[document_id],tuple(requests),bun_executable=bun_executable)
+                originals=encode_string_key_tuples(sources[metadata['documentId']],tuple(requests),bun_executable=bun_executable)
                 for address,original in zip(addresses,originals):
-                    encoded_keys.append({'operationIndex':str(address[0]),'keyNumber':address[1],
-                        'tupleHex':original.tuple_bytes.hex(),'receiptBase64':base64.b64encode(original.original_receipt_bytes).decode('ascii')})
-        original_keys=_bytes(encoded_keys)
-        if len(original_keys)>8388608:return GroupUnavailable(reason='resource')
-        cursor.execute('SELECT truss.apply_create_group(%s,%s,%s,%s,%s,%s)',
-            (original_input,original_documents,original_keys,original_request,manifest['releaseId'],digest),prepare=False)
+                    encoded_keys.append({'operationIndex':'0','keyNumber':address,'tupleHex':original.tuple_bytes.hex(),
+                        'receiptBase64':base64.b64encode(original.original_receipt_bytes).decode('ascii')})
+            original_keys=_bytes(encoded_keys)
+            if len(original_keys)>8388608:raise ValueError('Bounded original key inventory required')
+            cursor.execute('SELECT truss.object_group_step(%s::uuid,%s,%s)',(attempt_id,index,original_keys),prepare=False)
+            cursor.fetchone()
+        cursor.execute('SELECT truss.object_group_finish(%s::uuid)',(attempt_id,),prepare=False)
         return _result(bytes(cursor.fetchone()[0]))
     result=host._run_operation(transaction,apply)
     if isinstance(result,Error) and result.error.code=='execution_obligation':
-        reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
+        state=result.error.sql_state
+        reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(state)
         if reason:return Ok(GroupUnavailable(reason=reason))
+        if state in ('22023','23505','P1001','P1003','P1004','P1005'):
+            code={'P1001':'request_conflict','P1003':'expected_version','P1004':'not_found','P1005':'dependencies','23505':'key_conflict','22023':'invalid_input'}[state]
+            return Ok(_result(_bytes({'outcome':'failed','code':code,'operationIndex':str(operation_index[0]),'nativeState':state})))
     return result
 
 # A real selected provider; native readiness and authority are checked per call.

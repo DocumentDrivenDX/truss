@@ -132,7 +132,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -441,7 +441,7 @@ class CatalogReferenceAssembly:
                 for role in (grant.reader_role,grant.writer_role):
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_context(text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_type_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
-                for signature in ('group_create_metadata(bytea,bytea,text,text)','apply_create_group(bytea,bytea,bytea,bytea,text,text)'):
+                for signature in ('group_create_metadata(bytea,bytea,text,text)','apply_create_group(bytea,bytea,bytea,bytea,text,text)','object_group_begin(bytea,bytea,bytea,text,text)','object_group_metadata(uuid,int)','object_group_step(uuid,int,bytea)','object_group_finish(uuid)'):
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(grant.writer_role)),prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')

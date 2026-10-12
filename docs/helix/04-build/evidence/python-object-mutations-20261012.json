@@ -1,0 +1,25 @@
+{
+  "scope": "public rootless scalar create/update/delete and ordered mixed batches",
+  "runtime": "0.14 candidate",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "134c76b2686b4b28d4626ee15d359a0d864b0a4ccc010892e9475c32e57117b2",
+  "basicTests": {
+    "module": "test_object_mutations_native",
+    "sourcePassed": 2,
+    "sourceElapsedSeconds": 10.369,
+    "installedPassed": 2,
+    "installedElapsedSeconds": 18.699
+  },
+  "workflows": [
+    "register/create/commit/update/read, exact no-op and expected-version refusal",
+    "caller rollback of real dry-run update",
+    "delete/commit, delete retry and earlier update retry after deletion",
+    "create then alias update/delete in one committed batch",
+    "failed later batch operation rolls back earlier change"
+  ],
+  "review": "Astra Ultra approved plan and corrected source; request ownership and final buffered metadata authorization defects fixed",
+  "typing": "4 installed consumer fixtures;20 expected negative errors",
+  "limitations": "rootless scalar objects and string keys; edges/ownership, generic preconditions, imports, receipt visibility/feed, compiled queries and full catalog evolution remain unfinished; fresh installation required",
+  "testingPolicy": "basic public adopter workflows; further performance and qualification expansion deferred per owner direction"
+}

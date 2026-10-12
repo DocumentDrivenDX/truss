@@ -3,11 +3,11 @@
     {
       "name": "mutationProfile",
       "pin": {
-        "identity": "truss-rootless-string-create",
-        "version": "0.3",
-        "sha256": "b75b29e082384623671cae3b880fa195c082ae87e70b2630e4fd6c70fb07e730"
+        "identity": "truss-rootless-scalar-objects",
+        "version": "0.1",
+        "sha256": "46473c65138e656efbf85ac3e532a288df9693a58624f89bfef0db7d77c928a9"
       },
-      "definition": "truss-rootless-string-create/0.3;128 creates;1024 authored values per object;positive current append-only catalog revision;retain original definition revision pins;new effects use current revision;replay preserves original receipt revision;complete original definitions;required string keys;unknown exact scalar/null values retained;native IDs;atomic exact journals;caller settlement;current module writers;durable exact request replay;feed unavailable"
+      "definition": "truss-rootless-scalar-objects/0.1;128 ordered create/update/delete object operations;rootless JSON scalar values;stored targets and prior aliases;expected_version;exact representation no-op;one version per changed operation;UMF string keys with retired reservations;delete refuses edges and owned dependents;exact property and metadata journals;durable exact request replay before live target checks;caller settlement;current qualified module writers;feed unavailable"
     },
     {
       "name": "valueProfile",

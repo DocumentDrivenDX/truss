@@ -55,6 +55,38 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Public object mutations implementation — 2026-10-12
+
+Runtime 0.14 extends the existing `GroupCapability` and `UpdateObject`/`Delete` shapes to real
+rootless scalar object changes, without new consumer operation carriers. Execute
+create/update/delete in authored order, resolving prior aliases. Each changed
+operation increments one version; an exact no-op preserves version, timestamps
+and journal. Check `expected_version` against that operation's intermediate
+state. Reuse UMF key production and compare its bytes with native proposed values;
+preserve old key reservations and allow a currently unchanged key owned by the
+same object. Delete refuses incident edges and owned dependents.
+
+One private attempt coordinates the native steps within the existing host
+savepoint. It is bound to original input, actor, transaction and next operation;
+commit rejects incomplete attempts. Its handle is an internal implementation
+detail. Exact durable replay reauthorizes original owners before requiring live
+targets or versions. Ordered immutable transitions preserve original creation
+history while validating final live/deleted state and complete transaction
+journals. Property events and complete metadata before/after share one operation
+version and event-group digest. Successful deletes retain history and receipts.
+
+Basic adopter tests cover create/update/read/delete, caller dry-run rollback,
+original retries, no-op, expected-version refusal and an atomic mixed alias
+batch. Astra reviews the plan and implementation. Additional performance and
+qualification campaigns are deferred per owner direction. Edges/ownership,
+generic preconditions, imports, receipt visibility/feed, compiled queries and
+complete catalog evolution remain within the full delivery objective.
+
+The same two public workflows pass from source and the installed wheel. Astra
+approved the plan and implementation after correcting request ownership and
+buffered metadata authorization. See
+[basic workflow evidence](evidence/python-object-mutations-20261012.json).
+
 ## Changed-document validation implementation — 2026-10-12
 
 Owner priority update: deliver the complete callable public Python interface

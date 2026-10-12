@@ -13,7 +13,8 @@ business-key lookup, and runtime 0.9 reports exact-input unchanged registration.
 Runtime 0.10 accepts additional documents while preserving existing definitions.
 Runtime 0.11 adds exact integer, decimal, boolean, timestamp and binary properties.
 Runtime 0.12 adds bounded live object pages.
-Updates/deletes, compiled queries, imports and feed operations remain unfinished.
+Runtime 0.14 adds public scalar object updates/deletes and ordered mixed batches.
+Compiled queries, imports, receipt visibility and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -963,6 +964,50 @@ object read lock. The returned record is verified against the requested key, wit
 current record and key-field permissions rechecked before publication. The
 profile remains rootless/string-only and revision 1; pages, broader value types
 and catalog evolution remain unfinished. Runtime 0.8 currently needs fresh install.
+### Public object updates and deletes (runtime 0.14 candidate)
+
+Use the same `assembly.apply_in_transaction` or selected `GroupCapability`
+provider for `CreateObject`, `UpdateObject` and `Delete(operation="delete_object")`.
+`StoredObjectReference` targets the exact `TypedIdentity` returned by a create;
+`AliasObjectReference` targets a prior create in the same batch. Operations run
+in order. `expected_version` checks that operation's current intermediate version.
+
+```python
+from truss.groups import UpdateObject, StoredObjectReference, AuthoredValue
+from truss.contracts import TextValue, MapValue
+
+context = assembly.group_context_in_transaction(tx).value
+change = UpdateObject(
+    target=StoredObjectReference(identity=created.identity),
+    set=(AuthoredValue(name="title", value=TextValue(kind="string", text="Revised")),),
+    unset=(), expected_version=created.version,
+)
+result = assembly.apply_in_transaction(
+    tx, context.input((change,), MapValue(entries=())), context.request("edit-123"),
+    documents=accepted_documents, bun_executable="bun",
+)
+# The caller commits or rolls back its connection.
+```
+
+Updates return `Changed` or exact `Unchanged`; deletes return `Deleted`.
+One changed operation increments one version. No-ops preserve timestamps,
+version and journal, and request-enabled no-ops remain replayable. Set/unset
+preserves exact scalar spelling and absent-versus-null meaning, including
+retained scalar values. Business-key changes use UMF's encoder; old reservations
+remain, and unchanged keys remain owned by the same object.
+
+The provider currently supports rootless scalar JSON-home objects. Deletes
+refuse incident edges and owned dependents. Ownership changes and edge operations
+remain unavailable. Stale versions, missing targets, dependent objects, invalid
+values and key conflicts return `GroupFailed` with stable diagnostic codes.
+Any failed operation rolls back the entire group within the caller's transaction.
+Dry-run uses the same call followed by caller rollback. Retry with the original
+request and input returns the original result after later updates or deletion;
+current owner authorization is still required. Internal native progress handles
+are private composition details and cannot be used to commit incomplete work.
+
+Runtime 0.14 requires a fresh installation until migrations are implemented.
+
 ### Changed-document scalar refusal (runtime 0.13 candidate)
 
 `accept_in_transaction` returns `Ok(CatalogAcceptanceRefused(...))` when an
