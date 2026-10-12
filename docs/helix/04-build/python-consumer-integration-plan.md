@@ -90,6 +90,34 @@ Lakebase requires an actual supplied platform connection/privilege profile and
 basic deployment tests before Truss advertises support. Rootless scalar-only and
 fresh-install-only remain explicit interim limits, not release completion.
 
+## Public authority receipt visibility — 2026-10-12
+
+Runtime 0.17 candidate stores canonical original position bytes with each immutable
+request-enabled attempt and actual allocated receipt. The selected position profile
+binds original installation/epoch, native writer and complete attempt/receipt facts.
+Deferred commit guards verify this basis alongside the atomic mutation and receipt.
+Pending and same-transaction responses are tokenless; independently confirmed
+`CommittedReceiptReplay` exposes the original stable `receipt_token`.
+
+Public `reached_in_transaction` reuses the existing locator decoder and observes the
+protected receipt and comparison snapshot in one native statement on the caller's
+READ COMMITTED read-only transaction. The authority profile returns true only for
+visible original committed correspondence, otherwise unavailable. Missing/hidden
+locators have one disclosure-safe outcome; current original operation and edge
+endpoint read scopes are rechecked without requiring still-live targets. Token
+possession grants no authority. Stock logical byte limits and ordinary deadlines
+replace the earlier instrumentation-specific proposal limits.
+
+The final installed wheel passes eight basic workflows in 49.486s; four typing
+fixtures and 16 UMF SQL owner round trips pass. Astra approved the plan and runtime
+source after finite disclosure/GUC corrections. See [evidence](evidence/python-receipt-visibility-20261012.json).
+
+Two basic workflows cover committed mutation/recovery/current-reader inclusion,
+post-delete inclusion, tokenless pending/request-free outcomes, stable no-op tokens
+and typed unavailable results. Replica/seed and repeatable-read profiles remain
+future work; this implementation does not claim them. Imports are the next public
+provider, followed by Weft execution and committed feed/ACK.
+
 ## Public relationship implementation — 2026-10-12
 
 Runtime 0.16 candidate connects `CreateEdge`, `UpdateEdge` and edge deletion to the

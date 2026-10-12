@@ -57,6 +57,8 @@ export type GroupResponse = {
 } | {
   readonly disposition:'replayed';
   readonly durability:'committed';
+  /** Available only after independently observed original outer commit. */
+  readonly receiptToken?:string;
   readonly replay:{readonly basis:'committed_receipt'; readonly observationProfile:ProfilePin; readonly evidence:ExactArtifact};
 });
 

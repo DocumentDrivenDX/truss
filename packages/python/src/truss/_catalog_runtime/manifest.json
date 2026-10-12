@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-catalog-runtime-release/0.1",
-  "releaseId": "truss-catalog-runtime/0.16-candidate",
+  "releaseId": "truss-catalog-runtime/0.17-candidate",
   "postgresVersion": "180006",
   "layoutProfile": {
     "identity": "truss-layout",
@@ -11,19 +11,19 @@
     "layout.sql": "421a9bb88bcc1293f4fcbb66d2b443ccd08ccfc7845c79e5d3ee21b5494666a7",
     "lineage.sql": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc",
     "plan.sql": "ddb1d498df5f56d7fd5a3ec363b2023f201925876d9a7946315aa87c013d38dd",
-    "runtime.sql": "e0521cb85ffaca00f25c2057bfb991967811150eaa42a3f54db417448a28a5c5",
+    "runtime.sql": "60d354ef591929cf6743a8862124c25c61acb0069c245aabb8d7ba59d91c60dc",
     "barrier.sql": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
     "view.sql": "6c7c510c951174a266e4ef06029edb31902da6034aae0b3008c7d7cc08784bfb",
-    "read.sql": "939b977ba4d95aedbf8cf8bc2901526f5d3c09fff5ceb12c9537211d7c9cb3be",
+    "read.sql": "1e6bcae160616a3a181ac632dfad0c78f33c5399490f7001a41b30974a778b9d",
     "keys.sql": "d74dc2e4048331bafd6f1f68f7fd931818fb52beb720b51f5cfd8950b0f7a869",
-    "groups.sql": "a23cbd71fde8fd9cb3c8cfd40638034dfd9941abe14b89c28925e777d027bcea",
-    "group-profiles.json": "1177485d1ddda1b3b640b6f42b4aceb7bcfd09a0757e4a713a8f79684748a33e",
+    "groups.sql": "ad80c5a93866e931b3efd3d7ed427ab484a449ceff1fca982e176c88153546b2",
+    "group-profiles.json": "ef0f151e509a803680097e99b3df4883396488ad9bd1da166a97a2880c9fd1c6",
     "reader.sql": "af68f7296aa9ff5b535af9795712391bce32f7ade4c5b218a63a95d0d7e65149",
     "key-read.sql": "baaf99eae2635980d884c1fad899e28718dec012aabbde818723d40a0ae1a6ac",
     "scalars.sql": "5bf626a72bd82e265528d20cb893e9b3bb55762e90f393befacdab39e3f2ed19",
     "pages.sql": "928a3f51bc876ba67b8fc294693ff8cb079301e60671cb0d0f5d6bf1fc4b64bb",
     "evolution.sql": "b68f9b026655be68f656f2308b9f4f418bd85c1dc720acb2b2700428fd6db631",
-    "operations.sql": "7a88bd82b64b99de19f1fcaa41d84027ed3f0d38d723445233f7ba96a5fbd646",
+    "operations.sql": "de5455655b763cf30de9e63519ff3fb82307302e95dbb720ab69577a1fd7f1d6",
     "preconditions.sql": "32ea41dfd2b1312ad829704e35be426e27343aa1c6340a24d3574bab4776029b"
   },
   "version": "0.15"

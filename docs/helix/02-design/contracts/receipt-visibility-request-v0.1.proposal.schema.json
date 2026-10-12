@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:truss:draft:receipt-visibility-request:0.1.0",
-  "description": "Shape only; exact byte/account/profile/transaction/current-authority admission remains separate.",
+  "description": "Shape only; selected logical byte/profile/transaction/current-authority admission remains separate.",
   "type": "object",
   "properties": {
     "interfaceVersion": {
@@ -23,26 +23,11 @@
         "evidenceBytes": {
           "type": "string",
           "pattern": "^[1-9][0-9]*$"
-        },
-        "retainedBytes": {
-          "type": "string",
-          "pattern": "^[1-9][0-9]*$"
-        },
-        "workUnits": {
-          "type": "string",
-          "pattern": "^[1-9][0-9]*$"
-        },
-        "nativeStatements": {
-          "type": "string",
-          "pattern": "^[1-9][0-9]*$"
         }
       },
       "required": [
         "tokenBytes",
-        "evidenceBytes",
-        "retainedBytes",
-        "workUnits",
-        "nativeStatements"
+        "evidenceBytes"
       ],
       "additionalProperties": false
     }

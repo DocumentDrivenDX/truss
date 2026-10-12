@@ -51,6 +51,7 @@ CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTA
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),
 'adapterProfile',jsonb_build_object('identity','truss-psycopg-create-provider','version','0.1','sha256','f20735a94e87213d77f713cbbabd2bdf2e4f2b459041c53bb984f5b706112ba9'),
+'positionProfile',jsonb_build_object('identity','truss-authority-receipt-visibility','version','0.1','sha256','97d54f46af687510fd3ae10aaa37c761d17d6b371d12171ea15a0d402b8855e9'),
 'policyProfile',jsonb_build_object('identity','truss-qualified-module-writer','version','0.1','sha256','398cee9241e057bb95c415a165b1812ac689433eaac2684c70a15084e681b88b')); $$;
 REVOKE ALL ON FUNCTION truss.runtime_group_profiles() FROM PUBLIC;
 
@@ -81,7 +82,7 @@ BEGIN
  IF revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000'; END IF;
  RETURN convert_to((truss.runtime_group_profiles()||jsonb_build_object('layoutProfile',installation.layout_profile,
   'authorizedScopeIdentity','truss-person:'||installation.installation_id||':'||person::text,
-  'sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-scalar-create/0.2'))::text,'UTF8');
+  'installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-scalar-create/0.2'))::text,'UTF8');
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.group_context(text,text) FROM PUBLIC;

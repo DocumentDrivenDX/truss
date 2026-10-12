@@ -16,7 +16,8 @@ Runtime 0.12 adds bounded live object pages.
 Runtime 0.14 adds public scalar object updates/deletes and ordered mixed batches.
 Runtime 0.15 adds atomic caller preconditions and explicit invalid/unauthorized group failures.
 Runtime 0.16 adds independent directed edge create/update/delete, identity reads and ordered relationship pages, including mandatory relationships satisfied in the same batch.
-Compiled queries, imports, receipt visibility and feed operations remain unfinished.
+Runtime 0.17 adds original committed receipt tokens and authority-side `reached_in_transaction` on caller read-only transactions.
+Compiled queries, imports and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -809,7 +810,7 @@ There are no internal retries. The current runtime supports exact scalar values 
 
 The create provider stores the complete native objects, exact key membership and
 reservations, journal events and optional request receipt atomically. It does not
-activate the full feed/history provider. The current runtime also provides business-key reads, updates/deletes, caller preconditions and relationship reads. Receipt visibility, imports, full Weft execution and Lakebase remain outstanding.
+activate the full feed/history provider. The current runtime also provides business-key reads, updates/deletes, caller preconditions and relationship reads. Imports, full Weft execution and Lakebase remain outstanding. Authority receipt visibility is available in runtime 0.17.
 
 Current deployment dependencies: installation and module-access configuration
 require a superuser and permission to create the private owner/registrar roles.
@@ -1214,3 +1215,40 @@ A failed final multiplicity check rolls back the entire group. Source/target,
 order key and exact retained values are recorded in complete before/after history.
 Composition, ownership, association records, imports, feed and full Weft execution
 remain unfinished; independent edge support does not claim those capabilities.
+
+### Committed receipt tokens and reached (runtime 0.17 candidate)
+
+Pending writes and same-transaction retries do not expose a durable token. After
+the caller commits, retry the identical group input and request in a new adopted
+transaction. `CommittedReceiptReplay.receipt_token` is the opaque original token;
+repeated recovery returns the same token. Request-free groups have no token.
+All-no-op groups still receive a request receipt and original transaction basis.
+
+```python
+# After caller commit, recover using the exact original input and request.
+replay = assembly.apply_in_transaction(tx, original_input, original_request,
+                                      documents=original_documents)
+token = replay.value.response.receipt_token
+# Use a separate caller connection/transaction adopted with access_mode='read_only'.
+visible = read_assembly.reached_in_transaction(read_tx, token)
+```
+
+The authority-only READ COMMITTED profile returns `ReceiptIncluded(included=True)`
+once its protected original receipt is visible, or `ReceiptVisibilityUnavailable`.
+It performs no waits or retries and opens no connection. It does not report a
+missing or hidden receipt as false. Missing, unresolved and unreadable locators
+share `observation_integrity`, preventing receipt-existence disclosure. An
+independently denied caller/facade reports `authorization`; admitted missing/expired
+evidence can report `retention`. Wrong installation/epoch/profile reports
+`epoch_profile`; malformed tokens report `invalid_token`.
+
+The original locator is retained atomically with the group effects, and a token
+carries no read grant. Current readers of every original operation module and
+old/new edge endpoint module may compare inclusion, even after objects/edges have
+been deleted or changed. `maximum_token_bytes` and `maximum_evidence_bytes` reduce
+fixed logical byte ceilings; ordinary connection deadlines apply. No backend
+allocation accounting, custom tracing or metrics are introduced.
+
+This profile has indefinite retained receipts and no expiry API. Replica/seed
+comparison, repeatable-read visibility profiles and portable restore lineage
+remain unimplemented. A fresh installation is still required for runtime upgrades.

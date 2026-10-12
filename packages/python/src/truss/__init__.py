@@ -73,3 +73,6 @@ __all__ += ['ReaderCatalog','AcceptedDocument','CatalogRefused','CatalogInvalid'
 
 from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 __all__ += ["ScalarEdge","EdgeFound","EdgeNotFound","EdgePage","EdgePageCursor"]
+
+from .receipt_visibility import ReceiptIncluded,ReceiptVisibilityUnavailable
+__all__ += ["ReceiptIncluded","ReceiptVisibilityUnavailable"]
