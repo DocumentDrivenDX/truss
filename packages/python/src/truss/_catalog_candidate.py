@@ -2,7 +2,7 @@
 import json
 from dataclasses import asdict
 from .preparation import _require_original_preparation
-from ._acceptance_json import decode_row_operation_json
+from ._acceptance_json import decode_row_operation_json, decode_acceptance_json
 from ._catalog_support import evaluate_catalog_support
 from ._catalog_owner_evidence import require_catalog_owner_evidence
 from ._catalog_report_semantics import (canonical_numeric_free,
@@ -54,3 +54,44 @@ def encode_original_catalog_candidate(prepared):
         raise ValueError('Catalog candidate capacity exceeded')
     _require_original_preparation(prepared)
     return original
+
+
+# Pending private facade ABI: native body and result grammar are not implemented.
+# Validate the exact native result columns when connecting execution.
+FRESH_CATALOG_DISPATCH_SQL = (
+    'SELECT * FROM truss.runtime_accept_fresh_catalog_session_candidate('
+    '%s::pg_catalog.int8,%s::pg_catalog.bytea,%s::pg_catalog.bytea,'
+    '%s::pg_catalog.bytea,%s::pg_catalog.bytea,%s::pg_catalog.bytea)'
+)
+
+
+def encode_fresh_catalog_dispatch_parameters(prepared, ordinal, origin_bytes):
+    """Immediate trusted SDK input for the protected catalog facade.
+
+    Invoke inside the semantic host operation with its reserved ordinal. This
+    tuple supplies only original semantic input; actor, configuration, epoch,
+    prestate, operation recipe, effect plan and group custody are native-owned.
+    No registry, authority token, execution or accepted result is produced here.
+    The selected origin grammar is an exact numeric-free JSON object.
+    """
+    _require_original_preparation(prepared)
+    if (type(ordinal) is not str or not 1 <= len(ordinal) <= 19
+            or not ordinal.isascii() or not ordinal.isdecimal()
+            or str(int(ordinal)) != ordinal or int(ordinal) > 9223372036854775807):
+        raise ValueError('Canonical host-issued ordinal required')
+    if type(origin_bytes) is not bytes or not 1 <= len(origin_bytes) <= 131072:
+        raise ValueError('Bounded original asserted origin required')
+    if type(decode_acceptance_json(origin_bytes)) is not dict:
+        raise ValueError('Original asserted origin object required')
+    originals = (prepared.input_bytes, prepared.archive_documents_bytes,
+                 prepared.declarations_bytes)
+    if any(not 1 <= len(raw) <= 1048576 for raw in originals):
+        raise ValueError('Original catalog dispatch capacity exceeded')
+    candidate = encode_original_catalog_candidate(prepared)
+    parameters = (ordinal, prepared.input_bytes, candidate,
+                  prepared.archive_documents_bytes, prepared.declarations_bytes,
+                  origin_bytes)
+    if sum(len(raw) for raw in parameters[1:]) > 4194304:
+        raise ValueError('Catalog dispatch aggregate capacity exceeded')
+    _require_original_preparation(prepared)
+    return parameters

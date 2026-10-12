@@ -443,3 +443,39 @@ report hashes establish consistency of submitted assertions; they do not
 independently establish assertion completeness for arbitrary SQL submissions.
 The protected SQL facade therefore does not claim the SDK's semantic producer
 qualification for direct SQL using the same credentials.
+
+### Original catalog-family admission
+
+The protected facade takes six semantic inputs: the host-issued ordinal, original
+AcceptanceInput bytes, source-candidate bytes, original document-archive bytes,
+declarations bytes and asserted-origin bytes. The SDK derives its source candidate
+from the unchanged original preparation and complete source inventory; all six
+parameters are retained unchanged on the actual semantic host attempt before
+submission. The private parameter encoder does not attest native authorization
+or supply an accepted result.
+
+Native admission selects an exact, versioned fresh-catalog operation recipe from
+installation custody as `original_definition_bytes`. A document archive alone
+is not that definition: the recipe must also define report, custody, revision
+fact, document/configuration prerequisite, feed finalization, head transition
+and completion obligations. The native effect plan binds this recipe to original
+input/declarations and independently verified fresh prestate. It describes
+symbolic effects without predicting allocated identities, clocks or report
+hashes. Its empty graph/row scope excludes business, row-history and separate
+graph-allocation reservation effects; required feed counter reservations and
+manifest writes remain allowed planned effects.
+
+Native construction then produces a separately versioned catalog-family group
+envelope binding the recipe, input, effect plan, actual operation address and
+native context, with one ordered catalog command and request participation
+`none`. Preserve the acyclic order: original recipe/plan source, context, group
+envelope. Reuse the original operation-address codec. The existing mutation
+admission grammar excludes catalog acceptance and cannot be relabeled as this
+catalog counterpart.
+
+The same protected invocation must interpret and enforce the retained plan
+through staging and finalization against complete actual effects before
+publication. Descriptive JSON, a matching hash or replacement of fixture bytes
+with a shape-valid envelope cannot establish that correspondence. These rules
+implement CONTRACT-001's interpreted family/effect custody and CONTRACT-003's
+pre-effect semantic-plan requirements; the connected native body remains pending.
