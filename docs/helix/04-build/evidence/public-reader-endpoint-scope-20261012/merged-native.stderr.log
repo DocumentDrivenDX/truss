@@ -1,0 +1,12 @@
+test_dependency_revoked_before_its_module_visit_refuses_buffered_projection (test_reader_catalog_native.ReaderCatalogTests.test_dependency_revoked_before_its_module_visit_refuses_buffered_projection) ... ok
+test_hidden_field_and_key_dependencies_are_not_projected (test_reader_catalog_native.ReaderCatalogTests.test_hidden_field_and_key_dependencies_are_not_projected) ... ok
+test_reader_catalog_and_exact_document_without_registrar (test_reader_catalog_native.ReaderCatalogTests.test_reader_catalog_and_exact_document_without_registrar) ... ok
+test_relationship_endpoint_metadata_requires_both_module_scopes (test_reader_catalog_native.ReaderCatalogTests.test_relationship_endpoint_metadata_requires_both_module_scopes) ... ok
+test_unreadable_empty_module_prevents_whole_document_disclosure (test_reader_catalog_native.ReaderCatalogTests.test_unreadable_empty_module_prevents_whole_document_disclosure) ... ok
+test_create_commit_and_public_reads_in_actual_read_only_transaction (test_read_only_public_native.ReadOnlyPublicTests.test_create_commit_and_public_reads_in_actual_read_only_transaction) ... ok
+test_policy_replaced_while_object_buffered_uses_current_roles (test_read_only_public_native.ReadOnlyPublicTests.test_policy_replaced_while_object_buffered_uses_current_roles) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 23.314s
+
+OK
