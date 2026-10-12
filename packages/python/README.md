@@ -108,6 +108,25 @@ conflict. Retry still requires current authorization. There are no internal retr
 loops. Catalog evolution and business writes are unavailable in this release.
 `dispose()` closes this assembly's admission without closing or settling the host.
 
+The catalog runtime 0.2 candidate also provides
+`catalog_view_in_transaction(transaction, assembly.catalog_view_request())`.
+An `Ok` contains `CatalogViewAvailable(view=...)` or
+`CatalogViewUnavailable(reason=...)`. The view exposes immutable definitions,
+native IDs, exact original JSON definition bytes, archived document provenance,
+and ordered dependencies. It includes fields declared in other modules and
+document-qualified keys and relationships. `view.original_bytes` is the complete
+shared catalog-view JSON wire representation.
+
+This profile supports complete revision-1 views; genesis, unsupported history,
+and owner projections return unavailable. Readers require current registrar
+membership; they need not be the person who registered the catalog. Views hold a
+catalog-head share lock with no wait and require a read-write READ COMMITTED
+transaction. Define smaller output budgets with
+`assembly.catalog_view_request(definition_count="100", encoded_bytes="1048576")`.
+Count or full-output byte overflow returns unavailable without truncation. Failed
+transaction cleanup remains an error requiring host recovery. The 0.2 candidate
+does not migrate an existing 0.1 installation.
+
 The [accelerated capability queue](../../docs/helix/04-build/local-runtime-installation-migration-plan.md#accelerated-capability-queue--owner-direction-2026-10-09)
 prioritizes complete installation, catalog acceptance, apply/import and direct
 key/edge reads, with per-person isolation and origin capture included in the

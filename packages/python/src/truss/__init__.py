@@ -47,3 +47,12 @@ from .catalog_runtime import (CatalogRuntimeConfiguration, CatalogReferenceAssem
     PendingCatalogInstallation, CatalogRuntimeStatus, CatalogRegistration, CatalogReport)
 __all__ += ["CatalogRuntimeConfiguration", "CatalogReferenceAssembly", "PendingCatalogInstallation",
             "CatalogRuntimeStatus", "CatalogRegistration", "CatalogReport"]
+
+from .catalog_view import (CatalogViewRequest, CatalogViewLimits, CurrentCatalogSelection,
+    HistoricalCatalogSelection, CompleteCatalogScope, ProjectedCatalogScope,
+    CatalogDefinitionReference, CatalogDocumentProvenance, CatalogDefinitionEntry,
+    CatalogView, CatalogViewAvailable, CatalogViewUnavailable)
+__all__ += ["CatalogViewRequest", "CatalogViewLimits", "CurrentCatalogSelection",
+    "HistoricalCatalogSelection", "CompleteCatalogScope", "ProjectedCatalogScope",
+    "CatalogDefinitionReference", "CatalogDocumentProvenance", "CatalogDefinitionEntry",
+    "CatalogView", "CatalogViewAvailable", "CatalogViewUnavailable"]

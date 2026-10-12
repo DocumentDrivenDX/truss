@@ -1,5 +1,12 @@
 # truss project documentation
 
+The [Python catalog runtime](../../packages/python/README.md#public-catalog-workflow)
+now provides caller-owned installation, fresh registration, report/retry and
+complete accepted catalog views. The 0.2 candidate exposes exact archived
+definition slices and native document-qualified identities on PostgreSQL18.6.
+Business reads, mutations, imports and feed remain under implementation; older
+private component evidence below does not qualify those public operations.
+
 [Query and execution ownership](01-frame/prd.md#query-and-execution-ownership--owner-direction-2026-10-11): Truss exposes the full Weft query surface. Weft owns evolving SQL coverage; Truss owns table layout, query execution, actions and other executions. Direct read/traversal APIs are convenience operations, not SQL coverage limits.
 
 ## Current Python driver and resource decision — 2026-10-11
