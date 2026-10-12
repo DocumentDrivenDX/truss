@@ -1,0 +1,17 @@
+F
+======================================================================
+FAIL: test_public_graph_creation_and_original_source_validity (__main__.GraphABACTests.test_public_graph_creation_and_original_source_validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/test_graph_resource_abac_native.py", line 20, in test_public_graph_creation_and_original_source_validity
+    valid=self.admin.execute(sql['validitySql']).fetchone()[0];self.assertEqual(valid,'true');observations.append({'id':'original-public-graph-validity','observed':valid})
+                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'false' != 'true'
+- false
++ true
+
+
+----------------------------------------------------------------------
+Ran 1 test in 6.216s
+
+FAILED (failures=1)
