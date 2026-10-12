@@ -6437,3 +6437,10 @@ This fixture realizes the refusal distinction; complete source/authority lifetim
 all endpoint/key/subject obligations, public driver mapping and full diagnostic/
 publication privacy remain unimplemented. No runtime setting or acceptance case
 is promoted.
+
+
+Post-merge incomplete-fact replay at17a4fe3c preserves concurrent public group
+recovery changes and passes54 native observations.
+`security-incomplete-ontology-facts-20261012/merged-receipt.json` retains current
+source pins, changed preimages and terminal native output. Only this component
+is refreshed; original backend acceptance remains open.
