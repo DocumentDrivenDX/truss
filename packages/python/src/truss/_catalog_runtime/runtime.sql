@@ -17,7 +17,7 @@ CREATE TABLE truss.catalog_registration_request (
 CREATE FUNCTION truss.catalog_actor() RETURNS oid
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE actor record; installation truss.catalog_runtime_installation%ROWTYPE;
- member_of_owner boolean; member_of_registrar boolean; member_of_server_capability boolean;
+ member_of_owner boolean; member_of_registrar boolean; member_of_server_capability boolean; unsafe_switchable boolean;
 BEGIN
  IF current_setting('transaction_isolation')<>'read committed' THEN
   RAISE EXCEPTION 'catalog authorization requires READ COMMITTED' USING ERRCODE='0A000'; END IF;
@@ -34,9 +34,19 @@ BEGIN
           coalesce(bool_or(role_oid IN (SELECT oid FROM pg_roles WHERE rolname IN
            ('pg_read_server_files','pg_write_server_files','pg_execute_server_program'))),false)
  INTO member_of_owner,member_of_registrar,member_of_server_capability FROM memberships;
+ WITH RECURSIVE switchable(role_oid) AS (
+  SELECT actor.oid UNION
+  SELECT m.roleid FROM pg_auth_members m JOIN switchable s ON m.member=s.role_oid WHERE m.set_option
+ ) SELECT EXISTS(SELECT 1 FROM switchable s JOIN pg_roles r ON r.oid=s.role_oid
+   WHERE r.rolsuper OR r.rolcreaterole OR r.rolcreatedb OR r.rolreplication OR r.rolbypassrls
+    OR has_schema_privilege(r.oid,'truss','CREATE')
+    OR EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'
+      AND ((c.relkind IN ('r','p') AND (has_table_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
+        OR has_any_column_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,REFERENCES')))
+       OR (c.relkind='S' AND has_sequence_privilege(r.oid,c.oid,'USAGE,SELECT,UPDATE'))))) INTO unsafe_switchable;
  IF current_setting('server_version_num')<>'180006' OR current_setting('role')<>'none' OR NOT actor.rolcanlogin OR actor.rolsuper
   OR actor.rolcreaterole OR actor.rolcreatedb OR actor.rolreplication OR actor.rolbypassrls
-  OR actor.oid=installation.owner_oid OR member_of_owner OR member_of_server_capability
+  OR actor.oid=installation.owner_oid OR member_of_owner OR member_of_server_capability OR unsafe_switchable
   OR NOT EXISTS(SELECT 1 FROM pg_namespace n JOIN pg_roles r ON r.oid=n.nspowner
    WHERE n.nspname='truss' AND r.oid=installation.owner_oid AND NOT r.rolcanlogin AND NOT r.rolsuper
     AND NOT r.rolcreaterole AND NOT r.rolcreatedb AND NOT r.rolreplication AND NOT r.rolbypassrls AND NOT r.rolinherit)

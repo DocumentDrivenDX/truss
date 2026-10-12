@@ -1,0 +1,15 @@
+test_public_actor_refuses_switchable_private_column_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_switchable_private_column_privileges) ... FAIL
+
+======================================================================
+FAIL: test_public_actor_refuses_switchable_private_column_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_switchable_private_column_privileges)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 569, in test_public_actor_refuses_switchable_private_column_privileges
+    try:self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Ok(value=CatalogRuntimeStatus(installed=True, installation_id='b501d8a7-b926-4129-b309-593e2b20ae58', revision=0, capabilities=('catalog:fresh-registration', 'catalog:report', 'catalog:view')), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+----------------------------------------------------------------------
+Ran 1 test in 4.079s
+
+FAILED (failures=1)

@@ -544,6 +544,35 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
             self.admin.execute('REVOKE server_capability_bridge FROM consumer')
             self.admin.execute('DROP ROLE server_capability_bridge')
 
+    def test_public_actor_refuses_inherited_private_column_privileges(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        self.admin.execute('CREATE ROLE column_privilege_bridge NOLOGIN')
+        try:
+            self.admin.execute('GRANT SELECT (installation_id) ON truss.catalog_runtime_installation TO column_privilege_bridge')
+            self.admin.execute('GRANT column_privilege_bridge TO consumer WITH INHERIT TRUE, SET FALSE')
+            try:
+                self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+            finally:self.admin.execute('REVOKE column_privilege_bridge FROM consumer')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        finally:
+            self.admin.execute('DROP OWNED BY column_privilege_bridge')
+            self.admin.execute('DROP ROLE column_privilege_bridge')
+
+    def test_public_actor_refuses_switchable_private_column_privileges(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        self.admin.execute('CREATE ROLE switchable_column_bridge NOLOGIN')
+        try:
+            self.admin.execute('GRANT SELECT (installation_id) ON truss.catalog_runtime_installation TO switchable_column_bridge')
+            self.admin.execute('GRANT switchable_column_bridge TO consumer WITH INHERIT FALSE, SET TRUE')
+            try:self.assertIsInstance(assembly.status_in_transaction(tx),Error)
+            finally:self.admin.execute('REVOKE switchable_column_bridge FROM consumer')
+            self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        finally:
+            self.admin.execute('DROP OWNED BY switchable_column_bridge')
+            self.admin.execute('DROP ROLE switchable_column_bridge')
+
     def test_public_actor_refuses_late_column_and_reference_privileges(self):
         self.install();connection,host,assembly,tx=self.consumer()
         connection.execute("CREATE TEMP TABLE caller_privilege_sentinel(value text); INSERT INTO caller_privilege_sentinel VALUES ('kept')")

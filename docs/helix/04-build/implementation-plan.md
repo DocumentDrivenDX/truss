@@ -5847,3 +5847,24 @@ or any source/test covered by the44-test module-role qualification. All211
 current/preimage source pins and retained evidence digests are verified unchanged
 after merge. The separate native object-key receipt is not claimed as replayed
 here. Public module-role validation retains its recorded scoped qualification.
+
+### Public catalog SET-reachable storage authority — 2026-10-12
+
+The inherited private-column control passes under the original guard. The
+SET-only bridge control fails before this fix: the original session actor is
+admitted despite being able to switch to a role with private-column SELECT.
+The public actor guard now traverses all-SET membership paths and checks each
+reachable role's effective native schema/table/column/sequence rights and unsafe
+role attributes. Native privilege probes preserve each state's inheritance
+semantics. Registrar permission remains the selected membership-based policy.
+
+`evidence/public-inherited-storage-20261012/receipt.json` retains source pins,
+source archive, the positive inherited baseline, failing SET-only control,
+46 passing source tests and46 installed-wheel tests with exact SQL/manifest
+correspondence. PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary.
+Native unittest cleanup completes without error; no independent cleanup receipt
+or formal SQL refinement is claimed. This closes the observed raw-storage
+admission gap, not complete delegation/callable/lifetime closure.
+Trace CONTRACT-005 and CONTRACT-063/STP-056 B05/B10/B11/B12, US-056
+AC5/AC8/AC9/AC10 prerequisites. No advanced backend case is promoted; the shared
+132-case goal remains active at26/132 with106 unbound cases.

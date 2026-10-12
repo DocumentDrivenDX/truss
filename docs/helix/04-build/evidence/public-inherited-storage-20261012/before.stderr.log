@@ -1,0 +1,6 @@
+test_public_actor_refuses_inherited_private_column_privileges (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_actor_refuses_inherited_private_column_privileges) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 3.613s
+
+OK
