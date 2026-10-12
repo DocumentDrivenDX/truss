@@ -404,3 +404,17 @@ Boolean membership feasibility, not general storage equivalence, authenticated
 Weft output, nullable/composite/parallel/masking/history support or complete
 native admission. Source/mapping/authority/publication and original backend
 cases remain open; no separate policy semantics are created for raw storage.
+
+
+### Shared native collection operator controls — 2026-10-12
+
+The same raw/graph membership fixture now exercises exact RA/RB/RO lookups,
+count, sorted LIMIT/OFFSET pages and self-join counts for Alice/Bob/outsider.
+Every result matches independently authored eligibility, including all-hidden
+empty pages and zero counts. The combined fixture retains132 native observations
+in `docs/helix/04-build/evidence/security-shared-collection-operators-20261012/receipt.json`.
+That observation count is unrelated to the original132 required acceptance cases.
+Trace US-056-AC1/2 and STP-056 B03. This is per-statement native operator
+feasibility, not cursor/cache authority lifetime, edge traversal, protected-field
+query use, authenticated compilation/installation or full backend qualification.
+No original case is promoted; complete admission and publication remain required.

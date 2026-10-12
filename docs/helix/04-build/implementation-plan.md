@@ -6621,3 +6621,17 @@ Post-merge shared-storage replay at21a4238e preserves installed object-read
 identity changes and passes108 native observations. Current source pins, changed
 preimages and outputs: `security-shared-raw-graph-policy-20261012/merged-receipt.json`.
 The original shared-policy component scope remains unchanged and unadmitted.
+
+
+### Shared native collection operator controls — 2026-10-12
+
+The same raw/graph membership fixture now exercises exact RA/RB/RO lookups,
+count, sorted LIMIT/OFFSET pages and self-join counts for Alice/Bob/outsider.
+Every result matches independently authored eligibility, including all-hidden
+empty pages and zero counts. The combined fixture retains132 native observations
+in `docs/helix/04-build/evidence/security-shared-collection-operators-20261012/receipt.json`.
+That observation count is unrelated to the original132 required acceptance cases.
+Trace US-056-AC1/2 and STP-056 B03. This is per-statement native operator
+feasibility, not cursor/cache authority lifetime, edge traversal, protected-field
+query use, authenticated compilation/installation or full backend qualification.
+No original case is promoted; complete admission and publication remain required.
