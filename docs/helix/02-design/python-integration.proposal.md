@@ -3241,3 +3241,30 @@ borrowed-host, execution and recovery tests passed; 46 resource, frame, census,
 epoch and outbound tests passed. The Python module boundary check passed.
 These results qualify the accounting removal, not the unfinished public catalog
 or mutation capabilities.
+
+### Exact numeric-bearing owner evidence — 2026-10-11
+
+Catalog owner observations may contain original UMF JSON numbers, including
+relationship multiplicities. They are source evidence, not CONTRACT-009 semantic
+requests. `_owner_evidence_json` parses bounded original UTF-8 evidence with exact
+Python integers and Decimal tokens, rejects duplicate members, nonfinite values,
+unpaired surrogates and excessive trees/tokens, and keeps the original bytes.
+Full and embedded artifact correspondence compares exact carrier types and
+Decimal representations, so Python's `True == 1` and rounded binary floats cannot
+establish correspondence. Extreme unsupported exponents refuse consistently
+regardless of the caller's decimal trap configuration.
+
+The candidate producer uses this decoder for original report evidence. Its
+numeric-free host-source projection, one-MiB candidate bound, and selected
+closed scalar-record inventory remain unchanged. Keys/relationships require an
+extended genuine owner-derived inventory and qualified larger source transport;
+this change does not enable public acceptance. Existing report capture/serializer
+profiles are not upgraded to decimal-bearing source support by this change.
+
+Validation: six exact-evidence tests passed, including original packaged UMF
+key/relationship artifact correspondence and deterministic exponent refusal;
+twenty-one existing candidate, native source/staging, semantic-projection and
+dispatch tests passed on published `pgserver-pg18==18.6.1` / PostgreSQL 18.6.
+The 579-import Python boundary check passed. These are component results;
+ordinary-person catalog acceptance, committed report publication and the larger
+key/relationship corpus remain unfinished.
