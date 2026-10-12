@@ -233,3 +233,19 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
             self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
             self.admin.execute('DROP TRIGGER force_retry ON truss.object');self.admin.execute('DROP FUNCTION public.force_retry()')
             host.detach();connection.rollback();connection,host,assembly,tx=self.consumer();input,request=self.input(assembly,tx)
+
+    def test_reader_and_asserted_actor_cannot_authorize_first_create(self):
+        connection,host,assembly,tx=self.ready();input,request=self.input(assembly,tx)
+        input=replace(input,asserted_origin=MapValue(entries=(MapEntry(key='x-actor',value=TextValue(kind='string',text='group_writer')),)))
+        connection.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
+        self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE');self.admin.execute('REVOKE group_writer FROM consumer')
+        refused=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+        self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
+        for table in ('object','runtime_create_group','request_receipt','journal'):
+            self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))
+        self.admin.execute('GRANT group_writer TO consumer WITH SET FALSE')
+        self.assertIsInstance(self.apply(assembly,tx,input,request),GroupSuccess)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(1,))
+        self.assertEqual(self.admin.execute("SELECT actor_name,actor_oid=(SELECT oid FROM pg_roles WHERE rolname='consumer') FROM truss.runtime_create_group").fetchall(),[('consumer',True)])

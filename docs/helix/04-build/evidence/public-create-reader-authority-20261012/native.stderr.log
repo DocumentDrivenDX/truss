@@ -1,0 +1,6 @@
+test_reader_and_asserted_actor_cannot_authorize_first_create (test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 6.478s
+
+OK

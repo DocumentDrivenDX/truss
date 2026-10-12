@@ -6073,3 +6073,38 @@ Trace CONTRACT-005 effective PUBLIC privileges, CONTRACT-063/STP-056 B04/B05/
 B11/B12 and US-056 AC5/AC9/AC10 prerequisites. Public module-level create support
 remains distinct from shared ontology-policy authorization and masking. All132
 original cases remain required and the full shared goal stays active.
+
+
+### Fresh create uses current native write authority — 2026-10-12
+
+`evidence/public-create-reader-authority-20261012/receipt.json` verifies a first
+create after writer revocation with reader membership and forged asserted x-actor
+attribution. Public apply refuses42501, preserves prior caller work and leaves
+object/runtime-create-group/request-receipt/journal tables empty. Granting actual
+writer membership makes the same request succeed; committed actor_name/OID remain
+native consumer, not the asserted group_writer label. This extends the existing
+revoked durable-replay control to first effects and original native attribution.
+
+The targeted source and installed-wheel tests both pass. All package/source/
+installed bytes remain identical to the preceding72-test public qualification;
+only this additional regression changes. Source archive and exact wheel digest
+are retained. Existing native unittest cleanup completes without error; no
+independent stop receipt or new full73-test run is claimed. Engine PostgreSQL18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary.
+
+Trace CONTRACT-005/CONTRACT-002 actual writer/origin distinction and shared
+CONTRACT-063, STP-057 L01/L02/L05/L12, US-057 AC1/AC3/AC8 prerequisites. This
+qualifies current module-level refusal/recovery only; original field/ontology/
+ownership-change controls remain required. No full backend case is promoted;
+all132 original cases remain required and the full shared goal stays active.
+
+
+Final integration preserves main46e3a558/c8ea133d's new person-scoped catalog
+reader and updated runtime release. All14 create-group controls pass against the
+merged source and isolated installed wheel, including fresh-create refusal,
+zero object/group/receipt/journal effects, native attribution and authorized retry.
+`merged-receipt.json`/`merged-source.zip` retain final source pins and exact
+wheel/source/installed correspondence. Boundaries and ten original UMF SQL owner
+round trips pass. The separate reader-catalog native suite is not claimed as
+replayed; earlier72-test qualification retains its prior release/source scope.
+No shared field/ontology write case is promoted. Full goal remains active.
