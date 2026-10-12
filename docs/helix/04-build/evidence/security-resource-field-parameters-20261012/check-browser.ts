@@ -1,0 +1,3 @@
+import {chromium} from '/Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/playwright/index.mjs';
+const root='/private/tmp/truss-resource-param-native-20261012';const browser=await chromium.launch({headless:true});
+try{const page=await browser.newPage();await page.setContent('<html><body></body></html>');await page.addScriptTag({content:await Bun.file(root+'/browser.js').text()});const actual=await page.evaluate(()=>globalThis.results);const expected=await Bun.file(root+'/sql.json').json();if(JSON.stringify(actual)!==JSON.stringify(expected))throw Error('Browser/native producer mismatch');await Bun.write(root+'/browser.json',JSON.stringify({version:browser.version(),matchingExpressions:2,actual},null,2)+'\n');}finally{await browser.close();}

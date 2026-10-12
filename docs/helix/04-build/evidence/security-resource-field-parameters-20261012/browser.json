@@ -1,0 +1,8 @@
+{
+  "version": "153.0.8010.12",
+  "matchingExpressions": 2,
+  "actual": {
+    "plain": "((((($2 OPERATOR(pg_catalog.=) TRUE))) IS TRUE))",
+    "tagged": "(($2 OPERATOR(pg_catalog.=) E'42'::pg_catalog.int8) IS TRUE AND (((($3 OPERATOR(pg_catalog.=) TRUE))) IS TRUE))"
+  }
+}

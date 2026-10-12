@@ -37,6 +37,9 @@ export function lowerSecurityRowPredicate(input: {
   types: readonly SecurityPredicateType[];
   /** Shared resource homes also require the original row discriminator parameter. */
   resourceDiscriminatorParameter?: number;
+  /** Original resource-row fields, in argument order after keys/discriminator.
+   * Host must prove row/value/codec correspondence; caller assertions are not facts. */
+  resourceFieldParameters?: readonly SecurityPhysicalType['type'][];
 }): string {
   const plan = object(input.logicalPlan, ['version', 'rules']);
   if (plan.version !== 'weft.security.logical-ir/0.1.0' || !Array.isArray(plan.rules)) return refuse();
@@ -85,6 +88,14 @@ export function lowerSecurityRowPredicate(input: {
   };
   const resourceSelection = selections.get(ref(resource.type));
   if (resourceSelection ? input.resourceDiscriminatorParameter !== resource.keyFields.length + 1 : input.resourceDiscriminatorParameter !== undefined) return refuse();
+  const resourceFields = input.resourceFieldParameters ?? [];
+  if (!Array.isArray(resourceFields) || resourceFields.length > 64) return refuse();
+  const resourcePositions = new Map<string, number>();
+  for (const [index, field] of resourceFields.entries()) {
+    const identity = ref(field);
+    if (resourcePositions.has(identity) || resource.keyFields.some(f => ref(f.ref) === identity) || resource.fields.filter(f => ref(f.ref) === identity).length !== 1) return refuse();
+    resourcePositions.set(identity, resource.keyFields.length + (resourceSelection ? 1 : 0) + index + 1);
+  }
   const column = (t: SecurityPredicateType, r: unknown) => identifier(t.fields.find(f => ref(f.ref) === ref(r))?.column ?? refuse());
   type Bound = { type: SecurityPredicateType; alias?: string; resource?: boolean; subject?: boolean };
   type Value = { sql: string[]; identity?: string; domain?: string };
@@ -99,7 +110,9 @@ export function lowerSecurityRowPredicate(input: {
   const scalar = (b: Bound, r: unknown): string => {
     if (b.resource) {
       const at = b.type.keyFields.findIndex(f => ref(f.ref) === ref(r));
-      if (at < 0) return refuse(); return '$' + (at + 1);
+      if (at >= 0) return '$' + (at + 1);
+      const position = resourcePositions.get(ref(r)); if (position === undefined) return refuse();
+      return '$' + position;
     }
     if (b.subject) return '(SELECT "subject_row".' + column(b.type, r) + ' FROM ' + table(b.type) + ' AS "subject_row" WHERE "subject_row".' + identifier(input.subjectLoginColumn) + ' OPERATOR(pg_catalog.=) SESSION_USER::pg_catalog.text' + (b.type.discriminator ? ' AND (' + selectedRow(b.type, 'subject_row') + ')' : '') + ')';
     return identifier(b.alias!) + '.' + column(b.type, r);

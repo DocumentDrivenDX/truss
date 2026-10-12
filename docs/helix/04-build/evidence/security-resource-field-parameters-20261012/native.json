@@ -1,0 +1,67 @@
+{
+  "version": "180006",
+  "observations": [
+    {
+      "statement": "plain",
+      "active": "TRUE",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "statement": "tagged",
+      "discriminator": 42,
+      "active": "TRUE",
+      "expected": true,
+      "observed": true
+    },
+    {
+      "statement": "tagged",
+      "discriminator": 43,
+      "active": "TRUE",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "statement": "plain",
+      "active": "FALSE",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "statement": "tagged",
+      "discriminator": 42,
+      "active": "FALSE",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "statement": "tagged",
+      "discriminator": 43,
+      "active": "FALSE",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "statement": "plain",
+      "active": "NULL",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "statement": "tagged",
+      "discriminator": 42,
+      "active": "NULL",
+      "expected": false,
+      "observed": false
+    },
+    {
+      "statement": "tagged",
+      "discriminator": 43,
+      "active": "NULL",
+      "expected": false,
+      "observed": false
+    }
+  ],
+  "scope": "9 prepared expression controls with real native argument types; no ordinary policy admission or source/row/codec authenticity",
+  "cleanup": "LocalPostgres context exited; no independent stop receipt"
+}

@@ -6165,3 +6165,30 @@ integration; it does not admit advanced Staff–Project ontology policy, native
 masking, complete authority lifetime or the broader backend cases. External
 UMF/toolchain dependency closure is not claimed complete. No original case is
 promoted; all132 original cases remain required and the full goal stays active.
+
+
+### Candidate resource-field ABAC argument layout — 2026-10-12
+
+The portable PostgreSQL row-predicate candidate previously refused resource
+nonkey fields. Explicit resourceFieldParameters now supplies up to64 unique
+qualified nonkey field references, in native argument order after the complete
+resource Key and optional discriminator. Missing/foreign/key-duplicate/repeated
+fields refuse; the resource scalar expression references the derived positional
+argument. Original identity arguments and prior no-layout refusal stay unchanged.
+The selected required string/boolean domain subset is unchanged.
+
+All15 related Bun tests and strict security-source type checking pass. PostgreSQL
+18.6 executes nine typed prepared-expression controls: active true permits, false/
+null refuses, and discriminator mismatch refuses. Chromium153.0.8010.12 matches
+both Bun expressions exactly.
+`evidence/security-resource-field-parameters-20261012/receipt.json` retains original
+sources, generated SQL, native/browser code and observations. Native controls use
+an excluded administrator and demonstrate expression/argument layout only.
+
+The host must prove arguments came from the actual original resource row with
+exact codec/identity/source/cut correspondence. Caller-asserted attributes cannot
+qualify ABAC. Native source privacy, complete inventory/current authority, policy
+installation and final publication remain required for raw and graph homes.
+Trace shared CONTRACT-063/STP-056 B01/B08/B12/B15 and US-056 AC1/AC6/AC10
+prerequisites. No original backend case is promoted; all132 remain required and
+the full goal stays active.
