@@ -31,6 +31,31 @@ ddx:
 
 The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized exact scalar object and independent directed edge groups, object/key/page reads, relationship reads and atomic caller preconditions. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
 
+## Caller-owned import iteration — 2026-10-12
+
+Runtime 0.18 exposes `import_context_in_transaction`,
+`object_import_record_in_transaction` and `import_in_transaction` on the public
+catalog assembly. Accepted primary-key and relationship definitions supply real
+identities; original UMF produces string key tuples. Objects precede edges while
+reports retain submitted indices. Live/reserved identities skip before eligible
+replacement payload decoding. Each eligible record reuses the protected group
+provider under a contained host callback, with immutable load/source insertion
+and caller-owned pending settlement. There is no internal retry.
+
+Current disclosure authority governs successful and interrupted reports. A null
+failure report can mean withheld disclosure or bounded report unavailable and
+never proves no writes or rollback. Original execution failures are retained
+unless a later authorization read requires whole-transaction recovery.
+
+This iteration does not close engine-owned batches, the generic import selector,
+public source lookup, structured source facts or mandatory-relationship object
+imports. Each imported record must independently satisfy final invariants.
+Next priorities are compatible catalog acceptance and committed feed/source
+registration/checkpoint/ACK, followed by public Weft execution and installation
+upgrades. Existing scalar mutations, atomic preconditions, independent edges and
+authority receipt visibility are already callable; historical sections below
+retain the evidence and limitations of their original iterations.
+
 ## Consumer additions from commit 9e38962 — 2026-10-12
 
 Read the consumer's `docs/helix/02-design/truss-requirements.md` at commit

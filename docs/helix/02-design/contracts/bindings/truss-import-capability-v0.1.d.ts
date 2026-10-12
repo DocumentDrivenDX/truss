@@ -15,7 +15,8 @@ export type ImportExecutionResult<R extends ImportReport> = {
   readonly report:R & {readonly status:'interrupted'};
 } | {
   readonly outcome:'execution_failed';readonly error:ExecutionFailure;
-  /** Null only when no writer submission occurred; never erases prior progress. */
+  /** Null before submission or when current disclosure authority cannot be established or the report exceeds its bound.
+   * Null does not prove zero writes or rollback; caller-owned effects may remain pending/unresolved. */
   readonly report:R|null;
 } | {
   readonly outcome:'invalid';readonly diagnosticProfile:ProfilePin;

@@ -17,7 +17,8 @@ Runtime 0.14 adds public scalar object updates/deletes and ordered mixed batches
 Runtime 0.15 adds atomic caller preconditions and explicit invalid/unauthorized group failures.
 Runtime 0.16 adds independent directed edge create/update/delete, identity reads and ordered relationship pages, including mandatory relationships satisfied in the same batch.
 Runtime 0.17 adds original committed receipt tokens and authority-side `reached_in_transaction` on caller read-only transactions.
-Compiled queries, imports and feed operations remain unfinished.
+Runtime 0.18 adds caller-owned scalar object and independent edge imports with immutable source facts and indexed partial progress.
+Compiled queries, engine-owned import batches and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -996,8 +997,8 @@ Relationship conditions take an accepted relationship pin. Resolve it with
 `get_relationship_reference_in_transaction(document_id=..., module_id=...,
 relationship_id=...)`. Absence requires both endpoints to exist. Counts take an
 existing anchor, `direction="outgoing"` or `"incoming"`, `minimum="0"` by default
-and an optional exact integer-text `maximum`. They count live edges. Relationship
-writes remain unfinished; these predicates already query the actual edge table.
+and an optional exact integer-text `maximum`. They count live edges, including
+edges produced by the public relationship mutation provider.
 
 The selected profile admits up to 128 unique condition IDs. Truss locks existing
 objects and exact key routes; edge writers must lock old/new endpoint rows too.
@@ -1252,3 +1253,51 @@ allocation accounting, custom tracing or metrics are introduced.
 This profile has indefinite retained receipts and no expiry API. Replica/seed
 comparison, repeatable-read visibility profiles and portable restore lineage
 remain unimplemented. A fresh installation is still required for runtime upgrades.
+
+### Caller-owned imports (runtime 0.18 candidate)
+
+Use the same ordinary-person assembly and adopted read-write transaction as
+groups. Build object identities from the accepted primary-key definitions:
+
+```python
+context = assembly.import_context_in_transaction(tx).value
+record = assembly.object_import_record_in_transaction(
+    tx, document_id="commerce", module_id="sales", record_id="Product",
+    values=authored_values, source=source_facts,
+).value
+input = context.input((record,), load_id="load-2026-10-12",
+                      asserted_origin=MapValue(entries=()))
+result = assembly.import_in_transaction(tx, input, documents=original_documents)
+# Inspect ImportReported.report, then let the host commit or roll back.
+```
+
+The report preserves submitted indices and distinguishes created, skipped and
+rejected records. Created effects remain pending until the host commits.
+Objects run before edges; an `EdgeImportRecord` names an accepted relationship
+pin and existing native endpoint identities. Import new objects first, then
+use their returned identities to construct edge records with
+`context.edge_payload(values, order_key, source=source_facts)`.
+
+An admitted live identity skips before decoding its replacement payload.
+Deleted primary keys and imported edge pairs remain reserved and also skip.
+Eligible invalid records are rejected inside a per-record savepoint; earlier
+successful records remain pending. Execution failures return indexed progress
+and transaction disposition without an internal retry.
+An execution failure with `report=None` may mean current disclosure authority
+could not be established or the bounded report could not be published. It does not prove zero writes or rollback; earlier
+effects may remain pending or unresolved, and the host still owns settlement.
+
+The native producer atomically stores immutable load/source facts with each
+created record and its journal. `source_facts` is an optional `MapValue` of exact
+scalar values; known `author`, `at` and `system` facts are strings or null.
+`x-load-id` is supplied by Truss from `load_id`; the database actor remains the
+connecting person, while `x-initiated-by` may carry a caller assertion.
+Skips and later edits cannot replace provenance. Source rows survive deletion.
+
+This profile supports rootless scalar objects with string primary keys and
+independent directed edges. Each accepted record must satisfy final invariants
+on its own, so importing a new object that needs a mandatory relationship is
+not yet supported. Limits are 128 records, 1 MiB per payload, 4 MiB per canonical
+input and 8 MiB per report. Original UMF key production still requires Bun. Engine-owned batches,
+the generic import capability selector, public source lookup, structured source
+facts and migrations remain unfinished.

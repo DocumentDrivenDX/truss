@@ -18,6 +18,10 @@ from typing import Literal
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
+from .imports import ImportInput,ImportExecutionResult,ObjectImportRecord
+from .import_runtime import ImportRuntimeContext
+from .groups import AuthoredValue
+from .contracts import MapValue
 from .receipt_visibility import ReceiptIncluded,ReceiptVisibilityUnavailable
 from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
@@ -134,7 +138,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','preconditions.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','preconditions.sql','imports.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -444,7 +448,7 @@ class CatalogReferenceAssembly:
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(role)),prepare=False)
-                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.reached(bytea,int,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.reached(bytea,int,text,text),truss.import_context(text,text),truss.import_key_selection(text,text,text,text,text),truss.import_identity_key_selection(bytea,text,text),truss.import_object_identity(bytea,bytea,bytea,text,text),truss.import_edge_identity(bytea,text,text),truss.import_record_source(uuid,bytea,text),truss.import_report_record_authority(bytea,text,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
@@ -532,6 +536,56 @@ class CatalogReferenceAssembly:
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
         return result
+
+    def import_in_transaction(self,transaction: TransactionHandle,input: ImportInput,*,documents: tuple[CatalogDocument,...],bun_executable: str='bun') -> ImportExecutionResult[Literal['host_adopted']]:
+        """Import with indexed per-record outcomes; accepted effects remain caller-owned pending."""
+        from ._import_runtime import run_import
+        from .imports import ImportExecutionFailed
+        with self._lock:
+            if self._disposed:return ImportExecutionFailed(error=ExecutionFailure('execution_obligation','Assembly disposed'),report=None)
+            manifest,digest,_=_release()
+            return run_import(self._host,transaction,input,documents,manifest,digest,_pin_cursor,bun_executable=bun_executable)
+
+    @_active_operation
+    def import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[ImportRuntimeContext]:
+        from .import_runtime import ImportRuntimeContext
+        from .imports import ImportCatalogPin
+        from .contracts import ProfilePin
+        manifest,digest,_=_release()
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]))
+            return ImportRuntimeContext(layout_profile=ProfilePin(**value['layoutProfile']),import_profile=ProfilePin(**value['importProfile']),
+                value_profile=ProfilePin(**value['valueProfile']),payload_profile=ProfilePin(**value['importPayloadProfile']),
+                catalog=ImportCatalogPin(revision=value['catalog']['revision'],model_bundle_sha256=value['catalog']['modelBundleSha256']))
+        return self._host._run_operation(transaction,observe)
+
+    @_active_operation
+    def object_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
+                                            values: tuple[AuthoredValue,...],source: MapValue | None=None) -> Outcome[ObjectImportRecord]:
+        """Construct import identity from actual accepted primary-key definitions."""
+        from .contracts import ObjectKeySelection,ObjectKeyComponent,ReadTypeReference,QualifiedOwner,ProfilePin,TextValue
+        from .imports import ObjectImportRecord,ImportCatalogPin
+        from .import_runtime import ImportRuntimeContext
+        manifest,digest,_=_release()
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.import_key_selection(%s,%s,%s,%s,%s)',(document_id,module_id,record_id,manifest['releaseId'],digest),prepare=False)
+            selection=json.loads(bytes(cursor.fetchone()[0]));components=[]
+            for selected in selection['components']:
+                matching=tuple(v.value for v in values if v.name==selected['name'])
+                if len(matching)!=1 or type(matching[0]) is not TextValue or matching[0].kind!='string':raise ValueError('Complete exact string primary-key values required')
+                components.append(ObjectKeyComponent(property_id=selected['propertyId'],definition_pin=selected['definitionPin'],value=matching[0]))
+            identity=ObjectKeySelection(type=ReadTypeReference(type_id=selection['type']['typeId'],definition_pin=selection['type']['definitionPin'],
+                owner=QualifiedOwner(document_id=document_id,module_id=module_id)),key_number=selection['keyNumber'],key_definition_pin=selection['keyDefinitionPin'],
+                key_encoding_profile=ProfilePin(**selection['keyEncodingProfile']),components=tuple(components))
+            cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False);context=json.loads(bytes(cursor.fetchone()[0]))
+            builder=ImportRuntimeContext(layout_profile=ProfilePin(**context['layoutProfile']),import_profile=ProfilePin(**context['importProfile']),
+                value_profile=ProfilePin(**context['valueProfile']),payload_profile=ProfilePin(**context['importPayloadProfile']),
+                catalog=ImportCatalogPin(revision=context['catalog']['revision'],model_bundle_sha256=context['catalog']['modelBundleSha256']))
+            return ObjectImportRecord(identity=identity,payload=builder.object_payload(values,source=source),payload_profile=builder.payload_profile)
+        return self._host._run_operation(transaction,observe)
 
     @_active_operation
     def reached_in_transaction(self,transaction: TransactionHandle,token: str,*,maximum_token_bytes: int=16384,

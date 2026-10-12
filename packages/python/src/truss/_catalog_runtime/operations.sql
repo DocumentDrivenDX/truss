@@ -648,6 +648,8 @@ BEGIN
  IF (order_key='{"state":"null"}'::jsonb OR order_key->>'state'='text' AND jsonb_typeof(order_key->'text')='string'
   AND order_key-ARRAY['state','text']='{}'::jsonb AND octet_length(order_key->>'text')<=4096) IS NOT TRUE THEN
   RAISE EXCEPTION 'exact bounded order key required' USING ERRCODE='22023';END IF;
+ PERFORM truss.runtime_lock_edge_business_key(truss.runtime_edge_business_key(relation.rel_type_id,source_identity,target_identity));
+ IF old_source IS NOT NULL THEN PERFORM truss.runtime_lock_edge_business_key(truss.runtime_edge_business_key(relation.rel_type_id,old_source,old_target));END IF;
  IF NOT EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND source_type=(source_identity->>'typeId')::int AND target_type=(target_identity->>'typeId')::int) THEN
   RAISE EXCEPTION 'admitted endpoint pair required' USING ERRCODE='22023';END IF;
  IF octet_length(convert_to(retained::text,'UTF8'))>1048576 THEN RAISE EXCEPTION 'bounded edge values required' USING ERRCODE='54000';END IF;
@@ -710,6 +712,9 @@ BEGIN
    before_record:=truss.runtime_edge_history(before_image,identity,metadata->'oldSource',metadata->'oldTarget');row_image.ver:=row_image.ver+1;
   END IF;
   version:=row_image.ver;row_image.rev:=revision;row_image.updated_at:=clock_timestamp();
+  IF before_image IS NOT NULL AND (operation->>'operation'='delete_edge' OR metadata->'source' IS DISTINCT FROM metadata->'oldSource' OR metadata->'target' IS DISTINCT FROM metadata->'oldTarget') THEN
+   INSERT INTO truss.key_tombstone(entity_kind,type_id,key_num,k,entity_id,ver) VALUES('e',row_image.rel_type_id,0,truss.runtime_edge_business_key(row_image.rel_type_id,metadata->'oldSource',metadata->'oldTarget'),row_image.id,version) ON CONFLICT DO NOTHING;
+  END IF;
   row_image.source_id:=(metadata->'source'->>'id')::bigint;row_image.source_type:=(metadata->'source'->>'typeId')::int;
   row_image.target_id:=(metadata->'target'->>'id')::bigint;row_image.target_type:=(metadata->'target'->>'typeId')::int;
   row_image.retained:=nullif(metadata->'retained','{}'::jsonb);row_image.order_key:=metadata->'orderKey'->>'text';

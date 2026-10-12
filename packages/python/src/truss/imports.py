@@ -171,6 +171,7 @@ class ImportResourceLimited(_Carrier, Generic[Execution]):
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ImportExecutionFailed(_Carrier, Generic[Report]):
+    """No report may mean disclosure withheld or report capacity exceeded; it never proves zero writes or rollback."""
     error: ExecutionFailure
     report: Report | None
     outcome: Literal['execution_failed'] = field(default='execution_failed', init=False)
