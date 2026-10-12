@@ -5420,3 +5420,52 @@ all three fixture cleanups confirm stop0/status3/socket absent. Source/archive/
 runtime digests were independently rechecked after completion. The six
 `test_owner_evidence_json` tests also pass. These are component checks on the
 merged source set; the complete backend acceptance bindings remain unqualified.
+
+### Closed owned evaluator publication — 2026-10-11
+
+The owned Python read previously forwarded any evaluator dictionary carrying
+`decision: permit|deny`, including unknown members. It now parses duplicate-free
+finite JSON and requires exact decision/output and per-disposition member sets.
+Denied decisions have no output; withheld/absent cells cannot carry values.
+Original/transformed cells retain their exact value carrier, with transformed
+output-domain references. The transport bounds256 output cells and4096 characters
+per nonempty reference component. Private identities are discarded. These are
+transport checks, not a second ontology, literal decoder or authorization engine.
+
+Before emitting a permitted fixture result, the original TypeScript evaluator
+now applies UMF's existing `validateSecurityDisclosure` to the original Resource/
+salary selection. UMF validates field correspondence, disposition shape and exact
+Core literal/domain meanings. It remains a structural/domain validator, not an
+independent permission or credential proof. All four dispositions remain admitted
+by the transport; existing native permitted/denied outcomes remain unchanged.
+
+Two added controls preserve all four disposition carriers (including an integer
+token beyond JavaScript's safe integer range), refuse extra members, malformed
+references, missing values, nonfinite/duplicate JSON and over-limit output, and
+inject three malformed evaluator replies during actual delegated native reads.
+Unknown decision diagnostics, values attached to withholding and duplicate
+decision members all refuse; private sentinel data and evaluator stderr never
+appear in the caller result, and both pair reservations retire. The first
+`evidence/python-psycopg-epoch-cut/9a2e4c5f-4b8e-4905-9be1-66cfbe10d079`
+passes194 methods and the boundary gate with all three fixture cleanups, before
+the concurrent catalog-support merge and runner scope-description correction.
+An initial isolated unittest invocation lacked the required native fixture setup;
+the corrected direct parser-method invocation and the complete native run pass.
+
+Trace TD-056 C05, CONTRACT-063/STP-056 B07/B08/B10/B12/B15/B16 and
+US-056 AC5/AC6/AC8/AC10 prerequisites. This closes an actual publication-shape
+gap; source pins, structural validation and these finite controls do not prove
+producer authentication, current authority, all diagnostic channels or complete
+backend acceptance. Original raw/graph and all132 acceptance cases remain
+required;26 pass and106 remain unbound. The full Weft query surface is unchanged.
+
+Final merged packet
+`evidence/python-psycopg-epoch-cut/2e82210c-eaac-45d8-98bb-8750b7d4e522`
+passes194 methods and the boundary gate, with145 current/preimage Truss sources,
+363 current/archive UMF sources and1705 native payload pins independently
+reverified. All three cleanups confirm stop0/status3/socket absent. The exact
+selected engine18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary profile is
+unchanged. Main's concurrent authored catalog-key/relationship support is
+preserved; its eight `test_catalog_relational_support` tests also pass. Both
+native packets remain available under their original source scopes. No complete
+backend case or production channel/authentication profile is promoted.
