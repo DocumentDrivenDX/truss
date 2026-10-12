@@ -3065,3 +3065,165 @@ passes183 methods, boundaries and143 current/preimage inputs with three cleanups
 against both integrated changes. Earlier packets retain their own source scopes.
 This security composition run does not independently qualify the new catalog
 facade/dispatch workflow or promote any backend acceptance binding.
+
+### Private authorization-fact statistics counterexample — 2026-10-11
+
+An actual catalog-only native caller with no table/column SELECT can distinguish
+private Assignment populations through pg_catalog.pg_class.reltuples. After
+excluded admin ANALYZE, controlled populations1 and2 yield text statistics1 and2;
+private SELECT/count still refuse42501. The extra inactive fixture row is removed
+and statistics restored. This is finite analyzed-table statistics evidence, not
+an exact general-purpose row-count oracle or graph logical-association count proof.
+Final `evidence/python-psycopg-epoch-cut/9e6718b6-281d-4c0c-8e4d-ab3c5f0318d9`
+passes184 methods, module boundaries,143 current/preimage sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+This confirms that `_exclude_native_private_fact_privileges` establishes only its
+named table/column/definer privilege snapshot, not B10 observation isolation. RLS,
+column masking and ACL denial alone do not remove system-catalog/statistics access.
+The owned delegated tool's trusted application host references are not evidence
+that an end user lacks another SQL credential/endpoint. A positive hidden-fact
+profile must qualify every untrusted observation channel, including system
+catalogs, statistics, plans/errors and alternate endpoints. Select an enforced
+mediated channel with private executor credentials and complete receiver routing,
+or independently qualify native diagnostic/callable/catalog restrictions. Merely
+adding a request/configuration boolean such as sqlExposure=false is forbidden.
+Unknown coverage refuses positive admission. This obligation applies equally to
+raw tables and graph stores; the concrete counterexample covers this flat fixture.
+
+Trace CONTRACT-063/STP-056 B04/B05/B10/B11/B12 and US-056 AC5/AC8/AC9/AC10. The
+next protected service integration must prove credential/receiver channel custody
+and native source privacy, alongside original issuer/subject/mapping/target,
+writer/current-state and final-release closure. No backend binding or complete
+privacy/noninterference claim is promoted. Full goal remains active at26/132 with
+106 unbound cases; the original acceptance scope is unchanged.
+
+Integrated-main requalification: concurrent retained-parameter host/catalog work
+changes two source inputs. Original9e6718b6 keeps its pre-merge scope. Fresh
+`evidence/python-psycopg-epoch-cut/ed2ea7b9-ad94-40ed-b12d-84e346e20a7e`
+passes184 methods, boundaries,143 current/preimage sources and three cleanups
+against the integrated host/catalog. This qualifies the finite counterexample
+and composition only; hidden-fact B10 and protected channel admission stay open.
+
+### Opaque definer execution-plan buffer counterexample — 2026-10-11
+
+A separate owned database revokes ordinary SELECT on every pg_catalog relation
+and explicit EXECUTE on pg_catalog routines. Its ordinary non-superuser/no-role-
+admin/no-bypass actor receives only schema USAGE and EXECUTE on a fixed-search-path
+opaque SECURITY DEFINER routine scanning a private table. Private count and
+pg_class SELECT refuse; the routine returns the same literal opaque value in both
+worlds. EXPLAIN ANALYZE BUFFERS remains callable: one result row in each world,
+shared hit blocks1 then304 after10,000 private rows are added. Actual plan JSON is
+retained in `opaque-explain-counterexample.json`. This is one fixed private scan
+and command surface, not a policy evaluator, exact row-count oracle, timing
+noninterference proof or proof that every protected routine has the same footprint.
+
+Final `evidence/python-psycopg-epoch-cut/f79cd220-5c0d-4b1d-beb2-9f662aa40d2d`
+passes185 methods, boundaries,143 current/preimage Truss inputs on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three standard cleanups. The separate database/role are explicitly dropped;
+PUBLIC ACL changes never affect the main or any foreign database. This strengthens
+the existing PostgreSQL17.9 deny-first design limitation with native18.6 command
+observability evidence. Excluding table/catalog privileges cannot independently
+qualify B10 when arbitrary SQL can instrument a granted opaque routine.
+
+Protected integration should retain native RLS/ACL/masking/cut enforcement behind
+an independently qualified receiver/credential boundary. That boundary must expose
+only registered semantic operations and results, not user SQL/EXPLAIN/DDL/decoder
+callbacks or raw executor handles. Native SQL profiles remain possible only under
+independently qualified complete command/operator/type/diagnostic and deployment
+closure; they cannot inherit qualification from these explicit ACL tests. Unknown
+channel coverage refuses admission. Trace CONTRACT-063/STP-056 B04/B05/B10/B11/B12
+and US-056 AC5/AC8/AC9/AC10. No backend binding or complete privacy claim; full goal
+active at26/132 with106 unbound cases.
+
+### Owned semantic decision receiver candidate contract — 2026-10-11
+
+Under shared CONTRACT-063 / TD-056 C03, the private owned flat fixture selects
+wire interface `truss-owned-decision-request/0.1`. The request is exact UTF-8 JSON
+bytes of1–1024 bytes, one object with exactly interfaceVersion and operation,
+both strings. interfaceVersion is the selected value above; operation is read.
+Duplicate members, invalid UTF-8/JSON/constants, unknown fields/operations,
+non-byte carriers and oversized input refuse with the single generic ValueError
+message `Owned semantic request refused` before evaluator/native dispatch.
+The server-selected original fixture resource is fixed by the existing source
+bundle; this request does not select arbitrary resources or define a public API.
+
+Original caller/executor hosts, issued transaction handles, native epoch/profile,
+requirements and original policy/resolution are trusted application inputs captured
+in the private receiver. They are neither wire fields nor credentials granted by
+constructing the receiver. The receiver invokes only the existing owned delegated
+UMF read; success/error remains its original sanitized Outcome. It exposes no SQL,
+EXPLAIN/DDL, subject/actor/authority override, artifact path, decoder callback,
+connection or private fact cells. Authentication, endpoint/credential custody,
+full channel/source/lifetime closure and a public result grammar remain separate
+unimplemented qualification exits. This contract covers an owned C03 prototype
+only; it does not admit a backend or replace native enforcement.
+
+### Closed owned semantic receiver implementation evidence — 2026-10-11
+
+`scripts/security_owned_receiver.py` implements the private request contract
+above. It snapshots the original epoch/source bytes and retains application-owned
+host/issued transaction references in private scope. Request decoding admits only
+the exact fixed read grammar and forwards only to the original delegated UMF
+operation. It contains no user SQL/decoder dispatch or subject/profile/credential
+selection. Constructing this object is not authentication or endpoint closure.
+
+Two native methods execute the original read and reject23 adversarial carriers:
+SQL/EXPLAIN text, invalid UTF-8/JSON/constants/types/bounds/duplicates, actor/subject/
+profile/authority/host/credential/decoder/callback/artifact overrides and unsupported
+operations. The rejection schedule independently proves delegated native dispatch
+is never called, original native xid stays unchanged and no host pending operation
+appears. Original successful decision excludes cells/private identities. Final
+`evidence/python-psycopg-epoch-cut/1fadf098-d896-4014-8f08-4419dabf4387`
+passes187 methods, boundaries,144 current/preimage Truss sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-owned-receiver-formal/57268521-9120-4d11-af92-66d57d7cdad7`
+retains four exact source inputs and six Z3 4.15.4 SMT-LIB/fresh-context replays,
+four UNSAT/two SAT. Conditional grammar rejects extra/duplicate fields, explain
+and oversize. Countermodels show grammar does not authenticate a subject or close
+other channels. Faithful parsing/mapping remain premises; this is not Python/native
+or complete receiver refinement. Trace shared TD-056 C03, CONTRACT-063/STP-056
+B04/B06/B08/B10/B12 and US-056 AC5/AC7/AC8/AC10 prerequisites. C01/C02 actual
+route/credential/caller/issuer/mapping/target authentication and C04–C07 source/
+publication/recovery/full qualification remain open. No public endpoint, general
+resource selector or backend binding is promoted; full goal active at26/132 with
+106 unbound cases.
+
+### Original host attachment and receiver handle ownership — 2026-10-11
+
+Psycopg operation entry now compares the original physical-connection registry
+custody and attached weak reference to this exact host while its connection lease
+is retained, before cursor/SQL or semantic reservation. A shallow host copy cannot
+reuse the original issuer/transaction registry as an attached host. Copied-host
+detach refuses before invalidating shared original handles. Existing original
+closed/quarantined host outcome ordering remains transaction_unusable; no new
+public liveness/capability flag is introduced. Arbitrary same-process registry
+mutation remains outside the trusted embedding-host contract.
+
+Native controls prove copied host operation submits no cursor/SQL/callback,
+copied detach leaves the original handle usable, original disposed outcome is
+preserved, and a receiver with a metadata-identical newly constructed executor
+handle refuses while the original receiver scope can still produce its decision.
+The actual host registry's exact issued-handle instance check remains authoritative;
+the receiver does not copy it into an unguarded preflight claim. Final
+`evidence/python-psycopg-epoch-cut/4eeac22c-ea91-4afd-bfc8-1043495ac4ec`
+passes190 methods, boundaries,144 current/preimage sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups. Earlier645dcb61 passes189 before
+the explicit disposed-outcome compatibility control and reordered check.
+
+Formal `evidence/security-host-attachment-formal/8aff015a-174f-4e98-93de-f5db10cd812f`
+retains six exact source inputs and six Z3 4.15.4 SMT-LIB/fresh-context replays,
+three UNSAT/three SAT. Matching metadata cannot replace registered object identity;
+an unrelated detach preserves original usability. Original object identity does
+not authenticate a subject. Registry fidelity and lease exclusion are premises,
+not Python weak-reference/thread/native driver refinement proofs. Trace ADR-008,
+CONTRACT-063/STP-056 B12/L03/L11 and TD-056 C03 prerequisites. Original caller/
+issuer/subject/mapping/target credentials, all receiver routes and source/current-
+authority/publication/recovery closure remain required. No backend binding or
+C01/C02 authentication qualification; full goal active at26/132 with106 unbound
+cases.

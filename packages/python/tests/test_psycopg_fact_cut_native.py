@@ -1485,3 +1485,122 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 finally:self.connection.execute('ROLLBACK');connection.execute('RESET ROLE')
             self.with_unprivileged_actor(operation,catalog_only=True)
         finally:self.connection.execute('DROP ROLE IF EXISTS fact_identity_assumed,fact_identity_renamed')
+
+    def test_catalog_only_actor_can_observe_private_fact_statistics_counterexample(self):
+        def operation(host,t,original,connection):
+            connection.execute('SAVEPOINT private_count_refusal')
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('SELECT count(*) FROM truss.sec_assignment')
+            connection.execute('ROLLBACK TO private_count_refusal')
+            oid=self.semantic_relations['sec_assignment'].oid
+            self.connection.execute('ANALYZE truss.sec_assignment')
+            first=connection.execute('SELECT reltuples::text FROM pg_catalog.pg_class WHERE oid=%s::oid',(oid,)).fetchone()
+            self.connection.execute("INSERT INTO truss.sec_assignment VALUES('metadata-counterexample','s1','p1',false)")
+            try:
+                self.connection.execute('ANALYZE truss.sec_assignment')
+                second=connection.execute('SELECT reltuples::text FROM pg_catalog.pg_class WHERE oid=%s::oid',(oid,)).fetchone()
+                self.assertEqual((first,second),(('1',),('2',)))
+                connection.execute('SAVEPOINT private_rows_refusal')
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('SELECT * FROM truss.sec_assignment')
+                connection.execute('ROLLBACK TO private_rows_refusal')
+            finally:
+                self.connection.execute("DELETE FROM truss.sec_assignment WHERE assignment_id='metadata-counterexample'")
+                self.connection.execute('ANALYZE truss.sec_assignment')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_opaque_definer_explain_buffers_survive_catalog_privilege_denial(self):
+        # Separate owned database: catalog-wide PUBLIC ACL changes never touch
+        # the main fixture or a foreign installation.
+        self.connection.execute('CREATE ROLE opaque_diag_actor LOGIN NOSUPERUSER NOCREATEROLE NOCREATEDB NOREPLICATION NOBYPASSRLS')
+        with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
+            allocator.execute('CREATE DATABASE opaque_diag_database')
+        try:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname='opaque_diag_database',autocommit=True,options='-c statement_timeout=5000') as admin:
+                admin.execute("CREATE SCHEMA diag_private; REVOKE ALL ON SCHEMA diag_private FROM PUBLIC; CREATE TABLE diag_private.facts(v text); INSERT INTO diag_private.facts VALUES('private'); CREATE SCHEMA diag_api; GRANT USAGE ON SCHEMA diag_api TO opaque_diag_actor; CREATE FUNCTION diag_api.opaque_read() RETURNS text LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$ BEGIN PERFORM v FROM diag_private.facts; RETURN 'opaque'; END $$; REVOKE ALL ON FUNCTION diag_api.opaque_read() FROM PUBLIC; GRANT EXECUTE ON FUNCTION diag_api.opaque_read() TO opaque_diag_actor")
+                admin.execute('REVOKE SELECT ON ALL TABLES IN SCHEMA pg_catalog FROM PUBLIC; REVOKE EXECUTE ON ALL FUNCTIONS IN SCHEMA pg_catalog FROM PUBLIC')
+                with psycopg.connect(host=str(self.socket),user='opaque_diag_actor',dbname='opaque_diag_database',autocommit=True,options='-c statement_timeout=3000') as actor:
+                    self.assertEqual(actor.execute('SELECT diag_api.opaque_read()').fetchone(),('opaque',))
+                    for query in ('SELECT count(*) FROM diag_private.facts','SELECT reltuples FROM pg_catalog.pg_class'):
+                        with self.assertRaises(psycopg.errors.InsufficientPrivilege):actor.execute(query)
+                    first=actor.execute('EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) SELECT diag_api.opaque_read()').fetchone()[0][0]['Plan']
+                    admin.execute("INSERT INTO diag_private.facts SELECT repeat('private',30) FROM generate_series(1,10000)")
+                    self.assertEqual(actor.execute('SELECT diag_api.opaque_read()').fetchone(),('opaque',))
+                    second=actor.execute('EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) SELECT diag_api.opaque_read()').fetchone()[0][0]['Plan']
+                    def buffers(plan):return plan.get('Shared Hit Blocks',0)+plan.get('Shared Read Blocks',0)
+                    self.assertGreater(buffers(second),buffers(first))
+                    self.assertEqual((first['Actual Rows'],second['Actual Rows']),(1,1))
+                    import os
+                    evidence=os.environ.get('TRUSS_PSYCOPG_EPOCH_EVIDENCE')
+                    if evidence:
+                        (Path(evidence)/'opaque-explain-counterexample.json').write_text(json.dumps({'profile':'owned-opaque-definer-command-counterexample','firstPlan':first,'secondPlan':second,'scope':'One fixed private scan and opaque output; buffer observables vary under explicit catalog privilege denial. Not a policy evaluator, exact row-count oracle or complete diagnostic closure.'},indent=2)+'\n')
+        finally:
+            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=15000') as allocator:
+                allocator.execute('DROP DATABASE opaque_diag_database')
+            self.connection.execute('DROP ROLE opaque_diag_actor')
+
+    def owned_receiver(self,host,t,executor_t):
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_owned_receiver import _OwnedDecisionReceiver
+        raw,profile,sources=self.source_bound_profile();value=json.loads(profile)
+        def roles(c):return c.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
+        caller=roles(host.connection);executor=roles(self.connection)
+        value['kind']='truss-flat-fact-provider-fixture/0.4';value['caller']={'sessionRoleOid':caller[0],'effectiveRoleOid':caller[1],'subjectKey':[{'string':'s1'}]};value['executor']={'sessionRoleOid':executor[0],'effectiveRoleOid':executor[1]}
+        epoch=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
+        return _OwnedDecisionReceiver(host,t,self.host,executor_t,epoch,raw,sources)
+
+    def test_owned_semantic_receiver_dispatches_original_read_without_private_output(self):
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                receiver=self.owned_receiver(host,t,executor_t)
+                result=receiver.dispatch(b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read"}')
+                self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit')
+                self.assertNotIn('identities',result.value);self.assertNotIn('cells',result.value)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_owned_semantic_receiver_rejects_wire_escape_before_native_dispatch(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_receiver as tool
+        valid={'interfaceVersion':'truss-owned-decision-request/0.1','operation':'read'}
+        attacks=[b'SELECT * FROM truss.sec_assignment',b'EXPLAIN ANALYZE SELECT 1',b'\xff',b'',b' '*1025,
+                 b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read","operation":"read"}',
+                 bytearray(json.dumps(valid).encode()),json.dumps(valid),b'[]',b'NaN']
+        attacks += [json.dumps({**valid,key:'untrusted'}).encode() for key in ['sql','actor','subjectKey','profile','authority','host','credentials','decoder','callback','artifactPath']]
+        attacks += [json.dumps({**valid,'operation':operation}).encode() for operation in ['explain','ddl','write']]
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                receiver=self.owned_receiver(host,t,executor_t)
+                before=self.connection.execute('SELECT pg_current_xact_id()::text').fetchone()
+                with patch.object(tool,'run_delegated_owned_identity_read',side_effect=AssertionError('native dispatch must not run')) as execute:
+                    for attack in attacks:
+                        with self.subTest(carrier=type(attack).__name__):
+                            with self.assertRaisesRegex(ValueError,'^Owned semantic request refused$'):receiver.dispatch(attack)
+                    execute.assert_not_called()
+                self.assertEqual(self.connection.execute('SELECT pg_current_xact_id()::text').fetchone(),before)
+                self.assertIsNone(host._custody.pending);self.assertIsNone(self.host._custody.pending)
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_owned_receiver_copied_executor_handle_refuses_original_scope_borrowing(self):
+        from truss.execution import TransactionHandle
+        def operation(host,t,original,connection):
+            executor_t=self.begin()
+            try:
+                receiver=self.owned_receiver(host,t,executor_t)
+                scope=receiver._OwnedDecisionReceiver__scope
+                copied=TransactionHandle(executor_t._issuer,executor_t._key,executor_t.isolation,executor_t.access_mode)
+                receiver._OwnedDecisionReceiver__scope=(*scope[:3],copied,*scope[4:])
+                result=receiver.dispatch(b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read"}')
+                self.assertIsInstance(result,Error)
+                self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+                # Original application scope remains usable; metadata copying
+                # cannot register the substitute handle or consume its authority.
+                receiver._OwnedDecisionReceiver__scope=scope
+                original_result=receiver.dispatch(b'{"interfaceVersion":"truss-owned-decision-request/0.1","operation":"read"}')
+                self.assertIsInstance(original_result,Ok);self.assertEqual(original_result.value['decision'],'permit')
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)

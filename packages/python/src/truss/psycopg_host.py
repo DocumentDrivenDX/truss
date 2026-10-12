@@ -275,6 +275,10 @@ class PsycopgHost:
             name = sql.Identifier('truss_op_' + uuid4().hex)
             if self._closed or self._custody.quarantined:
                 return _failure('transaction_unusable', 'Session disposed or connection quarantined')
+            with _registry_lock:
+                if (_registry.get(self.connection) is not self._custody or self._custody.attached is None
+                        or self._custody.attached() is not self):
+                    return _failure('invalid_transaction', 'Original registered host attachment required')
             status = self._status()
             if status != pq.TransactionStatus.INTRANS:
                 if status == pq.TransactionStatus.IDLE:
@@ -487,6 +491,10 @@ class PsycopgHost:
         self._closed = True
         if not self._custody.lease.acquire(blocking=False): return False
         try:
+            with _registry_lock:
+                if (_registry.get(self.connection) is not self._custody or self._custody.attached is None
+                        or self._custody.attached() is not self):
+                    return False
             self._closed = True
             for custody in self._transactions.values(): custody.usable = False
             with _registry_lock:
