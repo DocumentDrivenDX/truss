@@ -5618,9 +5618,11 @@ this owned0.5 subset. Standalone/nondelegated capture refuses it. The private
 executor still uses the original0.4 native role scope: this is caller credential
 authentication, not executor/issuer/target authentication or a public admitted
 backend. No custom custody codec or whole-operation snapshot pipeline is added.
-The inert public assembly and unqualified installation asset still cannot supply
-the selected callable registration/report milestone; these component results do
-not substitute for it or impose a blanket catalog SCRAM requirement.
+At initial inspection the inert public assembly and unqualified installation
+asset could not supply the selected callable registration/report milestone.
+Public catalog implementation subsequently landed during this turn and is
+preserved below. These authentication components do not substitute for public
+workflow qualification or impose a blanket catalog SCRAM requirement.
 
 Three new native controls exercise the actual composed path. A matching trust
 session refuses before executor invocation. A genuine SCRAM caller invokes the
@@ -5649,3 +5651,30 @@ original authentication and retained custody are premises, not Python/native or
 complete semantic refinement proofs. Trace TD-056 C02/C04/C05, CONTRACT-063/
 STP-056 B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites. No backend binding is
 promoted; all132 cases remain required,26 pass and106 remain unbound.
+
+### Public catalog merge and authenticated-read requalification — 2026-10-12
+
+The initial non-force push was rejected because main had acquired the public
+catalog milestone at6c934ea5/d9349175. Merge preserves the actual
+`CatalogReferenceAssembly`, caller-owned installation, registration/report/status
+facades, selected deferred barrier, privileges and packaged SQL. Its existing
+`public-python-catalog-20261012.json` records14 native source and14 installed-wheel
+checks under the catalog-only scope; these owner-reported results are distinct
+from this turn's independent security composition and do not close advanced
+business security cases. Public registration/report review is now possible from
+actual source rather than an inert selector or administrative staging helper.
+
+Fresh `evidence/python-psycopg-epoch-cut/3ab7359a-12bc-433d-86b4-6caadae1d96c`
+passes197 methods and the boundary gate on the combined executable source,
+retaining146 Truss,363 UMF and1705 native payload pins and three confirmed
+cleanups. Prior48ac1b2b/d76eb4fd packets retain their pre-merge source scopes.
+The new native public catalog SQL, its actual routing/credential/privilege
+inventory and minimum security handoff require independent qualification; this
+197-method fixture does not execute the public catalog workflow. No blanket
+SCRAM release gate or advanced business-write/read capability is inferred.
+
+Merged formal `evidence/security-authenticated-publication-formal/b75d3127-9778-40d9-b023-88d5cb752a79`
+retains six current source/native-receipt inputs and the same four fresh-context
+replays, two UNSAT/two SAT. All current/archive/SMT digests are rechecked before
+publication. Formal and native scope remain caller-only owned0.5; public catalog
+and all advanced backend cases keep their independent acceptance obligations.
