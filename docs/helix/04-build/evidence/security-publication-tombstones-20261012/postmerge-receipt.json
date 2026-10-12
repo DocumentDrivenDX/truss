@@ -1,0 +1,13 @@
+{
+  "executedCommit": "bfaa96c98b84d16e447289170b94d3bbbba2d73f",
+  "reason": "Concurrent retained-history runtime was preserved in main merge; native regression replayed on merged source.",
+  "nativeObservations": 193,
+  "formulaReplays": 7,
+  "scope": "Same qualified candidate subset; no required acceptance promotion.",
+  "sha256": {
+    "security-tombstone-postmerge.json": "93c2771126750e02467014f49ac01e6c581bdcb3903aa2d1142b978fe2c64cff",
+    "security-tombstone-postmerge.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-tombstone-postmerge.stderr.log": "c5b84309539d845e4fa36899cea2a933ad002b911aeac713aad2ab5f59681829",
+    "security-tombstone-formula-replay.json": "68954458b164756b39624f57035d8f6698cd23d572d869eede55c15f064cbdfb"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "solver": "4.15.4",
+  "queries": {
+    "fresh-serial-registration-preserves-capacity": {
+      "result": "unsat",
+      "witness": null
+    },
+    "two-fresh-serial-registrations-preserve-capacity": {
+      "result": "unsat",
+      "witness": null
+    },
+    "settlement-retains-capacity-occupancy": {
+      "result": "unsat",
+      "witness": null
+    },
+    "last-slot-is-reachable": {
+      "result": "sat",
+      "witness": {
+        "retained": "0",
+        "capacity": "1"
+      }
+    },
+    "shared-stale-count-oversubscribes": {
+      "result": "sat",
+      "witness": {
+        "retained": "0",
+        "capacity": "1"
+      }
+    }
+  },
+  "scope": "Integer cardinality invariant under serialized fresh counts and retained settlement. Capacity is fixed by original verified profile. No physical heap/CPU bound, SQL snapshot/lock refinement, byte custody, complete registrant coverage, caller/profile authentication, capacity migration or admission proof."
+}

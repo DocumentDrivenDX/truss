@@ -248,3 +248,101 @@ Exact formulas, proof source, counterexample witnesses, replay and hashes:
 `../../04-build/evidence/security-publication-induction-20261012/receipt.json`.
 Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Native190-observation
 feasibility remains separately qualified; no required backend case is promoted.
+
+
+### Retained original publication identities — 2026-10-12
+
+The separately versioned0.2 tombstone candidate adds nonnull `settled` to the
+private claim table. Registration still inserts exact original operation bytes
+under a permanent primary key. Settlement updates only an unsettled matching
+operation/installation/profile/generation to `settled=true`, retaining all original
+bytes and generation. It never deletes the row. Repeated settlement returns zero
+and requires original reconciliation, not an invented new completion.
+
+The0.3 tombstone generation-advance source checks absence of every **unsettled**
+claim, so completed identities do not block authority advancement. Earlier0.1
+delete-based settlement and0.2 all-row generation gating are incompatible with
+this candidate; production bootstrap/callable parity must forbid mixing them.
+These are fresh fixture DDL/profile sources, not an installed layout migration.
+
+Actual native SQL retains both original settled identities, rejects each replay
+with23505 and returns zero for repeated settlement. Overlapping/pending
+registration drain and generation advancement still pass; total193 observations.
+The seven abstract lifetime checks include monotone retention across registration,
+settlement and loss, replay refusal, a reachable fresh token, delete-based replay
+and removal counterexamples. The latter proof assumes never-used registration
+and retained tokens; native PK execution provides separate limited feasibility.
+Neither establishes original issuer identity, authentic sink completion, concrete
+SQL refinement or complete administration/privilege closure.
+
+Permanent tombstones introduce retention and resource obligations. Production
+must bound/admit registry work, refuse before disclosure on capacity exhaustion,
+and preserve lifetime token uniqueness across cleanup, profile transitions and
+restores. Compaction may not simply remove settled identities and reopen reuse.
+Original commit uncertainty/reconciliation, bootstrap, complete participant
+coverage and trusted settlement remain required.
+
+Sources,193 native observations, seven formulas/results and hashes:
+`../../04-build/evidence/security-publication-tombstones-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L09/L11 and US-057-AC2/AC5/AC7. This extends
+the candidate only; no required backend acceptance case is promoted.
+
+
+### Bounded retained publication registration — 2026-10-12
+
+The separately versioned0.3 capacity registration source admits original operation
+bytes1..2048 and a verified-profile capacity integer1..1048576. These are local
+implementation bounds, not shared semantics or product ceilings. Capacity counts
+all retained identities, including settled tombstones. Exhaustion refuses before
+disclosure, without deleting identities or choosing a new operation/profile.
+The bounded count reads at most the selected capacity rows; this is a logical
+row-count bound, not native heap, scan-cost, CPU or allocation qualification.
+
+Count and insertion require original schema-head SHARE, guard SHARE, then
+`installation-publication-claim-capacity-lock-v0.1.proposal.sql`'s SHARE ROW
+EXCLUSIVE table lock, retained through commit/rollback. The count runs in a fresh
+READ COMMITTED statement after acquisition. All registrants must follow this
+order/source; uncapped0.2 registrations are incompatible with positive capacity
+admission. Capacity must be fixed by authenticated original installation/profile,
+never supplied as an ordinary caller option. That binding remains unimplemented.
+
+The native fixture retains three earlier settled identities, refuses full/zero/
+negative/oversized capacities and oversized operation bytes, then races two
+registrants for the fourth slot. The second actually waits on the first's original
+PID and its fresh count refuses after the first commits. Settlement of that
+fourth identity does not reopen capacity. Suite total197 native observations.
+Five integer-cardinality checks preserve the cap under fresh serialized counts
+and retain a stale-shared-count oversubscription witness; they assume the
+serialization/freshness and fixed-capacity premises rather than proving native
+SQL refinement.
+
+Sources, successful and failed native logs, formulas/results and hashes:
+`../../04-build/evidence/security-publication-capacity-20261012/receipt.json`.
+The first test binding used repeated positional parameters incorrectly; supported
+psycopg named parameters now preserve the original SQL source. Trace
+CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Whole resource budgets,
+original profile/issuer/sink authentication, complete participant/bootstrap
+parity, uncertainty/recovery and safe lifetime retention remain required.
+No required backend acceptance case is promoted.
+
+
+### Capacity acquisition interruption containment — 2026-10-12
+
+A blocked capacity acquisition now executes two native interruption schedules.
+A150ms native lock timeout returns55P03. Separately, native blocker evidence
+precedes cancellation of only the owned original waiter, whose actual command
+returns57014. Both transactions are INERROR until confirmed rollback to the
+admission savepoint. Earlier temporary-table work survives in INTRANS; actual
+pg_locks inspection finds zero remaining schema-head/guard/claim locks acquired
+inside the savepoint, and all four retained claim identities remain unchanged.
+No claim registration or protected result is published by the refused attempt.
+Suite total201 native observations.
+
+Sources, terminal logs and native observations:
+`../../04-build/evidence/security-publication-capacity-interruption-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. This qualifies the
+explicitly confirmed native fixture branches only. Unknown interruption/rollback
+outcomes still require original custody/quarantine; elapsed time or cancellation
+request alone never establishes containment. Production host recovery, profile
+binding, registry/issuer/sink and complete bootstrap/participant qualification
+remain required. No original backend acceptance case is promoted.

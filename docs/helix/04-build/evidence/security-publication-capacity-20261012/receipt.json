@@ -1,0 +1,29 @@
+{
+  "executedBaseCommit": "8e472001c658110acc149e9851ba457135e5b5cf",
+  "sourceDelta": "source-delta.zip",
+  "nativeObservations": 197,
+  "formalQueries": 5,
+  "trace": [
+    "CONTRACT-005 original resource admission",
+    "CONTRACT-063 fresh source cut and final release",
+    "STP-057 L03/L11",
+    "US-057-AC2/AC7"
+  ],
+  "developmentFailure": "Repeated positional placeholder binding refused before registration. Corrected fixture to supported psycopg named parameters; failed/successful logs retained.",
+  "scope": "Private candidate registry row/token bounds and native two-registrant schedule. Capacity is supplied fixture premise, not authenticated profile proof; no physical heap/CPU, full participant/issuer/bootstrap/recovery admission. No original132-case promotion.",
+  "sha256": {
+    "settlement-retains-capacity-occupancy.smt2": "153cd230997a069efb991adf5f7b21fe50b2c3d29874a5a6e0e032cb82d04e71",
+    "formal-results.json": "c826b00f291b6af59089616bbb350b1b418c52a7daeee73075fd4a5e60bf7742",
+    "shared-stale-count-oversubscribes.smt2": "cb9737a3be7d1793382d40523385e8a140e6bcb9f308ccdbf7d83970f9dd1fdf",
+    "security-capacity-claim-native-r2.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-capacity-claim-native.stderr.log": "1dd5a93fe9c5ba81130b87bc720d3195b3d8eb924da3e0c1f9ee1ba00e2065d3",
+    "fresh-serial-registration-preserves-capacity.smt2": "4bcaa26b920ec6a29fce994a6f99a332e012da55eabacc4e54b9fb440af8e8fb",
+    "prove-capacity.py": "2ac3118dbb2d16bdcd0efbb5a0928e5d0fe5b8ca9f300050853e23916af5b69f",
+    "security-capacity-claim-native-r2.json": "169a44992634ea1c97eec7235ca3a40b35f1e92735d94f19085befbcc9254ab8",
+    "source-delta.zip": "5663435e08047edd3c637d343a88eee2abce327d2875a4286add13e55db396ab",
+    "last-slot-is-reachable.smt2": "f182be49403c8bce7bcda4d8601aff31bac86df34b77f667fa6853d308cf1445",
+    "security-capacity-claim-native-r2.stderr.log": "75d5a1bc0e1ab45909eeceb93c4acaa199512c6aebea603062cf368954a21a3a",
+    "security-capacity-claim-native.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "two-fresh-serial-registrations-preserve-capacity.smt2": "ccf234215e1278bc307fe801632d5c2642c36435215c6dfa4d5f9ac265cad1cc"
+  }
+}

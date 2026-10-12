@@ -278,14 +278,14 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   # Same logical Record/Relationship condition over independent raw tables.
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])));rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,4)).fetchall();self.assertEqual(rows,[('1',installation_bytes.hex(),profile_bytes.hex(),'5')]);authority_writer.execute('COMMIT')
   # Durable outstanding publication survives native coordinator death.
-  self.admin.execute((contracts/'installation-publication-claim-v0.1.proposal.sql').read_text())
+  self.admin.execute((contracts/'installation-publication-claim-v0.2.tombstone.proposal.sql').read_text())
   def claim_sql(name,count):
    source=(contracts/name).read_text()
    for ordinal in range(1,count+1):source=source.replace('$'+str(ordinal),'%s')
    return source
-  register=claim_sql('installation-publication-claim-register-v0.1.proposal.sql',4)
-  settle=claim_sql('installation-publication-claim-settle-v0.1.proposal.sql',4)
-  claim_advance=claim_sql('installation-policy-generation-advance-v0.2.claim.proposal.sql',3)
+  register=claim_sql('installation-publication-claim-register-v0.2.tombstone.proposal.sql',4)
+  settle=claim_sql('installation-publication-claim-settle-v0.2.tombstone.proposal.sql',4)
+  claim_advance=claim_sql('installation-policy-generation-advance-v0.3.tombstone.proposal.sql',3)
   operation_bytes=b'fixture-original-publication-1'
   claim_coordinator=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(claim_coordinator.close)
   claim_pid=claim_coordinator.execute('SELECT pg_backend_pid()').fetchone()[0]
@@ -312,9 +312,16 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();deleted=self.admin.execute(settle,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(deleted,[(operation_bytes.hex(),)]);self.admin.execute('COMMIT');observations.append({'id':'original-publication-claim-settles-after-fixture-withholding','observed':deleted,'qualification':'fixture completion premise only'})
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();still_blocked=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(still_blocked,[]);authority_writer.execute('ROLLBACK');observations.append({'id':'settling-one-publication-preserves-other-operation-exclusion','observed':still_blocked})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(second_operation,installation_bytes,profile_bytes,5)).fetchall(),[(second_operation.hex(),)]);self.admin.execute('ROLLBACK')
-  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(1,));observations.append({'id':'rolled-back-publication-settlement-retains-claim','observed':1})
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE NOT settled').fetchone(),(1,));observations.append({'id':'rolled-back-publication-settlement-retains-claim','observed':1})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(second_operation,installation_bytes,profile_bytes,5)).fetchall(),[(second_operation.hex(),)]);self.admin.execute('COMMIT')
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();advanced=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),'6')]);authority_writer.execute('ROLLBACK');observations.append({'id':'settled-publication-allows-participating-advance','observed':advanced,'qualification':'rolled back to preserve generation5; no production authority-delta proof'})
+  retained=self.admin.execute("SELECT pg_catalog.encode(operation_identity_bytes,'hex'),generation::text,settled FROM truss.policy_publication_claim ORDER BY operation_identity_bytes").fetchall();self.assertEqual(retained,[(operation_bytes.hex(),'5',True),(second_operation.hex(),'5',True)]);observations.append({'id':'settled-publication-identities-retain-native-tombstones','observed':retained})
+  for replay in [operation_bytes,second_operation]:
+   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall()
+   with self.assertRaises(psycopg.errors.UniqueViolation) as duplicate:self.admin.execute(register,(replay,installation_bytes,profile_bytes,5)).fetchall()
+   self.assertEqual(duplicate.exception.sqlstate,'23505');self.admin.execute('ROLLBACK')
+  observations.append({'id':'settled-original-operation-token-replay-refuses','observed':'two23505 refusals; no replacement claims'})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();repeated_settlement=self.admin.execute(settle,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(repeated_settlement,[]);self.admin.execute('ROLLBACK');observations.append({'id':'settled-original-operation-cannot-settle-twice','observed':repeated_settlement})
   # A pending registration SHARE scope drains before writer's fresh claim check.
   pending_operation=b'fixture-pending-publication'
   pending_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(pending_owner.close)
@@ -338,6 +345,63 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    pending_owner.rollback();pending_thread.join(12)
   self.assertFalse(pending_thread.is_alive());self.assertEqual(pending_errors,[]);self.assertEqual(pending_advances,[]);observations.append({'id':'fresh-post-drain-authority-check-sees-committed-claim','observed':pending_advances})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(pending_operation,installation_bytes,profile_bytes,5)).fetchall(),[(pending_operation.hex(),)]);self.admin.execute('COMMIT')
+  # Capacity source: retained tombstones count; serialization precedes fresh count.
+  capacity_lock=(contracts/'installation-publication-claim-capacity-lock-v0.1.proposal.sql').read_text()
+  capacity_register=(contracts/'installation-publication-claim-register-v0.3.capacity.proposal.sql').read_text()
+  for ordinal in range(1,6):capacity_register=capacity_register.replace('$'+str(ordinal),'%(p'+str(ordinal)+')s')
+  def capacity_execute(connection,parameters):return connection.execute(capacity_register,{'p'+str(i):value for i,value in enumerate(parameters,1)})
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(3,))
+  for cap,token in [(3,b'full-registry'),(0,b'zero-capacity'),(-1,b'negative-capacity'),(1048577,b'oversized-capacity'),(4,b'x'*2049)]:
+   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=capacity_execute(self.admin,(token,installation_bytes,profile_bytes,5,cap)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK')
+  observations.append({'id':'publication-capacity-and-token-bounds-refuse-before-registration','observed':'five zero-row refusals; retained tombstones preserved'})
+  capacity_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(capacity_owner.close);capacity_pid=capacity_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
+  capacity_waiter=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(capacity_waiter.close);capacity_waiter_pid=capacity_waiter.execute('SELECT pg_backend_pid()').fetchone()[0]
+  capacity_owner.execute('BEGIN');capacity_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');capacity_owner.execute(acquire).fetchall();capacity_owner.execute(capacity_lock);last_registered=capacity_execute(capacity_owner,(b'last-capacity-slot',installation_bytes,profile_bytes,5,4)).fetchall();self.assertEqual(last_registered,[(b'last-capacity-slot'.hex(),)])
+  capacity_errors=[];capacity_rows=[]
+  def register_after_capacity_drain():
+   try:
+    capacity_waiter.execute('BEGIN');capacity_waiter.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');capacity_waiter.execute(acquire).fetchall();capacity_waiter.execute(capacity_lock);capacity_rows.extend(capacity_execute(capacity_waiter,(b'racing-capacity-slot',installation_bytes,profile_bytes,5,4)).fetchall());capacity_waiter.execute('ROLLBACK')
+   except BaseException as error:capacity_errors.append(type(error).__name__);capacity_waiter.execute('ROLLBACK')
+  capacity_thread=threading.Thread(target=register_after_capacity_drain);capacity_thread.start()
+  try:
+   blockers=[];wait_until=time.monotonic()+8
+   while time.monotonic()<wait_until:
+    blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(capacity_waiter_pid,)).fetchone()[0]
+    if capacity_pid in blockers:break
+    time.sleep(.02)
+   self.assertIn(capacity_pid,blockers);observations.append({'id':'publication-capacity-registrants-native-serialization','observed':blockers});capacity_owner.execute('COMMIT')
+  finally:capacity_owner.rollback();capacity_thread.join(12)
+  self.assertFalse(capacity_thread.is_alive());self.assertEqual(capacity_errors,[]);self.assertEqual(capacity_rows,[]);self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(4,));observations.append({'id':'fresh-capacity-check-refuses-racing-last-slot','observed':{'rows':capacity_rows,'retained':4}})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(b'last-capacity-slot',installation_bytes,profile_bytes,5)).fetchall(),[(b'last-capacity-slot'.hex(),)]);self.admin.execute('COMMIT')
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);self.assertEqual(capacity_execute(self.admin,(b'after-capacity-settlement',installation_bytes,profile_bytes,5,4)).fetchall(),[]);self.admin.execute('ROLLBACK');observations.append({'id':'settlement-cannot-reopen-retained-token-capacity','observed':'zero rows after settled fourth identity'})
+  # Failed capacity acquisition rolls back only its savepoint, not caller work.
+  for interruption in ['timeout','cancel']:
+   capacity_owner.execute('BEGIN');capacity_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');capacity_owner.execute(acquire).fetchall();capacity_owner.execute(capacity_lock)
+   interrupted=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(interrupted.close);interrupted_pid=interrupted.execute('SELECT pg_backend_pid()').fetchone()[0]
+   interrupted.execute('BEGIN');interrupted.execute('CREATE TEMP TABLE prior_capacity_work(value text)');interrupted.execute("INSERT INTO prior_capacity_work VALUES('kept')");interrupted.execute('SAVEPOINT capacity_attempt');interrupted.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');interrupted.execute(acquire).fetchall()
+   interruption_states=[];interruption_thread=None
+   try:
+    if interruption=='timeout':
+     interrupted.execute("SET LOCAL lock_timeout='150ms'")
+     with self.assertRaises(psycopg.errors.LockNotAvailable) as error:interrupted.execute(capacity_lock)
+     interruption_states.append(error.exception.sqlstate)
+    else:
+     def wait_for_capacity_lock():
+      try:interrupted.execute(capacity_lock);interruption_states.append('unexpected-success')
+      except psycopg.Error as error:interruption_states.append(error.sqlstate)
+     interruption_thread=threading.Thread(target=wait_for_capacity_lock);interruption_thread.start();blockers=[];wait_until=time.monotonic()+8
+     while time.monotonic()<wait_until:
+      blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(interrupted_pid,)).fetchone()[0]
+      if capacity_pid in blockers:break
+      time.sleep(.02)
+     self.assertIn(capacity_pid,blockers);self.assertIs(self.admin.execute('SELECT pg_cancel_backend(%s)',(interrupted_pid,)).fetchone()[0],True);interruption_thread.join(12);self.assertFalse(interruption_thread.is_alive())
+    self.assertEqual(interruption_states,['55P03' if interruption=='timeout' else '57014']);self.assertEqual(interrupted.info.transaction_status,psycopg.pq.TransactionStatus.INERROR);observations.append({'id':'publication-capacity-'+interruption+'-native-refusal','observed':interruption_states})
+    interrupted.execute('ROLLBACK TO SAVEPOINT capacity_attempt');self.assertEqual(interrupted.info.transaction_status,psycopg.pq.TransactionStatus.INTRANS);self.assertEqual(interrupted.execute('TABLE prior_capacity_work').fetchall(),[('kept',)])
+    locks=self.admin.execute("SELECT count(*) FROM pg_locks WHERE pid=%s AND relation IN ('truss.schema_head'::regclass,'truss.policy_generation_guard'::regclass,'truss.policy_publication_claim'::regclass)",(interrupted_pid,)).fetchone()[0];self.assertEqual(locks,0);self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(4,));observations.append({'id':'publication-capacity-'+interruption+'-savepoint-preserves-prior-work','observed':{'partialLocks':locks,'retainedClaims':4,'priorWork':'kept'}})
+   finally:
+    capacity_owner.rollback()
+    if interruption_thread is not None:interruption_thread.join(12)
+    interrupted.rollback();interrupted.close()
   self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.client(code text PRIMARY KEY);CREATE TABLE relational_fixture.project(code text PRIMARY KEY);CREATE TABLE relational_fixture.staff(code text PRIMARY KEY,login text NOT NULL);CREATE TABLE relational_fixture.resource(code text PRIMARY KEY,secret text NOT NULL);CREATE TABLE relational_fixture.assignment(code text PRIMARY KEY,active boolean NOT NULL)')
   for table,codes in [('client',['C']),('project',['A','B']),('resource',['RA','RB','RAB','RO'])]:
    for code in codes:

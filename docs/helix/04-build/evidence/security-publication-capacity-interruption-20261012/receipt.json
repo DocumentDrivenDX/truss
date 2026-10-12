@@ -1,0 +1,18 @@
+{
+  "executedBaseCommit": "9b72eb25eba37558d322cccb2d4307cad53b8a14",
+  "sourceDelta": "source-delta.zip",
+  "nativeObservations": 201,
+  "trace": [
+    "CONTRACT-005 original native custody",
+    "CONTRACT-063 deadline/cancellation/final release",
+    "STP-057 L03/L11",
+    "US-057-AC2/AC7"
+  ],
+  "scope": "Actual native timeout/cancel and confirmed savepoint rollback for the capacity candidate. Prior work preserved, zero partial guard locks and unchanged retained claims. No unknown-outcome, production host recovery/quarantine, registry/profile/issuer/sink/bootstrap qualification or original acceptance promotion.",
+  "sha256": {
+    "security-capacity-interruption-native.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-capacity-interruption-native.stderr.log": "58a9fd3be3381e8bbda0b9a4f2ccdebbdcba7ca3696dc34398f4e1c03054c249",
+    "source-delta.zip": "a24dc71f79c499a415e31d68665882f55adc6eeaf441159c5e6eed3a4d6867f7",
+    "security-capacity-interruption-native.json": "9fa17a5449409933f704f1d6720766f01ef0393f8a858a1914199b95066635ed"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "solver": "4.15.4",
+  "queries": {
+    "registration-retains-all-prior-tokens": {
+      "result": "unsat",
+      "witness": null
+    },
+    "settlement-retains-all-prior-tokens": {
+      "result": "unsat",
+      "witness": null
+    },
+    "loss-retains-all-prior-tokens": {
+      "result": "unsat",
+      "witness": null
+    },
+    "settled-token-cannot-register": {
+      "result": "unsat",
+      "witness": null
+    },
+    "fresh-token-registration-possible": {
+      "result": "sat",
+      "witness": {
+        "operation": "0",
+        "ever_registered[operation]": "False",
+        "active[operation]": "False"
+      }
+    },
+    "delete-based-replay-counterexample": {
+      "result": "sat",
+      "witness": {
+        "operation": "0",
+        "ever_registered[operation]": "True",
+        "active[operation]": "False"
+      }
+    },
+    "tombstone-removal-breaks-monotonicity": {
+      "result": "sat",
+      "witness": {
+        "operation": "0",
+        "ever_registered[operation]": "True",
+        "active[operation]": "False"
+      }
+    }
+  },
+  "scope": "Monotonic original-token set over arbitrary integer identities and finite modeled transitions. Register requires never-used identity; settlement/loss never remove it. Replay refusal assumes this registration gate. No concrete SQL/PK, byte identity/issuer/custody, bootstrap/admin closure, capacity/compaction, commit uncertainty, snapshot or production admission proof."
+}

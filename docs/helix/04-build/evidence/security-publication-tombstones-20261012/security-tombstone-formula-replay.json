@@ -1,0 +1,9 @@
+{
+  "registration-retains-all-prior-tokens": "unsat",
+  "settlement-retains-all-prior-tokens": "unsat",
+  "loss-retains-all-prior-tokens": "unsat",
+  "settled-token-cannot-register": "unsat",
+  "fresh-token-registration-possible": "sat",
+  "delete-based-replay-counterexample": "sat",
+  "tombstone-removal-breaks-monotonicity": "sat"
+}
