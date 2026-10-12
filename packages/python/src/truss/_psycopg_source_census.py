@@ -28,23 +28,7 @@ def observe_source_census_in_transaction(host, transaction):
     if type(host) is not PsycopgHost:
         return Error(ExecutionFailure('execution_obligation','Original supported host required'))
     def capture(cursor, observed):
-        _pin_cursor(cursor)
-        cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
-        original_path=cursor.fetchone()[0]
-        cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
-        raw=files('truss').joinpath('_source_census','pg18.sql').read_bytes()
-        if sha256(raw).hexdigest()!=_SOURCE_SHA256:
-            raise ValueError('Original source-census SQL required')
-        source=raw.decode('utf8').strip().removesuffix(';')
-        query=("WITH image AS MATERIALIZED (SELECT pg_catalog.convert_to(census,'UTF8') AS body FROM ("+source+") AS original_census) "
-            "SELECT part::pg_catalog.text AS ordinal,pg_catalog.octet_length(body)::pg_catalog.text AS total_bytes,"
-            "pg_catalog.encode(pg_catalog.substring(body,part*4096+1,4096),'hex') AS chunk_hex "
-            "FROM image LEFT JOIN LATERAL pg_catalog.generate_series(0,(pg_catalog.octet_length(body)-1)/4096) AS part ON true ORDER BY part")
-        cursor.execute(query,prepare=False,binary=False)
-        image=_decode_census(cursor)
-        cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
-        if cursor.fetchone()!=(original_path,):raise ValueError('Original census caller search path restoration required')
-        return SourceCensusObservation(image,_SOURCE_SHA256)
+        return _capture_census(cursor)
     return host._run_operation(transaction,capture)
 
 
@@ -72,3 +56,23 @@ def _decode_census(cursor):
         raise ValueError('Complete original source image unavailable')
     result=bytes(image);result.decode('utf8',errors='strict')
     return result
+
+
+def _capture_census(cursor):
+    _pin_cursor(cursor)
+    cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
+    original_path=cursor.fetchone()[0]
+    cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+    raw=files('truss').joinpath('_source_census','pg18.sql').read_bytes()
+    if sha256(raw).hexdigest()!=_SOURCE_SHA256:
+        raise ValueError('Original source-census SQL required')
+    source=raw.decode('utf8').strip().removesuffix(';')
+    query=("WITH image AS MATERIALIZED (SELECT pg_catalog.convert_to(census,'UTF8') AS body FROM ("+source+") AS original_census) "
+        "SELECT part::pg_catalog.text AS ordinal,pg_catalog.octet_length(body)::pg_catalog.text AS total_bytes,"
+        "pg_catalog.encode(pg_catalog.substring(body,part*4096+1,4096),'hex') AS chunk_hex "
+        "FROM image LEFT JOIN LATERAL pg_catalog.generate_series(0,(pg_catalog.octet_length(body)-1)/4096) AS part ON true ORDER BY part")
+    cursor.execute(query,prepare=False,binary=False)
+    image=_decode_census(cursor)
+    cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
+    if cursor.fetchone()!=(original_path,):raise ValueError('Original census caller search path restoration required')
+    return SourceCensusObservation(image,_SOURCE_SHA256)
