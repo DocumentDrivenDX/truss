@@ -87,7 +87,7 @@ Ordinary installs and tests use binaries and never build PostgreSQL.
 
 ```sh
 python3.11 -m venv .venv
-.venv/bin/pip install --only-binary=:all: --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r1 './packages/python[local,native]'
+.venv/bin/python scripts/install-local-runtime.py
 .venv/bin/truss-local-postgres --data-dir .local/truss-postgres-18 --probe
 ```
 
@@ -108,6 +108,15 @@ Reproduce the focused consumer checks with both installed wheels:
 ```sh
 .venv/bin/python scripts/check-local-runtime-smoke.py /path/to/pgserver_pg18.whl /path/to/truss_toolkit.whl --run-id FRESH_ID
 ```
+
+`scripts/install-local-runtime.py` is the shared CI/development setup command.
+It resolves only released binary runtime wheels, verifies their release checksums,
+refuses conflicting pgserver distributions, and replaces preliminary18.6.0 bytes
+explicitly. Missing wheels or checksum failures stop installation; no PostgreSQL
+source build is attempted. Truss's own pure Python wheel may still be built.
+The `Released Python runtime` CI job uses the same installer and focused installed
+smoke checks on Linux x64/Python3.11. PostgreSQL compilation belongs exclusively
+to the reusable pgserver repository.
 
 Ordinary psycopg and pg8000 native fixture classes reuse one owned Unix-socket
 cluster per worker, with fresh databases/roles and verified cleanup. Worker

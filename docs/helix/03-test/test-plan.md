@@ -51,6 +51,18 @@ Qualification is per implementation, adapter, database version, layout, UMF mode
 
 Bun test runs TypeScript development tests under ADR-001. A real Chromium runner exercises the pure browser-compatible core. Bun and Node adapters must independently pass exact transport and host transaction tests; browser success cannot qualify a database adapter. Native tests use ordinary driver clients and independent SQL, not an in-memory database imitation. CI provider and browser harness versions are not yet selected; pin them before B-001 closeout.
 
+### Released binary runtime in CI and development
+
+The normal setup command is `python scripts/install-local-runtime.py`. It selects
+the runtime profile's public release, requires binary wheels, verifies published
+checksums and rejects conflicting historical distributions. No source fallback
+is allowed. `.github/workflows/python-runtime.yml` builds only Truss's pure Python
+wheel and runs the focused installed smoke checks against released PostgreSQL18.6
+on Linux x64/Python3.11, retaining logs and cleanup evidence even on failure.
+Broader corpus qualification is an explicit separate lane. The historical Truss
+PostgreSQL recipe/build commands remain retired; native compilation belongs to
+DocumentDrivenDX/pgserver.
+
 ### Local native test infrastructure — selected 2026-10-11
 
 Routine native experiments share an owned pgserver18.6 Unix-socket cluster per
