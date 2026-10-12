@@ -6592,3 +6592,9 @@ Trace original guard acquisition under CONTRACT-005/063. This returns candidate
 values only: supplied expectations are not trusted issuers, copied values are
 not native exclusion/completion evidence, and no AuthorityLease is created.
 Production original source/caller/liveness, bootstrap and release remain required.
+
+
+Post-merge guard-decoder replay at54e29fda preserves catalog-compatibility work
+and passes102 native observations. Exact current pins/preimages/output are in
+`security-guard-observation-decoder-20261012/merged-receipt.json`. Decoder values
+still confer no native exclusion/lease authority; backend acceptance stays open.
