@@ -55,6 +55,21 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Reader catalog/source iteration — 2026-10-12
+
+The runtime 0.5 candidate connects `reader_catalog_in_transaction` and
+`accepted_document_in_transaction` through protected native functions on the
+live assembly. The first is an authorized metadata projection; the second
+returns exact original bytes only when all original document modules are readable.
+Current reader/writer role membership, qualified owners, property/key dependencies,
+complete relationship scope and empty modules are enforced in PostgreSQL.
+New calls expose typed unauthorized/invalid/unavailable outcomes while preserving
+native whole-transaction retry. Registration/report refusal mapping remains open.
+Source revision/artifact identity and native registration/catalog identities are
+separate. Fresh installation is required; upgrades and read-only read capabilities
+remain open. Public ordinary-person tests cover exact sources, revocation, hidden
+modules and fields, and limits. No new conformance framework is introduced.
+
 ## First create-provider iteration — 2026-10-12
 
 Runtime 0.4 connects the public group selector to rootless string/null creation,

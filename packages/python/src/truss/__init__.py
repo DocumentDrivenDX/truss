@@ -67,3 +67,6 @@ __all__ += ["GroupRuntimeContext"]
 
 from ._group_runtime import NativeGroupCapability, GroupCapabilityAvailable
 __all__ += ["NativeGroupCapability", "GroupCapabilityAvailable"]
+
+from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
+__all__ += ['ReaderCatalog','AcceptedDocument','CatalogRefused','CatalogInvalid','CatalogUnavailable']

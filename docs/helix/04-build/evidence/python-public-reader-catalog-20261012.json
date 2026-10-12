@@ -1,0 +1,30 @@
+{
+  "scope": "runtime0.5 ordinary-reader authorized catalog metadata and exact accepted-document source",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "b3c8855e56ebee968d7a76c9b6e374c6a981a3b1e97e4d8f701146bb168971e4",
+  "installedTests": {
+    "modules": [
+      "test_reader_catalog_native",
+      "test_group_create_native"
+    ],
+    "passed": 17,
+    "elapsedSeconds": 56.228
+  },
+  "nativeReaderCases": [
+    "qualified modules, exact bytes/revision/digest/artifact identity and native registration ID",
+    "missing/unauthorized identical refusal, limits, revocation",
+    "unreadable then authorized empty module",
+    "hidden field/key declaration owners excluded",
+    "actual dependency role revoked during projection; whole result refused and prior caller work survives"
+  ],
+  "umfSqlOwner": "all10 packaged SQL sources retain/reload/export without change",
+  "moduleBoundaries": "670 imports passed",
+  "review": "Astra Ultra plan and scoped implementation reviewed; final dependency correction and real revocation control completed",
+  "limitations": [
+    "fresh installation required; no upgrade from0.4",
+    "read-write READ COMMITTED only for these capabilities",
+    "typed refusals cover new reader methods; registration/report mapping still pending",
+    "full external interface goal remains incomplete"
+  ]
+}
