@@ -6406,3 +6406,12 @@ STP-057 L05 prerequisites. Actual graph feasibility does not discharge complete
 backend cases. Next integrate authenticated compiler/mapping/source enrollment,
 original public read context and authority/release protocol; qualify enrolled
 writers and revocation ordering before admitting the profile.
+
+
+Post-merge ontology replay atbabe2e26 preserves concurrent import-runtime and
+psycopg deadline changes, and repeats44 native observations on the current
+installed candidate successfully. Python boundaries pass723imports.
+`security-public-ontology-20261012/merged-receipt.json` retains exact current
+source pins, changed preimages, runtime release and outputs. Only this component
+is refreshed; complete backend admission and broader runtime qualification remain
+open.
