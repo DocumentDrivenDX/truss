@@ -6615,3 +6615,9 @@ Boolean membership feasibility, not general storage equivalence, authenticated
 Weft output, nullable/composite/parallel/masking/history support or complete
 native admission. Source/mapping/authority/publication and original backend
 cases remain open; no separate policy semantics are created for raw storage.
+
+
+Post-merge shared-storage replay at21a4238e preserves installed object-read
+identity changes and passes108 native observations. Current source pins, changed
+preimages and outputs: `security-shared-raw-graph-policy-20261012/merged-receipt.json`.
+The original shared-policy component scope remains unchanged and unadmitted.
