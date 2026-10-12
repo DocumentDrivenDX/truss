@@ -2697,3 +2697,33 @@ lifetime, ordinary grants, complete routine closure, original authentication,
 protected graph and final disclosure remain open. Trace shared CONTRACT-063 /
 STP-056 B04/B05/B10/B11 and US-056 AC5/AC8/AC9 prerequisites. No new backend
 binding: fresh full gate remains26/132 with106 unbound cases; goal active.
+
+### Delegated caller predefined-role admission — 2026-10-11
+
+The owned delegated profile0.4 service now executes the extracted original native
+predefined-role reachability check inside caller custody before caller/profile
+verification or executor fact capture. The optional epoch/DDL role composition
+uses that same check. It excludes active predefined privileges of every identity
+SET-reachable from original session/effective users; it does not authorize an
+executor, authenticate an issuer or replace original native identity verification.
+
+Two native controls refuse before the executor runs: directly inherited
+pg_read_all_data with SET FALSE, and a caller that can SET a bridge role which
+inherits pg_read_all_data. In the latter, original caller USAGE and SET paths to
+the predefined role are both false; actual SET LOCAL ROLE bridge nevertheless
+exposes the private Assignment count. Rollback restores caller identity before
+admission, and the service refuses without invoking the evaluator. Existing
+catalog-only delegated permit/deny and transaction/guard-retirement controls pass.
+
+Final `evidence/python-psycopg-epoch-cut/be21743a-f9f9-4ba6-a468-3a56030a37df`
+passes165 methods on PostgreSQL18.6/psycopg3.3.6 binary, module boundaries,
+141 current/preimage Truss source pins,363 original UMF sources,1705 native
+payload pins and three stop0/status3/socket-absent cleanups. Formal replay
+`evidence/security-predefined-role-formal/beadcd6f-3b03-42dd-a98f-a03643a8a717`
+retains five exact inputs and five original queries, three UNSAT/two SAT with
+fresh-context replay. It remains an abstract role-path model, not native SQL/role
+or host refinement. Trace CONTRACT-063/STP-056 B04/B05/B10/B11 and US-056 AC5/
+AC8/AC9 prerequisites. Role/grant lifetime, ordinary grants, complete routine
+closure, trusted caller/executor/issuer/mapping/target authentication and protected
+publication remain open. No new backend binding; full goal stays active at26/132,
+106 unbound required cases.

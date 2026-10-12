@@ -1088,3 +1088,40 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             self.assertEqual(connection.execute("SELECT pg_has_role(current_user,'pg_read_all_data','MEMBER'),pg_has_role(current_user,'pg_read_all_data','USAGE'),pg_has_role(current_user,'pg_read_all_data','SET')").fetchone(),(True,False,False))
             self.assertEqual(_run_predefined_role_excluded_ddl_fenced_epoch_operation(host,t,self.comparison(),original,lambda c:'inactive-membership'),Ok('inactive-membership'))
         self.with_unprivileged_actor(operation)
+
+    def test_delegated_caller_inherited_predefined_privilege_refuses_before_executor(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            self.connection.execute('GRANT pg_read_all_data TO fact_cut_actor WITH INHERIT TRUE, SET FALSE')
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);execute.assert_not_called()
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_caller_set_bridge_to_inherited_predefined_privilege_refuses(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        self.connection.execute('CREATE ROLE fact_privilege_bridge; GRANT pg_read_all_data TO fact_privilege_bridge WITH INHERIT TRUE, SET FALSE')
+        try:
+            def operation(host,t,original,connection):
+                self.connection.execute('GRANT fact_privilege_bridge TO fact_cut_actor WITH INHERIT FALSE, SET TRUE')
+                self.assertEqual(connection.execute("SELECT pg_has_role(current_user,'pg_read_all_data','USAGE'),pg_has_role(current_user,'pg_read_all_data','SET'),pg_has_role(current_user,'fact_privilege_bridge','SET')").fetchone(),(False,False,True))
+                connection.execute('SAVEPOINT bridge_observation; SET LOCAL ROLE fact_privilege_bridge')
+                self.assertEqual(connection.execute('SELECT count(*) FROM truss.sec_assignment').fetchone(),(1,))
+                connection.execute('ROLLBACK TO bridge_observation')
+                executor_t=self.begin()
+                try:
+                    with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                        result=self.delegated_owned_read(host,t,executor_t)
+                    self.assertIsInstance(result,Error);execute.assert_not_called()
+                finally:self.connection.execute('ROLLBACK')
+            self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute('DROP OWNED BY fact_privilege_bridge; DROP ROLE fact_privilege_bridge')
