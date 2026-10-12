@@ -1125,3 +1125,55 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 finally:self.connection.execute('ROLLBACK')
             self.with_unprivileged_actor(operation,catalog_only=True)
         finally:self.connection.execute('DROP OWNED BY fact_privilege_bridge; DROP ROLE fact_privilege_bridge')
+
+    def test_delegated_caller_column_only_fact_select_refuses_before_executor(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            self.connection.execute('GRANT SELECT(staff_id) ON truss.sec_assignment TO fact_cut_actor')
+            self.assertEqual(connection.execute('SELECT staff_id FROM truss.sec_assignment').fetchall(),[('s1',)])
+            self.assertEqual(connection.execute("SELECT has_table_privilege(current_user,'truss.sec_assignment','SELECT'),has_any_column_privilege(current_user,'truss.sec_assignment','SELECT')").fetchone(),(False,True))
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);execute.assert_not_called()
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_caller_private_fact_table_grant_refuses_before_executor(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        def operation(host,t,original,connection):
+            self.connection.execute('GRANT SELECT ON truss.sec_assignment TO fact_cut_actor')
+            self.assertEqual(connection.execute('SELECT count(*) FROM truss.sec_assignment').fetchone(),(1,))
+            executor_t=self.begin()
+            try:
+                with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                    result=self.delegated_owned_read(host,t,executor_t)
+                self.assertIsInstance(result,Error);execute.assert_not_called()
+            finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
+    def test_delegated_caller_reachable_definer_without_schema_usage_refuses(self):
+        import sys
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        self.connection.execute("CREATE SCHEMA fact_hidden_routine; CREATE FUNCTION fact_hidden_routine.private_count() RETURNS bigint LANGUAGE sql SECURITY DEFINER AS 'SELECT count(*) FROM truss.sec_assignment'")
+        routine_oid=self.connection.execute("SELECT 'fact_hidden_routine.private_count()'::regprocedure::oid").fetchone()[0]
+        try:
+            def operation(host,t,original,connection):
+                self.assertEqual(connection.execute("SELECT has_schema_privilege(current_user,'fact_hidden_routine','USAGE'),has_function_privilege(current_user,%s::oid,'EXECUTE')",(routine_oid,)).fetchone(),(False,True))
+                executor_t=self.begin()
+                try:
+                    with patch.object(tool,'_run_owned_identity_read',side_effect=AssertionError('executor must not run')) as execute:
+                        result=self.delegated_owned_read(host,t,executor_t)
+                    self.assertIsInstance(result,Error);execute.assert_not_called()
+                finally:self.connection.execute('ROLLBACK')
+            self.with_unprivileged_actor(operation,catalog_only=True)
+        finally:self.connection.execute('DROP SCHEMA fact_hidden_routine CASCADE')

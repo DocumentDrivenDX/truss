@@ -63,6 +63,23 @@ def run_owned_identity_read(host, transaction, epoch, requirements, sources):
     return _run_owned_identity_read(host,transaction,epoch,requirements,sources)
 
 
+def _exclude_native_private_fact_privileges(cursor, providers):
+    """Conservative native caller privilege snapshot, not complete call closure."""
+    oids=tuple(sorted({p.relation.oid for p in providers}))
+    cursor.execute("SELECT r.oid::pg_catalog.text FROM pg_catalog.pg_roles r "
+                   "WHERE (pg_catalog.pg_has_role(session_user,r.oid,'SET') OR pg_catalog.pg_has_role(current_user,r.oid,'SET')) "
+                   "AND (r.rolsuper OR r.rolcreaterole OR r.rolbypassrls "
+                   "OR EXISTS(SELECT 1 FROM pg_catalog.pg_proc p WHERE p.prosecdef AND pg_catalog.has_function_privilege(r.oid,p.oid,'EXECUTE')) "
+                   "OR EXISTS(SELECT 1 FROM pg_catalog.unnest(%s::pg_catalog.oid[]) f(oid) WHERE "
+                   "pg_catalog.has_table_privilege(r.oid,f.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN') "
+                   "OR pg_catalog.has_any_column_privilege(r.oid,f.oid,'SELECT,INSERT,UPDATE,REFERENCES'))) LIMIT 1",
+                   ('{'+','.join(str(v) for v in oids)+'}',),prepare=False,binary=False)
+    rows=cursor.fetchmany(2)
+    if (cursor.description is None or len(cursor.description)!=1
+            or cursor.description[0].type_code!=25 or rows!=[]):
+        raise ValueError('Original private fact privilege exclusion required')
+
+
 def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_host, executor_transaction, epoch, requirements, sources):
     """Trusted service spike: actual caller scope encloses executor operation.
 
@@ -78,6 +95,7 @@ def run_delegated_owned_identity_read(caller_host, caller_transaction, executor_
     def capture(cursor,observed):
         from truss._psycopg_epoch_cut import _exclude_native_predefined_role_reachability
         _exclude_native_predefined_role_reachability(cursor)
+        _exclude_native_private_fact_privileges(cursor,providers)
         _verify_native_profile_caller(cursor,selected.profile)
         cursor.execute('SELECT oid::pg_catalog.text FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()',prepare=False,binary=False)
         database=cursor.fetchone()

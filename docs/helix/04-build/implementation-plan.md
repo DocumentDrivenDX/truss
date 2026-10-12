@@ -4774,6 +4774,46 @@ native methods and module boundaries on PostgreSQL18.6, with current source pins
 and three stop0/status3/socket-absent cleanups. The prior native packet retains
 its original pre-integration source scope; qualified exclusions remain unchanged.
 
+
+### Transactional installation privilege boundary — 2026-10-11
+
+Private `_installation_privileges.protect_installation_in_transaction` protects
+fresh existing Truss objects through the psycopg host's owned savepoint. The
+trusted direct administrator must quiesce other administrative changes. It
+rejects role collisions, unsupported and extension-owned objects, foreign
+owners and third-party direct/column grants before changes. New owner/client
+roles are non-login, non-superuser, cannot create roles/databases, replicate or
+bypass RLS, and do not inherit roles. The owner receives schema, relation,
+routine and independent type ownership; generated row/array ownership follows
+its parent. PUBLIC access is removed, including column and row-type access.
+Clients receive only schema USAGE without grant authority. Exact object OIDs,
+ownership, effective client permissions and private function/type defaults
+are checked before returning a private report.
+
+The installer uses a fixed trusted search path and restores the caller's exact
+setting. Failure restores installation roles/objects and preserves earlier
+caller work. No transaction settlement, facade grant, actor adoption, installed
+marker or readiness claim is introduced. Historical invoker-only security and
+administrative catalog profiles remain unchanged. A future protected facade
+needs its own compatible composition and native original actor capture; an
+admitted SET ROLE actor cannot silently be replaced by session_user.
+
+Six native methods pass on PostgreSQL 18.6 against the UMF-generated 0.16
+layout plus an enum, domain and overloaded private routines. Controls include
+ordinary-person native session-context SELECT/INSERT/TRUNCATE/ALTER/EXECUTE/
+owner-SET-ROLE refusals, future private routines, PUBLIC column removal, role
+collisions, third-party column grants, extension ownership, late failure,
+hostile search paths and restored PUBLIC defaults. Session-context controls
+use SET LOCAL SESSION AUTHORIZATION in the owned fixture; they do not qualify
+network login or SCRAM. See `evidence/installation-privileges-pg18/native.log`.
+Initial checks exposed generated row-type usage and the review identified
+search-path/default-ACL gaps; these were corrected before the passing run.
+
+Run installer-owned metadata checks (including epoch-helper ownership checks)
+before ownership transfer, and transfer before admitting runtime operations.
+The old administrative inventory cannot certify the post-transfer ownership
+state; protected activation requires a separately selected inventory.
+
 ### Conservative predefined-role privilege snapshot — 2026-10-11
 
 Private `_run_predefined_role_excluded_ddl_fenced_epoch_operation` composes the
@@ -4834,3 +4874,48 @@ AC8/AC9 prerequisites. Role/grant lifetime, ordinary grants, complete routine
 closure, trusted caller/executor/issuer/mapping/target authentication and protected
 publication remain open. No new backend binding; full goal stays active at26/132,
 106 unbound required cases.
+
+### Delegated caller private-fact privilege exclusion — 2026-10-11
+
+Owned profile0.4 caller admission now inspects all SET-reachable original caller
+identities for superuser/CREATEROLE/BYPASSRLS, EXECUTE on any SECURITY DEFINER
+routine, and table or column privileges on the original provider relation OIDs.
+The table probe includes SELECT/INSERT/UPDATE/DELETE/TRUNCATE/REFERENCES/TRIGGER/
+MAINTAIN; the column probe includes SELECT/INSERT/UPDATE/REFERENCES. The native
+OID-based definer probe intentionally does not depend on current schema USAGE.
+This is conservative private-service snapshot exclusion, not complete callable
+closure, grant/role lifetime or authorization of the executor.
+
+Three controls establish actual column-only and full-table private reads, and
+EXECUTE reachability to a definer without schema USAGE, then refuse before executor
+evaluation. Final `evidence/python-psycopg-epoch-cut/37e19ef3-7536-45c8-bfc4-2c86f63b7e8d`
+passes168 native methods on PostgreSQL18.6/psycopg3.3.6 binary, module boundaries,
+141 current/preimage source pins,363 original UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups. Earlier5e0d4404 ran zero tests due
+to shared-memory-ID exhaustion; bdba4985 ran168 with one incorrect name-resolution
+probe denied by schema USAGE. The corrected probe captures the routine OID as the
+installer. Then71a6ff76 ran168 with one existing delegated-permit refusal; the final
+unchanged-source rerun passes. That intermittent refusal remains unexplained and
+retained, not evidence of general availability or deterministic load performance.
+No refusal or resource bound was weakened to obtain the passing run.
+
+Formal `evidence/security-private-fact-privilege-formal/9611d128-bf44-495a-95ed-62ca5a7d64df`
+retains five source inputs and five Z3 4.15.4 SMT-LIB queries/fresh-context replays:
+three UNSAT exclusion results and two SAT controls, including a table-only filter
+admitting column-only access. Initial38563687 retains the pre-correction test input.
+This is an abstract conditional model, not native privilege/role/SQL refinement.
+Trace CONTRACT-063/STP-056 B04/B05/B10/B11 and US-056 AC5/AC8/AC9 prerequisites.
+Complete routine/alternate-source/diagnostic closure, grant/role lifetime, original
+caller/issuer/mapping/target credentials and protected publication remain open.
+No backend binding is promoted; full goal stays active at26/132 with106 unbound
+required cases. Diagnose the retained intermittent refusal before any availability
+or complete protected-service qualification.
+
+Integrated-main requalification: concurrent installation privilege work changed
+native host test and boundary checker inputs. The pre-merge37e19ef3 packet retains
+its original source scope. Fresh
+`evidence/python-psycopg-epoch-cut/9c3297e7-8705-4d75-81b4-f893d8d21140`
+passes168 native methods and boundaries against integrated main a69788bf, with142
+current/preimage Truss source pins and three stop0/status3/socket-absent cleanups.
+This requalifies the finite composition; the retained intermittent refusal and
+complete backend admission/lifetime obligations remain open.
