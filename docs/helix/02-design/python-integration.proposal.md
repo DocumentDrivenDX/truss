@@ -3268,3 +3268,36 @@ dispatch tests passed on published `pgserver-pg18==18.6.1` / PostgreSQL 18.6.
 The 579-import Python boundary check passed. These are component results;
 ordinary-person catalog acceptance, committed report publication and the larger
 key/relationship corpus remain unfinished.
+
+### Relational source inventory profile 0.2 — 2026-10-11
+
+The separately selected `truss-fresh-catalog-support/0.2.0` policy covers explicit
+scalar-string Records plus owner-known authored Keys and Relationships. The
+0.1 policy, pins and closed-subset behavior remain available unchanged. Selection
+requires the exact identity, version and digest of the new relational policy.
+
+Expected authored occurrences come from each original document's module and
+Record pointers, retaining document/Record qualification even when authored IDs
+repeat. Full ordered declaration lists must match the original UMF owner meaning;
+each assertion binds its exact owner artifact, pointer, authored identity and
+source document digest. Authored assertions retain `authoredIdentity` rather than
+inventing a `sourceIdentityProfile`. The existing enforcement-entry schema and
+numeric-free semantic projection admit this variant without new report fields.
+Absent declarations produce no assertions. UMF 0.7 rejects authored empty Keys;
+authored empty Relationships are known-empty and remain distinct from absence.
+Unknown nested qualifiers remain outside this closed subset.
+
+Validation: 28 relational/support/projection tests passed, including actual native
+legacy staging, two-document repeated-key identities, ordered composite Keys,
+cross-module endpoints, `*` multiplicity, missing/duplicate/substituted artifacts,
+unknown qualifiers and the governing enforcement-entry schema. The Python module
+boundary check passed (580 imports). This qualifies source coverage only; all
+value-enforcement and accepted-publication flags remain false.
+
+An isolated size probe retaining every original source byte measured the richer
+candidate at 4,287,591 bytes, including 1,811,421 original evidence bytes and a
+653,636-byte tagged host-source tree. Production candidate/native/custody bounds
+remain unchanged. A naive raw dictionary expanded this candidate to 6,517,886
+bytes and was not adopted. Larger bounded source/custody/report transport remains
+required before this corpus can enter native acceptance; no compression extension
+or instrumentation dependency is introduced.

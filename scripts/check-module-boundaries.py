@@ -63,7 +63,7 @@ ALLOWED = {
     'preparation': {'weakref', 'dataclasses', 'hashlib', 'pathlib', 'base64', 'json', 'shutil', 'subprocess', 'selectors', 'tempfile', 'time', 'truss._umf_release', 'truss._acceptance_json'},
     '_acceptance_json': {'json'},
     '_catalog_completion': {'dataclasses','json','weakref','truss._catalog_report','truss.preparation'},
-    '_catalog_support': {'base64','hashlib','importlib.resources','json','truss.preparation','truss._catalog_owner_evidence'},
+    '_catalog_support': {'base64','hashlib','importlib.resources','json','truss.preparation','truss._catalog_owner_evidence','truss._owner_evidence_json'},
     '_catalog_owner_evidence': {'base64','hashlib','json','truss.preparation','truss._owner_evidence_json'},
     '_owner_evidence_json': {'json','decimal'},
     '_catalog_report': {'truss._catalog_report_semantics','truss._catalog_support','truss._catalog_owner_evidence','dataclasses', 'json', 'weakref', 'truss.preparation', 'truss._catalog_index_declarations','truss._catalog_lifecycle'},
