@@ -1,0 +1,47 @@
+{
+  "baseCommit": "ce5947ec",
+  "sourcePins": {
+    "packages/postgresql/src/security-predicate.ts": "c38f289ddc9d6751e633f63e5b865e9b6dd011b8a000e65995f2b309b765c0aa",
+    "packages/postgresql/src/security-graph-source.ts": "c5732745038b27d0f7c54adead5e5c090a9855053161f720c0f962a7095cdc27",
+    "tests/security-resource-parameters.test.ts": "01d60270fa7bc94103cad0037854aa0c98d230da82630c73a5fbe6eb3aa04a52",
+    "tests/fixtures/security-resource-parameters.ts": "f146b92338485b93f1bbabc513dadd0ea76ba971f33eb6f2c02eaf83b9725574"
+  },
+  "bun": "1.4.2",
+  "browser": "153.0.8010.12",
+  "postgres": "18.6",
+  "unitTests": 15,
+  "typecheckExitCode": 0,
+  "nativePreparedControls": 9,
+  "browserExpressionsMatched": 2,
+  "commands": [
+    "bun test tests/security-resource-parameters.test.ts tests/security-graph-source-lowering.test.ts tests/security-graph-source.test.ts",
+    "bun scripts/typecheck-security.ts",
+    "bun produce.ts; Python3.11/psycopg3.3.6 LocalPostgres native.py",
+    "bun build browser.ts --target browser --format iife; Playwright Chromium check-browser.ts"
+  ],
+  "scope": "Explicit positional resource nonkey scalar arguments for candidate row predicates. Required string/boolean domains remain the existing selected subset.",
+  "limits": [
+    "Host must independently prove original resource row/value/codec/argument correspondence; supplied values are not credentials.",
+    "Prepared expressions use excluded administrator fixture; no ordinary admitted native policy or whole backend case.",
+    "Source/cut/issuer privacy and lifetime, production installation and complete ontology policy remain required.",
+    "LocalPostgres context exits without error; no independent stop receipt."
+  ],
+  "trace": [
+    "CONTRACT-063/STP-056 B01/B08/B12/B15 prerequisites",
+    "US-056 AC1/AC6/AC10 prerequisites"
+  ],
+  "artifacts": {
+    "source.zip": "084209d88307338f0ad3139fccb5609b9afb8f7918278ae1947ef9efc58a898c",
+    "typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native.py": "a1961e79c4b47d16f659ca496bcb342eda16abc366c5430dcf58755faabe9382",
+    "native.json": "f8571c9d50ce7bbaa040120dded53016f05c2f2a656c084e9cb22f2e75cb1f58",
+    "browser.ts": "368f38d859a260f88df9abee6bdcaba05bb36fd7bb6a770dd1908cd40a97ab3d",
+    "sql.json": "ffc6e1ab6b072b0426ef90930f0b160761a4be26d6d7d7a04dae5f83e957e80e",
+    "unit.log": "0f947ef51bebe102d6f12a47928adf5d3e652ce4df529b6e272e57fc9ce183da",
+    "browser-build.log": "097a7ebaf81bb39167263568261e29d4e79f9b791f48185ceef571bbe8230160",
+    "browser.js": "045c1677a01b5904f55ec34cd3e723da7f8d04627c1525d74f450ce8cb488fd1",
+    "browser.json": "74d6e2161c3c56394e6e80d1f27485d3f5d8bacf845e2c16b6627549b1046780",
+    "produce.ts": "bef3988e7f2aad04ea97640bac06625e2fc80f90d91e5058a2683e0aeb38ac37",
+    "check-browser.ts": "96bb7b1acd342feb88308d25867721b179436432754ead16b94fc6f76d660084"
+  }
+}
