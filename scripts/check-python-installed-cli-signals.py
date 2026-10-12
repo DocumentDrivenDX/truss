@@ -27,8 +27,8 @@ if not loaded.is_relative_to(Path(sys.prefix).resolve()) or loaded.is_relative_t
  raise RuntimeError('Installed CLI outside checkout required')
 if loaded.read_bytes() != (root/'packages/python/src/truss/cli.py').read_bytes():
  raise RuntimeError('Installed CLI source drift')
-parent = Path(tempfile.mkdtemp(prefix='truss-cli-signals-'))
-directory = parent/('retained data' if sys.platform == 'darwin' else 'retained-data')
+parent = Path(tempfile.mkdtemp(prefix='truss-cli-signals-', dir='/tmp'))
+directory = parent/"retained data's"
 runs = []
 command = str(Path(sys.prefix)/'bin/truss-local-postgres')
 for signum in [signal.SIGTERM,signal.SIGINT]:
