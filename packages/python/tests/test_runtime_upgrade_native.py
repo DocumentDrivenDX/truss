@@ -42,7 +42,7 @@ class RuntimeUpgradeTests(unittest.TestCase):
                             self.assertEqual(admin.execute("SELECT to_regclass('truss.runtime_release') IS NOT NULL").fetchone()[0],original_ledger)
                     self.assertEqual(admin.execute('SELECT installation_id::text,source_epoch::text FROM truss.catalog_runtime_installation').fetchone(),installation)
                     self.assertEqual(admin.execute('SELECT release_id FROM truss.catalog_runtime_installation').fetchone()[0],genesis_release)
-                    self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.25-candidate')
+                    self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.26-candidate')
                 params['user']='consumer'
                 with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as consumer:
                     consumer.execute('BEGIN');host=adopt_psycopg_host(consumer)

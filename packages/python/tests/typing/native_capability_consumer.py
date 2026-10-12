@@ -34,3 +34,8 @@ def consume(assembly: CatalogReferenceAssembly, transaction: TransactionHandle,
     if isinstance(history,CapabilityAvailable):
         history.capability.reconstruct_in_transaction(transaction,entity=HistoryEntity(
             kind='object',document_id='orders',module_id='sales',definition_id='Order',id=1),version=1)
+
+    queries=assembly.compiled_execution(assembly.compiled_selection)
+    if isinstance(queries,CapabilityAvailable):
+        queries.capability.query_in_transaction(transaction,sql='SELECT COUNT(*) AS total FROM Order o',
+            document_ids=('orders',),parameters={'active':True})

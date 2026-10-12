@@ -5,8 +5,9 @@ Calls always return through the owning assembly's protected execution path.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Generic, Literal, TypeVar
+from typing import Mapping, Generic, Literal, TypeVar
 from .contracts import CapabilitySelection, CapabilityFamily, TypedIdentity, MapValue
+from .query import QueryRows,QueryRefused,QueryUnavailable
 from .execution import Outcome, TransactionHandle
 from .preparation import CatalogDocument, PreparedAcceptance
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
@@ -146,3 +147,12 @@ class NativeHistoryCapability(_NativeCapability[Literal['history']]):
     def reconstruct_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,version: int,
                                    maximum_events: int=4096,maximum_bytes: int=8388608) -> Outcome[HistoricalRecord | HistoricalDeleted | HistoryUnavailable]:
         return self._assembly.reconstruct_in_transaction(transaction,entity=entity,version=version,maximum_events=maximum_events,maximum_bytes=maximum_bytes)
+
+
+@dataclass(frozen=True,slots=True,kw_only=True)
+class NativeCompiledExecutionCapability(_NativeCapability[Literal['weft_execution']]):
+    """Compile with Weft and execute authorized logical reads on the host transaction."""
+    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool] | None=None,
+                             maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
+        return self._assembly.query_in_transaction(transaction,sql=sql,document_ids=document_ids,parameters=parameters,
+            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)

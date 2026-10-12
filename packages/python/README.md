@@ -1,24 +1,17 @@
 # Truss Python delivery
 
-Truss owns the tested embeddable Python implementation. The complete engine
-package is under implementation; current public components provide local runtime lifecycle, UMF acceptance-input
-preparation, selected native host transaction controls, installation footprint inspection
-and assembly construction. The selected catalog runtime additionally provides
-transactional installation, status, fresh catalog registration, report retrieval
-and durable registration retry. Runtime 0.4 provides module-authorized scalar-string object identity reads and
-rootless string object creation through a selected group provider, including
-caller rollback and durable request replay. Runtime 0.5 also provides ordinary-reader
-catalog metadata and exact accepted-document retrieval. Runtime 0.8 provides public
-business-key lookup, and runtime 0.9 reports exact-input unchanged registration.
-Runtime 0.10 accepts additional documents while preserving existing definitions.
-Runtime 0.11 adds exact integer, decimal, boolean, timestamp and binary properties.
-Runtime 0.12 adds bounded live object pages.
-Runtime 0.14 adds public scalar object updates/deletes and ordered mixed batches.
-Runtime 0.15 adds atomic caller preconditions and explicit invalid/unauthorized group failures.
-Runtime 0.16 adds independent directed edge create/update/delete, identity reads and ordered relationship pages, including mandatory relationships satisfied in the same batch.
-Runtime 0.17 adds original committed receipt tokens and authority-side `reached_in_transaction` on caller read-only transactions.
-Runtime 0.19 adds compatible changed-document acceptance through the public Python assembly. Runtime 0.18 added caller-owned scalar object and independent edge imports with immutable source facts and indexed partial progress.
-Runtime 0.20 adds complete committed transaction feed reads and caller-asserted source acknowledgements. Compiled queries and engine-owned import batches remain unfinished.
+The current Python reference assembly provides transactional installation and
+upgrades, accepted UMF catalogs, compatible evolution, exact scalar object and
+independent edge writes/reads, business-key lookup, preconditions, idempotent
+receipts, host-owned imports, retained history, committed feeds and acknowledgements.
+The caller owns its connection and transaction settlement.
+
+Runtime 0.26 adds public Weft compilation and query execution for string/boolean
+records, including equality filters/joins, counts, ordering/limits and `alias.*`.
+Integer COUNT results remain Python integers; optional values distinguish absence,
+null and empty strings. Read-only READ COMMITTED transactions are supported.
+Wider numeric query fields, relationship operators, structured properties,
+page-key profiles and engine-owned import batches remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -1582,3 +1575,48 @@ key production still require the bundled UMF producers' Bun runtime.
 
 Runtime0.25 supports additive upgrades from the exact .23 and .24 candidates,
 retaining genesis, original reports, receipts and feed evidence as described above.
+
+## Public compiled queries
+
+Install a Weft Python extension from commit `5eece2b` or a compatible successor,
+built with `truss-postgresql-pg18`, providing
+`compile_truss_runtime_json`. Generic or conformance-only Weft builds do not enable
+this capability. The selected Truss runtime is 0.26 on DocumentDrivenDX
+`pgserver-pg18==18.6.1` (PostgreSQL18.6); remote managed services remain unqualified.
+
+```python
+from truss import CapabilityAvailable, Ok, QueryRows
+
+selected = assembly.compiled_execution(assembly.compiled_selection)
+if not isinstance(selected, CapabilityAvailable):
+    raise RuntimeError(selected.reason)
+result = selected.capability.query_in_transaction(
+    transaction,
+    sql='SELECT n.* FROM Note n WHERE n.title = :title',
+    document_ids=('notes',),
+    parameters={'title': 'Draft'},
+)
+if isinstance(result, Ok) and isinstance(result.value, QueryRows):
+    for row in result.value.rows:
+        print(dict(zip(result.value.columns, row)))
+```
+
+Use authored UMF Record names and Field names in SQL. Truss constructs the binding
+from exact accepted documents and actual native mappings; consumers do not author
+codec graphs. The current source profile requires complete reader/writer authority
+for all modules in each selected original document. Unsupported semantics produce
+a typed refusal. No rows are returned from partial or unauthorized sources.
+`QueryAbsent()` represents absence, `None` represents explicit null, and empty
+strings remain strings. Connections, pools and commit/rollback remain host-owned.
+
+The installed fixed source functions expose validated logical query input without
+granting raw-table SELECT or accepting arbitrary SQL in a privileged routine.
+Weft parses/resolves/lowers queries; Truss binds original `$n` parameters, checks
+emitted obligations, buffers exact results and rechecks current context. Ordinary
+input/source/output limits and deadlines apply, without custom instrumentation or
+internal retry loops.
+
+Record-name annotations select support policy0.4.0. Runtime upgrades from exact
+0.23/0.24/0.25 profiles preserve immutable genesis, original accepted sources, rows,
+receipts and feed deliveries. The active runtime configuration selects the new
+policy without changing historical preparation or report pins.

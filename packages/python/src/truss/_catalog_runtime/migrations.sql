@@ -15,6 +15,9 @@ BEGIN
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation;
  SELECT * INTO active FROM truss.runtime_release ORDER BY generation DESC LIMIT 1;
  IF FOUND THEN installation.release_id:=active.release_id;installation.release_sha256:=active.release_sha256;END IF;
+ IF installation.release_id='truss-catalog-runtime/0.26-candidate' THEN
+  installation.preparation_configuration:=jsonb_set(installation.preparation_configuration,'{supportProfile}','{"identity":"truss-fresh-catalog-support","version":"0.4.0","sha256":"82934e8b77e9c2fabf1095a119429842a5a38dd90e47ea8cf85867cb27b1952d"}'::jsonb);
+ END IF;
  RETURN NEXT installation;
 END;
 $$;

@@ -3,8 +3,9 @@
 The protocol describes callable operations, not readiness, native authority,
 or conformance to broader historical/verified-application interfaces.
 """
-from typing import Protocol, Literal
+from typing import Protocol, Literal, Mapping
 from .contracts import TypedIdentity, MapValue
+from .query import QueryRows,QueryRefused,QueryUnavailable
 from .execution import Outcome, TransactionHandle
 from .preparation import CatalogDocument, PreparedAcceptance
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
@@ -83,3 +84,6 @@ class NativeRuntimeOperations(Protocol):
                                    maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]: ...
 
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]: ...
+
+    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool] | None=None,
+                             maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]: ...
