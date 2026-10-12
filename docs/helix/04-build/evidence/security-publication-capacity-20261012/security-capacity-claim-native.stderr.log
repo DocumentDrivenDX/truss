@@ -1,0 +1,16 @@
+E
+======================================================================
+ERROR: test_public_created_membership_graph (__main__.PublicOntologySecurityTests.test_public_created_membership_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 353, in test_public_created_membership_graph
+    self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=self.admin.execute(capacity_register,(token,installation_bytes,profile_bytes,5,cap)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK')
+                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.ProgrammingError: the query has 9 placeholders but 5 parameters were passed
+
+----------------------------------------------------------------------
+Ran 1 test in 23.190s
+
+FAILED (errors=1)

@@ -286,3 +286,41 @@ Sources,193 native observations, seven formulas/results and hashes:
 `../../04-build/evidence/security-publication-tombstones-20261012/receipt.json`.
 Trace CONTRACT-005/063, STP-057 L03/L09/L11 and US-057-AC2/AC5/AC7. This extends
 the candidate only; no required backend acceptance case is promoted.
+
+
+### Bounded retained publication registration — 2026-10-12
+
+The separately versioned0.3 capacity registration source admits original operation
+bytes1..2048 and a verified-profile capacity integer1..1048576. These are local
+implementation bounds, not shared semantics or product ceilings. Capacity counts
+all retained identities, including settled tombstones. Exhaustion refuses before
+disclosure, without deleting identities or choosing a new operation/profile.
+The bounded count reads at most the selected capacity rows; this is a logical
+row-count bound, not native heap, scan-cost, CPU or allocation qualification.
+
+Count and insertion require original schema-head SHARE, guard SHARE, then
+`installation-publication-claim-capacity-lock-v0.1.proposal.sql`'s SHARE ROW
+EXCLUSIVE table lock, retained through commit/rollback. The count runs in a fresh
+READ COMMITTED statement after acquisition. All registrants must follow this
+order/source; uncapped0.2 registrations are incompatible with positive capacity
+admission. Capacity must be fixed by authenticated original installation/profile,
+never supplied as an ordinary caller option. That binding remains unimplemented.
+
+The native fixture retains three earlier settled identities, refuses full/zero/
+negative/oversized capacities and oversized operation bytes, then races two
+registrants for the fourth slot. The second actually waits on the first's original
+PID and its fresh count refuses after the first commits. Settlement of that
+fourth identity does not reopen capacity. Suite total197 native observations.
+Five integer-cardinality checks preserve the cap under fresh serialized counts
+and retain a stale-shared-count oversubscription witness; they assume the
+serialization/freshness and fixed-capacity premises rather than proving native
+SQL refinement.
+
+Sources, successful and failed native logs, formulas/results and hashes:
+`../../04-build/evidence/security-publication-capacity-20261012/receipt.json`.
+The first test binding used repeated positional parameters incorrectly; supported
+psycopg named parameters now preserve the original SQL source. Trace
+CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Whole resource budgets,
+original profile/issuer/sink authentication, complete participant/bootstrap
+parity, uncertainty/recovery and safe lifetime retention remain required.
+No required backend acceptance case is promoted.

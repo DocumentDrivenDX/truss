@@ -345,6 +345,35 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    pending_owner.rollback();pending_thread.join(12)
   self.assertFalse(pending_thread.is_alive());self.assertEqual(pending_errors,[]);self.assertEqual(pending_advances,[]);observations.append({'id':'fresh-post-drain-authority-check-sees-committed-claim','observed':pending_advances})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(pending_operation,installation_bytes,profile_bytes,5)).fetchall(),[(pending_operation.hex(),)]);self.admin.execute('COMMIT')
+  # Capacity source: retained tombstones count; serialization precedes fresh count.
+  capacity_lock=(contracts/'installation-publication-claim-capacity-lock-v0.1.proposal.sql').read_text()
+  capacity_register=(contracts/'installation-publication-claim-register-v0.3.capacity.proposal.sql').read_text()
+  for ordinal in range(1,6):capacity_register=capacity_register.replace('$'+str(ordinal),'%(p'+str(ordinal)+')s')
+  def capacity_execute(connection,parameters):return connection.execute(capacity_register,{'p'+str(i):value for i,value in enumerate(parameters,1)})
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(3,))
+  for cap,token in [(3,b'full-registry'),(0,b'zero-capacity'),(-1,b'negative-capacity'),(1048577,b'oversized-capacity'),(4,b'x'*2049)]:
+   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=capacity_execute(self.admin,(token,installation_bytes,profile_bytes,5,cap)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK')
+  observations.append({'id':'publication-capacity-and-token-bounds-refuse-before-registration','observed':'five zero-row refusals; retained tombstones preserved'})
+  capacity_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(capacity_owner.close);capacity_pid=capacity_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
+  capacity_waiter=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(capacity_waiter.close);capacity_waiter_pid=capacity_waiter.execute('SELECT pg_backend_pid()').fetchone()[0]
+  capacity_owner.execute('BEGIN');capacity_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');capacity_owner.execute(acquire).fetchall();capacity_owner.execute(capacity_lock);last_registered=capacity_execute(capacity_owner,(b'last-capacity-slot',installation_bytes,profile_bytes,5,4)).fetchall();self.assertEqual(last_registered,[(b'last-capacity-slot'.hex(),)])
+  capacity_errors=[];capacity_rows=[]
+  def register_after_capacity_drain():
+   try:
+    capacity_waiter.execute('BEGIN');capacity_waiter.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');capacity_waiter.execute(acquire).fetchall();capacity_waiter.execute(capacity_lock);capacity_rows.extend(capacity_execute(capacity_waiter,(b'racing-capacity-slot',installation_bytes,profile_bytes,5,4)).fetchall());capacity_waiter.execute('ROLLBACK')
+   except BaseException as error:capacity_errors.append(type(error).__name__);capacity_waiter.execute('ROLLBACK')
+  capacity_thread=threading.Thread(target=register_after_capacity_drain);capacity_thread.start()
+  try:
+   blockers=[];wait_until=time.monotonic()+8
+   while time.monotonic()<wait_until:
+    blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(capacity_waiter_pid,)).fetchone()[0]
+    if capacity_pid in blockers:break
+    time.sleep(.02)
+   self.assertIn(capacity_pid,blockers);observations.append({'id':'publication-capacity-registrants-native-serialization','observed':blockers});capacity_owner.execute('COMMIT')
+  finally:capacity_owner.rollback();capacity_thread.join(12)
+  self.assertFalse(capacity_thread.is_alive());self.assertEqual(capacity_errors,[]);self.assertEqual(capacity_rows,[]);self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(4,));observations.append({'id':'fresh-capacity-check-refuses-racing-last-slot','observed':{'rows':capacity_rows,'retained':4}})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(b'last-capacity-slot',installation_bytes,profile_bytes,5)).fetchall(),[(b'last-capacity-slot'.hex(),)]);self.admin.execute('COMMIT')
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);self.assertEqual(capacity_execute(self.admin,(b'after-capacity-settlement',installation_bytes,profile_bytes,5,4)).fetchall(),[]);self.admin.execute('ROLLBACK');observations.append({'id':'settlement-cannot-reopen-retained-token-capacity','observed':'zero rows after settled fourth identity'})
   self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.client(code text PRIMARY KEY);CREATE TABLE relational_fixture.project(code text PRIMARY KEY);CREATE TABLE relational_fixture.staff(code text PRIMARY KEY,login text NOT NULL);CREATE TABLE relational_fixture.resource(code text PRIMARY KEY,secret text NOT NULL);CREATE TABLE relational_fixture.assignment(code text PRIMARY KEY,active boolean NOT NULL)')
   for table,codes in [('client',['C']),('project',['A','B']),('resource',['RA','RB','RAB','RO'])]:
    for code in codes:
