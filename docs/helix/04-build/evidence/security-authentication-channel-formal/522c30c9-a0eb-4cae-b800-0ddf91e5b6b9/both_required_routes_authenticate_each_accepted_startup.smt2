@@ -1,0 +1,33 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun authenticated_original () Bool)
+(declare-fun original_session_authentication_end () Bool)
+(declare-fun credential_at_new_login () Bool)
+(declare-fun required_at_new_login () Bool)
+(declare-fun authenticated_new () Bool)
+(declare-fun credential_at_login () Bool)
+(declare-fun required_at_login () Bool)
+(declare-fun accepted_new () Bool)
+(declare-fun accepted_original () Bool)
+(declare-fun second_route_required () Bool)
+(declare-fun second_route_credential () Bool)
+(assert
+ (let (($x26 (= original_session_authentication_end authenticated_original)))
+ (let (($x25 (= authenticated_new (and required_at_new_login credential_at_new_login))))
+ (let (($x23 (= authenticated_original (and required_at_login credential_at_login))))
+ (let (($x21 (= accepted_new (or (not required_at_new_login) credential_at_new_login))))
+ (let (($x18 (= accepted_original (or (not required_at_login) credential_at_login))))
+ (and $x18 $x21 $x23 $x25 $x26)))))))
+(assert
+ required_at_new_login)
+(assert
+ second_route_required)
+(assert
+ (let (($x32 (and second_route_required second_route_credential)))
+(let (($x38 (not $x32)))
+(let (($x30 (not second_route_required)))
+(let (($x31 (or $x30 second_route_credential)))
+(let (($x34 (not authenticated_new)))
+(let (($x37 (and accepted_new $x34)))
+(or $x37 (and $x31 $x38)))))))))
+(check-sat)

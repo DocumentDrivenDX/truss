@@ -5550,3 +5550,54 @@ defines the selected SCRAM method. SCRAM proves a credential holder, not the
 ontology subject, target, policy issuer or complete private executor deployment.
 No public authentication provider, backend binding or full C01/C02 exit is
 promoted; all132 cases remain required,26 pass and106 remain unbound.
+
+### Original native SCRAM caller gate — 2026-10-11
+
+Private `_verify_native_scram_profile_caller` composes the existing original
+session/effective OID comparison with actual `system_user`/session-name readback.
+It requires an original caller comparison and exact named native TEXT OID25
+descriptors, then matches SCRAM's original login identity to the actual native
+session role. Trust/NULL authentication refuses despite matching role metadata.
+It is called inside original registered host transaction custody after profile
+admission; no reusable authority object, client authentication flag, new Core
+meaning, custom codec or whole-operation snapshot pipeline is introduced.
+
+Final `evidence/security-native-authentication/9081f219-ee66-4a61-a1f2-9b8c2780445e`
+passes17 observations, including six actual host-scoped gate controls. Trust and
+weakened fresh sessions refuse; a genuine original SCRAM login and its separately
+admitted acting role pass; forged session OID comparison refuses. Every gate
+control independently records entry before its checks, preventing an unrelated
+host refusal from satisfying a negative control. An already-authenticated session
+still passes after HBA weakening, retaining the earlier endpoint-policy lifetime
+counterexample. Gate authentication does not establish current endpoint closure,
+privilege exclusion, ontology-subject mapping, target or issuer authority.
+
+The packet retains101 library/profile source preimages plus the original probe
+source and1705 runtime payload pins. Actual stop0/status3/socket-absent cleanup is
+verified. Earlier645e93c2 passes17 before the explicit gate-entry controls.
+Failed474a4dee retains its AssertionError and successful cleanup: initial host
+adoption used the default unbounded statement timeout. The corrected fixture uses
+the existing3-second host timeout; sanitized error capture uses Error.error.code.
+No host/evaluator deadline was widened. The failure never qualified the gate.
+
+Full `evidence/python-psycopg-epoch-cut/4fe464b6-8cf0-4dee-8bd7-17d3a9e75975`
+passes194 methods and the module boundary gate, with145 current/preimage Truss,
+363 current/archive UMF and1705 native payload pins, and three confirmed fixture
+cleanups. Concurrent main's public-catalog priority/execution/installation docs
+were read and preserved; selected executable source pins remain identical after
+merge. Separate Python boundary verification passes581 imports.
+
+Formal `evidence/security-authentication-channel-formal/522c30c9-a0eb-4cae-b800-0ddf91e5b6b9`
+replays the existing seven conditional startup/endpoint laws, two UNSAT/five SAT,
+on Z3 4.15.4 with the final native packet and exact source/SMT preimages. Earlier
+289d20a9 retains the intermediate probe scope. This does not prove Python caller
+profile parsing, native descriptor correspondence or complete host/native protocol
+refinement; those remain separately scoped native controls and model premises.
+
+Trace TD-056 C02/C04, CONTRACT-063/STP-056 B05/B11/B12 and US-056
+AC5/AC9/AC10 prerequisites. This private gate is not a selected blanket SCRAM
+requirement for the public catalog baseline, a public authentication provider or
+completion of the callable installation/registration/report milestone. Production
+integration must use the selected public assembly and original minimum security
+handoff without restoring historical snapshot/codec release gates. No backend
+binding or C01/C02 exit is promoted;26/132 remains accepted with106 unbound.

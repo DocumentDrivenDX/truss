@@ -12,6 +12,9 @@ import time
 import uuid
 import psycopg
 from psycopg import sql, pq
+from truss.psycopg_host import PsycopgHost
+from truss.execution import Ok, Error
+from truss._psycopg_dependency_fact_cut import _verify_native_scram_profile_caller
 
 
 def main():
@@ -24,6 +27,16 @@ def main():
     out = root / 'docs/helix/04-build/evidence/security-native-authentication' / str(uuid.uuid4())
     out.mkdir(parents=True)
     (out / 'preimage.py').write_bytes(source)
+    paths = list((root / 'packages/python/src/truss').glob('*.py'))
+    paths.append(root / 'packages/python/src/truss/_profiles/local-postgres-runtime.json')
+    source_pins = {}
+    for path in paths:
+        raw = path.read_bytes()
+        name = str(path.relative_to(root))
+        source_pins[name] = hashlib.sha256(raw).hexdigest()
+        target = out / 'preimages' / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
     observations = []
     secret = secrets.token_urlsafe(32)
     wrong = secrets.token_urlsafe(32)
@@ -41,12 +54,41 @@ def main():
 
     def connect(user, password=None):
         return psycopg.connect(host=str(socket), dbname='postgres', user=user,
-                               password=password, autocommit=True, connect_timeout=2)
+                               password=password, autocommit=True, connect_timeout=2,
+                               options='-c statement_timeout=3s')
 
     def identity(connection):
         row = connection.execute('SELECT system_user, session_user::pg_catalog.text, current_user::pg_catalog.text').fetchone()
         assert row is not None and len(row) == 3
         return list(row)
+
+    def gate(connection, label, expected, forged=False):
+        roles = connection.execute("SELECT s.oid::pg_catalog.text,c.oid::pg_catalog.text FROM pg_catalog.pg_roles s CROSS JOIN pg_catalog.pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
+        assert roles is not None
+        profile = json.dumps({'caller': {'sessionRoleOid': '1' if forged else roles[0],
+                                         'effectiveRoleOid': roles[1]}}).encode()
+        host = PsycopgHost(connection)
+        called = []
+        entered = []
+        try:
+            connection.execute('BEGIN')
+            adopted = host.adopt_transaction()
+            assert type(adopted) is Ok
+            def check(cursor, observed):
+                entered.append(True)
+                _verify_native_scram_profile_caller(cursor, profile)
+                called.append(True)
+                return 'original-native-authentication-checked'
+            result = host._run_operation(adopted.value, check)
+            assert (type(result) is Ok) == expected
+            assert (type(result) is Error) == (not expected)
+            assert entered == [True]
+            assert called == ([True] if expected else [])
+            observations.append({'id': label, 'passed': expected, 'gateEntered': True, 'callbackReached': bool(called),
+                                 'code': None if expected else result.error.code})
+        finally:
+            connection.execute('ROLLBACK')
+            host.detach()
 
     def install(admin, authentication):
         hba = 'local all postgres trust\nlocal all all ' + authentication + '\n'
@@ -82,6 +124,7 @@ def main():
                 before = identity(trusted)
                 assert before == [None, 'auth_actor', 'auth_actor']
                 observations.append({'id': 'trust-accepts-wrong-credential', 'identity': before})
+                gate(trusted, 'native-gate-refuses-trust', False)
             install(admin, 'scram-sha-256')
             for label, password in [('wrong-password', wrong), ('missing-password', None)]:
                 try:
@@ -97,10 +140,13 @@ def main():
                 original = identity(authenticated)
                 assert original == ['scram-sha-256:auth_actor', 'auth_actor', 'auth_actor']
                 observations.append({'id': 'scram-authenticated-original', 'identity': original})
+                gate(authenticated, 'native-gate-admits-original-scram', True)
+                gate(authenticated, 'native-gate-refuses-forged-role-comparison', False, forged=True)
                 authenticated.execute('SET ROLE auth_borrowed')
                 borrowed = identity(authenticated)
                 assert borrowed == ['scram-sha-256:auth_actor', 'auth_actor', 'auth_borrowed']
                 observations.append({'id': 'acting-role-does-not-replace-authentication', 'identity': borrowed})
+                gate(authenticated, 'native-gate-retains-original-login-with-acting-role', True)
                 for command in ('SET SESSION AUTHORIZATION postgres', 'SET ROLE postgres'):
                     try:
                         authenticated.execute(command)
@@ -112,9 +158,11 @@ def main():
                 authenticated.execute('RESET ROLE')
                 install(admin, 'trust')
                 assert identity(authenticated) == original
+                gate(authenticated, 'native-gate-does-not-pin-endpoint-policy', True)
                 with connect('auth_actor', wrong) as bypass:
                     weakened = identity(bypass)
                     assert weakened == [None, 'auth_actor', 'auth_actor']
+                    gate(bypass, 'native-gate-refuses-weakened-new-session', False)
                 observations.append({'id': 'session-authentication-does-not-pin-endpoint-policy',
                                      'originalSession': original, 'newSession': weakened})
                 install(admin, 'scram-sha-256')
@@ -136,8 +184,9 @@ def main():
         else:
             shutil.rmtree(owned)
     assert Path(__file__).read_bytes() == source
+    assert all(hashlib.sha256((root / name).read_bytes()).hexdigest() == digest for name, digest in source_pins.items())
     assert all(hashlib.sha256(Path(name).read_bytes()).hexdigest() == digest for name, digest in pins.items())
-    result.update({'sourceSha256': hashlib.sha256(source).hexdigest(), 'nativeBinaryDigests': pins,
+    result.update({'sourceSha256': hashlib.sha256(source).hexdigest(), 'sourceDigests': source_pins, 'nativeBinaryDigests': pins,
                    'psycopg': psycopg.__version__, 'implementation': pq.__impl__, 'libpq': pq.version(),
                    'server': '18.6', 'observations': observations, 'cleanup': cleanup,
                    'references': ['https://www.postgresql.org/docs/18/functions-info.html',
