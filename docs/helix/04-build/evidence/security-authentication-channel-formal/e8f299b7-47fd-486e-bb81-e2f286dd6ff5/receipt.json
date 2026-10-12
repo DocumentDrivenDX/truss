@@ -1,0 +1,79 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "scripts/prove-security-authentication-channel.py": "70f09dcae28e23fa246ce4e7fbd3cfe6696d5a072e16d24801ebf3202cd75758",
+    "scripts/check-security-native-authentication.py": "a2a6b5dfed28cc539e63043f896eb2201e51ed23c17c3ed2126bb080c0e4e8c9",
+    "docs/helix/04-build/evidence/security-native-authentication/dc8fa685-9e1b-41c2-96fd-6a7fc06fa081/receipt.json": "24da58b9c56a8fe336cd5f51b2c5919beae7efed892c6f2aeb3027d5d6943e43"
+  },
+  "queries": [
+    {
+      "id": "required_credential_excludes_uncredentialed_startup",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "f6ac713cf91beef6baa2a084c78f8c929ae25b1305f18190636b36fda28ed343",
+      "model": null
+    },
+    {
+      "id": "authenticated_session_survives_endpoint_weakening",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "d745815e440f00c6b492969f805a4ea057fb0023ad34e653614635223323141b",
+      "model": "[authenticated_original = True,\n accepted_original = True,\n credential_at_login = True,\n required_at_login = True,\n credential_at_new_login = False,\n required_at_new_login = False,\n authenticated_new = False,\n accepted_new = True,\n original_session_authentication_end = True]"
+    },
+    {
+      "id": "matching_role_without_challenge_does_not_authenticate",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "112704b81a507420df6394af47ec86e9b44ce1e648cd08449a2c1a947663804c",
+      "model": "[authenticated_original = False,\n accepted_original = False,\n credential_at_login = False,\n required_at_login = True,\n credential_at_new_login = False,\n required_at_new_login = False,\n authenticated_new = False,\n accepted_new = True,\n original_session_authentication_end = False]"
+    },
+    {
+      "id": "native_authentication_does_not_bind_ontology_subject",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "3638c1ab761828c1de2fa191315c29f2ec4f6216e92e63691e3dca9059d7fa93",
+      "model": "[independent_ontology_subject_binding = False,\n authenticated_original = True,\n accepted_original = True,\n credential_at_login = True,\n required_at_login = True,\n credential_at_new_login = True,\n required_at_new_login = True,\n authenticated_new = True,\n accepted_new = True,\n original_session_authentication_end = True]"
+    },
+    {
+      "id": "native_authentication_does_not_authenticate_target",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "eadf0cb2c1c9a02b3874318beffb42ece65782f954597cad8bee4c55ac6f2e0d",
+      "model": "[authenticated_original = True,\n accepted_original = True,\n credential_at_login = True,\n required_at_login = True,\n credential_at_new_login = True,\n required_at_new_login = True,\n authenticated_new = True,\n accepted_new = True,\n original_session_authentication_end = True,\n independent_target_authentication = False]"
+    },
+    {
+      "id": "both_required_routes_authenticate_each_accepted_startup",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "64e8ab742b164a961e88087b436a3984889c4a283e24de07a1a9044dfb611788",
+      "model": null
+    },
+    {
+      "id": "unknown_alternate_route_defeats_known_route_authentication",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "3f0fa8f5b2833c0821ff54756d985e2edbd90c9b1f729849361900e9841a8db0",
+      "model": "[authenticated_original = False,\n accepted_original = False,\n credential_at_login = False,\n required_at_login = True,\n credential_at_new_login = True,\n required_at_new_login = True,\n authenticated_new = True,\n accepted_new = True,\n second_route_required = False,\n original_session_authentication_end = False,\n second_route_credential = False]"
+    }
+  ],
+  "nativePacket": "docs/helix/04-build/evidence/security-native-authentication/dc8fa685-9e1b-41c2-96fd-6a7fc06fa081/receipt.json",
+  "scope": "Two declared connection routes, original session authentication and one endpoint policy transition.",
+  "limitations": [
+    "Credential challenge and immutable original-session identity are explicit premises",
+    "Faithful PostgreSQL/Psycopg/HBA mapping and complete route inventory are not proved by this Boolean model",
+    "Native packet is a separately scoped owned fixture; no proof of Python/native protocol refinement",
+    "No production subject/target/issuer/credentials/writer closure or backend admission"
+  ],
+  "acceptancePrerequisites": [
+    "TD-056 C01/C02/C04",
+    "STP-056 B05/B10/B11/B12"
+  ]
+}

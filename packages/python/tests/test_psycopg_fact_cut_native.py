@@ -1218,6 +1218,58 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             finally:self.connection.execute('ROLLBACK')
         self.with_unprivileged_actor(operation,catalog_only=True)
 
+    def test_owned_publication_transport_preserves_dispositions_and_refuses_extra_members(self):
+        import sys,copy
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_owned_read import _read_owned_evaluator_receipt as read
+        field={'documentId':'domain','moduleId':'m','elementId':'salary'}
+        for disposition in ('withheld','absent','original','transformed'):
+            cell={'field':field,'disposition':disposition}
+            if disposition in ('original','transformed'):cell['value']={'integerToken':'9007199254740993'}
+            if disposition=='transformed':cell['outputType']=field
+            envelope={'decision':{'decision':'permit','output':[cell]},'identities':[]}
+            self.assertEqual(read(json.dumps(envelope)),envelope['decision'])
+            altered=copy.deepcopy(envelope);altered['decision']['output'][0]['diagnostic']='private-value'
+            with self.assertRaisesRegex(ValueError,'Original fixture publication refused'):read(json.dumps(altered))
+        self.assertEqual(read('{"decision":{"decision":"deny","output":[]},"identities":[]}'),{'decision':'deny','output':[]})
+        malformed=[
+            {'decision':{'decision':'deny','output':[{'field':field,'disposition':'withheld'}]},'identities':[]},
+            {'decision':{'decision':'permit','output':[{'field':dict(field,extra='private'),'disposition':'withheld'}]},'identities':[]},
+            {'decision':{'decision':'permit','output':[{'field':field,'disposition':'unknown'}]},'identities':[]},
+            {'decision':{'decision':'permit','output':[{'field':field,'disposition':'original'}]},'identities':[]},
+            {'decision':{'decision':'permit','output':[{'field':field,'disposition':'withheld'}]*257},'identities':[]},
+        ]
+        for envelope in malformed:
+            with self.assertRaisesRegex(ValueError,'Original fixture publication refused'):read(json.dumps(envelope))
+        for text in ('{"decision":{"decision":"permit","output":[]},"identities":[],"identities":[]}',
+                     '{"decision":{"decision":"permit","output":[]},"identities":[NaN]}'):
+            with self.assertRaisesRegex(ValueError,'Original fixture publication refused'):read(text)
+
+    def test_delegated_malformed_publication_refuses_without_private_output(self):
+        import sys,subprocess
+        from unittest.mock import patch
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        import security_owned_read as tool
+        private='private-publication-sentinel'
+        field={'documentId':'domain','moduleId':'m','elementId':'salary'}
+        malformed=[
+            json.dumps({'decision':{'decision':'permit','output':[],'diagnostic':private},'identities':[]}),
+            json.dumps({'decision':{'decision':'permit','output':[{'field':field,'disposition':'withheld','value':{'string':private}}]},'identities':[]}),
+            '{"decision":{"decision":"deny","decision":"permit","output":[]},"identities":[]}',
+        ]
+        def operation(host,t,original,connection):
+            for text in malformed:
+                executor_t=self.begin()
+                try:
+                    with patch.object(tool.subprocess,'run',return_value=subprocess.CompletedProcess(['fixture'],0,text,private)):
+                        result=self.delegated_owned_read(host,t,executor_t)
+                    self.assertIsInstance(result,Error)
+                    self.assertNotIn(private,repr(result))
+                    self.assertEqual(self._last_delegated_events,[{'layer':'executor','status':'error','code':'invalid_transaction'},{'layer':'caller','status':'error','code':'invalid_transaction'}])
+                    self.assertIsNone(host._custody.reservation);self.assertIsNone(self.host._custody.reservation)
+                finally:self.connection.execute('ROLLBACK')
+        self.with_unprivileged_actor(operation,catalog_only=True)
+
     def test_delegated_repeated_native_completion_preserves_subject_decisions(self):
         def operation(host,t,original,connection):
             for subject,decision in [('s1','permit'),('s2','deny'),('s1','permit')]:

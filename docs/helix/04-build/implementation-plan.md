@@ -5437,3 +5437,116 @@ all three fixture cleanups confirm stop0/status3/socket absent. Source/archive/
 runtime digests were independently rechecked after completion. The six
 `test_owner_evidence_json` tests also pass. These are component checks on the
 merged source set; the complete backend acceptance bindings remain unqualified.
+
+### Closed owned evaluator publication — 2026-10-11
+
+The owned Python read previously forwarded any evaluator dictionary carrying
+`decision: permit|deny`, including unknown members. It now parses duplicate-free
+finite JSON and requires exact decision/output and per-disposition member sets.
+Denied decisions have no output; withheld/absent cells cannot carry values.
+Original/transformed cells retain their exact value carrier, with transformed
+output-domain references. The transport bounds256 output cells and4096 characters
+per nonempty reference component. Private identities are discarded. These are
+transport checks, not a second ontology, literal decoder or authorization engine.
+
+Before emitting a permitted fixture result, the original TypeScript evaluator
+now applies UMF's existing `validateSecurityDisclosure` to the original Resource/
+salary selection. UMF validates field correspondence, disposition shape and exact
+Core literal/domain meanings. It remains a structural/domain validator, not an
+independent permission or credential proof. All four dispositions remain admitted
+by the transport; existing native permitted/denied outcomes remain unchanged.
+
+Two added controls preserve all four disposition carriers (including an integer
+token beyond JavaScript's safe integer range), refuse extra members, malformed
+references, missing values, nonfinite/duplicate JSON and over-limit output, and
+inject three malformed evaluator replies during actual delegated native reads.
+Unknown decision diagnostics, values attached to withholding and duplicate
+decision members all refuse; private sentinel data and evaluator stderr never
+appear in the caller result, and both pair reservations retire. The first
+`evidence/python-psycopg-epoch-cut/9a2e4c5f-4b8e-4905-9be1-66cfbe10d079`
+passes194 methods and the boundary gate with all three fixture cleanups, before
+the concurrent catalog-support merge and runner scope-description correction.
+An initial isolated unittest invocation lacked the required native fixture setup;
+the corrected direct parser-method invocation and the complete native run pass.
+
+Trace TD-056 C05, CONTRACT-063/STP-056 B07/B08/B10/B12/B15/B16 and
+US-056 AC5/AC6/AC8/AC10 prerequisites. This closes an actual publication-shape
+gap; source pins, structural validation and these finite controls do not prove
+producer authentication, current authority, all diagnostic channels or complete
+backend acceptance. Original raw/graph and all132 acceptance cases remain
+required;26 pass and106 remain unbound. The full Weft query surface is unchanged.
+
+Final merged packet
+`evidence/python-psycopg-epoch-cut/2e82210c-eaac-45d8-98bb-8750b7d4e522`
+passes194 methods and the boundary gate, with145 current/preimage Truss sources,
+363 current/archive UMF sources and1705 native payload pins independently
+reverified. All three cleanups confirm stop0/status3/socket absent. The exact
+selected engine18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6 binary profile is
+unchanged. Main's concurrent authored catalog-key/relationship support is
+preserved; its eight `test_catalog_relational_support` tests also pass. Both
+native packets remain available under their original source scopes. No complete
+backend case or production channel/authentication profile is promoted.
+
+### Native credential authentication and endpoint-policy lifetime — 2026-10-11
+
+Existing security fixtures initialize PostgreSQL with `--auth=trust`; their
+actual session/effective role observations do not establish credential
+authentication. `scripts/check-security-native-authentication.py` now exercises
+an isolated socket-only owned PostgreSQL18.6 cluster using the original released
+runtime payload and stock psycopg3.3.6 binary/libpq180006. An excluded trust
+administrator creates a random SCRAM credential and switches the actual HBA
+rules; no production credential or application connection is accepted.
+
+Final `evidence/security-native-authentication/15d6b711-2390-4b43-a024-0b5e9df70eb8`
+passes11 observations. Trust accepts an incorrect credential and exposes NULL
+`system_user`. Actual SCRAM denies wrong/missing credentials with independently
+classified native error categories and records `scram-sha-256:auth_actor`.
+SET ROLE changes the effective role while original authentication/session
+identity stays unchanged. Ordinary SET SESSION AUTHORIZATION/SET ROLE to postgres
+refuse42501. Native `pg_hba_file_rules` readback and successful fresh connection
+observations qualify each reload rather than trusting a file write alone.
+
+After the excluded administrator weakens HBA to trust, the original SCRAM session
+still reports its authenticated identity while a new connection accepts the wrong
+credential and reports NULL authentication. Restoring SCRAM again requires an
+actual fresh authenticated connection. Thus an authenticated original session
+does not pin current policy on future/alternate connection routes. Authentication
+policy, role/credential administration and all endpoint writers need independent
+inventory and current-cut qualification. Matching actor names or session OIDs
+under trust cannot substitute for the selected authentication profile.
+
+The initial `ad1274f4-73c2-4017-b1a1-ee42d1d33f68` packet passes11 observations
+before strengthening driver-version admission and native refusal classification;
+it remains historical under its original preimage. Intermediate
+`dc8fa685-9e1b-41c2-96fd-6a7fc06fa081` passes11 with those strengthened checks
+before the cleanup correction. Cleanup now independently observes native status
+even after uncertain startup, stops an observed live owned server, and removes
+the owned directory only after verified absence; unconfirmed custody is retained.
+The successful final run exercises the normal cleanup path, not injected startup
+uncertainty. Each packet retains source
+and1705 native payload digests and confirms stop0/status3/socket absent. Generated
+secrets and native diagnostics are not emitted in retained receipts; the entire
+owned cluster is removed after stop. The trusted local administrator and owned
+socket directory remain fixture premises, not independently authenticated server
+or production credential custody.
+
+`scripts/prove-security-authentication-channel.py` retains seven Z3 4.15.4
+SMT-LIB/fresh-context replays in
+`evidence/security-authentication-channel-formal/5c2a625e-b711-4cb3-aa67-ceca60d04edd`:
+two UNSAT/five SAT, with exact script/native-receipt preimages. Required challenges
+exclude uncredentialed startup under the model; every accepted startup on both
+declared challenge-required routes authenticates. SAT witnesses preserve stale
+session authentication after endpoint weakening, trust accepting matching roles,
+unknown alternate routes and missing ontology-subject/target authentication.
+Faithful PostgreSQL/Psycopg mapping, immutable original-session observation and
+complete declared routing are premises; this is not native protocol refinement.
+Earlier `e8f299b7-47fd-486e-bb81-e2f286dd6ff5` retains the intermediate native
+packet/source scope and the same seven replayed queries.
+
+Trace TD-056 C01/C02/C04 and CONTRACT-063/STP-056 B05/B10/B11/B12
+prerequisites. PostgreSQL18's [session information documentation](https://www.postgresql.org/docs/18/functions-info.html)
+defines `system_user`, and [password authentication](https://www.postgresql.org/docs/18/auth-password.html)
+defines the selected SCRAM method. SCRAM proves a credential holder, not the
+ontology subject, target, policy issuer or complete private executor deployment.
+No public authentication provider, backend binding or full C01/C02 exit is
+promoted; all132 cases remain required,26 pass and106 remain unbound.

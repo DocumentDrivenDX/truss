@@ -25,6 +25,37 @@ def _pin_owned_evaluator_sources():
     return _OwnedEvaluatorSourcePins(tool,tuple((p,hashlib.sha256(p.read_bytes()).digest()) for p in paths))
 
 
+def _read_owned_evaluator_receipt(text):
+    """Closed publication shape only; UMF owns domains and field semantics."""
+    def refuse(*args):raise ValueError('Original fixture publication refused')
+    def pairs(entries):
+        result={}
+        for key,value in entries:
+            if key in result:refuse()
+            result[key]=value
+        return result
+    try:receipt=json.loads(text,object_pairs_hook=pairs,parse_constant=refuse)
+    except (ValueError,RecursionError):refuse()
+    if type(receipt) is not dict or set(receipt)!={'decision','identities'}:refuse()
+    decision=receipt['decision']
+    if (type(decision) is not dict or set(decision)!={'decision','output'}
+            or decision['decision'] not in ('permit','deny')
+            or type(decision['output']) is not list or len(decision['output'])>256):refuse()
+    if decision['decision']=='deny' and decision['output']:refuse()
+    for cell in decision['output']:
+        if type(cell) is not dict:refuse()
+        disposition=cell.get('disposition')
+        keys={'field','disposition'}
+        if disposition in ('original','transformed'):keys.add('value')
+        if disposition=='transformed':keys.add('outputType')
+        if disposition not in ('original','transformed','withheld','absent') or set(cell)!=keys:refuse()
+        for key in ('field','outputType') if disposition=='transformed' else ('field',):
+            ref=cell[key]
+            if (type(ref) is not dict or set(ref)!={'documentId','moduleId','elementId'}
+                    or any(type(value) is not str or not 1<=len(value)<=4096 for value in ref.values())):refuse()
+    return decision
+
+
 def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None):
     if type(sources) is not _OriginalFactSources:raise ValueError('Original fixture sources required')
     sources=_OriginalFactSources(sources.policy,sources.resolution)
@@ -65,10 +96,7 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
             raise TimeoutError('Original evaluator deadline expired') from None
         if result.returncode or len(result.stdout.encode('utf8'))>65536:raise ValueError('Original UMF fixture evaluation refused')
         if any(hashlib.sha256(p.read_bytes()).digest()!=h for p,h in pins.items()):raise ValueError('Original evaluator sources changed')
-        receipt=json.loads(result.stdout)
-        if type(receipt) is not dict or set(receipt)!= {'decision','identities'}:raise ValueError('Original fixture decision envelope required')
-        decision=receipt['decision']
-        if type(decision) is not dict or decision.get('decision') not in ('permit','deny'):raise ValueError('Determinate fixture decision required')
+        decision=_read_owned_evaluator_receipt(result.stdout)
         # No raw cells, private fact identities or evaluator diagnostics leave
         # this owned operation. Dispositions remain original UMF output.
         return decision
