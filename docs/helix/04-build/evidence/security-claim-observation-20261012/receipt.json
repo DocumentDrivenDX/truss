@@ -1,0 +1,16 @@
+{
+  "baseCommit": "84986943241f6b9a6354bcd76eaf9a4f757ccac7",
+  "tests": 5,
+  "assertions": 24,
+  "scope": "Private candidate carrier decoding only. Not native recovery, absence/noncommit proof, original issuer, fresh guarded observation, completion or AuthorityLease. Native packet integration remains next work.",
+  "trace": [
+    "CONTRACT-005 original response custody",
+    "CONTRACT-063 original recovery observation"
+  ],
+  "sha256": {
+    "security-claim-browser-build.log": "b09d20cf1196a0d6945333c5f918bc2478ebd43db72932ab8b52fcd8df8675de",
+    "security-claim-browser-result.json": "a0c7ffe35c3d75fdd5145650046e211ade42e05e060b4dcac8922be0552b06fa",
+    "security-claim-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-claim-tests.log": "4a89fb158a5631557297d04d42ee893f630a78d32d80806cd8ae5e47c636ccb4"
+  }
+}
