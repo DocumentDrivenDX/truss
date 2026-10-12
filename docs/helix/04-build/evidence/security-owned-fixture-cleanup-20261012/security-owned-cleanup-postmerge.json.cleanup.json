@@ -1,0 +1,16 @@
+{
+  "observations": [
+    {
+      "id": "owned-fixture-transaction-holds-native-schema-lock",
+      "observed": 1
+    },
+    {
+      "id": "owned-fixture-close-precedes-schema-drop",
+      "observed": {
+        "closed": true,
+        "remainingBackend": 0
+      }
+    }
+  ],
+  "scope": "Explicit owned fixture connection only; not production caller transaction recovery or unknown-outcome cleanup."
+}
