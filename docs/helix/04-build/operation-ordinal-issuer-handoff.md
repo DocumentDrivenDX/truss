@@ -2379,3 +2379,28 @@ replace PA02 or PA-N03 for existing profiles. Original SDK input/attempt custody
 protected body/owner correspondence and guarded publication remain required.
 The connected protected implementation must use its own versioned context and
 semantic bodies; existing invoker/superuser guards remain unchanged.
+
+### Psycopg shared semantic issuer — 2026-10-11
+
+The private `PsycopgHost._run_semantic_operation` reserves an ordinal on the
+retained host attempt before its first SAVEPOINT submission. The existing
+`OperationOrdinalIssuer` is shared by physical connection custody and native
+backend PID/virtual transaction; isolation and access mode remain handle checks
+and cannot select a fresh counter. Detach/re-adoption on the same active native
+transaction continues the counter. Rollback never rewinds it. Inspection calls
+consume no semantic ordinal.
+
+The practical profile allows 256 retained transaction bindings per connection
+and 256 semantic attempts per binding. Capacity refusal occurs before SQL and
+preserves the caller's transaction. A submitted but unconfirmed SAVEPOINT uses
+the existing conservative containment rules. A lost local reservation reply
+retains its original reservation on the attempt, without claiming a database
+authority token or settlement. No allocation ledger, tracing or metrics are
+introduced.
+
+This is the host execution seam for the connected protected catalog facade.
+It does not expose catalog acceptance or qualify the installed native bodies.
+The next connection must derive the source candidate immediately from the
+original prepared UMF input, retain the exact dispatch parameters on this
+attempt, and invoke the selected protected facade without the administrative
+staging route.

@@ -35,7 +35,7 @@ callers. The owner explicitly adopted this recommendation and the minimum securi
 handoff for installation and initial Python operations.
 
 The trusted host preserves genuine connection/transaction custody, exclusive
-execution, non-rewinding operation ordinals, cumulative resource accounting and
+execution, non-rewinding operation ordinals, practical workload limits and
 original attempt/recovery associations. These are host obligations to qualify,
 not facts proven by PostgreSQL inspecting object identity. Ordinary data callers
 cannot supply trusted callbacks, registrations or administrative credentials.

@@ -15,7 +15,7 @@ import sys
 ALLOWED = {
     '_installation_privileges': {'dataclasses','psycopg','truss.execution','truss.psycopg_host'},
     '_runtime_profile': {'json', 'importlib.resources'},
-    'psycopg_host': {'truss._runtime_profile', 'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
+    'psycopg_host': {'truss._operation_ordinal', 'truss._runtime_profile', 'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
     '_psycopg_epoch_cut': {'dataclasses', 'hashlib', 'truss.psycopg_host', 'psycopg.types.string'},
     '_psycopg_dependency_fact_cut': {'dataclasses', 'json', 'psycopg', 'truss._psycopg_epoch_cut', 'truss._security_fact_coverage', 'truss._psycopg_fact_cut'},
     '_security_fact_coverage': {'dataclasses', 'hashlib', 'json'},

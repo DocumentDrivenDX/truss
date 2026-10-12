@@ -5,7 +5,7 @@ unused during toolkit operations. The host may settle its transaction between ca
 not a claim of Lakebase, other libpq implementations or complete installation.
 """
 from ._runtime_profile import SERVER_VERSION_NUM
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from threading import Lock, Event, Timer, get_ident
 from time import monotonic
 from uuid import uuid4
@@ -43,6 +43,7 @@ class _ConnectionCustody:
     last_attempt: object = None
     reservation: object = None
     retry_identity: tuple | None = None
+    semantic_issuers: dict = field(default_factory=dict)
 
 
 class _HostPairReservation:
@@ -89,6 +90,7 @@ class _Attempt:
     result: object = None
     error: BaseException | None = None
     cleanup_error: BaseException | None = None
+    ordinal_reservation: object = None
 
 
 class _Deadline:
@@ -248,7 +250,7 @@ class PsycopgHost:
                 raise
             return False
 
-    def _attempt(self, callback, custody=None, publish=None):
+    def _attempt(self, callback, custody=None, publish=None, *, semantic=False):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
         reservation=self._custody.reservation
@@ -267,6 +269,7 @@ class PsycopgHost:
         primary = None
         name = None
         result = None
+        semantic_preflight = semantic
         try:
             name = sql.Identifier('truss_op_' + uuid4().hex)
             if self._closed or self._custody.quarantined:
@@ -286,9 +289,29 @@ class PsycopgHost:
             self._custody.pending = attempt
             self._custody.last_attempt = attempt
             try:
+                if semantic:
+                    from ._operation_ordinal import OperationOrdinalIssuer, OrdinalReservation
+                    if custody is None:
+                        raise ValueError('Adopted transaction required for semantic operation')
+                    # Isolation/access mode are handle checks, not transaction identities.
+                    key = custody.identity[:2]
+                    binding = self._custody.semantic_issuers.get(key)
+                    if binding is None:
+                        if len(self._custody.semantic_issuers) >= 256:
+                            raise ValueError('Semantic transaction custody capacity reached')
+                        anchor = object()
+                        binding = (anchor, OperationOrdinalIssuer(anchor, maximum=255))
+                        self._custody.semantic_issuers[key] = binding
+                    reservation = OrdinalReservation()
+                    attempt.ordinal_reservation = reservation
+                    issued = binding[1].reserve_into(binding[0], reservation)
+                    if issued.outcome != 'issued':
+                        raise ValueError('Semantic operation ordinal unavailable')
+
                 deadline = _Deadline(self.connection, self._deadline_ms)
                 cursor = _GuardedCursor(self._cursor(), deadline)
                 deadline.check()
+                semantic_preflight = False
                 cursor.execute(sql.SQL('SAVEPOINT {}').format(name), prepare=False)
                 established = True
                 attempt.phase = 'savepoint'
@@ -304,7 +327,8 @@ class PsycopgHost:
                 cursor.execute("SET LOCAL statement_timeout = '" + str(self._timeout) + "ms'", prepare=False)
                 deadline.check()
                 attempt.phase = 'executing'
-                result = callback(cursor, before)
+                result = (callback(cursor, before, attempt.ordinal_reservation.result.ordinal)
+                          if semantic else callback(cursor, before))
                 attempt.result = result
                 attempt.phase = 'command_returned'
                 deadline.check()
@@ -365,7 +389,7 @@ class PsycopgHost:
                         self._custody.quarantined = True
                     finally:
                         if not self._stop_deadline(cleanup, attempt): self._custody.quarantined = True
-                else:
+                elif not semantic_preflight:
                     self._custody.quarantined = True
                 if cursor is not None:
                     try: cursor.close(); cursor = None
@@ -418,6 +442,20 @@ class PsycopgHost:
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         return self._attempt(callback, custody)
+
+    def _run_semantic_operation(self, transaction, callback):
+        """Reserve a nonrewinding ordinal before SQL on the shared connection.
+
+        Private execution primitive for protected catalog/group facades. An
+        issued ordinal is host custody, never database authorization. Inspection
+        calls use _run_operation and consume no semantic ordinal.
+        """
+        custody = (self._transactions.get(transaction._key)
+                   if type(transaction) is TransactionHandle and transaction._issuer is self._issuer else None)
+        if (custody is None or custody.handle is not transaction
+                or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
+            return _failure('invalid_transaction', 'Original issued transaction handle required')
+        return self._attempt(callback, custody, semantic=True)
 
     def detach(self):
         self._closed = True
