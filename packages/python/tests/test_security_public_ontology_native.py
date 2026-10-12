@@ -181,6 +181,19 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   with psycopg.connect(**params,autocommit=True) as fresh:
    actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'new-read-after-drained-graph-change-denies','observed':actual})
   self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])))
+  # Source-table exclusion cannot fence native role authority changes.
+  control=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=5000');self.addCleanup(control.close)
+  self.admin.execute('BEGIN');self.admin.execute('LOCK TABLE truss.object,truss.edge,truss.type_def,truss.prop_def,truss.rel_def,truss.rel_endpoint IN SHARE MODE')
+  try:
+   control.execute('ALTER ROLE alice BYPASSRLS')
+   held=self.admin.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND mode='ShareLock' AND granted AND relation IN ('truss.object'::regclass,'truss.edge'::regclass,'truss.type_def'::regclass,'truss.prop_def'::regclass,'truss.rel_def'::regclass,'truss.rel_endpoint'::regclass)").fetchone()[0];self.assertEqual(held,6);observations.append({'id':'native-role-change-commits-while-six-source-locks-held','observed':held})
+   with psycopg.connect(**params,autocommit=True) as changed_reader:
+    flags=changed_reader.execute('SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user').fetchone();self.assertEqual(flags,(False,True));observations.append({'id':'changed-original-caller-bypass-attribute','observed':list(flags)})
+    count=changed_reader.execute('SELECT count(*) FROM truss.object').fetchone()[0];self.assertEqual(count,13);observations.append({'id':'bypass-authority-defeats-source-lock-only-profile','observed':count,'qualification':'deliberate disposable authority-widening counterexample'})
+  finally:
+   control.execute('ALTER ROLE alice NOBYPASSRLS');self.admin.rollback()
+  with psycopg.connect(**params,autocommit=True) as restored_reader:
+   actual=[r[0] for r in restored_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-native-caller-authority-original-vector','observed':actual})
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']).write_text(json.dumps({'packet':packet,'sql':sql,'observations':observations,'publicCreatedIdentities':{alias:{'id':identity.id,'typeId':identity.type_id} for alias,identity in aliases.items()},'scope':'Actual public-created objects/edges, typed native joins to business keys and candidate typed Record/opaque Relationship membership lowering under ordinary native RLS. Private views are real graph projections, not seeded flat tables. Not complete source enrollment, held authority or released public API/security compiler admission.'},indent=2)+'\n')
 if __name__=='__main__':
  import unittest;unittest.main()

@@ -368,3 +368,22 @@ The declared release boundary belongs to the fixture, not a production issuer/
 lease or public revocation acknowledgment. Table-wide contention, complete
 role/policy/routine participation, lost guards and streaming/application buffer
 release remain separate qualification obligations under CONTRACT-063.
+
+
+### Source exclusion is not complete authority exclusion — 2026-10-12
+
+A separate native control connection changes Alice to BYPASSRLS while all six
+selected graph/catalog SHARE locks remain granted. A fresh changed-role
+connection sees all13 objects rather than RA/RAB. Restoring the flag restores
+the original vector. Seventy-nine native observations and Python boundaries
+pass; counterexample evidence:
+`../../04-build/evidence/security-control-plane-exclusion-gap-20261012/receipt.json`.
+The broadened identity is deliberately outside admission, not a supported role.
+
+Production adoption must enroll every relevant role/grant/subject/policy/routine/
+assignment change in the authority protocol and retain independent original
+caller/native inventory checks. Source-table locks cannot protect native role
+DDL or validate a source lease as authority. If control-plane participation or
+equivalent independently qualified exclusion is unavailable, refuse that profile
+and deny direct unguarded paths. Existing CONTRACT-063/005 coordinator and final-
+publication obligations remain unchanged; no new substitute guard is selected.

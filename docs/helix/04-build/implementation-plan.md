@@ -6515,3 +6515,17 @@ fixture boundary does not admit production leases, enrolled public revokers,
 complete control-plane participation or streaming/cached output. Source/authority
 issuer and public final-release integration remain required; no backend case
 is promoted.
+
+
+### Native authority changes bypass source-table exclusion — 2026-10-12
+
+The real ontology regression retains79 observations. An excluded native role
+change commits while six source locks remain held; fresh BYPASSRLS identity sees
+all13 objects. Original role flags and RA/RAB visibility restore. Python boundaries
+pass723imports. Retained counterexample:
+`evidence/security-control-plane-exclusion-gap-20261012/receipt.json`.
+Trace CONTRACT-063 / STP-056 B05/B11 / STP-057 L03/L13. Source locking is not
+a complete authority protocol. Enroll and exclude all relevant control-plane
+changes under the existing coordinator, or refuse the profile; preserve original
+native caller/inventory checks and deny unguarded direct paths. No admitted
+identity/profile or original backend case is promoted.

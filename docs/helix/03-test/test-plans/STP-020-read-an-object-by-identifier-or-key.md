@@ -539,3 +539,13 @@ wait/commit observations rather than elapsed sleeps. Seventy-five observations
 pass in `../../04-build/evidence/security-graph-buffered-drain-20261012/receipt.json`.
 Shared STP-057 L03/L05 remains open until the actual admitted operation/public
 writer/revocation and final publication boundary is integrated and exercised.
+
+
+Control-plane exclusion negative: keep six graph/catalog source locks held,
+commit a separate native caller BYPASSRLS change and observe fresh-role flags
+and widened object count. Restore flags and exact original visibility. This
+must invalidate admission; source locks alone cannot satisfy authority exclusion.
+Seventy-nine fixture observations pass in
+`../../04-build/evidence/security-control-plane-exclusion-gap-20261012/receipt.json`.
+Shared STP-056 B05/B11 and STP-057 L03/L13 require actual enrolled control-plane
+and final-release integration, not this intentionally unguarded counterexample.
