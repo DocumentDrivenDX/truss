@@ -2928,3 +2928,17 @@ refinement theorem. Trace CONTRACT-063/STP-056 B11/B12/L03/L11/L13 and US-056
 AC9/AC10 prerequisites. No backend binding is promoted; complete authentication,
 writer/current-state closure, graph capture and protected final release remain
 required. Full goal active at26/132 with106 unbound cases.
+
+Integrated-main runtime requalification: concurrent packaging work changes the
+selected distribution to pgserver-pg18 18.6.1, engine18.6. Historical42d80ee6
+retains its original18.6.0 declaration/payload scope. Fresh
+`evidence/python-psycopg-epoch-cut/d1962dc8-ef99-4968-9540-d9da358c7adb`
+passes176 methods, boundaries and143 current/preimage Truss inputs on the selected
+18.6.1 release, with363 UMF and1705 native payload pins and three cleanups.
+Supplementary `runtime-release-provenance.json` retains exact macOS arm64 wheel
+SHA256 fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649,
+published r2 checksum URL/file digest and installed distribution metadata match.
+The task-owned environment is separate from historical runtime environments.
+This is native/release correspondence, not hermetic build or publisher identity
+qualification. Formal five-input model source remains unchanged; no backend
+binding or complete cross-database issuer/qualification/recovery claim is promoted.

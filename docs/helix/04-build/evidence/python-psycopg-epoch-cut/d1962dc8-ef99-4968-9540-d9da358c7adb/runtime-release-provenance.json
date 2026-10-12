@@ -1,0 +1,12 @@
+{
+  "distribution": "pgserver-pg18",
+  "version": "18.6.1",
+  "wheel": "/Users/erik/Projects/truss/.cache/pgserver/pg18.6/wheels/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+  "wheelSha256": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649",
+  "checksumUrl": "https://github.com/DocumentDrivenDX/pgserver/releases/download/pg18.6-pgv0.8.6-r2/SHA256SUMS",
+  "checksumFileSha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+  "matchingPublishedEntry": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649",
+  "installedDistributionVersion": "18.6.1",
+  "nativePayloadFiles": 1705,
+  "scope": "Published wheel checksum and installed metadata correspondence; native receipt pins the executed PostgreSQL payload. Not a hermetic build or publisher authentication proof."
+}
