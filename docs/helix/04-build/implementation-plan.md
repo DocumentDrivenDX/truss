@@ -6545,3 +6545,16 @@ This adopts no new profile or ready marker: verified bootstrap, full effective
 authority parity/participants, original source/caller lease/liveness and guarded
 publication/recovery remain unimplemented. Unmediated administrative changes
 still invalidate qualification; no original backend case is promoted.
+
+
+### Native generation boundary controls — 2026-10-12
+
+The existing ontology/authority regression now passes94 native observations.
+Foreign installation/profile bytes produce zero generation advance; ordinary
+reset refuses42501. Signed-bigint maximum remains exact and refuses advance
+without wrap; rollback restores original role flags and generation3. Sources
+and terminal output are retained under
+`docs/helix/04-build/evidence/security-authority-generation-boundaries-20261012/receipt.json`.
+This is partial original guard PG-01/05/06 evidence under CONTRACT-005/063, not
+verified bootstrap, complete authority/participant parity or coordinator/public
+release admission. No full PG schedule or original backend case is promoted.
