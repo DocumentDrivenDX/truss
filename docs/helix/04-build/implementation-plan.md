@@ -5351,3 +5351,35 @@ issuer/subject/mapping/target credentials, all receiver routes and source/curren
 authority/publication/recovery closure remain required. No backend binding or
 C01/C02 authentication qualification; full goal active at26/132 with106 unbound
 cases.
+
+### Receiver original source preparation and alias independence — 2026-10-11
+
+Receiver construction now validates its copied original policy/resolution and
+requirement inventory through the existing owner checks, derives the native
+provider recipe through the existing private dependency boundary, and requires
+the selected delegated0.4 profile. It does not interpret ontology/key semantics
+in Python or turn preparation into authority. The existing original native
+role/epoch/profile/source/guard verification still occurs at dispatch.
+
+Native controls mutate the original epoch profile/evidence and policy/resolution
+carrier fields after construction; the captured receiver still executes its
+original read. Changed policy/resolution bytes, mutable bytearray profile content
+and otherwise structured nondelegated context refuse during construction before
+delegated dispatch. The constructor is administrative preparation, not a proof
+that current backend state or credentials still correspond. Final
+`evidence/python-psycopg-epoch-cut/027d9cbf-5044-4268-a635-78049cca286d`
+passes192 methods, module boundaries,144 current/preimage sources on engine18.6 /
+pgserver-pg18 18.6.1 / psycopg3.3.6 binary,363 UMF and1705 native payload pins,
+with three stop0/status3/socket-absent cleanups.
+
+Formal `evidence/security-owned-receiver-formal/1cfd8771-8f0b-400d-b309-2c4c4850b484`
+retains four exact source inputs and nine Z3 4.15.4 SMT-LIB/fresh-context replays,
+six UNSAT/three SAT. Invalid captured source excludes construction/dispatch;
+selection from an immutable capture ignores later alias changes. Alias selection
+without capture has a changed-source countermodel. Authentication/channel closure
+remain independent; faithful parsing/capture/native mapping are premises, not
+Python/driver or complete receiver refinement. Trace TD-056 C03, CONTRACT-063/
+STP-056 B11/B12/L11 and US-056 AC9/AC10 prerequisites. C01/C02 credentials,
+original caller/issuer/mapping/target and C04–C07 source/publication/recovery/full
+qualification remain open. No public endpoint or backend binding; full goal
+active at26/132 with106 unbound required cases.

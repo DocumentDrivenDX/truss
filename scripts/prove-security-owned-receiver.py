@@ -9,8 +9,15 @@ for n in paths:
 version,operation=z3.Strings('wire_version wire_operation')
 exact_keys,duplicates,valid_utf8,bounded,dispatch,authenticated,channels_closed=z3.Bools('exact_keys duplicate_members valid_utf8 bounded_bytes dispatch authenticated_subject channels_closed')
 closed=z3.And(version=='truss-owned-decision-request/0.1',operation=='read',exact_keys,z3.Not(duplicates),valid_utf8,bounded)
-protocol=dispatch==closed
+captured_valid,delegated,constructed=z3.Bools('captured_valid delegated_profile receiver_constructed')
+construction=constructed==z3.And(captured_valid,delegated)
+protocol=z3.And(construction,dispatch==z3.And(closed,constructed))
+before,after,captured,selected=z3.Strings('original_source_before original_source_after captured_source selected_source')
+snapshot=z3.And(captured==before,selected==captured)
 queries=[
+ ('invalid_server_source_prevents_dispatch','unsat',[protocol,z3.Not(captured_valid),dispatch]),
+ ('carrier_mutation_cannot_change_captured_selection','unsat',[snapshot,before!=after,selected==after]),
+ ('alias_selection_without_snapshot_follows_mutation','sat',[captured==before,selected==after,before!=after,selected!=captured]),
  ('extra_wire_fields_prevent_dispatch','unsat',[protocol,z3.Not(exact_keys),dispatch]),
  ('duplicate_members_prevent_dispatch','unsat',[protocol,duplicates,dispatch]),
  ('explain_operation_prevents_dispatch','unsat',[protocol,operation=='explain',dispatch]),

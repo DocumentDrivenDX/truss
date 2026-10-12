@@ -1,9 +1,9 @@
 """Owned fixed semantic receiver candidate; no authenticated public endpoint."""
-import json
+import json,hashlib
 from truss.psycopg_host import PsycopgHost
 from truss.execution import TransactionHandle
 from truss._psycopg_epoch_cut import _EpochComparison
-from truss._psycopg_dependency_fact_cut import _OriginalFactSources
+from truss._psycopg_dependency_fact_cut import _OriginalFactSources,_inspect_original_fact_sources,_epoch_dependency_recipe
 from security_owned_read import run_delegated_owned_identity_read
 
 
@@ -15,8 +15,13 @@ class _OwnedDecisionReceiver:
                 or type(epoch) is not _EpochComparison or type(requirements) is not bytes or type(sources) is not _OriginalFactSources):
             raise ValueError('Original owned receiver context required')
         selected=_EpochComparison(epoch.installation,epoch.epoch,epoch.incarnation,epoch.profile,epoch.evidence)
-        self.__scope=(caller_host,caller_transaction,executor_host,executor_transaction,selected,requirements,
-                      _OriginalFactSources(sources.policy,sources.resolution))
+        captured=_OriginalFactSources(sources.policy,sources.resolution)
+        digest=hashlib.sha256(requirements).hexdigest()
+        _inspect_original_fact_sources(requirements,digest,captured)
+        selected,_=_epoch_dependency_recipe(selected,digest,captured)
+        if json.loads(selected.profile)['kind']!='truss-flat-fact-provider-fixture/0.4':
+            raise ValueError('Original delegated receiver profile required')
+        self.__scope=(caller_host,caller_transaction,executor_host,executor_transaction,selected,requirements,captured)
 
     def dispatch(self,request):
         def refuse(*args):raise ValueError('Owned semantic request refused')
