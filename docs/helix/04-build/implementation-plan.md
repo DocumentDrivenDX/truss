@@ -6672,3 +6672,9 @@ null/absence/withholding, arbitrary transforms, conflict activation, authenticat
 policy/source/callable closure or public driver release. Native disclosed-value
 behavior does not qualify compiler source query-use admission, prohibited/withheld
 operators or separate original-authorized actions. No full backend case is promoted.
+
+
+Post-merge constant-disclosure replay at59d5903c preserves feed runtime work and
+passes148 native observations. Current pins/preimages/output are retained in
+`security-native-constant-disclosure-20261012/merged-receipt.json`. Feed/history
+disclosure and original compiler query-use admission remain outside this subset.
