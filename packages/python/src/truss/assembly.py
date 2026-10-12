@@ -14,6 +14,7 @@ from .contracts import ProfilePin,CapabilitySelection,ABSENT,Absent
 from .assembly_contracts import (RecoveryConfiguration,RequestReplayConfiguration,
     ReferenceAssemblyConfiguration,InstallationInspectionConfiguration,AssemblyConstructionError,CapabilityUnavailable,AssemblyDisposed)
 from .execution import Ok,Error,ExecutionFailure
+from .catalog_runtime import CatalogRuntimeConfiguration, CatalogReferenceAssembly
 
 INSPECTION_ASSEMBLY_PROFILE=ProfilePin(identity='truss-reference-assembly-inspection',version='0.1.0-candidate',sha256='5df8b93c35dc11d710744b89b5a1aafd11a8c5aa957c514458db5ad5bb8c3b8d')
 
@@ -117,8 +118,14 @@ def create_reference_assembly(configuration: ReferenceAssemblyConfiguration,exec
 @overload
 def create_reference_assembly(configuration: InstallationInspectionConfiguration,executor: PsycopgHost,host_services: None = None) -> Ok[InstallationInspectionAssembly] | AssemblyConstructionError: ...
 
-def create_reference_assembly(configuration: ReferenceAssemblyConfiguration | InstallationInspectionConfiguration,executor: object,host_services: HostServices | None = None) -> Ok[ReferenceAssembly | InstallationInspectionAssembly] | AssemblyConstructionError:
-    """Capture the selected inert or inspection configuration without native I/O."""
+@overload
+def create_reference_assembly(configuration: CatalogRuntimeConfiguration,executor: PsycopgHost,host_services: None = None) -> Ok[CatalogReferenceAssembly] | AssemblyConstructionError: ...
+
+def create_reference_assembly(configuration: ReferenceAssemblyConfiguration | InstallationInspectionConfiguration | CatalogRuntimeConfiguration,executor: object,host_services: HostServices | None = None) -> Ok[ReferenceAssembly | InstallationInspectionAssembly | CatalogReferenceAssembly] | AssemblyConstructionError:
+    """Construct the selected assembly without opening or settling a connection."""
+    if type(configuration) is CatalogRuntimeConfiguration and host_services is None:
+        try:return Ok(CatalogReferenceAssembly(configuration,executor))
+        except ValueError:return _error('incompatible_selection','catalog_runtime')
     if type(configuration) is InstallationInspectionConfiguration:
         return _create_inspection_assembly(configuration,executor,host_services)
     if type(configuration) is not ReferenceAssemblyConfiguration:return _error('invalid_configuration')

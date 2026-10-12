@@ -42,3 +42,8 @@ from .installation import inspect_installation_in_transaction
 __all__ += ["InstallationInspectionConfiguration", "InstallationInspectionAssembly",
             "INSPECTION_ASSEMBLY_PROFILE", "INSPECTION_CONSTRUCTION_DIAGNOSTIC_PROFILE",
             "inspect_installation_in_transaction"]
+
+from .catalog_runtime import (CatalogRuntimeConfiguration, CatalogReferenceAssembly,
+    PendingCatalogInstallation, CatalogRuntimeStatus, CatalogRegistration, CatalogReport)
+__all__ += ["CatalogRuntimeConfiguration", "CatalogReferenceAssembly", "PendingCatalogInstallation",
+            "CatalogRuntimeStatus", "CatalogRegistration", "CatalogReport"]

@@ -1,0 +1,48 @@
+{
+  "scope": "public catalog-only Python milestone; not full Truss engine qualification",
+  "postgres": "18.6",
+  "python": "3.11.17",
+  "psycopg": "3.3.6",
+  "wheelSha256": "5cf0ea44f4082334fc60c5881affe1a1ea0681f208bec4f4a7054665182c8e23",
+  "installedWheelNativeTests": {
+    "tests": 14,
+    "passed": true,
+    "seconds": 22.386
+  },
+  "sourceNativeTests": {
+    "tests": 14,
+    "passed": true,
+    "seconds": 23.26
+  },
+  "existingAssemblyTests": {
+    "tests": 10,
+    "passed": true
+  },
+  "pythonBoundaries": {
+    "imports": 603,
+    "negativeControls": 16,
+    "passed": true
+  },
+  "umfOwnerRoundTrips": {
+    "files": [
+      "layout.sql",
+      "lineage.sql",
+      "plan.sql",
+      "runtime.sql",
+      "barrier.sql"
+    ],
+    "reloadExportEqual": true,
+    "scope": "retention and export, not generated-model authority"
+  },
+  "manifestSha256": "ee919664e360f78ff8b326884e80862fe3111187b873aa44f655b8b3967db8ba",
+  "review": "Astra Ultra approved catalog-only corrected source; final wheel, boundary gates and README corrections completed",
+  "remaining": [
+    "catalog evolution",
+    "accepted catalog view",
+    "direct and Weft reads",
+    "grouped mutations and durable recovery",
+    "imports",
+    "receipt visibility",
+    "feed and acknowledgements"
+  ]
+}
