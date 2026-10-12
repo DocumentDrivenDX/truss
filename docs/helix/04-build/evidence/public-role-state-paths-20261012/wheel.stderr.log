@@ -1,0 +1,14 @@
+test_absent_null_and_empty_values_remain_distinct (test_object_read_native.PublicObjectReadTests.test_absent_null_and_empty_values_remain_distinct) ... ok
+test_hidden_missing_and_wrong_document_share_not_found (test_object_read_native.PublicObjectReadTests.test_hidden_missing_and_wrong_document_share_not_found) ... ok
+test_invalid_and_budget_refusal_preserve_prior_host_work (test_object_read_native.PublicObjectReadTests.test_invalid_and_budget_refusal_preserve_prior_host_work) ... ok
+test_malformed_unknown_and_unsupported_cells_are_not_omitted (test_object_read_native.PublicObjectReadTests.test_malformed_unknown_and_unsupported_cells_are_not_omitted) ... ok
+test_native_set_then_inherit_paths_and_nonreachable_mixed_paths (test_object_read_native.PublicObjectReadTests.test_native_set_then_inherit_paths_and_nonreachable_mixed_paths) ... ok
+test_ordinary_reader_complete_values_without_registrar_or_raw_rights (test_object_read_native.PublicObjectReadTests.test_ordinary_reader_complete_values_without_registrar_or_raw_rights) ... ok
+test_selected_release_and_fixed_snapshot_refuse (test_object_read_native.PublicObjectReadTests.test_selected_release_and_fixed_snapshot_refuse) ... ok
+test_unsafe_session_and_raw_rights_are_execution_errors (test_object_read_native.PublicObjectReadTests.test_unsafe_session_and_raw_rights_are_execution_errors) ... ok
+test_wrong_revision_and_nonrepresentable_timestamps_refuse (test_object_read_native.PublicObjectReadTests.test_wrong_revision_and_nonrepresentable_timestamps_refuse) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 21.164s
+
+OK

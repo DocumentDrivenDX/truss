@@ -5879,3 +5879,32 @@ catalog/view/source/key/object-read tests pass from source and installed wheel.
 correspondence and wheel digest. Python boundaries and all seven original UMF
 SQL owner round trips pass. The separate key-bucket native suite is not claimed
 as replayed here. No formal/native refinement or advanced backend promotion.
+
+### Native public object role-state correspondence — 2026-10-12
+
+`evidence/public-role-state-paths-20261012/receipt.json` binds four native
+consumer→bridge→storage graphs to public object reads. SET→SET and
+SET→INHERIT admit actual native private-column access after SET ROLE and cause
+the original-person public guard to refuse. INHERIT→SET and dormant edges admit
+neither the tested SET nor direct private-column access; public reads remain
+available. Revoking each original unsafe path restores public availability.
+This supplies actual API/ordinary-session correspondence for the shared guard,
+including the positive no-overrejection controls, rather than relying only on
+synthetic membership reachability or a superuser SET ROLE observation.
+
+The source matrix passes; all9 installed-wheel object-read tests pass. Every
+package source and installed file remains byte-identical to the previous54-test
+qualification. Six retained Z3 4.15.4 queries and fresh-context replays give
+five UNSAT/one SAT: finite three-role closure agrees with an independently
+bounded path construction, all four native graph expectations agree with the
+logical model, and generic mixed-membership reachability admits a countermodel.
+The SMT model is conditional; native correspondence covers only those four
+graphs and is not complete SQL/ACL/owner/delegation/currentness refinement.
+
+The first harness run incorrectly predicates on ungranted id while testing
+props-only SELECT, leaving later subcases in an aborted transaction. Its log is
+retained explicitly as a harness error, not a product failure. The corrected
+control reads only the granted column. Native unittest cleanup completes without
+error; no independent cleanup packet is claimed. Trace CONTRACT-005,
+CONTRACT-063/STP-056 B04/B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites.
+No backend case is promoted; the original132-case goal remains active.

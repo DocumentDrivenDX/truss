@@ -121,3 +121,40 @@ class PublicObjectReadTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
         self.admin.execute('REVOKE SELECT ON truss.object FROM consumer')
         self.assertIsInstance(self.lookup(assembly,tx).value,ObjectFound)
+
+    def test_native_set_then_inherit_paths_and_nonreachable_mixed_paths(self):
+        connection,host,assembly,tx=self.seed()
+        # Each graph has consumer -> bridge -> storage. Native SET and native
+        # column access are independent controls for the public guard decision.
+        for label,first_inherit,first_set,last_inherit,last_set,exposed in (
+            ('set_set',False,True,False,True,True),
+            ('set_inherit',False,True,True,False,True),
+            ('inherit_set',True,False,False,True,False),
+            ('dormant',False,False,True,False,False),
+        ):
+            with self.subTest(path=label):
+                self.admin.execute('CREATE ROLE path_bridge NOLOGIN; CREATE ROLE path_storage NOLOGIN')
+                try:
+                    self.admin.execute('GRANT USAGE ON SCHEMA truss TO path_bridge,path_storage')
+                    self.admin.execute('GRANT SELECT(props) ON truss.object TO path_storage')
+                    self.admin.execute(psycopg.sql.SQL('GRANT path_storage TO path_bridge WITH INHERIT {}, SET {}').format(
+                        psycopg.sql.SQL(str(last_inherit)),psycopg.sql.SQL(str(last_set))))
+                    self.admin.execute(psycopg.sql.SQL('GRANT path_bridge TO consumer WITH INHERIT {}, SET {}').format(
+                        psycopg.sql.SQL(str(first_inherit)),psycopg.sql.SQL(str(first_set))))
+                    result=self.lookup(assembly,tx)
+                    if exposed:
+                        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'42501')
+                        connection.execute('SET ROLE '+('path_storage' if last_set else 'path_bridge'))
+                        self.assertEqual(connection.execute('SELECT props FROM truss.object').fetchone()[0],self.props)
+                        connection.execute('RESET ROLE')
+                    else:
+                        self.assertIsInstance(result.value,ObjectFound)
+                        for query in ('SET ROLE path_storage','SELECT props FROM truss.object'):
+                            connection.execute('SAVEPOINT native_denial')
+                            with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute(query)
+                            connection.execute('ROLLBACK TO SAVEPOINT native_denial');connection.execute('RELEASE SAVEPOINT native_denial')
+                    self.admin.execute('REVOKE path_bridge FROM consumer')
+                    self.assertIsInstance(self.lookup(assembly,tx).value,ObjectFound)
+                finally:
+                    self.admin.execute('REVOKE path_bridge FROM consumer')
+                    self.admin.execute('DROP OWNED BY path_bridge,path_storage; DROP ROLE path_bridge,path_storage')
