@@ -90,6 +90,39 @@ Lakebase requires an actual supplied platform connection/privilege profile and
 basic deployment tests before Truss advertises support. Rootless scalar-only and
 fresh-install-only remain explicit interim limits, not release completion.
 
+## Atomic caller preconditions implementation — 2026-10-12
+
+Runtime 0.15 implements all five R11 condition families inside the public group
+call: existence, live key absence, exact typed property equality, relationship
+absence and bounded relationship count. Caller IDs/reasons survive every failed
+condition, returned in authored order without effects. Evaluation uses a complete
+row/key/endpoint lock cut before writes, and current read authority for all
+qualified predicate owners. Absent keys and retained reservations are distinct;
+missing properties and present null are distinct. Numeric/timestamp spelling is
+preserved rather than normalized. Effect aliases do not exist in the prestate.
+
+Native exact receipt replay runs before predicate evaluation. A failed evaluation
+uses the native function's contained subtransaction to discard even request/key
+guard setup before returning the failure list; no pending attempt is inserted.
+Explicit `UnauthorizedPerson` and existing `InvalidGroupInput` now cover contained
+native authorization/input failures without changing retry/cancellation/unusable
+classifications. Python and the shared TypeScript declaration expose the same
+optional conditions and result unions. A genuine accepted relationship-reference
+selector supports these conditions and the forthcoming edge API.
+
+Basic workflows prove all failed IDs/reasons and absence of effects, all five
+passing condition forms, original retry after the property changes, and typed
+invalid/unauthorized outcomes. Current relationship tests use public endpoint
+creates and empty relationships; populated-edge workflow tests belong to the
+next public edge implementation. That writer must lock every old/new endpoint
+for insertion, deletion and retargeting to preserve the count/absence guarantees.
+Imports, token/reached, feed/ACK, full Weft execution, catalog evolution,
+managed installation and migrations remain in the complete interface goal.
+
+Astra approved the corrected source. Four basic workflows pass against the
+installed wheel, including the prior CRUD workflows. See
+[public precondition evidence](evidence/python-group-preconditions-20261012.json).
+
 ## Public object mutations implementation — 2026-10-12
 
 Runtime 0.14 extends the existing `GroupCapability` and `UpdateObject`/`Delete` shapes to real

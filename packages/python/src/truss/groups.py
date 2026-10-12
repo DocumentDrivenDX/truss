@@ -108,6 +108,53 @@ class PinnedCatalog(_Carrier):
     selection: Literal['pinned'] = field(default='pinned', init=False)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class ObjectExists(_Carrier):
+    id: str
+    reason: str
+    target: TypedIdentity
+    condition: Literal['object_exists'] = field(default='object_exists', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class KeyAbsent(_Carrier):
+    id: str
+    reason: str
+    type_definition_pin: str
+    key_id: str
+    values: tuple[ExactValue, *tuple[ExactValue, ...]]
+    condition: Literal['key_absent'] = field(default='key_absent', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class PropertyEquals(_Carrier):
+    id: str
+    reason: str
+    target: TypedIdentity
+    name: str
+    value: ExactValue
+    condition: Literal['property_equals'] = field(default='property_equals', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class RelationshipAbsent(_Carrier):
+    id: str
+    reason: str
+    relationship_definition_pin: str
+    source: TypedIdentity
+    target: TypedIdentity
+    condition: Literal['relationship_absent'] = field(default='relationship_absent', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class RelationshipCount(_Carrier):
+    id: str
+    reason: str
+    relationship_definition_pin: str
+    anchor: TypedIdentity
+    direction: Literal['outgoing','incoming']
+    minimum: str = '0'
+    maximum: str | Absent = ABSENT
+    condition: Literal['relationship_count'] = field(default='relationship_count', init=False)
+
+GroupPrecondition: TypeAlias = ObjectExists | KeyAbsent | PropertyEquals | RelationshipAbsent | RelationshipCount
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class GroupSemanticInput(_Carrier):
     layout_profile: ProfilePin
     mutation_profile: ProfilePin
@@ -115,6 +162,7 @@ class GroupSemanticInput(_Carrier):
     catalog: CurrentCatalog | PinnedCatalog
     operations: tuple[GroupOperation, *tuple[GroupOperation, ...]]
     asserted_origin: ExactValue
+    preconditions: tuple[GroupPrecondition, ...] = ()
     interface_version: Literal['truss-group-input/0.1.0'] = field(default='truss-group-input/0.1.0', init=False)
 
     def __post_init__(self) -> None:
@@ -286,7 +334,22 @@ class RequestConflict(_Carrier):
     diagnostic: ExactArtifact
     code: Literal['request_conflict'] = field(default='request_conflict', init=False)
 
-Failure = TypeVar('Failure', bound=GroupOperationFailure | InvalidGroupInput | RequestConflict, covariant=True)
+@dataclass(frozen=True, slots=True, kw_only=True)
+class UnauthorizedPerson(_Carrier):
+    code: Literal['unauthorized_person'] = field(default='unauthorized_person', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class FailedPrecondition(_Carrier):
+    condition_id: str
+    reason: str
+    rule: Literal['object_exists','key_absent','property_equals','relationship_absent','relationship_count']
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class PreconditionFailed(_Carrier):
+    failures: tuple[FailedPrecondition, *tuple[FailedPrecondition, ...]]
+    code: Literal['precondition_failed'] = field(default='precondition_failed', init=False)
+
+Failure = TypeVar('Failure', bound=GroupOperationFailure | InvalidGroupInput | RequestConflict | UnauthorizedPerson | PreconditionFailed, covariant=True)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class GroupFailed(_Carrier, Generic[Failure]):
@@ -301,8 +364,8 @@ class GroupUnavailable(_Carrier, Generic[Reason]):
     reason: Reason
     outcome: Literal['unavailable'] = field(default='unavailable', init=False)
 
-RequestFreeGroupApplicationResult: TypeAlias = GroupSuccess[AppliedPending] | GroupFailed[GroupOperationFailure | InvalidGroupInput] | GroupUnavailable[Literal['profile', 'observation', 'resource']]
-GroupApplicationResult: TypeAlias = GroupSuccess[InTransactionGroupResponse] | GroupFailed[GroupOperationFailure | InvalidGroupInput | RequestConflict] | GroupUnavailable[GroupUnavailableReason]
+RequestFreeGroupApplicationResult: TypeAlias = GroupSuccess[AppliedPending] | GroupFailed[GroupOperationFailure | InvalidGroupInput | UnauthorizedPerson | PreconditionFailed] | GroupUnavailable[Literal['profile', 'observation', 'resource']]
+GroupApplicationResult: TypeAlias = GroupSuccess[InTransactionGroupResponse] | GroupFailed[GroupOperationFailure | InvalidGroupInput | RequestConflict | UnauthorizedPerson | PreconditionFailed] | GroupUnavailable[GroupUnavailableReason]
 
 class GroupCapability(Protocol):
     """Contract only; providers require separate protected runtime qualification."""
@@ -339,6 +402,8 @@ __all__ = [
     'RootlessOwnership', 'OwnedOwnership', 'OwnershipSelection', 'NullOrderKey',
     'TextOrderKey', 'OrderKey', 'CreateObject', 'CreateEdge', 'UpdateObject', 'EndpointChange',
     'UpdateEdge', 'Delete', 'GroupOperation', 'CurrentCatalog', 'PinnedCatalog',
+    'ObjectExists', 'KeyAbsent', 'PropertyEquals', 'RelationshipAbsent', 'RelationshipCount', 'GroupPrecondition',
+    'UnauthorizedPerson', 'FailedPrecondition', 'PreconditionFailed',
     'GroupSemanticInput', 'RequestIdentity', 'RequestNone', 'RequestPresent',
     'GroupRequestSelection', 'JournalEventReference', 'Created', 'Changed', 'Unchanged',
     'DeletedIdentity', 'Deleted', 'OperationResult', 'AliasIdentity', 'GroupSemanticResult',

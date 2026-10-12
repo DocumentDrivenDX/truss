@@ -46,7 +46,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
-'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-objects','version','0.1','sha256','46473c65138e656efbf85ac3e532a288df9693a58624f89bfef0db7d77c928a9'),
+'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-objects','version','0.2','sha256','037447d9387dd032651fb883a781fdcb688b870348a89ab7991894cc7fd1f9c1'),
 'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.2','sha256','5e6a7f879e17066a8ffdeb8731da89906f0e5cb231e4b4357bd4fbea0158163f'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),

@@ -14,6 +14,7 @@ Runtime 0.10 accepts additional documents while preserving existing definitions.
 Runtime 0.11 adds exact integer, decimal, boolean, timestamp and binary properties.
 Runtime 0.12 adds bounded live object pages.
 Runtime 0.14 adds public scalar object updates/deletes and ordered mixed batches.
+Runtime 0.15 adds atomic caller preconditions and explicit invalid/unauthorized group failures.
 Compiled queries, imports, receipt visibility and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
@@ -808,9 +809,9 @@ structured values, and shapes requiring mandatory relationships refuse.
 
 The create provider stores the complete native objects, exact key membership and
 reservations, journal events and optional request receipt atomically. It does not
-activate the full feed/history provider. Business-key lookup, updates/deletes,
-preconditions, explicit unauthorized-person result carriers, receipt visibility,
-imports, relationship reads, full Weft execution and Lakebase remain outstanding.
+activate the full feed/history provider. Later iterations add business-key reads,
+updates/deletes and preconditions below. Receipt visibility, imports, relationship
+reads, full Weft execution and Lakebase remain outstanding.
 
 Current deployment dependencies: installation and module-access configuration
 require a superuser and permission to create the private owner/registrar roles.
@@ -964,6 +965,51 @@ object read lock. The returned record is verified against the requested key, wit
 current record and key-field permissions rechecked before publication. The
 profile remains rootless/string-only and revision 1; pages, broader value types
 and catalog evolution remain unfinished. Runtime 0.8 currently needs fresh install.
+### Atomic caller preconditions (runtime 0.15 candidate)
+
+Pass `preconditions=(...)` to `context.input`. Truss evaluates them against the
+group's locked prestate before applying operations. Conditions retain caller
+`id` and `reason`; `GroupFailed(PreconditionFailed(...))` returns every failed
+condition in input order. No mutation, receipt, attempt or guard setup persists
+on failure. The caller's transaction stays usable.
+
+```python
+from truss.groups import ObjectExists, PropertyEquals
+
+input = context.input((change,), MapValue(entries=()), preconditions=(
+    ObjectExists(id="exists", reason="The object must still exist", target=created.identity),
+    PropertyEquals(id="title", reason="The title must be unchanged",
+                   target=created.identity, name="title",
+                   value=TextValue(kind="string", text="Original")),
+))
+```
+
+The five conditions are `ObjectExists`, `KeyAbsent`, `PropertyEquals`,
+`RelationshipAbsent` and `RelationshipCount`. Targets refer to existing
+`TypedIdentity` values; effect aliases are resolved later. `KeyAbsent` takes a
+type definition pin, authored key ID and ordered exact values, currently strings.
+It checks live membership absence; retained reservations still independently
+refuse forbidden reuse. `PropertyEquals` compares exact typed values, including
+original token spelling; absent differs from present null. This is representation
+equality, not decimal normalization or approximate numeric comparison.
+
+Relationship conditions take an accepted relationship pin. Resolve it with
+`get_relationship_reference_in_transaction(document_id=..., module_id=...,
+relationship_id=...)`. Absence requires both endpoints to exist. Counts take an
+existing anchor, `direction="outgoing"` or `"incoming"`, `minimum="0"` by default
+and an optional exact integer-text `maximum`. They count live edges. Relationship
+writes remain unfinished; these predicates already query the actual edge table.
+
+The selected profile admits up to 128 unique condition IDs. Truss locks existing
+objects and exact key routes; edge writers must lock old/new endpoint rows too.
+Predicate owners require current read authority, rechecked before returning any
+failures. Unauthorized evaluation returns `GroupFailed(UnauthorizedPerson())`
+without a partial failure list. Native invalid input maps to `InvalidGroupInput`.
+Retry, cancellation and unusable-transaction outcomes keep their original
+classification. Exact request replay precedes predicate reevaluation and returns
+the original successful result after the state changes. Runtime 0.15 currently
+requires a fresh installation.
+
 ### Public object updates and deletes (runtime 0.14 candidate)
 
 Use the same `assembly.apply_in_transaction` or selected `GroupCapability`

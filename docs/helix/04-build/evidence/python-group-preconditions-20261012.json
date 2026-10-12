@@ -1,0 +1,23 @@
+{
+  "scope": "public caller preconditions and typed invalid/unauthorized group failures",
+  "runtime": "0.15 candidate",
+  "postgres": "18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "installedWheelSha256": "48eddcb9705c0152382a557debd9fafaa5e54a3b5faa36e5c70720641cca4b11",
+  "installedBasicTests": {
+    "modules": ["test_group_preconditions_native", "test_object_mutations_native"],
+    "passed": 4,
+    "elapsedSeconds": 23.788
+  },
+  "behavior": [
+    "all failed caller condition IDs/reasons survive in order with no object, attempt, receipt, guard or journal effects",
+    "object existence, live key absence, exact typed property equality, relationship absence and count bounds pass inside one atomic group",
+    "original committed request replays before today's changed property is checked",
+    "unknown authored key gives InvalidGroupInput; revoked writer gives UnauthorizedPerson; caller transaction remains usable",
+    "CRUD, no-op, dry-run rollback, mixed aliases and durable delete retry remain callable"
+  ],
+  "review": "Astra Ultra approved plan and corrected source; caller-selection misses map locally to22023 while internal integrity/readback failures remain distinct",
+  "typing": "4 installed consumer fixtures;20 expected negative errors",
+  "umfOwnerSql": "16 SQL sources retain/reload/export unchanged",
+  "limits": "scalar exact representation equality and string business keys; relationship tests cover publicly created endpoints and empty edges; populated edge writes/reads remain the next implementation; migration and full external interface remain unfinished"
+}

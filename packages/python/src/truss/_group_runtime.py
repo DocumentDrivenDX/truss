@@ -9,7 +9,7 @@ from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, Cu
     RequestNone, RequestPresent, RequestIdentity, GroupSuccess, GroupFailed, GroupUnavailable,
     InvalidGroupInput, RequestConflict, GroupOperationFailure, AppliedPending, SameTransactionReplay,
     CommittedReceiptReplay, SameTransactionReplayEvidence, CommittedReceiptReplayEvidence,
-    Created, Changed, Unchanged, Deleted, DeletedIdentity, AliasIdentity, JournalEventReference)
+    GroupPrecondition, UnauthorizedPerson, PreconditionFailed, FailedPrecondition, Created, Changed, Unchanged, Deleted, DeletedIdentity, AliasIdentity, JournalEventReference)
 from .preparation import CatalogDocument
 from ._umf_key_tuples import KeyTupleRequest, encode_string_key_tuples
 
@@ -28,9 +28,9 @@ class GroupRuntimeContext:
     source_epoch: str
     history_profile: str
 
-    def input(self,operations: tuple[GroupOperation,*tuple[GroupOperation,...]],asserted_origin: MapValue) -> GroupSemanticInput:
+    def input(self,operations: tuple[GroupOperation,*tuple[GroupOperation,...]],asserted_origin: MapValue,*,preconditions: tuple[GroupPrecondition,...]=()) -> GroupSemanticInput:
         return GroupSemanticInput(layout_profile=self.layout_profile,mutation_profile=self.mutation_profile,
-            value_profile=self.value_profile,catalog=CurrentCatalog(),operations=operations,asserted_origin=asserted_origin)
+            value_profile=self.value_profile,catalog=CurrentCatalog(),operations=operations,asserted_origin=asserted_origin,preconditions=preconditions)
 
     def request(self,request_id: str) -> RequestPresent:
         return RequestPresent(identity=RequestIdentity(authorized_scope_identity=self.authorized_scope_identity,request_id=request_id))
@@ -41,7 +41,7 @@ def _wire(value):
         result={}
         for member in fields(value):
             child=getattr(value,member.name)
-            if child is ABSENT:continue
+            if child is ABSENT or member.name=='preconditions' and child==():continue
             parts=member.name.split('_');name=parts[0]+''.join(part.title() for part in parts[1:])
             result[name]=_wire(child)
         return result
@@ -88,6 +88,10 @@ def _result(raw: bytes):
     if value['outcome']=='unavailable':return GroupUnavailable(reason=value['reason'])
     if value['outcome']=='failed':
         evidence=_artifact(raw)
+        if value['code']=='precondition_failed':
+            return GroupFailed(failure=PreconditionFailed(failures=tuple(FailedPrecondition(condition_id=v['conditionId'],reason=v['reason'],rule=v['rule']) for v in value['failures'])))
+        if value['code']=='invalid_input':return GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
+        if value['code']=='unauthorized_person':return GroupFailed(failure=UnauthorizedPerson())
         if value['code']=='request_conflict':return GroupFailed(failure=RequestConflict(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
         return GroupFailed(failure=GroupOperationFailure(operation_index=value['operationIndex'],error_profile=_DIAGNOSTIC,inner_error=evidence))
     semantic=_semantic(value['semantic'])
@@ -142,8 +146,17 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     operation_index=[0]
     def apply(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s)',
-            (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
+        condition_keys=[]
+        if input.preconditions:
+            cursor.execute('SELECT truss.group_condition_key_metadata(%s,%s,%s,%s)',
+                (original_input,original_documents,manifest['releaseId'],digest),prepare=False)
+            for metadata in json.loads(bytes(cursor.fetchone()[0])):
+                request=KeyTupleRequest(metadata['moduleId'],metadata['recordId'],metadata['keyId'],tuple(v['text'] for v in metadata['values']))
+                original=encode_string_key_tuples(sources[metadata['documentId']],(request,),bun_executable=bun_executable)[0]
+                condition_keys.append({'conditionIndex':str(metadata['index']),'tupleHex':original.tuple_bytes.hex(),
+                    'receiptBase64':base64.b64encode(original.original_receipt_bytes).decode('ascii')})
+        cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s,%s)',
+            (original_input,original_documents,original_request,manifest['releaseId'],digest,_bytes(condition_keys)),prepare=False)
         begin=json.loads(bytes(cursor.fetchone()[0]))
         if begin['outcome']!='execute':return _result(_bytes(begin))
         attempt_id=begin['attemptId']
@@ -170,6 +183,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     result=host._run_operation(transaction,apply)
     if isinstance(result,Error) and result.error.code=='execution_obligation':
         state=result.error.sql_state
+        if state=='42501':return Ok(GroupFailed(failure=UnauthorizedPerson()))
         reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(state)
         if reason:return Ok(GroupUnavailable(reason=reason))
         if state in ('22023','23505','P1001','P1003','P1004','P1005'):

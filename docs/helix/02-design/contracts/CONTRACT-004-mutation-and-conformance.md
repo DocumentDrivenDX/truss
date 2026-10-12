@@ -35,6 +35,29 @@ Defines, in a way that does not depend on a programming language, what each read
 
 ## Scope and Boundaries
 
+### Selected Python caller-condition profile
+
+The `truss-rootless-scalar-objects/0.2` binding adds optional group preconditions:
+object existence, live key absence, exact typed property equality, relationship
+absence and relationship-count bounds. Conditions evaluate against the locked
+prestate before effects. Every failure retains its caller ID/reason in authored
+order; failed evaluation publishes no mutation or receipt, including no retained
+setup writes. Missing differs from null; exact property equality preserves
+token spelling. Key absence does not promise clearance of persistent reservations.
+Relationship absence requires existing endpoints. Counts use exact integer-text
+bounds and live edges in the selected direction.
+
+Current predicate-owner read authority is required before evaluation and checked
+again before reporting. Unauthorized evaluation returns no partial failure list.
+Object rows and exact key routes remain locked; relationship insert/delete/
+retarget implementations must lock all old/new endpoints to exclude phantoms.
+No type-wide lock or retry loop is required for a missing object: the failed
+condition cannot authorize effects. Exact successful request replay precedes
+reevaluation of today's predicates. The shared group bindings mirror Python's
+`PreconditionFailed`, `UnauthorizedPerson` and `InvalidGroupInput` variants.
+This selection implements the declared predicates, not edge writes or full
+engine/corpus completion.
+
 - In scope: the operations and their effects, validation, locking, the version check, error kinds, and the conformance corpus format and pass rule.
 - Out of scope: any language's method names or types (each implementation binds these operations idiomatically), the query language, the HTTP or GraphQL surface, how a host authenticates a caller.
 - Owning project: truss. Implementations: truss's TypeScript engine, and any other (for example a Python implementation embedded in an application).
