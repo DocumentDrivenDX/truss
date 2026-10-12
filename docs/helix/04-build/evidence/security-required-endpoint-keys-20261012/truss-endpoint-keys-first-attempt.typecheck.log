@@ -1,0 +1,1 @@
+packages/postgresql/src/security-candidate-condition.ts(132,86): error TS7006: Parameter 'endpoint' implicitly has an 'any' type.

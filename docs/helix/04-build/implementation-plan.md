@@ -6444,3 +6444,18 @@ recovery changes and passes54 native observations.
 `security-incomplete-ontology-facts-20261012/merged-receipt.json` retains current
 source pins, changed preimages and terminal native output. Only this component
 is refreshed; original backend acceptance remains open.
+
+
+### Required nonnull graph endpoint Key guards — 2026-10-12
+
+Candidate source checks now include supplied selected Record/endpoint Key columns
+outside authored filtering and negation. Real public-created graph mutation keeps
+all ownership edges but removes Project B's key; a valid Alice/A path cannot hide
+it. Counts refuse and restoration restores the original decision. Sixty native
+observations,26 candidate tests, strict security typing, Python boundaries723
+imports and one real Chromium153 fold comparison pass. Retained evidence:
+`evidence/security-required-endpoint-keys-20261012/receipt.json`.
+Trace shared CONTRACT-063 / STP-056 B02/B13/B15 and TD-020/STP-020. This extends
+local required-key validity only, not nullable-key support or complete population
+authentication. Original source enrollment, mapping, authority/cut and final
+release remain required; no original backend case is promoted.

@@ -488,3 +488,15 @@ repeat visibility. Fifty-four observations are retained in
 `../../04-build/evidence/security-incomplete-ontology-facts-20261012/receipt.json`.
 This does not replace missing endpoint/key/source enumeration or full error/
 transport privacy controls. Shared STP-056 B10/B15 remains open as a full case.
+
+
+Required endpoint-key control now removes Project B's decoded business key
+while keeping the native object and edge incidences present. Retain exact edge
+occurrence count and NULL target projections, require indeterminate despite a
+valid sibling Project path, refuse every ordinary count and restore the original
+decision after repair. The candidate's global selected-key guards must enclose
+NOT/OR/filters. Sixty native observations and26 focused tests pass; Chromium153
+matches the actual ontology fold emission. Evidence:
+`../../04-build/evidence/security-required-endpoint-keys-20261012/receipt.json`.
+Nullable keys, omitted source populations, full mapping/issuer custody and
+publication remain required separate controls.

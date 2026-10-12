@@ -11,7 +11,7 @@ const input={condition,scans,subject:{target:ref('Staff'),keyId:'pk',keyFields:[
 test('actual mixed compiler condition retains outer Project correlation',()=>{
  const sql=lowerCandidateSecurityCondition(input);expect(sql).toContain('"candidate_1"."project_key" OPERATOR(pg_catalog.=) "candidate_0"."project_key"');expect(sql).toContain('"candidate_0"."resource_key" OPERATOR(pg_catalog.=) $1');expect(sql).toContain('"candidate_1"."staff_key" OPERATOR(pg_catalog.=) $2');expect(sql).toContain('IS NULL');expect(sql).toContain('NULL::pg_catalog.bool');
 });
-test('source negation retains three valued quantifier SQL',()=>{const negated=proof.artifacts.find(a=>a.id==='mixed-negated')!.rules[0]!.condition;expect(lowerCandidateSecurityCondition({...input,condition:negated})).toStartWith('(NOT (CASE WHEN EXISTS');});
+test('source negation retains three valued quantifier SQL',()=>{const negated=proof.artifacts.find(a=>a.id==='mixed-negated')!.rules[0]!.condition;const sql=lowerCandidateSecurityCondition({...input,condition:negated});expect(sql).toStartWith('(CASE WHEN');expect(sql).toContain('(NOT (CASE WHEN EXISTS');});
 test('unknown profiles and substituted endpoint mappings refuse',()=>{
  expect(()=>lowerCandidateSecurityCondition({...input,scans:scans.slice(0,1)})).toThrow();
  const wrong=structuredClone(scans);wrong[1]!.endpoints[0]!.keyId='other';expect(()=>lowerCandidateSecurityCondition({...input,scans:wrong})).toThrow();
@@ -201,4 +201,13 @@ test('native population identity survives keyed and property projection wrappers
  expect(()=>lowerCandidateSecurityCondition(packet(project('a'),project('b')))).toThrow();
  const distinct=createCandidateGraphSource({kind:'edge',typeId:'8',propertyOwnerTypeId:null,fields:[]});
  expect(lowerCandidateSecurityCondition(packet(base,distinct))).toContain(distinct.validitySql);
+});
+
+// Null required identity carriers invalidate the whole candidate source scan.
+test('required record and opaque endpoint keys are checked outside authored filters',()=>{
+ const sql=lowerCandidateSecurityCondition({...input,condition:{literal:true}});
+ expect(sql).toContain('"candidate_key_admission_0"."own_id" IS NOT NULL');
+ expect(sql).toContain('"candidate_key_admission_1"."staff_key" IS NOT NULL');
+ expect(sql).toContain('"candidate_key_admission_1"."project_key" IS NOT NULL');
+ expect(sql).toContain('ELSE NULL::pg_catalog.bool END');
 });

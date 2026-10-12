@@ -288,3 +288,23 @@ endpoint/key/subject coverage still requires original source enrollment and
 coherent authority/data admission. Whole native diagnostic/wire/trace privacy,
 streaming release and public driver outcome mapping remain separately required.
 Current runtime code is unchanged and no full backend case is promoted.
+
+
+### Required Key/incidence carrier completeness — 2026-10-12
+
+The candidate condition lowerer now checks every supplied selected Record Key
+and endpoint Key column for nonnull presence before authored filtering/negation.
+A valid sibling witness cannot conceal an undecodable required endpoint. In the
+real public ontology fixture, removing Project B's required business key retains
+all four ownership edges with two NULL target-key projections. The fold becomes
+indeterminate even for valid Alice/A access, all ordinary counts refuse55000 and
+repair restores the original permit. Sixty native observations,26 focused tests,
+strict security-source typing, Python boundaries and one Chromium153 actual fold
+emission comparison pass. Sources and failures:
+`../../04-build/evidence/security-required-endpoint-keys-20261012/receipt.json`.
+
+This is the required nonnull-key subset; it does not admit a nullable-key codec.
+Visible supplied-source checks cannot detect omitted/filtered populations or
+authenticate original mappings and native source custody. Keep complete collector
+enrollment and held data/authority/release admission as separate prerequisites.
+No full backend case or released public read profile is promoted.

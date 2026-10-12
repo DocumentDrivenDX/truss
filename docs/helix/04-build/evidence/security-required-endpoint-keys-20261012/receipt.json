@@ -1,0 +1,1569 @@
+{
+  "status": "component-passed",
+  "baseCommit": "dc8c01d62a49c63e499d32a8c7965d43e2efc57e",
+  "sourcePins": [
+    {
+      "path": "packages/postgresql/src/acceptance-json.ts",
+      "sha256": "ef934c8d2ccdd53c604f917c5a16ed27e99d6a24cc5deca809861c117f16bdc4"
+    },
+    {
+      "path": "packages/postgresql/src/asserted-origin-map.ts",
+      "sha256": "6b63c7630dfe9bd44c7d8c7d96163da1e5722eeba14a409a656b4114566dd2ba"
+    },
+    {
+      "path": "packages/postgresql/src/canonical-wire-tree.ts",
+      "sha256": "29987adb1cdc66cf679d462b4efe3168e03399346e510e31c788eb615f0393e6"
+    },
+    {
+      "path": "packages/postgresql/src/captured-origin-context.ts",
+      "sha256": "1d35638253b5f225c8549481b84d938b4336739fab5c9fd6b76604552e6cd1ab"
+    },
+    {
+      "path": "packages/postgresql/src/index.ts",
+      "sha256": "39879cd1ea524d5a68f7bfd72c121d1bafb4083b811eb9d9e0dc244ee0bc20c6"
+    },
+    {
+      "path": "packages/postgresql/src/operation-ordinal-issuer.ts",
+      "sha256": "caf59b276d0037a6d9a586380d6402714e39de0db6578c37b2a295c006586042"
+    },
+    {
+      "path": "packages/postgresql/src/original-byte-custody.ts",
+      "sha256": "0080a33427c00435da7cefdc3fbc35feaaaf453e86d21d7df43390e6f291af81"
+    },
+    {
+      "path": "packages/postgresql/src/security-candidate-condition.ts",
+      "sha256": "f2b285d1eba415f3eeb4848dcbf881a0819eec515907a41a2e5ae53d1a972bad"
+    },
+    {
+      "path": "packages/postgresql/src/security-candidate-endpoint.ts",
+      "sha256": "678c66861e702c4086f70402fd2f117bd492a33e50f9a26795071b4a721925dc"
+    },
+    {
+      "path": "packages/postgresql/src/security-graph-locator.ts",
+      "sha256": "337f48ea85dcb4c1a4359a0dee8cb0e8bbc0a4a873c3f8e96130ae8e80c28d04"
+    },
+    {
+      "path": "packages/postgresql/src/security-graph-source.ts",
+      "sha256": "15b37a47e28d100d500b34e994f10810d0972f1dd6e772f0f87ae029ea41e234"
+    },
+    {
+      "path": "packages/postgresql/src/security-key-namespace.ts",
+      "sha256": "97036be2d955336de8dccd08e8281269263e8c4d49e9b73cf36045a845bc6ce4"
+    },
+    {
+      "path": "packages/postgresql/src/security-key-transport.ts",
+      "sha256": "720d4d471ca37e38da3c1949243f64e5ac7af787da9b38f7fea477400b54abce"
+    },
+    {
+      "path": "packages/postgresql/src/security-native-key.ts",
+      "sha256": "0190bf385159decd0e5e89340936a2e324bff9a5f6291791a492caa6226c1d51"
+    },
+    {
+      "path": "packages/postgresql/src/security-predicate.ts",
+      "sha256": "55097899026f42ecf979e9917fa1aa6c4ad0ce40f2674fcc320ef1cdf9c858cf"
+    },
+    {
+      "path": "packages/postgresql/src/security-query-carrier-domains.ts",
+      "sha256": "3cace41bf21db0ee7cbab87ba2f68be66ebe3734299c6d933418485c13e33968"
+    },
+    {
+      "path": "packages/postgresql/src/security-query-use.ts",
+      "sha256": "232672f54adb502d208fec7f92baa9fb3c92a8c7e74ad812bf2bcf32200e104f"
+    },
+    {
+      "path": "packages/postgresql/src/security-source-completeness.ts",
+      "sha256": "2bb00adddc3f2a29be2ce5701d4be59cbbf586b890a5bb01a4c616a39b47db07"
+    },
+    {
+      "path": "packages/postgresql/src/security-stored-key.ts",
+      "sha256": "c7735d79e94a23884d07e820c22539205c4dd2b5743cb10b861067c0e5b6000a"
+    },
+    {
+      "path": "packages/python/src/truss/__init__.py",
+      "sha256": "ceb31c50249d503217efefa507abf64f47eade7f5c58fada873711b18e40a0fd"
+    },
+    {
+      "path": "packages/python/src/truss/_acceptance_json.py",
+      "sha256": "303638af137138a796542aa5425985d147e510a23639fca9b2d6221966337a01"
+    },
+    {
+      "path": "packages/python/src/truss/_adoption_cancellation.py",
+      "sha256": "3fbce34b38844251e2b7a4a52bfa21086786f3a04d4f1bf3d132f45f3457088c"
+    },
+    {
+      "path": "packages/python/src/truss/_borrowed_host.py",
+      "sha256": "45e5de0609a73d0d4a2a88c48754095ca22a6453826333eb93a573b8a88c0ab9"
+    },
+    {
+      "path": "packages/python/src/truss/_bounded_receive.py",
+      "sha256": "83a45e6b49b48f551cd46e9970850a8effa5492a49a0076cd878a3314a0f4ab1"
+    },
+    {
+      "path": "packages/python/src/truss/_canonical_wire_tree.py",
+      "sha256": "755bd1c50a506861c76b9332edb086bbb101a8f33e80b6b585df56a3d7a01b79"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_candidate.py",
+      "sha256": "d5d3443a6c6e609fe694b077a5a196816c75d93d057cebc0cdb1a298bf220cb4"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_completion.py",
+      "sha256": "7e29ee848e838514965a15e923c6e2d535d35c8a05c0a67e0407a5ab33dc48fd"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_definition_source.py",
+      "sha256": "5e6dc5d8c148502018064e2d0d976189eaed78cc075ec129fa484d6c4453e5f4"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_index_declarations.py",
+      "sha256": "68d4620754f5c0e9651c162a3dde0c9ca21f87b2cc791df333a05ff9d08bb03a"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_installation.py",
+      "sha256": "8ab52855a3e7bbf358f09b1984f7f9b3ba43f492ebdea0c4ef4cbc371a31ae5b"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_lifecycle.py",
+      "sha256": "54972c2abdf487c603dcedb4fbb65454d4489916e66fd30a1f24404d1c5cec70"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_owner_evidence.py",
+      "sha256": "1ad028b7be41de0485bcf58f27856392711cc8c78e585c66a595afbffdbe12e7"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_report.py",
+      "sha256": "beecc9de83a7d1a2f1a2b0de4a01af7c98605a08f2caf6d2e0f0e04575fb677b"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_report_assembly.py",
+      "sha256": "ddf8c5f3f76b3dcc089c66c0ad4a3f54c312a37cba7729f4bc7bb31ca6403de4"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_report_semantics.py",
+      "sha256": "8b9e257f71f53b08e30d92b11ace75b1ecc79334698f83f5cc5c862c44efb263"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/barrier.sql",
+      "sha256": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/evolution.sql",
+      "sha256": "b68f9b026655be68f656f2308b9f4f418bd85c1dc720acb2b2700428fd6db631"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/group-profiles.json",
+      "sha256": "d9944cdff274f9b001dc78837f221c0a42f248869d1898ab2033e857a9c041fd"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/groups.sql",
+      "sha256": "ad80c5a93866e931b3efd3d7ed427ab484a449ceff1fca982e176c88153546b2"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/imports.sql",
+      "sha256": "a344aa66ef54b3b607f1effb7b47b0abc7c3890033016c79a1aaff7cc2c1ea6d"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/key-read.sql",
+      "sha256": "baaf99eae2635980d884c1fad899e28718dec012aabbde818723d40a0ae1a6ac"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/keys.sql",
+      "sha256": "d74dc2e4048331bafd6f1f68f7fd931818fb52beb720b51f5cfd8950b0f7a869"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/layout.sql",
+      "sha256": "421a9bb88bcc1293f4fcbb66d2b443ccd08ccfc7845c79e5d3ee21b5494666a7"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/lineage.sql",
+      "sha256": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/manifest.json",
+      "sha256": "7472db2bded607ba17578146146bd7d71c662ec0a64e4e133b45502db1958a3f"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/operations.sql",
+      "sha256": "6f4879c39f1707715888bd6f9e7ac5ca520132596cd406e9d9a5912362bd5b5f"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/pages.sql",
+      "sha256": "928a3f51bc876ba67b8fc294693ff8cb079301e60671cb0d0f5d6bf1fc4b64bb"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/plan.sql",
+      "sha256": "ddb1d498df5f56d7fd5a3ec363b2023f201925876d9a7946315aa87c013d38dd"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/preconditions.sql",
+      "sha256": "32ea41dfd2b1312ad829704e35be426e27343aa1c6340a24d3574bab4776029b"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/read.sql",
+      "sha256": "875662769ec5ab01d2a1e795df7d5cc17ab165190b7789df882d634cd512eb08"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/reader.sql",
+      "sha256": "af68f7296aa9ff5b535af9795712391bce32f7ade4c5b218a63a95d0d7e65149"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/runtime.sql",
+      "sha256": "60d030faf7ea4a03d032fc42d522bf544728883e8601bc5216ec2c2b6edc6fd0"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/scalars.sql",
+      "sha256": "5bf626a72bd82e265528d20cb893e9b3bb55762e90f393befacdab39e3f2ed19"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_runtime/view.sql",
+      "sha256": "6c7c510c951174a266e4ef06029edb31902da6034aae0b3008c7d7cc08784bfb"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_staging.py",
+      "sha256": "720f8bb35214832e2ce40ffd7999f08f883ea5476ed70e18beff3197dd917ee0"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_support.py",
+      "sha256": "39f6eabf31f6972f90abad3fe2e1088a268f42f617c5a4b61b839eb7aceddd22"
+    },
+    {
+      "path": "packages/python/src/truss/_catalog_view_build.py",
+      "sha256": "cc046c3813c59b101ac6368bedccea9b50aeeb7e3c5ac7ae5d11a30be3299838"
+    },
+    {
+      "path": "packages/python/src/truss/_construction_recovery.py",
+      "sha256": "647a977b46527aebc20eb31e6515f6903c24ea16ca001f39e62ac0c864d892b9"
+    },
+    {
+      "path": "packages/python/src/truss/_directory_resources.py",
+      "sha256": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48"
+    },
+    {
+      "path": "packages/python/src/truss/_group_runtime.py",
+      "sha256": "a1897db30920c33f132789cd8e5de342bae9bb0aa0dfd56c3b568fba2fba8cf3"
+    },
+    {
+      "path": "packages/python/src/truss/_host_call_recovery.py",
+      "sha256": "90e844ef2d3e061186fe96707b01ea1ff8067b06f59420fdcf68e7a05d36b4fd"
+    },
+    {
+      "path": "packages/python/src/truss/_host_contracts.py",
+      "sha256": "a120a9a7465aeb0936cd81be52ec7f7d49e59befe0de9002f82e1a9221ed6c94"
+    },
+    {
+      "path": "packages/python/src/truss/_host_control_custody.py",
+      "sha256": "b54753d0698b74ef1e4f983306d23dde5fb4d09ea8068304f3926cbcf194135c"
+    },
+    {
+      "path": "packages/python/src/truss/_host_execution.py",
+      "sha256": "211dcc53cea6ceb295511c3ce0b36e62a19fb6aa2977ce44eae401331a800fbb"
+    },
+    {
+      "path": "packages/python/src/truss/_host_session.py",
+      "sha256": "18754ffd000aec5202c49545fc508fd6775d47ca163503b56c3b95bcfebeff2f"
+    },
+    {
+      "path": "packages/python/src/truss/_import_runtime.py",
+      "sha256": "85c84ce076179051de9c4fd71db54591ae55670a830459f0f71c39c8dc8b7652"
+    },
+    {
+      "path": "packages/python/src/truss/_installation/definitions.json",
+      "sha256": "3190689d74dca0b78e70bfd8daa95864bdb39563f85119ce89fcacd0975b99bb"
+    },
+    {
+      "path": "packages/python/src/truss/_installation/definitions.sql",
+      "sha256": "a549afb4ecdba65f4d42362bae91cbabfc5d2f97e931c8cf7825210f006967d4"
+    },
+    {
+      "path": "packages/python/src/truss/_installation/manifest.json",
+      "sha256": "35589fe38d1b54832c618caca739a8f1de8339d5a2dbe71d717d9b459d7950c0"
+    },
+    {
+      "path": "packages/python/src/truss/_installation/statements.json",
+      "sha256": "ab97ac257b53b9fea2c92b773bea189ee96cb43a4abb4f9b81c212d4c5b58544"
+    },
+    {
+      "path": "packages/python/src/truss/_installation_archive.py",
+      "sha256": "d1674fb5f8537873e3b41ce46618fd3aac1c73db7c8b34a90fe741cba6918f72"
+    },
+    {
+      "path": "packages/python/src/truss/_installation_definition_release.py",
+      "sha256": "0d8da8c5dd3cbab8165a1d7bcb2ca8fc3e8d598515123ee5ad68f8e63ab1f7ec"
+    },
+    {
+      "path": "packages/python/src/truss/_installation_metadata.py",
+      "sha256": "d04501fcec7fdd26fa8ba2409644bc32213180af2df9ecac9e9f8c5dacb83ad1"
+    },
+    {
+      "path": "packages/python/src/truss/_installation_privileges.py",
+      "sha256": "d2e85fe15bfdc478e6d0de6cc504aff4f9b1601dc5ec2223da26c9ecfb4c9cc1"
+    },
+    {
+      "path": "packages/python/src/truss/_installation_resources.py",
+      "sha256": "c0a6cd34a82b5ce06c6d4806433c3cb4cb195fd5a95f3cab56d5e1e3f12abd1d"
+    },
+    {
+      "path": "packages/python/src/truss/_installation_statement_release.py",
+      "sha256": "42a8337fc5cc16317d1cf988a8b9b3c45fcc96efe88518b4488ab08cb25d7d2b"
+    },
+    {
+      "path": "packages/python/src/truss/_installed_admission_inventory.py",
+      "sha256": "eca04abc6863db46cc2fbb2c448affe13c69ee71806ca8ac520ffc739d8553ca"
+    },
+    {
+      "path": "packages/python/src/truss/_inventory_sql/column-acl.sql",
+      "sha256": "f328a40200427d5e5b67179233e9d77b77c6ed4478608d1f5e269122976090fd"
+    },
+    {
+      "path": "packages/python/src/truss/_inventory_sql/dependency.sql",
+      "sha256": "b6d3b3eb4fe10d817a57c0e2d1ab723fc630233b4d15985bc5e6aaa366a3ba74"
+    },
+    {
+      "path": "packages/python/src/truss/_inventory_sql/manifest.json",
+      "sha256": "3544d094ff90df4b6966414cfd203db607ae347dd2a4923dc72c92758188f890"
+    },
+    {
+      "path": "packages/python/src/truss/_inventory_sql/namespace-acl.sql",
+      "sha256": "b28027fe1b0c15780c3000988d5396dc83acfa5d8228fe5488a7bd5ec5d5af17"
+    },
+    {
+      "path": "packages/python/src/truss/_inventory_sql/relation-acl.sql",
+      "sha256": "10ae36d576209b954b218908d2a9c4f4a4344803b18457eaa5bb42c12415c8eb"
+    },
+    {
+      "path": "packages/python/src/truss/_inventory_sql/routine-acl.sql",
+      "sha256": "7af67d9bc4e1a6873814197926d7f92cf69bbb299c83f0145731fcb6bebdbe7e"
+    },
+    {
+      "path": "packages/python/src/truss/_native_admission_capture.py",
+      "sha256": "7b7604c3c2e1e61655c29b155ed489adc6ecc0d5cf76f6dd8afb015dc5473e5f"
+    },
+    {
+      "path": "packages/python/src/truss/_native_admission_request.py",
+      "sha256": "77282e24877e1f93a0afb04fa88840c8766195969ddc6986f615fd04c7645f27"
+    },
+    {
+      "path": "packages/python/src/truss/_native_adoption.py",
+      "sha256": "f7e714beeaede3e09888d226dedd1df5aa18090ed62981138675571016b1de0b"
+    },
+    {
+      "path": "packages/python/src/truss/_native_arbitration.py",
+      "sha256": "5a777dad86a32ad7c1504609eff4111bce6f849027c64a9bd0edce7cee89192b"
+    },
+    {
+      "path": "packages/python/src/truss/_native_attachment.py",
+      "sha256": "e7af13436aec1d96e84449d1dc2fedb698ff38961eab5ff743296241c2dc6d24"
+    },
+    {
+      "path": "packages/python/src/truss/_native_bootstrap.py",
+      "sha256": "2d8167009e179816473c7c5fb384888ca1164043d31c8e6d7733974973e03711"
+    },
+    {
+      "path": "packages/python/src/truss/_native_cancellation.py",
+      "sha256": "2bc533da73c0e8727945df2a539d4494636c5028492597b2dd3ee4c9161835d3"
+    },
+    {
+      "path": "packages/python/src/truss/_native_catalog_capture.py",
+      "sha256": "a5ca9ba5df34441b609a64f5c666a30b6fd394cc0f9158052371ba22a5d2fb11"
+    },
+    {
+      "path": "packages/python/src/truss/_native_catalog_metadata.py",
+      "sha256": "feac15bbcf24f65821cfc750aca248cadc8d5b93ce3887f5f148eaf7fc4b1551"
+    },
+    {
+      "path": "packages/python/src/truss/_native_catalog_report_sources.py",
+      "sha256": "d3c8be54cbf2bd2bfd66c27af6fbf87ccad4affdf81ac1da7ab552983666b2f8"
+    },
+    {
+      "path": "packages/python/src/truss/_native_catalog_request.py",
+      "sha256": "93c87c2605764504e6e160a3180616a219e5e9bbc947f63bcb9c553a7bfd0c82"
+    },
+    {
+      "path": "packages/python/src/truss/_native_deadline.py",
+      "sha256": "818b01a238d1722e81efff792b6abdbc037d67485e77d3bf9c8fa16226ecab56"
+    },
+    {
+      "path": "packages/python/src/truss/_native_driver_profile.py",
+      "sha256": "942791295372ac96c4f7cf4753f2c3598084de9c136870a66bdd8239ddcb4266"
+    },
+    {
+      "path": "packages/python/src/truss/_native_epoch_acquisitions.py",
+      "sha256": "8b10b499dac31fcea225186e7d74f2124e3ef5f371d81f2a60c9a645d77094b2"
+    },
+    {
+      "path": "packages/python/src/truss/_native_fresh_epoch_capture.py",
+      "sha256": "b9d3db706d87435c65759c10f0c7ca012e562241eb038a8c70b77fbd4cd29653"
+    },
+    {
+      "path": "packages/python/src/truss/_native_ingress_deadline.py",
+      "sha256": "fe29cffb4040ee57ff2e107e3b008e1d56b97c6f561261d5be289d3b1d133651"
+    },
+    {
+      "path": "packages/python/src/truss/_native_operation.py",
+      "sha256": "ef9490cc580e6681bfd285fb75dcfd6f67331254ac9b457fabc78483844450d6"
+    },
+    {
+      "path": "packages/python/src/truss/_native_operation_ordinals.py",
+      "sha256": "f6bab5346a52f10fc18bc717a2b6fb6fb2b0f5c695a55324570859885069073d"
+    },
+    {
+      "path": "packages/python/src/truss/_native_outbound.py",
+      "sha256": "b69363c90aca9dff02149f1718c166c94350482b668e448f1243eb21a60dbec0"
+    },
+    {
+      "path": "packages/python/src/truss/_native_pg8000.py",
+      "sha256": "4b936f14c16f2ee0b817f1b1457e542a112056523899efe61c72698a4f43c5d6"
+    },
+    {
+      "path": "packages/python/src/truss/_native_result_custody.py",
+      "sha256": "2727ec8a7d44ab15b64c925b0dbd2b4e115a77704483de394f3ac52a8cb69190"
+    },
+    {
+      "path": "packages/python/src/truss/_native_source_census.py",
+      "sha256": "24c125f443a05d8166ca5d895d861f9c08c8c9030cc3c70c78d16a389a43fd53"
+    },
+    {
+      "path": "packages/python/src/truss/_native_string_request.py",
+      "sha256": "07029039d9ecae0739491ac70f00cbc7ee455be673480d1b23e30c0f4923e2c1"
+    },
+    {
+      "path": "packages/python/src/truss/_native_transactions.py",
+      "sha256": "ae5d9a851bb047ee0ec2cf608264b008ded275b16e06dc054e5caf65b885d570"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_admission.py",
+      "sha256": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_arbitration.py",
+      "sha256": "a7ff26d17feccb15885ae18a0ba7a0178cbb1e86de3a15de055cd51159a021bc"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_ordinal.py",
+      "sha256": "8437efb0b6fd6581b745e3bcf80c0e310cd79ba584ed9daf27ce6db94da233e6"
+    },
+    {
+      "path": "packages/python/src/truss/_operation_registry.py",
+      "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d"
+    },
+    {
+      "path": "packages/python/src/truss/_owner_evidence_json.py",
+      "sha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/absent-binding-index-declarations.json",
+      "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/assembly-construction-diagnostic.json",
+      "sha256": "2e42e685d6e18169d31cd34abc2d43b720f088c39b74182d5f02944d06e56b94"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/assembly-inspection-construction-diagnostic.json",
+      "sha256": "b8c53a93d67ec97a9895d3c4d862f1118758204ab06b1e625f8a0793c74c45d1"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/assembly-inspection.json",
+      "sha256": "5df8b93c35dc11d710744b89b5a1aafd11a8c5aa957c514458db5ad5bb8c3b8d"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-custody-prerequisite-registration-candidate.json",
+      "sha256": "bf260c6c411be0f61903c45b581e73e7871a676808a8f324f29b481439de32d2"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-custody-registration-candidate.json",
+      "sha256": "8561e275de278b019e7c20628ec98630d77d2011d2967556f614f09e1647793f"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",
+      "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-feed-finalization-candidate.json",
+      "sha256": "a1437880c0c839e933d786fe98f9994fc1d795bcefbaf80ae8055ff127e2b2f1"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-finalizing-custody-prerequisite-registration-candidate.json",
+      "sha256": "5939823612bff7115d2f247161f9f06f5ed95443ee5960df95e443953337b040"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-finalizing-custody-registration-candidate.json",
+      "sha256": "0706da4b4387b49834d095f2fbdc3dfb3ba4bb4e3ac22e7c0afdb64c7429e73b"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-only-business-guards-candidate.json",
+      "sha256": "8ebe0a20d5be956d8bc42d7bdaa85406c431534c7d8d6ac689e993e61fa65e3b"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-capture-candidate.json",
+      "sha256": "b582d6d36b9498551d082a52de89493ca0b32f19413a15f23833c67b5cc4bbe1"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-prerequisite-custody-registration-candidate.json",
+      "sha256": "d981f6a17e54873c781eeece986dbc93a47a7a2ce3460e38d710f13ea0edcaa8"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-prerequisite-registration-candidate.json",
+      "sha256": "293bce5ba248e558319eba57ecfe3b5f683d6d89b58033003e33b6aad38cde73"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-assembly.json",
+      "sha256": "ef0a39be769d74037a54f62a138fec47bb3a4fbe46e5e96c2891f70e18227ff5"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-capture-composition-candidate.json",
+      "sha256": "dbed90210223b331dd02764eb911723f674f45731f40ad64b4317d45856d7dcd"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-composition-candidate.json",
+      "sha256": "3f5f83a5b827451bdf29a018eca85b0bdac3811a37ec8efcbadafc1a79fd10fe"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-configuration.json",
+      "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-custody-composition-candidate.json",
+      "sha256": "eb581afaf2dfaf2d25c2b8d27a0c3b65be843a4cae028a3b9f822a526944892b"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-procedure-candidate.json",
+      "sha256": "8db9e6848188b94e4c4bd67636a0fd334a507b738bf649c9fb48a1c61fafe38c"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-release.json",
+      "sha256": "2d4ab361c53fba2ecbe10a57c181aef3887edd2751ff37796e5d03d6514996e4"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-semantic-inputs.json",
+      "sha256": "be634f1d1bdf8f096333e25d15597d2b81af4ace87c9216a8abf304797df2080"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-report-wide-composition-candidate.json",
+      "sha256": "d77cf6b399774166da481f0f0e7850271243e8911175b2bb225f9a628d418aba"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-composition-candidate.json",
+      "sha256": "6e22d1e2393935f8d15fcade4ca5ac22a6f81b3a0ff47836d24741068d215e57"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-custody-candidate.json",
+      "sha256": "877af3261207edb90ebdd824845978c2a6221915f74380e00177c53629d039a3"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-custody-registration-capture-candidate.json",
+      "sha256": "16fbd9767b97488ccc428f02dc5a8629890c2029d990245e34226a367a2cf06f"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-registration-candidate.json",
+      "sha256": "a32febdea06ee57405d856038ede3b503430a4f823226e0dfa65b072fae2f725"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-wide-registration-candidate.json",
+      "sha256": "709a7ff1f3009bf88a02b510fcd32dc783087af14e6142f4366565694b11058e"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/catalog-revision-wide-report-composition-candidate.json",
+      "sha256": "9269939c2151779c919826ef30beccfea51269f06da1d6241e8f6bb6d80e6253"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/fresh-catalog-lifecycle.json",
+      "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/fresh-catalog-support-relational.json",
+      "sha256": "bc7aa15a3c2ab55368a3eb7fc2c4c18c8a316cc8ac7c783930c38a2ba825f557"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/fresh-catalog-support-scalars.json",
+      "sha256": "aec460c192bd831ed713f9bc8e42f2c31a99adfdf1cfcf4edecff8cd8f047b9f"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
+      "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/installation-metadata-construction.json",
+      "sha256": "da5160434020a1b0066c8d411a230c3a528984c5134382506e7835015f0c3ffe"
+    },
+    {
+      "path": "packages/python/src/truss/_profiles/local-postgres-runtime.json",
+      "sha256": "9cbe351f9357213b2918fed12380f57daf93551be41c611138b5b94916146bae"
+    },
+    {
+      "path": "packages/python/src/truss/_psycopg_dependency_fact_cut.py",
+      "sha256": "932eb504853e5abc2e3df2d796ccba66e4f48e1edc607921933958551c4365a6"
+    },
+    {
+      "path": "packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "dd9ba78a0832435e3c5d7b029322ffb5930784e90f7245b24175ca071f38f238"
+    },
+    {
+      "path": "packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "0b22607862cd90a41f233ecc01faf6d56af78dc3f6ed141aca638d90aac96e8f"
+    },
+    {
+      "path": "packages/python/src/truss/_psycopg_graph_scope.py",
+      "sha256": "a004effe64f22ad3a6d395806b421728015a5a20780b84e78908f52951168747"
+    },
+    {
+      "path": "packages/python/src/truss/_query_execution.py",
+      "sha256": "9cf9d08a45f0b31ef1621c9bed47eb879715771583dd467ecb57b8278115b0aa"
+    },
+    {
+      "path": "packages/python/src/truss/_receipt_position.py",
+      "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schema.py",
+      "sha256": "47b8803a730d120160af85e438a5a47e7b1c47d71f4040d4db7492a3b4e49075"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schema_pins.py",
+      "sha256": "937669a940936ab8da9b5024b6ef35985b05f76aeb279a5aba3e4cd02df3b557"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json",
+      "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.1.schema.json",
+      "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json",
+      "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/direct-cursor-v0.1.schema.json",
+      "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/enforcement-report-v0.1.schema.json",
+      "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/exact-value-v0.1.schema.json",
+      "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/history-event-v0.1.schema.json",
+      "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/history-event-v0.2.proposal.schema.json",
+      "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/history-record-v0.1.schema.json",
+      "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe"
+    },
+    {
+      "path": "packages/python/src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json",
+      "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605"
+    },
+    {
+      "path": "packages/python/src/truss/_row_event_attribution.py",
+      "sha256": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b"
+    },
+    {
+      "path": "packages/python/src/truss/_row_group_custody.py",
+      "sha256": "b39f7f4e17243d846fc60b3fff02807d168a93c23adf793a8be4fcd2abf3dcdd"
+    },
+    {
+      "path": "packages/python/src/truss/_row_image.py",
+      "sha256": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9"
+    },
+    {
+      "path": "packages/python/src/truss/_row_image_capture.py",
+      "sha256": "377bb631b3dd939436dc89c50b6ca4f188a99e5352e8a18d8f6a30037f593125"
+    },
+    {
+      "path": "packages/python/src/truss/_row_image_scalar_shape.py",
+      "sha256": "1e639bfed2680ce589d8af65fe255b4498a61246384fb593e3313d673fbdccdc"
+    },
+    {
+      "path": "packages/python/src/truss/_row_image_tree.py",
+      "sha256": "8ff76ee2a95ec60db0bdfecded4e1f35bc302d711be0f71f14d42178cabb5386"
+    },
+    {
+      "path": "packages/python/src/truss/_row_operation_address.py",
+      "sha256": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08"
+    },
+    {
+      "path": "packages/python/src/truss/_row_operation_context.py",
+      "sha256": "aeaa86163233a597c554f977d3c82badcbf8290a336e47b5e1ff8c64c66794ca"
+    },
+    {
+      "path": "packages/python/src/truss/_row_operation_custody.py",
+      "sha256": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445"
+    },
+    {
+      "path": "packages/python/src/truss/_row_registry_correspondence.py",
+      "sha256": "f0229b5032aa1801dba1cf85ddf0d6be84a087baf1f51c9482475a5b1e6c2282"
+    },
+    {
+      "path": "packages/python/src/truss/_row_touch_registry.py",
+      "sha256": "332c37d656bbf825ab119422714330277d9988eef280fc6f72fff26e2d5e778b"
+    },
+    {
+      "path": "packages/python/src/truss/_runtime_profile.py",
+      "sha256": "14b9fba7359c84e6d84d4b20e13dceebd364accc7d9fb17865f20c520b9b7450"
+    },
+    {
+      "path": "packages/python/src/truss/_security_association_binding.py",
+      "sha256": "2652e851820216205bb526ad8921109ddbbd8153fbea1338d7822d13ae400044"
+    },
+    {
+      "path": "packages/python/src/truss/_security_fact_coverage.py",
+      "sha256": "50bfd13be6b2ce0f82cc1e0d0ceffd2bc192020b2d4f5a96eaa27b72f2f34385"
+    },
+    {
+      "path": "packages/python/src/truss/_startup_custody.py",
+      "sha256": "5cb7426701c8f1b831d1dc4dff635935dab3284a9672cae49d49f36b9f0b5061"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json",
+      "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/manifest.json",
+      "sha256": "29a18995eacd7d51279ad65fc276f1f886612311ad26b941b42cdd2ae6dd89db"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/owner/producer-manifest.json",
+      "sha256": "89115bff6644db7f2fe7b292458994a94dc78ff0c4c3f608d7b1fe3eeb810bc8"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/owners/assertion-fields/producer-manifest.json",
+      "sha256": "bb628d522ab0811f73c39401cfe3019244fbb1bcbf541d4a86e91ab720654075"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/owners/declarations/producer-manifest.json",
+      "sha256": "bf135d2c1557c6855519bca76cead5ae21dbe546173abbedd640d9d776e6afc2"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/owners/record-members/producer-manifest.json",
+      "sha256": "9ffba23939061e096a94bcb37109479c7689e8b5ecbe8c6cd3baf1dfba2456c9"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/owners/reference-links/producer-manifest.json",
+      "sha256": "234a60fb0abae54a2c7b0ef4117f57c57f3734e77da348b5dc05de947119619d"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/owners/scalar-types/producer-manifest.json",
+      "sha256": "d375d1dc762e6da198edbeb4128bf0006ad57d202daab4fad5c77ba8a1c1a346"
+    },
+    {
+      "path": "packages/python/src/truss/_umf/runtime/package.json",
+      "sha256": "9a0a1f4e40bbd5082cbcc0f6b6b515368f2dc8dc60341affdc8c50571819bd49"
+    },
+    {
+      "path": "packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "c93e84e94d2925fec61264934bcfe1d94ce03e61c34b1e86281f18d38338d32c"
+    },
+    {
+      "path": "packages/python/src/truss/_umf_keys/manifest.json",
+      "sha256": "4e90f95322267ed1e7297a3eb2850f47ff86cdbba107c6859ea70a93b88b6537"
+    },
+    {
+      "path": "packages/python/src/truss/_umf_keys/producer-manifest.json",
+      "sha256": "1dc05f559f369de468ddec84ffdf99f99e229e1ec1474f5868d4062934d6254c"
+    },
+    {
+      "path": "packages/python/src/truss/_umf_keys_release.py",
+      "sha256": "f5810287041362626b0341a56aa9121a9cc801e9bf6513c9a3ed1293ab9f5129"
+    },
+    {
+      "path": "packages/python/src/truss/_umf_release.py",
+      "sha256": "f9f39b9c6b1311a0d5ba3c8bf66586eeb70af1759c96c44ff33d74492d4d4ba1"
+    },
+    {
+      "path": "packages/python/src/truss/assembly.py",
+      "sha256": "85d8ded7f3a61041d75852ba11959a80029dd2d00c42e9b86ef1d56b9b03ccb2"
+    },
+    {
+      "path": "packages/python/src/truss/assembly_contracts.py",
+      "sha256": "a1a92ef2989337d2fa7b2e7b487c80c183df58dc6978c2a5b94d0f061afe633f"
+    },
+    {
+      "path": "packages/python/src/truss/catalog_runtime.py",
+      "sha256": "626b241041e37329e799ccd657735a59b4710a0c545b2ceb24189e08a330384b"
+    },
+    {
+      "path": "packages/python/src/truss/catalog_view.py",
+      "sha256": "83177df450c654e555f8395ed19ec07aa86d2369d04e86c2d7f7d95b207676b5"
+    },
+    {
+      "path": "packages/python/src/truss/cli.py",
+      "sha256": "6a6b3fb751a73b7d338f531d514ec3e4b94c7fb58d4fe80351ff630a7cc7df37"
+    },
+    {
+      "path": "packages/python/src/truss/contracts.py",
+      "sha256": "a5a71937709f3a8704de9e33b87e8aadcb743ea9adcdeea8037a7d76b069bdbd"
+    },
+    {
+      "path": "packages/python/src/truss/edge_read.py",
+      "sha256": "aaf2cb35a0745748f709eafb3f6800ece0589f73ed264cc3523b7eed87f3b749"
+    },
+    {
+      "path": "packages/python/src/truss/execution.py",
+      "sha256": "6a9dc024bb0c31fcb5bbd2d07ce11c6795d9ae8afc8356a3ae7bf0ef42834c54"
+    },
+    {
+      "path": "packages/python/src/truss/groups.py",
+      "sha256": "9e754d96d26d1ea49541fbb5ad3fcd2e86fece7a8cbbc1d5fb724af7f1206fe0"
+    },
+    {
+      "path": "packages/python/src/truss/host.py",
+      "sha256": "783ad597b055bf29efffa9c7faec79a999db22a8fea6c70e580feb99af4dfa5a"
+    },
+    {
+      "path": "packages/python/src/truss/import_runtime.py",
+      "sha256": "ab2b9021cfc41a42ddd45f5f5508b3a81546559a407cb6dfd1bbfc3880cf039f"
+    },
+    {
+      "path": "packages/python/src/truss/imports.py",
+      "sha256": "740123b78b28129a3c476ee23a7b0d7f47236711f147c00368c649aa4ea3aaa1"
+    },
+    {
+      "path": "packages/python/src/truss/installation.py",
+      "sha256": "28245b7eed58f71b368e81d5e2a814a43f20160786d017945c3d8a9ea2001c0f"
+    },
+    {
+      "path": "packages/python/src/truss/local_runtime.py",
+      "sha256": "271049ba5356477f472a57b4e424a8e2bbf01e5d1d995e563ce200a3bae42ac1"
+    },
+    {
+      "path": "packages/python/src/truss/migration_planning.py",
+      "sha256": "1523a466555ab7b4075f501edd0570f9465c67a67558d2733b5c06984571c3a6"
+    },
+    {
+      "path": "packages/python/src/truss/numeric.py",
+      "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18"
+    },
+    {
+      "path": "packages/python/src/truss/object_read.py",
+      "sha256": "a37234247c67ea57460508ef0fdd6c25efd8bf46fe119d4ef8e216c41aed0968"
+    },
+    {
+      "path": "packages/python/src/truss/preparation.py",
+      "sha256": "fdd790047c1406e13d335951a50053013398e1b0068849e6bf3a4ebf73850af0"
+    },
+    {
+      "path": "packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4"
+    },
+    {
+      "path": "packages/python/src/truss/reader_catalog.py",
+      "sha256": "c3050450bd422aa9c3124fd9bb75c105b5e0ac011d7352e241d605f8ba4a57ff"
+    },
+    {
+      "path": "packages/python/src/truss/receipt_visibility.py",
+      "sha256": "82a87bb6017ca363ec2b846685d160f2b9550cc8375320d24cddd5dc5fcfe95f"
+    },
+    {
+      "path": "packages/python/src/truss/timestamp.py",
+      "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c"
+    },
+    {
+      "path": "packages/python/src/truss/weft.py",
+      "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be"
+    },
+    {
+      "path": "packages/python/tests/fixtures/security-association-binding.json",
+      "sha256": "56992af280c4fc4af51e5ad5a397b8afdeb9b92ece1c4fb7ed4eb3e8e7e2d3f9"
+    },
+    {
+      "path": "packages/python/tests/fixtures/security-association-core.json",
+      "sha256": "bb6a609480975f782bea1a8d6cae9e0623218a8711a7cba1669353ea8ef3962a"
+    },
+    {
+      "path": "packages/python/tests/fixtures/security-association-ontology.json",
+      "sha256": "0bb78119241c490c7a588805306536632f353ed6fead463564992fa67fc6a120"
+    },
+    {
+      "path": "packages/python/tests/fixtures/umf-string-key-vectors.json",
+      "sha256": "9d6bacdc85e27f4f273d6c4e4df49f8636d2168b05cf5bd255245d01f3f35d7e"
+    },
+    {
+      "path": "packages/python/tests/test_acceptance_json.py",
+      "sha256": "fdef3f104a89070ac6377a08af3970f351b4c8994916758db5469f3542c90eb2"
+    },
+    {
+      "path": "packages/python/tests/test_adoption_cancellation.py",
+      "sha256": "de2a21a987d236906f9b2eeb7c316ee0461b93dae63d948d3e0af31bd68f734d"
+    },
+    {
+      "path": "packages/python/tests/test_archive_self_write_fence_native.py",
+      "sha256": "e5dc136e8d23f5d2fec5849fd013b0b359e7dd748acbe1cb14037c94886ea0cb"
+    },
+    {
+      "path": "packages/python/tests/test_borrowed_host.py",
+      "sha256": "92bb10be6fa8a7c877c0a82263840fafd2f8b5d78572ac0a4f08cca373488deb"
+    },
+    {
+      "path": "packages/python/tests/test_bounded_receive.py",
+      "sha256": "3b98037f4ec1aa0f0f335ecdb5571156f1744426d4d399d21c27da188a5b2d4e"
+    },
+    {
+      "path": "packages/python/tests/test_buffered_ingress.py",
+      "sha256": "2a905f49c447d3fcd22f2ad0dd6d4e7a0fbd3d6f14b6011056b98137285612d9"
+    },
+    {
+      "path": "packages/python/tests/test_canonical_wire_tree.py",
+      "sha256": "c05acb3cb318b9444a76ecbd5cd8f7455e044b3d0fc00a1b13607835eae1d47f"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_additions_native.py",
+      "sha256": "8738598c272a4f9d2b4b60c10aca47bcbe21c0f46dfab0bf60f0a8df95c329d3"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_codes_native.py",
+      "sha256": "6868e0668f9cb297f4924051bf2a5721c4d8a48715799a11db840fd7fc1e3ea2"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_completion_physical.py",
+      "sha256": "a7e5950c7ab81b238d7b9500f20ea667f3badd4b182dbd5f9df8aad67213ba5e"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_configured_release_stage_native.py",
+      "sha256": "eecd6fbba2083a3dcecbf85e52a144d93fd65dfdd391dc8b0f17ef12799f5939"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_definition_source.py",
+      "sha256": "de807ee0917504b516c3612781f907f047b19de3b83fdd93bfb34ea76bbb7915"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_evolution_native.py",
+      "sha256": "3ec06ca19c57f5a79367282c82d1189d89b0b018d9debd004f356380ede67839"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_generation_native.py",
+      "sha256": "2c27384fc699789f456b89ae32cf91aa39a792aff577cbee106cf5be018ed06e"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_head_psycopg_native.py",
+      "sha256": "c44c27cbf8ee4dc736ef3841657a288f80e907d5a864139e04c1eae2fb9387eb"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_index_declarations.py",
+      "sha256": "8253f9cd6981b0eb83baae3e819483fbd4272e2083b608a58b0f3db2273631ca"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_installation.py",
+      "sha256": "c8549caf0b49bee60fdce8244c8532ab45b033ec7cc8c86b97838466caadcc34"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_lifecycle.py",
+      "sha256": "632d0e99511a1720433283d49acff97c327ae0bb01e6c86df98a6309382281bf"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_prerequisites_psycopg_native.py",
+      "sha256": "a305dbb976f1daafb36c0cbf2ab5d21a5bec00efa782202a3fe47b6bdc6c5dee"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_relational_support.py",
+      "sha256": "bbd14fd5f8ef17b826484fb7f52211c16d8fa19372c7138e39b75eb31d26581b"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_report.py",
+      "sha256": "922a4b5012ed289a9bdc37835ed6c15bb17d70c1e159daa6b260775b487e0415"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_report_assembly.py",
+      "sha256": "98eb21782cba8140865f617eb2a2c671778991ae3c3e5aa43ef3d25f71306dbc"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_report_release_native.py",
+      "sha256": "e760dd479b574eb656ccbea665aa01b7d6b10027438631ba7f2126fafba179f1"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_report_semantics.py",
+      "sha256": "9445191d285ccca8416edd512544fcbf8fbe8e7af7d6a62b5cea2f7b0f03ea19"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_report_write_candidate_native.py",
+      "sha256": "0df6ee291440f501d115d1e9a2d441e2916c59a1f5c6fc1ef922ff706cee3aeb"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_revision_obligation.py",
+      "sha256": "fb579610c38574f4b50c5b5499d8eee589a578963db7c8e9afe02ebb6a168d10"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_revision_registration_native.py",
+      "sha256": "dbb70d9da37e0cffefcaf7eb4e3204298d83ab6412e7afd4aeed0daa51d99a90"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_runtime_native.py",
+      "sha256": "2fcb25df7c4e75647a0d6bbc8e89cf0afc83587a3f9cd306922d6516f74e8f5f"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_source_candidate.py",
+      "sha256": "18c68cd7721a96240cc7b2d0fd2b1841294af9b11f8fde8f7941c1784bea8d26"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_stage_issued.py",
+      "sha256": "4180c8382f2243337acd0e3bd2a23761b8a782478e6627aa3f871af6d33b557f"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_staging.py",
+      "sha256": "6427093ea23967c11aaf29d832fa0727224015049f08263d3529146bb0524373"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_support.py",
+      "sha256": "477560c56a43ccd40748b78fd1c07cf704cbab38c4c7871dfb3dac1ff6f1a284"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_unchanged_native.py",
+      "sha256": "3c9bc172655b7e669335472661b2094fca1183ffae1e0628b8dbf0d49af56a56"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_view_contracts.py",
+      "sha256": "70dc5627ba77fb18100c083a04958a83a1cdcf2d55f334476b7f0430f8af03b7"
+    },
+    {
+      "path": "packages/python/tests/test_catalog_view_revisions.py",
+      "sha256": "3d405315d623dba3297c541932fdb893dafb20d201330e1e252c95e2fe23ca1d"
+    },
+    {
+      "path": "packages/python/tests/test_configured_catalog_request.py",
+      "sha256": "f8f7e2967d1271e08b9c76be3db82319109640b8107dae7c56cab8ef14002a28"
+    },
+    {
+      "path": "packages/python/tests/test_configured_catalog_stage.py",
+      "sha256": "fb9f9003071ab50aefe8b52aabdfa40451ba7e6981817e44f92895bdac630aeb"
+    },
+    {
+      "path": "packages/python/tests/test_construction_recovery.py",
+      "sha256": "44326dd927a1d4648eee93b90ec2a67b2deca486697321dc8928210b50376863"
+    },
+    {
+      "path": "packages/python/tests/test_directory_resources.py",
+      "sha256": "d98de265dd42f81176647267ed14dc7d2462d68c71accd2d746e218c0709937c"
+    },
+    {
+      "path": "packages/python/tests/test_edge_event_frame_native.py",
+      "sha256": "aeee0cd4edc0ae7923437d845fa40816474712bdb738e67706fa7fa90abff0f0"
+    },
+    {
+      "path": "packages/python/tests/test_edge_mutations_native.py",
+      "sha256": "2cc0551ef0f55d6c779aeb0dfd11259747e7392b97f59d00593880c47b666d9f"
+    },
+    {
+      "path": "packages/python/tests/test_epoch_state_fence_native.py",
+      "sha256": "83e32f0716a2188fd35c2216dd1ff1a46f90cae9510f744fd6a37677c76362af"
+    },
+    {
+      "path": "packages/python/tests/test_exact_numeric.py",
+      "sha256": "1b7753e6692cd19575e401612056159dae06df6c2769589800ce0429a165c458"
+    },
+    {
+      "path": "packages/python/tests/test_exact_scalar_values_native.py",
+      "sha256": "d8025d18c66eef53289b6f32015336f6641cf81ceae3c23c2999c30523cfe29b"
+    },
+    {
+      "path": "packages/python/tests/test_exact_timestamp.py",
+      "sha256": "8d9d1c2364d474d98f1ab63ad586a8c3c11148ff12950e94bef424f1e997379f"
+    },
+    {
+      "path": "packages/python/tests/test_fresh_catalog_dispatch.py",
+      "sha256": "a57455f2fb68a58273e22cdc9a3ba07a1ed90b832bfbf92cfff2ffe956b562cb"
+    },
+    {
+      "path": "packages/python/tests/test_group_create_native.py",
+      "sha256": "13fbcc9c6293da7fce5a1339b31bce4a96beb1e7d51eee3fe486f1c4afc6d3cc"
+    },
+    {
+      "path": "packages/python/tests/test_group_preconditions_native.py",
+      "sha256": "91d2282b40a9d7f3a30e00fad41ac0a0eb66749d5748e4f0924641461b8c0f9a"
+    },
+    {
+      "path": "packages/python/tests/test_host_call_recovery.py",
+      "sha256": "d6eeab29b8fe477743400aa77048ca493708a9a7546a7a7b0ef1e6ca092c9485"
+    },
+    {
+      "path": "packages/python/tests/test_host_control_custody.py",
+      "sha256": "badfe64c70cb7db2b5aa40e65110784c93206cf44c31f107fd5f4396483f229f"
+    },
+    {
+      "path": "packages/python/tests/test_host_control_deadline.py",
+      "sha256": "19e1b8666ffea4307c814da0109c8e7d5db2bfcd8fd860ab6377a48f0b91a507"
+    },
+    {
+      "path": "packages/python/tests/test_host_execution.py",
+      "sha256": "2e8aac90abcc3c34cc8fa21d7e90e9a74d237f1a451795863550c08dbc063d7f"
+    },
+    {
+      "path": "packages/python/tests/test_host_session.py",
+      "sha256": "cdca964787c647804d443b096d903a2c184ad15ee29020ff1de0978e654ef2f8"
+    },
+    {
+      "path": "packages/python/tests/test_host_simple_recovery.py",
+      "sha256": "40aa159fd7b6c985d020a610fcaf899a46118f21e75ad0a30824ceb600d37aef"
+    },
+    {
+      "path": "packages/python/tests/test_import_contracts.py",
+      "sha256": "1e8a870c06f6cd139e4ca4d79e644bb7883c522cd5ee9aee698db36b1dc3fa6e"
+    },
+    {
+      "path": "packages/python/tests/test_import_runtime_native.py",
+      "sha256": "ec6cf83c832a9763cc7fac9f437151c95c43f4100a76ebc167efb178df1b1742"
+    },
+    {
+      "path": "packages/python/tests/test_installation_archive.py",
+      "sha256": "b8c4a03c04d7d919e9e506011b9de185c10af3ce53eb81709e983efaf5c6c51b"
+    },
+    {
+      "path": "packages/python/tests/test_installation_metadata.py",
+      "sha256": "e956420f72c8de97165e51668b7f169937c9b6f4da489dffda4a6509fccf276c"
+    },
+    {
+      "path": "packages/python/tests/test_installation_observation.py",
+      "sha256": "c669d78c89484667895696d840943ae9c83676dadb4bfbac9d7b1c77a6711347"
+    },
+    {
+      "path": "packages/python/tests/test_installation_privileges_native.py",
+      "sha256": "67f829b87f937a71fa131b184c23925b80d53ca5e07e482133ce8979503aa623"
+    },
+    {
+      "path": "packages/python/tests/test_installation_resources.py",
+      "sha256": "5381de8757723f6aaf4183b007e6e0ab69612430182995cdda4dcb08973cbdc5"
+    },
+    {
+      "path": "packages/python/tests/test_installed_admission_inventory.py",
+      "sha256": "61d315c0e529feb1f1949d71068e0e5d9b1553d290d1968b6f57f97c3e776ddb"
+    },
+    {
+      "path": "packages/python/tests/test_installed_admission_operator_routes.py",
+      "sha256": "db8f18355ff3cf3d518b0ef8dea579eab5ef6ca29d82904e6d512cd45b083a7e"
+    },
+    {
+      "path": "packages/python/tests/test_key_lookup_native.py",
+      "sha256": "f61c7d834c40ea09cd4c7957a918b226310dc3c809753204d351a803284c89b8"
+    },
+    {
+      "path": "packages/python/tests/test_local_runtime.py",
+      "sha256": "f7f6fae6ca9ce6847bf82b059cb203aa1ae99b72d12d24678d6070212d28c413"
+    },
+    {
+      "path": "packages/python/tests/test_migration_planning.py",
+      "sha256": "f967bffffefc22e62378e8410f19c5f5ddd6b84895c53c0a9fccb0c65388e8d6"
+    },
+    {
+      "path": "packages/python/tests/test_native_admission_capture.py",
+      "sha256": "09ce60d6381e5a955a015d729210df6cc1e6891ee58fe9eb625f84c779cc6622"
+    },
+    {
+      "path": "packages/python/tests/test_native_admission_dispatch.py",
+      "sha256": "062be486b3a2e6a39e7d813991c60250508cba0a2b9344fb889b45ed4e9113f1"
+    },
+    {
+      "path": "packages/python/tests/test_native_admission_preparation.py",
+      "sha256": "94368cad54a3e59d819c90abaca86a2f2c4356eb182ab7bbf4683b02536605be"
+    },
+    {
+      "path": "packages/python/tests/test_native_admission_request.py",
+      "sha256": "8436b1108199a8fbf7695f2dc070f4ea9cde53c2496401630b0fa3dcdd723f68"
+    },
+    {
+      "path": "packages/python/tests/test_native_admission_request_postgresql.py",
+      "sha256": "7180f53f00ecb963ea469d9e6187b35b12807df4628e6e519b3da9bb0791bddb"
+    },
+    {
+      "path": "packages/python/tests/test_native_adoption.py",
+      "sha256": "aa7b70a118538cc2b4d49e68f6b6c785c4f8f53503bc0b6f366e2ca2940fedd1"
+    },
+    {
+      "path": "packages/python/tests/test_native_arbitration.py",
+      "sha256": "3e0f6b63ea806205d86b2e717b388ac516a98f5d83427ff5c0b7af4f5ea34a8e"
+    },
+    {
+      "path": "packages/python/tests/test_native_bootstrap.py",
+      "sha256": "1772bf30f0c7bd8bde7ec0613a0e427de9d6cf1828a87a0bde142706597b4cf5"
+    },
+    {
+      "path": "packages/python/tests/test_native_call_root.py",
+      "sha256": "e63feb15b3ca80c64af58031f1ccbec7f45d71d5597f142844c8ea09ed604e6f"
+    },
+    {
+      "path": "packages/python/tests/test_native_cancellation.py",
+      "sha256": "e3419c53b26900f6fb77a6fe39be39743ca22b651d8f4b817738cb174e931a19"
+    },
+    {
+      "path": "packages/python/tests/test_native_catalog_dispatch.py",
+      "sha256": "ace0e876b7d40e305584dc218f6b082c8cdc0eab3efc06fe42da0cef5f489f18"
+    },
+    {
+      "path": "packages/python/tests/test_native_connected_string_writer.py",
+      "sha256": "939d6e3f847d27fdbb25558b8cc34a5e9e62d96763967941ba79e78326ed7f36"
+    },
+    {
+      "path": "packages/python/tests/test_native_deadline.py",
+      "sha256": "3c139c599d80501a3cffca4ca0163a6f7ded563fdaaffd7b35509a613abcbc92"
+    },
+    {
+      "path": "packages/python/tests/test_native_dependent_owner.py",
+      "sha256": "fd92f343cbd0f88d3f9c6cf40ef83d66ef1bbf39d3f05e789dcf094de00b703b"
+    },
+    {
+      "path": "packages/python/tests/test_native_edge_limit.py",
+      "sha256": "2e499a212ba74423e9d564f99d7707840eccbc43f20471560c92f3026ab22f7e"
+    },
+    {
+      "path": "packages/python/tests/test_native_epoch_acquisitions.py",
+      "sha256": "5f83654adf2cd86a62b43eaa3020ebf90bc3125389e63aed99b85a4b1b86181d"
+    },
+    {
+      "path": "packages/python/tests/test_native_fresh_epoch_capture.py",
+      "sha256": "2b92301ea6515bfcc4730aac2bbac1fcb3af51cb309e23a0c410cc06b05deb12"
+    },
+    {
+      "path": "packages/python/tests/test_native_ingress_deadline.py",
+      "sha256": "9d18c8c687d5eb74935fe6eeda343e2b2ee1cb2a928daecd29a548f062dcfcb3"
+    },
+    {
+      "path": "packages/python/tests/test_native_operation.py",
+      "sha256": "ab6fa9a27454a3146176491705419a7dd832483bb90f48c359297f9707c0b6d8"
+    },
+    {
+      "path": "packages/python/tests/test_native_operation_ordinals.py",
+      "sha256": "f23002ba59d57852e273cc2c2ad2bc4aa1da245a01fe1d1b0b6693f1729b5ae8"
+    },
+    {
+      "path": "packages/python/tests/test_native_outbound.py",
+      "sha256": "7a3bf77aa4645934d8585beb2fab69c4e9f781b55f1c936422996948b62d33ea"
+    },
+    {
+      "path": "packages/python/tests/test_native_pg8000.py",
+      "sha256": "f76689af6179c072940a6cfea69f319d64a9d752d3182be1ee7b3baadfbe896d"
+    },
+    {
+      "path": "packages/python/tests/test_native_resources.py",
+      "sha256": "5979cf9acd42e5e5003b2f262ed06384061dca7a887cb4f5b8c7b1046dfdc2e8"
+    },
+    {
+      "path": "packages/python/tests/test_native_source_census.py",
+      "sha256": "6977974e7a020c288c00d142aa545ae8a81990045a19791148f289387c20cbb2"
+    },
+    {
+      "path": "packages/python/tests/test_native_state_owner.py",
+      "sha256": "203bd4ad837135b046c653ed612eea36d0f83431a9403a07532a4ac106a7ce54"
+    },
+    {
+      "path": "packages/python/tests/test_native_string_candidate.py",
+      "sha256": "a4b698d7d2e0297223e9f21da94199161eb1fa1e7948de5b44ad0a42d4b10a3e"
+    },
+    {
+      "path": "packages/python/tests/test_native_string_dispatch.py",
+      "sha256": "3ee419073e3d08278eb1fb513278246175c977496045600e418a2e4f3b75df52"
+    },
+    {
+      "path": "packages/python/tests/test_native_transactions.py",
+      "sha256": "113006f757ed2d9b11805b8b59b1b11f06063c2a142e6b45bd6cb2b46e8b07b8"
+    },
+    {
+      "path": "packages/python/tests/test_numeric_binary_native.py",
+      "sha256": "63c6811fc0a6fc19f942e79a879f72ba764ce11ce7b7045d3eb1e9edee406095"
+    },
+    {
+      "path": "packages/python/tests/test_numeric_row_image_native.py",
+      "sha256": "cfbbc70dc9aca70c2d71261ef5271a31ade905ef546f603de948f9009ef28c13"
+    },
+    {
+      "path": "packages/python/tests/test_numeric_witness_native.py",
+      "sha256": "835a576d851dba8f9e7f81e6d21c7e570f31a5019809d224ef4679bcd8c363aa"
+    },
+    {
+      "path": "packages/python/tests/test_object_mutations_native.py",
+      "sha256": "ffb2207a72db3d53ad15112a106382c1ad1b6ecb36ae297a011642b9588dc532"
+    },
+    {
+      "path": "packages/python/tests/test_object_pages_native.py",
+      "sha256": "5e1acc02f7e0eedaf4c7884cb09284b44980805cf90618db5939360a436eb57b"
+    },
+    {
+      "path": "packages/python/tests/test_object_read_native.py",
+      "sha256": "5852ae4a12827aec7beb28702f24d6bc1e1c0fb141ad5a00f5c7d855cac97628"
+    },
+    {
+      "path": "packages/python/tests/test_object_string_key_native.py",
+      "sha256": "9bfdc8b8117e8fd9a95f299137028e37c752f04c1d851549d9771288ea03ddb8"
+    },
+    {
+      "path": "packages/python/tests/test_operation_admission.py",
+      "sha256": "50ed2a3ebbd82e02f7e1a055ba66d38db347ec8c27965052d3cecfe68b1f98b7"
+    },
+    {
+      "path": "packages/python/tests/test_operation_arbitration.py",
+      "sha256": "2293196112e5a7c48b4a85c6f928c9b610b68b3c5cfd03ba061312dd15fa1088"
+    },
+    {
+      "path": "packages/python/tests/test_operation_ordinal.py",
+      "sha256": "c2a0fa55bb622a64151afbfb7a4a684a44220b69884440c84a1bcfbf8678ca85"
+    },
+    {
+      "path": "packages/python/tests/test_operation_registry.py",
+      "sha256": "bb210a0e1ca1428ece5b63fbdae0a02ff09ad9807e0f6400c04da73e8e995db3"
+    },
+    {
+      "path": "packages/python/tests/test_owner_evidence_json.py",
+      "sha256": "e5fa954f2527f6b70284859790c0dd89638b3408c4841642048063f298164ebb"
+    },
+    {
+      "path": "packages/python/tests/test_preparation.py",
+      "sha256": "d2dc7fa6aae3e2066a9bfdf4824f12cae876caa20f1b3db04f8dc284b49fa935"
+    },
+    {
+      "path": "packages/python/tests/test_psycopg_epoch_cut_native.py",
+      "sha256": "a171e5ff75bd168c3fdf35341128acf648e655baaebf6652e5e8186f42e10e12"
+    },
+    {
+      "path": "packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "5965ae835d1099740a24e47d0452df6f6ae8e4ee516622f69a2c603908bea161"
+    },
+    {
+      "path": "packages/python/tests/test_psycopg_graph_projection_native.py",
+      "sha256": "5d71093947005a903e95aca5cad0442b074126094f8864e4fbee948a3914faec"
+    },
+    {
+      "path": "packages/python/tests/test_psycopg_host_native.py",
+      "sha256": "6b08fd001a6f41c81104226431c45dddc4deb7f90c4c36787a02324c48b9e4c1"
+    },
+    {
+      "path": "packages/python/tests/test_psycopg_pg17_native.py",
+      "sha256": "e91f8c4601d08884c3b52cddefc0c4232845a2b6f8bbaf7cfeadb835fa7c0107"
+    },
+    {
+      "path": "packages/python/tests/test_psycopg_semantic_ordinals_native.py",
+      "sha256": "664612a72e486e6267bcfefe95be3a505483d43482e88a382af6214e354bc44b"
+    },
+    {
+      "path": "packages/python/tests/test_public_contracts.py",
+      "sha256": "6e6eadada4c82a74988d9f3f42dba21fba888ebba769fa171bffec94b9482d5c"
+    },
+    {
+      "path": "packages/python/tests/test_public_host.py",
+      "sha256": "c44d2f83154c52be9d0d98860d42a7ad4f61eeb4d182acf028cf850af713edef"
+    },
+    {
+      "path": "packages/python/tests/test_public_inspection_assembly.py",
+      "sha256": "3c6f2ec23bedbda0348b6536f51648ac55a02a720f56383032c58de5a9819cef"
+    },
+    {
+      "path": "packages/python/tests/test_query_execution.py",
+      "sha256": "403759cc37ae7c1b5b0bdf025bed23e4eaa84fc0715ce362c605ffe4edc30ed0"
+    },
+    {
+      "path": "packages/python/tests/test_read_only_public_native.py",
+      "sha256": "910949a958cb34de5e2e8a835fc4c3a64ddef477a37061e02b9efaad70591e9f"
+    },
+    {
+      "path": "packages/python/tests/test_reader_catalog_native.py",
+      "sha256": "b59a1e9671ad7e457e079beaf7275c40eb9a21c107a017981597308e4e0df8fc"
+    },
+    {
+      "path": "packages/python/tests/test_receipt_position.py",
+      "sha256": "deb2f95c0dc04bb6f615f680aadcf88bc7d707e0dabebb407f2d4212af4068a7"
+    },
+    {
+      "path": "packages/python/tests/test_receipt_visibility_native.py",
+      "sha256": "c2e00a108402f333fa2801eddbb041c03a19803ffcd0f91470ac53181b761de0"
+    },
+    {
+      "path": "packages/python/tests/test_reference_assembly.py",
+      "sha256": "1a4d9612be371bcbd342715e69215fe30c68a6af2b5f2eb1802c1db0d0be1e3b"
+    },
+    {
+      "path": "packages/python/tests/test_reference_decimal_native.py",
+      "sha256": "06345f4411b45322e8043b747c217c876b41a2fc3a53f76fcc852459c778d851"
+    },
+    {
+      "path": "packages/python/tests/test_resource_registration_preflight.py",
+      "sha256": "5f7ca57e291ba76645c37a7405005db81a0b30b2f3f034c6d6bd18706ded7ba1"
+    },
+    {
+      "path": "packages/python/tests/test_routine_ddl_barrier_native.py",
+      "sha256": "b2dfcd6da0016285e8aa1e4a3168befa5a5968525c11266ce7a6d94989812dcb"
+    },
+    {
+      "path": "packages/python/tests/test_row_event_attribution.py",
+      "sha256": "3b1492a678b12f182c546511c455ed1df951c92fd23473e1b5cb8582f50b45ac"
+    },
+    {
+      "path": "packages/python/tests/test_row_forest_native.py",
+      "sha256": "67d7758f5679ad359ed01ff133689b2a6aa435e4b77838eedad422d3cbb89aa6"
+    },
+    {
+      "path": "packages/python/tests/test_row_group_custody.py",
+      "sha256": "91c9ff5078d4f6e18414227487f6991db44785433c3761d481727c08d06aa0a3"
+    },
+    {
+      "path": "packages/python/tests/test_row_image.py",
+      "sha256": "306a88711bcd722d8fb5777aaa6e6f3e59c554ad6803d5a320ac9eb60e256c05"
+    },
+    {
+      "path": "packages/python/tests/test_row_image_capture.py",
+      "sha256": "625cd53420fe2540a31fd4a9ffa662d341497a970bbbae04187abfdb26511d9a"
+    },
+    {
+      "path": "packages/python/tests/test_row_image_scalar_shape.py",
+      "sha256": "6638fa27e7c409009698971d0fca1be3066e3158a45f4ff5c87ac7210be3ee76"
+    },
+    {
+      "path": "packages/python/tests/test_row_image_tree.py",
+      "sha256": "7db423639a8fc2bf89358b2355c6faf8b84185b986a3bd44a850657f777ff2c8"
+    },
+    {
+      "path": "packages/python/tests/test_row_operation_address.py",
+      "sha256": "71a468e516a3c3bdd257b9e1abc7cd18ffee114e1af889a425780aad61bd43ec"
+    },
+    {
+      "path": "packages/python/tests/test_row_operation_context.py",
+      "sha256": "f59a659d5afa1d543060c0ef4653ab946249c183f67e258c11ae18257615b35a"
+    },
+    {
+      "path": "packages/python/tests/test_row_operation_custody.py",
+      "sha256": "10384de66272d5dcfe296aa5387b463995cf4a8f3036ec7e116636076bece853"
+    },
+    {
+      "path": "packages/python/tests/test_row_operation_json.py",
+      "sha256": "c99efd63b0a78b35bc8c7d9de0565bb2b5bd30244e1babf88550ecb5cceb910f"
+    },
+    {
+      "path": "packages/python/tests/test_row_registry_correspondence.py",
+      "sha256": "842dca68f100f06ea000075258ea4bb1652029bdfa5dc62b599ceba42dfd6c22"
+    },
+    {
+      "path": "packages/python/tests/test_row_touch_observer_native.py",
+      "sha256": "9765a80f74cc636136d217bf8d5cb5b2f47cac8dc4a2d89505680c85298ef2c5"
+    },
+    {
+      "path": "packages/python/tests/test_row_touch_registry.py",
+      "sha256": "9d46552a61b1dd3426be78152b410f575b7d272b086334074fa9afda8389cc83"
+    },
+    {
+      "path": "packages/python/tests/test_security_association_binding.py",
+      "sha256": "a5064a02048ed54cf60248583ec6f3644a1b3aa329c5be8aade858a845e658f4"
+    },
+    {
+      "path": "packages/python/tests/test_security_fact_coverage.py",
+      "sha256": "9a6ce93301cc41e1d943202ec76f000ac596d52a882be3c1a7893cf164ed9abe"
+    },
+    {
+      "path": "packages/python/tests/test_security_fixture_privacy.py",
+      "sha256": "d859290bc7c2518857c3066b547cd7ed9a3cb17f7625a8e553eef5ee393e59ae"
+    },
+    {
+      "path": "packages/python/tests/test_security_graph_source_cut_native.py",
+      "sha256": "eda7cf708b096a718cd1ace94e80b953c6b61a003384716e935e9ffdb755d111"
+    },
+    {
+      "path": "packages/python/tests/test_security_preparation.py",
+      "sha256": "cd989f6bee53338e41d6306af0e54f9bd735b65985aeff735bed65b9b843ad53"
+    },
+    {
+      "path": "packages/python/tests/test_security_public_ontology_native.py",
+      "sha256": "f1d3c997ad140fca0bbef4e0b9b3cac224d2175b1746a6dc16172d743e653080"
+    },
+    {
+      "path": "packages/python/tests/test_string_key_bucket_native.py",
+      "sha256": "0bc2b9c77118d99faf4cef17ee8ebed66383ecf44bd0c63c54b56fad47df40ba"
+    },
+    {
+      "path": "packages/python/tests/test_touch_operation_correspondence.py",
+      "sha256": "fad338c7887d88294a4668b5d6e25612d993df1c7b1fd27d730df76626846031"
+    },
+    {
+      "path": "packages/python/tests/test_umf_key_tuples.py",
+      "sha256": "304163a6662555198f9af85303f3f385077b6c10c83c67fa3f1f01817f893754"
+    },
+    {
+      "path": "packages/python/tests/test_umf_string_key_verifier_native.py",
+      "sha256": "d59a825cc5036c66c612278b4f6f975e5091f07215c5a015dba315a2eb23efab"
+    },
+    {
+      "path": "packages/python/tests/test_weft.py",
+      "sha256": "7ff2541d371c16c8d8d84b573f20a7961c4cbb2f5d434db3ce45d207e83d7591"
+    },
+    {
+      "path": "packages/python/tests/tools/canonical-wire-tree.ts",
+      "sha256": "b6f5978c8a07efe1e0727c9fd221bca8153c0ca790fa495c33f14c73e510c5f1"
+    },
+    {
+      "path": "packages/python/tests/typecheck_host_assembly.py",
+      "sha256": "7391edad40f0bd8bc97480e6b9b520e9d4e71ff539dae59545da644f6d5fcb96"
+    },
+    {
+      "path": "packages/python/tests/typing/group_consumer.py",
+      "sha256": "3dce97c5251da3350f8d2de575c60eaf7a5cb0d23b7fbd866d1c5db6085ac15f"
+    },
+    {
+      "path": "packages/python/tests/typing/group_consumer_invalid.py",
+      "sha256": "62e8d2a0641631e79e721258c777da160863ff8b87447d83ff76a1b40dbab7d2"
+    },
+    {
+      "path": "packages/python/tests/typing/import_consumer.py",
+      "sha256": "156b7221c3900c14d43fb86bbdd6fac03cf4fd98c8197b67a366db3ec44df6a2"
+    },
+    {
+      "path": "packages/python/tests/typing/import_consumer_invalid.py",
+      "sha256": "0357f5c99ca78580f792b2689224c60408b108c41a7aa9ebd6cf4f3e077179d4"
+    },
+    {
+      "path": "tests/fixtures/security-public-ontology.ts",
+      "sha256": "cba615773262214f92da700548f52b2ea3e38d508ef241ecbbab8c29a46d2c0f"
+    },
+    {
+      "path": "tests/security-candidate-condition.test.ts",
+      "sha256": "fd7f6824341530e0d6273db4c0cad8d34e2f54fbd0d396b7947ca8485fd8706e"
+    }
+  ],
+  "validation": {
+    "candidateConditionTests": {
+      "passed": 26,
+      "failed": 0
+    },
+    "strictSecurityTypecheck": "passed",
+    "nativeRegression": {
+      "passed": 1,
+      "observations": 60,
+      "serverVersionNum": "180006"
+    },
+    "browser": {
+      "version": "153.0.8010.12",
+      "emissionComparisons": 1
+    },
+    "pythonBoundaries": {
+      "passed": true,
+      "imports": 723
+    }
+  },
+  "scope": "Candidate supplied-source checks for required nonnull Record Key and endpoint Key columns, outside authored filters/negation. Actual graph missing Project B key preserves four ownership-edge occurrences, produces indeterminate despite valid Alice/A path, refuses ordinary counts and restores the original decision after repair. Chromium matches actual ontology fold SQL.",
+  "limitations": "Nonnull required-key subset only; no nullable-key codec admission. Checks visible rows in supplied selected scans, not authenticated complete population or arbitrary omitted facts/rows. Original mapping/domain/source enrollment, held authority/cut, full diagnostics, streaming/publication and backend cases remain unqualified. No current public runtime security setting changed.",
+  "failedAttempts": "One outdated negation-placement expectation and missing type annotation; corrected. Initial browser launch denied macOS process-port registration under sandbox; isolated authorized launch succeeds. Original logs/preimages retained.",
+  "artifacts": {
+    "truss-endpoint-keys-native.json": "34518e15f0893240dfe10efca8230a97da18d51560a64acb765911f017a3de05",
+    "truss-endpoint-keys-browser.js": "55a5554f303d2c50432a16494560e9f773b691104c00bb8eb0052149891960c4",
+    "source-preimages.zip": "de7fc33cbcfafe7a05855b094b362688333e9022b5136de0981bfae139540e61",
+    "truss-endpoint-keys-first-attempt.typecheck.log": "b0ba3fc4c82e3f9ec1014d381c6a8f16ed31739899540075a92ade9b6bb51d21",
+    "truss-endpoint-keys.bun.log": "055e99a6cd5dc50b786f2b3a9cb9b465128cdc8bbb09be32c5777c68c172d7f2",
+    "truss-endpoint-keys-native.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "truss-endpoint-keys-browser.build.log": "b8dda1c590191b852fa6b78cef28ef0bdc602ffaa84af2e5f2b7b38a4b0722fd",
+    "truss-endpoint-keys-browser.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "truss-endpoint-keys.boundaries.log": "27a8acc0a321b882668a9e76c41f154b5ac3bd99577d18846a526c978e7d1833",
+    "truss-endpoint-keys-check-browser.ts": "84df2686d2d5015cf0748c0e061b82aa142181dc34dc6a069460af33eb0e6fdc",
+    "truss-endpoint-keys-browser-first-attempt.stderr.log": "3b62cfceae2cc7e32b3a2363a534884e798f8f0fed0a0118c12ac1a47a1e0d1f",
+    "truss-endpoint-keys-browser.ts": "894c78a1c052534a6cfca82724395b4fa178beb3c6bea42fc687f17ca436ce90",
+    "truss-endpoint-keys.typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "truss-endpoint-keys-native.stderr.log": "db7dd5016e9563b144eec3d0bb8b4f5056bf4bfa69fca2948ef86c3bfe073ebc",
+    "truss-endpoint-keys-browser.json": "c1b25c938439d331cf071794e9c7d5320c96747842f50a98b30237be916434b1",
+    "truss-endpoint-keys-first-attempt.bun.log": "3e862b1ec4f7e6248f614e8e88e00ac91790929dece9c2c6db8037bb33c45891",
+    "truss-endpoint-keys-browser.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "truss-endpoint-keys-first-attempt.zip": "6e00e22c3a0105adc3eb0df3039c497ad970ad18de16ce16ce0fe371839ea59d"
+  }
+}
