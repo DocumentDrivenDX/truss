@@ -1,0 +1,37 @@
+{
+  "solver": "4.15.4",
+  "queries": {
+    "probe-only-counterexample": {
+      "result": "sat",
+      "witness": {
+        "acquire": 0,
+        "probe": 1,
+        "loss": 2,
+        "ack": 3,
+        "release": 4
+      }
+    },
+    "retained-exclusion-no-stale-release": {
+      "result": "unsat",
+      "witness": null
+    },
+    "successful-release-before-loss": {
+      "result": "sat",
+      "witness": {
+        "acquire": 0,
+        "probe": 1,
+        "loss": 3,
+        "ack": 4,
+        "release": 2
+      }
+    }
+  },
+  "independentEnumeration": {
+    "orders": 120,
+    "base": 3,
+    "probeOnlyStale": 1,
+    "retainedStale": 0,
+    "successfulRetained": 1
+  },
+  "scope": "Exactly five distinct events, one participating revoker, one buffered release. Required exclusion through release is a premise; not proved by a positive probe. No time, simultaneous events, arbitrary executions, source/caller authenticity or native refinement."
+}

@@ -108,3 +108,28 @@ Trace original guard acquisition under CONTRACT-005/063. This returns candidate
 values only: supplied expectations are not trusted issuers, copied values are
 not native exclusion/completion evidence, and no AuthorityLease is created.
 Production original source/caller/liveness, bootstrap and release remain required.
+
+
+### Positive probe is insufficient for final release — 2026-10-12
+
+The native ontology fixture now obtains a successful `SELECT 1` on the original
+coordinator after verifying the waiting authority writer. It then terminates only
+that owned coordinator, observes acknowledged revocation, and compares the retained
+RA/RAB buffer with a fresh empty ordinary read. The fixture discards that buffer;
+publishing it using the earlier positive probe would violate current authority.
+A positive liveness response does not establish exclusion through later disclosure.
+
+The five-event finite ordering model retains three solver queries: probe-only
+stale-release SAT, exclusion-through-release stale-release UNSAT, and successful
+release before loss SAT. An independent enumeration checks all120 total orders.
+The UNSAT claim assumes the very exclusion-through-release property that production
+coordination must implement; it does not establish that property for a native
+connection or a host callback. It does not prove arbitrary concurrency, driver
+refinement, identity custody, simultaneous events or clock expiry.
+
+Sources,176 native observations and formal results are retained in
+`../../04-build/evidence/security-positive-probe-release-20261012/receipt.json`.
+Trace CONTRACT-063, STP-057 L03/L11 and US-057-AC2/AC7. No required case is
+promoted. A future production admission path must refuse buffered publication
+when continuous release exclusion cannot be established; merely adding a final
+pre-publication probe does not close this race.

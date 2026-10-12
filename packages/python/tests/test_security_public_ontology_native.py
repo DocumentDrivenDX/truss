@@ -262,6 +262,8 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
     if coordinator_pid in blockers:break
     time.sleep(.01)
    self.assertIn(coordinator_pid,blockers);observations.append({'id':'authority-writer-waits-on-original-coordinator','observed':blockers,'coordinatorPid':coordinator_pid})
+   successful_probe=coordinator.execute('SELECT 1').fetchone();self.assertEqual(successful_probe,(1,));observations.append({'id':'coordinator-positive-probe-before-native-loss','observed':list(successful_probe),'qualification':'positive probe alone does not cover subsequent release'})
+   stale_buffer=list(pending_buffer)
    terminated=self.admin.execute('SELECT pg_terminate_backend(%s)',(coordinator_pid,)).fetchone()[0];self.assertIs(terminated,True);observations.append({'id':'owned-original-coordinator-terminated','observed':True})
    with self.assertRaises(psycopg.OperationalError) as loss:coordinator.execute('SELECT 1')
    observations.append({'id':'original-coordinator-native-liveness-probe-fails','observed':{'kind':type(loss.exception).__name__,'sqlState':loss.exception.sqlstate}})
@@ -272,6 +274,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   pending_buffer=[];observations.append({'id':'lost-coordinator-buffer-withheld-by-fixture','observed':pending_buffer,'qualification':'explicit fixture release arbitration, not a production lease'})
   with psycopg.connect(**params,autocommit=True) as fresh:
    actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'new-read-after-coordinator-loss-observes-revocation','observed':actual})
+   self.assertEqual(stale_buffer,['RA','RAB']);self.assertNotEqual(stale_buffer,actual);observations.append({'id':'positive-liveness-probe-retains-stale-buffer-counterexample','observed':{'bufferBeforeLoss':stale_buffer,'freshAfterRevocation':actual},'qualification':'would leak if published using only the earlier positive probe; actual fixture withheld it'})
   # Same logical Record/Relationship condition over independent raw tables.
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])));rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,4)).fetchall();self.assertEqual(rows,[('1',installation_bytes.hex(),profile_bytes.hex(),'5')]);authority_writer.execute('COMMIT')
   self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.client(code text PRIMARY KEY);CREATE TABLE relational_fixture.project(code text PRIMARY KEY);CREATE TABLE relational_fixture.staff(code text PRIMARY KEY,login text NOT NULL);CREATE TABLE relational_fixture.resource(code text PRIMARY KEY,secret text NOT NULL);CREATE TABLE relational_fixture.assignment(code text PRIMARY KEY,active boolean NOT NULL)')

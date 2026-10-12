@@ -1,0 +1,22 @@
+{
+  "executedBaseCommit": "9164d4899a0013524232b88a3024ef4de52a8be7",
+  "nativeObservations": 176,
+  "trace": [
+    "CONTRACT-063 final protected release and custody",
+    "STP-057 L03/L11",
+    "US-057-AC2",
+    "US-057-AC7"
+  ],
+  "conclusion": "Successful native probe precedes coordinator loss and acknowledged revocation while the old buffer survives. The fixture discards it. Earlier positive probing cannot alone justify later publication.",
+  "scope": "Precursor and counterexample only. Required-case matrix unchanged; production release arbitration and complete participant coverage remain unqualified.",
+  "sha256": {
+    "security-positive-probe-native.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained-exclusion-no-stale-release.smt2": "a23077d434a61d38c99e33bf1d3234adcfbc13a0a789474334c9c247b8a46080",
+    "formal-results.json": "47f2a107e69dd9809f3962c865b3be9cb55d0c922a244bf1e8acdfea8ac6ceaa",
+    "security-positive-probe-native.json": "1aa0e69f0d9c2ec203d9db47d64a85d97f227b2fde70637769c75386ec7e8c3b",
+    "probe-only-counterexample.smt2": "19c48b130cf37a567ac7aceae3444a5c957050ee87430e431af34e85578803ec",
+    "successful-release-before-loss.smt2": "06d458766de729fe9a7ec82a9bdac3a3e36316a199847dd1eb0946adcb8c04ba",
+    "security-positive-probe-native.stderr.log": "76dec68a43e06ba0622367b422cfb2df6bfc1572f9c02415a987a34b21c299b2",
+    "check-ordering.py": "d9c94f0723d459d7c050d1d92ac537833f1f01a3de080a3d7d27c784ceccd47d"
+  }
+}
