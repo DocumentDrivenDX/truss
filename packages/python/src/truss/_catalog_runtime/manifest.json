@@ -26,7 +26,8 @@
     "operations.sql": "019369b4c66dcb410054a9f0a38188c72b215951782749ddc21934dfb893b73c",
     "preconditions.sql": "d4c961fe307aaebaf042992ebfba7ab997d80d8576e1df2eadf7283c4a59ff51",
     "imports.sql": "428ba7a233043ce57d6663b82126317d459807471730c7e8b0a6d183709c43e2",
-    "feed.sql": "c9329b3ffdcaeea41ed9e1b03ec2d485e96ee445a73c4b77b507bae2c95d4f72"
+    "feed.sql": "c9329b3ffdcaeea41ed9e1b03ec2d485e96ee445a73c4b77b507bae2c95d4f72",
+    "capability-profiles.json": "27e605070811a023ace7427882a726e73353edcb823fb04d83f655370d695e21"
   },
   "version": "0.20"
 }

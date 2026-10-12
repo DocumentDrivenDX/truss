@@ -14,7 +14,10 @@ import base64
 from uuid import uuid4
 from threading import RLock
 from functools import wraps
-from typing import Literal
+from typing import Literal, overload, TypeVar
+from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogReport)
+from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
+    NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability)
 from .feed import FeedPage,FeedConsumer,FeedAcknowledged,FeedUnavailable
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
@@ -55,49 +58,6 @@ class CatalogRuntimeStatus:
     installation_id: str | None = None
     revision: int | None = None
     capabilities: tuple[str,...] = ()
-
-@dataclass(frozen=True,slots=True)
-class CatalogRegistration:
-    revision: int
-    registration_id: str
-    report_bytes: bytes
-    replayed: bool
-    status: str = 'pending_commit'
-
-@dataclass(frozen=True,slots=True)
-class CatalogUnchanged:
-    revision: int
-    registration_id: str
-    report_bytes: bytes
-    replayed: bool
-    request_key: str
-    asserted_origin_bytes: bytes
-    actor: str
-    outcome: str = 'unchanged'
-    status: str = 'pending_commit'
-
-@dataclass(frozen=True,slots=True)
-class CatalogCompatibilityViolation:
-    document_id: str
-    module_id: str
-    record_id: str
-    field_module_id: str
-    field_id: str
-    rule: Literal['property.required','property.scalar_type','property.retained_name_collision']
-    affected_object_count: int
-
-@dataclass(frozen=True,slots=True)
-class CatalogAcceptanceRefused:
-    revision: int
-    violations: tuple[CatalogCompatibilityViolation,...]
-    outcome: Literal['refused'] = 'refused'
-    code: Literal['incompatible'] = 'incompatible'
-
-@dataclass(frozen=True,slots=True)
-class CatalogReport:
-    revision: int
-    original_bytes: bytes
-
 
 @dataclass(frozen=True,slots=True)
 class ModuleAccessGrant:
@@ -147,6 +107,11 @@ def _release():
     if sha256(profiles).hexdigest()!=manifest['files']['group-profiles.json']:raise ValueError('Selected group profiles required')
     for entry in json.loads(profiles)['profiles']:
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original profile definition required')
+    public_profiles=root.joinpath('capability-profiles.json').read_bytes()
+    if sha256(public_profiles).hexdigest()!=manifest['files']['capability-profiles.json']:raise ValueError('Selected public capability profiles required')
+    for entry in json.loads(public_profiles)['profiles']:
+        if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
+        if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
     return manifest,sha256(original).hexdigest(),tuple(sources)
 
 
@@ -216,6 +181,9 @@ def _catalog_failure(result, local_code=None):
     return result if code is None else Error(replace(failure,catalog_code=code))
 
 
+_SelectedFamily=TypeVar('_SelectedFamily',Literal['catalog'],Literal['direct_read'],Literal['import'],Literal['feed'])
+
+
 class CatalogReferenceAssembly:
     """Actual installation/catalog provider. Settlement stays with the caller."""
     def __init__(self,configuration: CatalogRuntimeConfiguration,host: PsycopgHost) -> None:
@@ -224,7 +192,77 @@ class CatalogReferenceAssembly:
         if configuration.schema!='truss' or type(configuration.assembly_id) is not str or not 1<=len(configuration.assembly_id)<=256:
             raise ValueError('Supported catalog configuration required')
         self.configuration=configuration;self._host=host;self._disposed=False;self._lock=RLock();self._group_documents=()
-    def catalog(self) -> CatalogReferenceAssembly:return self
+    @overload
+    def catalog(self) -> CatalogReferenceAssembly: ...
+    @overload
+    def catalog(self,selection: CapabilitySelection[Literal['catalog']]) -> CapabilityAvailable[NativeCatalogCapability] | CapabilityUnavailable: ...
+    def catalog(self,selection: CapabilitySelection[Literal['catalog']] | None=None) -> CatalogReferenceAssembly | CapabilityAvailable[NativeCatalogCapability] | CapabilityUnavailable:
+        if selection is None:return self
+        with self._lock:
+            if self._disposed:return CapabilityUnavailable(reason='disposed')
+            if type(selection) is not CapabilitySelection or selection!=self.catalog_selection:return CapabilityUnavailable(reason='selection')
+            return CapabilityAvailable(capability=NativeCatalogCapability(selection=self.catalog_selection,_assembly=self))
+
+    def _native_selection(self,family: _SelectedFamily) -> CapabilitySelection[_SelectedFamily]:
+        """Inert exact packaged selection; per-call native admission is separate."""
+        from .contracts import ProfilePin
+        group=self.group_selection
+        entries=json.loads(files('truss').joinpath('_catalog_runtime','capability-profiles.json').read_bytes())['profiles']
+        entry=next(item for item in entries if item['name']==family)
+        return CapabilitySelection(family=family,capability_profile=ProfilePin(**entry['pin']),
+            layout_profile=group.layout_profile,adapter_profile=group.adapter_profile,
+            value_profile=group.value_profile,policy_profile=ProfilePin(**entry['policyPin']) if 'policyPin' in entry else group.policy_profile)
+
+    @property
+    def catalog_selection(self) -> CapabilitySelection[Literal['catalog']]:
+        return self._native_selection('catalog')
+
+    @property
+    def direct_read_selection(self) -> CapabilitySelection[Literal['direct_read']]:
+        return self._native_selection('direct_read')
+
+    @property
+    def import_selection(self) -> CapabilitySelection[Literal['import']]:
+        return self._native_selection('import')
+
+    @property
+    def feed_selection(self) -> CapabilitySelection[Literal['feed']]:
+        return self._native_selection('feed')
+
+    def direct_reads(self,selection: CapabilitySelection[Literal['direct_read']]) -> CapabilityAvailable[NativeDirectReadCapability] | CapabilityUnavailable:
+        with self._lock:
+            if self._disposed:return CapabilityUnavailable(reason='disposed')
+            if type(selection) is not CapabilitySelection or selection!=self.direct_read_selection:return CapabilityUnavailable(reason='selection')
+            return CapabilityAvailable(capability=NativeDirectReadCapability(selection=self.direct_read_selection,_assembly=self))
+
+    def imports(self,selection: CapabilitySelection[Literal['import']],*,documents: tuple[CatalogDocument,...],bun_executable: str='bun') -> CapabilityAvailable[NativeImportCapability] | CapabilityUnavailable:
+        with self._lock:
+            if self._disposed:return CapabilityUnavailable(reason='disposed')
+            if type(selection) is not CapabilitySelection or selection!=self.import_selection:return CapabilityUnavailable(reason='selection')
+            try:
+                valid=type(documents) is tuple and 1<=len(documents)<=512 and all(type(d) is CatalogDocument and type(d.content) is bytes and 1<=len(d.content)<=4194304
+                    and type(d.document_id) is str and type(d.document_revision) is str and all(1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (d.document_id,d.document_revision))
+                    and (d.artifact_identity is None or type(d.artifact_identity) is str and 1<=len(d.artifact_identity.encode('utf8'))<=4096 and '\0' not in d.artifact_identity) for d in documents)
+                valid=valid and len({d.document_id for d in documents})==len(documents) and sum(len(d.content) for d in documents)<=4194304
+                valid=valid and type(bun_executable) is str and 1<=len(bun_executable.encode('utf8'))<=4096 and '\0' not in bun_executable
+            except (UnicodeError,TypeError):valid=False
+            if not valid:return CapabilityUnavailable(reason='selection')
+            return CapabilityAvailable(capability=NativeImportCapability(selection=self.import_selection,_assembly=self,_documents=documents,_bun_executable=bun_executable))
+
+    def feed(self,selection: CapabilitySelection[Literal['feed']]) -> CapabilityAvailable[NativeFeedCapability] | CapabilityUnavailable:
+        with self._lock:
+            if self._disposed:return CapabilityUnavailable(reason='disposed')
+            if type(selection) is not CapabilitySelection or selection!=self.feed_selection:return CapabilityUnavailable(reason='selection')
+            return CapabilityAvailable(capability=NativeFeedCapability(selection=self.feed_selection,_assembly=self))
+
+    def history(self,selection: CapabilitySelection[Literal['history']]) -> CapabilityUnavailable:
+        with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')
+
+    def compiled_execution(self,selection: CapabilitySelection[Literal['weft_execution']]) -> CapabilityUnavailable:
+        with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')
+
+    def mutations(self,selection: CapabilitySelection[Literal['mutation']]) -> CapabilityUnavailable:
+        with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')
     def dispose(self) -> AssemblyDisposed:
         with self._lock:
             self._disposed=True

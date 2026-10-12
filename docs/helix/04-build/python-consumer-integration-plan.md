@@ -31,6 +31,17 @@ ddx:
 
 The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized exact scalar object and independent directed edge groups, object/key/page reads, relationship reads and atomic caller preconditions. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
 
+## Callable native assembly providers
+
+The installed runtime assembly now selects concrete catalog, direct-read, group,
+host-import and caller-asserted feed providers. Typed methods delegate through
+the same current assembly lifecycle and native lease checks; source binding is
+explicit and immutable. Exact family/profile equality is required. Metadata
+selection is not readiness or authority. Family policies distinguish registrar,
+module-reader/writer and enrolled complete-source reader gates. The broader
+historical, engine-owned import, verified-application and compiled profiles
+remain incomplete. The legacy inert configuration is a separate profile.
+
 ## Next callable operations
 
 Runtime 0.20 implements public committed feed reads and ordinary-role

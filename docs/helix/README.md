@@ -9,7 +9,8 @@ grouped object and independent edge mutations, atomic caller preconditions,
 relationship pages and committed receipt visibility on PostgreSQL18.6.
 Caller-owned imports and compatible catalog evolution are implemented within
 the documented scalar and independent-relationship subset. Object reads return
-identities usable directly for updates and links. Caller-asserted committed
+identities usable directly for updates and links. Concrete catalog/read/group/
+host-import/feed providers are selected through the runtime assembly. Caller-asserted committed
 feed/ACK is available on the authority database. Compiled query execution,
 managed installation/upgrades and verified downstream application remain unfinished. Older private component evidence below
 does not qualify those public operations.

@@ -1,0 +1,46 @@
+{
+  "scope": "callable native catalog/direct-read/host-import/feed selectors alongside existing groups",
+  "wheelSha256": "86a2dd761ef84006183e3c757992360615d7b5d35582fdae921132818ff02d19",
+  "environment": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6"
+  },
+  "installedBasicTests": {
+    "modules": [
+      "test_selected_capabilities_native",
+      "test_feed_runtime_native"
+    ],
+    "tests": 2,
+    "seconds": 60.636,
+    "passed": true
+  },
+  "publicTyping": {
+    "fixtures": 5,
+    "expectedNegativeErrors": 20,
+    "passed": true
+  },
+  "pythonBoundaryImports": 770,
+  "review": "Astra Ultra approved typed delegation, result extraction, family-specific policies, scope docs and fixture deadline correction",
+  "earlierFinalRun": {
+    "selectedWorkflow": "passed",
+    "feedSetup": "contained installation cancellation under default 5000ms administrative operation deadline",
+    "correctedFixture": "administrative statement10000ms/operation30000ms; ordinary consumers and production defaults unchanged"
+  },
+  "covered": [
+    "catalog preparation/unchanged acceptance/original reports",
+    "group create",
+    "key lookup and returned identity use",
+    "object pages",
+    "host import construction and execution",
+    "incompatible selection refusal",
+    "issued provider disposal",
+    "full feed and ordinary-role ACK via selected provider"
+  ],
+  "limits": [
+    "concrete native subset profiles; broader draft protocols remain incomplete",
+    "inert legacy ReferenceAssemblyConfiguration separate",
+    "history/compiled/standalone mutation selectors unavailable",
+    "explicit original source documents and Bun still needed",
+    "fresh installation"
+  ]
+}

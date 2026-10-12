@@ -26,7 +26,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.addCleanup(self.admin.close)
         self.admin.execute('CREATE ROLE consumer LOGIN')
         self.admin.execute('BEGIN')
-        self.host=adopt_psycopg_host(self.admin)
+        self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
         self.addCleanup(self.host.detach)
         self.tx=self.host.adopt_transaction().value
         result=create_reference_assembly(CatalogRuntimeConfiguration(),self.host)

@@ -1314,8 +1314,8 @@ independent directed edges. Each accepted record must satisfy final invariants
 on its own, so importing a new object that needs a mandatory relationship is
 not yet supported. Limits are 128 records, 1 MiB per payload, 4 MiB per canonical
 input and 8 MiB per report. Original UMF key production still requires Bun. Engine-owned batches,
-the generic import capability selector, public source lookup, structured source
-facts and migrations remain unfinished.
+public source lookup, structured source facts and migrations remain unfinished.
+The native host-adopted import selector is available as described below.
 
 ### Compatible document acceptance (runtime 0.19 candidate)
 
@@ -1388,3 +1388,52 @@ This profile retains source history indefinitely and supplies no cleanup, archiv
 offload, consumer removal, replica freshness or installation upgrade API. Reads
 may redeliver until ACK commits. Runtime 0.20 requires a fresh installation on the
 selected PostgreSQL18.6/psycopg3.3.6 profile.
+
+### Selected native capability objects
+
+The PostgreSQL runtime assembly exposes callable catalog, direct-read, group,
+import and feed providers. Select the exact packaged profile supplied by the
+assembly; construction does not access the database or assert readiness.
+
+```python
+from truss import CapabilityAvailable
+
+selected = assembly.direct_reads(assembly.direct_read_selection)
+if isinstance(selected, CapabilityAvailable):
+    found = selected.capability.lookup_key_in_transaction(
+        transaction, document_id="orders", module_id="sales",
+        record_id="Order", key_id="order-primary", values=("order-123",),
+    )
+
+catalog = assembly.catalog(assembly.catalog_selection)
+imports = assembly.imports(
+    assembly.import_selection, documents=original_documents,
+)
+feed = assembly.feed(assembly.feed_selection)
+```
+
+`CapabilityAvailable.capability` returns the exported `NativeCatalogCapability`,
+`NativeDirectReadCapability`, `NativeImportCapability` or `NativeFeedCapability`.
+Their methods match the assembly's existing protected calls, including typed
+results and caller-owned transactions. `catalog()` without a selection retains
+its existing convenience behavior. Administrative installation, module grants
+and feed enrollment stay on the assembly.
+
+Import selection binds an immutable validated tuple of original
+`CatalogDocument` bytes and the UMF executable; it does not infer source bytes.
+Calls verify those originals against the accepted catalog. Recreate the source
+binding when its documents change. A changed selection returns
+`CapabilityUnavailable`; disposing the owning assembly also closes previously
+issued providers. Each operation still checks current native context and
+authority. Read and feed policy pins describe their reader gates rather than
+requiring mutation writer authority.
+
+These concrete profiles implement the documented scalar/independent-edge,
+host-adopted import and caller-asserted feed subsets. They do not claim the broader
+draft historical DirectRead, engine-owned Import or verified-application Feed
+protocols. History, compiled execution and standalone mutation selectors remain
+unavailable; supported mutations use the group provider.
+
+`ReferenceAssemblyConfiguration` still selects the separately documented inert
+legacy profile. Use `CatalogRuntimeConfiguration` with the adopted psycopg host
+for these installed runtime capabilities.
