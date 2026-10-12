@@ -8,6 +8,9 @@ from truss.groups import AuthoredValue,GroupSuccess,RequestNone
 import test_group_create_native as groups
 class GraphABACTests(groups.PublicCreateGroupTests):
  for name in tuple(n for n in dir(groups.PublicCreateGroupTests) if n.startswith('test_')):locals()[name]=None
+ def tearDown(self):
+  self.admin.rollback();self.admin.execute('DROP FUNCTION IF EXISTS public.graph_read_wrapper();DROP FUNCTION IF EXISTS public.graph_read(text,text) CASCADE')
+  super().tearDown()
  def source(self,document):
   m=document['modules'][0];record=next(e for e in m['elements'] if e['id']=='A');m['elements'].append({'id':'A-flag','kind':'field','name':'flag','scalarType':'boolean','cardinality':'one','nullability':'required','extensions':{}});record['members'].append({'module':'m','element':'A-flag'})
  def test_public_graph_creation_and_original_source_validity(self):
@@ -121,6 +124,31 @@ class GraphABACTests(groups.PublicCreateGroupTests):
    guard.rollback();writer.rollback()
   self.admin.execute('ALTER FUNCTION truss.get_object(text,text,text,bigint,integer,text,text) SET row_security=off')
   settings=self.admin.execute("SELECT proconfig FROM pg_proc WHERE oid='truss.get_object(text,text,text,bigint,integer,text,text)'::regprocedure").fetchone()[0];self.assertIn('row_security=off',settings);observations.append({'id':'original-complete-read-settings-restored','observed':settings})
+  # Narrow read-owner feasibility; fixed test entrypoint, not a released API.
+  rh.detach();rc.commit() # Drain earlier reads before native policy DDL.
+  self.admin.execute('CREATE ROLE graph_read_owner NOLOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;GRANT USAGE ON SCHEMA truss TO graph_read_owner;GRANT SELECT(id,type_id,props) ON truss.object TO graph_read_owner')
+  self.addCleanup(self.admin.execute,'DROP OWNED BY graph_read_owner;DROP ROLE graph_read_owner')
+  self.admin.execute("CREATE POLICY graph_read_context ON truss.object AS RESTRICTIVE FOR SELECT TO graph_read_owner USING(current_user='graph_read_owner' AND session_user='consumer')")
+  body='SELECT q.label FROM ('+sql['sourceSql']+') q WHERE q.value OPERATOR(pg_catalog.=) $1 AND q.label OPERATOR(pg_catalog.=) $2'
+  self.admin.execute('CREATE FUNCTION public.graph_read(text,text) RETURNS TABLE(label text) LANGUAGE SQL SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=on AS $$ '+body+' $$;REVOKE ALL ON FUNCTION public.graph_read(text,text) FROM PUBLIC;GRANT EXECUTE ON FUNCTION public.graph_read(text,text) TO consumer;GRANT CREATE ON SCHEMA public TO graph_read_owner;ALTER FUNCTION public.graph_read(text,text) OWNER TO graph_read_owner;REVOKE CREATE ON SCHEMA public FROM graph_read_owner')
+  owner=self.admin.execute("SELECT r.rolcanlogin,r.rolinherit,r.rolsuper,r.rolcreatedb,r.rolcreaterole,r.rolreplication,r.rolbypassrls,p.prosecdef,p.proconfig FROM pg_roles r JOIN pg_proc p ON p.proowner=r.oid WHERE p.oid='public.graph_read(text,text)'::regprocedure").fetchone();self.assertEqual(owner[:8],(False,False,False,False,False,False,False,True));self.assertIn('row_security=on',owner[8]);observations.append({'id':'narrow-read-owner-and-routine-settings','observed':list(owner)})
+  privileges=self.admin.execute("SELECT has_table_privilege('graph_read_owner','truss.object','SELECT'),has_column_privilege('graph_read_owner','truss.object','props','SELECT'),has_column_privilege('graph_read_owner','truss.object','retained','SELECT'),has_table_privilege('graph_read_owner','truss.object','INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN'),has_table_privilege('graph_read_owner','truss.journal','SELECT'),has_sequence_privilege('graph_read_owner','truss.id_seq','USAGE,SELECT,UPDATE'),has_schema_privilege('graph_read_owner','truss','CREATE'),has_schema_privilege('graph_read_owner','public','CREATE')").fetchone();self.assertEqual(privileges,(False,True,False,False,False,False,False,False));observations.append({'id':'narrow-read-owner-native-privileges','observed':list(privileges)})
+  rc,rh,ra,rt=self.consumer()
+  for label,expected in [('yes',[('yes',)]),('no',[]),('not-present',[])]:
+   rows=rc.execute('SELECT label FROM public.graph_read(%s,%s)',('value',label)).fetchall();self.assertEqual(rows,expected);observations.append({'id':'narrow-owner-original-caller-lookup-'+label,'observed':[list(r) for r in rows]})
+  rows=rc.execute('SELECT label FROM public.graph_read(%s,%s)',("value' OR true --",'no')).fetchall();self.assertEqual(rows,[]);observations.append({'id':'narrow-owner-exact-key-parameter','observed':rows})
+  membership=rc.execute("SELECT pg_has_role(session_user,'graph_read_owner','MEMBER'),has_function_privilege(session_user,'public.graph_read(text,text)','EXECUTE')").fetchone();self.assertEqual(membership,(False,True));observations.append({'id':'ordinary-caller-invokes-without-owner-membership','observed':list(membership)})
+  probe_params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);probe_params['user']='consumer'
+  with psycopg.connect(**probe_params,autocommit=True) as probe:
+   for name,statement in [('set-read-owner','SET ROLE graph_read_owner'),('direct-property-bag','SELECT props FROM truss.object'),('direct-retained','SELECT retained FROM truss.object'),('direct-journal','SELECT * FROM truss.journal')]:
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege) as failure:probe.execute(statement)
+    self.assertEqual(failure.exception.sqlstate,'42501');observations.append({'id':'ordinary-narrow-owner-boundary-'+name,'observed':failure.exception.sqlstate})
+  with self.assertRaises(psycopg.errors.InsufficientPrivilege) as failure:direct.execute("SELECT * FROM public.graph_read('value','yes')")
+  self.assertEqual(failure.exception.sqlstate,'42501');observations.append({'id':'ungranted-original-caller-entrypoint-refuses','observed':failure.exception.sqlstate})
+  self.admin.execute("CREATE ROLE graph_wrapper_owner NOLOGIN NOINHERIT NOSUPERUSER NOBYPASSRLS;GRANT EXECUTE ON FUNCTION public.graph_read(text,text) TO graph_wrapper_owner;CREATE FUNCTION public.graph_read_wrapper() RETURNS TABLE(label text) LANGUAGE SQL SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ SELECT label FROM public.graph_read('value','yes') $$;REVOKE ALL ON FUNCTION public.graph_read_wrapper() FROM PUBLIC;GRANT EXECUTE ON FUNCTION public.graph_read_wrapper() TO consumer,graph_direct;GRANT CREATE ON SCHEMA public TO graph_wrapper_owner;ALTER FUNCTION public.graph_read_wrapper() OWNER TO graph_wrapper_owner;REVOKE CREATE ON SCHEMA public FROM graph_wrapper_owner")
+  self.addCleanup(self.admin.execute,'DROP OWNED BY graph_wrapper_owner;DROP ROLE graph_wrapper_owner')
+  rows=rc.execute('SELECT label FROM public.graph_read_wrapper()').fetchall();self.assertEqual(rows,[('yes',)]);observations.append({'id':'nested-definer-keeps-authorized-original-caller','observed':[list(r) for r in rows]})
+  rows=direct.execute('SELECT label FROM public.graph_read_wrapper()').fetchall();self.assertEqual(rows,[]);observations.append({'id':'nested-definer-cannot-substitute-owner-for-original-caller','observed':rows})
   forged=direct.execute("SELECT public.graph_candidate('value','no',true)").fetchone()[0];self.assertIs(forged,True);observations.append({'id':'forged-expression-alone-is-not-authority','observed':forged})
   rows=direct.execute("SELECT id FROM truss.object WHERE id=%s AND public.graph_candidate('value','no',true)",(ids['no'],)).fetchall();self.assertEqual(rows,[]);observations.append({'id':'forged-argument-cannot-bypass-original-row-policy','observed':rows})
   admin_count=self.admin.execute('SELECT count(*) FROM truss.object').fetchone()[0];self.assertEqual(admin_count,2);observations.append({'id':'excluded-admin-bypass','observed':admin_count})

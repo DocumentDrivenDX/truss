@@ -437,3 +437,14 @@ observations in
 `../../04-build/evidence/security-source-exclusion-failures-20261012/receipt.json`.
 Guard issuer loss/crash, actual protected-entrypoint publication, complete
 authority participation and retry outcomes remain separate required controls.
+
+
+Narrow-owner precursor controls in the same repository regression independently
+inspect native role/function/column/sequence/schema privileges, exact eligible/
+denied/missing business-key lookup, injection-looking parameters, ungranted
+caller entrypoint denial and original caller retention through nested definers.
+Ordinary owner adoption and direct bag/retained/journal access must refuse.
+Fifty-six component observations pass; see
+`../../04-build/evidence/security-narrow-read-owner-20261012/receipt.json`.
+The fixed fixture caller policy cannot qualify production module/subject mapping,
+public get adoption, complete callable inventory or source/authority lifetime.

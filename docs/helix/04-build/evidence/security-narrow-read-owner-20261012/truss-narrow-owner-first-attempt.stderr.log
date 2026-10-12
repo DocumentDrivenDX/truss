@@ -1,0 +1,15 @@
+E
+======================================================================
+ERROR: test_public_graph_creation_and_original_source_validity (__main__.GraphABACTests.test_public_graph_creation_and_original_source_validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_graph_source_cut_native.py", line 127, in test_public_graph_creation_and_original_source_validity
+    self.admin.execute("CREATE POLICY graph_read_context ON truss.object AS RESTRICTIVE FOR SELECT TO graph_read_owner USING(current_user='graph_read_owner' AND session_user='consumer')")
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.QueryCanceled: canceling statement due to statement timeout
+
+----------------------------------------------------------------------
+Ran 1 test in 16.019s
+
+FAILED (errors=1)

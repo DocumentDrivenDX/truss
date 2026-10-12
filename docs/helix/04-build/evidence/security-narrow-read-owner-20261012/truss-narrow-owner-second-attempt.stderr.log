@@ -1,0 +1,16 @@
+E
+======================================================================
+ERROR: test_public_graph_creation_and_original_source_validity (__main__.GraphABACTests.test_public_graph_creation_and_original_source_validity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 41, in tearDown
+    self.admin.execute('DROP ROLE consumer')
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.DependentObjectsStillExist: role "consumer" cannot be dropped because some objects depend on it
+DETAIL:  privileges for function graph_read(text,text)
+
+----------------------------------------------------------------------
+Ran 1 test in 6.721s
+
+FAILED (errors=1)

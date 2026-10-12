@@ -6343,3 +6343,22 @@ STP-057 L11 prerequisites. Native acquisition/recovery feasibility is now tested
 protected issuer/enrollment, narrowed read-owner/original-person composition,
 authority changes, lost-guard containment and publication remain unimplemented.
 No current runtime setting is changed and no original backend case is promoted.
+
+
+### Native narrow read-owner boundary — 2026-10-12
+
+The executable graph regression now retains56 observations, adding separate
+nonlogin read ownership with selected column-only privileges, native forced-RLS
+lookup and original caller binding. Ordinary callers cannot SET the owner role
+or read raw object bags, retained data or journals. Nested definers preserve the
+authorized session caller and cannot substitute privileged owners for the
+unauthorized caller. Native settings/privileges and failed attempts are pinned
+in `evidence/security-narrow-read-owner-20261012/receipt.json`; Python boundaries
+pass691imports. Existing runtime code and public get ownership are unchanged.
+
+Trace CONTRACT-005 / TD-020 / STP-020 and shared CONTRACT-063 / STP-056 B01/B04/
+B05/B06/B12 prerequisites. The disposable fixed lookup is an implemented test
+entrypoint, not a released API profile. Next adopt a registered narrow read-owner
+context in the original public read/decoder path, compose original complete
+source enrollment and current module/ontology authority, and qualify complete
+callable closure and held final release. No original acceptance case is promoted.

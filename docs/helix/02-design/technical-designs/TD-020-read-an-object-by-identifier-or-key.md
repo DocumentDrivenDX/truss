@@ -176,3 +176,31 @@ an admitted security guard. It blocks all writers to those relations, even other
 types; performance and finite contention outcomes must be qualified before
 adoption. Role/policy/routine/private-fact changes and buffered release are not
 covered by these table locks. Preserve their separate authority/coordinator gates.
+
+
+### Narrow native read-owner feasibility — 2026-10-12
+
+The same native regression now instantiates a distinct nonlogin/noninherit/
+nonbypass read owner for an isolated fixed business-key lookup. It has SELECT
+only on object id/type_id/props, no table-wide SELECT and no retained/journal/
+mutation/sequence/schema-create rights. Its routine uses qualified dependencies,
+fixed search_path and row_security=on; ordinary callers get EXECUTE only. Native
+policy verifies the original session caller while current_user is the read owner.
+Authorized exact-key lookup returns the eligible label; denied/missing/injection-
+looking keys return no rows. Caller SET ROLE and raw bag/retained/journal reads
+refuse42501. An independently owned nested definer wrapper keeps the original
+authorized caller and cannot replace an unauthorized original caller with its
+own execution privilege. Fifty-six total observations and failed attempts are
+retained in
+`../../04-build/evidence/security-narrow-read-owner-20261012/receipt.json`.
+
+This realizes the native privilege transition in a test entrypoint, not the
+Python public get API. That API still requires installation-owner context under
+runtime_person. Production adoption must implement its registered read-role/
+original-person check, current module and ontology authority, complete source
+enrollment and held publication protocol before selecting this owner. Never
+change the existing helper to accept an arbitrary current_user or caller role.
+Selected props column access is row protection only; field masking and decoder
+privacy require separate faithful projection. Policy installation must drain
+earlier read transactions; native policy DDL cannot be inserted into their held
+read transaction. Rollback must retain the prior registered protected profile.
