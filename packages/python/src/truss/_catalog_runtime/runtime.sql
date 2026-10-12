@@ -40,7 +40,8 @@ BEGIN
     AND NOT r.rolcreaterole AND NOT r.rolcreatedb AND NOT r.rolreplication AND NOT r.rolbypassrls AND NOT r.rolinherit)
   OR has_schema_privilege(actor.oid,'truss','CREATE')
   OR EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss'
-    AND ((c.relkind IN ('r','p') AND has_table_privilege(actor.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,TRIGGER,MAINTAIN'))
+    AND ((c.relkind IN ('r','p') AND (has_table_privilege(actor.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
+      OR has_any_column_privilege(actor.oid,c.oid,'SELECT,INSERT,UPDATE,REFERENCES')))
      OR (c.relkind='S' AND has_sequence_privilege(actor.oid,c.oid,'USAGE,SELECT,UPDATE'))))
   OR (SELECT oid FROM pg_roles WHERE rolname=current_user) IS DISTINCT FROM installation.owner_oid
   OR NOT member_of_registrar THEN

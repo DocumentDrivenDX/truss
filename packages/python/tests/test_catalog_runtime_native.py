@@ -367,6 +367,26 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
         host.detach();connection.commit()
 
+    def test_public_actor_refuses_late_column_and_reference_privileges(self):
+        self.install();connection,host,assembly,tx=self.consumer()
+        connection.execute("CREATE TEMP TABLE caller_privilege_sentinel(value text); INSERT INTO caller_privilege_sentinel VALUES ('kept')")
+        self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+        grants=[('SELECT (installation_id)','SELECT (installation_id)'),
+                ('INSERT (installation_id)','INSERT (installation_id)'),
+                ('UPDATE (installation_id)','UPDATE (installation_id)'),
+                ('REFERENCES (installation_id)','REFERENCES (installation_id)'),
+                ('REFERENCES','REFERENCES')]
+        for grant,revoke in grants:
+            with self.subTest(grant=grant):
+                self.admin.execute('GRANT '+grant+' ON truss.catalog_runtime_installation TO consumer')
+                try:
+                    result=assembly.status_in_transaction(tx)
+                    self.assertIsInstance(result,Error)
+                    self.assertFalse(host._custody.quarantined)
+                    self.assertEqual(connection.execute('SELECT value FROM caller_privilege_sentinel').fetchall(),[('kept',)])
+                finally:self.admin.execute('REVOKE '+revoke+' ON truss.catalog_runtime_installation FROM consumer')
+                self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
+
     def test_outsider_raw_tables_private_helpers_and_role_setting_refuse(self):
         self.install();connection,host,assembly,tx=self.consumer()
         for statement in ('SELECT * FROM truss.schema_doc','SELECT truss.catalog_actor()'):
