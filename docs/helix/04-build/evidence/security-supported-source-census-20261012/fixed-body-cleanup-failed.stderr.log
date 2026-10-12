@@ -1,0 +1,13 @@
+E
+======================================================================
+ERROR: test_supported_source_census_observes_bootstrap_and_body_drift (test_security_public_ontology_native.PublicOntologySecurityTests.test_supported_source_census_observes_bootstrap_and_body_drift)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.InvalidSchemaName: schema "census_hostile" does not exist
+
+----------------------------------------------------------------------
+Ran 1 test in 6.415s
+
+FAILED (errors=1)

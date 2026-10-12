@@ -19,6 +19,44 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_supported_source_census_observes_bootstrap_and_body_drift(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  from truss._psycopg_source_census import observe_source_census_in_transaction
+  import gzip,hashlib
+  self.install();self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  self.admin.execute("CREATE TEMP TABLE source_census_work(value text);INSERT INTO source_census_work VALUES('kept')")
+  self.assertIsInstance(bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=self.installation.installation_id.encode(),authored_profile=b'source-census-fixture/0.1',max_retained=6),Ok)
+  self.admin.execute("CREATE FUNCTION truss.census_fixture_probe() RETURNS int LANGUAGE sql AS 'SELECT 1'")
+  def capture():
+   result=observe_source_census_in_transaction(self.host,tx)
+   self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(result.value.admitted)
+   return result.value.original_image
+  self.admin.execute("CREATE SCHEMA census_hostile;CREATE FUNCTION census_hostile.multiply(int,int) RETURNS int LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'hostile operator invoked';END $$;CREATE OPERATOR census_hostile.* (FUNCTION=census_hostile.multiply,LEFTARG=int,RIGHTARG=int)")
+  self.addCleanup(self.admin.execute,'DROP SCHEMA IF EXISTS census_hostile CASCADE')
+  self.admin.execute('SET LOCAL search_path=census_hostile,pg_catalog,pg_temp')
+  original_path=self.admin.execute("SELECT pg_catalog.current_setting('search_path')").fetchone()[0]
+  self.admin.execute('SAVEPOINT hostile_operator_probe')
+  with self.assertRaises(psycopg.errors.RaiseException):self.admin.execute('SELECT 2*3')
+  self.admin.execute('ROLLBACK TO hostile_operator_probe')
+  original=capture();parsed=json.loads(original)
+  self.assertEqual(self.admin.execute("SELECT pg_catalog.current_setting('search_path')").fetchone()[0],original_path)
+  self.assertEqual(parsed['serverVersion'],'180006')
+  names={json.loads(row)['relname'] for row in parsed['sections']['pg_class']}
+  self.assertTrue({'policy_generation_guard','policy_publication_claim','policy_publication_capacity'}<=names)
+  def bodies(image):return [json.loads(row)['prosrc'] for row in json.loads(image)['sections']['pg_proc'] if json.loads(row)['proname']=='census_fixture_probe']
+  self.assertEqual(bodies(original),['SELECT 1'])
+  self.admin.execute('SAVEPOINT source_mutation');self.admin.execute("CREATE OR REPLACE FUNCTION truss.census_fixture_probe() RETURNS int LANGUAGE sql AS 'SELECT 2'")
+  changed=capture();self.assertNotEqual(changed,original);self.assertEqual(bodies(changed),['SELECT 2'])
+  self.admin.execute('ROLLBACK TO source_mutation');restored=capture();self.assertEqual(restored,original)
+  self.admin.execute('CREATE FOREIGN DATA WRAPPER source_census_fixture')
+  refused=observe_source_census_in_transaction(self.host,tx);self.assertIsInstance(refused,Error)
+  self.assertEqual(self.admin.execute('TABLE source_census_work').fetchall(),[('kept',)])
+  self.admin.execute('ROLLBACK TO source_mutation');self.assertEqual(capture(),original)
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):
+   target=Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.census.json')
+   target.write_text(json.dumps({'originalBytes':len(original),'originalSha256':hashlib.sha256(original).hexdigest(),'changedSha256':hashlib.sha256(changed).hexdigest(),'restoredSha256':hashlib.sha256(restored).hexdigest(),'guardHomesObserved':True,'hostileOperatorNotInvoked':True,'callerSearchPathRestored':True,'originalBody':'SELECT 1','changedBody':'SELECT 2','foreignWrapperRefused':True,'callerWork':'kept','scope':'Actual PostgreSQL18.6 source response via stock supported psycopg, private host scope. Not authenticated producer/source writer, held authority/data cut or admitted policy.'},indent=2)+'\n')
+   Path(str(target)+'.original.gz').write_bytes(gzip.compress(original,mtime=0));Path(str(target)+'.changed.gz').write_bytes(gzip.compress(changed,mtime=0))
  def test_private_bootstrap_refuses_suppressed_native_seed(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction

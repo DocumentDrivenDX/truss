@@ -1,0 +1,25 @@
+FE
+======================================================================
+ERROR: test_supported_source_census_observes_bootstrap_and_body_drift (test_security_public_ontology_native.PublicOntologySecurityTests.test_supported_source_census_observes_bootstrap_and_body_drift)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.InvalidSchemaName: schema "census_hostile" does not exist
+
+======================================================================
+FAIL: test_supported_source_census_observes_bootstrap_and_body_drift (test_security_public_ontology_native.PublicOntologySecurityTests.test_supported_source_census_observes_bootstrap_and_body_drift)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 39, in test_supported_source_census_observes_bootstrap_and_body_drift
+    original=capture();parsed=json.loads(original)
+             ^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 33, in capture
+    self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(result.value.admitted)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : canceling statement due to statement timeout
+
+----------------------------------------------------------------------
+Ran 1 test in 14.802s
+
+FAILED (failures=1, errors=1)

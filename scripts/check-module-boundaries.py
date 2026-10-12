@@ -35,6 +35,7 @@ ALLOWED = {
     '_installation_privileges': {'dataclasses','psycopg','truss.execution','truss.psycopg_host'},
     '_runtime_profile': {'json', 'importlib.resources'},
     'psycopg_host': {'truss._operation_ordinal', 'truss._runtime_profile', 'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},
+    '_psycopg_source_census': {'dataclasses','hashlib','importlib.resources','re','truss.execution','truss.psycopg_host','truss.catalog_runtime'},
     '_psycopg_epoch_cut': {'dataclasses', 'hashlib', 'truss.psycopg_host', 'psycopg.types.string'},
     '_psycopg_dependency_fact_cut': {'dataclasses', 'json', 'psycopg', 'truss._psycopg_epoch_cut', 'truss._security_fact_coverage', 'truss._psycopg_fact_cut'},
     '_security_home_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss._installation_privileges','truss.catalog_runtime'},
