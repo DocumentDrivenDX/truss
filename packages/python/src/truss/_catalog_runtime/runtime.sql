@@ -349,7 +349,11 @@ BEGIN
   RETURN;
  END IF;
  SELECT r.* INTO existing FROM truss.catalog_registration_request r
-  WHERE r.input_bytes=catalog_accept.input_bytes AND r.document_bytes=catalog_accept.documents_bytes AND r.declaration_bytes=catalog_accept.declarations_bytes AND r.source_bytes=catalog_accept.source_bytes;
+  WHERE r.input_bytes=catalog_accept.input_bytes AND r.document_bytes=catalog_accept.documents_bytes AND r.declaration_bytes=catalog_accept.declarations_bytes AND r.source_bytes=catalog_accept.source_bytes
+  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(catalog_accept.documents_bytes,'UTF8')::jsonb) d
+   WHERE NOT EXISTS(SELECT 1 FROM truss.schema_doc current_doc WHERE current_doc.doc_id=d.value->>'documentId'
+    AND current_doc.rev=(SELECT max(latest.rev) FROM truss.schema_doc latest WHERE latest.doc_id=current_doc.doc_id)
+    AND current_doc.document=d.value->>'originalText' AND current_doc.doc_revision=d.value->>'revision'));
  IF FOUND THEN
   PERFORM truss.catalog_require_sources(input_bytes,documents_bytes,declarations_bytes);
   INSERT INTO truss.catalog_unchanged_request VALUES(installation.installation_id,actor,session_user::text,request_key,existing.registration_id,origin_bytes)

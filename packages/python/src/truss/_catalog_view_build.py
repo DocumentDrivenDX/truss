@@ -51,20 +51,24 @@ def build_catalog_view(basis,layout_profile):
         if sha256(original).hexdigest()!=document['content_sha256']:raise ValueError('Original archive digest required')
         parsed=decode_owner_evidence_json(original)
         if parsed['id']!=document['doc_id']:raise ValueError('Original archive identity required')
-        archives[document['doc_id']]=(document,original)
+        archive_key=(document['rev'],document['ord'],document['doc_id'])
+        if archive_key in archives:raise ValueError('Unique accepted archive required')
+        archives[archive_key]=(document,original)
         for mi,module in enumerate(parsed['modules']):
             for ei,element in enumerate(module['elements']):
-                address=(document['doc_id'],module['id'],element['id'])
+                address=(archive_key,(document['doc_id'],module['id'],element['id']))
                 if address in occurrences:raise ValueError('Unique source definition required')
                 occurrences[address]=(element,f'/modules/{mi}/elements/{ei}')
             for ri,rel in enumerate(module.get('relationships',[])):
-                address=(document['doc_id'],module['id'],'relationship',rel['id'])
+                address=(archive_key,(document['doc_id'],module['id'],'relationship',rel['id']))
                 if address in occurrences:raise ValueError('Unique source relationship required')
                 occurrences[address]=(rel,f'/modules/{mi}/relationships/{ri}')
     entries=[];references={};sources={};native={}
+    def archive_key(row):
+        return (row['definition_rev'],row['definition_doc_ord'],row['definition_document_id'])
     def add(kind,row,address,identity,**ids):
-        source,pointer=occurrences[address]
-        doc,original=archives[address[0]]
+        source,pointer=occurrences[(archive_key(row),address)]
+        doc,original=archives[archive_key(row)]
         if row['definition_document_id']!=address[0] or row['definition_doc_ord']!=doc['ord'] or row['definition_rev']!=doc['rev']:
             raise ValueError('Accepted native source provenance required')
         fragment=extract_definition(original,pointer)
@@ -90,11 +94,11 @@ def build_catalog_view(basis,layout_profile):
         ref=add('property',row,address,row['element'],type_id=str(row['type_id']),property_id=str(row['prop_id']))
         prop_refs[(row['type_id'],address[1],address[2])]=ref
     for row in basis['keys']:
-        address=type_source[row['type_id']];record,record_pointer=occurrences[address]
+        address=type_source[row['type_id']];record,record_pointer=occurrences[(archive_key(row),address)]
         matches=[(i,key) for i,key in enumerate(record.get('keys',[])) if key['id']==row['key_id']]
         if len(matches)!=1:raise ValueError('Exact authored key occurrence required')
         index,key=matches[0];key_address=(*address,'key',key['id'])
-        occurrences[key_address]=(key,record_pointer+f'/keys/{index}')
+        occurrences[(archive_key(row),key_address)]=(key,record_pointer+f'/keys/{index}')
         ref=add('key',row,key_address,key['id'],type_id=str(row['type_id']),key_number=str(row['key_num']))
         key_refs[(row['type_id'],key['id'])]=ref
     for row in basis['relationships']:

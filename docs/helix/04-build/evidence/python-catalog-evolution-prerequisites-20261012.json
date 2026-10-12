@@ -1,0 +1,34 @@
+{
+  "scope": "Revision-qualified catalog source composition and current-document unchanged selection; evolution acceptance remains unavailable",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "nativeRegression": {
+    "modules": [
+      "test_catalog_unchanged_native",
+      "test_catalog_additions_native"
+    ],
+    "count": 7,
+    "seconds": 112.244,
+    "result": "passed"
+  },
+  "composerAndContractTests": {
+    "modules": [
+      "test_catalog_view_revisions",
+      "test_catalog_definition_source",
+      "test_catalog_view_contracts"
+    ],
+    "count": 10,
+    "result": "passed",
+    "qualification": "Composer fixture only; no invented fixture identity is claimed accepted."
+  },
+  "ownerSqlSources": 17,
+  "pythonImportsChecked": 723,
+  "astraReview": "Scoped prerequisite source and connected implementation plan approved; native regression passed",
+  "unfinished": [
+    "deterministic revision fold and native typed delta/history",
+    "compatible changed-document acceptance",
+    "original replay before current pin admission",
+    "stable edge import reservations",
+    "current owner document production separate from retained definition archives"
+  ]
+}
