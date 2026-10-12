@@ -5383,3 +5383,29 @@ STP-056 B11/B12/L11 and US-056 AC9/AC10 prerequisites. C01/C02 credentials,
 original caller/issuer/mapping/target and C04–C07 source/publication/recovery/full
 qualification remain open. No public endpoint or backend binding; full goal
 active at26/132 with106 unbound required cases.
+
+### Actual owned receiver grammar controls — 2026-10-11
+
+`scripts/check-security-owned-receiver-grammar.py` exercises the actual private
+receiver parser with an isolated original-scope dispatch sentinel. Receipt
+`evidence/security-owned-receiver-grammar/38f1a5c7-5a7a-4df9-be11-be204db0f13b/receipt.json`
+retains 540 carrier observations, five deliberately weakened-parser negative
+controls and both original source preimages/digests on Python3.11.17. Every
+possible single prefix/suffix byte is exercised with independently selected
+JSON whitespace expectations. Exact1024/over1025 bounds, escaped keys/values,
+decoded duplicate keys, extra SQL/actor/subject members, nonfinite values,
+surrogates, invalid UTF-8, concatenated documents, nested data and nonbytes
+carriers are covered. Rejected input raises the same sanitized error and never
+calls delegated execution; accepted input preserves every original scope object.
+The weakened parser demonstrates detected duplicate-key, extra-member, byte-bound
+and mutable-carrier regressions. Run with
+`PYTHONPATH=packages/python/src:scripts python scripts/check-security-owned-receiver-grammar.py`
+using the selected stock driver environment.
+
+Trace TD-056 C03, CONTRACT-063/STP-056 B10/B12 and US-056 AC9/AC10
+prerequisites. This finite parser corpus complements the formal model's parsing
+premise; it is not universal refinement, constructor/native evaluation evidence,
+authentication, route closure or backend admission. The private fixed read spike
+does not limit the full Weft query surface selected by CONTRACT-007. Native
+selected source behavior is unchanged. C01/C02 and C04–C07 remain open; the full
+goal remains26/132 with106 unbound required cases.
