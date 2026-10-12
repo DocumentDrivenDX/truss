@@ -78,16 +78,16 @@ def _epoch_dependency_recipe(epoch, expected_sha256, sources=None):
         return value
     try:profile=json.loads(raw,object_pairs_hook=unique)
     except (UnicodeError,RecursionError) as error:raise ValueError('Original provider profile JSON required') from error
-    if type(profile) is dict and profile.get('kind') in ('truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3','truss-flat-fact-provider-fixture/0.4'):
-        closed(profile,('kind','requirementsSha256','providers','policyUtf8','resolutionUtf8')+(('caller',) if profile['kind'].endswith(('/0.3','/0.4')) else ())+(('executor',) if profile['kind'].endswith('/0.4') else ()))
-        if profile['kind'].endswith(('/0.3','/0.4')):
+    if type(profile) is dict and profile.get('kind') in ('truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3','truss-flat-fact-provider-fixture/0.4','truss-flat-fact-provider-fixture/0.5'):
+        closed(profile,('kind','requirementsSha256','providers','policyUtf8','resolutionUtf8')+(('caller',) if profile['kind'].endswith(('/0.3','/0.4','/0.5')) else ())+(('executor',) if profile['kind'].endswith(('/0.4','/0.5')) else ()))
+        if profile['kind'].endswith(('/0.3','/0.4','/0.5')):
             caller=closed(profile['caller'],('sessionRoleOid','effectiveRoleOid','subjectKey'))
             for value in (caller['sessionRoleOid'],caller['effectiveRoleOid']):
                 if type(value) is not str or not value.isascii() or not value.isdigit() or not 0<int(value)<=4294967295:
                     raise ValueError('Original native caller role identities required')
             if type(caller['subjectKey']) is not list or not 1<=len(caller['subjectKey'])<=32:
                 raise ValueError('Bounded original subject key carrier required')
-        if profile['kind'].endswith('/0.4'):
+        if profile['kind'].endswith(('/0.4','/0.5')):
             executor=closed(profile['executor'],('sessionRoleOid','effectiveRoleOid'))
             for value in executor.values():
                 if type(value) is not str or not value.isascii() or not value.isdigit() or not 0<int(value)<=4294967295:
@@ -101,7 +101,7 @@ def _epoch_dependency_recipe(epoch, expected_sha256, sources=None):
                 raise ValueError('Exact native profile policy/resolution correspondence required')
     else:
         closed(profile,('kind','requirementsSha256','providers'))
-    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.1','truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3','truss-flat-fact-provider-fixture/0.4') or profile['requirementsSha256']!=expected_sha256:
+    if profile['kind'] not in ('truss-flat-fact-provider-fixture/0.1','truss-flat-fact-provider-fixture/0.2','truss-flat-fact-provider-fixture/0.3','truss-flat-fact-provider-fixture/0.4','truss-flat-fact-provider-fixture/0.5') or profile['requirementsSha256']!=expected_sha256:
         raise ValueError('Original requirement/profile correspondence required')
     values=profile['providers']
     if type(values) is not list or not 1<=len(values)<=8192:raise ValueError('Bounded original provider list required')
@@ -152,7 +152,7 @@ def _capture_epoch_bound_dependency_cells(host, transaction, epoch, original_byt
         _inspect_original_fact_sources(original_bytes,expected_sha256,sources)
     selected,providers=_epoch_dependency_recipe(epoch,expected_sha256,sources)
     import json
-    if json.loads(selected.profile)['kind'].endswith('/0.4'):
+    if json.loads(selected.profile)['kind'].endswith(('/0.4','/0.5')):
         raise ValueError('Original delegated caller scope required')
     groups={}
     for p in providers:
@@ -214,6 +214,8 @@ def _verify_native_profile_caller(cursor, profile_bytes):
     if (cursor.description is None or tuple(d.name for d in cursor.description)!=('session_role_oid','effective_role_oid')
             or any(d.type_code!=25 for d in cursor.description) or roles!=[(caller['sessionRoleOid'],caller['effectiveRoleOid'])]):
         raise ValueError('Original native caller/profile correspondence required')
+    if json.loads(profile_bytes).get('kind')=='truss-flat-fact-provider-fixture/0.5':
+        _require_native_scram_login(cursor)
 
 
 def _verify_native_scram_profile_caller(cursor, profile_bytes):
@@ -227,6 +229,10 @@ def _verify_native_scram_profile_caller(cursor, profile_bytes):
     if type(profile_bytes) is not bytes or type(json.loads(profile_bytes).get('caller')) is not dict:
         raise ValueError('Original authenticated caller profile required')
     _verify_native_profile_caller(cursor,profile_bytes)
+    _require_native_scram_login(cursor)
+
+
+def _require_native_scram_login(cursor):
     cursor.execute('SELECT system_user AS authenticated_identity,session_user::pg_catalog.text AS session_role_name',prepare=False,binary=False)
     rows=cursor.fetchmany(2)
     if (cursor.description is None

@@ -5601,3 +5601,51 @@ completion of the callable installation/registration/report milestone. Productio
 integration must use the selected public assembly and original minimum security
 handoff without restoring historical snapshot/codec release gates. No backend
 binding or C01/C02 exit is promoted;26/132 remains accepted with106 unbound.
+
+### Source-bound authenticated delegated read — 2026-10-12
+
+Owned `truss-flat-fact-provider-fixture/0.5` retains0.4's exact original
+requirement/policy/resolution/provider, caller-role/subject-key and executor-role
+correspondence, and requires native SCRAM login correspondence on the caller.
+The original profile bytes select this stricter requirement; no request-carried
+authentication flag or copied metadata can satisfy it. Admission and final caller
+publication both execute the actual native check. Original0.4 remains a separate
+administrative fixture profile; Core/ontology/key/disclosure semantics still
+belong to the original UMF implementation.
+
+The dependency recipe, guarded delegated read and closed receiver now support
+this owned0.5 subset. Standalone/nondelegated capture refuses it. The private
+executor still uses the original0.4 native role scope: this is caller credential
+authentication, not executor/issuer/target authentication or a public admitted
+backend. No custom custody codec or whole-operation snapshot pipeline is added.
+The inert public assembly and unqualified installation asset still cannot supply
+the selected callable registration/report milestone; these component results do
+not substitute for it or impose a blanket catalog SCRAM requirement.
+
+Three new native controls exercise the actual composed path. A matching trust
+session refuses before executor invocation. A genuine SCRAM caller invokes the
+closed receiver and original UMF evaluator, returning the original permitted,
+withheld salary output. An excluded administrator renames the login role after
+successful executor evaluation; original authentication identity stays unchanged
+while the native session name changes, and final caller publication refuses.
+Authentication policy mutation is confined to an isolated owned class lifecycle;
+the test restores original HBA bytes and removes the credential-bearing role.
+
+Final `evidence/python-psycopg-epoch-cut/48ac1b2b-5fca-487a-8e15-c3f231ee7cc7`
+passes197 methods, including144 fact/identity controls, and the module boundary
+gate. It retains145 original/current/preimage Truss sources,363 original/current/
+archive UMF sources and1705 native payload pins on PostgreSQL18.6 /
+pgserver-pg18 18.6.1 / stock psycopg3.3.6 binary/libpq180006. Three fixture cleanups
+confirm stop0/status3/socket absent. Initial d76eb4fd also passes197 before the
+runner's scope-description count was corrected; preserve its original scope.
+
+Formal `evidence/security-authenticated-publication-formal/cd4b2824-d19b-449f-84cd-8cab455ff5da`
+retains six exact source/native-receipt inputs and four Z3 4.15.4 SMT-LIB/fresh-
+context replays, two UNSAT/two SAT. NULL authentication excludes executor and
+publication; matching role OIDs do not bypass a changed login name at publication.
+Other-route authentication and ontology-subject mapping remain independent SAT
+countermodels. Faithful native role/name/source-cut observations, immutable
+original authentication and retained custody are premises, not Python/native or
+complete semantic refinement proofs. Trace TD-056 C02/C04/C05, CONTRACT-063/
+STP-056 B05/B11/B12 and US-056 AC5/AC9/AC10 prerequisites. No backend binding is
+promoted; all132 cases remain required,26 pass and106 remain unbound.

@@ -19,7 +19,7 @@ class _OwnedDecisionReceiver:
         digest=hashlib.sha256(requirements).hexdigest()
         _inspect_original_fact_sources(requirements,digest,captured)
         selected,_=_epoch_dependency_recipe(selected,digest,captured)
-        if json.loads(selected.profile)['kind']!='truss-flat-fact-provider-fixture/0.4':
+        if json.loads(selected.profile)['kind'] not in ('truss-flat-fact-provider-fixture/0.4','truss-flat-fact-provider-fixture/0.5'):
             raise ValueError('Original delegated receiver profile required')
         self.__scope=(caller_host,caller_transaction,executor_host,executor_transaction,selected,requirements,captured)
 
