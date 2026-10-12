@@ -348,7 +348,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.24-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.25-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -485,7 +485,12 @@ $$;
 CREATE FUNCTION truss.catalog_status() RETURNS TABLE(installation_id text,release_id text,release_sha256 text,layout_profile text,revision text)
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
- IF NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN PERFORM truss.catalog_actor(); END IF;
+ IF NOT EXISTS(WITH RECURSIVE person AS (
+  SELECT oid,rolsuper,rolcreaterole FROM pg_roles WHERE rolname=session_user), inherited(role_oid) AS (
+  SELECT oid FROM person UNION SELECT m.roleid FROM pg_auth_members m JOIN inherited p ON m.member=p.role_oid WHERE m.inherit_option)
+  SELECT 1 FROM person p CROSS JOIN truss.catalog_runtime_installation i
+   WHERE current_setting('role')='none' AND (p.rolsuper OR p.rolcreaterole AND EXISTS(SELECT 1 FROM inherited WHERE role_oid=i.owner_oid)))
+ THEN PERFORM truss.catalog_actor(); END IF;
  RETURN QUERY SELECT i.installation_id::text,i.release_id,i.release_sha256,i.layout_profile::text,h.rev::text FROM truss.runtime_current_installation() i CROSS JOIN truss.schema_head h WHERE h.id=1;
 END;
 $$;

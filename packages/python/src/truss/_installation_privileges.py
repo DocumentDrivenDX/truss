@@ -120,17 +120,37 @@ def protect_installation_in_transaction(host, transaction, roles):
     return host._run_operation(transaction,install)
 
 
+def installation_administrator_with_cursor(cursor, owner_oid=None):
+    """Direct trusted session administrator; consumer admission is separate.
+
+    Existing installation ownership uses current native INHERIT edges, not
+    definer-context cached membership. The caller pins search_path first.
+    """
+    cursor.execute("""SELECT oid,rolname::text,rolsuper,rolcreaterole,current_user=session_user,
+        pg_catalog.current_setting('role')='none' FROM pg_catalog.pg_roles WHERE rolname=session_user""",prepare=False)
+    actor=cursor.fetchone()
+    if actor is None or actor[4:]!=(True,True) or not (actor[2] or actor[3]):
+        raise ValueError('Direct trusted role administrator required')
+    if owner_oid is not None and not actor[2]:
+        cursor.execute("""WITH RECURSIVE inherited(role_oid) AS (
+            SELECT %s::oid UNION SELECT m.roleid FROM pg_catalog.pg_auth_members m
+            JOIN inherited i ON m.member=i.role_oid WHERE m.inherit_option)
+            SELECT EXISTS(SELECT 1 FROM inherited WHERE role_oid=%s::oid)""",(actor[0],owner_oid),prepare=False)
+        if cursor.fetchone()!=(True,):raise ValueError('Current inherited installation owner authority required')
+    return actor[:4]
+
+
 def protect_installation_with_cursor(cursor, roles):
     """Installer-only cursor body; caller supplies the existing guarded savepoint."""
     cursor.execute("SELECT pg_catalog.current_setting('search_path')", prepare=False)
     original_search_path = cursor.fetchone()[0]
     cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)", prepare=False)
-    cursor.execute('''SELECT r.oid,r.rolsuper,current_user=session_user,
-        pg_catalog.current_setting('role')='none',pg_catalog.current_setting('transaction_read_only')='off'
-        FROM pg_catalog.pg_roles r WHERE r.rolname=current_user''', prepare=False)
-    actor = cursor.fetchone()
-    if actor is None or actor[1:] != (True,True,True,True):
-        raise ValueError('Direct trusted installer transaction required')
+    actor=installation_administrator_with_cursor(cursor)
+    cursor.execute("SELECT pg_catalog.current_setting('transaction_read_only')='off'",prepare=False)
+    if cursor.fetchone()!=(True,):raise ValueError('Read-write installation transaction required')
+    if not actor[2]:
+        cursor.execute("SELECT pg_catalog.has_database_privilege(%s,pg_catalog.current_database(),'CREATE WITH GRANT OPTION')",(actor[0],),prepare=False)
+        if cursor.fetchone()!=(True,):raise ValueError('Database CREATE WITH GRANT OPTION or ownership required')
     cursor.execute('SELECT oid,nspowner,nspacl FROM pg_catalog.pg_namespace WHERE nspname=\'truss\'', prepare=False)
     namespace = cursor.fetchone()
     if namespace is None or namespace[1] != actor[0]:
@@ -182,7 +202,18 @@ def protect_installation_with_cursor(cursor, roles):
         cursor.execute(sql.SQL('CREATE ROLE {} NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS').format(sql.Identifier(name)), prepare=False)
     owner = _rows(cursor,'SELECT oid FROM pg_catalog.pg_roles WHERE rolname=%s',(roles.owner,))[0][0]
     client = _rows(cursor,'SELECT oid FROM pg_catalog.pg_roles WHERE rolname=%s',(roles.client,))[0][0]
+    if not actor[2]:
+        # PostgreSQL already gives the role creator ADMIN authority. Enable
+        # only inherited ownership and SET for that trusted creator.
+        # None of these memberships is granted to a consumer or permission role.
+        for option in ('INHERIT','SET'):
+            cursor.execute(sql.SQL('GRANT {} TO {} WITH {} TRUE').format(sql.Identifier(roles.owner),sql.Identifier(actor[1]),sql.SQL(option)),prepare=False)
+        cursor.execute('SELECT pg_catalog.current_database()',prepare=False);database=cursor.fetchone()[0]
+        cursor.execute(sql.SQL('GRANT CREATE ON DATABASE {} TO {}').format(sql.Identifier(database),sql.Identifier(roles.owner)),prepare=False)
     cursor.execute(sql.SQL('ALTER SCHEMA truss OWNER TO {}').format(sql.Identifier(roles.owner)),prepare=False)
+    if not actor[2]:
+        cursor.execute(sql.SQL('REVOKE CREATE ON DATABASE {} FROM {}').format(sql.Identifier(database),sql.Identifier(roles.owner)),prepare=False)
+
     cursor.execute('REVOKE ALL ON SCHEMA truss FROM PUBLIC',prepare=False)
     for relation_oid,name,kind,*rest in relations:
         if kind in ('i','I'):continue

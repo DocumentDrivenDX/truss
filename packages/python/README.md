@@ -1555,3 +1555,30 @@ Receipt tokens and feed cursors remain usable under current reader authority.
 This first route is PostgreSQL18.6, requires a direct superuser administrator,
 and upgrades only the exact 0.23 candidate to 0.24. Earlier candidates, layout
 changes, managed-database installation and Lakebase support remain unfinished.
+
+### Installation without PostgreSQL superuser (runtime 0.25 candidate)
+
+`install_in_transaction` now supports a direct trusted installer with native
+`CREATEROLE` and database `CREATE WITH GRANT OPTION` (or database ownership).
+It creates fresh private owner/registrar roles. PostgreSQL supplies creator ADMIN
+authority; Truss enables owner INHERIT/SET only for that installer, temporarily
+grants the new owner database CREATE for schema transfer, and revokes that
+temporary database privilege afterward. Ordinary consumers receive no owner
+membership or raw-table privileges. See PostgreSQL's
+[schema ownership rule](https://www.postgresql.org/docs/18/sql-alterschema.html).
+
+The same installer can observe status, configure module access and enroll feed
+consumers. Existing-installation administration additionally requires current
+native inherited authority over its retained owner role; CREATEROLE alone is
+insufficient. Business calls still reject elevated installers and owner members:
+use the authenticated person's ordinary connection for catalog acceptance,
+mutation and reads. The host supplies connections and settles transactions.
+
+The tested profile uses PostgreSQL18.6 and a LOGIN CREATEROLE role with
+NOSUPERUSER, NOCREATEDB, NOREPLICATION and NOBYPASSRLS. This removes the
+superuser dependency for these operations; actual Aurora/Lakebase permission,
+TLS and identity behavior still require deployment evidence. Registration and
+key production still require the bundled UMF producers' Bun runtime.
+
+Runtime0.25 supports additive upgrades from the exact .23 and .24 candidates,
+retaining genesis, original reports, receipts and feed evidence as described above.

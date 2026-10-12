@@ -1,0 +1,64 @@
+{
+  "runtime": "0.25",
+  "scope": "public installation and configuration using a direct non-superuser role administrator",
+  "wheelSha256": "c79cbbb3d0f6a585ccc1c4fabb0d93c9e0f62f61fff6776631bf689c267455a0",
+  "environment": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6",
+    "installer": [
+      "LOGIN",
+      "CREATEROLE",
+      "NOSUPERUSER",
+      "NOCREATEDB",
+      "NOREPLICATION",
+      "NOBYPASSRLS"
+    ],
+    "databasePrivilege": "CREATE WITH GRANT OPTION"
+  },
+  "installedBasicTests": [
+    {
+      "modules": [
+        "test_managed_installation_native",
+        "test_runtime_upgrade_native"
+      ],
+      "upgradeSource": "0.24",
+      "tests": 2,
+      "seconds": 28.523,
+      "passed": true
+    },
+    {
+      "modules": [
+        "test_runtime_upgrade_native"
+      ],
+      "upgradeSource": "0.23",
+      "tests": 1,
+      "seconds": 8.133,
+      "passed": true
+    }
+  ],
+  "ownerSqlRoundTrips": 20,
+  "pythonBoundaryImports": 789,
+  "publicTypingFixtures": 5,
+  "expectedNegativeTypeErrors": 20,
+  "review": "Astra Ultra approved role-creator ADMIN preservation, installer-only INHERIT/SET, temporary database grant, native retained-owner checks and ordinary consumer separation",
+  "covered": [
+    "public non-superuser install and status",
+    "ordinary-person real catalog acceptance",
+    "non-super module access configuration and feed enrollment",
+    "ordinary group create and key lookup",
+    "committed ordinary-role feed acknowledgement",
+    "temporary owner database CREATE revoked",
+    "exact .23/.24 upgrades preserve original receipts/tokens/report/feed evidence"
+  ],
+  "upstreamInspection": {
+    "weftCommittedMain": "40b812c",
+    "pythonRealCatalogBridge": "still test-original only; not adopted"
+  },
+  "limits": [
+    "actual Aurora/Lakebase deployment permission/TLS/identity evidence remains open",
+    "Bun still required for owner registration/key producers",
+    "trusted administration requires current inherited owner authority",
+    "no owner membership/raw table grant to consumers",
+    "no relaxation of elevated-person business refusals"
+  ]
+}
