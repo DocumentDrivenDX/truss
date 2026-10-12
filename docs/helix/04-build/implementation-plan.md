@@ -6635,3 +6635,22 @@ Trace US-056-AC1/2 and STP-056 B03. This is per-statement native operator
 feasibility, not cursor/cache authority lifetime, edge traversal, protected-field
 query use, authenticated compilation/installation or full backend qualification.
 No original case is promoted; complete admission and publication remain required.
+
+
+### Bounded typed raw/graph correspondence proof — 2026-10-12
+
+A symbolic two-instance model for each disjoint Staff/Assignment/Project/Resource
+key space proves membership equivalence under bounded typed key bijections,
+complete incidence correspondence and exact active flags(UNSAT difference).
+Omitting owner incidence, active-value correspondence or bijective key mapping
+producesSAT counterexamples; an authorized population isSAT. All five formulas
+replay. Independent Python enumeration checks16,384 Boolean worlds across16
+key-permutation combinations, totaling262,144 mapped worlds and1,048,576
+caller/resource comparisons, with6,543 positive Boolean worlds.
+
+Evidence: `docs/helix/04-build/evidence/security-raw-graph-correspondence-formal-20261012/receipt.json`.
+Trace shared CONTRACT-062/063 / US-056-AC1/2/10. This is the exact declared finite
+conditional model, not arbitrary-world equivalence or SQL/compiler/native codec
+refinement. Native original mapping, complete population, caller, coherent cut,
+authority and final-release premises remain independently required. No backend
+case or production admission is promoted.
