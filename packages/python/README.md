@@ -1501,3 +1501,30 @@ returned safe watermark is the reproduced interval endpoint, rather than the
 original polling observation. Unavailable or mismatched retained facts refuse
 reproduction; there is no internal retry. Retention cleanup is not implemented.
 Runtime 0.22 requires a fresh installation; upgrades remain unfinished.
+
+### Retained import provenance (runtime 0.23 candidate)
+
+The selected direct-read capability retrieves committed import provenance even
+after an object or independent edge has been deleted:
+
+```python
+from truss import HistoryEntity, ImportSourceFound, Ok
+
+result = reader.lookup_import_source_in_transaction(
+    transaction,
+    entity=HistoryEntity(kind="object", document_id="orders", module_id="sales",
+                         definition_id="Order", id=object_id),
+)
+if isinstance(result, Ok) and isinstance(result.value, ImportSourceFound):
+    print(result.value.load_id)
+    # content is the retained native record_source JSON representation, with
+    # entity_kind, entity_id, load_id, source and imported_at; sha256 covers it.
+```
+
+Current module access is required, including original endpoints for edges.
+Read-only READ COMMITTED caller transactions are supported. `ImportSourceAbsent`
+means a committed original creation was verified and has no import provenance;
+unknown or unsafe history returns `ImportSourceUnavailable`. Returned bytes are
+the retained native source representation, rather than the original ImportInput
+syntax. Object property payloads are not included. This does not implement
+archives, cleanup, general source history or upgrades; 0.23 needs fresh installation.

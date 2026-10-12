@@ -20,6 +20,7 @@ from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability)
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
     HistoricalRecord,HistoricalDeleted,HistoryUnavailable)
+from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .feed import FeedPage,FeedConsumer,FeedAcknowledged,FeedUnavailable
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
@@ -506,7 +507,7 @@ class CatalogReferenceAssembly:
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
                                       'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
-                                      'page_objects(text,text,text,int,int,bytea,text,text)','read_history(jsonb,bytea,bigint,int,int,text,text)'):
+                                      'page_objects(text,text,text,int,int,bytea,text,text)','read_history(jsonb,bytea,bigint,int,int,text,text)','lookup_import_source(jsonb,int,text,text)'):
                         cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
@@ -826,6 +827,31 @@ class CatalogReferenceAssembly:
             if state=='42501':return Ok(CatalogRefused())
             reason={'0A000':'profile','25006':'profile','54000':'resource','55P03':'observation','42P01':'installation','42883':'installation'}.get(state)
             if reason:return Ok(CatalogUnavailable(code=reason))
+        return result
+
+    @_active_operation
+    def lookup_import_source_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,maximum_bytes: int=1048576) -> Outcome[ImportSourceFound | ImportSourceAbsent | ImportSourceUnavailable]:
+        """Read committed native import provenance, including after deletion."""
+        try:
+            valid=type(entity) is HistoryEntity and entity.kind in ('object','edge') and type(entity.id) is int and 1<=entity.id<=9223372036854775807
+            valid=valid and all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (entity.document_id,entity.module_id,entity.definition_id))
+        except (UnicodeError,TypeError):valid=False
+        if not valid:return Ok(ImportSourceUnavailable(reason='context'))
+        if type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:return Ok(ImportSourceUnavailable(reason='resource'))
+        manifest,digest,_=_release()
+        selection=json.dumps({'kind':entity.kind,'documentId':entity.document_id,'moduleId':entity.module_id,'definitionId':entity.definition_id,'id':str(entity.id)})
+        def read(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.lookup_import_source(%s::jsonb,%s,%s,%s)',(selection,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]))
+            if value['outcome']=='absent':return ImportSourceAbsent()
+            content=base64.b64decode(value['contentBase64'],validate=True)
+            if sha256(content).hexdigest()!=value['sha256']:raise ValueError('Exact retained native provenance required')
+            return ImportSourceFound(load_id=value['loadId'],content=content,sha256=value['sha256'],writer_xid=value['writerXid'])
+        result=self._host._run_operation(transaction,read)
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            reason={'42501':'authorization','22023':'context','0A000':'profile','55000':'integrity','54000':'resource','P1010':'observation','55P03':'observation'}.get(result.error.sql_state)
+            if reason:return Ok(ImportSourceUnavailable(reason=reason))
         return result
 
     @_active_operation

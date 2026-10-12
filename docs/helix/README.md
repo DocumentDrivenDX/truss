@@ -7,7 +7,7 @@ definition slices and native document-qualified identities on PostgreSQL18.6.
 The public Python assembly now provides exact scalar object/key/page reads,
 grouped object and independent edge mutations, atomic caller preconditions,
 relationship pages and committed receipt visibility on PostgreSQL18.6.
-Caller-owned imports and compatible catalog evolution are implemented within
+Caller-owned imports, retained import provenance after deletion, and compatible catalog evolution are implemented within
 the documented scalar and independent-relationship subset. Object reads return
 identities usable directly for updates and links. Concrete catalog/read/group/
 host-import/feed/history providers are selected through the runtime assembly.

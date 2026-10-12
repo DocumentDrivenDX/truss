@@ -172,3 +172,54 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.read_history(jsonb,bytea,bigint,int,int,text,text) FROM PUBLIC;
+
+CREATE FUNCTION truss.lookup_import_source(selection jsonb,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' AS $$
+DECLARE entity jsonb;kind char(1);ledger truss.runtime_import_source%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
+ identity jsonb;actual jsonb;content bytea;result bytea;creation jsonb;captured_revision int;frontier xid8;
+BEGIN
+ entity:=truss.runtime_history_entity(selection,expected_release,expected_digest);
+ captured_revision:=(SELECT rev FROM truss.schema_head WHERE id=1);frontier:=pg_snapshot_xmin(pg_current_snapshot());
+ IF maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 THEN RAISE EXCEPTION 'bounded provenance output required' USING ERRCODE='22023';END IF;
+ kind:=CASE entity->>'kind' WHEN 'object' THEN 'o' ELSE 'e' END;
+ SELECT * INTO ledger FROM truss.runtime_import_source WHERE entity_kind=kind AND entity_id=(entity->>'id')::bigint;
+ IF NOT FOUND THEN
+  IF EXISTS(SELECT 1 FROM truss.record_source WHERE entity_kind=kind AND entity_id=(entity->>'id')::bigint) THEN
+   RAISE EXCEPTION 'original source ledger required' USING ERRCODE='55000';END IF;
+  -- Absence is meaningful only for an authorized original committed creation.
+  creation:=convert_from(truss.read_history(selection,NULL,1,4096,maximum_bytes,expected_release,expected_digest),'UTF8')::jsonb;
+  IF creation->>'outcome' IS DISTINCT FROM 'record' THEN RAISE EXCEPTION 'original committed creation required' USING ERRCODE='P1010';END IF;
+  IF creation->'event'->>'writerXid' IS NULL OR (creation->'event'->>'writerXid')::xid8>=frontier THEN
+   RAISE EXCEPTION 'creation outside fixed source observation' USING ERRCODE='P1010';END IF;
+  IF EXISTS(SELECT 1 FROM truss.runtime_import_source WHERE entity_kind=kind AND entity_id=(entity->>'id')::bigint)
+   OR EXISTS(SELECT 1 FROM truss.record_source WHERE entity_kind=kind AND entity_id=(entity->>'id')::bigint) THEN
+   RAISE EXCEPTION 'source absence observation changed' USING ERRCODE='55P03';END IF;
+  result:=convert_to('{"outcome":"absent"}','UTF8');
+ ELSE
+  IF ledger.writer_xid>=frontier THEN RAISE EXCEPTION 'committed provenance unavailable' USING ERRCODE='P1010';END IF;
+  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=ledger.group_attempt_id;
+  identity:=attempt.results->0->'identity';
+  IF NOT attempt.complete OR attempt.next_index<>1 OR attempt.writer_xid IS DISTINCT FROM ledger.writer_xid
+   OR attempt.results->0->>'outcome' IS DISTINCT FROM 'created' OR identity->>'id' IS DISTINCT FROM entity->>'id'
+   OR identity->>'typeId' IS DISTINCT FROM entity->>'typeId'
+   OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',entity->>'documentId','moduleId',entity->>'moduleId')
+   OR (convert_from(attempt.input_bytes,'UTF8')::jsonb)->'operations'->0->>'operation' IS DISTINCT FROM
+      (CASE kind WHEN 'o' THEN 'create_object' ELSE 'create_edge' END) THEN
+   RAISE EXCEPTION 'original qualified import creation required' USING ERRCODE='55000';END IF;
+  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'original creation dependency reader required' USING ERRCODE='42501';END IF;
+  SELECT to_jsonb(s) INTO actual FROM truss.record_source s WHERE entity_kind=kind AND entity_id=(entity->>'id')::bigint;
+  IF actual IS DISTINCT FROM ledger.expected_source OR actual->>'entity_kind' IS DISTINCT FROM kind::text
+   OR actual->>'entity_id' IS DISTINCT FROM entity->>'id' THEN
+   RAISE EXCEPTION 'retained native source correspondence required' USING ERRCODE='55000';END IF;
+  content:=convert_to(ledger.expected_source::text,'UTF8');
+  result:=convert_to(jsonb_build_object('outcome','found','loadId',actual->>'load_id','writerXid',ledger.writer_xid::text,
+   'contentBase64',replace(encode(content,'base64'),chr(10),''),'sha256',encode(sha256(content),'hex'))::text,'UTF8');
+  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'current creation dependency reader required' USING ERRCODE='42501';END IF;
+ END IF;
+ PERFORM truss.runtime_history_entity(selection,expected_release,expected_digest);
+ IF captured_revision IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1) THEN RAISE EXCEPTION 'provenance context changed' USING ERRCODE='55P03';END IF;
+ IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'provenance exceeds byte limit' USING ERRCODE='54000';END IF;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.lookup_import_source(jsonb,int,text,text) FROM PUBLIC;
