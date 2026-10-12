@@ -13,9 +13,13 @@ import json
 from uuid import uuid4
 from threading import RLock
 from functools import wraps
-from .assembly_contracts import AssemblyDisposed
-from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
+from typing import Literal
+from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
+from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
 from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable
+from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
+from .contracts import CapabilitySelection
+from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, _require_original_preparation
@@ -97,10 +101,14 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','read.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','read.sql','keys.sql','groups.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
+    profiles=root.joinpath('group-profiles.json').read_bytes()
+    if sha256(profiles).hexdigest()!=manifest['files']['group-profiles.json']:raise ValueError('Selected group profiles required')
+    for entry in json.loads(profiles)['profiles']:
+        if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original profile definition required')
     return manifest,sha256(original).hexdigest(),tuple(sources)
 
 
@@ -133,7 +141,7 @@ class CatalogReferenceAssembly:
             raise ValueError('Catalog configuration and adopted psycopg host required')
         if configuration.schema!='truss' or type(configuration.assembly_id) is not str or not 1<=len(configuration.assembly_id)<=256:
             raise ValueError('Supported catalog configuration required')
-        self.configuration=configuration;self._host=host;self._disposed=False;self._lock=RLock()
+        self.configuration=configuration;self._host=host;self._disposed=False;self._lock=RLock();self._group_documents=()
     def catalog(self) -> CatalogReferenceAssembly:return self
     def dispose(self) -> AssemblyDisposed:
         with self._lock:
@@ -144,7 +152,9 @@ class CatalogReferenceAssembly:
     def prepare_catalog(self,documents: tuple[CatalogDocument,...],*,bun_executable: str='bun') -> PreparedAcceptance:
         with self._lock:
             self._available()
-            return prepare_acceptance(documents,canonical_numeric_free(_configuration()),bun_executable=bun_executable)
+            prepared=prepare_acceptance(documents,canonical_numeric_free(_configuration()),bun_executable=bun_executable)
+            self._group_documents=documents
+            return prepared
     @_active_operation
     def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None) -> Outcome[PendingCatalogInstallation]:
         self._available()
@@ -166,14 +176,14 @@ class CatalogReferenceAssembly:
             if cursor.fetchone()[0]:raise ValueError('Existing namespace requires a supported migration')
             for source in sources:cursor.execute(source,prepare=False)
             privileges=protect_installation_with_cursor(cursor,roles)
-            cursor.execute('''INSERT INTO truss.catalog_runtime_installation
+            cursor.execute('''INSERT INTO truss.catalog_runtime_installation(singleton,installation_id,release_id,release_sha256,layout_profile,preparation_configuration,owner_oid,registrar_oid,genesis_at)
                 SELECT true,pg_catalog.gen_random_uuid(),%s,%s,%s::pg_catalog.jsonb,%s::pg_catalog.jsonb,%s,%s,accepted_at
                 FROM truss.schema_rev WHERE rev=0 RETURNING installation_id::pg_catalog.text''',
                 (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),privileges.owner_oid,privileges.client_oid),prepare=False)
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.3: catalog and module-authorized scalar object reads; business writes unavailable'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.4: catalog, scalar object reads and protected create groups; feed unavailable'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
@@ -190,7 +200,7 @@ class CatalogReferenceAssembly:
             row=cursor.fetchone()
             if row is None or row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-string-create'))
         return self._host._run_operation(transaction,observe)
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration]:
@@ -323,6 +333,12 @@ class CatalogReferenceAssembly:
                 for role in (grant.reader_role,grant.writer_role):
                     cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+            for grant in grants:
+                for role in (grant.reader_role,grant.writer_role):
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_context(text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_type_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                for signature in ('group_create_metadata(bytea,bytea,text,text)','apply_create_group(bytea,bytea,bytea,bytea,text,text)'):
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(grant.writer_role)),prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingModuleAccessConfiguration(grants)
@@ -403,3 +419,54 @@ class CatalogReferenceAssembly:
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
         return result
+
+    @_active_operation
+    def group_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[GroupRuntimeContext]:
+        from ._group_runtime import group_context
+        manifest,digest,_=_release()
+        return group_context(self._host,transaction,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def apply_in_transaction(self,transaction: TransactionHandle,input: GroupSemanticInput,request: GroupRequestSelection,*,
+                             documents: tuple[CatalogDocument,...]=(),bun_executable: str='bun') -> Outcome[GroupApplicationResult]:
+        """Apply one create group; host owns outer commit/rollback and durability."""
+        from ._group_runtime import apply_group
+        manifest,digest,_=_release()
+        return apply_group(self._host,transaction,input,request,documents or self._group_documents,
+                           manifest,digest,_pin_cursor,bun_executable=bun_executable)
+
+    @_active_operation
+    def get_type_reference_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str) -> Outcome[CatalogDefinitionReference | None]:
+        """Resolve a genuine accepted type pin using current module read/write authority."""
+        from .catalog_view import CatalogDefinitionReference
+        from .contracts import QualifiedOwner
+        manifest,digest,_=_release()
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.group_type_reference(%s,%s,%s,%s,%s)',
+                (document_id,module_id,record_id,manifest['releaseId'],digest),prepare=False)
+            raw=cursor.fetchone()[0]
+            if raw is None:return None
+            value=json.loads(bytes(raw))
+            return CatalogDefinitionReference(kind='type',definition_pin=value['definitionPin'],type_id=value['typeId'],
+                authored_identity=value['authoredIdentity'],owner=QualifiedOwner(document_id=value['owner']['documentId'],module_id=value['owner']['moduleId']))
+        return self._host._run_operation(transaction,observe)
+
+    @property
+    def group_selection(self) -> CapabilitySelection[Literal['group']]:
+        """Exact supported provider selection; does not assert database readiness."""
+        from .contracts import CapabilitySelection, ProfilePin
+        manifest,_,_=_release()
+        entries=json.loads(files('truss').joinpath('_catalog_runtime','group-profiles.json').read_bytes())['profiles']
+        pins={entry['name']:ProfilePin(**entry['pin']) for entry in entries}
+        return CapabilitySelection(family='group',capability_profile=pins['mutationProfile'],
+            layout_profile=ProfilePin(**manifest['layoutProfile']),adapter_profile=pins['adapterProfile'],
+            value_profile=pins['valueProfile'],policy_profile=pins['policyProfile'])
+
+    def groups(self,selection: CapabilitySelection[Literal['group']],*,documents: tuple[CatalogDocument,...]=(),bun_executable: str='bun') -> GroupCapabilityAvailable | CapabilityUnavailable:
+        with self._lock:
+            if self._disposed:return CapabilityUnavailable(reason='disposed')
+            if type(selection) is not CapabilitySelection or selection!=self.group_selection:return CapabilityUnavailable(reason='selection')
+            def apply(transaction,input,request):
+                return self.apply_in_transaction(transaction,input,request,documents=documents,bun_executable=bun_executable)
+            return GroupCapabilityAvailable(capability=NativeGroupCapability(selection=self.group_selection,_apply=apply))

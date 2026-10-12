@@ -29,7 +29,53 @@ ddx:
 
 # Python consumer integration: first real workflow
 
-The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. Business object reads and writes remain unavailable. Draft interfaces and private native components do not count as those operations.
+The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized scalar-string identity reads and a create-only group provider. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
+
+## Consumer additions from commit 9e38962 — 2026-10-12
+
+Read the consumer's `docs/helix/02-design/truss-requirements.md` at commit
+`9e38962` in the Hohfeld checkout. Truss owns delivery of the following additions;
+use public adopter workflows and focused regressions, rather than a new process
+or conformance framework. The consumer's 1,025 tests validate its side, not these
+Truss capabilities.
+
+| Ask | Next implementation and acceptance |
+| --- | --- |
+| R14 reader catalog/source | Add a current-person module-scoped catalog view and accepted document bytes/digest/revision retrieval. One reader sees its module and original bytes; a non-reader sees neither. Whole-document retrieval must explicitly address documents containing unreadable modules, rather than leaking their source through a readable module. |
+| R13 catalog refusals | Public stable codes distinguish unauthorized, invalid, conflict and unavailable. Preserve disclosure-safe results and PostgreSQL transaction-retry errors; no prose parsing. Deliver alongside reader catalog access and group permission refusals. |
+| R15 registration lifecycle | Accept a second document/module, report unchanged derived meaning, then support compatible additions and relationship widening. Refuse incompatible changes with typed rule/count results. Define provisional cross-module relationships before enabling unresolved targets. |
+| R15/R9 property families | Add exact integer, decimal, boolean, timestamp and binary catalog/mutation/read support using existing UMF semantics. No float intermediates or rounded timestamps. |
+| R15 identities | Document source revision, artifact identity and registration identity separately. A content digest may identify a source revision; it does not replace Truss's accepted registration ID or catalog revision. Confirm this against the retained UMF producer before changing inputs. |
+| R3 deployment | State current installer/configuration superuser requirement and Bun preparation/key-production dependency plainly. Define a managed-database installer using available owner/role administration privileges, then qualify it on a supplied Lakebase instance. Truss runs its qualification; platform owners supply the supported connection/privilege profile. Do not claim existing Lakebase support. |
+| R12 reads/settlement | Finish real public mutation commit/replay and rollback now; enable these read capabilities on adopted read-only transactions. Distinguish an unknown commit from a confirmed committed retry. |
+
+Implementation order: publish the real create workflow; reader catalog/source and
+typed refusals; business-key reads and capability support on adopted read-only transactions; additional registration
+and exact property families; conditional update/delete/preconditions. Receipt
+visibility, imports, relationship reads, full Weft queries and managed deployment
+remain in the complete goal. None is replaced by documentation or fixture seeding.
+
+## First create-provider iteration — 2026-10-12
+
+Runtime 0.4 connects the public group selector to rootless string/null creation,
+actual accepted type/field/key identities, native key uniqueness, atomic journal
+publication and durable request receipts. The host commits or rolls back; replay
+returns the original result after current module-writer authorization. Request-free
+calls create without a receipt. The existing UMF key producer stays internal.
+This candidate requires fresh installation; it does not qualify upgrades or the
+complete feed/history profile. The retained request fingerprint profile describes
+the exact input byte hash separately from proposed canonical framing.
+
+Native tests cover the public commit/read/replay workflow, multiple groups,
+rollback, conflicting requests, authorization revocation, exact source pins,
+asymmetric relationship minima, malformed native input, late receipt/journal
+failure and deferred corruption. Astra reviews each iteration before publication.
+Next work follows the consumer-additions order above. Receipt visibility, imports,
+relationships and full Weft execution remain in the complete goal. Supporting
+these read capabilities on adopted read-only transactions and Lakebase
+qualification remain explicit work. No external dependency blocks the local
+PostgreSQL implementation; Lakebase qualification requires a supplied target and
+privilege profile.
 
 ## Current implementation priority: public object workflow — 2026-10-12
 
