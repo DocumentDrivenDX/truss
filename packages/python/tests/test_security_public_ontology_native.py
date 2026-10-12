@@ -438,9 +438,31 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    with self.assertRaises(psycopg.errors.InsufficientPrivilege) as failure:ordinary.execute('UPDATE truss.policy_publication_capacity SET max_retained=100')
    self.assertEqual(failure.exception.sqlstate,'42501')
   observations.append({'id':'ordinary-native-capacity-profile-change-refuses','observed':'42501'})
-  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);profile_registered=profile_execute(self.admin,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(profile_registered,[(b'profile-bound-operation'.hex(),)]);self.admin.execute('COMMIT');observations.append({'id':'native-profile-capacity-registers-original-fifth-slot','observed':profile_registered})
+  publication_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self._track_owned_connection(publication_owner);publication_pid=publication_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
+  publication_owner.execute('BEGIN');publication_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');publication_owner.execute(acquire).fetchall();publication_owner.execute(capacity_lock);profile_registered=profile_execute(publication_owner,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(profile_registered,[(b'profile-bound-operation'.hex(),)]);publication_owner.execute('COMMIT');observations.append({'id':'native-profile-capacity-registers-original-fifth-slot','observed':profile_registered})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=profile_execute(self.admin,(b'profile-bound-overflow',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK');observations.append({'id':'native-profile-capacity-exhaustion-refuses','observed':refused})
+  read_params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);read_params['user']='alice'
+  def protected_codes():
+   with psycopg.connect(**read_params,autocommit=True) as reader:return [r[0] for r in reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))]
+  real_buffer=protected_codes();self.assertEqual(real_buffer,['RA','RAB']);observations.append({'id':'durable-registered-operation-buffers-real-protected-read','observed':list(real_buffer)})
+  self.assertIs(self.admin.execute('SELECT pg_terminate_backend(%s)',(publication_pid,)).fetchone()[0],True)
+  with self.assertRaises(psycopg.OperationalError):publication_owner.execute('SELECT 1')
+  self.assertEqual(self.admin.execute('SELECT settled FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(False,));observations.append({'id':'real-protected-buffer-original-coordinator-loss-retains-claim','observed':'unsettled'})
+  def participating_assignment_change(active,expected_generation):
+   authority_writer.execute('BEGIN')
+   try:
+    authority_writer.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone()
+    if authority_writer.execute('SELECT EXISTS(SELECT 1 FROM truss.policy_publication_claim WHERE NOT settled)').fetchone()[0]:authority_writer.execute('ROLLBACK');return 'refused'
+    authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':active}),int(aliases['AA'].id),int(assignment['typeId'])))
+    advanced=authority_writer.execute(claim_advance,(installation_bytes,profile_bytes,expected_generation)).fetchall();self.assertEqual(advanced,[('1',installation_bytes.hex(),profile_bytes.hex(),str(expected_generation+1))]);authority_writer.execute('COMMIT');return advanced
+   except BaseException:authority_writer.rollback();raise
+  self.assertEqual(participating_assignment_change(False,5),'refused');self.assertEqual(protected_codes(),['RA','RAB']);self.assertEqual(self.admin.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone(),('5',));observations.append({'id':'durable-real-read-refuses-assignment-revocation-before-effects','observed':{'generation':'5','freshCodes':['RA','RAB']}})
+  # Explicit fixture withholding is the completion premise, not a production sink.
+  real_buffer=[];observations.append({'id':'durable-real-read-withholds-buffer-before-original-settlement','observed':real_buffer,'qualification':'fixture completion only'})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall(),[(b'profile-bound-operation'.hex(),)]);self.admin.execute('COMMIT')
+  committed=participating_assignment_change(False,5);self.assertEqual(committed,[('1',installation_bytes.hex(),profile_bytes.hex(),'6')]);observations.append({'id':'durable-real-read-settlement-permits-committed-assignment-revocation','observed':committed})
+  fresh_codes=protected_codes();self.assertEqual(fresh_codes,[]);observations.append({'id':'durable-real-read-fresh-admission-after-revocation-denies','observed':fresh_codes})
+  restored=participating_assignment_change(True,6);self.assertEqual(restored,[('1',installation_bytes.hex(),profile_bytes.hex(),'7')]);self.assertEqual(protected_codes(),['RA','RAB']);observations.append({'id':'durable-real-read-controlled-restoration-advances-generation','observed':restored})
   self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.client(code text PRIMARY KEY);CREATE TABLE relational_fixture.project(code text PRIMARY KEY);CREATE TABLE relational_fixture.staff(code text PRIMARY KEY,login text NOT NULL);CREATE TABLE relational_fixture.resource(code text PRIMARY KEY,secret text NOT NULL);CREATE TABLE relational_fixture.assignment(code text PRIMARY KEY,active boolean NOT NULL)')
   for table,codes in [('client',['C']),('project',['A','B']),('resource',['RA','RB','RAB','RO'])]:
    for code in codes:

@@ -400,3 +400,32 @@ Trace CONTRACT-005/063, STP-057 L11 and US-057-AC7. This concerns explicit owned
 fixture resources only; production caller transaction recovery, unknown outcomes
 and complete original native/resource custody remain unqualified. No required
 backend acceptance case is promoted.
+
+
+### Composed protected read and durable revocation — 2026-10-12
+
+Astra Ultra independently reviewed the current candidate with no actionable
+defects, replaying24 SMT obligations and verifying27 formula/script hashes. Its
+next integration recommendation is now implemented: the profile-bound fifth
+claim commits on an owned original publication coordinator, then an actual
+ordinary Alice read buffers RA/RAB. Termination of that owned coordinator leaves
+the original durable claim unsettled. The participating assignment changer takes
+schema-head SHARE then guard UPDATE and freshly checks every unsettled claim
+before real AA effects. It refuses, preserving generation5 and ordinary access.
+
+Explicit fixture withholding then precedes exact original settlement COMMIT.
+The same participating changer updates actual AA active=false and checked
+generation6 together, commits, and a fresh ordinary read is empty. Controlled
+restoration updates AA active=true and generation7 together and restores RA/RAB.
+The post-effect gate remains rollback-contained. Astra's read-only review of this
+new sequence also found no actionable defect. Both native tests pass:212 security
+observations plus the separate two cleanup observations.
+
+Sources, reviews, actual terminal/native results and hashes:
+`../../04-build/evidence/security-composed-durable-read-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L05/L11 and US-057-AC2/AC3/AC7. This composes
+previously separate finite native steps; it does not establish authentic sink
+completion, original production issuer, unknown commit recovery, complete
+source/fact/participant/callable closure or verified bootstrap. The audit still
+has132 required cases and106 missing commands, and production Weft lowering
+remains closed. No original backend case is promoted.
