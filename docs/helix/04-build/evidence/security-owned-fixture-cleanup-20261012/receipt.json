@@ -1,0 +1,22 @@
+{
+  "executedBaseCommit": "eb2756908e6c1474436f06a9a337862ba0b548f7",
+  "sourceDelta": "source-delta.zip",
+  "nativeTests": 2,
+  "observedDurationSeconds": 31.103,
+  "securityObservations": 205,
+  "cleanupObservations": 2,
+  "trace": [
+    "CONTRACT-005 explicit owned resource custody",
+    "CONTRACT-063 native cleanup confirmation",
+    "STP-057 L11",
+    "US-057-AC7"
+  ],
+  "scope": "Owned fixture connection closure before schema teardown; unchanged public ontology candidate regression. Observed duration is not worst-case deadline proof. No production caller transaction/unknown-outcome recovery or original acceptance promotion.",
+  "sha256": {
+    "security-owned-fixture-cleanup.stderr.log": "4e09438a61f2b0fae6b07624813838872558529f302b6b20e9e2e304dab7bfc3",
+    "security-owned-fixture-cleanup.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-delta.zip": "697752e22540722ab9970f87cef228f355c85a8d8c426fcaa045e2339b592e41",
+    "security-owned-fixture-cleanup.json": "9d859056c83a2b58809ca1a557f18d2b6fa6288eec6a91fe1e6054b9da3022a3",
+    "security-owned-fixture-cleanup.json.cleanup.json": "7ef2ef64075ee2d0889f2f68597001016c6efa7379660bc5f3946e3b178e9e51"
+  }
+}

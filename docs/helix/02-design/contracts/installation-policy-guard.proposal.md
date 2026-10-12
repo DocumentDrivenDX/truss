@@ -379,3 +379,94 @@ Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Resource budgets,
 complete profile/source/participant/callable parity, original operation issuer,
 authentic sink settlement and uncertainty/recovery remain unqualified. No
 required backend acceptance case is promoted.
+
+
+### Native evidence fixture cleanup ordering — 2026-10-12
+
+Extra explicitly owned security-fixture connections now close before fixture
+schema teardown, rather than relying solely on unittest cleanup callbacks that
+run afterward. This contains a failed-assertion path whose still-open transaction
+could otherwise hold schema locks during DROP. Original public consumer host
+connections remain managed by the inherited host/fixture lifecycle.
+
+A native regression starts an owned transaction with an observed schema lock,
+invokes the same owned-connection close helper used before teardown, observes
+backend absence and drops the schema under250ms lock timeout. The full ontology
+regression remains205 observations. Both tests pass in the observed31.103s; this
+is not a worst-case60s-runner deadline guarantee or backend case admission.
+Sources, two cleanup observations, terminal logs and receipt:
+`../../04-build/evidence/security-owned-fixture-cleanup-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L11 and US-057-AC7. This concerns explicit owned
+fixture resources only; production caller transaction recovery, unknown outcomes
+and complete original native/resource custody remain unqualified. No required
+backend acceptance case is promoted.
+
+
+### Composed protected read and durable revocation — 2026-10-12
+
+Astra Ultra independently reviewed the current candidate with no actionable
+defects, replaying24 SMT obligations and verifying27 formula/script hashes. Its
+next integration recommendation is now implemented: the profile-bound fifth
+claim commits on an owned original publication coordinator, then an actual
+ordinary Alice read buffers RA/RAB. Termination of that owned coordinator leaves
+the original durable claim unsettled. The participating assignment changer takes
+schema-head SHARE then guard UPDATE and freshly checks every unsettled claim
+before real AA effects. It refuses, preserving generation5 and ordinary access.
+
+Explicit fixture withholding then precedes exact original settlement COMMIT.
+The same participating changer updates actual AA active=false and checked
+generation6 together, commits, and a fresh ordinary read is empty. Controlled
+restoration updates AA active=true and generation7 together and restores RA/RAB.
+The post-effect gate remains rollback-contained. Astra's read-only review of this
+new sequence also found no actionable defect. Both native tests pass:212 security
+observations plus the separate two cleanup observations.
+
+Sources, reviews, actual terminal/native results and hashes:
+`../../04-build/evidence/security-composed-durable-read-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L05/L11 and US-057-AC2/AC3/AC7. This composes
+previously separate finite native steps; it does not establish authentic sink
+completion, original production issuer, unknown commit recovery, complete
+source/fact/participant/callable closure or verified bootstrap. The audit still
+has132 required cases and106 missing commands, and production Weft lowering
+remains closed. No original backend case is promoted.
+
+
+### Real assignment/generation rollback containment — 2026-10-12
+
+The composed participating assignment changer now has two explicit native failure
+schedules before COMMIT. After actual AA active=false, a division-by-zero query
+returns22012; confirmed rollback preserves active=true, generation5 and fresh
+ordinary RA/RAB reads. Separately, the original generation source actually
+returns6 and the owned transaction reads6 before the same native failure;
+confirmed rollback restores both assignment and generation5. The writer is IDLE
+after containment. Later successful revocation/generation6 and restoration7
+still commit and produce the independently checked ordinary results.
+
+Both native tests pass with214 security observations and the separate two cleanup
+observations. Sources, native results and terminal logs:
+`../../04-build/evidence/security-durable-revocation-rollback-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L05/L12 and US-057-AC3/AC8. This proves the
+confirmed owned native fixture branches, not uncertain COMMIT/ROLLBACK outcomes,
+production recovery, authentic sink/issuer or complete bootstrap/participant
+qualification. Unknown completion still retains original custody; no replay or
+replacement generation is inferred. No required backend case is promoted.
+
+
+### Original registration rollback and capacity — 2026-10-12
+
+The original profile-bound fifth claim now exercises explicit rollback and actual
+22012 native failure after INSERT. The owning transaction sees its unsettled row;
+an independent fresh native observer sees no row before commit. Confirmed
+rollback leaves the owner IDLE, retains exactly four existing identities and
+leaves no claim/tombstone for the original uncommitted operation. The same
+original operation subsequently registers and confirms COMMIT before the
+composed protected read. An INSERT result alone never proves durable admission.
+
+Both native tests pass with216 security observations plus separate cleanup
+observations. Sources, terminal results and hashes:
+`../../04-build/evidence/security-registration-rollback-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L11/L12 and US-057-AC7/AC8. These are known
+rollback branches only, not permission to retry uncertain COMMIT or issue a
+replacement token. Production original issuer, reconciliation, authentic
+settlement/sink and complete native bootstrap/participant qualification remain
+required. No original required backend case is promoted.

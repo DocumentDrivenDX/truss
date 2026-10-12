@@ -1,0 +1,33 @@
+{
+  "executedBaseCommit": "bc1f2656cd5cd2e3f9d0beb4f5ea21034e9f6d7e",
+  "sourceDelta": "source-delta.zip",
+  "nativeTests": 2,
+  "observedDurationSeconds": 18.83,
+  "securityObservations": 212,
+  "cleanupObservations": 2,
+  "trace": [
+    "CONTRACT-005 original publication custody",
+    "CONTRACT-063 final release/current authority",
+    "STP-057 L03/L05/L11",
+    "US-057-AC2/AC3/AC7"
+  ],
+  "acceptanceAudit": {
+    "required": 132,
+    "missingCommands": 106,
+    "byBackend": {
+      "pg-raw": 16,
+      "truss": 30,
+      "delta-raw": 30,
+      "ashlar": 30
+    }
+  },
+  "scope": "Composed native candidate schedule, with fixture-controlled participant/withholding premises. Not production admission, authenticated sink/issuer, unknown commit recovery or complete writer/source/bootstrap qualification. No original case promotion.",
+  "sha256": {
+    "astra-review.json": "9464034fd89966c310f93259207016d0a3b346dd023079c633c057f167a7dfcc",
+    "security-composed-durable-read.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-composed-durable-read.json.cleanup.json": "7ef2ef64075ee2d0889f2f68597001016c6efa7379660bc5f3946e3b178e9e51",
+    "source-delta.zip": "31e2d9c3fa385e3820fef777c787b6cd3a22bac5a0d6ac573a045c2b016f6732",
+    "security-composed-durable-read.stderr.log": "cc33ac69b51b2d450cefd77e8ef3b483bc2ec807e241a93b25f534343d4daab8",
+    "security-composed-durable-read.json": "4cbc741ddadd604d590d6b512d77e87d50907bd044d0220b605a12d57b822fea"
+  }
+}
