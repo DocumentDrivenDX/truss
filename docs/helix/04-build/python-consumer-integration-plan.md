@@ -55,6 +55,25 @@ and exact property families; conditional update/delete/preconditions. Receipt
 visibility, imports, relationship reads, full Weft queries and managed deployment
 remain in the complete goal. None is replaced by documentation or fixture seeding.
 
+## Exact-input unchanged registration iteration — 2026-10-12
+
+Runtime 0.9 adds a distinct public `CatalogUnchanged` result when a new request
+submits exactly the current accepted input/document/declaration/source bytes.
+It preserves the original accepted native registration ID, revision and report;
+the current request key, authenticated native actor and exact asserted origin are
+separate fields. An immutable protected request alias supports exact retries and
+conflict refusal without another catalog revision, report, archive or business
+journal event. The caller still commits or rolls back. A dedicated deferred
+validator rechecks authority, exact stored alias, original catalog/report and
+unambiguous request-key ownership; the head completion trigger alone would not
+run for this operation. Installation privilege closure includes the new private
+table. Focused public native tests cover pending/committed retry, origin/source
+conflict, rollback, suppressed insertion, ambiguous request identity and authority
+revocation before commit. This is exact-input unchanged, not semantic equivalence.
+Additional documents, compatible evolution, incompatibility rule/count reporting
+and exact non-string property families remain the next lifecycle work. Fresh
+installation remains required; full-interface completion is not claimed.
+
 ## Business-key reader iteration — 2026-10-12
 
 Runtime 0.8 connects authored primary/alternate string-key lookup through the

@@ -58,6 +58,18 @@ class CatalogRegistration:
     status: str = 'pending_commit'
 
 @dataclass(frozen=True,slots=True)
+class CatalogUnchanged:
+    revision: int
+    registration_id: str
+    report_bytes: bytes
+    replayed: bool
+    request_key: str
+    asserted_origin_bytes: bytes
+    actor: str
+    outcome: str = 'unchanged'
+    status: str = 'pending_commit'
+
+@dataclass(frozen=True,slots=True)
 class CatalogReport:
     revision: int
     original_bytes: bytes
@@ -234,7 +246,7 @@ class CatalogReferenceAssembly:
             return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-string-create'))
         return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
-    def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration]:
+    def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged]:
         self._available()
         local_failure=[None]
         def reject(code,message):
@@ -273,10 +285,11 @@ class CatalogReferenceAssembly:
             cursor.execute('SELECT * FROM truss.catalog_accept(%s,%s,%s,%s,%s,%s)',parameters,prepare=False)
             rows=cursor.fetchmany(2)
             if len(rows)!=1:raise ValueError('Complete catalog result required')
-            revision,identity,report,replayed=rows[0]
+            revision,identity,report,replayed,unchanged,actor=rows[0]
             report=bytes(report);decoded=json.loads(report)
             if decoded['revision']!=revision or decoded['registrationId']!=identity or decoded['acceptedInput']!=prepared.input():
                 raise ValueError('Original catalog result correspondence required')
+            if unchanged:return CatalogUnchanged(int(revision),identity,report,replayed,request_key,origin_bytes,actor)
             return CatalogRegistration(int(revision),identity,report,replayed)
         return _catalog_failure(self._host._run_semantic_operation(transaction,execute,parameter_producer=produce),local_failure[0])
     @_active_operation

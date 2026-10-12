@@ -8,8 +8,9 @@ transactional installation, status, fresh catalog registration, report retrieval
 and durable registration retry. Runtime 0.4 provides module-authorized scalar-string object identity reads and
 rootless string object creation through a selected group provider, including
 caller rollback and durable request replay. Runtime 0.5 also provides ordinary-reader
-catalog metadata and exact accepted-document retrieval. Updates/deletes, key/page reads,
-compiled queries, imports and feed operations remain unfinished.
+catalog metadata and exact accepted-document retrieval. Runtime 0.8 provides public
+business-key lookup, and runtime 0.9 reports exact-input unchanged registration.
+Updates/deletes, pages, compiled queries, imports and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -959,3 +960,24 @@ object read lock. The returned record is verified against the requested key, wit
 current record and key-field permissions rechecked before publication. The
 profile remains rootless/string-only and revision 1; pages, broader value types
 and catalog evolution remain unfinished. Runtime 0.8 currently needs fresh install.
+### Exact-input unchanged registration (runtime 0.9 candidate)
+
+`accept_in_transaction` returns `CatalogRegistration` for a new accepted catalog
+or its original request retry. A new request key for exactly the current accepted
+input returns `CatalogUnchanged`, with `outcome="unchanged"`. Its `revision`,
+`registration_id` and `report_bytes` identify the original accepted registration.
+Its `request_key`, `actor` and `asserted_origin_bytes` describe the current request;
+they do not replace the original report's actor or asserted origin.
+
+Both calls remain inside the caller's transaction (`status="pending_commit"`).
+An unchanged request stores a durable request alias when the caller commits,
+without adding a catalog revision, report, archive or business journal event.
+Repeating its exact input and origin returns `CatalogUnchanged(replayed=True)`;
+reusing the key with different source/input or origin refuses with
+`catalog_code="request_conflict"`. Current registrar authority is required on
+retry and again at commit for a newly recorded alias. Rollback removes that alias.
+
+The equality profile compares original input, archive, declarations and retained
+source bytes. It does not claim semantic equivalence of rewritten documents.
+Later documents and changed definitions still require the pending lifecycle
+implementation. This candidate requires fresh installation.
