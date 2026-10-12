@@ -15,6 +15,7 @@ from threading import RLock
 from functools import wraps
 from .assembly_contracts import AssemblyDisposed
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
+from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, _require_original_preparation
@@ -96,7 +97,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','barrier.sql','view.sql','read.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -172,7 +173,7 @@ class CatalogReferenceAssembly:
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss catalog runtime 0.2: fresh registration, reports and complete views; business writes unavailable'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.3: catalog and module-authorized scalar object reads; business writes unavailable'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
@@ -189,7 +190,7 @@ class CatalogReferenceAssembly:
             row=cursor.fetchone()
             if row is None or row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id'))
         return self._host._run_operation(transaction,observe)
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration]:
@@ -317,6 +318,11 @@ class CatalogReferenceAssembly:
                 cursor.execute('''SELECT reader_role,writer_role FROM truss.module_access
                   WHERE document_id=%s AND module=%s''',(grant.document_id,grant.module_id),prepare=False)
                 if cursor.fetchone()!=(grant.reader_role,grant.writer_role):raise ValueError('Complete native module grant batch required')
+            from psycopg import sql
+            for grant in grants:
+                for role in (grant.reader_role,grant.writer_role):
+                    cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingModuleAccessConfiguration(grants)
@@ -359,4 +365,41 @@ class CatalogReferenceAssembly:
         result=self._host._run_operation(transaction,observe)
         if isinstance(result,Error) and result.error.code=='execution_obligation' and result.error.sql_state=='54000':
             return Ok(CatalogViewUnavailable(reason='resource'))
+        return result
+
+    @_active_operation
+    def get_object_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,
+                                  record_id: str,object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+        """Read complete supported logical values using current module membership.
+
+        This scalar-string profile uses authored addresses and native identities;
+        it does not claim the historical DirectRecord definition-pin profile.
+        """
+        try:
+            valid=all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v
+                      for v in (document_id,module_id,record_id))
+        except UnicodeError:valid=False
+        if not valid or type(object_id) is not int or not 1<=object_id<=9223372036854775807:
+            return Ok(ObjectReadInvalid(code='selection'))
+        if type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:
+            return Ok(ObjectReadInvalid(code='limits'))
+        manifest,digest,_=_release()
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.get_object(%s,%s,%s,%s,%s,%s,%s)',
+                (document_id,module_id,record_id,object_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            raw=cursor.fetchone()[0]
+            if raw is None:return ObjectNotFound()
+            basis=json.loads(bytes(raw))
+            if basis['releaseId']!=manifest['releaseId'] or basis['releaseSha256']!=digest:
+                raise ValueError('Exact selected installed runtime required')
+            return ObjectFound(object=ScalarObject(document_id=basis['documentId'],module_id=basis['moduleId'],
+                record_id=basis['recordId'],id=int(basis['id']),type_id=int(basis['typeId']),version=int(basis['version']),
+                catalog_revision=int(basis['catalogRevision']),record_revision=int(basis['recordRevision']),
+                created_at=basis['createdAt'],updated_at=basis['updatedAt'],
+                values=tuple(tuple(v) for v in basis['values']),retained=tuple(tuple(v) for v in basis['retained'])))
+        result=self._host._run_operation(transaction,observe)
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
+            if reason:return Ok(ObjectReadUnavailable(reason=reason))
         return result

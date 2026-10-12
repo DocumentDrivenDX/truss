@@ -5,8 +5,9 @@ package is under implementation; current public components provide local runtime
 preparation, selected native host transaction controls, installation footprint inspection
 and assembly construction. The selected catalog runtime additionally provides
 transactional installation, status, fresh catalog registration, report retrieval
-and durable registration retry. Business mutations, queries, imports and feed
-operations remain unfinished.
+and durable registration retry. Runtime 0.3 also provides module-authorized
+scalar-string object identity reads. Business mutations, key/page reads, compiled
+queries, imports and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
 `adopt_psycopg_host(connection)` implementation selects psycopg/psycopg-binary
@@ -105,7 +106,7 @@ because membership authorization must observe committed revocations. Repeating
 the same request key as the same person with identical original inputs and origin
 returns the original report and `replayed=True`. Changing the request returns a
 conflict. Retry still requires current authorization. There are no internal retry
-loops. Catalog evolution and business writes are unavailable in this release.
+loops. Catalog evolution and business writes are unavailable in this release. The selected 0.3 runtime adds module-authorized object identity reads as described below.
 `dispose()` closes this assembly's admission without closing or settling the host.
 
 The catalog runtime 0.2 candidate also provides
@@ -720,3 +721,47 @@ Graph capabilities still require their separate scoped native qualification.
 The host owns transaction start/end, connection lifecycle and pooling. Truss
 does not change PostgreSQL 17's transaction_timeout; native timeout termination
 retains the original failure, quarantines the connection and refuses reuse.
+
+## Public object identity read
+
+After registration, an installation administrator configures module access using
+`configure_module_access_in_transaction`. This grants only schema usage and
+execution of the protected reader to the selected module roles. The host grants
+people membership in those roles; readers need no catalog registrar membership.
+
+```python
+from truss import Ok, ObjectFound
+
+result = assembly.get_object_in_transaction(
+    transaction, document_id="orders", module_id="sales",
+    record_id="Order", object_id=123,
+)
+if isinstance(result, Ok) and isinstance(result.value, ObjectFound):
+    order = result.value.object
+    print(order.id, order.version, dict(order.values))
+```
+
+The `truss-python-scalar-object/0.1` result uses authored document/module/Record
+addresses, native integer identities, versions/revisions and exact UTC microsecond
+timestamps. `values` and `retained` are immutable tuples of name/value pairs:
+strings are Python `str`, explicit null is `None`, and absent values have no pair.
+This is an explicit scalar-string profile, not the draft historical `DirectRecord`
+definition-pin carrier. It supports rootless JSON-home objects. Unsupported
+ownership, row-home content, structured/numeric values or unknown properties
+refuse rather than disappearing from the result. Keys and pages follow separately.
+
+An `Ok` contains `ObjectFound`, `ObjectNotFound`, `ObjectReadInvalid`, or
+`ObjectReadUnavailable`. Wrong-module and missing selections both return not-found.
+Losing the sole role that grants facade execution returns an execution error;
+unsafe caller contexts and unresolved transaction cleanup also remain errors.
+Authorization uses current recursive native role membership before observing the
+object and again before returning it. Calls require READ COMMITTED and the
+caller-owned read-write transaction used by this installed profile; the toolkit
+never commits, rolls back the outer transaction or retries. `maximum_bytes`
+defaults to 1 MiB and can be selected from 1 byte through 16 MiB.
+
+Runtime 0.3 requires a fresh installation; upgrading earlier candidates is not
+implemented. Accepted catalog rows are protected from ordinary callers; trusted
+administrative maintenance requires quiescence. Native reader fixtures seed rows
+administratively and qualify reads only. Public grouped mutations remain the next
+implementation milestone.
