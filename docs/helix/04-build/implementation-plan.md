@@ -6708,3 +6708,28 @@ Trace CONTRACT-062/063 / US-056-AC6/7 / STP-056 B07/B09 / STP-057 L12.
 This is fixture prepublication conflict/rollback feasibility, not authenticated
 production installer, commit-uncertainty recovery or full source/authority/
 publication admission. No original backend case is promoted.
+
+
+### Public compiled-query workflow — 2026-10-12
+
+Runtime0.26 exposes `NativeCompiledExecutionCapability.query_in_transaction`
+through `assembly.compiled_execution(assembly.compiled_selection)`. It consumes
+actual accepted source bytes/catalog mappings, calls Weft's normal Rust Python
+entry and executes on the adopted psycopg transaction. Public registration and
+mutations produce the queried rows; no administrative row seed or synthetic
+accepted identity is used.
+
+The initial callable profile covers string/boolean fields, equality filters and
+property joins, integer COUNT, ordering/limits and alias expansion. Optional
+projections preserve absent/null/empty distinctions. Complete authorized document
+scope, fixed independently authorized source functions, one statement data
+snapshot, native parameter slots and final context checks remain explicit.
+Basic installed-wheel workflows and a retained0.25→0.26 upgrade pass on
+DocumentDrivenDX pgserver18.6.1/PostgreSQL18.6/psycopg3.3.6. Legacy support policy
+pins remain intact; only the new runtime selects the named-record policy0.4.0.
+
+Remaining work includes wider numeric query domains, relationship lowering,
+structured/composed records, page-key profiles, archive/retention operations,
+engine-owned import batches and managed-service qualification. The full Python
+interface goal remains active; this is a working public increment, not closure
+of the complete shared corpus or broader security compiler.

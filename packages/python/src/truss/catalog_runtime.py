@@ -15,10 +15,10 @@ import base64
 from uuid import uuid4
 from threading import RLock
 from functools import wraps
-from typing import Literal, overload, TypeVar
+from typing import Literal, overload, TypeVar, Mapping
 from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogReport)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
-    NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability)
+    NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability, NativeCompiledExecutionCapability)
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
     HistoricalRecord,HistoricalDeleted,HistoryUnavailable)
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
@@ -36,10 +36,11 @@ from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadIn
 from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
 from .contracts import CapabilitySelection, TypedIdentity
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult
+from .query import QueryRows,QueryRefused,QueryUnavailable
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, _require_original_preparation
-from ._catalog_support import evaluate_catalog_support, SCALAR_PROFILE
+from ._catalog_support import evaluate_catalog_support, SCALAR_PROFILE, NAMED_SCALAR_PROFILE
 from ._catalog_report_semantics import compose_original_catalog_report_semantics, canonical_numeric_free
 
 
@@ -111,7 +112,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','preconditions.sql','imports.sql','feed.sql','history.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','read.sql','keys.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         sources.append(raw.decode('utf-8'))
@@ -124,14 +125,16 @@ def _release():
     for entry in json.loads(public_profiles)['profiles']:
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json'):
+    for name in ('preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original migration/preparation baseline required')
     return manifest,sha256(original).hexdigest(),tuple(sources)
 
 
 def _configuration():
     _release()
-    return json.loads(files('truss').joinpath('_catalog_runtime','preparation-baseline.json').read_bytes())
+    configuration=json.loads(files('truss').joinpath('_catalog_runtime','preparation-baseline.json').read_bytes())
+    configuration['supportProfile']=dict(NAMED_SCALAR_PROFILE)
+    return configuration
 
 
 def _active_operation(method):
@@ -188,7 +191,7 @@ def _catalog_failure(result, local_code=None):
     return result if code is None else Error(replace(failure,catalog_code=code))
 
 
-_SelectedFamily=TypeVar('_SelectedFamily',Literal['catalog'],Literal['direct_read'],Literal['import'],Literal['feed'],Literal['history'])
+_SelectedFamily=TypeVar('_SelectedFamily',Literal['catalog'],Literal['direct_read'],Literal['import'],Literal['feed'],Literal['history'],Literal['weft_execution'])
 
 
 class CatalogReferenceAssembly:
@@ -272,8 +275,25 @@ class CatalogReferenceAssembly:
             if type(selection) is not CapabilitySelection or selection!=self.history_selection:return CapabilityUnavailable(reason='selection')
             return CapabilityAvailable(capability=NativeHistoryCapability(selection=self.history_selection,_assembly=self))
 
-    def compiled_execution(self,selection: CapabilitySelection[Literal['weft_execution']]) -> CapabilityUnavailable:
-        with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')
+    @property
+    def compiled_selection(self) -> CapabilitySelection[Literal['weft_execution']]:
+        return self._native_selection('weft_execution')
+
+    def compiled_execution(self,selection: CapabilitySelection[Literal['weft_execution']]) -> CapabilityAvailable[NativeCompiledExecutionCapability] | CapabilityUnavailable:
+        with self._lock:
+            if self._disposed:return CapabilityUnavailable(reason='disposed')
+            if type(selection) is not CapabilitySelection or selection!=self.compiled_selection:return CapabilityUnavailable(reason='selection')
+            from ._query_runtime import compiler
+            if compiler() is None:return CapabilityUnavailable(reason='profile')
+            return CapabilityAvailable(capability=NativeCompiledExecutionCapability(selection=self.compiled_selection,_assembly=self))
+
+    @_active_operation
+    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool] | None=None,
+                             maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
+        from ._query_runtime import run_query
+        manifest,digest,_=_release()
+        return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
+            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,pin_cursor=_pin_cursor)
 
     def mutations(self,selection: CapabilitySelection[Literal['mutation']]) -> CapabilityUnavailable:
         with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')
@@ -316,14 +336,14 @@ class CatalogReferenceAssembly:
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.25 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.26 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
         return self._host._run_operation(transaction,install)
     @_active_operation
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
-        """Apply supported additive .23/.24 -> .25 upgrades; caller settles it.
+        """Apply supported additive .23/.24/.25 -> .26 upgrades; caller settles it.
 
         Requires a direct trusted installation administrator and quiescence.
         Native NOWAIT fencing refuses active consumers without internal retries.
@@ -336,11 +356,13 @@ class CatalogReferenceAssembly:
         previous=json.loads(previous_raw);previous_digest=sha256(previous_raw).hexdigest()
         previous_024_raw=bundled.joinpath('upgrade-source-024.json').read_bytes()
         previous_024=json.loads(previous_024_raw)
-        supported={(previous['releaseId'],previous_digest),(previous_024['releaseId'],sha256(previous_024_raw).hexdigest())}
+        previous_025_raw=bundled.joinpath('upgrade-source-025.json').read_bytes()
+        previous_025=json.loads(previous_025_raw)
+        supported={(previous['releaseId'],previous_digest),(previous_024['releaseId'],sha256(previous_024_raw).hexdigest()),(previous_025['releaseId'],sha256(previous_025_raw).hexdigest())}
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=108:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=111:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -352,7 +374,7 @@ class CatalogReferenceAssembly:
                 if parameter is None:raise ValueError('Owned additive routine argument profile required')
                 types.append(parameter.group(1))
             signature=name+'('+','.join(types)+')'
-            if name!='truss.runtime_current_installation':signatures.append(signature)
+            if name not in ('truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects'):signatures.append(signature)
         def upgrade(cursor,observed):
             _pin_cursor(cursor)
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False);original_path=cursor.fetchone()[0]
@@ -385,8 +407,8 @@ class CatalogReferenceAssembly:
                 cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
                 if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
                 return PendingRuntimeUpgrade(identity,active_release,manifest['releaseId'],'unchanged')
-            if (active_release,active_digest) not in supported or layout!=manifest['layoutProfile'] or configuration!=_configuration():
-                raise ValueError('Exact supported .23/.24 installation and preparation required')
+            if (active_release,active_digest) not in supported or layout!=manifest['layoutProfile'] or configuration not in (_configuration(),json.loads(bundled.joinpath('preparation-baseline.json').read_bytes())):
+                raise ValueError('Exact supported .23/.24/.25 installation and preparation required')
             if has_ledger:signatures.append('truss.runtime_current_installation()')
             original_routines=[]
             for signature in signatures:
@@ -395,6 +417,7 @@ class CatalogReferenceAssembly:
                 if routine is None or routine[1]!=owner_oid:raise ValueError('Exact original routine signature and owner required')
                 original_routines.append(routine)
             if not has_ledger:cursor.execute(bundled.joinpath('migrations.sql').read_text(),prepare=False)
+            # New query entry points are additive; old routine OIDs/ACLs stay fixed.
             # This exact owned release has dollar/quoted function bodies; replay no other
             # DDL, triggers or data statements from its fresh-install sources.
             for statement in replacements:
@@ -406,6 +429,13 @@ class CatalogReferenceAssembly:
                 cursor.execute(sql.SQL('REVOKE ALL ON {} truss.{} FROM PUBLIC').format(sql.SQL('TABLE' if name=='runtime_release' else 'SEQUENCE'),sql.Identifier(name)),prepare=False)
             cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_current_installation() OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
             cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_current_installation() FROM PUBLIC',prepare=False)
+            for signature in ('query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)'):
+                cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
+                cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
+                cursor.execute('SELECT reader_role,writer_role FROM truss.module_access',prepare=False)
+                roles=sorted({role for row in cursor.fetchall() for role in row})
+                for role in roles:
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),prepare=False)
             cursor.execute('REVOKE ALL ON TYPE truss.runtime_release FROM PUBLIC',prepare=False)
             cursor.execute("""SELECT EXISTS(SELECT 1 FROM (
                 SELECT relacl AS acl,relowner AS owner,'r'::"char" AS kind FROM pg_class WHERE oid='truss.runtime_release'::regclass
@@ -437,7 +467,7 @@ class CatalogReferenceAssembly:
             if row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 local_failure[0]='unsupported_profile'
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority','history:retained-native-groups'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority','history:retained-native-groups','compiled_query:weft-scalar-runtime'))
         return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
@@ -611,6 +641,7 @@ class CatalogReferenceAssembly:
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
+                                      'query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
                                       'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
                                       'page_objects(text,text,text,int,int,bytea,text,text)','read_history(jsonb,bytea,bigint,int,int,text,text)','lookup_import_source(jsonb,int,text,text)'):

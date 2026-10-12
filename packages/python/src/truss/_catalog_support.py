@@ -13,6 +13,7 @@ RELATIONAL_POLICY_SHA256='bc7aa15a3c2ab55368a3eb7fc2c4c18c8a316cc8ac7c783930c38a
 RELATIONAL_PROFILE={'identity':'truss-fresh-catalog-support','version':'0.2.0','sha256':RELATIONAL_POLICY_SHA256}
 SCALAR_PROFILE={'identity':'truss-fresh-catalog-support','version':'0.3.0','sha256':'aec460c192bd831ed713f9bc8e42f2c31a99adfdf1cfcf4edecff8cd8f047b9f'}
 
+NAMED_SCALAR_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.4.0', 'sha256': '82934e8b77e9c2fabf1095a119429842a5a38dd90e47ea8cf85867cb27b1952d'}
 
 def evaluate_catalog_support(prepared):
     """Evaluate only the exact selected policy before native catalog effects.
@@ -23,11 +24,12 @@ def evaluate_catalog_support(prepared):
     _require_original_preparation(prepared)
     choices=prepared.input()
     selected=choices['supportProfile']
-    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE):
+    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE):
         return {'state':'unavailable','reason':'unregistered_support_policy'}
-    scalars=selected==SCALAR_PROFILE
-    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE)
-    policy=files('truss').joinpath('_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
+    named=selected==NAMED_SCALAR_PROFILE
+    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE)
+    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE)
+    policy=files('truss').joinpath('_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=selected['sha256']:
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
@@ -94,14 +96,14 @@ def evaluate_catalog_support(prepared):
             'observationCoverage':coverage,'assertionInventoryComplete':False,
             'enforcementQualified':False,'supportSemanticsQualified':False,
             'acceptedReportQualified':False,
-            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars)}
+            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named)}
 
     if len(json.dumps(decision,ensure_ascii=True,separators=(',',':')).encode('utf8'))>4194304:
         raise ValueError('Selected catalog support decision capacity exceeded')
     return decision
 
 
-def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False):
+def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False):
     """Complete source occurrence inventory for explicit scalar string Records.
 
     Profile 0.2 additionally covers known authored Keys and Relationships.
@@ -128,12 +130,13 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                 pointer=f'/modules/{mi}/elements/{ei}'
                 kind=element.get('kind')
                 kinds[(document.document.document_id,module['id'],element['id'])]=kind
-                allowed=(({'id','kind','members','extensions','keys'} if relational else {'id','kind','members','extensions'}) if kind=='record' else
+                allowed=((({'id','kind','members','extensions','keys'} if relational else {'id','kind','members','extensions'}) | ({'name'} if named else set())) if kind=='record' else
                          {'id','kind','name','scalarType','nullability','cardinality','extensions'})
                 if kind not in ('record','field') or set(element)-allowed or element.get('extensions',{})!={}:
                     return unavailable
                 operations=['kind']
                 if kind=='record':
+                    if 'name' in element and (type(element['name']) is not str or not element['name'] or '\0' in element['name']):return unavailable
                     if type(element.get('members')) is not list:
                         return unavailable
                     operations.append('members')
