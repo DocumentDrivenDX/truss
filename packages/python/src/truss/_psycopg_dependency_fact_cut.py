@@ -214,3 +214,25 @@ def _verify_native_profile_caller(cursor, profile_bytes):
     if (cursor.description is None or tuple(d.name for d in cursor.description)!=('session_role_oid','effective_role_oid')
             or any(d.type_code!=25 for d in cursor.description) or roles!=[(caller['sessionRoleOid'],caller['effectiveRoleOid'])]):
         raise ValueError('Original native caller/profile correspondence required')
+
+
+def _verify_native_scram_profile_caller(cursor, profile_bytes):
+    """Private credential/login check; not subject, endpoint or issuer authority.
+
+    Use only inside the original registered host operation after original profile
+    admission. Native authentication survives HBA changes; this check cannot pin
+    policy for other connections or establish credential custody.
+    """
+    import json
+    if type(profile_bytes) is not bytes or type(json.loads(profile_bytes).get('caller')) is not dict:
+        raise ValueError('Original authenticated caller profile required')
+    _verify_native_profile_caller(cursor,profile_bytes)
+    cursor.execute('SELECT system_user AS authenticated_identity,session_user::pg_catalog.text AS session_role_name',prepare=False,binary=False)
+    rows=cursor.fetchmany(2)
+    if (cursor.description is None
+            or tuple(d.name for d in cursor.description)!=('authenticated_identity','session_role_name')
+            or any(d.type_code!=25 for d in cursor.description)
+            or len(rows)!=1 or len(rows[0])!=2
+            or type(rows[0][0]) is not str or type(rows[0][1]) is not str
+            or rows[0][0]!='scram-sha-256:'+rows[0][1]):
+        raise ValueError('Original native SCRAM login correspondence required')
