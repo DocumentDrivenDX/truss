@@ -1,0 +1,24 @@
+{
+  "scope": "Private READ COMMITTED bucket lock/observation component; not public uniqueness or namespace authority",
+  "postgres": "18.6",
+  "sourceSha256": "1e389645bfad9a4858a9754b2ae033cf425c765e58864f10255981b84d359172",
+  "nativeTests": {
+    "count": 10,
+    "passed": true,
+    "seconds": 9.263
+  },
+  "controls": [
+    "first and existing guard contention",
+    "same active transaction fresh committed visibility",
+    "rollback",
+    "exact guard insertion/readback",
+    "existing generation preserved",
+    "hidden RLS candidate refusal",
+    "10001-row overflow",
+    "16MiB overflow",
+    "ordinary execution denied"
+  ],
+  "ownerModelReloadExportEqual": true,
+  "review": "Astra Ultra approved scoped source; extra same-active-transaction control passed",
+  "remaining": "Native-derived namespace, all-route planning, membership/reservation mutation generations, journal/feed/finalization and public group writer"
+}
