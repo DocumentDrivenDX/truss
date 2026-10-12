@@ -15,6 +15,7 @@ Runtime 0.11 adds exact integer, decimal, boolean, timestamp and binary properti
 Runtime 0.12 adds bounded live object pages.
 Runtime 0.14 adds public scalar object updates/deletes and ordered mixed batches.
 Runtime 0.15 adds atomic caller preconditions and explicit invalid/unauthorized group failures.
+Runtime 0.16 adds independent directed edge create/update/delete, identity reads and ordered relationship pages, including mandatory relationships satisfied in the same batch.
 Compiled queries, imports, receipt visibility and feed operations remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
@@ -114,7 +115,7 @@ because membership authorization must observe committed revocations. Repeating
 the same request key as the same person with identical original inputs and origin
 returns the original report and `replayed=True`. Changing the request returns a
 conflict. Retry still requires current authorization. There are no internal retry
-loops. Catalog evolution remains unavailable. The selected runtime adds module-authorized object identity reads and the create-only group provider described below.
+loops. Changed-document catalog evolution remains unavailable. The selected runtime provides module-authorized scalar object and independent directed relationship groups and reads described below.
 `dispose()` closes this assembly's admission without closing or settling the host.
 
 The catalog runtime 0.2 candidate also provides
@@ -804,21 +805,18 @@ Current writer membership is required for every module, including on replay. The
 authenticated PostgreSQL session person is recorded separately from asserted
 origin, such as `x-action`. Roles reachable through SET/INHERIT/ADMIN paths must also lack
 elevated or raw Truss access, including NOINHERIT/SET memberships. The supplied transaction remains READ COMMITTED and read-write.
-There are no internal retries. Unsupported ownership, relationships, numeric or
-structured values, and shapes requiring mandatory relationships refuse.
+There are no internal retries. The current runtime supports exact scalar values and independent directed relationships. Ownership/composition and structured values remain unavailable. Mandatory relationships must be satisfied by the final batch.
 
 The create provider stores the complete native objects, exact key membership and
 reservations, journal events and optional request receipt atomically. It does not
-activate the full feed/history provider. Later iterations add business-key reads,
-updates/deletes and preconditions below. Receipt visibility, imports, relationship
-reads, full Weft execution and Lakebase remain outstanding.
+activate the full feed/history provider. The current runtime also provides business-key reads, updates/deletes, caller preconditions and relationship reads. Receipt visibility, imports, full Weft execution and Lakebase remain outstanding.
 
 Current deployment dependencies: installation and module-access configuration
 require a superuser and permission to create the private owner/registrar roles.
 They are privileged provisioning operations, separate from ordinary application
 registration and writes. This installer is not yet qualified for managed systems
 without superuser access. Registration preparation currently needs Bun; the
-create-only provider also runs the bundled UMF key producer through Bun.
+object mutation provider also runs the bundled UMF key producer through Bun.
 Applications using those paths must include Bun today. A build-time preparation
 route or Python-compatible producer is future work, not an existing deployment
 claim. The checked driver/server tuple is psycopg3.3.6 binary/libpq18.6 with
@@ -964,7 +962,7 @@ read-write READ COMMITTED transactions; read-write lookup takes a nonblocking
 object read lock. The returned record is verified against the requested key, with
 current record and key-field permissions rechecked before publication. The
 profile remains rootless/string-only and revision 1; pages, broader value types
-and catalog evolution remain unfinished. Runtime 0.8 currently needs fresh install.
+and catalog evolution remain unfinished. The current runtime requires a fresh installation; upgrades remain unfinished.
 ### Atomic caller preconditions (runtime 0.15 candidate)
 
 Pass `preconditions=(...)` to `context.input`. Truss evaluates them against the
@@ -1184,3 +1182,35 @@ These are live reads. Separate pages do not share a frozen data snapshot, and
 native ID order does not establish commit order or exactly-once enumeration.
 Full DirectRecord/relationship/traversal and compiled-query profiles remain
 unfinished. This candidate requires fresh installation.
+
+### Independent directed relationships (runtime 0.16 candidate)
+
+Use `CreateEdge` for link, `UpdateEdge` for retained scalar values, order changes or
+retargeting, and `Delete(operation='delete_edge', ...)` for unlink. Resolve the
+relationship pin with `get_relationship_reference_in_transaction`. Endpoint references
+are stored object identities or aliases of earlier object creates; edge updates/deletes
+may use a stored edge identity or an earlier edge alias. Edge `type_id` identifies the
+accepted relationship, never a record type.
+
+The relationship module requires writer authority; old/new endpoint modules require
+reader authority. Truss locks endpoints and checks complete final multiplicities. A
+batch may create mandatory endpoints and their link together. Maximum-one markers
+are derived from final state, so unlink/replace batches can succeed. Duplicate
+source/relationship/target triples remain unique. Edge attributes are exact named
+retained scalar values; this profile has no association record or invented property IDs.
+
+`get_edge_in_transaction(..., relationship_id='A-B', edge_id=...)` returns `EdgeFound`
+with a `ScalarEdge`, or `EdgeNotFound` for absent or unreadable selections.
+`page_edges_in_transaction(..., relationship_id='A-B', anchor=identity,
+direction='outgoing', limit=100, continuation=...)` returns a live `EdgePage`.
+Pages order by `order_key` using C collation, nulls last, then native ID. Pass the
+returned `EdgePageCursor` unchanged; it carries both order key and ID and is bound
+to the installation, catalog, relationship and anchor. It grants no authority.
+Both reads support caller-adopted READ COMMITTED read-only transactions.
+
+Edge mutations share object groups' expected versions, exact no-op results,
+caller rollback and durable idempotent replay, including replay after unlink.
+A failed final multiplicity check rolls back the entire group. Source/target,
+order key and exact retained values are recorded in complete before/after history.
+Composition, ownership, association records, imports, feed and full Weft execution
+remain unfinished; independent edge support does not claim those capabilities.

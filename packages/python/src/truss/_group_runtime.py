@@ -5,7 +5,7 @@ import base64
 import json
 from .contracts import ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, TextValue, NullValue, BooleanValue
 from .execution import Ok, Error, Outcome
-from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, UpdateObject, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership,
+from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, CreateEdge, UpdateObject, UpdateEdge, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership,
     RequestNone, RequestPresent, RequestIdentity, GroupSuccess, GroupFailed, GroupUnavailable,
     InvalidGroupInput, RequestConflict, GroupOperationFailure, AppliedPending, SameTransactionReplay,
     CommittedReceiptReplay, SameTransactionReplayEvidence, CommittedReceiptReplayEvidence,
@@ -123,13 +123,13 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     if type(input) is not GroupSemanticInput or type(request) not in (RequestNone,RequestPresent):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"shape"}'))))
     if (type(input.catalog) is not CurrentCatalog or type(input.asserted_origin) is not MapValue
-        or any(not (type(op) is CreateObject and type(op.ownership) is RootlessOwnership or type(op) is UpdateObject and op.ownership_change is ABSENT and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) is Delete and op.operation=='delete_object' and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
+        or any(not (type(op) is CreateObject and type(op.ownership) is RootlessOwnership or type(op) is UpdateObject and op.ownership_change is ABSENT and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) in (CreateEdge,UpdateEdge) or type(op) is Delete and op.operation in ('delete_object','delete_edge') and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
         return Ok(GroupUnavailable(reason='profile'))
-    if not 1<=len(input.operations)<=128 or any(len(op.values if type(op) is CreateObject else op.set if type(op) is UpdateObject else ())>1024 for op in input.operations):
+    if not 1<=len(input.operations)<=128 or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations):
         return Ok(GroupUnavailable(reason='resource'))
     def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
     def origin_scalar(value):return type(value) is NullValue or (type(value) is TextValue and value.kind=='string')
-    if any(not scalar(v.value) for op in input.operations for v in (op.values if type(op) is CreateObject else op.set if type(op) is UpdateObject else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
+    if any(not scalar(v.value) for op in input.operations for v in (op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
         return Ok(GroupUnavailable(reason='profile'))
     if type(documents) is not tuple or not 1<=len(documents)<=512 or any(type(d) is not CatalogDocument or type(d.document_id) is not str or type(d.content) is not bytes for d in documents):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"original_documents"}'))))

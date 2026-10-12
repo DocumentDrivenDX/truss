@@ -46,7 +46,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
-'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-objects','version','0.2','sha256','037447d9387dd032651fb883a781fdcb688b870348a89ab7991894cc7fd1f9c1'),
+'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-graph','version','0.1','sha256','1c337a6650a9b0cfe5eafc06f84ac6080dd75ed4e9cae4e26a42491cecb25114'),
 'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.2','sha256','5e6a7f879e17066a8ffdeb8731da89906f0e5cb231e4b4357bd4fbea0158163f'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),
@@ -242,7 +242,8 @@ BEGIN
      FROM truss.journal j WHERE j.xid=group_row.writer_xid)
  IS DISTINCT FROM (SELECT coalesce(jsonb_agg(e.value ORDER BY (e.value->>'at')::timestamptz,(e.value->>'seq')::bigint),'[]'::jsonb) FROM (
      SELECT e.value->'journal' AS value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e(value) WHERE g.writer_xid=group_row.writer_xid
-     UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid) e) THEN
+     UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
+     UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid) e) THEN
   RAISE EXCEPTION 'complete transaction create journal required' USING ERRCODE='55000'; END IF;
  FOR member IN SELECT * FROM truss.runtime_create_member WHERE group_id=selected_group ORDER BY operation_index LOOP
   entry:=semantic->'results'->member.operation_index;
@@ -379,7 +380,10 @@ BEGIN
    RAISE EXCEPTION 'closed bounded create operation required' USING ERRCODE='22023'; END IF;
   IF EXISTS(SELECT 1 FROM truss.rel_endpoint e JOIN truss.rel_def r USING(rel_type_id)
    WHERE r.retired_rev IS NULL AND ((e.source_type=selected_type.type_id AND r.target_min>0)
-    OR (e.target_type=selected_type.type_id AND r.source_min>0))) THEN
+    OR (e.target_type=selected_type.type_id AND r.source_min>0))) AND NOT EXISTS(
+    SELECT 1 FROM truss.runtime_object_attempt a WHERE a.writer_xid=writer AND a.actor_oid=truss.runtime_person(false) AND NOT a.complete
+    AND convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index=operation
+    AND a.documents_bytes=original_documents) THEN
    RAISE EXCEPTION 'mandatory relationship unsupported by create-only profile' USING ERRCODE='0A000'; END IF;
   IF EXISTS(SELECT 1 FROM jsonb_array_elements(operation->'values') v WHERE jsonb_typeof(v.value->'name') IS DISTINCT FROM 'string'
    OR octet_length(v.value->>'name') NOT BETWEEN 1 AND 4096 OR v.value-ARRAY['name','value']<>'{}'::jsonb

@@ -70,3 +70,6 @@ __all__ += ["NativeGroupCapability", "GroupCapabilityAvailable"]
 
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 __all__ += ['ReaderCatalog','AcceptedDocument','CatalogRefused','CatalogInvalid','CatalogUnavailable']
+
+from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
+__all__ += ["ScalarEdge","EdgeFound","EdgeNotFound","EdgePage","EdgePageCursor"]

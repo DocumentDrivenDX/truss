@@ -1,0 +1,32 @@
+{
+  "scope": "Public Python independent directed relationship groups and reads; basic adopter workflows",
+  "runtime": "truss-catalog-runtime/0.16-candidate",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "wheelSha256": "35c475b2629ce8287f462c2cd5d6e8f8508523a59654bf4edb2d0dedb9d8e4e0",
+  "installedTests": {
+    "modules": [
+      "test_edge_mutations_native",
+      "test_group_preconditions_native",
+      "test_object_mutations_native"
+    ],
+    "count": 6,
+    "seconds": 31.568,
+    "result": "passed"
+  },
+  "typing": {
+    "fixtures": 4,
+    "expectedNegativeErrors": 20,
+    "result": "passed"
+  },
+  "umfOwnerSqlSources": 16,
+  "pythonImportsChecked": 683,
+  "astraReview": "Approved with endpoint, anchor and lookahead publication checks; all applied before final wheel",
+  "limits": [
+    "independent directed rootless relationships",
+    "edge attributes retained exact scalars",
+    "fresh installation required",
+    "Bun required for UMF object key production",
+    "imports, receipt visibility, full Weft execution and feed remain unfinished"
+  ]
+}

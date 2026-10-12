@@ -18,9 +18,10 @@ from typing import Literal
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
+from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
-from .contracts import CapabilitySelection
+from .contracts import CapabilitySelection, TypedIdentity
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
@@ -181,6 +182,19 @@ def _object_result(raw,manifest,digest):
         values=tuple((v[0],logical(v[1])) for v in basis['values']),retained=tuple((v[0],logical(v[1])) for v in basis['retained'])))
 
 
+def _edge_result(value):
+    from ._group_runtime import _identity
+    from .contracts import TextValue
+    def logical(cell):
+        if cell['kind']=='null':return None
+        if cell['kind']=='boolean':return cell['value']
+        if cell['kind']=='string':return cell['text']
+        return TextValue(kind=cell['kind'],text=cell['text'])
+    return ScalarEdge(identity=_identity(value['identity']),source=_identity(value['source']),target=_identity(value['target']),
+        version=int(value['recordVersion']),catalog_revision=int(value['executedCatalogRevision']),record_revision=int(value['catalogRevision']),created_at=value['createdAt'],updated_at=value['updatedAt'],
+        order_key=value['orderKey'].get('text'),retained=tuple((v['name'],logical(v['value'])) for v in value['retained']))
+
+
 def _catalog_failure(result, local_code=None):
     # Annotate contained catalog failures only; transaction authority and retry
     # outcomes remain unchanged. Codes never depend on diagnostic prose.
@@ -244,7 +258,7 @@ class CatalogReferenceAssembly:
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.4: catalog, scalar object reads and protected create groups; feed unavailable'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.16 candidate: catalog, scalar objects and independent directed relationships; feed unavailable'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
@@ -264,7 +278,7 @@ class CatalogReferenceAssembly:
             if row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 local_failure[0]='unsupported_profile'
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-string-create'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page'))
         return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
@@ -429,7 +443,7 @@ class CatalogReferenceAssembly:
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(role)),prepare=False)
-                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
@@ -516,6 +530,50 @@ class CatalogReferenceAssembly:
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
+        return result
+
+    @_active_operation
+    def get_edge_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,
+                                relationship_id: str,edge_id: int,maximum_bytes: int=1048576) -> Outcome[EdgeFound | EdgeNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+        """Read one authorized independent edge, preserving exact scalar values."""
+        return self._read_edges(transaction,document_id,module_id,relationship_id,edge_id=edge_id,maximum_bytes=maximum_bytes)
+
+    @_active_operation
+    def page_edges_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
+                                  anchor: TypedIdentity, direction: Literal['outgoing','incoming']='outgoing',limit: int=100,
+                                  maximum_bytes: int=1048576,continuation: EdgePageCursor | None=None) -> Outcome[EdgePage | EdgeNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+        """Read a live relationship page ordered by order key, then native ID."""
+        return self._read_edges(transaction,document_id,module_id,relationship_id,anchor=anchor,direction=direction,limit=limit,maximum_bytes=maximum_bytes,continuation=continuation)
+
+    def _read_edges(self,transaction,document_id,module_id,relationship_id,*,edge_id=None,anchor=None,direction='outgoing',limit=100,maximum_bytes=1048576,continuation=None):
+        from .contracts import TypedIdentity
+        from ._group_runtime import _wire,_bytes
+        try:valid=all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (document_id,module_id,relationship_id))
+        except UnicodeError:valid=False
+        if not valid or edge_id is not None and (type(edge_id) is not int or not 1<=edge_id<=9223372036854775807):return Ok(ObjectReadInvalid(code='selection'))
+        if type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:return Ok(ObjectReadInvalid(code='limits'))
+        if edge_id is None and (type(anchor) is not TypedIdentity or direction not in ('outgoing','incoming') or type(limit) is not int or not 1<=limit<=1000
+            or continuation is not None and (type(continuation) is not EdgePageCursor or type(continuation.content) is not bytes or not 1<=len(continuation.content)<=65536)):
+            return Ok(ObjectReadInvalid(code='selection'))
+        manifest,digest,_=_release()
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            if edge_id is not None:
+                cursor.execute('SELECT truss.get_edge(%s,%s,%s,%s,%s,%s,%s)',(document_id,module_id,relationship_id,edge_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            else:
+                cursor.execute('SELECT truss.page_edges(%s,%s,%s,%s::jsonb,%s,%s,%s,%s,%s,%s)',
+                    (document_id,module_id,relationship_id,_bytes(_wire(anchor)).decode('utf8'),direction,limit,maximum_bytes,None if continuation is None else continuation.content,manifest['releaseId'],digest),prepare=False)
+            raw=cursor.fetchone()[0]
+            if raw is None:return EdgeNotFound()
+            value=json.loads(bytes(raw))
+            if edge_id is not None:return EdgeFound(edge=_edge_result(value))
+            token=None if value['continuation'] is None else EdgePageCursor(content=_bytes(value['continuation']))
+            return EdgePage(edges=tuple(_edge_result(v) for v in value['edges']),catalog_revision=value['catalogRevision'],continuation=token)
+        result=self._host._run_operation(transaction,observe)
+        if isinstance(result,Error) and result.error.code=='execution_obligation':
+            reason={'0A000':'profile','54000':'resource','55P03':'observation','P1002':'context'}.get(result.error.sql_state)
+            if reason:return Ok(ObjectReadUnavailable(reason=reason))
+            if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='selection'))
         return result
 
     @_active_operation

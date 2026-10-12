@@ -29,7 +29,7 @@ ddx:
 
 # Python consumer integration: first real workflow
 
-The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized scalar-string identity reads and a create-only group provider. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
+The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized exact scalar object and independent directed edge groups, object/key/page reads, relationship reads and atomic caller preconditions. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
 
 ## Consumer additions from commit 9e38962 — 2026-10-12
 
@@ -89,6 +89,35 @@ match managed role/schema administration rather than assuming `rolsuper`, and
 Lakebase requires an actual supplied platform connection/privilege profile and
 basic deployment tests before Truss advertises support. Rootless scalar-only and
 fresh-install-only remain explicit interim limits, not release completion.
+
+## Public relationship implementation — 2026-10-12
+
+Runtime 0.16 candidate connects `CreateEdge`, `UpdateEdge` and edge deletion to the
+same public group path as objects. Genuine relationship definitions qualify edge
+identities; earlier object/edge aliases remain category-specific. Relationship
+writers and old/new endpoint readers are rechecked before publication and receipt
+replay. Endpoint locks preserve caller relationship predicates through settlement.
+
+Final-batch and deferred-commit validation include new surviving zero-edge objects
+and all changed endpoints. Outgoing counts use target bounds; incoming counts use
+source bounds. Final maximum-one markers come from actual edge state. Mandatory
+links can be created with their endpoints in one batch. Exact edge before/after
+history and immutable transitions join the existing complete transaction journal.
+
+Public edge identity reads and relationship pages support adopted read-only
+transactions. Pages use paired C-collated order-key/native-ID continuations,
+authorize lookahead identically to visible rows, recheck buffered/anchor authority
+and refuse selection drift instead of silently skipping it.
+
+The final installed wheel passes six basic workflows in 31.568s; four typing fixtures,
+16 UMF SQL owner round trips and the Python boundary check also pass. Astra reviewed
+the source and its publication-guard corrections. See [evidence](evidence/python-edge-workflows-20261012.json).
+
+Two basic adopter workflows cover link/read/page/no-op/retarget/unlink/durable retry
+and mandatory creation/atomic failed relationship preconditions. Existing object
+and precondition workflows remain the small regression set. Imports, receipt
+visibility, Weft execution and feed/ACK are next; compatible evolution and
+migration/managed installation remain part of the full delivery goal.
 
 ## Atomic caller preconditions implementation — 2026-10-12
 
