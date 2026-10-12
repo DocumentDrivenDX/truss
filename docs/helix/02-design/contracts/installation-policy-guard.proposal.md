@@ -324,3 +324,25 @@ CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Whole resource budgets,
 original profile/issuer/sink authentication, complete participant/bootstrap
 parity, uncertainty/recovery and safe lifetime retention remain required.
 No required backend acceptance case is promoted.
+
+
+### Capacity acquisition interruption containment — 2026-10-12
+
+A blocked capacity acquisition now executes two native interruption schedules.
+A150ms native lock timeout returns55P03. Separately, native blocker evidence
+precedes cancellation of only the owned original waiter, whose actual command
+returns57014. Both transactions are INERROR until confirmed rollback to the
+admission savepoint. Earlier temporary-table work survives in INTRANS; actual
+pg_locks inspection finds zero remaining schema-head/guard/claim locks acquired
+inside the savepoint, and all four retained claim identities remain unchanged.
+No claim registration or protected result is published by the refused attempt.
+Suite total201 native observations.
+
+Sources, terminal logs and native observations:
+`../../04-build/evidence/security-publication-capacity-interruption-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. This qualifies the
+explicitly confirmed native fixture branches only. Unknown interruption/rollback
+outcomes still require original custody/quarantine; elapsed time or cancellation
+request alone never establishes containment. Production host recovery, profile
+binding, registry/issuer/sink and complete bootstrap/participant qualification
+remain required. No original backend acceptance case is promoted.
