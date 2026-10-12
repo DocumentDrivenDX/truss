@@ -10,7 +10,31 @@ RECORDS={'Client':{'code':'string'},'Project':{'code':'string'},'Staff':{'code':
 LINKS={'staff_assignment':('Staff','Assignment'),'assignment_project':('Assignment','Project'),'resource_project':('Resource','Project'),'project_client':('Project','Client')}
 class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  for name in tuple(n for n in dir(groups.PublicCreateGroupTests) if n.startswith('test_')):locals()[name]=None
+ def setUp(self):
+  self._security_connections=[]
+  super().setUp()
+ def _track_owned_connection(self,connection):
+  self._security_connections.append(connection)
+  self.addCleanup(connection.close)
+ def _close_owned_connections(self):
+  for connection in reversed(self._security_connections):
+   if not connection.closed:connection.close()
+ def test_owned_connections_close_before_schema_teardown(self):
+  import time
+  self.install();self.host.detach();self.admin.commit()
+  self.admin.execute('CREATE SCHEMA ontology_fixture;CREATE TABLE ontology_fixture.cleanup_probe(value text)')
+  owned=psycopg.connect(self.info.connection_uri,autocommit=True);self._track_owned_connection(owned);pid=owned.execute('SELECT pg_backend_pid()').fetchone()[0];owned.execute('BEGIN');owned.execute('TABLE ontology_fixture.cleanup_probe').fetchall()
+  locks=self.admin.execute("SELECT count(*) FROM pg_locks WHERE pid=%s AND relation='ontology_fixture.cleanup_probe'::regclass",(pid,)).fetchone()[0];self.assertGreater(locks,0)
+  self._close_owned_connections();self.assertTrue(owned.closed)
+  remaining=1;wait_until=time.monotonic()+5
+  while time.monotonic()<wait_until:
+   remaining=self.admin.execute('SELECT count(*) FROM pg_stat_activity WHERE pid=%s',(pid,)).fetchone()[0]
+   if remaining==0:break
+   time.sleep(.02)
+  self.assertEqual(remaining,0);self.admin.execute("SET lock_timeout='250ms'");self.admin.execute('DROP SCHEMA ontology_fixture CASCADE');self.admin.execute("SET lock_timeout='0'")
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.cleanup.json').write_text(json.dumps({'observations':[{'id':'owned-fixture-transaction-holds-native-schema-lock','observed':locks},{'id':'owned-fixture-close-precedes-schema-drop','observed':{'closed':owned.closed,'remainingBackend':remaining}}],'scope':'Explicit owned fixture connection only; not production caller transaction recovery or unknown-outcome cleanup.'},indent=2)+'\n')
  def tearDown(self):
+  self._close_owned_connections()
   self.admin.rollback();self.admin.execute('DROP SCHEMA IF EXISTS relational_fixture CASCADE;DROP SCHEMA IF EXISTS ontology_fixture CASCADE')
   super().tearDown()
  def consumer(self):
@@ -159,7 +183,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-authority-fresh-read-original-vector','observed':actual})
   # Actual graph assignment writer waits through the fixture's buffered release.
   import threading,time
-  writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(writer.close)
+  writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(writer)
   writer_pid=writer.execute('SELECT pg_backend_pid()').fetchone()[0];errors=[]
   def revoke_assignment():
    try:writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':False}),int(aliases['AA'].id),int(assignment['typeId'])))
@@ -182,7 +206,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'new-read-after-drained-graph-change-denies','observed':actual})
   self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])))
   # Source-table exclusion cannot fence native role authority changes.
-  control=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=5000');self.addCleanup(control.close)
+  control=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=5000');self._track_owned_connection(control)
   self.admin.execute('BEGIN');self.admin.execute('LOCK TABLE truss.object,truss.edge,truss.type_def,truss.prop_def,truss.rel_def,truss.rel_endpoint IN SHARE MODE')
   try:
    control.execute('ALTER ROLE alice BYPASSRLS')
@@ -202,7 +226,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   acquire=(contracts/'installation-policy-guard-acquire-v0.1.proposal.sql').read_text()
   advance=(contracts/'installation-policy-generation-advance-v0.1.proposal.sql').read_text()
   for ordinal in [1,2,3]:advance=advance.replace('$'+str(ordinal),'%s')
-  authority_writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(authority_writer.close)
+  authority_writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(authority_writer)
   authority_pid=authority_writer.execute('SELECT pg_backend_pid()').fetchone()[0];authority_errors=[];advanced=[]
   def controlled_role_change():
    try:
@@ -242,9 +266,9 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   maximum=authority_writer.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone()[0];self.assertEqual(maximum,'9223372036854775807');observations.append({'id':'maximum-generation-remains-exact-before-rollback','observed':maximum});authority_writer.rollback()
   flags=self.admin.execute("SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname='alice'").fetchone();generation=self.admin.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone()[0];self.assertEqual(flags,(False,False));self.assertEqual(generation,'3');observations.append({'id':'exhausted-authority-delta-rolls-back-role-and-generation','observed':{'flags':list(flags),'generation':generation}})
   # Losing the original coordinator cannot authorize its buffered result.
-  coordinator=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(coordinator.close)
+  coordinator=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(coordinator)
   coordinator_pid=coordinator.execute('SELECT pg_backend_pid()').fetchone()[0];coordinator.execute('BEGIN');coordinator.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();held_generation=coordinator.execute(acquire).fetchall();self.assertEqual(held_generation,[('1',installation_bytes.hex(),profile_bytes.hex(),'3')])
-  data_reader=psycopg.connect(**params,autocommit=True);self.addCleanup(data_reader.close);data_reader.execute('BEGIN');data_reader.execute("CREATE TEMP TABLE prior_data_work(value text);INSERT INTO prior_data_work VALUES('kept')")
+  data_reader=psycopg.connect(**params,autocommit=True);self._track_owned_connection(data_reader);data_reader.execute('BEGIN');data_reader.execute("CREATE TEMP TABLE prior_data_work(value text);INSERT INTO prior_data_work VALUES('kept')")
   pending_buffer=[r[0] for r in data_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))]
   self.assertEqual(pending_buffer,['RA','RAB']);lost_errors=[];lost_advance=[]
   def change_after_coordinator_loss():
@@ -287,7 +311,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   settle=claim_sql('installation-publication-claim-settle-v0.2.tombstone.proposal.sql',4)
   claim_advance=claim_sql('installation-policy-generation-advance-v0.3.tombstone.proposal.sql',3)
   operation_bytes=b'fixture-original-publication-1'
-  claim_coordinator=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(claim_coordinator.close)
+  claim_coordinator=psycopg.connect(self.info.connection_uri,autocommit=True);self._track_owned_connection(claim_coordinator)
   claim_pid=claim_coordinator.execute('SELECT pg_backend_pid()').fetchone()[0]
   claim_coordinator.execute('BEGIN');claim_coordinator.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');claim_coordinator.execute(acquire).fetchall()
   registered=claim_coordinator.execute(register,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(registered,[(operation_bytes.hex(),)]);claim_coordinator.execute('COMMIT')
@@ -324,7 +348,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();repeated_settlement=self.admin.execute(settle,(operation_bytes,installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(repeated_settlement,[]);self.admin.execute('ROLLBACK');observations.append({'id':'settled-original-operation-cannot-settle-twice','observed':repeated_settlement})
   # A pending registration SHARE scope drains before writer's fresh claim check.
   pending_operation=b'fixture-pending-publication'
-  pending_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(pending_owner.close)
+  pending_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self._track_owned_connection(pending_owner)
   pending_pid=pending_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
   pending_owner.execute('BEGIN');pending_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');pending_owner.execute(acquire).fetchall();self.assertEqual(pending_owner.execute(register,(pending_operation,installation_bytes,profile_bytes,5)).fetchall(),[(pending_operation.hex(),)])
   pending_errors=[];pending_advances=[]
@@ -354,8 +378,8 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   for cap,token in [(3,b'full-registry'),(0,b'zero-capacity'),(-1,b'negative-capacity'),(1048577,b'oversized-capacity'),(4,b'x'*2049)]:
    self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=capacity_execute(self.admin,(token,installation_bytes,profile_bytes,5,cap)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK')
   observations.append({'id':'publication-capacity-and-token-bounds-refuse-before-registration','observed':'five zero-row refusals; retained tombstones preserved'})
-  capacity_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self.addCleanup(capacity_owner.close);capacity_pid=capacity_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
-  capacity_waiter=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(capacity_waiter.close);capacity_waiter_pid=capacity_waiter.execute('SELECT pg_backend_pid()').fetchone()[0]
+  capacity_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self._track_owned_connection(capacity_owner);capacity_pid=capacity_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
+  capacity_waiter=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(capacity_waiter);capacity_waiter_pid=capacity_waiter.execute('SELECT pg_backend_pid()').fetchone()[0]
   capacity_owner.execute('BEGIN');capacity_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');capacity_owner.execute(acquire).fetchall();capacity_owner.execute(capacity_lock);last_registered=capacity_execute(capacity_owner,(b'last-capacity-slot',installation_bytes,profile_bytes,5,4)).fetchall();self.assertEqual(last_registered,[(b'last-capacity-slot'.hex(),)])
   capacity_errors=[];capacity_rows=[]
   def register_after_capacity_drain():
@@ -377,7 +401,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   # Failed capacity acquisition rolls back only its savepoint, not caller work.
   for interruption in ['timeout','cancel']:
    capacity_owner.execute('BEGIN');capacity_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');capacity_owner.execute(acquire).fetchall();capacity_owner.execute(capacity_lock)
-   interrupted=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(interrupted.close);interrupted_pid=interrupted.execute('SELECT pg_backend_pid()').fetchone()[0]
+   interrupted=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(interrupted);interrupted_pid=interrupted.execute('SELECT pg_backend_pid()').fetchone()[0]
    interrupted.execute('BEGIN');interrupted.execute('CREATE TEMP TABLE prior_capacity_work(value text)');interrupted.execute("INSERT INTO prior_capacity_work VALUES('kept')");interrupted.execute('SAVEPOINT capacity_attempt');interrupted.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');interrupted.execute(acquire).fetchall()
    interruption_states=[];interruption_thread=None
    try:

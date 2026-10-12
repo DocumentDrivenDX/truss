@@ -379,3 +379,24 @@ Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Resource budgets,
 complete profile/source/participant/callable parity, original operation issuer,
 authentic sink settlement and uncertainty/recovery remain unqualified. No
 required backend acceptance case is promoted.
+
+
+### Native evidence fixture cleanup ordering — 2026-10-12
+
+Extra explicitly owned security-fixture connections now close before fixture
+schema teardown, rather than relying solely on unittest cleanup callbacks that
+run afterward. This contains a failed-assertion path whose still-open transaction
+could otherwise hold schema locks during DROP. Original public consumer host
+connections remain managed by the inherited host/fixture lifecycle.
+
+A native regression starts an owned transaction with an observed schema lock,
+invokes the same owned-connection close helper used before teardown, observes
+backend absence and drops the schema under250ms lock timeout. The full ontology
+regression remains205 observations. Both tests pass in the observed31.103s; this
+is not a worst-case60s-runner deadline guarantee or backend case admission.
+Sources, two cleanup observations, terminal logs and receipt:
+`../../04-build/evidence/security-owned-fixture-cleanup-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L11 and US-057-AC7. This concerns explicit owned
+fixture resources only; production caller transaction recovery, unknown outcomes
+and complete original native/resource custody remain unqualified. No required
+backend acceptance case is promoted.
