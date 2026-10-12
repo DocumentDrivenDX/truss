@@ -1051,3 +1051,15 @@ If confirmed archive storage and local history coexist after failed cleanup, bot
 CONTRACT-002’s selected v0.2 event/archive/page/report candidate does not by itself require renaming the existing feed/seed wrappers. Those wrappers retain exact artifact bytes and explicit profile custody; their selected extractor/loader/application composition must admit the complete transitive history version before activation. Register exact event schema/codec, physical op/envelope mapping, group digest, retained definition/owner resolution and matching archive decoder together. A v0.1-only event extractor or retained-history loader refuses the v0.2 composition before member extraction, seed publication or downstream application. Unknown artifact bytes may be preserved, but required unknown lifecycle/retain meaning cannot be treated as applied success.
 
 Independently compare the complete original journal event inventory with required feed members and seed retained archives, preserving one physical retain row with several retained names as one event/member. Do not split it into fabricated sequence positions, filter it away to fit an old decoder, or place it in a report’s rebind-only inventory. Profile resolution uses original full definitions/bytes and current authority, not version-label recognition or current catalog repair. Exact wrapper/application registration and native extraction completeness remain unqualified.
+
+## Compact runtime baseline — owner correction 2026-10-11
+
+Whole-operation row snapshots, hex custody envelopes and global database-state
+snapshots are experimental mechanisms, not selected Python release dependencies.
+Use retained original documents, typed catalog checks, protected transactional
+writers and durable request/result records. Historical snapshot/custody profiles
+remain scoped historical evidence. This does not remove committed feed ordering,
+reconstruction, retention, authorization, retry or durable acknowledgement
+requirements. The first catalog release must state whether it supports feed;
+unimplemented feed capability stays unavailable and remains in the full product
+goal. Do not claim feed support from catalog commit or receipt persistence alone.

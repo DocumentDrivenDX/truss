@@ -479,3 +479,36 @@ publication. Descriptive JSON, a matching hash or replacement of fixture bytes
 with a shape-valid envelope cannot establish that correspondence. These rules
 implement CONTRACT-001's interpreted family/effect custody and CONTRACT-003's
 pre-effect semantic-plan requirements; the connected native body remains pending.
+
+## Compact catalog registration baseline — owner correction 2026-10-11
+
+The selected trusted-SDK/session-person profile consumes original prepared input,
+original UMF document bytes, declarations and the compact source projection with
+its original tool/profile pins. The SDK validates original preparation and full
+owner-derived assertion coverage before submission. Retain original documents
+and accepted source/configuration/release identities; do not echo full owner
+observation evidence or whole PostgreSQL operation records through each runtime,
+report and feed envelope. This supersedes those mechanisms as Python baseline
+release dependencies, without upgrading SQL-only calls to original-UMF
+completeness qualification.
+
+Use actual session-person identity, exact native ROLE setting `none`, installed
+registrar authorization and the private owner boundary already selected above.
+The native registration facade locks the head, validates the selected installed
+release and original typed input, produces document-qualified catalog rows,
+checks the complete planned typed effects and constraints, writes the report and
+durable registration receipt, and advances the head last in the same invocation.
+Recheck current registration authorization before publication. No ordinary caller
+receives raw table writes or execution of private helpers.
+
+Registration carries a stable request key, separate from a host operation ordinal.
+Scope the durable key by installation and authenticated actor. Exact repeated
+original request returns the original revision/report even after the head advances;
+check replay before the fresh-head requirement. Equality covers original input,
+document and declaration bytes, compact source projection and selected pins,
+asserted origin and selected registration options. Reusing the key with any
+different request component refuses. Current authorization/configuration checks
+are independent of original request equality; a matching receipt never skips
+current disclosure authorization. A failed/rolled-back registration leaves no receipt or
+published head. This registration receipt is not a substitute for the later group
+mutation/import receipt contracts.

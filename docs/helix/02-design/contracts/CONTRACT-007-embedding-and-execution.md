@@ -1100,3 +1100,20 @@ Exact baseline fields/native queries, restoration commands, prepared-state recog
 For the PostgreSQL 17 reference owned-session baseline, independently observe exact session_user, admitted acting role and actual current_user outside definer execution; client_encoding, DateStyle, TimeZone, IntervalStyle, bytea_output, standard_conforming_strings, search_path and resolved current_schemas; row_security and session_replication_role; default_transaction_isolation/read_only/deferrable; and statement_timeout, lock_timeout, idle_in_transaction_session_timeout, idle_session_timeout and transaction_timeout. Preserve original names/values and actual source/version, with explicit unavailable fields rather than silent omission. These fields are a required floor, not a complete session-state inventory or an instruction to overwrite the pool baseline. Actual decoder expectations and allowed transaction-local changes must be admitted against them before work.
 
 In particular, session_replication_role must remain compatible with the selected integrity trigger/FK profile; a permissive pool baseline cannot authorize bypass. Resolved search-path membership and original dependency identity are independently checked, not inferred from textual search_path equality. Timeout values retain their distinct native meanings and cannot replace the executor monotone deadline. The [PostgreSQL client defaults documentation](https://www.postgresql.org/docs/17/runtime-config-client.html) supplies their native setting meanings; actual driver/server collection and version-specific compatibility remain qualification inputs. Other engine/version profiles must explicitly reconcile available fields before claiming this baseline. Complete prepared/protocol/temp/advisory/session mutation custody still requires the adapter’s original allowed-path inventory.
+
+## Public-operation execution baseline — owner correction 2026-10-11
+
+Stock psycopg parameters/results, host-owned PostgreSQL transactions, native
+constraints, exact values and current authorization are the Python execution
+baseline. Whole-row hex envelopes and global state snapshots are not required
+per-call mechanisms or release gates. Use compact original source/configuration
+identities and durable request/result records where recovery requires them.
+Preserve pending versus committed outcomes, atomicity, caller-work containment,
+unknown-settlement recovery and refusal without automatic retry loops.
+
+A callable operation requires its real selected native implementation and checks.
+Administrative staging fixtures, inert assembly selectors and installation-only
+footprints cannot satisfy the public catalog workflow. Replace the unconditional
+catalog commit barrier only with an installed deferred validator proving the
+required catalog/report/receipt correspondence; do not simply remove it. Runtime
+capabilities not implemented by the selected release remain unavailable.

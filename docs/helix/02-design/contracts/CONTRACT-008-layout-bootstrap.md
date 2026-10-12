@@ -3259,3 +3259,29 @@ STP-056 B11/B12/L11 and US-056 AC9/AC10 prerequisites. C01/C02 credentials,
 original caller/issuer/mapping/target and C04–C07 source/publication/recovery/full
 qualification remain open. No public endpoint or backend binding; full goal
 active at26/132 with106 unbound required cases.
+
+## Caller-owned public installation — owner correction 2026-10-11
+
+The Python baseline adds `install_in_transaction(host, transaction, ...)` as a
+separate transactional installation profile. This supersedes the prohibition on
+adopted transactions for this new entry point; the existing `install_fresh`
+owns-and-commits profile retains its separate meaning. Installation executes
+selected owner-generated DDL, guards, private owner/registrar roles, grants and
+initial metadata in one guarded host savepoint. Failure rolls back that work
+without settling or losing earlier caller work. Do not force unrelated caller
+constraints with `SET CONSTRAINTS ALL IMMEDIATE`.
+
+A successful call returns `pending_commit`. Savepoint release does not mean
+installed, committed or ready. The caller owns commit/rollback; a fresh adopted
+transaction reads the committed release/version and available capability set.
+Unknown settlement follows the existing host recovery rules. Namespace reuse
+requires an explicit supported migration or refuses; installation never silently
+overwrites an existing schema.
+
+The next release is a PostgreSQL 18 catalog release: real installation,
+registration, report/revision reads and registration retry. Package exact DDL,
+initializers, privileges, facades and a selected deferred catalog validator
+before declaring it supported. The existing review-only 112-statement asset
+has no guards/facades and remains unqualified. Business writes remain unavailable
+until their own protected implementation lands. An install-only intermediate
+result does not satisfy the registration milestone.
