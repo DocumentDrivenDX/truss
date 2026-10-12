@@ -3057,3 +3057,11 @@ containment or authority check was weakened and deterministic availability is no
 claimed. Exact earlier cause remains unqualified beyond the observed cancellation.
 The eight-query abstract caller model remains unchanged and does not establish
 native host/ordinal refinement. Full backend acceptance stays26/132; goal active.
+
+Final source-inventory integration: a further main catalog-candidate change alters
+one retained input after6e633de9. Fresh
+`evidence/python-psycopg-epoch-cut/1ba2a07c-9f61-4b5c-aaa8-c6a53b9418f0`
+passes183 methods, boundaries and143 current/preimage inputs with three cleanups
+against both integrated changes. Earlier packets retain their own source scopes.
+This security composition run does not independently qualify the new catalog
+facade/dispatch workflow or promote any backend acceptance binding.
