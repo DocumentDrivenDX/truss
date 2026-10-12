@@ -56,6 +56,28 @@ class CatalogReport:
     original_bytes: bytes
 
 
+@dataclass(frozen=True,slots=True)
+class ModuleAccessGrant:
+    document_id: str
+    module_id: str
+    reader_role: str
+    writer_role: str
+
+    def __post_init__(self) -> None:
+        for value in (self.document_id,self.module_id,self.reader_role,self.writer_role):
+            if type(value) is not str or not value or '\0' in value or len(value.encode('utf-8'))>4096:
+                raise ValueError('Exact nonempty module grant identities required')
+        if self.reader_role==self.writer_role:raise ValueError('Reader and writer roles must differ')
+        if any(len(role.encode('utf-8'))>63 for role in (self.reader_role,self.writer_role)):
+            raise ValueError('Native role names must fit 63 UTF-8 bytes')
+
+
+@dataclass(frozen=True,slots=True)
+class PendingModuleAccessConfiguration:
+    grants: tuple[ModuleAccessGrant,...]
+    status: str = 'pending_commit'
+
+
 def _pin_cursor(cursor):
     from psycopg.types.string import (TextLoader, ByteaLoader, StrDumperUnknown,
         StrBinaryDumper, BytesDumper, BytesBinaryDumper)
@@ -224,6 +246,80 @@ class CatalogReferenceAssembly:
         return CatalogViewRequest(layout_profile=ProfilePin(**manifest['layoutProfile']),view_profile=VIEW_PROFILE,
             selection=CurrentCatalogSelection(),scope=CompleteCatalogScope(),
             limits=CatalogViewLimits(definition_count=definition_count,encoded_bytes=encoded_bytes))
+
+    @_active_operation
+    def configure_module_access_in_transaction(self,transaction: TransactionHandle,grants: tuple[ModuleAccessGrant,...]) -> Outcome[PendingModuleAccessConfiguration]:
+        """Configure existing module-policy rows as the trusted administrator.
+
+        This does not grant raw-table privileges or install business capabilities.
+        """
+        if type(grants) is not tuple or not 1<=len(grants)<=512 or any(type(grant) is not ModuleAccessGrant for grant in grants):
+            return Error(ExecutionFailure('execution_obligation','Bounded typed module grants required'))
+        if len({(grant.document_id,grant.module_id) for grant in grants})!=len(grants):
+            return Error(ExecutionFailure('execution_obligation','Unique document-qualified module grants required'))
+        manifest,digest,_=_release()
+        def configure(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
+            original_path=cursor.fetchone()[0]
+            cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+            cursor.execute("""SELECT current_user=session_user,pg_catalog.current_setting('role')='none',
+              pg_catalog.current_setting('transaction_isolation')='read committed',
+              pg_catalog.current_setting('transaction_read_only')='off'""",prepare=False)
+            if cursor.fetchone()!=(True,True,True,True):raise ValueError('Direct read-write READ COMMITTED administrator required')
+            cursor.execute("SELECT rolsuper FROM pg_catalog.pg_roles WHERE rolname=session_user",prepare=False)
+            if cursor.fetchone()!=(True,):raise ValueError('Trusted installation administrator required')
+            cursor.execute('SELECT release_id,release_sha256 FROM truss.catalog_runtime_installation',prepare=False)
+            if cursor.fetchone()!=(manifest['releaseId'],digest):raise ValueError('Selected installed runtime required')
+            cursor.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT',prepare=False)
+            if cursor.fetchone()!=(1,):raise ValueError('Accepted catalog head required')
+            for grant in grants:
+                cursor.execute("""SELECT EXISTS(SELECT 1 FROM truss.schema_doc d
+                  CROSS JOIN LATERAL pg_catalog.jsonb_array_elements(d.document::pg_catalog.jsonb->'modules') m
+                  WHERE d.doc_id=%s AND m.value->>'id'=%s)""",(grant.document_id,grant.module_id),prepare=False)
+                if cursor.fetchone()!=(True,):raise ValueError('Accepted document-qualified module required')
+                cursor.execute("""WITH RECURSIVE permission_roles(oid) AS (
+                    SELECT oid FROM pg_catalog.pg_roles WHERE rolname::pg_catalog.text IN (%s::pg_catalog.text,%s::pg_catalog.text)
+                    UNION SELECT m.roleid FROM pg_catalog.pg_auth_members m JOIN permission_roles p ON m.member=p.oid)
+                  SELECT CASE WHEN EXISTS(SELECT 1 FROM permission_roles p JOIN pg_catalog.pg_roles r ON r.oid=p.oid
+                    CROSS JOIN truss.catalog_runtime_installation i
+                    WHERE r.rolcanlogin OR r.rolsuper OR r.rolcreaterole OR r.rolcreatedb
+                      OR r.rolreplication OR r.rolbypassrls OR r.oid IN (i.owner_oid,i.registrar_oid)
+                      OR pg_catalog.has_schema_privilege(r.oid,'truss','CREATE')
+                      OR EXISTS(SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+                        WHERE n.nspname='truss' AND ((c.relkind IN ('r','p') AND
+                          (pg_catalog.has_table_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
+                           OR pg_catalog.has_any_column_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,REFERENCES')))
+                          OR (c.relkind='S' AND pg_catalog.has_sequence_privilege(r.oid,c.oid,'USAGE,SELECT,UPDATE')))))
+                   THEN 0 ELSE (SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname::pg_catalog.text IN (%s::pg_catalog.text,%s::pg_catalog.text)) END""",
+                  (grant.reader_role,grant.writer_role,grant.reader_role,grant.writer_role),prepare=False)
+                if cursor.fetchone()!=(2,):raise ValueError('Existing ordinary permission roles required')
+            for grant in grants:
+                cursor.execute('''SELECT reader_role,writer_role FROM truss.module_access
+                  WHERE document_id=%s AND module=%s FOR UPDATE NOWAIT''',(grant.document_id,grant.module_id),prepare=False)
+                before=cursor.fetchone()
+                expected=(grant.reader_role,grant.writer_role)
+                cursor.execute('''INSERT INTO truss.module_access(document_id,module,reader_role,writer_role)
+                  VALUES(%s,%s,%s,%s) ON CONFLICT(document_id,module)
+                  DO UPDATE SET reader_role=EXCLUDED.reader_role,writer_role=EXCLUDED.writer_role
+                  WHERE (module_access.reader_role,module_access.writer_role)
+                    IS DISTINCT FROM (EXCLUDED.reader_role,EXCLUDED.writer_role)
+                  RETURNING reader_role,writer_role''',
+                  (grant.document_id,grant.module_id,grant.reader_role,grant.writer_role),prepare=False)
+                returned=cursor.fetchone()
+                if returned!=expected and not (returned is None and before==expected):
+                    raise ValueError('Complete native module grant write required')
+                cursor.execute('''SELECT reader_role,writer_role FROM truss.module_access
+                  WHERE document_id=%s AND module=%s''',(grant.document_id,grant.module_id),prepare=False)
+                if cursor.fetchone()!=expected:raise ValueError('Exact native module grant readback required')
+            for grant in grants:
+                cursor.execute('''SELECT reader_role,writer_role FROM truss.module_access
+                  WHERE document_id=%s AND module=%s''',(grant.document_id,grant.module_id),prepare=False)
+                if cursor.fetchone()!=(grant.reader_role,grant.writer_role):raise ValueError('Complete native module grant batch required')
+            cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
+            if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
+            return PendingModuleAccessConfiguration(grants)
+        return self._host._run_operation(transaction,configure)
 
     @_active_operation
     def catalog_view_in_transaction(self,transaction: TransactionHandle,request: CatalogViewRequest) -> Outcome[CatalogViewAvailable | CatalogViewUnavailable]:

@@ -44,9 +44,11 @@ __all__ += ["InstallationInspectionConfiguration", "InstallationInspectionAssemb
             "inspect_installation_in_transaction"]
 
 from .catalog_runtime import (CatalogRuntimeConfiguration, CatalogReferenceAssembly,
-    PendingCatalogInstallation, CatalogRuntimeStatus, CatalogRegistration, CatalogReport)
+    PendingCatalogInstallation, CatalogRuntimeStatus, CatalogRegistration, CatalogReport,
+    ModuleAccessGrant, PendingModuleAccessConfiguration)
 __all__ += ["CatalogRuntimeConfiguration", "CatalogReferenceAssembly", "PendingCatalogInstallation",
-            "CatalogRuntimeStatus", "CatalogRegistration", "CatalogReport"]
+            "CatalogRuntimeStatus", "CatalogRegistration", "CatalogReport",
+            "ModuleAccessGrant", "PendingModuleAccessConfiguration"]
 
 from .catalog_view import (CatalogViewRequest, CatalogViewLimits, CurrentCatalogSelection,
     HistoricalCatalogSelection, CompleteCatalogScope, ProjectedCatalogScope,

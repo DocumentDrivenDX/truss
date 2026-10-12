@@ -1,0 +1,29 @@
+{
+  "scope": "public administrator module-policy metadata configuration; business authorization/mutations unfinished",
+  "python": "3.11.17",
+  "postgres": "18.6",
+  "psycopg": "3.3.6",
+  "wheelSha256": "60d5446b6ccb0257c34fadc088eadcc4e5548d9be984576665189df1eefd9096",
+  "installedWheelTests": {
+    "count": 32,
+    "passed": true,
+    "seconds": 41.297
+  },
+  "sourceTests": {
+    "count": 32,
+    "passed": true,
+    "seconds": 40.051
+  },
+  "pythonBoundaryImports": 627,
+  "review": "Astra Ultra approved corrected source for scoped commit/push",
+  "controls": [
+    "ordinary caller/read-only/RR/serializable refusal",
+    "qualified adoc/m and zdoc/m",
+    "unsafe roles and inherited owner/raw table/column privileges",
+    "suppressed write and later-trigger prior-row mutation rollback",
+    "hostile equality operator search path isolation/restoration",
+    "63-byte role name bound",
+    "identical upsert no-op",
+    "caller commit and rollback"
+  ]
+}
