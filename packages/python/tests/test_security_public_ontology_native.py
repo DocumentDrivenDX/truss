@@ -19,6 +19,176 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_supported_source_census_observes_bootstrap_and_body_drift(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  from truss._psycopg_source_census import observe_source_census_in_transaction
+  import gzip,hashlib
+  self.install();self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  self.admin.execute("CREATE TEMP TABLE source_census_work(value text);INSERT INTO source_census_work VALUES('kept')")
+  self.assertIsInstance(bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=self.installation.installation_id.encode(),authored_profile=b'source-census-fixture/0.1',max_retained=6),Ok)
+  self.admin.execute("CREATE FUNCTION truss.census_fixture_probe() RETURNS int LANGUAGE sql AS 'SELECT 1'")
+  def capture():
+   result=observe_source_census_in_transaction(self.host,tx)
+   self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(result.value.admitted)
+   return result.value.original_image
+  self.admin.execute("CREATE SCHEMA census_hostile;CREATE FUNCTION census_hostile.multiply(int,int) RETURNS int LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'hostile operator invoked';END $$;CREATE OPERATOR census_hostile.* (FUNCTION=census_hostile.multiply,LEFTARG=int,RIGHTARG=int)")
+  self.addCleanup(self.admin.execute,'DROP SCHEMA IF EXISTS census_hostile CASCADE')
+  self.admin.execute('SET LOCAL search_path=census_hostile,pg_catalog,pg_temp')
+  original_path=self.admin.execute("SELECT pg_catalog.current_setting('search_path')").fetchone()[0]
+  self.admin.execute('SAVEPOINT hostile_operator_probe')
+  with self.assertRaises(psycopg.errors.RaiseException):self.admin.execute('SELECT 2*3')
+  self.admin.execute('ROLLBACK TO hostile_operator_probe')
+  original=capture();parsed=json.loads(original)
+  self.assertEqual(self.admin.execute("SELECT pg_catalog.current_setting('search_path')").fetchone()[0],original_path)
+  self.assertEqual(parsed['serverVersion'],'180006')
+  names={json.loads(row)['relname'] for row in parsed['sections']['pg_class']}
+  self.assertTrue({'policy_generation_guard','policy_publication_claim','policy_publication_capacity'}<=names)
+  def bodies(image):return [json.loads(row)['prosrc'] for row in json.loads(image)['sections']['pg_proc'] if json.loads(row)['proname']=='census_fixture_probe']
+  self.assertEqual(bodies(original),['SELECT 1'])
+  self.admin.execute('SAVEPOINT source_mutation');self.admin.execute("CREATE OR REPLACE FUNCTION truss.census_fixture_probe() RETURNS int LANGUAGE sql AS 'SELECT 2'")
+  changed=capture();self.assertNotEqual(changed,original);self.assertEqual(bodies(changed),['SELECT 2'])
+  self.admin.execute('ROLLBACK TO source_mutation');restored=capture();self.assertEqual(restored,original)
+  self.admin.execute('CREATE FOREIGN DATA WRAPPER source_census_fixture')
+  refused=observe_source_census_in_transaction(self.host,tx);self.assertIsInstance(refused,Error)
+  self.assertEqual(self.admin.execute('TABLE source_census_work').fetchall(),[('kept',)])
+  self.admin.execute('ROLLBACK TO source_mutation');self.assertEqual(capture(),original)
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):
+   target=Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.census.json')
+   target.write_text(json.dumps({'originalBytes':len(original),'originalSha256':hashlib.sha256(original).hexdigest(),'changedSha256':hashlib.sha256(changed).hexdigest(),'restoredSha256':hashlib.sha256(restored).hexdigest(),'guardHomesObserved':True,'hostileOperatorNotInvoked':True,'callerSearchPathRestored':True,'originalBody':'SELECT 1','changedBody':'SELECT 2','foreignWrapperRefused':True,'callerWork':'kept','scope':'Actual PostgreSQL18.6 source response via stock supported psycopg, private host scope. Not authenticated producer/source writer, held authority/data cut or admitted policy.'},indent=2)+'\n')
+   Path(str(target)+'.original.gz').write_bytes(gzip.compress(original,mtime=0));Path(str(target)+'.changed.gz').write_bytes(gzip.compress(changed,mtime=0))
+ def test_private_bootstrap_refuses_suppressed_native_seed(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  self.install()
+  self.admin.execute("CREATE SCHEMA bootstrap_fault_fixture;CREATE FUNCTION bootstrap_fault_fixture.skip_seed() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RETURN NULL;END $$")
+  self.admin.execute("CREATE FUNCTION bootstrap_fault_fixture.attach_fault() RETURNS event_trigger LANGUAGE plpgsql AS $$ DECLARE command record;BEGIN FOR command IN SELECT * FROM pg_catalog.pg_event_trigger_ddl_commands() LOOP IF command.object_identity='truss.policy_generation_guard' THEN EXECUTE 'CREATE TRIGGER skip_seed BEFORE INSERT ON truss.policy_generation_guard FOR EACH ROW EXECUTE FUNCTION bootstrap_fault_fixture.skip_seed()';END IF;END LOOP;END $$")
+  self.admin.execute("CREATE EVENT TRIGGER bootstrap_seed_fault ON ddl_command_end WHEN TAG IN ('CREATE TABLE') EXECUTE FUNCTION bootstrap_fault_fixture.attach_fault()")
+  self.addCleanup(self.admin.execute,'DROP SCHEMA bootstrap_fault_fixture CASCADE')
+  self.addCleanup(self.admin.execute,'DROP EVENT TRIGGER bootstrap_seed_fault')
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);tx=self.host.adopt_transaction().value
+  self.admin.execute("CREATE TEMP TABLE bootstrap_fault_work(value text);INSERT INTO bootstrap_fault_work VALUES('kept')")
+  result=bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=self.installation.installation_id.encode(),authored_profile=b'suppressed-seed-fixture/0.1',max_retained=6)
+  self.assertIsInstance(result,Error)
+  for home in ['policy_generation_guard','policy_publication_claim','policy_publication_capacity']:
+   self.assertIsNone(self.admin.execute('SELECT pg_catalog.to_regclass(%s)',('truss.'+home,)).fetchone()[0])
+  self.assertEqual(self.admin.execute('TABLE bootstrap_fault_work').fetchall(),[('kept',)])
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.seed.json').write_text(json.dumps({'observations':['actual native event hook attaches BEFORE INSERT suppression','bootstrap refuses without pending success','all three homes roll back','original caller work preserved'],'scope':'Native suppressed-seed containment; excluded administrator injects fixture fault. Not full event-hook census or security profile admission.'},indent=2)+'\n')
+ def test_private_security_home_operation_preserves_transaction_and_refuses_repair(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  self.install()
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);tx=self.host.adopt_transaction().value
+  identity=self.installation.installation_id.encode();profile=b'private-bootstrap-native/0.1'
+  self.admin.execute("CREATE TEMP TABLE bootstrap_caller_work(value text);INSERT INTO bootstrap_caller_work VALUES('kept')")
+  def bootstrap(original=identity):return bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=original,authored_profile=profile,max_retained=6)
+  self.assertIsInstance(bootstrap(b'foreign'),Error)
+  self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_generation_guard')").fetchone()[0])
+  self.admin.execute('ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO consumer')
+  self.assertIsInstance(bootstrap(),Error)
+  self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_generation_guard')").fetchone()[0])
+  self.assertEqual(self.admin.execute('TABLE bootstrap_caller_work').fetchall(),[('kept',)])
+  self.admin.execute('ALTER DEFAULT PRIVILEGES REVOKE SELECT ON TABLES FROM consumer')
+  from psycopg.types.string import BytesDumper
+  from psycopg.adapt import Dumper
+  class ChangedBytes(BytesDumper):
+   def dump(self,value):return super().dump(value+b'-changed')
+  class ChangedCapacity(Dumper):
+   oid=23
+   def dump(self,value):return str(9 if value==6 else value).encode()
+  self.admin.adapters.register_dumper(bytes,ChangedBytes)
+  self.admin.adapters.register_dumper(int,ChangedCapacity)
+  installed=bootstrap();self.assertIsInstance(installed,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(installed.value.security_ready)
+  self.assertEqual(self.admin.execute('SELECT %s::bytea,%s::int',(b'caller',6)).fetchone(),(b'caller-changed',9))
+  self.assertEqual(self.admin.execute('SELECT installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard').fetchall(),[(identity,profile,1)])
+  self.assertEqual(self.admin.execute('SELECT installation_identity_bytes,policy_profile_bytes,max_retained FROM truss.policy_publication_capacity').fetchall(),[(identity,profile,6)])
+  self.assertIsInstance(bootstrap(),Error)
+  self.assertEqual(self.admin.execute('TABLE bootstrap_caller_work').fetchall(),[('kept',)])
+  self.host.detach();self.admin.rollback()
+  self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_generation_guard')").fetchone()[0])
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);tx=self.host.adopt_transaction().value
+  committed=bootstrap();self.assertIsInstance(committed,Ok,str(self.host._custody.last_attempt.error));self.host.detach();self.admin.commit()
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(0,))
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   for home in ['policy_generation_guard','policy_publication_claim','policy_publication_capacity']:
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('TABLE truss.{}').format(psycopg.sql.Identifier(home)))
+   ordinary.execute("SET statement_timeout='10000'");ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=10000)
+   try:
+    ordinary_tx=ordinary_host.adopt_transaction().value
+    denied=bootstrap_security_homes_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,max_retained=6)
+    self.assertIsInstance(denied,Error)
+    self.assertEqual(ordinary.execute('SELECT 1').fetchone(),(1,))
+   finally:ordinary_host.detach();ordinary.rollback()
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.operation.json').write_text(json.dumps({'observations':['foreign original identity refused','hostile default ACL refused with full home rollback','prior caller work preserved','exact original guard and capacity seeded despite caller custom bytes/int adapters; caller adapters preserved','existing homes refused without repair','outer rollback removes homes','original caller commit persists homes','ordinary native consumer denied all three homes and private bootstrap; transaction remains usable'],'scope':'Private installation operation only; no security-ready profile, policy activation, authority issuer, complete participant/native source qualification or backend acceptance.'},indent=2)+'\n')
+ def test_fresh_installer_seals_candidate_homes_and_refuses_inherited_acl(self):
+  from unittest.mock import patch
+  from truss import Error
+  import truss.catalog_runtime as runtime
+  contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'
+  sources=[(contracts/name).read_text() for name in ['installation-policy-guard-v0.1.proposal.sql','installation-publication-claim-v0.2.tombstone.proposal.sql','installation-publication-capacity-profile-v0.1.proposal.sql']]
+  manifest,digest,original=runtime._release()
+  self.admin.execute("CREATE TEMP TABLE caller_bootstrap_work(value text);INSERT INTO caller_bootstrap_work VALUES('kept')")
+  observations=[]
+  for mode in ['default-table-grant','direct-column-grant']:
+   if mode=='default-table-grant':self.admin.execute('ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO consumer')
+   extra=sources+(['GRANT SELECT(generation) ON truss.policy_generation_guard TO consumer'] if mode=='direct-column-grant' else [])
+   with patch('truss.catalog_runtime._release',return_value=(manifest,digest,tuple(original)+tuple(extra))):
+    refused=self.assembly.install_in_transaction(self.tx,owner_role='security_bootstrap_owner',registrar_role='security_bootstrap_client')
+   self.assertIsInstance(refused,Error)
+   self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regnamespace('truss')").fetchone()[0])
+   self.assertEqual(self.admin.execute("SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname IN ('security_bootstrap_owner','security_bootstrap_client')").fetchone(),(0,))
+   self.assertEqual(self.admin.execute('TABLE caller_bootstrap_work').fetchall(),[('kept',)])
+   observations.append({'id':'production-installer-refuses-'+mode,'observed':{'namespace':None,'createdRoles':0,'callerWork':'kept'}})
+   if mode=='default-table-grant':self.admin.execute('ALTER DEFAULT PRIVILEGES REVOKE SELECT ON TABLES FROM consumer')
+  # The release source injection is test-only, not an adopted release manifest.
+  with patch('truss.catalog_runtime._release',return_value=(manifest,digest,tuple(original)+tuple(sources))):self.install()
+  homes=['policy_generation_guard','policy_publication_claim','policy_publication_capacity']
+  owners=self.admin.execute("SELECT c.relname,r.rolname FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace JOIN pg_catalog.pg_roles r ON r.oid=c.relowner WHERE n.nspname='truss' AND c.relname=ANY(%s) ORDER BY c.relname",(homes,)).fetchall()
+  self.assertEqual(owners,sorted((home,self.installation.owner_role) for home in homes))
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   for home in homes:
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('TABLE truss.{}').format(psycopg.sql.Identifier(home)))
+    self.assertFalse(ordinary.execute("SELECT pg_catalog.has_any_column_privilege(current_user,%s,'SELECT,INSERT,UPDATE,REFERENCES')",('truss.'+home,)).fetchone()[0])
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('SET ROLE {}').format(psycopg.sql.Identifier(self.installation.owner_role)))
+  observations.append({'id':'production-fresh-installer-seals-proposed-security-homes','observed':owners,'ordinaryRead':'42501','ordinaryColumnPrivileges':False,'ownerAdoption':'42501'})
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.installer.json').write_text(json.dumps({'observations':observations,'scope':'Existing production fresh-install savepoint and privilege sealing primitive with explicit test-only source injection. Original release manifest is unchanged; security homes/profile are not adopted or activated. No complete issuer/source/caller/bootstrap qualification or acceptance-case promotion.'},indent=2)+'\n')
+ def test_candidate_security_bootstrap_atomicity_and_owner_isolation(self):
+  self.install();self.host.detach();self.admin.commit()
+  contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'
+  homes=[('policy_generation_guard','installation-policy-guard-v0.1.proposal.sql'),('policy_publication_claim','installation-publication-claim-v0.2.tombstone.proposal.sql'),('policy_publication_capacity','installation-publication-capacity-profile-v0.1.proposal.sql')]
+  installation=self.admin.execute('SELECT installation_id::text FROM truss.catalog_runtime_installation').fetchone()[0].encode()
+  profile=b'bootstrap-ownership-fixture/0.1';observations=[]
+  # Every partial prefix must disappear with its original failed transaction.
+  for prefix in range(1,len(homes)+1):
+   self.admin.execute('BEGIN')
+   for home,source in homes[:prefix]:self.admin.execute((contracts/source).read_text())
+   with self.assertRaises(psycopg.errors.DivisionByZero):self.admin.execute('SELECT 1/0')
+   self.admin.rollback()
+   absent=[self.admin.execute('SELECT pg_catalog.to_regclass(%s)',('truss.'+home,)).fetchone()[0] for home,_ in homes]
+   self.assertEqual(absent,[None]*3)
+   observations.append({'id':'failed-bootstrap-prefix-'+str(prefix),'observed':absent})
+  self.admin.execute('BEGIN')
+  for home,source in homes:
+   self.admin.execute((contracts/source).read_text())
+   self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} OWNER TO {}').format(psycopg.sql.Identifier(home),psycopg.sql.Identifier(self.installation.owner_role)))
+   self.admin.execute(psycopg.sql.SQL('REVOKE ALL ON truss.{} FROM PUBLIC').format(psycopg.sql.Identifier(home)))
+  self.admin.execute('INSERT INTO truss.policy_generation_guard VALUES(1,%s,%s,1)',(installation,profile))
+  self.admin.execute('INSERT INTO truss.policy_publication_capacity VALUES(1,%s,%s,6)',(installation,profile))
+  self.admin.commit()
+  ownership=self.admin.execute("SELECT c.relname,r.rolname FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace JOIN pg_catalog.pg_roles r ON r.oid=c.relowner WHERE n.nspname='truss' AND c.relname=ANY(%s) ORDER BY c.relname",([home for home,_ in homes],)).fetchall()
+  self.assertEqual(ownership,sorted((home,self.installation.owner_role) for home,_ in homes))
+  observations.append({'id':'candidate-security-homes-original-installation-owner','observed':ownership})
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
+  with psycopg.connect(**params,autocommit=True) as ordinary:
+   for home,_ in homes:
+    for privilege in ['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER']:
+     allowed=ordinary.execute('SELECT pg_catalog.has_table_privilege(current_user,%s,%s)',('truss.'+home,privilege)).fetchone()[0]
+     self.assertFalse(allowed)
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('TABLE truss.{}').format(psycopg.sql.Identifier(home)))
+    observations.append({'id':'ordinary-consumer-security-home-denied-'+home,'observed':'42501','privilegesAbsent':['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER']})
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.bootstrap.json').write_text(json.dumps({'observations':observations,'scope':'Candidate DDL under explicit trusted fixture administrator, atomic rollback and existing installation-owner isolation only. No public runtime adoption, authenticated profile issuer, complete native source census or production bootstrap admission.'},indent=2)+'\n')
  def test_owned_connections_close_before_schema_teardown(self):
   import time
   self.install();self.host.detach();self.admin.commit()
@@ -220,9 +390,17 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    actual=[r[0] for r in restored_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-native-caller-authority-original-vector','observed':actual})
   # Exercise the existing installation-wide authority guard's original SQL.
   contracts=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts'
-  self.admin.execute((contracts/'installation-policy-guard-v0.1.proposal.sql').read_text())
+  from truss import adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
   installation_bytes=self.admin.execute('SELECT installation_id::text FROM truss.catalog_runtime_installation').fetchone()[0].encode();profile_bytes=b'ontology-authority-guard-fixture/0.1'
-  self.admin.execute('INSERT INTO truss.policy_generation_guard VALUES(1,%s,%s,1)',(installation_bytes,profile_bytes))
+  self.admin.execute('BEGIN');bootstrap_host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
+  try:
+   bootstrap_tx=bootstrap_host.adopt_transaction().value
+   bootstrapped=bootstrap_security_homes_in_transaction(bootstrap_host,bootstrap_tx,installation_identity=installation_bytes,authored_profile=profile_bytes,max_retained=6)
+   self.assertIsInstance(bootstrapped,Ok,str(bootstrap_host._custody.last_attempt.error));self.assertFalse(bootstrapped.value.security_ready)
+  finally:bootstrap_host.detach()
+  self.admin.commit()
+  observations.append({'id':'ontology-lifecycle-uses-private-bootstrap-homes','observed':{'installationHex':installation_bytes.hex(),'profileHex':profile_bytes.hex(),'maxRetained':6,'securityReady':False},'qualification':'implemented bootstrap custody and sealed homes; candidate source/issuer/participant admission remains unqualified'})
   acquire=(contracts/'installation-policy-guard-acquire-v0.1.proposal.sql').read_text()
   advance=(contracts/'installation-policy-generation-advance-v0.1.proposal.sql').read_text()
   for ordinal in [1,2,3]:advance=advance.replace('$'+str(ordinal),'%s')
@@ -302,7 +480,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   # Same logical Record/Relationship condition over independent raw tables.
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])));rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,4)).fetchall();self.assertEqual(rows,[('1',installation_bytes.hex(),profile_bytes.hex(),'5')]);authority_writer.execute('COMMIT')
   # Durable outstanding publication survives native coordinator death.
-  self.admin.execute((contracts/'installation-publication-claim-v0.2.tombstone.proposal.sql').read_text())
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(0,))
   def claim_sql(name,count):
    source=(contracts/name).read_text()
    for ordinal in range(1,count+1):source=source.replace('$'+str(ordinal),'%s')
@@ -427,7 +605,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
     if interruption_thread is not None:interruption_thread.join(12)
     interrupted.rollback();interrupted.close()
   # Source capacity from original protected native profile, not a fifth argument.
-  self.admin.execute((contracts/'installation-publication-capacity-profile-v0.1.proposal.sql').read_text());self.admin.execute('INSERT INTO truss.policy_publication_capacity VALUES(1,%s,%s,6)',(installation_bytes,profile_bytes))
+  self.assertEqual(self.admin.execute('SELECT installation_identity_bytes,policy_profile_bytes,max_retained FROM truss.policy_publication_capacity').fetchall(),[(installation_bytes,profile_bytes,6)])
   profile_register=(contracts/'installation-publication-claim-register-v0.4.profile.proposal.sql').read_text()
   for ordinal in range(1,5):profile_register=profile_register.replace('$'+str(ordinal),'%(p'+str(ordinal)+')s')
   def profile_execute(connection,parameters):return connection.execute(profile_register,{'p'+str(i):value for i,value in enumerate(parameters,1)})
@@ -458,21 +636,43 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone()
   reconciled=self.admin.execute("SELECT pg_catalog.encode(installation_identity_bytes,'hex'),pg_catalog.encode(policy_profile_bytes,'hex'),generation::text,settled FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s",(b'original-commit-ack-loss',)).fetchall();self.assertEqual(reconciled,[(installation_bytes.hex(),profile_bytes.hex(),'5',False)]);native_packet,claim_decoded=decode_native_claim(b'original-commit-ack-loss',False);absent_packet,absent_decoded=decode_native_claim(b'never-registered-original');self.admin.execute('COMMIT');observations.append({'id':'lost-registration-ack-reconciles-exact-original-durable-claim','observed':reconciled});observations.append({'id':'native-original-claim-recovery-carriers-decode','input':native_packet,'observed':claim_decoded});observations.append({'id':'native-missing-original-claim-is-only-not-observed','input':absent_packet,'observed':absent_decoded})
   # Fixture ledger dispatched no data query; conclusively withheld, then settle.
-  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.assertEqual(self.admin.execute(settle,(b'original-commit-ack-loss',installation_bytes,profile_bytes,5)).fetchall(),[(b'original-commit-ack-loss'.hex(),)]);self.admin.execute('COMMIT')
+  settlement_proxy=CommitResponseDropProxy(psycopg.conninfo.conninfo_to_dict(self.info.connection_uri));self.addCleanup(settlement_proxy.close)
+  settlement_owner=psycopg.connect(self.info.connection_uri,host='127.0.0.1',port=settlement_proxy.port,sslmode='disable',gssencmode='disable',autocommit=True);self._track_owned_connection(settlement_owner)
+  settlement_owner.execute('BEGIN');settlement_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');settlement_owner.execute(acquire).fetchall();self.assertEqual(settlement_owner.execute(settle,(b'original-commit-ack-loss',installation_bytes,profile_bytes,5)).fetchall(),[(b'original-commit-ack-loss'.hex(),)]);settlement_proxy.armed.set()
+  with self.assertRaises(psycopg.OperationalError) as settlement_loss:settlement_owner.execute('COMMIT')
+  self.assertIsNone(settlement_loss.exception.sqlstate);self.assertTrue(settlement_proxy.dropped.wait(2));settlement_proxy.close();self.assertEqual(settlement_proxy.errors,[]);observations.append({'id':'original-settlement-native-commit-response-dropped','observed':{'sqlState':settlement_loss.exception.sqlstate,'replacementOperation':False},'qualification':'fixture no-data-query completion premise; not production sink proof'})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();settled_packet,settled_decoded=decode_native_claim(b'original-commit-ack-loss',True);self.admin.execute('COMMIT');observations.append({'id':'native-original-settled-claim-recovery-carriers-decode','input':settled_packet,'observed':settled_decoded})
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();repeated=self.admin.execute(settle,(b'original-commit-ack-loss',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(repeated,[]);self.admin.execute('ROLLBACK');observations.append({'id':'lost-settlement-ack-reconciled-original-cannot-settle-twice','observed':repeated,'qualification':'negative control after original reconciliation, not automatic retry'})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock)
   with self.assertRaises(psycopg.errors.UniqueViolation) as replay:profile_execute(self.admin,(b'original-commit-ack-loss',installation_bytes,profile_bytes,5)).fetchall()
   self.assertEqual(replay.exception.sqlstate,'23505');self.admin.execute('ROLLBACK');observations.append({'id':'lost-registration-ack-never-replaced-original-token','observed':'original settled tombstone refuses23505'})
   publication_owner=psycopg.connect(self.info.connection_uri,autocommit=True);self._track_owned_connection(publication_owner);publication_pid=publication_owner.execute('SELECT pg_backend_pid()').fetchone()[0]
   for failure_mode in ['explicit_rollback','native_failure']:
+   recovery_thread=None;recovery_rows=[];recovery_errors=[]
    publication_owner.execute('BEGIN');publication_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');publication_owner.execute(acquire).fetchall();publication_owner.execute(capacity_lock)
    try:
     pending_registration=profile_execute(publication_owner,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(pending_registration,[(b'profile-bound-operation'.hex(),)])
     self.assertEqual(publication_owner.execute('SELECT settled FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(False,));self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(0,))
+    if failure_mode=='explicit_rollback':
+     recovery_reader=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(recovery_reader);recovery_pid=recovery_reader.execute('SELECT pg_backend_pid()').fetchone()[0]
+     def recover_after_original_drain():
+      try:
+       recovery_reader.execute('BEGIN');recovery_reader.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');recovery_reader.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();recovery_rows.extend(recovery_reader.execute(observe_claim,(b'profile-bound-operation',)).fetchall());recovery_reader.execute('COMMIT')
+      except BaseException as error:recovery_errors.append(type(error).__name__);recovery_reader.rollback()
+     recovery_thread=threading.Thread(target=recover_after_original_drain);recovery_thread.start();blockers=[];wait_until=time.monotonic()+8
+     while time.monotonic()<wait_until:
+      blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(recovery_pid,)).fetchone()[0]
+      if publication_pid in blockers:break
+      time.sleep(.02)
+     self.assertIn(publication_pid,blockers);observations.append({'id':'original-claim-recovery-drains-invisible-pending-registration','observed':{'blockers':blockers,'unguardedVisibleRows':0}})
     if failure_mode=='native_failure':
      with self.assertRaises(psycopg.errors.DivisionByZero) as error:publication_owner.execute('SELECT 1/0')
      self.assertEqual(error.exception.sqlstate,'22012');self.assertEqual(publication_owner.info.transaction_status,psycopg.pq.TransactionStatus.INERROR)
-   finally:publication_owner.rollback()
+   finally:
+    publication_owner.rollback()
+    if recovery_thread is not None:recovery_thread.join(12)
+   if recovery_thread is not None:
+    self.assertFalse(recovery_thread.is_alive());self.assertEqual(recovery_errors,[]);self.assertEqual(recovery_rows,[]);observations.append({'id':'fresh-original-claim-recovery-after-drained-rollback-is-not-observed','observed':recovery_rows,'qualification':'native absence after known rollback; decoder still supplies no issuer/abort proof'})
    self.assertEqual(publication_owner.info.transaction_status,psycopg.pq.TransactionStatus.IDLE);self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'profile-bound-operation',)).fetchone(),(0,));self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(5,));observations.append({'id':'profile-registration-'+failure_mode+'-preserves-capacity-and-original-token','observed':{'retained':5,'originalTokenRows':0,'commit':'not-published'},'qualification':'confirmed rollback only; no unknown-commit retry'})
   publication_owner.execute('BEGIN');publication_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');publication_owner.execute(acquire).fetchall();publication_owner.execute(capacity_lock);profile_registered=profile_execute(publication_owner,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(profile_registered,[(b'profile-bound-operation'.hex(),)]);publication_owner.execute('COMMIT');observations.append({'id':'native-profile-capacity-registers-original-next-slot','observed':profile_registered})
   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();self.admin.execute(capacity_lock);refused=profile_execute(self.admin,(b'profile-bound-overflow',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK');observations.append({'id':'native-profile-capacity-exhaustion-refuses','observed':refused})

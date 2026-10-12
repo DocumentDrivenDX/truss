@@ -1,0 +1,53 @@
+{
+  "implementation": "Private exact source-image comparison before the original synchronous callback, on the same cursor inside an existing native epoch-state fence. No nested host operation or retained lease.",
+  "validation": {
+    "focusedNativeTests": 3,
+    "focusedSeconds": 5.466,
+    "fullNativeTests": 12,
+    "fullSeconds": 7.669,
+    "decoderTests": 3,
+    "boundaries": "807 imports pass",
+    "wheelSha256": "a50396ba1b34827528a3f8e9987733cb172cee85ebff0d3caa435ec4e9397fb1",
+    "moduleBytes": "exact matches",
+    "result": "pass"
+  },
+  "command": "TRUSS_CENSUS_POSTGRES_BIN=/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages/pgserver/pginstall/bin PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python -m unittest test_psycopg_epoch_cut_native",
+  "nativeAssertions": [
+    "Original source match precedes callback with both source-epoch native SHARE locks held",
+    "Actual routine-body drift before acquisition refuses before callback",
+    "Failure retains original caller work and prior caller DDL and releases operation-acquired SHARE locks",
+    "Returned cold deferred callback closes without body execution and cannot escape native scope"
+  ],
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "result": "No actionable findings in declared epoch-fence scope",
+    "controls": "3 decoder tests and7 supplemental synthetic ordering/refusal controls; read-only, no native mutation"
+  },
+  "acceptanceTraceability": [
+    {
+      "case": "truss.B11",
+      "covers": "US-056-AC9",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.B12",
+      "covers": "US-056-AC10",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L11",
+      "covers": "US-057-AC7",
+      "caseClosed": false
+    }
+  ],
+  "scope": "PostgreSQL18.6/stock psycopg3.3.6 private source-epoch layout0.16 administrative fixture and selected native helper/ACL premises. Independently selected expected image is not authenticated issuer evidence. Epoch-state fencing and six-tag routine-DDL coverage are not complete source writer participation or stable authority/data cut. No actual current catalog runtime profile activation, authenticated fact producer, complete recursive callback carrier, SQL emission or backend admission. Native scan/heap and whole driver buffers remain separately qualified. Original 132 required cases retained.",
+  "sourceSha256": {
+    "packages/python/src/truss/_psycopg_census_cut.py": "c5493132e5cd7182988b053eb8622693292a6c9d092546f7a546551bc3ab846e",
+    "packages/python/src/truss/_psycopg_source_census.py": "04d07815477b940c0324d707044babcd03f72fe71f52dafe1ba924772db90c55",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "dd9ba78a0832435e3c5d7b029322ffb5930784e90f7245b24175ca071f38f238",
+    "packages/python/tests/test_psycopg_epoch_cut_native.py": "b62883486b0e8ff67e793d5c58a4c3c0b4c5d0d557c884bd3aa27345580c73b9",
+    "packages/python/src/truss/_source_census/pg18.sql": "494a647e449032e21ebc5e2eb9903619b9385bf99cbde72c63923da44ee23465",
+    "scripts/check-module-boundaries.py": "8e6b0f8496c6caa951b7f2756708d306ca9b9635a1537d7436b5fb4e334d8293"
+  }
+}

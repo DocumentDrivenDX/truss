@@ -1,0 +1,18 @@
+{
+  "baseCommit": "3cff15355ecf8ca8d6d3673c27620b3c3300c388",
+  "tests": 15,
+  "localDevelopmentBounds": {
+    "rows": 4096,
+    "cells": 4096,
+    "utf8TextBytes": 1048576
+  },
+  "scope": "Private synthetic-host buffered transport validation before decoder; no driver/producer allocation, native query/resource/service qualification or original acceptance promotion.",
+  "trace": [
+    "CONTRACT-063 bounded original transport/result admission",
+    "STP-057 L04/L11"
+  ],
+  "sha256": {
+    "packages/python/src/truss/_query_execution.py": "615f17867d7e49e0a9df99401524c2428ea034891f2390c8124c328d104b2a66",
+    "packages/python/tests/test_query_execution.py": "30c10c997d8dca924711ef85f4d3354e96f13ddb4b2a21b3b1f73eb0a6f0b434"
+  }
+}

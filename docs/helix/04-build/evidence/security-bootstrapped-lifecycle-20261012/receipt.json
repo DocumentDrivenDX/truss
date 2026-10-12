@@ -1,0 +1,38 @@
+{
+  "tests": 5,
+  "seconds": 32.581,
+  "result": "pass",
+  "lifecycleObservations": 227,
+  "command": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-bootstrapped-lifecycle-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+  "scope": "Actual public-created ontology and candidate lifecycle schedules now use the implemented private host-savepoint bootstrap, original seeded profile/capacity and installation-owned sealed homes. No profile activation, authenticated original issuer/sink, full native source census, complete participant closure or backend acceptance. No change to 132 required cases or promotion of partial observations.",
+  "acceptanceTraceability": [
+    {
+      "case": "truss.L03",
+      "covers": "US-057-AC2",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L05",
+      "covers": "US-057-AC3",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L11",
+      "covers": "US-057-AC7",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L12",
+      "covers": "US-057-AC8",
+      "caseClosed": false
+    }
+  ],
+  "sourceSha256": {
+    "packages/python/tests/test_security_public_ontology_native.py": "94d6c1ee11dd3b594c44a3ef49efede2636bb014d0fcba375d550c92669ca6a3",
+    "packages/python/src/truss/_security_home_installation.py": "51eb90eebf9d3d1bdd7daf7b1d9de377a2a9a13b1a8ac021e4f5d52032edeccf",
+    "packages/python/src/truss/_security_bootstrap/guard.sql": "0e1d881a2eccbcaf3d34ab8c4729a1aa21361c8c64b4ac142d706ee1da1312cf",
+    "packages/python/src/truss/_security_bootstrap/claims.sql": "09515ed389247cea307ca04fc4ef45f90213a7881cd489758e5a1f854ce8e323",
+    "packages/python/src/truss/_security_bootstrap/capacity.sql": "1ce1e6680dc681134423120e005df9161232e61fe1495495da177b82dbf69474",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "dbb2cd96137d9d6215ddfe4271ba10b77a9327f6950191b662a43b91e6e67fc5"
+  }
+}

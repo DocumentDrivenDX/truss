@@ -60,5 +60,17 @@
     "engine-owned import batches",
     "managed-service qualification",
     "full shared corpus/native interchange closure"
-  ]
+  ],
+  "mergedMain": {
+    "securitySourceHead": "8451c713",
+    "wheelSha256": "f314b949e3d84aa28c27741345cfd509b68a546c55f39e5d83fc9d2f005be490",
+    "publicQueryAndUpgradeTestsPassed": 3,
+    "seconds": 52.233,
+    "retainedSecurityBootstrapCheck": true,
+    "securityReady": false,
+    "pythonModuleBoundaryImports": 828,
+    "typingFixtures": 5,
+    "expectedNegativeTypingErrors": 20,
+    "review": "Astra Ultra approved merge intersections and conflict resolution"
+  }
 }

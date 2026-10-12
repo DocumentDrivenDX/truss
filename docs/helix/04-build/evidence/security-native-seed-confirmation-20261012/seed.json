@@ -1,0 +1,9 @@
+{
+  "observations": [
+    "actual native event hook attaches BEFORE INSERT suppression",
+    "bootstrap refuses without pending success",
+    "all three homes roll back",
+    "original caller work preserved"
+  ],
+  "scope": "Native suppressed-seed containment; excluded administrator injects fixture fault. Not full event-hook census or security profile admission."
+}

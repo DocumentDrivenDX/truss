@@ -519,3 +519,115 @@ The decoder establishes carrier correspondence only; expected bytes remain
 assertions, not authenticated issuer/operation/source/freshness or AuthorityLease
 proof. Production recovery/custody/bootstrap/participant qualification and all
 remaining original acceptance cases stay open.
+
+
+### Private buffered-result carrier refusal — 2026-10-12
+
+The private synchronous QueryCoordinator now requires exact dict input for
+decoded mappings. MappingProxyType can hide custom executable iteration and is
+therefore refused as input; the coordinator still creates immutable proxies as
+output. Regression checks confirm wrapped custom/plain mappings refuse without
+executing custom code, while cold deferred query/decoder generators are closed
+without running their bodies or publishing streams. Context cleanup runs once.
+Thirteen coordinator tests pass with synthetic hosts. Evidence:
+`../../04-build/evidence/security-query-carrier-refusal-20261012/receipt.json`.
+This is a private seam correction, not a native streaming/security service,
+authenticated callback/issuer/guard proof or full STP-057 L04 qualification.
+Production final-release integration and remaining acceptance cases stay open.
+
+
+### Bounded private result freezing — 2026-10-12
+
+The private synchronous coordinator now counts decoded visits, depth and UTF-8
+text before publishing its complete immutable result. Its development subset
+is4096 visited nodes, depth64 and1MiB text, including keys. It rejects cycles,
+shared-reference expansion, oversized collections and text rather than returning
+a prefix. Cardinality/character bounds precede collection scanning and encoding;
+UTF-8 bytes are checked exactly. These are local implementation bounds, not
+shared semantics/product ceilings or producer/whole-Python-heap qualification.
+
+Fourteen tests pass, including repeated execution after each refusal to verify
+slot settlement and cleanup, plus the exact text boundary. Evidence:
+`../../04-build/evidence/security-result-bounds-20261012/receipt.json`.
+Synthetic host checks do not qualify native original producer/cut/issuer, guarded
+publication or a streaming service. Production admission and original backend
+acceptance cases remain open.
+
+
+### Private transport validation bounds — 2026-10-12
+
+Before invoking the original decoder, the private buffered coordinator now
+requires exact list/tuple rows with exact text/null cells, bounds rows/cells
+to4096 each and checks aggregate UTF-8 text within1MiB. Cardinality and character
+checks precede scanning/encoding. Oversized or malformed transport refuses the
+whole invocation; no decoder callback or result prefix is published. Fifteen
+coordinator tests pass, including oversized batches/text, Unicode refusal,
+cleanup and the exact byte boundary. Evidence:
+`../../04-build/evidence/security-transport-bounds-20261012/receipt.json`.
+These are local development limits and synthetic host evidence. They do not
+bound prior driver/producer allocations or establish native query/resource/
+issuer/guard/publication qualification. Production admission and original
+backend acceptance cases remain open.
+
+
+### Recovery drains pending original registration — 2026-10-12
+
+While the original profile registration remains uncommitted, an independent
+unguarded read sees zero claim rows. A recovery scope takes schema-head SHARE
+then guard UPDATE and actually waits on that original producer PID. Only after
+the known original rollback does its separate fresh observe statement return
+zero rows. This demonstrates why early absence cannot substitute for producer
+drain/freshness; the decoder still returns only not-observed, not an abort proof.
+Both native tests pass with224 security observations. Evidence:
+`../../04-build/evidence/security-recovery-registration-drain-20261012/receipt.json`.
+Trace CONTRACT-005/063 and STP-057 L03/L11. This known rollback schedule does
+not qualify unknown original producer/source/issuer/bootstrap or production
+recovery. No original required acceptance case is promoted.
+
+
+### Original settlement COMMIT acknowledgment loss — 2026-10-12
+
+The owned native relay now also drops the exact COMMIT response after original
+claim settlement. Stock psycopg reports transport failure with no SQLSTATE.
+Recovery takes original guard UPDATE and a fresh observe statement; the exact
+original token/installation/profile/generation row decodes settled=true. It does
+not infer rollback or issue a replacement operation. A separate post-reconciliation
+negative control returns zero for repeated settlement, and retained-token replay
+still refuses23505. Both native tests pass with226 security observations.
+Evidence:
+`../../04-build/evidence/security-settlement-commit-ack-loss-20261012/receipt.json`.
+Trace CONTRACT-005/063 and STP-057 L11/L12. The fixture knows no data query was
+dispatched before settlement; this is not authentic production sink completion,
+original issuer/unknown-outcome recovery or complete bootstrap/participant
+qualification. No original required acceptance case is promoted.
+
+
+### Private transaction-owned home bootstrap (2026-10-12)
+
+`packages/python/src/truss/_security_home_installation.py` now implements an
+explicit private bootstrap for the three candidate homes. It uses the original
+PsycopgHost operation savepoint, supported cursor-local adapters and a direct
+trusted installation administrator. It compares original installation identity,
+namespace/role ownership and resolved current runtime release, serializes on the
+original installation head, rejects existing homes and third-party default ACLs,
+checks bundled SQL digests, seals ownership/ACLs, and seeds generation one plus
+the authored capacity configuration. The caller alone commits or rolls back.
+There is no repair, token deletion, policy activation or public ready-engine API.
+
+The profile bytes are authored configuration, not authenticated issuer evidence.
+Administrative quiescence remains a premise. This operation does not qualify the
+complete source census, authority participants, native fact producers, original
+caller/context, publication sink or recovery issuer. The returned pending value
+explicitly has `security_ready=False`; installing these homes does not admit a
+security profile or enable Weft lowering. The ordinary catalog release manifest
+and public capability inventory remain unchanged.
+
+Native and package evidence, including failed attempts and Astra Ultra review
+corrections, is retained under
+`docs/helix/04-build/evidence/security-private-home-bootstrap-20261012/`.
+The tests cover foreign identity, default ACL refusal and rollback, prior caller
+work, original bytes/capacity despite caller adapters, preservation of caller
+adapters, outer rollback/commit, repeated-bootstrap refusal, and ordinary native
+access/invocation refusal. Bootstrap after an actual supported runtime upgrade
+is a separate regression. These are partial prerequisites for truss.B05/B11 and
+L12; none of the thirty Truss backend cases is promoted by this seam.

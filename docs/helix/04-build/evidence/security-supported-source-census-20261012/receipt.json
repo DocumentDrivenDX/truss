@@ -1,0 +1,50 @@
+{
+  "implementation": "Private stock psycopg adapter for the existing pinned PostgreSQL18.6 source-catalog SQL; bounded exact chunks; safe operation-local search path and exact success restoration. Original host owns containment and transaction settlement.",
+  "validation": {
+    "nativeTests": 7,
+    "nativeSeconds": 24.389,
+    "chunkTests": 3,
+    "boundaries": "804 imports pass",
+    "wheelSha256": "30e31ce889a36ddea0a48e4cc5ab876767a893b8071ed80769402361abe126de",
+    "wheelModuleAndSql": "exact original bytes",
+    "result": "pass"
+  },
+  "commands": {
+    "native": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-supported-census-r4-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+    "chunks": "PYTHONPATH=packages/python/src /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_psycopg_source_census.py"
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "finding": "Caller search-path operator resolution could substitute source and wrapper expressions",
+    "resolution": "Safe pg_catalog,pg_temp operation path; original path restoration; native shadow operator probe and catalog facts control",
+    "secondReview": "No residual actionable findings; read-only review"
+  },
+  "acceptanceTraceability": [
+    {
+      "case": "truss.B06",
+      "covers": "US-056-AC5",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.B11",
+      "covers": "US-056-AC9",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.B12",
+      "covers": "US-056-AC10",
+      "caseClosed": false
+    }
+  ],
+  "scope": "Single source response observation only, not authenticated producer/caller or installed source correspondence, complete writer closure, stable authority/data cut, external executable custody or activated policy. Retained image/chunk ceilings do not bound native scan/aggregate/heap work or whole driver buffers. Original 132 cases retained. Unsafe-path attempt timed out with confirmed native containment; it did not demonstrate a returned corrupted image. Failed cleanup attempts are retained.",
+  "sourceSha256": {
+    "packages/python/src/truss/_psycopg_source_census.py": "917de7d7643e85a9d0e9ac4048468f1cb41cdf465b13e3e624d50087dcd9cef2",
+    "packages/python/src/truss/_source_census/pg18.sql": "494a647e449032e21ebc5e2eb9903619b9385bf99cbde72c63923da44ee23465",
+    "packages/postgresql/native/security-query-source-census-pg18.sql": "494a647e449032e21ebc5e2eb9903619b9385bf99cbde72c63923da44ee23465",
+    "packages/python/tests/test_psycopg_source_census.py": "2d65a0d1663730bc2e38d873a6c94a05322aa3c87cfe6107df420e660a90ef52",
+    "packages/python/tests/test_security_public_ontology_native.py": "c98466bff2cedca70c8a0166c532ac3eaa4d44b7bb17b78e6ec394e23389c499",
+    "packages/python/pyproject.toml": "c6f36b74a761e533dfaebd9374a7438de19542a190322526c0718624a339e330",
+    "scripts/check-module-boundaries.py": "f7d77679d70a515f59d45823b2ff4c4d900585c80774b84db5353991f49170db"
+  }
+}

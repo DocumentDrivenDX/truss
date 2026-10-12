@@ -1,0 +1,14 @@
+...E.
+======================================================================
+ERROR: test_private_security_home_operation_preserves_transaction_and_refuses_repair (__main__.PublicOntologySecurityTests.test_private_security_home_operation_preserves_transaction_and_refuses_repair)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 53, in test_private_security_home_operation_preserves_transaction_and_refuses_repair
+    ordinary_tx=ordinary_host.adopt_transaction().value
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Error' object has no attribute 'value'
+
+----------------------------------------------------------------------
+Ran 5 tests in 29.065s
+
+FAILED (errors=1)

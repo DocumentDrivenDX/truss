@@ -15,7 +15,7 @@ class RuntimeUpgradeTests(unittest.TestCase):
             with LocalPostgres(root/'data') as runtime:
                 artifact=root/'original-facts.pickle'
                 tests=Path(__file__).parent.resolve()
-                env=dict(os.environ,PYTHONPATH=os.environ['TRUSS_UPGRADE_SOURCE_PACKAGE']+os.pathsep+str(tests)+os.pathsep+str(tests.parents[2]/'scripts'))
+                env=dict(os.environ,PYTHONPATH=os.environ['TRUSS_UPGRADE_SOURCE_PACKAGE']+os.pathsep+str(tests)+os.pathsep+str(tests.parents[2]/'scripts')+os.pathsep+os.environ.get('PYTHONPATH',''))
                 subprocess.run([sys.executable,str(tests/'_seed_runtime_upgrade_023.py'),runtime.info.connection_uri,str(artifact)],env=env,check=True,timeout=120)
                 documents,input,request,identity,token,report,page,next_operation=pickle.loads(artifact.read_bytes())
                 params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri)
@@ -43,6 +43,17 @@ class RuntimeUpgradeTests(unittest.TestCase):
                     self.assertEqual(admin.execute('SELECT installation_id::text,source_epoch::text FROM truss.catalog_runtime_installation').fetchone(),installation)
                     self.assertEqual(admin.execute('SELECT release_id FROM truss.catalog_runtime_installation').fetchone()[0],genesis_release)
                     self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.26-candidate')
+                    from truss._security_home_installation import bootstrap_security_homes_in_transaction
+                    admin.execute('BEGIN');bootstrap_host=adopt_psycopg_host(admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
+                    try:
+                        bootstrap_tx=bootstrap_host.adopt_transaction().value
+                        bootstrap=bootstrap_security_homes_in_transaction(bootstrap_host,bootstrap_tx,installation_identity=installation[0].encode(),authored_profile=b'upgraded-bootstrap-fixture/0.1',max_retained=6)
+                        self.assertIsInstance(bootstrap,Ok,str(bootstrap_host._custody.last_attempt.error))
+                        self.assertFalse(bootstrap.value.security_ready)
+                        self.assertEqual(admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(1,))
+                    finally:bootstrap_host.detach()
+                    admin.commit()
+
                 params['user']='consumer'
                 with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as consumer:
                     consumer.execute('BEGIN');host=adopt_psycopg_host(consumer)

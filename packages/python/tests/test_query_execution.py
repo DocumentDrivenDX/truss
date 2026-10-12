@@ -49,6 +49,51 @@ class QueryExecutionTests(unittest.TestCase):
         with self.assertRaises(CompileRefusal) as error:unknown.execute(unknown_plan)
         self.assertEqual(error.exception.code,'obligation');self.assertEqual(events,[])
 
+    def test_missing_supplied_callbacks_refuse_before_acquisition(self):
+        for member in ['read_context', 'decode', 'accepts', 'check']:
+            events=[];host=self.host(events)
+            if member in ('accepts', 'check'):
+                handler=SimpleNamespace(accepts=lambda *_:True, check=lambda *_:None)
+                setattr(handler, member, None);host.handlers={'fixture':handler}
+            else:
+                setattr(host, member, None)
+            with self.subTest(member=member),self.assertRaises(CompileRefusal):
+                coordinator(host)
+            self.assertEqual(events, [])
+
+    def test_rejected_successful_entry_cleans_once_and_cannot_suppress(self):
+        for cleanup_failure in [False, True]:
+            events=[];host=self.host(events)
+            def deferred():
+                events.append('deferred body');yield None
+            class Manager:
+                def __enter__(self):
+                    events.append('acquired');return deferred()
+                def __exit__(self, kind, error, traceback):
+                    events.append('cleanup')
+                    self_error=error
+                    if not isinstance(self_error, CompileRefusal):
+                        raise AssertionError('original refusal missing')
+                    if cleanup_failure:raise RuntimeError('cleanup unavailable')
+                    return True
+            host.read_context=lambda:Manager()
+            engine,plan=coordinator(host)
+            for _ in range(2):
+                with self.assertRaises(RuntimeError if cleanup_failure else CompileRefusal):
+                    engine.execute(plan)
+            self.assertEqual(events, ['acquired','cleanup','acquired','cleanup'])
+
+    def test_original_entry_failure_does_not_call_exit(self):
+        events=[];host=self.host(events)
+        class Manager:
+            def __enter__(self):
+                events.append('entry failure');raise RuntimeError('entry unavailable')
+            def __exit__(self, *_):events.append('cleanup')
+        host.read_context=lambda:Manager()
+        engine,plan=coordinator(host)
+        with self.assertRaises(RuntimeError):engine.execute(plan)
+        self.assertEqual(events, ['entry failure'])
+
     def test_obligations_and_publication_recheck_have_original_order(self):
         events=[];host=self.host(events)
         host.handlers={'fixture':SimpleNamespace(accepts=lambda *_:True,
@@ -90,6 +135,73 @@ class QueryExecutionTests(unittest.TestCase):
         self.assertEqual(callbacks,[])
         self.assertEqual(events.count('cleanup'),1)
         self.assertEqual(sum(isinstance(e,tuple) and e[0]=='query' for e in events),1)
+
+    def test_mapping_proxy_cannot_hide_executable_decoded_carriers(self):
+        from types import MappingProxyType
+        callbacks=[]
+        class ExecutableMap(dict):
+            def __iter__(self):
+                callbacks.append('iteration');return super().__iter__()
+            def items(self):
+                callbacks.append('items');return super().items()
+        for mapping in [ExecutableMap(value='secret'), {'value':'ordinary'}]:
+            events=[];engine,plan=coordinator(self.host(events,decode=[MappingProxyType(mapping)]))
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'decoder')
+            self.assertEqual(callbacks,[])
+            self.assertEqual(events.count('cleanup'),1)
+
+    def test_deferred_query_and_decoder_results_never_publish_streams(self):
+        for stage in ['query','decode']:
+            events=[];streams=[];host=self.host(events)
+            def body():
+                events.append('stream body ran');yield ['secret']
+            def deferred(*_):
+                value=body();streams.append(value);return value
+            if stage=='decode':host.decode=deferred
+            else:
+                original=host.read_context
+                @contextmanager
+                def context():
+                    with original() as scope:
+                        scope.query=deferred;yield scope
+                host.read_context=context
+            engine,plan=coordinator(host)
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'execution_obligation')
+            self.assertNotIn('stream body ran',events)
+            self.assertEqual(events.count('cleanup'),1)
+            self.assertIsNone(streams[0].gi_frame)
+
+    def test_result_resource_refusal_preserves_cleanup_and_never_returns_prefix(self):
+        cycle=[];cycle.append(cycle)
+        shared=['leaf']
+        for _ in range(20):shared=[shared,shared]
+        deep='leaf'
+        for _ in range(66):deep=[deep]
+        for decoded in [[cycle],[shared],[deep],['x'*1048577],['😀'*262145],[None]*4097]:
+            events=[];engine,plan=coordinator(self.host(events,decode=decoded))
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'decoder')
+            self.assertEqual(events.count('cleanup'),1)
+            # The operation slot settles on refusal; it is not left busy.
+            with self.assertRaises(CompileRefusal) as again:engine.execute(plan)
+            self.assertEqual(again.exception.code,'decoder')
+        events=[];engine,plan=coordinator(self.host(events,decode=['x'*1048576]))
+        self.assertEqual(engine.execute(plan),('x'*1048576,))
+
+    def test_transport_bounds_refuse_before_decoder_and_preserve_cleanup(self):
+        for rows in [[[None]]*4097, [['x'*1048577]], [['😀'*262145]], [['\ud800']]]:
+            events=[];host=self.host(events,rows=rows)
+            def forbidden_decoder(*_):
+                events.append('unexpected decoder');raise AssertionError('decoder invoked')
+            host.decode=forbidden_decoder;engine,plan=coordinator(host)
+            with self.assertRaises(CompileRefusal) as error:engine.execute(plan)
+            self.assertEqual(error.exception.code,'transport')
+            self.assertNotIn('unexpected decoder',events)
+            self.assertEqual(events.count('cleanup'),1)
+        events=[];host=self.host(events,rows=[['x'*1048576]],decode=[])
+        engine,plan=coordinator(host);self.assertEqual(engine.execute(plan),())
 
     def test_disposal_and_reentrancy_do_not_repeat_native_work(self):
         events=[];host=self.host(events)

@@ -45,6 +45,44 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
     def comparison(self):return _EpochComparison('fixture',self.epoch,'target',b'\x01',b'\x02')
     def shares(self):return self.connection.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)").fetchone()[0]
     def run_cut(self,t,callback,comparison=None):return _run_fenced_epoch_operation(self.host,t,comparison or self.comparison(),callback)
+    def test_census_comparison_precedes_callback_under_native_epoch_fence(self):
+        from truss._psycopg_source_census import observe_source_census_in_transaction
+        from truss._psycopg_census_cut import _run_census_compared_epoch_operation
+        t=self.begin();original=observe_source_census_in_transaction(self.host,t)
+        self.assertIsInstance(original,Ok,str(self.host._custody.last_attempt.error));calls=[]
+        def callback(cursor):
+            cursor.execute("SELECT count(*)::text FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)")
+            self.assertEqual(cursor.fetchone(),('2',));calls.append('original callback')
+            cursor.execute('SELECT truss.psy_subject()');return cursor.fetchone()[0]
+        result=_run_census_compared_epoch_operation(self.host,t,self.comparison(),original.value.original_image,callback)
+        self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error));self.assertEqual(result.value,333);self.assertEqual(calls,['original callback'])
+
+    def test_census_drift_refuses_before_callback_and_preserves_caller_work(self):
+        from truss._psycopg_source_census import observe_source_census_in_transaction
+        from truss._psycopg_census_cut import _run_census_compared_epoch_operation
+        t=self.begin();self.connection.execute("CREATE TEMP TABLE census_prior_work(value text);INSERT INTO census_prior_work VALUES('kept')")
+        original=observe_source_census_in_transaction(self.host,t);self.assertIsInstance(original,Ok)
+        self.connection.execute("CREATE OR REPLACE FUNCTION truss.psy_subject() RETURNS integer LANGUAGE sql AS 'SELECT 334'")
+        calls=[]
+        result=_run_census_compared_epoch_operation(self.host,t,self.comparison(),original.value.original_image,lambda cursor:calls.append('must not execute'))
+        self.assertIsInstance(result,Error);self.assertEqual(calls,[]);self.assertEqual(self.shares(),0)
+        self.assertEqual(self.connection.execute('TABLE census_prior_work').fetchall(),[('kept',)])
+        self.assertEqual(self.connection.execute('SELECT truss.psy_subject()').fetchone(),(334,))
+
+    def test_census_compared_callback_cannot_escape_as_deferred_work(self):
+        from truss._psycopg_source_census import observe_source_census_in_transaction
+        from truss._psycopg_census_cut import _run_census_compared_epoch_operation
+        t=self.begin();self.connection.execute("CREATE TEMP TABLE census_deferred_work(value text);INSERT INTO census_deferred_work VALUES('kept')")
+        original=observe_source_census_in_transaction(self.host,t);self.assertIsInstance(original,Ok)
+        bodies=[];deferred=[]
+        def callback(cursor):
+            def cold():
+                bodies.append('must not run');yield cursor.execute('SELECT truss.psy_subject()')
+            value=cold();deferred.append(value);return value
+        result=_run_census_compared_epoch_operation(self.host,t,self.comparison(),original.value.original_image,callback)
+        self.assertIsInstance(result,Error);self.assertEqual(bodies,[]);self.assertEqual(len(deferred),1);self.assertIsNone(deferred[0].gi_frame)
+        self.assertEqual(self.shares(),0);self.assertEqual(self.connection.execute('TABLE census_deferred_work').fetchall(),[('kept',)])
+
     def test_callback_has_native_cut_and_external_writer_refuses(self):
         t=self.begin()
         def callback(cursor):

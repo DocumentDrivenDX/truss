@@ -1,0 +1,14 @@
+{
+  "baseCommit": "2d371d232eefd883323533f2c344910ae9f8ce9f",
+  "tests": 13,
+  "change": "Exact dict decoded input only; output remains immutable MappingProxyType. Wrapped custom mappings refuse without iteration. Deferred query/decode generators close without executing body; cleanup runs once.",
+  "scope": "Private synchronous coordinator with synthetic hosts. Not native security service, original source/issuer/guard custody, streaming qualification or backend acceptance.",
+  "trace": [
+    "CONTRACT-063 final release and deferred execution",
+    "STP-057 L04"
+  ],
+  "sha256": {
+    "packages/python/src/truss/_query_execution.py": "886555bf3ea80ee350dcc4f40cfde5c97c1e3fcf204f8f0403e9aa8fa5fc7593",
+    "packages/python/tests/test_query_execution.py": "3c54b42496f71a66195dd95866b46ab9045c8a88610216bb01f16d2786e1f1eb"
+  }
+}

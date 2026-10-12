@@ -1,0 +1,13 @@
+F
+======================================================================
+FAIL: test_private_bootstrap_refuses_suppressed_native_seed (test_security_public_ontology_native.PublicOntologySecurityTests.test_private_bootstrap_refuses_suppressed_native_seed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 34, in test_private_bootstrap_refuses_suppressed_native_seed
+    self.assertIsInstance(result,Error)
+AssertionError: Ok(value=PendingSecurityHomes(installation_identity=b'04142f9e-9d30-4b4f-b060-8f9fda4cd506', authored_profile=b'suppressed-seed-fixture/0.1', max_retained=6, status='pending_commit', security_ready=False), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+----------------------------------------------------------------------
+Ran 1 test in 4.213s
+
+FAILED (failures=1)

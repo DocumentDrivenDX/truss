@@ -1,0 +1,19 @@
+{
+  "baseCommit": "fbd0084968a81d59e0f08b22bb435fb7ca9f38d6",
+  "securityObservations": 224,
+  "nativeTests": 2,
+  "observedDurationSeconds": 23.842,
+  "trace": [
+    "CONTRACT-005 original producer custody",
+    "CONTRACT-063 drain before fresh recovery observation",
+    "STP-057 L03/L11"
+  ],
+  "scope": "Actual original registration SHARE scope blocks recovery guard UPDATE; separate fresh claim query after confirmed rollback is absent. Not absence-based abort proof, original issuer/source/bootstrap/production recovery qualification or original132-case promotion.",
+  "sha256": {
+    "security-recovery-registration-drain.json.cleanup.json": "7ef2ef64075ee2d0889f2f68597001016c6efa7379660bc5f3946e3b178e9e51",
+    "security-recovery-registration-drain.json": "d2b2cf114f91233233ccf8399610d682436689cc9616ecfad6283706f5b69413",
+    "security-recovery-registration-drain.stderr.log": "921f2daf768e81b47cd21064e923eb64cd0191462336e2f830238df2ee810c97",
+    "source-delta.zip": "7e67852e37f58b1f308a965895e20f33b8c9b5a0b4883f506873844a9479c99f",
+    "security-recovery-registration-drain.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

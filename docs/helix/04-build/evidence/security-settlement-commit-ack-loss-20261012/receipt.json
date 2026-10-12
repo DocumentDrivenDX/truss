@@ -1,0 +1,19 @@
+{
+  "baseCommit": "73644945e156c609047f44ccad46d922ed002a50",
+  "securityObservations": 226,
+  "nativeTests": 2,
+  "observedDurationSeconds": 20.065,
+  "trace": [
+    "CONTRACT-005 original uncertain completion custody",
+    "CONTRACT-063 original settlement reconciliation",
+    "STP-057 L11/L12"
+  ],
+  "scope": "Actual settlement COMMIT response loss with stock driver, exact fresh original tombstone reconciliation, repeated-update negative control and retained-token refusal. Fixture no-data-query completion premise only; not production sink/issuer/unknown-outcome recovery or original acceptance promotion.",
+  "sha256": {
+    "security-settlement-commit-ack-loss.stderr.log": "7bd7ef200b94d5293b40b051ff058f5fe1732f52e6bb54067075d12965cf7449",
+    "security-settlement-commit-ack-loss.json.cleanup.json": "7ef2ef64075ee2d0889f2f68597001016c6efa7379660bc5f3946e3b178e9e51",
+    "security-settlement-commit-ack-loss.json": "6dca807ad291fc44d596dc62f1417a8b167c5a89518edeac5972246b6ee5d5d5",
+    "source-delta.zip": "1c5b0685d632753dfac89a53d3842fc00d9bd768266546072ae217812f493334",
+    "security-settlement-commit-ack-loss.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

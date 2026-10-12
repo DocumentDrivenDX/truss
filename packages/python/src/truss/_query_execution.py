@@ -50,7 +50,14 @@ class _SynchronousContext:
             raise CompileRefusal('execution_obligation', 'Synchronous original context lifecycle required')
 
     def __enter__(self):
-        return _synchronous(self._enter())
+        entered = self._enter()
+        try:
+            return _synchronous(entered)
+        except BaseException as error:
+            # Original entry completed: cleanup belongs to this wrapper even
+            # though Python will not call __exit__ after a rejected entry.
+            self.__exit__(type(error), error, error.__traceback__)
+            raise
 
     def __exit__(self, error_type, error, traceback):
         result = _synchronous(self._exit(error_type,error,traceback))
@@ -60,22 +67,75 @@ class _SynchronousContext:
 
 
 def _freeze_result(value):
-    if type(value) is str:
-        try: value.encode('utf-8', errors='strict')
-        except UnicodeError as error:
-            raise CompileRefusal('decoder', 'Lossless Unicode required') from error
-        return value
-    if value is None or type(value) is bool:
-        return value
-    if type(value) in (tuple, list):
-        return tuple(_freeze_result(child) for child in value)
-    if type(value) in (dict, MappingProxyType):
-        if any(type(key) is not str for key in value):
-            raise CompileRefusal('decoder', 'Exact string member names required')
-        for key in value:
-            _freeze_result(key)
-        return MappingProxyType({key:_freeze_result(child) for key,child in value.items()})
-    raise CompileRefusal('decoder', 'Stored values require admitted exact carriers')
+    # Private development profile bounds, not shared semantic/product ceilings.
+    nodes, text = 4096, 1048576
+    ancestors = set()
+    def visit(value, depth):
+        nonlocal nodes, text
+        nodes -= 1
+        if nodes < 0 or depth > 64:
+            raise CompileRefusal('decoder', 'Decoded result exceeds admitted bounds')
+        if type(value) is str:
+            if len(value) > text:
+                raise CompileRefusal('decoder', 'Decoded text exceeds admitted bounds')
+            try: size = len(value.encode('utf-8', errors='strict'))
+            except UnicodeError as error:
+                raise CompileRefusal('decoder', 'Lossless Unicode required') from error
+            text -= size
+            if text < 0:
+                raise CompileRefusal('decoder', 'Decoded text exceeds admitted bounds')
+            return value
+        if value is None or type(value) is bool:
+            return value
+        if type(value) not in (tuple, list, dict):
+            raise CompileRefusal('decoder', 'Stored values require admitted exact carriers')
+        identity = id(value)
+        if identity in ancestors:
+            raise CompileRefusal('decoder', 'Cyclic decoded result refused')
+        # Bound cardinality before scanning/allocating or inspecting every key.
+        if len(value) > nodes:
+            raise CompileRefusal('decoder', 'Decoded result exceeds admitted bounds')
+        ancestors.add(identity)
+        try:
+            if type(value) in (tuple, list):
+                return tuple(visit(child, depth + 1) for child in value)
+            # Only this producer creates proxies; input proxies can hide callbacks.
+            frozen = {}
+            for key, child in value.items():
+                if type(key) is not str:
+                    raise CompileRefusal('decoder', 'Exact string member names required')
+                visit(key, depth + 1)
+                frozen[key] = visit(child, depth + 1)
+            return MappingProxyType(frozen)
+        finally:
+            ancestors.remove(identity)
+    return visit(value, 0)
+
+
+def _validate_transport_rows(rows, column_count):
+    # Local buffered profile: bound work before original decoder invocation.
+    if type(rows) not in (tuple, list) or len(rows) > 4096:
+        raise CompileRefusal('transport', 'Bounded complete row sequence required')
+    cells, text = 4096, 1048576
+    for row in rows:
+        if type(row) not in (tuple, list) or len(row) != column_count:
+            raise CompileRefusal('transport', 'Complete exact text/null rows required')
+        cells -= len(row)
+        if cells < 0:
+            raise CompileRefusal('transport', 'Transport cells exceed admitted bounds')
+        for cell in row:
+            if cell is None:
+                continue
+            if type(cell) is not str:
+                raise CompileRefusal('transport', 'Exact text/null carriers required')
+            if len(cell) > text:
+                raise CompileRefusal('transport', 'Transport text exceeds admitted bounds')
+            try: size = len(cell.encode('utf-8', errors='strict'))
+            except UnicodeError as error:
+                raise CompileRefusal('transport', 'Lossless transport Unicode required') from error
+            text -= size
+            if text < 0:
+                raise CompileRefusal('transport', 'Transport text exceeds admitted bounds')
 
 
 class QueryCoordinator:
@@ -92,8 +152,8 @@ class QueryCoordinator:
         self._handlers = MappingProxyType({
             key:(handler.accepts,handler.check) for key,handler in host.handlers.items()
         }) if host is not None else MappingProxyType({})
-        callbacks = [self._context,self._decode] + [f for pair in self._handlers.values() for f in pair]
-        if any(not callable(f) or _deferred_callable(f) for f in callbacks if f is not None):
+        callbacks = ([self._context,self._decode] + [f for pair in self._handlers.values() for f in pair]) if host is not None else []
+        if any(not callable(f) or _deferred_callable(f) for f in callbacks):
             raise CompileRefusal('execution_obligation', 'Synchronous original host functions required')
         self._plans = WeakValueDictionary()
         self._disposed = False
@@ -154,11 +214,7 @@ class QueryCoordinator:
                     _completed_check(check(scope,obligation,artifact))
                     self._admitting()
                 rows = _synchronous(query(artifact['sql'],tuple(p['value'] for p in artifact['parameters'])))
-                if type(rows) not in (tuple,list) or any(
-                    type(row) not in (tuple,list) or len(row) != len(artifact['columns'])
-                    or any(cell is not None and type(cell) is not str for cell in row) for row in rows
-                ):
-                    raise CompileRefusal('transport', 'Complete exact text/null rows required')
+                _validate_transport_rows(rows, len(artifact['columns']))
                 self._admitting()
                 decoded = _synchronous(self._decode(artifact,rows))
                 _completed_check(verify_context(artifact))

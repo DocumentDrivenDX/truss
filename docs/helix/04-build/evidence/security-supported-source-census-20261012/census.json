@@ -1,0 +1,14 @@
+{
+  "originalBytes": 13992275,
+  "originalSha256": "ea943064312a74d7d7e95b1ee9aceeef20b240c1eb1dc27aaf14c562f2cda455",
+  "changedSha256": "20e4bd645087f6253bee956c54ab68c45a5f63488690f31d3b408789071e6518",
+  "restoredSha256": "ea943064312a74d7d7e95b1ee9aceeef20b240c1eb1dc27aaf14c562f2cda455",
+  "guardHomesObserved": true,
+  "hostileOperatorNotInvoked": true,
+  "callerSearchPathRestored": true,
+  "originalBody": "SELECT 1",
+  "changedBody": "SELECT 2",
+  "foreignWrapperRefused": true,
+  "callerWork": "kept",
+  "scope": "Actual PostgreSQL18.6 source response via stock supported psycopg, private host scope. Not authenticated producer/source writer, held authority/data cut or admitted policy."
+}

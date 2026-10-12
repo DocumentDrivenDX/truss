@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_preserve_original_facts_rollback_upgrade_and_continue (test_runtime_upgrade_native.RuntimeUpgradeTests.test_preserve_original_facts_rollback_upgrade_and_continue)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_runtime_upgrade_native.py", line 33, in test_preserve_original_facts_rollback_upgrade_and_continue
+    if not isinstance(upgraded,Ok):self.fail(repr(upgraded)+' '+str(host._custody.last_attempt.error))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') Exact supported .23/.24 installation and preparation required
+
+----------------------------------------------------------------------
+Ran 1 test in 12.691s
+
+FAILED (failures=1)
