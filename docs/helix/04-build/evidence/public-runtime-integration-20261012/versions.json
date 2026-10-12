@@ -1,0 +1,8 @@
+{
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "psycopg": "3.3.6",
+  "libpq": 180006,
+  "pgserver-pg18": "18.6.1",
+  "postgres": "postgres (PostgreSQL) 18.6",
+  "bun": "1.4.2"
+}

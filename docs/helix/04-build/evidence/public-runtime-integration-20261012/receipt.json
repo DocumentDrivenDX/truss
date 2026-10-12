@@ -1,0 +1,48 @@
+{
+  "baseCommit": "3473660990f7b117d44a06db7ea5f6fa3697f796",
+  "runtimeRelease": "truss-catalog-runtime/0.9-candidate",
+  "source": {
+    "command": "PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python -m unittest test_catalog_runtime_native test_catalog_view_contracts test_catalog_definition_source test_umf_key_tuples test_object_read_native test_group_create_native test_reader_catalog_native test_read_only_public_native test_key_lookup_native test_catalog_unchanged_native test_catalog_codes_native",
+    "exitCode": 0,
+    "tests": 88
+  },
+  "installed": {
+    "command": "PYTHONPATH=packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages:/private/tmp/truss-security-pg18-r2-20261011/lib/python3.11/site-packages /private/tmp/truss-security-public-consumer-20261012/bin/python -m unittest test_catalog_runtime_native test_catalog_view_contracts test_catalog_definition_source test_umf_key_tuples test_object_read_native test_group_create_native test_reader_catalog_native test_read_only_public_native test_key_lookup_native test_catalog_unchanged_native test_catalog_codes_native",
+    "exitCode": 0,
+    "tests": 88
+  },
+  "packagedFilesCompared": 212,
+  "wheelSha256": "eae6851431871b723bbacbea87083a8127228256d4f79dbde5eb9c3671298ae1",
+  "sourcePinsUnchangedAfterRuns": true,
+  "initialAttempt": {
+    "exitCode": 1,
+    "classification": "sandbox environment failure",
+    "reason": "pgserver cache lock outside sandbox"
+  },
+  "trace": [
+    "CONTRACT-005",
+    "CONTRACT-063",
+    "STP-056 B04/B05/B06/B09/B11/B12",
+    "US-056 AC5/AC7/AC9/AC10 prerequisites"
+  ],
+  "limits": [
+    "Public catalog/module-authority and fixed create/read/key runtime controls only; advanced shared ontology policy and masking not implemented by this run.",
+    "No original backend case promoted. All132 original cases remain required.",
+    "Local native ordinary roles use the fixture connection profile; production authentication, complete authority lifetime and publication proof not qualified.",
+    "Python package and test source pins are retained; external UMF/toolchain dependency closure is not claimed complete.",
+    "Native unittest cleanup completed without error; no independent native stop receipt claimed."
+  ],
+  "artifacts": {
+    "test-inventory.json": "3e249b1a9bf132f79d6f5475cab8c443fb07146abe15f6631b598162c20920e5",
+    "source-final.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-pins.json": "95d1afc966ef689ad0a6c6110bf6a867370e51b9459b6776e2096d72a165bbc7",
+    "source.zip": "018ede8e2860f4cc750193f0e6ba5a4154da9b498849a1c8b8789626cb8905c8",
+    "installed.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "versions.json": "696c4d668384d694c40dce001d2e768ae46a060e0ce18753bd08d503adf46901",
+    "source.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source-final.stderr.log": "9c446b20ccedea554bbbee70a85355a35db9c8358019ee73dbd520af6b39d4b7",
+    "ownership-checks.json": "8355f9b19a522960cd9f6bd1080afa3c9d165ff31867e20bf8832485c7190dd6",
+    "installed.stderr.log": "a6b18968fdb74721fe7a9977247d0ae5fe5e96cc44850a7ec7503b3c5cc132d7",
+    "source.stderr.log": "c5dc4aa2e9c81e97c31db37ad13dfba660e23da2f981efd8f47a32b105d09ac7"
+  }
+}

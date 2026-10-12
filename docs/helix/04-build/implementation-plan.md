@@ -6137,3 +6137,31 @@ Current catalog projection remains separate from advanced ontology membership,
 installed masking, complete authority lifetime and business enforcement. No
 original backend case is promoted; all132 original cases remain required and
 full shared security goal remains active.
+
+
+### Current public runtime security integration — 2026-10-12
+
+Current main34736609 preserves endpoint-scoped readers and adds business-key
+lookup, exact-input unchanged registration and stable refusal codes. Fresh
+combined verification against runtime candidate0.9 passes88 unique tests from
+source and the installed wheel separately, including raw-storage/role denial,
+original caller custody, current membership checks, metadata dependencies,
+create rollback/replay, read-only access, key lookup and unchanged registration.
+All212 packaged files match source, wheel and installed bytes exactly. Python
+module boundaries pass671 imports;11 packaged SQL assets round-trip through
+UMF unchanged. PostgreSQL18.6/pgserver18.6.1, psycopg3.3.6/libpq180006,
+Python3.11.17 and Bun1.4.2 are retained in the version receipt.
+
+`evidence/public-runtime-integration-20261012/receipt.json` retains exact commands,
+88-test inventory, package/test source pins and archive, versions and original
+logs. The first sandboxed run failed acquiring pgserver's external cache lock;
+its failure is retained separately from the successful native runs. Pinned
+package/test bytes remain unchanged after both runs. Native unittest cleanup
+completed without error; no independent native stop receipt is claimed.
+
+Trace CONTRACT-005 and shared CONTRACT-063/STP-056 B04/B05/B06/B09/B11/B12,
+US-056 AC5/AC7/AC9/AC10 prerequisites. This refreshes current public runtime
+integration; it does not admit advanced Staff–Project ontology policy, native
+masking, complete authority lifetime or the broader backend cases. External
+UMF/toolchain dependency closure is not claimed complete. No original case is
+promoted; all132 original cases remain required and the full goal stays active.
