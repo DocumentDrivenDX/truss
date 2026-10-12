@@ -6558,3 +6558,18 @@ and terminal output are retained under
 This is partial original guard PG-01/05/06 evidence under CONTRACT-005/063, not
 verified bootstrap, complete authority/participant parity or coordinator/public
 release admission. No full PG schedule or original backend case is promoted.
+
+
+### Native original coordinator loss — 2026-10-12
+
+The ontology/authority regression now passes101 observations. After native
+blocking evidence, termination of only the owned original coordinator releases
+its exclusion; the participating authority writer commits generation4. Native
+liveness probing fails before local close. The fixture withholds its pending
+buffer, preserves the separate data transaction's INTRANS/prior work and a fresh
+read sees revocation. Failed attempt and exact sources/results:
+`docs/helix/04-build/evidence/security-coordinator-loss-20261012/receipt.json`.
+Trace CONTRACT-005/063 and STP-057 L03/L11. This is native loss plus fixture
+arbitration, not production lease/quarantine/recovery or streaming/cached-buffer
+release. Full participant/source/caller/publication integration remains required;
+no original backend case is promoted.

@@ -239,6 +239,37 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   exhausted=authority_writer.execute(advance,(installation_bytes,profile_bytes,9223372036854775807)).fetchall();self.assertEqual(exhausted,[]);observations.append({'id':'authority-generation-maximum-refuses-instead-of-wrap','observed':exhausted})
   maximum=authority_writer.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone()[0];self.assertEqual(maximum,'9223372036854775807');observations.append({'id':'maximum-generation-remains-exact-before-rollback','observed':maximum});authority_writer.rollback()
   flags=self.admin.execute("SELECT rolsuper,rolbypassrls FROM pg_roles WHERE rolname='alice'").fetchone();generation=self.admin.execute('SELECT generation::text FROM truss.policy_generation_guard WHERE singleton=1').fetchone()[0];self.assertEqual(flags,(False,False));self.assertEqual(generation,'3');observations.append({'id':'exhausted-authority-delta-rolls-back-role-and-generation','observed':{'flags':list(flags),'generation':generation}})
+  # Losing the original coordinator cannot authorize its buffered result.
+  coordinator=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(coordinator.close)
+  coordinator_pid=coordinator.execute('SELECT pg_backend_pid()').fetchone()[0];coordinator.execute('BEGIN');coordinator.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE').fetchone();held_generation=coordinator.execute(acquire).fetchall();self.assertEqual(held_generation,[('1',installation_bytes.hex(),profile_bytes.hex(),'3')])
+  data_reader=psycopg.connect(**params,autocommit=True);self.addCleanup(data_reader.close);data_reader.execute('BEGIN');data_reader.execute("CREATE TEMP TABLE prior_data_work(value text);INSERT INTO prior_data_work VALUES('kept')")
+  pending_buffer=[r[0] for r in data_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))]
+  self.assertEqual(pending_buffer,['RA','RAB']);lost_errors=[];lost_advance=[]
+  def change_after_coordinator_loss():
+   try:
+    authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':False}),int(aliases['AA'].id),int(assignment['typeId'])))
+    rows=authority_writer.execute(advance,(installation_bytes,profile_bytes,3)).fetchall()
+    if rows!=[('1',installation_bytes.hex(),profile_bytes.hex(),'4')]:raise ValueError('Original generation advance refused')
+    lost_advance.extend(rows);authority_writer.execute('COMMIT')
+   except Exception as exc:lost_errors.append(type(exc).__name__);authority_writer.rollback()
+  loss_thread=threading.Thread(target=change_after_coordinator_loss);loss_thread.start()
+  try:
+   deadline=time.monotonic()+5;blockers=[]
+   while time.monotonic()<deadline:
+    blockers=self.admin.execute('SELECT pg_blocking_pids(%s)',(authority_pid,)).fetchone()[0]
+    if coordinator_pid in blockers:break
+    time.sleep(.01)
+   self.assertIn(coordinator_pid,blockers);observations.append({'id':'authority-writer-waits-on-original-coordinator','observed':blockers,'coordinatorPid':coordinator_pid})
+   terminated=self.admin.execute('SELECT pg_terminate_backend(%s)',(coordinator_pid,)).fetchone()[0];self.assertIs(terminated,True);observations.append({'id':'owned-original-coordinator-terminated','observed':True})
+   with self.assertRaises(psycopg.OperationalError) as loss:coordinator.execute('SELECT 1')
+   observations.append({'id':'original-coordinator-native-liveness-probe-fails','observed':{'kind':type(loss.exception).__name__,'sqlState':loss.exception.sqlstate}})
+  finally:
+   coordinator.close();loss_thread.join(12)
+  self.assertFalse(loss_thread.is_alive());self.assertEqual(lost_errors,[]);self.assertEqual(lost_advance,[('1',installation_bytes.hex(),profile_bytes.hex(),'4')]);observations.append({'id':'authority-change-commits-after-native-coordinator-loss','observed':[list(row) for row in lost_advance]})
+  self.assertEqual(data_reader.info.transaction_status,psycopg.pq.TransactionStatus.INTRANS);prior=data_reader.execute('TABLE prior_data_work').fetchall();self.assertEqual(prior,[('kept',)]);observations.append({'id':'coordinator-loss-preserves-original-data-transaction-work','observed':[list(row) for row in prior]});data_reader.rollback()
+  pending_buffer=[];observations.append({'id':'lost-coordinator-buffer-withheld-by-fixture','observed':pending_buffer,'qualification':'explicit fixture release arbitration, not a production lease'})
+  with psycopg.connect(**params,autocommit=True) as fresh:
+   actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'new-read-after-coordinator-loss-observes-revocation','observed':actual})
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']).write_text(json.dumps({'packet':packet,'sql':sql,'observations':observations,'publicCreatedIdentities':{alias:{'id':identity.id,'typeId':identity.type_id} for alias,identity in aliases.items()},'scope':'Actual public-created objects/edges, typed native joins to business keys and candidate typed Record/opaque Relationship membership lowering under ordinary native RLS. Private views are real graph projections, not seeded flat tables. Not complete source enrollment, held authority or released public API/security compiler admission.'},indent=2)+'\n')
 if __name__=='__main__':
  import unittest;unittest.main()

@@ -1,0 +1,16 @@
+E
+======================================================================
+ERROR: test_public_created_membership_graph (__main__.PublicOntologySecurityTests.test_public_created_membership_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 266, in test_public_created_membership_graph
+    with self.assertRaises(psycopg.InterfaceError):coordinator.execute('SELECT 1')
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.OperationalError: the connection is closed
+
+----------------------------------------------------------------------
+Ran 1 test in 20.409s
+
+FAILED (errors=1)
