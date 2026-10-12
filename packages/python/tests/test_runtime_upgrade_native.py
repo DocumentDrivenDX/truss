@@ -1,4 +1,4 @@
-"""One real installed .23 -> .24 public workflow, including caller rollback."""
+"""One real installed candidate upgrade workflow, including caller rollback."""
 import os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path
 import psycopg
@@ -21,6 +21,8 @@ class RuntimeUpgradeTests(unittest.TestCase):
                 params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri)
                 with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as admin:
                     installation=admin.execute('SELECT installation_id::text,source_epoch::text FROM truss.catalog_runtime_installation').fetchone()
+                    genesis_release=admin.execute('SELECT release_id FROM truss.catalog_runtime_installation').fetchone()[0]
+                    original_ledger=admin.execute("SELECT to_regclass('truss.runtime_release') IS NOT NULL").fetchone()[0]
                     for commit in (False,True):
                         admin.execute('BEGIN')
                         host=adopt_psycopg_host(admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
@@ -37,10 +39,10 @@ class RuntimeUpgradeTests(unittest.TestCase):
                         if commit:admin.commit()
                         else:
                             admin.rollback()
-                            self.assertIsNone(admin.execute("SELECT to_regclass('truss.runtime_release')").fetchone()[0])
+                            self.assertEqual(admin.execute("SELECT to_regclass('truss.runtime_release') IS NOT NULL").fetchone()[0],original_ledger)
                     self.assertEqual(admin.execute('SELECT installation_id::text,source_epoch::text FROM truss.catalog_runtime_installation').fetchone(),installation)
-                    self.assertEqual(admin.execute('SELECT release_id FROM truss.catalog_runtime_installation').fetchone()[0],'truss-catalog-runtime/0.23-candidate')
-                    self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.24-candidate')
+                    self.assertEqual(admin.execute('SELECT release_id FROM truss.catalog_runtime_installation').fetchone()[0],genesis_release)
+                    self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.25-candidate')
                 params['user']='consumer'
                 with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as consumer:
                     consumer.execute('BEGIN');host=adopt_psycopg_host(consumer)

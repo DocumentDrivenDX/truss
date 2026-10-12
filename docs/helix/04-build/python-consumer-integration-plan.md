@@ -85,6 +85,20 @@ workflow exercises old-version production, upgrade rollback and commit, original
 evidence recovery and a new public mutation; a fresh provider workflow remains
 required. This does not establish arbitrary layout migrations or managed installation.
 
+## Non-superuser installation — runtime 0.25
+
+The public installer now supports native CREATEROLE plus database CREATE WITH
+GRANT OPTION or ownership. It retains private no-login runtime roles and enables
+owner inheritance/SET only for the trusted installer. The temporary database
+CREATE grant needed by the new schema owner is revoked after transfer. Current
+native inherited authority over the retained owner is required for module access
+configuration, feed enrollment and upgrades. Elevated installers remain excluded
+from ordinary catalog/mutation/read admission. One installed public workflow
+exercises installation, status, real person acceptance, configuration, enrollment,
+mutation, key read and durable feed ACK. Actual managed-service qualification and
+Bun-free owner producers remain open. Exact .23/.24 additive upgrades preserve
+original evidence under .25; no arbitrary layout migration is implied.
+
 ## Next callable operations
 
 Runtime 0.20 implements public committed feed reads and ordinary-role
@@ -104,7 +118,8 @@ equal ACK is idempotent. It provides no automatic retention release or verified
 downstream/replica/exactly-once claim. The stronger application-proof capability
 remains separate.
 
-Public Weft execution has an owner integration dependency: the frozen Truss
+Committed Weft main40b812c still exposes real-catalog Python composition only
+through its test-original feature. Public Weft execution has an owner integration dependency: the frozen Truss
 backend requires fixture `{}` basis artifacts and PostgreSQL17.9 settings. It
 cannot admit the installed PostgreSQL18.6 catalog. Its scalar projection also
 expects native JSON leaves, while Truss uses exact tagged cells. Reuse an

@@ -1,5 +1,19 @@
 # Local runtime, installation and migration execution plan
 
+## Non-superuser administrative profile — runtime 0.25
+
+Fresh installation, status, module-access configuration and feed enrollment
+support a direct native CREATEROLE installer with database CREATE WITH GRANT
+OPTION or database ownership. Schema transfer temporarily grants database CREATE
+to the fresh no-login owner, then revokes that grant; only the installer receives
+owner INHERIT/SET, retaining PostgreSQL's creator ADMIN authority. Existing
+installation administration requires current native inherited authority over the
+retained owner. This leaves ordinary elevated-person/owner-member business
+refusals intact. The local PostgreSQL18.6 public workflow qualifies these native
+permissions, without claiming actual Aurora or Lakebase deployment evidence.
+Exact .23 and .24 runtime candidates upgrade additively to .25; original
+preparation/genesis/report/feed bases remain fixed.
+
 ## First public additive upgrade — 0.23 to 0.24
 
 The Python runtime implements `upgrade_in_transaction` for the exact .23
