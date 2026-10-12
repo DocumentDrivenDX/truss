@@ -1,0 +1,24 @@
+{
+  "executedBaseCommit": "563c30bd1e6559e6e06152b489a01a2d95b64e1a",
+  "sourceDelta": "source-delta.zip",
+  "nativeObservations": 183,
+  "trace": [
+    "CONTRACT-005 publication custody",
+    "CONTRACT-063 final protected release",
+    "STP-057 L03/L11",
+    "US-057-AC2/AC7"
+  ],
+  "developmentAttempt": "Initial Python fixture quote error corrected before native run; no native action executed by that failed parse.",
+  "scope": "Candidate SQL feasibility and conditional five-event ordering only; not adopted layout, production lease/issuer/settlement service or native semantic refinement. All132 required cases remain; no acceptance promotion.",
+  "sha256": {
+    "security-durable-claim-native.stderr.log": "16867356f1ee079e245ace5b7b8ede78bac55fec74bdf24aa5511e44018f7663",
+    "security-durable-claim-native.json": "c20dfb6869849120f716b406494608569fba7d3ca50a3053c2966e7a729df2ad",
+    "formal-results.json": "3a05594f6986735338959263c1d25f78570338d1848eb59f2526148af407e986",
+    "durable-claim-stale-release.smt2": "0ed8de318703ad2c90144ee3cfcc7c088b3a8362090120f69034d6c918c2971c",
+    "auto-clear-on-loss-counterexample.smt2": "885ce795e2a51bedccc6b9e77a555b941d59f0b6b5e7ccddf7dc808382bc09fe",
+    "security-durable-claim-native.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "check-ordering.py": "f80fa3fc41c0383442abb41d096c5c06c49a1f86e498cdaec48069d45d5eded4",
+    "source-delta.zip": "a094d682d7785e8cdcde4a23a3e315dada37f1f3c36869f984070c6cde39b980",
+    "durable-claim-success-after-loss.smt2": "5122924e143350f742ae938f65d483dda2e83b4c21caef472ed48775c6f3d80d"
+  }
+}

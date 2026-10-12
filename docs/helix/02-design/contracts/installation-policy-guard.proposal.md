@@ -108,3 +108,143 @@ Trace original guard acquisition under CONTRACT-005/063. This returns candidate
 values only: supplied expectations are not trusted issuers, copied values are
 not native exclusion/completion evidence, and no AuthorityLease is created.
 Production original source/caller/liveness, bootstrap and release remain required.
+
+
+### Positive probe is insufficient for final release — 2026-10-12
+
+The native ontology fixture now obtains a successful `SELECT 1` on the original
+coordinator after verifying the waiting authority writer. It then terminates only
+that owned coordinator, observes acknowledged revocation, and compares the retained
+RA/RAB buffer with a fresh empty ordinary read. The fixture discards that buffer;
+publishing it using the earlier positive probe would violate current authority.
+A positive liveness response does not establish exclusion through later disclosure.
+
+The five-event finite ordering model retains three solver queries: probe-only
+stale-release SAT, exclusion-through-release stale-release UNSAT, and successful
+release before loss SAT. An independent enumeration checks all120 total orders.
+The UNSAT claim assumes the very exclusion-through-release property that production
+coordination must implement; it does not establish that property for a native
+connection or a host callback. It does not prove arbitrary concurrency, driver
+refinement, identity custody, simultaneous events or clock expiry.
+
+Sources,176 native observations and formal results are retained in
+`../../04-build/evidence/security-positive-probe-release-20261012/receipt.json`.
+Trace CONTRACT-063, STP-057 L03/L11 and US-057-AC2/AC7. No required case is
+promoted. A future production admission path must refuse buffered publication
+when continuous release exclusion cannot be established; merely adding a final
+pre-publication probe does not close this race.
+
+
+### Durable publication custody candidate — 2026-10-12
+
+The transaction-held guard alone cannot exclude an authority acknowledgment
+after coordinator loss but before final protected release. The candidate
+`installation-publication-claim-v0.1.proposal.sql` adds a private durable claim
+with exact original operation, installation, profile and generation bytes. It is
+not adopted in the layout and is not an AuthorityLease issuer.
+
+The original operation owner acquires schema-head then guard SHARE, registers
+the original claim through `installation-publication-claim-register-v0.1.proposal.sql`,
+and confirms its commit before any protected disclosure. An uncertain registration
+retains recovery custody and withholds disclosure; it never retries with a new
+operation identity. The claim persists after disconnect. Participating authority
+writers acquire schema-head then guard UPDATE and freshly establish zero
+outstanding claims before effects. Any claim, including one with incompatible
+identity/profile, refuses the complete authority change. The
+`installation-policy-generation-advance-v0.2.claim.proposal.sql` repeats that
+condition at the post-effect generation gate; zero rows requires whole rollback.
+Version0.1 writers are incompatible with this candidate and cannot coexist as
+admitted participants. Complete native parity must enforce that distinction.
+
+Only the original publication/recovery owner may settle the exact claim through
+`installation-publication-claim-settle-v0.1.proposal.sql`, under the same SHARE
+lock order, after every protected release has finished or was conclusively
+withheld. Settlement commit must be confirmed. A timeout, coordinator death,
+positive probe, copied token or caller statement never proves completion. No
+TTL or automatic deletion is permitted. An unresolved claim can deny authority
+changes indefinitely; recovery must establish original sink/resource completion
+before settlement. Availability does not override this safety requirement.
+
+The actual four new SQL sources execute in the public ontology fixture. A
+committed claim survives termination of its owned coordinator; guarded generation
+advance returns zero; four operation/installation/profile/generation mismatches
+leave it intact; ordinary deletion refuses42501. Fixture-confirmed withholding
+then permits exact settlement and a generation advance, which rolls back to
+preserve the original subsequent fixture state. Native total183 observations.
+Three finite formal queries retain durable stale-release UNSAT, successful
+release after loss SAT and automatic-clear stale-release SAT; an independent
+oracle enumerates all120 event orders. UNSAT assumes authentic settlement only
+after release and complete writer participation. It proves neither premise nor
+arbitrary concurrency/native SQL/driver/sink refinement.
+
+Evidence and exact source delta:
+`../../04-build/evidence/security-durable-publication-claim-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11, US-057-AC2/AC7. Production original
+operation issuance, durable registry capacity/admission, bootstrap/privilege
+parity, complete source/fact/authority participants, commit uncertainty and
+final sink/recovery integration remain required. No original required case
+is promoted and no ordinary security API is enabled.
+
+
+### Overlapping publication and pending registration — 2026-10-12
+
+Two exact original operation claims coexist. Duplicate registration refuses23505
+without replacing either; stale generation registration returns zero. Settling
+one claim leaves participating generation advance refused; rolled-back settlement
+of the other leaves its durable row. Exact confirmed settlement of both permits
+the existing guarded advance. A separate pending registration holds native guard
+SHARE before commit. The participating authority writer actually waits on that
+original PID, then a fresh post-drain statement sees the committed claim and
+returns zero advance. Native suite total190 observations.
+
+A finite transition explorer visits all58 reachable states/107 edges for exactly
+two one-shot operations in one generation, with no acknowledgment while any
+publication remains pending. Its automatic-clear-on-loss mutant reaches74 states
+and9 unsafe states, including register/loss/ack before completion. This is bounded
+model exploration, not arbitrary-cardinality induction or native refinement.
+Original serialized registration, settlement after completion, fresh snapshot
+and complete writer participation are premises.
+
+Retained original SQL/test sources, successful and failed native logs, explorer
+and receipt:
+`../../04-build/evidence/security-overlapping-publication-claims-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. The first concurrent
+observer incorrectly used an earlier data-writer PID; the corrected test uses
+the actual authority writer PID and a blocker deadline below statement timeout.
+Production issuer/sink authentication, capacity, uncertainty/recovery, bootstrap
+and complete participant parity remain required; no backend acceptance case
+is promoted.
+
+
+### Arbitrary-claim inductive safety — 2026-10-12
+
+The abstract publication model now has an inductive invariant over arbitrary
+integer-indexed claim arrays: every pending protected release has an active
+durable claim whose generation equals the current installation generation.
+Initialization, registration, completion, settlement, native-loss stuttering and
+guarded generation advance preserve it. A writer acknowledgment requires absence
+of every active claim, so it cannot overlap a pending protected release. This
+extends the formal cardinality scope beyond the earlier fixed two operations to
+arbitrary finite sequences of these abstract atomic transitions.
+
+Twelve Z3 obligations and retained-formula replays pass: eight UNSAT safety/gate
+checks, one SAT reachable pending operation and three SAT premise-breaking
+controls for early settlement, loss-triggered deletion and partial writer checks.
+The prior independent two-claim finite explorer replays separately. Native loss
+is modeled as leaving durable arrays unchanged; that is a premise of this model,
+not an inferred guarantee for a concrete connection. Stale-registration refusal
+checks the exact generation-equality gate, not source/issuer authentication.
+
+The proof does not establish those transition premises for the SQL/driver/sink.
+It assumes serialized complete registration/writer checks, authentic original
+completion and settlement, durable state on loss, and complete participation.
+Identity anti-reuse, registry capacity, commit uncertainty, fresh native snapshots,
+source/fact coverage, sink authenticity, clock expiry, fairness/liveness and
+production adoption remain open. In particular, the current delete-based0.1
+claim candidate retains no native tombstone preventing reuse of settled operation
+bytes; original issuer lifetime uniqueness is not established by this proof.
+
+Exact formulas, proof source, counterexample witnesses, replay and hashes:
+`../../04-build/evidence/security-publication-induction-20261012/receipt.json`.
+Trace CONTRACT-005/063, STP-057 L03/L11 and US-057-AC2/AC7. Native190-observation
+feasibility remains separately qualified; no required backend case is promoted.

@@ -1,0 +1,37 @@
+{
+  "solver": "4.15.4",
+  "queries": {
+    "durable-claim-stale-release": {
+      "result": "unsat",
+      "witness": null
+    },
+    "durable-claim-success-after-loss": {
+      "result": "sat",
+      "witness": {
+        "register": 0,
+        "loss": 1,
+        "release": 2,
+        "settle": 3,
+        "ack": 4
+      }
+    },
+    "auto-clear-on-loss-counterexample": {
+      "result": "sat",
+      "witness": {
+        "register": 0,
+        "loss": 1,
+        "release": 4,
+        "settle": 2,
+        "ack": 3
+      }
+    }
+  },
+  "independentEnumeration": {
+    "orders": 120,
+    "base": 12,
+    "durableStale": 0,
+    "durableSuccessAfterLoss": 1,
+    "autoClearStale": 1
+  },
+  "scope": "Five distinct events, one durable registered claim and one participating authority acknowledgment. Settlement only after final release and acknowledgment only after settlement are assumptions. No native SQL equivalence, multi-operation generalization, clock/TTL, source/issuer/sink authenticity, simultaneous events or driver refinement."
+}

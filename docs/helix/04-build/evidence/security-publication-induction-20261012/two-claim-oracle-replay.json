@@ -1,0 +1,19 @@
+{
+  "durable": {
+    "states": 58,
+    "edges": 107,
+    "unsafeStates": 0,
+    "counterexample": null
+  },
+  "autoClearOnLoss": {
+    "states": 74,
+    "edges": 143,
+    "unsafeStates": 9,
+    "counterexample": [
+      "register0",
+      "native-loss0",
+      "authority-ack"
+    ]
+  },
+  "scope": "All reachable states of exactly two one-shot operations in one generation. Claim registration serialized with authority, settlement only after final publication/completely withheld result, and complete writer participation are premises. Native loss does not authenticate completion. No arbitrary-cardinality, native implementation refinement, external sink authenticity, commit uncertainty or real-time proof."
+}

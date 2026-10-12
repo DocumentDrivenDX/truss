@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_public_created_membership_graph (__main__.PublicOntologySecurityTests.test_public_created_membership_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_ontology_native.py", line 335, in test_public_created_membership_graph
+    self.assertIn(pending_pid,blockers);observations.append({'id':'authority-writer-drains-pending-publication-registration','observed':blockers})
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 45929 not found in []
+
+----------------------------------------------------------------------
+Ran 1 test in 24.239s
+
+FAILED (failures=1)

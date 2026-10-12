@@ -1,0 +1,17 @@
+{
+  "solver": "4.15.4",
+  "retainedFormulaReplays": {
+    "initial-invariant": "unsat",
+    "registration-preserves": "unsat",
+    "completion-preserves": "unsat",
+    "settlement-preserves": "unsat",
+    "native-loss-preserves": "unsat",
+    "generation-advance-preserves": "unsat",
+    "acknowledgment-excludes-pending-release": "unsat",
+    "stale-registration-refuses": "unsat",
+    "pending-operation-is-reachable": "sat",
+    "unsafe-settlement-counterexample": "sat",
+    "loss-auto-clear-counterexample": "sat",
+    "partial-writer-check-counterexample": "sat"
+  }
+}

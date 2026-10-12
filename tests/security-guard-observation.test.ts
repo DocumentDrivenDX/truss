@@ -7,3 +7,10 @@ test('zero extra sparse or extended rows refuse',()=>{for(const mutate of [(p:an
 test('null noncanonical wrong identity and overflow carriers refuse',()=>{for(const value of [null,1,'0','01','+1','-1','1.0','9223372036854775808','1'.repeat(20)]){const p:any=packet();p.rows[0][3]=value;expect(()=>decodeCandidateAuthorityGuard(p)).toThrow();}for(const value of ['',null,'0','FF','00fe','gg']){const p:any=packet();p.rows[0][1]=value;expect(()=>decodeCandidateAuthorityGuard(p)).toThrow();}});
 test('exact binary limits qualify only the local decoder subset',()=>{const p=packet();p.expected.installationIdentityHex=p.rows[0]![1]='ab'.repeat(32768);expect(decodeCandidateAuthorityGuard(p).installationIdentityHex.length).toBe(65536);p.expected.installationIdentityHex=p.rows[0]![1]='ab'.repeat(32769);expect(()=>decodeCandidateAuthorityGuard(p)).toThrow();});
 test('getters iterators and unknown packet fields cannot become native evidence',()=>{let reads=0;const p:any=packet();Object.defineProperty(p.rows[0],'3',{enumerable:true,get(){reads++;return '1';}});expect(()=>decodeCandidateAuthorityGuard(p)).toThrow();expect(reads).toBe(0);const q:any=packet();q.rows[Symbol.iterator]=function*(){reads++;yield q.rows[0];};expect(()=>decodeCandidateAuthorityGuard(q)).toThrow();expect(reads).toBe(0);expect(()=>decodeCandidateAuthorityGuard({...packet(),complete:true})).toThrow();});
+
+test('oversized carriers refuse before acquiring element descriptors',()=>{
+ let acquisitions=0;const p:any=packet();p.columns=new Proxy(Array(10000).fill(null),{getOwnPropertyDescriptor(target,key){acquisitions++;return Reflect.getOwnPropertyDescriptor(target,key);}});
+ expect(()=>decodeCandidateAuthorityGuard(p)).toThrow();expect(acquisitions).toBe(1);
+ acquisitions=0;const q:any=packet();q.expected=new Proxy(Object.fromEntries(Array.from({length:10000},(_,i)=>['extra'+i,i])),{getOwnPropertyDescriptor(target,key){acquisitions++;return Reflect.getOwnPropertyDescriptor(target,key);}});
+ expect(()=>decodeCandidateAuthorityGuard(q)).toThrow();expect(acquisitions).toBe(0);
+});
