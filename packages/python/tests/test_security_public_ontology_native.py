@@ -157,6 +157,30 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])))
   with psycopg.connect(**params,autocommit=True) as fresh:
    actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,['RA','RAB']);observations.append({'id':'restored-authority-fresh-read-original-vector','observed':actual})
+  # Actual graph assignment writer waits through the fixture's buffered release.
+  import threading,time
+  writer=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(writer.close)
+  writer_pid=writer.execute('SELECT pg_backend_pid()').fetchone()[0];errors=[]
+  def revoke_assignment():
+   try:writer.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':False}),int(aliases['AA'].id),int(assignment['typeId'])))
+   except Exception as exc:errors.append(type(exc).__name__)
+  self.admin.execute('BEGIN');self.admin.execute('LOCK TABLE truss.object,truss.edge,truss.type_def,truss.prop_def,truss.rel_def,truss.rel_endpoint IN SHARE MODE')
+  thread=threading.Thread(target=revoke_assignment);thread.start()
+  try:
+   deadline=time.monotonic()+5;waiting=None
+   while time.monotonic()<deadline:
+    waiting=self.admin.execute("SELECT mode,granted FROM pg_locks WHERE pid=%s AND relation='truss.object'::regclass AND mode='RowExclusiveLock'",(writer_pid,)).fetchone()
+    if waiting==('RowExclusiveLock',False):break
+    time.sleep(.01)
+   self.assertEqual(waiting,('RowExclusiveLock',False));observations.append({'id':'graph-assignment-revoker-native-wait','writerPid':writer_pid,'observed':list(waiting)})
+   with psycopg.connect(**params,autocommit=True) as guarded_reader:
+    buffered=[r[0] for r in guarded_reader.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(buffered,['RA','RAB'])
+   self.assertTrue(thread.is_alive());observations.append({'id':'buffered-graph-read-released-before-revoker-commit','observed':buffered,'boundary':'fixture records final buffered return before releasing native source locks'})
+  finally:self.admin.rollback();thread.join(12)
+  self.assertFalse(thread.is_alive());self.assertEqual(errors,[]);observations.append({'id':'graph-assignment-revoker-completes-after-release','observed':'committed'})
+  with psycopg.connect(**params,autocommit=True) as fresh:
+   actual=[r[0] for r in fresh.execute("SELECT props->%s->>'text' FROM truss.object ORDER BY props->%s->>'text'",(key,key))];self.assertEqual(actual,[]);observations.append({'id':'new-read-after-drained-graph-change-denies','observed':actual})
+  self.admin.execute('UPDATE truss.object SET props=jsonb_set(props,ARRAY[%s],%s::jsonb) WHERE id=%s AND type_id=%s',(active_id,json.dumps({'kind':'boolean','value':True}),int(aliases['AA'].id),int(assignment['typeId'])))
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']).write_text(json.dumps({'packet':packet,'sql':sql,'observations':observations,'publicCreatedIdentities':{alias:{'id':identity.id,'typeId':identity.type_id} for alias,identity in aliases.items()},'scope':'Actual public-created objects/edges, typed native joins to business keys and candidate typed Record/opaque Relationship membership lowering under ordinary native RLS. Private views are real graph projections, not seeded flat tables. Not complete source enrollment, held authority or released public API/security compiler admission.'},indent=2)+'\n')
 if __name__=='__main__':
  import unittest;unittest.main()

@@ -530,3 +530,12 @@ in `../../04-build/evidence/security-old-snapshot-refusal-20261012/receipt.json`
 Shared STP-057 L05/L06 remains open until actual enrolled revocation/current-
 authority/publication protocol executes. Isolation restriction alone cannot
 close revocation drain or historical data/current authority composition.
+
+
+Actual graph drain precursor: hold selected source locks, observe an independent
+assignment writer's native lock wait, record the ordinary buffered result before
+release, then require writer completion and fresh-read revocation. Use native
+wait/commit observations rather than elapsed sleeps. Seventy-five observations
+pass in `../../04-build/evidence/security-graph-buffered-drain-20261012/receipt.json`.
+Shared STP-057 L03/L05 remains open until the actual admitted operation/public
+writer/revocation and final publication boundary is integrated and exercised.

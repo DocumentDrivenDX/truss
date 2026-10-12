@@ -6501,3 +6501,17 @@ Trace CONTRACT-063 / US-057-AC3 / STP-057 L05/L06 and TD-020/STP-020. This is
 a selected profile restriction, not admitted revocation/current-authority drain
 or a historical read profile. Complete source/authority exclusion and final
 publication remain required; no original backend case is promoted.
+
+
+### Real graph assignment buffered-release ordering — 2026-10-12
+
+The real ontology fixture retains75 observations. Six source/catalog SHARE locks
+exclude an independent actual assignment UPDATE; pg_locks verifies waiting.
+Ordinary buffered RA/RAB is recorded before source release, then writer commit
+completes and a later read sees revocation. Python boundaries pass723imports.
+Receipt: `evidence/security-graph-buffered-drain-20261012/receipt.json`.
+Trace CONTRACT-063 / US-057-AC2/3 / STP-057 L03/L05 and TD-020/STP-020. The
+fixture boundary does not admit production leases, enrolled public revokers,
+complete control-plane participation or streaming/cached output. Source/authority
+issuer and public final-release integration remain required; no backend case
+is promoted.

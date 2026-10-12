@@ -353,3 +353,18 @@ This enforces only the selected isolation restriction. READ COMMITTED does not
 provide admission-linearized revocation, complete current authority or held final
 release. Keep the coordinator/generation and writer/control-plane participation
 requirements; a historical data profile needs separately fresh authority facts.
+
+
+### Actual graph buffered-release exclusion — 2026-10-12
+
+The ontology regression now holds native SHARE locks over object/edge/type/
+property/relationship/endpoint sources while an independent assignment writer
+waits. pg_locks proves its RowExclusiveLock is ungranted. Ordinary Alice's
+buffered RA/RAB result is recorded before releasing the guard; the writer then
+commits and the next read sees revocation. Seventy-five native observations and
+Python boundaries pass. Evidence:
+`../../04-build/evidence/security-graph-buffered-drain-20261012/receipt.json`.
+The declared release boundary belongs to the fixture, not a production issuer/
+lease or public revocation acknowledgment. Table-wide contention, complete
+role/policy/routine participation, lost guards and streaming/application buffer
+release remain separate qualification obligations under CONTRACT-063.
