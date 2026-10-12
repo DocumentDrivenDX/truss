@@ -5957,3 +5957,28 @@ B01/B13/B15, US-056 AC2/AC7 prerequisites. Hand-authored logical IR is not compi
 source custody; native collation/codec/source/current authority and actual ordinary
 API enforcement remain unqualified. Nullable-domain predicate support remains
 refused. No original backend case is promoted; the shared132-case goal stays active.
+
+
+### Native permit/require/forbid truth correspondence — 2026-10-12
+
+`evidence/security-native-composition-20261012/receipt.json` retains exhaustive
+four-rule controls: two permits, one require and one forbid, each with T/F/U.
+All81 actual PostgreSQL18.6 combinations agree with the independently authored
+truth table and original UMF composition:3 permit,13 deny,65 indeterminate.
+Native eligibility is true only for the three permits; both refusal classes map
+to false. A true permit cannot override an unknown sibling permit. No field
+mask/disclosure contract is exercised by this row-only control.
+
+Chromium153.0.8010.12 and Bun1.4.2 produce identical SQL and semantic outcomes.
+Two Z3 4.15.4 queries replay in fresh contexts: one UNSAT for the fixed finite
+row-eligibility formula equivalence, one SAT showing an unguarded unknown permit
+would broaden admission. Actual native SQL execution separately covers all81
+truth assignments. This is not a general compiler/SQL/snapshot refinement proof.
+
+The fixture uses excluded administrative SQL; nullable columns exercise abstract
+unknown truth only and do not admit nullable domain mappings or incomplete facts.
+Native LocalPostgres context cleanup completes without error; no independent stop
+receipt is claimed. Trace CONTRACT-062/063 composition, STP-056 B01/B09/B15 and
+US-056 AC2/AC7 prerequisites. Original Weft source/IR custody, complete fact cuts,
+ordinary authentication, installed masks/current authority/final release and
+all132 original cases remain required. No backend case is promoted; goal active.

@@ -1,0 +1,17 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun forbid () Int)
+(declare-fun require () Int)
+(declare-fun p2 () Int)
+(declare-fun p1 () Int)
+(assert
+ (let (($x33 (= forbid 0)))
+(let (($x32 (= require 1)))
+(let (($x31 (or (= p1 1) (= p2 1))))
+(let (($x25 (and (distinct p2 2) true)))
+(let (($x24 (and (distinct p1 2) true)))
+(let (($x34 (and $x24 $x25 (and (distinct require 2) true) (and (distinct forbid 2) true) $x31 $x32 $x33)))
+(let (($x36 (and $x31 $x32 $x33)))
+(let (($x23 (and (and (>= p1 0) (<= p1 2)) (and (>= p2 0) (<= p2 2)) (and (>= require 0) (<= require 2)) (and (>= forbid 0) (<= forbid 2)))))
+(and $x23 $x36 (not $x34)))))))))))
+(check-sat)
