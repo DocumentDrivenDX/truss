@@ -116,7 +116,10 @@ explicitly. Missing wheels or checksum failures stop installation; no PostgreSQL
 source build is attempted. Truss's own pure Python wheel may still be built.
 The `Released Python runtime` CI job uses the same installer and focused installed
 smoke checks on Linux x64/Python3.11. PostgreSQL compilation belongs exclusively
-to the reusable pgserver repository.
+to the reusable pgserver repository. The released Linux runtime currently leaves
+short socket paths containing whitespace unquoted; use short paths without spaces
+as the shared workers do. This observed upstream limitation is reported to the
+wheel repository; macOS retains its whitespace-path lifecycle coverage.
 
 Ordinary psycopg and pg8000 native fixture classes reuse one owned Unix-socket
 cluster per worker, with fresh databases/roles and verified cleanup. Worker
