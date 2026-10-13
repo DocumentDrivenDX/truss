@@ -39,9 +39,12 @@ JSON file supplies calls, transaction phases and semantic expectations:
 
 ```sh
 python packages/python/examples/run_corpus.py \
-  docs/helix/04-build/corpus/public-python/0.4/adopter-basic.json \
+  docs/helix/04-build/corpus/public-python/0.5/adopter-basic.json \
   /tmp/truss-public-preview --bun bun
 ```
+
+The sibling `exact-scalars.json` case exercises all six scalar types through
+public creation, import, key lookup and complete SQL reads.
 
 This is one implementation's `passed_preview`, not completion of the full
 consumer corpus or independent native interchange.

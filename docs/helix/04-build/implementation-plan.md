@@ -6929,3 +6929,18 @@ preserved. [Receipt](evidence/python-exact-query-projections-20261012.json) reco
 actual package digests and basic typing/module checks. Astra Ultra reviewed the
 plan, implementation and security-owner merges. Complete corpus/interchange,
 protected security activation and additional deployment profiles remain open.
+
+### Portable exact scalar adopter case — 2026-10-12
+
+Preview0.5 retains the basic22-observation case and adds one10-observation exact
+scalar case. The runner uses existing public scalar carriers with closed JSON
+shapes, never float conversions. Public create/import each commit before a
+read-only key lookup and complete SQL observation of every scalar property.
+Large integers, decimal text, boolean, timestamp precision, binary and optional
+absence/null survive the native boundary. No runtime or public API is added.
+
+Both installed-package cases pass on the selected PG18 tuple. Astra Ultra
+reviewed the plan and actual runner/data; [receipt](evidence/python-scalar-preview-20261012.json)
+records case/fixture/source digests and the basic test result. Original0.1–0.4
+cases remain unchanged. This is one Python preview, not full required corpus or
+independent bidirectional interchange; those deliverables remain open.
