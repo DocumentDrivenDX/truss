@@ -11,7 +11,8 @@
     "nativeTests": 11,
     "nativeSeconds": 26.84,
     "boundaries": "871 imports passed",
-    "formal": "2 UNSAT / 3 SAT; independent Astra Ultra replay with Z3 4.15.4; no actionable findings"
+    "formal": "2 UNSAT / 3 SAT; independent Astra Ultra replay with Z3 4.15.4; no actionable findings",
+    "postmergeNativeTests": 11
   },
   "controls": [
     "Competing admin source-byte change and restoration during actual coordinated data callback accepted by endpoint checks; harmless comment demonstrates byte lifetime only, not changed authorization semantics.",
