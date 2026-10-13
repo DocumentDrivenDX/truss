@@ -7285,3 +7285,6 @@ the interim route; no index publication or stable-layout claim was made.
 
 
 Astra found wrong-OID helper rows were fetched before descriptor refusal. Exact ordered names/TEXT OIDs are now checked before fetch. A real caller-installed NAME loader receives zero `load` calls; all19 native groups replay successfully in4.327s after preserving three concurrent owner commits. Stock psycopg may still construct configured loaders during execute; this avoids foreign row decoding, without a configured-adapter sandbox or predecode claim. Driver adaptation/runtime code remains trusted. Python ownership baseline and all16 boundary controls pass on merged source.
+
+
+Astra Ultra independently replays26 bounded observation/source/custody controls; wrong-OID fetch count is zero after the correction. A separate real binary Transformer probe confirms constructor execution before row load, explicitly excluded from the row-decoding guarantee. It inspects parent native19-group and boundary16 results without claiming a native rerun. Final merged source/docs pins, controls and review are retained in `evidence/python-subject-observation-20261013/astra-review.json`; no remaining actionable finding in the qualified historical-observation scope.
