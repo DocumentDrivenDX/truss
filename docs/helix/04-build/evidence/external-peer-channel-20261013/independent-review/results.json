@@ -1,0 +1,131 @@
+{
+  "scope": "Actual qualifier mocked-Docker failures, actual bind constructor with mocked socket initialization, unchanged function AST controls for bounded line/cleanup; no Docker/socket/native lifecycle invoked",
+  "passed": 28,
+  "controls": [
+    {
+      "control": "cleanup_unowned_network",
+      "passed": true,
+      "receiptRetained": true,
+      "primaryPreserved": true
+    },
+    {
+      "control": "cleanup_remove_failure",
+      "passed": true,
+      "receiptRetained": true,
+      "primaryPreserved": true
+    },
+    {
+      "control": "cleanup_daemon_failure",
+      "passed": true,
+      "receiptRetained": true,
+      "primaryPreserved": true
+    },
+    {
+      "control": "cleanup_absent",
+      "passed": true,
+      "receiptRetained": true,
+      "primaryPreserved": true
+    },
+    {
+      "control": "invalid_bind_4",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_5",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_6",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_7",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_8",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_9",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_10",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_11",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_12",
+      "passed": true
+    },
+    {
+      "control": "invalid_bind_13",
+      "passed": true
+    },
+    {
+      "control": "valid_bind_14",
+      "passed": true
+    },
+    {
+      "control": "valid_bind_15",
+      "passed": true
+    },
+    {
+      "control": "valid_bind_16",
+      "passed": true
+    },
+    {
+      "control": "valid_bind_17",
+      "passed": true
+    },
+    {
+      "control": "bounded_line_two_lines",
+      "passed": true
+    },
+    {
+      "control": "bounded_line_limit",
+      "passed": true
+    },
+    {
+      "control": "bounded_line_deadline",
+      "passed": true
+    },
+    {
+      "control": "bounded_line_eof",
+      "passed": true
+    },
+    {
+      "control": "bounded_line_invalid_utf8",
+      "passed": true
+    },
+    {
+      "control": "service_cleanup_ok",
+      "passed": true
+    },
+    {
+      "control": "service_cleanup_teardown",
+      "passed": true
+    },
+    {
+      "control": "service_cleanup_cleanup_false",
+      "passed": true
+    },
+    {
+      "control": "service_cleanup_class_failure",
+      "passed": true
+    },
+    {
+      "control": "service_cleanup_all",
+      "passed": true
+    }
+  ],
+  "sourcePins": {
+    "/private/tmp/truss-security-linux-composition/compose.py": "353d2f158052d34bd959e9bd16157a0bb355a298674e5aed590ed58748818c9e",
+    "/private/tmp/truss-security-main-integration/scripts/security_channel_composition_service.py": "e1fffbf27ea470258dc8ccb31e4f7158de56fc752e302c7f6a44424fb6a39a10",
+    "/private/tmp/truss-security-main-integration/scripts/security_catalog_channel.py": "36ff31ccc9e04f77f73f31431ff3851189312a2889b0694801fa29fcbbe068b4"
+  }
+}

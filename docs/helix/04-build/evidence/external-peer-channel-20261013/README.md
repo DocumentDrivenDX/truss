@@ -47,3 +47,14 @@ Complete OS/diagnostic/endpoint closure, credential issuer/revocation/rotation,
 continuous topology and handler authority, remote DB composition, recovery,
 transport acknowledgment and every remaining backend case are unproved.
 No Docker/kernel, cryptographic or native refinement theorem is claimed.
+
+## Merged runtime 0.52 replay
+
+Owner main9b7c5206 adds parallel-edge layout1.0 and runtime0.52-candidate.
+Integration merge1e10db7b preserves those changes. The unchanged composed
+external-peer controls pass again, with all three owned resources confirmed
+absent. runtime052-* retains the separate replay; the earlier0.51 records
+and independent review remain historical. No acceptance cases are promoted.
+
+Both original native TLS tests also pass on0.52 (2 tests/12.452 seconds),
+including event-trigger refusal with zero encoding and generic wire denial.

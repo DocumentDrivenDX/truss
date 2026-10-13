@@ -1,0 +1,7 @@
+{
+  "trussRevision": "1e10db7b88a85b57a259b38eb73623ef9d273fb1",
+  "ownerMain": "9b7c52060b9fed81b093fc215abee79dffdf0b94",
+  "runtime": "0.52-candidate",
+  "taskSources": "unchanged; see inputs.json",
+  "scope": "Composed external peer/native guarded TLS read; service-private local PostgreSQL"
+}

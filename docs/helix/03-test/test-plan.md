@@ -1982,3 +1982,7 @@ This qualifies the service-private local database option, not separate remote
 DB topology or complete endpoint/OS/issuer authority. CH01/CH02/CH04/CH05/CH08,
 US-056 AC2/AC5/AC8/AC10 and US-057 AC7 remain prerequisites, with no promotion
 of the original132 cases. [Evidence and limitations](../04-build/evidence/external-peer-channel-20261013/README.md).
+
+Concurrent owner layout1.0/runtime0.52 changes are preserved. The composed
+external-peer controls pass on merged runtime0.52; both original native TLS
+tests pass (2/12.452s), with separate runtime052 evidence retained.
