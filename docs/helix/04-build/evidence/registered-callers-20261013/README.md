@@ -45,3 +45,10 @@ open. No whole-system proof or original required-case promotion; all132 remain.
 Trace CONTRACT-063/STP-056 B01/B11/B12, US-056AC2/AC6/AC9/AC10 and US-057AC7,
 SPIKE-004 CH02/CH04 prerequisites. Concurrent main integration/replay receipts
 retain their newer runtime separately below.
+
+Direct-main integration: concurrent30aca780 added decimal/name evolution and
+catalog runtime0.57-candidate. Mergea2a3dc03 preserves both implementation-plan
+additions. Security implementation sources are unchanged; native six-case replay
+passes58.657s and external registered producer/TLS/all-three cleanup passes.
+Separate merged-runtime057-native.log and merged-runtime057-peer.json/.log retain
+this newer tuple without rewriting original0.55 evidence or promoting admission.
