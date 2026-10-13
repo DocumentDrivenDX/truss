@@ -1,0 +1,55 @@
+Failed postgres command (1, ['/usr/local/lib/python3.11/site-packages/pgserver/pginstall/bin/initdb', '-D', '/tmp/truss-public-catalog-gfilj5fm/data', '--auth=trust', '--auth-local=trust', '--encoding=utf8', '-U', 'postgres']) with kwargs: `{'user': None}`:
+error:
+Command '['/usr/local/lib/python3.11/site-packages/pgserver/pginstall/bin/initdb', '-D', '/tmp/truss-public-catalog-gfilj5fm/data', '--auth=trust', '--auth-local=trust', '--encoding=utf8', '-U', 'postgres']' returned non-zero exit status 1.
+stdout:
+
+---
+stderr:
+initdb: could not look up effective user ID 1000: user does not exist
+
+---
+
+setUpClass (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests) ... ERROR
+setUpClass (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/app/truss/packages/python/tests/test_security_mapping_native.py", line 24, in setUpClass
+    super().setUpClass()
+  File "/app/truss/packages/python/tests/test_catalog_runtime_native.py", line 17, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/truss/packages/python/src/truss/local_runtime.py", line 90, in __enter__
+    self._server = pgserver.get_server(self.directory, cleanup_mode='stop')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pgserver/postgres_server.py", line 64, in __init__
+    self.ensure_pgdata_inited()
+  File "/usr/local/lib/python3.11/site-packages/pgserver/postgres_server.py", line 129, in ensure_pgdata_inited
+    initdb(['--auth=trust', '--auth-local=trust', '--encoding=utf8', '-U', self.postgres_user], pgdata=self.pgdata,
+  File "/usr/local/lib/python3.11/site-packages/pgserver/_commands.py", line 55, in command
+    raise err
+  File "/usr/local/lib/python3.11/site-packages/pgserver/_commands.py", line 40, in command
+    result = subprocess.run(full_command_line, check=True, stdout=stdout, stderr=stderr, text=True,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/usr/local/lib/python3.11/site-packages/pgserver/pginstall/bin/initdb', '-D', '/tmp/truss-public-catalog-gfilj5fm/data', '--auth=trust', '--auth-local=trust', '--encoding=utf8', '-U', 'postgres']' returned non-zero exit status 1.
+
+======================================================================
+ERROR: setUpClass (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/app/truss/packages/python/tests/test_security_catalog_read_native.py", line 23, in cleanup
+    status=subprocess.run([str(cls.runtime.psql_path.parent/'pg_ctl'),'-D',str(cls.info.data_directory),'status'],capture_output=True,text=True,timeout=30)
+                                                                               ^^^^^^^^
+AttributeError: type object 'AuthenticatedCatalogChannelTests' has no attribute 'info'
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.050s
+
+FAILED (errors=2)
