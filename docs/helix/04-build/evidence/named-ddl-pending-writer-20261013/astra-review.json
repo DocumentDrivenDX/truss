@@ -1,0 +1,132 @@
+{
+  "status": "No actionable findings in pending-writer native controls",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "839d909c7a5b2c1a1aa1e3170057a1f48f45e665",
+  "findings": [],
+  "reviewedScope": "Only new pending_commit/pending_abort fixture paths and final documentation claims; production implementation remains byte-identical to previous review.",
+  "conclusions": [
+    "Separate writer explicitly begins and completes ALTER FUNCTION before first acquisition. It remains pending until exact LockNotAvailable, contained phase, no cleanup error and zero codec/evaluator entry assertions succeed.",
+    "Commit/rollback is performed solely on the separate writer. Both calls use identical host, transaction, original comparisons, source/selection and barrier arguments.",
+    "Committed change yields exact helper-snapshot refusal before codecs. Aborted change yields both original codec calls and exact original r1 withheld receipt, retaining existing external-writer exclusion probes.",
+    "Writer close occurs in finally, covering setup/read/assertion failures. Original helper is recreated for each subsequent variant. Existing owned actor scope closes/rolls back and removes test roles/hooks.",
+    "These observations support fail-closed pending acquisition and fresh retry in the existing original transaction; they do not claim a waiting/draining reader or automatic retry."
+  ],
+  "independentChecks": {
+    "staticChecks": 15,
+    "allPassed": true,
+    "scope": "Static AST/control-flow and byte-pin checks, not independent execution of PostgreSQL or test branches. Native execution is parent evidence separately inspected.",
+    "results": "/private/tmp/named-ddl-pending-review-20261013/checks.json",
+    "initialHarnessCorrection": "First static scope assertion disallowed concurrently added documentation files; narrowed to non-documentation implementation delta, then all 15 checks passed. No implementation defect or failed native run inferred."
+  },
+  "nativeEvidence": {
+    "execution": "Parent native run inspected; not independently repeated",
+    "groups": 1,
+    "seconds": 10.442,
+    "outcome": "OK",
+    "log": {
+      "path": "/private/tmp/named-ddl-pending-native.log",
+      "sha256": "36320c4b629ad0e8fe47905b2a6797bbf61e04de4088e58747fcdef3bc027bbe",
+      "bytes": 359
+    },
+    "cleanup": {
+      "path": "/private/tmp/named-source-cleanup/cleanup-PsycopgFactCutNativeTests.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    "subcases": "Existing six shared-source variants plus pending commit and pending abort"
+  },
+  "limits": [
+    "Cooperative six routine/three table tags only; no complete writer/admin/cascade/handler/role/config closure.",
+    "Broad ordinary fixture grants remain unsafe; no authenticated helper/issuer/current authority, protected release or admitted backend claim.",
+    "Native group output is aggregate; outcome-specific assertions are source reviewed and executed by parent suite. No independent native mutation by reviewer."
+  ],
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "1146c21f0a51d32364be84692d24956d9691841fcf573d5d80d5a2a0b24fc2d3",
+      "bytes": 164108
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "6199c1624d13ded791ef94b684f0231dca83cc4767d66f65007e700c9a600322",
+      "bytes": 18024
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_dependency_fact_cut.py",
+      "sha256": "23c3171a3dcf19518cc09e32e51bf343e3c3a6f70e3aed335d63da344663b59c",
+      "bytes": 15727
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "a81227203e5f8ad1b74e739e1586d3a3887b27dfa6e67ee85ba9b181fdc80962",
+      "bytes": 21602
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-subject.sql",
+      "sha256": "1048120c8500e5fcbae5c5c7ecd838755a85bfad3806be81ba1b1a779873fd77",
+      "bytes": 330
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-routine-ddl-barrier.sql",
+      "sha256": "93d0740578df55803370f15e7de9d325baa6f465426bf3a3bcac48c217e68413",
+      "bytes": 2531
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-table-ddl-barrier.sql",
+      "sha256": "9fdcd6823aafb1106597e1f9e003994df96748686b54b68b34adbea2ed198de4",
+      "bytes": 637
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "3135ae07145c371ae1116cdf50da3f19453fe25b825b6b0dd1fcc2a1cef02bf4",
+      "bytes": 316517
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "d270489433b063cd091a3adb0d4cf8756efe3b3d3ddfad806d7833d52a2a2ca5",
+      "bytes": 1083296
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-pending-writer-20261013/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-pending-writer-20261013/native.log",
+      "sha256": "36320c4b629ad0e8fe47905b2a6797bbf61e04de4088e58747fcdef3bc027bbe",
+      "bytes": 359
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-pending-writer-20261013/receipt.json",
+      "sha256": "fbef98564ade08ccd768d0475167b01c8e83ce7421a938b1821b94351634ef16",
+      "bytes": 1284
+    }
+  ],
+  "independentArtifactPins": [
+    {
+      "path": "/private/tmp/named-ddl-pending-review-20261013/check.py",
+      "sha256": "253ee35f49f593559e3a4671ae08e0ab96a07c6507309bbdd105cdd3c32c6261",
+      "bytes": 3426
+    },
+    {
+      "path": "/private/tmp/named-ddl-pending-review-20261013/checks.json",
+      "sha256": "72201061dffc323644c8fbba5ba358bb4e5095cbecb4b916544e83deba6088ea",
+      "bytes": 2430
+    }
+  ],
+  "previousReview": {
+    "path": "/private/tmp/named-ddl-review-20261013/review.json",
+    "sha256": "5ca799cf65b35d1910a50679518e2717462d8c191e597a7d633540f4ec18dbeb",
+    "bytes": 8866
+  },
+  "repositoryMutations": "None by reviewer; owned temporary review files only."
+}
