@@ -113,6 +113,10 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   self.admin.execute('PREPARE eligibility_predicate(boolean) AS SELECT sid,rid,('+selected['decisionExpression']+') FROM (SELECT s.id AS sid,r.id AS rid,'+projections+' FROM truss.object s CROSS JOIN truss.object r WHERE s.type_id='+str(ids['Staff'])+' AND r.type_id='+str(ids['Resource'])+') q ORDER BY sid,rid')
   eligibility=self.admin.execute('EXECUTE eligibility_predicate(true)').fetchall()
   self.assertEqual([r[2] for r in eligibility],['permit','deny','deny','deny','permit','deny'])
+  salary_state=next(d['stateExpression'] for d in selected['disclosure'] if d['field']['elementId']=='salary')
+  identity_state=next(d['stateExpression'] for d in selected['disclosure'] if d['field']['elementId']=='resourceId')
+  for active,expected in ((True,'withheld'),(False,'not-applicable'),(None,'not-applicable')):
+   self.assertEqual(self.admin.execute('SELECT ('+salary_state+'),('+identity_state+') FROM (SELECT %s::boolean AS q0,TRUE AS q1) q',(active,)).fetchone(),(expected,'original' if active is True else 'not-applicable'))
   # Exercise emitted composition with original reader/require truth positions.
   from itertools import product
   for permit,required in product((False,None,True),repeat=2):
@@ -139,6 +143,23 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
     actual=self.admin.execute('SELECT ('+decision_expression+') FROM (SELECT %s::boolean AS '+columns['permit']+',%s::boolean AS '+columns['require']+',%s::boolean AS '+columns['forbid']+') q',(permit,required,forbidden)).fetchone()[0]
     expected='indeterminate' if None in (permit,required,forbidden) else 'permit' if permit and required and not forbidden else 'deny'
     self.assertEqual(actual,expected)
+  # Native emitted original/withheld precedence and row gating, both rule orders.
+  for reverse in (False,True):
+   variant=deepcopy(request);policy_variant=json.loads(variant['policyJson']);base=deepcopy(policy_variant['rules'][0])
+   original=deepcopy(base);original['id']='original';original['disclosure'][0]['disposition']={'kind':'original'}
+   withheld=deepcopy(base);withheld['id']='withheld'
+   policy_variant['rules']=[original,withheld]
+   if reverse:policy_variant['rules'].reverse()
+   variant['policyJson']=json.dumps(policy_variant)
+   rendered_states=subprocess.run([binary],input=json.dumps({'request':variant,'assessment':assessment}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(rendered_states.returncode,0,rendered_states.stderr.decode());state_packet=json.loads(rendered_states.stdout)
+   state_group=next(e for e in state_packet['eligibility'] if e['action']=='read')
+   expression=next(d['stateExpression'] for d in state_group['disclosure'] if d['field']['elementId']=='salary')
+   columns={r['id']:r['truthColumn'] for r in state_packet['rules']}
+   for original_truth,withheld_truth in product((False,None,True),repeat=2):
+    actual=self.admin.execute('SELECT ('+expression+') FROM (SELECT %s::boolean AS '+columns['original']+',%s::boolean AS '+columns['withheld']+') q',(original_truth,withheld_truth)).fetchone()[0]
+    expected='not-applicable' if original_truth is None or withheld_truth is None or not(original_truth or withheld_truth) else 'withheld' if withheld_truth else 'original'
+    self.assertEqual(actual,expected)
   # Convert captured native cells, not authored expected rows, to original facts.
   def ref(element):return {'documentId':'domain','moduleId':'m','elementId':element}
   facts=[];by_id={};inventory=assessment['inventory']
@@ -163,6 +184,10 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    self.assertEqual(decisions,['permit'] if truth is True else [])
    decision='permit' if decisions else 'filtered' 
    self.assertEqual(decision,'permit' if truth is True else 'filtered')
+   disclosure_run=subprocess.run([binary],input=json.dumps(dict(payload,cut=cut,evaluationRequest={'action':'read','resources':[by_id[rid]],'output':[ref('salary')]})).encode(),capture_output=True,timeout=30)
+   self.assertEqual(disclosure_run.returncode,0,disclosure_run.stderr.decode())
+   disclosed=json.loads(disclosure_run.stdout)['simulationDisclosures']
+   self.assertEqual(disclosed,[[[ref('salary'),'withheld']]] if truth is True else [])
    comparisons.append({'subject':sid,'resource':rid,'nativeTruth':truth,'originalDecision':decision})
   directory=os.environ.get('TRUSS_PREDICATE_EVIDENCE_DIR')
   if directory:
