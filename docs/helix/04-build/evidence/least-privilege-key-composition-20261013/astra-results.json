@@ -1,0 +1,78 @@
+{
+  "controls": [
+    {
+      "name": "original Weft selects declared Staff/pk from exact original source",
+      "passed": true
+    },
+    {
+      "name": "wrong source refuses",
+      "passed": true
+    },
+    {
+      "name": "wrong module refuses",
+      "passed": true
+    },
+    {
+      "name": "wrong subject refuses",
+      "passed": true
+    },
+    {
+      "name": "wrong key refuses",
+      "passed": true
+    },
+    {
+      "name": "original UMF tuple bytes match fixed independent s1 vector",
+      "passed": true
+    },
+    {
+      "name": "pure original receipt agrees with retained native composition receipt",
+      "passed": true
+    },
+    {
+      "name": "original source and literal text retained exactly",
+      "passed": true
+    },
+    {
+      "name": "wrong literal family refuses",
+      "passed": true
+    },
+    {
+      "name": "required null refuses",
+      "passed": true
+    }
+  ],
+  "count": 10,
+  "sourcePins": [
+    {
+      "path": "/private/tmp/ordinary-key-composition-review-20261013/check.py",
+      "sha256": "1107c28b506676823c08b187e4f46f1bd491eaf2c82850862618fb62e6ee78fb",
+      "bytes": 3145
+    },
+    {
+      "path": "/private/tmp/subject-consumer-python/weft.so",
+      "sha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+      "bytes": 14364352
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/fixtures/security-mapping-request.json",
+      "sha256": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+      "bytes": 11439
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+      "bytes": 9931
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/producer.js",
+      "sha256": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+      "bytes": 611721
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/bridge.mjs",
+      "sha256": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
+      "bytes": 1940
+    }
+  ],
+  "scope": "Independent genuine original Weft selection and UMF encoding only; reads parent native retained receipt but does not independently exercise a native transaction or privileges."
+}

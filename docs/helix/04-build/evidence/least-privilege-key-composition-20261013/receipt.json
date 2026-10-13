@@ -23,5 +23,8 @@
     "authenticated source/issuer provenance",
     "ontology resource enforcement and final protected release"
   ],
-  "reviewCorrection": "Encoder refusal must be entered exactly once and retained as exact contained ValueError with no cleanup error; earlier assertion failures cannot substitute."
+  "reviewCorrection": "Encoder refusal must be entered exactly once and retained as exact contained ValueError with no cleanup error; earlier assertion failures cannot substitute.",
+  "mergedMain": "bffe56a7ea5f026ecf7cf6ff025807990912c6ad",
+  "mergedNativeSeconds": 4.485,
+  "mergedQualification": "Both native groups pass with concurrent numeric runtime changes preserved; unchanged component scope."
 }
