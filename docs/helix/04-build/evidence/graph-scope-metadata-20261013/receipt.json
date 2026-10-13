@@ -1,0 +1,16 @@
+{
+  "status": "component-passed",
+  "metadataAdverseSubcases": 13,
+  "nativeTests": 16,
+  "nativeSeconds": 3.774,
+  "python": "3.11.17",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "sourceDigests": {
+    "packages/python/src/truss/_psycopg_graph_scope.py": "da7ad8288c2c6654323eaeb85c1d3730e14b13700eec6f16d49d41088aa96165",
+    "packages/python/tests/test_psycopg_graph_scope_metadata.py": "8e14176580fe70ed3b92dbe6a010f440bfc21140d27d3c283a235ae001a2625e",
+    "packages/python/tests/test_psycopg_graph_projection_native.py": "5d71093947005a903e95aca5cad0442b074126094f8864e4fbee948a3914faec"
+  },
+  "formalEvidence": "../graph-fact-projection-formal/ef8ea21b-9f3d-4c16-bafd-4be198499eb1/receipt.json",
+  "scope": "Graph scope metadata validation and existing selected association guard component only. No semantic graph projection, authenticated mapping, protected backend admission or acceptance promotion."
+}
