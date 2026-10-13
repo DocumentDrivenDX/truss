@@ -1,0 +1,26 @@
+{
+  "scope": "Merged runtime0.50 original authenticated channel regression",
+  "integrationCommit": "610537e15ff1f4c9caffd9e02240fe67de1cc705",
+  "preservedOwnerMain": "c666745d",
+  "checks": {
+    "total": 8,
+    "httpChannel": 6,
+    "nativePostgreSQL": 2,
+    "seconds": 36.966
+  },
+  "imports": 933,
+  "qualification": "Six actual loopback controls and two original native Subject/source publication controls pass on combined0.50 with exact owned native cleanup. Earlier0.48 native2/unit6 and Astra35 remain separately qualified. No relationship/container-evolution security qualification or CH08 TLS/issuer/SQL-network/OS isolation, complete authority/lifetime closure or backend case promotion.",
+  "sourcePins": {
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "d66f4e0dcf387bb60fcb97c20c6aca3b93fb2a41cb88126ac45efdeca8647a37",
+    "scripts/security_catalog_channel.py": "60ab72635821fe61d6856b67f967b8bb52a3ef53bca52b5f2a327c1eaf72b4f5",
+    "packages/python/tests/test_security_catalog_channel.py": "b54ea746471f091545881b96ab33c90ac022ee3c5aa0943cc4536ee11b3091d5",
+    "packages/python/tests/test_security_catalog_channel_native.py": "b3a00a29b4a4ab6a69fa5fb77df4bf019a05589c5e8009546f91530e76742ecb"
+  },
+  "evidencePins": {
+    "wire-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "checks.log": "adbbec0ece8a3b5361c07765e2069561cdb701ed6d665f9c17be5dac26d06c8e",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "runtime-manifest.json": "d66f4e0dcf387bb60fcb97c20c6aca3b93fb2a41cb88126ac45efdeca8647a37"
+  }
+}

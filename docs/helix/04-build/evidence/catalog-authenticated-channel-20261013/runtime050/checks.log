@@ -1,0 +1,15 @@
+test_exact_authenticated_request_one_delivery_then_no_reuse (test_security_catalog_channel.ChannelTests.test_exact_authenticated_request_one_delivery_then_no_reuse) ... ok
+test_malformed_headers_and_normalized_target_never_dispatch (test_security_catalog_channel.ChannelTests.test_malformed_headers_and_normalized_target_never_dispatch) ... ok
+test_native_failure_is_generic_and_consumes_original_operation (test_security_catalog_channel.ChannelTests.test_native_failure_is_generic_and_consumes_original_operation) ... ok
+test_progressing_unauthenticated_headers_have_absolute_deadline (test_security_catalog_channel.ChannelTests.test_progressing_unauthenticated_headers_have_absolute_deadline) ... ok
+test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch (test_security_catalog_channel.ChannelTests.test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch) ... ok
+test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry (test_security_catalog_channel.ChannelTests.test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry) ... ok
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 36.966s
+
+OK
