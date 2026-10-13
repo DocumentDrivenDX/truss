@@ -215,6 +215,10 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
             result=query.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={} if parameters is None else parameters)
             if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+repr(host._custody.last_attempt.error))
             return result.value
+        self.assertEqual(run("SELECT a.\"A-label\" FROM \"A\" a WHERE a.\"A-label\" = 'one'").rows,(('one',),))
+        shorthand=query.query_in_transaction(tx,sql='SELECT a."A-label" FROM "A" a WHERE a."A-B" = :key',document_ids=('adoc',),parameters={'key':'two'})
+        self.assertIsInstance(shorthand.value,QueryRefused)
+        self.assertTrue(any('single-component key' in d.message for d in shorthand.value.diagnostics))
         forward='SELECT a."A-label" FROM "A" a WHERE HAS_RELATED(a."A-B",KEY(:value,:label))'
         self.assertEqual(run(forward,{'value':'value','label':'two'}).rows,(('one',),))
         self.assertEqual(run('SELECT b."B-label" FROM "B" b WHERE HAS_RELATED(b."B-A",KEY(:value,:label)) ORDER BY b."B-label"',{'value':'value','label':'one'}).rows,(('three',),('two',)))

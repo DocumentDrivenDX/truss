@@ -1,4 +1,4 @@
-"""Run two unchanged original consumer read cases on the authority database."""
+"""Run selected unchanged original consumer read cases on the authority database."""
 import argparse
 from contextlib import ExitStack
 from hashlib import sha256
@@ -12,10 +12,10 @@ from truss.contracts import MapValue, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
     RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions')
 
 
-def run_reads(corpus_path, directory, *, bun='bun'):
+def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
     corpus_path = Path(corpus_path).resolve()
     original = corpus_path.read_bytes()
     corpus = json.loads(original)
@@ -36,7 +36,7 @@ def run_reads(corpus_path, directory, *, bun='bun'):
     seeds = [s for s in fixture if s['op'] == 'seed']
     if [s['op'] for s in fixture] != ['install', *['grant'] * len(grants), 'seed', 'sync'] or len(seeds) != 1:
         raise ValueError('Selected original basic setup required')
-    selected = [next(c for c in corpus['cases'] if c['id'] == name) for name in CASES]
+    selected = [next(c for c in corpus['cases'] if c['id'] == name) for name in case_ids]
     if any(c['fixture'] != 'basic' for c in selected):
         raise ValueError('Original basic fixture required')
     directory = Path(directory).resolve()
@@ -121,10 +121,24 @@ def run_reads(corpus_path, directory, *, bun='bun'):
                 if step['op'] != 'query':
                     raise ValueError('Selected original read step required')
                 if 'requires' in step:
-                    if set(step['requires']) != {'type', 'columns'}:
+                    if not {'type', 'columns'} <= set(step['requires']) or set(step['requires']) - {'type', 'columns', 'relationships'}:
                         raise ValueError('Unsupported original capability requirement')
-                    if step['requires']['type'] != module['namespace'] + '.UseCase':
+                    record = next((e for e in module['elements'] if e['kind'] == 'record'
+                        and module['namespace'] + '.' + e['name'] == step['requires']['type']), None)
+                    if record is None:
                         raise ValueError('Unknown original type requirement')
+                    members = {ref['element'] for ref in record['members'] if ref['module'] == module_id}
+                    columns = {e['name'] for e in module['elements'] if e['id'] in members}
+                    if any(name not in columns for name in step['requires']['columns']):
+                        raise ValueError('Unknown original member requirement')
+                    names = set()
+                    for relation in module['relationships']:
+                        for endpoint, name in (('source', relation['name']), ('target', relation.get('inverse'))):
+                            if name and any(ref['module'] == module_id and ref['element'] == record['id']
+                                    for ref in relation[endpoint]):
+                                names.add(name)
+                    if any(name not in names for name in step['requires'].get('relationships', [])):
+                        raise ValueError('Unknown original relationship requirement')
                 with transaction(people[step['as']], read_only=True) as (assembly, tx):
                     archived=expect(success(assembly.accepted_document_in_transaction(tx,document_id=document_id)),AcceptedDocument)
                     if archived.content!=source:raise AssertionError('Original consumer document bytes differ')
@@ -135,7 +149,7 @@ def run_reads(corpus_path, directory, *, bun='bun'):
                     raise AssertionError(f'Original expected read differs: {case["id"]}')
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
-    return {'scope': 'two original authority read variants; not complete corpus or interchange',
+    return {'scope': 'selected original authority read variants; not complete corpus or interchange',
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,
         'interpretation':'partial; actions/placement/replica semantics unselected', 'observations': observations}
@@ -146,5 +160,6 @@ if __name__ == '__main__':
     parser.add_argument('corpus', type=Path)
     parser.add_argument('directory', type=Path)
     parser.add_argument('--bun', default='bun')
+    parser.add_argument('--case', action='append', dest='case_ids', help='Original case ID; unsupported cases fail explicitly')
     args = parser.parse_args()
-    print(json.dumps(run_reads(args.corpus, args.directory, bun=args.bun), sort_keys=True))
+    print(json.dumps(run_reads(args.corpus, args.directory, bun=args.bun, case_ids=tuple(args.case_ids) if args.case_ids else CASES), sort_keys=True))

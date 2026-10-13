@@ -1,4 +1,4 @@
-"""Two original consumer authority variants through installed public APIs."""
+"""Selected original consumer authority variants through installed public APIs."""
 import json
 import os
 from pathlib import Path
@@ -17,7 +17,7 @@ class OriginalConsumerReads(unittest.TestCase):
             '--bun','/opt/homebrew/bin/bun'],check=False,capture_output=True,text=True,env=dict(os.environ))
         self.assertEqual(result.returncode,0,result.stderr)
         report=json.loads(result.stdout)
-        self.assertEqual([v['id'] for v in report['observations']],['read.missing-key-is-no-rows','read.columns-and-filters'])
+        self.assertEqual([v['id'] for v in report['observations']],['read.missing-key-is-no-rows','read.columns-and-filters','read.relationship-filter-both-directions'])
         self.assertTrue(all(v['authority']=='passed' and v['replica']=='unavailable' for v in report['observations']))
         self.assertEqual(report['fixtureSync'],'committed original receipt included on authority')
         self.assertEqual(report['retainedExtensions'],4)
