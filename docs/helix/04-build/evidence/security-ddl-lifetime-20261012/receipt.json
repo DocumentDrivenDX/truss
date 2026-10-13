@@ -1,0 +1,38 @@
+{
+  "status": "component-only",
+  "sources": {
+    "scripts/prove-security-ddl-lifetime.py": "6894f845d7e3011eeacf28a41c61052cbbadd0f17e4efe0000025ab70c8aa6c7",
+    "packages/python/tests/test_security_public_ontology_native.py": "98562dafd36765ced553f6c12eae0ab274ec753405f6285ecea498ee3aeab8ec",
+    "packages/python/src/truss/_security_data_writer.py": "e1bfcec15ce52fb0cc0b23b28278636471b6765773aac768129842c93b10817f",
+    "packages/python/src/truss/_security_authority_change.py": "51d037dbc875b452e8dbdb6bfebd3ec08ed34d942e1f5691301931d6022b1cb8"
+  },
+  "profile": "PostgreSQL18.6 / stock psycopg3.3.6 / original trusted administrator; selected raw assignment and graph homes",
+  "validation": {
+    "nativeTests": 11,
+    "nativeSeconds": 26.84,
+    "boundaries": "871 imports passed",
+    "formal": "2 UNSAT / 3 SAT; independent Astra Ultra replay with Z3 4.15.4; no actionable findings"
+  },
+  "controls": [
+    "Competing admin source-byte change and restoration during actual coordinated data callback accepted by endpoint checks; harmless comment demonstrates byte lifetime only, not changed authorization semantics.",
+    "Actual authority-change helper waits on original guard: pg_blocking_pids identifies writer; callback entry absent until release; data commit advances once then authority change advances once."
+  ],
+  "traceability": [
+    {
+      "case": "truss.B11",
+      "scope": "selected source-byte ABA counterexample and lifetime prerequisite",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L13",
+      "scope": "selected cross-transaction routine DDL generation coordination prerequisite",
+      "caseClosed": false
+    }
+  ],
+  "formalScope": "Conditional abstract exclusive-guard source-state induction. Requires every source mutation while no protected operation is active; native reentrant lock alone does not establish this. No Python/SQL refinement or complete native DDL participation proof.",
+  "exclusions": [
+    "No complete source/role/handler/library/DDL route closure or same-transaction reentrant mutation exclusion",
+    "No logical permissions, caller/subject/issuer authentication, ready admission or final sink qualification",
+    "No required case promoted; original132 remain in scope"
+  ]
+}

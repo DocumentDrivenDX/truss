@@ -1,0 +1,43 @@
+{
+  "status": "conditional-inductive-proof",
+  "solverVersion": "4.15.4",
+  "sourceDigests": {
+    "/private/tmp/truss-security-main-integration/scripts/prove-security-ddl-lifetime.py": "6894f845d7e3011eeacf28a41c61052cbbadd0f17e4efe0000025ab70c8aa6c7",
+    "packages/python/tests/test_security_public_ontology_native.py": "98562dafd36765ced553f6c12eae0ab274ec753405f6285ecea498ee3aeab8ec",
+    "packages/python/src/truss/_security_data_writer.py": "e1bfcec15ce52fb0cc0b23b28278636471b6765773aac768129842c93b10817f",
+    "packages/python/src/truss/_security_authority_change.py": "51d037dbc875b452e8dbdb6bfebd3ec08ed34d942e1f5691301931d6022b1cb8"
+  },
+  "cases": [
+    {
+      "id": "empty-initial-state-consistent",
+      "result": "unsat",
+      "smt": "(declare-fun pinned_changed () Bool)\n(declare-fun source_changed () Bool)\n(declare-fun active () Bool)\n(assert (and (not active) (not (=> active (= source_changed pinned_changed)))))\n",
+      "witness": null
+    },
+    {
+      "id": "coordinated-transitions-preserve-pinned-source",
+      "result": "unsat",
+      "smt": "(declare-fun next_pinned_changed () Bool)\n(declare-fun next_source_changed () Bool)\n(declare-fun next_active () Bool)\n(declare-fun pinned_changed () Bool)\n(declare-fun source_changed () Bool)\n(declare-fun active () Bool)\n(assert (let ((a!1 (or (and (not active)\n                    next_active\n                    (= next_source_changed source_changed)\n                    (= next_pinned_changed source_changed))\n               (and active\n                    (not next_active)\n                    (= next_source_changed source_changed)\n                    (= next_pinned_changed pinned_changed))\n               (and (not active)\n                    (not next_active)\n                    (= next_source_changed (not source_changed))\n                    (= next_pinned_changed pinned_changed)))))\n  (and (=> active (= source_changed pinned_changed))\n       a!1\n       (not (=> next_active (= next_source_changed next_pinned_changed))))))\n",
+      "witness": null
+    },
+    {
+      "id": "uncoordinated-ddl-can-break-lifetime",
+      "result": "sat",
+      "smt": "(declare-fun next_pinned_changed () Bool)\n(declare-fun next_source_changed () Bool)\n(declare-fun next_active () Bool)\n(declare-fun pinned_changed () Bool)\n(declare-fun source_changed () Bool)\n(declare-fun active () Bool)\n(assert (and (=> active (= source_changed pinned_changed))\n     active\n     next_active\n     (= next_source_changed (not source_changed))\n     (= next_pinned_changed pinned_changed)\n     (not (=> next_active (= next_source_changed next_pinned_changed)))))\n",
+      "witness": "[active = True,\n next_pinned_changed = False,\n source_changed = False,\n pinned_changed = False,\n next_active = True,\n next_source_changed = True]"
+    },
+    {
+      "id": "restored-endpoints-cannot-exclude-intermediate-change",
+      "result": "sat",
+      "smt": "(declare-fun pinned_changed () Bool)\n(declare-fun next_source_changed () Bool)\n(declare-fun restored_source_changed () Bool)\n(declare-fun source_changed () Bool)\n(declare-fun active () Bool)\n(assert (and active\n     (not pinned_changed)\n     (not source_changed)\n     next_source_changed\n     (= source_changed pinned_changed)\n     (= restored_source_changed pinned_changed)\n     (distinct next_source_changed pinned_changed)))\n",
+      "witness": "[active = True,\n source_changed = False,\n pinned_changed = False,\n next_source_changed = True,\n restored_source_changed = False]"
+    },
+    {
+      "id": "nonempty-admitted-reader-is-consistent",
+      "result": "sat",
+      "smt": "(declare-fun pinned_changed () Bool)\n(declare-fun source_changed () Bool)\n(declare-fun active () Bool)\n(assert (and active\n     (= source_changed pinned_changed)\n     (=> active (= source_changed pinned_changed))))\n",
+      "witness": "[active = True,\n source_changed = False,\n pinned_changed = False]"
+    }
+  ],
+  "scope": "Abstract two-source-state exclusive guard model. Empty state and modeled coordinated transitions preserve active reader source equality to its pin. Premises: every source change occurs only while no protected operation is active; all source mutators acquire the same exclusive guard before effects, pinning occurs under that guard and it stays held through every protected use. Acquiring a native reentrant lock alone does not establish the inactive-only mutation premise. SAT bypass/endpoint controls show why complete mutator participation is required. Native paired test demonstrates source-byte ABA with a harmless comment, not changed authorization semantics. Does not prove Python/SQL refinement, native object locking, DDL/event coverage, handler/library closure, roles, crashes, liveness or backend admission."
+}

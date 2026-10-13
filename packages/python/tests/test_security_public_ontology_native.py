@@ -230,11 +230,62 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.host.detach();self.admin.rollback()
   self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(current,))
   self.assertEqual(self.admin.execute('SELECT count(*) FROM relational_fixture.assignment WHERE id=4').fetchone(),(0,))
+  # Native counterexample: endpoint checks alone do not hold routine DDL lifetime.
+  import hashlib
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=2000') as ddl:
+   aba=[]
+   def routine_aba(cursor):
+    try:
+     ddl.execute(replace_source.replace('RETURN NULL;','RETURN NULL; -- concurrent ABA fixture'))
+     body=ddl.execute("SELECT prosrc FROM pg_catalog.pg_proc WHERE oid='truss.security_data_writer_guard()'::regprocedure").fetchone()[0]
+     changed=hashlib.sha256(body.encode()).hexdigest();self.assertNotEqual(changed,'8c3c1418af9cd20ee7c85cee8babdc74cc0e16f7391b1c91074994cc9e54c1c1');aba.append(changed)
+     cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2')
+    finally:ddl.execute(replace_source)
+   observed=coordinated(routine_aba);self.assertIsInstance(observed,Ok,str(self.host._custody.last_attempt.error));self.assertEqual(len(aba),1)
+   self.assertEqual(observed.value.generation,current+1);self.assertFalse(observed.value.security_ready)
+  self.host.detach();self.admin.rollback()
+  self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=2').fetchone(),(True,))
+  from truss._security_authority_change import change_authority_in_transaction
+  coordinated_ddl=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(coordinated_ddl)
+  ddl_outcomes=[];ddl_callbacks=[];ddl_worker=None
+  def ddl_authority_change():
+   ddl_host=None
+   try:
+    coordinated_ddl.execute('BEGIN');ddl_host=adopt_psycopg_host(coordinated_ddl,statement_timeout_ms=10000,operation_timeout_ms=30000);ddl_tx=ddl_host.adopt_transaction().value
+    def change_source(cursor):
+     ddl_callbacks.append('entered');cursor.execute(replace_source.replace('RETURN NULL;','RETURN NULL; -- coordinated source change'));cursor.execute(replace_source)
+    changed=change_authority_in_transaction(ddl_host,ddl_tx,installation_identity=identity,authored_profile=profile,expected_generation=current+1,action=change_source)
+    if isinstance(changed,Ok):ddl_outcomes.append((changed.value.generation,changed.value.security_ready));ddl_host.detach();ddl_host=None;coordinated_ddl.commit()
+    else:ddl_outcomes.append(str(ddl_host._custody.last_attempt.error))
+   except BaseException as error:ddl_outcomes.append(type(error).__name__)
+   finally:
+    if ddl_host is not None:ddl_host.detach()
+    coordinated_ddl.rollback()
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  def guarded_data(cursor):
+   nonlocal ddl_worker
+   ddl_worker=threading.Thread(target=ddl_authority_change);ddl_worker.start();deadline=time.monotonic()+5;blocked=False
+   while time.monotonic()<deadline:
+    cursor.execute('SELECT pg_catalog.pg_blocking_pids(%s)',(coordinated_ddl.info.backend_pid,))
+    if self.admin.info.backend_pid in cursor.fetchone()[0]:blocked=True;break
+    time.sleep(.01)
+   self.assertTrue(blocked);self.assertEqual(ddl_outcomes,[]);self.assertEqual(ddl_callbacks,[]);self.assertTrue(ddl_worker.is_alive())
+   cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2')
+  try:
+   guarded=coordinated(guarded_data);self.assertIsInstance(guarded,Ok,str(self.host._custody.last_attempt.error));self.assertEqual(guarded.value.generation,current+1)
+   self.host.detach();self.admin.commit()
+  finally:
+   self.admin.rollback()
+   if ddl_worker is not None:ddl_worker.join(11)
+  self.assertFalse(ddl_worker.is_alive());self.assertEqual(ddl_outcomes,[(current+2,False)]);self.assertEqual(ddl_callbacks,['entered'])
+  current+=2
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(current,))
   with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=30000);ordinary_adoption=ordinary_host.adopt_transaction();self.assertIsInstance(ordinary_adoption,Ok);ordinary_tx=ordinary_adoption.value
    refused=write_data_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,expected_generation=current,expected_event_count=1,home_oids=tuple(home_oids),action=lambda cursor:effects.append('unexpected'))
    self.assertIsInstance(refused,Error);self.assertEqual(effects,[]);ordinary_host.detach();ordinary.rollback()
-  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','actual private coordinated writer acquires original guard before DML, observes committed revocation and affects zero rows','wrong profile and pending claim refuse callback','no generation or wrong composite event count rolls back effects, preserves prior caller work','deferred returned callback refuses','exact two-event UPSERT returns pending commit; outer rollback preserves original data/generation','ordinary consumer coordinator access refuses before callback','native post-effect division failure rolls back data/generation','started generator cleanup writes and KeyboardInterrupt are contained, generator closed','returned coroutine is closed without executing body; prior DML rolls back','declared generator/coroutine/async-generator callbacks refuse before invocation','failure preserves prior caller work and search path','original selected function/body/ACL/always-trigger metadata checked before callback','disabled trigger, routine attribute/body, extra execute grant and wrong trigger profile refuse before callback','post-effect metadata drift refuses and rolls back data/generation/DDL','forged array loader cannot hide actual function configuration drift; no array loads','oversized extra trigger stays in cardinality check and refuses before callback'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','actual private coordinated writer acquires original guard before DML, observes committed revocation and affects zero rows','wrong profile and pending claim refuse callback','no generation or wrong composite event count rolls back effects, preserves prior caller work','deferred returned callback refuses','exact two-event UPSERT returns pending commit; outer rollback preserves original data/generation','ordinary consumer coordinator access refuses before callback','native post-effect division failure rolls back data/generation','started generator cleanup writes and KeyboardInterrupt are contained, generator closed','returned coroutine is closed without executing body; prior DML rolls back','declared generator/coroutine/async-generator callbacks refuse before invocation','failure preserves prior caller work and search path','original selected function/body/ACL/always-trigger metadata checked before callback','disabled trigger, routine attribute/body, extra execute grant and wrong trigger profile refuse before callback','post-effect metadata drift refuses and rolls back data/generation/DDL','forged array loader cannot hide actual function configuration drift; no array loads','oversized extra trigger stays in cardinality check and refuses before callback','counterexample: competing uncoordinated routine DDL changes and restores source during guarded callback; endpoint checks accept pending operation','actual authority-change routine DDL waits on original writer PID until commit, then advances generation'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
  def test_private_publication_registration_identity_capacity_and_rollback(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction
