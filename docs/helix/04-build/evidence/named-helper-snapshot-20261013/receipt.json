@@ -32,5 +32,8 @@
   ],
   "fixtureWarning": "Ordinary native fixture has broad ALL table grants; not a supported protected deployment.",
   "requiredBackendCases": 132,
-  "promotedBackendCases": 0
+  "promotedBackendCases": 0,
+  "mergedMain": "aa7ff60bd2ec31dcc6635cdf88f7d1205a1abcc5",
+  "mergedNativeSeconds": 21.151,
+  "mergedQualification": "Both native groups and Python module boundaries pass with concurrent v0.0.2 release changes preserved; unchanged component scope."
 }
