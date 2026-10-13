@@ -1,0 +1,171 @@
+{
+  "review": "Fixed-source original multi-resource evaluation fixture",
+  "reviewedAt": "2026-10-13T15:24:57.813696+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "3cce63ce63adb5860deecaef3c6e1e3ca5291a47",
+  "status": "no remaining actionable findings within the fixed-source fixture scope",
+  "findings": [],
+  "resolvedFindings": [
+    {
+      "problem": "Zero resources skipped original evaluation completely, allowing invalid duplicate facts to produce a successful empty resource list.",
+      "reproduction": "duplicate-empty.json returned exit0/rows[] before the fix; the same complete input through original evaluateSecurityCollection with explicit Resource target returned refused.",
+      "resolution": "Require evaluated status from original complete-collection preflight before any keyed per-resource projection. This also restores joint cut/resource fact budgeting. Per-resource conflict now refuses alongside indeterminate."
+    },
+    {
+      "problem": "Native malformed branches accepted any host Error, allowing unrelated earlier failures to satisfy the test.",
+      "resolution": "Final controls assert the original evaluator ValueError/message and contained phase with no cleanup error."
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts",
+      "sha256": "fdabd216981e33947981148f40606b9b3d4e3479f5302f496d7d9e24f5fcca1a",
+      "bytes": 7847
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "1778fbfe462f3380eeb1c2a67d483c9c661bf553681b6f8d3dd4c33f5d16941f",
+      "bytes": 13843
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "1fc73129ed7724e33d5442d01e7aaadedbcf63b64fb3b6fb3b18850ca3ae06b9",
+      "bytes": 155472
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_dependency_fact_cut.py",
+      "sha256": "932eb504853e5abc2e3df2d796ccba66e4f48e1edc607921933958551c4365a6",
+      "bytes": 15581
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_owner_evidence_json.py",
+      "sha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+      "bytes": 3271
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-identity-requirements/policy.json",
+      "sha256": "11bcba30d9f049f6dba1a061e590b8a3aa157db8a608ad71656dff69cae5d030",
+      "bytes": 1454
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-identity-requirements/resolution.json",
+      "sha256": "de2fd0e79da6d2220619f0256d8038e3b115b8d3e4ba8509ded77332bbb52d5c",
+      "bytes": 5136
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-identity-requirements/transport.json",
+      "sha256": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+      "bytes": 2903
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/owned-resource-list-20261013/receipt.json",
+      "sha256": "fa5828eee6f56dbfcdfe60df0eccda1af9e3e3c1b6b63203beca1c8fd5be19a4",
+      "bytes": 2271
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "d3e2900d21716457f3ce9acc9e266a6eacc8b3eaed0fe73381e2a62189ff9750",
+      "bytes": 307915
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "f362467562e70b19b08ee5a04da2004629e03275af32861c9140df72ced0cd1a",
+      "bytes": 1074769
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/evaluate.ts",
+      "sha256": "e64385876ad398b677b73c2718584fcbbd36fca69bd1d69803c24ec82df532ee",
+      "bytes": 19473
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/tests/security/fixture.ts",
+      "sha256": "572f914713ea24d3e06b85a953cc9176fd98adf2e585e1cd6d838f27c1b694c6",
+      "bytes": 3416
+    }
+  ],
+  "independentEvidence": [
+    {
+      "path": "/private/tmp/resource-list-review-20261013/check.py",
+      "sha256": "23183a0dcb0d07a2ec1ad75703eb044259aaf4a5108db4bf91ec905ae3b32630",
+      "bytes": 6016
+    },
+    {
+      "path": "/private/tmp/resource-list-review-20261013/results.json",
+      "sha256": "f6654bb25b75689cdcf29519352f19c49e77d0a6f2198664a8add73b86c0ce78",
+      "bytes": 4634
+    },
+    {
+      "path": "/private/tmp/resource-list-review-20261013/probe.py",
+      "sha256": "8ea5ab17d19b5ee604796a3c9b8396d496f311dcb81e00255c1429651d0395cb",
+      "bytes": 1655
+    },
+    {
+      "path": "/private/tmp/resource-list-review-20261013/prechange-evaluator.ts",
+      "sha256": "c4f48d290fc81e5d4065d618eb438b6660a72f8189728dc7f544ea1392671776",
+      "bytes": 7533
+    },
+    {
+      "path": "/private/tmp/resource-list-review-20261013/prechange-probe-results.json",
+      "sha256": "691a0e660822d306c22bd3ca392aa3a7246283ab71c90f2e6b8a1f355e54ddf8",
+      "bytes": 1622
+    },
+    {
+      "path": "/private/tmp/resource-list-review-20261013/duplicate-empty.json",
+      "sha256": "d59e84fc87eec6f13196cfd9f760b93e56060ed4de134217599997d3416828d8",
+      "bytes": 3062
+    },
+    {
+      "path": "/private/tmp/resource-list-review-20261013/duplicate-nonempty.json",
+      "sha256": "2facccfcc4b749c6adeefe2026186c75b5b9f0d2eaed371da90f9dd9b2f77336",
+      "bytes": 3212
+    },
+    {
+      "path": "/private/tmp/resource-list-review-20261013/collection-oracle.ts",
+      "sha256": "923c309de4be628923a81d7824d97ac9a9e50713a71fe9b63a8929f72faecd02",
+      "bytes": 7744
+    },
+    {
+      "path": "/private/tmp/resource-list-review-20261013/collection-oracle-result.json",
+      "sha256": "c62d36387f7e0a47f440e9aaa63ce80b59e09539051bb02e99fac31faee1ae6b",
+      "bytes": 281
+    }
+  ],
+  "independentValidation": {
+    "controls": 38,
+    "result": "pass",
+    "scope": "Actual fixed fixture CLI via Bun and Python closed receipt structural parser. Positive/negative membership, empty-population admission, malformed facts, missing/duplicate subject, input closure, all-or-nothing stdout, exact100/101 total facts under the work limit, legacy single APIs and closed publication shapes. No native privileges/transactions executed by reviewer."
+  },
+  "parentNativeEvidence": {
+    "tests": 3,
+    "seconds": 7.096,
+    "execution": "Parent-executed; retained log, source and cleanup inspected",
+    "cleanup": "passed",
+    "pins": [
+      {
+        "path": "/private/tmp/resource-list-native.log",
+        "sha256": "62db758f1aaf6bb61f67cbcd5ff0eb80fa0d48cc80c2541c65f8b5b43242bbfc",
+        "bytes": 789
+      },
+      {
+        "path": "/private/tmp/resource-list-cleanup/cleanup-PsycopgFactCutNativeTests.json",
+        "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+        "bytes": 71
+      }
+    ]
+  },
+  "sourceReview": [
+    "Resource-list mode accepts the explicit closed top-level cells/subjectKey/resultMode shape and keeps legacy single-result modes.",
+    "Original UMF performs collection admission, per-resource decisions, key encoding and disclosure validation; no competing local policy or literal-domain evaluator was added.",
+    "Only original permitted resource keys and disclosure outputs leave this list fixture; captured private fact identities and raw salary values are omitted.",
+    "Python decoder validates closed resource row/output structure, duplicate JSON members and supported disclosure carrier forms; UMF remains responsible for key and disclosure meaning.",
+    "Native membership updates occur between separate caller cuts, and malformed positive/empty populations both refuse without a list."
+  ],
+  "limitations": [
+    "Original fixed policy/ontology, complete native capture, caller-subject binding, issuer and source-cut correspondence remain trusted fixture premises.",
+    "Ordinary native role retains broad ALL source/fact privileges; this is not bypass-safe deployment evidence.",
+    "Repeated owner evaluation and bounded fixture transport do not constitute a general aggregate CPU/heap or production result-enumeration theorem.",
+    "Closed resource receipt validation is structural only, not an independent semantic key or policy authenticator.",
+    "No generic query lowering, complete callable/role/configuration/writer closure, authenticated current authority, final protected release, profile readiness or backend-case promotion. All132 required cases remain required."
+  ],
+  "repositoryMutations": false
+}

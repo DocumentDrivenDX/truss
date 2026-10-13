@@ -1,0 +1,40 @@
+{
+  "scope": "Fixed original policy/ontology native flat fact capture and multi-resource evaluation fixture; no backend admission",
+  "sources": {
+    "scripts/security_owned_read.py": "1778fbfe462f3380eeb1c2a67d483c9c661bf553681b6f8d3dd4c33f5d16941f",
+    "scripts/evaluate-security-captured-identity-fixture.ts": "fdabd216981e33947981148f40606b9b3d4e3479f5302f496d7d9e24f5fcca1a",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "1fc73129ed7724e33d5442d01e7aaadedbcf63b64fb3b6fb3b18850ca3ae06b9"
+  },
+  "nativeGroups": 3,
+  "nativeSeconds": 7.096,
+  "listScenarios": {
+    "active_assignment": [
+      "r1"
+    ],
+    "inactive_p2_sibling_p3_ownerless_r4": "excluded",
+    "activated_p2": [
+      "r1",
+      "r2"
+    ],
+    "all_assignments_inactive": [],
+    "duplicate_assignment_key": "Error; no list published",
+    "duplicate_assignment_key_with_zero_resources": "Error; original collection preflight, no list published"
+  },
+  "disclosure": "Only original permitted resource key and validated salary Withheld outcome; no private captured identities or salary values",
+  "acceptanceTraceability": {
+    "US-056-AC1": "Selected raw-table ontology filtering prerequisite",
+    "US-056-AC6": "Original withholding through list output fixture",
+    "US-056-AC10": "Source-pinned native complete capture/evaluation correspondence prerequisite"
+  },
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17; original UMF Core0.8/security0.1 evaluator via Bun1.4.2",
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "limitations": [
+    "ordinary native fixture has broad ALL fact/source privileges; bypass controls unqualified",
+    "fixed original fixture sources and trusted administrative mapping/issuer/cut premises",
+    "caller Subject profile is selected issuer fixture data, not live authenticated subject producer",
+    "not generic query lowering, final protected release, graph-store or other backend admission"
+  ],
+  "reviewCorrection": "Require original collection evaluated status even for zero resources before per-resource keyed projection; indeterminate/conflict refuse whole output",
+  "malformedFailureIsolation": "Exact original evaluator ValueError retained in contained phase with no cleanup error"
+}

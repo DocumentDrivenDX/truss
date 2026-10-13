@@ -56,7 +56,7 @@ def _read_owned_evaluator_receipt(text):
     return decision
 
 
-def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None):
+def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None, *, resource_list=False):
     if type(sources) is not _OriginalFactSources:raise ValueError('Original fixture sources required')
     sources=_OriginalFactSources(sources.policy,sources.resolution)
     digest=hashlib.sha256(requirements).hexdigest()
@@ -88,7 +88,8 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
         _verify_native_profile_caller(cursor,json.dumps({'caller':profile['executor']}).encode() if delegated else selected.profile)
         cells=_capture_dependency_relation_cells(cursor,groups)
         captured=[asdict(c) for c in cells]
-        payload=json.dumps(captured if caller is None else {'cells':captured,'subjectKey':caller['subjectKey']})
+        if resource_list and caller is None:raise ValueError('Original bound subject required for resource listing')
+        payload=json.dumps({'cells':captured,'subjectKey':caller['subjectKey'],'resultMode':'resources'} if resource_list else (captured if caller is None else {'cells':captured,'subjectKey':caller['subjectKey']}))
         if len(payload.encode('utf8'))>1048576:raise ValueError('Bounded semantic fixture input required')
         try:
             result=subprocess.run(['/opt/homebrew/bin/bun',str(tool)],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=4)
@@ -96,11 +97,32 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
             raise TimeoutError('Original evaluator deadline expired') from None
         if result.returncode or len(result.stdout.encode('utf8'))>65536:raise ValueError('Original UMF fixture evaluation refused')
         if any(hashlib.sha256(p.read_bytes()).digest()!=h for p,h in pins.items()):raise ValueError('Original evaluator sources changed')
-        decision=_read_owned_evaluator_receipt(result.stdout)
+        decision=_read_owned_resource_receipt(result.stdout) if resource_list else _read_owned_evaluator_receipt(result.stdout)
         # No raw cells, private fact identities or evaluator diagnostics leave
         # this owned operation. Dispositions remain original UMF output.
         return decision
     return _run_dependency_fact_operation(host,transaction,selected,requirements,digest,providers,execute)
+
+
+def _read_owned_resource_receipt(text):
+    # Structural carrier checks only; original UMF owns key and disclosure semantics.
+    from truss._owner_evidence_json import decode_owner_evidence_json
+    receipt=decode_owner_evidence_json(text.encode('utf8'))
+    if (type(receipt) is not dict or set(receipt)!={'kind','rows'}
+            or receipt['kind']!='owned-resource-list-fixture/0.1'
+            or type(receipt['rows']) is not list or len(receipt['rows'])>100):
+        raise ValueError('Closed bounded original resource receipt required')
+    for row in receipt['rows']:
+        if (type(row) is not dict or set(row)!={'key','output'}
+                or type(row['key']) is not list or not 1<=len(row['key'])<=32):
+            raise ValueError('Original resource key/output carrier required')
+        _read_owned_evaluator_receipt(json.dumps({'decision':{'decision':'permit','output':row['output']},'identities':[]}))
+    return receipt
+
+
+def run_owned_resource_read(host, transaction, epoch, requirements, sources):
+    """Fixed-source multi-resource fixture; no generic compiler/native admission."""
+    return _run_owned_identity_read(host,transaction,epoch,requirements,sources,resource_list=True)
 
 
 def run_owned_identity_read(host, transaction, epoch, requirements, sources):

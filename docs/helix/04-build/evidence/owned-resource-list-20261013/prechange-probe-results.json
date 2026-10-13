@@ -1,0 +1,20 @@
+[
+  {
+    "name": "baseline",
+    "status": 0,
+    "stdout": "{\"kind\":\"owned-resource-list-fixture/0.1\",\"rows\":[{\"key\":[{\"string\":\"r1\"}],\"output\":[{\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"salary\"},\"disposition\":\"withheld\"}]}]}\n",
+    "stderr": ""
+  },
+  {
+    "name": "duplicate-nonempty",
+    "status": 1,
+    "stdout": "",
+    "stderr": "63 | const cut:SecurityFactCut={trusted:true,generation:'owned-identity-fixture',expectedGeneration:'owned-identity-fixture',policyId:model.policy.id,policyRevision:model.policy.revision,ontologyDocumentId:model.resolution.ontology.documentId,ontologyRevision:model.resolution.ontology.revision,subjects:subject,facts:[...groups].filter(([key])=>key!==id(model.resolution.ontology.subject)&&key!==id(ref('Resource'))).flatMap(([,rows])=>rows),coverage,context:[],maxFacts:100,maxSteps:10000};\n64 | if(listing){\n65 |  const rows=[];\n66 |  for(const resource of resources){\n67 |   const decision=evaluateSecurityAccess(model.policy,model.resolution,cut,{action:'read',output:[ref('salary')]},resource);\n68 |   if(decision.decision==='indeterminate')throw Error('Complete original resource evaluation required');\n                                                    ^\nerror: Complete original resource evaluation required\n      at /private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts:68:48\n\nBun v1.4.2 (macOS arm64)\n"
+  },
+  {
+    "name": "duplicate-empty",
+    "status": 0,
+    "stdout": "{\"kind\":\"owned-resource-list-fixture/0.1\",\"rows\":[]}\n",
+    "stderr": ""
+  }
+]

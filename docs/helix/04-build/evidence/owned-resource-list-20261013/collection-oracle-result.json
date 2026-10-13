@@ -1,0 +1,6 @@
+{
+  "exit": 0,
+  "stdout": "{\"status\":\"refused\",\"rows\":[]}\n",
+  "stderr": "",
+  "qualification": "Copied fixture reconstruction with original evaluateSecurityCollection invoked for the complete captured resources and explicit Resource target; no changed owner semantics."
+}

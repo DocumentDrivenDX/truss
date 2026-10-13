@@ -943,6 +943,48 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 result=self.caller_bound_owned_read(host,t,'s1');self.assertIsInstance(result,Ok);self.assertEqual(result.value['decision'],'permit')
             self.with_unprivileged_actor(operation)
         finally:self.connection.execute("DELETE FROM truss.sec_staff WHERE staff_id='s2'")
+
+    def test_original_resource_list_filters_active_sibling_inactive_and_ownerless(self):
+        """@covers US-056-AC1; component fixture, not backend case promotion."""
+        import sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        from security_owned_read import run_owned_resource_read
+        self.connection.execute("INSERT INTO truss.sec_project VALUES('p2'),('p3'); INSERT INTO truss.sec_resource VALUES('r2',200),('r3',300),('r4',400); INSERT INTO truss.sec_ownership VALUES('o2','r2','p2'),('o3','r3','p3'); INSERT INTO truss.sec_assignment VALUES('a2','s1','p2',false)")
+        try:
+            def operation(host,t,original,connection):
+                raw,profile,sources=self.source_bound_profile();value=json.loads(profile)
+                roles=connection.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
+                value['kind']='truss-flat-fact-provider-fixture/0.3'
+                value['caller']={'sessionRoleOid':roles[0],'effectiveRoleOid':roles[1],'subjectKey':[{'string':'s1'}]}
+                comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
+                self._caller_generation_pending=comparison.epoch
+                result=run_owned_resource_read(host,t,comparison,raw,sources)
+                if expected is None:
+                    self.assertIsInstance(result,Error)
+                    attempt=host._custody.last_attempt
+                    self.assertIsInstance(attempt.error,ValueError)
+                    self.assertEqual(str(attempt.error),'Original UMF fixture evaluation refused')
+                    self.assertEqual(attempt.phase,'contained');self.assertIsNone(attempt.cleanup_error)
+                    return
+                self.assertIsInstance(result,Ok)
+                self.assertEqual({row['key'][0]['string'] for row in result.value['rows']},expected)
+                self.assertTrue(all(row['output']==[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}] for row in result.value['rows']))
+            expected={'r1'}
+            self.with_unprivileged_actor(operation)
+            # Change membership only after the previous original caller cut ends.
+            self.connection.execute("UPDATE truss.sec_assignment SET active=true WHERE assignment_id='a2'")
+            expected={'r1','r2'}
+            self.with_unprivileged_actor(operation)
+            self.connection.execute("UPDATE truss.sec_assignment SET active=false")
+            expected=set()
+            self.with_unprivileged_actor(operation)
+            self.connection.execute("UPDATE truss.sec_assignment SET active=true;INSERT INTO truss.sec_assignment VALUES('a2','s1','p2',true)")
+            expected=None
+            self.with_unprivileged_actor(operation)
+            self.connection.execute('DELETE FROM truss.sec_resource')
+            self.with_unprivileged_actor(operation)
+        finally:
+            self.connection.execute("DELETE FROM truss.sec_assignment WHERE assignment_id='a2';UPDATE truss.sec_assignment SET active=true WHERE assignment_id='a1';DELETE FROM truss.sec_ownership WHERE owner_id IN ('o2','o3');DELETE FROM truss.sec_resource WHERE resource_id IN ('r2','r3','r4');DELETE FROM truss.sec_project WHERE project_id IN ('p2','p3');INSERT INTO truss.sec_resource(resource_id,salary) SELECT 'r1',100 WHERE NOT EXISTS(SELECT 1 FROM truss.sec_resource WHERE resource_id='r1')")
     def test_native_caller_bound_unassigned_staff_denies(self):
         self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
         try:

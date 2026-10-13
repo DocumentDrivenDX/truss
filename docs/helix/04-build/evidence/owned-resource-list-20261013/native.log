@@ -1,0 +1,9 @@
+test_original_resource_list_filters_active_sibling_inactive_and_ownerless (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_original_resource_list_filters_active_sibling_inactive_and_ownerless)
+@covers US-056-AC1; component fixture, not backend case promotion. ... ok
+test_owned_semantic_read_permits_with_original_withholding_inside_host (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_owned_semantic_read_permits_with_original_withholding_inside_host) ... ok
+test_owned_semantic_read_denies_inactive_assignment_without_raw_output (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_owned_semantic_read_denies_inactive_assignment_without_raw_output) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 7.096s
+
+OK

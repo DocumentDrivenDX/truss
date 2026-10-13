@@ -1,0 +1,193 @@
+{
+  "count": 38,
+  "controls": [
+    {
+      "name": "active resource only; no private identities",
+      "passed": true
+    },
+    {
+      "name": "new active membership admits sibling",
+      "passed": true
+    },
+    {
+      "name": "all inactive gives empty rows",
+      "passed": true
+    },
+    {
+      "name": "valid empty population preflights",
+      "passed": true
+    },
+    {
+      "name": "duplicate fact refuses nonempty",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "duplicate fact refuses empty",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "malformed late bool gives no partial output",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "missing selected subject refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "duplicate selected subject refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "wrong subject key family refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "extra envelope member refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "unknown result mode refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "unbound resources mode refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "missing capture refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "missing association capture refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "wrong row width refuses",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "exact 100 total facts within work bound accepted",
+      "passed": true
+    },
+    {
+      "name": "101 total facts refused by original collection",
+      "passed": true,
+      "refusal": true
+    },
+    {
+      "name": "legacy bound single result preserved",
+      "passed": true
+    },
+    {
+      "name": "legacy unbound single result preserved",
+      "passed": true
+    },
+    {
+      "name": "receipt accepts original withheld result",
+      "passed": true
+    },
+    {
+      "name": "receipt accepts empty result",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses extra top-level member",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses wrong kind",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses rows not list",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses rows above 100",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses extra row member",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses missing key",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses empty key",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses key above 32",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses output not list",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses disposition unknown",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses withheld leaks value",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses extra field ref member",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses missing field ref component",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses blank field ref component",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses duplicate top-level key",
+      "passed": true
+    },
+    {
+      "name": "receipt refuses nonfinite",
+      "passed": true
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts",
+      "sha256": "fdabd216981e33947981148f40606b9b3d4e3479f5302f496d7d9e24f5fcca1a",
+      "bytes": 7847
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "1778fbfe462f3380eeb1c2a67d483c9c661bf553681b6f8d3dd4c33f5d16941f",
+      "bytes": 13843
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/evaluate.ts",
+      "sha256": "e64385876ad398b677b73c2718584fcbbd36fca69bd1d69803c24ec82df532ee",
+      "bytes": 19473
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/tests/security/fixture.ts",
+      "sha256": "572f914713ea24d3e06b85a953cc9176fd98adf2e585e1cd6d838f27c1b694c6",
+      "bytes": 3416
+    }
+  ],
+  "scope": "Pure actual fixed evaluator through Bun and Python closed publication parser; not a native privilege or transaction replay."
+}
