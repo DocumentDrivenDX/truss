@@ -1,0 +1,6 @@
+{
+  "wheelSha256": "2fb5e193fff2521c01e648335735f31a59273507d6579fdc6f8db272f46ab5d3",
+  "moduleSha256": "e48cadd5c53301fb681b393fa01955a8d8f34febc61d17f115b902326825e659",
+  "exactModule": true,
+  "scope": "Built-wheel inclusion only; native tests used source checkout."
+}

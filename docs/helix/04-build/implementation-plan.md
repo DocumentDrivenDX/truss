@@ -7023,3 +7023,12 @@ Seven original SQL/expected-output variants now pass together; [scoped evidence]
 ### Whole-object timestamps activated — 2026-10-13
 
 Runtime0.34/backend0.4.7 and entity profile0.2 expose exact _created_at/_updated_at; [evidence](evidence/public-entity-times-runtime-034-20261013.md) includes public reader agreement across create/update/no-op, read-only queries, populated .33 upgrade and existing preview workflows. Current preview0.8 preserves older datasets. Original common whole-object metadata field checks now run; answer-position/time, full corpus/interchange and protected security activation remain open. Astra Ultra approved the final source and corrected upgrade/schema coverage.
+
+
+### Original Weft preparation coupled to native profile cell — 2026-10-13
+
+[Retained evidence](evidence/security-mapping-guard-20261013/receipt.json) adds a private original-source boundary and PostgreSQL18.6 head/guard SHARE coupling for the genuine Weft mapping API. Model/policy/ontology/profile/mapping substitutions refuse before compiler invocation; original output envelope/source/model/profile/mapping/SQL correspondence is checked without implementing competing compiler/physical semantics. Prepared output remains non-ready metadata.
+
+After preserving concurrent main changes through runtime0.34,25 selected tests pass:8 new native mapping controls,11 existing native ontology controls and6 pure compiler-boundary tests.885 import edges pass using qualified Python3.11; the built wheel includes exact module bytes. Native tests use source checkout, not installed wheel. Astra's column-ACL, safe-path, malformed-envelope and lock-setup feedback is implemented. A measured hostile operator, actual ordinary consumer, retained started generator/contained cleanup, priorwork rollback and original holder PID blocking through outer settlement have discriminating native controls.
+
+Independent3UNSAT/2SAT replay is conditional on exact signature/lock-state/participating-writer premises and pre-ceiling native epochs; actual MAX read preparation lies outside that model. These controls establish no source refinement, authenticated issuer, original installed physical mapping/model, complete writer/role/private-fact/ABA/source-cut closure, protected effects or final release. B08/B11/B12 receive prerequisites only; no case closes and all132 original cases remain required.

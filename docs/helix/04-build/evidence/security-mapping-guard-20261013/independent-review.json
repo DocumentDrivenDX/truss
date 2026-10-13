@@ -1,0 +1,51 @@
+{
+  "status": "reviewed-no-actionable-findings",
+  "head": "451e6f1a85d4199054d6ed3dcddb78e53d4ffddf",
+  "scope": "Read-only final integrated private mapping guard source/native-test/formal review. Native tests and wheel/boundary runs remain parent evidence; no native mutation or duplicate native suite run by this reviewer.",
+  "sourceDigests": {
+    "packages/python/src/truss/_security_mapping.py": "e48cadd5c53301fb681b393fa01955a8d8f34febc61d17f115b902326825e659",
+    "packages/python/tests/test_security_mapping_native.py": "5fd7ee0ca8f67df76e1f4c353af5e90b6faa8bbc244e6c60afcbb9cf7b11b2c9",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "packages/python/src/truss/weft.py": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+    "packages/python/src/truss/psycopg_host.py": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+    "packages/python/src/truss/catalog_runtime.py": "0e4b0128f0ef63de937d1f55c7b05e54d57425a501db90a99b28bed6e35bfe96",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/_security_home_installation.py": "a2119d47a23e0833bfc91aed2bf86211578102b3083c59a0699bae4d3c4787fa",
+    "scripts/security/prove-mapping-guard.py": "7cf43ca8a52bdc96ca8abf79fc5a0913093d7d42d1d4bb2fe253819a44abe541",
+    "scripts/check-module-boundaries.py": "eef49e30457367617910d8beacebb900d3597ba427991f05c2c2e691af89cc45",
+    "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "a76b22ce82a78fce9832daad4f19f55d7edf6c75278f39c761a4ea00c3128460"
+  },
+  "priorReview": {
+    "path": "/private/tmp/truss-mapping-source-review-astra-20261013-ymcyn5fk/review.json",
+    "sha256": "492ea8ce6bde7272658674aee010f259eb5a7ef5b021ecec38f0d93ea1e88224"
+  },
+  "independentFormalReplay": {
+    "path": "/private/tmp/truss-mapping-guard-formal-astra-20261013-1sr4yobh/formal.json",
+    "sha256": "ccc3efdbe9e78ec607f44f5c3ab828fb54c5f8e12fc0647f9997d6156462b1c9",
+    "solver": "4.15.4",
+    "unsat": 3,
+    "sat": 2,
+    "exactSourcePinsVerified": true,
+    "scope": "Conditional equality gate and explicitly defined participating-writer transition over arbitrary symbolic source/profile strings and native epochs 1 <= epoch < INT8_MAX. The model excludes the terminal native int8 epoch even though read preparation permits it. No native lock, Python source-signature, driver, source closure, authenticity, own-transaction ABA or release refinement theorem."
+  },
+  "finalNativeControlsReviewed": [
+    "Committed setup before actual competing-writer lock probe; exact blocking PID observed during callback and after return, then worker commits only after caller outer settlement.",
+    "Hostile smallint/integer equality operator directly raises P0001 before callback sets that path; helper postchecks still pass and original path restores.",
+    "Returned started generator frame closes; deliberate KeyboardInterrupt propagates after host contained phase and native generation/prior caller work restore.",
+    "Ordinary consumer refuses before compiler and preserves prior caller work.",
+    "Column SELECT/UPDATE grants refuse before compiler; malformed handoff and changed generation refuse."
+  ],
+  "sourceIntegration": "_security_mapping.py and PsycopgHost unchanged from reviewed fixes. Runtime33 catalog_runtime changed, but its imported _pin_cursor function AST remains identical. New module boundary entry lists exactly its eight actual imports.",
+  "parentReportedValidation": {
+    "selectedNativeTestsPassed": 25,
+    "breakdown": {
+      "mapping": 8,
+      "ontology": 11,
+      "weft": 6
+    },
+    "pythonBoundaryEdgesPassed": 858,
+    "wheelModuleBytesExact": true,
+    "independentlyReplayedHere": false
+  },
+  "conclusion": "No remaining actionable findings in declared private non-ready mapping preparation scope. Earlier ACL, inspection-environment, packet-envelope and lock-fixture concerns are addressed; source/compiler authenticity and complete native admission remain explicit external premises."
+}

@@ -1,0 +1,69 @@
+{
+  "status": "private-source-native-profile-cell-coupling",
+  "integrationRevision": "1bf90ea415c7eb62d53aaea9807cd8a1925dbcda",
+  "sourceDigests": {
+    "packages/python/src/truss/_security_mapping.py": "e48cadd5c53301fb681b393fa01955a8d8f34febc61d17f115b902326825e659",
+    "packages/python/tests/test_security_mapping_native.py": "5fd7ee0ca8f67df76e1f4c353af5e90b6faa8bbc244e6c60afcbb9cf7b11b2c9",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "packages/python/src/truss/weft.py": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+    "packages/python/src/truss/psycopg_host.py": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+    "packages/python/src/truss/catalog_runtime.py": "618a425a9a37d880942e5ca39fa07ab6c655ed922796dfb7f264faa83cddad5f",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/_security_home_installation.py": "a2119d47a23e0833bfc91aed2bf86211578102b3083c59a0699bae4d3c4787fa",
+    "packages/python/src/truss/_security_bootstrap/guard.sql": "0e1d881a2eccbcaf3d34ab8c4729a1aa21361c8c64b4ac142d706ee1da1312cf",
+    "scripts/check-module-boundaries.py": "ed8c86a7ed04cb3045fa048606d43392ec5d92920e9522cf025fb43cc8942e12",
+    "scripts/security/prove-mapping-guard.py": "7cf43ca8a52bdc96ca8abf79fc5a0913093d7d42d1d4bb2fe253819a44abe541",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "120f704e29652f2b10ea4d1e40cf4d5893056bfe4277f125a010880b167f9d81"
+  },
+  "validation": {
+    "selectedTests": 25,
+    "nativeMapping": 8,
+    "nativeOntologyRegression": 11,
+    "pureCompilerBoundary": 6,
+    "seconds": 41.058,
+    "pythonImports": 885,
+    "wheelExactNewModule": true,
+    "formalUNSAT": 3,
+    "formalSAT": 2,
+    "independentFormalReplay": true
+  },
+  "versions": {
+    "runtime": "0.34",
+    "postgres": "18.6",
+    "python": "3.11.17",
+    "psycopg": "3.3.6",
+    "z3": "4.15.4"
+  },
+  "compiler": {
+    "weftMain": "f769cbe40e13a012c999dc574e8158256b4ebf96",
+    "nativeModuleSha256": "2c62713f8b0b2f06d8537267405cad027cf44db3d832faefbd37920ba958bc0f",
+    "premise": "Trusted original compiler/source selection; matching path/hash is not issuer authentication"
+  },
+  "controls": [
+    "Source changes refuse before compiler",
+    "Native guard profile/generation/missing rows/table and live-column grants refuse",
+    "Committed-setup competing writer blocks on original holder during prepare and until outer settlement; stale generation refuses",
+    "Measured hostile smallint/int4 operator raisesP0001; postcallback inspection resets safe path and restores callerpath",
+    "Malformed handoff envelope/SQL hash refuses",
+    "Late native generation mutation rolls back and preserves priorwork",
+    "Retained started generator closes; contained KeyboardInterrupt cleanup rolls back native effects",
+    "Actual ordinary consumer refuses before compiler and preserves priorwork"
+  ],
+  "formalScope": "Pre-ceiling native epochs (<INT8_MAX), expected<=MAX; actual helper permits MAX read preparation outside this model. Exact symbolic source/profile identities and declared participating-writer/lock-state premises, not Python/SQL/driver/source/native-lock refinement or issuer authenticity.",
+  "traceability": [
+    {
+      "case": "truss.B08",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.B11",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.B12",
+      "caseClosed": false
+    }
+  ],
+  "scope": "Non-ready preparation metadata only, not CompiledQuery/SQL permit. Opaque fixture mapping and unregistered fixture models provide no native physical mapping/model/profile installation, actor/role/fact/effect/issuer/writer-route/ABA/settlement/release proof. Outer transaction belongs to caller. Built wheel includes exact source; installed-wheel native execution not claimed. All132 required cases remain; no case promotion.",
+  "reviewCorrections": "Added live-column ACL check, safe postcallback path/pinned loaders, closed handoff envelope and committed lock-probe setup. Used qualified Python3.11 for boundary AST parsing; initial systemPython3.9 parse failures retained. Automatic merge review initially mistook branch-only additions for upstream deletions; actual ancestor diff showed zero upstream changes to those files and retry preserved them."
+}

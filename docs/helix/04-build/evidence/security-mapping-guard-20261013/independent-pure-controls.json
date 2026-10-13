@@ -1,0 +1,66 @@
+{
+  "scope": "Actual pure Python boundary plus imported native Weft; no PostgreSQL/native mutation. Source pin and deferred completion controls; body-shape observation conditional on replaced trusted callback.",
+  "sourceDigests": {
+    "packages/python/src/truss/_security_mapping.py": "eeaca6f2f139e5d01fb892721cc1656f45389db80bcc6f3e548f95bd03bd96bb",
+    "packages/python/src/truss/weft.py": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87"
+  },
+  "compilerPath": "/private/tmp/weft-security-mapping-native-20261013/weft.so",
+  "compilerSha256": "2c62713f8b0b2f06d8537267405cad027cf44db3d832faefbd37920ba958bc0f",
+  "observations": [
+    {
+      "control": "original",
+      "outcome": "prepared-not-ready"
+    },
+    {
+      "control": "sql-parameter-only-change",
+      "outcome": "exact-string-preserved"
+    },
+    {
+      "control": "policyJson",
+      "outcome": "refused-before-compiler"
+    },
+    {
+      "control": "ontologyJson",
+      "outcome": "refused-before-compiler"
+    },
+    {
+      "control": "queryProfileJson",
+      "outcome": "refused-before-compiler"
+    },
+    {
+      "control": "bindingJson",
+      "outcome": "refused-before-compiler"
+    },
+    {
+      "control": "backendVersion",
+      "outcome": "refused-before-compiler"
+    },
+    {
+      "control": "targetProfile",
+      "outcome": "refused-before-compiler"
+    },
+    {
+      "control": "returned-generator",
+      "outcome": "closed-cold-and-refused"
+    },
+    {
+      "control": "returned-coroutine",
+      "outcome": "closed-cold-and-refused"
+    },
+    {
+      "control": "body-sections-removed-preserving-source-pins",
+      "outcome": "prepared-not-ready",
+      "scope": "compiler authenticity remains premise; records decoder structure coverage only",
+      "remainingKeys": [
+        "binding",
+        "modelPins",
+        "ontologySha256",
+        "policySha256",
+        "profile",
+        "sqlSha256",
+        "version"
+      ]
+    }
+  ]
+}

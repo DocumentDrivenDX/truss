@@ -1,0 +1,19 @@
+test_native_guard_writer_waits_through_outer_settlement (test_security_mapping_native.MappingNativeTests.test_native_guard_writer_waits_through_outer_settlement) ... FAIL
+test_native_profile_generation_missing_guard_and_acl_refuse (test_security_mapping_native.MappingNativeTests.test_native_profile_generation_missing_guard_and_acl_refuse) ... ok
+test_original_native_profile_and_compiler_handoff (test_security_mapping_native.MappingNativeTests.test_original_native_profile_and_compiler_handoff) ... ok
+test_response_substitution_and_late_native_generation_roll_back (test_security_mapping_native.MappingNativeTests.test_response_substitution_and_late_native_generation_roll_back) ... ok
+test_source_substitutions_refuse_before_compiler (test_security_mapping_native.MappingNativeTests.test_source_substitutions_refuse_before_compiler) ... ok
+
+======================================================================
+FAIL: test_native_guard_writer_waits_through_outer_settlement (test_security_mapping_native.MappingNativeTests.test_native_guard_writer_waits_through_outer_settlement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_mapping_native.py", line 86, in test_native_guard_writer_waits_through_outer_settlement
+    result=self.prepare();self.assertIsInstance(result,Ok);self.assertFalse(result.value.security_ready);self.assertTrue(blocked());self.assertEqual(outcomes,[])
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'>
+
+----------------------------------------------------------------------
+Ran 5 tests in 13.292s
+
+FAILED (failures=1)
