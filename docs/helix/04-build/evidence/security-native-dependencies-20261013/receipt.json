@@ -1,7 +1,7 @@
 {
   "scope": "original Weft dependency references mapped to assessed native catalog homes only",
   "sourceSha256": {
-    "packages/python/src/truss/_security_catalog_mapping.py": "158a4a280e3e48f89bc78b32b3c27254ec4a7aea87ed25ba6e8a53babc1ea65c",
+    "packages/python/src/truss/_security_catalog_mapping.py": "06142ef12f7003f5e1ea664e566eee1c16cdffd46561fb5d739d68e73769fcc5",
     "packages/python/src/truss/_security_mapping.py": "60fe1ccf939605ec1da3bc7e1943aa8344cca93b16f17018a50a4348a1777e3b",
     "packages/python/tests/test_security_accepted_catalog_native.py": "6c4a75de658fd1dc32fff46138b1cc32d5b414c9282c515d8fca807c24c0f824"
   },
@@ -17,5 +17,6 @@
     "complete source and writer closure",
     "same-transaction ABA",
     "protected execution"
-  ]
+  ],
+  "indexedNativeReplaySeconds": 5.733
 }
