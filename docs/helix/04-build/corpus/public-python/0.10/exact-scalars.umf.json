@@ -1,0 +1,128 @@
+{
+  "umf": "0.7.0",
+  "id": "notes",
+  "vocabularies": {},
+  "extensions": {},
+  "modules": [
+    {
+      "id": "notes",
+      "namespace": "notes",
+      "extensions": {},
+      "elements": [
+        {
+          "id": "Note",
+          "name": "Note",
+          "kind": "record",
+          "members": [
+            {
+              "module": "notes",
+              "element": "title"
+            },
+            {
+              "module": "notes",
+              "element": "units"
+            },
+            {
+              "module": "notes",
+              "element": "amount"
+            },
+            {
+              "module": "notes",
+              "element": "enabled"
+            },
+            {
+              "module": "notes",
+              "element": "at"
+            },
+            {
+              "module": "notes",
+              "element": "blob"
+            },
+            {
+              "module": "notes",
+              "element": "note"
+            }
+          ],
+          "keys": [
+            {
+              "id": "title-key",
+              "name": "title",
+              "primary": true,
+              "fields": [
+                {
+                  "module": "notes",
+                  "element": "title"
+                }
+              ]
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "title",
+          "name": "title",
+          "kind": "field",
+          "scalarType": "string",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        {
+          "id": "units",
+          "name": "units",
+          "kind": "field",
+          "scalarType": "integer",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        {
+          "id": "amount",
+          "name": "amount",
+          "kind": "field",
+          "scalarType": "decimal",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        {
+          "id": "enabled",
+          "name": "enabled",
+          "kind": "field",
+          "scalarType": "boolean",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        {
+          "id": "at",
+          "name": "at",
+          "kind": "field",
+          "scalarType": "timestamp",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        {
+          "id": "blob",
+          "name": "blob",
+          "kind": "field",
+          "scalarType": "binary",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        },
+        {
+          "id": "note",
+          "name": "note",
+          "kind": "field",
+          "scalarType": "string",
+          "nullability": "absent-allowed",
+          "cardinality": "one",
+          "extensions": {}
+        }
+      ],
+      "relationships": []
+    }
+  ]
+}

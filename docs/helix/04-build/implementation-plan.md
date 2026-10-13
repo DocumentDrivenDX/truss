@@ -7305,3 +7305,19 @@ The Core0.8 bridge now passes raw ordered CoreLiteral JSON text components throu
 
 
 Astra Ultra independently passes13 semantic/legacy tests and ten actual producer controls, replayed after final arity/keyPath structural guards. It verifies every manifest asset, canonical/packaged bridge equality, unchanged original owner/Core0.7 files and byte-vector/refusal provenance against committed UMF7c0f. It reencodes the retained native packet to byte-identical original receipt/tuple, separately from native replay. Final native composition passes3.949s. Source-pinned independent review/controls are retained with the evidence; no actionable finding or native authority/acceptance promotion follows.
+
+## Refresh the runnable portable examples — 2026-10-13
+
+Published-in-repository preview0.10 selects current runtime0.38 while preserving
+the two original basic/exact-scalar workflows and all32 observations. Prior0.9
+and both UMF fixture bytes are preserved. The existing two installed PG18 tests
+pass; see `evidence/public-python-preview-010-20261013.md`. No runtime change,
+new case campaign or interchange claim was added.
+
+## No-op-only writer retry — 2026-10-13
+
+The existing receipt workflow now commits creation separately before the no-op,
+proving original semantic/token recovery when the receipt's writer transaction
+has no object-change events. One basic installed PG18 test passes; see
+`evidence/python-noop-only-receipt-20261013.md`. Prior same-transaction creation
+plus no-op evidence remains historical; no runtime or new test case was added.
