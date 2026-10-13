@@ -1,0 +1,26 @@
+{
+  "scope": "Optional PostgreSQL18.6 ALTER ROUTINE participation extension; no complete writer closure",
+  "sources": {
+    "packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql": "c3fc4f3228d49cc67ff93009f70f0e08eb627a0dd7cbc3a43fb7db4feeb35720",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "9c14d45fbeb02e3d9ecd0571b166b8aa367a0c0390e23402f8efb7e14e94576e",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "a8faa60e1c70dcce820aaccaf428283d012254b8929be2cdc126a8d657924a55"
+  },
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17",
+  "nativeGroups": 2,
+  "nativeSeconds": 3.669,
+  "controls": [
+    "legacy held cut permits ALTER ROUTINE SECURITY DEFINER: retained true flag counterexample",
+    "opt-in ALWAYS supplemental trigger reuses selected routine writer and excludes ALTER ROUTINE: definer stays false",
+    "exact third trigger owner/function/body/flags/tag readback required",
+    "disabled/missing supplemental trigger refuses before callback with clean containment",
+    "strict Boolean selection uses trusted static SQL literal; forbidden caller bool dumper has zero invocations",
+    "legacy installed barrier readback remains passing"
+  ],
+  "acceptanceTraceability": {
+    "US-056-AC9": "Additional selected helper writer exclusion prerequisite",
+    "US-056-AC10": "Native opt-in installation/readback correspondence prerequisite"
+  },
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "limits": "Seven selected routine tags when opt-in is selected; event-trigger administration, cascade/other DDL, handlers/roles/config/issuer provenance and protected release remain open. Not a generic installer or protected backend admission."
+}

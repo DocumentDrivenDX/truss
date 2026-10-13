@@ -479,6 +479,48 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         original=self.ddl_comparison();t=self.begin();called=[]
         result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+
+    def test_alter_routine_native_tag_boundary_probe(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'scripts/security-named-subject.sql').read_text())
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            from psycopg.types.bool import BoolDumper
+            bool_calls=[]
+            class ForbiddenBoolDumper(BoolDumper):
+                def dump(self,value):bool_calls.append(value);raise AssertionError('caller bool adaptation entered')
+            self.connection.adapters.register_dumper(bool,ForbiddenBoolDumper)
+            barrier=self.ddl_comparison();t=self.begin();observed=[]
+            def probe(cursor):
+                with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c lock_timeout=100ms -c statement_timeout=1500') as writer:
+                    try:writer.execute('ALTER ROUTINE truss.named_subject_current(text) SECURITY DEFINER')
+                    except psycopg.errors.LockNotAvailable:outcome='excluded'
+                    else:outcome='not-excluded'
+                    flag=writer.execute("SELECT prosecdef FROM pg_proc WHERE oid='truss.named_subject_current(text)'::regprocedure").fetchone()[0]
+                    observed.append({'outcome':outcome,'definer':flag})
+                return observed
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),barrier,probe)
+            self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error))
+            print(json.dumps({'alterRoutineProbe':observed}))
+            self.assertEqual(observed,[{'outcome':'not-excluded','definer':True}])
+            self.connection.execute('ROLLBACK');self.connection.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY INVOKER')
+            self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
+            from dataclasses import replace
+            extended=replace(barrier,include_alter_routine=True);observed.clear();t=self.begin()
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),extended,probe)
+            self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error))
+            self.assertEqual(observed,[{'outcome':'excluded','definer':False}])
+            self.assertEqual(bool_calls,[])
+            print(json.dumps({'alterRoutineExtended':observed}))
+            for change in ('ALTER EVENT TRIGGER truss_z_routine_ddl_writer_barrier DISABLE','DROP EVENT TRIGGER truss_z_routine_ddl_writer_barrier'):
+                self.connection.execute('ROLLBACK');self.connection.execute(change);observed.clear();t=self.begin()
+                result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),extended,probe)
+                self.assertIsInstance(result,Error);self.assertEqual(observed,[])
+                self.assertEqual(str(self.host._custody.last_attempt.error),'Exact original installed DDL barriers required')
+                self.assertEqual(self.host._custody.last_attempt.phase,'contained');self.assertIsNone(self.host._custody.last_attempt.cleanup_error)
+        finally:
+            self.connection.execute('ROLLBACK')
+            self.connection.execute('DROP EVENT TRIGGER IF EXISTS truss_z_routine_ddl_writer_barrier;DROP FUNCTION truss.named_subject_current(text);DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
     def test_disabled_installed_table_barrier_refuses_before_callback(self):
         from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
         self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())

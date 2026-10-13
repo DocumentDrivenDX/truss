@@ -1,0 +1,179 @@
+{
+  "status": "No remaining actionable correctness findings within optional ALTER ROUTINE cooperative barrier scope",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "c0f37a64fa2d48a67fc4d76e01bb941a7334fe33",
+  "findings": [],
+  "resolvedFinding": {
+    "priority": "P2",
+    "description": "Initial Boolean SQL parameter introduced inherited caller bool-dumper execution into legacy default False path. Actual Psycopg Transformer probe demonstrated legacy predecessor success vs current parameterized refusal.",
+    "fix": "Strict exact bool selects trusted static true/false SQL literal, with no new bound parameter. Both default and opt-in modes now make zero bool dumper calls.",
+    "originalObservation": "/private/tmp/alter-routine-review-20261013/dumper-probe.json",
+    "finalControls": "/private/tmp/alter-routine-review-20261013/dumper-fixed.json",
+    "qualification": "Final pre/fix comparison reconstructs the exact one changed predicate/parameter line; original direct pre-fix probe output is retained separately. Pure native-driver adaptation only, not a PostgreSQL run."
+  },
+  "conclusions": [
+    "Legacy comparison defaults to exact False; strict non-bool values refuse before native epoch host entry. The selected flag is captured before host entry.",
+    "Opt-in True requires exact third installed hook row: supplementary name, ddl_command_start, ALWAYS, original owner/function/body/flags and singleton ALTER ROUTINE tag. Missing/disabled/extra/reordered/drifted rows refuse.",
+    "Legacy two-row qualification remains separately scoped. New SQL asset reuses the same original writer function without rewriting its six-tag historical source.",
+    "All 19 descriptor widths/OIDs remain checked before row fetch for both modes; bounded fetch rises from 3 to 4 only for opt-in.",
+    "Native old-gap observation changes actual prosecdef to true while legacy cut is held; extension refuses the same external ALTER ROUTINE and preserves false. Test restores original invoker and releases caller cut before installing new hook. Finally rolls back before dropping hooks/helper.",
+    "Custom bool adapter is connection-local; base test setUp creates a fresh connection and tearDown closes it, so the adversarial adapter does not leak across native tests."
+  ],
+  "independentControls": {
+    "metadataControls": 82,
+    "driverAdaptationControls": 4,
+    "allPassed": true,
+    "metadataScope": "Actual qualification function with synthetic native epoch host and catalog descriptor/row carriers; no native effects or independent DDL event semantics.",
+    "adaptationScope": "Actual Psycopg3.3.6 Transformer adaptation with synthetic cursor/catalog rows and replaced epoch host envelope. Pre-fix source is explicitly reconstructed by restoring the one changed parameter predicate/argument line. Original observed pre-fix output retained separately. No native mutation."
+  },
+  "nativeEvidenceInspected": {
+    "execution": "Parent run inspected, no independent native rerun",
+    "groups": 2,
+    "seconds": 3.669,
+    "log": {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/alter-routine-extension-20261013/native.log",
+      "sha256": "85f9e0f9456bc61fb3985a68152935630c90f3edbebcde9ad214c4266ec05b49",
+      "bytes": 562
+    },
+    "cleanup": {
+      "stopExitCode": 0,
+      "statusExitCode": 3,
+      "socketAbsent": true
+    },
+    "observations": {
+      "legacy": "not-excluded; definer=true",
+      "extended": "excluded; definer=false"
+    },
+    "additionalAssertions": "Disabled and dropped supplementary trigger exact refusal, contained/no cleanup error; zero caller bool adaptation; legacy readback passes."
+  },
+  "scopeLimits": [
+    "Only optional ALTER ROUTINE participation added to the existing six routine and three table tags, conditional on current cooperative hooks and conflicting modes.",
+    "No event-trigger administration/ABA, complete DDL/cascade/language-handler/role/grant/config/issuer/dependency closure, generic installer, authenticated authority or protected release.",
+    "Independent synthetic controls do not establish driver constructor sandboxing, native lock/refinement semantics or full transaction custody.",
+    "No backend case promotion; remaining132-case goal unchanged."
+  ],
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "9c14d45fbeb02e3d9ecd0571b166b8aa367a0c0390e23402f8efb7e14e94576e",
+      "bytes": 18502
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_dependency_fact_cut.py",
+      "sha256": "23c3171a3dcf19518cc09e32e51bf343e3c3a6f70e3aed335d63da344663b59c",
+      "bytes": 15727
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "a81227203e5f8ad1b74e739e1586d3a3887b27dfa6e67ee85ba9b181fdc80962",
+      "bytes": 21602
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "a8faa60e1c70dcce820aaccaf428283d012254b8929be2cdc126a8d657924a55",
+      "bytes": 167660
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py",
+      "sha256": "ca9ecf1ef9273f382093bb5af7a6086b6ffe1b35a66b1e055c27d529d239ab63",
+      "bytes": 13291
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py",
+      "sha256": "6b08fd001a6f41c81104226431c45dddc4deb7f90c4c36787a02324c48b9e4c1",
+      "bytes": 20158
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-routine-ddl-barrier.sql",
+      "sha256": "93d0740578df55803370f15e7de9d325baa6f465426bf3a3bcac48c217e68413",
+      "bytes": 2531
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-table-ddl-barrier.sql",
+      "sha256": "9fdcd6823aafb1106597e1f9e003994df96748686b54b68b34adbea2ed198de4",
+      "bytes": 637
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql",
+      "sha256": "c3fc4f3228d49cc67ff93009f70f0e08eb627a0dd7cbc3a43fb7db4feeb35720",
+      "bytes": 384
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "3fdea6af501adfcddbbeb3f5d668cedeba188c449393b00e3aa364a01a054599",
+      "bytes": 317840
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "79439e854cf8f381a87eebcd780cb8f577dff5634c6c8205cf065f610b8d312d",
+      "bytes": 1084604
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/alter-routine-extension-20261013/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/alter-routine-extension-20261013/native.log",
+      "sha256": "85f9e0f9456bc61fb3985a68152935630c90f3edbebcde9ad214c4266ec05b49",
+      "bytes": 562
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/alter-routine-extension-20261013/receipt.json",
+      "sha256": "daf6e2ff5f9aefccc45942823d5aa7a5df474a3623afb4d9854b0fc9ed4ec50f",
+      "bytes": 1731
+    }
+  ],
+  "independentArtifactPins": [
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/check.py",
+      "sha256": "ac21930bd0164f271919940b7d93963ce04ae1b66ebed6127a57cf303bde832d",
+      "bytes": 4359
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/results.json",
+      "sha256": "8395aa230ee0fdf59defb276d1e96721d438a68c15a7a7630914162498fc451a",
+      "bytes": 8094
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/dumper_probe.py",
+      "sha256": "35b0f296dea0146b5fbf8554d0de7de26b7f10d0196ffa9b52e1e8c2e76bbc36",
+      "bytes": 2271
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/dumper-probe.json",
+      "sha256": "b0952bc7534f6fd23967feb94445aec45ebac847d02887438e970d2093ed2e8b",
+      "bytes": 273
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/dumper_fixed.py",
+      "sha256": "fb1e45d7fd4d1c1395164da096c36a27431782664b683021af3a50ae5634911e",
+      "bytes": 4006
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/dumper-fixed.json",
+      "sha256": "020d25dc34f2553420615954bef45d8bfa397b2ab60c043ac030bcfd335c7ea1",
+      "bytes": 1750
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/reconstructed_parameterized.py",
+      "sha256": "8bc92dc2690971fecff5cd6659dec23df366fc25363869b211c056f8c4ea04fc",
+      "bytes": 18479
+    }
+  ],
+  "repositoryMutations": "None by reviewer; only owned temporary review artifacts written."
+}
