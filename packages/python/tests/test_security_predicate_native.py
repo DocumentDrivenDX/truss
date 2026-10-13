@@ -217,6 +217,14 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    projected=self.admin.execute('EXECUTE transformed_cell('+arguments+')').fetchone()[0]
    self.assertEqual(projected,{'outcomeId':'transform0','disposition':'transformed','value':{'integerToken':left}})
    self.admin.execute('DEALLOCATE transformed_cell')
+   expected_ids=['transform0','transform1' if conflicting else 'transform0']
+   self.assertEqual([t['outcomeId'] for t in field['transformations']],expected_ids)
+   self.assertEqual([t['ruleId'] for t in field['transformations']],['left','right'])
+   self.admin.execute('PREPARE second_transformed_cell(jsonb,jsonb) AS SELECT ('+field['cellExpression']+') FROM truss.object r CROSS JOIN (SELECT FALSE::boolean q0,TRUE::boolean q1,FALSE::boolean q2) q WHERE r.type_id='+str(ids['Resource'])+' ORDER BY r.id LIMIT 1')
+   projected_second=self.admin.execute('EXECUTE second_transformed_cell('+arguments+')').fetchone()[0]
+   self.assertEqual(projected_second,{'outcomeId':expected_ids[1],'disposition':'transformed','value':{'integerToken':right}})
+   self.admin.execute('DEALLOCATE second_transformed_cell')
+
 
    for a,b,w in product((False,None,True),repeat=3):
     state,choice=self.admin.execute('SELECT ('+field['stateExpression']+'),('+field['transformationChoiceExpression']+') FROM (SELECT %s::boolean q0,%s::boolean q1,%s::boolean q2) q',(a,b,w)).fetchone()

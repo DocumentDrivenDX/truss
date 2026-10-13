@@ -7170,3 +7170,9 @@ Independent Astra21-render/211-cell-branch corpus passes, including mixed parame
 ## Next public feed delivery: durable destination receipt reconciliation — 2026-10-13
 
 Ashlar requires ordinary authorized source retention of exact destination receipt bytes atomically with checkpoint advancement, plus fresh read-only recovery after uncertain source COMMIT. Runtime0.35 plain ACK has no such retained receipt and cannot provide this proof. The [implementation direction](../02-design/contracts/feed-ack-destination-receipt.proposal.md) adds an immutable interval receipt and two public calls while preserving caller-asserted downstream application. Prioritize this actual public feed gap; keep receipts after later advances, refuse legacy backfill, and distinguish matched/missing/conflict without a second ACK write. Astra Ultra reviewed the plan; implement additive installation/migration and one basic native workflow before claiming callable support.
+
+### Native transformation outcome classes in progress — 2026-10-13
+
+The original result contract requires normalized transformation classes rather than one outcome per rule. Native projected second-rule cases pass10.403s:0/-0useoneoutcomeID while preservingchosenliteral;1/2remain separate. Original rule IDs are retained for future declaration-source closure. This is a result-admission prerequisite, not a checked full result contract, output selection, source/principal authentication or protected execution. Review/full regressions pending before direct-main integration; no required case promotion.
+
+All8 native regressions pass40.314s. Independent renderer review covers22 cases/1,195 emitted-cell evaluations within its separately qualified translation scope. This original-composer outcome-class correction does not yet construct/check complete ResultContract/selection/cell batches or authenticate protected release. Direct-main integration preserves all132 required backend cases without promotion.
