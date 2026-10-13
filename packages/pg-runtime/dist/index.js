@@ -478,6 +478,7 @@ import { Pool, DatabaseError } from "pg";
 
 // packages/pg-runtime/src/subject-key.ts
 import { createHash } from "crypto";
+import { types as nativeTypes } from "util";
 function createOrdinarySubjectKeyBinding(options) {
   const refuse = () => {
     throw Error("Original subject key binding refused");
@@ -494,6 +495,16 @@ function createOrdinarySubjectKeyBinding(options) {
   const observe = options.host.observeOrdinarySubject.bind(options.host);
   const read = options.owner.readJsonValue.bind(options.owner), encode = options.owner.encodeCoreKeyTuple.bind(options.owner), bytes = options.owner.readCoreKeyTupleBytes.bind(options.owner);
   const sourceSha256 = createHash("sha256").update(sourceText).digest("hex");
+  const inspect = options.inspectSubjectKey;
+  if (typeof inspect !== "function" || nativeTypes.isAsyncFunction(inspect) || nativeTypes.isGeneratorFunction(inspect))
+    return refuse();
+  const inspected = inspect(Object.freeze({ sourceSha256, identity }));
+  if (nativeTypes.isPromise(inspected)) {
+    Promise.prototype.then.call(inspected, undefined, () => {});
+    return refuse();
+  }
+  if (inspected !== undefined)
+    return refuse();
   return Object.freeze({ encode(connection) {
     const observation = observe(connection);
     if (JSON.stringify(observation.keyColumns) !== JSON.stringify(columns) || observation.keyValues.length !== encodings.length)
