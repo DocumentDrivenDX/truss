@@ -7305,3 +7305,11 @@ the two original basic/exact-scalar workflows and all32 observations. Prior0.9
 and both UMF fixture bytes are preserved. The existing two installed PG18 tests
 pass; see `evidence/public-python-preview-010-20261013.md`. No runtime change,
 new case campaign or interchange claim was added.
+
+## No-op-only writer retry — 2026-10-13
+
+The existing receipt workflow now commits creation separately before the no-op,
+proving original semantic/token recovery when the receipt's writer transaction
+has no object-change events. One basic installed PG18 test passes; see
+`evidence/python-noop-only-receipt-20261013.md`. Prior same-transaction creation
+plus no-op evidence remains historical; no runtime or new test case was added.

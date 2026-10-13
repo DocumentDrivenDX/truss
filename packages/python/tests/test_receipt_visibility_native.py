@@ -41,12 +41,18 @@ class ReceiptVisibilityTests(mutation_tests.ObjectMutationTests):
         connection,host,assembly,tx=self.ready()
         created,_,_=self.run_group(assembly,tx,(self.create(),));identity=created.response.semantic.results[0].identity
         self.assertFalse(hasattr(created.response,'receipt_token'))
+        # The receipt must also work when its writer transaction has no creation
+        # or update journal events to use as a position shortcut.
+        host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
         noop,input,request=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=identity),set=(),unset=()),),'noop')
         self.assertIsInstance(noop,GroupSuccess);self.assertEqual(noop.response.semantic.results[0].events,())
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
         first=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun').value
         second=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun').value
-        token=first.response.receipt_token;self.assertEqual(token,second.response.receipt_token)
+        self.assertIsInstance(first.response,CommittedReceiptReplay)
+        self.assertEqual(first.response.semantic,noop.response.semantic)
+        self.assertEqual(second.response.semantic,noop.response.semantic)
+        token=first.response.receipt_token;self.assertTrue(token);self.assertEqual(token,second.response.receipt_token)
         host.detach();connection.rollback();connection,host,assembly,tx=self.readonly()
         connection.execute("SET LOCAL bytea_output='escape'")
         result=assembly.reached_in_transaction(tx,token);self.assertIsInstance(result.value,ReceiptIncluded);self.assertTrue(result.value.included)
