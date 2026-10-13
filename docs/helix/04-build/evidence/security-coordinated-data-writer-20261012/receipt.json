@@ -1,0 +1,40 @@
+{
+  "status": "component-only",
+  "sources": {
+    "packages/python/src/truss/_security_data_writer.py": "f3102e8751c458381a47d05ca0b4682f6dc7e33bf8e50a1e931288bfe4df576e",
+    "packages/python/tests/test_security_public_ontology_native.py": "3f7fd9e53db5641d4ba101c4245e77e9423f7a1c4b476e5b54260c58cec285ed",
+    "scripts/check-module-boundaries.py": "dc7fbeaef208f81e6fa1530986eb6f150bc529467a628c8b5421d04055f2365d"
+  },
+  "profile": "PostgreSQL18.6 READ COMMITTED read-write, stock psycopg3.3.6; trusted original installation administrator/physical callback/trigger installation and lifetime",
+  "implementation": "original host operation savepoint; stock pin and safe path; exact installation/guard/profile/generation; head SHARE before guard UPDATE; separate fresh claim query before callback SQL; exact final generation=original+declared event count; no additional advance; final unsettled-claim check; pending outer commit, security_ready false",
+  "native": "Full11 passed before adding ordinary credential control; final focused writer test passed after successful transaction adoption and actual ordinary coordinator refusal",
+  "wheel": {
+    "name": "truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+    "sha256": "3ffe290e43ff0b95b09adbd68922a9a8b95b26239e74b5cdc07ec138becf4013",
+    "moduleExact": true,
+    "moduleSha256": "f3102e8751c458381a47d05ca0b4682f6dc7e33bf8e50a1e931288bfe4df576e"
+  },
+  "boundaries": "862 Python imports pass; native/TypeScript broader gates remain open",
+  "traceability": [
+    {
+      "case": "truss.L13",
+      "scope": "selected writer/fresh DML prerequisite only; no complete participant enumeration or stale decision issuer",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L03",
+      "scope": "original guard/claim exclusion prerequisite only; no final release/sink proof",
+      "caseClosed": false
+    }
+  ],
+  "formalContext": "Prior retained snapshot ordering proof is conditional event ordering; actual coordinator native race now verifies selected guard-before-DML ordering. No source/native refinement theorem.",
+  "exclusions": [
+    "no logical write permission/compiler, caller-facing policy API or native admitted profile",
+    "exact event count does not prove every individual effect participated",
+    "no complete source/role/catalog/key/DDL closure or authenticated issuer",
+    "async/opaque deferred carriers cannot be synchronously cleaned; independently qualified void callback remains premise",
+    "does not compose with existing authority-change helper exactly-one CAS; uses separate trigger profile",
+    "no conclusive final sink publication or commit acknowledgment reconciliation"
+  ],
+  "review": "Astra Ultra final: no actionable findings; independent862 import boundary check. Corrected ordinary connection timeout and asserted adoption before refusal. Native executed by primary."
+}

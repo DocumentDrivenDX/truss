@@ -1,0 +1,24 @@
+{
+  "observations": [
+    "ordinary raw writer guard and data effects commit atomically",
+    "outer rollback preserves data and generation",
+    "all four DML/TRUNCATE families refuse outstanding claim before effects",
+    "settled tombstone permits subsequent update",
+    "ordinary trigger disabling/replica bypass denied",
+    "graph object and zero-row edge events advance conservatively",
+    "graph rollback preserves generation",
+    "original native guard wait drains pending registrant; fresh post-wait claim check refuses",
+    "repeatable-read writer scope refuses before effects",
+    "UPSERT advances two events and MERGE three including zero-row events",
+    "late intervening claim rolls back data and claim",
+    "composite overflow refuses and rolls back all events",
+    "counterexample: trigger guard wait retains stale outer DML predicate",
+    "actual private coordinated writer acquires original guard before DML, observes committed revocation and affects zero rows",
+    "wrong profile and pending claim refuse callback",
+    "no generation or wrong composite event count rolls back effects, preserves prior caller work",
+    "deferred returned callback refuses",
+    "exact two-event UPSERT returns pending commit; outer rollback preserves original data/generation",
+    "ordinary consumer coordinator access refuses before callback"
+  ],
+  "scope": "Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission."
+}

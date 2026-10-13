@@ -102,16 +102,25 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.admin.execute('UPDATE truss.policy_generation_guard SET generation=10')
   self.admin.execute('UPDATE relational_fixture.assignment SET active=true')
   stale=psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(stale)
+  from truss._security_data_writer import write_data_in_transaction
   def race(prelock):
    self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute('SELECT generation FROM truss.policy_generation_guard FOR UPDATE');self.admin.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=1')
+   expected=self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone()[0]
    results=[]
    def conditional_write():
     try:
      stale.execute('BEGIN')
      if prelock:
-      stale.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');stale.execute('SELECT generation FROM truss.policy_generation_guard FOR UPDATE')
-     result=stale.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2 AND EXISTS(SELECT 1 FROM relational_fixture.assignment WHERE id=1 AND active)')
-     results.append(result.rowcount);stale.commit()
+      coordinated=adopt_psycopg_host(stale,statement_timeout_ms=10000,operation_timeout_ms=30000);coordinated_tx=coordinated.adopt_transaction().value
+      def effect(cursor):
+       cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2 AND EXISTS(SELECT 1 FROM relational_fixture.assignment WHERE id=1 AND active)');results.append(cursor.rowcount)
+      try:
+       outcome=write_data_in_transaction(coordinated,coordinated_tx,installation_identity=identity,authored_profile=profile,expected_generation=expected,expected_event_count=1,action=effect)
+       if not isinstance(outcome,Ok):results.append(str(coordinated._custody.last_attempt.error))
+      finally:coordinated.detach()
+     else:
+      result=stale.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2 AND EXISTS(SELECT 1 FROM relational_fixture.assignment WHERE id=1 AND active)');results.append(result.rowcount)
+     stale.commit()
     except BaseException as error:results.append(type(error).__name__);stale.rollback()
    worker=threading.Thread(target=conditional_write);worker.start();deadline=time.monotonic()+5;waiting=False
    try:
@@ -129,7 +138,36 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   stale.close();stale=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(stale)
   self.assertEqual(race(True),[0])
   self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=2').fetchone(),(True,))
-  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','separate administrative prelock before DML observes committed revocation and affects zero rows'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
+  from truss import Error
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  current=self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone()[0]
+  self.admin.execute("CREATE TEMP TABLE data_writer_prior_work(value text);INSERT INTO data_writer_prior_work VALUES('kept')")
+  effects=[]
+  def coordinated(action,count=1,selected=profile):return write_data_in_transaction(self.host,tx,installation_identity=identity,authored_profile=selected,expected_generation=current,expected_event_count=count,action=action)
+  def upsert(cursor):cursor.execute('INSERT INTO relational_fixture.assignment VALUES(4,true) ON CONFLICT(id) DO UPDATE SET active=excluded.active')
+  self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected'),selected=b'wrong-profile'),Error);self.assertEqual(effects,[])
+  self.assertIsInstance(coordinated(upsert,count=True),Error)
+  self.assertIsInstance(coordinated(lambda cursor:None),Error)
+  self.assertIsInstance(coordinated(upsert,count=1),Error)
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM relational_fixture.assignment WHERE id=4').fetchone(),(0,))
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(current,))
+  def deferred(cursor):
+   def later():yield 1
+   return later()
+  self.assertIsInstance(coordinated(deferred),Error)
+  self.admin.execute('INSERT INTO truss.policy_publication_claim VALUES(%s,%s,%s,%s,false)',(b'coordinated-unsettled',identity,profile,current))
+  self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected')),Error);self.assertEqual(effects,[])
+  self.admin.execute('UPDATE truss.policy_publication_claim SET settled=true WHERE operation_identity_bytes=%s',(b'coordinated-unsettled',))
+  success=coordinated(upsert,count=2);self.assertIsInstance(success,Ok,str(self.host._custody.last_attempt.error));self.assertEqual(success.value.generation,current+2);self.assertFalse(success.value.security_ready)
+  self.assertEqual(self.admin.execute('TABLE data_writer_prior_work').fetchall(),[('kept',)])
+  self.host.detach();self.admin.rollback()
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(current,))
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM relational_fixture.assignment WHERE id=4').fetchone(),(0,))
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
+   ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=30000);ordinary_adoption=ordinary_host.adopt_transaction();self.assertIsInstance(ordinary_adoption,Ok);ordinary_tx=ordinary_adoption.value
+   refused=write_data_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,expected_generation=current,expected_event_count=1,action=lambda cursor:effects.append('unexpected'))
+   self.assertIsInstance(refused,Error);self.assertEqual(effects,[]);ordinary_host.detach();ordinary.rollback()
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','actual private coordinated writer acquires original guard before DML, observes committed revocation and affects zero rows','wrong profile and pending claim refuse callback','no generation or wrong composite event count rolls back effects, preserves prior caller work','deferred returned callback refuses','exact two-event UPSERT returns pending commit; outer rollback preserves original data/generation','ordinary consumer coordinator access refuses before callback'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
  def test_private_publication_registration_identity_capacity_and_rollback(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction
@@ -212,7 +250,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=10000)
    try:
-    ordinary_tx=ordinary_host.adopt_transaction().value
+    ordinary_adoption=ordinary_host.adopt_transaction();self.assertIsInstance(ordinary_adoption,Ok);ordinary_tx=ordinary_adoption.value
     ordinary.execute("CREATE TEMP TABLE authority_ordinary_work(value text);INSERT INTO authority_ordinary_work VALUES('kept')")
     denied=change_authority_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,expected_generation=1,action=lambda cursor:calls.append('must not execute'))
     self.assertIsInstance(denied,Error);self.assertEqual(denied.error.sql_state,'42501');self.assertEqual(calls,[])
@@ -311,12 +349,12 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   committed=bootstrap();self.assertIsInstance(committed,Ok,str(self.host._custody.last_attempt.error));self.host.detach();self.admin.commit()
   self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(0,))
   params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
-  with psycopg.connect(**params,autocommit=True) as ordinary:
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    for home in ['policy_generation_guard','policy_publication_claim','policy_publication_capacity']:
     with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('TABLE truss.{}').format(psycopg.sql.Identifier(home)))
    ordinary.execute("SET statement_timeout='10000'");ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=10000)
    try:
-    ordinary_tx=ordinary_host.adopt_transaction().value
+    ordinary_adoption=ordinary_host.adopt_transaction();self.assertIsInstance(ordinary_adoption,Ok);ordinary_tx=ordinary_adoption.value
     denied=bootstrap_security_homes_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,max_retained=6)
     self.assertIsInstance(denied,Error)
     self.assertEqual(ordinary.execute('SELECT 1').fetchone(),(1,))
@@ -348,7 +386,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   owners=self.admin.execute("SELECT c.relname,r.rolname FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace JOIN pg_catalog.pg_roles r ON r.oid=c.relowner WHERE n.nspname='truss' AND c.relname=ANY(%s) ORDER BY c.relname",(homes,)).fetchall()
   self.assertEqual(owners,sorted((home,self.installation.owner_role) for home in homes))
   params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
-  with psycopg.connect(**params,autocommit=True) as ordinary:
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    for home in homes:
     with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute(psycopg.sql.SQL('TABLE truss.{}').format(psycopg.sql.Identifier(home)))
     self.assertFalse(ordinary.execute("SELECT pg_catalog.has_any_column_privilege(current_user,%s,'SELECT,INSERT,UPDATE,REFERENCES')",('truss.'+home,)).fetchone()[0])
@@ -382,7 +420,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.assertEqual(ownership,sorted((home,self.installation.owner_role) for home,_ in homes))
   observations.append({'id':'candidate-security-homes-original-installation-owner','observed':ownership})
   params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
-  with psycopg.connect(**params,autocommit=True) as ordinary:
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    for home,_ in homes:
     for privilege in ['SELECT','INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER']:
      allowed=ordinary.execute('SELECT pg_catalog.has_table_privilege(current_user,%s,%s)',('truss.'+home,privilege)).fetchone()[0]
@@ -646,7 +684,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   for invalid_identity,invalid_profile,kind in [(b'foreign-installation',profile_bytes,'installation'),(installation_bytes,b'foreign-profile','profile')]:
    authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone()
    rows=authority_writer.execute(advance,(invalid_identity,invalid_profile,3)).fetchall();self.assertEqual(rows,[]);authority_writer.rollback();observations.append({'id':'foreign-authority-'+kind+'-refuses-generation-advance','observed':rows})
-  with psycopg.connect(**params,autocommit=True) as ordinary:
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    with self.assertRaises(psycopg.errors.InsufficientPrivilege) as failure:ordinary.execute('UPDATE truss.policy_generation_guard SET generation=1')
    self.assertEqual(failure.exception.sqlstate,'42501');observations.append({'id':'ordinary-authority-generation-reset-denied','observed':'42501'})
   authority_writer.execute('BEGIN');authority_writer.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();authority_writer.execute('UPDATE truss.policy_generation_guard SET generation=9223372036854775807 WHERE singleton=1');authority_writer.execute('ALTER ROLE alice BYPASSRLS')
@@ -711,7 +749,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   for wrong in [(b'foreign-operation',installation_bytes,profile_bytes,5),(operation_bytes,b'foreign-installation',profile_bytes,5),(operation_bytes,installation_bytes,b'foreign-profile',5),(operation_bytes,installation_bytes,profile_bytes,4)]:
    self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute(acquire).fetchall();deleted=self.admin.execute(settle,wrong).fetchall();self.assertEqual(deleted,[]);self.admin.execute('ROLLBACK')
   observations.append({'id':'publication-claim-original-settlement-mismatch-refuses','observed':'four mismatches preserve original claim'})
-  with psycopg.connect(**params,autocommit=True) as ordinary:
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute('DELETE FROM truss.policy_publication_claim')
   observations.append({'id':'ordinary-publication-claim-reset-refuses','observed':'42501'})
   second_operation=b'fixture-original-publication-2'
@@ -822,7 +860,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   for mutation in ["DELETE FROM truss.policy_publication_capacity","UPDATE truss.policy_publication_capacity SET installation_identity_bytes='foreign'::bytea","UPDATE truss.policy_publication_capacity SET policy_profile_bytes='foreign'::bytea","UPDATE truss.policy_publication_capacity SET max_retained=4"]:
    self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR UPDATE').fetchone();self.admin.execute(mutation);self.admin.execute(capacity_lock);refused=profile_execute(self.admin,(b'profile-bound-operation',installation_bytes,profile_bytes,5)).fetchall();self.assertEqual(refused,[]);self.admin.execute('ROLLBACK')
   observations.append({'id':'native-capacity-profile-missing-mismatched-full-refuses','observed':'four zero-row refusals; fixture mutations rolled back'})
-  with psycopg.connect(**params,autocommit=True) as ordinary:
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    with self.assertRaises(psycopg.errors.InsufficientPrivilege) as failure:ordinary.execute('UPDATE truss.policy_publication_capacity SET max_retained=100')
    self.assertEqual(failure.exception.sqlstate,'42501')
   observations.append({'id':'ordinary-native-capacity-profile-change-refuses','observed':'42501'})
