@@ -269,7 +269,7 @@ BEGIN
   IF FOUND THEN props:=props||jsonb_build_object(property.prop_id::text,entry->'value');ELSE retained:=retained||jsonb_build_object(entry->>'name',entry->'value');END IF;
  END LOOP;
  FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected.type_id AND retired_rev IS NULL LOOP
-  IF property.home<>'json' OR property.cardinality<>'one' OR property.scalar_type NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.nullability NOT IN ('required','absent-allowed') OR (property.facets IS NOT NULL AND NOT (property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb)) OR property.item IS NOT NULL THEN
+  IF property.home<>'json' OR property.cardinality<>'one' OR property.scalar_type NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.nullability NOT IN ('required','absent-allowed') OR (property.facets IS NOT NULL AND NOT ((property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (property.scalar_type='decimal' AND property.facets='{"precision":18,"scale":4}'::jsonb) OR property.facets='{}'::jsonb)) OR property.item IS NOT NULL THEN
    RAISE EXCEPTION 'supported scalar definition required' USING ERRCODE='0A000';END IF;
   IF NOT props ? property.prop_id::text THEN
    IF property.nullability='required' THEN RAISE EXCEPTION 'missing required value' USING ERRCODE='22023';END IF;

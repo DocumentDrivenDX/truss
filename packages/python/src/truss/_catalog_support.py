@@ -21,6 +21,9 @@ RETAINED_METADATA_PROFILE={'identity':'truss-fresh-catalog-support','version':'0
 
 CORE08_PROFILE={'identity':'truss-fresh-catalog-support','version':'0.7.0','sha256':'a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f'}
 
+FACET07_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.8.0', 'sha256': '9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620'}
+FACET08_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.9.0', 'sha256': '12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9'}
+
 def evaluate_catalog_support(prepared):
     """Evaluate only the exact selected policy before native catalog effects.
 
@@ -30,15 +33,16 @@ def evaluate_catalog_support(prepared):
     _require_original_preparation(prepared)
     choices=prepared.input()
     selected=choices['supportProfile']
-    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE):
+    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE):
         return {'state':'unavailable','reason':'unregistered_support_policy'}
-    current=selected==CORE08_PROFILE
-    metadata=selected in (RETAINED_METADATA_PROFILE,CORE08_PROFILE)
-    inverse=selected in (NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE)
-    named=selected in (NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE)
-    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE)
-    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE)
-    policy=files('truss').joinpath('_profiles/fresh-catalog-support-core08.json' if current else '_profiles/fresh-catalog-support-retained-metadata.json' if metadata else '_profiles/fresh-catalog-support-named-relationships.json' if inverse else '_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
+    current=selected in (CORE08_PROFILE,FACET08_PROFILE)
+    faceted=selected in (FACET07_PROFILE,FACET08_PROFILE)
+    metadata=selected in (RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE)
+    inverse=selected in (NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE)
+    named=selected in (NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE)
+    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE)
+    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE)
+    policy=files('truss').joinpath('_profiles/fresh-catalog-support-numeric08.json' if selected==FACET08_PROFILE else '_profiles/fresh-catalog-support-numeric07.json' if selected==FACET07_PROFILE else '_profiles/fresh-catalog-support-core08.json' if current else '_profiles/fresh-catalog-support-retained-metadata.json' if metadata else '_profiles/fresh-catalog-support-named-relationships.json' if inverse else '_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=selected['sha256']:
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
@@ -105,14 +109,14 @@ def evaluate_catalog_support(prepared):
             'observationCoverage':coverage,'assertionInventoryComplete':False,
             'enforcementQualified':False,'supportSemanticsQualified':False,
             'acceptedReportQualified':False,
-            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named,inverse=inverse,metadata=metadata,current=current)}
+            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named,inverse=inverse,metadata=metadata,current=current,faceted=faceted)}
 
     if len(json.dumps(decision,ensure_ascii=True,separators=(',',':')).encode('utf8'))>4194304:
         raise ValueError('Selected catalog support decision capacity exceeded')
     return decision
 
 
-def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False,metadata=False,current=False):
+def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False,metadata=False,current=False,faceted=False):
     """Complete source occurrence inventory for explicit scalar string Records.
 
     Profile 0.2 additionally covers known authored Keys and Relationships.
@@ -142,6 +146,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                 kinds[(document.document.document_id,module['id'],element['id'])]=kind
                 allowed=((({'id','kind','members','extensions','keys'} if relational else {'id','kind','members','extensions'}) | ({'name'} if named else set())) if kind=='record' else
                          {'id','kind','name','scalarType','nullability','cardinality','extensions'})
+                if faceted and kind=='field':allowed=allowed|{'facets'}
                 if current:allowed=allowed|{'title','description','aliases','examples'}|({'facets','allowedValues','default'} if kind=='field' else set())
                 if kind not in ('record','field') or set(element)-allowed or (not metadata and element.get('extensions',{})!={}):
                     return unavailable
@@ -177,7 +182,12 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                         return unavailable
                     fields.add((module['id'],element['id']))
                     operations.extend(('nullability','cardinality','scalarType'))
-                    if current and 'facets' in element:
+                    if faceted and 'facets' in element:
+                        facet=element['facets'];family=element['scalarType']
+                        signed=(family=='integer' and facet=={'integerWidth':{'bits':64,'signed':True}} and type(facet['integerWidth']['bits']) is int and type(facet['integerWidth']['signed']) is bool)
+                        decimal=(family=='decimal' and facet=={'precision':18,'scale':4} and type(facet['precision']) is int and type(facet['scale']) is int)
+                        if facet!={} and not (signed or decimal):return unavailable
+                    if (current or faceted) and 'facets' in element:
                         operations.append('facets');declaration_values[(document.document.document_id,'facets',module['id'],element['id'])]=element['facets']
                     if current:
                         for prop in ('allowedValues','default'):
@@ -222,7 +232,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                 raise ValueError('Original closed-source observation required')
             meaning=observed['result']['observation']['meaning']
             declaration=declaration_values.get((observed['documentId'],operation,identity.get('module'),identity.get('element')))
-            if ((relational and operation in ('relationships','keys')) or (current and operation=='facets')) and declaration is not None:
+            if ((relational and operation in ('relationships','keys')) or ((current or faceted) and operation=='facets')) and declaration is not None:
                 expected_state='known';classification='original_assertion'
                 if not same_owner_evidence(meaning.get(operation),declaration):
                     raise ValueError('Original authored declaration meaning correspondence required')

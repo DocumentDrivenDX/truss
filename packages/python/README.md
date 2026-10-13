@@ -150,7 +150,8 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.37 to 0.38. The trusted administrator must quiesce consumers and
+0.23 through 0.37 to 0.38 for published v0.0.1. Unpublished main
+`0.0.2.dev0` also upgrades runtime 0.38 to 0.39. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -580,3 +581,17 @@ First receipt creation refuses a zero-width interval. Receipts remain retained;
 there is no cleanup API. The destination consumer verifies its own publication
 before ACK. Truss confirms source retention and checkpoint inclusion and does
 not verify another database's commit or grant history-deletion authority.
+
+### Next iteration on main: exact numeric facets
+
+The unpublished `0.0.2.dev0` package uses runtime `0.39-candidate` and Weft
+`0.4.4` / backend `0.4.9`. Fresh UMF 0.7 and 0.8 catalogs can declare signed
+64-bit integers and decimal precision 18, scale 4. Public creates, updates,
+imports, reads and compiled queries enforce these facets without float coercion
+or rounding. Decimal `1.2`, `1.2300` and `1.23000` are exact representable values;
+`1.23001` is refused. Direct reads preserve the authored token; Python queries
+return `int` and `Decimal`. Other facet combinations and facet evolution remain
+unsupported. Enforcement is through runtime operations, not bare-table CHECKs.
+Existing installation upgrades preserve original reports and receipts.
+
+These capabilities are not included in the published v0.0.1 wheel.

@@ -19,7 +19,11 @@ assert isinstance(replay,Ok)
 token=replay.value.response.receipt_token
 report=assembly.report_in_transaction(tx).value.original_bytes
 revision=fixture.read_page(assembly,tx);fixture.ack(assembly,tx,revision)
-page=fixture.read_page(assembly,tx);fixture.ack(assembly,tx,page)
+page=fixture.read_page(assembly,tx)
+if hasattr(assembly,'acknowledge_feed_with_receipt_in_transaction'):
+ receipt=assembly.acknowledge_feed_with_receipt_in_transaction(tx,page,destination_id='upgrade-test',request_sha256='a'*64,publication_id='original',receipt_bytes=b'original destination receipt')
+ assert isinstance(receipt,Ok)
+else:fixture.ack(assembly,tx,page)
 host.detach();connection.commit()
 Path(sys.argv[2]).write_bytes(pickle.dumps((fixture.documents,original_input,request,identity,token,report,page,fixture.create(label='after',value='after'))))
 # The parent owns this local cluster; close all clients without dropping its facts.
