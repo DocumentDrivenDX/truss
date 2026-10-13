@@ -7313,3 +7313,14 @@ proving original semantic/token recovery when the receipt's writer transaction
 has no object-change events. One basic installed PG18 test passes; see
 `evidence/python-noop-only-receipt-20261013.md`. Prior same-transaction creation
 plus no-op evidence remains historical; no runtime or new test case was added.
+
+## New adopter gap: connected numeric facets — 2026-10-13
+
+Ashlar's original0.7 signed64/decimal18,4 source prepares but the selected source
+profile refuses acceptance. A separate0.8 diagnostic accepts facet metadata,
+but decimal writes/reads and all faceted query sources remain unsupported.
+See `evidence/ashlar-numeric-facets-20261013.md` and its rollback-only native result.
+This is a concrete new adopter implementation item, not a preparation-only fix:
+connect authoritative facet admission, exact no-rounding enforcement and Weft
+query lowering on one versioned runtime with a basic create/read/query check.
+No source-version reinterpretation or compiler-invented facets is authorized.
