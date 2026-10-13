@@ -1,0 +1,107 @@
+#0 building with "orbstack" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 565B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.11-slim
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/oven/bun:1.4.2
+#3 DONE 0.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 75B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [stage-1 1/5] FROM docker.io/library/python:3.11-slim@sha256:6f31d6e9ba2b0a787a3f81c37b004155b87b9efa1b771182bd550c1615745be5
+#6 resolve docker.io/library/python:3.11-slim@sha256:6f31d6e9ba2b0a787a3f81c37b004155b87b9efa1b771182bd550c1615745be5
+#6 resolve docker.io/library/python:3.11-slim@sha256:6f31d6e9ba2b0a787a3f81c37b004155b87b9efa1b771182bd550c1615745be5 0.0s done
+#6 DONE 0.0s
+
+#7 [bun 1/1] FROM docker.io/oven/bun:1.4.2@sha256:9114c058aeae42162ee16dd5084b95fe9473970bb6bcb5b232ab1630f0546895
+#7 resolve docker.io/oven/bun:1.4.2@sha256:9114c058aeae42162ee16dd5084b95fe9473970bb6bcb5b232ab1630f0546895 0.0s done
+#7 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 12.29MB 0.0s done
+#5 DONE 0.1s
+
+#8 [stage-1 2/5] COPY --from=bun /usr/local/bin/bun /opt/homebrew/bin/bun
+#8 CACHED
+
+#9 [stage-1 3/5] COPY wheels/ /wheels/
+#9 DONE 0.1s
+
+#10 [stage-1 4/5] RUN pip install --no-cache-dir 'psycopg[binary]==3.3.6' 'jsonschema==4.26.0' 'referencing==0.37.0' 'fasteners==0.20' 'platformdirs==4.12.4' 'psutil==7.2.2' /wheels/*.whl
+#10 0.919 Processing /wheels/pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+#10 0.933 Processing /wheels/weft_sql-0.1.0-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+#10 1.048 Collecting psycopg==3.3.6 (from psycopg[binary]==3.3.6)
+#10 1.121   Downloading psycopg-3.3.6-py3-none-any.whl.metadata (4.4 kB)
+#10 1.157 Collecting jsonschema==4.26.0
+#10 1.169   Downloading jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+#10 1.205 Collecting referencing==0.37.0
+#10 1.218   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+#10 1.244 Collecting fasteners==0.20
+#10 1.256   Downloading fasteners-0.20-py3-none-any.whl.metadata (4.8 kB)
+#10 1.323 Collecting platformdirs==4.12.4
+#10 1.336   Downloading platformdirs-4.12.4-py3-none-any.whl.metadata (5.5 kB)
+#10 1.419 Collecting psutil==7.2.2
+#10 1.432   Downloading psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (22 kB)
+#10 1.471 Collecting typing-extensions>=4.6 (from psycopg==3.3.6->psycopg[binary]==3.3.6)
+#10 1.483   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#10 1.515 Collecting attrs>=22.2.0 (from jsonschema==4.26.0)
+#10 1.528   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+#10 1.556 Collecting jsonschema-specifications>=2023.03.6 (from jsonschema==4.26.0)
+#10 1.569   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+#10 1.758 Collecting rpds-py>=0.25.0 (from jsonschema==4.26.0)
+#10 1.772   Downloading rpds_py-2026.9.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (4.1 kB)
+#10 1.899 Collecting psycopg-binary==3.3.6 (from psycopg[binary]==3.3.6)
+#10 1.911   Downloading psycopg_binary-3.3.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl.metadata (2.7 kB)
+#10 1.939 Downloading psycopg-3.3.6-py3-none-any.whl (215 kB)
+#10 1.965    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 215.5/215.5 kB 8.4 MB/s eta 0:00:00
+#10 1.978 Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+#10 1.980    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 90.6/90.6 kB 162.7 MB/s eta 0:00:00
+#10 1.993 Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+#10 2.006 Downloading fasteners-0.20-py3-none-any.whl (18 kB)
+#10 2.019 Downloading platformdirs-4.12.4-py3-none-any.whl (32 kB)
+#10 2.032 Downloading psutil-7.2.2-cp36-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (156 kB)
+#10 2.035    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 157.0/157.0 kB 75.9 MB/s eta 0:00:00
+#10 2.048 Downloading psycopg_binary-3.3.6-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl (6.9 MB)
+#10 2.151    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.9/6.9 MB 67.1 MB/s eta 0:00:00
+#10 2.165 Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+#10 2.167    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 67.5/67.5 kB 561.4 MB/s eta 0:00:00
+#10 2.179 Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+#10 2.193 Downloading rpds_py-2026.9.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (377 kB)
+#10 2.198    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 377.8/377.8 kB 88.7 MB/s eta 0:00:00
+#10 2.211 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#10 2.213    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 431.7 MB/s eta 0:00:00
+#10 2.261 Installing collected packages: weft-sql, typing-extensions, rpds-py, psycopg-binary, psutil, platformdirs, fasteners, attrs, referencing, psycopg, pgserver-pg18, jsonschema-specifications, jsonschema
+#10 2.813 Successfully installed attrs-26.1.0 fasteners-0.20 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 pgserver-pg18-18.6.1 platformdirs-4.12.4 psutil-7.2.2 psycopg-3.3.6 psycopg-binary-3.3.6 referencing-0.37.0 rpds-py-2026.9.1 typing-extensions-4.16.0 weft-sql-0.1.0
+#10 2.814 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#10 2.869 
+#10 2.869 [notice] A new release of pip is available: 24.0 -> 26.2.1
+#10 2.869 [notice] To update, run: pip install --upgrade pip
+#10 DONE 3.2s
+
+#11 [stage-1 5/5] RUN python -c "import psycopg,weft,pgserver; from psycopg import pq; print(psycopg.__version__,pq.version()); assert callable(weft.prepare_security_mapping_json); assert callable(weft.inspect_security_mapping_subject_key_json)"
+#11 0.281 /usr/local/lib/python3.11/site-packages/platformdirs/api.py:459: RuntimeDirWarning: XDG_RUNTIME_DIR is not set, falling back to /tmp/runtime-0
+#11 0.281   return Path(self.user_runtime_dir)
+#11 0.281 3.3.6 180006
+#11 DONE 0.3s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 1.8s done
+#12 exporting manifest sha256:672f1c0010f308dc1b8cd85259c68e9fb34f731fc50273f3ec8e447c6361ce3c
+#12 exporting manifest sha256:672f1c0010f308dc1b8cd85259c68e9fb34f731fc50273f3ec8e447c6361ce3c done
+#12 exporting config sha256:9fae1243e7b8251c56e3e969f9cc8beadded622e97a490e76b86e7911a0d81e5 done
+#12 exporting attestation manifest sha256:47a92dd9b1bc738885f2e711a2435d086039e870d4e6f326d4afde3105c87ce2 0.0s done
+#12 exporting manifest list sha256:8ca22d619f4529cc6d263b4d7449dc3153222a856ff4d13f0513e53e3ab028a9 done
+#12 naming to docker.io/library/truss-security-linux-composition:source-6fc0a27 done
+#12 unpacking to docker.io/library/truss-security-linux-composition:source-6fc0a27
+#12 unpacking to docker.io/library/truss-security-linux-composition:source-6fc0a27 0.8s done
+#12 DONE 2.7s

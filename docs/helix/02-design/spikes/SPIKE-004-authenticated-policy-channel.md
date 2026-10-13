@@ -139,3 +139,11 @@ producer. Credential/issuer nonexposure, app route inventory, daemon/OS/IPv6 and
 continuous topology/authority lifetime remain open. No backend promotion; the
 original132 cases remain required. Evidence:
 `docs/helix/04-build/evidence/network-isolation-20261013/receipt.json`.
+
+## Linux native runtime replay — 2026-10-13
+
+The original guarded TLS tests pass on Linux AArch64 with actual PostgreSQL
+18.6 and source-built Weft: 2 tests on merged Truss 0.51-candidate.
+[Inputs, controls, setup failure and replay evidence](../../04-build/evidence/linux-guarded-channel-20261013/README.md)
+qualify this portability prerequisite. CH08 external-peer composition and the
+132-case backend inventory remain unfinished.

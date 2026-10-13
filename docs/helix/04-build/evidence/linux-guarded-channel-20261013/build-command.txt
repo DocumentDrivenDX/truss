@@ -1,0 +1,4 @@
+Recorded source-wheel build invocation (2026-10-13):
+docker run --rm --env RUSTUP_TOOLCHAIN=1.90.0 --mount type=bind,src=/private/tmp/truss-security-linux-composition/weft-source,dst=/io --mount type=bind,src=/private/tmp/truss-security-linux-composition/wheels,dst=/wheels --workdir /io ghcr.io/pyo3/maturin:v1.9.6 build --locked --release --manifest-path crates/weft-python/Cargo.toml --features truss-postgresql-pg18 --interpreter /opt/python/cp311-cp311/bin/python --out /wheels
+
+The source snapshot initially omitted compile-time contract schema files. Adding the original tracked docs/helix/02-design/contracts inputs yielded the successful build.log; no source patch was applied.
