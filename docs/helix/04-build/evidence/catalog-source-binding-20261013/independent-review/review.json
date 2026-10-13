@@ -1,0 +1,18 @@
+{
+  "kind": "scoped-independent-review/0.1",
+  "reviewer": "Astra Ultra",
+  "status": "no_remaining_actionable_findings_in_reviewed_scope",
+  "scope": "Exact source/profile byte binding, selected recipe/barrier sensitivity, immutable capture before helper I/O, preflight refusal and publication ordering.",
+  "independentControls": {"profileAndBounds": 52, "syntheticOrchestration": 33, "custodyBeforeAfterPairs": 2},
+  "resolvedFindings": ["Helper reread allowed declared profile bytes to differ from captured verifier/final-check bytes; one captured helper now supplies all three.", "Standalone producer reread original dataclasses after helper I/O; captured immutable bytes and deep-copied validated recipe/barrier now retain the original packet."],
+  "nativeEvidence": {"execution": "parent-executed; reviewer inspected retained log and cleanup only", "tests": 6, "seconds": 113.038, "server": "PostgreSQL18.6", "cleanup": "runtime exit succeeded, status3, socket absent", "moduleBoundaryImports": 933},
+  "limits": ["Pure orchestration substitutes native host, inspector, codec and evaluator; no implementation/native refinement theorem.", "Packet binds exact selected input bytes and provided recipe descriptors; it does not authenticate issuer, source, evidence or complete native dependencies.", "Continuous host/cut/handler lifetime and writer participation remain premises; no complete role, DDL, configuration, authority or protected endpoint qualification.", "Bounds qualify selected inputs and retained packet, not total native scan, heap or CPU. No readiness or backend acceptance case promotion."],
+  "implementationSha256": "cece0dc3e83ad66eb70ddee2a0bc7187b660900991b2d6bb9a00c89b8c58dbb0",
+  "nativeTestSha256": "86d5f8fe11383c0f852927778df84de6ff573e5ee8c3af6fe011a6587e63df90",
+  "nativeLogSha256": "8a93ed0427208e002a4d0fff85e409c5796dc8e9fbaa8ccae5ee4dab44369381",
+  "decisionSha256": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+  "cleanupSha256": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+  "sourcePins": "source-pins.json",
+  "sourcePinsSha256": "28537c84bf20e1b9612491b321797ab2a3d1a0838fad74539e809be22f46c132",
+  "parentReceipt": "Not present at review capture; governing receipt may be pinned in a later evidence-only refresh."
+}

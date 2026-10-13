@@ -1,0 +1,15 @@
+{
+  "scope": "Actual source-binding preflight and captured callback closure; synthetic original inspector and host boundary, no native mutation/execution",
+  "sourceSha256": "cece0dc3e83ad66eb70ddee2a0bc7187b660900991b2d6bb9a00c89b8c58dbb0",
+  "helperReadDigests": [
+    "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8"
+  ],
+  "outcome": "ok",
+  "hostEntries": [
+    {
+      "sourceSha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+      "finalSourcePin": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+      "declaredHelperSha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8"
+    }
+  ]
+}

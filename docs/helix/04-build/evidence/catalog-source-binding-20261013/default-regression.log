@@ -1,0 +1,6 @@
+test_default_publication_without_source_binding_regression (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_default_publication_without_source_binding_regression) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 52.830s
+
+OK
