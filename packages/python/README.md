@@ -292,6 +292,10 @@ source cell is validated before filtering. Timestamp and binary projections, inc
 absence and explicit null. Timestamp/binary filters, ordering, grouping, keys and
 parameters remain unsupported. The selected compile/IR/backend interfaces are
 `0.2.3`, with the unchanged SQL dialect `0.2.0`.
+Successful native `QueryRows` and `QueryPage` results carry `as_of: QueryReadPosition`. Its opaque `value` identifies a conservative committed lower bound captured immediately before the data query; `at` is the database capture time as a timezone-aware UTC `datetime`. The following READ COMMITTED statement can include newer commits. `caller_xid_assigned` reports only whether the caller already had a transaction ID; it does not prove writes or commitment. Constructors retain an optional default for compatibility, while this provider fills the position on every successful result, including empty rows.
+
+Read-position values use their own namespace and are not receipt tokens. Do not pass them to `reached`, infer ordering from their strings or timestamps, or treat them as exact snapshots. An adapter may publish this position only with the stated lower-bound semantics. Current authority/context checks must pass before the result and position are returned.
+
 Compiled queries require complete read authority for all modules in each selected
 original document, including modules the SQL does not name.
 

@@ -22,4 +22,5 @@ class OriginalConsumerReads(unittest.TestCase):
         self.assertEqual(report['fixtureSync'],'committed original receipt included on authority')
         self.assertEqual(report['retainedExtensions'],4)
         self.assertIn('required whole-object metadata fields',report['checked'])
+        self.assertIn('answer position/time (committed lower bound)',report['checked'])
         shutil.rmtree(directory)

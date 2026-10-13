@@ -274,6 +274,10 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         def entity(label):
             result=assembly.query_in_transaction(tx,sql='SELECT a.* FROM "A" a WHERE a."A-label" = :label',document_ids=('adoc',),parameters={'label':label},read_profile='complete-entity')
             if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+str(host._custody.last_attempt.error))
+            self.assertIsNotNone(result.value.as_of)
+            self.assertEqual(result.value.as_of.semantics,'committed-lower-bound')
+            self.assertIsNotNone(result.value.as_of.at.utcoffset())
+            self.assertEqual(result.value.as_of.caller_xid_assigned,connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0] is not None)
             self.assertEqual(len(result.value.rows),1)
             return dict(zip(result.value.columns,result.value.rows[0],strict=True))
         created,_,_=self.run_group(assembly,tx,(self.create('one'),))

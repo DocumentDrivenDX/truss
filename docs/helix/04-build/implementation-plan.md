@@ -7023,3 +7023,7 @@ Seven original SQL/expected-output variants now pass together; [scoped evidence]
 ### Whole-object timestamps activated — 2026-10-13
 
 Runtime0.34/backend0.4.7 and entity profile0.2 expose exact _created_at/_updated_at; [evidence](evidence/public-entity-times-runtime-034-20261013.md) includes public reader agreement across create/update/no-op, read-only queries, populated .33 upgrade and existing preview workflows. Current preview0.8 preserves older datasets. Original common whole-object metadata field checks now run; answer-position/time, full corpus/interchange and protected security activation remain open. Astra Ultra approved the final source and corrected upgrade/schema coverage.
+
+### Public read-position observations — 2026-10-13
+
+Successful public queries/pages now include QueryReadPosition, an explicitly declared committed lower bound captured before the data query with native recorded time and allocation flag. [Basic evidence](evidence/public-query-read-position-20261013.md) covers empty results, original SQL/output variants, pages, pending writes and fresh read-only reads without XID allocation. The issuing adapter must preserve lower-bound semantics; no exact snapshot, receipt comparison or replica claim is made. Full adapter/corpus/interchange and protected security activation remain open.

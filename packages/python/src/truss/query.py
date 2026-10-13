@@ -1,5 +1,6 @@
 """Public compiled-query results. Numbers remain exact Python values."""
 from decimal import Decimal
+from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Literal, Mapping, TypeAlias
 from .contracts import TextValue
@@ -16,10 +17,19 @@ class QueryRelatedKeys:
 QueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | tuple['QueryValue', ...] | Mapping[str, 'QueryValue']
 
 @dataclass(frozen=True, slots=True)
+class QueryReadPosition:
+    """Committed lower bound captured before a query; separate from receipt tokens."""
+    value: str
+    at: datetime
+    caller_xid_assigned: bool
+    semantics: Literal['committed-lower-bound'] = field(default='committed-lower-bound', init=False)
+
+@dataclass(frozen=True, slots=True)
 class QueryRows:
     columns: tuple[str, ...]
     rows: tuple[tuple[QueryValue, ...], ...]
     catalog_revision: int
+    as_of: QueryReadPosition | None = None
     outcome: Literal['rows'] = field(default='rows', init=False)
 
 @dataclass(frozen=True, slots=True)
@@ -48,4 +58,5 @@ class QueryPage:
     rows: tuple[tuple[QueryValue, ...], ...]
     catalog_revision: int
     next_cursor: QueryPageCursor | None
+    as_of: QueryReadPosition | None = None
     outcome: Literal['page'] = field(default='page', init=False)
