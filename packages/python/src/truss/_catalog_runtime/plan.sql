@@ -77,8 +77,8 @@ BEGIN
    IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;
    tightening:=(old->>'nullability'='absent-allowed' AND row->>'nullability'='required') IS TRUE;
    IF tightening THEN
-    IF (old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary') AND row->>'scalar_type'=old->>'scalar_type') IS DISTINCT FROM TRUE THEN
-     RAISE EXCEPTION 'required tightening requires a retained singular scalar' USING ERRCODE='0A000';END IF;
+    IF ((old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary') AND row->>'scalar_type'=old->>'scalar_type') OR (old->>'cardinality' IN ('array','map') AND row->>'cardinality'=old->>'cardinality' AND truss.valid_property_definition(jsonb_populate_record(NULL::truss.prop_def,candidate)) IS TRUE)) IS DISTINCT FROM TRUE THEN
+     RAISE EXCEPTION 'required tightening requires a supported retained scalar or flat container' USING ERRCODE='0A000';END IF;
     FOREACH facet_map IN ARRAY ARRAY[coalesce(old->'_originalField'->'facets','{}'::jsonb),coalesce(row->'_originalField'->'facets','{}'::jsonb)] LOOP
      IF NOT ((facet_map='{}'::jsonb OR old->>'scalar_type'='integer' AND facet_map='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR old->>'scalar_type'='decimal' AND facet_map='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN
       RAISE EXCEPTION 'required tightening needs known scalar facets' USING ERRCODE='0A000';END IF;
