@@ -1,0 +1,88 @@
+{
+  "scope": "Actual loopback TLS and synthetic original operation only; no native database, private key bytes or bearer token retained",
+  "count": 19,
+  "controls": [
+    {
+      "name": "owned directory0700 and key0600 without reading key bytes",
+      "passed": true
+    },
+    {
+      "name": "client verifies CA and hostname with TLS1.3 minimum",
+      "passed": true
+    },
+    {
+      "name": "untrusted default CA refuses before operation",
+      "passed": true
+    },
+    {
+      "name": "trusted CA wrong hostname refuses before operation",
+      "passed": true
+    },
+    {
+      "name": "TLS1.2-only client cannot enter original server HTTP path",
+      "passed": true
+    },
+    {
+      "name": "weak-context countercheck actually negotiates TLS1.2",
+      "passed": true
+    },
+    {
+      "name": "postconstruction weakened minimum still rejects negotiatedTLS1.2 before HTTP",
+      "passed": true
+    },
+    {
+      "name": "plaintext request cannot dispatch or receive HTTP decision on TLS listener",
+      "passed": true
+    },
+    {
+      "name": "wrong bearer over verifiedTLS gets401 without operation",
+      "passed": true
+    },
+    {
+      "name": "verified TLS1.3 original bearer publishes once",
+      "passed": true
+    },
+    {
+      "name": "certificate verified against exact IP SAN",
+      "passed": true
+    },
+    {
+      "name": "TLS channel reuse refuses with no second operation",
+      "passed": true
+    },
+    {
+      "name": "TLS server and sockets settle",
+      "passed": true
+    },
+    {
+      "name": "constructor refuses wrong object",
+      "passed": true
+    },
+    {
+      "name": "constructor refuses client context",
+      "passed": true
+    },
+    {
+      "name": "constructor refuses weak minimum",
+      "passed": true
+    },
+    {
+      "name": "progressing incomplete TLS handshake is bounded before queued valid operation",
+      "passed": true
+    },
+    {
+      "name": "stalled-handshake server shuts down cleanly",
+      "passed": true
+    },
+    {
+      "name": "ephemeral certificate and private key directory removed",
+      "passed": true
+    }
+  ],
+  "incompleteHandshakeElapsedSeconds": 5.084,
+  "sourceSha256": {
+    "scripts/security_catalog_channel.py": "d882c4b290fcae98c6b713e4a06822b53cc4eb447e138b904a8b32602845e1e8",
+    "packages/python/tests/security_channel_tls_fixture.py": "54a3d7ecd515881ca64c937621e5d4dac83685c9989ca5dce28cd056b8c133dd",
+    "packages/python/tests/test_security_catalog_channel_native.py": "2ab5137d60b68bc3f13066dba20ce8eec8b99a9916bef90db2dcd136f8d63c68"
+  }
+}

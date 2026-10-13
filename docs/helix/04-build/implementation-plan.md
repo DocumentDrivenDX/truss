@@ -7630,3 +7630,25 @@ Trace US-056 AC2/AC5/AC7/AC8/AC9/AC10 and US-057 AC2/AC7 prerequisites, CONTRACT
 Astra Ultra independently passes35 actual loopback controls (22 request,12 completion,1 absolute deadline); both admission findings are fixed. Native execution remains parent-executed and independently inspected. Review and final source pins are retained; no CH08 or backend readiness claim.
 
 Concurrent owner mainc666745d/runtime0.50/package0.0.13 was preserved. Merged replay passes8/36.966s (six actual loopback channel controls and two native PostgreSQL controls) with exact owned native cleanup and933 imports. No broader evolution-security qualification or backend promotion. Evidence: `evidence/catalog-authenticated-channel-20261013/runtime050/receipt.json`.
+
+
+### Verified local TLS publication channel — 2026-10-13
+
+SPIKE-004 now records an explicit TLS1.3 channel subprofile. Exact stock server
+context/minimum checks precede bind; bounded stock handshake and negotiated
+TLSv1.3 checks precede HTTP/auth processing. No plaintext fallback follows TLS
+failure. Native peer controls verify the original local CA and IP hostname,
+receive r1/Withheld from the original guarded Subject/source operation and retain
+generic zero-output native refusal. Unknown CA, wrong hostname, plaintext and
+negotiated TLS1.2 under a weakened owner context cannot dispatch an operation;
+incomplete/progressing handshake controls allow the next verified peer through.
+
+Final checks11/46.335s pass on runtime0.50 (nine channel, two PostgreSQL native),
+with exact owned cleanup and933 imports. Astra19 independent TLS controls pass.
+Private ephemeral keys are not retained; fixture permissions and cleanup are
+qualified locally. Earlier8/25.942s precedes negotiated-version checks and is
+historical. Trace CH01/CH02/CH04/CH07/CH08 and US-056 AC2/AC5/AC8/AC10/US-057 AC7
+prerequisites. Production issuer/key/rotation/revocation, SQL/network/OS/diagnostic
+isolation and complete authority/handler/config lifetime remain open. No native
+or cryptographic refinement theorem, backend readiness or case promotion.
+Evidence: `docs/helix/04-build/evidence/catalog-tls-channel-20261013/receipt.json`.

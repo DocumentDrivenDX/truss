@@ -1413,3 +1413,25 @@ SPIKE-004 specifies CH01–CH08 for the mediated backend option under UMF CONTRA
 Six actual loopback HTTP tests pass5.130s, including progressing unauthenticated headers, exact raw target and parser-defect refusal. Two PostgreSQL18.6 native tests pass29.400s on runtime0.48: r1/Withheld reaches the authenticated peer with original SESSION_USER consumer and source ShareLocks before wire publication; invalid credentials, subject substitution and SQL route cause zero dispatch. Native event-trigger refusal causes zero encoding, generic503 and no retry. Initial standard-header refusal failures and prior43.347s native success are retained separately. Astra identified and the implementation fixed idle-timeout starvation and malformed-header/parser normalization gaps. Absolute five-second admission timer termination/monotonic checks now precede operation entry.
 
 Trace US-056 AC2/AC5/AC7/AC8/AC9/AC10 and US-057 AC2/AC7 prerequisites, CONTRACT-007 and UMF CONTRACT-063/STP-056. TLS, issuer/rotation/principal credentials, independent SQL/network/OS isolation and diagnostic route inventory remain open CH08. Outer transaction settlement belongs to the embedding owner; there is no automatic renewal, remote acknowledgment/exactly-once proof, general pages/writes/queries or complete authority/writer/handler/config lifetime. No backend case promotion;26 implemented/105 not-run/1 counterexample-found remains. Evidence: `docs/helix/04-build/evidence/catalog-authenticated-channel-20261013/receipt.json`.
+
+
+### Verified local TLS publication channel — 2026-10-13
+
+SPIKE-004 now records an explicit TLS1.3 channel subprofile. Exact stock server
+context/minimum checks precede bind; bounded stock handshake and negotiated
+TLSv1.3 checks precede HTTP/auth processing. No plaintext fallback follows TLS
+failure. Native peer controls verify the original local CA and IP hostname,
+receive r1/Withheld from the original guarded Subject/source operation and retain
+generic zero-output native refusal. Unknown CA, wrong hostname, plaintext and
+negotiated TLS1.2 under a weakened owner context cannot dispatch an operation;
+incomplete/progressing handshake controls allow the next verified peer through.
+
+Final checks11/46.335s pass on runtime0.50 (nine channel, two PostgreSQL native),
+with exact owned cleanup and933 imports. Astra19 independent TLS controls pass.
+Private ephemeral keys are not retained; fixture permissions and cleanup are
+qualified locally. Earlier8/25.942s precedes negotiated-version checks and is
+historical. Trace CH01/CH02/CH04/CH07/CH08 and US-056 AC2/AC5/AC8/AC10/US-057 AC7
+prerequisites. Production issuer/key/rotation/revocation, SQL/network/OS/diagnostic
+isolation and complete authority/handler/config lifetime remain open. No native
+or cryptographic refinement theorem, backend readiness or case promotion.
+Evidence: `docs/helix/04-build/evidence/catalog-tls-channel-20261013/receipt.json`.

@@ -85,3 +85,29 @@ and revocation; complete native writer/role/handler/config lifetime; recovery,
 clock/stream/page behavior and all original B/L acceptance cases. The current
 132-case inventory is unchanged. Evidence belongs in
 `../../04-build/evidence/catalog-authenticated-channel-20261013/`.
+
+
+## Local verified TLS subprofile — 2026-10-13
+
+The owner may explicitly supply an exact stock server SSLContext with a TLS1.3
+minimum. Each accepted socket has a five-second timeout before the stock SSL
+handshake; the negotiated version must be TLSv1.3 before HTTP parsing or bearer
+credential handling. A failed handshake closes without a plaintext fallback.
+The existing absolute five-second header/body admission deadline is separate
+from this preceding handshake phase. None retains the earlier explicit local
+plaintext spike; it does not activate a protected production profile.
+
+Owned test certificates declare IP SAN127.0.0.1, use a private0600 key in an
+owned temporary directory and are removed after execution. The exercising peer
+uses CA and hostname verification. Unknown CA and wrong hostname refuse before
+operation entry; weakening the owner context and negotiating TLS1.2 still causes
+zero HTTP/operation dispatch. Actual incomplete handshakes are bounded and allow
+the queued verified peer to proceed. Certificate/key issuer authenticity,
+revocation/rotation, deployment names, context/stdlib/admin lifetime, isolated
+SQL/storage/diagnostic topology and complete CH08 remain unqualified.
+
+Final runtime0.50 checks pass11/46.335s (nine channel controls, two native TLS
+publication controls) on Python3.11.17/OpenSSL3.5.9/PostgreSQL18.6. Astra19
+independent actual loopback TLS controls pass; they substitute the guarded
+operation and do not independently execute PostgreSQL. No new backend case
+promotion. Evidence: `../../04-build/evidence/catalog-tls-channel-20261013/`.

@@ -65,3 +65,48 @@ class ChannelTests(unittest.TestCase):
     c.sendall(request);response=http.client.HTTPResponse(c);response.begin()
     self.assertEqual((response.status,response.read()),(403,b'{}'))
   self.assertEqual(self.calls,[])
+
+class TlsChannelTests(unittest.TestCase):
+ def setUp(self):
+  import ssl
+  from security_channel_tls_fixture import owned_tls
+  self.context,self.client_context=owned_tls(self);self.credential=secrets.token_bytes(32);self.calls=[]
+  def operation(publish):self.calls.append(True);packet=b'{"rows":[]}';publish(packet);return Ok(packet)
+  self.server=AuthenticatedReadChannel(self.credential,operation,tls_context=self.context)
+  self.worker=threading.Thread(target=self.server.serve_forever,kwargs={'poll_interval':0.01});self.worker.start();self.addCleanup(self.stop)
+ def stop(self):
+  self.server.shutdown();self.server.server_close();self.worker.join(5);self.assertFalse(self.worker.is_alive())
+ def request(self,context=None):
+  c=http.client.HTTPSConnection(*self.server.server_address,timeout=12,context=context or self.client_context)
+  try:
+   c.request('POST',ROUTE,REQUEST,{'Authorization':'Bearer '+self.credential.hex(),'Content-Type':'application/json'})
+   self.assertEqual(c.sock.version(),'TLSv1.3')
+   r=c.getresponse();return r.status,r.read()
+  finally:c.close()
+ def test_verified_certificate_then_one_original_publication(self):
+  import ssl
+  with self.assertRaises(ssl.SSLCertVerificationError):self.request(ssl.create_default_context())
+  wrong_name=http.client.HTTPSConnection('localhost',self.server.server_address[1],timeout=10,context=self.client_context)
+  try:
+   with self.assertRaises(ssl.SSLCertVerificationError):wrong_name.request('POST',ROUTE,REQUEST)
+  finally:wrong_name.close()
+  self.assertEqual(self.calls,[]);self.assertEqual(self.request(),(200,b'{"rows":[]}'))
+ def test_weakened_owner_context_does_not_admit_negotiated_tls12(self):
+  import ssl
+  self.context.minimum_version=ssl.TLSVersion.TLSv1_2
+  legacy=ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT);legacy.check_hostname=False;legacy.verify_mode=ssl.CERT_NONE
+  legacy.minimum_version=legacy.maximum_version=ssl.TLSVersion.TLSv1_2
+  c=http.client.HTTPSConnection(*self.server.server_address,timeout=10,context=legacy)
+  try:
+   with self.assertRaises((OSError,http.client.HTTPException)):
+    c.request('POST',ROUTE,REQUEST,{'Authorization':'Bearer '+self.credential.hex(),'Content-Type':'application/json'});c.getresponse()
+  finally:c.close()
+  self.assertEqual(self.calls,[]);self.context.minimum_version=ssl.TLSVersion.TLSv1_3
+  self.assertEqual(self.request()[0],200)
+ def test_incomplete_tls_handshake_expires_and_queued_verified_peer_runs(self):
+  attacker=socket.create_connection(self.server.server_address,timeout=10);outcome=[];started=time.monotonic()
+  client=threading.Thread(target=lambda:outcome.append(self.request()));client.start()
+  try:
+   client.join(9);self.assertFalse(client.is_alive());self.assertEqual(outcome,[(200,b'{"rows":[]}')])
+   self.assertLess(time.monotonic()-started,9);self.assertEqual(self.calls,[True])
+  finally:attacker.close();client.join(3)

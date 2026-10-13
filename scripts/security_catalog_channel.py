@@ -5,7 +5,7 @@ operation. TLS, credential issuance/rotation, isolated SQL topology and complete
 endpoint/authority lifetime remain separate qualification obligations.
 """
 from http.server import BaseHTTPRequestHandler,HTTPServer
-import hmac,socket,time
+import hmac,socket,time,ssl
 from threading import Timer
 from truss.execution import Ok
 
@@ -13,9 +13,14 @@ REQUEST=b'{"operation":"read-resource"}'
 ROUTE='/protected/read'
 
 class AuthenticatedReadChannel(HTTPServer):
-    def __init__(self,credential,operation):
+    def __init__(self,credential,operation,*,tls_context=None):
         if type(credential) is not bytes or len(credential)!=32 or not callable(operation):
             raise ValueError('Private exact 256-bit credential and original operation required')
+        if tls_context is not None and (type(tls_context) is not ssl.SSLContext
+                or tls_context.protocol!=ssl.PROTOCOL_TLS_SERVER
+                or tls_context.minimum_version<ssl.TLSVersion.TLSv1_3):
+            raise ValueError('Original TLS server context with TLS1.3 minimum required')
+        self._tls_context=tls_context
         self._authorization='Bearer '+credential.hex()
         self._operation=operation
         self._consumed=False
@@ -26,6 +31,13 @@ class AuthenticatedReadChannel(HTTPServer):
     def get_request(self):
         connection,address=super().get_request()
         connection.settimeout(5)
+        if self._tls_context is not None:
+            try:
+                connection=self._tls_context.wrap_socket(connection,server_side=True)
+                if connection.version()!='TLSv1.3':
+                    raise ssl.SSLError('Original negotiated TLS1.3 required')
+            except BaseException:
+                connection.close();raise
         return connection,address
 
 class _Handler(BaseHTTPRequestHandler):

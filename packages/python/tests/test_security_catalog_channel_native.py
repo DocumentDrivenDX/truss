@@ -4,17 +4,19 @@ from pathlib import Path
 from unittest.mock import patch
 from truss import Ok,Error
 import test_security_catalog_source_cut_native as source
+from security_channel_tls_fixture import owned_tls
+import ssl
 from security_catalog_channel import AuthenticatedReadChannel,REQUEST,ROUTE
 
 class AuthenticatedCatalogChannelTests(source.CatalogSourceCutTests):
  for name in tuple(n for n in dir(source.CatalogSourceCutTests) if n.startswith('test_')):locals()[name]=None
  def channel(self,operation):
-  credential=secrets.token_bytes(32);server=AuthenticatedReadChannel(credential,operation)
+  credential=secrets.token_bytes(32);server_context,client_context=owned_tls(self);server=AuthenticatedReadChannel(credential,operation,tls_context=server_context)
   worker=threading.Thread(target=server.serve_forever,kwargs={'poll_interval':0.01});worker.start()
   def stop():server.shutdown();server.server_close();worker.join(5);self.assertFalse(worker.is_alive())
   self.addCleanup(stop)
   def request(body=REQUEST,selected=credential,route=ROUTE):
-   c=http.client.HTTPConnection(*server.server_address,timeout=60)
+   c=http.client.HTTPSConnection(*server.server_address,timeout=60,context=client_context)
    try:
     c.request('POST',route,body,{'Authorization':'Bearer '+selected.hex(),'Content-Type':'application/json'})
     r=c.getresponse();return r.status,r.read()
@@ -31,6 +33,11 @@ class AuthenticatedCatalogChannelTests(source.CatalogSourceCutTests):
     states.append('native-cuts-before-wire');publish(packet)
    return source.subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,guarded_publish)
   server,request=self.channel(operation)
+  untrusted=http.client.HTTPSConnection(*server.server_address,timeout=10,context=ssl.create_default_context())
+  try:
+   with self.assertRaises(ssl.SSLCertVerificationError):untrusted.request('POST',ROUTE,REQUEST)
+  finally:untrusted.close()
+  self.assertEqual(calls,[])
   self.assertEqual(request(selected=bytes(32)),(401,b'{}'))
   self.assertEqual(request(body=b'{"operation":"read-resource","actor":"postgres"}'),(403,b'{}'))
   self.assertEqual(request(route='/sql'),(403,b'{}'));self.assertEqual(calls,[])
