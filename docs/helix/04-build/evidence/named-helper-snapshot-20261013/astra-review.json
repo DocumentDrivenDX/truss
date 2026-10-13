@@ -1,0 +1,176 @@
+{
+  "review": "Fixed named native subject helper definition snapshot",
+  "reviewedAt": "2026-10-13T16:08:21.824027+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "a703d8a6ca7b7307c80fed33c7b469ae5bb75c9f",
+  "status": "no actionable findings within the fixed helper snapshot scope",
+  "findings": [],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "363d938734fd528fdd0b0580687939d7e50730a9d81daefea14eb3054973ccbb",
+      "bytes": 20690
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-subject.sql",
+      "sha256": "1048120c8500e5fcbae5c5c7ecd838755a85bfad3806be81ba1b1a779873fd77",
+      "bytes": 330
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-source-fixture.ts",
+      "sha256": "bcf5e800cb0fce712db993128673499c601d92c33a169b211bd32a270430c481",
+      "bytes": 1387
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts",
+      "sha256": "116057c09071c25284e82e9d68fc044cf06c69e123f356567010cc3ad0af0441",
+      "bytes": 8752
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "869c8ead680033af0d0e88e7ad7619d42fa22b91fb575294348400b535dddade",
+      "bytes": 160908
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+      "bytes": 9078
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_dependency_fact_cut.py",
+      "sha256": "932eb504853e5abc2e3df2d796ccba66e4f48e1edc607921933958551c4365a6",
+      "bytes": 15581
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/astra-packet-results.json",
+      "sha256": "dd5f763ff142b52dd32998254bdd0dc0d15ce83240dea9024320e1d2229338cf",
+      "bytes": 3779
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/astra-results.json",
+      "sha256": "2bf84e0e65a708bb563d429c490645724d5d339d21cf60682a3bd26b6d7320d2",
+      "bytes": 7679
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/astra-review.json",
+      "sha256": "60cf53701c6dd2b35b9aac80fa6ef9cfcb4b88520f506613cfa4899107536962",
+      "bytes": 12687
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/document.json",
+      "sha256": "1eb64de9c3cdf8fcde1c1d37325136330508686cca70b6550c780df7d74085e8",
+      "bytes": 2857
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json",
+      "sha256": "723e7855b33d46843837a55eb426a23df661bfa8ca2e62a20362491a6caaaa53",
+      "bytes": 9574
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/original-selection.json",
+      "sha256": "ca0fb71ec748549da1e14b8345f3a1110a5dc921ca08d210294c91c21f618ef8",
+      "bytes": 104
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/policy.json",
+      "sha256": "ac1dc5841de60f64b8c268417124818c089ef247549fa75a621f1785f0b6ec97",
+      "bytes": 1472
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/receipt.json",
+      "sha256": "aacf76d39252a3c5b92efd8c6f187ebbb09951371ba77bd200016148c7fb9298",
+      "bytes": 3932
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/requirements.json",
+      "sha256": "c3195b19bd31aa7b3913effb814004a45198eecbc2af000a1d2be23b3f893748",
+      "bytes": 1044
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/resolution.json",
+      "sha256": "d6591a68b48b4f4a56b1631fce26dd66ac99a9d4f1f60c02c77c178bb3636e74",
+      "bytes": 5467
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/transport.json",
+      "sha256": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+      "bytes": 2903
+    }
+  ],
+  "independentEvidence": [
+    {
+      "path": "/private/tmp/named-helper-review-20261013/metadata_checks.py",
+      "sha256": "bec8821e1a7c2607016de145bd1e387824d4180fabae62806a5469910150c148",
+      "bytes": 4217
+    },
+    {
+      "path": "/private/tmp/named-helper-review-20261013/metadata-results.json",
+      "sha256": "406dc7522326353f8b7226660fdae86dbb7fb7575edac3442999d36a83e9c3c2",
+      "bytes": 6628
+    },
+    {
+      "path": "/private/tmp/named-helper-review-20261013/composition_checks.py",
+      "sha256": "2d2652186fc1d8b9335c22481b1278ed13597425d6bce546de9d8217e837c042",
+      "bytes": 13477
+    },
+    {
+      "path": "/private/tmp/named-helper-review-20261013/results.json",
+      "sha256": "d1a8cf9a050df54c1f911b31731ec46a89f5f385f06b0d121cf8c082f26fd676",
+      "bytes": 9233
+    }
+  ],
+  "independentValidation": {
+    "total": 95,
+    "metadataControls": 59,
+    "compositionControls": 36,
+    "result": "pass",
+    "metadataScope": "Actual snapshot checker with synthetic descriptors/rows: exact positive; all19 foreign descriptor positions and wrong/absent widths refuse before fetch; all19 metadata positions, row cardinality/width, null body, Staff reference/home multiplicity, selected owner/column/type and bounded expected-source controls.",
+    "compositionScope": "Actual original Weft/UMF plus composed Python code; synthetic native cut/host/cursor values. Snapshot runs after cut entry and before helper observation; drift reaches neither helper, codecs nor capture. Fixed schema/routine/carrier overrides refuse before inspection.",
+    "qualification": "No independent native database mutation or native locking/privilege replay."
+  },
+  "parentNativeEvidence": {
+    "tests": 2,
+    "seconds": 7.445,
+    "execution": "Parent executed; retained final log and cleanup inspected",
+    "coverage": "Five named-subject cases: live/profile success and mismatch; definer/body/path drift before either encoder; plus legacy resource-list regression.",
+    "cleanup": "stopped, status absent, socket absent",
+    "pins": [
+      {
+        "path": "/private/tmp/named-helper-native.log",
+        "sha256": "33d162421e76ec5a897b4703baf82ad098016f3fa6b00629c172b882737ecd51",
+        "bytes": 638
+      },
+      {
+        "path": "/private/tmp/named-source-cleanup/cleanup-PsycopgFactCutNativeTests.json",
+        "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+        "bytes": 71
+      }
+    ]
+  },
+  "sourceReview": [
+    "Staff mapping must be selected exactly once as truss.sec_staff.staff_id with native TEXT; helper owner must match selected fact owner.",
+    "Nineteen TEXT results compare native function/signature/return/flags/search_path/body/argument metadata and prosqlbody-null values.",
+    "Descriptor widths and OIDs are checked before fetch. Catalog references and equality operators are qualified; support function uses numeric OID text.",
+    "SQL bytes are captured and checked against their prepared pin before inspector invocation, and bounded body text is passed unchanged to the native snapshot checker. SQL file also participates in the post-evaluation source check.",
+    "Native snapshot runs inside the existing declared cut before subject observation. Fixed schema/routine/carrier prevents alternate helper dispatch.",
+    "Drift native tests isolate the specific snapshot error, zero encoders, contained phase and clean cleanup."
+  ],
+  "limitations": [
+    "Definition snapshot only: no held DDL/helper lifetime, dependency closure, language-handler/type/operator lifetime, role/configuration lifetime or authenticated helper provenance theorem.",
+    "Selected owner and mapping remain trusted fixture premises; snapshot equality is not issuer authentication or subject authority.",
+    "Psycopg may construct loaders during execute; descriptor-before-fetch covers row decoding, not a driver callback sandbox.",
+    "Source bounds do not establish aggregate native catalog heap/CPU or arbitrary metadata-size safety.",
+    "Broad native source/fact privileges remain in this fixture. No bypass-safe deployment, protected release, readiness, backend admission or required-case promotion; all132 remain required."
+  ],
+  "repositoryMutations": false
+}

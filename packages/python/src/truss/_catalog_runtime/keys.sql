@@ -50,12 +50,99 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.verify_umf_string_key_tuple(bytea,text[]) FROM PUBLIC;
 
+-- Native correspondence with UMF's published scalar tuple grammar. UMF remains
+-- the tuple producer; these helpers compare bytes with actual admitted cells.
+CREATE FUNCTION truss.umf_key_values(cells jsonb) RETURNS jsonb
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE cell jsonb;result jsonb:='[]';
+BEGIN
+ IF jsonb_typeof(cells) IS DISTINCT FROM 'array' OR jsonb_array_length(cells) NOT BETWEEN 1 AND 1024 THEN RAISE EXCEPTION 'bounded key cells required' USING ERRCODE='22023';END IF;
+ FOR cell IN SELECT value FROM jsonb_array_elements(cells) LOOP
+  IF truss.valid_scalar_cell(cell,NULL,false) IS NOT TRUE OR cell->>'kind' NOT IN ('string','integer','decimal','boolean','binary') THEN RAISE EXCEPTION 'exact key family required' USING ERRCODE='22023';END IF;
+  result:=result||jsonb_build_array(CASE cell->>'kind'
+   WHEN 'string' THEN jsonb_build_object('string',cell->'text')
+   WHEN 'integer' THEN jsonb_build_object('integerToken',cell->'text')
+   WHEN 'decimal' THEN jsonb_build_object('decimalToken',cell->'text')
+   WHEN 'boolean' THEN jsonb_build_object('boolean',cell->'value')
+   WHEN 'binary' THEN jsonb_build_object('binaryHex',encode(decode(cell->>'text','base64'),'hex')) END);
+ END LOOP;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.umf_key_values(jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.verify_umf_scalar_key_tuple(tuple_bytes bytea,cells jsonb,facets jsonb) RETURNS boolean
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE position int:=5;total int;component_count int;number bigint;multiplier bigint;digit int;octet int;prefix_count int;
+ cell jsonb;facet jsonb;family text;tag int;payload bytea;token text;mantissa text;coefficient text;exponent_token text;exponent_sign text;
+ fraction_length int;exponent_value int;shift int;component_index int:=0;
+BEGIN
+ IF tuple_bytes IS NULL OR jsonb_typeof(cells) IS DISTINCT FROM 'array' OR jsonb_typeof(facets) IS DISTINCT FROM 'array'
+  OR jsonb_array_length(cells) NOT BETWEEN 1 AND 1024 OR jsonb_array_length(cells)<>jsonb_array_length(facets) THEN RETURN false;END IF;
+ total:=octet_length(tuple_bytes);
+ IF total NOT BETWEEN 7 AND 1048576 OR substring(tuple_bytes FROM 1 FOR 5)<>convert_to('UMFK1','UTF8') THEN RETURN false;END IF;
+ number:=0;multiplier:=1;prefix_count:=0;
+ LOOP
+  IF position>=total OR prefix_count>=3 THEN RETURN false;END IF;
+  octet:=get_byte(tuple_bytes,position);position:=position+1;prefix_count:=prefix_count+1;digit:=octet & 127;number:=number+digit*multiplier;
+  IF number>1024 THEN RETURN false;END IF;
+  IF octet<128 THEN IF prefix_count>1 AND digit=0 THEN RETURN false;END IF;EXIT;END IF;
+  multiplier:=multiplier*128;
+ END LOOP;
+ component_count:=number::int;
+ IF component_count<>jsonb_array_length(cells) THEN RETURN false;END IF;
+ FOR cell IN SELECT value FROM jsonb_array_elements(cells) LOOP
+  family:=cell->>'kind';facet:=facets->component_index;component_index:=component_index+1;
+  IF family NOT IN ('string','integer','decimal','boolean','binary') OR family IS NULL
+   OR truss.valid_scalar_property(cell,family,false,facet) IS NOT TRUE THEN RETURN false;END IF;
+  token:=cell->>'text';
+  CASE family
+   WHEN 'string' THEN tag:=4;payload:=convert_to(token,'UTF8');
+   WHEN 'binary' THEN tag:=5;payload:=decode(token,'base64');
+   WHEN 'boolean' THEN tag:=1;payload:=CASE WHEN (cell->>'value')::boolean THEN decode('01','hex') ELSE decode('00','hex') END;
+   WHEN 'integer' THEN tag:=2;payload:=convert_to(CASE WHEN token='-0' THEN '0' ELSE token END,'UTF8');
+   WHEN 'decimal' THEN
+    IF facet IS DISTINCT FROM '{"precision":18,"scale":4}'::jsonb THEN RETURN false;END IF;
+    tag:=3;mantissa:=split_part(lower(token),'e',1);fraction_length:=length(split_part(mantissa,'.',2));
+    coefficient:=ltrim(replace(ltrim(mantissa,'-'),'.',''),'0');
+    IF coefficient='' THEN coefficient:='0';
+    ELSE
+     exponent_value:=0;exponent_token:=split_part(lower(token),'e',2);
+     IF exponent_token<>'' THEN
+      exponent_sign:=left(exponent_token,1);exponent_token:=ltrim(ltrim(exponent_token,'+-'),'0');
+      IF length(exponent_token)>7 THEN RETURN false;END IF;
+      exponent_value:=CASE WHEN exponent_token='' THEN 0 ELSE exponent_token::int END;
+      IF exponent_sign='-' THEN exponent_value:=-exponent_value;END IF;
+     END IF;
+     shift:=4-fraction_length+exponent_value;
+     IF shift>=0 THEN coefficient:=coefficient||repeat('0',shift);ELSE coefficient:=left(coefficient,length(coefficient)+shift);END IF;
+     IF left(token,1)='-' THEN coefficient:='-'||coefficient;END IF;
+    END IF;
+    payload:=decode('04','hex')||convert_to(coefficient,'UTF8');
+  END CASE;
+  IF position>=total OR get_byte(tuple_bytes,position)<>tag THEN RETURN false;END IF;
+  position:=position+1;number:=0;multiplier:=1;prefix_count:=0;
+  LOOP
+   IF position>=total OR prefix_count>=3 THEN RETURN false;END IF;
+   octet:=get_byte(tuple_bytes,position);position:=position+1;prefix_count:=prefix_count+1;digit:=octet & 127;number:=number+digit*multiplier;
+   IF number>1048576 THEN RETURN false;END IF;
+   IF octet<128 THEN IF prefix_count>1 AND digit=0 THEN RETURN false;END IF;EXIT;END IF;
+   multiplier:=multiplier*128;
+  END LOOP;
+  IF number<>octet_length(payload) OR number>total-position OR substring(tuple_bytes FROM position+1 FOR number::int)<>payload THEN RETURN false;END IF;
+  position:=position+number::int;
+ END LOOP;
+ RETURN position=total;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.verify_umf_scalar_key_tuple(bytea,jsonb,jsonb) FROM PUBLIC;
+
 -- Private writer helper: derive expected components from actual object rows.
 -- Caller holds the object's mutation lock and the accepted catalog-head lock.
 CREATE FUNCTION truss.verify_object_string_key(selected_object bigint,selected_type int,selected_key smallint,tuple_bytes bytea)
 RETURNS boolean LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE object_row truss.object%ROWTYPE; key_row truss.key_def%ROWTYPE;
- component record;cell jsonb;actual_values text[]:=ARRAY[]::text[];counted int:=0;
+ component record;cell jsonb;actual_values text[]:=ARRAY[]::text[];counted int:=0;cells jsonb:='[]';key_facets jsonb:='[]';
 BEGIN
  SELECT * INTO object_row FROM truss.object WHERE id=selected_object AND type_id=selected_type;
  IF NOT FOUND OR object_row.root_id IS NOT NULL THEN RETURN false; END IF;
@@ -63,20 +150,19 @@ BEGIN
    AND kind='record' AND NOT provisional AND retired_rev IS NULL) THEN RETURN false; END IF;
  SELECT * INTO key_row FROM truss.key_def WHERE type_id=selected_type AND key_num=selected_key AND retired_rev IS NULL;
  IF NOT FOUND OR cardinality(key_row.prop_ids) NOT BETWEEN 1 AND 1024 THEN RETURN false; END IF;
- FOR component IN SELECT p.prop_id,p.scalar_type,p.retired_rev,p.home,p.cardinality,p.nullability
+ FOR component IN SELECT p.prop_id,p.scalar_type,p.retired_rev,p.home,p.cardinality,p.nullability,p.facets
   FROM unnest(key_row.prop_ids) WITH ORDINALITY k(prop_id,ord)
   JOIN truss.prop_def p ON p.prop_id=k.prop_id AND p.type_id=selected_type ORDER BY k.ord LOOP
   counted:=counted+1;
-  IF component.scalar_type IS DISTINCT FROM 'string' OR component.retired_rev IS NOT NULL
+  IF component.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR component.retired_rev IS NOT NULL
    OR component.home IS DISTINCT FROM 'json' OR component.cardinality IS DISTINCT FROM 'one'
    OR component.nullability IS DISTINCT FROM 'required' THEN RETURN false; END IF;
   cell:=object_row.props->component.prop_id::text;
-  IF jsonb_typeof(cell) IS DISTINCT FROM 'object' OR cell->>'kind' IS DISTINCT FROM 'string'
-   OR jsonb_typeof(cell->'text') IS DISTINCT FROM 'string' OR cell-'kind'-'text'<>'{}'::jsonb THEN RETURN false; END IF;
-  actual_values:=array_append(actual_values,cell->>'text');
+  IF truss.valid_scalar_property(cell,component.scalar_type,false,component.facets) IS NOT TRUE THEN RETURN false;END IF;
+  cells:=cells||jsonb_build_array(cell);key_facets:=key_facets||jsonb_build_array(coalesce(component.facets,'{}'::jsonb));
  END LOOP;
  IF counted<>cardinality(key_row.prop_ids) THEN RETURN false; END IF;
- RETURN truss.verify_umf_string_key_tuple(tuple_bytes,actual_values);
+ RETURN truss.verify_umf_scalar_key_tuple(tuple_bytes,cells,key_facets);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.verify_object_string_key(bigint,int,smallint,bytea) FROM PUBLIC;

@@ -18,7 +18,7 @@ ALLOWED = {
     '_query_runtime': {'base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
     '_umf_keys_release': set(),
     '_umf_keys08_release': set(),
-    '_umf_key_tuples': {'decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release','truss._umf_keys08_release'},
+    '_umf_key_tuples': {'base64','truss.contracts','decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release','truss._umf_keys08_release'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     '_group_runtime': {'truss._receipt_position','typing','dataclasses','hashlib','base64','json','truss.contracts','truss.execution','truss.groups','truss.preparation','truss._umf_key_tuples'},
     '_import_runtime': {'base64','json','hashlib','uuid','truss.contracts','truss.execution','truss.imports','truss.groups','truss._group_runtime','truss._acceptance_json','truss._umf_key_tuples','truss.psycopg_host','truss.preparation','truss._catalog_report_semantics'},

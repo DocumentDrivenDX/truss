@@ -1,0 +1,39 @@
+{
+  "scope": "Fixed named helper native definition snapshot before subject invocation; no held callable closure or protected admission",
+  "sources": {
+    "scripts/security-named-subject.sql": "1048120c8500e5fcbae5c5c7ecd838755a85bfad3806be81ba1b1a779873fd77",
+    "scripts/security_owned_read.py": "363d938734fd528fdd0b0580687939d7e50730a9d81daefea14eb3054973ccbb",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "869c8ead680033af0d0e88e7ad7619d42fa22b91fb575294348400b535dddade"
+  },
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17; Bun1.4.2; original Core0.8/security0.1/KeyTuple3; Weft subject selection0.1",
+  "nativeGroups": 2,
+  "nativeSeconds": 7.445,
+  "independentControls": 95,
+  "metadataControls": 59,
+  "compositionControls": 36,
+  "controls": [
+    "exact declared Staff field truss.sec_staff.staff_id/TEXT",
+    "helper owner agrees with selected native fact owner",
+    "19 native TEXT catalog descriptors checked before fetch",
+    "exact selected signature/SQL/invoker/set/config/body and numeric support OID snapshot",
+    "SQL source copied and checked against prepared pin before inspector",
+    "definer/body/searchpath drift refuses before any codecs with exact contained error and no cleanup error",
+    "original subject success/key mismatch and legacy filtered read remain passing"
+  ],
+  "acceptanceTraceability": {
+    "US-056-AC9": "Selected helper definition drift refusal prerequisite",
+    "US-056-AC10": "Original native helper source/definition snapshot correspondence prerequisite"
+  },
+  "missingGates": [
+    "held helper/DDL/handler/config/role writer exclusion",
+    "authenticated helper/dependency and issuer provenance",
+    "bypass-safe native grants and generic raw/graph installer",
+    "protected compiler/query release"
+  ],
+  "fixtureWarning": "Ordinary native fixture has broad ALL table grants; not a supported protected deployment.",
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "mergedMain": "aa7ff60bd2ec31dcc6635cdf88f7d1205a1abcc5",
+  "mergedNativeSeconds": 21.151,
+  "mergedQualification": "Both native groups and Python module boundaries pass with concurrent v0.0.2 release changes preserved; unchanged component scope."
+}

@@ -1,0 +1,10 @@
+test_alter_routine_native_tag_boundary_probe (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_alter_routine_native_tag_boundary_probe) ... ok
+test_shared_named_source_native_subject_and_resource_evaluation (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_shared_named_source_native_subject_and_resource_evaluation)
+@covers US-056-AC1; @covers US-056-AC10; fixture prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 7.585s
+
+OK
+{"alterRoutineProbe": [{"outcome": "not-excluded", "definer": true}]}
+{"alterRoutineExtended": [{"outcome": "excluded", "definer": false}]}

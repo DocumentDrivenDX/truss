@@ -34,9 +34,10 @@ def _run_graph_scope_operation(host, transaction, epoch, comparison, callback):
                   "pg_catalog.pg_backend_pid()::pg_catalog.text,session_user::pg_catalog.text,current_user::pg_catalog.text,"
                   "(SELECT oid::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) current_user),"
                   "(SELECT oid::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user)",prepare=False,binary=False)
+        if c.description is None or len(c.description)!=7 or any(d.type_code!=25 for d in c.description):
+            raise ValueError('Exact original native graph context required')
         identity=c.fetchmany(2)
-        if (c.description is None or len(c.description)!=7 or any(d.type_code!=25 for d in c.description)
-                or len(identity)!=1 or len(identity[0])!=7 or any(type(v) is not str for v in identity[0])):
+        if (len(identity)!=1 or len(identity[0])!=7 or any(type(v) is not str for v in identity[0])):
             raise ValueError('Exact original native graph context required')
         expected=dict(zip(('xid','databaseOid','backendPid','sessionUser','actingUser','actorRoleOid','sessionRoleOid'),identity[0]))
         def unique(pairs):
@@ -48,8 +49,10 @@ def _run_graph_scope_operation(host, transaction, epoch, comparison, callback):
         def read_scope():
             c.execute("SELECT rel_type_id::pg_catalog.text,pg_catalog.encode(original_context_bytes,'hex'),pg_catalog.encode(original_evidence_bytes,'hex') "
                       "FROM truss.authorization_graph_fact_scope WHERE original_writer_xid OPERATOR(pg_catalog.=) pg_catalog.pg_current_xact_id() ORDER BY rel_type_id",prepare=False,binary=False)
+            if c.description is None or len(c.description)!=3 or any(d.type_code!=25 for d in c.description):
+                raise ValueError('Bounded original graph scope rows required')
             rows=c.fetchmany(33)
-            if (c.description is None or len(c.description)!=3 or any(d.type_code!=25 for d in c.description) or len(rows)>32):
+            if len(rows)>32:
                 raise ValueError('Bounded original graph scope rows required')
             found=[];contexts=set()
             for row in rows:
@@ -66,9 +69,11 @@ def _run_graph_scope_operation(host, transaction, epoch, comparison, callback):
         before=read_scope();required=tuple(sorted(set(before)|set(ids)))
         if len(required)>32:raise ValueError('Graph scope capacity reached')
         c.execute('SELECT truss.runtime_register_graph_fact_scope(%s,%s)::pg_catalog.text AS registered_types',(list(ids),evidence),prepare=False,binary=False)
-        response=c.fetchmany(2)
         if (c.description is None or len(c.description)!=1 or c.description[0].name!='registered_types'
-                or c.description[0].type_code!=25 or response!=[(str(len(required)),)]):
+                or c.description[0].type_code!=25):
+            raise ValueError('Exact original registration result required')
+        response=c.fetchmany(2)
+        if response!=[(str(len(required)),)]:
             raise ValueError('Exact original registration result required')
         if read_scope()!=required:raise ValueError('Complete original registered scope required')
         return callback(c)

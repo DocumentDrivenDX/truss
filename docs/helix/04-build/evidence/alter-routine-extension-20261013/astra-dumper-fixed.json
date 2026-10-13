@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "source": "reconstructed parameterized variant",
+      "extended": false,
+      "result": "Caller bool adaptation invoked",
+      "callback": [],
+      "dumperCalls": [
+        false
+      ]
+    },
+    {
+      "source": "reconstructed parameterized variant",
+      "extended": true,
+      "result": "Caller bool adaptation invoked",
+      "callback": [],
+      "dumperCalls": [
+        true
+      ]
+    },
+    {
+      "source": "fixed current",
+      "extended": false,
+      "result": "ok",
+      "callback": [
+        true
+      ],
+      "dumperCalls": []
+    },
+    {
+      "source": "fixed current",
+      "extended": true,
+      "result": "ok",
+      "callback": [
+        true
+      ],
+      "dumperCalls": []
+    }
+  ],
+  "count": 4,
+  "allPassed": true,
+  "scope": "Actual Psycopg3.3.6 Transformer adaptation with synthetic cursor/catalog rows and replaced epoch host envelope. Pre-fix source is explicitly reconstructed by restoring the one changed parameter predicate/argument line. Original observed pre-fix output retained separately. No native mutation.",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "9c14d45fbeb02e3d9ecd0571b166b8aa367a0c0390e23402f8efb7e14e94576e",
+      "bytes": 18502
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/dumper_fixed.py",
+      "sha256": "fb1e45d7fd4d1c1395164da096c36a27431782664b683021af3a50ae5634911e",
+      "bytes": 4006
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/reconstructed_parameterized.py",
+      "sha256": "8bc92dc2690971fecff5cd6659dec23df366fc25363869b211c056f8c4ea04fc",
+      "bytes": 18479
+    }
+  ]
+}

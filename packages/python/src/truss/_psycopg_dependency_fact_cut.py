@@ -17,7 +17,7 @@ class _DependencyFactProvider:
 
 
 def _run_dependency_fact_operation(host, transaction, epoch, original_bytes,
-                                   expected_sha256, providers, callback):
+                                   expected_sha256, providers, callback, *, ddl_barrier=None):
     if type(providers) is not tuple or not 1<=len(providers)<=8192:
         raise ValueError('Bounded original dependency provider tuple required')
     declarations=[]; relations={}
@@ -52,7 +52,8 @@ def _run_dependency_fact_operation(host, transaction, epoch, original_bytes,
     coverage=_inspect_fact_coverage(original_bytes,expected_sha256,tuple(declarations))
     if coverage.missing:raise ValueError('Incomplete original semantic dependency provider coverage')
     recipe=tuple(_FactRelationComparison(*base,columns) for base,columns in relations.values())
-    return _run_fenced_fact_operation(host,transaction,epoch,recipe,callback)
+    if ddl_barrier is None:return _run_fenced_fact_operation(host,transaction,epoch,recipe,callback)
+    return _run_fenced_fact_operation(host,transaction,epoch,recipe,callback,ddl_barrier=ddl_barrier)
 
 
 def _epoch_dependency_recipe(epoch, expected_sha256, sources=None):

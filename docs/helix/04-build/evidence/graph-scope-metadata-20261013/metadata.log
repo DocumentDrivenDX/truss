@@ -1,0 +1,6 @@
+test_every_metadata_boundary_refuses_before_fetch (test_psycopg_graph_scope_metadata.GraphScopeMetadataTests.test_every_metadata_boundary_refuses_before_fetch) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.056s
+
+OK

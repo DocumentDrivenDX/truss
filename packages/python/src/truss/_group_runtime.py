@@ -12,7 +12,7 @@ from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, Cu
     GroupPrecondition, UnauthorizedPerson, PreconditionFailed, FailedPrecondition, Created, Changed, Unchanged, Deleted, DeletedIdentity, AliasIdentity, JournalEventReference)
 from .preparation import CatalogDocument
 from ._receipt_position import decode_receipt_position
-from ._umf_key_tuples import KeyTupleRequest, encode_string_key_tuples
+from ._umf_key_tuples import KeyTupleRequest, encode_key_tuples, key_value_from_cell
 
 _DIAGNOSTIC=ProfilePin(identity='truss-native-create-diagnostic',version='0.1',
     sha256=sha256(b'Native create result: closed outcome/code/operationIndex/nativeState; no database source diagnostic disclosure; v1').hexdigest())
@@ -159,8 +159,8 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
             cursor.execute('SELECT truss.group_condition_key_metadata(%s,%s,%s,%s)',
                 (original_input,original_documents,manifest['releaseId'],digest),prepare=False)
             for metadata in json.loads(bytes(cursor.fetchone()[0])):
-                key_request=KeyTupleRequest(metadata['moduleId'],metadata['recordId'],metadata['keyId'],tuple(v['text'] for v in metadata['values']))
-                original=encode_string_key_tuples(sources[metadata['documentId']],(key_request,),bun_executable=bun_executable)[0]
+                key_request=KeyTupleRequest(metadata['moduleId'],metadata['recordId'],metadata['keyId'],tuple(key_value_from_cell(v) for v in metadata['values']))
+                original=encode_key_tuples(sources[metadata['documentId']],(key_request,),bun_executable=bun_executable)[0]
                 condition_keys.append({'conditionIndex':str(metadata['index']),'tupleHex':original.tuple_bytes.hex(),
                     'receiptBase64':base64.b64encode(original.original_receipt_bytes).decode('ascii')})
         cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s,%s)',
@@ -175,11 +175,11 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
             metadata=json.loads(bytes(cursor.fetchone()[0]));encoded_keys=[];requests=[];addresses=[]
             values={v['name']:v['value'] for v in metadata['values']}
             for key in metadata['keys']:
-                if any(name not in values or values[name].get('kind')!='string' for name in key['names']):continue
-                requests.append(KeyTupleRequest(metadata['moduleId'],metadata['recordId'],key['keyId'],tuple(values[name]['text'] for name in key['names'])))
+                if any(name not in values for name in key['names']):continue
+                requests.append(KeyTupleRequest(metadata['moduleId'],metadata['recordId'],key['keyId'],tuple(key_value_from_cell(values[name]) for name in key['names'])))
                 addresses.append(key['keyNumber'])
             if requests:
-                originals=encode_string_key_tuples(sources[metadata['documentId']],tuple(requests),bun_executable=bun_executable)
+                originals=encode_key_tuples(sources[metadata['documentId']],tuple(requests),bun_executable=bun_executable)
                 for address,original in zip(addresses,originals):
                     encoded_keys.append({'operationIndex':'0','keyNumber':address,'tupleHex':original.tuple_bytes.hex(),
                         'receiptBase64':base64.b64encode(original.original_receipt_bytes).decode('ascii')})

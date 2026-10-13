@@ -7411,3 +7411,49 @@ A separately authored named source profile uses explicit names and distinct sche
 The private named-subject read requires an exact immutable selection and copies it before the inspector. Within the existing original declared source/fact operation, it observes the native ordinary caller Subject, delegates actual and selected profile keys to original UMF, compares original tuple bytes before resource capture, then runs original collection/disclosure evaluation. Caller OIDs are rechecked after codecs and after evaluation. Three native groups pass9.503s: actual s1 permits r1 with salary Withheld; a selected s2 profile refuses at the exact native key mismatch; Staff writers refuse at both encoder calls; selection=None refuses before any host operation; original legacy list/single paths remain passing. Owned server cleanup is exact.
 
 This closes the previous separate-fixture source join for one explicitly authored fixture. Ordinary table grants remain broad ALL and unsafe for protected deployment; helper definition/dependency authentication, source/issuer provenance, complete role/helper/config writer closure, generic raw/graph installer, query lowering and final protected release remain open. Native captured bigint/TEXT/boolean reads do not admit arbitrary-width integer storage/writes; no implicit facet is invented. US-056-AC1/AC6/AC10 gain component evidence only; no backend case promotion and all132 remain required. Inputs, source pins and native receipts: `evidence/security-named-source-profile/receipt.json`.
+
+
+### Named subject helper definition snapshot — 2026-10-13
+
+The fixed named-subject read now checks its declared Staff field maps to truss.sec_staff.staff_id/TEXT and verifies the native helper definition before invocation. Selected fact owner, SQL language, signature, output modes/names/types, set-returning/invoker/strict/volatility/parallel/leakproof flags, numeric support OID, search path, body and parsed-body form must match the authored fixture. Nineteen exact TEXT descriptors are checked before row fetch. The authored SQL body is copied and checked against the prepared source pin before the inspector; the operation uses that captured source.
+
+Two native groups pass7.445s. Definer, same-key fake-body and search-path drift refuse before codecs with exact contained error and no cleanup error; original subject/key and legacy list controls remain passing. Ninety-five independent controls pass, separating actual original Weft/UMF source behavior from a synthetic native shell and metadata adverse controls. Server cleanup is exact.
+
+This is a definition snapshot, not a held helper/DDL/handler/config/role lifetime proof or authenticated complete callable/dependency/issuer provenance. Broad ordinary fixture grants remain unsafe; generic raw/graph installation and protected query release remain open. US-056-AC9/AC10 receive prerequisite evidence only; no backend case promotion and all132 remain required. Evidence/source pins: `evidence/named-helper-snapshot-20261013/receipt.json`.
+
+
+### Cooperative DDL-fenced named subject read — 2026-10-13
+
+A separate private entry requires exact Subject selection and DDL-barrier comparison. It forwards the original barrier through dependency/fact custody so native epoch fence and installed DDL readback precede declared fact locks, helper snapshot, codecs, capture and original policy evaluation on the same callback cursor. Existing snapshot-only and legacy paths remain separately scoped. DDL barrier metadata now checks19 TEXT descriptors before row fetch.
+
+Four native groups pass8.294s. Participating ALTER FUNCTION writers refuse at both encoder entry points and policy evaluator entry; disabled routine barrier refuses before helper/codecs with exact contained error and no cleanup error. Required selection/barrier None, missing table barrier, installed readback and legacy list controls remain passing. These probes witness selected entry points plus source ordering, not continuous observation of subprocess execution. Exact server cleanup passes. Z34.15.4 records1 UNSAT cooperating-writer exclusion and3 SAT release/disabled-hook/uncovered-writer controls under explicit current-hook, participation and conflicting-mode premises; this is not source/native refinement or liveness.
+
+Scope remains the existing six routine and three table tags. Event-trigger administration, uncovered DDL/cascade, handlers, role/grant/config and complete writer closure, authenticated dependency/issuer provenance, bypass-safe deployment and protected release remain open. Ordinary fixture table grants are still broad ALL and unsafe. US-056-AC9/AC10 gain prerequisites only; no backend case promotion and all132 remain required. Evidence/source pins: `evidence/named-ddl-composition-20261013/receipt.json`.
+
+
+### Pending cooperative helper writer and retry — 2026-10-13
+
+Native named-read controls now stage a separate helper ALTER FUNCTION transaction before acquisition. Both pending commit/abort paths refuse at native LockNotAvailable with exact contained phase, no cleanup error and zero codecs/evaluator calls. After writer abort the same original caller transaction retries successfully with original r1/Withheld. After writer commit, retry sees the changed helper and refuses at the exact helper snapshot before encoding. One expanded native group passes10.442s and owned server cleanup is exact.
+
+US-056-AC9/AC10 gain pending-writer/fresh-retry prerequisite evidence only. Existing selected-tag/cooperating-writer limits, broad unsafe ordinary fixture grants, complete administration/role/config/handler/issuer closure and protected release remain open. No backend case promotion; all132 remain required. Evidence: `evidence/named-ddl-pending-writer-20261013/receipt.json`.
+
+
+### Optional ALTER ROUTINE writer participation — 2026-10-13
+
+A PostgreSQL18.6 probe confirms the legacy six-tag hook permits ALTER ROUTINE SECURITY DEFINER while a qualified epoch/DDL cut is held, changing the native flag to true. A separate opt-in ALWAYS supplemental trigger covers ALTER ROUTINE using the same selected routine-writer function. Exact Boolean comparison selection defaults false; when true, native readback requires the exact third trigger, singleton tag, owner/function/body and flags. Legacy two-trigger qualification remains unchanged.
+
+Two native groups pass3.669s: legacy gap, opt-in exclusion with unchanged false flag, disabled/missing supplemental trigger refusal before callback with exact contained error/no cleanup error, and legacy readback. A caller bool dumper that raises is never invoked in either mode; trusted static SQL selection replaces the initially introduced Boolean parameter. Server cleanup is exact. This adds one cooperating tag only; complete event-trigger administration/cascade/other DDL/handler/role/config and issuer closure, generic installation and protected release remain open. US-056-AC9/AC10 gain prerequisites; no backend case promotion and all132 remain required. Evidence/source pins: `evidence/alter-routine-extension-20261013/receipt.json`.
+
+
+### ALTER ROUTINE extension in original subject/policy read — 2026-10-13
+
+The native named-read fixture now explicitly selects include_alter_routine=true and installs the supplemental hook. The original epoch/DDL/dependency/fact/helper/key/policy chain verifies all three triggers before subject work. Native ALTER ROUTINE writers refuse at both encoder entry points and evaluator entry. Pending ALTER ROUTINE transactions refuse with exact native lock error, clean containment and zero codecs/evaluator; abort permits retry in the same original caller transaction, while commit causes exact helper-snapshot refusal before encoding. Existing source/helper drift and disabled base barrier controls remain intact.
+
+Two native groups pass6.036s, including standalone legacy gap and optional missing/disabled trigger controls; cleanup is exact. Probes witness selected entry points, not continuous subprocess observation. US-056-AC9/AC10 gain integration prerequisites only. Seven cooperating routine tags are selected for this fixture; complete event-trigger administration/other DDL/cascade/role/config/handler/issuer closure, bypass-safe installation and protected release remain open. Broad ordinary grants stay unsafe. No backend case promotion; all132 remain required. Evidence: `evidence/alter-routine-composed-read-20261013/receipt.json`.
+
+
+### Graph scope metadata before decoding — 2026-10-13
+
+The private graph scope gateway now checks exact TEXT descriptors before fetching native caller identity, prior scope, registration result and final scope. Thirteen adverse metadata subcases refuse before row decoding and never invoke the callback. All16 PostgreSQL18.6 native graph controls pass3.774s; exact server cleanup passes. Python module boundaries pass922 imports. The existing qualified graph projection proof replays11 expected SAT/UNSAT queries with Z34.15.4, retaining its original premises and refinement exclusions.
+
+This verifies the selected association guard component only. Native graph IDs have not been mapped to original semantic business keys or integrated with ontology policy evaluation. Authenticated dependency/source/issuer provenance, complete writer/ACL closure, protected release and other backend implementations remain open. US-056 receives component evidence only; no backend case promotion and all132 remain required. Evidence: `evidence/graph-scope-metadata-20261013/receipt.json`.

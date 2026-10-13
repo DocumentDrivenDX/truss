@@ -1,0 +1,318 @@
+{
+  "count": 59,
+  "controls": [
+    {
+      "name": "exact metadata snapshot",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "foreign NAME descriptor position 0",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 1",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 2",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 3",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 4",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 5",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 6",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 7",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 8",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 9",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 10",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 11",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 12",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 13",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 14",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 15",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 16",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 17",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "foreign NAME descriptor position 18",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "absent descriptor",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "short descriptor",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "long descriptor",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "native value drift position 0",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 1",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 2",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 3",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 4",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 5",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 6",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 7",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 8",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 9",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 10",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 11",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 12",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 13",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 14",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 15",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 16",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 17",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "native value drift position 18",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "no row",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "duplicate row",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "short row",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "null body",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "missing staff",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "duplicate staff",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "wrong schema",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "wrong home",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "wrong reference",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "original selected owner mismatch",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "name": "missing column",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "wrong column",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "wrong column type",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "nontext source",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "empty source",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "oversize source",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "name": "captured original expected source positive",
+      "passed": true,
+      "fetches": 1
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "363d938734fd528fdd0b0580687939d7e50730a9d81daefea14eb3054973ccbb",
+      "bytes": 20690
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-subject.sql",
+      "sha256": "1048120c8500e5fcbae5c5c7ecd838755a85bfad3806be81ba1b1a779873fd77",
+      "bytes": 330
+    },
+    {
+      "path": "/private/tmp/named-helper-review-20261013/metadata_checks.py",
+      "sha256": "bec8821e1a7c2607016de145bd1e387824d4180fabae62806a5469910150c148",
+      "bytes": 4217
+    }
+  ],
+  "scope": "Actual snapshot validator with synthetic catalog descriptors/rows; no driver constructor, native query, privilege or lifetime qualification."
+}
