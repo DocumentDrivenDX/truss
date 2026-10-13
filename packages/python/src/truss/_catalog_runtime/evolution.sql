@@ -34,7 +34,7 @@ BEGIN
     ,count(*) FILTER (WHERE field->'declaration'->>'cardinality'='one' AND property_id IS NOT NULL AND o.props ? property_id::text
      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS TRUE
-     AND ((field->'declaration'->>'scalarType'='integer' AND field->'declaration'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (field->'declaration'->>'scalarType'='decimal' AND field->'declaration'->'facets'='{"precision":18,"scale":4}'::jsonb))
+     AND ((field->'declaration'->>'scalarType'='integer' AND field->'declaration'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (field->'declaration'->>'scalarType'='decimal' AND field->'declaration'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)))
      AND truss.valid_scalar_property(o.props->property_id::text,field->'declaration'->>'scalarType',true,field->'declaration'->'facets') IS NOT TRUE)
     ,count(*) FILTER (WHERE property_id IS NULL AND o.retained ? (field->'declaration'->>'name'))
     INTO missing_count,family_count,facet_count,retained_count FROM truss.object o WHERE o.type_id=selected_type;

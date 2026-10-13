@@ -102,7 +102,7 @@ BEGIN
    WHEN 'boolean' THEN tag:=1;payload:=CASE WHEN (cell->>'value')::boolean THEN decode('01','hex') ELSE decode('00','hex') END;
    WHEN 'integer' THEN tag:=2;payload:=convert_to(CASE WHEN token='-0' THEN '0' ELSE token END,'UTF8');
    WHEN 'decimal' THEN
-    IF facet IS DISTINCT FROM '{"precision":18,"scale":4}'::jsonb THEN RETURN false;END IF;
+    IF (facet IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS DISTINCT FROM TRUE THEN RETURN false;END IF;
     tag:=3;mantissa:=split_part(lower(token),'e',1);fraction_length:=length(split_part(mantissa,'.',2));
     coefficient:=ltrim(replace(ltrim(mantissa,'-'),'.',''),'0');
     IF coefficient='' THEN coefficient:='0';
@@ -114,11 +114,11 @@ BEGIN
       exponent_value:=CASE WHEN exponent_token='' THEN 0 ELSE exponent_token::int END;
       IF exponent_sign='-' THEN exponent_value:=-exponent_value;END IF;
      END IF;
-     shift:=4-fraction_length+exponent_value;
+     shift:=(facet->>'scale')::int-fraction_length+exponent_value;
      IF shift>=0 THEN coefficient:=coefficient||repeat('0',shift);ELSE coefficient:=left(coefficient,length(coefficient)+shift);END IF;
      IF left(token,1)='-' THEN coefficient:='-'||coefficient;END IF;
     END IF;
-    payload:=decode('04','hex')||convert_to(coefficient,'UTF8');
+    payload:=decode(CASE facet->>'scale' WHEN '2' THEN '02' ELSE '04' END,'hex')||convert_to(coefficient,'UTF8');
   END CASE;
   IF position>=total OR get_byte(tuple_bytes,position)<>tag THEN RETURN false;END IF;
   position:=position+1;number:=0;multiplier:=1;prefix_count:=0;

@@ -11,14 +11,14 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.25',
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.26',
            'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.5'}
 
 
 def compiler():
     try:
         import weft
-        if weft.__version__ != '0.4.20':
+        if weft.__version__ != '0.4.21':
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
@@ -47,7 +47,7 @@ def _relationship_key_types(types,maximum=128):
     for t in types:
         if t.get('nullable') is not False or set(t)!= {'family','facets','nullable'}:raise ValueError('Required key types required')
         family,facets=t['family'],t['facets']
-        valid=(family in ('string','boolean') and facets=={} or family=='integer' and facets in ({},{'integerWidth':{'bits':64,'signed':True}}) or family=='decimal' and facets=={'precision':18,'scale':4})
+        valid=(family in ('string','boolean') and facets=={} or family=='integer' and facets in ({},{'integerWidth':{'bits':64,'signed':True}}) or family=='decimal' and facets in ({'precision':18,'scale':4},{'precision':18,'scale':2}))
         if not valid:raise ValueError('Supported exact relationship key required')
     return types
 

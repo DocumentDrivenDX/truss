@@ -28,7 +28,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         prepared=assembly.prepare_catalog(tuple(documents),source_version=json.loads(documents[0].content)['umf'],bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.documents=tuple(d.document for d in prepared.documents)
         registered=assembly.accept_in_transaction(tx,prepared,request_key='create-model')
-        self.assertIsInstance(registered,Ok)
+        self.assertIsInstance(registered,Ok,repr(registered)+" "+str(host._custody.last_attempt.error))
         view=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request()).value.view
         self.types={(d.reference.owner.document_id,d.reference.authored_identity):d.reference
                     for d in view.definitions if d.reference.kind=='type'}
