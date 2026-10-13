@@ -127,7 +127,10 @@ BEGIN
   IF old IS NOT NULL THEN
    old_source:=truss.catalog_plan_source(prior,old);new_source:=truss.catalog_plan_source(fresh,row);
    IF old_source=new_source THEN CONTINUE;END IF;
-   IF (old_source-ARRAY['source','target','sourceMultiplicity','targetMultiplicity']) IS DISTINCT FROM (new_source-ARRAY['source','target','sourceMultiplicity','targetMultiplicity'])
+   IF (old_source-ARRAY['name','inverse','source','target','sourceMultiplicity','targetMultiplicity']) IS DISTINCT FROM (new_source-ARRAY['name','inverse','source','target','sourceMultiplicity','targetMultiplicity'])
+    OR (old_source ? 'inverse') IS DISTINCT FROM (new_source ? 'inverse')
+    OR (old_source->'name' IS DISTINCT FROM new_source->'name' AND (jsonb_typeof(old_source->'name') IS DISTINCT FROM 'string' OR jsonb_typeof(new_source->'name') IS DISTINCT FROM 'string'))
+    OR (old_source->'inverse' IS DISTINCT FROM new_source->'inverse' AND (jsonb_typeof(old_source->'inverse') IS DISTINCT FROM 'string' OR jsonb_typeof(new_source->'inverse') IS DISTINCT FROM 'string'))
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'source') x WHERE NOT (new_source->'source') @> jsonb_build_array(x.value))
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'target') x WHERE NOT (new_source->'target') @> jsonb_build_array(x.value)) THEN
     RAISE EXCEPTION 'relationship source meaning must be retained' USING ERRCODE='0A000';END IF;
@@ -137,7 +140,7 @@ BEGIN
     AND (old_source->'source' IS DISTINCT FROM new_source->'source' OR old_source->'target' IS DISTINCT FROM new_source->'target') THEN
     RAISE EXCEPTION 'tightening requires unchanged endpoint declarations' USING ERRCODE='0A000';END IF;
    IF old->>'lifecycle' IS DISTINCT FROM 'independent' OR candidate->>'lifecycle' IS DISTINCT FROM 'independent'
-    OR (old-ARRAY['source_min','source_max','target_min','target_max','definition_rev','definition_doc_ord','definition_document_id','doc_ord','since_rev']) IS DISTINCT FROM (candidate-ARRAY['source_min','source_max','target_min','target_max','definition_rev','definition_doc_ord','definition_document_id','doc_ord','since_rev'])
+    OR (old-ARRAY['name','source_min','source_max','target_min','target_max','definition_rev','definition_doc_ord','definition_document_id','doc_ord','since_rev']) IS DISTINCT FROM (candidate-ARRAY['name','source_min','source_max','target_min','target_max','definition_rev','definition_doc_ord','definition_document_id','doc_ord','since_rev'])
  THEN
     RAISE EXCEPTION 'relationship change requires unchanged independent endpoints and meaning' USING ERRCODE='0A000';END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
