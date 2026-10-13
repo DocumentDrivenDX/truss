@@ -217,6 +217,28 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    projected=self.admin.execute('EXECUTE transformed_cell('+arguments+')').fetchone()[0]
    self.assertEqual(projected,{'outcomeId':'transform0','disposition':'transformed','value':{'integerToken':left}})
    self.admin.execute('DEALLOCATE transformed_cell')
+   # Exact original query/profile sources drive the owner's existing result checker.
+   from hashlib import sha256
+   inspection_request=deepcopy(variant);inspection_request['sql']='SELECT r.salary AS amount FROM Resource r';inspection_request['parameters']={}
+   inspection_profile=json.loads(inspection_request['queryProfileJson']);inspection_profile['policySha256']=sha256(inspection_request['policyJson'].encode()).hexdigest();inspection_request['queryProfileJson']=json.dumps(inspection_profile)
+   probe={'target':{'documentId':'domain','moduleId':'m','elementId':'Resource'},'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'outputName':'amount','rows':[[projected]]}
+   checked=subprocess.run([binary],input=json.dumps({'request':inspection_request,'assessment':assessment,'resultProbe':probe}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(checked.returncode,0,checked.stderr.decode());self.assertTrue(json.loads(checked.stdout)['resultCellInspectionPassed'])
+   forged=deepcopy(probe);forged['rows'][0][0]['value']={'integerToken':'9'}
+   rejected=subprocess.run([binary],input=json.dumps({'request':inspection_request,'assessment':assessment,'resultProbe':forged}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(rejected.returncode,1);self.assertFalse(rejected.stdout)
+   self.assertEqual(json.loads(rejected.stderr)['code'],'WFT-SECURITY-RESULT')
+   for mutation in ('unknown-outcome','extra-member','withheld-value','wrong-arity','wrong-column'):
+    malformed=deepcopy(probe)
+    if mutation=='unknown-outcome':malformed['rows'][0][0]['outcomeId']='unknown'
+    elif mutation=='extra-member':malformed['rows'][0][0]['extra']=True
+    elif mutation=='withheld-value':malformed['rows'][0][0].update(outcomeId='withheld',disposition='withheld')
+    elif mutation=='wrong-arity':malformed['rows'][0].append(deepcopy(projected))
+    else:malformed['outputName']='other'
+    refused_result=subprocess.run([binary],input=json.dumps({'request':inspection_request,'assessment':assessment,'resultProbe':malformed}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(refused_result.returncode,1,mutation);self.assertFalse(refused_result.stdout,mutation)
+
+
    expected_ids=['transform0','transform1' if conflicting else 'transform0']
    self.assertEqual([t['outcomeId'] for t in field['transformations']],expected_ids)
    self.assertEqual([t['ruleId'] for t in field['transformations']],['left','right'])
@@ -224,6 +246,10 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    projected_second=self.admin.execute('EXECUTE second_transformed_cell('+arguments+')').fetchone()[0]
    self.assertEqual(projected_second,{'outcomeId':expected_ids[1],'disposition':'transformed','value':{'integerToken':right}})
    self.admin.execute('DEALLOCATE second_transformed_cell')
+   second_probe=deepcopy(probe);second_probe['rows']=[[projected_second]]
+   second_checked=subprocess.run([binary],input=json.dumps({'request':inspection_request,'assessment':assessment,'resultProbe':second_probe}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(second_checked.returncode,0,second_checked.stderr.decode())
+
 
 
    for a,b,w in product((False,None,True),repeat=3):
