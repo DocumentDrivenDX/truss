@@ -2110,3 +2110,15 @@ pass45.842s and final owner-read/second-session/TLS4cases pass41.107s.
 [Evidence](../04-build/evidence/catalog-subject-installation-20261013/README.md)
 qualifies US-056AC2/AC9/AC10 and US-057AC7 prerequisites, retaining explicit
 multi-role protected admission and complete lifecycle gaps.
+
+### Registered Project-membership native population — 2026-10-13
+
+`test_security_registered_callers_native` uses actual Alice/Bob/outsider native
+sessions and independent r1/r2/empty expectations, inactive/sibling/ownerless
+exclusion, withheld salary and unavailable raw SELECT. Exact registration map
+and PUBLIC helper ACL drift refuse before Subject/evaluation. Hostile text-domain
+execution is excluded through qualified checker casts and pinned evaluator path.
+Final six native/TLS cases pass53.069s. [Evidence](../04-build/evidence/registered-callers-20261013/README.md)
+retains failed historical setup/path runs, independent comparison controls and
+single-caller external registered transport. Full backend B01 admission remains
+unqualified; all132 required cases remain required.

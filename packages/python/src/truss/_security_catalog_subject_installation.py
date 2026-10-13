@@ -110,3 +110,25 @@ def bootstrap_catalog_subjects_in_transaction(host,transaction,*,mapping,binding
   if cursor.fetchmany(2)!=[(prior[0][0],)]:raise ValueError('Original Subject installation path restoration required')
   return PendingCatalogSubjects(identity,_SOURCE_SHA256,tuple(sorted(principals)))
  return host._run_operation(transaction,install)
+
+
+def snapshot_catalog_subjects(subjects):
+ """Bounded original comparison carriers; not an authenticated issuer token."""
+ if (type(subjects) is not PendingCatalogSubjects or type(subjects.installation_id) is not str
+     or not 1<=len(subjects.installation_id.encode())<=1024 or type(subjects.source_sha256) is not str or type(subjects.status) is not str or subjects.source_sha256!=_SOURCE_SHA256
+     or subjects.status!='pending_commit' or subjects.security_ready is not False
+     or type(subjects.bindings) is not tuple or not 1<=len(subjects.bindings)<=256
+     or any(type(b) is not tuple or len(b)!=2 or type(b[0]) is not int or not 1<=b[0]<=4294967295 or type(b[1]) is not str or not b[1] or '\0' in b[1] or len(b[1].encode())>4096 for b in subjects.bindings)
+     or tuple(sorted(subjects.bindings))!=subjects.bindings or len({b[0] for b in subjects.bindings})!=len(subjects.bindings)):
+  raise ValueError('Original bounded registered Subject comparisons required')
+ return PendingCatalogSubjects(subjects.installation_id,subjects.source_sha256,tuple((oid,key) for oid,key in subjects.bindings))
+
+
+def verify_registered_catalog_subjects_with_cursor(cursor,subjects,source):
+ """Caller must hold qualified object/map cuts; no complete role lifetime proof."""
+ subjects=snapshot_catalog_subjects(subjects)
+ if type(source) is not bytes or sha256(source).hexdigest()!=subjects.source_sha256:raise ValueError('Original registered Subject helper bytes required')
+ if _text_rows(cursor,'SELECT installation_id::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton',limit=1)!=[(subjects.installation_id,)]:raise ValueError('Original registered Subject installation required')
+ expected=tuple(oid for oid,key in subjects.bindings)
+ verify_catalog_subject_helpers_with_cursor(cursor,source.decode(),expected_callers=expected)
+ if _text_rows(cursor,'SELECT role_oid::pg_catalog.text,staff_key::pg_catalog.text FROM ONLY truss.catalog_subject_map ORDER BY role_oid',limit=256)!=[(str(oid),key) for oid,key in subjects.bindings]:raise ValueError('Original registered Subject map changed')

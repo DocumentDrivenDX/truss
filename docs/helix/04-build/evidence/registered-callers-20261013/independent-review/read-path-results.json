@@ -1,0 +1,184 @@
+{
+  "scope": "Actual nested execute AST with synthetic cursor/capture/evaluator seams. Pins initial and late SQL path and exact restoration; failures propagate. No native SQL execution or host rollback proof.",
+  "count": 7,
+  "passed": true,
+  "sourceSha256": "80ee5256e229a0f2e148f95d12f69609571d147582c4e1731f34e6a897550e4a",
+  "controls": [
+    {
+      "name": "positive-exact-restoration",
+      "passed": true,
+      "events": [
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "guard",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "lock",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "capture",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "evaluate",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "guard",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "capture",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "set",
+          "registered_hostile,pg_catalog"
+        ]
+      ]
+    },
+    {
+      "name": "missing-original",
+      "refused": true,
+      "events": []
+    },
+    {
+      "name": "nontext-original",
+      "refused": true,
+      "events": []
+    },
+    {
+      "name": "bad-set-1",
+      "refused": true,
+      "events": [
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "name": "bad-set-2",
+      "refused": true,
+      "events": [
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "guard",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "lock",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "capture",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "evaluate",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ]
+      ]
+    },
+    {
+      "name": "bad-set-3",
+      "refused": true,
+      "events": [
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "guard",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "lock",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "capture",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "evaluate",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "guard",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "capture",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "set",
+          "registered_hostile,pg_catalog"
+        ]
+      ]
+    },
+    {
+      "name": "positive-after-evaluator-path-drift",
+      "passed": true,
+      "events": [
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "guard",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "lock",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "capture",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "evaluate",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "set",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "guard",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "capture",
+          "pg_catalog, pg_temp"
+        ],
+        [
+          "set",
+          "registered_hostile,pg_catalog"
+        ]
+      ]
+    }
+  ]
+}

@@ -34,7 +34,7 @@ def serve(*,refuse_event_triggers=False,refuse_helper_public_grant=False,refuse_
     fixture.assertEqual(c.execute('SELECT SESSION_USER::text,CURRENT_USER::text').fetchone(),('consumer','consumer'))
     fixture.assertEqual(fixture.admin.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)").fetchone(),(2,))
     publish(packet)
-   return native.source.subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,fixture.host,fixture.tx,mapping,selection,inspector,relations,cut,guarded)
+   return native.source.subject.publish_registered_ddl_epoch_guarded_native_catalog_resource_read(h,t,fixture.host,fixture.tx,mapping,selection,inspector,relations,cut,fixture.registered_subjects,guarded)
   server=AuthenticatedReadChannel(credential,operation,tls_context=context,bind_address=('0.0.0.0',0));fixture.addCleanup(server.server_close)
   certificate=ssl.DER_cert_to_PEM_cert(client.get_ca_certs(binary_form=True)[0])
   # Owner hands only channel credential/public certificate to its admitted peer.

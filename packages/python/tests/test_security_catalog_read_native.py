@@ -29,7 +29,7 @@ class AcceptedCatalogReadNativeTests(accepted.AcceptedCatalogMappingTests):
   if status.returncode!=3 or socket.exists():raise RuntimeError('Owned catalog read server cleanup failed')
   shutil.rmtree(cls.root)
 
- def populated(self):
+ def populated(self,*,extra_rows=()):
   source=json.loads((read.BASE/'mapping-request.json').read_bytes());self.accepted(source=source)
   self.host.detach();self.admin.commit()
   self.admin.execute('CREATE ROLE catalog_fact_reader;CREATE ROLE catalog_fact_writer')
@@ -45,6 +45,7 @@ class AcceptedCatalogReadNativeTests(accepted.AcceptedCatalogMappingTests):
         ('Resource',{'resourceId':'r1','salary':100}),('Resource',{'resourceId':'r2','salary':200}),('Resource',{'resourceId':'orphan','salary':300}),
         ('Ownership',{'ownerId':'o1','ownerResource':'r1','ownerProject':'p1'}),('Ownership',{'ownerId':'o2','ownerResource':'r2','ownerProject':'p2'}),
         ('Assignment',{'assignmentId':'a1','assignmentStaff':'s1','assignmentProject':'p1','active':True}),('Assignment',{'assignmentId':'a2','assignmentStaff':'s1','assignmentProject':'p2','active':False})]
+  rows+=list(extra_rows)
   operations=[]
   for index,(record,fields) in enumerate(rows):
    values=tuple(AuthoredValue(name=k,value=BooleanValue(value=v) if type(v) is bool else TextValue(kind='integer' if type(v) is int else 'string',text=str(v))) for k,v in fields.items())

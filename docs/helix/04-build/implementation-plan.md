@@ -7849,3 +7849,18 @@ map directly. [Qualified construction evidence](evidence/catalog-subject-install
 retains source/review/wheel/external results. Complete issuer/role/handler lifetime
 and backend admission remain open; US-056AC2/AC9/AC10, US-057AC7 and
 CONTRACT-063/STP-056 B01/B11/B12 prerequisites only. All132 remain required.
+
+### Registered native callers across Project ownership — 2026-10-13
+
+The explicit registered producer snapshots installed role/Staff bindings and
+requires source epoch plus qualified object/map cuts. Exact native map/helper
+ACL comparisons surround Subject/evaluation; actual caller OID/key must be in
+the registration. Alice(s1 activep1/inactivep2), Bob(s2 activep2) and outsider(s3)
+sessions receive r1/r2/no rows with withheld salary and no raw object/map SELECT.
+Final six native cases pass53.069s. Astra prompted qualifying new checker casts
+and strict source/status strings; the full hostile-domain case additionally
+required operation-local read path pinning/restoration. Failed setup and hostile
+path runs remain retained. [Qualified registered-caller evidence](evidence/registered-callers-20261013/README.md)
+keeps B01 population distinct from complete issuer/lifetime/backend admission.
+All132 required cases remain unchanged; US-056AC2/AC6/AC9/AC10, US-057AC7 and
+CONTRACT-063/STP-056 B01/B11/B12 prerequisites only.
