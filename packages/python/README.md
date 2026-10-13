@@ -15,15 +15,33 @@ ordinary-person/module boundaries.
 
 ## Run a real workflow
 
-Python 3.11 or later, Bun 1.4.2, and the Weft Python extension built with the
-`truss-postgresql-pg18` feature are required. This feature must expose runtime
-backend `0.4.8`; the conformance-only backend is not the public integration.
-Install the package from this repository:
+Python 3.11 or later, Bun 1.4.2, and a Rust/Cargo toolchain are required for
+this source-install path. The Weft wheel must include `truss-postgresql-pg18`
+and runtime backend `0.4.8` with Truss0.38 compatibility. The old conformance
+build helper does not build this runtime. In a fresh Python virtual environment,
+from the Truss repository root:
 
 ```sh
-python -m pip install './packages/python[local,native]'
+python -m pip install maturin==1.9.6
+git clone https://github.com/DocumentDrivenDX/weft.git ../weft
+python scripts/build-weft-runtime-python.py ../weft /tmp/truss-weft-build
+python -m pip install --force-reinstall --no-deps /tmp/truss-weft-build/wheels/*.whl
+python -m pip install --find-links \
+  https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
+  './packages/python[local,native]'
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```
+
+The PG18 wheel is distributed through the owner GitHub release rather than the
+configured Python package index; `--find-links` lets pip select the matching
+Python/platform wheel.
+
+Reuse an existing Weft clone if available. The helper builds committed source
+`cb10d8e6fbf60c43c0daa0c2e7422375fd1e13e5`, independent of the clone's working
+files. Normal builds may download Cargo dependencies; add `--offline` only when
+they are cached. Force-reinstall matters because older conformance wheels also
+use package version0.1.0. The helper uses maturin from the caller's Python environment and builds for
+that same interpreter.
 
 Use a new or empty directory. The [example](examples/adopter_workflow.py) installs
 the runtime, registers the [original UMF document](examples/notes.umf.json),
@@ -33,21 +51,11 @@ dry-run, imports a Note and saves feed pages durably before source ACKs. It uses
 administrator SQL only for role setup. Data and sink files remain after the
 server stops; a failed run preserves source state for diagnosis.
 
-The [portable public preview](../../docs/helix/04-build/corpus/public-python/0.4/README.md)
-adds reader/outsider refusals and mixed created/skipped/rejected imports. Its
-JSON file supplies calls, transaction phases and semantic expectations:
-
-```sh
-python packages/python/examples/run_corpus.py \
-  docs/helix/04-build/corpus/public-python/0.9/adopter-basic.json \
-  /tmp/truss-public-preview --bun bun
-```
-
-The sibling `exact-scalars.json` case exercises all six scalar types through
-public creation, import, key lookup and complete SQL reads.
-
-This is one implementation's `passed_preview`, not completion of the full
-consumer corpus or independent native interchange.
+The [portable public preview0.9](../../docs/helix/04-build/corpus/public-python/0.9/README.md)
+retains its original runtime0.35/Weft0.4.8 pins and basic/exact-scalar observations.
+Use its matching historical package for reproduction; it is not a current0.38
+quickstart or full cross-language interchange claim. The current workflow above
+uses the current installed public API.
 
 For a local server with an installed Truss candidate, use the explicit launcher
 option after installing the `[local,native]` extras:

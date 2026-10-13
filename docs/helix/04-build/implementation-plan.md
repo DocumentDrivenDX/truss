@@ -7235,3 +7235,16 @@ A thin host binding captures original source/key/mapping/encoding selection and 
 ### Original ontology subject selection — 2026-10-13
 
 The source-bound Weft inspector reconstructs the original catalog, ontology, policy, SQL and admitted query profile, then checks the selected source SHA/Record/Key against the original ontology Subject. A closed source-only diagnostic returns `securityReady:false`; no native admission is produced. Truss requires this synchronous inspector before native observation or original UMF key encoding. Deferred async/generator functions are refused before invocation, including across realms; ordinary rejected Promise returns are observed before refusal. Arbitrary configured callback effects, hidden asynchronous wrappers and modified Promise constructors/species remain trusted-code premises. Original helper authenticity, actual subject existence/current binding, issuer authority and protected release remain unqualified. Retained evidence: `evidence/ontology-subject-selection-20261013/receipt.json`. Seven core transport tests, sixteen module controls, twenty-one host tests, thirteen native subject groups and eight predicate regressions pass; independent actual-binary review passes thirty-nine controls with every refusal producing empty stdout. Owner-only selection callbacks are test doubles; native fixtures use the original Weft inspector. No required backend case is promoted; all132 remain required.
+
+## Owner queue correction — 2026-10-13
+
+The owner defers the independent second implementation and removes full
+interchange from the Python release gates; ADR-003 records the amendment.
+Do not build a second engine to finish this release. Finish the adopter-facing
+Python package, dependency/install instructions and basic public workflows;
+resolve concrete consumer gaps and defects. Formal/performance/exhaustive
+verification expansions and historical evidence inventories are deferred
+unless they establish a specific support claim the release actually makes.
+Review remaining work against this rule before starting it. Existing protected
+security work stays scoped to its owner and must not block ordinary API release
+through claims of capabilities the Python release does not advertise.

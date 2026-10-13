@@ -19,6 +19,25 @@ ddx:
 
 # ADR-003: Other-language implementations conform to shared contracts and a corpus
 
+## Accepted owner amendment — Python release scope, 2026-10-13
+
+The owner selected finishing the Python release first and deferring a second
+implementation. Independent bidirectional interchange is not a Python release
+gate. Earlier mandatory interchange language below is superseded for this
+release; it remains a possible future compatibility exercise, not authorized
+work to build another implementation. Reconsider its value when a real second
+consumer or implementation exists.
+
+Release work prioritizes a usable public Python API, basic real PostgreSQL
+workflows, actual adopter integration, reproducible dependency installation,
+and necessary migrations. Keep tests for real correctness/security failures;
+do not expand formal proofs, performance campaigns, exhaustive conformance or
+verification inventories merely to satisfy historical process gates. Add work
+when a concrete adopter requirement, observed defect or advertised support
+claim justifies it. Preserve existing evidence without rerunning it to enlarge
+counts. Shared corpus examples can document behavior without implying complete
+multi-engine or cross-language qualification.
+
 ## Accepted owner amendment — Python driver baseline, 2026-10-11
 
 The owner selects maintained stock psycopg 3 as Truss's baseline Python driver, using supported APIs. Truss owns the choice and qualification; consumer driver preferences and pg8000 experimental receipts do not select it. Pin the tested psycopg implementation/libpq build, sync or async mode and server/deployment tuple before claiming support.
