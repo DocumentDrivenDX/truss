@@ -1,0 +1,12 @@
+test_caller_rollback_leaves_no_marker_or_archive (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_caller_rollback_leaves_no_marker_or_archive) ... ok
+test_hostile_function_resolution_is_pinned_and_restored (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_hostile_function_resolution_is_pinned_and_restored) ... ok
+test_ordinary_caller_cannot_install_marker (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_ordinary_caller_cannot_install_marker) ... ok
+test_original_release_catalog_archive_and_no_repair (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_original_release_catalog_archive_and_no_repair)
+@covers US-056-AC10; source issuer construction prerequisite. ... ok
+test_substituted_catalog_has_no_marker_effect (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_substituted_catalog_has_no_marker_effect) ... ok
+test_suppressed_archive_insert_refuses_and_rolls_back (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_suppressed_archive_insert_refuses_and_rolls_back) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 47.941s
+
+OK

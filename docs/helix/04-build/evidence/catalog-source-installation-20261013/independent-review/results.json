@@ -1,0 +1,132 @@
+{
+  "scope": "Actual Python initializer with synthetic cursor/host and substituted trusted dependencies. No native execution, SQL refinement, rollback or authority claim.",
+  "sourceSha256": "59549c9648d2d09c7d80b4fdfa611efea8be13415449f78d4104acc71caac626",
+  "manifestSha256": "6a4c12bc481e7c181bf99c2947f79496e291abee55389ee2344e6183582d5c2f",
+  "controls": [
+    {
+      "control": "positive-safe-path-exact-readback-restoration",
+      "passed": true
+    },
+    {
+      "control": "profile:0",
+      "passed": true
+    },
+    {
+      "control": "profile:1",
+      "passed": true
+    },
+    {
+      "control": "profile:2",
+      "passed": true
+    },
+    {
+      "control": "source-drift",
+      "passed": true
+    },
+    {
+      "control": "existing",
+      "passed": true
+    },
+    {
+      "control": "marker-missing",
+      "passed": true
+    },
+    {
+      "control": "archive-missing",
+      "passed": true
+    },
+    {
+      "control": "archive-extra",
+      "passed": true
+    },
+    {
+      "control": "marker:0",
+      "passed": true
+    },
+    {
+      "control": "marker:1",
+      "passed": true
+    },
+    {
+      "control": "marker:2",
+      "passed": true
+    },
+    {
+      "control": "marker:3",
+      "passed": true
+    },
+    {
+      "control": "marker:4",
+      "passed": true
+    },
+    {
+      "control": "marker:5",
+      "passed": true
+    },
+    {
+      "control": "marker:6",
+      "passed": true
+    },
+    {
+      "control": "marker:7",
+      "passed": true
+    },
+    {
+      "control": "marker:8",
+      "passed": true
+    },
+    {
+      "control": "marker:9",
+      "passed": true
+    },
+    {
+      "control": "archive:0",
+      "passed": true
+    },
+    {
+      "control": "archive:1",
+      "passed": true
+    },
+    {
+      "control": "archive:2",
+      "passed": true
+    },
+    {
+      "control": "archive:3",
+      "passed": true
+    },
+    {
+      "control": "archive:4",
+      "passed": true
+    },
+    {
+      "control": "archive:5",
+      "passed": true
+    },
+    {
+      "control": "pre-host:original_request:bytes:0",
+      "passed": true
+    },
+    {
+      "control": "pre-host:original_request:bytearray:1",
+      "passed": true
+    },
+    {
+      "control": "pre-host:original_request:bytes:4000001",
+      "passed": true
+    },
+    {
+      "control": "pre-host:accepted_catalog_assessment:bytes:0",
+      "passed": true
+    },
+    {
+      "control": "pre-host:accepted_catalog_assessment:memoryview:1",
+      "passed": true
+    },
+    {
+      "control": "pre-host:accepted_catalog_assessment:bytes:1048577",
+      "passed": true
+    }
+  ],
+  "passed": 31
+}
