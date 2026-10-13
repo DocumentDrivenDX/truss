@@ -1,0 +1,200 @@
+{
+  "scope": "Actual captured pre-fix and current wrappers, actual recipe/row projection, genuine original UMF evaluator, retained historical runtime 0.40 native packet. Native recapture and host/cursor shells are synthetic. Demonstrates mutable expected carrier custody only, not a native catalog attack or runtime refinement.",
+  "observations": [
+    {
+      "mutable": false,
+      "nativeCatalogDrifts": false,
+      "outcome": "published",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      },
+      "implementation": "capturedPreFix"
+    },
+    {
+      "mutable": false,
+      "nativeCatalogDrifts": true,
+      "outcome": "Accepted catalog changed during owned evaluation",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": null,
+      "implementation": "capturedPreFix"
+    },
+    {
+      "mutable": true,
+      "nativeCatalogDrifts": false,
+      "outcome": "published",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      },
+      "implementation": "capturedPreFix"
+    },
+    {
+      "mutable": true,
+      "nativeCatalogDrifts": true,
+      "outcome": "published",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      },
+      "implementation": "capturedPreFix"
+    },
+    {
+      "mutable": false,
+      "nativeCatalogDrifts": false,
+      "outcome": "published",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      },
+      "implementation": "currentFixed"
+    },
+    {
+      "mutable": false,
+      "nativeCatalogDrifts": true,
+      "outcome": "Accepted catalog changed during owned evaluation",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": null,
+      "implementation": "currentFixed"
+    },
+    {
+      "mutable": true,
+      "nativeCatalogDrifts": false,
+      "outcome": "Original accepted-catalog fixture mapping required",
+      "hostEntries": 0,
+      "captureCalls": 0,
+      "result": null,
+      "implementation": "currentFixed"
+    },
+    {
+      "mutable": true,
+      "nativeCatalogDrifts": true,
+      "outcome": "Original accepted-catalog fixture mapping required",
+      "hostEntries": 0,
+      "captureCalls": 0,
+      "result": null,
+      "implementation": "currentFixed"
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/accepted-catalog-policy-review-20261013/source-at-dispatch.py",
+      "sha256": "4eb62be0c282167ec7c381751886a56f2edb60a5f97696a4d58ddae387b51522",
+      "bytes": 7220
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_read.py",
+      "sha256": "e64a0eed50eb7317d1e67ba045085f1e6feda02cfbcc1521f4d232213fa037f5",
+      "bytes": 7442
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-policy-review-20261013/custody_compare.py",
+      "sha256": "c33a482c75f76d105ab6536a81cfa0b876f737500363feae32a3bd317b3b4538",
+      "bytes": 3610
+    }
+  ],
+  "packetPins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/runtime040/request.json",
+      "sha256": "359743a8140b8d88da17bc22ceb5a56b56402417411db63cbe7133f062a2cf8d",
+      "bytes": 9573
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/runtime040/assessment.json",
+      "sha256": "84516c5f3bda889b446d0b613fd1bb2f3bb37ff3ab07d2965579ba5506dc5e85",
+      "bytes": 10408
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/runtime040/capture.json",
+      "sha256": "0cb4522789a1e281d8ffb3054e17f30f3207db5aea1f9d8d6885afb1547c75a9",
+      "bytes": 4814
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/runtime040/decision.json",
+      "sha256": "3966cf8f43266a70436f3cb7ca9ec3d0e1345f41d8f16f0259bc5429945a769f",
+      "bytes": 361
+    }
+  ]
+}

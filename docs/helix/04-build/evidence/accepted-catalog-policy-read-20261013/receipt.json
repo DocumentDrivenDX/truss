@@ -1,0 +1,68 @@
+{
+  "status": "component-passed",
+  "securityReady": false,
+  "criteriaPrerequisites": [
+    "US-056-AC2",
+    "US-056-AC6",
+    "US-056-AC9",
+    "US-056-AC10"
+  ],
+  "backendCasePromotion": false,
+  "nativeGroups": 2,
+  "nativeSeconds": 14.095,
+  "ordinaryCreatedRecords": 10,
+  "edgeRows": 0,
+  "assessmentVersion": "truss.accepted-catalog-assessment/0.1",
+  "catalogRelease": "truss-catalog-runtime/0.41-candidate",
+  "catalogReleaseSha256": "2a24f1b1a9755557c16a74108fa5e578ca8285b6490b04e74b5a1d1e2f52cdfa",
+  "catalogRevision": "1",
+  "modelPins": [
+    {
+      "documentId": "domain",
+      "revision": "named-schema-1",
+      "sha256": "1eb64de9c3cdf8fcde1c1d37325136330508686cca70b6550c780df7d74085e8",
+      "umfVersion": "0.8.0"
+    }
+  ],
+  "versions": {
+    "python": "3.11.17",
+    "psycopg": "3.3.6",
+    "postgresql": "18.6",
+    "bun": "1.4.2"
+  },
+  "originalCompiler": {
+    "path": "/private/tmp/weft-security-mapping-native-20261013/weft.so",
+    "sha256": "2c62713f8b0b2f06d8537267405cad027cf44db3d832faefbd37920ba958bc0f"
+  },
+  "sourceDigests": {
+    "scripts/security_catalog_read.py": "e64a0eed50eb7317d1e67ba045085f1e6feda02cfbcc1521f4d232213fa037f5",
+    "scripts/security_graph_read.py": "2623640cb2a26efd3a0419d64fae2e0e7cec8fefa54d031fee63bee165490152",
+    "scripts/security_owned_read.py": "a81227203e5f8ad1b74e739e1586d3a3887b27dfa6e67ee85ba9b181fdc80962",
+    "scripts/evaluate-security-captured-identity-fixture.ts": "0a33a7605ccb8bbe74b54cccb338cc84d1b3dbba5cef54e5336e7ea1209c5c43",
+    "packages/python/tests/test_security_catalog_read_native.py": "2cb9e013040fc8df0890928803a7767b7d3401e0aa3616911f137fa83425d673",
+    "packages/python/src/truss/_security_catalog_assessment.py": "b2d6864b7eb3ae7c56d6f678adb1a6005caf614fabf4708db5c2219f733096e2",
+    "packages/python/src/truss/_security_catalog_mapping.py": "0a9740e62910b4684a1d50131e7291c2cd23cc908df586e68a91d7b9a705a57f",
+    "packages/python/src/truss/_security_mapping.py": "b613475fb393e5002b58496376637b41ffca4005a02c9baa95e3f9ccb6fa6e80",
+    "packages/python/src/truss/preparation.py": "03f98cbcce659105967d9cd83eba542bfd56d03303619155563f2453f67f1c1d",
+    "packages/python/src/truss/catalog_runtime.py": "a375f8184eb8e85d54b0e499de59161e08167bcdf2f03b243a429a5193da6912",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "2a24f1b1a9755557c16a74108fa5e578ca8285b6490b04e74b5a1d1e2f52cdfa",
+    "packages/python/src/truss/_catalog_runtime/read.sql": "1cabbef35cfc618980e122498e8c9f4ebc19aa0258c251db52c4b746f0cb0ad7",
+    "packages/python/src/truss/_catalog_runtime/query.sql": "9e832c02b5ebe2c7a87e257f11aaa2bf067247e08788a468d816130bd977325f",
+    "packages/python/src/truss/_catalog_runtime/traversal.sql": "3c262ceec26d259cb3b7d34918c717193a645c158e99b9584cb5f4f2996eac0c",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "9ce34d2ba6d216553fc6de485b1f5ae7db8221e9561b718e0f14a32fee96e683",
+    "packages/python/src/truss/_umf_core08/manifest.json": "cff7dd91f17781f64b6954dc0baa370aad468704e6698ee93f50a434aac86c67",
+    "packages/python/src/truss/_umf_key_tuples.py": "b5b88fd89fe8e215396e31da62d925b698a15749d236d3dfbb47c57a415f23f9",
+    "packages/python/src/truss/_group_runtime.py": "cb4240477fb3536edcad3cccf103c324acb5ef02e0568888a56ee3892ae01bf2"
+  },
+  "limits": [
+    "Exact shared named fixture only; string-key/boolean required JSON-property transport subset.",
+    "Ontology association Records preserve actual object homes; this does not qualify direct-edge bindings.",
+    "Administrative Subject selection and original installed owner/issuer/runtime premises; not authenticated current graph authority.",
+    "Object SHARE excludes selected cross-transaction DML; no same-transaction mutation/ABA, complete DDL/role/ACL/config/callable writer closure or protected release qualification.",
+    "Native accepted-source recapture supplies actual catalog correspondence, not authority from retained mapping artifacts.",
+    "100-row/1MiB packet bounds limit retained/results, not native scan/libpq heap.",
+    "No backend case promotion; all132 required cases remain."
+  ],
+  "integrationBase": "8ea51b7a",
+  "moduleBoundaryImports": 932
+}
