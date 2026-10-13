@@ -8,8 +8,8 @@ from typing import Mapping
 from .execution import Error, Ok, ExecutionFailure
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.3.0',
-           'targetProfile': 'truss-runtime-pg18.6/0.3', 'interfaceVersion': 'weft-backend/0.2.0'}
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.0',
+           'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.0'}
 
 
 def compiler():
@@ -102,7 +102,7 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
 
 
 def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
-              maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor):
+              maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor, read_profile):
     try:
         valid = type(sql) is str and 1 <= len(sql.encode('utf8')) <= 1048576 and '\0' not in sql
         valid = valid and type(document_ids) is tuple and 1 <= len(document_ids) <= 32 and len(set(document_ids)) == len(document_ids)
@@ -112,6 +112,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         valid = valid and all(type(v) is not str or len(v.encode('utf8')) <= 1048576 and '\0' not in v for v in parameters.values())
     except (UnicodeError, TypeError, ValueError):
         valid = False
+    valid=valid and (read_profile is None or type(read_profile) is str and read_profile in ('entity-page','related-entity-page','count-summary'))
     if not valid:
         return Ok(QueryRefused(code='invalid_query'))
     if any(type(n) is not int for n in (maximum_rows, maximum_scan_rows, maximum_bytes)) or not 1 <= maximum_rows <= 10000 or not 1 <= maximum_scan_rows <= 10000 or not 1 <= maximum_bytes <= 16777216:
@@ -146,6 +147,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                    'modules': bundle['modules'], 'parameters': values, 'options': {'allowCandidate': True},
                    'target': {'backendId': BACKEND['backendId'], 'backendVersion': BACKEND['backendVersion'],
                               'targetProfile': BACKEND['targetProfile'], 'bindingJson': binding_json, 'bindingSha256': binding_sha}}
+        if read_profile is not None:request['readProfile']={'version':'weft-application-read/0.2.0','subset':read_profile}
         artifact = json.loads(compile_query(json.dumps(request, ensure_ascii=False)))
         if artifact['status'] != 'compiled':
             cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)

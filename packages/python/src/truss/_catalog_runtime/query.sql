@@ -29,14 +29,14 @@ REVOKE ALL ON FUNCTION truss.query_numeric_value(text,text) FROM PUBLIC;
 -- Fixed, independently authorized query sources; no arbitrary SQL gateway.
 CREATE FUNCTION truss.query_scope(binding jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_document jsonb;selected_record jsonb;selected_field jsonb;source truss.schema_doc%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;module jsonb;selected_relation jsonb;relation truss.rel_def%ROWTYPE;
+DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_document jsonb;selected_record jsonb;selected_field jsonb;source truss.schema_doc%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;module jsonb;selected_relation jsonb;relation truss.rel_def%ROWTYPE;selected_key jsonb;key_definition truss.key_def%ROWTYPE;
 BEGIN
  PERFORM truss.runtime_person(false);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.3'
+ IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.4'
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.28-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.29-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
@@ -62,6 +62,13 @@ BEGIN
    IF NOT FOUND OR property.element IS DISTINCT FROM selected_field->'identity'->>'element' OR property.declaration_module IS DISTINCT FROM selected_field->'identity'->>'module'
     OR selected_field->'identity'->>'documentId' IS DISTINCT FROM owner.document_id OR selected_field->'identity'->>'revision' IS DISTINCT FROM selected_record->'identity'->>'revision'
     OR NOT truss.runtime_can_read(owner.document_id,property.declaration_module) THEN RAISE EXCEPTION 'accepted authorized property mapping required' USING ERRCODE='42501';END IF;
+  END LOOP;
+  IF jsonb_typeof(selected_record->'keys') IS DISTINCT FROM 'array' OR jsonb_array_length(selected_record->'keys')<>(SELECT count(*) FROM truss.key_def k WHERE k.type_id=owner.type_id AND k.retired_rev IS NULL)
+   OR (SELECT count(DISTINCT k.value->>'keyId') FROM jsonb_array_elements(selected_record->'keys') k)<>jsonb_array_length(selected_record->'keys') THEN RAISE EXCEPTION 'complete current key mapping required' USING ERRCODE='0A000';END IF;
+  FOR selected_key IN SELECT value FROM jsonb_array_elements(selected_record->'keys') LOOP
+   SELECT * INTO key_definition FROM truss.key_def k WHERE k.type_id=owner.type_id AND k.key_id=selected_key->>'keyId' AND k.retired_rev IS NULL;
+   IF NOT FOUND OR selected_key->'propertyIds' IS DISTINCT FROM (SELECT coalesce(jsonb_agg(p.prop_id::text ORDER BY p.n),'[]') FROM unnest(key_definition.prop_ids) WITH ORDINALITY p(prop_id,n)) THEN
+    RAISE EXCEPTION 'exact ordered native key mapping required' USING ERRCODE='55000';END IF;
   END LOOP;
  END LOOP;
  FOR selected_relation IN SELECT value FROM jsonb_array_elements(binding->'relationships') LOOP
@@ -99,6 +106,7 @@ BEGIN
   modules:=modules||jsonb_build_array(jsonb_build_object('documentJson',content,'pin',jsonb_build_object('documentId',selected_document_id,'revision',archived->>'documentRevision','sha256',archived->>'sha256','umfVersion',source->>'umf'),
    'selectedModuleIds',(SELECT jsonb_agg(m.value->>'id' ORDER BY m.value->>'id') FROM jsonb_array_elements(source->'modules') m)));
   records:=records||coalesce((SELECT jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',t.document_id,'revision',archived->>'documentRevision','module',t.module,'element',t.element),'typeId',t.type_id::text,
+    'keys',(SELECT coalesce(jsonb_agg(jsonb_build_object('keyId',k.key_id,'propertyIds',(SELECT jsonb_agg(p.prop_id::text ORDER BY p.n) FROM unnest(k.prop_ids) WITH ORDINALITY p(prop_id,n))) ORDER BY k.key_num),'[]') FROM truss.key_def k WHERE k.type_id=t.type_id AND k.retired_rev IS NULL),
     'fields',(SELECT coalesce(jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',t.document_id,'revision',archived->>'documentRevision','module',p.declaration_module,'element',p.element),'propertyId',p.prop_id::text) ORDER BY p.prop_id),'[]') FROM truss.prop_def p WHERE p.type_id=t.type_id AND p.retired_rev IS NULL)) ORDER BY t.type_id)
     FROM truss.type_def t WHERE t.document_id=selected_document_id AND t.retired_rev IS NULL AND NOT t.provisional AND t.kind='record'),'[]');
   relationships:=relationships||coalesce((SELECT jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',r.document_id,'revision',archived->>'documentRevision','module',r.module,'relationship',r.rel_id),
@@ -106,7 +114,7 @@ BEGIN
    FROM truss.rel_def r JOIN truss.rel_endpoint e ON e.rel_type_id=r.rel_type_id WHERE r.document_id=selected_document_id AND r.retired_rev IS NULL AND r.lifecycle='independent' AND r.directed AND NOT r.composition AND r.assoc_type_id IS NULL
    AND (SELECT count(*) FROM truss.rel_endpoint ep WHERE ep.rel_type_id=r.rel_type_id)=1),'[]');
  END LOOP;
- binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.3','schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
+ binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.4','schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
  'documents',pins,'records',records,'relationships',relationships,'maximumScanRows',maximum_scan_rows,'maximumResultRows',maximum_result_rows,'maximumBytes',maximum_bytes);
  PERFORM truss.query_scope(binding);
  result:=convert_to(jsonb_build_object('binding',binding,'bindingJson',binding::text,'modules',modules,'actorOid',(SELECT oid::text FROM pg_roles WHERE rolname=session_user))::text,'UTF8');
@@ -172,3 +180,30 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.query_edges(jsonb,int) FROM PUBLIC;
+
+
+CREATE FUNCTION truss.query_page_objects(binding jsonb,selected_type int,selected_key text) RETURNS TABLE(id bigint,props jsonb)
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE key_definition truss.key_def%ROWTYPE;component truss.prop_def%ROWTYPE;row record;counted int:=0;
+BEGIN
+ PERFORM truss.query_scope(binding);
+ IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='42501';END IF;
+ SELECT * INTO key_definition FROM truss.key_def k WHERE k.type_id=selected_type AND k.key_id=selected_key AND k.retired_rev IS NULL;
+ IF NOT FOUND OR cardinality(key_definition.prop_ids) NOT BETWEEN 1 AND 1024 THEN RAISE EXCEPTION 'bounded authored page key required' USING ERRCODE='0A000';END IF;
+ FOR component IN SELECT p.* FROM unnest(key_definition.prop_ids) WITH ORDINALITY k(prop_id,n) JOIN truss.prop_def p ON p.prop_id=k.prop_id AND p.type_id=selected_type ORDER BY k.n LOOP
+  counted:=counted+1;
+  IF component.retired_rev IS NOT NULL OR component.scalar_type<>'string' OR component.nullability<>'required' OR component.cardinality<>'one' OR component.home<>'json' OR coalesce(component.facets,'{}')<>'{}'::jsonb THEN RAISE EXCEPTION 'required string page key components required' USING ERRCODE='0A000';END IF;
+ END LOOP;
+ IF counted<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete page key required' USING ERRCODE='55000';END IF;
+ FOR row IN SELECT q.* FROM truss.query_objects(binding,selected_type) q LOOP
+  id:=row.id;props:=row.props;RETURN NEXT;
+ END LOOP;
+ -- The preceding SRF validates and bounds the complete source in this snapshot.
+ -- A collated text array uses the same C component equality as emitted ROW/order.
+ IF EXISTS(SELECT 1 FROM (SELECT ARRAY(SELECT o.props->p.prop_id::text->>'text' FROM unnest(key_definition.prop_ids) WITH ORDINALITY p(prop_id,n) ORDER BY p.n) COLLATE pg_catalog."C" AS key_values
+  FROM truss.object o WHERE o.type_id=selected_type) source GROUP BY source.key_values HAVING count(*)>1) THEN
+  RAISE EXCEPTION 'unique authored page key required' USING ERRCODE='55000';END IF;
+ PERFORM truss.query_scope(binding);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_page_objects(jsonb,int,text) FROM PUBLIC;

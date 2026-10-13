@@ -6796,3 +6796,22 @@ package and DocumentDrivenDX PostgreSQL18.6. This is integrated adopter evidence
 not full shared corpus or native interchange qualification. README corrections
 remove superseded present-tense unavailable/fresh-only statements while retaining
 historical profile constraints. See `evidence/python-adopter-workflow-20261012.json`.
+
+### Public compiled authored-key pages — 2026-10-12
+
+Runtime0.29/backend0.4 exposes optional `read_profile` on the existing public
+query method. Established Weft application-read0.2 resolves entity-page,
+related-entity-page and ungrouped count-summary; the backend maps selected
+required-string authored keys to exact current native key IDs and ordered
+property IDs. A fixed protected page source validates/bounds all objects and
+checks C-collated tuple uniqueness before WHERE/LIMIT. Typed ROW continuation
+uses the same C comparison as ORDER BY. All old backend/binding shapes remain
+closed to the new key metadata member.
+
+Continuation is live and caller-managed; a per-call catalog revision does not
+freeze values or promise exactly-once enumeration. No non-string page keys,
+grouped summary, page joins or opaque cursor API is claimed. Additive .28→.29
+upgrades retain five prior query routine identities/owners/ACLs. Basic public
+first/next/empty-tail, read-only, related-page and count workflows run with the
+existing scalar/relationship/adopter workflows. Evidence follows execution in
+`evidence/python-query-pages-20261012.json`.

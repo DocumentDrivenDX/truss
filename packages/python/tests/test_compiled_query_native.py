@@ -131,6 +131,8 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         self.assertEqual(run('SELECT b."B-label" FROM "B" b WHERE HAS_RELATED(b."B-A",KEY(:value,:label)) ORDER BY b."B-label"',{'value':'value','label':'one'}).rows,(('three',),('two',)))
         bounded='SELECT RELATED_KEYS(a."A-B",1) AS related FROM "A" a'
         self.assertEqual(run(bounded).rows,((QueryRelatedKeys(items=(('value','three'),),truncated=True),),))
+        related=query.query_in_transaction(tx,sql='SELECT a.* FROM "A" a WHERE HAS_RELATED(a."A-B",KEY(:value,:label)) ORDER BY a."A-value",a."A-label" LIMIT 1',document_ids=('adoc',),parameters={'value':'value','label':'two'},read_profile='related-entity-page')
+        self.assertIsInstance(related.value,QueryRows);self.assertEqual(len(related.value.rows),1)
         self.assertEqual(run('SELECT b."B-label",RELATED_KEYS(b."B-A",2) AS related FROM "B" b ORDER BY b."B-label"').rows,(('three',QueryRelatedKeys(items=(('value','one'),),truncated=False)),('two',QueryRelatedKeys(items=(('value','one'),),truncated=False))))
         host.detach();connection.commit();connection.execute('BEGIN READ ONLY;SET LOCAL statement_timeout=10000')
         host=adopt_psycopg_host(connection);tx=host.adopt_transaction(access_mode='read_only').value
@@ -142,3 +144,28 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         self.assertIsInstance(deleted,GroupSuccess)
         self.assertEqual(run(forward,{'value':'value','label':'two'}).rows,())
         self.assertEqual(run(bounded).rows,((QueryRelatedKeys(items=(('value','three'),),truncated=False),),))
+
+    def test_authored_composite_key_pages_and_count_profile(self):
+        def names(source):
+            for element in source['modules'][0]['elements']:
+                if element['kind']=='record':element['name']=element['id']
+        connection,host,assembly,tx=self.ready(names)
+        created,_,_=self.run_group(assembly,tx,tuple(self.create(label,alias=label) for label in ('gamma','alpha','beta')))
+        self.assertIsInstance(created,GroupSuccess)
+        host.detach();connection.commit();connection.execute('BEGIN READ ONLY;SET LOCAL statement_timeout=10000')
+        host=adopt_psycopg_host(connection);tx=host.adopt_transaction(access_mode='read_only').value
+        assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value
+        query=assembly.compiled_execution(assembly.compiled_selection).capability
+        def page(sql,parameters=None,profile='entity-page'):
+            result=query.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={} if parameters is None else parameters,read_profile=profile)
+            if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+repr(host._custody.last_attempt.error))
+            return result.value
+        first=page('SELECT a.* FROM "A" a ORDER BY a."A-value",a."A-label" LIMIT 2')
+        self.assertEqual(tuple(dict(zip(first.columns,row))['A-label'] for row in first.rows),('alpha','beta'))
+        continuation='SELECT a.* FROM "A" a WHERE (a."A-value",a."A-label") > (:value,:label) ORDER BY a."A-value",a."A-label" LIMIT 2'
+        second=page(continuation,{'value':'value','label':'beta'})
+        self.assertEqual(tuple(dict(zip(second.columns,row))['A-label'] for row in second.rows),('gamma',))
+        self.assertEqual(page(continuation,{'value':'value','label':'gamma'}).rows,())
+        self.assertEqual(page('SELECT COUNT(*) AS total FROM "A" a',profile='count-summary').rows,((3,),))
+        self.assertEqual(first.catalog_revision,second.catalog_revision)
+        self.assertIsNone(connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0])

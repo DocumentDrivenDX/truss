@@ -38,7 +38,7 @@ def consume(assembly: CatalogReferenceAssembly, transaction: TransactionHandle,
     queries=assembly.compiled_execution(assembly.compiled_selection)
     if isinstance(queries,CapabilityAvailable):
         queries.capability.query_in_transaction(transaction,sql='SELECT COUNT(*) AS total FROM Order o',
-            document_ids=('orders',),parameters={'active':True})
+            document_ids=('orders',),parameters={'active':True},read_profile='count-summary')
 
         from decimal import Decimal
         queries.capability.query_in_transaction(transaction,sql='SELECT o.amount FROM Order o WHERE o.amount = :amount',
