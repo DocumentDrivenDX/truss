@@ -1,0 +1,34 @@
+{
+  "review": "Independent bounded source, synthetic-host and retained-native review",
+  "date": "2026-10-13",
+  "gitHead": "d71743e94ec3ed7f170b27aa1816cc1b9ab48dfe",
+  "status": "No remaining actionable findings within reviewed scope",
+  "resolvedFinding": "Callable-only sinks returning coroutine/generator falsely produced Ok/published without execution; reproduced before fix, now refused with recognized object close and quarantine.",
+  "independentControls": "18 actual private-host controls with synthetic cursor/deadline/connection custody; not native qualification.",
+  "sourceChecks": "Existing _attempt, _run_operation and adopt_transaction AST unchanged; optional publication serializes immutable bytes before original final host checks; boundary allowlist adds only inspect to psycopg_host.",
+  "completionChecks": "Native final checks, RELEASE, timer stop and cursor close precede sink under lease; exact None required; failures preserve uncertainty, quarantine and retry none; declared deferred functions refuse before effects.",
+  "nativeEvidence": "Parent-executed, independently inspected: PostgreSQL18.6 publication5/62.098s, host regressions4/8.889s; boundary933; shutdown succeeded/status3/socket absent.",
+  "limits": [
+    "Trusted bounded synchronous sink, original source/issuer and continuous selected cut lifetime remain premises.",
+    "No sandbox of configured code, hidden deferred side effects or arbitrary async-generator cleanup; sink runs after native timer stops.",
+    "No rollback or acknowledged nondelivery after receiver effects; quarantine is not proof of exactly-once external delivery.",
+    "No protected endpoint, complete role/DDL/authority closure, security readiness or backend case promotion."
+  ],
+  "sha256": {
+    "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398",
+    "scripts/security_catalog_subject_read.py": "d69ace836cdb21580b9a3b47801492787cdc0f8e5f4cc50a8501df12ad1f40a7",
+    "scripts/check-module-boundaries.py": "248e6f97c47cf0284112c288effbe66392948b5cd3b30d297c613851651f6858",
+    "packages/python/tests/test_security_guarded_subject_native.py": "b871af73c0d8f921bde87e8d3e591b8ce1220576db7a1fe9c48498d36b6e7775",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/native.log": "aee46e7baf89244b355de2a4f0d7de7abe1e8916823905a50a3db3bb2795de2f",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/host-regression.log": "3d8a40e2652625d7b3560db4da21a32f85a98943bf86c2c6bc4d66106bb4749c",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/published-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/independent-review/check.py": "6e523c2034543842395fb92f881afd3250bd60b6af51c5baa7b07c0809903f73",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/independent-review/results.json": "b8c70c3e65505014cfdcdb6eb804ce253792f5abaf6dfbd49481dc6f07d15d21",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/independent-review/initial-check.py": "0d0631ebb74c6a9850c736457dd8c1ad041ca05155d4915ff6cf4b157b5bdd4a",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/independent-review/initial-results.json": "696016aa755eadc19e9b3889ad2d6eb0c45751e37fe4f394817cb2fe5b02dcee",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/independent-review/host-initial.py": "eb2847745bc621c50548d7d17a10bddb537ac4c740d2c736a9a60f68f07b6880",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/receipt.json": "fe77880fa37bd9ea2d59af7f90b460d96e789605ae998b03aa8d2227559492b5"
+  }
+}

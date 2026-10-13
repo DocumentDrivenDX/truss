@@ -1,0 +1,37 @@
+{
+  "review": "Independent bounded source and retained native evidence review",
+  "date": "2026-10-13",
+  "gitHead": "636f99f4daedbf61ec2c69cfbcb468892906bad1",
+  "scope": "test_public_revoker_waits_for_caller_transaction_settlement; test-only public writer drain component",
+  "status": "No actionable findings",
+  "checks": [
+    "Executor settles before writer starts; original caller transaction retains its object cut.",
+    "Native ordinary writer identity and false superuser/bypass flags are checked; public lookup and update use original documents.",
+    "Native blocking PID matches original caller, an object lock is ungranted, and no committed outcome is recorded before caller settlement.",
+    "Caller commits in finally; worker is joined with bounded cancellation fallback; errors are surfaced.",
+    "Worker requires GroupSuccess, COMMIT and IDLE; independent native false readback precedes fresh read.",
+    "Both guarded calls have identical argument AST; fresh transactions reuse original mapping and return no rows.",
+    "Retained decision packet, blocker identity, successful native log and exact cleanup independently checked."
+  ],
+  "nativeEvidence": {
+    "execution": "parent-executed; independently inspected, not rerun",
+    "postgresql": "18.6",
+    "tests": 1,
+    "seconds": 11.067,
+    "cleanup": "exit status 3; socket absent; runtime shutdown succeeded"
+  },
+  "limits": [
+    "Selected cooperative object-lock/current-state component with local fixture authentication.",
+    "No protected public endpoint, exhaustive publication/drain lifecycle, or complete truss.L03 acceptance claim.",
+    "Issuer/source/role/DDL/grant lifetime, old snapshots, caches and streaming remain unqualified.",
+    "Initial output already returned before the transaction-held drain barrier; no buffered/final protected or stream drain, and no L03/L05 promotion."
+  ],
+  "sha256": {
+    "packages/python/tests/test_security_guarded_subject_native.py": "afbb425408f56ebb1a8cd634917e61d68d5cbb7aa3601ebe22ef6c676bbd653b",
+    "docs/helix/04-build/evidence/public-revocation-drain-20261013/native.log": "389eed02534c09889a44ccdbd0aa6d87581ed0db1f15a94529a5548a648c9532",
+    "docs/helix/04-build/evidence/public-revocation-drain-20261013/cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "docs/helix/04-build/evidence/public-revocation-drain-20261013/drain-decisions.json": "456228f78febca3df3505701b5b9c5b8398b58f3303e9f3fece74e36f76b798b",
+    "docs/helix/04-build/evidence/public-revocation-drain-20261013/receipt.json": "2018b15cdff9050fcdcccb0dcd2f3264d3d54e892f3f0b93734c7be4dd9ae75f",
+    "docs/helix/04-build/evidence/public-revocation-drain-20261013/module-boundaries.log": "efa0e232ab5c91146d6740d061769d3c05f4aa749fe187654b63b112bb189e3b"
+  }
+}

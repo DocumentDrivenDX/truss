@@ -1,0 +1,203 @@
+{
+  "status": "no-remaining-actionable-findings-within-test-scope",
+  "reviewer": "Independent Astra Ultra review",
+  "date": "2026-10-13",
+  "gitHead": "5ada85e0087629f339c23137629d2f579fc96ee6",
+  "findings": [],
+  "resolvedFinding": "Initial55000 expectation was wrong for this composition: caller holds a conflicting object ShareLock in another backend, so executor writes block while acquiring locks before its BEFORE trigger runs. Final test sets100ms lock_timeout and requires55P03 plus exact native lock-timeout message. Prior same-backend55000 evidence retains its separate scope.",
+  "sourceChecks": [
+    {
+      "name": "only new method changes executable test AST relative to pinned prior review",
+      "passed": true
+    },
+    {
+      "name": "four selected statement events present",
+      "passed": true
+    },
+    {
+      "name": "per-attempt savepoint precedes100ms timeout and native command",
+      "passed": true
+    },
+    {
+      "name": "exact error and all four SQLSTATEs asserted",
+      "passed": true
+    },
+    {
+      "name": "each attempt rolls back and releases own savepoint",
+      "passed": true
+    },
+    {
+      "name": "native count verified before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "actual delegated implementation invoked with original arguments",
+      "passed": true
+    },
+    {
+      "name": "original outer result and disclosure required",
+      "passed": true
+    },
+    {
+      "name": "unchanged implementation packages/python/src/truss/_psycopg_fact_cut.py",
+      "passed": true
+    },
+    {
+      "name": "unchanged implementation scripts/security_catalog_subject_read.py",
+      "passed": true
+    },
+    {
+      "name": "unchanged implementation scripts/security_catalog_read.py",
+      "passed": true
+    },
+    {
+      "name": "unchanged implementation scripts/security-catalog-subject.sql",
+      "passed": true
+    },
+    {
+      "name": "unchanged implementation packages/python/src/truss/_psycopg_subject_observation.py",
+      "passed": true
+    },
+    {
+      "name": "unchanged implementation packages/python/src/truss/_umf_key_tuples.py",
+      "passed": true
+    },
+    {
+      "name": "unchanged implementation packages/python/src/truss/psycopg_host.py",
+      "passed": true
+    },
+    {
+      "name": "unchanged implementation packages/postgresql/native/authorization-fact-write-fence.sql",
+      "passed": true
+    },
+    {
+      "name": "final selected native target passes",
+      "passed": true
+    },
+    {
+      "name": "owned native cleanup confirmed",
+      "passed": true
+    }
+  ],
+  "nativeEvidenceInspected": {
+    "tests": 1,
+    "seconds": 9.604,
+    "postgresql": "18.6",
+    "notIndependentlyRerun": true,
+    "cleanup": {
+      "runtimeExitSucceeded": true,
+      "statusExitCode": 3,
+      "socketAbsent": true,
+      "serverVersion": "18.6"
+    },
+    "result": "Actual executor UPDATE/DELETE/INSERT/TRUNCATE attempts at original evaluator dispatch time out; each attempt rolls back its savepoint. Ten rows and original r1/Withheld result remain."
+  },
+  "limits": [
+    "Test-only addition; no library/runtime semantics changed.",
+    "Cross-backend lock exclusion in the existing two-host fixture; no new same-backend trigger attribution.",
+    "Probes precede actual evaluator subprocess invocation, not continuous observation inside it.",
+    "Helper/issuer/source lifetime, exclusive host use, complete DDL/role/ACL/callable closure and protected release remain premises or open work.",
+    "No profile readiness or backend-case promotion."
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_guarded_subject_native.py",
+      "sha256": "ae5b70a9a8794e145406ee79fbf6dcd696df52991f1dd982eb12cce4589969cb",
+      "bytes": 7885
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "2d82e3550463394dfe6dd1ebb3c31e7d83c8d34fdbc8723baf45b99503b0a537",
+      "bytes": 9453
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_subject_read.py",
+      "sha256": "cdc6c7a2e3635d5a576f84955f42c29683bfdb5c4b2ed14c08b37b08e8096831",
+      "bytes": 9083
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_read.py",
+      "sha256": "c69720e742f039295101a9d29b5a3617b0d9c5ec97c5284f558e35728800db9a",
+      "bytes": 8085
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-catalog-subject.sql",
+      "sha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+      "bytes": 2670
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+      "bytes": 9078
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "b5b88fd89fe8e215396e31da62d925b698a15749d236d3dfbb47c57a415f23f9",
+      "bytes": 11649
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/authorization-fact-write-fence.sql",
+      "sha256": "66b1a93c5a16d0f0727f9f0b8b91e77df7b1a7e9a9116c221f2cec65e6455381",
+      "bytes": 1067
+    }
+  ],
+  "priorReviewPin": {
+    "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-native-subject-20261013/independent-review/review.json",
+    "sha256": "63a08616985c14f2caacdedab657e66da898852666b601c37646820448216203",
+    "bytes": 10277
+  },
+  "governedDocumentationPins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "929d142a5081d530ac6fae079dae3b0dfdb9b7a0a6f65aedec9366cb7926c010",
+      "bytes": 333547
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/03-test/test-plan.md",
+      "sha256": "b11cd427acc65bdd614cb1113e57b6c26c248543bf452986ff685a9be38ec1e2",
+      "bytes": 191568
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "58af62ebca79db73e64856638c15404bf18495ad5086a450f677abecf94ecc76",
+      "bytes": 1100176
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-subject-writes-20261013/native.log",
+      "sha256": "2e35b0e058b3ced5e9b3afa3c78b3cea9b174aa0430d9e6c74c62703c0160ce2",
+      "bytes": 329
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-subject-writes-20261013/cleanup.json",
+      "sha256": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+      "bytes": 109
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-subject-writes-20261013/initial-failure.log",
+      "sha256": "d3a6a49151685e3de011edc584ab6a48b0e721667446c09be67d87a8914716b6",
+      "bytes": 1449
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-subject-writes-20261013/diagnostic-failure.log",
+      "sha256": "12c641f8cad339a7e892f35c3eb8e09343b77c8f7770b8aaa554c517bb996ca3",
+      "bytes": 1445
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-subject-writes-20261013/receipt.json",
+      "sha256": "819334d83980a7449a5b29ed2c7c43145d4b889b7c8d7037bc437324debfe29d",
+      "bytes": 1275
+    }
+  ],
+  "predecessorTestPin": {
+    "path": "/private/tmp/guarded-subject-writes-review-20261013/test-before-new-probe.py",
+    "sha256": "4d78cd8376310c7b9e3158b23b65e39084ec1f4736a4bb059bb50f4a72817902",
+    "bytes": 6006
+  }
+}

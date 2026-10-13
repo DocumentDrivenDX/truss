@@ -10,7 +10,7 @@ from truss._psycopg_subject_observation import _SubjectSelection,_prepare_subjec
 from truss._security_mapping import PreparedSecurityMapping,_pin_cursor
 from truss._umf_key_tuples import encode_literal_key_tuple
 from truss.execution import Ok
-from truss.psycopg_host import PsycopgHost
+from truss.psycopg_host import PsycopgHost,_prepare_synchronous_publisher
 from security_catalog_read import run_owned_catalog_resource_read,BASE
 ROOT=Path(__file__).resolve().parent.parent
 
@@ -32,9 +32,12 @@ def _verify_helpers(cursor,source):
         if cursor.fetchmany(2)!=[expected]:raise ValueError('Exact installed catalog subject helper snapshot required')
 
 
-def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,*,fact_relations=None):
+def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,*,fact_relations=None,publisher=None):
     if (type(mapping) is not PreparedSecurityMapping or type(selection) is not _SubjectSelection
             or type(caller_host) is not PsycopgHost or type(executor_host) is not PsycopgHost):raise ValueError('Exact native caller and accepted mapping required')
+    if publisher is not None and (not callable(publisher) or fact_relations is None):
+        raise ValueError('Original guarded publication context required')
+    if publisher is not None:publisher=_prepare_synchronous_publisher(publisher)
     mapping=replace(mapping);selection=replace(selection)
     if (selection.original_request!=mapping.original_request or selection.original_document!=(BASE/'document.json').read_bytes()
             or (selection.module,selection.record,selection.key,selection.schema,selection.routine,selection.columns,selection.actor_carrier)!=('m','Staff','pk','truss','catalog_subject_current',('staff_id',),'text')):
@@ -79,7 +82,9 @@ def run_owned_native_catalog_resource_read(caller_host,caller_transaction,execut
         _pin_cursor(cursor);_verify_helpers(cursor,source)
         if observe(cursor,caller_host._observe(cursor))!=(subject,key):raise ValueError('Original native Subject changed during delegated evaluation')
         if hashlib.sha256(source_path.read_bytes()).digest()!=source_pin:raise ValueError('Original catalog Subject source changed')
+        if publisher is not None:return json.dumps(result.value,separators=(',',':'),ensure_ascii=False).encode('utf8')
         return result.value
+    if publisher is not None:return caller_host._run_published_operation(caller_transaction,execute,publisher)
     return caller_host._run_operation(caller_transaction,execute)
 
 
@@ -87,3 +92,14 @@ def run_guarded_native_catalog_resource_read(caller_host,caller_transaction,exec
     """Explicit guarded fixture; omitted guard never downgrades to legacy mode."""
     if fact_relations is None:raise ValueError('Mandatory native caller fact cuts required')
     return run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations=fact_relations)
+
+
+def publish_guarded_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations,publisher):
+    """Private immutable historical publication; trusted bounded sink premise.
+
+    Original issuer/source and continuous selected cut lifetime remain premises.
+    Not a public protected query endpoint or reusable authority capability.
+    """
+    if fact_relations is None or not callable(publisher):
+        raise ValueError('Mandatory guarded publication context required')
+    return run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations=fact_relations,publisher=publisher)

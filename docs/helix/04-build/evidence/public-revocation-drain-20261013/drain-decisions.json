@@ -1,0 +1,43 @@
+{
+  "before": {
+    "kind": "owned-resource-list-fixture/0.1",
+    "rows": [
+      {
+        "key": [
+          {
+            "string": "r1"
+          }
+        ],
+        "output": [
+          {
+            "field": {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "salary"
+            },
+            "disposition": "withheld"
+          }
+        ]
+      }
+    ]
+  },
+  "afterCommittedPublicUpdate": {
+    "kind": "owned-resource-list-fixture/0.1",
+    "rows": []
+  },
+  "writer": "assignment_revoker",
+  "blocking": [
+    {
+      "writerPid": 5608,
+      "callerPid": 5599,
+      "blockers": [
+        5599
+      ],
+      "ungrantedObjectLock": true
+    }
+  ],
+  "outcomes": [
+    "public-update-committed"
+  ],
+  "authentication": "owned local fixture authentication; not production credential qualification"
+}

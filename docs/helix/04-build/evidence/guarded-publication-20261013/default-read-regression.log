@@ -1,0 +1,7 @@
+test_complete_guarded_chain_without_raw_caller_privileges (test_security_guarded_subject_native.GuardedSubjectTests.test_complete_guarded_chain_without_raw_caller_privileges)
+@covers US-056-AC2; @covers US-056-AC9; component prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 16.516s
+
+OK

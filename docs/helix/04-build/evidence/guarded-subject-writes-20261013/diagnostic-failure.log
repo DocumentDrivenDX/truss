@@ -1,0 +1,17 @@
+test_delegated_executor_refuses_all_writes_before_effect (test_security_guarded_subject_native.GuardedSubjectTests.test_delegated_executor_refuses_all_writes_before_effect)
+@covers US-056-AC2; @covers US-056-AC9; two-host component. ... FAIL
+
+======================================================================
+FAIL: test_delegated_executor_refuses_all_writes_before_effect (test_security_guarded_subject_native.GuardedSubjectTests.test_delegated_executor_refuses_all_writes_before_effect)
+@covers US-056-AC2; @covers US-056-AC9; two-host component.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_guarded_subject_native.py", line 105, in test_delegated_executor_refuses_all_writes_before_effect
+    self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(states,['55000']*4)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : canceling statement due to statement timeout
+
+----------------------------------------------------------------------
+Ran 1 test in 12.135s
+
+FAILED (failures=1)

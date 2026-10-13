@@ -1,0 +1,24 @@
+{
+  "profile": "native-public-assignment-update/fresh-guarded-read-component",
+  "postgresql": "18.6",
+  "tests": 1,
+  "seconds": 10.715,
+  "acceptanceCriteria": [
+    "US-057-AC3"
+  ],
+  "nativeWriter": "assignment_revoker: actual SESSION_USER=CURRENT_USER, no superuser/bypass flags; mapped ordinary public writer; local fixture authentication",
+  "transition": "Public key lookup a1 -> public UpdateObject(active=false, expected_version=1) -> GroupSuccess -> COMMIT -> native transaction idle and independent native false readback. Both earlier read transactions settled before update.",
+  "result": "Before r1/Withheld; after committed update fresh original caller/key/mapping read returns zero rows.",
+  "limits": [
+    "Selected current-state prerequisite only; not a protected public query endpoint or truss.L05 promotion.",
+    "No concurrent drain acknowledgment, old snapshot/generation, history, cache, streaming or exhaustive mutation proof.",
+    "Issuer/source/DDL/role/grant lifetime and production authentication remain open."
+  ],
+  "pins": {
+    "initial-pass.log": "87d8a0aa5572b7bc311f1821a347278e98b70373a791ee9f807965ae053022ca",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "efa0e232ab5c91146d6740d061769d3c05f4aa749fe187654b63b112bb189e3b",
+    "native.log": "63a3f434753bfeb4409d8ba9d9877f221f0f5ebc6559abe19c20ec39edc86b1c",
+    "revocation-decisions.json": "cd7d898df4a986de765436ff94044fc7f5211a8c882de1cdeb5403b5b691e0da"
+  }
+}

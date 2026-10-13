@@ -1,0 +1,7 @@
+test_fresh_read_after_public_assignment_revocation (test_security_guarded_subject_native.GuardedSubjectTests.test_fresh_read_after_public_assignment_revocation)
+@covers US-057-AC3; actual public writer and fresh component read. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 10.715s
+
+OK
