@@ -1,0 +1,7 @@
+test_public_revoker_waits_for_caller_transaction_settlement (test_security_guarded_subject_native.GuardedSubjectTests.test_public_revoker_waits_for_caller_transaction_settlement)
+@covers US-057-AC3; @covers US-057-AC2; public writer drain component. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 11.067s
+
+OK
