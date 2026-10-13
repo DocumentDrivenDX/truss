@@ -1,13 +1,18 @@
 # truss
 
-truss is a planned property-oriented graph engine that runs on SQL databases.
-It will store graph data in a fixed set of tables, starting on PostgreSQL,
-with each property value typed by a [UMF](https://github.com/DocumentDrivenDX/umf)
-schema, and later add query, mutation and constraint engines on top.
+Truss is an embeddable property-oriented graph toolkit for PostgreSQL, with
+property values typed by [UMF](https://github.com/DocumentDrivenDX/umf) schemas.
 
-**Status:** discovery. No code exists yet. Direction, prior art and open
-decisions are in [`docs/helix/`](docs/helix/README.md), starting with the
-[product vision](docs/helix/00-discover/product-vision.md).
+**Status:** experimental Python reference implementation. The
+[Python interface](packages/python/README.md) provides installation and upgrades,
+catalog registration, scalar object and independent edge mutations/reads,
+preconditions, idempotent receipts, host-owned imports, history, committed feeds
+and Weft-compiled scalar queries. The local baseline is DocumentDrivenDX
+`pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6.
+
+Relationship query lowering, structured values, broader import execution and
+managed-service qualification remain unfinished. Design and evidence live in
+[`docs/helix/`](docs/helix/README.md).
 
 ## Relationship to other DocumentDrivenDX projects
 

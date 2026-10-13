@@ -6733,3 +6733,17 @@ structured/composed records, page-key profiles, archive/retention operations,
 engine-owned import batches and managed-service qualification. The full Python
 interface goal remains active; this is a working public increment, not closure
 of the complete shared corpus or broader security compiler.
+
+### Public exact numeric query increment — 2026-10-12
+
+Runtime0.27 extends the existing public `query_in_transaction` workflow with
+Python `int` and `Decimal` fields/parameters. Weft runtime backend0.2.0 derives
+and admits unbounded numeric capabilities explicitly; Truss checks complete
+source values and parameters against the finite PostgreSQL numeric domain.
+Projected decimals retain their original token scale/exponent. Unsupported
+relationships and structured values remain refused.
+
+Four installed-wheel public query/upgrade tests pass on DocumentDrivenDX
+pgserver-pg18==18.6.1 and psycopg3.3.6, including retained0.26→0.27 data/receipt
+preservation. Astra Ultra approved the implementation and security merge
+intersections. See `evidence/python-exact-query-20261012.json`.

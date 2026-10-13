@@ -31,5 +31,14 @@
     "Facetless scalar numeric fields only",
     "Relationship lowering and structured queries unfinished",
     "No managed-service qualification"
-  ]
+  ],
+  "mergedMain": {
+    "securitySourceHead": "767e425b",
+    "wheelSha256": "9852e255a07b1523a30ac4b62134d49d169073fd8f5daf12cf10dce2f629b2aa",
+    "publicQueryAndUpgradePassed": 4,
+    "seconds": 27.351,
+    "pythonBoundaryImports": 847,
+    "review": "Astra Ultra approved merge intersections",
+    "securityReady": false
+  }
 }
