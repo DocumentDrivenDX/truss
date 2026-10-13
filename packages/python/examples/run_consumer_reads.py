@@ -253,7 +253,14 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         operations = []
                         for record in step['records']:
                             if 'type' in record:
-                                raise ValueError('Selected case adds relationships only')
+                                authored=next(e for e in module['elements'] if e['id']==record['type'])
+                                primary=next(k for k in authored['keys'] if k.get('primary'))
+                                if len(primary['fields'])!=1:raise ValueError('Selected single-field fixture key required')
+                                key_field=next(e for e in module['elements'] if e['id']==primary['fields'][0]['element'])
+                                values={key_field['name']:record['key'],**record['properties']}
+                                if any(type(value) is not str for value in values.values()):raise ValueError('Selected fixture uses scalar strings')
+                                operations.append(CreateObject(type_definition_pin=types[record['type']].definition_pin,values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=value)) for name,value in values.items()),ownership=RootlessOwnership(),alias=record['key']))
+                                continue
                             relation = next(r for r in module['relationships'] if r['name'] == record['relationship'])
                             reference = success(assembly.get_relationship_reference_in_transaction(tx, document_id=document_id, module_id=module_id, relationship_id=relation['id']))
                             operations.append(CreateEdge(relationship_definition_pin=reference.definition_pin, source=StoredObjectReference(identity=fixture_objects[record['source']]), target=StoredObjectReference(identity=fixture_objects[record['target']]), values=(), order_key=NullOrderKey()))
@@ -275,8 +282,10 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                 if step['op'] != 'query':
                     raise ValueError('Selected original read step required')
                 if 'requires' in step:
-                    if not {'type', 'columns'} <= set(step['requires']) or set(step['requires']) - {'type', 'columns', 'relationships'}:
+                    if not {'type', 'columns'} <= set(step['requires']) or set(step['requires']) - {'type', 'columns', 'relationships', 'count'}:
                         raise ValueError('Unsupported original capability requirement')
+                    if 'count' in step['requires'] and step['requires']['count'] is not True:
+                        raise ValueError('Selected count capability requires exact True')
                     record = next((e for e in module['elements'] if e['kind'] == 'record'
                         and module['namespace'] + '.' + e['name'] == step['requires']['type']), None)
                     if record is None:

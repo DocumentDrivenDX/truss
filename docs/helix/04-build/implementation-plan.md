@@ -7057,3 +7057,7 @@ The original AddSolution preview executes the public group, rolls back, publishe
 ## Original consumer correction through public Python — 2026-10-13
 
 Exercise the unchanged CorrectSolution update case through public business-key lookup, UpdateObject with the found native identity/version, and the original declared ObjectExists precondition. The host commits then retries the canonical original request for its durable receipt; a fresh key read and complete-entity query verify version and creation/update actor attribution. No general action interpreter or runtime profile change is introduced. See [evidence](evidence/original-consumer-update-20261013.md) for the basic installed-runtime result; full corpus/interchange remains open.
+
+## Original grouped-count expectation discrepancy — 2026-10-13
+
+The unchanged consumer grouped-count SQL executes through the default Weft profile and returns the correct exact integer groups through public Python. Its positional oracle requires an order absent from the SQL; observed order differs, so the original case remains failing and is excluded from the passing aggregate. [Evidence](evidence/original-consumer-count-20261013.md) records the actual result and consumer correction needed (unordered comparison or authored ORDER BY). Do not rewrite SQL or sort results to qualify this original case.
