@@ -1,0 +1,22 @@
+{
+  "scope": "Fixed-home native SECURITY DEFINER privilege-separation spike; no protected installation admission",
+  "sources": {
+    "docs/helix/02-design/spikes/security/ordinary-subject-cut-definer-v0.1.sql": "bcefff19bb51bafb7486eee08918a5e59298b2ae49889501327a74c0e674ce4b",
+    "packages/python/tests/test_ordinary_subject_cut_privileges_native.py": "57ad1e53dc69c175e5df4484438e9e62a80331a1beb1b4aa4197ecf6b0cfba27"
+  },
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17",
+  "nativeControls": 25,
+  "nativeSeconds": 2.807,
+  "acceptanceTraceability": {
+    "US-056-AC5": "Selected direct table/role/execute bypass denials only",
+    "US-056-AC10": "Original caller/privileged owner and historical cut lifetime controls only"
+  },
+  "missingGates": [
+    "complete nested callable/role/helper/config writer closure",
+    "authenticated dependency and issuer correspondence",
+    "generic raw-table/graph installer",
+    "protected query release"
+  ],
+  "promotedBackendCases": 0,
+  "requiredBackendCases": 132
+}

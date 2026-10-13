@@ -7367,3 +7367,10 @@ keep distribution/crate versions aligned and preserve original platform tags.
 Only the final tag-triggered job can write a draft release; finalize after every
 asset is uploaded. Existing runtime CI discovers its built wheel dynamically.
 No stable-layout, managed-service, protected-engine or facet support claim follows.
+
+
+### Fixed-home ordinary caller privilege-separation spike — 2026-10-13
+
+A PostgreSQL18.6 fixed-home SECURITY DEFINER helper acquires fresh source and subject-fact SHARE locks using a no-login, non-superuser/non-bypass owner with SELECT and MAINTAIN only. The ordinary caller receives schema USAGE and helper EXECUTE; direct source/fact SELECT and DML, privileged role adoption and outsider invocation refuse. SESSION_USER identifies the original caller separately from CURRENT_USER inside the definer. Fixed catalog-first search_path, expected source checks and read-committed/read-write guards remain explicit. Native25 controls pass2.807s, including restored caller context, pending writer refusal, held fact locks and rollback-to-before-acquisition releasing locks while returned rows remain historical. Python module boundaries pass; owned server cleanup is exact.
+
+This is a named-home design spike, not a generic raw-table/graph installer or protected deployment. Nested privileged callable routes and complete role/helper/config/dependency writer closure remain unqualified; no authenticated issuer, current authority or protected query release follows. US-056-AC5/AC10 receive prerequisite evidence only. No backend case is promoted; all132 remain required. Retained source pins, native controls and cleanup: `evidence/ordinary-subject-cut-privileges-20261013/receipt.json`.

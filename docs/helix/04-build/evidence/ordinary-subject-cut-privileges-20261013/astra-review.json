@@ -1,0 +1,119 @@
+{
+  "review": "Fixed ordinary subject cut SECURITY DEFINER spike independent source review",
+  "reviewedAt": "2026-10-13T15:04:04.790136+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "8d2ef47d53247dcd096953c0fb74125bcf35908f",
+  "status": "no actionable findings within the fixed declared-home experimental scope",
+  "findings": [],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/spikes/security/ordinary-subject-cut-definer-v0.1.sql",
+      "sha256": "bcefff19bb51bafb7486eee08918a5e59298b2ae49889501327a74c0e674ce4b",
+      "bytes": 2843
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_ordinary_subject_cut_privileges_native.py",
+      "sha256": "57ad1e53dc69c175e5df4484438e9e62a80331a1beb1b4aa4197ecf6b0cfba27",
+      "bytes": 6811
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py",
+      "sha256": "ca9ecf1ef9273f382093bb5af7a6086b6ffe1b35a66b1e055c27d529d239ab63",
+      "bytes": 13291
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py",
+      "sha256": "6b08fd001a6f41c81104226431c45dddc4deb7f90c4c36787a02324c48b9e4c1",
+      "bytes": 20158
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
+      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f",
+      "bytes": 59119
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "/private/tmp/ordinary-cut-native.json",
+      "sha256": "ada6e4ef234392c4105cdffe4ea9541f3239e432ed2d5f481d12531f9a878d97",
+      "bytes": 1926
+    },
+    {
+      "path": "/private/tmp/ordinary-cut-native.log",
+      "sha256": "234fcd38313f03731f3898b3d8545139f72bfde27a66a0970a5ea7bbf7d8b280",
+      "bytes": 98
+    },
+    {
+      "path": "/private/tmp/ordinary-cut-cleanup/cleanup-OrdinarySubjectCutPrivilegeTests.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    }
+  ],
+  "independentChecks": {
+    "kind": "read-only retained artifact correspondence checks, not a native rerun",
+    "count": 9,
+    "checks": [
+      {
+        "name": "retained server version is PostgreSQL 18.6",
+        "passed": true
+      },
+      {
+        "name": "25 distinct named native groups retained",
+        "passed": true
+      },
+      {
+        "name": "twelve exact string projected fields retained",
+        "passed": true
+      },
+      {
+        "name": "fixed installation/incarnation/profile/evidence correspondence",
+        "passed": true
+      },
+      {
+        "name": "evidence digest matches retained evidence bytes",
+        "passed": true
+      },
+      {
+        "name": "original actor differs from privileged owner and subject is retained",
+        "passed": true
+      },
+      {
+        "name": "source updates and savepoint release controls retained",
+        "passed": true
+      },
+      {
+        "name": "parent native log ends successful one-test run",
+        "passed": true
+      },
+      {
+        "name": "owned native cleanup succeeded",
+        "passed": true
+      }
+    ]
+  },
+  "sourceReview": [
+    "Explicit pg_catalog,pg_temp search path and fixed schema-qualified table references avoid caller-controlled SQL identifier selection.",
+    "VOLATILE function acquires SHARE NOWAIT locks on all three declared homes before RC reads and checks expected installation, epoch, incarnation and stored evidence hash.",
+    "SESSION_USER selects the subject and is retained separately from privileged CURRENT_USER; unsupported effective role and non-RC/RW profiles refuse.",
+    "Fixture owner has SELECT and MAINTAIN table rights only, is NOLOGIN/NOSUPERUSER/NOBYPASSRLS, and caller receives schema USAGE and function EXECUTE only.",
+    "Native direct table/caller role denials, definer entry/exit identity, pending writer refusal, external writer blocking, fresh reacquisition and rollback-past-acquisition are checked by the parent fixture."
+  ],
+  "nativeEvidence": {
+    "executedBy": "parent; reviewed retained output only",
+    "version": "PostgreSQL 18.6",
+    "tests": 1,
+    "namedGroups": 25,
+    "seconds": 2.807,
+    "result": "pass",
+    "cleanup": "stopped, status absent and socket absent"
+  },
+  "limitations": [
+    "Fixed declared-home fixture only; no generic installer or complete storage binding.",
+    "Direct EXECUTE refusal is not proof against indirect privileged callable routes; complete callable, role, configuration and dependency closure remains a prerequisite.",
+    "No authenticated issuer, principal deployment, complete current authority, protected release, security readiness, profile admission or backend-case promotion.",
+    "Returned rows are historical observations; rollback past lock acquisition releases the cut, and previous values are not a live capability.",
+    "Selected fixture rights do not establish complete same-transaction mutator exclusion.",
+    "No total native heap, CPU, returned payload or arbitrary-home resource theorem."
+  ],
+  "repositoryMutations": false
+}
