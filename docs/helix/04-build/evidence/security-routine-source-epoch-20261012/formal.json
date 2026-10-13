@@ -1,0 +1,44 @@
+{
+  "status": "conditional-generation-proof",
+  "solverVersion": "4.15.4",
+  "sourceDigests": {
+    "/private/tmp/truss-security-main-integration/scripts/prove-security-routine-ddl-generation.py": "9ca48f46868de077d94293698e349c901036b7ee3bf475ffc08b7745bc0de555",
+    "packages/postgresql/native/security-routine-ddl-guard-pg18.sql": "abae9698ebfb81c0091cc8033dc078e84706ee3d94ad33515da11b000db63d83",
+    "packages/python/tests/test_security_public_ontology_native.py": "924134a22a1213f5d564c8b1543fe6f9e6caddeae89616bac2649bb679cceeac",
+    "packages/python/src/truss/_security_data_writer.py": "18c196188cf9342f0603b488dbb7d49baeb44a317acfccc91e14e6cec0e2491b",
+    "packages/postgresql/native/security-data-writer-guard-pg18.sql": "57af5bc1e4c0e0a7ccb6bc489c2d136ba45fa3de1fa84399a578f258597f60d8"
+  },
+  "cases": [
+    {
+      "id": "distinct-source-epoch-cannot-hide-ddl-with-any-data-inventory",
+      "result": "unsat",
+      "smt": "(declare-fun source_original () Int)\n(declare-fun source_next () Int)\n(declare-fun ddl_events () Int)\n(declare-fun next_generation () Int)\n(declare-fun data_events () Int)\n(declare-fun original () Int)\n(declare-fun expected_data_events () Int)\n(assert (and (>= original 1)\n     (>= data_events 1)\n     (>= expected_data_events 1)\n     (>= ddl_events 0)\n     (= next_generation (+ original data_events ddl_events))\n     (<= next_generation 9223372036854775807)\n     (>= source_original 0)\n     (= source_next (+ source_original ddl_events))\n     (<= source_next 9223372036854775807)\n     (> ddl_events 0)\n     (= source_next source_original)))\n",
+      "witness": null
+    },
+    {
+      "id": "correct-data-inventory-cannot-hide-any-ddl",
+      "result": "unsat",
+      "smt": "(declare-fun expected_data_events () Int)\n(declare-fun original () Int)\n(declare-fun next_generation () Int)\n(declare-fun ddl_events () Int)\n(declare-fun data_events () Int)\n(assert (and (>= original 1)\n     (>= data_events 1)\n     (>= expected_data_events 1)\n     (>= ddl_events 0)\n     (= next_generation (+ original data_events ddl_events))\n     (<= next_generation 9223372036854775807)\n     (= data_events expected_data_events)\n     (> ddl_events 0)\n     (= next_generation (+ original expected_data_events))))\n",
+      "witness": null
+    },
+    {
+      "id": "bounded-ddl-successor-never-wraps",
+      "result": "unsat",
+      "smt": "(declare-fun original () Int)\n(declare-fun next_generation () Int)\n(assert (and (>= original 1)\n     (< original 9223372036854775807)\n     (= next_generation (+ original 1))\n     (<= next_generation original)))\n",
+      "witness": null
+    },
+    {
+      "id": "no-ddl-correct-data-inventory-can-pass",
+      "result": "sat",
+      "smt": "(declare-fun expected_data_events () Int)\n(declare-fun original () Int)\n(declare-fun next_generation () Int)\n(declare-fun data_events () Int)\n(declare-fun ddl_events () Int)\n(assert (and (>= original 1)\n     (>= data_events 1)\n     (>= expected_data_events 1)\n     (>= ddl_events 0)\n     (= next_generation (+ original data_events ddl_events))\n     (<= next_generation 9223372036854775807)\n     (= ddl_events 0)\n     (= data_events expected_data_events)\n     (= next_generation (+ original expected_data_events))))\n",
+      "witness": "[next_generation = 2,\n expected_data_events = 1,\n ddl_events = 0,\n data_events = 1,\n original = 1]"
+    },
+    {
+      "id": "wrong-data-inventory-can-hide-ddl",
+      "result": "sat",
+      "smt": "(declare-fun expected_data_events () Int)\n(declare-fun original () Int)\n(declare-fun next_generation () Int)\n(declare-fun ddl_events () Int)\n(declare-fun data_events () Int)\n(assert (and (>= original 1)\n     (>= data_events 1)\n     (>= expected_data_events 1)\n     (>= ddl_events 0)\n     (= next_generation (+ original data_events ddl_events))\n     (<= next_generation 9223372036854775807)\n     (= data_events 1)\n     (= ddl_events 1)\n     (= expected_data_events 2)\n     (= next_generation (+ original expected_data_events))))\n",
+      "witness": "[next_generation = 3,\n expected_data_events = 2,\n ddl_events = 1,\n data_events = 1,\n original = 1]"
+    }
+  ],
+  "scope": "Exact bounded integer model. A distinct monotonic source epoch cannot remain equal after any positive participating DDL count, independently of declared data-event inventory. The separate shared-generation check alone still needs correct independently qualified data-event inventory: under that premise, each selected DDL advances once and no generation decreases/reset/overflow, nonzero DDL cannot pass the original data-only final delta. SAT wrong-inventory control demonstrates this is not proof that each effect participated. Original guard serialization, fresh claim refusal and rollback are native exercising observations, not established by arithmetic. No SQL/Python refinement, complete DDL/role/routine/procedure/extension/source route closure, trusted installer or sink/admission theorem."
+}

@@ -3,7 +3,9 @@
 Trusted direct installation administrator and independently qualified physical
 mutation callback are premises. Selected persistent ordinary homes and original
 function/body/ACL/trigger metadata are checked before and after the callback.
-DDL lifetime/ABA closure, exact event inventory and complete participant coverage
+The distinct selected routine-source epoch must stay unchanged through callback
+execution, independently of the data event count. Complete DDL lifetime/ABA
+closure, exact event inventory and complete participant coverage
 remain separate admission. No count proves which individual effects participated. Caller settles the transaction.
 """
 from dataclasses import dataclass
@@ -59,11 +61,22 @@ def write_data_in_transaction(host, transaction, *, installation_identity,
         cursor.execute('SELECT 1 FROM truss.policy_publication_claim WHERE NOT settled LIMIT 1',prepare=False)
         if cursor.fetchall():raise ValueError('Original publication operations remain unsettled')
         require_data_writer_homes(cursor,original[0][1],installation_identity,authored_profile,home_oids)
+        def source_epoch():
+            cursor.execute('SELECT routine_source_generation FROM truss.policy_generation_guard WHERE singleton=1',prepare=False)
+            if (cursor.description is None or len(cursor.description)!=1
+                    or cursor.description[0].name!='routine_source_generation' or cursor.description[0].type_code!=20):
+                raise ValueError('Original native routine source epoch required')
+            rows=cursor.fetchmany(2)
+            if len(rows)!=1 or type(rows[0][0]) is not int or not 0<=rows[0][0]<=9223372036854775807:
+                raise ValueError('Original bounded routine source epoch required')
+            return rows[0][0]
+        original_source_epoch=source_epoch()
         # Issue callback DML only after the separate guard/claim commands.
         result=action(cursor)
         if inspect.isgenerator(result) or inspect.iscoroutine(result):
             result.close();raise ValueError('Original data writer action must complete synchronously')
         if result is not None:raise ValueError('Original data writer action must complete or raise')
+        if source_epoch()!=original_source_epoch:raise ValueError('Original routine source epoch changed during data writer')
         require_data_writer_homes(cursor,original[0][1],installation_identity,authored_profile,home_oids)
         cursor.execute('SELECT installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard WHERE singleton=1',prepare=False)
         if cursor.fetchmany(2)!=[(installation_identity,authored_profile,expected_generation+expected_event_count)]:

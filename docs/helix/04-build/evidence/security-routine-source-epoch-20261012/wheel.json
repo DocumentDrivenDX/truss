@@ -1,0 +1,7 @@
+{
+  "wheel": "/private/tmp/truss-routine-epoch-wheel-20261012/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+  "wheelSha256": "eac44477f8a0ab0793e9733c169f0b37c7a3145baa28832eb9d2374a3e8c9813",
+  "moduleSha256": "18c196188cf9342f0603b488dbb7d49baeb44a317acfccc91e14e6cec0e2491b",
+  "exactModuleBytes": true,
+  "scope": "Private Python coordinator only; native SQL spike is not a production installer."
+}
