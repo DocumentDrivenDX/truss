@@ -146,7 +146,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                 expected = step['expect']
                 actual_rows = [dict(zip(rows.columns, row, strict=True)) for row in rows.rows]
                 if actual_rows != expected['rows'] or ('columns' in expected and list(rows.columns) != expected['columns']):
-                    raise AssertionError(f'Original expected read differs: {case["id"]}')
+                    raise AssertionError(f'Original expected read differs: {case["id"]}; columns={rows.columns!r}; actual={actual_rows!r}; expected={expected!r}')
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
     return {'scope': 'selected original authority read variants; not complete corpus or interchange',
