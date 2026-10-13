@@ -11,14 +11,14 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.15',
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.16',
            'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.4'}
 
 
 def compiler():
     try:
         import weft
-        if weft.__version__ != '0.4.10':
+        if weft.__version__ != '0.4.11':
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
@@ -42,8 +42,8 @@ def _decode_scalar(value, family):
     raise ValueError('Exact selected scalar result required')
 
 
-def _relationship_key_types(types):
-    if not types or len(types)>128:raise ValueError('Bounded complete key types required')
+def _relationship_key_types(types,maximum=128):
+    if not types or len(types)>maximum:raise ValueError('Bounded complete key types required')
     for t in types:
         if t.get('nullable') is not False or set(t)!= {'family','facets','nullable'}:raise ValueError('Required key types required')
         family,facets=t['family'],t['facets']
@@ -54,6 +54,17 @@ def _relationship_key_types(types):
 def _decode_key_tuple(item,types):
     if type(item) is not list or len(item)!=len(types):raise ValueError('Complete relationship key tuple required')
     return tuple(_decode_scalar(value,t['family']) for value,t in zip(item,types,strict=True))
+
+
+def _page_key_token(value,t):
+    family=t['family']
+    if family=='string' and type(value) is str:token=value
+    elif family=='boolean' and type(value) is bool:token='true' if value else 'false'
+    elif family=='integer' and type(value) is int:token=str(Decimal(value))
+    elif family=='decimal' and type(value) is Decimal and value.is_finite():token=format(value,'f')
+    else:raise ValueError('Exact typed continuation key required')
+    if len(token.encode('utf8'))>65536:raise ValueError('Bounded continuation key required')
+    return token
 
 
 def _decode_value(value, descriptor_id, descriptors):
@@ -174,7 +185,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                 return Ok(QueryRefused(code='invalid_query'))
             try:
                 page_state = json.loads(page_cursor.original_bytes)
-                if type(page_state) is not dict or set(page_state) != {'profile','context','after'} or page_state['profile'] != 'truss-query-page/0.1' or type(page_state['context']) is not str or type(page_state['after']) is not list or not page_state['after'] or any(type(v) is not str for v in page_state['after']):
+                if type(page_state) is not dict or set(page_state) != {'profile','context','after'} or page_state['profile'] != 'truss-query-page/0.2' or type(page_state['context']) is not str or type(page_state['after']) is not list or not page_state['after'] or any(type(v) is not str for v in page_state['after']):
                     return Ok(QueryRefused(code='invalid_query'))
             except (ValueError, UnicodeError):
                 return Ok(QueryRefused(code='invalid_query'))
@@ -224,7 +235,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                 return QueryRefused(code='stale_context')
             response = json.loads(compile_query(json.dumps(request,ensure_ascii=False),page_size,None if page_state is None else page_state['after']))
             if response.get('status') == 'compiled':
-                if response.get('interfaceVersion') != 'weft-sql-page/0.1' or set(response) != {'interfaceVersion','status','artifact','page'}:
+                if response.get('interfaceVersion') != 'weft-sql-page/0.2' or set(response) != {'interfaceVersion','status','artifact','page'}:
                     raise ValueError('Exact owner page response required')
                 artifact, page_metadata = response['artifact'], response['page']
             else:
@@ -299,13 +310,15 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             keys = page_metadata['keyOutputs']
             if type(visible) is not int or visible < 1 or type(keys) is not list or not keys or keys != list(range(visible,len(result.columns))) or page_metadata['pageSize'] != page_size or len(result.rows)>page_size+1:
                 raise ValueError('Exact owner page output positions and lookahead required')
-            key_types = artifact['logicalPlan']['pageKey']['types']
-            if len(keys)!=len(key_types) or any(t!={'family':'string','facets':{},'nullable':False} for t in key_types) or any(type(row[index]) is not str for row in result.rows for index in keys):
-                raise ValueError('Exact authored string continuation keys required')
+            key_types = _relationship_key_types(artifact['logicalPlan']['pageKey']['types'],maximum=1024)
+            if len(keys)!=len(key_types):raise ValueError('Complete authored continuation key required')
+            try:
+                lexical_keys=[[_page_key_token(row[index],t) for index,t in zip(keys,key_types,strict=True)] for row in result.rows]
+            except (ValueError,UnicodeError):return QueryRefused(code='limits')
             retained = result.rows[:page_size]
             next_cursor = None
             if len(result.rows)>page_size:
-                token = json.dumps({'profile':'truss-query-page/0.1','context':context,'after':[retained[-1][index] for index in keys]},ensure_ascii=False,separators=(',',':')).encode('utf8')
+                token = json.dumps({'profile':'truss-query-page/0.2','context':context,'after':lexical_keys[len(retained)-1]},ensure_ascii=False,separators=(',',':')).encode('utf8')
                 if len(token)>65536:return QueryRefused(code='limits')
                 next_cursor = QueryPageCursor(original_bytes=token)
             return QueryPage(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=binding['catalogRevision'],next_cursor=next_cursor,as_of=position)

@@ -36,7 +36,7 @@ BEGIN
  IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.4'
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.45-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.46-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
@@ -192,15 +192,16 @@ BEGIN
  IF NOT FOUND OR cardinality(key_definition.prop_ids) NOT BETWEEN 1 AND 1024 THEN RAISE EXCEPTION 'bounded authored page key required' USING ERRCODE='0A000';END IF;
  FOR component IN SELECT p.* FROM unnest(key_definition.prop_ids) WITH ORDINALITY k(prop_id,n) JOIN truss.prop_def p ON p.prop_id=k.prop_id AND p.type_id=selected_type ORDER BY k.n LOOP
   counted:=counted+1;
-  IF component.retired_rev IS NOT NULL OR component.scalar_type<>'string' OR component.nullability<>'required' OR component.cardinality<>'one' OR component.home<>'json' OR coalesce(component.facets,'{}')<>'{}'::jsonb THEN RAISE EXCEPTION 'required string page key components required' USING ERRCODE='0A000';END IF;
+  IF component.retired_rev IS NOT NULL OR component.scalar_type NOT IN ('string','boolean','integer','decimal') OR component.nullability<>'required' OR component.cardinality<>'one' OR component.home<>'json' OR NOT ((component.scalar_type IN ('string','boolean') AND coalesce(component.facets,'{}')='{}'::jsonb OR component.scalar_type='integer' AND (coalesce(component.facets,'{}')='{}'::jsonb OR component.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR component.scalar_type='decimal' AND component.facets='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN RAISE EXCEPTION 'required exact page key components required' USING ERRCODE='0A000';END IF;
  END LOOP;
  IF counted<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete page key required' USING ERRCODE='55000';END IF;
  FOR row IN SELECT q.* FROM truss.query_objects(binding,selected_type) q LOOP
   id:=row.id;props:=row.props;RETURN NEXT;
  END LOOP;
  -- The preceding SRF validates and bounds the complete source in this snapshot.
- -- A collated text array uses the same C component equality as emitted ROW/order.
- IF EXISTS(SELECT 1 FROM (SELECT ARRAY(SELECT o.props->p.prop_id::text->>'text' FROM unnest(key_definition.prop_ids) WITH ORDINALITY p(prop_id,n) ORDER BY p.n) COLLATE pg_catalog."C" AS key_values
+ -- Validated typed tuple equality matches emitted C-text/bool/numeric ROW.
+ IF EXISTS(SELECT 1 FROM (SELECT (SELECT jsonb_agg(CASE property.scalar_type WHEN 'boolean' THEN o.props->property.prop_id::text->'value' WHEN 'integer' THEN to_jsonb((o.props->property.prop_id::text->>'text')::numeric) WHEN 'decimal' THEN to_jsonb((o.props->property.prop_id::text->>'text')::numeric) ELSE to_jsonb(o.props->property.prop_id::text->>'text') END ORDER BY p.n)
+  FROM unnest(key_definition.prop_ids) WITH ORDINALITY p(prop_id,n) JOIN truss.prop_def property ON property.prop_id=p.prop_id AND property.type_id=selected_type) AS key_values
   FROM truss.object o WHERE o.type_id=selected_type) source GROUP BY source.key_values HAVING count(*)>1) THEN
   RAISE EXCEPTION 'unique authored page key required' USING ERRCODE='55000';END IF;
  PERFORM truss.query_scope(binding);
