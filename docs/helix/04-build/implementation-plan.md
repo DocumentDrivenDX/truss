@@ -7269,3 +7269,11 @@ Missing-endpoint rejection remains explicit host orchestration, not a fabricated
 native report. One basic installed PG18 test passes thirteen selected workflows;
 see `evidence/original-consumer-import-provenance-20261013.md`. No runtime API,
 second implementation or extra conformance campaign was added.
+
+## Identify the installable Python candidate — 2026-10-13
+
+The Python package now identifies itself as0.1.0.dev38 instead of reusing
+0.0.1.dev0 across runtime changes. Package/native/layout versions remain distinct.
+The built and installed wheel passes the basic public adopter workflow; see
+`evidence/public-python-dev38-package-20261013.md`. Source distribution remains
+the interim route; no index publication or stable-layout claim was made.
