@@ -1,0 +1,127 @@
+{
+  "scope": "Actual loopback HTTP and synthetic trusted operation; no native database or external delivery acknowledgment claim",
+  "sourceSha256": "60ab72635821fe61d6856b67f967b8bb52a3ef53bca52b5f2a327c1eaf72b4f5",
+  "count": 12,
+  "controls": [
+    {
+      "name": "failure before publication generic503",
+      "passed": true,
+      "status": 503,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "RuntimeError"
+    },
+    {
+      "name": "None completion without publication",
+      "passed": true,
+      "status": 503,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "Ok completion without publication",
+      "passed": true,
+      "status": 503,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "invalid packet None",
+      "passed": true,
+      "status": 503,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "invalid packet mutable",
+      "passed": true,
+      "status": 503,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "invalid packet empty",
+      "passed": true,
+      "status": 503,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "invalid packet over1MiB",
+      "passed": true,
+      "status": 503,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "postpublication exception adds no error packet",
+      "passed": true,
+      "status": 200,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "RuntimeError"
+    },
+    {
+      "name": "duplicate publication emits only first packet",
+      "passed": true,
+      "status": 200,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "mismatched original completion closes after original packet",
+      "passed": true,
+      "status": 200,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "None completion after original packet",
+      "passed": true,
+      "status": 200,
+      "bodyBytes": 2,
+      "bodySha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": "ValueError"
+    },
+    {
+      "name": "exact1MiB packet accepted once",
+      "passed": true,
+      "status": 200,
+      "bodyBytes": 1048576,
+      "bodySha256": "40c5d356a6ec6c0a9e47d9b7fc99cf595c78e2afab19473671a73d06dbc255d2",
+      "retryStatus": 403,
+      "operationCalls": 1,
+      "ownerFailureType": null
+    }
+  ]
+}

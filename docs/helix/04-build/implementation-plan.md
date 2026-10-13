@@ -7617,3 +7617,66 @@ PostgreSQL18 documents event-trigger exceptions for shared databases, roles/memb
 The strengthened native countercontrol records actual PUBLIC EXECUTE false→true with event_triggers=off despite original ALWAYS/unfiltered installation and both source ShareLocks; final delivery refuses. Together with original base/missing/ALTER ROUTINE regressions, supplemental4 passes17.662s. Exact source and base fixture cleanup receipts are retained separately. A preceding missing-binary-path setup failure remains explicit. Product source is unchanged from primary12; the late-drift test is strengthened. No acceptance promotion.
 
 Concurrent owner mainf8453de8/runtime0.48/package0.0.11 was preserved. The full current unfiltered database-DDL suite passes12/152.072s, including strengthened actual administrative switch bypass and final zero-publication refusal, with exact owned cleanup and933 imports. Component regression only; unchanged acceptance inventory. Evidence: `evidence/catalog-database-ddl-20261013/runtime048/receipt.json`.
+
+
+### Authenticated original-operation loopback channel — 2026-10-13
+
+SPIKE-004 specifies CH01–CH08 for the mediated backend option under UMF CONTRACT-063. The new local one-operation channel compares an owner-private32-byte credential before exact request admission and original native dispatch. The peer cannot select actor/source/model/SQL. Its immutable wire publisher runs inside the existing guarded native receiver. The original operation is consumed before dispatch; native failure gives a fixed generic response, while delivery uncertainty closes without an appended diagnostic or retry. Original outcome/failure remain with the trusted owner. This is one authored invocation, not a permanent Weft SQL coverage restriction or activated public security profile.
+
+Six actual loopback HTTP tests pass5.130s, including progressing unauthenticated headers, exact raw target and parser-defect refusal. Two PostgreSQL18.6 native tests pass29.400s on runtime0.48: r1/Withheld reaches the authenticated peer with original SESSION_USER consumer and source ShareLocks before wire publication; invalid credentials, subject substitution and SQL route cause zero dispatch. Native event-trigger refusal causes zero encoding, generic503 and no retry. Initial standard-header refusal failures and prior43.347s native success are retained separately. Astra identified and the implementation fixed idle-timeout starvation and malformed-header/parser normalization gaps. Absolute five-second admission timer termination/monotonic checks now precede operation entry.
+
+Trace US-056 AC2/AC5/AC7/AC8/AC9/AC10 and US-057 AC2/AC7 prerequisites, CONTRACT-007 and UMF CONTRACT-063/STP-056. TLS, issuer/rotation/principal credentials, independent SQL/network/OS isolation and diagnostic route inventory remain open CH08. Outer transaction settlement belongs to the embedding owner; there is no automatic renewal, remote acknowledgment/exactly-once proof, general pages/writes/queries or complete authority/writer/handler/config lifetime. No backend case promotion;26 implemented/105 not-run/1 counterexample-found remains. Evidence: `docs/helix/04-build/evidence/catalog-authenticated-channel-20261013/receipt.json`.
+
+Astra Ultra independently passes35 actual loopback controls (22 request,12 completion,1 absolute deadline); both admission findings are fixed. Native execution remains parent-executed and independently inspected. Review and final source pins are retained; no CH08 or backend readiness claim.
+
+Concurrent owner mainc666745d/runtime0.50/package0.0.13 was preserved. Merged replay passes8/36.966s (six actual loopback channel controls and two native PostgreSQL controls) with exact owned native cleanup and933 imports. No broader evolution-security qualification or backend promotion. Evidence: `evidence/catalog-authenticated-channel-20261013/runtime050/receipt.json`.
+
+
+### Verified local TLS publication channel — 2026-10-13
+
+SPIKE-004 now records an explicit TLS1.3 channel subprofile. Exact stock server
+context/minimum checks precede bind; bounded stock handshake and negotiated
+TLSv1.3 checks precede HTTP/auth processing. No plaintext fallback follows TLS
+failure. Native peer controls verify the original local CA and IP hostname,
+receive r1/Withheld from the original guarded Subject/source operation and retain
+generic zero-output native refusal. Unknown CA, wrong hostname, plaintext and
+negotiated TLS1.2 under a weakened owner context cannot dispatch an operation;
+incomplete/progressing handshake controls allow the next verified peer through.
+
+Final checks11/46.335s pass on runtime0.50 (nine channel, two PostgreSQL native),
+with exact owned cleanup and933 imports. Astra19 independent TLS controls pass.
+Private ephemeral keys are not retained; fixture permissions and cleanup are
+qualified locally. Earlier8/25.942s precedes negotiated-version checks and is
+historical. Trace CH01/CH02/CH04/CH07/CH08 and US-056 AC2/AC5/AC8/AC10/US-057 AC7
+prerequisites. Production issuer/key/rotation/revocation, SQL/network/OS/diagnostic
+isolation and complete authority/handler/config lifetime remain open. No native
+or cryptographic refinement theorem, backend readiness or case promotion.
+Evidence: `docs/helix/04-build/evidence/catalog-tls-channel-20261013/receipt.json`.
+
+
+### Owned private SQL network domain — 2026-10-13
+
+SPIKE-004 CH08 has a selected IPv4 topology prerequisite: exact PostgreSQL18.6
+image on an internal backend network, peer on a separate internal frontend, and
+trusted service domain on both. Native service_reader is non-super/non-bypass and
+reads the independently seeded private fact count1. Peer DNS, known DB address
+and selected service-facing/back-facing SQL addresses deny even with deliberately
+compromised valid SQL credentials. Excluded Docker administrator attachment makes
+the same peer/credential read succeed; detachment restores denial. Seven native
+controls pass with all five owned resources confirmed absent after cleanup.
+
+Astra23 independent harness controls pass after fixes: daemon/access inspection
+failure is unknown rather than absent; every cleanup is attempted and recorded
+without replacing the primary failure; auth/SQL/exec failures cannot qualify as
+network denial. Exact nonce-labeled resource IDs are removed; shared resources
+are not touched. Z3 4.15.4 yields one UNSAT and three SAT over an explicit network
+membership model: direct private SQL exclusion is conditional, excluded topology
+change restores access, and an arbitrary application relay can disclose private
+facts despite direct network separation. This is not Docker/kernel refinement.
+
+Trace CH08 and US-056 AC5/AC8/AC10/UMF CONTRACT-063/STP-056 prerequisites. The
+service fixture is sleep plus trusted psql probes, not the composed TLS/guarded
+producer. Credential/issuer nonexposure, app route inventory, daemon/OS/IPv6 and
+continuous topology/authority lifetime remain open. No backend promotion; the
+original132 cases remain required. Evidence:
+`docs/helix/04-build/evidence/network-isolation-20261013/receipt.json`.

@@ -1,0 +1,475 @@
+{
+  "scope": "Actual qualifier with synthetic Docker responses; no Docker/container/native lifecycle invoked",
+  "sourceSha256": "f2f4dba6fa64f4f70c4942a48d51864fc5778803ac78fdf266a79ba9bee53eb8",
+  "passed": 23,
+  "controls": [
+    {
+      "control": "auth_negative",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Original native network denial required; auth/SQL/infrastructure failures do not qualify",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "baseline",
+      "passed": true,
+      "qualificationStatus": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "cleanup_daemon_error",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": false,
+        "service": false,
+        "database": false,
+        "front": false,
+        "back": false
+      },
+      "exception": "RuntimeError: Owned cleanup qualification failed; receipt retained",
+      "remainingSyntheticResources": 5,
+      "removed": []
+    },
+    {
+      "control": "dns_alternative",
+      "passed": true,
+      "qualificationStatus": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "exec_negative",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Original native network denial required; auth/SQL/infrastructure failures do not qualify",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "first_remove_error",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": false,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Owned cleanup qualification failed; receipt retained",
+      "remainingSyntheticResources": 1,
+      "removed": [
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "initial_failure",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Owned Docker fixture operation refused",
+      "remainingSyntheticResources": 0,
+      "removed": []
+    },
+    {
+      "control": "missing_wrong_error",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": false,
+        "service": false,
+        "database": false,
+        "front": false,
+        "back": false
+      },
+      "exception": "RuntimeError: Owned cleanup qualification failed; receipt retained",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "missing_wrong_exit",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": false,
+        "service": false,
+        "database": false,
+        "front": false,
+        "back": false
+      },
+      "exception": "RuntimeError: Owned cleanup qualification failed; receipt retained",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "missing_wrong_name",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": false,
+        "service": false,
+        "database": false,
+        "front": false,
+        "back": false
+      },
+      "exception": "RuntimeError: Owned cleanup qualification failed; receipt retained",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "missing_wrong_stdout",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": false,
+        "service": false,
+        "database": false,
+        "front": false,
+        "back": false
+      },
+      "exception": "RuntimeError: Owned cleanup qualification failed; receipt retained",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "negative_stdout",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Original native network denial required; auth/SQL/infrastructure failures do not qualify",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "notfound_kind",
+      "passed": true,
+      "qualificationStatus": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "notfound_network",
+      "passed": true,
+      "qualificationStatus": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "notfound_object",
+      "passed": true,
+      "qualificationStatus": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "primary_and_cleanup",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": false,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Original native network denial required; auth/SQL/infrastructure failures do not qualify",
+      "remainingSyntheticResources": 1,
+      "removed": [
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "refused",
+      "passed": true,
+      "qualificationStatus": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "sql_negative",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Original native network denial required; auth/SQL/infrastructure failures do not qualify",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "timed_out",
+      "passed": true,
+      "qualificationStatus": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "timeout",
+      "passed": true,
+      "qualificationStatus": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "wrong_cleanup_label",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": false,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Owned cleanup qualification failed; receipt retained",
+      "remainingSyntheticResources": 1,
+      "removed": [
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "wrong_exit",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Original native network denial required; auth/SQL/infrastructure failures do not qualify",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "wrong_host",
+      "passed": true,
+      "qualificationStatus": "failed",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": "RuntimeError: Original native network denial required; auth/SQL/infrastructure failures do not qualify",
+      "remainingSyntheticResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    }
+  ]
+}

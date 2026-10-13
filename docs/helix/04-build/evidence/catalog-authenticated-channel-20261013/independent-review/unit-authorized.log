@@ -1,0 +1,9 @@
+test_exact_authenticated_request_one_delivery_then_no_reuse (test_security_catalog_channel.ChannelTests.test_exact_authenticated_request_one_delivery_then_no_reuse) ... ok
+test_native_failure_is_generic_and_consumes_original_operation (test_security_catalog_channel.ChannelTests.test_native_failure_is_generic_and_consumes_original_operation) ... ok
+test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch (test_security_catalog_channel.ChannelTests.test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch) ... ok
+test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry (test_security_catalog_channel.ChannelTests.test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.049s
+
+OK

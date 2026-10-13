@@ -1,0 +1,41 @@
+{
+  "scope": "Selected owned Docker IPv4 native SQL network isolation prerequisite",
+  "server": "PostgreSQL18.6",
+  "docker": "29.4.0",
+  "image": "postgres@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336",
+  "nativeControls": 7,
+  "confirmedOwnedResourcesAbsent": 5,
+  "independentHarnessControls": 23,
+  "formal": {
+    "z3": "4.15.4",
+    "unsat": 1,
+    "sat": 3,
+    "qualification": "Abstract network memberships; no native Docker/kernel refinement theorem. Unsafe application relay witness is abstract, not observed deployment escape."
+  },
+  "imports": 933,
+  "acceptancePrerequisites": [
+    "SPIKE-004 CH08",
+    "US-056 AC5/AC8/AC10",
+    "UMF CONTRACT-063/STP-056"
+  ],
+  "qualification": "Private backend DB network and front-only peer; trusted dual-network service domain accesses native fact as non-super/non-bypass role. Correct SQL credentials deliberately supplied only for compromise controls; peer cannot reach selected SQL endpoints until excluded topology admin attaches it, and detach restores denial. Service container runs sleep plus trusted psql probes, not actual TLS/guarded application. No credential nonexposure, whole endpoint/OS/daemon/IPv6/namespace/lifetime closure, app composition or backend readiness claimed. All132 remain required; inventory26 implemented/105 not-run/1 counterexample-found unchanged. Initial actual native pass predates qualifier robustness fixes; source-pinned final replay and independent faults qualify the harness separately.",
+  "sourcePins": {
+    "scripts/security_network_isolation.py": "f2f4dba6fa64f4f70c4942a48d51864fc5778803ac78fdf266a79ba9bee53eb8",
+    "scripts/prove-security-network-boundary.py": "2a4484e0592999da65b1b7f7f5c4835bd9fa5fbbbbc4fe59eeda41229d014020"
+  },
+  "evidencePins": {
+    "results.json": "7572cb9657f85d7dfc36667360cc48e33a227e6d7fac774c6fc8dee640c09d25",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "results-before-qualification-fixes.json": "4ac04cb3b495a703ca35e158877eed8c945b0ca53ce373d23f88cda09ef214c8",
+    "native.log": "204d56d3ea6c5b8eabecea32ff7585f370908a98a9fd95390b0e82ce5e8e9b30",
+    "formal.json": "91248bd8e86c562d6302c97e975d08da6d24bffe9082a13c158f5f6e6cfd1fdc",
+    "independent-review/check.py": "ae725a2b3d82d6ea365bd20fb134f91ff531ec53b679ccdb4876fec3e4449372",
+    "independent-review/results.json": "61c795fe820ce7f175e66d92d66b2d4c598bd82883b5511d07cb1018d3dde5c8",
+    "independent-review/reviewed-source.py": "f2f4dba6fa64f4f70c4942a48d51864fc5778803ac78fdf266a79ba9bee53eb8",
+    "independent-review/review-pending.json": "27c95a53b953d456ad106e31957579a007fd1b83e6ed4c00dd3c392240a5afae",
+    "independent-review/pre-fix-results.json": "315058488ba03ed5d0166e092d83175ad543afd58f7d7a3348dfa6234e40fdae",
+    "independent-review/pre-fix-original.py": "4f5dcbef01ff4646eecc6f8966fc9d5aeff4fec22742ea95a70f23053da0c892",
+    "independent-review/review.json": "1f46e45f56ba431240b7c3aa9b1320428021777362dc0e7535fe0ea61ab24851",
+    "independent-review/pre-fix-check.py": "99062bc72991381d451ec560752b50db9ccdffa17f71575516f9bfaa5e7b9ef3"
+  }
+}

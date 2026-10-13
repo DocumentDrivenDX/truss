@@ -1,0 +1,69 @@
+test_exact_authenticated_request_one_delivery_then_no_reuse (test_security_catalog_channel.ChannelTests.test_exact_authenticated_request_one_delivery_then_no_reuse) ... FAIL
+test_native_failure_is_generic_and_consumes_original_operation (test_security_catalog_channel.ChannelTests.test_native_failure_is_generic_and_consumes_original_operation) ... FAIL
+test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch (test_security_catalog_channel.ChannelTests.test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch) ... FAIL
+test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry (test_security_catalog_channel.ChannelTests.test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry) ... FAIL
+
+======================================================================
+FAIL: test_exact_authenticated_request_one_delivery_then_no_reuse (test_security_catalog_channel.ChannelTests.test_exact_authenticated_request_one_delivery_then_no_reuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_channel.py", line 27, in test_exact_authenticated_request_one_delivery_then_no_reuse
+    self.assertEqual(self.request(),(200,b'{"rows":[]}'));self.assertEqual(self.calls,[True])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (403, b'{}') != (200, b'{"rows":[]}')
+
+First differing element 0:
+403
+200
+
+- (403, b'{}')
++ (200, b'{"rows":[]}')
+
+======================================================================
+FAIL: test_native_failure_is_generic_and_consumes_original_operation (test_security_catalog_channel.ChannelTests.test_native_failure_is_generic_and_consumes_original_operation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_channel.py", line 39, in test_native_failure_is_generic_and_consumes_original_operation
+    self.assertEqual(self.request(),(503,b'{}'));self.assertEqual(self.request(),(403,b'{}'));self.assertEqual(self.calls,[True])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (403, b'{}') != (503, b'{}')
+
+First differing element 0:
+403
+503
+
+- (403, b'{}')
+?  ^
+
++ (503, b'{}')
+?  ^
+
+
+======================================================================
+FAIL: test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch (test_security_catalog_channel.ChannelTests.test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_channel.py", line 35, in test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch
+    self.assertEqual(self.request()[0],200)
+AssertionError: 403 != 200
+
+======================================================================
+FAIL: test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry (test_security_catalog_channel.ChannelTests.test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_channel.py", line 43, in test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry
+    self.assertEqual(self.request(),(200,b'{"rows":[]}'));self.assertEqual(self.request(),(403,b'{}'));self.assertEqual(self.calls,[True])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (403, b'{}') != (200, b'{"rows":[]}')
+
+First differing element 0:
+403
+200
+
+- (403, b'{}')
++ (200, b'{"rows":[]}')
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.064s
+
+FAILED (failures=4)

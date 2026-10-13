@@ -1,0 +1,10 @@
+{
+  "peerClosedDuringTrickle": true,
+  "incompleteUnauthenticatedHeaderSeconds": 5.651,
+  "queuedAuthenticatedStatus": 200,
+  "shutdownBlockedUntilUnauthenticatedPeerCloses": false,
+  "operationCallsBeforePeerClose": 1,
+  "shutdownCompletedAfterPeerClose": true,
+  "sourceSha256": "60ab72635821fe61d6856b67f967b8bb52a3ef53bca52b5f2a327c1eaf72b4f5",
+  "scope": "Actual loopback HTTP server; bounded progressing-input request and queued valid fixture operation, no database lifecycle."
+}

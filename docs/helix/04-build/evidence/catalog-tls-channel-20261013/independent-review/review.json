@@ -1,0 +1,20 @@
+{
+  "kind": "scoped-independent-review/0.1",
+  "reviewer": "Astra Ultra",
+  "status": "no_actionable_findings_in_reviewed_scope",
+  "scope": "Optional stock TLS server context, exact negotiatedTLS1.3 before HTTP, ephemeral certificate identity, bounded handshake and original channel compatibility.",
+  "independentControls": {"actualLoopbackTls": 19, "nativeLifecycleRuns": 0, "progressingIncompleteHandshakeElapsedSeconds": 5.084},
+  "observations": ["Verified trust-store and IP SAN hostname selection; unknown issuer/wrong hostname/plaintext refuse before operation.", "OriginalTLS1.3 minimum refuses TLS1.2. After owner weakens the context, an actually observed TLS1.2 handshake is still rejected before HTTP/operation entry.", "TLS1.3 bearer request publishes once; wrong bearer/reuse refuse. Stock handshake timeout releases a continuously progressing incomplete record and permits queued verified client.", "Owned fixture directory0700/key0600; cleanup removes certificate/key directory. No key or bearer value retained."],
+  "parentEvidence": {"finalTests": 11, "composition": "9 channel tests including original6 plaintext controls plus2 original PostgreSQL18.6 HTTPS tests", "seconds": 46.335, "execution": "Parent-executed; reviewer inspected source/logs/cleanup", "cleanup": "runtime exit succeeded, status3, socket absent"},
+  "reviewerHarnessCorrection": "Initial harness assumed get_ca_certs enumerates the explicitly trusted self-signed leaf. Corrected it to load the fixture public certificate file; final19 controls passed. Initial harness error retained separately.",
+  "findings": [],
+  "limits": ["TLS context/certificate selection and owner runtime remain trusted lifetime premises; exact type/version checks do not authenticate an issuer or prevent arbitrary configured-code/context replacement.", "This is verified ephemeral loopback TLS, not production certificate issuance, rotation/revocation, SQL/network/OS isolation, complete authority/source/cut closure or backend admission.", "Handshake timeout and HTTP admission deadline are separate phases; no overall operation/CPU/heap/exhaustive TLS attack theorem. TLS success and socket flush are not remote acknowledgment or native settlement."],
+  "pythonVersion": "3.11.17",
+  "opensslVersion": "OpenSSL 3.5.9 29 Sep 2026",
+  "implementationSha256": "d882c4b290fcae98c6b713e4a06822b53cc4eb447e138b904a8b32602845e1e8",
+  "fixtureSha256": "54a3d7ecd515881ca64c937621e5d4dac83685c9989ca5dce28cd056b8c133dd",
+  "finalChecksLogSha256": "9b2cd876eeda83a371f925191d218b196fb1e7117a66e195e954953f6ef5e43d",
+  "wireDecisionSha256": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+  "sourcePins": "source-pins.json",
+  "sourcePinsSha256": "a8dcb74d5a6d90743fb65151fc1f3f389c3d7f8d30bae234841cc7374d886c60"
+}

@@ -1,0 +1,43 @@
+{
+  "scope": "Optional local verified TLS1.3 original guarded publication channel",
+  "runtime": "truss-catalog-runtime/0.50-candidate",
+  "python": "3.11.17",
+  "openssl": "OpenSSL 3.5.9 29 Sep 2026",
+  "server": "PostgreSQL18.6",
+  "checks": {
+    "total": 11,
+    "channel": 9,
+    "nativePostgreSQL": 2,
+    "seconds": 46.335
+  },
+  "independentTlsControls": 19,
+  "imports": 933,
+  "acceptancePrerequisites": [
+    "SPIKE-004 CH01/CH02/CH04/CH07/CH08",
+    "US-056 AC2/AC5/AC8/AC10",
+    "US-057 AC7"
+  ],
+  "qualification": "Exact server context/minimum before bind and negotiated TLSv1.3 before HTTP/auth dispatch. Owned ephemeral local CA/IP-SAN/key, stock client CA/hostname verification, no plaintext fallback. Five-second stock handshake timeout precedes independent absolute header/body admission deadline. Earlier8/25.942s precedes negotiated gate; final11 qualifies final sources. Production issuer/key/rotation/revocation/context/stdlib/admin lifetime, SQL/network/OS/diagnostic isolation and complete backend admission remain open. Optional None explicitly retains legacy plaintext fixture; no public protected production profile activated. No cryptographic/native refinement theorem or backend case promotion. Keys and bearer credentials are not retained.",
+  "sourcePins": {
+    "scripts/security_catalog_channel.py": "d882c4b290fcae98c6b713e4a06822b53cc4eb447e138b904a8b32602845e1e8",
+    "packages/python/tests/test_security_catalog_channel.py": "b01ae5b96c153739c37c327bff0f72cb9588b6baa0f0d6b967c591b63b3172a5",
+    "packages/python/tests/test_security_catalog_channel_native.py": "2ab5137d60b68bc3f13066dba20ce8eec8b99a9916bef90db2dcd136f8d63c68",
+    "packages/python/tests/security_channel_tls_fixture.py": "54a3d7ecd515881ca64c937621e5d4dac83685c9989ca5dce28cd056b8c133dd",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "d66f4e0dcf387bb60fcb97c20c6aca3b93fb2a41cb88126ac45efdeca8647a37",
+    "docs/helix/02-design/spikes/SPIKE-004-authenticated-policy-channel.md": "0f15f2deb76e5b247f1b2e431fa09ce709859b2b17c1a7f8256d9c6c9ca485a3"
+  },
+  "evidencePins": {
+    "wire-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "checks.log": "9b2cd876eeda83a371f925191d218b196fb1e7117a66e195e954953f6ef5e43d",
+    "channel.log": "9b6904033c38acb6bb83169a126e15dc5feef793500735c4f29e855fb53e50a7",
+    "checks-before-negotiated-gate.log": "0b3978c75a49b65c3947c4a3ed0afeb573a4608ca427f39dda96fd5d3794f806",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "independent-review/check.py": "de8cd5a0d007ca3d498df161b27e2bfed29c8ed78bec657d88fbf19fdf1318e4",
+    "independent-review/source-pins.json": "a8dcb74d5a6d90743fb65151fc1f3f389c3d7f8d30bae234841cc7374d886c60",
+    "independent-review/results.json": "a64fcfafd8d571d88e7d8e23d260825fcedd4c9b4c5798910397f2a2eb23af91",
+    "independent-review/check-initial-harness.log": "3807c3bf20f6d67b6b188f8ad8ffa9cc323060408766515ccb00a2a66dc49bd3",
+    "independent-review/check.log": "4718f7824f3d7cc25148684bb6a50bf25906f61a9c39e903a33b96efecfef0b6",
+    "independent-review/review.json": "2c9a374df68b98215f25bdc44fd745769febbd5a8cf50562eac48122981dc996"
+  }
+}

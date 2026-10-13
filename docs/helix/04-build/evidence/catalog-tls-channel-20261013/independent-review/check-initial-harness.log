@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/tls-channel-review-20261013/check.py", line 36, in <module>
+    legacy=ssl.create_default_context();legacy.load_verify_locations(cadata=ssl.DER_cert_to_PEM_cert(client_context.get_ca_certs(binary_form=True)[0]));legacy.minimum_version=ssl.TLSVersion.TLSv1_2;legacy.maximum_version=ssl.TLSVersion.TLSv1_2
+                                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range

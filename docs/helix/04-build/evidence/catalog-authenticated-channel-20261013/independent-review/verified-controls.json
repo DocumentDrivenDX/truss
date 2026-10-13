@@ -1,0 +1,9 @@
+{
+  "scope": "35 independent actual loopback controls using synthetic configured operations; no native database run by reviewer",
+  "rawRequestControls": 22,
+  "completionControls": 12,
+  "absoluteDeadlineControl": 1,
+  "passed": true,
+  "sourceSha256": "60ab72635821fe61d6856b67f967b8bb52a3ef53bca52b5f2a327c1eaf72b4f5",
+  "limits": "Valid source operation is trusted; no SQL topology, TLS, token issuer, admission or remote acknowledgment qualification."
+}

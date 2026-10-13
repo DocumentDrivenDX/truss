@@ -1,0 +1,14 @@
+test_exact_authenticated_request_one_delivery_then_no_reuse (test_security_catalog_channel.ChannelTests.test_exact_authenticated_request_one_delivery_then_no_reuse) ... ok
+test_malformed_headers_and_normalized_target_never_dispatch (test_security_catalog_channel.ChannelTests.test_malformed_headers_and_normalized_target_never_dispatch) ... ok
+test_native_failure_is_generic_and_consumes_original_operation (test_security_catalog_channel.ChannelTests.test_native_failure_is_generic_and_consumes_original_operation) ... ok
+test_progressing_unauthenticated_headers_have_absolute_deadline (test_security_catalog_channel.ChannelTests.test_progressing_unauthenticated_headers_have_absolute_deadline) ... ok
+test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch (test_security_catalog_channel.ChannelTests.test_unknown_credentials_and_subject_or_sql_substitution_never_dispatch) ... ok
+test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry (test_security_catalog_channel.ChannelTests.test_wrong_completion_cannot_append_diagnostic_after_delivery_or_retry) ... ok
+test_incomplete_tls_handshake_expires_and_queued_verified_peer_runs (test_security_catalog_channel.TlsChannelTests.test_incomplete_tls_handshake_expires_and_queued_verified_peer_runs) ... ok
+test_verified_certificate_then_one_original_publication (test_security_catalog_channel.TlsChannelTests.test_verified_certificate_then_one_original_publication) ... ok
+test_weakened_owner_context_does_not_admit_negotiated_tls12 (test_security_catalog_channel.TlsChannelTests.test_weakened_owner_context_does_not_admit_negotiated_tls12) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 10.769s
+
+OK

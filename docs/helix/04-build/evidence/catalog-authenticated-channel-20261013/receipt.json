@@ -1,0 +1,72 @@
+{
+  "scope": "One original authenticated local HTTP invocation and native guarded publication",
+  "runtime": "truss-catalog-runtime/0.48-candidate",
+  "python": "3.11.17",
+  "server": "PostgreSQL18.6",
+  "channelTests": {
+    "tests": 6,
+    "seconds": 5.13
+  },
+  "nativeTests": {
+    "tests": 2,
+    "seconds": 29.4
+  },
+  "independentControls": {
+    "total": 35,
+    "request": 22,
+    "completion": 12,
+    "deadline": 1
+  },
+  "imports": 933,
+  "acceptancePrerequisites": [
+    "US-056 AC2/AC5/AC7/AC8/AC9/AC10",
+    "US-057 AC2/AC7",
+    "CONTRACT-007",
+    "UMF CONTRACT-063/STP-056"
+  ],
+  "resolvedFindings": [
+    "Standard HTTP client identity encoding header was refused; exact identity is now admitted.",
+    "Idle socket timeout allowed progressing unauthenticated headers to monopolize serial server; absolute five-second admission timer/termination/monotonic gate now precede native entry.",
+    "Parser silently omitted malformed headers and normalized request target; parser defects and nonexact raw request target now refuse."
+  ],
+  "qualification": "Actual loopback credential comparison and request routing precede original native Subject/source/fact publication. Does not qualify TLS, credential issuer/rotation/principal authority, SQL/network/OS/storage diagnostic isolation, complete writer/role/handler/config lifetime or backend readiness. One original operation, no autoretry/renewal/outer transaction settlement. HTTP200/flush is not remote acknowledgment, producer settlement or exactly-once delivery. Complete native/kernel/refinement and resource bounds remain separate.26 implemented/105 not-run/1 counterexample-found remains unchanged. Historical failed header and earlier native success logs retained with scope; independent controls substitute publication operation and do not execute PostgreSQL.",
+  "sourcePins": {
+    "scripts/security_catalog_channel.py": "60ab72635821fe61d6856b67f967b8bb52a3ef53bca52b5f2a327c1eaf72b4f5",
+    "packages/python/tests/test_security_catalog_channel.py": "b54ea746471f091545881b96ab33c90ac022ee3c5aa0943cc4536ee11b3091d5",
+    "packages/python/tests/test_security_catalog_channel_native.py": "b3a00a29b4a4ab6a69fa5fb77df4bf019a05589c5e8009546f91530e76742ecb",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "4d08f416a3f1285c4ffafdfeab237689985be6254da32974f24264de9e329824",
+    "docs/helix/02-design/spikes/SPIKE-004-authenticated-policy-channel.md": "17775108014c5fb9ca0300d9e5400de483e3c2e34a74a74f1818afd4f0a01d27"
+  },
+  "evidencePins": {
+    "wire-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "native-before-header-fix.log": "bbbc8fe77960b062b7ddfe25a91d9c9af114f6caa2cd68a0fc725b9fb642c373",
+    "native-before-admission-fixes.log": "a21de523b657981be15ec0abd2cb18bfeeb4bf8f703b6e209ffc14082e9e1d45",
+    "channel.log": "fb7f4cee9f48ca5d6d4309559864fe2c10a70a23747eddfa06428c3cfee93fb8",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "55d0acd6e7f934a742ae45f029327b155814ecdc5e81efbf21b40da250cd94f6",
+    "channel-before-header-fix.log": "2cff259d77539e048903a071bbc2c586ff88f458051c9e1d97c617833a329b26",
+    "independent-review/channel-1a0d637ccddc.py": "1a0d637ccddc02b63cbf436ac64f887056aef871bcf5babea7183d4124bcfa8d",
+    "independent-review/raw-requests.py": "aaad522af5ae3685a8e62ac62a2650b4b97290014485e3ab2c0b748a3ec77abf",
+    "independent-review/channel-df535e278e2b.py": "df535e278e2bc0b5662ef5e7e4917a923d6216652de72fb74c56335f5a2550db",
+    "independent-review/completion.log": "c44297391aee3ad0c04edad2f9000a8c2c609ca827fb2385b621379640f78ce2",
+    "independent-review/raw-requests-after.json": "91fda054715e6b7d9d0fec1d5e7ad6c7fc9145f062106795fa8cfc360463bccd",
+    "independent-review/unit-authorized.log": "bdf6e28cec3d969a3fe216252d51c646b09272a6ebbfa1692aee8a361f8c1f36",
+    "independent-review/slow-request-after.json": "66eb2f9aa738a52366a162df3c7b81e4f686ead0a53c3e1b8b9907e8caed4705",
+    "independent-review/source-pins.json": "27068a4f4a42a0197b52af55903016f0388e6396c471449e46eb6b9e8e034dba",
+    "independent-review/completion.py": "472caa8f672ef529bc5eea48a4f5b9f9345ab36502e8aae752101bcea1486d98",
+    "independent-review/slow-request-after.log": "e4cd7ed7769a70de1ac8609b9f0afcddc01c9ccc699f32cc585d9e4996a213ea",
+    "independent-review/verified-controls.json": "cc066d081383b2ff61339b5da378b1e02e5d7287059f3bf57dd2a78e55342dbd",
+    "independent-review/slow-request.py": "7a488a3a92330216513d317acb7878b0dbe37da486fb0c1fd29132dae0c0a669",
+    "independent-review/raw-requests-before.json": "c077ed0338963f44402e96203b3ed0cef60e5a2a94464df21185d8c767968ac4",
+    "independent-review/slow-request-before.py": "2ace10ef4c128c3cb35946a4e488b43b986b2198f5b32569c54ce19492ab4e52",
+    "independent-review/slow-request-authorized.log": "7bad10385caaed57a2020935b8cb7350335a4fbb12579f8d53e6a5d89fe30589",
+    "independent-review/channel-after.py": "60ab72635821fe61d6856b67f967b8bb52a3ef53bca52b5f2a327c1eaf72b4f5",
+    "independent-review/channel-9d79c45a96a3.py": "9d79c45a96a340ae5fc684e23eaea087fcc836cac122f3ed736ad8fae95af508",
+    "independent-review/slow-request-before.json": "d617d46fe0205d118278231db55ddbb4019cf85874f368e312e91daf9ae5630e",
+    "independent-review/raw-requests-after.log": "1d34395851eb3748e25c83262b523ffd63b2d91e896b2c79e52c5388f30ac95f",
+    "independent-review/review.json": "59c4219f9e7bfae6652519a5892b753d1a162575ceb6d9a871f74c999486ac77",
+    "independent-review/completion.json": "57651d017bbbfcd0e0913597bbaa06da085e2b061b9a2c7d6674753d67112d98",
+    "independent-review/raw-requests.log": "7f8a4f5411365b16a0db7d204087a4dbf9f9eca25a3baf16ba764e294c9b8d77"
+  }
+}
