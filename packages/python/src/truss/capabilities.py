@@ -102,8 +102,8 @@ class NativeDirectReadCapability(_NativeCapability[Literal['direct_read']]):
             anchor=anchor,direction=direction,limit=limit,maximum_bytes=maximum_bytes,continuation=continuation)
 
     def reached_in_transaction(self,transaction: TransactionHandle,token: str,*,maximum_token_bytes: int=16384,
-                               maximum_evidence_bytes: int=1048576) -> Outcome[ReceiptIncluded | ReceiptVisibilityUnavailable]:
-        return self._assembly.reached_in_transaction(transaction,token,maximum_token_bytes=maximum_token_bytes,maximum_evidence_bytes=maximum_evidence_bytes)
+                               maximum_evidence_bytes: int=1048576,consumer_id: str | None=None) -> Outcome[ReceiptIncluded | ReceiptVisibilityUnavailable]:
+        return self._assembly.reached_in_transaction(transaction,token,maximum_token_bytes=maximum_token_bytes,maximum_evidence_bytes=maximum_evidence_bytes,consumer_id=consumer_id)
 
 
 @dataclass(frozen=True,slots=True,kw_only=True)

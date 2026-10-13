@@ -6815,3 +6815,25 @@ upgrades retain five prior query routine identities/owners/ACLs. Basic public
 first/next/empty-tail, read-only, related-page and count workflows run with the
 existing scalar/relationship/adopter workflows. Evidence follows execution in
 `evidence/python-query-pages-20261012.json`.
+
+### Public registered-feed receipt comparison — 2026-10-12
+
+Runtime0.30 adds optional `consumer_id` to the existing public reached method.
+The authority-only result and canonical issued token bytes are unchanged. Named
+consumers use a distinct pinned comparison: original committed receipt proof,
+actual registered installation/epoch/checkpoint bytes, complete current source
+and receipt authority, and lossless exclusive checkpoint next-xid comparison.
+Both true and false require final unchanged checkpoint/registration and receipt
+proof/authority; missing or unsafe evidence refuses. Read-only mode additionally
+requires an unassigned transaction ID to exclude caller-pending ACK writes.
+
+Python, shared proposal JSON request/result and TS carriers agree on optional
+consumer selection and typed invalid-consumer refusal. Existing enrollment and
+additive .29→.30 upgrades grant the new private-owned facade to registered feed
+readers, preserving old routine identities/ACLs and feed checkpoints. Weft0.4.1
+selects .30 explicitly; the .4 query grammar/binding/target remain unchanged and
+0.4.0 stays closed to .29. The documented public adopter workflow exercises the
+same token as source-visible/feed-behind before ACK, then feed-included after
+its durable content-addressed sink and separate committed ACKs. This is source
+ACK evidence, not verified downstream application or full interchange closure.
+Evidence follows execution in `evidence/python-feed-reached-20261012.json`.

@@ -135,6 +135,9 @@ def run_workflow(directory, *, bun_executable='bun'):
                     included = expect(success(assembly.reached_in_transaction(tx, token)), ReceiptIncluded)
                     if not included.included:
                         raise RuntimeError('Committed receipt was not visible')
+                    behind = expect(success(assembly.reached_in_transaction(tx, token, consumer_id='demo-sink')), ReceiptIncluded)
+                    if behind.included or behind.comparison_profile == included.comparison_profile:
+                        raise RuntimeError('Expected distinct feed comparison before ACK')
                     expect(success(assembly.lookup_key_in_transaction(tx, document_id='notes',
                         module_id='notes', record_id='Note', key_id='title-key', values=('first',),
                         bun_executable=bun_executable)), ObjectFound)
@@ -188,6 +191,10 @@ def run_workflow(directory, *, bun_executable='bun'):
                     raise RuntimeError('Demo feed exceeded its finite delivery bound')
                 if delivered < 1:
                     raise RuntimeError('Expected committed feed transactions')
+                with transaction(person, read_only=True) as (assembly, tx):
+                    caught_up = expect(success(assembly.reached_in_transaction(tx, token, consumer_id='demo-sink')), ReceiptIncluded)
+                    if not caught_up.included:
+                        raise RuntimeError('Committed feed ACK did not include the receipt')
                 return {'catalog': 'accepted', 'mutation': 'committed', 'replay': 'committed',
                         'receipt': 'included', 'query': 'relationship', 'dry_run': 'rolled_back',
                         'import': 'created', 'feed_transactions': delivered, 'ack': 'committed'}

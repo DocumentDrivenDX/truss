@@ -42,7 +42,7 @@ class RuntimeUpgradeTests(unittest.TestCase):
                             self.assertEqual(admin.execute("SELECT to_regclass('truss.runtime_release') IS NOT NULL").fetchone()[0],original_ledger)
                     self.assertEqual(admin.execute('SELECT installation_id::text,source_epoch::text FROM truss.catalog_runtime_installation').fetchone(),installation)
                     self.assertEqual(admin.execute('SELECT release_id FROM truss.catalog_runtime_installation').fetchone()[0],genesis_release)
-                    self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.29-candidate')
+                    self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.30-candidate')
                     from truss._security_home_installation import bootstrap_security_homes_in_transaction
                     admin.execute('BEGIN');bootstrap_host=adopt_psycopg_host(admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
                     try:

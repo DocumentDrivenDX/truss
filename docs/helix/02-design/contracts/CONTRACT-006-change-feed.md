@@ -41,6 +41,27 @@ deduplication and commit remain the consumer's responsibility. This profile
 retains source history indefinitely; cleanup/offload/removal and the stronger
 verified-application capability remain unimplemented.
 
+## Receipt comparison for caller-asserted consumers — runtime0.30
+
+`reached_in_transaction(transaction, token, consumer_id=...)` compares an
+original issued committed receipt with the named registered consumer's committed
+source checkpoint. The optional consumer selector uses the caller's current
+installation. The existing authority-only mode and receipt token bytes remain
+unchanged. A separate `truss-feed-receipt-visibility/0.1` comparison pin describes
+this result; it does not turn the token into a read grant.
+
+The profile requires READ COMMITTED, read-only, and no assigned transaction ID,
+so a caller-pending ACK cannot masquerade as committed progress. It verifies the
+actual registration/install/epoch cursor and current receipt/full historical
+feed authority, then compares the checkpoint's exclusive next xid losslessly to
+the receipt's original writer xid. False means a valid authorized issued receipt
+is ahead of this consumer; malformed, missing, unauthorized or changed evidence
+refuses. Both boolean outcomes recheck the original receipt, consumer authority,
+registration and checkpoint. There is no wait, retry, replica claim or independent
+proof of downstream application. Only caller-asserted source ACK progress is
+compared. Python, proposal request/result JSON schemas and TS carriers name the
+same optional consumer and typed invalid-consumer refusal.
+
 ## Owner decisions — 2026-10-07
 
 Complete reconstructable history is selected under ADR-007. Local retention may be short or zero, but required durable archive/consumer handoff precedes deletion when continued reconstruction/delivery is promised. Transactional event production, complete group/transaction boundaries and registered consumer protection still apply. Missing both local and qualified archive history yields explicit unavailable history. Request-receipt replay/protection is independent of local journal retention; trimming cannot make an old request reapply.

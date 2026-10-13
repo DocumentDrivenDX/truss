@@ -6,7 +6,7 @@ independent edge writes/reads, business-key lookup, preconditions, idempotent
 receipts, host-owned imports, retained history, committed feeds and acknowledgements.
 The caller owns its connection and transaction settlement.
 
-Runtime 0.29 provides public Weft compilation and query execution for string, boolean,
+Runtime 0.30 provides public Weft compilation and query execution for string, boolean,
 integer and decimal records, including equality filters/joins, counts, ordering/limits and `alias.*`.
 Integer COUNT results remain Python integers; optional values distinguish absence,
 null and empty strings. Read-only READ COMMITTED transactions are supported.
@@ -81,7 +81,7 @@ transaction, rolls back a dry-run, imports a Note, then durably saves feed pages
 before committing their source acknowledgements.
 
 Install this package's `[local,native]` extras, Bun, and the Weft Python extension
-built with `truss-postgresql-pg18` supporting runtime backend0.4.0. The example
+built with `truss-postgresql-pg18` supporting runtime backend0.4.1. The example
 requires that actual extension; it does not skip compiled queries.
 
 ```sh
@@ -1285,7 +1285,7 @@ allocation accounting, custom tracing or metrics are introduced.
 
 The current profile has indefinite retained receipts and no expiry API. Replica/seed
 comparison, repeatable-read visibility profiles and portable restore lineage
-remain unimplemented. Current additive upgrades from0.23–0.28 are supported as described below.
+remain unimplemented. Current additive upgrades from0.23–0.29 are supported as described below.
 
 ### Caller-owned imports (runtime 0.18 candidate)
 
@@ -1524,7 +1524,7 @@ a transaction ID. Read-only READ COMMITTED transactions are supported. The
 returned safe watermark is the reproduced interval endpoint, rather than the
 original polling observation. Unavailable or mismatched retained facts refuse
 reproduction; there is no internal retry. Retention cleanup is not implemented.
-The initial0.22 release required fresh installation. Current0.23–0.28 upgrades
+The initial0.22 release required fresh installation. Current0.23–0.29 upgrades
 preserve feed registrations and checkpoints.
 
 ### Retained import provenance (runtime 0.23 candidate)
@@ -1611,10 +1611,10 @@ retaining genesis, original reports, receipts and feed evidence as described abo
 
 ## Public compiled queries
 
-Install a Weft Python extension supporting runtime backend version `0.4.0`,
+Install a Weft Python extension supporting runtime backend version `0.4.1`,
 built with `truss-postgresql-pg18`, providing
 `compile_truss_runtime_json`. Generic or conformance-only Weft builds do not enable
-this capability. The selected Truss runtime is 0.29 on DocumentDrivenDX
+this capability. The selected Truss runtime is 0.30 on DocumentDrivenDX
 `pgserver-pg18==18.6.1` (PostgreSQL18.6); remote managed services remain unqualified.
 
 ```python
@@ -1650,7 +1650,7 @@ input/source/output limits and deadlines apply, without custom instrumentation o
 internal retry loops.
 
 Record-name and inverse-name annotations select support policy0.5.0. Runtime upgrades from exact
-0.23/0.24/0.25/0.26/0.27/0.28 profiles preserve immutable genesis, original accepted sources, rows,
+0.23/0.24/0.25/0.26/0.27/0.28/0.29 profiles preserve immutable genesis, original accepted sources, rows,
 receipts and feed deliveries. The active runtime configuration selects the new
 policy without changing historical preparation or report pins.
 
@@ -1724,3 +1724,33 @@ An empty result ends this traversal. `QueryRows.catalog_revision` describes each
 call; continuation is caller-managed and live. Edits between calls can move rows,
 and there is no stable snapshot or exactly-once enumeration guarantee. Non-string
 keys, grouped summaries, joins in page profiles and opaque cursors are unsupported.
+
+
+## Has a feed consumer acknowledged a receipt?
+
+The default `reached_in_transaction(tx, token)` checks source receipt visibility.
+To check the named registered consumer's committed ACK progress, use a fresh
+caller-owned read-only READ COMMITTED transaction with no assigned transaction ID:
+
+```python
+result = assembly.reached_in_transaction(
+    read_transaction, token, consumer_id='warehouse',
+)
+if isinstance(result, Ok) and isinstance(result.value, ReceiptIncluded):
+    print(result.value.included)
+```
+
+The returned feed comparison has its own `comparison_profile`; original receipt
+tokens are unchanged. `True` means this consumer's committed source checkpoint
+has advanced past the receipt's original writer transaction. `False` means the
+issued, committed and currently authorized receipt is ahead of that consumer's
+checkpoint. Missing/unauthorized consumers, invalid tokens, expired/missing
+receipt evidence and changed authority or checkpoint refuse instead of returning
+false. Invalid consumer syntax returns `invalid_consumer`.
+
+Both results require current receipt scope and complete historical feed authority.
+Caller-pending ACKs cannot count as committed progress: an assigned transaction ID
+refuses this comparison. There is no wait or internal retry. The result compares
+caller-asserted source ACKs; it does not independently verify downstream application,
+replica freshness or another database's commit. The runnable adopter example
+checks false before delivery and true after its durable sink and ACK commits.
