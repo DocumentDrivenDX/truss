@@ -7,6 +7,10 @@
 -- or establish complete source/role routes. BEFORE does not refresh the outer
 -- DML snapshot: authorization-dependent DML requires an original coordinator
 -- guard acquired in a separate statement before issuing the fresh DML.
+-- Private coordinated writer v0.2 also pins a distinct routine-source epoch.
+-- The selected routine-DDL spike advances it; data event counts cannot absorb it.
+ALTER TABLE truss.policy_generation_guard ADD COLUMN routine_source_generation bigint
+ NOT NULL DEFAULT 0 CHECK (routine_source_generation >= 0);
 CREATE FUNCTION truss.security_data_writer_guard() RETURNS trigger
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE original_identity bytea; original_profile bytea; observed_generation bigint;

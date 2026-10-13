@@ -1,0 +1,52 @@
+{
+  "status": "private-selected-endpoint-binding",
+  "profile": "PostgreSQL18.6 / stock psycopg3.3.6 / Python3.11.17; original trusted administrator and provided original native superuser hook owner",
+  "sourceDigests": {
+    "packages/python/src/truss/_security_data_writer.py": "007b21091cc79823eeb215284f5dc00a18dcb3dcee836f82e85df1c0e7ad35a6",
+    "packages/python/src/truss/_security_data_writer_binding.py": "74e6925d9623ebaccfd3bf9b2d4b988a27c91c9ebe9835bbe0cae8c7990eb735",
+    "packages/python/tests/test_security_public_ontology_native.py": "ac5bf9087e554cb3e1fec46d096438b0ae01a9ba33b1e88e797fc2ee05058be6",
+    "packages/postgresql/native/security-routine-ddl-guard-pg18.sql": "04ec378e45b6e23b153230a663d7e3abf5bf9e1b13174541d8ecbc139dc1235f",
+    "scripts/prove-security-routine-ddl-generation.py": "b68cd9eeec25c1b639fa4dcd48d2a5aa9e22bdc30c60446d6b3036965a2e21e3",
+    "packages/python/src/truss/_psycopg_source_census.py": "04d07815477b940c0324d707044babcd03f72fe71f52dafe1ba924772db90c55",
+    "packages/python/src/truss/_source_census/pg18.sql": "494a647e449032e21ebc5e2eb9903619b9385bf99cbde72c63923da44ee23465"
+  },
+  "implementation": "Explicit write_data_with_routine_hooks_in_transaction validates bounded exact hook-owner OID; inside original guard checks active event_triggers=on, original routine function owner/native flags/body SHA/restricted ACL and exact two named ALWAYS hooks with original owner/function/event and complete3-tag native boolean array predicate before and after callback. Source epoch remains independently pinned. Legacy private epoch-only entry remains unattested, never security_ready.",
+  "validation": {
+    "nativeTests": 11,
+    "nativeSeconds": 28.386,
+    "boundaries": "873 imports passed",
+    "wheel": "Both coordinator modules match exact source bytes",
+    "formal": "Existing conditional arithmetic3UNSAT/2SAT; binding source added to digest custody only",
+    "review": "Astra Ultra found stable-off GUC gap, fixed with native pre/late controls; final no remaining actionable source findings. Independent parse/bodyhash/873 boundaries; native tests are parent evidence.",
+    "independentFormal": "Astra Ultra Z34.15.4 independently3UNSAT/2SAT, all6 source hashes unchanged; formulas identical to prior arithmetic model"
+  },
+  "controls": [
+    "Missing, disabled, origin-only, dropped, extra and incomplete-tag hooks refuse before callback",
+    "Canonical hook bound to different routine and actual/provided alternate superuser owner refuse before callback",
+    "Invalid boolean/zero/overflow and non-superuser owner refuse",
+    "Measured late-off callback enters and changes setting; exact active-event cause refuses afterward and rolls back effects/epochs/GUC",
+    "Late hook disabling after DML rolls back data/epochs and restores ALWAYS metadata",
+    "Existing source-epoch ABA, misleading event count, ceiling, competing DDL and fresh post-wait claim controls now exercise hook-bound entry",
+    "Existing census already includes full pg_event_trigger; native disable changes only that section, exact native row matches, rollback restores original image"
+  ],
+  "traceability": [
+    {
+      "case": "truss.B11",
+      "scope": "selected hook/settings persistent endpoint drift refusal and metadata observation prerequisite",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L13",
+      "scope": "selected routine DDL participating hook metadata prerequisite",
+      "caseClosed": false
+    }
+  ],
+  "exclusions": [
+    "Endpoint checks do not hold immutable hook/settings custody: transient disable/configuration/source change-and-restore remains a complete-route/lifetime obligation",
+    "Original hook owner input and trusted administrator/callback/stock source are premises, not authenticated issuer/credential closure",
+    "Only selected function tags; other DDL/role/procedure/extension/direct epoch reset/handler/library paths unclosed",
+    "No logical action permissions, source/native refinement, production installation, final release/sink or ready-profile admission",
+    "Native source census is response observation, not a held coherent source cut",
+    "Legacy epoch-only helper remains private and unattested; no required case promotion; all132 remain in scope"
+  ]
+}

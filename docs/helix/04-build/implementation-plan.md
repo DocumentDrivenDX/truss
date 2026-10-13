@@ -6958,6 +6958,14 @@ independent bidirectional interchange; those deliverables remain open.
 
 Full11 native tests pass. The conditional model passes2UNSAT/4SAT; the added SAT query repeats the active mutation transition and is not a native lock-owner theorem. This remains a selected B11/L13 prerequisite/counterexample, with no changed authorization semantics demonstrated and no required case promoted.
 
+
+### Selected native routine source epoch — 2026-10-12
+
+[Private v0.2 implementation and retained native evidence](evidence/security-routine-source-epoch-20261012/receipt.json) adds a distinct bounded int8 routine_source_generation to the private data-writer spike. The actual writer pins it before callback execution and requires equality afterward, independently of the declared data-event count. Selected native CREATE/ALTER/DROP FUNCTION hooks take original head SHARE then guard UPDATE, check fresh unsettled claims, and atomically advance both general and source epochs at command end. The native data-trigger body itself remains unchanged.
+
+Controls independently assert both epochs for every selected tag, both ceilings, missing/mistyped epoch refusal before callback, rollback of same-transaction source ABA with correct and misleading event counts, competing plain-DDL guard waits and immediate/post-wait claim refusal. Full11 native tests,873 import boundaries and exact Python wheel module bytes pass. The3UNSAT/2SAT arithmetic model proves conditional separate-epoch detectability, while its SAT shared-count control retains the correct inventory limitation. No SQL/Python source refinement is claimed.
+
+The epoch column alone does not prove original hook custody or complete mutation coverage. These assets require a native superuser hook installer and original trusted function owner; they cover only the selected function tags. Admin hook bypass, direct counter reset and other DDL/role/procedure/extension/handler/library routes remain unclosed. Source bytes can temporarily change before refusal; callback rollback safety remains a premise. The general home bootstrap does not install this spike, and its increments must not be composed with the existing exactly-one manual authority CAS. Raw fixture claims supply no authenticated publication/release/sink evidence. These are B11/L13 prerequisites only; no required case is promoted and all132 remain in scope.
 ### Original consumer model registration gap — 2026-10-12
 
 An authority-only attempt at the unchanged original missing-key and scalar-filter
@@ -6976,3 +6984,12 @@ The draft authority adapter remains unpromoted until the exact model registers
 and its original expectations execute. Replica variants and independent native
 interchange remain unqualified. This registration gap takes priority over adding
 a second implementation or broader test machinery.
+
+
+### Private selected routine-hook binding — 2026-10-13
+
+[Explicit hook-bound writer and retained native controls](evidence/security-routine-hook-binding-20261013/receipt.json) add a private entry point that checks the provided original native superuser hook owner, original routine function metadata/body/ACL, two exact ALWAYS hooks/events, all3 selected function tags and active PostgreSQL event_triggers=on before and after callback execution inside the original guard. The independent routine source epoch remains required. The legacy private epoch-only entry point remains unattested and returns no security-ready result.
+
+Astra identified that exact enabled metadata alone missed the global event_triggers=off setting; native pre-off and measured late-off controls now refuse and preserve caller state. Missing/disabled/origin-only/dropped/extra/wrong-tag/wrong-function/wrong-owner hooks refuse before callback; late hook disable rolls back data/epochs/metadata. Existing native source epoch/race controls use the stricter entry point. The existing source census already included full pg_event_trigger metadata: a new native control verifies disabling changes only that section, exact native row metadata agrees, and rollback restores the image. No census SQL extension was needed.
+
+Full11 native tests,873 import boundaries and exact bytes of both Python wheel modules pass. The unchanged conditional3UNSAT/2SAT epoch arithmetic has refreshed source custody, not a new source-refinement theorem. Endpoint checks do not exclude transient hook/GUC/source disable-and-restore or establish complete mutation/lifetime closure. Original owner/administrator/callback premises, other DDL/role/procedure/extension/handler/library routes, production activation and final release/sink remain unqualified. These are B11/L13 prerequisites only; no required case is promoted and all132 remain in scope.

@@ -1,0 +1,56 @@
+{
+  "status": "private-component-only",
+  "profile": "native-data-writer-spike/0.2; PostgreSQL18.6 / stock psycopg3.3.6 / Python3.11.17",
+  "sourceDigests": {
+    "packages/python/src/truss/_security_data_writer.py": "18c196188cf9342f0603b488dbb7d49baeb44a317acfccc91e14e6cec0e2491b",
+    "packages/python/tests/test_security_public_ontology_native.py": "924134a22a1213f5d564c8b1543fe6f9e6caddeae89616bac2649bb679cceeac",
+    "packages/postgresql/native/security-data-writer-guard-pg18.sql": "57af5bc1e4c0e0a7ccb6bc489c2d136ba45fa3de1fa84399a578f258597f60d8",
+    "packages/postgresql/native/security-routine-ddl-guard-pg18.sql": "abae9698ebfb81c0091cc8033dc078e84706ee3d94ad33515da11b000db63d83",
+    "scripts/prove-security-routine-ddl-generation.py": "9ca48f46868de077d94293698e349c901036b7ee3bf475ffc08b7745bc0de555"
+  },
+  "implementation": "Private writer requires original native int8 routine_source_generation and unchanged bounded exact value through callback. Separate selected native CREATE/ALTER/DROP FUNCTION ddl_start/end hooks acquire original head SHARE then guard UPDATE, inspect unsettled claims in fresh VOLATILE SPI statement, and advance both general and source epochs atomically. Original native data trigger body hash unchanged.",
+  "validation": {
+    "nativeTests": 11,
+    "nativeSeconds": 28.586,
+    "formal": "3 UNSAT /2 SAT",
+    "boundaries": "873 imports passed",
+    "wheel": "Private coordinator exact source bytes",
+    "review": "Astra Ultra: no remaining actionable findings; independently3UNSAT/2SAT and all5 source hashes match final files. Native tests not independently rerun."
+  },
+  "controls": [
+    "All3 selected tags individually advance both epochs exactly once",
+    "Either epoch ceiling refuses selected DDL before effects and rolls back",
+    "Missing or mistyped epoch refuses actual writer before callback; prior caller work retained",
+    "Same-transaction routine change/data/restore refuses with correct and misleading data-event counts; exact source epoch, data and general generation roll back",
+    "Competing plain native DDL waits on original writer PID, then2changes advance both epochs after data commit",
+    "Immediate and freshly committed post-wait unsettled claims refuse42501 with unchanged routine source and both epochs"
+  ],
+  "formalScope": "Conditional bounded integer arithmetic, including independent source epoch refusal regardless of data-event count. Exact monotonic participating increments/no resets are premises. Shared-generation-only wrong-inventory SAT control remains. Not SQL/Python source refinement or native lock/freshness proof; those selected behaviors have exercising evidence.",
+  "traceability": [
+    {
+      "case": "truss.B11",
+      "scope": "selected routine source-change visibility and writer refusal prerequisite",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L13",
+      "scope": "selected routine DDL participation in authority/source epoch prerequisite",
+      "caseClosed": false
+    }
+  ],
+  "exclusions": [
+    "Epoch column does not attest installed/unchanged/always-active original DDL hooks; complete hook custody and mutator route closure remain required",
+    "Native superuser hook installer, original function owner, stock execution path and qualified rollback-safe synchronous physical callback are premises",
+    "Only CREATE/ALTER/DROP FUNCTION tags participate; procedure/extension/role/handler/library/otherDDL/directepochreset routes and admin hook bypass are not closed",
+    "Same-transaction source can change before refusal; this is selected detection and rollback, not source-byte immutability or irreversible external-effect containment",
+    "General security home bootstrap does not install the new epoch/hooks; native SQL assets are private spikes, not production installation or activation",
+    "Do not compose DDL hook increments with existing exactly-one manual authority CAS",
+    "Raw fixture claim insertion is not authenticated publication, final sink or release proof",
+    "No ready profile/case promotion; all132 required cases remain in scope"
+  ],
+  "postmerge": {
+    "testedSourcesUnchanged": true,
+    "upstreamCommit": "7b4dd909",
+    "upstreamScope": "consumer registration-gap evidence and implementation-plan append only; both entries preserved"
+  }
+}
