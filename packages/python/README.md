@@ -57,11 +57,12 @@ dry-run, imports a Note and saves feed pages durably before source ACKs. It uses
 administrator SQL only for role setup. Data and sink files remain after the
 server stops; a failed run preserves source state for diagnosis.
 
-The [portable public preview0.9](../../docs/helix/04-build/corpus/public-python/0.9/README.md)
-retains its original runtime0.35/Weft0.4.8 pins and basic/exact-scalar observations.
-Use its matching historical package for reproduction; it is not a current0.38
-quickstart or full cross-language interchange claim. The current workflow above
-uses the current installed public API.
+The [portable public preview0.10](../../docs/helix/04-build/corpus/public-python/0.10/README.md)
+provides two JSON-driven basic and exact-scalar examples for this current runtime.
+They retain22 and10 observations respectively, with explicit caller transaction
+phases. Run them using the installed package and a new directory as documented
+there. Prior0.9 retains its original runtime0.35 pins and needs its historical
+runner/package; neither preview claims full cross-language interchange.
 
 For a local server with an installed Truss candidate, use the explicit launcher
 option after installing the `[local,native]` extras:

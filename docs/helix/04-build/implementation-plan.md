@@ -7286,3 +7286,11 @@ precondition without a partial object. Explicit native-to-authored condition-ID
 mapping preserves original labels. One basic installed PG18 test passes fourteen
 selected workflows; see `evidence/original-consumer-atomic-batch-20261013.md`.
 No runtime change, general action planner or broader test campaign was added.
+
+## Refresh the runnable portable examples — 2026-10-13
+
+Published-in-repository preview0.10 selects current runtime0.38 while preserving
+the two original basic/exact-scalar workflows and all32 observations. Prior0.9
+and both UMF fixture bytes are preserved. The existing two installed PG18 tests
+pass; see `evidence/public-python-preview-010-20261013.md`. No runtime change,
+new case campaign or interchange claim was added.

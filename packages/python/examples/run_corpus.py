@@ -20,11 +20,11 @@ from truss.groups import (CreateObject, CreateEdge, UpdateObject, AuthoredValue,
     RequestNone, GroupSuccess, GroupFailed, PropertyEquals)
 from truss.imports import ImportReported, ImportCreated, ImportSkipped, ImportRejected
 
-FORMAT = 'truss-public-python-preview/0.9'
+FORMAT = 'truss-public-python-preview/0.10'
 SCOPE = 'single Python preview; not full conformance or interchange'
 OPS = {'install', 'accept', 'configure', 'apply', 'replay', 'lookup', 'query',
        'reached', 'import', 'drain-feed'}
-PROFILE = {'runtimeRelease': 'truss-catalog-runtime/0.35-candidate',
+PROFILE = {'runtimeRelease': 'truss-catalog-runtime/0.38-candidate',
     'postgresql': '18.6', 'driver': 'psycopg3.3.6', 'weftBackendVersion': '0.4.8',
     'layout': {'identity': 'truss-layout', 'version': '0.16',
         'sha256': '261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368'}}
