@@ -10,7 +10,7 @@ from .groups import (CreateObject,CreateEdge,AuthoredValue,RootlessOwnership,Sto
     RequestNone,GroupSuccess)
 from ._group_runtime import GroupRuntimeContext,_wire,_bytes,_artifact,_identity,apply_group
 from ._acceptance_json import decode_acceptance_json
-from ._umf_key_tuples import KeyTupleRequest,encode_string_key_tuples
+from ._umf_key_tuples import KeyTupleRequest,encode_key_tuples
 from .psycopg_host import _HostOperationReservation
 from .preparation import CatalogDocument
 from ._catalog_report_semantics import canonical_numeric_free
@@ -129,8 +129,8 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
                     if type(record) is ObjectImportRecord:
                         cursor.execute('SELECT truss.import_identity_key_selection(%s,%s,%s)',(_bytes(_wire(record.identity)),manifest['releaseId'],digest),prepare=False)
                         metadata=json.loads(bytes(cursor.fetchone()[0]))
-                        request=KeyTupleRequest(record.identity.type.owner.module_id,metadata['recordId'],metadata['keyId'],tuple(c.value.text for c in record.identity.components))
-                        original_key=encode_string_key_tuples(sources[record.identity.type.owner.document_id],(request,),bun_executable=bun_executable)[0]
+                        request=KeyTupleRequest(record.identity.type.owner.module_id,metadata['recordId'],metadata['keyId'],tuple(c.value for c in record.identity.components))
+                        original_key=encode_key_tuples(sources[record.identity.type.owner.document_id],(request,),bun_executable=bun_executable)[0]
                         cursor.execute('SELECT truss.import_object_identity(%s,%s,%s,%s,%s)',(_bytes(_wire(record.identity)),sources[record.identity.type.owner.document_id],original_key.tuple_bytes,manifest['releaseId'],digest),prepare=False)
                     else:cursor.execute('SELECT truss.import_edge_identity(%s,%s,%s)',(_bytes(_wire(record.identity)),manifest['releaseId'],digest),prepare=False)
                     metadata=json.loads(bytes(cursor.fetchone()[0]))

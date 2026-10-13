@@ -137,8 +137,7 @@ BEGIN
  IF replay_only AND request->>'state' IS DISTINCT FROM 'present' THEN RAISE EXCEPTION 'request-present replay probe required' USING ERRCODE='22023';END IF;
  IF input-ARRAY['interfaceVersion','layoutProfile','mutationProfile','valueProfile','catalog','operations','assertedOrigin','preconditions']<>'{}'::jsonb
  OR input->>'interfaceVersion' IS DISTINCT FROM 'truss-group-input/0.1.0' OR input->'catalog' IS DISTINCT FROM '{"selection":"current"}'::jsonb
- OR input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile' OR input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile'
- OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile' OR jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
+ OR input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile' OR jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
  OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128 OR jsonb_typeof(documents) IS DISTINCT FROM 'array'
  OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512 THEN RAISE EXCEPTION 'selected bounded object group required' USING ERRCODE='0A000';END IF;
  IF input->'assertedOrigin'->>'kind' IS DISTINCT FROM 'map' OR (input->'assertedOrigin')-ARRAY['kind','entries']<>'{}'::jsonb
@@ -198,6 +197,7 @@ BEGIN
     'semantic',raw->'semantic','receiptToken',CASE WHEN writer<>receipt.original_writer_xid THEN truss.runtime_receipt_token(attempt.position_bytes) END,'observationBase64',replace(encode(observation,'base64'),chr(10),''),'observationSha256',encode(sha256(observation),'hex'))::text,'UTF8');
   END IF;
  END IF;
+ IF input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile' OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile' THEN RAISE EXCEPTION 'current group profile required on receipt miss' USING ERRCODE='0A000';END IF;
  IF replay_only THEN RETURN convert_to('{"outcome":"miss"}','UTF8');END IF;
  -- Authorize the full original owner inventory without requiring live targets.
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
@@ -231,6 +231,19 @@ BEGIN
  IF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN RETURN truss.runtime_edge_metadata(attempt_id,operation_index);END IF;
  selected:=truss.runtime_operation_type(operation,input->'operations',operation_index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);
  IF operation->>'operation'='create_object' THEN
+  -- Reject malformed key cells natively before calling the external UMF
+  -- producer, so caller input failures remain GroupFailed rather than host errors.
+  IF jsonb_typeof(operation->'values') IS DISTINCT FROM 'array' OR jsonb_array_length(operation->'values')>1024 THEN RAISE EXCEPTION 'bounded authored create values required' USING ERRCODE='22023';END IF;
+  FOR property IN SELECT DISTINCT p.* FROM truss.key_def k CROSS JOIN LATERAL unnest(k.prop_ids) i(prop_id)
+   JOIN truss.prop_def p ON p.type_id=k.type_id AND p.prop_id=i.prop_id WHERE k.type_id=selected.type_id AND k.retired_rev IS NULL LOOP
+   IF property.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR property.scalar_type IS NULL
+    OR property.nullability IS DISTINCT FROM 'required' OR property.cardinality IS DISTINCT FROM 'one' OR property.home IS DISTINCT FROM 'json'
+    OR property.retired_rev IS NOT NULL OR (property.scalar_type='decimal' AND property.facets IS DISTINCT FROM '{"precision":18,"scale":4}'::jsonb) THEN
+    RAISE EXCEPTION 'supported required scalar key property required' USING ERRCODE='0A000';END IF;
+   IF (SELECT count(*) FROM jsonb_array_elements(operation->'values') v WHERE v.value->>'name'=property.name)<>1 THEN RAISE EXCEPTION 'complete unique key values required' USING ERRCODE='22023';END IF;
+   SELECT v.value->'value' INTO entry FROM jsonb_array_elements(operation->'values') v WHERE v.value->>'name'=property.name;
+   IF truss.valid_scalar_property(entry,property.scalar_type,false,property.facets) IS NOT TRUE THEN RAISE EXCEPTION 'exact declared key cell required' USING ERRCODE='22023';END IF;
+  END LOOP;
   RETURN convert_from(truss.group_create_metadata(convert_to(jsonb_set(input-'preconditions','{operations}',jsonb_build_array(operation))::text,'UTF8'),attempt.documents_bytes,
    (SELECT release_id FROM truss.runtime_current_installation()),(SELECT release_sha256 FROM truss.runtime_current_installation())),'UTF8')::jsonb->0
    ||jsonb_build_object('values',operation->'values');
@@ -326,7 +339,7 @@ REVOKE ALL ON FUNCTION truss.runtime_object_history(jsonb,jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_object_update_keys(object_id bigint,selected_type int,desired_props jsonb,original_keys bytea,attempt_id uuid,operation_index int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE installation truss.catalog_runtime_installation%ROWTYPE;key_definition truss.key_def%ROWTYPE;component record;values_text text[];
+DECLARE installation truss.catalog_runtime_installation%ROWTYPE;key_definition truss.key_def%ROWTYPE;component record;values_text text[];values_cells jsonb;key_facets jsonb;
  keys jsonb;key_input jsonb;tuple_bytes bytea;owner_receipt jsonb;pin record;ns bytea;transport bytea;planned jsonb:='[]';entry jsonb;
  old truss.object_key_bucket%ROWTYPE;members bigint[];reservations bigint[];observed record;unchanged boolean;route record;
 BEGIN
@@ -335,20 +348,22 @@ BEGIN
   RAISE EXCEPTION 'bounded original key inventory required' USING ERRCODE='22023';END IF;
  keys:=convert_from(original_keys,'UTF8')::jsonb;
  FOR key_definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
-  values_text:=ARRAY[]::text[];
+  values_text:=ARRAY[]::text[];values_cells:='[]';key_facets:='[]';
   FOR component IN SELECT p.* FROM unnest(key_definition.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.prop_id=i.prop_id AND p.type_id=selected_type ORDER BY i.ord LOOP
-   IF component.scalar_type<>'string' OR component.nullability<>'required' OR desired_props->component.prop_id::text->>'kind' IS DISTINCT FROM 'string' THEN
-    RAISE EXCEPTION 'required string key components required' USING ERRCODE='0A000';END IF;
-   values_text:=array_append(values_text,desired_props->component.prop_id::text->>'text');
+   IF component.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR component.nullability IS DISTINCT FROM 'required'
+    OR truss.valid_scalar_property(desired_props->component.prop_id::text,component.scalar_type,false,component.facets) IS NOT TRUE THEN
+    RAISE EXCEPTION 'required exact key components required' USING ERRCODE='0A000';END IF;
+   values_cells:=values_cells||jsonb_build_array(desired_props->component.prop_id::text);
+   key_facets:=key_facets||jsonb_build_array(coalesce(component.facets,'{}'::jsonb));
   END LOOP;
   SELECT value INTO STRICT key_input FROM jsonb_array_elements(keys) WHERE value->>'keyNumber'=key_definition.key_num::text;
   tuple_bytes:=decode(key_input->>'tupleHex','hex');
-  IF NOT truss.verify_umf_string_key_tuple(tuple_bytes,values_text) THEN RAISE EXCEPTION 'key tuple disagrees with final values' USING ERRCODE='22023';END IF;
+  IF NOT truss.verify_umf_scalar_key_tuple(tuple_bytes,values_cells,key_facets) THEN RAISE EXCEPTION 'key tuple disagrees with final values' USING ERRCODE='22023';END IF;
   owner_receipt:=convert_from(decode(key_input->>'receiptBase64','base64'),'UTF8')::jsonb;
   IF owner_receipt->>'operation' IS DISTINCT FROM 'encode-core-key-tuple' OR owner_receipt->>'profile' IS DISTINCT FROM 'umf-key-tuple-v1'
    OR owner_receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex') OR owner_receipt->'identity' IS DISTINCT FROM
     (SELECT jsonb_build_object('module',t.module,'element',t.element,'key',key_definition.key_id) FROM truss.type_def t WHERE t.type_id=selected_type)
-   OR owner_receipt->'values' IS DISTINCT FROM (SELECT jsonb_agg(jsonb_build_object('string',v) ORDER BY n) FROM unnest(values_text) WITH ORDINALITY x(v,n))
+   OR owner_receipt->'values' IS DISTINCT FROM truss.umf_key_values(values_cells)
    OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.type_def t JOIN truss.schema_doc d ON d.doc_id=t.document_id WHERE t.type_id=selected_type ORDER BY d.rev DESC LIMIT 1) THEN
    RAISE EXCEPTION 'original UMF key receipt required' USING ERRCODE='22023';END IF;
   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected_type,key_definition.key_num);

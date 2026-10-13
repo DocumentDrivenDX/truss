@@ -1,6 +1,6 @@
 CREATE FUNCTION truss.runtime_import_profiles() RETURNS jsonb
 LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
- SELECT '{"importProfile":{"identity":"truss-host-scalar-import","version":"0.1","sha256":"3f8ec350d3184ef4239e3193afb48ed0b37213f36db8fe4f636d55585a2c3b9d"},"importPayloadProfile":{"identity":"truss-scalar-import-payload","version":"0.1","sha256":"bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"},"importKeyProfile":{"identity":"truss-selected-umf-string-key","version":"0.1","sha256":"07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"},"configurationProfile":{"identity":"truss-installed-engine-forbid","version":"0.1","sha256":"502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"}}'::jsonb;
+ SELECT '{"importProfile":{"identity":"truss-host-scalar-import","version":"0.1","sha256":"3f8ec350d3184ef4239e3193afb48ed0b37213f36db8fe4f636d55585a2c3b9d"},"importPayloadProfile":{"identity":"truss-scalar-import-payload","version":"0.1","sha256":"bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"},"importKeyProfile":{"identity":"truss-selected-umf-scalar-key","version":"0.2","sha256":"e4b325c5906c759776e7ffbb5b9c298caa23034339d90c4e2e7a9d74eb002708"},"configurationProfile":{"identity":"truss-installed-engine-forbid","version":"0.1","sha256":"502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"}}'::jsonb;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_import_profiles() FROM PUBLIC;
 
@@ -36,10 +36,10 @@ BEGIN
  SELECT * INTO STRICT pin FROM truss.runtime_definition('type',selected.type_id);type_pin:=pin.definition_pin;
  SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected.type_id,key_row.key_num);key_pin:=pin.definition_pin;
  FOR property IN SELECT p.* FROM unnest(key_row.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.prop_id=i.prop_id ORDER BY i.ord LOOP
-  IF property.scalar_type<>'string' OR property.cardinality<>'one' OR property.nullability<>'required' OR property.home<>'json' OR property.retired_rev IS NOT NULL THEN RAISE EXCEPTION 'selected string primary key required' USING ERRCODE='0A000';END IF;
+  IF property.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR property.scalar_type IS NULL OR property.cardinality<>'one' OR property.nullability<>'required' OR property.home<>'json' OR property.retired_rev IS NOT NULL THEN RAISE EXCEPTION 'selected string primary key required' USING ERRCODE='0A000';END IF;
   IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'primary property reader required' USING ERRCODE='42501';END IF;
   SELECT * INTO STRICT pin FROM truss.runtime_definition('property',selected.type_id,property.prop_id);
-  components:=components||jsonb_build_array(jsonb_build_object('name',property.name,'propertyId',property.prop_id::text,'definitionPin',pin.definition_pin));
+  components:=components||jsonb_build_array(jsonb_build_object('name',property.name,'propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'scalarType',property.scalar_type,'facets',coalesce(property.facets,'{}'::jsonb)));
  END LOOP;
  FOR property IN SELECT p.* FROM unnest(key_row.prop_ids) i(prop_id) JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.prop_id=i.prop_id LOOP
   IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'current primary declaration reader required' USING ERRCODE='42501';END IF;
@@ -54,7 +54,7 @@ REVOKE ALL ON FUNCTION truss.import_key_selection(text,text,text,text,text) FROM
 CREATE FUNCTION truss.import_object_identity(original_identity bytea,original_document bytea,tuple_bytes bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' AS $$
 DECLARE identity jsonb;selected truss.type_def%ROWTYPE;metadata jsonb;key_row truss.key_def%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;
- archive truss.schema_doc%ROWTYPE;component jsonb;values_text text[]:=ARRAY[]::text[];fields jsonb:='[]';component_index int:=0;pin record;namespace bytea;transport bytea;observed record;member truss.object_key_bucket%ROWTYPE;object_row truss.object%ROWTYPE;result jsonb;
+ archive truss.schema_doc%ROWTYPE;component jsonb;values_text text[]:=ARRAY[]::text[];values_cells jsonb:='[]';key_facets jsonb:='[]';fields jsonb:='[]';component_index int:=0;pin record;namespace bytea;transport bytea;observed record;member truss.object_key_bucket%ROWTYPE;object_row truss.object%ROWTYPE;result jsonb;
 BEGIN
  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 1048576 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique import identity required' USING ERRCODE='22023';END IF;
  identity:=convert_from(original_identity,'UTF8')::jsonb;
@@ -66,16 +66,16 @@ BEGIN
  IF NOT FOUND THEN RAISE EXCEPTION 'known import type required' USING ERRCODE='22023';END IF;
  metadata:=convert_from(truss.import_key_selection(selected.document_id,selected.module,selected.element,expected_release,expected_digest),'UTF8')::jsonb;
  IF jsonb_typeof(identity->'keyNumber') IS DISTINCT FROM 'string' OR jsonb_typeof(identity->'keyDefinitionPin') IS DISTINCT FROM 'string' OR identity->'type' IS DISTINCT FROM metadata->'type' OR identity->>'keyNumber' IS DISTINCT FROM metadata->>'keyNumber'
-  OR identity->>'keyDefinitionPin' IS DISTINCT FROM metadata->>'keyDefinitionPin' OR identity->'keyEncodingProfile' IS DISTINCT FROM metadata->'keyEncodingProfile'
+  OR identity->>'keyDefinitionPin' IS DISTINCT FROM metadata->>'keyDefinitionPin' OR (identity->'keyEncodingProfile' IS DISTINCT FROM metadata->'keyEncodingProfile' AND NOT ((identity->'keyEncodingProfile'='{"identity":"truss-selected-umf-string-key","version":"0.1","sha256":"07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"}'::jsonb AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(identity->'components') c WHERE c.value->'value'->>'kind' IS DISTINCT FROM 'string')) IS TRUE))
   OR jsonb_array_length(identity->'components')<>jsonb_array_length(metadata->'components') THEN RAISE EXCEPTION 'actual complete primary definition required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
  IF original_document IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'caller-known original document required' USING ERRCODE='22023';END IF;
  FOR component IN SELECT value FROM jsonb_array_elements(identity->'components') LOOP
   IF jsonb_typeof(component->'propertyId') IS DISTINCT FROM 'string' OR jsonb_typeof(component->'definitionPin') IS DISTINCT FROM 'string' OR component-ARRAY['propertyId','definitionPin','value']<>'{}'::jsonb OR component->>'propertyId' IS DISTINCT FROM metadata->'components'->component_index->>'propertyId'
-   OR component->>'definitionPin' IS DISTINCT FROM metadata->'components'->component_index->>'definitionPin' OR truss.valid_scalar_cell(component->'value','string',false) IS NOT TRUE THEN RAISE EXCEPTION 'exact ordered primary component required' USING ERRCODE='22023';END IF;
-  values_text:=array_append(values_text,component->'value'->>'text');fields:=fields||jsonb_build_array(jsonb_build_object('name',metadata->'components'->component_index->>'name','value',component->'value'));component_index:=component_index+1;
+   OR component->>'definitionPin' IS DISTINCT FROM metadata->'components'->component_index->>'definitionPin' OR truss.valid_scalar_property(component->'value',metadata->'components'->component_index->>'scalarType',false,metadata->'components'->component_index->'facets') IS NOT TRUE THEN RAISE EXCEPTION 'exact ordered primary component required' USING ERRCODE='22023';END IF;
+  values_cells:=values_cells||jsonb_build_array(component->'value');key_facets:=key_facets||jsonb_build_array(metadata->'components'->component_index->'facets');fields:=fields||jsonb_build_array(jsonb_build_object('name',metadata->'components'->component_index->>'name','value',component->'value'));component_index:=component_index+1;
  END LOOP;
- IF truss.verify_umf_string_key_tuple(tuple_bytes,values_text) IS NOT TRUE THEN RAISE EXCEPTION 'original UMF primary tuple required' USING ERRCODE='22023';END IF;
+ IF truss.verify_umf_scalar_key_tuple(tuple_bytes,values_cells,key_facets) IS NOT TRUE THEN RAISE EXCEPTION 'original UMF primary tuple required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
   'typeId',metadata->'type'->>'typeId','keyNumber',metadata->>'keyNumber','definitionPin',metadata->>'keyDefinitionPin','encoding','umf-key-tuple-v1')::text,'UTF8');
@@ -125,10 +125,10 @@ BEGIN
   metadata:=convert_from(truss.import_key_selection(selected_type.document_id,selected_type.module,selected_type.element,
    (SELECT release_id FROM truss.runtime_current_installation()),(SELECT release_sha256 FROM truss.runtime_current_installation())),'UTF8')::jsonb;
   IF (record->'identity')-ARRAY['operation','type','keyNumber','keyDefinitionPin','keyEncodingProfile','components']<>'{}'::jsonb OR record->'identity'->>'operation' IS DISTINCT FROM 'object_key' OR jsonb_typeof(record->'identity'->'components') IS DISTINCT FROM 'array' OR record->'identity'->'type' IS DISTINCT FROM metadata->'type' OR record->'identity'->>'keyNumber' IS DISTINCT FROM metadata->>'keyNumber'
-   OR record->'identity'->>'keyDefinitionPin' IS DISTINCT FROM metadata->>'keyDefinitionPin' OR record->'identity'->'keyEncodingProfile' IS DISTINCT FROM metadata->'keyEncodingProfile'
+   OR record->'identity'->>'keyDefinitionPin' IS DISTINCT FROM metadata->>'keyDefinitionPin' OR (record->'identity'->'keyEncodingProfile' IS DISTINCT FROM metadata->'keyEncodingProfile' AND NOT ((record->'identity'->'keyEncodingProfile'='{"identity":"truss-selected-umf-string-key","version":"0.1","sha256":"07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"}'::jsonb AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(record->'identity'->'components') c WHERE c.value->'value'->>'kind' IS DISTINCT FROM 'string')) IS TRUE))
    OR jsonb_array_length(record->'identity'->'components') IS DISTINCT FROM jsonb_array_length(metadata->'components') THEN RAISE EXCEPTION 'actual complete import primary key required' USING ERRCODE='22023';END IF;
   FOR entry IN SELECT v.value FROM jsonb_array_elements(record->'identity'->'components') v LOOP
-   IF entry-ARRAY['propertyId','definitionPin','value']<>'{}'::jsonb OR jsonb_typeof(entry->'propertyId') IS DISTINCT FROM 'string' OR jsonb_typeof(entry->'definitionPin') IS DISTINCT FROM 'string' OR truss.valid_scalar_cell(entry->'value','string',false) IS NOT TRUE OR entry->>'propertyId' IS DISTINCT FROM metadata->'components'->component_index->>'propertyId'
+   IF entry-ARRAY['propertyId','definitionPin','value']<>'{}'::jsonb OR jsonb_typeof(entry->'propertyId') IS DISTINCT FROM 'string' OR jsonb_typeof(entry->'definitionPin') IS DISTINCT FROM 'string' OR truss.valid_scalar_cell(entry->'value',NULL,false) IS NOT TRUE OR entry->>'propertyId' IS DISTINCT FROM metadata->'components'->component_index->>'propertyId'
     OR entry->>'definitionPin' IS DISTINCT FROM metadata->'components'->component_index->>'definitionPin'
     OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v WHERE v.value->>'name'=metadata->'components'->component_index->>'name' AND v.value->'value'=entry->'value') THEN
     RAISE EXCEPTION 'original primary field/payload agreement required' USING ERRCODE='22023';END IF;
@@ -222,7 +222,7 @@ REVOKE ALL ON FUNCTION truss.import_edge_identity(bytea,text,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.import_identity_key_selection(original_identity bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE identity jsonb;selected truss.type_def%ROWTYPE;metadata bytea;
+DECLARE identity jsonb;selected truss.type_def%ROWTYPE;metadata bytea;parsed jsonb;component jsonb;component_index int:=0;
 BEGIN
  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 1048576 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique primary identity required' USING ERRCODE='22023';END IF;
  identity:=convert_from(original_identity,'UTF8')::jsonb;
@@ -232,6 +232,15 @@ BEGIN
  IF NOT FOUND THEN RAISE EXCEPTION 'accepted import type required' USING ERRCODE='22023';END IF;
  metadata:=truss.import_key_selection(selected.document_id,selected.module,selected.element,expected_release,expected_digest);
  IF identity->'type' IS DISTINCT FROM convert_from(metadata,'UTF8')::jsonb->'type' THEN RAISE EXCEPTION 'original qualified import type required' USING ERRCODE='22023';END IF;
+ parsed:=convert_from(metadata,'UTF8')::jsonb;
+ IF jsonb_typeof(identity->'components') IS DISTINCT FROM 'array' OR jsonb_array_length(identity->'components')<>jsonb_array_length(parsed->'components') THEN RAISE EXCEPTION 'complete ordered import key cells required' USING ERRCODE='22023';END IF;
+ FOR component IN SELECT value FROM jsonb_array_elements(identity->'components') LOOP
+  IF component->>'propertyId' IS DISTINCT FROM parsed->'components'->component_index->>'propertyId'
+   OR component->>'definitionPin' IS DISTINCT FROM parsed->'components'->component_index->>'definitionPin'
+   OR truss.valid_scalar_property(component->'value',parsed->'components'->component_index->>'scalarType',false,parsed->'components'->component_index->'facets') IS NOT TRUE THEN
+   RAISE EXCEPTION 'exact declared import key cell required' USING ERRCODE='22023';END IF;
+  component_index:=component_index+1;
+ END LOOP;
  RETURN metadata;
 END;
 $$;
@@ -241,7 +250,16 @@ CREATE FUNCTION truss.import_report_record_authority(original_identity bytea,kin
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE identity jsonb;relation truss.rel_def%ROWTYPE;source_definition truss.type_def%ROWTYPE;target_definition truss.type_def%ROWTYPE;
 BEGIN
- IF kind='object' THEN PERFORM truss.import_identity_key_selection(original_identity,expected_release,expected_digest);RETURN;END IF;
+ IF kind='object' THEN
+  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 1048576 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique report identity required' USING ERRCODE='22023';END IF;
+  identity:=convert_from(original_identity,'UTF8')::jsonb;
+  IF jsonb_typeof(identity->'type'->'typeId') IS DISTINCT FROM 'string' OR identity->'type'->>'typeId' !~ '^[1-9][0-9]{0,9}$'
+   OR length(identity->'type'->>'typeId')=10 AND (identity->'type'->>'typeId') COLLATE "C">'2147483647' THEN RAISE EXCEPTION 'exact report type ID required' USING ERRCODE='22023';END IF;
+  SELECT t.* INTO source_definition FROM truss.type_def t WHERE t.type_id=(identity->'type'->>'typeId')::int AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
+  IF NOT FOUND THEN RAISE EXCEPTION 'known report type required' USING ERRCODE='22023';END IF;
+  IF identity->'type' IS DISTINCT FROM convert_from(truss.import_key_selection(source_definition.document_id,source_definition.module,source_definition.element,expected_release,expected_digest),'UTF8')::jsonb->'type' THEN RAISE EXCEPTION 'original report type identity required' USING ERRCODE='22023';END IF;
+  RETURN;
+ END IF;
  IF kind<>'edge' THEN RAISE EXCEPTION 'selected report record required' USING ERRCODE='22023';END IF;
  identity:=convert_from(original_identity,'UTF8')::jsonb;
  relation:=truss.runtime_operation_relationship(jsonb_build_object('operation','create_edge','relationshipDefinitionPin',identity->>'relationshipDefinitionPin'),'[]',0);
