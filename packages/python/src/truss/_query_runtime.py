@@ -8,7 +8,7 @@ from typing import Mapping
 from .execution import Error, Ok, ExecutionFailure
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.2',
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.3',
            'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.0'}
 
 

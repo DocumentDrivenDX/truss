@@ -1,0 +1,54 @@
+{
+  "scope": "Selected supported SQL fields on mixed scalar catalogs; not timestamp/binary SQL semantics or full corpus/interchange",
+  "runtime": "truss-catalog-runtime/0.31-candidate",
+  "weftBackend": "0.4.3",
+  "profile": "DocumentDrivenDX pgserver-pg18==18.6.1 / PostgreSQL18.6 / psycopg3.3.6 binary libpq18.6 / Bun1.4.2",
+  "files": {
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "c597f15730f41f65411a8125ba218b35e797555f33ec7259f15b4b036b15fb2d",
+    "packages/python/src/truss/_catalog_runtime/query.sql": "25c5fe72fcbdfb3958be2ed9dd3556058f1be273c4e87814848321bdbed51637",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "98c7df5304578563204315a457fe89a6c84cff16ba17fdeb2b6a53d9136a396e",
+    "packages/python/src/truss/_catalog_runtime/read.sql": "e5859936ad0b278b0b238e01969637dbba97db03f3c36f6c65a0fc22d2a2a39e",
+    "packages/python/src/truss/_catalog_runtime/migrations.sql": "937b80351f642f7c09263c1e7d0818bde62fd6af3c0dcb7598aa7e02f3af7ce1",
+    "packages/python/src/truss/_catalog_runtime/upgrade-source-030.json": "17d8b142ee41408c9243682dd551c3e889ac962880cac983d3f73746fa168fad",
+    "packages/python/src/truss/catalog_runtime.py": "8a83451e91a53e1524f155f86c691d6e7175a4fbd304091ffcf0cff5faa468a2",
+    "packages/python/src/truss/_query_runtime.py": "dda4d672365a2cd82c83f50acb1a5c7c21811cbd31446f483ec8a7956b26880e",
+    "packages/python/tests/test_compiled_query_native.py": "ba7cedfeb9aee81e26057ca21ac7e1cd33611ab263ad6e2b09418ce14ebbc001",
+    "docs/helix/04-build/corpus/public-python/0.3/adopter-basic.json": "793fa670c53045398cfc39ae06af510b79ecae550b5a5849ec001fce61a00be3"
+  },
+  "wheelSha256": "33f17ea157b5b7b31f0726af82c576ed72f8ad0eabe9f713b89e182f616b98dd",
+  "weftExtensionSha256": "27d876bc43b8fe0330c6c2753794c9feeb87814201138ab6db0784344fa1b97b",
+  "validation": {
+    "mixedReadUpgradePreview": {
+      "tests": 3,
+      "seconds": 27.317,
+      "result": "OK",
+      "upgradeSource": "0.30",
+      "previewObservations": 22
+    },
+    "original030Backend042Consumer": {
+      "tests": 1,
+      "seconds": 6.899,
+      "result": "OK"
+    },
+    "typingFixtures": 5,
+    "expectedNegativeErrors": 20,
+    "pythonModuleImports": 869,
+    "weftPackages": 11,
+    "ownerSqlRoundtrips": 21,
+    "rustPythonBuild": "passed"
+  },
+  "preservation": [
+    "Whole authored membership and actual native-ID correspondence",
+    "Every source cell validated before predicates; numeric native-domain limits unchanged",
+    "Original .30 manifest bytes and .1/.2 preview datasets unchanged",
+    "Existing six query and feed_reached routine OIDs/owners/ACLs captured for .30 upgrade",
+    "Current scalar field projection/count works; selected timestamp/binary or complete entity requiring them refuses"
+  ],
+  "open": [
+    "Timestamp/binary SQL projection and comparison semantics",
+    "Full original consumer corpus and genuinely independent native interchange",
+    "Stable layout, managed service qualification and protected security activation"
+  ],
+  "review": "Astra Ultra approved selected metadata, release guards and migration preservation",
+  "securityReady": false
+}

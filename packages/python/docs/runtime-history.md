@@ -2,7 +2,7 @@
 
 This is the release diary preserved from main `4d7ab1b8`. Statements about
 availability, dependencies and limits apply to their named historical versions.
-Use the [current public guide](../README.md) for runtime 0.30. Content is preserved
+Use the [current public guide](../README.md) for the current runtime. Content is preserved
 with this notice and relative link corrections; it is not a current API contract.
 
 # Truss Python delivery

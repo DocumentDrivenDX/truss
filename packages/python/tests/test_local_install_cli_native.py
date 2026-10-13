@@ -40,7 +40,7 @@ class LocalInstallCliTests(unittest.TestCase):
         report = json.loads(unchanged.stdout)['installation']
         self.assertEqual(report['action'], 'unchanged')
         self.assertEqual(report['installationId'], first['installation']['installationId'])
-        self.assertEqual(report['previousReleaseId'], 'truss-catalog-runtime/0.30-candidate')
+        self.assertEqual(report['previousReleaseId'], 'truss-catalog-runtime/0.31-candidate')
         self.assertEqual(report['releaseId'], report['previousReleaseId'])
         self.assertFalse((directory / 'postmaster.pid').exists())
         # Preserve source data on subprocess/assertion failures; clean only success.
@@ -78,7 +78,7 @@ with LocalPostgres(sys.argv[1]) as runtime:
         self.assertEqual(after['action'], 'upgraded')
         self.assertEqual(after['installationId'], before['installationId'])
         self.assertEqual(after['previousReleaseId'], before['releaseId'])
-        self.assertEqual(after['releaseId'], 'truss-catalog-runtime/0.30-candidate')
+        self.assertEqual(after['releaseId'], 'truss-catalog-runtime/0.31-candidate')
         self.assertEqual(after['catalogRevision'], 0)
         self.assertFalse((directory / 'postmaster.pid').exists())
         shutil.rmtree(parent)

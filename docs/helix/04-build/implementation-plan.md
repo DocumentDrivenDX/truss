@@ -6884,3 +6884,22 @@ Trusted direct installation administrator, independently qualified synchronous v
 [Retained native controls](evidence/security-data-writer-callback-containment-20261012/receipt.json) exercise the existing actual private writer and original PsycopgHost savepoint with a post-DML native division failure, an already-started returned generator whose cleanup mutates another row then raises KeyboardInterrupt, and a returned coroutine following DML. The generator closes and its cleanup write rolls back; KeyboardInterrupt propagates after verified containment. Coroutine body stays unexecuted; caller prior work, search path, data and generation survive. Declared generator/coroutine/async-generator callbacks refuse with unchanged host-attempt identity. No runtime changes were required.
 
 Eleven native tests pass plus the final focused preflight-identity controls; Astra Ultra found no remaining actionable findings. These verify operation containment prerequisites for L01 and selected generation rollback for L13, not logical old/new permissions, complete participant closure or an admitted backend profile. Opaque/async cleanup, external irreversible effects and final publication remain outside this control scope. No required case is promoted; all132 remain in scope.
+
+
+### Mixed scalar catalog reads and additive .31 runtime — 2026-10-12
+
+Weft backend0.4.3 preserves every authored Record member/native-ID mapping while
+admitting only selected logical field semantics. Runtime0.31 validates all six
+existing scalar cell families before predicates, so supported projections/counts
+can read catalogs containing timestamp/binary siblings. Selecting those SQL types
+or a complete entity containing them still refuses without dropping values.
+Full document authorization, numeric limits and original source bytes remain.
+
+The exact .30 manifest is retained as an upgrade source. Additive .23–.30→.31
+migrations preserve existing query/feed routine identity, ownership and ACLs;
+there is no physical layout or new routine change. The basic mixed public read,
+real .30 upgrade and pinned preview0.3 pass, as does an original .30/backend0.4.2
+consumer on the rebuilt owner extension. Evidence: [native receipt](evidence/python-mixed-catalog-20261012.json).
+The original required corpus/interchange and protected security activation remain
+open. This does not adopt the private coordinated writer or qualify a new security
+profile; preview0.1/0.2 and original consumer cases stay unchanged.

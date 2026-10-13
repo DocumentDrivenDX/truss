@@ -126,7 +126,7 @@ def _release():
     for entry in json.loads(public_profiles)['profiles']:
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json','upgrade-source-026.json','upgrade-source-027.json','upgrade-source-028.json','upgrade-source-029.json'):
+    for name in ('preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json','upgrade-source-026.json','upgrade-source-027.json','upgrade-source-028.json','upgrade-source-029.json','upgrade-source-030.json'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original migration/preparation baseline required')
     return manifest,sha256(original).hexdigest(),tuple(sources)
 
@@ -338,14 +338,14 @@ class CatalogReferenceAssembly:
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.30 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.31 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
         return self._host._run_operation(transaction,install)
     @_active_operation
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
-        """Apply supported additive .23 through .29 -> .30 upgrades; caller settles it.
+        """Apply supported additive .23 through .30 -> .31 upgrades; caller settles it.
 
         Requires a direct trusted installation administrator and quiescence.
         Native NOWAIT fencing refuses active consumers without internal retries.
@@ -368,7 +368,9 @@ class CatalogReferenceAssembly:
         previous_028=json.loads(previous_028_raw)
         previous_029_raw=bundled.joinpath('upgrade-source-029.json').read_bytes()
         previous_029=json.loads(previous_029_raw)
-        supported={(previous['releaseId'],previous_digest),(previous_024['releaseId'],sha256(previous_024_raw).hexdigest()),(previous_025['releaseId'],sha256(previous_025_raw).hexdigest()),(previous_026['releaseId'],sha256(previous_026_raw).hexdigest()),(previous_027['releaseId'],sha256(previous_027_raw).hexdigest()),(previous_028['releaseId'],sha256(previous_028_raw).hexdigest()),(previous_029['releaseId'],sha256(previous_029_raw).hexdigest())}
+        previous_030_raw=bundled.joinpath('upgrade-source-030.json').read_bytes()
+        previous_030=json.loads(previous_030_raw)
+        supported={(previous['releaseId'],previous_digest),(previous_024['releaseId'],sha256(previous_024_raw).hexdigest()),(previous_025['releaseId'],sha256(previous_025_raw).hexdigest()),(previous_026['releaseId'],sha256(previous_026_raw).hexdigest()),(previous_027['releaseId'],sha256(previous_027_raw).hexdigest()),(previous_028['releaseId'],sha256(previous_028_raw).hexdigest()),(previous_029['releaseId'],sha256(previous_029_raw).hexdigest()),(previous_030['releaseId'],sha256(previous_030_raw).hexdigest())}
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
@@ -423,13 +425,14 @@ class CatalogReferenceAssembly:
                 previous_named['supportProfile']=dict(NAMED_SCALAR_PROFILE)
                 source_configurations.append(previous_named)
             if (active_release,active_digest) not in supported or layout!=manifest['layoutProfile'] or configuration not in source_configurations:
-                raise ValueError('Exact supported .23/.24/.25/.26/.27/.28/.29 installation and preparation required')
+                raise ValueError('Exact supported .23/.24/.25/.26/.27/.28/.29/.30 installation and preparation required')
             if has_ledger:signatures.append('truss.runtime_current_installation()')
-            if active_release in ('truss-catalog-runtime/0.26-candidate','truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate'):
+            if active_release in ('truss-catalog-runtime/0.26-candidate','truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate'):
                 signatures.extend(('truss.query_binding(jsonb,int,int,int,text,text)','truss.query_scope(jsonb)','truss.query_objects(jsonb,int)'))
-            if active_release in ('truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate'):signatures.append('truss.query_numeric_value(text,text)')
-            if active_release in ('truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate'):signatures.append('truss.query_edges(jsonb,int)')
-            if active_release=='truss-catalog-runtime/0.29-candidate':signatures.append('truss.query_page_objects(jsonb,int,text)')
+            if active_release in ('truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate'):signatures.append('truss.query_numeric_value(text,text)')
+            if active_release in ('truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate'):signatures.append('truss.query_edges(jsonb,int)')
+            if active_release in ('truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate'):signatures.append('truss.query_page_objects(jsonb,int,text)')
+            if active_release=='truss-catalog-runtime/0.30-candidate':signatures.append('truss.feed_reached(text,bytea,int,text,text)')
             original_routines=[]
             for signature in signatures:
                 cursor.execute('SELECT oid,proowner,proacl FROM pg_proc WHERE oid=to_regprocedure(%s)',(signature,),prepare=False)
