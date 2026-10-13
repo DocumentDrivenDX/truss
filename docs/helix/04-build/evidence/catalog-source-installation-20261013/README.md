@@ -31,3 +31,12 @@ backend readiness is created. The service still constructs a unittest fixture;
 current authority/caller/fact/publication admission and generic lowering remain
 required by the installed-profile plan. No original132 case is promoted.
 Trace US-056AC10/AC2/AC9 and US-057AC7 prerequisites, SPIKE-004.
+
+## Merged runtime0.54 replay
+
+Owner binary-equality/runtime0.54 work is preserved in mergea38e98b4. All ten
+native controls pass together (69.457s), including seven initializer cases, both
+TLS cases and foreign-marker refusal. The external peer receives the guarded
+positive decision with all three owned resources confirmed absent. The positive
+epoch uses the initializer's own native namespace target; only the foreign
+negative retains a fabricated target. Earlier review/0.53 logs are historical.

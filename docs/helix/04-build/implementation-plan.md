@@ -7769,3 +7769,8 @@ native namespace target is consumed by source-epoch issuance. Pending commit
 and security_ready=False remain explicit: this is one installed-profile factory
 dependency, not complete issuer/current-authority or backend admission.
 [Source installation and evidence](evidence/catalog-source-installation-20261013/README.md).
+
+Owner binary-equality/runtime0.54 changes are preserved. The original target
+is consumed by positive source-epoch issuance. Ten native controls pass together
+(69.457s); external guarded delivery and all-three cleanup also pass. Separate
+runtime054 records preserve this replay without promoting backend admission.

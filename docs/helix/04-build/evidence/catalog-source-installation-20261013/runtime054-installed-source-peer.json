@@ -1,0 +1,54 @@
+{
+  "ownerMode": "read",
+  "scope": "Owned external peer TLS publication; database stays in service-private local runtime, not a separate network database",
+  "controls": {
+    "peerTopology": {
+      "noMounts": true,
+      "noPublishedPorts": true,
+      "readOnlyRootfs": true,
+      "allCapabilitiesDropped": true,
+      "noDeclaredSqlCredential": true,
+      "originalNativeSqlPort": 5432
+    },
+    "externalPeer": {
+      "unknownBearerDenied": true,
+      "verifiedTls13": true,
+      "decision": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      },
+      "genericNativeRefusal": false,
+      "replayDenied": true,
+      "peerServiceTcpSqlDenied": true
+    },
+    "originalService": {
+      "operationCalls": 1,
+      "channelConsumed": true,
+      "nativeConsumerAndBothSourceCutsBeforeWire": true
+    }
+  },
+  "cleanup": {
+    "truss-channel-05cd93840d61-peer": true,
+    "truss-channel-05cd93840d61-service": true,
+    "truss-channel-05cd93840d61": true
+  },
+  "status": "pass"
+}
