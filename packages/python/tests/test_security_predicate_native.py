@@ -11,6 +11,23 @@ from truss.groups import CreateObject,AuthoredValue,RootlessOwnership,RequestNon
 import test_security_accepted_catalog_native as accepted
 class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
  for name in tuple(n for n in dir(accepted.AcceptedCatalogMappingTests) if n.startswith('test_')):locals()[name]=None
+ def test_native_k3_primitives_and_unknown_existential_witnesses(self):
+  from itertools import product
+  self.admin.execute('SET LOCAL search_path TO pg_catalog,pg_temp')
+  values=(False,None,True)
+  def conjunction(a,b):return False if a is False or b is False else None if a is None or b is None else True
+  def disjunction(a,b):return True if a is True or b is True else None if a is None or b is None else False
+  for a,b in product(values,repeat=2):
+   actual=self.admin.execute('SELECT %s::boolean AND %s::boolean,%s::boolean OR %s::boolean,NOT %s::boolean',(a,b,a,b,a)).fetchone()
+   self.assertEqual(actual,(conjunction(a,b),disjunction(a,b),None if a is None else not a))
+  count=0
+  for size in range(5):
+   for witnesses in product(values,repeat=size):
+    expected=True if True in witnesses else None if None in witnesses else False
+    actual=self.admin.execute('SELECT CASE WHEN bool_or(truth IS TRUE) THEN TRUE WHEN bool_or(truth IS NULL) THEN NULL::bool ELSE FALSE END FROM unnest(%s::boolean[]) AS facts(truth)',(list(witnesses),)).fetchone()[0]
+    self.assertIs(actual,expected);count+=1
+  self.assertEqual(count,121)
+  self.assertEqual(self.admin.execute('SELECT EXISTS(SELECT 1 FROM unnest(ARRAY[NULL::boolean]) AS facts(truth) WHERE truth)').fetchone(),(False,))
  def test_original_policy_membership_predicates_match_native_population(self):
   self.population()
  def test_signed64_boundaries_through_ordinary_writer(self):
