@@ -503,8 +503,8 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has seven original SQL/output variants
-exercised through public registration, mutation, replay and read-only queries;
+must be supported. The original consumer corpus has eight original read/action workflows
+exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
 replica execution and the full consumer corpus remain unqualified.
 
 Select `read_profile="complete-entity"` for `alias.*` with complete relationship
@@ -513,4 +513,6 @@ keys and `_version`, `_created_by`, `_created_at`, `_updated_by`, `_updated_at`,
 evidence. Missing evidence, output-name collisions or more than100 related keys
 refuse the query. Single-component relationship keys are immutable scalar tuples;
 composite keys retain nested tuples. Ordinary projections keep their authored
-member shape. Whole-object timestamps use exact six-fraction UTC strings from the verified object image. The original whole-entity SQL/output observations pass on the pinned tuple; consumer answer-position/time and full harness qualification remain open.
+member shape. Whole-object timestamps use exact six-fraction UTC strings from the verified object image. The original whole-entity SQL/output observations pass on the pinned tuple; position/time shape checks use the declared committed lower-bound semantics, while complete consumer-adapter and harness qualification remain open.
+
+The original consumer AddSolution example is a trusted host handler bound to the exact retained fixture document. It resolves a target by public business-key lookup, submits one create/link group with a native ObjectExists precondition and x-action origin, retains the invocation's original request for committed recovery, and reads the result through the public API. It does not interpret arbitrary UMF action declarations. Counts, initial disposition and versions come from native semantic results; the committed token is attached only after verified replay following the host's known commit.

@@ -1,0 +1,11 @@
+# Original consumer atomic action — 2026-10-13
+
+The unchanged action.applies-atomically-and-reads-back case now runs through public Python capabilities. The trusted example host handler is bound to the exact retained consumer document (SHA256849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696), which declares AddSolution as create Solution(alias s), link addresses(s,useCase), and use_case_exists. It is one selected handler, not a Truss UMF action interpreter; consumer action declarations remain provisional.
+
+Public business-key lookup supplies the actual qualified target identity, and public catalog/relationship references supply definition pins. One GroupCapability call submits both effects with native ObjectExists and x-action origin. The host owns outer settlement. Each invocation creates and retains one original request/input; post-commit replay must return equal semantic results before its real receipt token is attached. Initial replay disposition, creation/link counts and version derive from the first native semantic results. Fresh business-key read agrees with the created native identity/key/version. Original reached(token) and complete-entity SQL expectations verify receipt inclusion, relationship key uc-2, actor erik and version1.
+
+Installed runtime0.34/Weft0.4.7 on DocumentDrivenDX pgserver-pg18 18.6.1/PostgreSQL18.6, psycopg3.3.6: eight original read/action variants passed together in one basic native test (13.852seconds). No original corpus, model, SQL or expected observation was edited, and no data was inserted administratively. Known-commit recovery is exercised; this case alone does not establish every flaky-network path, other action handlers, full consumer adapter/corpus, protected security activation, replicas or independent interchange.
+
+Astra Ultra reviewed the plan and selected source. Its plan constraints were applied: exact declaration/fixture binding, distinct invocation identity, retained original recovery input, native outcome mapping and replay equality.
+
+Final source review also required refusing other action cases/unsupported controls before opening the write transaction, and reporting action-specific checks only when selected. Those guard/report-only fixes are in place; Astra approved them without another native run. The13.852second run covers the unchanged native workflow body.

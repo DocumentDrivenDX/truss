@@ -7027,3 +7027,7 @@ Runtime0.34/backend0.4.7 and entity profile0.2 expose exact _created_at/_updated
 ### Public read-position observations — 2026-10-13
 
 Successful public queries/pages now include QueryReadPosition, an explicitly declared committed lower bound captured before the data query with native recorded time and allocation flag. [Basic evidence](evidence/public-query-read-position-20261013.md) covers empty results, original SQL/output variants, pages, pending writes and fresh read-only reads without XID allocation. The issuing adapter must preserve lower-bound semantics; no exact snapshot, receipt comparison or replica claim is made. Full adapter/corpus/interchange and protected security activation remain open.
+
+### Original consumer atomic create/link adoption — 2026-10-13
+
+The original AddSolution action workflow passes public business-key resolution, one grouped create/link with native precondition, known outer commit, original-request replay, receipt visibility and whole-object readback. [Evidence](evidence/original-consumer-atomic-action-20261013.md) covers eight original read/action variants together. The selected trusted host handler is exact-fixture-bound and does not adopt a provisional UMF action interpreter. Other handlers, full consumer mapping/corpus, protected security activation and independent interchange remain open.
