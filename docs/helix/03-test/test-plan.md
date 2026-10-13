@@ -2028,3 +2028,21 @@ retry and all-three owned cleanup are confirmed. Positive external read still
 passes. This is US-056AC9/US-057AC7 and SPIKE-004 CH04/CH05/CH08 prerequisite
 coverage only, not truss.B11 or a new native refinement claim.
 [Inputs, setup failure and outcomes](../04-build/evidence/helper-definition-drift-20261013/README.md).
+
+
+### Native accepted-catalog source installation — 2026-10-13
+
+The positive guarded fixture now uses a private native initializer rather than
+placeholder marker hashes. It recaptures accepted sources and archives exact
+release-manifest/assessment bytes, verifies complete persisted readback, pins
+installer resolution and refuses substituted/existing state. Native rollback,
+ordinary refusal, hostile resolution and suppressed-insert controls pass. Its
+native namespace target is consumed by source-epoch issuance. Pending commit
+and security_ready=False remain explicit: this is one installed-profile factory
+dependency, not complete issuer/current-authority or backend admission.
+[Source installation and evidence](../04-build/evidence/catalog-source-installation-20261013/README.md).
+
+Owner binary-equality/runtime0.54 changes are preserved. The original target
+is consumed by positive source-epoch issuance. Ten native controls pass together
+(69.457s); external guarded delivery and all-three cleanup also pass. Separate
+runtime054 records preserve this replay without promoting backend admission.

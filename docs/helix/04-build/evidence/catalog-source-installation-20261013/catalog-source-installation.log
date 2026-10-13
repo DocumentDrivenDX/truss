@@ -1,0 +1,8 @@
+test_original_release_catalog_archive_and_no_repair (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_original_release_catalog_archive_and_no_repair)
+@covers US-056-AC10; source issuer construction prerequisite. ... ok
+test_substituted_catalog_has_no_marker_effect (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_substituted_catalog_has_no_marker_effect) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 22.432s
+
+OK

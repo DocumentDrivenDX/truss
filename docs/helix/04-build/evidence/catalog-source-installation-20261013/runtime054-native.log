@@ -1,0 +1,18 @@
+test_caller_rollback_leaves_no_marker_or_archive (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_caller_rollback_leaves_no_marker_or_archive) ... ok
+test_committed_archive_retains_exact_original_bytes (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_committed_archive_retains_exact_original_bytes) ... ok
+test_hostile_function_resolution_is_pinned_and_restored (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_hostile_function_resolution_is_pinned_and_restored) ... ok
+test_ordinary_caller_cannot_install_marker (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_ordinary_caller_cannot_install_marker) ... ok
+test_original_release_catalog_archive_and_no_repair (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_original_release_catalog_archive_and_no_repair)
+@covers US-056-AC10; source issuer construction prerequisite. ... ok
+test_substituted_catalog_has_no_marker_effect (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_substituted_catalog_has_no_marker_effect) ... ok
+test_suppressed_archive_insert_refuses_and_rolls_back (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_suppressed_archive_insert_refuses_and_rolls_back) ... ok
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+test_foreign_runtime_installation_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_foreign_runtime_installation_refuses_before_subject_and_delivery) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 69.457s
+
+OK

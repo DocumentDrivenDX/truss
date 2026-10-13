@@ -7756,3 +7756,21 @@ these components to backend admission. General B03/B08 requires registered Weft
 lowering; Ashlar requires its own native policy adapter. Preserve the remaining
 query/write/history/recovery requirements and all132 cases.
 [Gate, proof replay and dependency audit](evidence/security-full-gate-20261013/README.md).
+
+
+### Native accepted-catalog source installation — 2026-10-13
+
+The positive guarded fixture now uses a private native initializer rather than
+placeholder marker hashes. It recaptures accepted sources and archives exact
+release-manifest/assessment bytes, verifies complete persisted readback, pins
+installer resolution and refuses substituted/existing state. Native rollback,
+ordinary refusal, hostile resolution and suppressed-insert controls pass. Its
+native namespace target is consumed by source-epoch issuance. Pending commit
+and security_ready=False remain explicit: this is one installed-profile factory
+dependency, not complete issuer/current-authority or backend admission.
+[Source installation and evidence](evidence/catalog-source-installation-20261013/README.md).
+
+Owner binary-equality/runtime0.54 changes are preserved. The original target
+is consumed by positive source-epoch issuance. Ten native controls pass together
+(69.457s); external guarded delivery and all-three cleanup also pass. Separate
+runtime054 records preserve this replay without promoting backend admission.
