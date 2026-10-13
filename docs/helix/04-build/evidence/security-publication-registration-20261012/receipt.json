@@ -1,0 +1,43 @@
+{
+  "implementation": "Private host-savepoint registration of original token under head SHARE, original guard SHARE and serialized native capacity lock; fresh profile-bound INSERT, exact native insertion/row confirmation. Caller owns commit and recovery; pending publication_allowed false.",
+  "validation": {
+    "nativeTests": 10,
+    "seconds": 23.83,
+    "boundaries": "843 imports pass",
+    "wheelSha256": "e38c8ec5c80c9e9686cc43671ac627c6e5340fd34b38b8ba47a503221bfaaba2",
+    "moduleAndTwoSqlSources": "exact bytes",
+    "result": "pass"
+  },
+  "command": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-publication-registration-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "result": "No actionable findings within private registration scope; readonly, native replay separate"
+  },
+  "acceptanceTraceability": [
+    {
+      "case": "truss.L03",
+      "covers": "US-057-AC2",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L11",
+      "covers": "US-057-AC7",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L12",
+      "covers": "US-057-AC8",
+      "caseClosed": false
+    }
+  ],
+  "scope": "PostgreSQL18.6/stock psycopg3.3.6 current catalog0.26 and private bootstrap. Native token/capacity/rollback controls; genuine dropped native COMMIT response now follows implemented registration, and fixture reconciles same original durable token. Independently supplied identity is not authentic issuer evidence; no release grant, final sink, production unknown-outcome recovery or full source/guard/participant qualification. Original132 cases retained, none promoted.",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_publication_registration.py": "0d4440e56e6bae31cfa7b24ba901d554c2296522a9d504526ae082bb5ea62f02",
+    "packages/python/src/truss/_security_bootstrap/register.sql": "55ad786b5b4e43a8b477dc1749fee3f92b94f7a48867c1c83b1b5e41c040fa73",
+    "packages/python/src/truss/_security_bootstrap/capacity-lock.sql": "6c7d76e24b8f4cb83815c4ab25e94f069c147acae136eb16c4ce87307862e349",
+    "packages/python/tests/test_security_public_ontology_native.py": "a09f2c3e04266175322fdb3428e523728ced41b7dd07c9cdc35465efc304ed23",
+    "scripts/check-module-boundaries.py": "d6f6e357077ccc61cee7bd1a8a43359d500b3c22ff365929c11e2f5ac6e4336b",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "145fd167a0746c7845b1439822cd588359bea678dbfa7b77e4b20c24f8da9e81"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "observations": [
+    "wrong original profile refuses without insertion",
+    "original registration returns pending commit and no release grant",
+    "duplicate original identity23505 retains first claim",
+    "second original identity takes last slot",
+    "settled tombstones retain capacity and exhaustion refuses",
+    "caller prior work survives refusals",
+    "outer rollback removes staged homes and claims"
+  ],
+  "scope": "Private trusted-administrator registration only; no authentic operation issuer, original sink/recovery or admitted policy."
+}

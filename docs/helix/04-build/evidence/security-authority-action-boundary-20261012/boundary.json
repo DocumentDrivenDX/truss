@@ -1,0 +1,10 @@
+{
+  "observations": [
+    "declared async/generator actions refuse without body execution",
+    "returned cold generator/coroutine actions close and roll back staged physical effects",
+    "original generation1 and caller work retained",
+    "actual ordinary native consumer receives42501 before callback",
+    "ordinary caller transaction work survives refusal"
+  ],
+  "scope": "Private native administrative/deferred boundary only; no logical action permission, authenticated issuer/source or full backend security admission."
+}

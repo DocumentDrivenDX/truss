@@ -1,0 +1,12 @@
+{
+  "observations": [
+    "unsettled original claim blocks before physical callback",
+    "settled tombstone permits advancement",
+    "physical action error rolls back effects and generation",
+    "late unsettled claim rolls back callback effects and inserted claim",
+    "complete action and exact native generation2 stage together",
+    "stale original generation refuses before callback",
+    "outer caller rollback removes staged installation homes"
+  ],
+  "scope": "Private native authority effect coordination under trusted administrator. Physical temp-table effect only; no logical action permission, original policy issuer, complete participant closure or security-ready profile."
+}

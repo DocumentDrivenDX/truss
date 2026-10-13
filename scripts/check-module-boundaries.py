@@ -41,6 +41,8 @@ ALLOWED = {
     '_psycopg_source_census': {'dataclasses','hashlib','importlib.resources','re','truss.execution','truss.psycopg_host','truss.catalog_runtime'},
     '_psycopg_epoch_cut': {'dataclasses', 'hashlib', 'truss.psycopg_host', 'psycopg.types.string'},
     '_psycopg_dependency_fact_cut': {'dataclasses', 'json', 'psycopg', 'truss._psycopg_epoch_cut', 'truss._security_fact_coverage', 'truss._psycopg_fact_cut'},
+    '_security_publication_registration': {'dataclasses','hashlib','importlib.resources','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges'},
+    '_security_authority_change': {'dataclasses','hashlib','importlib.resources','inspect','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges'},
     '_security_home_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss._installation_privileges','truss.catalog_runtime'},
     '_security_fact_coverage': {'dataclasses', 'hashlib', 'json'},
     '_psycopg_graph_scope': {'dataclasses', 'json', 'truss._psycopg_epoch_cut', 'psycopg.types.numeric', 'psycopg.types.string', 'psycopg.types.array'},
