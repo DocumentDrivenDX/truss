@@ -1,0 +1,29 @@
+{
+  "scope": "original accepted-model and native definition consistency under administrative guard only",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_catalog_assessment.py": "b2d6864b7eb3ae7c56d6f678adb1a6005caf614fabf4708db5c2219f733096e2",
+    "packages/python/src/truss/_security_mapping.py": "7e4a3977a54168ccc47cfec1f029181ef9be06750bb5d07638808987f17cf8e4",
+    "packages/python/tests/test_security_accepted_catalog_native.py": "73d8e66948ab9d5e0a3134d6a1a06c9b2dff556d63156e1cd4096bf7ee1ed1b4",
+    "scripts/check-module-boundaries.py": "00c0a2ee5d8c14dd2d68cf3579af1515a761d568d4c4812856e5ad7d8e0e2235"
+  },
+  "native": "PostgreSQL18.6/stock psycopg3.3.6",
+  "weftModuleSha256": "287958bb0d5f9fc668e0a60f721b0564a3634be41afe88fce87941c148a5215e",
+  "nativeNewControls": 8,
+  "nativeNewControlsPassed": 8,
+  "nativeOriginalGuardControlsPassed": 8,
+  "boundaryImports": 903,
+  "formal": "2 UNSAT conjunctive implications; 1 SAT endpoint-equal intermediate-change witness; abstract only",
+  "requiredBackendPromotion": 0,
+  "securityReady": false,
+  "remaining": [
+    "physical scan/type/property/key/endpoint mapping",
+    "issuer and caller authentication",
+    "complete source/writer closure",
+    "same-transaction ABA",
+    "protected SQL execution",
+    "Ashlar physical acceptance",
+    "all132 required backend cases"
+  ],
+  "nativeFinalSeconds": 25.861,
+  "preciseHistoryControlsPassed": 2
+}

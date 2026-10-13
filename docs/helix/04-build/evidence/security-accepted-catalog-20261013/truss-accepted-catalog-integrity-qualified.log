@@ -1,0 +1,41 @@
+test_head_mismatch_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_head_mismatch_refused_before_compiler) ... ok
+test_late_definition_change_contained_and_prior_work_preserved (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_late_definition_change_contained_and_prior_work_preserved) ... ok
+test_missing_historical_report_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_missing_historical_report_refused_before_compiler) ... FAIL
+test_missing_report_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_missing_report_refused_before_compiler) ... ok
+test_native_definition_substitution_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_native_definition_substitution_refused_before_compiler) ... ok
+test_original_accepted_model_and_native_inventory (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_original_accepted_model_and_native_inventory) ... ok
+test_stale_positive_head_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_stale_positive_head_refused_before_compiler) ... FAIL
+test_unaccepted_source_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_unaccepted_source_refused_before_compiler) ... ok
+
+======================================================================
+FAIL: test_missing_historical_report_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_missing_historical_report_refused_before_compiler)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_accepted_catalog_native.py", line 73, in test_missing_historical_report_refused_before_compiler
+    self.accepted(second=True);self.admin.execute('ALTER TABLE truss.catalog_acceptance_report DISABLE TRIGGER USER;DELETE FROM truss.catalog_acceptance_report WHERE rev=1;ALTER TABLE truss.catalog_acceptance_report ENABLE TRIGGER USER')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_accepted_catalog_native.py", line 21, in accepted
+    result=a.accept_in_transaction(t,another,request_key='accepted-mapping08-second');self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error))
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42501', catalog_code='unauthorized'), status='error') is not an instance of <class 'truss.execution.Ok'> : current module read authority required for compatibility counts
+CONTEXT:  PL/pgSQL function truss.catalog_scalar_violations(bytea) line 12 at RAISE
+PL/pgSQL function truss.catalog_accept(bytea,bytea,bytea,bytea,bytea,text) line 205 at assignment
+
+======================================================================
+FAIL: test_stale_positive_head_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_stale_positive_head_refused_before_compiler)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_accepted_catalog_native.py", line 68, in test_stale_positive_head_refused_before_compiler
+    self.accepted(second=True);self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(2,))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_accepted_catalog_native.py", line 21, in accepted
+    result=a.accept_in_transaction(t,another,request_key='accepted-mapping08-second');self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error))
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42501', catalog_code='unauthorized'), status='error') is not an instance of <class 'truss.execution.Ok'> : current module read authority required for compatibility counts
+CONTEXT:  PL/pgSQL function truss.catalog_scalar_violations(bytea) line 12 at RAISE
+PL/pgSQL function truss.catalog_accept(bytea,bytea,bytea,bytea,bytea,text) line 205 at assignment
+
+----------------------------------------------------------------------
+Ran 8 tests in 25.576s
+
+FAILED (failures=2)

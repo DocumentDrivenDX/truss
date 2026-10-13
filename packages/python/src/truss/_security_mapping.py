@@ -4,7 +4,7 @@ The host supplies original compiler code and source inputs. Neither this Python
 object nor a matching guard row authenticates their issuer or installed mapping.
 Prepared output cannot be passed to the ordinary compiled-query executor.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from hashlib import sha256
 import inspect
 from .weft import _decode, CompileRefusal
@@ -48,7 +48,8 @@ def _request(original):
 class PreparedSecurityMapping:
     original_request:bytes
     original_response:bytes
-    security_ready:bool=False
+    security_ready:bool=field(default=False,init=False)
+    accepted_catalog_assessment:bytes|None=None
 
 class SecurityMappingBoundary:
     """Capture original sources once; changing SQL/parameters cannot rebind them.
@@ -103,9 +104,9 @@ class SecurityMappingBoundary:
         return PreparedSecurityMapping(original_request,original_response)
 
 
-def prepare_security_mapping_in_transaction(host,transaction,*,boundary,installation_identity,expected_generation,original_request):
+def prepare_security_mapping_in_transaction(host,transaction,*,boundary,installation_identity,expected_generation,original_request,require_accepted_catalog=False):
     """Selected administrative guard coupling only; caller owns outer settlement."""
-    if (type(host) is not PsycopgHost or type(boundary) is not SecurityMappingBoundary
+    if (type(require_accepted_catalog) is not bool or type(host) is not PsycopgHost or type(boundary) is not SecurityMappingBoundary
             or type(installation_identity) is not bytes or not 1<=len(installation_identity)<=32768
             or type(expected_generation) is not int or not 1<=expected_generation<=9223372036854775807
             or not 1<=len(boundary.original_profile)<=32768):
@@ -151,12 +152,19 @@ def prepare_security_mapping_in_transaction(host,transaction,*,boundary,installa
             if (len(rows)!=1 or tuple(type(v) for v in rows[0])!=(bytes,bytes,int) or rows!=[expected]):
                 raise ValueError('Original mapping profile/generation guard required')
         guard(' FOR SHARE')
+        assessment=None
+        if require_accepted_catalog:
+            from ._security_catalog_assessment import capture_accepted_catalog
+            assessment=capture_accepted_catalog(cursor,original_request)
         result=boundary.prepare(original_request)
         # A genuine owner compiler is pure. Reassert the native inspection
         # environment before the synthetic late-mutation endpoint controls.
         _pin_cursor(cursor)
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
         guard()
+        if require_accepted_catalog:
+            if capture_accepted_catalog(cursor,original_request)!=assessment:raise ValueError('Accepted catalog changed during compiler preparation')
+            result=PreparedSecurityMapping(result.original_request,result.original_response,assessment)
         if home()!=original_home:raise ValueError('Original mapping guard home changed')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
         if cursor.fetchmany(2)!=[(original_path,)]:raise ValueError('Original mapping caller path restoration required')
