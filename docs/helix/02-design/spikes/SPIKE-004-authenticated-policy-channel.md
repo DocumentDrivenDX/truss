@@ -268,3 +268,12 @@ identity; pending construction does not authorize a caller. Actual post-issuance
 pointer deletion refuses before factory handoff and preserves prior caller work.
 [Factory evidence](../../04-build/evidence/catalog-source-factory-20261013/README.md)
 advances CH04 source composition while complete authority/lifetime remains open.
+
+### Installed native Subject helpers — 2026-10-13
+
+Positive source setup now registers original native role/Staff-key bindings and
+installs/readbacks helpers through the library. Native second-session observation
+confirms own Subject, wrong-actor refusal and private map exclusion. Effective
+helper-owner reads are required; an owner-only ACL is insufficient. TLS source
+factory publication still passes. [Construction evidence](../../04-build/evidence/catalog-subject-installation-20261013/README.md)
+advances CH02/CH04 without complete authority/lifetime or multi-role read admission.

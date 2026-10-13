@@ -1,0 +1,231 @@
+{
+  "scope": "Original verifier function AST with synthetic stock-shaped native descriptor/ACL rows; not SQL privilege or native refinement evidence",
+  "passed": 47,
+  "controls": [
+    {
+      "control": "baseline",
+      "passed": true,
+      "refusal": null
+    },
+    {
+      "control": "reverse",
+      "passed": true,
+      "refusal": null
+    },
+    {
+      "control": "owner_is_caller",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "caller_missing",
+      "passed": true,
+      "refusal": "Original unique native helper caller role required"
+    },
+    {
+      "control": "caller_duplicate",
+      "passed": true,
+      "refusal": "Original unique native helper caller role required"
+    },
+    {
+      "control": "caller_nontext",
+      "passed": true,
+      "refusal": "Original unique native helper caller role required"
+    },
+    {
+      "control": "caller_foreign_descriptor",
+      "passed": true,
+      "refusal": "Exact native helper caller role descriptor required"
+    },
+    {
+      "control": "catalog_subject_current:public",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:null_default",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:third_role",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:caller_grantable",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:owner_grantable",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:wrong_grantor",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:wrong_privilege",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:missing_caller",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:missing_owner",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:duplicate",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:empty",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_current:acl_foreign_descriptor",
+      "passed": true,
+      "refusal": "Exact native helper ACL descriptors required"
+    },
+    {
+      "control": "catalog_subject_current:acl_wrong_width",
+      "passed": true,
+      "refusal": "Exact native helper ACL descriptors required"
+    },
+    {
+      "control": "catalog_subject_context:public",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:null_default",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:third_role",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:caller_grantable",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:owner_grantable",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:wrong_grantor",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:wrong_privilege",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:missing_caller",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:missing_owner",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:duplicate",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:empty",
+      "passed": true,
+      "refusal": "Exact installed catalog subject helper ACL required"
+    },
+    {
+      "control": "catalog_subject_context:acl_foreign_descriptor",
+      "passed": true,
+      "refusal": "Exact native helper ACL descriptors required"
+    },
+    {
+      "control": "catalog_subject_context:acl_wrong_width",
+      "passed": true,
+      "refusal": "Exact native helper ACL descriptors required"
+    },
+    {
+      "control": "explicit caller cardinality 1",
+      "passed": true
+    },
+    {
+      "control": "explicit caller cardinality 2",
+      "passed": true
+    },
+    {
+      "control": "explicit caller cardinality 256",
+      "passed": true
+    },
+    {
+      "control": "invalid explicit callers ()",
+      "passed": true
+    },
+    {
+      "control": "invalid explicit callers [3]",
+      "passed": true
+    },
+    {
+      "control": "invalid explicit callers (True,)",
+      "passed": true
+    },
+    {
+      "control": "invalid explicit callers (0,)",
+      "passed": true
+    },
+    {
+      "control": "invalid explicit callers (4294967296,)",
+      "passed": true
+    },
+    {
+      "control": "invalid explicit callers (3, 3)",
+      "passed": true
+    },
+    {
+      "control": "invalid explicit callers (3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19",
+      "passed": true
+    },
+    {
+      "control": "explicit exact ACL actual=(3, 4) expected=(3,)",
+      "passed": true
+    },
+    {
+      "control": "explicit exact ACL actual=(3,) expected=(3, 4)",
+      "passed": true
+    },
+    {
+      "control": "explicit exact ACL actual=(3, 4) expected=(3, 5)",
+      "passed": true
+    },
+    {
+      "control": "explicit exact ACL actual=(2, 3) expected=(2, 3)",
+      "passed": true
+    }
+  ],
+  "sourcePins": {
+    "/private/tmp/truss-security-main-integration/scripts/security_catalog_subject_read.py": "c04c6d4b165cb3b62e0aefb7e745634f123e1efd5cbfbab416bf55ee89b9f5d6",
+    "/private/tmp/truss-security-main-integration/scripts/security-catalog-subject.sql": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8"
+  }
+}

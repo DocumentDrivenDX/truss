@@ -1,0 +1,15 @@
+test_missing_staff_refuses_before_subject_effects (test_security_catalog_subject_installation_native.CatalogSubjectInstallationNativeTests.test_missing_staff_refuses_before_subject_effects) ... ok
+test_multiple_native_role_bindings_match_exact_helper_acl (test_security_catalog_subject_installation_native.CatalogSubjectInstallationNativeTests.test_multiple_native_role_bindings_match_exact_helper_acl) ... ok
+test_original_subject_registration_and_no_repair (test_security_catalog_subject_installation_native.CatalogSubjectInstallationNativeTests.test_original_subject_registration_and_no_repair)
+@covers US-056-AC2/AC9/AC10; original Subject construction prerequisite. ... ok
+test_outer_rollback_retains_prior_caller_work (test_security_catalog_subject_installation_native.CatalogSubjectInstallationNativeTests.test_outer_rollback_retains_prior_caller_work) ... ok
+test_unsafe_login_role_refuses_before_subject_effects (test_security_catalog_subject_installation_native.CatalogSubjectInstallationNativeTests.test_unsafe_login_role_refuses_before_subject_effects) ... ok
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 45.842s
+
+OK

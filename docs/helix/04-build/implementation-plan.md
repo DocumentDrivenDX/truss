@@ -7835,3 +7835,17 @@ failure remains retained. Astra prompted restoring wrapper snapshot-before-I/O.
 keeps source custody distinct from full authority/profile admission. Trace
 CONTRACT-063/STP-056 B01/B11/B12, US-056AC6/AC9/AC10 and US-057AC7 prerequisites;
 all132 original required cases remain unchanged.
+
+### Original named Subject installation — 2026-10-13
+
+The positive Subject fixture now consumes a private library installer for native
+role/Staff-key bindings, original packaged helpers, private map ownership and
+exact helper/map readback. Up to256 ordinary native login bindings construct;
+protected-reader admission remains its original single-caller scope. Initial
+seven cases pass45.842s; Astra prompted an effective owner-read check, verified
+with a global SELECT-default revoke. Final owner-read/second-login/TLS4/41.107s
+passes. Actual second session sees only its native Subject and cannot read the
+map directly. [Qualified construction evidence](evidence/catalog-subject-installation-20261013/README.md)
+retains source/review/wheel/external results. Complete issuer/role/handler lifetime
+and backend admission remain open; US-056AC2/AC9/AC10, US-057AC7 and
+CONTRACT-063/STP-056 B01/B11/B12 prerequisites only. All132 remain required.

@@ -2098,3 +2098,15 @@ negative-only administrative constructions. [Retained results](../04-build/evide
 include the initial wrong negative error expectation, corrected case and final
 aggregate replay. These are US-056AC6/AC9/AC10 and US-057AC7 prerequisites, not
 complete backend B01/B11/B12 acceptance.
+
+### Native Subject construction — 2026-10-13
+
+`test_security_catalog_subject_installation_native` covers exact initial native
+registration/no repair, missing Staff refusal, multiple declared principal ACL,
+unsafe login-role rejection, outer rollback and original caller work, owner
+SELECT revoked through native defaults, and actual second SESSION_USER helper
+invocation/wrong-actor refusal/no direct map SELECT. Initial installer/TLS7cases
+pass45.842s and final owner-read/second-session/TLS4cases pass41.107s.
+[Evidence](../04-build/evidence/catalog-subject-installation-20261013/README.md)
+qualifies US-056AC2/AC9/AC10 and US-057AC7 prerequisites, retaining explicit
+multi-role protected admission and complete lifecycle gaps.

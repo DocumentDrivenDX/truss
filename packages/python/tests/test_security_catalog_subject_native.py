@@ -15,12 +15,11 @@ class NativeCatalogSubjectTests(catalog.AcceptedCatalogReadNativeTests):
  for name in tuple(n for n in dir(catalog.AcceptedCatalogReadNativeTests) if n.startswith('test_')):locals()[name]=None
  def setup_subject(self):
   mapping=self.populated();self.host.detach();self.admin.commit()
-  self.admin.execute("CREATE TABLE truss.catalog_subject_map(role_oid oid PRIMARY KEY,staff_key text NOT NULL);INSERT INTO truss.catalog_subject_map SELECT oid,'s1' FROM pg_roles WHERE rolname='consumer'")
-  self.admin.execute(sql.SQL('ALTER TABLE truss.catalog_subject_map OWNER TO {}').format(sql.Identifier(self.installation.owner_role)))
-  self.admin.execute((ROOT/'scripts/security-catalog-subject.sql').read_text())
-  for name in ('catalog_subject_current','catalog_subject_context'):
-   self.admin.execute(sql.SQL('ALTER FUNCTION {}(text) OWNER TO {}').format(sql.Identifier('truss',name),sql.Identifier(self.installation.owner_role)))
-   self.admin.execute(sql.SQL('GRANT EXECUTE ON FUNCTION {}(text) TO consumer').format(sql.Identifier('truss',name)))
+  self.admin.execute('BEGIN');self.host=catalog.adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
+  from truss._security_catalog_subject_installation import bootstrap_catalog_subjects_in_transaction
+  registered=bootstrap_catalog_subjects_in_transaction(self.host,self.tx,mapping=mapping,bindings=(('consumer','s1'),))
+  self.assertIsInstance(registered,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(registered.value.security_ready)
+  self.host.detach();self.admin.commit()
   self.admin.execute('GRANT USAGE ON SCHEMA truss TO consumer;REVOKE catalog_fact_writer FROM consumer')
   self.admin.execute('BEGIN');self.host=catalog.adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
   c,h,a,t=self.consumer()

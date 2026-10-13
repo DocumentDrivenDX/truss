@@ -1,0 +1,22 @@
+{
+  "wheelSha256": "e79f774c8908f8db5046bf1c2e01b4ab881db9fe346b38b8e9f3f53e8dcac556",
+  "files": [
+    {
+      "file": "truss/_security_catalog_subject_installation.py",
+      "sha256": "8dbf2bb69d6c4f45f95089919d572e1334349ac6e20d6fe23466355e46228aee",
+      "originalSourceMatches": true
+    },
+    {
+      "file": "truss/_security_catalog_subject_helpers.py",
+      "sha256": "5927f9f08838dfc583b5e9986a596a56f20999997dc73d1e9949ad2e8104db1d",
+      "originalSourceMatches": true
+    },
+    {
+      "file": "truss/_security_bootstrap/catalog-subject.sql",
+      "sha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+      "originalSourceMatches": true
+    }
+  ],
+  "status": "pass",
+  "scope": "Local built/extracted wheel byte correspondence, not clean installed consumer qualification"
+}
