@@ -1858,3 +1858,10 @@ Two PostgreSQL18.6 native controls pass21.398s; original positive1/17.616s remai
 
 
 Concurrent owner main02fefb14 adds scalar containers and runtime0.43/package0.0.6. Both histories were merged without conflict; unchanged receiver-drain controls replay2/37.465s on actual0.43 with exact cleanup and933 imports. Original0.42/21.398s and independent review remain historical. This is component regression only, with no broader container-security or backend case promotion. Current source/native packets/manifest pins: `../04-build/evidence/public-receiver-drain-20261013/runtime043/receipt.json`.
+
+
+### Pre-revocation native snapshots refuse guarded publication — 2026-10-13
+
+Actual repeatable-read and serializable caller transactions capture native snapshots before a separate ordinary public versioned Assignment update deactivates a1 and commits. Public GroupSuccess/COMMIT reaches IDLE; independent current native readback is active=false. PostgreSQL's snapshot visibility function excludes the captured top-level revoker xid from the retained old snapshot and includes it in a fresh snapshot. Original guarded publication refuses both caller profiles before codec/evaluator/receiver, with exact contained profile error/no cleanup error and no acquired caller object/map ShareLocks. Rollback and read-committed re-adoption reuse the original caller/source/mapping; fresh guarded evaluation returns no rows.
+
+Two PostgreSQL18.6 tests pass21.721s on runtime0.43 with exact owned cleanup and933 imports. Trace US-057 AC3/AC7 and truss.L06 prerequisites. This is categorical RR/SERIALIZABLE profile refusal, not age detection or native authority-generation advancement. Original source/issuer and local authentication remain premises; a protected public endpoint, broader snapshot/history/cache/stream support and complete role/DDL/lifetime closure remain open. No backend case promotion. Evidence: `../04-build/evidence/stale-subject-snapshot-20261013/receipt.json`.

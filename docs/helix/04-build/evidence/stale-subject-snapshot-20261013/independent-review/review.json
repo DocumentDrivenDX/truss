@@ -1,0 +1,32 @@
+{
+  "review": "Independent bounded test-source and retained-native-evidence review",
+  "date": "2026-10-13",
+  "gitHead": "88213b394536848a63c637c319ba108b39d828af",
+  "scope": "_assert_stale_snapshot_refusal and RR/SERIALIZABLE entrypoints; test-only increment on runtime0.43",
+  "status": "No actionable findings",
+  "checks": [
+    "Actual RR/SERIALIZABLE caller adoption and native snapshot capture precede separate ordinary public revoker transaction.",
+    "Original public key lookup/update requires GroupSuccess, COMMIT and IDLE; native permanent xid visibility is false in old snapshot and true in fresh snapshot.",
+    "Independent native active=false readback precedes attempted publication; exact selected-profile refusal, zero codec/evaluator/sink calls and contained/no-cleanup-error state are asserted.",
+    "No caller object/map ShareLocks remain after refusal; source confirms profile check precedes subject helper invocation and guarded fact qualification.",
+    "Caller rollback then fresh RC adoption with original mapping yields no rows; inherited cleanup owns all connections and roles.",
+    "Both retained packet outcomes independently checked against exact test entrypoint isolation arguments; final log and native cleanup verified."
+  ],
+  "nativeEvidence": "Parent-executed and independently inspected, not rerun: PostgreSQL18.6, 2 tests/21.721s; shutdown succeeded/status3/socket absent.",
+  "limits": [
+    "Categorical RR/SERIALIZABLE refusal with top-level native xid visibility in older snapshots, not a snapshot-age or policy-generation detector.",
+    "Local fixture authentication and trusted issuer/helper/source premises; no protected public endpoint or complete authority/source/DDL/role lifetime closure.",
+    "No authority-generation transition, old-generation/history/cache/stream theorem or L06/backend acceptance promotion."
+  ],
+  "sha256": {
+    "packages/python/tests/test_security_guarded_subject_native.py": "f904cbf09b2fc92025fba199f2114c548c14e71b215a25b3460956beffd5248a",
+    "packages/python/src/truss/_psycopg_subject_observation.py": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+    "scripts/security_catalog_subject_read.py": "d69ace836cdb21580b9a3b47801492787cdc0f8e5f4cc50a8501df12ad1f40a7",
+    "docs/helix/04-build/evidence/stale-subject-snapshot-20261013/native.log": "02d9be495cfaff81e76a07130e034c64a1b3294a04fe442d9a86a12381d19f66",
+    "docs/helix/04-build/evidence/stale-subject-snapshot-20261013/cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "docs/helix/04-build/evidence/stale-subject-snapshot-20261013/repeatable_read.json": "64d94fd87e708c3dfe0fe77de7c27aa2fe0f8cb9aa8ac2258b355bc59ad49cb3",
+    "docs/helix/04-build/evidence/stale-subject-snapshot-20261013/serializable.json": "e9b346fecb2f7f27af0ab82c290c6420ec6530d8618aab2de00196c838f5aa82",
+    "docs/helix/04-build/evidence/stale-subject-snapshot-20261013/module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "docs/helix/04-build/evidence/stale-subject-snapshot-20261013/receipt.json": "761f77c33f184a9e25d71ee608f1a4d9bc5e6feecb9ce950cb6f40510d399a89"
+  }
+}

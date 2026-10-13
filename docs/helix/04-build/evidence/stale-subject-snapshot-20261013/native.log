@@ -1,0 +1,7 @@
+test_repeatable_read_snapshot_before_revocation_refuses_publication (test_security_guarded_subject_native.GuardedSubjectTests.test_repeatable_read_snapshot_before_revocation_refuses_publication) ... ok
+test_serializable_snapshot_before_revocation_refuses_publication (test_security_guarded_subject_native.GuardedSubjectTests.test_serializable_snapshot_before_revocation_refuses_publication) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 21.721s
+
+OK

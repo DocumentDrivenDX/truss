@@ -1,0 +1,12 @@
+{
+  "isolation": "repeatable_read",
+  "originalSnapshot": "790:790:",
+  "committedRevokerXid": "791",
+  "visibleInOriginalSnapshot": false,
+  "visibleInFreshSnapshot": true,
+  "stalePublication": "refused-before-codec-evaluator-and-sink",
+  "freshDecision": {
+    "kind": "owned-resource-list-fixture/0.1",
+    "rows": []
+  }
+}

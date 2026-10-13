@@ -1,0 +1,12 @@
+{
+  "isolation": "serializable",
+  "originalSnapshot": "844:844:",
+  "committedRevokerXid": "845",
+  "visibleInOriginalSnapshot": false,
+  "visibleInFreshSnapshot": true,
+  "stalePublication": "refused-before-codec-evaluator-and-sink",
+  "freshDecision": {
+    "kind": "owned-resource-list-fixture/0.1",
+    "rows": []
+  }
+}
