@@ -25,3 +25,8 @@ alongside these workflows: five tests passed in103.814 seconds on the installed
 Truss0.0.6.dev0 and Weft0.4.8 wheels. Module boundaries passed932 imports.
 Native release smoke and actual public assets will be
 recorded separately. Managed Aurora/Lakebase and full corpus remain unqualified.
+
+Final source rerun: two container workflows passed19.053 seconds. Existing
+basic typed-key/traversal/facet-evolution release checks: six passed52.957 seconds.
+Focused mypy checks passed three modules. Commitcab9e4dc merged concurrent
+security main updates in9aedd8f3 and pushed main.
