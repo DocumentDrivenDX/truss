@@ -5,9 +5,9 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.6`,
-native runtime `0.43-candidate`, layout `0.16`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.13`. The tested local
+This is an experimental implementation: development Python distribution `truss-toolkit==0.0.7.dev0`,
+native runtime `0.44-candidate`, layout `0.16`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.14`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -665,6 +665,9 @@ Containers have at most1024 items, map keys at most4096 UTF-8 bytes and complete
 cells at most1 MiB, in addition to ordinary group/result bounds. Item meaning or
 reference changes are refused in this tranche. Native admission recognizes old
 scalar-only import payloads; the Python importer requires its current profile.
-Compiled queries currently refuse a selected catalog containing these fields
-with `unsupported_query`; ordinary scalar catalogs retain their query support.
+Development Weft0.4.9 projects these values and complete entities through
+`QueryRows`: arrays become tuples, maps become immutable key-sorted mappings,
+and integer/decimal items become exact Python int/Decimal values. v0.0.6 with
+Weft0.4.8 still refuses container-bearing query selections. Container comparisons,
+unnesting and nested values remain unsupported.
 Runtime0.43 upgrades0.42 additively without rewriting original data or receipts.

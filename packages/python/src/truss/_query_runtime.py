@@ -11,14 +11,14 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.13',
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.14',
            'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.4'}
 
 
 def compiler():
     try:
         import weft
-        if weft.__version__ != '0.4.8':
+        if weft.__version__ != '0.4.9':
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
@@ -60,6 +60,12 @@ def _decode_value(value, descriptor_id, descriptors):
         if kind not in ('timestamp', 'binary') or type(value) is not str:
             raise ValueError('Exact timestamp/binary token required')
         return TextValue(kind=kind, text=value)
+    if descriptor['kind'] == 'sequence':
+        if type(value) is not list:raise ValueError('Complete logical sequence required')
+        return tuple(_decode_value(item,descriptor['item'],descriptors) for item in value)
+    if descriptor['kind'] == 'map':
+        if type(value) is not dict or any(type(key) is not str for key in value):raise ValueError('Complete logical map required')
+        return MappingProxyType({key:_decode_value(value[key],descriptor['item'],descriptors) for key in sorted(value)})
     if descriptor['kind'] == 'record':
         members = descriptor['members']
         if type(value) is not dict or set(value) != {m['name'] for m in members}:
