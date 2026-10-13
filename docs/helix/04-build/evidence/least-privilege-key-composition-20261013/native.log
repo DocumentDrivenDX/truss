@@ -1,0 +1,7 @@
+test_least_privilege_cut_and_original_key_share_host_operation (test_ordinary_subject_cut_privileges_native.OrdinarySubjectCutPrivilegeTests.test_least_privilege_cut_and_original_key_share_host_operation) ... ok
+test_ordinary_cut_without_direct_source_or_fact_privileges (test_ordinary_subject_cut_privileges_native.OrdinarySubjectCutPrivilegeTests.test_ordinary_cut_without_direct_source_or_fact_privileges) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 3.558s
+
+OK

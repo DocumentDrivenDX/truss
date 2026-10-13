@@ -1,0 +1,27 @@
+{
+  "scope": "Fixed-home native least-privilege cut and original key composition spike; no protected deployment admission",
+  "sources": {
+    "packages/python/tests/test_ordinary_subject_cut_privileges_native.py": "f4d576e537c2f673ca5dced421af62327c9153291953951d5479e8fcde511ab8",
+    "docs/helix/02-design/spikes/security/ordinary-subject-cut-definer-v0.1.sql": "bcefff19bb51bafb7486eee08918a5e59298b2ae49889501327a74c0e674ce4b",
+    "packages/python/src/truss/psycopg_host.py": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+    "packages/python/src/truss/_umf_key_tuples.py": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e"
+  },
+  "nativeTestGroups": 2,
+  "nativeSeconds": 3.558,
+  "privilegeControls": 25,
+  "compositionControls": 5,
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17; Bun1.4.2; original Core0.8 KeyTuple3; Weft subject selection0.1.0",
+  "acceptanceTraceability": {
+    "US-056-AC5": "No direct source/fact rights in declared fixture",
+    "US-056-AC10": "Original source/ontology/key and native operation correspondence prerequisite"
+  },
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "missingGates": [
+    "generic installed raw/graph profile",
+    "complete native callable/role/helper/config closure",
+    "authenticated source/issuer provenance",
+    "ontology resource enforcement and final protected release"
+  ],
+  "reviewCorrection": "Encoder refusal must be entered exactly once and retained as exact contained ValueError with no cleanup error; earlier assertion failures cannot substitute."
+}

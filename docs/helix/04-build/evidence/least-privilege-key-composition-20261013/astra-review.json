@@ -1,0 +1,108 @@
+{
+  "review": "Fixed-home least-privilege ordinary subject cut plus original semantic key composition",
+  "reviewedAt": "2026-10-13T15:14:31.076460+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "77d0694fa8bc6e856d527b278db6de38c2fe20a2",
+  "status": "no remaining actionable findings within the test-only composition scope",
+  "findings": [],
+  "resolvedFinding": {
+    "problem": "An Error-only codec-failure assertion could pass on an earlier callback assertion without calling the encoder.",
+    "resolution": "Final test asserts exactly one mocked encoder invocation, the specific ValueError/message, contained host phase and no cleanup_error."
+  },
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_ordinary_subject_cut_privileges_native.py",
+      "sha256": "f4d576e537c2f673ca5dced421af62327c9153291953951d5479e8fcde511ab8",
+      "bytes": 12034
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/spikes/security/ordinary-subject-cut-definer-v0.1.sql",
+      "sha256": "bcefff19bb51bafb7486eee08918a5e59298b2ae49889501327a74c0e674ce4b",
+      "bytes": 2843
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+      "bytes": 9931
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/fixtures/security-mapping-request.json",
+      "sha256": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+      "bytes": 11439
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py",
+      "sha256": "ca9ecf1ef9273f382093bb5af7a6086b6ffe1b35a66b1e055c27d529d239ab63",
+      "bytes": 13291
+    }
+  ],
+  "independentEvidence": [
+    {
+      "path": "/private/tmp/ordinary-key-composition-review-20261013/check.py",
+      "sha256": "1107c28b506676823c08b187e4f46f1bd491eaf2c82850862618fb62e6ee78fb",
+      "bytes": 3145
+    },
+    {
+      "path": "/private/tmp/ordinary-key-composition-review-20261013/results.json",
+      "sha256": "267677001ead48ae6dc8fdf72096dd0f6141d2248bd75f83a80b21d3e259f0dd",
+      "bytes": 2443
+    }
+  ],
+  "independentControls": {
+    "count": 10,
+    "result": "pass",
+    "scope": "Actual exact-path imported original Weft selector and pinned original UMF encoder: positive subject/source/key, wrong source/module/subject/key refusal, independent s1 tuple vector, retained native receipt correspondence, exact original source/raw literal retention, wrong literal family and required-null refusal. No native fixture executed by reviewer."
+  },
+  "parentNativeEvidence": {
+    "tests": 2,
+    "seconds": 3.558,
+    "compositionGroups": 5,
+    "privilegeGroups": 25,
+    "result": "pass",
+    "execution": "Parent execution; retained outputs independently inspected",
+    "cleanup": "stopped, status absent, socket absent",
+    "pins": [
+      {
+        "path": "/private/tmp/ordinary-key-composition.log",
+        "sha256": "ede1cde537df046adcc9e716426cedf44eb65a84463d6c5dc9b360510665dd44",
+        "bytes": 514
+      },
+      {
+        "path": "/private/tmp/ordinary-key-composition.json",
+        "sha256": "5dc48c3ee02235d45785b2fb585df77776fae3093715ca4f0a7644cbcf3825d4",
+        "bytes": 8094
+      },
+      {
+        "path": "/private/tmp/ordinary-cut-native.json",
+        "sha256": "ada6e4ef234392c4105cdffe4ea9541f3239e432ed2d5f481d12531f9a878d97",
+        "bytes": 1926
+      },
+      {
+        "path": "/private/tmp/ordinary-cut-cleanup/cleanup-OrdinarySubjectCutPrivilegeTests.json",
+        "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+        "bytes": 71
+      }
+    ]
+  },
+  "sourceReview": [
+    "Weft selects the original ontology subject and key from fixed original request/source before the host operation; the source and identity are reused unchanged by the UMF encoder.",
+    "Inside the original host callback, fixed definer result descriptor names and TEXT OIDs are checked before fetch; installation/epoch/incarnation/profile/evidence and original actor/privileged actor are checked.",
+    "Native XID/database/backend identity is compared with the helper row, backend PID agrees with the host observation, and the outside-helper role context is restored to the ordinary caller.",
+    "Native conflicting UPDATE is attempted immediately before original encoding and after successful host handback; caller rollback allows it. Code ordering places encoding inside the same original callback and transaction.",
+    "The injected codec exception is now isolated explicitly; host operation savepoint containment releases acquired locks before outer rollback, with no successful result.",
+    "Each test resets the shared fixture subject to s1, preventing the prior test-order contamination."
+  ],
+  "limitations": [
+    "Test-authored fixed-home correspondence only; Weft source selection is not authenticated native source/profile admission.",
+    "The negative codec branch injects a ValueError with a mock; it is a containment control, not a native encoder failure mechanism theorem.",
+    "Lock probes bracket encoding; this is not an independent continuously sampled lock-lifetime or arbitrary callback-mutation proof.",
+    "Original host, driver, helper, pinned producer and configured module are trusted for this component. Complete callable/role/config/dependency writer closure is not established.",
+    "Returned key/receipt remains historical; no authenticated issuer, current authority, generic installer, protected release, profile readiness or backend-case promotion."
+  ],
+  "repositoryMutations": false
+}
