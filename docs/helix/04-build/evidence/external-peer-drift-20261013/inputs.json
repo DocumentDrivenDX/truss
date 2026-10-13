@@ -1,0 +1,10 @@
+{
+  "trussBaseRevision": "4b379aa3ed0d5043aac8867ddae1393c65af82f3",
+  "runtime": "0.52-candidate",
+  "sharedRuntimeInputs": "../linux-guarded-channel-20261013/inputs.json",
+  "sourceSha256": {
+    "scripts/security_channel_composition_service.py": "dca24d183dbcd6302cdf245ca445c76feacb1f67a4076448ab6d232c56a0ccbf",
+    "scripts/security_catalog_channel.py": "36ff31ccc9e04f77f73f31431ff3851189312a2889b0694801fa29fcbbe068b4"
+  },
+  "runnerSha256": "895a58e2d9aa94625b5cc4e2dfd78dde6e93653c428333e224e5f2d31395a997"
+}

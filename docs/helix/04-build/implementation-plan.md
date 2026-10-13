@@ -7700,3 +7700,14 @@ of the original132 cases. [Evidence and limitations](evidence/external-peer-chan
 Concurrent owner layout1.0/runtime0.52 changes are preserved. The composed
 external-peer controls pass on merged runtime0.52; both original native TLS
 tests pass (2/12.452s), with separate runtime052 evidence retained.
+
+
+### External peer native event-trigger drift — 2026-10-13
+
+The composed ordinary peer observes generic503{} after the trusted owner changes
+native event_triggers tooff. The original guarded operation runs once and refuses
+at its native gate, with zero encoding calls; reuse and TCP SQL probes refuse.
+All three owned resources are confirmed absent. The original positive composed
+read also passes. This is US-056AC9/US-057AC7 and SPIKE-004 CH04/CH05/CH08
+prerequisite evidence, not truss.B11 or backend admission. Other native authority
+changes remain required. [Inputs, outcomes and scope](evidence/external-peer-drift-20261013/README.md).
