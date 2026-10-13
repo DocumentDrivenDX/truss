@@ -1,0 +1,213 @@
+[
+  {
+    "recipes": [
+      [
+        1,
+        {
+          "documentId": "domain",
+          "moduleId": "m",
+          "elementId": "Assignment"
+        },
+        [
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "assignmentId"
+            },
+            "2",
+            "string"
+          ],
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "assignmentStaff"
+            },
+            "4",
+            "string"
+          ],
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "assignmentProject"
+            },
+            "3",
+            "string"
+          ],
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "active"
+            },
+            "1",
+            "boolean"
+          ]
+        ],
+        true
+      ],
+      [
+        2,
+        {
+          "documentId": "domain",
+          "moduleId": "m",
+          "elementId": "Ownership"
+        },
+        [
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "ownerId"
+            },
+            "5",
+            "string"
+          ],
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "ownerResource"
+            },
+            "7",
+            "string"
+          ],
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "ownerProject"
+            },
+            "6",
+            "string"
+          ]
+        ],
+        true
+      ],
+      [
+        3,
+        {
+          "documentId": "domain",
+          "moduleId": "m",
+          "elementId": "Project"
+        },
+        [
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "projectId"
+            },
+            "8",
+            "string"
+          ]
+        ],
+        false
+      ],
+      [
+        4,
+        {
+          "documentId": "domain",
+          "moduleId": "m",
+          "elementId": "Resource"
+        },
+        [
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "resourceId"
+            },
+            "9",
+            "string"
+          ]
+        ],
+        false
+      ],
+      [
+        5,
+        {
+          "documentId": "domain",
+          "moduleId": "m",
+          "elementId": "Staff"
+        },
+        [
+          [
+            {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "staffId"
+            },
+            "11",
+            "string"
+          ]
+        ],
+        false
+      ]
+    ],
+    "rows": [
+      [
+        "10",
+        "1",
+        "{\"1\": {\"kind\": \"boolean\", \"value\": false}, \"2\": {\"kind\": \"string\", \"text\": \"a2\"}, \"3\": {\"kind\": \"string\", \"text\": \"p2\"}, \"4\": {\"kind\": \"string\", \"text\": \"s1\"}}",
+        "false"
+      ],
+      [
+        "9",
+        "1",
+        "{\"1\": {\"kind\": \"boolean\", \"value\": true}, \"2\": {\"kind\": \"string\", \"text\": \"a1\"}, \"3\": {\"kind\": \"string\", \"text\": \"p1\"}, \"4\": {\"kind\": \"string\", \"text\": \"s1\"}}",
+        "false"
+      ],
+      [
+        "7",
+        "2",
+        "{\"5\": {\"kind\": \"string\", \"text\": \"o1\"}, \"6\": {\"kind\": \"string\", \"text\": \"p1\"}, \"7\": {\"kind\": \"string\", \"text\": \"r1\"}}",
+        "false"
+      ],
+      [
+        "8",
+        "2",
+        "{\"5\": {\"kind\": \"string\", \"text\": \"o2\"}, \"6\": {\"kind\": \"string\", \"text\": \"p2\"}, \"7\": {\"kind\": \"string\", \"text\": \"r2\"}}",
+        "false"
+      ],
+      [
+        "2",
+        "3",
+        "{\"8\": {\"kind\": \"string\", \"text\": \"p1\"}}",
+        "false"
+      ],
+      [
+        "3",
+        "3",
+        "{\"8\": {\"kind\": \"string\", \"text\": \"p2\"}}",
+        "false"
+      ],
+      [
+        "4",
+        "4",
+        "{\"9\": {\"kind\": \"string\", \"text\": \"r1\"}, \"10\": {\"kind\": \"integer\", \"text\": \"100\"}}",
+        "false"
+      ],
+      [
+        "5",
+        "4",
+        "{\"9\": {\"kind\": \"string\", \"text\": \"r2\"}, \"10\": {\"kind\": \"integer\", \"text\": \"200\"}}",
+        "false"
+      ],
+      [
+        "6",
+        "4",
+        "{\"9\": {\"kind\": \"string\", \"text\": \"orphan\"}, \"10\": {\"kind\": \"integer\", \"text\": \"300\"}}",
+        "false"
+      ],
+      [
+        "1",
+        "5",
+        "{\"11\": {\"kind\": \"string\", \"text\": \"s1\"}}",
+        "false"
+      ]
+    ]
+  }
+]

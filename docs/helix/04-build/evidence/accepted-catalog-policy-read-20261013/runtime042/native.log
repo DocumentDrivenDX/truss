@@ -1,0 +1,7 @@
+test_original_accepted_catalog_populated_records_feed_shared_policy (test_security_catalog_read_native.AcceptedCatalogReadNativeTests.test_original_accepted_catalog_populated_records_feed_shared_policy) ... ok
+test_retained_assessment_substitution_refuses_before_evaluator (test_security_catalog_read_native.AcceptedCatalogReadNativeTests.test_retained_assessment_substitution_refuses_before_evaluator) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 15.122s
+
+OK

@@ -1,0 +1,101 @@
+{
+  "scope": "Actual captured pre-fix wrapper/recipe/row projection and genuine original UMF evaluator; native recapture and host/cursor shells replaced. Retained actual native assessment and rows are replayed. Demonstrates mutable expected carrier custody only, not a native catalog attack.",
+  "sourceAtDispatchSha256": "4eb62be0c282167ec7c381751886a56f2edb60a5f97696a4d58ddae387b51522",
+  "observations": [
+    {
+      "mutable": false,
+      "nativeCatalogDrifts": false,
+      "outcome": "published",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "mutable": false,
+      "nativeCatalogDrifts": true,
+      "outcome": "Accepted catalog changed during owned evaluation",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": null
+    },
+    {
+      "mutable": true,
+      "nativeCatalogDrifts": false,
+      "outcome": "published",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "mutable": true,
+      "nativeCatalogDrifts": true,
+      "outcome": "published",
+      "hostEntries": 1,
+      "captureCalls": 2,
+      "result": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
