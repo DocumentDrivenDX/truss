@@ -11,7 +11,7 @@ class QueryAbsent:
 
 @dataclass(frozen=True, slots=True)
 class QueryRelatedKeys:
-    items: tuple[tuple[str, ...], ...]
+    items: tuple[tuple[str | bool | int | Decimal, ...], ...]
     truncated: bool
 
 QueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | tuple['QueryValue', ...] | Mapping[str, 'QueryValue']

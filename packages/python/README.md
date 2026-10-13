@@ -5,9 +5,9 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.7`,
-native runtime `0.44-candidate`, layout `0.16`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.14`. The tested local
+This is an experimental implementation: development Python distribution `truss-toolkit==0.0.8.dev0`,
+native runtime `0.45-candidate`, layout `0.16`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.15`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -619,8 +619,8 @@ result = reads.lookup_key_in_transaction(
 Equal decimal spellings identify the same key without changing stored tokens.
 Updates preserve old reservations; imports skip reserved or live identities.
 Historical committed requests retain their original results across upgrade.
-Timestamp/float keys are refused. Weft pagination and relationship-key projections
-still require string keys. This tranche was added after v0.0.2.
+Timestamp/float keys are refused. Weft pagination still requires string keys. Relationship predicates and key
+projections now also support required boolean, integer and decimal(18,4) keys. This tranche was added after v0.0.2.
 
 ## One-call graph traversal
 
@@ -671,3 +671,16 @@ and integer/decimal items become exact Python int/Decimal values. v0.0.6 with
 Weft0.4.8 still refuses container-bearing query selections. Container comparisons,
 unnesting and nested values remain unsupported.
 Runtime0.43 upgrades0.42 additively without rewriting original data or receipts.
+
+## Typed relationship keys (next release tranche)
+
+`HAS_RELATED`, `RELATED_KEYS` and complete-entity relationship key lists support
+required string, boolean, integer (unfaceted or signed64), and decimal(18,4)
+components. Comparison and ordering are typed; projection preserves original
+numeric token text until exact Python int/Decimal decoding. `QueryRelatedKeys`
+contains immutable tuples of those types, with its existing truncation flag.
+Complete lists refuse overflow rather than returning a partial complete result.
+
+Business-key query pages remain string-only. Binary/timestamp relationship keys
+and unfaceted decimal business keys remain unsupported. This is native0.45 /
+Weft0.4.10/backend0.4.15; original0.44 upgrades additively.
