@@ -5,8 +5,8 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: runtime `0.31-candidate`, layout `0.16`
-candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.4`. The tested local
+This is an experimental implementation: runtime `0.32-candidate`, layout `0.16`
+candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.5`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -17,7 +17,7 @@ ordinary-person/module boundaries.
 
 Python 3.11 or later, Bun 1.4.2, and the Weft Python extension built with the
 `truss-postgresql-pg18` feature are required. This feature must expose runtime
-backend `0.4.4`; the conformance-only backend is not the public integration.
+backend `0.4.5`; the conformance-only backend is not the public integration.
 Install the package from this repository:
 
 ```sh
@@ -39,7 +39,7 @@ JSON file supplies calls, transaction phases and semantic expectations:
 
 ```sh
 python packages/python/examples/run_corpus.py \
-  docs/helix/04-build/corpus/public-python/0.5/adopter-basic.json \
+  docs/helix/04-build/corpus/public-python/0.6/adopter-basic.json \
   /tmp/truss-public-preview --bun bun
 ```
 
@@ -143,7 +143,7 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.30 to 0.31. The trusted administrator must quiesce consumers and
+0.23 through 0.31 to 0.32. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -490,3 +490,11 @@ These links retain earlier README section addresses.
 <a id="versioned-public-preview-corpus"></a>
 
 [Versioned public preview corpus](docs/runtime-history.md#versioned-public-preview-corpus) — historical release notes.
+
+Catalog registration also retains original vocabulary and extension artifacts and
+owner-reported module actions as uninterpreted metadata. It preserves the original
+validation diagnostics and partial interpretation; it does not execute actions or
+interpret placement, DDD or security annotations. Required core semantics still
+must be supported. The original consumer corpus has two authority read cases
+exercised through public registration, mutation, replay and read-only queries;
+replica execution and the full consumer corpus remain unqualified.

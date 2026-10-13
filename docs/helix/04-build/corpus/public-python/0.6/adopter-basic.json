@@ -1,0 +1,847 @@
+{
+  "format": "truss-public-python-preview/0.6",
+  "id": "public-adopter-basic",
+  "profile": {
+    "runtimeRelease": "truss-catalog-runtime/0.32-candidate",
+    "postgresql": "18.6",
+    "driver": "psycopg3.3.6",
+    "weftBackendVersion": "0.4.5",
+    "layout": {
+      "identity": "truss-layout",
+      "version": "0.16",
+      "sha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368"
+    }
+  },
+  "fixture": {
+    "path": "notes.umf.json",
+    "sha256": "2d12a4ee34d9e02ffb578e99fb0f69466bb11832db0eb49a235d23659931942b",
+    "documentId": "notes",
+    "revision": "r1"
+  },
+  "setup": {
+    "actors": {
+      "writer": "preview_writer",
+      "reader": "preview_reader",
+      "outsider": "preview_outsider"
+    },
+    "readerRole": "preview_readers",
+    "writerRole": "preview_writers",
+    "moduleId": "notes",
+    "consumerId": "preview-feed"
+  },
+  "phases": [
+    {
+      "actor": "admin",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "install",
+          "as": "installation",
+          "args": {
+            "registrarActor": "writer"
+          },
+          "expect": {
+            "status": "pending_commit",
+            "releaseId": "truss-catalog-runtime/0.32-candidate",
+            "installed": true
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "accept",
+          "as": "catalog",
+          "args": {
+            "requestKey": "preview-catalog"
+          },
+          "expect": {
+            "replayed": false,
+            "revision": "1"
+          }
+        }
+      ]
+    },
+    {
+      "actor": "admin",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "configure",
+          "as": "policy",
+          "args": {
+            "grants": [
+              {
+                "actor": "writer",
+                "permission": "read"
+              },
+              {
+                "actor": "writer",
+                "permission": "write"
+              },
+              {
+                "actor": "reader",
+                "permission": "read"
+              }
+            ],
+            "removeRegistrarActor": "writer"
+          },
+          "expect": {
+            "status": "pending_commit"
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "apply",
+          "as": "created",
+          "args": {
+            "operations": [
+              {
+                "op": "create-object",
+                "record": "Note",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "first"
+                    }
+                  }
+                ],
+                "alias": "first"
+              },
+              {
+                "op": "create-object",
+                "record": "Note",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "second"
+                    }
+                  }
+                ],
+                "alias": "second"
+              },
+              {
+                "op": "create-edge",
+                "relationship": "references",
+                "sourceAlias": "first",
+                "targetAlias": "second",
+                "alias": "link"
+              }
+            ],
+            "requestKey": "preview-create",
+            "preconditions": []
+          },
+          "expect": {
+            "outcome": "success",
+            "disposition": "applied",
+            "durability": "pending",
+            "results": [
+              "created",
+              "created",
+              "created"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "replay",
+          "as": "recovered",
+          "args": {
+            "original": "created"
+          },
+          "expect": {
+            "outcome": "success",
+            "disposition": "replayed",
+            "durability": "committed",
+            "results": [
+              "created",
+              "created",
+              "created"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "reader",
+      "readOnly": true,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "reached",
+          "as": "source-visible",
+          "args": {
+            "token": "recovered",
+            "consumer": null
+          },
+          "expect": {
+            "outcome": "available",
+            "included": true,
+            "comparison": "truss-authority-receipt-visibility"
+          }
+        },
+        {
+          "op": "reached",
+          "as": "consumer-behind",
+          "args": {
+            "token": "recovered",
+            "consumer": "preview-feed"
+          },
+          "expect": {
+            "outcome": "available",
+            "included": false,
+            "comparison": "truss-feed-receipt-visibility"
+          }
+        },
+        {
+          "op": "lookup",
+          "as": "by-key",
+          "args": {
+            "record": "Note",
+            "key": "title-key",
+            "values": [
+              "first"
+            ]
+          },
+          "expect": {
+            "outcome": "found",
+            "values": {
+              "title": {
+                "kind": "string",
+                "text": "first"
+              }
+            }
+          }
+        },
+        {
+          "op": "query",
+          "as": "related",
+          "args": {
+            "sql": "SELECT n.title,RELATED_KEYS(n.references,10) AS linked FROM Note n WHERE HAS_RELATED(n.references,KEY(:title))",
+            "parameters": {
+              "title": "second"
+            },
+            "readProfile": null
+          },
+          "expect": {
+            "outcome": "rows",
+            "columns": [
+              "title",
+              "linked"
+            ],
+            "rows": [
+              [
+                {
+                  "kind": "string",
+                  "text": "first"
+                },
+                {
+                  "kind": "related-keys",
+                  "items": [
+                    [
+                      "second"
+                    ]
+                  ],
+                  "truncated": false
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "reader",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "apply",
+          "as": "reader-refused",
+          "args": {
+            "operations": [
+              {
+                "op": "create-object",
+                "record": "Note",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "forbidden"
+                    }
+                  }
+                ],
+                "alias": "forbidden"
+              }
+            ],
+            "requestKey": null,
+            "preconditions": []
+          },
+          "expect": {
+            "outcome": "failed",
+            "code": "unauthorized_person"
+          }
+        }
+      ]
+    },
+    {
+      "actor": "outsider",
+      "readOnly": true,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "query",
+          "as": "outsider-refused",
+          "args": {
+            "sql": "SELECT COUNT(*) AS total FROM Note n",
+            "parameters": {},
+            "readProfile": null
+          },
+          "expect": {
+            "outcome": "refused",
+            "code": "unauthorized"
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "apply",
+          "as": "condition-refused",
+          "args": {
+            "operations": [
+              {
+                "op": "update-object",
+                "entity": "first",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "changed"
+                    }
+                  }
+                ],
+                "expectedVersion": "1"
+              }
+            ],
+            "requestKey": null,
+            "preconditions": [
+              {
+                "op": "property-equals",
+                "entity": "first",
+                "name": "title",
+                "value": {
+                  "kind": "string",
+                  "text": "different"
+                },
+                "id": "original",
+                "reason": "must still match"
+              }
+            ]
+          },
+          "expect": {
+            "outcome": "failed",
+            "code": "precondition_failed",
+            "conditions": [
+              "original"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "rollback",
+      "steps": [
+        {
+          "op": "apply",
+          "as": "dry-run",
+          "args": {
+            "operations": [
+              {
+                "op": "create-object",
+                "record": "Note",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "dry-run"
+                    }
+                  }
+                ],
+                "alias": "temporary"
+              }
+            ],
+            "requestKey": null,
+            "preconditions": []
+          },
+          "expect": {
+            "outcome": "success",
+            "disposition": "applied",
+            "durability": "pending",
+            "results": [
+              "created"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "reader",
+      "readOnly": true,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "lookup",
+          "as": "dry-gone",
+          "args": {
+            "record": "Note",
+            "key": "title-key",
+            "values": [
+              "dry-run"
+            ]
+          },
+          "expect": {
+            "outcome": "not_found"
+          }
+        },
+        {
+          "op": "lookup",
+          "as": "refusal-gone",
+          "args": {
+            "record": "Note",
+            "key": "title-key",
+            "values": [
+              "forbidden"
+            ]
+          },
+          "expect": {
+            "outcome": "not_found"
+          }
+        },
+        {
+          "op": "lookup",
+          "as": "condition-unchanged",
+          "args": {
+            "record": "Note",
+            "key": "title-key",
+            "values": [
+              "first"
+            ]
+          },
+          "expect": {
+            "outcome": "found",
+            "values": {
+              "title": {
+                "kind": "string",
+                "text": "first"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "import",
+          "as": "imported-batch",
+          "args": {
+            "record": "Note",
+            "loadId": "preview-load",
+            "records": [
+              {
+                "as": "imported",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "imported"
+                    }
+                  }
+                ],
+                "payloadValues": null,
+                "source": {
+                  "system": "preview"
+                }
+              },
+              {
+                "as": "duplicate",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "first"
+                    }
+                  }
+                ],
+                "payloadValues": null,
+                "source": {}
+              },
+              {
+                "as": "invalid",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "invalid"
+                    }
+                  }
+                ],
+                "payloadValues": [],
+                "source": {}
+              }
+            ]
+          },
+          "expect": {
+            "status": "processed",
+            "execution": "host_adopted",
+            "outcomes": [
+              {
+                "index": "0",
+                "outcome": "created",
+                "disposition": "pending"
+              },
+              {
+                "index": "1",
+                "outcome": "skipped",
+                "disposition": "pending",
+                "reason": "live_identity"
+              },
+              {
+                "index": "2",
+                "outcome": "rejected",
+                "disposition": "rolled_back",
+                "code": "invalid_payload"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "reader",
+      "readOnly": true,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "query",
+          "as": "committed-import-count",
+          "args": {
+            "sql": "SELECT COUNT(*) AS total FROM Note n",
+            "parameters": {},
+            "readProfile": "count-summary"
+          },
+          "expect": {
+            "outcome": "rows",
+            "columns": [
+              "total"
+            ],
+            "rows": [
+              [
+                {
+                  "kind": "integer",
+                  "text": "3"
+                }
+              ]
+            ]
+          }
+        },
+        {
+          "op": "lookup",
+          "as": "invalid-import-gone",
+          "args": {
+            "record": "Note",
+            "key": "title-key",
+            "values": [
+              "invalid"
+            ]
+          },
+          "expect": {
+            "outcome": "not_found"
+          }
+        },
+        {
+          "op": "query",
+          "as": "grouped-import-counts",
+          "args": {
+            "sql": "SELECT n.title,COUNT(*) AS total FROM Note n GROUP BY n.title ORDER BY n.title LIMIT 10",
+            "parameters": {},
+            "readProfile": "count-summary"
+          },
+          "expect": {
+            "outcome": "rows",
+            "columns": [
+              "title",
+              "total"
+            ],
+            "rows": [
+              [
+                {
+                  "kind": "string",
+                  "text": "first"
+                },
+                {
+                  "kind": "integer",
+                  "text": "1"
+                }
+              ],
+              [
+                {
+                  "kind": "string",
+                  "text": "imported"
+                },
+                {
+                  "kind": "integer",
+                  "text": "1"
+                }
+              ],
+              [
+                {
+                  "kind": "string",
+                  "text": "second"
+                },
+                {
+                  "kind": "integer",
+                  "text": "1"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "reader",
+      "readOnly": false,
+      "settle": "per-delivery",
+      "steps": [
+        {
+          "op": "drain-feed",
+          "as": "delivered",
+          "args": {
+            "consumer": "preview-feed",
+            "maximumPages": 16
+          },
+          "expect": {
+            "journal": [
+              {
+                "entity": "first",
+                "kind": "object",
+                "operation": "create",
+                "version": "1",
+                "properties": [
+                  {
+                    "fieldId": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "first"
+                    }
+                  }
+                ],
+                "actor": "preview_writer"
+              },
+              {
+                "entity": "second",
+                "kind": "object",
+                "operation": "create",
+                "version": "1",
+                "properties": [
+                  {
+                    "fieldId": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "second"
+                    }
+                  }
+                ],
+                "actor": "preview_writer"
+              },
+              {
+                "entity": "link",
+                "kind": "edge",
+                "operation": "create",
+                "version": "1",
+                "properties": [],
+                "actor": "preview_writer",
+                "source": "first",
+                "target": "second",
+                "orderKey": {
+                  "state": "null"
+                }
+              },
+              {
+                "entity": "imported",
+                "kind": "object",
+                "operation": "create",
+                "version": "1",
+                "properties": [
+                  {
+                    "fieldId": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "imported"
+                    }
+                  }
+                ],
+                "actor": "preview_writer"
+              }
+            ],
+            "importSources": [
+              {
+                "entity": "imported",
+                "loadId": "preview-load",
+                "source": {
+                  "system": {
+                    "kind": "string",
+                    "text": "preview"
+                  }
+                }
+              }
+            ],
+            "catalog": [
+              "2d12a4ee34d9e02ffb578e99fb0f69466bb11832db0eb49a235d23659931942b"
+            ],
+            "ack": "committed"
+          }
+        }
+      ]
+    },
+    {
+      "actor": "reader",
+      "readOnly": true,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "reached",
+          "as": "consumer-included",
+          "args": {
+            "token": "recovered",
+            "consumer": "preview-feed"
+          },
+          "expect": {
+            "outcome": "available",
+            "included": true,
+            "comparison": "truss-feed-receipt-visibility"
+          }
+        }
+      ]
+    }
+  ],
+  "feedProjection": {
+    "journal": [
+      "entity",
+      "kind",
+      "operation",
+      "version",
+      "properties",
+      "actor",
+      "source",
+      "target",
+      "orderKey"
+    ],
+    "importSources": [
+      "entity",
+      "loadId",
+      "source"
+    ],
+    "catalog": [
+      "originalDocumentSha256"
+    ],
+    "retainedButNotCompared": [
+      "native timestamps",
+      "native xid/seq",
+      "opaque cursor bytes",
+      "physical reservations",
+      "remaining catalog metadata"
+    ]
+  },
+  "scope": "single Python preview; not full conformance or interchange",
+  "resultProjection": {
+    "install": [
+      "status",
+      "releaseId",
+      "installed"
+    ],
+    "accept": [
+      "replayed",
+      "revision"
+    ],
+    "configure": [
+      "status"
+    ],
+    "apply/replay": [
+      "outcome",
+      "disposition",
+      "durability",
+      "results",
+      "failure code/condition IDs"
+    ],
+    "lookup": [
+      "outcome",
+      "values"
+    ],
+    "query": [
+      "outcome",
+      "columns",
+      "rows",
+      "refusal code"
+    ],
+    "reached": [
+      "outcome",
+      "included",
+      "comparison identity"
+    ],
+    "import": [
+      "status",
+      "execution",
+      "per-item index/outcome/disposition/reason/code"
+    ],
+    "drain-feed": [
+      "declared feedProjection",
+      "committed ACK"
+    ],
+    "retainedButNotCompared": [
+      "catalog report metadata",
+      "full group receipt/replay evidence",
+      "diagnostic prose",
+      "import batch IDs/containment evidence"
+    ]
+  }
+}

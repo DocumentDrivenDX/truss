@@ -281,7 +281,7 @@ BEGIN
    OR decode(selected_doc->'artifact'->>'bytesBase64','base64') IS DISTINCT FROM convert_to(doc->>'originalText','UTF8')
    OR source->>'id' IS DISTINCT FROM doc->>'documentId' OR source->>'umf' IS DISTINCT FROM '0.7.0'
    OR doc->>'umfVersion' IS DISTINCT FROM source->>'umf'
-   OR coalesce(source->'vocabularies','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb OR coalesce(source->'extensions','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb THEN
+   OR (input->'supportProfile'->>'version'<>'0.6.0' AND (coalesce(source->'vocabularies','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb OR coalesce(source->'extensions','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb)) THEN
    RAISE EXCEPTION 'original document correspondence required' USING ERRCODE='22023'; END IF;
   SELECT count(*) FILTER(WHERE e.value->>'kind'='record'),count(*) FILTER(WHERE e.value->>'kind'='field')
    INTO expected_records,expected_fields FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e;
@@ -348,7 +348,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.31-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.32-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -391,6 +391,131 @@ BEGIN
   IF NOT FOUND THEN RAISE EXCEPTION 'original registration report missing' USING ERRCODE='55000'; END IF;
   RETURN;
  END IF;
+ -- Retention verifies original bytes and unselected meaning, not owner execution.
+ DECLARE
+  metadata_source jsonb:=convert_from(source_bytes,'UTF8')::jsonb;
+  original_input jsonb:=convert_from(input_bytes,'UTF8')::jsonb;
+  original_docs jsonb:=convert_from(documents_bytes,'UTF8')::jsonb;
+  expected_extensions jsonb:='[]'::jsonb; doc jsonb; selected_doc jsonb; original jsonb;
+  node jsonb; owner jsonb; scope_name text; path text; extension_name text; occurrence jsonb;
+  mi int; ei int; ni int; seen jsonb:='[]'::jsonb; artifact jsonb; decoded jsonb; decoded_raw bytea;
+  diagnostic jsonb; interpretation jsonb; decoded_interpretation jsonb; actions_known boolean;
+  expected_diagnostics jsonb:='[]'::jsonb; expected_diagnostic_ids jsonb:='[]'::jsonb;
+  basis_name text; doc_index int:=0;
+  validation_profile jsonb:='{"identity":"truss-umf-validation-evidence","version":"0.1.0","sha256":"668f717089e9d5fbb097429c93c31b36ad2ebb562a6a76c5971c7725e7002c97"}'::jsonb;
+ BEGIN
+  IF jsonb_typeof(metadata_source->'extensions') IS DISTINCT FROM 'array' THEN
+   RAISE EXCEPTION 'original retained extension artifacts required' USING ERRCODE='22023'; END IF;
+  IF jsonb_array_length(metadata_source->'documentInterpretations')<>jsonb_array_length(original_docs) THEN
+   RAISE EXCEPTION 'complete original interpretation inventory required' USING ERRCODE='22023'; END IF;
+  FOR doc IN SELECT value FROM jsonb_array_elements(original_docs) LOOP
+   SELECT value INTO STRICT selected_doc FROM jsonb_array_elements(original_input->'documents') d WHERE d.value->>'documentId'=doc->>'documentId';
+   original:=(doc->>'originalText')::jsonb;
+   IF EXISTS(SELECT 1 FROM jsonb_object_keys(original) k WHERE k NOT IN ('umf','id','modules','vocabularies','extensions')) THEN
+    RAISE EXCEPTION 'selected original document members required' USING ERRCODE='0A000'; END IF;
+   SELECT value INTO STRICT interpretation FROM jsonb_array_elements(metadata_source->'documentInterpretations') i WHERE i.value->>'documentId'=doc->>'documentId';
+   decoded_raw:=decode(interpretation->'evidence'->>'bytesBase64','base64');
+   decoded_interpretation:=convert_from(decoded_raw,'UTF8')::jsonb;
+   IF encode(sha256(decoded_raw),'hex') IS DISTINCT FROM interpretation->'evidence'->>'sha256'
+    OR interpretation->>'contentSha256' IS DISTINCT FROM selected_doc->'artifact'->>'sha256'
+    OR interpretation->'interpretationProfile' IS DISTINCT FROM selected_doc->'umfProfile'
+    OR decoded_interpretation->'producer' IS DISTINCT FROM selected_doc->'umfProfile'
+    OR decoded_interpretation->'observation'->>'originalText' IS DISTINCT FROM doc->>'originalText'
+    OR decoded_interpretation->'observation'->'source' IS DISTINCT FROM original
+    OR decoded_interpretation->'observation'->'sourceValidation'->'valid' IS DISTINCT FROM 'true'::jsonb
+    OR jsonb_typeof(decoded_interpretation->'observation'->'sourceValidation'->'complete') IS DISTINCT FROM 'boolean'
+    OR interpretation->>'completeness' IS DISTINCT FROM (CASE WHEN decoded_interpretation->'observation'->'sourceValidation'->'complete'='true'::jsonb AND decoded_interpretation->'observation'->'targetValidation'->'complete'='true'::jsonb THEN 'complete' ELSE 'partial' END) THEN
+    RAISE EXCEPTION 'original interpretation correspondence required' USING ERRCODE='22023'; END IF;
+   -- Preserve the producer's complete source/target diagnostic occurrence schedule.
+   IF jsonb_typeof(decoded_interpretation->'observation'->'targetValidation'->'complete') IS DISTINCT FROM 'boolean'
+    OR decoded_interpretation->'observation'->'targetValidation'->'valid' IS DISTINCT FROM 'true'::jsonb THEN
+    RAISE EXCEPTION 'original target validation required' USING ERRCODE='22023'; END IF;
+   FOR basis_name IN SELECT value FROM jsonb_array_elements_text(
+    CASE WHEN decoded_interpretation->'observation'->'transition' IS DISTINCT FROM 'null'::jsonb
+     THEN '["original","reversible_target"]'::jsonb ELSE '["original"]'::jsonb END) LOOP
+    ni:=0;
+    FOR diagnostic IN SELECT value FROM jsonb_array_elements(decoded_interpretation->'observation'->
+      (CASE WHEN basis_name='original' THEN 'sourceValidation' ELSE 'targetValidation' END)->'diagnostics') LOOP
+     expected_diagnostics:=expected_diagnostics||jsonb_build_array(jsonb_build_object(
+      'profile',validation_profile,'producer',selected_doc->'umfProfile','documentId',doc->>'documentId',
+      'contentSha256',selected_doc->'artifact'->>'sha256','basis',basis_name,'diagnostic',diagnostic));
+     expected_diagnostic_ids:=expected_diagnostic_ids||jsonb_build_array('truss.original-umf-diagnostic/'||doc_index||'/'||basis_name||'/'||ni);
+     ni:=ni+1;
+    END LOOP;
+   END LOOP;
+
+   FOR mi IN -1..jsonb_array_length(original->'modules')-1 LOOP
+    IF mi=-1 THEN node:=original;owner:=jsonb_build_object('scope','document','documentId',doc->>'documentId');scope_name:='document';path:='';
+    ELSE
+     node:=original->'modules'->mi;owner:=jsonb_build_object('documentId',doc->>'documentId','moduleId',node->>'id');scope_name:='module';path:='/modules/'||mi;
+     IF EXISTS(SELECT 1 FROM jsonb_object_keys(node) k WHERE k NOT IN ('id','namespace','elements','extensions','relationships','actions')) THEN
+      RAISE EXCEPTION 'selected module members required' USING ERRCODE='0A000'; END IF;
+     IF node ? 'actions' THEN
+      actions_known:=false;
+      FOR artifact IN SELECT value FROM jsonb_array_elements(metadata_source->'diagnostics') LOOP
+       decoded_raw:=decode(artifact->'diagnostic'->>'bytesBase64','base64');decoded:=convert_from(decoded_raw,'UTF8')::jsonb;
+       IF decoded->>'documentId'=doc->>'documentId' AND decoded->>'basis'='original'
+        AND decoded->'diagnostic'->>'code'='UNKNOWN_CORE_FIELD' AND decoded->'diagnostic'->>'path'=path||'/actions' THEN
+        IF encode(sha256(decoded_raw),'hex') IS DISTINCT FROM artifact->'diagnostic'->>'sha256'
+         OR artifact->'source'->'artifact' IS DISTINCT FROM selected_doc->'artifact'
+         OR decoded->>'contentSha256' IS DISTINCT FROM selected_doc->'artifact'->>'sha256'
+         OR decoded->'producer' IS DISTINCT FROM selected_doc->'umfProfile'
+         OR decoded->'profile' IS DISTINCT FROM artifact->'diagnosticProfile'
+         OR decoded->'diagnostic'->>'severity' IS DISTINCT FROM 'warning'
+         OR NOT (decoded_interpretation->'observation'->'sourceValidation'->'diagnostics' @> jsonb_build_array(decoded->'diagnostic')) THEN
+         RAISE EXCEPTION 'original uninterpreted actions warning required' USING ERRCODE='22023'; END IF;
+        IF actions_known THEN RAISE EXCEPTION 'one original actions occurrence required' USING ERRCODE='22023'; END IF;
+        actions_known:=true;
+       END IF;
+      END LOOP;
+      IF NOT actions_known THEN RAISE EXCEPTION 'actions remain owner-uninterpreted' USING ERRCODE='0A000'; END IF;
+     END IF;
+    END IF;
+    FOR ei IN -1..(CASE WHEN mi=-1 THEN -1 ELSE jsonb_array_length(node->'elements')-1 END) LOOP
+     IF ei=-1 THEN occurrence:=node;
+     ELSE occurrence:=node->'elements'->ei;scope_name:='element';path:='/modules/'||mi||'/elements/'||ei; END IF;
+     FOR extension_name IN SELECT jsonb_object_keys(coalesce(occurrence->'extensions','{}'::jsonb)) LOOP
+      IF NOT (original->'vocabularies' ? extension_name) THEN RAISE EXCEPTION 'declared original vocabulary required' USING ERRCODE='22023'; END IF;
+      expected_extensions:=expected_extensions||jsonb_build_array(jsonb_build_object(
+       'interfaceVersion','truss-original-extension-occurrence/0.1.0','interpretation','retained_uninterpreted',
+       'owner',owner,'scope',scope_name,'sourcePointer',path||'/extensions/'||replace(replace(extension_name,'~','~0'),'/','~1'),
+       'extensionId',extension_name,'vocabulary',original->'vocabularies'->extension_name,
+       'payload',occurrence->'extensions'->extension_name,'source',selected_doc->'artifact'));
+     END LOOP;
+    END LOOP;
+   END LOOP;
+   doc_index:=doc_index+1;
+  END LOOP;
+  ni:=0;
+  FOR artifact IN SELECT value FROM jsonb_array_elements(metadata_source->'diagnostics') LOOP
+   decoded_raw:=decode(artifact->'diagnostic'->>'bytesBase64','base64');decoded:=convert_from(decoded_raw,'UTF8')::jsonb;
+   SELECT d.value INTO STRICT selected_doc FROM jsonb_array_elements(original_input->'documents') d WHERE d.value->>'documentId'=decoded->>'documentId';
+   IF (SELECT count(*) FROM jsonb_object_keys(artifact))<>4 OR (SELECT count(*) FROM jsonb_object_keys(artifact->'diagnostic'))<>3
+    OR decoded IS DISTINCT FROM expected_diagnostics->ni OR artifact->'diagnostic'->>'identity' IS DISTINCT FROM expected_diagnostic_ids->>ni
+    OR encode(sha256(decoded_raw),'hex') IS DISTINCT FROM artifact->'diagnostic'->>'sha256'
+    OR artifact->>'classification' IS DISTINCT FROM 'upstream_validation'
+    OR artifact->'source' IS DISTINCT FROM jsonb_build_object('kind','document','artifact',selected_doc->'artifact','sourcePointer','')
+    OR artifact->'diagnosticProfile' IS DISTINCT FROM validation_profile THEN
+    RAISE EXCEPTION 'complete original diagnostic correspondence required' USING ERRCODE='22023'; END IF;
+   ni:=ni+1;
+  END LOOP;
+  IF ni<>jsonb_array_length(expected_diagnostics) THEN RAISE EXCEPTION 'complete original diagnostic inventory required' USING ERRCODE='22023'; END IF;
+  ni:=0;
+  FOR artifact IN SELECT value FROM jsonb_array_elements(metadata_source->'extensions') LOOP
+   decoded_raw:=decode(artifact->>'bytesBase64','base64');decoded:=convert_from(decoded_raw,'UTF8')::jsonb;
+   IF (SELECT count(*) FROM jsonb_object_keys(artifact))<>3
+    OR artifact->>'identity' IS DISTINCT FROM 'truss.original-extension-occurrence/'||ni
+    OR encode(sha256(decoded_raw),'hex') IS DISTINCT FROM artifact->>'sha256'
+    OR NOT (expected_extensions @> jsonb_build_array(decoded))
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(seen) prior WHERE prior.value=decoded)
+    OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(expected_extensions) expected WHERE expected.value=decoded) THEN
+    RAISE EXCEPTION 'original extension occurrence correspondence required' USING ERRCODE='22023'; END IF;
+   seen:=seen||jsonb_build_array(decoded);ni:=ni+1;
+  END LOOP;
+  IF jsonb_array_length(seen)<>jsonb_array_length(expected_extensions) THEN
+   RAISE EXCEPTION 'complete retained extension occurrence bijection required' USING ERRCODE='22023'; END IF;
+ END;
+
  SELECT r.* INTO existing FROM truss.catalog_registration_request r
   WHERE r.input_bytes=catalog_accept.input_bytes AND r.document_bytes=catalog_accept.documents_bytes AND r.declaration_bytes=catalog_accept.declarations_bytes AND r.source_bytes=catalog_accept.source_bytes
   AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(catalog_accept.documents_bytes,'UTF8')::jsonb) d
