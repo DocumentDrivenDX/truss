@@ -1,0 +1,23 @@
+{
+  "kind": "scoped-independent-review/0.1",
+  "reviewer": "Astra Ultra",
+  "status": "no_actionable_findings_in_reviewed_scope",
+  "scope": "Optional unfiltered ddl_command_start barrier, exact SQL NULL tag readback, mandatory event_triggers setting gate, source profile0.3 and native fixture controls.",
+  "independentControls": 104,
+  "controlScope": "Actual Python qualifier/profile producer with synthetic native epoch/catalog rows. All8 flag combinations, strict/captured flags, setting and metadata descriptor-before-fetch, exact setting carriers, all19 unfiltered hook fields, SQL NULL versus JSON-text/filtered tags, profile sensitivity. No native lifecycle independently executed.",
+  "findings": [],
+  "nativeEvidence": {"execution": "parent-executed; reviewer inspected source, terminal logs and cleanup", "historicalSuite": {"tests": 12, "seconds": 122.697}, "strengthenedCountercheckAndBaseRegressions": {"tests": 4, "seconds": 17.662}, "server": "PostgreSQL18.6", "cleanup": "runtime exit succeeded; status3; socket absent", "boundaryImports": 933, "fullTwelveRerunAfterTestStrengtheningClaimed": false},
+  "retainedFailure": "First supplemental run passed the strengthened countercheck but base class setup failed for missing TRUSS_CENSUS_POSTGRES_BIN; retained separately, corrected same4 controls then passed.",
+  "compatibility": "Default include_database_ddl=False retains selected old hook sets. Every profile now requires current executor event_triggers=on. Derived source profile0.3 binds all three options; prior profile packets are not silently admitted.",
+  "sourceCustody": "Flag values captured before epoch-host entry; original producer copies captured bytes, recipe and barrier before helper I/O. Trusted stock TEXT loader/tuple row factory supports exact setting/metadata carriers.",
+  "countercheck": "Actual ALWAYS/SQL NULL-tag trigger remained installed while excluded administrator set event_triggers=off and changed PUBLIC EXECUTE false to true under two source ShareLocks; final setting gate prevented delivery.",
+  "limits": ["Unfiltered native event-supported current-database commands only; shared roles/databases/tablespaces, parameter privileges, ALTER SYSTEM and event-trigger administration remain excluded.", "Reader setting readback does not force other sessions to run event triggers. Administrators can disable event_triggers/handlers or restore them transiently; complete lifetime and writer closure remain premises.", "No source/issuer authentication, protected endpoint, readiness or backend acceptance case promotion. Pure controls are bounded selected correspondence, not full native/source refinement."],
+  "implementationSha256": "592768644000c29dc52187d8e9d9e7f6b6f738c4ee9b7a22ac3a186fdd4244e5",
+  "profileProducerSha256": "c38289d6a75f2c605e38f2fd61d81a60056a42de2d4c33ce338476305b572963",
+  "currentNativeTestSha256": "951c01f51fc2905c10ed0bfe7261e7095dcc6fcc2f42efb81dc49ba0746a508d",
+  "historicalTwelveTestSourceSha256": "6cfd5aac654661972569359a319e2ed31b3041047ba55ea82a594f356206f4a1",
+  "nativeLogSha256": "ee5d8bef797989bd11c7f04a0a901a7ee79bf7d47e805103e722361d28873b86",
+  "supplementalLogSha256": "72fa53ba8b6e7767e51def2adfe2a4531aad3c8edde7cacbf500976ea933fbc7",
+  "sourcePins": "source-pins.json",
+  "sourcePinsSha256": "30579e20b506b9850e41ce93dc55d3abf96ea49a2f53a56b809ddc39a385e4b5"
+}

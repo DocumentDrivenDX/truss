@@ -29,9 +29,9 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
   # Administrative marker seed is explicit; not the production bootstrap issuer.
   self.admin.execute("INSERT INTO truss.installation_marker VALUES(1,'truss-bootstrap-marker/0.1.0',%s,'fixture',sha256(decode('01','hex')),'fixture',sha256(decode('02','hex')),'fixture','truss',now(),now()::text)",(installation,))
   source=(ROOT/'packages/postgresql/native/source-epoch-routine-ddl-barrier.sql').read_text()
-  self.admin.execute(source);self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-schema-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
+  self.admin.execute(source);self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-schema-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-database-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
   oid,owner=self.admin.execute("SELECT oid,proowner FROM pg_proc WHERE oid='truss.runtime_fence_routine_ddl_writer()'::regprocedure").fetchone()
-  barrier=_DDLBarrierComparison(owner,oid,source.split('AS $$',1)[1].split('$$;',1)[0],include_alter_routine=True,include_schema_ddl=True)
+  barrier=_DDLBarrierComparison(owner,oid,source.split('AS $$',1)[1].split('$$;',1)[0],include_alter_routine=True,include_schema_ddl=True,include_database_ddl=True)
   profile=subject.derive_catalog_source_epoch_profile(mapping,relations,barrier) if profile_override is None else profile_override
   evidence=mapping.accepted_catalog_assessment if evidence_override is None else evidence_override
   epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,NULL,%s,%s,%s)',(installation,'catalog-fixture-target',profile,evidence)).fetchone()[0]
@@ -47,7 +47,7 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
   def publish(packet):
    shares()
    with psycopg.connect(self.info.connection_uri,autocommit=True) as writer:
-    for command in ('ALTER FUNCTION truss.catalog_subject_current(text) STABLE','ALTER ROUTINE truss.catalog_subject_current(text) STABLE','CREATE SCHEMA source_cut_foreign','ALTER SCHEMA truss RENAME TO source_cut_foreign','DROP SCHEMA truss CASCADE'):
+    for command in ('ALTER FUNCTION truss.catalog_subject_current(text) STABLE','ALTER ROUTINE truss.catalog_subject_current(text) STABLE','CREATE SCHEMA source_cut_foreign','ALTER SCHEMA truss RENAME TO source_cut_foreign','DROP SCHEMA truss CASCADE',"COMMENT ON TABLE truss.object IS 'changed'",'CREATE TYPE truss.source_cut_type AS ENUM (\'changed\')','GRANT EXECUTE ON FUNCTION truss.catalog_subject_current(text) TO PUBLIC','REVOKE EXECUTE ON FUNCTION truss.catalog_subject_current(text) FROM PUBLIC'):
      with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(command)
    delivered.append(packet)
   for table in ('truss.source_epoch_current','truss.source_epoch_registry'):
@@ -124,7 +124,7 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
   """@covers US-056-AC9; same-backend schema DDL exclusion prerequisite."""
   mapping,c,h,t,selection,inspector,relations,cut=self.source_setup();delivered=[];states=[]
   def publish(packet):
-   for command in ('CREATE SCHEMA source_cut_local','ALTER SCHEMA truss RENAME TO source_cut_local','DROP SCHEMA truss CASCADE'):
+   for command in ('CREATE SCHEMA source_cut_local','ALTER SCHEMA truss RENAME TO source_cut_local','DROP SCHEMA truss CASCADE',"COMMENT ON TABLE truss.object IS 'changed'",'CREATE TYPE truss.source_cut_type AS ENUM (\'changed\')','GRANT EXECUTE ON FUNCTION truss.catalog_subject_current(text) TO PUBLIC','REVOKE EXECUTE ON FUNCTION truss.catalog_subject_current(text) FROM PUBLIC'):
     self.admin.execute('SAVEPOINT schema_writer')
     try:
      with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState) as caught:self.admin.execute(command)
@@ -136,4 +136,46 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
    self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(10,))
    delivered.append(packet)
   result=subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,publish)
-  self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(states,['55000']*3);self.assertEqual(delivered,[result.value])
+  self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(states,['55000']*7);self.assertEqual(delivered,[result.value])
+
+ def test_disabled_unfiltered_barrier_refuses_before_subject_and_delivery(self):
+  """@covers US-056-AC9; database DDL participation prerequisite."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup()
+  self.admin.execute('ALTER EVENT TRIGGER truss_database_ddl_writer_barrier DISABLE');delivered=[]
+  with patch.object(subject,'encode_literal_key_tuple') as encoder,patch.object(subject,'run_owned_catalog_resource_read') as evaluator:
+   result=subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,delivered.append)
+   encoder.assert_not_called();evaluator.assert_not_called()
+  self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
+  self.assertEqual(str(self.host._custody.last_attempt.error),'Exact original installed DDL barriers required')
+
+ def test_disabled_session_event_triggers_refuses_before_subject_and_delivery(self):
+  """@covers US-056-AC9; ALWAYS installation does not override event_triggers=off."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup()
+  self.admin.execute('SET LOCAL event_triggers=off');delivered=[]
+  with patch.object(subject,'encode_literal_key_tuple') as encoder,patch.object(subject,'run_owned_catalog_resource_read') as evaluator:
+   result=subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,delivered.append)
+   encoder.assert_not_called();evaluator.assert_not_called()
+  self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
+  self.assertEqual(str(self.host._custody.last_attempt.error),'Original native event trigger execution required')
+
+ def test_session_event_trigger_drift_refuses_final_delivery(self):
+  """@covers US-056-AC9; late execution-setting drift prevents publication."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup();delivered=[]
+  original=subject.run_owned_catalog_resource_read
+  def evaluate(*args,**kwargs):
+   result=original(*args,**kwargs)
+   # ALWAYS does not override this session switch; verify a real ACL effect.
+   self.assertEqual(self.admin.execute("SELECT evtenabled,evttags FROM pg_event_trigger WHERE evtname='truss_database_ddl_writer_barrier'").fetchone(),('A',None))
+   public_execute="SELECT EXISTS(SELECT 1 FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.oid='truss.catalog_subject_current(text)'::regprocedure AND a.grantee=0 AND a.privilege_type='EXECUTE')"
+   self.assertEqual(self.admin.execute(public_execute).fetchone(),(False,))
+   self.admin.execute('SET LOCAL event_triggers=off')
+   self.admin.execute('GRANT EXECUTE ON FUNCTION truss.catalog_subject_current(text) TO PUBLIC')
+   self.assertEqual(self.admin.execute(public_execute).fetchone(),(True,))
+   self.assertEqual(self.admin.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)").fetchone(),(2,))
+   directory=os.environ.get('TRUSS_CATALOG_POLICY_READ_EVIDENCE')
+   if directory:(Path(directory)/'event-trigger-disabled-counterexample.json').write_text(json.dumps({'always':'A','tags':None,'setting':'off','sourceShareLocks':2,'publicExecuteBefore':False,'publicExecuteAfter':True,'scope':'excluded administrative same-session bypass; final publication must refuse'},indent=2)+'\n')
+   return result
+  with patch.object(subject,'run_owned_catalog_resource_read',evaluate):
+   result=subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,delivered.append)
+  self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
+  self.assertEqual(str(self.host._custody.last_attempt.error),'Original native event trigger execution required')

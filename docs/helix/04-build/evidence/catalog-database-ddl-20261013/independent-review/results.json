@@ -1,0 +1,428 @@
+{
+  "scope": "Actual Python readback and profile producer with synthetic native epoch/catalog carriers; no native event or lifecycle execution",
+  "count": 104,
+  "controls": [
+    {
+      "name": "legacy positional constructor defaults all three flags false",
+      "passed": true
+    },
+    {
+      "name": "flags=False,False,False exact ordered rows accept after setting gate",
+      "passed": true
+    },
+    {
+      "name": "flags=False,False,False setting query is first and every SQL flag is static",
+      "passed": true
+    },
+    {
+      "name": "flags=False,False,False event_triggers off refuses before metadata query",
+      "passed": true
+    },
+    {
+      "name": "flags=False,False,True exact ordered rows accept after setting gate",
+      "passed": true
+    },
+    {
+      "name": "flags=False,False,True setting query is first and every SQL flag is static",
+      "passed": true
+    },
+    {
+      "name": "flags=False,False,True event_triggers off refuses before metadata query",
+      "passed": true
+    },
+    {
+      "name": "flags=False,True,False exact ordered rows accept after setting gate",
+      "passed": true
+    },
+    {
+      "name": "flags=False,True,False setting query is first and every SQL flag is static",
+      "passed": true
+    },
+    {
+      "name": "flags=False,True,False event_triggers off refuses before metadata query",
+      "passed": true
+    },
+    {
+      "name": "flags=False,True,True exact ordered rows accept after setting gate",
+      "passed": true
+    },
+    {
+      "name": "flags=False,True,True setting query is first and every SQL flag is static",
+      "passed": true
+    },
+    {
+      "name": "flags=False,True,True event_triggers off refuses before metadata query",
+      "passed": true
+    },
+    {
+      "name": "flags=True,False,False exact ordered rows accept after setting gate",
+      "passed": true
+    },
+    {
+      "name": "flags=True,False,False setting query is first and every SQL flag is static",
+      "passed": true
+    },
+    {
+      "name": "flags=True,False,False event_triggers off refuses before metadata query",
+      "passed": true
+    },
+    {
+      "name": "flags=True,False,True exact ordered rows accept after setting gate",
+      "passed": true
+    },
+    {
+      "name": "flags=True,False,True setting query is first and every SQL flag is static",
+      "passed": true
+    },
+    {
+      "name": "flags=True,False,True event_triggers off refuses before metadata query",
+      "passed": true
+    },
+    {
+      "name": "flags=True,True,False exact ordered rows accept after setting gate",
+      "passed": true
+    },
+    {
+      "name": "flags=True,True,False setting query is first and every SQL flag is static",
+      "passed": true
+    },
+    {
+      "name": "flags=True,True,False event_triggers off refuses before metadata query",
+      "passed": true
+    },
+    {
+      "name": "flags=True,True,True exact ordered rows accept after setting gate",
+      "passed": true
+    },
+    {
+      "name": "flags=True,True,True setting query is first and every SQL flag is static",
+      "passed": true
+    },
+    {
+      "name": "flags=True,True,True event_triggers off refuses before metadata query",
+      "passed": true
+    },
+    {
+      "name": "missing database refuses callback",
+      "passed": true
+    },
+    {
+      "name": "duplicate database refuses callback",
+      "passed": true
+    },
+    {
+      "name": "wrong order refuses callback",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 0 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 1 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 2 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 3 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 4 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 5 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 6 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 7 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 8 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 9 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 10 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 11 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 12 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 13 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 14 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 15 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 16 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 17 exact match required",
+      "passed": true
+    },
+    {
+      "name": "database metadata field 18 exact match required",
+      "passed": true
+    },
+    {
+      "name": "SQL NULL tags distinct from null",
+      "passed": true
+    },
+    {
+      "name": "SQL NULL tags distinct from []",
+      "passed": true
+    },
+    {
+      "name": "SQL NULL tags distinct from [\"COMMENT\"]",
+      "passed": true
+    },
+    {
+      "name": "include_database_ddl nonbool NoneType refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_database_ddl nonbool int refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_database_ddl nonbool int refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_database_ddl nonbool str refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_database_ddl nonbool list refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_database_ddl nonbool object refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool NoneType refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool int refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool int refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool str refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool list refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool object refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool NoneType refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool int refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool int refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool str refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool list refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool object refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "setting none descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "setting empty descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "setting two descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "setting foreign NAME descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "setting missing rows refuse before metadata",
+      "passed": true
+    },
+    {
+      "name": "setting two rows refuse before metadata",
+      "passed": true
+    },
+    {
+      "name": "setting null rows refuse before metadata",
+      "passed": true
+    },
+    {
+      "name": "setting text ON rows refuse before metadata",
+      "passed": true
+    },
+    {
+      "name": "setting bool rows refuse before metadata",
+      "passed": true
+    },
+    {
+      "name": "setting extra column rows refuse before metadata",
+      "passed": true
+    },
+    {
+      "name": "setting list row rows refuse before metadata",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 0 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 1 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 2 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 3 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 4 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 5 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 6 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 7 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 8 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 9 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 10 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 11 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 12 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 13 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 14 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 15 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 16 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 17 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "metadata foreign OID 18 refuses before metadata fetch",
+      "passed": true
+    },
+    {
+      "name": "database selection captured before epoch host mutation",
+      "passed": true
+    },
+    {
+      "name": "profile0.3 binds exact default false and optin true distinctly",
+      "passed": true
+    },
+    {
+      "name": "profile refuses database selection None",
+      "passed": true
+    },
+    {
+      "name": "profile refuses database selection 0",
+      "passed": true
+    },
+    {
+      "name": "profile refuses database selection 1",
+      "passed": true
+    },
+    {
+      "name": "profile refuses database selection 'true'",
+      "passed": true
+    }
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "592768644000c29dc52187d8e9d9e7f6b6f738c4ee9b7a22ac3a186fdd4244e5",
+    "scripts/security_catalog_subject_read.py": "c38289d6a75f2c605e38f2fd61d81a60056a42de2d4c33ce338476305b572963",
+    "packages/postgresql/native/source-epoch-database-ddl-barrier.sql": "4593c5d5b2caec37077a9d9b0f1631ffc8bbea9a045a3e17e8c66ac677ba7da3",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "951c01f51fc2905c10ed0bfe7261e7095dcc6fcc2f42efb81dc49ba0746a508d"
+  }
+}
