@@ -1,0 +1,25 @@
+{
+  "cases": [
+    "text and stale handle",
+    "name and stale handle",
+    "unbound caller",
+    "wrong caller",
+    "superuser",
+    "effective role",
+    "read committed",
+    "read write",
+    "wrong OID",
+    "null key",
+    "multiple keys",
+    "wrong columns",
+    "non-subject Record",
+    "wrong source",
+    "wrong Key",
+    "foreign original handle",
+    "deferred inspector refused before invocation",
+    "numeric false response refused"
+  ],
+  "serverVersion": "18.6",
+  "nativeExpected": "\u0394\ufeff9007199254740993",
+  "scope": "Stock psycopg caller-owned stable read-only operation; original Weft source selection; trusted helper fixture/local trust authentication; no key domain encoding/subject existence/current authority/protected release"
+}

@@ -7260,3 +7260,8 @@ observations remain required; no omitted check is relabeled passing. Preserve
 artifact IDs/frontmatter/traceability. This amendment controls historical contrary
 release sequencing rather than deleting historical evidence or starting a second
 implementation. The practical clean-install path now succeeds separately.
+
+
+### Python original ordinary subject observation — 2026-10-13
+
+A private supported-psycopg operation composes the original Weft source selector with the existing original host containment/custody boundary. Pinned caller/effective caller and snapshot-visible false superuser/bypass flags plus UTF8 are observed outside the selected helper before/after one exact ordered nonnull native TEXT tuple. Immutable supported-driver strings and their UTF8 re-encoding are retained; no raw-wire claim is made. Native18 groups pass on PostgreSQL18.6, including text/name input, Unicode/BOM/exact beyond-2^53 text, unbound/wrong/elevated callers, wrong profiles/OID/null/cardinality/columns, source/Record/Key refusals, stale/foreign handles and deferred/forged response refusal. Python boundary controls16 pass. Retained source/owner hashes and logs: `evidence/python-subject-observation-20261013/receipt.json`. Installed helper authenticity, semantic tuple-domain encoding, subject existence/current binding, role/source writer exclusion, issuer authority and protected release remain open. Native flags are transaction-snapshot observations; concurrent role/helper changes are not excluded. All132 backend cases retain their scope without promotion.
