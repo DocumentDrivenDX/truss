@@ -15,9 +15,9 @@ from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewU
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogInvalid, CatalogRefused, CatalogUnavailable
 from .object_read import ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
-from .imports import ImportInput, ObjectImportRecord, ImportExecutionResult
+from .imports import ImportInput, ObjectImportRecord, EdgeImportRecord, ImportExecutionResult
 from .import_runtime import ImportRuntimeContext
-from .groups import AuthoredValue
+from .groups import AuthoredValue, OrderKey
 from .feed import FeedPage, FeedAcknowledged, FeedUnavailable
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
@@ -114,6 +114,13 @@ class NativeImportCapability(_NativeCapability[Literal['import']]):
 
     def import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[ImportRuntimeContext]:
         return self._assembly.import_context_in_transaction(transaction)
+
+    def edge_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
+                                         source_endpoint: TypedIdentity,target_endpoint: TypedIdentity,values: tuple[AuthoredValue,...],
+                                         order_key: OrderKey,source: MapValue | None=None) -> Outcome[EdgeImportRecord]:
+        return self._assembly.edge_import_record_in_transaction(transaction,document_id=document_id,module_id=module_id,
+            relationship_id=relationship_id,source_endpoint=source_endpoint,target_endpoint=target_endpoint,
+            values=values,order_key=order_key,source=source)
 
     def object_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
                                             values: tuple[AuthoredValue,...],source: MapValue | None=None) -> Outcome[ObjectImportRecord]:

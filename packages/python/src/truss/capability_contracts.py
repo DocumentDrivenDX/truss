@@ -13,9 +13,9 @@ from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewU
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogInvalid, CatalogRefused, CatalogUnavailable
 from .object_read import ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
-from .imports import ImportInput, ObjectImportRecord, ImportExecutionResult
+from .imports import ImportInput, ObjectImportRecord, EdgeImportRecord, ImportExecutionResult
 from .import_runtime import ImportRuntimeContext
-from .groups import AuthoredValue
+from .groups import AuthoredValue, OrderKey
 from .feed import FeedPage, FeedAcknowledged, FeedUnavailable
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
@@ -72,6 +72,10 @@ class NativeRuntimeOperations(Protocol):
                                    maximum_evidence_bytes: int=1048576,consumer_id: str | None=None) -> Outcome[ReceiptIncluded | ReceiptVisibilityUnavailable]: ...
 
     def import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[ImportRuntimeContext]: ...
+
+    def edge_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
+                                         source_endpoint: TypedIdentity,target_endpoint: TypedIdentity,values: tuple[AuthoredValue,...],
+                                         order_key: OrderKey,source: MapValue | None=None) -> Outcome[EdgeImportRecord]: ...
 
     def object_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
                                                 values: tuple[AuthoredValue,...],source: MapValue | None=None) -> Outcome[ObjectImportRecord]: ...

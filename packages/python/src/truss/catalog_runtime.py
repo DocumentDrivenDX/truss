@@ -1,7 +1,7 @@
 """Public catalog runtime over caller-owned psycopg transactions.
 
-This release registers one fresh scalar-string catalog, including authored keys
-and relationships. Other capability families remain under implementation.
+The selected runtime provides accepted scalar catalogs, graph groups and reads,
+imports, retained history, receipts, feeds and additive candidate upgrades.
 Ordinary-person catalog calls require READ COMMITTED, so authorization reads
 observe committed membership changes. Higher isolation returns a refusal.
 """
@@ -26,7 +26,7 @@ from .feed import FeedPage,FeedConsumer,FeedAcknowledged,FeedUnavailable
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
-from .imports import ImportInput,ImportExecutionResult,ObjectImportRecord
+from .imports import ImportInput,ImportExecutionResult,ObjectImportRecord,EdgeImportRecord
 from .import_runtime import ImportRuntimeContext
 from .groups import AuthoredValue
 from .contracts import MapValue
@@ -35,7 +35,7 @@ from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
 from .contracts import CapabilitySelection, TypedIdentity
-from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult
+from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult, OrderKey
 from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
@@ -345,7 +345,7 @@ class CatalogReferenceAssembly:
         return self._host._run_operation(transaction,install)
     @_active_operation
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
-        """Apply supported additive .23/.24/.25/.26 -> .27 upgrades; caller settles it.
+        """Apply supported additive .23 through .29 -> .30 upgrades; caller settles it.
 
         Requires a direct trusted installation administrator and quiescence.
         Native NOWAIT fencing refuses active consumers without internal retries.
@@ -774,6 +774,33 @@ class CatalogReferenceAssembly:
             return ImportRuntimeContext(layout_profile=ProfilePin(**value['layoutProfile']),import_profile=ProfilePin(**value['importProfile']),
                 value_profile=ProfilePin(**value['valueProfile']),payload_profile=ProfilePin(**value['importPayloadProfile']),
                 catalog=ImportCatalogPin(revision=value['catalog']['revision'],model_bundle_sha256=value['catalog']['modelBundleSha256']))
+        return self._host._run_operation(transaction,observe)
+
+    @_active_operation
+    def edge_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
+                                         source_endpoint: TypedIdentity,target_endpoint: TypedIdentity,values: tuple[AuthoredValue,...],
+                                         order_key: OrderKey,source: MapValue | None=None) -> Outcome[EdgeImportRecord]:
+        """Build an edge import with an accepted pin; execution validates endpoints."""
+        from .contracts import ProfilePin
+        from .imports import EdgeImportIdentity,ImportCatalogPin
+        manifest,digest,_=_release()
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            if type(source_endpoint) is not TypedIdentity or type(target_endpoint) is not TypedIdentity:
+                raise ValueError('Exact caller endpoint identities required')
+            cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            context=json.loads(bytes(cursor.fetchone()[0]))
+            builder=ImportRuntimeContext(layout_profile=ProfilePin(**context['layoutProfile']),import_profile=ProfilePin(**context['importProfile']),
+                value_profile=ProfilePin(**context['valueProfile']),payload_profile=ProfilePin(**context['importPayloadProfile']),
+                catalog=ImportCatalogPin(revision=context['catalog']['revision'],model_bundle_sha256=context['catalog']['modelBundleSha256']))
+            payload=builder.edge_payload(values,order_key,source=source)
+            cursor.execute('SELECT truss.group_relationship_reference(%s,%s,%s,%s,%s)',
+                (document_id,module_id,relationship_id,manifest['releaseId'],digest),prepare=False)
+            raw=cursor.fetchone()[0]
+            if raw is None:raise ValueError('Available accepted relationship reference required')
+            reference=json.loads(bytes(raw))
+            return EdgeImportRecord(identity=EdgeImportIdentity(relationship_definition_pin=reference['definitionPin'],
+                source=source_endpoint,target=target_endpoint),payload=payload,payload_profile=builder.payload_profile)
         return self._host._run_operation(transaction,observe)
 
     @_active_operation
