@@ -160,6 +160,25 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
     actual=self.admin.execute('SELECT ('+expression+') FROM (SELECT %s::boolean AS '+columns['original']+',%s::boolean AS '+columns['withheld']+') q',(original_truth,withheld_truth)).fetchone()[0]
     expected='not-applicable' if original_truth is None or withheld_truth is None or not(original_truth or withheld_truth) else 'withheld' if withheld_truth else 'original'
     self.assertEqual(actual,expected)
+  # Transform equivalence uses the original composer, including numeric -0.
+  for left,right,conflicting in (('0','-0',False),('1','2',True)):
+   variant=deepcopy(request);policy_variant=json.loads(variant['policyJson']);base=deepcopy(policy_variant['rules'][0])
+   rules=[]
+   for name,token in (('left',left),('right',right)):
+    transformed_rule=deepcopy(base);transformed_rule['id']=name
+    transformed_rule['disclosure'][0]['disposition']={'kind':'transformed','transform':'constant','version':'0.1.0','field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'value':{'integerToken':token}}
+    rules.append(transformed_rule)
+   base['id']='withheld';rules.append(base);policy_variant['rules']=rules;variant['policyJson']=json.dumps(policy_variant)
+   transport=subprocess.run([binary],input=json.dumps({'request':variant,'assessment':assessment}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(transport.returncode,0,transport.stderr.decode());transformed_packet=json.loads(transport.stdout)
+   group=next(e for e in transformed_packet['eligibility'] if e['action']=='read')
+   field=next(d for d in group['disclosure'] if d['field']['elementId']=='salary')
+   self.assertEqual(len(field['transformations']),2)
+   for a,b,w in product((False,None,True),repeat=3):
+    state,choice=self.admin.execute('SELECT ('+field['stateExpression']+'),('+field['transformationChoiceExpression']+') FROM (SELECT %s::boolean q0,%s::boolean q1,%s::boolean q2) q',(a,b,w)).fetchone()
+    expected='not-applicable' if None in (a,b,w) or not(a or b or w) else 'withheld' if w else 'conflict' if a and b and conflicting else 'transformed'
+    self.assertEqual(state,expected)
+    self.assertEqual(choice,(0 if a else 1) if state=='transformed' else None)
   # Convert captured native cells, not authored expected rows, to original facts.
   def ref(element):return {'documentId':'domain','moduleId':'m','elementId':element}
   facts=[];by_id={};inventory=assessment['inventory']

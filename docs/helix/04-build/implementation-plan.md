@@ -7151,6 +7151,14 @@ The native original/withheld precedence control passes9.627s with18 emitted fiel
 
 Astra's separate emitted-state corpus passes117 controls/164 evaluations (in-memory SQLite, not an independent PostgreSQL oracle). Native initial/full/gated/final-work and18 precedence vectors are retained separately. Reviewed fixes and tests are directly integrated to main; no full mask/transform/authentication or required backend-case completion is claimed.
 
+### Transformation state/choice correspondence in progress — 2026-10-13
+
+The original typed Weft0.4 diagnostic now delegates transformed literal equivalence/conflict to the original composer. Native54 state/choice vectors pass9.046s:0/-0equivalence,1/2conflict, withheld dominance and nonpermit/unknown gating. Choices retain original disposition metadata and are only applicable for transformed states; indeterminate/conflict fields must make projection refuse. No SQL transformed value projection, original-use gate, authenticated caller/source or protected execution is implemented by these diagnostic vectors. Review/final-source replay remain pending before direct-main integration; no acceptance-case promotion.
+
+All six native transformation/eligibility/disclosure/K3/data-writer/receipt controls pass26.791s. Final rebuilt-source replay and independent review remain pending. No transform value projection or native output-domain admission is established by state/choice selection alone.
+
+Independent Astra renderer checks pass875 controls/1,026 state-choice evaluations; that oracle uses in-memory SQLite for emitted CASE with typed-NULL spelling translated, separately from native PostgreSQL54-vector and full-suite evidence. No actionable component source blocker remains. Integration to main does not promote required backend cases or establish actual transformed value projection/authenticated protected execution.
+
 ## Next public feed delivery: durable destination receipt reconciliation — 2026-10-13
 
 Ashlar requires ordinary authorized source retention of exact destination receipt bytes atomically with checkpoint advancement, plus fresh read-only recovery after uncertain source COMMIT. Runtime0.35 plain ACK has no such retained receipt and cannot provide this proof. The [implementation direction](../02-design/contracts/feed-ack-destination-receipt.proposal.md) adds an immutable interval receipt and two public calls while preserving caller-asserted downstream application. Prioritize this actual public feed gap; keep receipts after later advances, refuse legacy backfill, and distinguish matched/missing/conflict without a second ACK write. Astra Ultra reviewed the plan; implement additive installation/migration and one basic native workflow before claiming callable support.
