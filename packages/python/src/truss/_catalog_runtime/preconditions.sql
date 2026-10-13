@@ -57,10 +57,12 @@ BEGIN
    selected:=truss.runtime_condition_type(condition->'target');objects:=jsonb_build_array(condition->'target');
    scopes:=jsonb_build_array(jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module));
    IF condition->>'condition'='property_equals' THEN
-    IF jsonb_typeof(condition->'name') IS DISTINCT FROM 'string' OR octet_length(condition->>'name') NOT BETWEEN 1 AND 4096 OR truss.valid_scalar_cell(condition->'value') IS NOT TRUE THEN RAISE EXCEPTION 'exact scalar property equality required' USING ERRCODE='22023';END IF;
+    IF jsonb_typeof(condition->'name') IS DISTINCT FROM 'string' OR octet_length(condition->>'name') NOT BETWEEN 1 AND 4096 OR truss.valid_flat_cell(condition->'value') IS NOT TRUE THEN RAISE EXCEPTION 'exact scalar property equality required' USING ERRCODE='22023';END IF;
     SELECT * INTO property FROM truss.prop_def p WHERE p.type_id=selected.type_id AND p.name=condition->>'name' AND p.retired_rev IS NULL;
     IF FOUND THEN entry:=entry||jsonb_build_object('propertyId',property.prop_id::text);
-     scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',selected.document_id,'moduleId',property.declaration_module));END IF;
+     scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',selected.document_id,'moduleId',property.declaration_module));
+     IF property.cardinality IN ('array','map') THEN scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',property.item->>'documentId','moduleId',property.item->'reference'->>'module'));END IF;
+    END IF;
    END IF;
   ELSIF condition->>'condition'='key_absent' THEN
    IF condition-ARRAY['condition','id','reason','typeDefinitionPin','keyId','values']<>'{}'::jsonb OR jsonb_typeof(condition->'values') IS DISTINCT FROM 'array'
@@ -171,8 +173,8 @@ BEGIN
    SELECT * INTO current_object FROM truss.object WHERE id=(condition->'target'->>'id')::bigint AND type_id=(condition->'target'->>'typeId')::int;
    IF FOUND THEN
     IF condition->>'condition'='object_exists' THEN passed:=true;
-    ELSIF entry ? 'propertyId' THEN passed:=current_object.props ? (entry->>'propertyId') AND current_object.props->(entry->>'propertyId')=condition->'value';
-    ELSE passed:=coalesce(current_object.retained,'{}') ? (condition->>'name') AND current_object.retained->(condition->>'name')=condition->'value';END IF;
+    ELSIF entry ? 'propertyId' THEN passed:=current_object.props ? (entry->>'propertyId') AND current_object.props->(entry->>'propertyId')=truss.canonical_flat_cell(condition->'value');
+    ELSE passed:=coalesce(current_object.retained,'{}') ? (condition->>'name') AND current_object.retained->(condition->>'name')=truss.canonical_flat_cell(condition->'value');END IF;
    END IF;
   ELSIF condition->>'condition'='key_absent' THEN
    SELECT value INTO STRICT key_input FROM jsonb_array_elements(keys) WHERE value->>'conditionIndex'=entry->>'index';

@@ -5,9 +5,9 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.5`,
-native runtime `0.40-candidate`, layout `0.16`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.10`. The tested local
+This is an experimental implementation: development Python distribution `truss-toolkit==0.0.6.dev0`,
+native runtime `0.43-candidate`, layout `0.16`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.13`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -150,7 +150,7 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.39 to 0.40 for published v0.0.5. The trusted administrator must quiesce consumers and
+0.23 through 0.42 to the development runtime0.43. Published v0.0.5 uses0.42. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -644,3 +644,27 @@ endpoint and property declaration modules require current read access.
 A limited result contains no objects and requires restart. Bounds cover logical
 attempted states and output; use ordinary PostgreSQL deadlines too. Membership is
 live per call; no cursor, held snapshot, resume or exact backend allocation claim.
+
+## Scalar arrays and maps (next release tranche)
+
+Original UMF core0.7/0.8 Fields may declare `cardinality: array` or `map`
+with an explicit same-document `itemType` reference to a required singular
+scalar Field. Item-only Fields remain schema definitions, not object properties.
+String, integer, decimal, boolean, timestamp and binary items use the scalar
+carriers, including signed64 and decimal(18,4) facets. Nested containers,
+record-valued items and optional items are refused.
+
+Pass `SequenceValue(items=(...))` or `MapValue(entries=(MapEntry(...), ...))`
+in `AuthoredValue`. Sequences preserve order and duplicates; map keys must be
+unique exact strings and are stored in canonical key order. Absent, null and
+empty containers remain distinct. Writes, imports, direct reads, preconditions
+and retained history preserve exact item tokens. The item definition's module
+requires current reader or writer authority alongside property declarations.
+
+Containers have at most1024 items, map keys at most4096 UTF-8 bytes and complete
+cells at most1 MiB, in addition to ordinary group/result bounds. Item meaning or
+reference changes are refused in this tranche. Native admission recognizes old
+scalar-only import payloads; the Python importer requires its current profile.
+Compiled queries currently refuse a selected catalog containing these fields
+with `unsupported_query`; ordinary scalar catalogs retain their query support.
+Runtime0.43 upgrades0.42 additively without rewriting original data or receipts.

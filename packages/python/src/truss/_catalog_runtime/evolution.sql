@@ -17,16 +17,20 @@ BEGIN
    IF NOT truss.runtime_can_read(rec->>'documentId',field->>'fieldModule') THEN
     RAISE EXCEPTION 'current field module read authority required for compatibility counts' USING ERRCODE='42501';END IF;
    scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',rec->>'documentId','moduleId',field->>'fieldModule'));
+   IF field->'declaration'->>'cardinality' IN ('array','map') THEN
+    IF truss.runtime_can_read(rec->>'documentId',field->'declaration'->'itemType'->>'module') IS NOT TRUE THEN RAISE EXCEPTION 'current item module read authority required for compatibility counts' USING ERRCODE='42501';END IF;
+    scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',rec->>'documentId','moduleId',field->'declaration'->'itemType'->>'module'));
+   END IF;
    SELECT prop_id INTO property_id FROM truss.prop_def p WHERE p.type_id=selected_type
     AND p.declaration_module=field->>'fieldModule' AND p.element=field->>'fieldId' AND p.retired_rev IS NULL;
    scope:=jsonb_build_object('documentId',rec->>'documentId','moduleId',rec->>'moduleId',
     'recordId',rec->>'elementId','fieldModuleId',field->>'fieldModule','fieldId',field->>'fieldId');
    SELECT count(*) FILTER (WHERE field->'declaration'->>'nullability'='required'
      AND (property_id IS NULL OR NOT o.props ? property_id::text OR o.props->property_id::text='{"kind":"null"}'::jsonb)),
-    count(*) FILTER (WHERE property_id IS NOT NULL AND o.props ? property_id::text
+    count(*) FILTER (WHERE field->'declaration'->>'cardinality'='one' AND property_id IS NOT NULL AND o.props ? property_id::text
      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS NOT TRUE)
-    ,count(*) FILTER (WHERE property_id IS NOT NULL AND o.props ? property_id::text
+    ,count(*) FILTER (WHERE field->'declaration'->>'cardinality'='one' AND property_id IS NOT NULL AND o.props ? property_id::text
      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS TRUE
      AND ((field->'declaration'->>'scalarType'='integer' AND field->'declaration'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (field->'declaration'->>'scalarType'='decimal' AND field->'declaration'->'facets'='{"precision":18,"scale":4}'::jsonb))

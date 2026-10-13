@@ -1,7 +1,7 @@
-"""Public logical identity reads; scalar-string profile, not historical DirectRecord."""
+"""Public rootless logical identity reads with exact scalars and flat containers."""
 from dataclasses import dataclass, field
 from typing import Literal
-from .contracts import TextValue, TypedIdentity, QualifiedOwner
+from .contracts import SequenceValue, MapValue, TextValue, TypedIdentity, QualifiedOwner
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ScalarObject:
@@ -16,9 +16,9 @@ class ScalarObject:
     record_revision: int
     created_at: str
     updated_at: str
-    values: tuple[tuple[str, str | bool | TextValue | None], ...]
-    retained: tuple[tuple[str, str | bool | TextValue | None], ...]
-    profile: Literal['truss-python-scalar-object/0.3'] = field(default='truss-python-scalar-object/0.3', init=False)
+    values: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
+    retained: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
+    profile: Literal['truss-python-scalar-object/0.4'] = field(default='truss-python-scalar-object/0.4', init=False)
 
     @property
     def identity(self) -> TypedIdentity:

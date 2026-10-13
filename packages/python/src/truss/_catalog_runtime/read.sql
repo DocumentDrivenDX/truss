@@ -16,23 +16,22 @@ BEGIN
    SELECT 1 FROM unnest(properties) p WHERE p.prop_id::text=k)) THEN
   RAISE EXCEPTION 'unsupported complete object representation' USING ERRCODE='0A000'; END IF;
  FOREACH property IN ARRAY properties LOOP
-  IF coalesce(property.scalar_type,'') NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.since_rev>captured_revision OR property.nullability NOT IN ('required','absent-allowed')
-   OR property.item IS NOT NULL OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb AND NOT ((property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (property.scalar_type='decimal' AND property.facets='{"precision":18,"scale":4}'::jsonb) OR property.facets='{}'::jsonb)) THEN
+  IF truss.valid_property_definition(property) IS NOT TRUE OR property.since_rev>captured_revision THEN
    RAISE EXCEPTION 'unsupported property profile' USING ERRCODE='0A000'; END IF;
   IF NOT current_object.props ? property.prop_id::text THEN
    IF property.nullability='required' THEN RAISE EXCEPTION 'missing required property' USING ERRCODE='55000'; END IF;
    CONTINUE;
   END IF;
   cell:=current_object.props->property.prop_id::text;
-  IF truss.valid_scalar_property(cell,property.scalar_type,property.nullability='absent-allowed',property.facets) IS NOT TRUE THEN RAISE EXCEPTION 'malformed exact logical value' USING ERRCODE='55000';END IF;
-  cell:=truss.logical_scalar_cell(cell);
+  IF truss.valid_property_value(cell,property) IS NOT TRUE THEN RAISE EXCEPTION 'malformed exact logical value' USING ERRCODE='55000';END IF;
+  cell:=truss.logical_flat_cell(cell);
   values_json:=values_json||jsonb_build_array(jsonb_build_array(property.name,cell));
  END LOOP;
  FOR cell IN SELECT jsonb_build_array(key,value) FROM jsonb_each(coalesce(current_object.retained,'{}'::jsonb)) ORDER BY key COLLATE "C" LOOP
-  cell:=jsonb_build_array(cell->0,truss.logical_scalar_cell(cell->1));
+  cell:=jsonb_build_array(cell->0,truss.logical_flat_cell(cell->1));
   retained_json:=retained_json||jsonb_build_array(cell);
  END LOOP;
- result:=convert_to(jsonb_build_object('profile','truss-python-scalar-object/0.3','releaseId',expected_release,
+ result:=convert_to(jsonb_build_object('profile','truss-python-scalar-object/0.4','releaseId',expected_release,
  'releaseSha256',expected_digest,'documentId',selected_type.document_id,'moduleId',selected_type.module,'recordId',selected_type.element,
  'id',current_object.id::text,'typeId',current_object.type_id::text,
  'definitionPin',definition_pin,'version',current_object.ver::text,
@@ -67,7 +66,7 @@ BEGIN
  END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.42-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.43-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.
@@ -85,9 +84,7 @@ BEGIN
    AND element=selected_record AND retired_rev IS NULL AND kind='record' AND NOT provisional AND since_rev<=captured_revision;
  IF NOT FOUND THEN RETURN NULL; END IF;
  -- Require every declaration owner before any object observation.
- FOR dependency IN SELECT DISTINCT declaration_module FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL LOOP
-  IF NOT truss.runtime_can_read(selected_type.document_id,dependency.declaration_module) THEN RETURN NULL;END IF;
- END LOOP;
+ IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
  SELECT coalesce(array_agg(p ORDER BY p.prop_id),ARRAY[]::truss.prop_def[]) INTO properties FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL;
  SELECT d.definition_pin INTO STRICT definition_pin FROM truss.runtime_definition('type',selected_type.type_id) d;
  SELECT o AS object,EXISTS(SELECT 1 FROM truss.row_home_state r WHERE r.object_id=o.id AND r.object_type_id=o.type_id) AS row_home
@@ -104,9 +101,7 @@ BEGIN
    SELECT actor_oid UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
    SELECT 1 FROM pg_roles r JOIN memberships m ON m.role_oid=r.oid
    WHERE r.rolname::text IN (policy.reader_role,policy.writer_role)) THEN RETURN NULL; END IF;
- FOR dependency IN SELECT DISTINCT p.declaration_module FROM unnest(properties) p LOOP
-  IF NOT truss.runtime_can_read(selected_type.document_id,dependency.declaration_module) THEN RETURN NULL;END IF;
- END LOOP;
+ IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN
   RAISE EXCEPTION 'catalog changed during object observation' USING ERRCODE='55P03';END IF;
  RETURN result;

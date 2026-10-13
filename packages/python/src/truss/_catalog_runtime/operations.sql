@@ -40,6 +40,7 @@ BEGIN
   OR jsonb_typeof(identity->'id') IS DISTINCT FROM 'string' OR identity->>'id' !~ '^[1-9][0-9]{0,18}$'
   OR length(identity->>'id')=19 AND (identity->>'id') COLLATE "C">'9223372036854775807') THEN
   RAISE EXCEPTION 'qualified exact object identity required' USING ERRCODE='22023';END IF;
+ IF NOT truss.runtime_object_values_readable(selected.type_id) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
  RETURN selected;
 END;
 $$;
@@ -99,7 +100,7 @@ REVOKE ALL ON FUNCTION truss.runtime_operation_owner(jsonb,jsonb,int) FROM PUBLI
 CREATE FUNCTION truss.runtime_retained_operation_owner(selected_attempt uuid,operation_index int)
 RETURNS TABLE(document_id text,module text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;operation jsonb;result jsonb;identity jsonb;owner_document text;owner_module text;
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;operation jsonb;result jsonb;identity jsonb;owner_document text;owner_module text;revision int;basis jsonb;property truss.prop_def%ROWTYPE;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  IF NOT attempt.complete OR operation_index<0 OR operation_index>=attempt.next_index
@@ -110,6 +111,15 @@ BEGIN
   THEN RAISE EXCEPTION 'retained operation identity required' USING ERRCODE='55000';END IF;
  IF operation->>'operation' IN ('create_object','update_object','delete_object') THEN
   SELECT t.document_id,t.module INTO STRICT owner_document,owner_module FROM truss.type_def t WHERE t.type_id=(identity->>'typeId')::int AND t.kind='record';
+  revision:=((convert_from(decode(substr(attempt.expected_receipt->>'original_receipt_bytes',3),'hex'),'UTF8')::jsonb)->'semantic'->>'executedCatalogRevision')::int;
+  IF attempt.expected_receipt IS NULL AND operation->>'operation'='create_object' THEN
+   SELECT (g.expected_members->m.operation_index->'object'->>'rev')::int INTO STRICT revision FROM truss.runtime_create_member m JOIN truss.runtime_create_group g ON g.group_id=m.group_id WHERE m.object_id=(identity->>'id')::bigint AND m.type_id=(identity->>'typeId')::int AND g.writer_xid=attempt.writer_xid;
+  END IF;
+  IF revision IS NULL OR revision<1 THEN RAISE EXCEPTION 'positive original executed revision required' USING ERRCODE='55000';END IF;
+  basis:=truss.catalog_all_expected_records(revision);
+  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(identity->>'typeId')::int AND p.retired_rev IS NULL LOOP
+   IF NOT truss.runtime_can_read(property.definition_document_id,property.declaration_module) OR (property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE) THEN RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
+  END LOOP;
  ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
   SELECT r.document_id,r.module INTO STRICT owner_document,owner_module FROM truss.rel_def r WHERE r.rel_type_id=(identity->>'typeId')::int;
  ELSE RAISE EXCEPTION 'retained operation category required' USING ERRCODE='55000';END IF;
@@ -266,7 +276,7 @@ BEGIN
  OR jsonb_typeof(operation->'unset') IS DISTINCT FROM 'array' OR jsonb_array_length(operation->'set')>1024 OR jsonb_array_length(operation->'unset')>1024 THEN
   RAISE EXCEPTION 'closed bounded scalar update required' USING ERRCODE='22023';END IF;
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(operation->'set') s WHERE s.value-ARRAY['name','value']<>'{}'::jsonb
-  OR jsonb_typeof(s.value->'name') IS DISTINCT FROM 'string' OR octet_length(s.value->>'name') NOT BETWEEN 1 AND 4096 OR truss.valid_scalar_cell(s.value->'value') IS NOT TRUE)
+  OR jsonb_typeof(s.value->'name') IS DISTINCT FROM 'string' OR octet_length(s.value->>'name') NOT BETWEEN 1 AND 4096 OR truss.valid_flat_cell(s.value->'value') IS NOT TRUE)
  OR EXISTS(SELECT 1 FROM jsonb_array_elements(operation->'unset') u WHERE jsonb_typeof(u.value) IS DISTINCT FROM 'string' OR octet_length(u.value#>>'{}') NOT BETWEEN 1 AND 4096)
  OR jsonb_array_length(operation->'set')<>(SELECT count(DISTINCT s.value->>'name') FROM jsonb_array_elements(operation->'set') s)
  OR jsonb_array_length(operation->'unset')<>(SELECT count(DISTINCT u.value) FROM jsonb_array_elements(operation->'unset') u)
@@ -279,14 +289,14 @@ BEGIN
  END LOOP;
  FOR entry IN SELECT value FROM jsonb_array_elements(operation->'set') LOOP
   SELECT * INTO property FROM truss.prop_def WHERE type_id=selected.type_id AND name=entry->>'name' AND retired_rev IS NULL;
-  IF FOUND THEN props:=props||jsonb_build_object(property.prop_id::text,entry->'value');ELSE retained:=retained||jsonb_build_object(entry->>'name',entry->'value');END IF;
+  IF FOUND THEN props:=props||jsonb_build_object(property.prop_id::text,truss.canonical_flat_cell(entry->'value'));ELSE retained:=retained||jsonb_build_object(entry->>'name',truss.canonical_flat_cell(entry->'value'));END IF;
  END LOOP;
  FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected.type_id AND retired_rev IS NULL LOOP
-  IF property.home<>'json' OR property.cardinality<>'one' OR property.scalar_type NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.nullability NOT IN ('required','absent-allowed') OR (property.facets IS NOT NULL AND NOT ((property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (property.scalar_type='decimal' AND property.facets='{"precision":18,"scale":4}'::jsonb) OR property.facets='{}'::jsonb)) OR property.item IS NOT NULL THEN
+  IF truss.valid_property_definition(property) IS NOT TRUE THEN
    RAISE EXCEPTION 'supported scalar definition required' USING ERRCODE='0A000';END IF;
   IF NOT props ? property.prop_id::text THEN
    IF property.nullability='required' THEN RAISE EXCEPTION 'missing required value' USING ERRCODE='22023';END IF;
-  ELSIF truss.valid_scalar_property(props->property.prop_id::text,property.scalar_type,property.nullability='absent-allowed',property.facets) IS NOT TRUE THEN RAISE EXCEPTION 'exact family required' USING ERRCODE='22023';END IF;
+  ELSIF truss.valid_property_value(props->property.prop_id::text,property) IS NOT TRUE THEN RAISE EXCEPTION 'exact family required' USING ERRCODE='22023';END IF;
  END LOOP;
  IF octet_length(convert_to(jsonb_build_object('props',props,'retained',retained)::text,'UTF8'))>1048576 THEN RAISE EXCEPTION 'bounded object values required' USING ERRCODE='54000';END IF;
  SELECT coalesce(jsonb_agg(jsonb_build_object('name',v.name,'value',v.value) ORDER BY v.name COLLATE "C"),'[]'::jsonb) INTO values FROM (
@@ -306,6 +316,7 @@ DECLARE metadata jsonb;encoded bytea;entry jsonb;
 BEGIN
  metadata:=truss.runtime_object_metadata(attempt_id,operation_index);encoded:=convert_to(metadata::text,'UTF8');
  PERFORM truss.runtime_module_writer(metadata->>'documentId',metadata->>'moduleId');
+ IF NOT metadata ? 'source' AND NOT truss.runtime_object_values_readable((metadata->>'typeId')::int) THEN RAISE EXCEPTION 'current buffered property/item reader required' USING ERRCODE='42501';END IF;
  FOR entry IN SELECT value FROM jsonb_array_elements(jsonb_build_array(metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target')) WHERE value<>'null'::jsonb LOOP
   IF NOT truss.runtime_can_read(entry->'owner'->>'documentId',entry->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current endpoint metadata reader required' USING ERRCODE='42501';END IF;
  END LOOP;
@@ -695,7 +706,7 @@ BEGIN
   OR jsonb_array_length(values)<>(SELECT count(DISTINCT value->>'name') FROM jsonb_array_elements(values))
   OR EXISTS(SELECT 1 FROM jsonb_array_elements(values) v JOIN jsonb_array_elements(coalesce(operation->'unset','[]')) u ON v.value->>'name'=u.value#>>'{}') THEN
   RAISE EXCEPTION 'unique disjoint exact edge values required' USING ERRCODE='22023';END IF;
- FOR entry IN SELECT value FROM jsonb_array_elements(values) LOOP retained:=retained||jsonb_build_object(entry->>'name',entry->'value');END LOOP;
+ FOR entry IN SELECT value FROM jsonb_array_elements(values) LOOP retained:=retained||jsonb_build_object(entry->>'name',truss.canonical_flat_cell(entry->'value'));END LOOP;
  IF (order_key='{"state":"null"}'::jsonb OR order_key->>'state'='text' AND jsonb_typeof(order_key->'text')='string'
   AND order_key-ARRAY['state','text']='{}'::jsonb AND octet_length(order_key->>'text')<=4096) IS NOT TRUE THEN
   RAISE EXCEPTION 'exact bounded order key required' USING ERRCODE='22023';END IF;
@@ -1018,7 +1029,10 @@ BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-  SELECT * INTO STRICT owner FROM truss.runtime_retained_operation_owner(selected_attempt,index);
+  BEGIN
+   SELECT * INTO STRICT owner FROM truss.runtime_retained_operation_owner(selected_attempt,index);
+  EXCEPTION WHEN insufficient_privilege THEN RETURN false;
+  END;
   IF NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RETURN false;END IF;
   index:=index+1;
  END LOOP;

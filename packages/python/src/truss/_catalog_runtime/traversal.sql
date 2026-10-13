@@ -34,7 +34,7 @@ BEGIN
  END LOOP;
  -- Authorize the full declared expansion scope before observing any edge.
  FOR selected_type IN SELECT * FROM truss.type_def WHERE type_id=ANY(scope_types) LOOP
-  IF NOT truss.runtime_can_read(selected_type.document_id,selected_type.module) THEN RETURN NULL;END IF;
+  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
   FOR scope IN SELECT DISTINCT declaration_module FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL LOOP
    IF NOT truss.runtime_can_read(selected_type.document_id,scope.declaration_module) THEN RETURN NULL;END IF;
   END LOOP;
@@ -82,7 +82,7 @@ BEGIN
  END LOOP;
  END IF;
  FOR selected_type IN SELECT * FROM truss.type_def WHERE type_id=ANY(scope_types) LOOP
-  IF NOT truss.runtime_can_read(selected_type.document_id,selected_type.module) THEN RETURN NULL;END IF;
+  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
   FOR scope IN SELECT DISTINCT declaration_module FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL LOOP IF NOT truss.runtime_can_read(selected_type.document_id,scope.declaration_module) THEN RETURN NULL;END IF;END LOOP;
  END LOOP;
  FOR relation IN SELECT * FROM truss.rel_def WHERE rel_type_id=ANY(relations) LOOP IF NOT truss.runtime_can_read(relation.document_id,relation.module) THEN RETURN NULL;END IF;END LOOP;

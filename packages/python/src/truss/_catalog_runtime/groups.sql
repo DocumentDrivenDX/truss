@@ -57,13 +57,13 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
-'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-graph','version','0.2','sha256','e2b24e52e1b374245d728db33ab34c63f6bea983e986064a4a444286d9d3c9b0'),
-'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.2','sha256','5e6a7f879e17066a8ffdeb8731da89906f0e5cb231e4b4357bd4fbea0158163f'),
+'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-graph','version','0.3','sha256','5fdc0458db29b2b1f34bef0c5ef2d522a80d4e1cf70def8757ac3da0261ea69e'),
+'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.3','sha256','4848867c9dede45720bbb37773a43e78db4bb2b9124891cb4d46e95c208f8f16'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),
 'adapterProfile',jsonb_build_object('identity','truss-psycopg-create-provider','version','0.1','sha256','f20735a94e87213d77f713cbbabd2bdf2e4f2b459041c53bb984f5b706112ba9'),
 'positionProfile',jsonb_build_object('identity','truss-authority-receipt-visibility','version','0.1','sha256','97d54f46af687510fd3ae10aaa37c761d17d6b371d12171ea15a0d402b8855e9'),
-'policyProfile',jsonb_build_object('identity','truss-qualified-module-writer','version','0.1','sha256','398cee9241e057bb95c415a165b1812ac689433eaac2684c70a15084e681b88b')); $$;
+'policyProfile',jsonb_build_object('identity','truss-qualified-module-writer','version','0.2','sha256','f0f41d6dfa0cc38f1340fd1516679ff985824f9cb79034923330b16c2fb3ec4f')); $$;
 REVOKE ALL ON FUNCTION truss.runtime_group_profiles() FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_module_writer(selected_document text,selected_module text) RETURNS oid
@@ -125,6 +125,7 @@ BEGIN
   SELECT t.* INTO STRICT selected_type FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
    WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=operation->>'typeDefinitionPin';
   PERFORM truss.runtime_module_writer(selected_type.document_id,selected_type.module);
+  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
   SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.doc_id=selected_type.document_id ORDER BY d.rev DESC LIMIT 1;
   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d
    WHERE d.value->>'documentId'=archive.doc_id;
@@ -360,6 +361,7 @@ BEGIN
     RAISE EXCEPTION 'request input or origin changed' USING ERRCODE='P1001'; END IF;
    FOR operation_meta IN SELECT value FROM jsonb_array_elements(metadata) LOOP
     PERFORM truss.runtime_module_writer(operation_meta->>'documentId',operation_meta->>'moduleId');
+  IF NOT truss.runtime_object_values_readable((operation_meta->>'typeId')::int) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
    END LOOP;
    observation_bytes:=convert_to(jsonb_build_object('profile','truss-native-create-replay-observation/0.1',
     'sourceEpoch',installation.source_epoch::text,'observingXid',writer::text,'originalWriterXid',existing.original_writer_xid::text,
@@ -398,25 +400,23 @@ BEGIN
    RAISE EXCEPTION 'mandatory relationship unsupported by create-only profile' USING ERRCODE='0A000'; END IF;
   IF EXISTS(SELECT 1 FROM jsonb_array_elements(operation->'values') v WHERE jsonb_typeof(v.value->'name') IS DISTINCT FROM 'string'
    OR octet_length(v.value->>'name') NOT BETWEEN 1 AND 4096 OR v.value-ARRAY['name','value']<>'{}'::jsonb
-   OR truss.valid_scalar_cell(v.value->'value') IS NOT TRUE)
+   OR truss.valid_flat_cell(v.value->'value') IS NOT TRUE)
    OR jsonb_array_length(operation->'values')<>(SELECT count(DISTINCT v.value->>'name') FROM jsonb_array_elements(operation->'values') v) THEN
    RAISE EXCEPTION 'unique exact scalar authored values required' USING ERRCODE='22023'; END IF;
   props:='{}';retained:='{}';
   FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
-   IF coalesce(property.scalar_type,'') NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json'
-    OR property.nullability NOT IN ('required','absent-allowed') OR property.item IS NOT NULL
-    OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb AND NOT ((property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (property.scalar_type='decimal' AND property.facets='{"precision":18,"scale":4}'::jsonb) OR property.facets='{}'::jsonb)) THEN
+   IF truss.valid_property_definition(property) IS NOT TRUE THEN
     RAISE EXCEPTION 'selected scalar property profile required' USING ERRCODE='0A000'; END IF;
    SELECT v.value->'value' INTO supplied_value FROM jsonb_array_elements(operation->'values') v WHERE v.value->>'name'=property.name;
    IF NOT FOUND THEN
     IF property.nullability='required' THEN RAISE EXCEPTION 'missing required value' USING ERRCODE='22023'; END IF;
    ELSE
-    IF truss.valid_scalar_property(supplied_value,property.scalar_type,property.nullability='absent-allowed',property.facets) IS NOT TRUE THEN
+    IF truss.valid_property_value(supplied_value,property) IS NOT TRUE THEN
      RAISE EXCEPTION 'exact property family and value required' USING ERRCODE='22023'; END IF;
-    props:=props||jsonb_build_object(property.prop_id::text,supplied_value);
+    props:=props||jsonb_build_object(property.prop_id::text,truss.canonical_flat_cell(supplied_value));
    END IF;
   END LOOP;
-  SELECT coalesce(jsonb_object_agg(v.value->>'name',v.value->'value'),'{}'::jsonb) INTO retained
+  SELECT coalesce(jsonb_object_agg(v.value->>'name',truss.canonical_flat_cell(v.value->'value')),'{}'::jsonb) INTO retained
    FROM jsonb_array_elements(operation->'values') v WHERE NOT EXISTS(SELECT 1 FROM truss.prop_def p
     WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL AND p.name=v.value->>'name');
   planned:=planned||jsonb_build_array(jsonb_build_object('typeId',selected_type.type_id,'props',props,'retained',retained));
@@ -592,6 +592,7 @@ BEGIN
  PERFORM truss.runtime_create_validate_group(group_uuid);
  FOR operation_meta IN SELECT value FROM jsonb_array_elements(metadata) LOOP
   PERFORM truss.runtime_module_writer(operation_meta->>'documentId',operation_meta->>'moduleId');
+  IF NOT truss.runtime_object_values_readable((operation_meta->>'typeId')::int) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
  END LOOP;
  RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic)::text,'UTF8');
 EXCEPTION

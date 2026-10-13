@@ -2,7 +2,7 @@
 import base64,json
 from hashlib import sha256
 from uuid import uuid4
-from .contracts import (ABSENT,ProfilePin,SelectedMutationConfiguration,MapValue,MapEntry,TextValue,NullValue,BooleanValue)
+from .contracts import (SequenceValue,ABSENT,ProfilePin,SelectedMutationConfiguration,MapValue,MapEntry,TextValue,NullValue,BooleanValue)
 from .execution import Ok,Error,ExecutionFailure
 from .imports import (ImportInput,ObjectImportRecord,EdgeImportRecord,ImportReported,ImportInvalid,ImportExecutionFailed,
     ImportReport,ImportCounts,ImportCreated,ImportSkipped,ImportRejected,ImportAttemptUnknown,PendingBatch,RolledBackBatch,TransactionUnresolvedBatch)
@@ -22,11 +22,17 @@ class _RecordRefused(Exception):
 _DIAGNOSTIC=ProfilePin(identity='truss-import-input-diagnostic',version='0.1',sha256=sha256(b'Closed import invalid-input code; no native diagnostic disclosure;v1').hexdigest())
 
 
-def _cell(value):
+def _cell(value,*,containers=False):
     if type(value) is not dict:raise ValueError('Exact scalar cell required')
     if value=={'kind':'null'}:return NullValue()
     if value.get('kind')=='boolean' and set(value)=={'kind','value'}:return BooleanValue(value=value['value'])
     if value.get('kind') in ('string','integer','decimal','timestamp','binary') and set(value)=={'kind','text'}:return TextValue(kind=value['kind'],text=value['text'])
+    if containers and value.get('kind')=='sequence' and set(value)=={'kind','items'} and type(value['items']) is list and len(value['items'])<=1024:
+        return SequenceValue(items=tuple(_cell(item) for item in value['items']))
+    if containers and value.get('kind')=='map' and set(value)=={'kind','entries'} and type(value['entries']) is list and len(value['entries'])<=1024:
+        entries=tuple(MapEntry(key=e['key'],value=_cell(e['value'])) for e in value['entries'] if type(e) is dict and set(e)=={'key','value'})
+        if len(entries)!=len(value['entries']) or len({e.key for e in entries})!=len(entries):raise ValueError('Unique exact map entries required')
+        return MapValue(entries=entries)
     raise ValueError('Selected scalar cell required')
 
 
@@ -35,7 +41,7 @@ def _payload(record,metadata):
     fields={'interfaceVersion','kind','values','source','ownership' if type(record) is ObjectImportRecord else 'orderKey'}
     if set(value)-fields or value.get('interfaceVersion')!='truss-import-payload/0.1.0' or value.get('kind')!=record.kind or type(value.get('values')) is not list:
         raise ValueError('Closed original import payload required')
-    values=tuple(AuthoredValue(name=v['name'],value=_cell(v['value'])) for v in value['values'])
+    values=tuple(AuthoredValue(name=v['name'],value=_cell(v['value'],containers=type(record) is ObjectImportRecord and record.payload_profile.version=='0.2')) for v in value['values'])
     if len(values)>1024 or len({v.name for v in values})!=len(values) or any(set(v)!= {'name','value'} for v in value['values']):raise ValueError('Unique authored scalar values required')
     if 'source' in value:
         source=value['source']

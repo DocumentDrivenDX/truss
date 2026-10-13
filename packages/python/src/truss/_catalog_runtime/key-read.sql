@@ -15,6 +15,7 @@ BEGIN
  IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RETURN NULL;END IF;
  SELECT * INTO record_type FROM truss.type_def WHERE document_id=selected_document AND module=selected_module AND element=selected_record AND kind='record' AND NOT provisional AND retired_rev IS NULL AND since_rev<=revision;
  IF NOT FOUND THEN RETURN NULL;END IF;
+ IF NOT truss.runtime_object_values_readable(record_type.type_id) THEN RETURN NULL;END IF;
  SELECT * INTO key_definition FROM truss.key_def WHERE type_id=record_type.type_id AND key_id=selected_key AND retired_rev IS NULL;
  IF NOT FOUND THEN RETURN NULL;END IF;
  IF cardinality(key_definition.prop_ids) NOT BETWEEN 1 AND 1024 THEN RAISE EXCEPTION 'bounded complete key required' USING ERRCODE='0A000';END IF;
@@ -107,6 +108,7 @@ BEGIN
   IF NOT truss.runtime_can_read(selected_document,component.declaration_module) THEN RETURN NULL;END IF;
  END LOOP;
  PERFORM truss.runtime_person(false);
+ IF NOT truss.runtime_object_values_readable(member.type_id) THEN RETURN NULL;END IF;
  RETURN result;
 END;
 $$;
