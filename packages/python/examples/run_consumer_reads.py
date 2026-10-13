@@ -10,9 +10,9 @@ from adopter_workflow import transaction, success, expect
 from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, ReceiptIncluded, AcceptedDocument
 from truss.contracts import MapValue, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
-    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay)
+    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.repeated-relationship-predicates-mean-both')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -108,7 +108,8 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             context = success(assembly.group_context_in_transaction(tx))
             original_input = context.input(tuple(operations), MapValue(entries=()))
             request = context.request('original-consumer-fixture')
-            expect(success(assembly.apply_in_transaction(tx, original_input, request, documents=documents, bun_executable=bun)), GroupSuccess)
+            created = expect(success(assembly.apply_in_transaction(tx, original_input, request, documents=documents, bun_executable=bun)), GroupSuccess)
+            fixture_objects = {record['key']: result.identity for record, result in zip(seed['records'], created.response.semantic.results, strict=True) if 'type' in record}
         with transaction(people[seed['as']]) as (assembly, tx):
             replay = expect(success(assembly.apply_in_transaction(tx, original_input, request, documents=documents, bun_executable=bun)), GroupSuccess)
             token = expect(replay.response, CommittedReceiptReplay).receipt_token
@@ -117,7 +118,33 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                 raise AssertionError('Original fixture commit is not source-visible')
         # The original sync has authority inclusion evidence; no replica sync is claimed.
         for case in selected:
+            case_input = case_request = case_actor = None
             for step in case['steps']:
+                if step['op'] == 'seed':
+                    case_actor = step['as']
+                    with transaction(people[case_actor]) as (assembly, tx):
+                        operations = []
+                        for record in step['records']:
+                            if 'type' in record:
+                                raise ValueError('Selected case adds relationships only')
+                            relation = next(r for r in module['relationships'] if r['name'] == record['relationship'])
+                            reference = success(assembly.get_relationship_reference_in_transaction(tx, document_id=document_id, module_id=module_id, relationship_id=relation['id']))
+                            operations.append(CreateEdge(relationship_definition_pin=reference.definition_pin, source=StoredObjectReference(identity=fixture_objects[record['source']]), target=StoredObjectReference(identity=fixture_objects[record['target']]), values=(), order_key=NullOrderKey()))
+                        context = success(assembly.group_context_in_transaction(tx))
+                        case_input = context.input(tuple(operations), MapValue(entries=()))
+                        case_request = context.request(case['id'])
+                        expect(success(assembly.apply_in_transaction(tx, case_input, case_request, documents=documents, bun_executable=bun)), GroupSuccess)
+                    continue
+                if step['op'] == 'sync':
+                    if case_input is None:
+                        raise ValueError('Sync requires a real public mutation')
+                    with transaction(people[case_actor]) as (assembly, tx):
+                        replay = expect(success(assembly.apply_in_transaction(tx, case_input, case_request, documents=documents, bun_executable=bun)), GroupSuccess)
+                        token = expect(replay.response, CommittedReceiptReplay).receipt_token
+                    with transaction(people[case_actor], read_only=True) as (assembly, tx):
+                        if not expect(success(assembly.reached_in_transaction(tx, token)), ReceiptIncluded).included:
+                            raise AssertionError('Case mutation is not source-visible')
+                    continue
                 if step['op'] != 'query':
                     raise ValueError('Selected original read step required')
                 if 'requires' in step:

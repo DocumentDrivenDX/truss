@@ -7005,3 +7005,9 @@ The original consumer whole-entity case remains required; see [the actual failed
 5. Exercise the unchanged original whole-entity query and expected row through public registration/mutation/commit/read-only query, plus the existing basic scalar/relationship checks. Review with Astra Ultra, integrate security main and commit/push the completed implementation. This is one functional increment, not a new conformance campaign.
 
 No implementation or passing whole-entity claim is made by this plan. Replica qualification, full corpus and independent interchange remain open.
+
+## Next consumer interface: SQL pages by authored business key — 2026-10-13
+
+The existing compiled entity-page profile supports explicit authored-key ORDER BY, tuple continuation and LIMIT, but the public query call has no page-size/cursor/next-cursor wrapper. Direct object pages use native ID order and cannot satisfy the unchanged consumer read.paging-by-key case.
+
+Implement a public query_page_in_transaction returning columns/rows and an optional opaque continuation. Weft owns resolving the actual authored primary key, constructing key ordering/continuation/limit in its AST/IR, and describing any hidden key carrier; Truss must not parse or rewrite SQL. Truss owns binding the cursor to the original query/parameters, accepted catalog/model and installation context, rechecking caller authority, and coordinating caller-owned transactions and exact results. Use lookahead to distinguish a last page; do not infer completion merely from page length. Begin with the existing single-source, required-string-key page domain and refuse unsupported shapes explicitly. Run the original SQL, limits, cursor steps and expected rows unchanged. Astra reviewed this ownership split; complete native page qualification remains pending.

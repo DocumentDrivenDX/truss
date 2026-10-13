@@ -27,7 +27,7 @@ adopter cases: the22-observation workflow and10-observation exact scalar case.
 actual installed-package workflows on the selected PG18 tuple.
 
 The original consumer model now registers with its original extension artifacts,
-diagnostics and partially interpreted actions retained. Four unchanged authority
+diagnostics and partially interpreted actions retained. Five unchanged authority
 read cases pass, including complete entity values with native attribution,
 forward/inverse relationship equality and an absent
 related key. Weft resolves this single-key shorthand through its existing

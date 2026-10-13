@@ -495,7 +495,7 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has four authority read cases
+must be supported. The original consumer corpus has five authority read cases
 exercised through public registration, mutation, replay and read-only queries;
 replica execution and the full consumer corpus remain unqualified.
 
