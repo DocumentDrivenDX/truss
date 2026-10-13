@@ -1,0 +1,14 @@
+{
+  "scope": "Host-owned immutable original native TEXT tuple observation, never authority lease or protected execution credential. Independently trusted helper/native model/key existence/current binding/issuer and writer closure remain unqualified. Old returned values remain snapshots after native lifetime ends.",
+  "nativeGroups": 12,
+  "nativeSeconds": 3.375,
+  "wireTests": 15,
+  "nativeProfile": "PostgreSQL18.6 local fixture-trusted helpers/local trust authentication",
+  "sources": {
+    "packages/pg-runtime/src/index.ts": "6b155e6feb5a9f907c763684250601e71660e7567929d39fed030949985fc043",
+    "packages/pg-runtime/dist/index.js": "7070ce0f1cd1d62ef3d800284d503a028d82e8c7d5652f773f6505cf9a075095",
+    "packages/pg-runtime/dist/index.d.ts": "baeeebfc53ace628dba95f0025fc771573e2b4effb5a89cfb3f60892c545b89c",
+    "tests/pg-principal-native-runner.ts": "e0b2b5b9f31ac06de5606cdd829476d2ced1c1ef691ec681eb32417c095e35e5",
+    "packages/python/tests/test_pg_principal_runtime_native.py": "4b0933ac521d2648f077205ad98555f3d1de9411d95c1a45adcca064bd62e25a"
+  }
+}

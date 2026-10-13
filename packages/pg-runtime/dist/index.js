@@ -509,6 +509,7 @@ function createPgConnectionSource(config, options = {}) {
       throw Error("Binary native carriers unsupported");
     return (text) => text;
   } } });
+  const observations = new WeakMap;
   const quarantine = new Set;
   const active = new Set;
   let admissionClosed = false;
@@ -525,6 +526,7 @@ function createPgConnectionSource(config, options = {}) {
     let ended = false;
     let started = false;
     let subjectPending = false;
+    let observedSubject;
     const lease = randomUUID2();
     let ordinal = 0n;
     const query = (sql, values) => originalQuery(client, sql, values, options.journal, { lease, ordinal: (ordinal++).toString() }, responseTimeout);
@@ -569,7 +571,14 @@ function createPgConnectionSource(config, options = {}) {
       const descriptions = frames.filter((frame) => frame.kind === "T"), rows = frames.filter((frame) => frame.kind === "D");
       if (descriptions.length !== 1 || JSON.stringify(descriptions[0].fields.map((field) => field.name)) !== JSON.stringify(subject.keyColumns) || descriptions[0].fields.some((field) => field.typeOid !== "25" || field.format !== "0") || rows.length !== 1 || rows[0].fields.length !== subject.keyColumns.length || rows[0].fields.some((field) => typeof field.hex !== "string" || field.hex.length > 131072))
         throw Error("Original subject binding unavailable");
-      rows[0].fields.forEach((field) => new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(Buffer.from(field.hex, "hex")));
+      const keyValues = rows[0].fields.map((field) => new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(Buffer.from(field.hex, "hex")));
+      observedSubject = Object.freeze({
+        version: "truss.native.subject-observation/0.1",
+        principal,
+        keyColumns: subject.keyColumns,
+        keyValues: Object.freeze(keyValues),
+        keyHex: Object.freeze(rows[0].fields.map((field) => field.hex))
+      });
     };
     const resetPrincipal = async () => {
       try {
@@ -602,6 +611,7 @@ function createPgConnectionSource(config, options = {}) {
           throw Error("Unsupported transaction options");
         if (subject && (options.isolation === "read_committed" || options.accessMode !== "read_only"))
           throw Error("Subject preflight requires stable read-only transaction");
+        observedSubject = undefined;
         subjectPending = subject !== undefined;
         try {
           await control("BEGIN ISOLATION LEVEL " + isolation + " " + mode, "BEGIN");
@@ -656,12 +666,14 @@ function createPgConnectionSource(config, options = {}) {
         try {
           await control("COMMIT", "COMMIT");
           started = false;
+          observedSubject = undefined;
           return "committed";
         } catch (error) {
           if (!(error instanceof DatabaseError) || !error.code || !/^(23|40)[0-9A-Z]{3}$/.test(error.code))
             throw error;
           await control("ROLLBACK", "ROLLBACK");
           started = false;
+          observedSubject = undefined;
           return { status: "rejected", sqlState: error.code };
         }
       },
@@ -669,6 +681,7 @@ function createPgConnectionSource(config, options = {}) {
         ready();
         await control("ROLLBACK", "ROLLBACK");
         started = false;
+        observedSubject = undefined;
         return "rolled_back";
       },
       async release() {
@@ -694,6 +707,9 @@ function createPgConnectionSource(config, options = {}) {
       busy = true;
       try {
         return await operation(...args);
+      } catch (error) {
+        observedSubject = undefined;
+        throw error;
       } finally {
         busy = false;
       }
@@ -704,9 +720,20 @@ function createPgConnectionSource(config, options = {}) {
     connection.commit = exclusive(connection.commit);
     connection.rollback = exclusive(connection.rollback);
     connection.release = exclusive(connection.release);
+    observations.set(connection, () => {
+      ready();
+      if (busy || !started || !observedSubject)
+        throw Error("Active original subject observation unavailable");
+      return observedSubject;
+    });
     return connection;
   } };
-  return { source, quarantinedCount: () => quarantine.size, async close() {
+  return { source, observeOrdinarySubject(connection) {
+    const read = observations.get(connection);
+    if (!read)
+      throw Error("Foreign subject observation refused");
+    return read();
+  }, quarantinedCount: () => quarantine.size, async close() {
     if (quarantine.size)
       throw Error("Original quarantined custody needs explicit settlement");
     if (active.size)

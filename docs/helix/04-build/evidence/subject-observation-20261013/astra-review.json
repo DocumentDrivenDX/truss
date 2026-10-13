@@ -1,0 +1,80 @@
+{
+  "reviewer": "Independent Astra Ultra subagent",
+  "date": "2026-10-13",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "0beb20aad05107d0343370761bad5010665d2e3a",
+  "status": "No remaining actionable findings within the observation-only handoff after failed-operation invalidation.",
+  "sourceDigests": {
+    "packages/pg-runtime/src/index.ts": "6b155e6feb5a9f907c763684250601e71660e7567929d39fed030949985fc043",
+    "packages/pg-runtime/src/native-query.ts": "a404706f40228a3c43514da2447db19c2b0dd5a37f491f7cfa63bcf15cac4b76",
+    "packages/pg-runtime/src/wire.ts": "1a9cf79f5d1b700d7813ee24dabd6bcf3abc2f9a4eee134c7c223cd4dc5e0cd0",
+    "packages/pg-runtime/package.json": "958e5c9e451ec2d9c523c5c3dcafad3b259d8a2b4204c9397d4fb8ea1ef7a562",
+    "packages/pg-runtime/dist/index.js": "7070ce0f1cd1d62ef3d800284d503a028d82e8c7d5652f773f6505cf9a075095",
+    "packages/pg-runtime/dist/index.d.ts": "baeeebfc53ace628dba95f0025fc771573e2b4effb5a89cfb3f60892c545b89c",
+    "packages/pg-runtime/dist/build-evidence.json": "3aa9923b099ccf5aeeb10574a81e818759f0cebc13b3ad656477dad056862806",
+    "tests/pg-principal-native-runner.ts": "e0b2b5b9f31ac06de5606cdd829476d2ced1c1ef691ec681eb32417c095e35e5",
+    "packages/python/tests/test_pg_principal_runtime_native.py": "4b0933ac521d2648f077205ad98555f3d1de9411d95c1a45adcca064bd62e25a",
+    "tests/pg-principal-wire.test.ts": "c0b8d67a19c0db0c5a06105c06505bcffd90262436a15a1306980d036dfe3dad",
+    "tests/pg-principal-admission-race-runner.ts": "e28e978f8a3cf44b3d5d96a82d145f49f87dabf4ac77d33075856c663c665179"
+  },
+  "independentEvidence": {
+    "observationControls": {
+      "count": 25,
+      "harness": "controls.ts",
+      "results": "results.json",
+      "scope": "Actual runtime with original wire frames/decoder and deterministic synthetic pg driver. Does not qualify actual socket scheduling or native helper deployment."
+    },
+    "priorProtocolRegressionControls": {
+      "count": 23,
+      "results": "prior-protocol-controls.json",
+      "harness": "/private/tmp/principal-runtime-review-20261013/controls.ts"
+    },
+    "wireAndAdmissionRaceTests": {
+      "passed": 15,
+      "failed": 0,
+      "log": "wire-tests.log"
+    },
+    "builtArtifactHashesMatchRetainedBuildEvidence": true
+  },
+  "parentNativeEvidenceInspected": {
+    "version": "PostgreSQL 18.6",
+    "groups": 12,
+    "elapsedSeconds": 3.375,
+    "receipt": "parent-native.json",
+    "log": "parent-native.log",
+    "executedByReviewer": false,
+    "observations": "Includes text/name subject paths, exact ordered composite TEXT 9007199254740993, original session checks, lifecycle refusal, actual division-error invalidation and fresh-begin recapture. Isolated local trust-authenticated fixture and fixture-trusted helpers only."
+  },
+  "resolvedConcern": {
+    "finding": "After a native statement error/ReadyForQuery E, local started remained true and the accessor returned its prior observation, despite the native transaction being failed.",
+    "beforeEvidence": "pre-fix-results.json, final characterization stillReturnsSameObservation=true",
+    "resolution": "The exclusive operation wrapper clears observedSubject on rejection. Final independent control checks refusal after original 23505/E and new object after rollback/fresh begin. Parent native division-error control confirms corresponding actual behavior.",
+    "qualification": "Previously returned immutable snapshots remain historical observations; clearing an accessor does not revoke copies or confer authority."
+  },
+  "sourceReview": [
+    "The per-host private WeakMap accepts only the actual connection object from that factory. Foreign, cloned, proxy and cross-host handles refuse.",
+    "Observation object and all nested arrays are frozen. Contents are primitive strings; no mutable nested carrier or native frame object escapes.",
+    "Original TEXT values preserve integer-looking strings above JS exact integer precision, BOM and Unicode. keyHex reproduces exact native bytes and keyColumns retains original declared order.",
+    "Only a successfully preflighted, locally idle, started, nonquarantined/nonreleased connection yields the observation. Pending begin, execute, commit and rollback refuse synchronously without native dispatch.",
+    "Confirmed commit/rollback and classified commit rejection clear the current snapshot. Any wrapped operation rejection clears it conservatively. Fresh begin captures a distinct snapshot and updated helper bytes without altering older snapshots.",
+    "Final acquisition gate to return remains synchronous. New WeakMap.set uses the trusted built-in on a private map; no await or external callback was introduced. The original trusted-runtime/no-reentrancy premise remains necessary.",
+    "New snapshot retention remains bounded by the existing 32-key, 64KiB-per-key and original response limits. This is not a total native/libpq/JS heap proof."
+  ],
+  "scope": [
+    "Immutable native subject observation only, not a principal credential, policy permit, authority lease or protected release.",
+    "Original semantic interpretation and exact helper deployment/owner/body/ACL/dependencies/source and held authority remain independent host obligations.",
+    "The accessor does not authenticate current source or revoke previously returned data.",
+    "No public Python behavior, protected security backend readiness, issuer admission, production deployment or required acceptance case promotion is established.",
+    "Reviewer modified only owned temporary evidence; no implementation, primary checkout, commit, push or native database mutation."
+  ],
+  "evidenceDigests": {
+    "parent-build.log": "81d1866f72122091dd91b14ac26561de43621f09f687774b974c0034116a757c",
+    "parent-native.log": "c57d337c3be57b880fd20565cf12841210f84fd482c3049f1c7ff16c63d4a399",
+    "results.json": "96c283a834760569bedbc90123512db4aee82c27c6671640d46a429448c1bd3b",
+    "pre-fix-results.json": "ed06485ab0fed6fce219ebff09c9e199cc0dae93a25af9393a1e2e19d7e67b16",
+    "prior-protocol-controls.json": "48310d5d3b62cc44e36d6e34c299b9710bb2f6c74824194cff5757b4de6c76c6",
+    "parent-native.json": "632e52891e021b24c5fe5837a0ec593b4ce7548ca5de40e2b45ea7a5ca1b4813",
+    "controls.ts": "f49778076a7ab7dcc66ceb38ed9bc5de03eeec77f96424468b39ec21200fc6ec",
+    "wire-tests.log": "200d42f70f5a9b296c215a3a7b2d2cfc77cc210608378af83bb65b768eafd8e7"
+  }
+}

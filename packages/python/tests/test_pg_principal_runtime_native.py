@@ -20,12 +20,15 @@ class PrincipalRuntimeNativeTests(unittest.TestCase):
       CREATE FUNCTION principal_diag.subject_name(actor name) RETURNS TABLE(staff_id text)
       LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog AS $$
       SELECT 'alice'::text WHERE actor=SESSION_USER AND SESSION_USER='principal_alice' $$;
+      CREATE FUNCTION principal_diag.subject_composite(actor text) RETURNS TABLE(staff_id text,ordinal text)
+      LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog AS $$
+      SELECT 'alice'::text,'9007199254740993'::text WHERE actor=SESSION_USER::text AND SESSION_USER='principal_alice' $$;
       CREATE FUNCTION principal_diag.subject_wrong_type(actor text) RETURNS TABLE(staff_id name)
       LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog AS $$ SELECT 'alice'::name $$;
       GRANT USAGE ON SCHEMA principal_diag TO principal_alice,principal_bob""")
      config={'host':params['host'],'port':int(params.get('port',5432)),'database':params.get('dbname','postgres'),'user':params['user']}
      run=subprocess.run(['/opt/homebrew/bin/bun',str(ROOT/'tests/pg-principal-native-runner.ts')],input=json.dumps(config).encode(),capture_output=True,timeout=60,cwd=ROOT)
-     self.assertEqual(run.returncode,0,run.stderr.decode());receipt=json.loads(run.stdout);self.assertEqual(len(receipt['cases']),10)
+     self.assertEqual(run.returncode,0,run.stderr.decode());receipt=json.loads(run.stdout);self.assertEqual(len(receipt['cases']),12)
      receipt['serverVersion']=admin.execute('SHOW server_version').fetchone()[0]
      output=os.environ.get('TRUSS_PRINCIPAL_RUNTIME_EVIDENCE')
      if output:Path(output).write_text(json.dumps(receipt,indent=2)+'\n')

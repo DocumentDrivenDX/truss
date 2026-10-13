@@ -17,9 +17,22 @@ export interface OrdinarySubjectPreflight {
 /** Experimental deployment-qualified zero-argument principal observation.
  * Caller identity remains outside the definer; names alone are not trust. */
 export interface OrdinaryPrincipalObserver { readonly schema:string; readonly routine:string }
+/** Immutable native TEXT observation, not an authority lease or policy credential.
+ * Consumers must interpret ordered keys using the original semantic model and
+ * independently qualify helper deployment and held subject/source authority. */
+export interface OrdinarySubjectObservation {
+  readonly version:'truss.native.subject-observation/0.1';
+  readonly principal:string;
+  readonly keyColumns:readonly string[];
+  readonly keyValues:readonly string[];
+  readonly keyHex:readonly string[];
+}
 export function createPgConnectionSource(config:PoolConfig,options:{journal?:OriginalQueryJournal;ordinaryPrincipal?:string;ordinarySubject?:OrdinarySubjectPreflight;ordinaryPrincipalObserver?:OrdinaryPrincipalObserver;originalResponseTimeoutMs?:number}={}): {
   readonly source:NativeConnectionSource;
   readonly quarantinedCount:()=>number;
+  /** Only this host's active, idle, successfully preflighted transaction.
+   * Previously returned snapshots remain observations, never held-use authority. */
+  readonly observeOrdinarySubject:(connection:NativeConnection)=>OrdinarySubjectObservation;
   readonly close:()=>Promise<void>;
   /** Explicit transport shutdown only; uncertain native outcomes remain unresolved. */
   readonly shutdownQuarantinedTransports:()=>Promise<void>;
@@ -48,12 +61,14 @@ export function createPgConnectionSource(config:PoolConfig,options:{journal?:Ori
     if(format==='binary')throw Error('Binary native carriers unsupported');
     return (text:string)=>text;
   }}});
+  const observations=new WeakMap<NativeConnection,()=>OrdinarySubjectObservation>();
   const quarantine=new Set<PoolClient>();const active=new Set<PoolClient>();let admissionClosed=false;let poolEnded=false;
   const source:NativeConnectionSource={async acquire(){
     if(admissionClosed)throw Error('Host admission closed');
     const client=await pool.connect();
     if(admissionClosed){client.release();throw Error('Host admission closed');}
     active.add(client);let ended=false;let started=false;let subjectPending=false;
+    let observedSubject:OrdinarySubjectObservation|undefined;
     const lease=randomUUID();let ordinal=0n;
     const query=(sql:string,values?:readonly (string|null)[])=>originalQuery(client,sql,values,options.journal,{lease,ordinal:(ordinal++).toString()},responseTimeout);
     const alive=()=>{if(ended||quarantine.has(client))throw Error('Original native connection unavailable');};
@@ -83,7 +98,10 @@ export function createPgConnectionSource(config:PoolConfig,options:{journal?:Ori
       const descriptions=frames.filter(frame=>frame.kind==='T'),rows=frames.filter(frame=>frame.kind==='D');
       if(descriptions.length!==1||JSON.stringify(descriptions[0].fields.map(field=>field.name))!==JSON.stringify(subject.keyColumns)||descriptions[0].fields.some(field=>field.typeOid!=='25'||field.format!=='0')||rows.length!==1||rows[0].fields.length!==subject.keyColumns.length||rows[0].fields.some(field=>typeof field.hex!=='string'||field.hex.length>131072))throw Error('Original subject binding unavailable');
       // Validate native UTF-8 without converting identities through JS numbers.
-      rows[0].fields.forEach(field=>new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(Buffer.from(field.hex!,'hex')));
+      const keyValues=rows[0].fields.map(field=>new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(Buffer.from(field.hex!,'hex')));
+      observedSubject=Object.freeze({version:'truss.native.subject-observation/0.1' as const,principal:principal!,
+        keyColumns:subject.keyColumns,keyValues:Object.freeze(keyValues),
+        keyHex:Object.freeze(rows[0].fields.map(field=>field.hex!))});
     };
     const resetPrincipal=async()=>{
       try{
@@ -110,7 +128,7 @@ export function createPgConnectionSource(config:PoolConfig,options:{journal?:Ori
         const mode={read_only:'READ ONLY',read_write:'READ WRITE'}[options.accessMode];
         if(!isolation||!mode||options.cancellation)throw Error('Unsupported transaction options');
         if(subject&&(options.isolation==='read_committed'||options.accessMode!=='read_only'))throw Error('Subject preflight requires stable read-only transaction');
-        subjectPending=subject!==undefined;
+        observedSubject=undefined;subjectPending=subject!==undefined;
         try{
           await control('BEGIN ISOLATION LEVEL '+isolation+' '+mode,'BEGIN');started=true;
           if(principal!==undefined)try{await verifyPrincipal(true,'T');await verifySubject();}catch(error){quarantine.add(client);admissionClosed=true;throw error;}
@@ -132,15 +150,15 @@ export function createPgConnectionSource(config:PoolConfig,options:{journal?:Ori
       },
       async control(sql){ready();if(!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))throw Error('Unregistered control SQL');await control(sql,sql.startsWith('SAVEPOINT ')?'SAVEPOINT':sql.startsWith('RELEASE ')?'RELEASE':'ROLLBACK');},
       async commit(){
-        ready();try{await control('COMMIT','COMMIT');started=false;return 'committed';}
+        ready();try{await control('COMMIT','COMMIT');started=false;observedSubject=undefined;return 'committed';}
         catch(error){
           if(!(error instanceof DatabaseError)||!error.code||! /^(23|40)[0-9A-Z]{3}$/.test(error.code))throw error;
           // Queue on this original connection and confirm rollback before classified settlement.
-          await control('ROLLBACK','ROLLBACK');started=false;
+          await control('ROLLBACK','ROLLBACK');started=false;observedSubject=undefined;
           return {status:'rejected',sqlState:error.code};
         }
       },
-      async rollback(){ready();await control('ROLLBACK','ROLLBACK');started=false;return 'rolled_back';},
+      async rollback(){ready();await control('ROLLBACK','ROLLBACK');started=false;observedSubject=undefined;return 'rolled_back';},
       async release(){ready();if(started)throw Error('Active connection cannot release');if(principal!==undefined)await resetPrincipal();ended=true;client.off('error',onError);client.release();active.delete(client);},
       async quarantine(){quarantine.add(client);}
     };
@@ -149,7 +167,7 @@ export function createPgConnectionSource(config:PoolConfig,options:{journal?:Ori
     let busy=false;
     const exclusive=<A extends unknown[],R>(operation:(...args:A)=>Promise<R>)=>async(...args:A):Promise<R>=>{
       ready();if(busy)throw Error('Original native operation still pending');
-      busy=true;try{return await operation(...args);}finally{busy=false;}
+      busy=true;try{return await operation(...args);}catch(error){observedSubject=undefined;throw error;}finally{busy=false;}
     };
     connection.begin=exclusive(connection.begin);
     connection.execute=exclusive(connection.execute);
@@ -157,9 +175,13 @@ export function createPgConnectionSource(config:PoolConfig,options:{journal?:Ori
     connection.commit=exclusive(connection.commit);
     connection.rollback=exclusive(connection.rollback);
     connection.release=exclusive(connection.release);
+    observations.set(connection,()=>{
+      ready();if(busy||!started||!observedSubject)throw Error('Active original subject observation unavailable');
+      return observedSubject;
+    });
     return connection;
   }};
-  return {source,quarantinedCount:()=>quarantine.size,async close(){
+  return {source,observeOrdinarySubject(connection){const read=observations.get(connection);if(!read)throw Error('Foreign subject observation refused');return read();},quarantinedCount:()=>quarantine.size,async close(){
     if(quarantine.size)throw Error('Original quarantined custody needs explicit settlement');
     if(active.size)throw Error('Original active checkout still held');admissionClosed=true;if(!poolEnded){await pool.end();poolEnded=true;}
   },async shutdownQuarantinedTransports(){
