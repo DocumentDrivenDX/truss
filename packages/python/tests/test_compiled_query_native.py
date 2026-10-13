@@ -42,6 +42,31 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         refused=query.query_in_transaction(tx,sql='SELECT COUNT(*) AS total FROM "A" a',document_ids=('zdoc',))
         self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,QueryRefused);self.assertEqual(refused.value.code,'unauthorized')
 
+    def test_grouped_count_preserves_string_boolean_bags(self):
+        from dataclasses import replace
+        from truss.contracts import BooleanValue
+        from truss.groups import AuthoredValue
+        def add_fields(source):
+            module=source['modules'][0]
+            for element in module['elements']:
+                if element['kind']=='record':element['name']=element['id']
+                if element['id']=='A':element['members'].append({'module':'m','element':'A-active'})
+            module['elements'].append(dict(id='A-active',name='active',kind='field',scalarType='boolean',
+                nullability='required',cardinality='one',extensions={}))
+        connection,host,assembly,tx=self.ready(add_fields)
+        operations=[]
+        for label,value,active in [('one','shared',True),('two','shared',True),('three','shared',False),('four','other',True)]:
+            created=self.create(label=label,value=value,alias=label)
+            operations.append(replace(created,values=created.values+(AuthoredValue(name='active',value=BooleanValue(value=active)),)))
+        self.assertIsInstance(self.run_group(assembly,tx,tuple(operations))[0],GroupSuccess)
+        query=assembly.compiled_execution(assembly.compiled_selection).capability
+        result=query.query_in_transaction(tx,
+            sql='SELECT a."A-value" AS category,a.active,COUNT(*) AS total FROM "A" a '
+                'GROUP BY a."A-value",a.active ORDER BY a."A-value",a.active LIMIT 10',
+            document_ids=('adoc',),read_profile='count-summary')
+        if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+repr(host._custody.last_attempt.error))
+        self.assertEqual(result.value.rows,(('other',True,1),('shared',False,1),('shared',True,2)))
+
     def test_boolean_and_optional_values_remain_logical(self):
         from dataclasses import replace
         from truss import QueryAbsent
@@ -66,6 +91,9 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         result=query.query_in_transaction(tx,sql='SELECT a."A-label" AS label,a.active AS active,a.note AS note FROM "A" a WHERE a.active = :active ORDER BY a."A-label"',document_ids=('adoc',),parameters={'active':True})
         if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+repr(host._custody.last_attempt.error))
         self.assertEqual(result.value.rows,(('absent',True,QueryAbsent()),('empty',True,''),('null',True,None)))
+        refused=query.query_in_transaction(tx,sql='SELECT a.note,COUNT(*) FROM "A" a GROUP BY a.note ORDER BY a.note LIMIT 10',
+            document_ids=('adoc',),read_profile='count-summary')
+        self.assertIsInstance(refused.value,QueryRefused);self.assertEqual(refused.value.code,'unsupported_query')
 
     def test_exact_integer_decimal_projection_and_parameters(self):
         from dataclasses import replace
@@ -101,6 +129,10 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         self.assertEqual(row['units'],integer);self.assertEqual(row['amount'].as_tuple(),Decimal(decimal_token).as_tuple())
         refused=query.query_in_transaction(tx,sql='SELECT a.amount FROM "A" a WHERE a.amount = :amount',document_ids=('adoc',),parameters={'amount':Decimal('1e-20000')})
         self.assertIsInstance(refused.value,QueryRefused);self.assertEqual(refused.value.code,'native_domain')
+
+        grouped=query.query_in_transaction(tx,sql='SELECT a.amount,COUNT(*) FROM "A" a GROUP BY a.amount ORDER BY a.amount LIMIT 10',
+            document_ids=('adoc',),read_profile='count-summary')
+        self.assertIsInstance(grouped.value,QueryRefused);self.assertEqual(grouped.value.code,'unsupported_query')
 
         nonfinite=query.query_in_transaction(tx,sql='SELECT a.amount FROM "A" a WHERE a.amount = :amount',document_ids=('adoc',),parameters={'amount':Decimal('NaN')})
         self.assertIsInstance(nonfinite.value,QueryRefused);self.assertEqual(nonfinite.value.code,'invalid_query')
