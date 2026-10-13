@@ -1,0 +1,25 @@
+{
+  "scope": "Post-merge runtime0.48 unfiltered database DDL/session setting regression",
+  "integrationCommit": "d360c4568c6ea0ba38de523e8b708edb7b4c5dda",
+  "preservedOwnerMain": "f8453de8",
+  "nativeTests": 12,
+  "seconds": 152.072,
+  "imports": 933,
+  "qualification": "Full current twelve-test suite including strengthened actual administrative event_triggers-off ACL bypass and final publication refusal passes with exact owned cleanup. Earlier runtime0.47 primary12/supplemental4/Astra104 remain separately qualified. No scalar-requiredness security qualification, authenticated protected endpoint, full admin/writer/handler lifetime closure or backend case promotion.",
+  "sourcePins": {
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "4d08f416a3f1285c4ffafdfeab237689985be6254da32974f24264de9e329824",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "592768644000c29dc52187d8e9d9e7f6b6f738c4ee9b7a22ac3a186fdd4244e5",
+    "scripts/security_catalog_subject_read.py": "c38289d6a75f2c605e38f2fd61d81a60056a42de2d4c33ce338476305b572963",
+    "packages/postgresql/native/source-epoch-database-ddl-barrier.sql": "4593c5d5b2caec37077a9d9b0f1631ffc8bbea9a045a3e17e8c66ac677ba7da3",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "951c01f51fc2905c10ed0bfe7261e7095dcc6fcc2f42efb81dc49ba0746a508d"
+  },
+  "evidencePins": {
+    "event-trigger-disabled-counterexample.json": "f6a07040b39b0f8e459c64ccc9ae8532cecc36f1d3daf68b5c7833f9ffb2e984",
+    "published-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "bc8f9d7ecc100a5779868dd3ec5058de6148575d8d6f8d7f3441176a16720956",
+    "runtime-manifest.json": "4d08f416a3f1285c4ffafdfeab237689985be6254da32974f24264de9e329824",
+    "decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143"
+  }
+}
