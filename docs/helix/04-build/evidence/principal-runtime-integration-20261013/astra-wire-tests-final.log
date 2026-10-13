@@ -1,0 +1,38 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/pg-principal-wire.test.ts:
+(pass) ParameterStatus preserves original UTF-8 name/value bytes [0.54ms]
+(pass) ParameterStatus cannot manufacture command or Ready completion [0.39ms]
+(pass) Fragmented ParameterStatus interleaves with confirmed reset without changing completion [0.19ms]
+(pass) Malformed, non-UTF8 and over-budget parameter reports refuse [0.07ms]
+25 | });
+26 | 
+27 | test('pending reset cannot publish a lease after another reset closes admission',async()=>{
+28 |  const run=Bun.spawn([process.execPath,import.meta.dir+'/pg-principal-admission-race-runner.ts'],{stdout:'pipe',stderr:'pipe'});
+29 |  const [stdout,stderr,code]=await Promise.all([new Response(run.stdout).text(),new Response(run.stderr).text(),run.exited]);
+30 |  expect(code).toBe(0);if(code!==0)throw Error(stderr);
+                   ^
+error: expect(received).toBe(expected)
+
+Expected: 0
+Received: 1
+
+      at <anonymous> (/private/tmp/truss-security-main-integration/tests/pg-principal-wire.test.ts:30:15)
+(fail) pending reset cannot publish a lease after another reset closes admission [40.84ms]
+
+tests/pg-wire.test.ts:
+(pass) original command count text beyond host precision remains exact [0.20ms]
+(pass) raw data preserves NULL/empty/binary distinctions and frame boundaries [0.09ms]
+(pass) fragmented original frame forwards once only after full admission [0.14ms]
+(pass) oversized header refuses before body allocation or forwarding and remains closed [0.04ms]
+(pass) invalid text row refuses before forwarding to original parser [0.10ms]
+(pass) query completion requires original command then ready and matching SELECT rows [0.10ms]
+(pass) error response retains ordered fields and ends only on original ready [0.09ms]
+(pass) notice is retained without replacing original command completion [0.05ms]
+(pass) unnamed extended response requires parse/bind before no-data completion [0.06ms]
+(pass) matching command cannot conceal wrong original transaction status [0.07ms]
+
+ 14 pass
+ 1 fail
+ 50 expect() calls
+Ran 15 tests across 2 files. [411.00ms]

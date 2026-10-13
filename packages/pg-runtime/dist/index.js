@@ -106,6 +106,10 @@ function decodeResponseFrame(frame, limits) {
     }
     if (!terminated || !tags.has("C"))
       fail();
+  } else if (kind === "S") {
+    if (limits.maxFields < 1)
+      fail();
+    fields.push(Object.freeze({ name: text(), value: text() }));
   } else if (kind === "Z") {
     if (offset + 1 !== frame.length)
       fail();
@@ -163,7 +167,7 @@ class ResponseIngress {
             size = size * 256n + BigInt(this.#header[i]);
           if (size < 4n || size + 1n > BigInt(this.limits.maxFrameBytes) || this.#frames === this.limits.maxFrames)
             throw Error("pg-ingress:frame-limit");
-          if (![84, 68, 67, 90, 69, 78, 49, 50, 110].includes(this.#header[0]))
+          if (![84, 68, 67, 90, 69, 78, 83, 49, 50, 110].includes(this.#header[0]))
             throw Error("pg-ingress:unsupported-kind");
           this.#frame = new Uint8Array(Number(size) + 1);
           this.#frame.set(this.#header);
@@ -218,6 +222,9 @@ class ResponseIngress {
             if (this.#phase !== "start" && this.#phase !== "rows")
               throw Error("pg-ingress:response-order");
             this.#phase = "error";
+          } else if (decoded.kind === "S") {
+            if (this.#phase === "ended")
+              throw Error("pg-ingress:response-order");
           } else if (decoded.kind === "N") {
             if (this.#phase === "ended")
               throw Error("pg-ingress:response-order");
@@ -370,7 +377,9 @@ function inspectOriginalQueryFile(path, limits) {
   }
 }
 // packages/pg-runtime/src/native-query.ts
-async function originalQuery(client, text, values, journal, custody) {
+async function originalQuery(client, text, values, journal, custody, responseTimeoutMs = 5000) {
+  if (!Number.isInteger(responseTimeoutMs) || responseTimeoutMs < 1 || responseTimeoutMs > 60000)
+    throw Error("Unsupported original response deadline");
   const connection = client.connection;
   const stream = connection?.stream;
   if (!stream)
@@ -397,7 +406,7 @@ async function originalQuery(client, text, values, journal, custody) {
     const error = Error("Original response deadline");
     rejectReady(error);
     stream.destroy(error);
-  }, 5000);
+  }, responseTimeoutMs);
   const guarded = (chunk) => {
     try {
       ingress.feed(chunk, (frame) => {
@@ -467,6 +476,34 @@ function requireOriginalCompletion(frames, status, command) {
 import { randomUUID as randomUUID2 } from "crypto";
 import { Pool, DatabaseError } from "pg";
 function createPgConnectionSource(config, options = {}) {
+  const responseTimeout = options.originalResponseTimeoutMs === undefined ? 5000 : options.originalResponseTimeoutMs;
+  if (typeof responseTimeout !== "number" || !Number.isInteger(responseTimeout) || responseTimeout < 1 || responseTimeout > 60000)
+    throw Error("Unsupported original response deadline");
+  const principal = options.ordinaryPrincipal;
+  if (principal !== undefined && (typeof principal !== "string" || !principal.length || principal.length > 1024 || principal.includes("\x00")))
+    throw Error("Invalid pinned ordinary principal");
+  const nativeIdentifier = (value) => {
+    if (typeof value !== "string" || !value.length || value.includes("\x00") || [...value].some((c) => c.charCodeAt(0) >= 55296 && c.charCodeAt(0) <= 57343) || new TextEncoder().encode(value).length > 63)
+      throw Error("Invalid subject preflight identity");
+    return '"' + value.replaceAll('"', '""') + '"';
+  };
+  const subject = options.ordinarySubject === undefined ? undefined : Object.freeze({
+    schema: nativeIdentifier(options.ordinarySubject.schema),
+    routine: nativeIdentifier(options.ordinarySubject.routine),
+    actorCarrier: options.ordinarySubject.actorCarrier === undefined ? "text" : options.ordinarySubject.actorCarrier,
+    keyColumns: Object.freeze([...options.ordinarySubject.keyColumns].map((name) => {
+      nativeIdentifier(name);
+      return name;
+    }))
+  });
+  if (subject && (subject.actorCarrier !== "text" && subject.actorCarrier !== "name" || principal === undefined || !subject.keyColumns.length || subject.keyColumns.length > 32 || new Set(subject.keyColumns).size !== subject.keyColumns.length))
+    throw Error("Subject preflight requires pinned principal and ordered key");
+  const observer = options.ordinaryPrincipalObserver === undefined ? undefined : Object.freeze({
+    schema: nativeIdentifier(options.ordinaryPrincipalObserver.schema),
+    routine: nativeIdentifier(options.ordinaryPrincipalObserver.routine)
+  });
+  if (observer && principal === undefined)
+    throw Error("Principal observer requires pinned principal");
   const pool = new Pool({ ...config, types: { getTypeParser(_oid, format) {
     if (format === "binary")
       throw Error("Binary native carriers unsupported");
@@ -487,12 +524,18 @@ function createPgConnectionSource(config, options = {}) {
     active.add(client);
     let ended = false;
     let started = false;
+    let subjectPending = false;
     const lease = randomUUID2();
     let ordinal = 0n;
-    const query = (sql, values) => originalQuery(client, sql, values, options.journal, { lease, ordinal: (ordinal++).toString() });
+    const query = (sql, values) => originalQuery(client, sql, values, options.journal, { lease, ordinal: (ordinal++).toString() }, responseTimeout);
     const alive = () => {
       if (ended || quarantine.has(client))
         throw Error("Original native connection unavailable");
+    };
+    const ready = () => {
+      alive();
+      if (subjectPending)
+        throw Error("Subject preflight still pending");
     };
     const onError = () => {
       quarantine.add(client);
@@ -508,20 +551,76 @@ function createPgConnectionSource(config, options = {}) {
         throw error;
       }
     };
+    const verifyPrincipal = async (requireCurrent, status = "I") => {
+      const frames = await query(observer ? "SELECT SESSION_USER AS original_actor,CURRENT_USER AS effective_actor,p.native_superuser,p.native_bypass,p.native_encoding FROM " + observer.schema + "." + observer.routine + "() p" : "SELECT session_user::pg_catalog.text AS original_actor,current_user::pg_catalog.text AS effective_actor,(SELECT rolsuper::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_superuser,(SELECT rolbypassrls::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_bypass,pg_catalog.current_setting('client_encoding')::pg_catalog.text AS native_encoding");
+      requireOriginalCompletion(frames, status);
+      const descriptions = frames.filter((frame) => frame.kind === "T"), rows = frames.filter((frame) => frame.kind === "D");
+      if (descriptions.length !== 1 || JSON.stringify(descriptions[0].fields.map((field) => field.name)) !== JSON.stringify(["original_actor", "effective_actor", "native_superuser", "native_bypass", "native_encoding"]) || descriptions[0].fields.some((field, i) => field.typeOid !== (observer && i < 2 ? "19" : "25") || field.format !== "0") || rows.length !== 1 || rows[0].fields.length !== 5 || rows[0].fields.some((field) => typeof field.hex !== "string"))
+        throw Error("Original principal response unavailable");
+      const values = rows[0].fields.map((field) => new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(Buffer.from(field.hex, "hex")));
+      if (values[0] !== principal || requireCurrent && values[1] !== principal || values[2] !== "false" || values[3] !== "false" || values[4] !== "UTF8")
+        throw Error("Pinned ordinary principal unavailable");
+    };
+    const verifySubject = async () => {
+      if (!subject)
+        return;
+      const frames = await query("SELECT * FROM " + subject.schema + "." + subject.routine + (subject.actorCarrier === "name" ? "(SESSION_USER)" : "(SESSION_USER::pg_catalog.text)"));
+      requireOriginalCompletion(frames, "T");
+      const descriptions = frames.filter((frame) => frame.kind === "T"), rows = frames.filter((frame) => frame.kind === "D");
+      if (descriptions.length !== 1 || JSON.stringify(descriptions[0].fields.map((field) => field.name)) !== JSON.stringify(subject.keyColumns) || descriptions[0].fields.some((field) => field.typeOid !== "25" || field.format !== "0") || rows.length !== 1 || rows[0].fields.length !== subject.keyColumns.length || rows[0].fields.some((field) => typeof field.hex !== "string" || field.hex.length > 131072))
+        throw Error("Original subject binding unavailable");
+      rows[0].fields.forEach((field) => new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(Buffer.from(field.hex, "hex")));
+    };
+    const resetPrincipal = async () => {
+      try {
+        alive();
+        await verifyPrincipal(false);
+        for (const statement of ["RESET ROLE", "RESET SESSION AUTHORIZATION", "RESET ALL"]) {
+          requireOriginalCompletion(await query(statement), "I", "RESET");
+        }
+        await verifyPrincipal(true);
+      } catch (error) {
+        quarantine.add(client);
+        admissionClosed = true;
+        throw error;
+      }
+    };
+    if (principal !== undefined)
+      await resetPrincipal();
+    if (admissionClosed) {
+      quarantine.add(client);
+      throw Error("Host admission closed");
+    }
     const connection = {
       async begin(options) {
-        alive();
+        ready();
         if (started)
           throw Error("Already begun");
         const isolation = { read_committed: "READ COMMITTED", repeatable_read: "REPEATABLE READ", serializable: "SERIALIZABLE" }[options.isolation];
         const mode = { read_only: "READ ONLY", read_write: "READ WRITE" }[options.accessMode];
         if (!isolation || !mode || options.cancellation)
           throw Error("Unsupported transaction options");
-        await control("BEGIN ISOLATION LEVEL " + isolation + " " + mode, "BEGIN");
-        started = true;
+        if (subject && (options.isolation === "read_committed" || options.accessMode !== "read_only"))
+          throw Error("Subject preflight requires stable read-only transaction");
+        subjectPending = subject !== undefined;
+        try {
+          await control("BEGIN ISOLATION LEVEL " + isolation + " " + mode, "BEGIN");
+          started = true;
+          if (principal !== undefined)
+            try {
+              await verifyPrincipal(true, "T");
+              await verifySubject();
+            } catch (error) {
+              quarantine.add(client);
+              admissionClosed = true;
+              throw error;
+            }
+        } finally {
+          subjectPending = false;
+        }
       },
       async execute(statement) {
-        alive();
+        ready();
         if (!started)
           throw Error("Not begun");
         const frames = await query(statement.sql, statement.parameters.map((p) => p.carrier === "null" ? null : p.text));
@@ -547,11 +646,13 @@ function createPgConnectionSource(config, options = {}) {
         return { columns: descriptions[0]?.fields.map((field) => field.name) ?? [], rows, affectedRows: noCount ? "0" : original.affectedRows, command };
       },
       async control(sql) {
+        ready();
         if (!/^((SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT) truss_sp_[1-9][0-9]*)$/.test(sql))
           throw Error("Unregistered control SQL");
         await control(sql, sql.startsWith("SAVEPOINT ") ? "SAVEPOINT" : sql.startsWith("RELEASE ") ? "RELEASE" : "ROLLBACK");
       },
       async commit() {
+        ready();
         try {
           await control("COMMIT", "COMMIT");
           started = false;
@@ -565,14 +666,17 @@ function createPgConnectionSource(config, options = {}) {
         }
       },
       async rollback() {
+        ready();
         await control("ROLLBACK", "ROLLBACK");
         started = false;
         return "rolled_back";
       },
       async release() {
-        alive();
+        ready();
         if (started)
           throw Error("Active connection cannot release");
+        if (principal !== undefined)
+          await resetPrincipal();
         ended = true;
         client.off("error", onError);
         client.release();
@@ -582,6 +686,24 @@ function createPgConnectionSource(config, options = {}) {
         quarantine.add(client);
       }
     };
+    let busy = false;
+    const exclusive = (operation) => async (...args) => {
+      ready();
+      if (busy)
+        throw Error("Original native operation still pending");
+      busy = true;
+      try {
+        return await operation(...args);
+      } finally {
+        busy = false;
+      }
+    };
+    connection.begin = exclusive(connection.begin);
+    connection.execute = exclusive(connection.execute);
+    connection.control = exclusive(connection.control);
+    connection.commit = exclusive(connection.commit);
+    connection.rollback = exclusive(connection.rollback);
+    connection.release = exclusive(connection.release);
     return connection;
   } };
   return { source, quarantinedCount: () => quarantine.size, async close() {

@@ -1,0 +1,31 @@
+{
+  "first": {
+    "error": "Error: Pinned ordinary principal unavailable"
+  },
+  "second": "returned connection after first closed admission; begin and rollback passed",
+  "future": {
+    "error": "Error: Host admission closed"
+  },
+  "quarantinedCount": 1,
+  "calls": {
+    "bad": [
+      "SELECT session_user::pg_catalog.text AS original_actor,current_user::pg_catalog.text AS effective_actor,(SELECT rolsuper::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_superuser,(SELECT rolbypassrls::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_bypass,pg_catalog.current_setting('client_encoding')::pg_catalog.text AS native_encoding"
+    ],
+    "good": [
+      "SELECT session_user::pg_catalog.text AS original_actor,current_user::pg_catalog.text AS effective_actor,(SELECT rolsuper::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_superuser,(SELECT rolbypassrls::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_bypass,pg_catalog.current_setting('client_encoding')::pg_catalog.text AS native_encoding",
+      "RESET ROLE",
+      "RESET SESSION AUTHORIZATION",
+      "RESET ALL",
+      "SELECT session_user::pg_catalog.text AS original_actor,current_user::pg_catalog.text AS effective_actor,(SELECT rolsuper::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_superuser,(SELECT rolbypassrls::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_bypass,pg_catalog.current_setting('client_encoding')::pg_catalog.text AS native_encoding",
+      "BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY",
+      "SELECT session_user::pg_catalog.text AS original_actor,current_user::pg_catalog.text AS effective_actor,(SELECT rolsuper::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_superuser,(SELECT rolbypassrls::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_bypass,pg_catalog.current_setting('client_encoding')::pg_catalog.text AS native_encoding",
+      "ROLLBACK",
+      "SELECT session_user::pg_catalog.text AS original_actor,current_user::pg_catalog.text AS effective_actor,(SELECT rolsuper::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_superuser,(SELECT rolbypassrls::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_bypass,pg_catalog.current_setting('client_encoding')::pg_catalog.text AS native_encoding",
+      "RESET ROLE",
+      "RESET SESSION AUTHORIZATION",
+      "RESET ALL",
+      "SELECT session_user::pg_catalog.text AS original_actor,current_user::pg_catalog.text AS effective_actor,(SELECT rolsuper::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_superuser,(SELECT rolbypassrls::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) session_user) AS native_bypass,pg_catalog.current_setting('client_encoding')::pg_catalog.text AS native_encoding"
+    ]
+  },
+  "scope": "Synthetic deterministic driver and original framed-response source; actual unchanged runtime logic. No native database or authenticated deployment claim."
+}
