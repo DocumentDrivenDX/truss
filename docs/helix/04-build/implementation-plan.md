@@ -7680,3 +7680,19 @@ producer. Credential/issuer nonexposure, app route inventory, daemon/OS/IPv6 and
 continuous topology/authority lifetime remain open. No backend promotion; the
 original132 cases remain required. Evidence:
 `docs/helix/04-build/evidence/network-isolation-20261013/receipt.json`.
+
+
+### External peer guarded TLS composition — 2026-10-13
+
+An actual peer container calls the original source-guarded accepted-catalog
+producer over verified TLS1.3. Unknown bearer and reuse refuse; the admitted
+peer receives r1 with salary Withheld, with original consumer identity and both
+source ShareLocks checked before wire publication. The peer has no mounts or
+declared SQL credentials; a probe of the original service-local database port
+is denied. All three nonce-owned resources are confirmed absent. Eleven channel
+and listener tests pass; non-loopback plaintext refuses before socket binding.
+
+This qualifies the service-private local database option, not separate remote
+DB topology or complete endpoint/OS/issuer authority. CH01/CH02/CH04/CH05/CH08,
+US-056 AC2/AC5/AC8/AC10 and US-057 AC7 remain prerequisites, with no promotion
+of the original132 cases. [Evidence and limitations](evidence/external-peer-channel-20261013/README.md).

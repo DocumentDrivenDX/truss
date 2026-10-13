@@ -5,7 +5,7 @@ operation. TLS, credential issuance/rotation, isolated SQL topology and complete
 endpoint/authority lifetime remain separate qualification obligations.
 """
 from http.server import BaseHTTPRequestHandler,HTTPServer
-import hmac,socket,time,ssl
+import hmac,socket,time,ssl,ipaddress
 from threading import Timer
 from truss.execution import Ok
 
@@ -13,20 +13,30 @@ REQUEST=b'{"operation":"read-resource"}'
 ROUTE='/protected/read'
 
 class AuthenticatedReadChannel(HTTPServer):
-    def __init__(self,credential,operation,*,tls_context=None):
+    def __init__(self,credential,operation,*,tls_context=None,bind_address=('127.0.0.1',0)):
         if type(credential) is not bytes or len(credential)!=32 or not callable(operation):
             raise ValueError('Private exact 256-bit credential and original operation required')
         if tls_context is not None and (type(tls_context) is not ssl.SSLContext
                 or tls_context.protocol!=ssl.PROTOCOL_TLS_SERVER
                 or tls_context.minimum_version<ssl.TLSVersion.TLSv1_3):
             raise ValueError('Original TLS server context with TLS1.3 minimum required')
+        if (type(bind_address) is not tuple or len(bind_address)!=2
+                or type(bind_address[0]) is not str or type(bind_address[1]) is not int
+                or not 0<=bind_address[1]<=65535):
+            raise ValueError('Exact IPv4 address and port required')
+        try:
+            address=ipaddress.IPv4Address(bind_address[0])
+        except ipaddress.AddressValueError as error:
+            raise ValueError('Literal IPv4 bind address required') from error
+        if not address.is_loopback and tls_context is None:
+            raise ValueError('TLS1.3 required for a non-loopback listener')
         self._tls_context=tls_context
         self._authorization='Bearer '+credential.hex()
         self._operation=operation
         self._consumed=False
         self._failure=None
         self._outcome=None
-        super().__init__(('127.0.0.1',0),_Handler)
+        super().__init__(bind_address,_Handler)
 
     def get_request(self):
         connection,address=super().get_request()
