@@ -99,9 +99,9 @@ class NativeRuntimeOperations(Protocol):
 
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]: ...
 
-    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
+    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
                              maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
                              read_profile: Literal['entity-page','related-entity-page','count-summary','complete-entity'] | None=None) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]: ...
 
-    def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
+    def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
                                   limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]: ...
