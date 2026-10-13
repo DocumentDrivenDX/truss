@@ -5,9 +5,9 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.8`,
-native runtime `0.45-candidate`, layout `0.16`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.15`. The tested local
+This is an experimental implementation: development Python distribution `truss-toolkit==0.0.9.dev0`,
+native runtime `0.46-candidate`, layout `0.16`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.16`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -684,3 +684,18 @@ Complete lists refuse overflow rather than returning a partial complete result.
 Business-key query pages remain string-only. Binary/timestamp relationship keys
 and unfaceted decimal business keys remain unsupported. This is native0.45 /
 Weft0.4.10/backend0.4.15; original0.44 upgrades additively.
+
+## Exact typed SQL pages (next release tranche)
+
+`assembly.query_page_in_transaction(tx, sql=..., document_ids=(...), limit=100,
+cursor=prior.next_cursor)` supports required string, boolean, integer and
+decimal(18,4) authored primary keys. The entrypoint supplies complete primary-key
+ordering and lookahead; caller SQL must omit ORDER BY/LIMIT, aggregates and joins.
+Returned int/Decimal/bool values remain exact. Opaque cursor0.2 carries lossless
+lexical key tokens and the original query/catalog/runtime context.
+
+A page is live per call, not a held multi-call snapshot. Catalog/query/runtime
+changes invalidate continuation. Existing explicit `entity-page` and
+`related-entity-page` query profiles retain their string-only key scope; typed
+pages use the selected Weft SQL-page0.2 wrapper. No binary/timestamp or unfaceted
+decimal key claim. Native0.46 upgrades0.45 additively.
