@@ -1017,6 +1017,11 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             self.connection.execute("UPDATE truss.sec_assignment SET active=true WHERE assignment_id='a2'")
             expected={'r1','r2'}
             self.with_unprivileged_actor(operation)
+            # Duplicate resources must refuse before per-resource evaluation, too.
+            self.connection.execute("INSERT INTO truss.sec_resource VALUES('r2',999)")
+            expected=None
+            self.with_unprivileged_actor(operation)
+            self.connection.execute("DELETE FROM truss.sec_resource WHERE resource_id='r2' AND salary=999")
             self.connection.execute("UPDATE truss.sec_assignment SET active=false")
             expected=set()
             self.with_unprivileged_actor(operation)

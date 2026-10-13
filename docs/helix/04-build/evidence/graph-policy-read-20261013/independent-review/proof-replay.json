@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "queries": 3,
+  "unsat": 1,
+  "sat": 2,
+  "solver": "4.15.4",
+  "exactCompleteOutputMatch": true,
+  "scriptSha256": "38fa0be1cb2cc8f06d6960202b518524901929cb1a5c600acadb4ede2a8b42a8",
+  "scope": "Exact copied script/source replay. Propositional compared-pair injectivity assumptions over unbounded symbolic IDs/strings; not global quantified injectivity, native/codec/evaluator refinement or policy authority."
+}

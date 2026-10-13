@@ -1,0 +1,29 @@
+{
+  "solver": "4.15.4",
+  "queries": [
+    {
+      "id": "injective_typed_keys_preserve_membership",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null
+    },
+    {
+      "id": "duplicate_staff_key_breaks_native_id_correspondence",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[caller_node = 2,\n assignment_staff = 3,\n ownership_resource = 0,\n resource_node = 0,\n ownership_project = 0,\n assignment_project = 0,\n staff_key = [else -> \"!0!\"]]"
+    },
+    {
+      "id": "omitted_project_join_changes_membership",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[ownership_project = 3,\n assignment_project = 2,\n ownership_resource = 0,\n resource_node = 0,\n assignment_staff = 0,\n caller_node = 0,\n project_key = [3 -> \"A\", else -> \"\"]]"
+    }
+  ],
+  "scope": "Conditional typed graph IDs/business-key membership correspondence.\n\nOriginal UMF string-key equality, complete faithful selected edge projection,\nunique typed node identities and key injectivity on each compared pair are\npremises. IDs and key values are symbolic and unbounded. This\nis not native SQL/codec/evaluator refinement or authenticated policy authority.\n",
+  "sources": {
+    "scripts/security_graph_read.py": "2623640cb2a26efd3a0419d64fae2e0e7cec8fefa54d031fee63bee165490152",
+    "scripts/evaluate-security-captured-identity-fixture.ts": "0a33a7605ccb8bbe74b54cccb338cc84d1b3dbba5cef54e5336e7ea1209c5c43",
+    "scripts/prove-graph-semantic-membership.py": "38fa0be1cb2cc8f06d6960202b518524901929cb1a5c600acadb4ede2a8b42a8"
+  }
+}

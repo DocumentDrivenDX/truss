@@ -1,0 +1,174 @@
+{
+  "count": 31,
+  "controls": [
+    {
+      "name": "actual original UMF baseline selects business r1 with salary withheld",
+      "passed": true
+    },
+    {
+      "name": "active assignments (True, True)",
+      "passed": true
+    },
+    {
+      "name": "active assignments (False, False)",
+      "passed": true
+    },
+    {
+      "name": "active assignments (False, True)",
+      "passed": true
+    },
+    {
+      "name": "ownerless resources omitted by original policy",
+      "passed": true
+    },
+    {
+      "name": "unmapped administrative subject refuses",
+      "passed": true
+    },
+    {
+      "name": "wrong source type fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "wrong target type fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "missing source fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "missing target fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "selected nested object fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "unknown selected node type fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "unknown selected relation type fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "duplicate typed native node fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "missing business key fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "wrong scalar family fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "extra scalar member fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "invalid key payload fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "invalid active payload fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "duplicate JSON property fails before original evaluator",
+      "passed": true
+    },
+    {
+      "name": "duplicate original Staff semantic key refuses",
+      "passed": true
+    },
+    {
+      "name": "duplicate original Project semantic key refuses",
+      "passed": true
+    },
+    {
+      "name": "duplicate original Resource semantic key refuses",
+      "passed": true
+    },
+    {
+      "name": "duplicate original Assignment semantic key refuses",
+      "passed": true
+    },
+    {
+      "name": "duplicate original Ownership semantic key refuses",
+      "passed": true
+    },
+    {
+      "name": "same business text across distinct record domains stays distinct",
+      "passed": true
+    },
+    {
+      "name": "native identity renumbering preserves original business result",
+      "passed": true
+    },
+    {
+      "name": "legacy flat positive retained",
+      "passed": true
+    },
+    {
+      "name": "legacy flat duplicate refusal",
+      "passed": true
+    },
+    {
+      "name": "ownerless/sibling resources excluded with active p2 False",
+      "passed": true
+    },
+    {
+      "name": "ownerless/sibling resources excluded with active p2 True",
+      "passed": true
+    }
+  ],
+  "genuineOwnerBaseline": [
+    {
+      "name": "baseline",
+      "result": {
+        "kind": "owned-resource-list-fixture/0.1",
+        "rows": [
+          {
+            "key": [
+              {
+                "string": "r1"
+              }
+            ],
+            "output": [
+              {
+                "field": {
+                  "documentId": "domain",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "disposition": "withheld"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_graph_read.py",
+      "sha256": "2623640cb2a26efd3a0419d64fae2e0e7cec8fefa54d031fee63bee165490152",
+      "bytes": 6404
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts",
+      "sha256": "0a33a7605ccb8bbe74b54cccb338cc84d1b3dbba5cef54e5336e7ea1209c5c43",
+      "bytes": 8933
+    },
+    {
+      "path": "/private/tmp/graph-policy-review-20261013/check.py",
+      "sha256": "0c8634fffdb7b35d2a80bd621a85bdb6b2759df7fe11ea639d7fbe9996063397",
+      "bytes": 7227
+    }
+  ],
+  "scope": "Actual fixed Python graph projection and genuine Bun original UMF named/legacy evaluator from synthetic original native text rows. No native query, source/lock/role custody or authenticated mapping qualification."
+}

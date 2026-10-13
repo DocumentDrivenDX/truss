@@ -1,0 +1,40 @@
+{
+  "status": "component-passed",
+  "securityReady": false,
+  "criteriaPrerequisites": [
+    "US-056-AC2",
+    "US-056-AC6",
+    "US-056-AC1"
+  ],
+  "backendCasePromotion": false,
+  "nativeGraphTests": 5,
+  "nativeGraphSeconds": 5.291,
+  "nativeFlatRegressionGroups": 2,
+  "nativeFlatSeconds": 10.108,
+  "pureProjectionTests": 1,
+  "formalQueries": 3,
+  "versions": {
+    "python": "3.11.17",
+    "psycopg": "3.3.6",
+    "postgresql": "18.6",
+    "z3": "4.15.4"
+  },
+  "sourceDigests": {
+    "scripts/security_graph_read.py": "2623640cb2a26efd3a0419d64fae2e0e7cec8fefa54d031fee63bee165490152",
+    "scripts/evaluate-security-captured-identity-fixture.ts": "0a33a7605ccb8bbe74b54cccb338cc84d1b3dbba5cef54e5336e7ea1209c5c43",
+    "packages/python/tests/test_security_graph_read_native.py": "03f0025fe3b5a756f62db6e1a171071695c96cfb0d7ee7d14acae7e64cbbf9a2",
+    "packages/python/tests/test_security_graph_projection.py": "829a2c3569bd355e3d2fd696ff52a3c33c8458b8c29efc81d9964feae922d604",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "ba09d73dbe74d6238151daaf60ea68fa113d759a1e6523632efe2a3078a0b21f",
+    "scripts/prove-graph-semantic-membership.py": "38fa0be1cb2cc8f06d6960202b518524901929cb1a5c600acadb4ede2a8b42a8"
+  },
+  "limitations": [
+    "Fixed separately authored mapping; not accepted catalog/protected compiler admission.",
+    "Administrative selected subject; not authenticated live graph Subject integration.",
+    "Joint whole-table object/edge guards; no fine-grained graph scope composition.",
+    "Native graph property subset string business keys and boolean active.",
+    "Trusted administrative source/issuer/runtime and complete selected SQL projection premises.",
+    "No bypass-safe role/ACL/controlplane/callable closure, query lowering or protected release.",
+    "No backend case promotion; all132 required cases remain.",
+    "100-row and1MiB evaluator-packet caps limit retained/results; they do not bound native scan work or libpq heap."
+  ]
+}

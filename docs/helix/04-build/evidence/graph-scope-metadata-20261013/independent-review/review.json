@@ -1,0 +1,95 @@
+{
+  "status": "No actionable findings within metadata decoder-ordering change",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "e2b3cbf2a8e4cf9b4913adc74680a22404c53700",
+  "findings": [],
+  "conclusions": [
+    "Identity, initial scope, registration and final scope each validate native TEXT descriptor width/OIDs before fetch. Registration also checks registered_types name.",
+    "Existing row shape/value/count/context/evidence/completeness checks are preserved.",
+    "Focused adverse test now asserts selected phase reached; two independent valid empty/existing scope controls reach callback once."
+  ],
+  "independentEvidence": {
+    "metadataControls": 29,
+    "prechangeForeignFetchReproductions": 4,
+    "prechangeCommit": "995a2a95",
+    "focusedRepositoryTest": "Passed; 1 test with 13 adverse subcases, 0.028s",
+    "allPassed": true,
+    "scope": "Actual graph scope acquisition logic, synthetic driver descriptors/rows and replaced native epoch envelope. Includes valid initial-empty/initial-existing scopes and exact target-phase assertions. No native database mutation or driver constructor/callback sandbox qualification.",
+    "results": "/private/tmp/graph-scope-metadata-review-20261013/results.json"
+  },
+  "parentEvidenceInspected": {
+    "nativeTests": 16,
+    "nativeSeconds": 3.774,
+    "nativeRerun": false,
+    "cleanup": "Exact stop/status/socket receipt passed",
+    "formalQueries": 11,
+    "formalQualification": "Existing conditional-model replay reported in retained proof log; not independently replayed in this metadata review."
+  },
+  "limits": [
+    "Descriptor ordering excludes foreign row decoding, not trusted driver loader constructors or arbitrary configured code.",
+    "Synthetic host shell does not prove native transaction or lock semantics.",
+    "No semantic graph projection, authenticated mapping, protected backend admission or acceptance promotion."
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_graph_scope.py",
+      "sha256": "da7ad8288c2c6654323eaeb85c1d3730e14b13700eec6f16d49d41088aa96165",
+      "bytes": 5460
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_graph_scope_metadata.py",
+      "sha256": "8e14176580fe70ed3b92dbe6a010f440bfc21140d27d3c283a235ae001a2625e",
+      "bytes": 2877
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_graph_projection_native.py",
+      "sha256": "5d71093947005a903e95aca5cad0442b074126094f8864e4fbee948a3914faec",
+      "bytes": 13795
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/graph-scope-metadata-20261013/receipt.json",
+      "sha256": "8e83d18b8528e9ed7c346896c31e6c929062c2f51ca3f2b2b544ead5cee41000",
+      "bytes": 918
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/graph-scope-metadata-20261013/native.log",
+      "sha256": "5b40c84052ad9089853c8b753a9f95afaf326a8682939e976d71d9f00a39a1f2",
+      "bytes": 3187
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/graph-scope-metadata-20261013/metadata.log",
+      "sha256": "6d902d949197f6e6b70865fdf25e2ee91dde20c5eeaa18ab7c0360f2ac41d94e",
+      "bytes": 264
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/graph-scope-metadata-20261013/proof.log",
+      "sha256": "ebefd41775f894dd66206f063209a9121d703d8735f2dce6f459baa297125cd5",
+      "bytes": 209
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/graph-scope-metadata-20261013/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    }
+  ],
+  "independentArtifactPins": [
+    {
+      "path": "/private/tmp/graph-scope-metadata-review-20261013/check.py",
+      "sha256": "c1346bb279f15c449d3059e8e23dc49cefbfd5bf3ee789a0005db92b8407175e",
+      "bytes": 4512
+    },
+    {
+      "path": "/private/tmp/graph-scope-metadata-review-20261013/results.json",
+      "sha256": "e2b20bab9f7e03b6ab388c1387f57190e0c812688a21a94c34c59c6b5f11909d",
+      "bytes": 5909
+    },
+    {
+      "path": "/private/tmp/graph-scope-metadata-review-20261013/prechange.py",
+      "sha256": "a004effe64f22ad3a6d395806b421728015a5a20780b84e78908f52951168747",
+      "bytes": 5215
+    }
+  ],
+  "repositoryMutations": "Only requested review evidence added below; implementation untouched."
+}
