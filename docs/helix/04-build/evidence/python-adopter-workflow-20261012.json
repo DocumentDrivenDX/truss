@@ -1,0 +1,40 @@
+{
+  "scope": "Integrated public adopter workflow, not full corpus/interchange qualification",
+  "runtimeRelease": "truss-catalog-runtime/0.28-candidate",
+  "runtimeSourceMain": "1420c9f0",
+  "weftSourceMain": "8129b19",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "localRuntime": "DocumentDrivenDX pgserver-pg18==18.6.1",
+  "installedWheelSha256": "ae364ca9c5ba5200fe2d1a60fa9cda013be51dc47886448491c0cd75cf846500",
+  "nativeExtensionSha256": "a361fc530ed5a64f772f9a48d672546be1e6307b9fc298303b3771a488782952",
+  "files": {
+    "packages/python/examples/adopter_workflow.py": "01585bb4006b514d262dbb040efb962fa9372fd2c1b7bdcdd2cb19b11d4ed942",
+    "packages/python/examples/notes.umf.json": "2d12a4ee34d9e02ffb578e99fb0f69466bb11832db0eb49a235d23659931942b",
+    "packages/python/tests/test_adopter_workflow_native.py": "e6c524049f0308bce0879069601d103dda14439027c4c05a0f4c0913d34d9b3a"
+  },
+  "test": {
+    "module": "test_adopter_workflow_native",
+    "passed": 1,
+    "seconds": 7.895
+  },
+  "behaviors": [
+    "Public install/status and accepted original UMF catalog",
+    "Public module policy with separate ordinary person",
+    "Public object and independent edge batch then caller commit",
+    "Original request retry produces durable receipt token",
+    "Receipt visibility and business-key read in read-only transaction",
+    "Weft compiles against actual accepted original source and native mappings",
+    "Caller rollback removes dry-run effects",
+    "Public host-owned import then caller commit",
+    "Read committed feed; content-addressed durable local payload sink before ordinary-role source ACK commit"
+  ],
+  "notClaimed": [
+    "Full shared-engine/native interchange qualification",
+    "Downstream graph replica or verified application",
+    "History and upgrade exercised by this example",
+    "Managed-service qualification or complete structured value support"
+  ],
+  "review": "Astra Ultra approved plan and final source/docs with finite corrections",
+  "securityReady": false
+}

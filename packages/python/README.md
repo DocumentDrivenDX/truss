@@ -39,8 +39,8 @@ cleanup depend on this native bound; an observed zero or larger value refuses
 adoption. The watchdog requests cancellation and checks monotonic elapsed time
 before each SQL submission; it does not guarantee hard wall-clock termination. Toolkit operation containment preserves earlier host work and timeout
 settings; unresolved cleanup quarantines the connection across detach/re-adoption.
-This entry point provides host adoption, not installed graph capabilities,
-compiled query execution or durable commit recovery.
+This entry point supplies the host transaction. Select `CatalogRuntimeConfiguration`
+with `create_reference_assembly` for installed graph capabilities and recovery.
 
 The pg8000 entry points below are historical experimental components, available
 through `[experimental-pg8000]`; their transport hooks do not gate the baseline.
@@ -69,6 +69,33 @@ Construction failures retain `BorrowedHostAttachmentFailure` with original
 attachment custody and a `restored` flag. Unconfirmed restoration requires host
 recovery before reuse. This API supplies transaction embedding; it grants no
 catalog, read or mutation authority.
+
+## Run the adopter workflow
+
+The [runnable example](examples/adopter_workflow.py) uses one
+[original UMF document](examples/notes.umf.json) for catalog registration, public
+writes and Weft compilation. It installs a new local database, configures a
+separate ordinary person, commits two Notes and their link, recovers the original
+receipt, reads by business key, queries the relationship in a read-only
+transaction, rolls back a dry-run, imports a Note, then durably saves feed pages
+before committing their source acknowledgements.
+
+Install this package's `[local,native]` extras, Bun, and the Weft Python extension
+built with `truss-postgresql-pg18` supporting runtime backend0.3.0. The example
+requires that actual extension; it does not skip compiled queries.
+
+```sh
+python -m pip install './packages/python[local,native]'
+python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
+```
+
+Use a new or empty directory. The PostgreSQL data and content-addressed feed sink
+remain there after the local server stops. Run with a fresh directory each time.
+Only installation/role setup uses the administrator connection; application data
+uses the ordinary person's public assembly. Each transaction is explicitly
+settled by the caller. The sink retains exact feed bytes with file and directory
+fsync before ACK, so it demonstrates durable delivery rather than a second
+Truss database replica. There are no internal retries or query skips.
 
 ## Public catalog workflow
 
@@ -99,8 +126,8 @@ host.detach()
 connection.commit()
 ```
 
-The current release supports one fresh scalar-string catalog with authored keys
-and relationships on PostgreSQL 18.6. Preparation uses the bundled UMF producer
+The current release supports multiple accepted exact-scalar catalogs with authored
+string keys and independent directed relationships on PostgreSQL18.6. Preparation uses the bundled UMF producer
 through Bun. Original documents are retained; accepted identities come from
 native catalog rows. Registration records the authenticated session person as
 actor separately from asserted origin. Exact `SET ROLE` must be `none`.
@@ -122,11 +149,11 @@ and ordered dependencies. It includes fields declared in other modules and
 document-qualified keys and relationships. `view.original_bytes` is the complete
 shared catalog-view JSON wire representation.
 
-This profile supports complete revision-1 views; genesis, unsupported history,
-and owner projections return unavailable. Readers require current registrar
-membership; they need not be the person who registered the catalog. Views hold a
-catalog-head share lock with no wait and require a read-write READ COMMITTED
-transaction. Define smaller output budgets with
+The complete `catalog_view_in_transaction` profile requires current registrar
+membership and a read-write READ COMMITTED transaction. It remains a distinct
+interface from `reader_catalog_in_transaction`, which supplies module-authorized
+reader views and supports read-only transactions. Unsupported historical or
+owner-projected complete views return unavailable. Define smaller output budgets with
 `assembly.catalog_view_request(definition_count="100", encoded_bytes="1048576")`.
 Count or full-output byte overflow returns unavailable without truncation. Failed
 transaction cleanup remains an error requiring host recovery. The 0.2 candidate
@@ -138,15 +165,16 @@ is a tuple of `ModuleAccessGrant(document_id, module_id, reader_role, writer_rol
 Modules must exist in the original accepted archives. Permission roles must already
 exist as safe, distinct non-login roles without paths into protected owners or raw
 Truss privileges. Role names must fit 63 UTF-8 bytes and are compared as exact text.
-The method creates no roles, memberships or privilege grants.
+The method creates no roles or memberships. It grants schema `USAGE` and
+selected public facade `EXECUTE`, never raw-table privileges.
 
 Configuration is an exact upsert of only the supplied addresses; omitted addresses
 remain unchanged and identical rows are a no-op. A batch validates before writing,
 verifies native effects, and returns `pending_commit`. The caller commits or rolls
 back. Role names resolve live: administrators must quiesce role replacement,
 renaming and membership changes and reconfigure policy deliberately. Removal is
-not implicit in an omitted address. This administration API prepares policy
-metadata; business authorization and mutation capabilities remain under implementation.
+not implicit in an omitted address. Business authorization and public mutation providers use this configured policy;
+see the current group and relationship sections below.
 
 The package also retains a separately pinned original UMF key-tuple producer as
 an internal dependency for grouped writes. It parses original source through UMF,
@@ -241,9 +269,9 @@ bundled18.6 with its exact reusable package identity; retired16.x packages refus
 before startup. Other platform/version
 tuples still require qualification.
 
-The experimental truss-toolkit0.0.1.dev0 wheel exposes this lifecycle component;
-it does not yet expose the complete Truss engine, catalog acceptance, mutation,
-query or migration APIs. Test with `python -m unittest discover -s packages/python/tests -v`.
+The experimental truss-toolkit0.0.1.dev0 wheel also exposes the public catalog,
+mutation, query, import, history/feed and installation/upgrade providers described
+here. The runnable adopter workflow exercises their current supported subsets.
 
 If cleanup raises or leaves a postmaster marker, close refuses and retains the
 directory lease; connection information becomes unavailable. It does not retry
@@ -813,7 +841,8 @@ There are no internal retries. The current runtime supports exact scalar values 
 
 The create provider stores the complete native objects, exact key membership and
 reservations, journal events and optional request receipt atomically. It does not
-activate the full feed/history provider. The current runtime also provides business-key reads, updates/deletes, caller preconditions and relationship reads. Imports, full Weft execution and Lakebase remain outstanding. Authority receipt visibility is available in runtime 0.17.
+activate the full feed/history provider. The current runtime also provides business-key reads, updates/deletes, caller preconditions and relationship reads. Public imports and scalar/relationship Weft queries are available below; broader
+query domains and Lakebase remain unfinished. Authority receipt visibility is available in runtime 0.17.
 
 Current deployment dependencies: installation and module-access configuration
 require a superuser and permission to create the private owner/registrar roles.
@@ -965,8 +994,8 @@ Lookup creates no route, guard or reservation. It supports adopted read-only and
 read-write READ COMMITTED transactions; read-write lookup takes a nonblocking
 object read lock. The returned record is verified against the requested key, with
 current record and key-field permissions rechecked before publication. The
-profile remains rootless/string-only and revision 1; pages, broader value types
-and catalog evolution remain unfinished. The current runtime requires a fresh installation; upgrades remain unfinished.
+initial0.8 profile was rootless/string-only and revision1. Current exact scalar
+values, pages, compatible evolution and additive upgrades are described below.
 ### Atomic caller preconditions (runtime 0.15 candidate)
 
 Pass `preconditions=(...)` to `context.input`. Truss evaluates them against the
@@ -1092,7 +1121,7 @@ retry and again at commit for a newly recorded alias. Rollback removes that alia
 The equality profile compares original input, archive, declarations and retained
 source bytes. It does not claim semantic equivalence of rewritten documents.
 Later documents and changed definitions still require the pending lifecycle
-implementation. This candidate requires fresh installation.
+implementation. That historical release required fresh installation; current additive upgrades are described below.
 
 ### Additional documents (runtime 0.10 candidate)
 
@@ -1121,7 +1150,7 @@ to grouped writes; native code checks those sources against the accepted archive
 
 The cumulative catalog limits are 512 documents, 65,536 definitions and a 16MiB
 native expected image, with ordinary operation deadlines. Changes to an existing
-document are supported within the runtime 0.19 subset below. Exact scalar properties are supported as described below. This candidate requires fresh installation.
+document are supported within the runtime 0.19 subset below. Exact scalar properties are supported as described below. That historical release required fresh installation; current additive upgrades are described below.
 
 ### Exact scalar properties (runtime 0.11 candidate)
 
@@ -1182,8 +1211,8 @@ Reduce the page size explicitly to fit individual large records.
 
 These are live reads. Separate pages do not share a frozen data snapshot, and
 native ID order does not establish commit order or exactly-once enumeration.
-Full DirectRecord/relationship/traversal and compiled-query profiles remain
-unfinished. This candidate requires fresh installation.
+Broader DirectRecord and traversal profiles remain unfinished. Current independent
+relationship reads and compiled scalar/relationship queries are available below. That historical release required fresh installation; current additive upgrades are described below.
 
 ### Independent directed relationships (runtime 0.16 candidate)
 
@@ -1254,9 +1283,9 @@ been deleted or changed. `maximum_token_bytes` and `maximum_evidence_bytes` redu
 fixed logical byte ceilings; ordinary connection deadlines apply. No backend
 allocation accounting, custom tracing or metrics are introduced.
 
-This profile has indefinite retained receipts and no expiry API. Replica/seed
+The current profile has indefinite retained receipts and no expiry API. Replica/seed
 comparison, repeatable-read visibility profiles and portable restore lineage
-remain unimplemented. A fresh installation is still required for runtime upgrades.
+remain unimplemented. Current additive upgrades from0.23–0.27 are supported as described below.
 
 ### Caller-owned imports (runtime 0.18 candidate)
 
@@ -1307,7 +1336,8 @@ independent directed edges. Each accepted record must satisfy final invariants
 on its own, so importing a new object that needs a mandatory relationship is
 not yet supported. Limits are 128 records, 1 MiB per payload, 4 MiB per canonical
 input and 8 MiB per report. Original UMF key production still requires Bun. Engine-owned batches,
-public source lookup, structured source facts and migrations remain unfinished.
+structured source facts remain unfinished. Public retained source lookup and
+additive upgrades are available in the current runtime.
 The native host-adopted import selector is available as described below.
 
 ### Compatible document acceptance (runtime 0.19 candidate)
@@ -1378,7 +1408,8 @@ database's commit, claim exactly-once downstream effects, or release retention.
 The stronger verified-application capability remains separate and unfinished.
 
 This profile retains source history indefinitely and supplies no cleanup, archive
-offload, consumer removal, replica freshness or installation upgrade API. Reads
+offload, consumer removal or replica freshness API. Current additive upgrades
+retain existing feed registrations/checkpoints. Reads
 may redeliver until ACK commits. Runtime 0.20 requires a fresh installation on the
 selected PostgreSQL18.6/psycopg3.3.6 profile.
 
@@ -1424,8 +1455,8 @@ requiring mutation writer authority.
 These concrete profiles implement the documented scalar/independent-edge,
 host-adopted import and caller-asserted feed subsets. They do not claim the broader
 draft historical DirectRead, engine-owned Import or verified-application Feed
-protocols. Compiled execution and standalone mutation selectors remain unavailable;
-supported mutations use the group provider. Retained native history is available
+protocols. Compiled execution is available through `compiled_execution`; standalone
+mutations use the group provider. Retained native history is available
 as described below.
 
 `ReferenceAssemblyConfiguration` still selects the separately documented inert
@@ -1493,7 +1524,8 @@ a transaction ID. Read-only READ COMMITTED transactions are supported. The
 returned safe watermark is the reproduced interval endpoint, rather than the
 original polling observation. Unavailable or mismatched retained facts refuse
 reproduction; there is no internal retry. Retention cleanup is not implemented.
-Runtime 0.22 requires a fresh installation; upgrades remain unfinished.
+The initial0.22 release required fresh installation. Current0.23–0.27 upgrades
+preserve feed registrations and checkpoints.
 
 ### Retained import provenance (runtime 0.23 candidate)
 
@@ -1520,7 +1552,8 @@ means a committed original creation was verified and has no import provenance;
 unknown or unsafe history returns `ImportSourceUnavailable`. Returned bytes are
 the retained native source representation, rather than the original ImportInput
 syntax. Object property payloads are not included. This does not implement
-archives, cleanup, general source history or upgrades; 0.23 needs fresh installation.
+archives, cleanup or general source history. Current upgrades retain these
+original source rows.
 
 ### Additive runtime upgrade (0.23 → 0.24 candidate)
 

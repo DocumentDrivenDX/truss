@@ -6777,3 +6777,22 @@ row seed or consumer-authored storage mapping is used. Evidence is recorded in
 ### Acceptance traceability correction — 2026-10-12
 
 A direct comparison with UMF's required case assertions found that four recent component receipts linked transaction helper controls to missing-custody and activation-rollback cases without exercising their required behavior. [The correction ledger](evidence/security-acceptance-traceability-audit-20261012/corrections.json) retains prior receipt hashes and links. Receipt mappings now distinguish component prerequisites from complete case execution: durable registration/settlement and authority claim gating support L03 coordination; participating role-change generation advances support only part of L13; ordinary administrative denial supports only part of B05. None proves complete release, full writer participation, activation rollback, retained-owner deletion, or pool reset. Native logs and tested source archives remain unchanged. All132 required cases remain in scope; no case is promoted. Historical component links elsewhere are not comprehensively audited by this correction.
+
+### Runnable public adopter workflow — 2026-10-12
+
+`packages/python/examples/adopter_workflow.py` consumes exact `notes.umf.json`
+bytes through registration, mutation/key production and Weft compilation on the
+installed public Python package. It supplies its own synchronous psycopg host
+transactions, uses public installation/status/module configuration and a
+separate ordinary person for application calls, commits grouped object/edge
+writes, recovers the original receipt/token, reads by key and compiled relation,
+rolls back a dry-run, imports an object, and durably stores committed feed pages
+before separately committing ordinary-role ACKs. No data rows or accepted native
+identities are seeded administratively. Bun and the actual Weft .3 extension are
+required; there is no silent query skip.
+
+A single basic native test runs that exact program against the installed .28
+package and DocumentDrivenDX PostgreSQL18.6. This is integrated adopter evidence,
+not full shared corpus or native interchange qualification. README corrections
+remove superseded present-tense unavailable/fresh-only statements while retaining
+historical profile constraints. See `evidence/python-adopter-workflow-20261012.json`.
