@@ -1,0 +1,7 @@
+test_role_catalog_cut_survives_receiver_until_executor_settlement (test_security_registered_callers_native.RegisteredCallersNativeTests.test_role_catalog_cut_survives_receiver_until_executor_settlement)
+@covers US-056-AC9; selected dual catalog lock publication lifetime. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 14.284s
+
+OK

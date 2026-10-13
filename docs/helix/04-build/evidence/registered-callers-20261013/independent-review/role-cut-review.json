@@ -1,0 +1,11 @@
+{
+  "review": "Explicit role-catalog-fenced registered producer source review",
+  "status": "No actionable findings in inspected source and receiver/settlement test.",
+  "headAtReview": "28aea4342cf1dbcf6673d2dc66fe06922454baf3",
+  "assessment": "Exact-Boolean opt-in defaults false; explicit wrapper requires registration/fact/source cuts. Qualified pg_authid and pg_auth_members SHARE NOWAIT acquisition precedes registered role read; exact current-PID shared-database-0 granted ShareLock rows and catalog OIDs are TEXT-descriptor-checked before fetch. Acquisition and late requalification use the original executor outer transaction.",
+  "native": "Parent-owned receiver/settlement test passed1/14.284s: ALTER ROLE and GRANT attempts refuse inside receiver and after delivery; executor rollback then permits ALTER ROLE. Role setup is committed before probes. Contention/legacy replay still running and not counted here.",
+  "validation": "Read-only source/assertion/log inspection. No new independent or native test campaign; previous synthetic controls remain historical.",
+  "limits": "Privileged cluster-wide locks on these two selected catalogs and cross-transaction writers only. Same-backend mutation, role/config/administrator bypass, arbitrary source lifetime, issuer authority and admitted public backend remain unqualified; no ABA or complete protected-release theorem.",
+  "sourceDigests": {"packages/python/src/truss/_security_catalog_subject_installation.py":"8254908eb3c1983ad77a8fc9d492a6b9abf152c45a327e10fb07ac78607b261b","scripts/security_catalog_subject_read.py":"4e3f8e5c3b5a282bf16bfa1a545cde6c6c87f13c98d03ae91f0f68bc91d1ee03","packages/python/tests/test_security_registered_callers_native.py":"24bfa442c052c25b4dee7d5cf16c0ab5fb7f7e5e2d14e384ef7fe7fa5923c6f4","packages/python/src/truss/_psycopg_epoch_cut.py":"592768644000c29dc52187d8e9d9e7f6b6f738c4ee9b7a22ac3a186fdd4244e5","packages/python/tests/test_security_catalog_subject_native.py":"2f648d3996294c367d0438198f5bf95f532f7000cde101385e6484d425c13ba6","packages/python/tests/test_security_catalog_source_cut_native.py":"9d974e7c882411c8222a2a78427e45ae9e07fbb0d48f1f912f7063151ad59624"},
+  "evidenceDigests": {"role-cut-native.log":"25a4114be23fc0be18a4a090f95c169d1c3019d4e10a4933f3f8fdf38fdc6105"}
+}

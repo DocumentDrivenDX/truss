@@ -33,8 +33,12 @@ def serve(*,refuse_event_triggers=False,refuse_helper_public_grant=False,refuse_
    def guarded(packet):
     fixture.assertEqual(c.execute('SELECT SESSION_USER::text,CURRENT_USER::text').fetchone(),('consumer','consumer'))
     fixture.assertEqual(fixture.admin.execute("SELECT count(*) FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='ShareLock' AND relation IN ('truss.source_epoch_current'::regclass,'truss.source_epoch_registry'::regclass)").fetchone(),(2,))
+    fixture.assertEqual(fixture.admin.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND database=0 AND granted AND mode='ShareLock' AND relation IN ('pg_catalog.pg_authid'::pg_catalog.regclass,'pg_catalog.pg_auth_members'::pg_catalog.regclass)").fetchone(),(2,))
+    with psycopg.connect(fixture.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+     with fixture.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('ALTER ROLE consumer BYPASSRLS')
+     with fixture.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(psycopg.sql.SQL('GRANT {} TO consumer').format(psycopg.sql.Identifier(fixture.installation.owner_role)))
     publish(packet)
-   return native.source.subject.publish_registered_ddl_epoch_guarded_native_catalog_resource_read(h,t,fixture.host,fixture.tx,mapping,selection,inspector,relations,cut,fixture.registered_subjects,guarded)
+   return native.source.subject.publish_role_fenced_registered_catalog_resource_read(h,t,fixture.host,fixture.tx,mapping,selection,inspector,relations,cut,fixture.registered_subjects,guarded)
   server=AuthenticatedReadChannel(credential,operation,tls_context=context,bind_address=('0.0.0.0',0));fixture.addCleanup(server.server_close)
   certificate=ssl.DER_cert_to_PEM_cert(client.get_ca_certs(binary_form=True)[0])
   # Owner hands only channel credential/public certificate to its admitted peer.
@@ -53,6 +57,7 @@ def serve(*,refuse_event_triggers=False,refuse_helper_public_grant=False,refuse_
   else:
    fixture.assertIsInstance(server._outcome,Ok);fixture.assertIsNone(server._failure)
    observations['nativeConsumerAndBothSourceCutsBeforeWire']=True
+   observations['bothRoleCatalogLocksAndOpposingWritersBeforeWire']=True
   print(json.dumps(observations),flush=True)
  finally:
   failures=[]
