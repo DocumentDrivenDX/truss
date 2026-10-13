@@ -1,0 +1,7 @@
+test_caller_cut_blocks_all_delegated_executor_writes (test_security_guarded_subject_native.GuardedSubjectTests.test_caller_cut_blocks_all_delegated_executor_writes)
+@covers US-056-AC2; @covers US-056-AC9; two-host component. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 9.604s
+
+OK

@@ -1,0 +1,31 @@
+{
+  "nativeTests": 1,
+  "seconds": 9.604,
+  "postgresql": "18.6",
+  "events": [
+    "UPDATE",
+    "DELETE",
+    "INSERT",
+    "TRUNCATE"
+  ],
+  "sqlstates": [
+    "55P03",
+    "55P03",
+    "55P03",
+    "55P03"
+  ],
+  "mechanism": "Caller-held ShareLock conflicts with delegated executor write lock before trigger entry. Each native write has100ms lock_timeout inside rollback-restored savepoint.",
+  "outcome": "10 original objects unchanged; original evaluator returns r1 with salary Withheld.",
+  "acceptanceCriteria": [
+    "US-056-AC2",
+    "US-056-AC9"
+  ],
+  "limits": "Component only. Not55000 same-backend trigger evidence, authority issuance, complete writer/DDL closure or backend promotion.",
+  "initialFailures": "Initial expectation incorrectly predicted trigger55000 before caller/executor lock conflict. Both failed runs retained; second exposes original statement timeout.",
+  "pins": {
+    "initial-failure.log": "d3a6a49151685e3de011edc584ab6a48b0e721667446c09be67d87a8914716b6",
+    "diagnostic-failure.log": "12c641f8cad339a7e892f35c3eb8e09343b77c8f7770b8aaa554c517bb996ca3",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "native.log": "2e35b0e058b3ced5e9b3afa3c78b3cea9b174aa0430d9e6c74c62703c0160ce2"
+  }
+}

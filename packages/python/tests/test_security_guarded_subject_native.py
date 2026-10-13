@@ -76,3 +76,33 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
     with self.assertRaisesRegex(ValueError,'Exact bounded caller fact column comparisons required'):
      subject.run_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,invalid)
     operation.assert_not_called();prepare.assert_not_called()
+
+ def test_caller_cut_blocks_all_delegated_executor_writes(self):
+  """@covers US-056-AC2; @covers US-056-AC9; two-host component."""
+  import psycopg
+  import security_catalog_read as read
+  mapping,c,h,t,selection,inspector,relations=self.guarded_setup()
+  original_read=subject.run_owned_catalog_resource_read
+  original_run=read.subprocess.run;states=[]
+  def evaluate(*args,**kwargs):
+   for command in ('UPDATE truss.object SET props=props','DELETE FROM truss.object','INSERT INTO truss.object SELECT * FROM truss.object','TRUNCATE truss.object CASCADE'):
+    self.admin.execute('SAVEPOINT composed_writer')
+    self.admin.execute("SET LOCAL lock_timeout='100ms'")
+    try:
+     with self.assertRaises(psycopg.errors.LockNotAvailable) as caught:self.admin.execute(command)
+     self.assertEqual(caught.exception.diag.message_primary,'canceling statement due to lock timeout')
+     states.append(caught.exception.sqlstate)
+    finally:
+     self.admin.execute('ROLLBACK TO composed_writer');self.admin.execute('RELEASE composed_writer')
+   self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(10,))
+   return original_run(*args,**kwargs)
+  def delegated(*args,**kwargs):
+   with patch.object(read.subprocess,'run',evaluate):
+    value=original_read(*args,**kwargs)
+   if not isinstance(value,Ok):raise AssertionError(str(self.host._custody.last_attempt.error))
+   return value
+  with patch.object(subject,'run_owned_catalog_resource_read',delegated):
+   result=subject.run_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations)
+  self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(states,['55P03']*4)
+  self.assertEqual([r['key'] for r in result.value['rows']],[[{'string':'r1'}]])
+  self.assertEqual(result.value['rows'][0]['output'][0]['disposition'],'withheld')
