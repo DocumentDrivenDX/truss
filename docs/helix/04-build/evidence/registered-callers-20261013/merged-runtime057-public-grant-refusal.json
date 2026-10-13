@@ -1,0 +1,36 @@
+{
+  "ownerMode": "refuse-helper-public-grant",
+  "scope": "Owned external peer TLS publication; database stays in service-private local runtime, not a separate network database",
+  "controls": {
+    "peerTopology": {
+      "noMounts": true,
+      "noPublishedPorts": true,
+      "readOnlyRootfs": true,
+      "allCapabilitiesDropped": true,
+      "noDeclaredSqlCredential": true,
+      "originalNativeSqlPort": 5432
+    },
+    "externalPeer": {
+      "unknownBearerDenied": true,
+      "verifiedTls13": true,
+      "decision": null,
+      "genericNativeRefusal": true,
+      "replayDenied": true,
+      "peerServiceTcpSqlDenied": true
+    },
+    "originalService": {
+      "operationCalls": 1,
+      "channelConsumed": true,
+      "nativeEventTriggerDriftRefused": false,
+      "nativeHelperPublicGrantRefused": true,
+      "nativeHelperOwnerRefused": false,
+      "encodingCalls": 0
+    }
+  },
+  "cleanup": {
+    "truss-channel-4907dca53c2b-peer": true,
+    "truss-channel-4907dca53c2b-service": true,
+    "truss-channel-4907dca53c2b": true
+  },
+  "status": "pass"
+}

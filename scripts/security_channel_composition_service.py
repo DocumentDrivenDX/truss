@@ -46,7 +46,7 @@ def serve(*,refuse_event_triggers=False,refuse_helper_public_grant=False,refuse_
   observations={'operationCalls':len(calls),'channelConsumed':server._consumed}
   if any(flags):
    fixture.assertIsInstance(server._outcome,Error);fixture.assertIsNotNone(server._failure)
-   primary=fixture.host._custody.last_attempt.error if refuse_event_triggers else h._custody.last_attempt.error
+   primary=fixture.host._custody.last_attempt.error
    fixture.assertEqual(str(primary),'Original native event trigger execution required' if refuse_event_triggers else ('Exact installed catalog subject helper snapshot required' if refuse_helper_owner else 'Exact installed catalog subject helper ACL required'))
    observed_encoder.assert_not_called()
    observations.update({'nativeEventTriggerDriftRefused':refuse_event_triggers,'nativeHelperPublicGrantRefused':refuse_helper_public_grant,'nativeHelperOwnerRefused':refuse_helper_owner,'encodingCalls':0})

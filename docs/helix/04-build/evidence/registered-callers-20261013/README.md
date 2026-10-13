@@ -52,3 +52,5 @@ additions. Security implementation sources are unchanged; native six-case replay
 passes58.657s and external registered producer/TLS/all-three cleanup passes.
 Separate merged-runtime057-native.log and merged-runtime057-peer.json/.log retain
 this newer tuple without rewriting original0.55 evidence or promoting admission.
+
+The merged runtime 0.57 external helper PUBLIC-grant and helper-owner refusal replays both pass. The registered wrapper refuses on the executor; the owner fixture now reads that exact private diagnostic. Both receipts retain generic wire refusal, zero encoding, replay denial, and complete owned cleanup. These checks do not promote backend acceptance.
