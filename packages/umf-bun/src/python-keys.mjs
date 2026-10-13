@@ -10,8 +10,11 @@ try {
   if(Buffer.byteLength(input.sourceText)*input.requests.length>4194304)throw Error('aggregate source budget');
   const parts=[];let total=64;
   for(const request of input.requests){
-    if(Object.keys(request).sort().join(',')!=='identity,values')throw Error('key request shape');
-    const receipt=encodeCoreKeyTuple(source,request.identity,request.values);
+    const shape=Object.keys(request).sort().join(',');
+    if(shape!=='identity,values'&&shape!=='identity,literalTexts')throw Error('key request shape');
+    if(shape==='identity,literalTexts'&&(!Array.isArray(request.literalTexts)||request.literalTexts.length<1||request.literalTexts.length>32||request.literalTexts.some(v=>typeof v!=='string')))throw Error('literal input shape');
+    const values=shape==='identity,literalTexts'?request.literalTexts.map(text=>readJsonValue(text,'json')):request.values;
+    const receipt=encodeCoreKeyTuple(source,request.identity,values);
     const bytes=readCoreKeyTupleBytes(receipt,source);
     if(Buffer.from(bytes).toString('hex')!==receipt.bytesHex)throw Error('original key byte correspondence');
     const part=JSON.stringify(JSON.stringify(receipt));total+=Buffer.byteLength(part)+1;

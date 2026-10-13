@@ -28,7 +28,7 @@
   "files": {
     "producer.js": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
     "producer-manifest.json": "f674dd05d79d42c22838c145db87897c3e7f19d95669a1f342a9811b236f8c31",
-    "bridge.mjs": "b83d4e5cda8d76201759d3eaf85afe3ba91133fe0baa1d9c4b63ce5a7de3f133",
+    "bridge.mjs": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
     "licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
     "licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
     "licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
