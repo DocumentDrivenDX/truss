@@ -15,9 +15,10 @@
       }
     },
     "archiveSha256": "d25f545ca0988b66b42aad32c1942f8d5fd04174a2f31f2d3b887c097c1ddad4",
-    "bundleSha256": "7967767dd926d71733f4c24c4b4545ba7c87ff883900a7501aa92bae8beee064",
+    "bundleSha256": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
     "operations": [
       "readDocument",
+      "validateDocument",
       "inspectCoreSchemaProperties",
       "inspectCoreKeys",
       "inspectCoreRelationships",
@@ -32,14 +33,16 @@
     "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
   },
   "files": {
+    "acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
     "licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
     "licenses/fast-deep-equal.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
     "licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
     "licenses/json-schema-traverse.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
     "licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
     "licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
-    "producer-manifest.json": "2bb798f3deddcbbb7d1b4634b73f2b2a3b791725a5d43c5b0a46ed109053fc41",
-    "producer.js": "7967767dd926d71733f4c24c4b4545ba7c87ff883900a7501aa92bae8beee064",
+    "preparation.mjs": "2ccfce14207584cceb568069e5465efbd290617000466d8b04620274ff65099c",
+    "producer-manifest.json": "3123647a3443894052b670de8444e6ba0197abd83f647819faaad01fcaaedc81",
+    "producer.js": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
     "receiver.mjs": "08d0ca7d3122374505287a016c66c47b864c0feb17a45d5c2c9687afb8994443"
   },
   "scope": "Original core0.8 observation source only. No native ingress, report acceptance, migration, issuer authentication or protected execution."

@@ -40,8 +40,8 @@ from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
-from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, _require_original_preparation
-from ._catalog_support import evaluate_catalog_support, RETAINED_METADATA_PROFILE, SCALAR_PROFILE, NAMED_SCALAR_PROFILE, NAMED_RELATIONSHIP_PROFILE
+from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, prepare_core08_acceptance, _require_original_preparation
+from ._catalog_support import evaluate_catalog_support, CORE08_PROFILE, RETAINED_METADATA_PROFILE, SCALAR_PROFILE, NAMED_SCALAR_PROFILE, NAMED_RELATIONSHIP_PROFILE
 from ._catalog_report_semantics import compose_original_catalog_report_semantics, canonical_numeric_free
 
 
@@ -129,15 +129,16 @@ def _release():
     for entry in json.loads(public_profiles)['profiles']:
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json','upgrade-source-026.json','upgrade-source-027.json','upgrade-source-028.json','upgrade-source-029.json','upgrade-source-030.json','upgrade-source-031.json','upgrade-source-032.json','upgrade-source-033.json'):
+    for name in ('preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json','upgrade-source-026.json','upgrade-source-027.json','upgrade-source-028.json','upgrade-source-029.json','upgrade-source-030.json','upgrade-source-031.json','upgrade-source-032.json','upgrade-source-033.json','upgrade-source-034.json'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original migration/preparation baseline required')
     return manifest,sha256(original).hexdigest(),tuple(sources)
 
 
-def _configuration():
+def _configuration(source_version="0.7.0"):
     _release()
     configuration=json.loads(files('truss').joinpath('_catalog_runtime','preparation-baseline.json').read_bytes())
-    configuration['supportProfile']=dict(RETAINED_METADATA_PROFILE)
+    if source_version not in ('0.7.0','0.8.0'):raise ValueError('Explicit original source version required')
+    configuration['supportProfile']=dict(CORE08_PROFILE if source_version=='0.8.0' else RETAINED_METADATA_PROFILE)
     return configuration
 
 
@@ -317,10 +318,12 @@ class CatalogReferenceAssembly:
             return AssemblyDisposed()
     def _available(self):
         if self._disposed:raise ValueError('Assembly disposed')
-    def prepare_catalog(self,documents: tuple[CatalogDocument,...],*,bun_executable: str='bun') -> PreparedAcceptance:
+    def prepare_catalog(self,documents: tuple[CatalogDocument,...],*,bun_executable: str='bun',source_version:str='0.7.0') -> PreparedAcceptance:
         with self._lock:
             self._available()
-            prepared=prepare_acceptance(documents,canonical_numeric_free(_configuration()),bun_executable=bun_executable)
+            configuration=_configuration(source_version)
+            producer=prepare_core08_acceptance if source_version=='0.8.0' else prepare_acceptance
+            prepared=producer(documents,canonical_numeric_free(configuration),bun_executable=bun_executable)
             return prepared
     @_active_operation
     def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None) -> Outcome[PendingCatalogInstallation]:
@@ -350,14 +353,14 @@ class CatalogReferenceAssembly:
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.34 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.35 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
         return self._host._run_operation(transaction,install)
     @_active_operation
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
-        """Apply supported additive .23 through .32 -> .33 upgrades; caller settles it.
+        """Apply supported additive .23 through .34 -> .35 upgrades; caller settles it.
 
         Requires a direct trusted installation administrator and quiescence.
         Native NOWAIT fencing refuses active consumers without internal retries.
@@ -391,7 +394,10 @@ class CatalogReferenceAssembly:
         supported.add((previous_032['releaseId'],sha256(previous_032_raw).hexdigest()))
         previous_033_raw=bundled.joinpath('upgrade-source-033.json').read_bytes()
         previous_033=json.loads(previous_033_raw)
+        previous_034_raw=bundled.joinpath('upgrade-source-034.json').read_bytes()
+        previous_034=json.loads(previous_034_raw)
         supported.add((previous_033['releaseId'],sha256(previous_033_raw).hexdigest()))
+        supported.add((previous_034['releaseId'],sha256(previous_034_raw).hexdigest()))
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
@@ -448,14 +454,15 @@ class CatalogReferenceAssembly:
             if (active_release,active_digest) not in supported or layout!=manifest['layoutProfile'] or configuration not in source_configurations:
                 raise ValueError('Exact supported .23/.24/.25/.26/.27/.28/.29/.30/.31/.32/.33 installation and preparation required')
             if has_ledger:signatures.append('truss.runtime_current_installation()')
-            if active_release in ('truss-catalog-runtime/0.26-candidate','truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate'):
+            if active_release in ('truss-catalog-runtime/0.26-candidate','truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate'):
                 signatures.extend(('truss.query_binding(jsonb,int,int,int,text,text)','truss.query_scope(jsonb)','truss.query_objects(jsonb,int)'))
-            if active_release in ('truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate'):signatures.append('truss.query_numeric_value(text,text)')
-            if active_release in ('truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate'):signatures.append('truss.query_edges(jsonb,int)')
-            if active_release in ('truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate'):signatures.append('truss.query_page_objects(jsonb,int,text)')
-            if active_release in ('truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate'):signatures.append('truss.feed_reached(text,bytea,int,text,text)')
-            if active_release=='truss-catalog-runtime/0.33-candidate':
+            if active_release in ('truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate'):signatures.append('truss.query_numeric_value(text,text)')
+            if active_release in ('truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate'):signatures.append('truss.query_edges(jsonb,int)')
+            if active_release in ('truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate'):signatures.append('truss.query_page_objects(jsonb,int,text)')
+            if active_release in ('truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate'):signatures.append('truss.feed_reached(text,bytea,int,text,text)')
+            if active_release in ('truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate'):
                 signatures.extend(('truss.query_object_attribution(jsonb,int,bigint)','truss.query_complete_related_keys(jsonb,int,int)'))
+            if active_release=='truss-catalog-runtime/0.34-candidate':signatures.append('truss.query_object_times(jsonb,int,bigint)')
             original_routines=[]
             for signature in signatures:
                 cursor.execute('SELECT oid,proowner,proacl FROM pg_proc WHERE oid=to_regprocedure(%s)',(signature,),prepare=False)
@@ -535,7 +542,7 @@ class CatalogReferenceAssembly:
         def produce(ordinal):
             require_original()
             choices={key:value for key,value in prepared.input().items() if key not in ('interfaceVersion','documents')}
-            if choices not in (_configuration(),{**_configuration(),'supportProfile':dict(NAMED_RELATIONSHIP_PROFILE)}):reject('unsupported_profile','Exact selected catalog preparation required')
+            if choices not in (_configuration(),_configuration('0.8.0'),{**_configuration(),'supportProfile':dict(NAMED_RELATIONSHIP_PROFILE)}):reject('unsupported_profile','Exact selected catalog preparation required')
             try:valid_request=type(request_key) is str and 1<=len(request_key.encode('utf8'))<=1024 and '\0' not in request_key
             except UnicodeError:valid_request=False
             if not valid_request:reject('invalid_input','Stable request key required')

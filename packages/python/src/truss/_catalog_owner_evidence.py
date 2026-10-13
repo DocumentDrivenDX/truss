@@ -24,10 +24,10 @@ def require_catalog_owner_evidence(prepared, evidence):
             'scalarProfile':('scalar-types','umf-scalar-type-inspection'),
             'membersProfile':('record-members','umf-record-members-inspection'),
             'referenceLinksProfile':('reference-links','umf-reference-links-inspection')}
-    from .preparation import _release
-    root,_=_release()
+    from .preparation import _release_for_prepared
+    root,manifest=_release_for_prepared(prepared)
     for name,(mode,identity) in owners.items():
-        owner=json.loads((root/'owners'/mode/'producer-manifest.json').read_bytes())
+        owner=manifest['owner'] if root.name=='_umf_core08' else json.loads((root/'owners'/mode/'producer-manifest.json').read_bytes())
         if collection.get(name)!={'identity':identity,'version':owner['revision'],'sha256':owner['bundleSha256']}:
             raise ValueError('Exact packaged owner observation profile required')
     observations=collection.get('observations')

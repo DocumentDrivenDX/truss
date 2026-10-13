@@ -92,7 +92,7 @@ ALLOWED = {
     'assembly': {'truss.catalog_runtime','__future__', 'typing', 'dataclasses', 'threading', 'truss.contracts', 'truss.assembly_contracts', 'truss.execution', 'truss.psycopg_host', 'truss.installation'},
     'assembly_contracts': {'dataclasses', 'typing', 'truss.contracts'},
     '_umf_release': set(),
-    'preparation': {'weakref', 'dataclasses', 'hashlib', 'pathlib', 'base64', 'json', 'shutil', 'subprocess', 'selectors', 'tempfile', 'time', 'truss._umf_release', 'truss._acceptance_json'},
+    'preparation': {'weakref', 'dataclasses', 'hashlib', 'pathlib', 'base64', 'json', 'shutil', 'subprocess', 'selectors', 'tempfile', 'time', 'truss._umf_release', 'truss._core08_catalog_release', 'truss._acceptance_json'},
     '_acceptance_json': {'json'},
     '_catalog_completion': {'dataclasses','json','weakref','truss._catalog_report','truss.preparation'},
     '_catalog_support': {'base64','hashlib','importlib.resources','json','truss.preparation','truss._catalog_owner_evidence','truss._owner_evidence_json'},

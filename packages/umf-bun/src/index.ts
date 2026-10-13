@@ -115,3 +115,26 @@ export async function loadUmfRecordTypeJournalProducer(directory:string){
  const {hash,captured}=await loadPinnedFunctions(directory,UMF_RECORD_TYPE_JOURNAL_SOURCE,'record-type-journals',['inspectCoreRecordTypeJournal']);
  return registerAssertionOwner(Object.freeze({sourceRevision:UMF_RECORD_TYPE_JOURNAL_SOURCE,bundleSha256:hash,inspectRecordTypeJournal:captured.inspectCoreRecordTypeJournal}),'record-type-journals');
 }
+
+/** Separate current original0.8 catalog owner; no legacy profile replacement. */
+export const UMF_CORE08_CATALOG_SOURCE='7c0f0c98beee2cc1a5a407992b5c53cc2616da8e';
+export async function loadCore08CatalogOwners(directory:string){
+ const revision=UMF_CORE08_CATALOG_SOURCE;
+ const {hash,captured}=await loadPinnedFunctions(directory,revision,'core08-catalog',[
+  'readDocument','validateDocument','inspectCoreSchemaProperties','inspectCoreKeys','inspectCoreRelationships',
+  'inspectCoreElementKind','inspectCoreNullability','inspectCoreCardinality','inspectCoreFacets',
+  'inspectCoreScalarType','inspectCoreRecordMembers','inspectCoreReferenceLinks']);
+ const pin={sourceRevision:revision,bundleSha256:hash};
+ const record=Object.freeze({...pin,inspect(originalText:string){
+  if(typeof originalText!=='string'||Buffer.byteLength(originalText)>1048576)throw Error('Original document bound');
+  const source=captured.readDocument(originalText,'json');if(source.umf!=='0.8.0')throw Error('Unsupported original UMF version');
+  const sourceValidation=captured.validateDocument(source);
+  return {originalText,source,sourceValidation,transition:null,targetValidation:sourceValidation,target:source};
+ }});
+ return Object.freeze({record,
+  declarations:registerAssertionOwner(Object.freeze({...pin,inspectSchemaProperties:captured.inspectCoreSchemaProperties,inspectKeys:captured.inspectCoreKeys,inspectRelationships:captured.inspectCoreRelationships}),'declarations'),
+  fields:registerAssertionOwner(Object.freeze({...pin,inspectKind:captured.inspectCoreElementKind,inspectNullability:captured.inspectCoreNullability,inspectCardinality:captured.inspectCoreCardinality,inspectFacets:captured.inspectCoreFacets}),'assertion-fields'),
+  scalars:registerAssertionOwner(Object.freeze({...pin,inspectScalarType:captured.inspectCoreScalarType}),'scalar-types'),
+  members:registerAssertionOwner(Object.freeze({...pin,inspectRecordMembers:captured.inspectCoreRecordMembers}),'record-members'),
+  links:registerAssertionOwner(Object.freeze({...pin,inspectReferenceLinks:captured.inspectCoreReferenceLinks}),'reference-links')});
+}

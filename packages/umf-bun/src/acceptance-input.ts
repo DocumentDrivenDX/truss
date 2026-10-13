@@ -11,8 +11,8 @@ export class AcceptanceInputInspectionError extends Error {
  constructor(readonly reason:'schema'|'artifact_integrity'|'document_identity'|'resource'|'document_encoding'|'source_custody'){super(reason)}
 }
 /** dependenciesPackage is trusted host startup configuration, never document input. */
-export async function createAcceptanceInputInspector(dependenciesPackage:string){
- const schemaBytes=await readFile(new URL('../../../docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json',import.meta.url));
+export async function createAcceptanceInputInspector(dependenciesPackage:string,schemaUrl:URL=new URL('../../../docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json',import.meta.url)){
+ const schemaBytes=await readFile(schemaUrl);
  if(digest(schemaBytes)!==SCHEMA_SHA)throw Error('Original acceptance schema pin mismatch');
  const require=createRequire(dependenciesPackage);const Ajv=require('ajv/dist/2020').default;
  const validate=new Ajv({strict:true}).compile(JSON.parse(schemaBytes.toString('utf8')));

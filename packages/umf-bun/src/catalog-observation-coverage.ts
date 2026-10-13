@@ -1,18 +1,20 @@
 /** Observation correspondence only: never an enforcement or complete assertion report. */
 import {createHash} from 'node:crypto';
-import {UMF_SCALAR_TYPE_SOURCE,UMF_RECORD_MEMBERS_SOURCE,UMF_REFERENCE_LINKS_SOURCE} from './index';
+import {UMF_CORE08_CATALOG_SOURCE,UMF_SCALAR_TYPE_SOURCE,UMF_RECORD_MEMBERS_SOURCE,UMF_REFERENCE_LINKS_SOURCE} from './index';
 import type {createCatalogInputPreparation} from './catalog-input';
 import {requireOriginalCatalogObservationCollection,type collectCatalogAssertionObservations} from './catalog-assertion-observations';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
 type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
 export function assessCatalogObservationCoverage(prepared:Prepared,collection:Collection){
  requireOriginalCatalogObservationCollection(prepared,collection);
+ const current=prepared.umfProfile.version===UMF_CORE08_CATALOG_SOURCE&&prepared.documents.every(d=>d.umfVersion==='0.8.0');
+ if(current)for(const profile of [collection.profile,collection.fieldProfile,collection.scalarProfile,collection.membersProfile,collection.referenceLinksProfile])if(!profile||profile.version!==UMF_CORE08_CATALOG_SOURCE||profile.sha256!==prepared.umfProfile.sha256)throw Error('Original current observation bundle required');
  if(!collection.fieldProfile)throw Error('Complete Field observation bundle required');
  for(const [profile,identity] of [[collection.profile,'umf-declaration-inspection'],[collection.fieldProfile,'umf-field-assertion-inspection']] as const)
   if(profile.identity!==identity||profile.version!==prepared.umfProfile.version||!/^[0-9a-f]{64}$/.test(profile.sha256))throw Error('Original observation profile correspondence required');
- if(collection.scalarProfile&&(collection.scalarProfile.identity!=='umf-scalar-type-inspection'||collection.scalarProfile.version!==UMF_SCALAR_TYPE_SOURCE||!/^[0-9a-f]{64}$/.test(collection.scalarProfile.sha256)))throw Error('Original scalar observation profile correspondence required');
- if(collection.membersProfile&&(collection.membersProfile.identity!=='umf-record-members-inspection'||collection.membersProfile.version!==UMF_RECORD_MEMBERS_SOURCE||!/^[0-9a-f]{64}$/.test(collection.membersProfile.sha256)))throw Error('Original membership observation profile correspondence required');
- if(collection.referenceLinksProfile&&(collection.referenceLinksProfile.identity!=='umf-reference-links-inspection'||collection.referenceLinksProfile.version!==UMF_REFERENCE_LINKS_SOURCE||!/^[0-9a-f]{64}$/.test(collection.referenceLinksProfile.sha256)))throw Error('Original reference-link observation profile correspondence required');
+ if(collection.scalarProfile&&(collection.scalarProfile.identity!=='umf-scalar-type-inspection'||collection.scalarProfile.version!==(current?UMF_CORE08_CATALOG_SOURCE:UMF_SCALAR_TYPE_SOURCE)||!/^[0-9a-f]{64}$/.test(collection.scalarProfile.sha256)))throw Error('Original scalar observation profile correspondence required');
+ if(collection.membersProfile&&(collection.membersProfile.identity!=='umf-record-members-inspection'||collection.membersProfile.version!==(current?UMF_CORE08_CATALOG_SOURCE:UMF_RECORD_MEMBERS_SOURCE)||!/^[0-9a-f]{64}$/.test(collection.membersProfile.sha256)))throw Error('Original membership observation profile correspondence required');
+ if(collection.referenceLinksProfile&&(collection.referenceLinksProfile.identity!=='umf-reference-links-inspection'||collection.referenceLinksProfile.version!==(current?UMF_CORE08_CATALOG_SOURCE:UMF_REFERENCE_LINKS_SOURCE)||!/^[0-9a-f]{64}$/.test(collection.referenceLinksProfile.sha256)))throw Error('Original reference-link observation profile correspondence required');
  const expected:{documentIndex:number;operation:string;identity:unknown;basis:'original'|'reversible_target';field:boolean}[]=[];
  const add=(documentIndex:number,operation:string,identity:unknown,basis:'original'|'reversible_target',field=false)=>{
   if(expected.length>=4096)throw Error('Observation coverage component capacity exceeded');expected.push({documentIndex,operation,identity,basis,field});
