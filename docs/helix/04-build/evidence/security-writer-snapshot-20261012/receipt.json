@@ -17,5 +17,6 @@
     }
   ],
   "nextRequirement": "Supported coordinator must acquire original head/guard before issuing authorization-dependent SQL, keep them through all effects, authenticate issuer/caller and prove all native writer/routes; trigger guard alone cannot supply freshness.",
-  "review": "Astra Ultra: no actionable native/formal findings; independent1UNSAT2SAT replay byte-identical and source hashes match. Final head-before-guard correction applied."
+  "review": "Astra Ultra: no actionable native/formal findings; independent1UNSAT2SAT replay byte-identical and source hashes match. Final head-before-guard correction applied.",
+  "postmergeValidation": "Final integrated main:11 native tests pass,856 Python module imports pass boundary check"
 }
