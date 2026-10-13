@@ -1,0 +1,107 @@
+{
+  "matrix": "UMF docs/helix/03-test/security/cases.json",
+  "originalRequiredScope": 132,
+  "casePromotions": 0,
+  "corrections": [
+    {
+      "receipt": "docs/helix/04-build/evidence/security-publication-registration-20261012/receipt.json",
+      "previousReceiptSha256": "97f907c4addaca42fffe8f609f6bb4307560ab9cb78f4c33f87f64007f4c71dd",
+      "previousLinks": [
+        {
+          "case": "truss.L03",
+          "covers": "US-057-AC2",
+          "caseClosed": false
+        },
+        {
+          "case": "truss.L11",
+          "covers": "US-057-AC7",
+          "caseClosed": false
+        },
+        {
+          "case": "truss.L12",
+          "covers": "US-057-AC8",
+          "caseClosed": false
+        }
+      ]
+    },
+    {
+      "receipt": "docs/helix/04-build/evidence/security-publication-settlement-20261012/receipt.json",
+      "previousReceiptSha256": "5ae76ee6670f2d36cfe42e017be6740404a9b7ef65c70a59278aae93bba25d3a",
+      "previousLinks": [
+        {
+          "case": "truss.L11",
+          "covers": "US-057-AC7",
+          "caseClosed": false
+        },
+        {
+          "case": "truss.L12",
+          "covers": "US-057-AC8",
+          "caseClosed": false
+        }
+      ]
+    },
+    {
+      "receipt": "docs/helix/04-build/evidence/security-authority-change-operation-20261012/receipt.json",
+      "previousReceiptSha256": "e89fc12873ea130c31294499d754c3d305c87452a1790936dc23a86b25e95cc3",
+      "previousLinks": [
+        {
+          "case": "truss.L03",
+          "covers": "US-057-AC2",
+          "caseClosed": false
+        },
+        {
+          "case": "truss.L12",
+          "covers": "US-057-AC8",
+          "caseClosed": false
+        },
+        {
+          "case": "truss.L13",
+          "covers": "US-057-AC3",
+          "caseClosed": false
+        }
+      ]
+    },
+    {
+      "receipt": "docs/helix/04-build/evidence/security-authority-action-boundary-20261012/receipt.json",
+      "previousReceiptSha256": "b873752d313775db8cea7c21a22477aeebc40f65bab78397797b1970145ffd41",
+      "previousLinks": [
+        {
+          "case": "truss.B05",
+          "covers": "US-056-AC5",
+          "caseClosed": false
+        },
+        {
+          "case": "truss.L11",
+          "covers": "US-057-AC7",
+          "caseClosed": false
+        },
+        {
+          "case": "truss.L12",
+          "covers": "US-057-AC8",
+          "caseClosed": false
+        }
+      ]
+    }
+  ],
+  "result": "Four component receipt mappings corrected; does not audit all historical receipts or prove backend acceptance.",
+  "matrixSha256": "37308740d5d8b57f6f4647c1a44feee71cbfde02d8f5bee1334299654a610ba9",
+  "requiredByBackend": {
+    "semantic": 12,
+    "pg-raw": 30,
+    "truss": 30,
+    "delta-raw": 30,
+    "ashlar": 30
+  },
+  "missingExercisingCommandsByBackend": {
+    "pg-raw": 16,
+    "truss": 30,
+    "delta-raw": 30,
+    "ashlar": 30
+  },
+  "nextIntegrationGap": "Weft compile.rs unconditional refusal: physical/result/dependency coverage validation not implemented. Declaration checker results alone cannot qualify native/security lowering.",
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "result": "No actionable findings in four corrected receipts; five case/AC prerequisite links agree, prior hashes/mappings match, native evidence unchanged,132 required/106 missing commands/zero promotions verified. Readonly; no native rerun."
+  }
+}

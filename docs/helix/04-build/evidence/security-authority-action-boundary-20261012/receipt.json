@@ -10,16 +10,8 @@
     {
       "case": "truss.B05",
       "covers": "US-056-AC5",
-      "caseClosed": false
-    },
-    {
-      "case": "truss.L11",
-      "covers": "US-057-AC7",
-      "caseClosed": false
-    },
-    {
-      "case": "truss.L12",
-      "covers": "US-057-AC8",
+      "relationship": "component-prerequisite-only",
+      "qualification": "Actual ordinary LOGIN denied private administrative operation. Complete role adoption and pool reset coverage absent.",
       "caseClosed": false
     }
   ],
@@ -28,5 +20,6 @@
     "packages/python/tests/test_security_public_ontology_native.py": "ec9d3d3c454c076eb4dc647a26102ce1253df5faa8371831a43ad2e913471aaa",
     "packages/python/src/truss/_security_authority_change.py": "51d037dbc875b452e8dbdb6bfebd3ec08ed34d942e1f5691301931d6022b1cb8",
     "packages/python/src/truss/_catalog_runtime/manifest.json": "145fd167a0746c7845b1439822cd588359bea678dbfa7b77e4b20c24f8da9e81"
-  }
+  },
+  "traceabilityCorrection": "2026-10-12: direct assertion audit removed unsupported missing-custody/activation-rollback links. Execution/source evidence unchanged; no required case promoted."
 }

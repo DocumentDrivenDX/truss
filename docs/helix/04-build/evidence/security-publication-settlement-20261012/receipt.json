@@ -15,13 +15,10 @@
   },
   "acceptanceTraceability": [
     {
-      "case": "truss.L11",
-      "covers": "US-057-AC7",
-      "caseClosed": false
-    },
-    {
-      "case": "truss.L12",
-      "covers": "US-057-AC8",
+      "case": "truss.L03",
+      "covers": "US-057-AC2",
+      "relationship": "component-prerequisite-only",
+      "qualification": "Original tombstone settlement and unknown-ack reconciliation are coordination prerequisites. Fixture completion is a premise; final release and authenticated recovery owner remain unqualified.",
       "caseClosed": false
     }
   ],
@@ -32,5 +29,6 @@
     "packages/python/tests/test_security_public_ontology_native.py": "e95959ba7e126c6ab8c38047e74265b361308d05747a0f604c0dcc5b57e7d354",
     "scripts/check-module-boundaries.py": "a678d53cf758237ae149b590d29553d4277e2759a515701178a1686d36095fc1",
     "packages/python/src/truss/_catalog_runtime/manifest.json": "145fd167a0746c7845b1439822cd588359bea678dbfa7b77e4b20c24f8da9e81"
-  }
+  },
+  "traceabilityCorrection": "2026-10-12: direct assertion audit removed unsupported missing-custody/activation-rollback links. Execution/source evidence unchanged; no required case promoted."
 }

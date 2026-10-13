@@ -20,16 +20,15 @@
     {
       "case": "truss.L03",
       "covers": "US-057-AC2",
-      "caseClosed": false
-    },
-    {
-      "case": "truss.L12",
-      "covers": "US-057-AC8",
+      "relationship": "component-prerequisite-only",
+      "qualification": "Unsettled claims refuse before physical effects; final protected release and acknowledgment unqualified.",
       "caseClosed": false
     },
     {
       "case": "truss.L13",
       "covers": "US-057-AC3",
+      "relationship": "component-prerequisite-only",
+      "qualification": "Participating role-change generation advance only; complete assignment/subject/attribute writers and invalidation unqualified.",
       "caseClosed": false
     }
   ],
@@ -40,5 +39,6 @@
     "docs/helix/02-design/contracts/installation-policy-generation-advance-v0.3.tombstone.proposal.sql": "d1772dd74faf7a52fd3a86fb7dec0889223a5c2e970c396d9a6f78bdb64c18a6",
     "packages/python/tests/test_security_public_ontology_native.py": "a036cd413fbca42b75c50c68c76675f8a8de6d91636d5b1b45ccdbad0e3f3369",
     "scripts/check-module-boundaries.py": "cd8f5f19028f8c3a31f54c9f51d85289506ce6fc86b81f3e80c555b9b5bba313"
-  }
+  },
+  "traceabilityCorrection": "2026-10-12: direct assertion audit removed unsupported missing-custody/activation-rollback links. Execution/source evidence unchanged; no required case promoted."
 }

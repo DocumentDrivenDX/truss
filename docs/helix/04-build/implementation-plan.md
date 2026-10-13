@@ -6739,7 +6739,7 @@ of the complete shared corpus or broader security compiler.
 
 The private caller-transaction settlement adapter now consumes pinned v0.2 tombstone SQL, checks original installation/profile/generation under head and guard SHARE, confirms exactly one native update and exact stored settled row, and returns pending commit with no release grant. Trusted coordinator identity and conclusively completed/withheld publication remain premises; this is not an authenticated completion service.
 
-[Retained evidence](evidence/security-publication-settlement-20261012/receipt.json) records ten passing native tests, real dropped settlement COMMIT acknowledgment followed by original-token reconciliation, wrong/missing original-field and repeated-settlement refusal preserving caller work, exact wheel sources, and Astra Ultra review. This partially exercises truss.L11/L12 (US-057-AC7/8); no required case is promoted and all132 remain in scope.
+[Retained evidence](evidence/security-publication-settlement-20261012/receipt.json) records ten passing native tests, real dropped settlement COMMIT acknowledgment followed by original-token reconciliation, wrong/missing original-field and repeated-settlement refusal preserving caller work, exact wheel sources, and Astra Ultra review. This is a coordination prerequisite for truss.L03 (US-057-AC2), not execution of that full case; no required case is promoted and all132 remain in scope.
 ### Public exact numeric query increment — 2026-10-12
 
 Runtime0.27 extends the existing public `query_in_transaction` workflow with
@@ -6753,3 +6753,8 @@ Four installed-wheel public query/upgrade tests pass on DocumentDrivenDX
 pgserver-pg18==18.6.1 and psycopg3.3.6, including retained0.26→0.27 data/receipt
 preservation. Astra Ultra approved the implementation and security merge
 intersections. See `evidence/python-exact-query-20261012.json`.
+
+
+### Acceptance traceability correction — 2026-10-12
+
+A direct comparison with UMF's required case assertions found that four recent component receipts linked transaction helper controls to missing-custody and activation-rollback cases without exercising their required behavior. [The correction ledger](evidence/security-acceptance-traceability-audit-20261012/corrections.json) retains prior receipt hashes and links. Receipt mappings now distinguish component prerequisites from complete case execution: durable registration/settlement and authority claim gating support L03 coordination; participating role-change generation advances support only part of L13; ordinary administrative denial supports only part of B05. None proves complete release, full writer participation, activation rollback, retained-owner deletion, or pool reset. Native logs and tested source archives remain unchanged. All132 required cases remain in scope; no case is promoted. Historical component links elsewhere are not comprehensively audited by this correction.
