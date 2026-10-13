@@ -44,7 +44,9 @@
     "scripts/check-module-boundaries.py": "39c6fce1ff41b58308b2925ae07a8207649b460cfaa9e28df2c3cf5a8b2bf45b",
     "docs/helix/04-build/evidence/security-ontology-endpoints-20261013/key_order_proof.py": "00660a414041442b1b0016545afc874f14ed84165da486d4ebe563aa1b70cc6a",
     "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "3beaf9034759cf144276330081e7f6a9ca31386914a63c41137ffa2a84c4d36c",
-    "docs/helix/04-build/implementation-plan.md": "5432b8fe00356d52461ac415be4072d15594d4bcd0890a3d23b452072b2a84a7"
+    "docs/helix/04-build/implementation-plan.md": "5432b8fe00356d52461ac415be4072d15594d4bcd0890a3d23b452072b2a84a7",
+    "docs/helix/04-build/evidence/security-ontology-endpoints-20261013/README.md": "d7610d88b10f1722ddefacfcab2734e9954b0bb1c4049f454b4bc6cddd24b279",
+    "docs/helix/04-build/evidence/security-ontology-endpoints-20261013/receipt.json": "f794fb74ff0c394ce95263d5d3648f59416f89ec9358881703c8441e4d261a25"
   },
   "reviewedOwnerSourceDigests": {
     "crates/weft-core/src/security_ontology.rs": "a1e19a2605a2d247b6c58f252886d0ab45077cd2e3d53f0bffb995a2ae2a7d19",
@@ -98,5 +100,6 @@
     },
     "premiseCheck": "key-order-premise-check.json",
     "review": "Sound conditional equality lemma with satisfiable premises; full array equality assumes the correspondence the Python checks seek to establish. Does not prove source/Python/native refinement, source-side pair semantics, domain/key encoding, issuer, or admission."
-  }
+  },
+  "retainedGovernedEvidenceVerified": true
 }
