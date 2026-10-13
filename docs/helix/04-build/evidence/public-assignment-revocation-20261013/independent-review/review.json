@@ -1,0 +1,41 @@
+{
+  "review": "independent bounded source and retained-native-evidence review",
+  "date": "2026-10-13",
+  "gitHead": "4c4846fad0c1e8ce0a935de4e477a707595c65d6",
+  "status": "no actionable findings in reviewed scope",
+  "scope": "test_fresh_read_after_public_assignment_revocation; test-only integration",
+  "checks": [
+    "Earlier caller and executor transactions settle before the independent public writer transaction.",
+    "Actual assignment_revoker native login is checked as SESSION_USER=CURRENT_USER with superuser and bypass flags false.",
+    "Public key lookup selects Assignment a1; public UpdateObject(active=false, expected_version=1) uses original documents and requires GroupSuccess.",
+    "Writer COMMIT, native IDLE status, and independent native active=false readback precede fresh guarded read.",
+    "Fresh caller and executor transactions reuse original caller, mapping, selection and guard recipes; before r1/Withheld becomes empty rows."
+  ],
+  "nativeEvidence": {
+    "source": "parent-executed retained native evidence, not independently rerun",
+    "postgresql": "18.6",
+    "tests": 1,
+    "seconds": 10.715,
+    "cleanup": {
+      "runtimeExitSucceeded": true,
+      "statusExitCode": 3,
+      "socketAbsent": true,
+      "serverVersion": "18.6"
+    }
+  },
+  "acceptanceScope": "US-057-AC3 / truss.L05 selected prerequisite only; no case promotion",
+  "limits": [
+    "Fixed native fixture with local authentication and trusted administrative issuer/helper configuration.",
+    "No protected public query endpoint or production authentication qualification.",
+    "No concurrent drain acknowledgement, old snapshot/generation, history, cache, streaming or exhaustive lifecycle proof.",
+    "Source, DDL, role, grant and issuer lifetime closure remain open."
+  ],
+  "sha256": {
+    "packages/python/tests/test_security_guarded_subject_native.py": "da94a6ac63346b29df25ef58b7cbce6b971a32f22b8a82a376fd035c8a2e8063",
+    "docs/helix/04-build/evidence/public-assignment-revocation-20261013/receipt.json": "55eedfd48ab29be08a89c661c08e5dce885f24ebecf68cbd4aa3cb215e67a389",
+    "docs/helix/04-build/evidence/public-assignment-revocation-20261013/native.log": "63a3f434753bfeb4409d8ba9d9877f221f0f5ebc6559abe19c20ec39edc86b1c",
+    "docs/helix/04-build/evidence/public-assignment-revocation-20261013/cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "docs/helix/04-build/evidence/public-assignment-revocation-20261013/revocation-decisions.json": "cd7d898df4a986de765436ff94044fc7f5211a8c882de1cdeb5403b5b691e0da",
+    "docs/helix/04-build/evidence/public-assignment-revocation-20261013/module-boundaries.log": "efa0e232ab5c91146d6740d061769d3c05f4aa749fe187654b63b112bb189e3b"
+  }
+}
