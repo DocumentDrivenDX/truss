@@ -11,6 +11,11 @@ export interface SubjectKeyBindingOptions {
     };
     /** Exact original owner functions; shape and output do not authenticate code. */
     readonly owner: OriginalSubjectKeyOwner;
+    /** Original source-bound ontology Subject/Record/Key inspection; no issuer proof. */
+    readonly inspectSubjectKey: (selection: {
+        readonly sourceSha256: string;
+        readonly identity: SubjectKeyBindingOptions['identity'];
+    }) => undefined;
     readonly sourceText: string;
     readonly identity: {
         readonly module: string;

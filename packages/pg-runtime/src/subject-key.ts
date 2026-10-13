@@ -1,5 +1,6 @@
 /** Thin native observation → original semantic owner handoff. No credentials. */
 import {createHash} from 'node:crypto';
+import {types as nativeTypes} from 'node:util';
 import type {NativeConnection} from '@documentdrivendx/truss-postgresql';
 import type {OrdinarySubjectObservation} from './index';
 export interface OriginalSubjectKeyOwner {
@@ -11,6 +12,8 @@ export interface SubjectKeyBindingOptions {
   readonly host:{observeOrdinarySubject:(connection:NativeConnection)=>OrdinarySubjectObservation};
   /** Exact original owner functions; shape and output do not authenticate code. */
   readonly owner:OriginalSubjectKeyOwner;
+  /** Original source-bound ontology Subject/Record/Key inspection; no issuer proof. */
+  readonly inspectSubjectKey:(selection:{readonly sourceSha256:string;readonly identity:SubjectKeyBindingOptions['identity']})=>undefined;
   readonly sourceText:string;
   readonly identity:{readonly module:string;readonly element:string;readonly key:string};
   readonly keyColumns:readonly string[];
@@ -39,6 +42,16 @@ export function createOrdinarySubjectKeyBinding(options:SubjectKeyBindingOptions
  const observe=options.host.observeOrdinarySubject.bind(options.host);
  const read=options.owner.readJsonValue.bind(options.owner),encode=options.owner.encodeCoreKeyTuple.bind(options.owner),bytes=options.owner.readCoreKeyTupleBytes.bind(options.owner);
  const sourceSha256=createHash('sha256').update(sourceText).digest('hex');
+ const inspect=options.inspectSubjectKey;
+ if(typeof inspect!=='function'||nativeTypes.isAsyncFunction(inspect)||nativeTypes.isGeneratorFunction(inspect))return refuse();
+ // Selection is immutable, and a deferred result cannot constitute inspection.
+ const inspected=inspect(Object.freeze({sourceSha256,identity}));
+ if(nativeTypes.isPromise(inspected)){
+  // Ordinary Promise returns are observed. Configured code, including mutated
+  // Promise constructors/species or hidden async wrappers, remains trusted.
+  Promise.prototype.then.call(inspected,undefined,()=>{});return refuse();
+ }
+ if(inspected!==undefined)return refuse();
  return Object.freeze({encode(connection){
   const observation=observe(connection);
   if(JSON.stringify(observation.keyColumns)!==JSON.stringify(columns)||observation.keyValues.length!==encodings.length)return refuse();

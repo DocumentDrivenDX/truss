@@ -1,7 +1,28 @@
 /** Dedicated disposable native fixture; no installed-policy authority. */
 import {createPgConnectionSource,createOrdinarySubjectKeyBinding} from '../packages/pg-runtime/src/index';
 import * as owner from '../packages/python/src/truss/_umf_keys08/producer.js';
+import {createHash} from 'node:crypto';
+const originalRequest=JSON.parse(await Bun.file(import.meta.dir+'/../packages/python/tests/fixtures/security-mapping-request.json').text());
 const originalSourceText=JSON.parse(await Bun.file(import.meta.dir+'/../packages/python/tests/fixtures/security-mapping-request.json').text()).modules[0].documentJson;
+function originalSubjectInspector(sourceText:string){
+ const request=structuredClone(originalRequest);
+ if(sourceText!==originalSourceText){
+  const source=JSON.parse(sourceText);const ref=(element:string)=>({documentId:source.id,moduleId:'m',elementId:element});
+  request.modules[0].documentJson=sourceText;request.modules[0].pin.sha256=createHash('sha256').update(sourceText).digest('hex');
+  const ontology=JSON.parse(request.ontologyJson);ontology.subject=ref('Staff');ontology.entities=[{type:ref('Staff'),keyId:'pk',fields:source.modules[0].elements.filter((e:any)=>e.kind==='field').map((e:any)=>({ref:ref(e.id),protection:'unprotected'}))}];ontology.associations=[];ontology.context=[];
+  request.ontologyJson=JSON.stringify(ontology);
+  const policy=JSON.parse(request.policyJson);policy.rules=[{id:'allow',effect:'permit',actions:['read'],target:[ref('Staff')],condition:{op:'literal',value:true}}];request.policyJson=JSON.stringify(policy);
+  const profile=JSON.parse(request.queryProfileJson);profile.modelPins=[request.modules[0].pin];profile.policySha256=createHash('sha256').update(request.policyJson).digest('hex');profile.ontologySha256=createHash('sha256').update(request.ontologyJson).digest('hex');profile.targets=[ref('Staff')];profile.bindings=[];request.queryProfileJson=JSON.stringify(profile);
+  request.sql='SELECT r.k0 FROM Staff r';request.parameters={};
+ }
+ return (selection:any)=>{
+  const binary=process.env.TRUSS_SUBJECT_KEY_INSPECTOR_BINARY;if(!binary)throw Error('Original subject inspector required');
+  const run=Bun.spawnSync([binary],{stdin:new TextEncoder().encode(JSON.stringify({request,subjectKeyProbe:selection})),stdout:'pipe',stderr:'pipe'});
+  if(run.exitCode!==0)throw Error(new TextDecoder().decode(run.stderr));
+  const response=JSON.parse(new TextDecoder().decode(run.stdout));if(response.securityReady!==false||response.subjectKeyInspectionPassed!==true)throw Error('Original subject inspection refused');
+  return undefined;
+ };
+}
 const config=JSON.parse(await Bun.stdin.text());const cases:string[]=[];
 const refuses=(fn:()=>unknown)=>{let refused=false;try{fn();}catch{refused=true;}if(!refused)throw Error('Observation lifecycle did not refuse');};
 const transaction={isolation:'repeatable_read' as const,accessMode:'read_only' as const};
@@ -15,7 +36,7 @@ async function check(name:string,user:string,options:any,positive:boolean,expect
    if(observed.principal!==user||JSON.stringify(observed.keyColumns)!==JSON.stringify(options.ordinarySubject.keyColumns)||observed.keyValues[0]!=='alice'||observed.keyHex[0]!==Buffer.from('alice').toString('hex'))throw Error('Native subject bytes lost');
    if(!Object.isFrozen(observed)||!Object.isFrozen(observed.keyValues)||!Object.isFrozen(observed.keyHex)||!Object.isFrozen(observed.keyColumns))throw Error('Subject observation mutable');
    if(observed.keyValues.length===1){
-    const binder=createOrdinarySubjectKeyBinding({host,owner,sourceText:originalSourceText,identity:{module:'m',element:'Staff',key:'pk'},keyColumns:['staff_id'],encodings:['string']});
+    const binder=createOrdinarySubjectKeyBinding({host,owner,inspectSubjectKey:originalSubjectInspector(originalSourceText),sourceText:originalSourceText,identity:{module:'m',element:'Staff',key:'pk'},keyColumns:['staff_id'],encodings:['string']});
     const encoded=binder.encode(connection);
     const expected=owner.encodeCoreKeyTuple(owner.readJsonValue(originalSourceText,'json'),{module:'m',element:'Staff',key:'pk'},[{string:'alice'}]);
     if(encoded.bytesHex!==expected.bytesHex||encoded.observation!==observed)throw Error('Original semantic subject key mismatch');
@@ -26,7 +47,7 @@ async function check(name:string,user:string,options:any,positive:boolean,expect
   const result=await connection.execute({sql:'SELECT SESSION_USER::pg_catalog.text AS actor,CURRENT_USER::pg_catalog.text AS effective',parameters:[]});
   if(JSON.stringify(result.rows)!==JSON.stringify([[{state:'text',text:user},{state:'text',text:user}]]))throw Error('Native caller changed');
   await connection.rollback();refuses(()=>host.observeOrdinarySubject(connection));await connection.release();refuses(()=>host.observeOrdinarySubject(connection));await host.close();
- }catch(error){failed=true;if(expected&&!String(error).includes(expected))throw Error('Wrong native refusal: '+name);if(host.quarantinedCount()!==1)throw Error('Uncertain admission lost quarantine');await host.shutdownQuarantinedTransports();}
+ }catch(error){if(positive)throw error;failed=true;if(expected&&!String(error).includes(expected))throw Error('Wrong native refusal: '+name);if(host.quarantinedCount()!==1)throw Error('Uncertain admission lost quarantine');await host.shutdownQuarantinedTransports();}
  if(failed===positive)throw Error('Unexpected native admission: '+name);cases.push(name);
 }
 const observer={schema:'principal_diag',routine:'observe'};
@@ -44,7 +65,7 @@ const typedHost=createPgConnectionSource({...config,user:'principal_alice',max:1
 const typedConnection=await typedHost.source.acquire();await typedConnection.begin(transaction);
 const typedSource=JSON.parse(originalSourceText);const kinds=['string','boolean','integer','decimal','binary'];
 typedSource.modules[0].elements=[{id:'Staff',kind:'record',name:'Staff',members:kinds.map((_,i)=>({module:'m',element:'k'+i})),keys:[{id:'pk',name:'Key',fields:kinds.map((_,i)=>({module:'m',element:'k'+i}))}],extensions:{}},...kinds.map((kind,i)=>({id:'k'+i,name:'k'+i,kind:'field',scalarType:kind,cardinality:'one',nullability:'required',extensions:{},...(kind==='decimal'?{facets:{precision:30,scale:4}}:{})}))];
-const typedBinding=createOrdinarySubjectKeyBinding({host:typedHost,owner,sourceText:JSON.stringify(typedSource),identity:{module:'m',element:'Staff',key:'pk'},keyColumns:['k0','k1','k2','k3','k4'],encodings:kinds.map(()=> 'core-literal-json')});
+const typedBinding=createOrdinarySubjectKeyBinding({host:typedHost,owner,inspectSubjectKey:originalSubjectInspector(JSON.stringify(typedSource)),sourceText:JSON.stringify(typedSource),identity:{module:'m',element:'Staff',key:'pk'},keyColumns:['k0','k1','k2','k3','k4'],encodings:kinds.map(()=> 'core-literal-json')});
 const nativeTypedKey=typedBinding.encode(typedConnection);
 const expectedTypedKey=owner.encodeCoreKeyTuple(typedSource,{module:'m',element:'Staff',key:'pk'},[{string:'Δ\uFEFF'},{boolean:true},{integerToken:'9007199254740993'},{decimalToken:'9007199254740993.0000'},{binaryHex:'0001'}]);
 if(nativeTypedKey.bytesHex!==expectedTypedKey.bytesHex)throw Error('Native typed subject semantic mismatch');
