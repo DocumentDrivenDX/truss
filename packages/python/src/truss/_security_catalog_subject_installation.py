@@ -131,4 +131,7 @@ def verify_registered_catalog_subjects_with_cursor(cursor,subjects,source):
  if _text_rows(cursor,'SELECT installation_id::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton',limit=1)!=[(subjects.installation_id,)]:raise ValueError('Original registered Subject installation required')
  expected=tuple(oid for oid,key in subjects.bindings)
  verify_catalog_subject_helpers_with_cursor(cursor,source.decode(),expected_callers=expected)
+ # Recheck current role flags/reachability; installation-time admission is stale after ALTER ROLE/GRANT.
+ roles=_text_rows(cursor,"SELECT r.oid::pg_catalog.text,r.rolcanlogin::pg_catalog.text,r.rolsuper::pg_catalog.text,r.rolcreatedb::pg_catalog.text,r.rolcreaterole::pg_catalog.text,r.rolreplication::pg_catalog.text,r.rolbypassrls::pg_catalog.text,pg_catalog.pg_has_role(r.oid,c.relowner,'MEMBER')::pg_catalog.text FROM pg_catalog.pg_roles r CROSS JOIN pg_catalog.pg_class c WHERE c.oid OPERATOR(pg_catalog.=) 'truss.object'::pg_catalog.regclass AND r.oid OPERATOR(pg_catalog.=) ANY(%s::pg_catalog.oid[]) ORDER BY r.oid",(list(expected),),256)
+ if roles!=[(str(oid),'true','false','false','false','false','false','false') for oid in expected]:raise ValueError('Original ordinary registered Subject principals required')
  if _text_rows(cursor,'SELECT role_oid::pg_catalog.text,staff_key::pg_catalog.text FROM ONLY truss.catalog_subject_map ORDER BY role_oid',limit=256)!=[(str(oid),key) for oid,key in subjects.bindings]:raise ValueError('Original registered Subject map changed')

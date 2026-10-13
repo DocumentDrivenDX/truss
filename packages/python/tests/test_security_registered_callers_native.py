@@ -62,3 +62,13 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
   self.admin.execute('SET LOCAL search_path=registered_hostile,pg_catalog')
   result=self.publish(h,t,mapping,selection,inspector,relations,cut,self.registered_subjects,delivered)
   self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(delivered,[result.value])
+
+ def test_registered_role_privilege_drift_refuses_before_subject(self):
+  """@covers US-056-AC9; selected role drift, not complete concurrent authority."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup();delivered=[]
+  self.admin.execute(sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)))
+  with patch.object(source.subject,'encode_literal_key_tuple') as encoder,patch.object(source.subject,'run_owned_catalog_resource_read') as evaluator:
+   result=self.publish(h,t,mapping,selection,inspector,relations,cut,self.registered_subjects,delivered)
+   encoder.assert_not_called();evaluator.assert_not_called()
+  self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
+  self.assertEqual(str(self.host._custody.last_attempt.error),'Original ordinary registered Subject principals required')

@@ -1,0 +1,12 @@
+test_changed_registered_staff_binding_refuses_before_subject (test_security_registered_callers_native.RegisteredCallersNativeTests.test_changed_registered_staff_binding_refuses_before_subject) ... ok
+test_hostile_text_domain_cannot_run_in_registered_checker (test_security_registered_callers_native.RegisteredCallersNativeTests.test_hostile_text_domain_cannot_run_in_registered_checker) ... ok
+test_registered_role_privilege_drift_refuses_before_subject (test_security_registered_callers_native.RegisteredCallersNativeTests.test_registered_role_privilege_drift_refuses_before_subject)
+@covers US-056-AC9; selected role drift, not complete concurrent authority. ... ok
+test_three_actual_callers_obey_own_project_membership (test_security_registered_callers_native.RegisteredCallersNativeTests.test_three_actual_callers_obey_own_project_membership)
+@covers US-056-AC2; B01 population prerequisite, not complete backend admission. ... ok
+test_unregistered_extra_helper_grant_refuses_before_subject (test_security_registered_callers_native.RegisteredCallersNativeTests.test_unregistered_extra_helper_grant_refuses_before_subject) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 66.956s
+
+OK
