@@ -37,7 +37,7 @@ from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCap
 from .contracts import CapabilitySelection, TypedIdentity, ProfilePin
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult, OrderKey
 from decimal import Decimal
-from .query import QueryRows,QueryRefused,QueryUnavailable
+from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, _require_original_preparation
@@ -299,6 +299,15 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
             maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=read_profile)
+
+    @_active_operation
+    def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
+                                  limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]:
+        from ._query_runtime import run_query
+        manifest,digest,_=_release()
+        return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
+            maximum_rows=limit+1 if type(limit) is int else 0,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,
+            manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=None,page_size=limit,page_cursor=cursor)
 
     def mutations(self,selection: CapabilitySelection[Literal['mutation']]) -> CapabilityUnavailable:
         with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')

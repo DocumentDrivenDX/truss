@@ -7,12 +7,12 @@ from pathlib import Path
 
 import psycopg
 from adopter_workflow import transaction, success, expect
-from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, ReceiptIncluded, AcceptedDocument
+from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, ReceiptIncluded, AcceptedDocument
 from truss.contracts import MapValue, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
     RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.repeated-relationship-predicates-mean-both')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -119,6 +119,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
         # The original sync has authority inclusion evidence; no replica sync is claimed.
         for case in selected:
             case_input = case_request = case_actor = None
+            cursors = {}
             for step in case['steps']:
                 if step['op'] == 'seed':
                     case_actor = step['as']
@@ -169,7 +170,15 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                 with transaction(people[step['as']], read_only=True) as (assembly, tx):
                     archived=expect(success(assembly.accepted_document_in_transaction(tx,document_id=document_id)),AcceptedDocument)
                     if archived.content!=source:raise AssertionError('Original consumer document bytes differ')
-                    rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id']=='read.key-lookup-whole-entity' else None)), QueryRows)
+                    if 'limit' in step:
+                        cursor = cursors[step['after'][1:]] if 'after' in step else None
+                        rows = expect(success(assembly.query_page_in_transaction(tx,sql=step['sql'],document_ids=(document_id,),limit=step['limit'],cursor=cursor)), QueryPage)
+                        if (rows.next_cursor is not None) != step['expect']['next_cursor']:
+                            raise AssertionError('Original page continuation differs')
+                        if 'save' in step:
+                            cursors[step['save']['cursor']] = rows.next_cursor
+                    else:
+                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id']=='read.key-lookup-whole-entity' else None)), QueryRows)
                 expected = step['expect']
                 actual_rows = [{name: list(value) if type(value) is tuple else value for name, value in zip(rows.columns, row, strict=True)} for row in rows.rows]
                 if actual_rows != expected['rows'] or ('columns' in expected and list(rows.columns) != expected['columns']):

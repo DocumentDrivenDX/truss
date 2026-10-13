@@ -291,9 +291,13 @@ source cell is validated before filtering. Timestamp and binary projections, inc
 `TextValue` carriers with their original exact text; optional fields preserve
 absence and explicit null. Timestamp/binary filters, ordering, grouping, keys and
 parameters remain unsupported. The selected compile/IR/backend interfaces are
-`0.2.1`, with the unchanged SQL dialect `0.2.0`.
+`0.2.2`, with the unchanged SQL dialect `0.2.0`.
 Compiled queries require complete read authority for all modules in each selected
 original document, including modules the SQL does not name.
+
+`query_page_in_transaction(tx, sql=sql, document_ids=(document_id,), limit=100, cursor=None)` returns `QueryPage(columns, rows, catalog_revision, next_cursor)`. Pass `next_cursor` back to continue; `None` means the last page. The same call is available through the compiled-execution capability. Weft resolves the authored primary key, adds key ordering and continuation, and supplies hidden key outputs that Truss removes. The original SQL need not project the key or contain `ORDER BY`.
+
+This public page call initially supports one nonaggregated source with a complete required-string primary key. Caller `ORDER BY`/`LIMIT`, joins and relationship predicates refuse. Cursors bind the original SQL, exact parameters, document selection, connecting person, catalog/installation/release context, limit and resource budgets. Keep those inputs unchanged for continuation. Each page rechecks current authority in the caller's transaction; pages are live, so concurrent changes can affect traversal.
 
 `entity-page` and `related-entity-page` query profiles require complete authored
 keys in `ORDER BY`, an explicit limit and caller-supplied continuation predicates.

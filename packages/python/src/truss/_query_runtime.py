@@ -7,7 +7,7 @@ from types import MappingProxyType
 from typing import Mapping
 from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
-from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable
+from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor
 
 BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.6',
            'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.2'}
@@ -141,7 +141,7 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
 
 
 def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
-              maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor, read_profile):
+              maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor, read_profile, page_size=None, page_cursor=None):
     try:
         valid = type(sql) is str and 1 <= len(sql.encode('utf8')) <= 1048576 and '\0' not in sql
         valid = valid and type(document_ids) is tuple and 1 <= len(document_ids) <= 32 and len(set(document_ids)) == len(document_ids)
@@ -156,9 +156,28 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         return Ok(QueryRefused(code='invalid_query'))
     if any(type(n) is not int for n in (maximum_rows, maximum_scan_rows, maximum_bytes)) or not 1 <= maximum_rows <= 10000 or not 1 <= maximum_scan_rows <= 10000 or not 1 <= maximum_bytes <= 16777216:
         return Ok(QueryRefused(code='limits'))
+    page_state = None
+    if page_size is not None:
+        if type(page_size) is not int or not 1 <= page_size <= 999 or read_profile is not None:
+            return Ok(QueryRefused(code='limits'))
+        if page_cursor is not None:
+            if type(page_cursor) is not QueryPageCursor or type(page_cursor.original_bytes) is not bytes or not 1 <= len(page_cursor.original_bytes) <= 65536:
+                return Ok(QueryRefused(code='invalid_query'))
+            try:
+                page_state = json.loads(page_cursor.original_bytes)
+                if type(page_state) is not dict or set(page_state) != {'profile','context','after'} or page_state['profile'] != 'truss-query-page/0.1' or type(page_state['context']) is not str or type(page_state['after']) is not list or not page_state['after'] or any(type(v) is not str for v in page_state['after']):
+                    return Ok(QueryRefused(code='invalid_query'))
+            except (ValueError, UnicodeError):
+                return Ok(QueryRefused(code='invalid_query'))
     compile_query = compiler()
     if compile_query is None:
         return Ok(QueryUnavailable(reason='compiler'))
+    if page_size is not None:
+        try:
+            import weft
+            compile_query = weft.compile_truss_runtime_page_json
+        except (ImportError, AttributeError):
+            return Ok(QueryUnavailable(reason='compiler'))
     values={}
     for name,value in parameters.items():
         if type(value) is Decimal:
@@ -187,7 +206,22 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                    'target': {'backendId': BACKEND['backendId'], 'backendVersion': BACKEND['backendVersion'],
                               'targetProfile': BACKEND['targetProfile'], 'bindingJson': binding_json, 'bindingSha256': binding_sha}}
         if read_profile is not None:request['readProfile']={'version':'weft-truss-entity-read/0.1.0' if read_profile=='complete-entity' else 'weft-application-read/0.2.0','subset':read_profile}
-        artifact = json.loads(compile_query(json.dumps(request, ensure_ascii=False)))
+        page_metadata = None
+        if page_size is not None:
+            # Each page composes and reauthorizes the current accepted catalog.
+            context = sha256(json.dumps({'sql':sql,'parameters':values,'documents':document_ids,
+                'binding':binding,'actorOid':bundle['actorOid'],'pageSize':page_size},sort_keys=True,ensure_ascii=False,separators=(',',':')).encode('utf8')).hexdigest()
+            if page_state is not None and page_state['context'] != context:
+                return QueryRefused(code='stale_context')
+            response = json.loads(compile_query(json.dumps(request,ensure_ascii=False),page_size,None if page_state is None else page_state['after']))
+            if response.get('status') == 'compiled':
+                if response.get('interfaceVersion') != 'weft-sql-page/0.1' or set(response) != {'interfaceVersion','status','artifact','page'}:
+                    raise ValueError('Exact owner page response required')
+                artifact, page_metadata = response['artifact'], response['page']
+            else:
+                artifact = response
+        else:
+            artifact = json.loads(compile_query(json.dumps(request, ensure_ascii=False)))
         if artifact['status'] != 'compiled':
             cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
             diagnostics = tuple(QueryDiagnostic(code=d['code'], message=d['message']) for d in artifact.get('diagnostics', ()))
@@ -233,6 +267,21 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)", (original_path,), prepare=False)
         if cursor.fetchone() != (original_path,):
             raise ValueError('Caller search path restoration required')
+        if isinstance(result, QueryRows) and page_metadata is not None:
+            visible = page_metadata['visibleOutputs']
+            keys = page_metadata['keyOutputs']
+            if type(visible) is not int or visible < 1 or type(keys) is not list or not keys or keys != list(range(visible,len(result.columns))) or page_metadata['pageSize'] != page_size or len(result.rows)>page_size+1:
+                raise ValueError('Exact owner page output positions and lookahead required')
+            key_types = artifact['logicalPlan']['pageKey']['types']
+            if len(keys)!=len(key_types) or any(t!={'family':'string','facets':{},'nullable':False} for t in key_types) or any(type(row[index]) is not str for row in result.rows for index in keys):
+                raise ValueError('Exact authored string continuation keys required')
+            retained = result.rows[:page_size]
+            next_cursor = None
+            if len(result.rows)>page_size:
+                token = json.dumps({'profile':'truss-query-page/0.1','context':context,'after':[retained[-1][index] for index in keys]},ensure_ascii=False,separators=(',',':')).encode('utf8')
+                if len(token)>65536:return QueryRefused(code='limits')
+                next_cursor = QueryPageCursor(original_bytes=token)
+            return QueryPage(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=binding['catalogRevision'],next_cursor=next_cursor)
         if isinstance(result, QueryRows):
             return QueryRows(columns=result.columns, rows=result.rows, catalog_revision=binding['catalogRevision'])
         return result
