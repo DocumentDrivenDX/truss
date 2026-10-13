@@ -8,8 +8,8 @@ from typing import Mapping
 from .execution import Error, Ok, ExecutionFailure
 from .query import QueryAbsent, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.1.0',
-           'targetProfile': 'truss-runtime-pg18.6/0.1', 'interfaceVersion': 'weft-backend/0.2.0'}
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.2.0',
+           'targetProfile': 'truss-runtime-pg18.6/0.2', 'interfaceVersion': 'weft-backend/0.2.0'}
 
 
 def compiler():
@@ -27,6 +27,10 @@ def _decode_scalar(value, family):
         return value
     if family == 'boolean' and type(value) is bool:
         return value
+    if family == 'decimal' and type(value) is str:
+        result=Decimal(value)
+        if not result.is_finite():raise ValueError('Finite exact decimal result required')
+        return result
     if family == 'integer' and type(value) is str:
         if not re.fullmatch(r'-?(0|[1-9][0-9]*)', value):
             raise ValueError('Canonical integer carrier required')
@@ -95,7 +99,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         valid = valid and type(document_ids) is tuple and 1 <= len(document_ids) <= 32 and len(set(document_ids)) == len(document_ids)
         valid = valid and all(type(d) is str and 1 <= len(d.encode('utf8')) <= 4096 and '\0' not in d for d in document_ids)
         valid = valid and isinstance(parameters, Mapping) and len(parameters) <= 1024
-        valid = valid and all(type(k) is str and 1 <= len(k.encode('utf8')) <= 4096 and '\0' not in k and type(v) in (str, int, bool) for k, v in parameters.items())
+        valid = valid and all(type(k) is str and 1 <= len(k.encode('utf8')) <= 4096 and '\0' not in k and type(v) in (str, int, bool, Decimal) for k, v in parameters.items())
         valid = valid and all(type(v) is not str or len(v.encode('utf8')) <= 1048576 and '\0' not in v for v in parameters.values())
     except (UnicodeError, TypeError, ValueError):
         valid = False
@@ -106,8 +110,19 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
     compile_query = compiler()
     if compile_query is None:
         return Ok(QueryUnavailable(reason='compiler'))
-    values = {k: {'family': 'boolean' if type(v) is bool else 'integer' if type(v) is int else 'string',
-                  'value': ('true' if v else 'false') if type(v) is bool else str(Decimal(v)) if type(v) is int else v} for k, v in parameters.items()}
+    values={}
+    for name,value in parameters.items():
+        if type(value) is Decimal:
+            if not value.is_finite():return Ok(QueryRefused(code='invalid_query'))
+            parts=value.as_tuple();exponent=parts.exponent;digits=len(parts.digits)
+            size=(digits+exponent if exponent>=0 else digits+1 if digits+exponent>0 else 2-exponent)+parts.sign
+            if size>1048576:return Ok(QueryRefused(code='limits'))
+            token=format(value,'f');family='decimal'
+        elif type(value) is int:token=str(Decimal(value));family='integer'
+        elif type(value) is bool:token='true' if value else 'false';family='boolean'
+        else:token=value;family='string'
+        if len(token.encode('utf8'))>1048576:return Ok(QueryRefused(code='limits'))
+        values[name]={'family':family,'value':token}
     def execute(cursor, observed):
         pin_cursor(cursor)
         cursor.execute('SELECT truss.query_binding(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s)',
@@ -140,6 +155,15 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog,pg_temp',true)", prepare=False)
         # Fixed context handler and source functions independently recheck all owners.
         cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
+        for slot in slots:
+            family=slot['logicalType']['family']
+            if family in ('integer','decimal'):
+                cursor.execute('SELECT truss.query_numeric_value(%s,%s)',(slot['value'],family),prepare=False)
+                if cursor.fetchone()!=(True,):
+                    cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)',(binding_json,),prepare=False)
+                    cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
+                    if cursor.fetchone()!=(original_path,):raise ValueError('Caller path restoration required')
+                    return QueryRefused(code='native_domain')
         from psycopg import RawCursor
         from psycopg.rows import tuple_row
         from .psycopg_host import _GuardedCursor
@@ -165,6 +189,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         state = result.error.sql_state
         if state == '42501':
             return Ok(QueryRefused(code='unauthorized'))
+        if state=='22003':return Ok(QueryRefused(code='native_domain'))
         if state in ('0A000', '54000', '55P03'):
             return Ok(QueryRefused(code={'0A000': 'unsupported_query', '54000': 'limits', '55P03': 'stale_context'}[state]))
     return result

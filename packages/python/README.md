@@ -6,11 +6,11 @@ independent edge writes/reads, business-key lookup, preconditions, idempotent
 receipts, host-owned imports, retained history, committed feeds and acknowledgements.
 The caller owns its connection and transaction settlement.
 
-Runtime 0.26 adds public Weft compilation and query execution for string/boolean
-records, including equality filters/joins, counts, ordering/limits and `alias.*`.
+Runtime 0.27 provides public Weft compilation and query execution for string, boolean,
+integer and decimal records, including equality filters/joins, counts, ordering/limits and `alias.*`.
 Integer COUNT results remain Python integers; optional values distinguish absence,
 null and empty strings. Read-only READ COMMITTED transactions are supported.
-Wider numeric query fields, relationship operators, structured properties,
+Relationship operators, structured properties,
 page-key profiles and engine-owned import batches remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
@@ -1578,10 +1578,10 @@ retaining genesis, original reports, receipts and feed evidence as described abo
 
 ## Public compiled queries
 
-Install a Weft Python extension from commit `5eece2b` or a compatible successor,
+Install a Weft Python extension supporting runtime backend version `0.2.0`,
 built with `truss-postgresql-pg18`, providing
 `compile_truss_runtime_json`. Generic or conformance-only Weft builds do not enable
-this capability. The selected Truss runtime is 0.26 on DocumentDrivenDX
+this capability. The selected Truss runtime is 0.27 on DocumentDrivenDX
 `pgserver-pg18==18.6.1` (PostgreSQL18.6); remote managed services remain unqualified.
 
 ```python
@@ -1617,6 +1617,13 @@ input/source/output limits and deadlines apply, without custom instrumentation o
 internal retry loops.
 
 Record-name annotations select support policy0.4.0. Runtime upgrades from exact
-0.23/0.24/0.25 profiles preserve immutable genesis, original accepted sources, rows,
+0.23/0.24/0.25/0.26 profiles preserve immutable genesis, original accepted sources, rows,
 receipts and feed deliveries. The active runtime configuration selects the new
 policy without changing historical preparation or report pins.
+
+Exact query integers use Python `int`; decimals use `decimal.Decimal`. Stored
+decimal tokens retain their original scale and exponent in projected values. Pass
+`Decimal` parameters directly; non-finite values are refused. Values outside the
+finite PostgreSQL numeric domain return `QueryRefused(code="native_domain")`
+before predicates can hide them. Decimal parameters expand to bounded exact
+fixed-point tokens; binary floating-point parameters are unsupported.

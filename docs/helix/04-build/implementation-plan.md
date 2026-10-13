@@ -6740,3 +6740,16 @@ of the complete shared corpus or broader security compiler.
 The private caller-transaction settlement adapter now consumes pinned v0.2 tombstone SQL, checks original installation/profile/generation under head and guard SHARE, confirms exactly one native update and exact stored settled row, and returns pending commit with no release grant. Trusted coordinator identity and conclusively completed/withheld publication remain premises; this is not an authenticated completion service.
 
 [Retained evidence](evidence/security-publication-settlement-20261012/receipt.json) records ten passing native tests, real dropped settlement COMMIT acknowledgment followed by original-token reconciliation, wrong/missing original-field and repeated-settlement refusal preserving caller work, exact wheel sources, and Astra Ultra review. This partially exercises truss.L11/L12 (US-057-AC7/8); no required case is promoted and all132 remain in scope.
+### Public exact numeric query increment — 2026-10-12
+
+Runtime0.27 extends the existing public `query_in_transaction` workflow with
+Python `int` and `Decimal` fields/parameters. Weft runtime backend0.2.0 derives
+and admits unbounded numeric capabilities explicitly; Truss checks complete
+source values and parameters against the finite PostgreSQL numeric domain.
+Projected decimals retain their original token scale/exponent. Unsupported
+relationships and structured values remain refused.
+
+Four installed-wheel public query/upgrade tests pass on DocumentDrivenDX
+pgserver-pg18==18.6.1 and psycopg3.3.6, including retained0.26→0.27 data/receipt
+preservation. Astra Ultra approved the implementation and security merge
+intersections. See `evidence/python-exact-query-20261012.json`.

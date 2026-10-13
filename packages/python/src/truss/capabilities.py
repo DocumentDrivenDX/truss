@@ -7,6 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Mapping, Generic, Literal, TypeVar
 from .contracts import CapabilitySelection, CapabilityFamily, TypedIdentity, MapValue
+from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable
 from .execution import Outcome, TransactionHandle
 from .preparation import CatalogDocument, PreparedAcceptance
@@ -152,7 +153,7 @@ class NativeHistoryCapability(_NativeCapability[Literal['history']]):
 @dataclass(frozen=True,slots=True,kw_only=True)
 class NativeCompiledExecutionCapability(_NativeCapability[Literal['weft_execution']]):
     """Compile with Weft and execute authorized logical reads on the host transaction."""
-    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool] | None=None,
+    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
                              maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
         return self._assembly.query_in_transaction(transaction,sql=sql,document_ids=document_ids,parameters=parameters,
             maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)

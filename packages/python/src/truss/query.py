@@ -1,4 +1,5 @@
 """Public compiled-query results. Numbers remain exact Python values."""
+from decimal import Decimal
 from dataclasses import dataclass, field
 from typing import Literal, Mapping, TypeAlias
 
@@ -6,7 +7,7 @@ from typing import Literal, Mapping, TypeAlias
 class QueryAbsent:
     state: Literal['absent'] = field(default='absent', init=False)
 
-QueryValue: TypeAlias = str | bool | int | None | QueryAbsent | Mapping[str, 'QueryValue']
+QueryValue: TypeAlias = str | bool | int | Decimal | None | QueryAbsent | Mapping[str, 'QueryValue']
 
 @dataclass(frozen=True, slots=True)
 class QueryRows:
@@ -22,7 +23,7 @@ class QueryDiagnostic:
 
 @dataclass(frozen=True, slots=True)
 class QueryRefused:
-    code: Literal['unauthorized', 'invalid_query', 'unsupported_query', 'limits', 'stale_context']
+    code: Literal['unauthorized', 'invalid_query', 'unsupported_query', 'limits', 'stale_context', 'native_domain']
     diagnostics: tuple[QueryDiagnostic, ...] = ()
     outcome: Literal['refused'] = field(default='refused', init=False)
 

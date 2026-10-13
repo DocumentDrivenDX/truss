@@ -36,6 +36,7 @@ from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadIn
 from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
 from .contracts import CapabilitySelection, TypedIdentity
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult
+from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
@@ -125,7 +126,7 @@ def _release():
     for entry in json.loads(public_profiles)['profiles']:
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json'):
+    for name in ('preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json','upgrade-source-026.json'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original migration/preparation baseline required')
     return manifest,sha256(original).hexdigest(),tuple(sources)
 
@@ -288,7 +289,7 @@ class CatalogReferenceAssembly:
             return CapabilityAvailable(capability=NativeCompiledExecutionCapability(selection=self.compiled_selection,_assembly=self))
 
     @_active_operation
-    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool] | None=None,
+    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
                              maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
         from ._query_runtime import run_query
         manifest,digest,_=_release()
@@ -336,14 +337,14 @@ class CatalogReferenceAssembly:
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.26 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.27 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
         return self._host._run_operation(transaction,install)
     @_active_operation
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
-        """Apply supported additive .23/.24/.25 -> .26 upgrades; caller settles it.
+        """Apply supported additive .23/.24/.25/.26 -> .27 upgrades; caller settles it.
 
         Requires a direct trusted installation administrator and quiescence.
         Native NOWAIT fencing refuses active consumers without internal retries.
@@ -358,11 +359,13 @@ class CatalogReferenceAssembly:
         previous_024=json.loads(previous_024_raw)
         previous_025_raw=bundled.joinpath('upgrade-source-025.json').read_bytes()
         previous_025=json.loads(previous_025_raw)
-        supported={(previous['releaseId'],previous_digest),(previous_024['releaseId'],sha256(previous_024_raw).hexdigest()),(previous_025['releaseId'],sha256(previous_025_raw).hexdigest())}
+        previous_026_raw=bundled.joinpath('upgrade-source-026.json').read_bytes()
+        previous_026=json.loads(previous_026_raw)
+        supported={(previous['releaseId'],previous_digest),(previous_024['releaseId'],sha256(previous_024_raw).hexdigest()),(previous_025['releaseId'],sha256(previous_025_raw).hexdigest()),(previous_026['releaseId'],sha256(previous_026_raw).hexdigest())}
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=111:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=112:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -374,7 +377,7 @@ class CatalogReferenceAssembly:
                 if parameter is None:raise ValueError('Owned additive routine argument profile required')
                 types.append(parameter.group(1))
             signature=name+'('+','.join(types)+')'
-            if name not in ('truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects'):signatures.append(signature)
+            if name not in ('truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects','truss.query_numeric_value'):signatures.append(signature)
         def upgrade(cursor,observed):
             _pin_cursor(cursor)
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False);original_path=cursor.fetchone()[0]
@@ -408,8 +411,10 @@ class CatalogReferenceAssembly:
                 if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
                 return PendingRuntimeUpgrade(identity,active_release,manifest['releaseId'],'unchanged')
             if (active_release,active_digest) not in supported or layout!=manifest['layoutProfile'] or configuration not in (_configuration(),json.loads(bundled.joinpath('preparation-baseline.json').read_bytes())):
-                raise ValueError('Exact supported .23/.24/.25 installation and preparation required')
+                raise ValueError('Exact supported .23/.24/.25/.26 installation and preparation required')
             if has_ledger:signatures.append('truss.runtime_current_installation()')
+            if active_release=='truss-catalog-runtime/0.26-candidate':
+                signatures.extend(('truss.query_binding(jsonb,int,int,int,text,text)','truss.query_scope(jsonb)','truss.query_objects(jsonb,int)'))
             original_routines=[]
             for signature in signatures:
                 cursor.execute('SELECT oid,proowner,proacl FROM pg_proc WHERE oid=to_regprocedure(%s)',(signature,),prepare=False)
@@ -429,7 +434,7 @@ class CatalogReferenceAssembly:
                 cursor.execute(sql.SQL('REVOKE ALL ON {} truss.{} FROM PUBLIC').format(sql.SQL('TABLE' if name=='runtime_release' else 'SEQUENCE'),sql.Identifier(name)),prepare=False)
             cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_current_installation() OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
             cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_current_installation() FROM PUBLIC',prepare=False)
-            for signature in ('query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)'):
+            for signature in ('query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)'):
                 cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
                 cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
                 cursor.execute('SELECT reader_role,writer_role FROM truss.module_access',prepare=False)
@@ -641,7 +646,7 @@ class CatalogReferenceAssembly:
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
-                                      'query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)',
+                                      'query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
                                       'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
                                       'page_objects(text,text,text,int,int,bytea,text,text)','read_history(jsonb,bytea,bigint,int,int,text,text)','lookup_import_source(jsonb,int,text,text)'):
