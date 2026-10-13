@@ -227,3 +227,15 @@ Owner binary-equality/runtime0.54 changes are preserved. The original target
 is consumed by positive source-epoch issuance. Ten native controls pass together
 (69.457s); external guarded delivery and all-three cleanup also pass. Separate
 runtime054 records preserve this replay without promoting backend admission.
+
+
+### Native guard generation coupling — 2026-10-13
+
+Accepted preparation now retains its checked native guard tuple; guarded catalog
+read checks exact descriptors/types and tuple under SHARE NOWAIT before/after
+evaluation. Actual generation is transported losslessly to shared UMF instead
+of a fixed label. Stale/NUMERIC/nativegeneration2 controls pass (3/20.502s),
+late changed generation refuses after successful evaluation (1/9.767s), and
+external guarded delivery/cleanup passes. This is comparison-only metadata;
+trusted fixture facts and complete installed-profile authority remain unresolved.
+No backend case is promoted. [Qualified controls](../../04-build/evidence/catalog-authority-generation-20261013/README.md).

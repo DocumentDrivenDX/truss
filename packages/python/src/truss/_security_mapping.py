@@ -51,6 +51,7 @@ class PreparedSecurityMapping:
     security_ready:bool=field(default=False,init=False)
     accepted_catalog_assessment:bytes|None=None
     native_dependencies:bytes|None=None
+    native_guard:tuple[bytes,bytes,int]|None=None
 
 class SecurityMappingBoundary:
     """Capture original sources once; changing SQL/parameters cannot rebind them.
@@ -167,7 +168,7 @@ def prepare_security_mapping_in_transaction(host,transaction,*,boundary,installa
             if capture_accepted_catalog(cursor,original_request)!=assessment:raise ValueError('Accepted catalog changed during compiler preparation')
             from ._security_catalog_mapping import map_catalog_dependencies
             dependencies=map_catalog_dependencies(assessment,result.original_response,original_request)
-            result=PreparedSecurityMapping(result.original_request,result.original_response,assessment,dependencies)
+            result=PreparedSecurityMapping(result.original_request,result.original_response,assessment,dependencies,expected)
         if home()!=original_home:raise ValueError('Original mapping guard home changed')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
         if cursor.fetchmany(2)!=[(original_path,)]:raise ValueError('Original mapping caller path restoration required')

@@ -1,0 +1,26 @@
+{
+  "sourceSha256": "2752a88cfc62cf4b421888656ef156d2429574a25e42d0a65d4d0a3b576cdddd",
+  "method": "Exact extracted Python guard with synthetic cursor; no native SQL executed",
+  "controls": [
+    {
+      "case": "missing-descriptor",
+      "accepted": true,
+      "fetches": 1
+    },
+    {
+      "case": "boolean-generation",
+      "accepted": true,
+      "fetches": 1
+    },
+    {
+      "case": "numeric-generation",
+      "accepted": true,
+      "fetches": 1
+    },
+    {
+      "case": "mutable-bytea",
+      "accepted": true,
+      "fetches": 1
+    }
+  ]
+}

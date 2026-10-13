@@ -1,0 +1,11 @@
+test_foreign_native_generation_descriptor_refuses (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_foreign_native_generation_descriptor_refuses)
+@covers US-056-AC9; guard decoding before field loaders. ... ok
+test_fresh_generation_two_is_carried_to_shared_evaluator (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_fresh_generation_two_is_carried_to_shared_evaluator)
+@covers US-057-AC3; actual current guard transport, not ready authority. ... ok
+test_native_generation_drift_refuses_before_evaluator (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_native_generation_drift_refuses_before_evaluator)
+@covers US-056-AC9; @covers US-057-AC3; prerequisite only. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 20.502s
+
+OK

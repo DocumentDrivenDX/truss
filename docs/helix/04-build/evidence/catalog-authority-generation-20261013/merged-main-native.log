@@ -1,0 +1,17 @@
+test_foreign_native_generation_descriptor_refuses (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_foreign_native_generation_descriptor_refuses)
+@covers US-056-AC9; guard descriptor refusal before row fetch/Loader.load decoding. ... ok
+test_fresh_generation_two_is_carried_to_shared_evaluator (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_fresh_generation_two_is_carried_to_shared_evaluator)
+@covers US-057-AC3; actual current guard transport, not ready authority. ... ok
+test_late_native_generation_drift_refuses_publication (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_late_native_generation_drift_refuses_publication)
+@covers US-056-AC9; @covers US-057-AC7; final native comparison. ... ok
+test_native_generation_drift_refuses_before_evaluator (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_native_generation_drift_refuses_before_evaluator)
+@covers US-056-AC9; @covers US-057-AC3; prerequisite only. ... ok
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 52.662s
+
+OK
