@@ -7583,6 +7583,17 @@ Trace US-056 AC2/AC6/AC9/AC10 and US-057 AC7/CONTRACT-063/STP-056 prerequisites.
 
 Concurrent owner main4417b0f5/runtime0.46/package0.0.9 was preserved. The merged source-binding suite passes7/85.057s, including default publication, with exact owned cleanup and933 imports. This is component regression with unchanged acceptance inventory. Evidence: `evidence/catalog-source-binding-20261013/runtime046/receipt.json`.
 
+## Released Python feature tranches — 2026-10-13
+
+v0.0.8/Weft0.4.10 publishes typed relationship keys; downloaded public wheels
+pass both original UMF public workflows. v0.0.9/Weft0.4.11 publishes exact typed
+SQL pages, with Linux/macOS release workflows passing. Record renaming/member
+reordering is committed on main for v0.0.10/Weft0.4.12 after Astra Ultra review,
+two UMF workflows and immediate predecessor upgrade. Required-field tightening
+is next: existing non-key singular scalar optional→required after locked
+compatibility validation, public repair and reacceptance. Both UMF workflows
+pass; predecessor upgrade passes and release is in progress. No new formal/performance
+campaign or independent second engine is added to these release gates.
 
 ### Selected schema DDL source participation — 2026-10-13
 
