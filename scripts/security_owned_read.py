@@ -56,7 +56,7 @@ def _read_owned_evaluator_receipt(text):
     return decision
 
 
-def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None, *, resource_list=False, source_profile='legacy', native_subject=None, original_inspector=None):
+def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None, *, resource_list=False, source_profile='legacy', native_subject=None, original_inspector=None, ddl_barrier=None):
     if type(source_profile) is not str or source_profile not in ('legacy','named'):raise ValueError('Exact original fixture source profile required')
     if type(sources) is not _OriginalFactSources:raise ValueError('Original fixture sources required')
     sources=_OriginalFactSources(sources.policy,sources.resolution)
@@ -135,7 +135,8 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
         # No raw cells, private fact identities or evaluator diagnostics leave
         # this owned operation. Dispositions remain original UMF output.
         return decision
-    return _run_dependency_fact_operation(host,transaction,selected,requirements,digest,providers,execute)
+    if ddl_barrier is None:return _run_dependency_fact_operation(host,transaction,selected,requirements,digest,providers,execute)
+    return _run_dependency_fact_operation(host,transaction,selected,requirements,digest,providers,execute,ddl_barrier=ddl_barrier)
 
 
 def _verify_named_subject_helper(cursor,providers,*,expected_source=None):
@@ -194,6 +195,16 @@ def run_named_subject_resource_read(host, transaction, epoch, requirements, sour
         raise ValueError('Required exact native subject selection')
     return _run_owned_identity_read(host,transaction,epoch,requirements,sources,resource_list=True,
         source_profile='named',native_subject=selection,original_inspector=original_inspector)
+
+
+def run_ddl_fenced_named_subject_resource_read(host, transaction, epoch, requirements, sources, selection, original_inspector, barrier):
+    """Selected cooperative table/routine DDL exclusion; not complete closure."""
+    from truss._psycopg_subject_observation import _SubjectSelection
+    from truss._psycopg_epoch_cut import _DDLBarrierComparison
+    if type(selection) is not _SubjectSelection or type(barrier) is not _DDLBarrierComparison:
+        raise ValueError('Required exact subject selection and DDL barrier')
+    return _run_owned_identity_read(host,transaction,epoch,requirements,sources,resource_list=True,
+        source_profile='named',native_subject=selection,original_inspector=original_inspector,ddl_barrier=barrier)
 
 
 def run_owned_identity_read(host, transaction, epoch, requirements, sources):

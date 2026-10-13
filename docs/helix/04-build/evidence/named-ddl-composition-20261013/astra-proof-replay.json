@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "queries": 4,
+  "unsat": 1,
+  "sat": 3,
+  "solver": "4.15.4",
+  "stdout": "1 UNSAT; 3 SAT; conditional selected-tag model only\n",
+  "originalScriptSha256": "c4e779b9dd9508969349e671527b4388d0a7df330eccc8ed8dcc61fbcb12a504",
+  "replicaScriptSha256": "c4e779b9dd9508969349e671527b4388d0a7df330eccc8ed8dcc61fbcb12a504",
+  "fullOutputIdentical": true,
+  "scope": "Exact script and cited source byte copies in owned replica; no repository files modified; propositional mutex premises only."
+}

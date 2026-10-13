@@ -1,0 +1,41 @@
+{
+  "solver": "4.15.4",
+  "scope": "Boolean transcription of participating selected-tag writer-before-effect and conflicting table modes. Current hook/participation and mutex correspondence are explicit premises; not source/native refinement, complete closure or liveness.",
+  "sourcePins": {
+    "packages/postgresql/native/source-epoch-routine-ddl-barrier.sql": "93d0740578df55803370f15e7de9d325baa6f465426bf3a3bcac48c217e68413",
+    "packages/postgresql/native/source-epoch-table-ddl-barrier.sql": "9fdcd6823aafb1106597e1f9e003994df96748686b54b68b34adbea2ed198de4",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "6199c1624d13ded791ef94b684f0231dca83cc4767d66f65007e700c9a600322",
+    "packages/python/src/truss/_psycopg_dependency_fact_cut.py": "23c3171a3dcf19518cc09e32e51bf343e3c3a6f70e3aed335d63da344663b59c",
+    "scripts/security_owned_read.py": "a81227203e5f8ad1b74e739e1586d3a3887b27dfa6e67ee85ba9b181fdc80962"
+  },
+  "checks": [
+    {
+      "name": "held_cut_excludes_participating_selected_ddl",
+      "expected": "unsat",
+      "observed": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun writer_lock () Bool)\n(declare-fun mutation () Bool)\n(declare-fun hook_now () Bool)\n(declare-fun writer_cooperates () Bool)\n(declare-fun share_held () Bool)\n(assert\n (let (($x10 (and writer_cooperates hook_now mutation)))\n (=> $x10 writer_lock)))\n(assert\n (not (and share_held writer_lock)))\n(assert\n share_held)\n(assert\n writer_cooperates)\n(assert\n hook_now)\n(assert\n mutation)\n(check-sat)\n",
+      "model": null
+    },
+    {
+      "name": "writer_can_mutate_after_cut_ends",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun writer_lock () Bool)\n(declare-fun mutation () Bool)\n(declare-fun hook_now () Bool)\n(declare-fun writer_cooperates () Bool)\n(declare-fun share_held () Bool)\n(assert\n (let (($x10 (and writer_cooperates hook_now mutation)))\n (=> $x10 writer_lock)))\n(assert\n (not (and share_held writer_lock)))\n(assert\n (not share_held))\n(assert\n writer_cooperates)\n(assert\n hook_now)\n(assert\n mutation)\n(check-sat)\n",
+      "model": "[mutation = True,\n share_held = False,\n hook_now = True,\n writer_lock = True,\n writer_cooperates = True]"
+    },
+    {
+      "name": "disabling_hook_after_snapshot_allows_mutation",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun writer_lock () Bool)\n(declare-fun mutation () Bool)\n(declare-fun hook_now () Bool)\n(declare-fun writer_cooperates () Bool)\n(declare-fun share_held () Bool)\n(assert\n (let (($x10 (and writer_cooperates hook_now mutation)))\n (=> $x10 writer_lock)))\n(assert\n (not (and share_held writer_lock)))\n(assert\n share_held)\n(assert\n writer_cooperates)\n(assert\n (not hook_now))\n(assert\n mutation)\n(check-sat)\n",
+      "model": "[mutation = True,\n share_held = True,\n hook_now = False,\n writer_lock = False,\n writer_cooperates = True]"
+    },
+    {
+      "name": "uncovered_writer_can_mutate_without_participation",
+      "expected": "sat",
+      "observed": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun writer_lock () Bool)\n(declare-fun mutation () Bool)\n(declare-fun hook_now () Bool)\n(declare-fun writer_cooperates () Bool)\n(declare-fun share_held () Bool)\n(assert\n (let (($x10 (and writer_cooperates hook_now mutation)))\n (=> $x10 writer_lock)))\n(assert\n (not (and share_held writer_lock)))\n(assert\n share_held)\n(assert\n (not writer_cooperates))\n(assert\n hook_now)\n(assert\n mutation)\n(check-sat)\n",
+      "model": "[mutation = True,\n share_held = True,\n hook_now = True,\n writer_lock = False,\n writer_cooperates = False]"
+    }
+  ]
+}

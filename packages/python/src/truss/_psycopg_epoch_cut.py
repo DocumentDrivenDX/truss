@@ -113,6 +113,9 @@ def _run_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, call
                        "JOIN pg_catalog.pg_language l ON l.oid OPERATOR(pg_catalog.=) p.prolang "
                        "WHERE e.evtname IN ('truss_routine_ddl_writer_barrier','truss_table_ddl_writer_barrier') "
                        "ORDER BY e.evtname",prepare=False,binary=False)
+        if (cursor.description is None or len(cursor.description)!=19
+                or any(d.type_code!=25 for d in cursor.description)):
+            raise ValueError('Exact original DDL barrier TEXT descriptors required')
         rows=cursor.fetchmany(3)
         suffix=(str(function),str(owner),'truss','runtime_fence_routine_ddl_writer','plpgsql','f','0',
                 'true','false','false','v','["search_path=pg_catalog, pg_temp"]',source,'false')
@@ -120,8 +123,7 @@ def _run_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, call
                    '["CREATE FUNCTION", "ALTER FUNCTION", "DROP FUNCTION", "CREATE PROCEDURE", "ALTER PROCEDURE", "DROP PROCEDURE"]',*suffix),
                   ('truss_table_ddl_writer_barrier','ddl_command_start','A',str(owner),
                    '["CREATE TABLE", "ALTER TABLE", "DROP TABLE"]',*suffix)]
-        if (cursor.description is None or len(cursor.description)!=19
-                or any(d.type_code!=25 for d in cursor.description) or rows!=expected):
+        if rows!=expected:
             raise ValueError('Exact original installed DDL barriers required')
         return callback(cursor)
     return _run_fenced_epoch_operation(host,transaction,comparison,qualify)
