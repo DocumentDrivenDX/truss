@@ -6950,3 +6950,10 @@ reviewed the plan and actual runner/data; [receipt](evidence/python-scalar-previ
 records case/fixture/source digests and the basic test result. Original0.1–0.4
 cases remain unchanged. This is one Python preview, not full required corpus or
 independent bidirectional interchange; those deliverables remain open.
+
+
+### Native same-transaction source mutation — 2026-10-12
+
+[Actual reentrant guard counterexample](evidence/security-reentrant-ddl-20261012/receipt.json) confirms that a protected data callback can reacquire its transaction's original FOR UPDATE guard, install a harmless routine-source comment during guarded DML, restore the source and pass endpoint checks. Outer rollback preserves original data/generation. Guard acquisition therefore does not imply inactive-only source mutation. An admitted lifetime protocol must additionally prevent or prove absence of same-transaction source mutation during protected use, as well as close competing mutation routes.
+
+Full11 native tests pass. The conditional model passes2UNSAT/4SAT; the added SAT query repeats the active mutation transition and is not a native lock-owner theorem. This remains a selected B11/L13 prerequisite/counterexample, with no changed authorization semantics demonstrated and no required case promoted.

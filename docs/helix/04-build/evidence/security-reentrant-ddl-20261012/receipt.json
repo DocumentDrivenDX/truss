@@ -1,0 +1,34 @@
+{
+  "status": "component-counterexample",
+  "sourceDigests": {
+    "scripts/prove-security-ddl-lifetime.py": "ab66cffdf9c6b3e5828dafd053b719f30e8204217c6da3febde44e010885ea2a",
+    "packages/python/tests/test_security_public_ontology_native.py": "094d9ad88769e57cab83490cd97015d83a2c3d3b7eddc4be1ebc417511fecfa8",
+    "packages/python/src/truss/_security_data_writer.py": "e1bfcec15ce52fb0cc0b23b28278636471b6765773aac768129842c93b10817f"
+  },
+  "profile": "PostgreSQL18.6, stock psycopg3.3.6, trusted original installation administrator",
+  "validation": {
+    "nativeTests": 11,
+    "nativeSeconds": 28.747,
+    "formal": "2 UNSAT / 4 SAT",
+    "review": "Astra Ultra: no actionable defect; independently2UNSAT/4SAT; reentrancy-specific evidence is native, added formula equivalent to bypass"
+  },
+  "observation": "Actual active data callback reacquires original guard FOR UPDATE in same transaction, modifies routine body with harmless comment, issues guarded DML and restores source. Endpoint checks accept pending generation. Outer rollback restores data and generation.",
+  "formalScope": "Added SAT query repeats the source mutation transition without inactive-only restriction. It is not a lock-owner model or native refinement proof; native test supplies actual same-transaction reentrancy evidence.",
+  "traceability": [
+    {
+      "case": "truss.B11",
+      "scope": "same-transaction selected source-byte lifetime counterexample",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L13",
+      "scope": "inactive-only source mutation premise not established by native guard acquisition",
+      "caseClosed": false
+    }
+  ],
+  "exclusions": [
+    "No changed authorization semantics shown",
+    "No complete source/DDL/role/handler/library closure, ready admission or final sink",
+    "No required acceptance case promoted"
+  ]
+}
