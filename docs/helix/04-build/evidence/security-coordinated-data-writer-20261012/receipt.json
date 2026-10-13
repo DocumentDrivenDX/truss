@@ -36,5 +36,11 @@
     "does not compose with existing authority-change helper exactly-one CAS; uses separate trigger profile",
     "no conclusive final sink publication or commit acknowledgment reconciliation"
   ],
-  "review": "Astra Ultra final: no actionable findings; independent862 import boundary check. Corrected ordinary connection timeout and asserted adoption before refusal. Native executed by primary."
+  "review": "Astra Ultra final: no actionable findings; independent862 import boundary check. Corrected ordinary connection timeout and asserted adoption before refusal. Native executed by primary.",
+  "postmergeValidation": {
+    "native": "11 passed after main integration",
+    "boundaries": "869 Python imports passed; broader native/TypeScript gates remain open",
+    "boundarySourceSha256": "53837df5beeb6850702010bf5b447e22cf1dda9345cb7d84419cb85143d2e0ce",
+    "runtimeAndTestSourceUnchanged": true
+  }
 }
