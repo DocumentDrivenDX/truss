@@ -1,0 +1,231 @@
+{
+  "review": "Shared authored named source plus live native subject/resource fixture composition",
+  "reviewedAt": "2026-10-13T15:49:08.592404+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "70fadda8118cfe7c26ee991a45f3d76ca8acba92",
+  "status": "no remaining actionable findings within the fixed-source fixture scope",
+  "findings": [],
+  "resolvedFinding": {
+    "problem": "The named-subject wrapper previously accepted selection=None, causing the optional internal native_subject branch to be skipped and returning a profile-subject-only named read.",
+    "resolution": "The wrapper now unconditionally requires exact _SubjectSelection before preparing sources or accessing a host.",
+    "independentReproduction": "A faithful reconstruction of the former wrapper through the unchanged internal helper returned permitted r1 without inspector, helper or encoding events; the corrected wrapper refuses before any such event. This is a controlled predecessor reconstruction, not an archived whole-file replay."
+  },
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "9ab4250932f3aa9214e63a9a382b40f83be870c73b61ce04824a95513ea86c46",
+      "bytes": 17550
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-source-fixture.ts",
+      "sha256": "bcf5e800cb0fce712db993128673499c601d92c33a169b211bd32a270430c481",
+      "bytes": 1387
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/produce-security-named-source.ts",
+      "sha256": "9d1759918491d983c44d45451c6279b6adaef8677ab988604d46a8d8daf2506e",
+      "bytes": 2099
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts",
+      "sha256": "116057c09071c25284e82e9d68fc044cf06c69e123f356567010cc3ad0af0441",
+      "bytes": 8752
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "5f2de1c4c03d9e5543a9426da07f8e05fc804336aefe0a780c0e4ed1496ed62f",
+      "bytes": 159799
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+      "bytes": 9078
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_dependency_fact_cut.py",
+      "sha256": "932eb504853e5abc2e3df2d796ccba66e4f48e1edc607921933958551c4365a6",
+      "bytes": 15581
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+      "bytes": 9931
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/producer.js",
+      "sha256": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+      "bytes": 611721
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/bridge.mjs",
+      "sha256": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
+      "bytes": 1940
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/manifest.json",
+      "sha256": "3ce2df6a1abf84eef7d9a9f0586b09638939a06df9a261242d49cf58e772fad8",
+      "bytes": 1858
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/document.json",
+      "sha256": "1eb64de9c3cdf8fcde1c1d37325136330508686cca70b6550c780df7d74085e8",
+      "bytes": 2857
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json",
+      "sha256": "723e7855b33d46843837a55eb426a23df661bfa8ca2e62a20362491a6caaaa53",
+      "bytes": 9574
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/original-selection.json",
+      "sha256": "ca0fb71ec748549da1e14b8345f3a1110a5dc921ca08d210294c91c21f618ef8",
+      "bytes": 104
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/policy.json",
+      "sha256": "ac1dc5841de60f64b8c268417124818c089ef247549fa75a621f1785f0b6ec97",
+      "bytes": 1472
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/receipt.json",
+      "sha256": "3240f15fbf7762ba7b8357ea8154e26e625cca2e7411b9a2db6aa0c5feb46e54",
+      "bytes": 3825
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/requirements.json",
+      "sha256": "c3195b19bd31aa7b3913effb814004a45198eecbc2af000a1d2be23b3f893748",
+      "bytes": 1044
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/resolution.json",
+      "sha256": "d6591a68b48b4f4a56b1631fce26dd66ac99a9d4f1f60c02c77c178bb3636e74",
+      "bytes": 5467
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/transport.json",
+      "sha256": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+      "bytes": 2903
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/tests/security/fixture.ts",
+      "sha256": "572f914713ea24d3e06b85a953cc9176fd98adf2e585e1cd6d838f27c1b694c6",
+      "bytes": 3416
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/evaluate.ts",
+      "sha256": "e64385876ad398b677b73c2718584fcbbd36fca69bd1d69803c24ec82df532ee",
+      "bytes": 19473
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/dependencies.ts",
+      "sha256": "a94e291f78ad38dfdc73b7b03fb7f7ed7547dd3adb678040e952be71e3e8f2c7",
+      "bytes": 6166
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/disclosure.ts",
+      "sha256": "019d3a02c69dcf29cceaf4a3ff7db1a2eb34192dfc4bbd01f001c5ef93ddadec",
+      "bytes": 3862
+    },
+    {
+      "path": "/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/key-tuple.ts",
+      "sha256": "5baba1577035aefba2ff1786b646b35e9fc7266fd99eaf42c9b5a4b13b1381aa",
+      "bytes": 11608
+    },
+    {
+      "path": "/private/tmp/subject-consumer-python/weft.so",
+      "sha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+      "bytes": 14364352
+    }
+  ],
+  "independentEvidence": [
+    {
+      "path": "/private/tmp/named-source-review-20261013/check.py",
+      "sha256": "b0c08fbf0bfb5bbce7f1dc47ff1f838741011de251f353632af80dcb8cf9fba1",
+      "bytes": 11985
+    },
+    {
+      "path": "/private/tmp/named-source-review-20261013/results.json",
+      "sha256": "2bf84e0e65a708bb563d429c490645724d5d339d21cf60682a3bd26b6d7320d2",
+      "bytes": 7679
+    },
+    {
+      "path": "/private/tmp/named-source-review-20261013/packet_checks.py",
+      "sha256": "4c055fab63f83206d2e228d01b6d7528ba5c95fcd100011689038fd4578af7f4",
+      "bytes": 3081
+    },
+    {
+      "path": "/private/tmp/named-source-review-20261013/packet-results.json",
+      "sha256": "dd5f763ff142b52dd32998254bdd0dc0d15ce83240dea9024320e1d2229338cf",
+      "bytes": 3779
+    },
+    {
+      "path": "/private/tmp/named-source-review-20261013/produce-relocated.ts",
+      "sha256": "2db058fc52b8acb7b30f69387046c87f6373a443c31a1a4a25763a827a843a42",
+      "bytes": 2092
+    },
+    {
+      "path": "/private/tmp/named-source-review-20261013/security-named-source-fixture.ts",
+      "sha256": "bcf5e800cb0fce712db993128673499c601d92c33a169b211bd32a270430c481",
+      "bytes": 1387
+    }
+  ],
+  "independentValidation": {
+    "controls": 41,
+    "result": "pass",
+    "sourcePackets": "Original producer replay with only output path relocated generated all six packets byte-for-byte. Named document preserves all legacy assertions plus explicitly authored names and distinct revisions.",
+    "ownerComponents": "Actual exact-path original Weft extension, pinned original UMF encoder and original UMF evaluator invoked.",
+    "composition": "Actual Python recipe/preparation/subject observer/encoding/key comparison/evaluator code with synthetic host observer, cursor rows and enclosing native-cut shell. Positive exact key, mismatch before capture, mandatory selection, wrong source/request/record/columns, principal/OID/null refusal, selection snapshot, malformed owner response and late caller OID drift at both new checkpoints tested.",
+    "packetGuards": "Unchanged evaluator/helper copied to owned mirror; document/module/policy/ontology/extra/empty module drift refuses with empty stdout. Exact restoration passes.",
+    "legacy": "Legacy and named CLI modes pass; unknown or extra arguments refuse."
+  },
+  "parentNativeEvidence": {
+    "tests": 3,
+    "seconds": 9.503,
+    "execution": "Parent execution; final retained outputs and cleanup inspected",
+    "coverage": "Live s1 admits r1 withheld; profile s2 mismatches exact original key and is contained; writer blocked at entry into both original encodings; legacy list/single positive regressions pass.",
+    "cleanup": "stopped, status absent, socket absent",
+    "pins": [
+      {
+        "path": "/private/tmp/named-source-native.log",
+        "sha256": "e548c9d790f8f2a81aef83b0f70901230ea19894722d8efb682fa8fe8a2c3b85",
+        "bytes": 844
+      },
+      {
+        "path": "/private/tmp/named-source-cleanup/cleanup-PsycopgFactCutNativeTests.json",
+        "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+        "bytes": 71
+      }
+    ]
+  },
+  "sourceReview": [
+    "Separately authored named model preserves prior fixture assertions while adding explicit names and distinct schema/ontology/policy revisions; legacy packets remain separate.",
+    "Exact document bytes are shared by Weft selection and UMF key encoding; named evaluation checks authored policy/resolution/transport/document/mapping correspondence.",
+    "The original Weft query selects Resource.resourceId with no additional original-value query-use grant.",
+    "Selection is copied before configured inspector invocation. Native subject observation and both original encodings run after the declared source/dependency cut and before native capture/evaluation.",
+    "Mismatched live/profile tuple refuses before capture. Caller OIDs are rechecked after key comparison and after evaluator completion. No competing semantic key or policy evaluator was added."
+  ],
+  "limitations": [
+    "Native ordinary fixture roles retain broad ALL source/fact privileges; this is not bypass-safe installation or full protected backend admission.",
+    "Configured helper, host, inspector and original producer remain trusted. Complete helper/source dependencies, issuer/deployment authenticity, role/configuration/callable closure and current authority remain separate.",
+    "Endpoint source hashes/equalities do not establish source lifetime or ABA exclusion.",
+    "Matching profile subject to observed key is component correspondence, not authenticated principal/subject issuance.",
+    "The new document omits the unrelated older selector salary facet; identity-query inspection establishes no broader physical numeric domain support. Legacy sources/facets remain separate.",
+    "No total CPU/heap, generic query lowering, complete result enumeration, final protected release, security readiness or backend promotion; all132 cases remain required."
+  ],
+  "repositoryMutations": false
+}
