@@ -18,7 +18,7 @@ BEGIN
  END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.38-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.39-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.
@@ -51,7 +51,7 @@ BEGIN
   RAISE EXCEPTION 'unsupported complete object representation' USING ERRCODE='0A000'; END IF;
  FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
   IF coalesce(property.scalar_type,'') NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.since_rev>captured_revision OR property.nullability NOT IN ('required','absent-allowed')
-   OR property.item IS NOT NULL OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb AND NOT (property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb)) THEN
+   OR property.item IS NOT NULL OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb AND NOT ((property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (property.scalar_type='decimal' AND property.facets='{"precision":18,"scale":4}'::jsonb) OR property.facets='{}'::jsonb)) THEN
    RAISE EXCEPTION 'unsupported property profile' USING ERRCODE='0A000'; END IF;
   IF NOT current_object.props ? property.prop_id::text THEN
    IF property.nullability='required' THEN RAISE EXCEPTION 'missing required property' USING ERRCODE='55000'; END IF;

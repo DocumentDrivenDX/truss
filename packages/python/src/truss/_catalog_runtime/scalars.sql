@@ -50,10 +50,29 @@ REVOKE ALL ON FUNCTION truss.logical_scalar_cell(jsonb) FROM PUBLIC;
 -- Selected signed64 refinement; preserve original lexical bytes without casts.
 CREATE FUNCTION truss.valid_scalar_property(cell jsonb,family text,allow_null boolean,facets jsonb) RETURNS boolean
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE token text;limit_text text;
+DECLARE token text;limit_text text;mantissa text;exponent_token text;coefficient text;fraction_length int;shift int;trailing_zero_count int;exponent_value int:=0;
 BEGIN
  IF truss.valid_scalar_cell(cell,family,allow_null) IS NOT TRUE THEN RETURN false;END IF;
  IF facets IS NULL OR facets='{}'::jsonb THEN RETURN true;END IF;
+ IF family='decimal' AND facets='{"precision":18,"scale":4}'::jsonb THEN
+  IF cell='{"kind":"null"}'::jsonb THEN RETURN allow_null;END IF;
+  token:=cell->>'text';mantissa:=split_part(lower(token),'e',1);
+  fraction_length:=length(split_part(mantissa,'.',2));
+  coefficient:=ltrim(replace(ltrim(mantissa,'-'),'.',''),'0');
+  IF coefficient='' THEN RETURN true;END IF;
+  exponent_token:=split_part(lower(token),'e',2);
+  IF exponent_token<>'' THEN
+   limit_text:=left(exponent_token,1);exponent_token:=ltrim(ltrim(exponent_token,'+-'),'0');
+   IF length(exponent_token)>7 THEN RETURN false;END IF;
+   exponent_value:=CASE WHEN exponent_token='' THEN 0 ELSE exponent_token::int END;
+   IF limit_text='-' THEN exponent_value:=-exponent_value;END IF;
+  END IF;
+  shift:=4-fraction_length+exponent_value;
+  trailing_zero_count:=length(coefficient)-length(rtrim(coefficient,'0'));
+  -- Exact fixed-scale coefficient: no numeric typmod, casts or rounding.
+  IF shift<0 AND -shift>trailing_zero_count THEN RETURN false;END IF;
+  RETURN length(coefficient)+shift<=18;
+ END IF;
  IF family IS DISTINCT FROM 'integer' OR facets IS DISTINCT FROM '{"integerWidth":{"bits":64,"signed":true}}'::jsonb THEN RETURN false;END IF;
  IF cell='{"kind":"null"}'::jsonb THEN RETURN allow_null;END IF;
  token:=cell->>'text';limit_text:='9223372036854775807';

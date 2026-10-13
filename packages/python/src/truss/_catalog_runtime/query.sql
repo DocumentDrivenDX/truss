@@ -36,7 +36,7 @@ BEGIN
  IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.4'
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.38-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.39-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
@@ -133,7 +133,7 @@ BEGIN
  SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type AND t.retired_rev IS NULL;
  FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
   IF property.scalar_type NOT IN ('string','boolean','integer','decimal','timestamp','binary') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.item IS NOT NULL
-   OR coalesce(property.facets,'{}')<>'{}'::jsonb OR property.nullability NOT IN ('required','absent-allowed') THEN RAISE EXCEPTION 'query scalar profile unavailable' USING ERRCODE='0A000';END IF;
+   OR (coalesce(property.facets,'{}')<>'{}'::jsonb AND NOT ((property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (property.scalar_type='decimal' AND property.facets='{"precision":18,"scale":4}'::jsonb))) OR property.nullability NOT IN ('required','absent-allowed') THEN RAISE EXCEPTION 'query scalar profile unavailable' USING ERRCODE='0A000';END IF;
  END LOOP;
  FOR object_row IN SELECT * FROM truss.object o WHERE o.type_id=selected_type ORDER BY o.id LIMIT (binding->>'maximumScanRows')::int+1 LOOP
   row_count:=row_count+1;byte_count:=byte_count+octet_length(object_row.props::text);
@@ -144,7 +144,7 @@ BEGIN
   FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
    cell:=object_row.props->property.prop_id::text;
    IF cell IS NULL THEN IF property.nullability='required' THEN RAISE EXCEPTION 'required query value missing' USING ERRCODE='55000';END IF;
-   ELSIF truss.valid_scalar_cell(cell,property.scalar_type,property.nullability='absent-allowed') IS NOT TRUE THEN RAISE EXCEPTION 'malformed query scalar' USING ERRCODE='55000';
+   ELSIF truss.valid_scalar_property(cell,property.scalar_type,property.nullability='absent-allowed',property.facets) IS NOT TRUE THEN RAISE EXCEPTION 'malformed query scalar' USING ERRCODE='55000';
    ELSIF property.scalar_type IN ('integer','decimal') AND cell->>'kind'<>'null' AND truss.query_numeric_value(cell->>'text',property.scalar_type) IS NOT TRUE THEN RAISE EXCEPTION 'exact native numeric domain unavailable' USING ERRCODE='22003';END IF;
   END LOOP;
   id:=object_row.id;props:=object_row.props;RETURN NEXT;
