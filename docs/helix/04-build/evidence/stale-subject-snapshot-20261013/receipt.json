@@ -1,0 +1,38 @@
+{
+  "profile": "current-native-subject/read-committed-only",
+  "runtime": "truss-catalog-runtime/0.43-candidate",
+  "postgresql": "18.6",
+  "tests": 2,
+  "seconds": 21.721,
+  "criteria": [
+    "US-057-AC3",
+    "US-057-AC7"
+  ],
+  "controls": [
+    "Actual repeatable-read and serializable caller transactions captured before ordinary public versioned Assignment revocation.",
+    "Public GroupSuccess/COMMIT reaches native IDLE; actual activefalse independently read back.",
+    "Native captured top-level revoker xid is not visible in retained old snapshot and visible in fresh snapshot.",
+    "Original profile gate refuses before codec/evaluator/sink with exact contained error/no cleanup error; no caller object/mapShare cuts acquired.",
+    "Rollback/re-adopt readcommitted; same original caller/source/mapping guarded read returns zero rows."
+  ],
+  "qualification": "Categorical RR/SERIALIZABLE profile refusal; not snapshot age detection, generation advancement, old-fact codec evaluation or truss.L06 promotion.",
+  "limits": [
+    "No protected public endpoint or complete issuer/source/role/DDL/grant/lifetime qualification.",
+    "No old-snapshot support positive case, durable authority generation, history/cache/stream/clock-expiry coverage.",
+    "Local fixture authentication and original owner/runtime/code remain premises."
+  ],
+  "sourcePins": {
+    "packages/python/tests/test_security_guarded_subject_native.py": "f904cbf09b2fc92025fba199f2114c548c14e71b215a25b3460956beffd5248a",
+    "packages/python/src/truss/_psycopg_subject_observation.py": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+    "scripts/security_catalog_subject_read.py": "d69ace836cdb21580b9a3b47801492787cdc0f8e5f4cc50a8501df12ad1f40a7",
+    "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "714b67b1455def530baa6fd7ee035df7856155e9655c2eaca6f00f024e0855e3"
+  },
+  "evidencePins": {
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "serializable.json": "e9b346fecb2f7f27af0ab82c290c6420ec6530d8618aab2de00196c838f5aa82",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "02d9be495cfaff81e76a07130e034c64a1b3294a04fe442d9a86a12381d19f66",
+    "repeatable_read.json": "64d94fd87e708c3dfe0fe77de7c27aa2fe0f8cb9aa8ac2258b355bc59ad49cb3"
+  }
+}
