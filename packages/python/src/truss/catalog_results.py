@@ -33,9 +33,18 @@ class CatalogCompatibilityViolation:
     affected_object_count: int
 
 @dataclass(frozen=True,slots=True)
+class CatalogRelationshipCompatibilityViolation:
+    document_id: str
+    module_id: str
+    relationship_id: str
+    side: Literal['source','target']
+    rule: Literal['relationship.min','relationship.max']
+    affected_object_count: int
+
+@dataclass(frozen=True,slots=True)
 class CatalogAcceptanceRefused:
     revision: int
-    violations: tuple[CatalogCompatibilityViolation,...]
+    violations: tuple[CatalogCompatibilityViolation | CatalogRelationshipCompatibilityViolation,...]
     outcome: Literal['refused'] = 'refused'
     code: Literal['incompatible'] = 'incompatible'
 
