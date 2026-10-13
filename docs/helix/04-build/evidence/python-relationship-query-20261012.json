@@ -37,5 +37,13 @@
     "Structured query values and pagination profiles",
     "Broader import batches, archive/retention and managed-service qualification",
     "Full shared corpus/native interchange closure"
-  ]
+  ],
+  "mergedMain": {
+    "securitySourceHead": "26ec1874",
+    "wheelSha256": "ae364ca9c5ba5200fe2d1a60fa9cda013be51dc47886448491c0cd75cf846500",
+    "publicQueryAndUpgradePassed": 5,
+    "seconds": 30.697,
+    "boundaryImports": 854,
+    "securityReady": false
+  }
 }
