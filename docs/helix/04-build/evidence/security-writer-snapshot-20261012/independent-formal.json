@@ -1,0 +1,30 @@
+{
+  "status": "conditional-ordering-proof",
+  "solverVersion": "4.15.4",
+  "sourceDigests": {
+    "/private/tmp/truss-security-main-integration/scripts/prove-security-writer-snapshot.py": "23e7b3bfc6fa2074ad44b9dbe24beab3a842f426f014f639ded192a5be98e07f",
+    "packages/python/tests/test_security_public_ontology_native.py": "baf19d978333da219f9b594fe4af7b807edcf04de6630194b65ed4de6fbb97e1",
+    "packages/postgresql/native/security-data-writer-guard-pg18.sql": "fbe485ee33c48e332ce4c0a5a62535e9036357f28c7d8adc6dab62e570114bb0"
+  },
+  "cases": [
+    {
+      "id": "guard-inside-statement-can-retain-stale-snapshot",
+      "result": "sat",
+      "smt": "(declare-fun revocation_commit () Int)\n(declare-fun snapshot () Int)\n(declare-fun guard_acquired () Int)\n(assert (and (>= snapshot 0)\n     (>= revocation_commit 0)\n     (>= guard_acquired 0)\n     (<= revocation_commit guard_acquired)\n     (< snapshot revocation_commit)))\n",
+      "witness": "[snapshot = 0, guard_acquired = 1, revocation_commit = 1]"
+    },
+    {
+      "id": "separate-prelock-before-fresh-statement-excludes-stale-snapshot",
+      "result": "unsat",
+      "smt": "(declare-fun revocation_commit () Int)\n(declare-fun snapshot () Int)\n(declare-fun guard_acquired () Int)\n(assert (and (>= snapshot 0)\n     (>= revocation_commit 0)\n     (>= guard_acquired 0)\n     (<= revocation_commit guard_acquired)\n     (<= guard_acquired snapshot)\n     (< snapshot revocation_commit)))\n",
+      "witness": null
+    },
+    {
+      "id": "fresh-order-is-satisfiable",
+      "result": "sat",
+      "smt": "(declare-fun guard_acquired () Int)\n(declare-fun revocation_commit () Int)\n(declare-fun snapshot () Int)\n(assert (and (>= snapshot 0)\n     (>= revocation_commit 0)\n     (>= guard_acquired 0)\n     (<= revocation_commit guard_acquired)\n     (< guard_acquired snapshot)\n     (< revocation_commit guard_acquired)))\n",
+      "witness": "[snapshot = 2, guard_acquired = 1, revocation_commit = 0]"
+    }
+  ],
+  "scope": "Unbounded integer event ordering only. Premises: committed revocation precedes original guard acquisition, same guard remains held through fresh DML, and supported READ COMMITTED separate-command snapshot is taken after guard acquisition. Native paired race separately demonstrates the selected predicate behavior. No verification of SQL/Python refinement, snapshot implementation generally, logical authorization, all writers, admission, liveness or complete acceptance. SAT inside-statement control prevents treating native trigger guard as a freshness theorem."
+}

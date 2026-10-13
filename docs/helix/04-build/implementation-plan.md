@@ -6863,3 +6863,10 @@ US-028 complete required corpus or independent bidirectional interchange. The
 original 41-case corpus and TD/STP-028 remain unchanged/open; no old harness,
 accounting machinery or invented second engine is adopted. Evidence follows
 execution in `evidence/python-public-preview-corpus-20261012.json`.
+
+
+### Authorization-dependent DML snapshot constraint — 2026-10-12
+
+[Native paired race and conditional ordering proof](evidence/security-writer-snapshot-20261012/receipt.json) show why the data trigger cannot invalidate every stale decision: an ordinary consumer UPDATE begins before an assignment revocation commits, waits at the BEFORE guard, then updates an independent row using the old assignment predicate. The administrative control acquires original head SHARE then guard UPDATE in separate commands before fresh DML; it observes the committed revocation and updates zero rows. The selected target avoids an updated-target-row recheck masking the stale dependency.
+
+Authorization-dependent writes therefore require a supported original coordinator to acquire and retain the guard before issuing fresh authorization-dependent SQL. Trigger participation still protects generation/claim coordination but does not refresh an outer DML snapshot. The control uses administrative credentials and establishes no ordinary caller admission or complete writer closure. The1UNSAT/2SAT event-order model is conditional on native snapshot/lock premises, not SQL/Python refinement. Full native11 tests pass; the final head-before-guard correction also passes the focused race test. This is a L13 freshness prerequisite/counterexample, not execution of the full case; no required case is promoted.

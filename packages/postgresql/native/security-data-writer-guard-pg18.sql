@@ -3,7 +3,10 @@
 -- original identity/profile bytes and actual relation OID in immutable TG_ARGV.
 -- Attach BEFORE and AFTER STATEMENT for INSERT/UPDATE/DELETE/TRUNCATE, ENABLE ALWAYS.
 -- Advance once per AFTER trigger event, including zero-row events; UPSERT/MERGE
--- may fire multiple events per command. This does not authorize logical writes or establish complete source/role routes.
+-- may fire multiple events per command. This does not authorize logical writes
+-- or establish complete source/role routes. BEFORE does not refresh the outer
+-- DML snapshot: authorization-dependent DML requires an original coordinator
+-- guard acquired in a separate statement before issuing the fresh DML.
 CREATE FUNCTION truss.security_data_writer_guard() RETURNS trigger
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE original_identity bytea; original_profile bytea; observed_generation bigint;

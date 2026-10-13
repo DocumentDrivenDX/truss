@@ -98,7 +98,38 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    with self.assertRaises(psycopg.errors.InsufficientPrivilege):overflow.execute('INSERT INTO relational_fixture.assignment VALUES(4,false) ON CONFLICT(id) DO UPDATE SET active=excluded.active')
   self.assertEqual(self.admin.execute('SELECT count(*) FROM relational_fixture.assignment WHERE id=4').fetchone(),(0,))
   self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(9223372036854775806,))
-  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
+  # A statement trigger cannot refresh the already-selected outer DML snapshot.
+  self.admin.execute('UPDATE truss.policy_generation_guard SET generation=10')
+  self.admin.execute('UPDATE relational_fixture.assignment SET active=true')
+  stale=psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(stale)
+  def race(prelock):
+   self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute('SELECT generation FROM truss.policy_generation_guard FOR UPDATE');self.admin.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=1')
+   results=[]
+   def conditional_write():
+    try:
+     stale.execute('BEGIN')
+     if prelock:
+      stale.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');stale.execute('SELECT generation FROM truss.policy_generation_guard FOR UPDATE')
+     result=stale.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2 AND EXISTS(SELECT 1 FROM relational_fixture.assignment WHERE id=1 AND active)')
+     results.append(result.rowcount);stale.commit()
+    except BaseException as error:results.append(type(error).__name__);stale.rollback()
+   worker=threading.Thread(target=conditional_write);worker.start();deadline=time.monotonic()+5;waiting=False
+   try:
+    while time.monotonic()<deadline:
+     if self.admin.info.backend_pid in self.admin.execute('SELECT pg_catalog.pg_blocking_pids(%s)',(stale.info.backend_pid,)).fetchone()[0]:waiting=True;break
+     time.sleep(.01)
+    self.assertTrue(waiting);self.admin.commit()
+   finally:self.admin.rollback();worker.join(11)
+   self.assertFalse(worker.is_alive());return results
+  self.assertEqual(race(False),[1])
+  self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=1').fetchone(),(False,))
+  self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=2').fetchone(),(False,))
+  self.admin.execute('UPDATE relational_fixture.assignment SET active=true')
+  # Test-only administrative prelock: no ordinary credential admission is implied.
+  stale.close();stale=psycopg.connect(self.info.connection_uri,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(stale)
+  self.assertEqual(race(True),[0])
+  self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=2').fetchone(),(True,))
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','separate administrative prelock before DML observes committed revocation and affects zero rows'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
  def test_private_publication_registration_identity_capacity_and_rollback(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction
