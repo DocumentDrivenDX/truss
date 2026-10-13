@@ -1,0 +1,244 @@
+{
+  "scope": "Real selected recipe, source pin, descriptor, immutable input and pre-host controls only. Synthetic cursor and host dispatch; no native effects, role privilege proof or completed admission.",
+  "count": 59,
+  "passed": true,
+  "controls": [
+    {
+      "name": "selected original Staff recipe",
+      "passed": true
+    },
+    {
+      "name": "recipe types.document_id=foreign",
+      "passed": true
+    },
+    {
+      "name": "recipe types.module=other",
+      "passed": true
+    },
+    {
+      "name": "recipe types.element=Other",
+      "passed": true
+    },
+    {
+      "name": "recipe types.retired_rev=1",
+      "passed": true
+    },
+    {
+      "name": "recipe types.kind=entity",
+      "passed": true
+    },
+    {
+      "name": "recipe types.provisional=True",
+      "passed": true
+    },
+    {
+      "name": "recipe types.type_id=True",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.definition_document_id=foreign",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.declaration_module=other",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.element=other",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.home=row",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.scalar_type=integer",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.cardinality=many",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.nullability=nullable",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.retired_rev=1",
+      "passed": true
+    },
+    {
+      "name": "recipe properties.prop_id=True",
+      "passed": true
+    },
+    {
+      "name": "recipe keys.key_id=alternate",
+      "passed": true
+    },
+    {
+      "name": "recipe keys.retired_rev=1",
+      "passed": true
+    },
+    {
+      "name": "recipe keys.prop_ids=[8, 9]",
+      "passed": true
+    },
+    {
+      "name": "recipe types empty",
+      "passed": true
+    },
+    {
+      "name": "recipe types duplicate",
+      "passed": true
+    },
+    {
+      "name": "recipe properties empty",
+      "passed": true
+    },
+    {
+      "name": "recipe properties duplicate",
+      "passed": true
+    },
+    {
+      "name": "recipe keys empty",
+      "passed": true
+    },
+    {
+      "name": "recipe keys duplicate",
+      "passed": true
+    },
+    {
+      "name": "foreign descriptors refuse before fetch None",
+      "passed": true
+    },
+    {
+      "name": "foreign descriptors refuse before fetch [19]",
+      "passed": true
+    },
+    {
+      "name": "foreign descriptors refuse before fetch [25, 19]",
+      "passed": true
+    },
+    {
+      "name": "foreign rows/excess refuse [(None,)]",
+      "passed": true
+    },
+    {
+      "name": "foreign rows/excess refuse [(b'raw',)]",
+      "passed": true
+    },
+    {
+      "name": "foreign rows/excess refuse [(True,)]",
+      "passed": true
+    },
+    {
+      "name": "foreign rows/excess refuse [('a',), ('b',)]",
+      "passed": true
+    },
+    {
+      "name": "packaged helper exact original bytes and pin",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal []",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal ()",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('consumer', 's1'), ('consumer', 's1'), ('consumer', 's1'), ('consumer', 's1'), ('consume",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('consumer', 's1'), ('consumer', 's2'))",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('consumer',),)",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('consumer', ''),)",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('', 's1'),)",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 's1'),)",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('consumer', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('consumer', bytearray(b's1')),)",
+      "passed": true
+    },
+    {
+      "name": "binding shape/limit refusal (('consumer', 'x\\x00y'),)",
+      "passed": true
+    },
+    {
+      "name": "original mapping preflight original_request <class 'bytes'>",
+      "passed": true
+    },
+    {
+      "name": "original mapping preflight original_request <class 'bytearray'>",
+      "passed": true
+    },
+    {
+      "name": "original mapping preflight original_response <class 'bytes'>",
+      "passed": true
+    },
+    {
+      "name": "original mapping preflight accepted_catalog_assessment <class 'bytes'>",
+      "passed": true
+    },
+    {
+      "name": "original mapping preflight native_dependencies <class 'bytes'>",
+      "passed": true
+    },
+    {
+      "name": "256 unique roles bounded preflight succeeds",
+      "passed": true
+    },
+    {
+      "name": "mapping captured before packaged helper read",
+      "passed": true
+    },
+    {
+      "name": "ontology selected key missing",
+      "passed": true
+    },
+    {
+      "name": "ontology selected key duplicate",
+      "passed": true
+    },
+    {
+      "name": "ontology selected key wrong key",
+      "passed": true
+    },
+    {
+      "name": "exact owner schema/read gate true/true",
+      "passed": true
+    },
+    {
+      "name": "exact owner schema/read gate true/false",
+      "passed": true
+    },
+    {
+      "name": "exact owner schema/read gate false/true",
+      "passed": true
+    },
+    {
+      "name": "exact owner schema/read gate false/false",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "8dbf2bb69d6c4f45f95089919d572e1334349ac6e20d6fe23466355e46228aee"
+}

@@ -1,0 +1,65 @@
+{
+  "wheel": "truss_toolkit-0.0.19-py3-none-any.whl",
+  "wheelSha256": "c4547e1c0af6a697b566877adfc37c2056dc552ff7bd2e467e697d1027204f60",
+  "installerSha256": "992152cc9c10b0dedc5cfea82b40493bb874cc1f546f16fe187dadfe4ff28907",
+  "manifestSha256": "56b6f870104e6f79ebb7e9e860740a3002514641195a3fff3e65e51a3775b2a1",
+  "sources": [
+    {
+      "source": "immutability.sql",
+      "sha256": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "lock.sql",
+      "sha256": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "issue.sql",
+      "sha256": "f7c292a9a70715137c003232603877b58e862cd8476faf7a63992ff05b92326e",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "fresh-lock.sql",
+      "sha256": "b9d48c570237cac5b69b959270b363862ec5f87d33ac5145cdd9d847e9640ebc",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "read-fence.sql",
+      "sha256": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "fenced-fresh-lock.sql",
+      "sha256": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "routine-ddl-barrier.sql",
+      "sha256": "93d0740578df55803370f15e7de9d325baa6f465426bf3a3bcac48c217e68413",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "schema-ddl-barrier.sql",
+      "sha256": "0ad98a723bdfe5f0fc7c9648cf4b1845a512afba7f4069d9d0e7cc46ae07a4d6",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "database-ddl-barrier.sql",
+      "sha256": "4593c5d5b2caec37077a9d9b0f1631ffc8bbea9a045a3e17e8c66ac677ba7da3",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "table-ddl-barrier.sql",
+      "sha256": "9fdcd6823aafb1106597e1f9e003994df96748686b54b68b34adbea2ed198de4",
+      "originalNativeBytesMatch": true
+    },
+    {
+      "source": "alter-routine-ddl-barrier.sql",
+      "sha256": "c3fc4f3228d49cc67ff93009f70f0e08eb627a0dd7cbc3a43fb7db4feeb35720",
+      "originalNativeBytesMatch": true
+    }
+  ],
+  "status": "pass",
+  "scope": "Local built wheel bytes and repository-native SQL correspondence; not clean installed consumer qualification"
+}

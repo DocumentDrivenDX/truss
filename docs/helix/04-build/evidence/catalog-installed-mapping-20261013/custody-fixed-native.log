@@ -1,0 +1,17 @@
+test_original_carriers_are_captured_before_native_callbacks (test_security_catalog_source_installation_native.CatalogSourceInstallationTests.test_original_carriers_are_captured_before_native_callbacks)
+@covers US-056-AC6/AC9; source custody before host callback. ... ok
+test_archive_source_cut_is_held_through_delivery (test_security_catalog_archive_native.CatalogArchiveNativeTests.test_archive_source_cut_is_held_through_delivery)
+@covers US-056-AC9; selected cross-transaction source writer exclusion. ... ok
+test_late_archive_drift_refuses_after_actual_evaluation (test_security_catalog_archive_native.CatalogArchiveNativeTests.test_late_archive_drift_refuses_after_actual_evaluation)
+@covers US-057-AC7; original release comparison prerequisite. ... ok
+test_substituted_installed_policy_request_refuses_before_subject (test_security_catalog_archive_native.CatalogArchiveNativeTests.test_substituted_installed_policy_request_refuses_before_subject)
+@covers US-056-AC6/AC9; installed source binding prerequisite. ... ok
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 50.684s
+
+OK

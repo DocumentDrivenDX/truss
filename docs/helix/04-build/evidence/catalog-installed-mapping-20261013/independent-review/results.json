@@ -1,0 +1,265 @@
+{
+  "scope": "Actual archive functions; synthetic cursor and host callback inspection; original mapper recomputes dependencies from retained historical genuine native packets. No native SQL/lifecycle, full compiler validation, issuer or authority proof.",
+  "sourceSha256": "70487a970b3b82ccb730b63b0d227c53f8bcaca1534522d01d0765ae0afdd774",
+  "passed": 55,
+  "controls": [
+    {
+      "control": "six-exact-original-archive-carriers",
+      "passed": true
+    },
+    {
+      "control": "exact-six",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "no-descriptors",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "descriptor-width",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "wrong-name:0",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-oid:0",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "changed-field:0",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "missing-original-row:0",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "wrong-name:1",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-oid:1",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "changed-field:1",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "missing-original-row:1",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "wrong-name:2",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-oid:2",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "changed-field:2",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "missing-original-row:2",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "wrong-name:3",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-oid:3",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "changed-field:3",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "missing-original-row:3",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "wrong-name:4",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-oid:4",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "changed-field:4",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "missing-original-row:4",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "wrong-name:5",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-oid:5",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "changed-field:5",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "missing-original-row:5",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "mutable-decoded-field:2",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "mutable-decoded-field:3",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "mutable-decoded-field:4",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "extra-row",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "wrong-row-width",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "wrong-installation",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "initializer-original-replacement:original_request",
+      "passed": true
+    },
+    {
+      "control": "initializer-original-replacement:original_response",
+      "passed": true
+    },
+    {
+      "control": "initializer-original-replacement:accepted_catalog_assessment",
+      "passed": true
+    },
+    {
+      "control": "initializer-original-replacement:native_dependencies",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:original_request:empty",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:original_request:mutable",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:original_request:oversized",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:original_response:empty",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:original_response:mutable",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:original_response:oversized",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:accepted_catalog_assessment:empty",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:accepted_catalog_assessment:mutable",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:accepted_catalog_assessment:oversized",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:native_dependencies:empty",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:native_dependencies:mutable",
+      "passed": true
+    },
+    {
+      "control": "pre-host-shape:native_dependencies:oversized",
+      "passed": true
+    },
+    {
+      "control": "verifier-pre-file-snapshot:original_request",
+      "passed": true
+    },
+    {
+      "control": "verifier-pre-file-snapshot:original_response",
+      "passed": true
+    },
+    {
+      "control": "verifier-pre-file-snapshot:accepted_catalog_assessment",
+      "passed": true
+    },
+    {
+      "control": "verifier-pre-file-snapshot:native_dependencies",
+      "passed": true
+    },
+    {
+      "control": "derived-dependency-drift-refused",
+      "passed": true
+    }
+  ],
+  "inputDigests": {
+    "request.json": "359743a8140b8d88da17bc22ceb5a56b56402417411db63cbe7133f062a2cf8d",
+    "owner-response.json": "74fd70bc6ab9ede8d346b2adc1ef1f227c27412431c1498df650f55b6ecb5568",
+    "assessment.json": "33a940d78beb268eede6adcf82419df659d1d64f911ac4d351a3525da11cfe31"
+  }
+}

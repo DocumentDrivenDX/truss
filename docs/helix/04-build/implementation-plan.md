@@ -7786,3 +7786,66 @@ late changed generation refuses after successful evaluation (1/9.767s), and
 external guarded delivery/cleanup passes. This is comparison-only metadata;
 trusted fixture facts and complete installed-profile authority remain unresolved.
 No backend case is promoted. [Qualified controls](evidence/catalog-authority-generation-20261013/README.md).
+
+### Installed original mapping source archive — 2026-10-13
+
+The native source initializer now archives the original request, Weft handoff and
+native dependency mapping alongside release/catalog sources. Selected source-epoch
+publication verifies those exact installed sources before Subject capture and again
+before release, holding an archive SHARE lock. Initial twelve native cases pass;
+Astra identified and prompted a pre-I/O immutable carrier snapshot correction.
+[Source custody and qualified evidence](evidence/catalog-installed-mapping-20261013/README.md)
+retain initial/final results separately. This connects original installed sources
+into the factory boundary; compiler/issuer authentication, complete authority and
+backend admission remain open. CONTRACT-063/STP-056 B01/B08/B11/B12 and US-056
+AC6/AC9/AC10, US-057AC7 prerequisites only; all132 required cases remain unchanged.
+
+### Native epoch/barrier installer — 2026-10-13
+
+The private source infrastructure installer replaces manual positive fixture SQL
+setup with a pinned packaged eleven-source manifest and native readback of seven
+routines, five DDL hooks and four table hooks. It requires the original installed
+release/source marker, direct superuser and fresh epochs; existing objects refuse.
+Native installer/TLS6/40.967s and actual external peer/cleanup pass. Local wheel
+source correspondence and isolated resource import pass. [Qualified installer
+receipts](evidence/source-epoch-installation-20261013/README.md) preserve exact
+versions and excluded administrator/handler ownership. Pending construction is
+not issuer authentication or full profile admission. CONTRACT-063/STP-056
+B01/B11/B12 and US-056AC9/AC10 prerequisites only; all132 remain required.
+
+Astra found and prompted correction of the initial pre-pin type cast. The exact
+previous query executes a hostile native text-domain CHECK; the corrected
+pg_catalog.text query permits safe installation. Native counterexample/fix
+1/12.387s and hostile-domain/TLS3/27.340s pass. Unsafe third-party defaults refuse
+atomically (1/9.852s). Final wheel receipts are separate from historical initial
+build/test results. No complete compiler/issuer/authority or backend admission
+claim follows from these construction controls.
+
+### Initial catalog source factory composition — 2026-10-13
+
+A private original factory now connects marker/infrastructure outputs, accepted
+mapping and qualified fact recipes to native initial epoch issuance/readback.
+Binding moved into the library; profile0.4 pins the infrastructure manifest.
+Positive guarded source setup consumes the pending factory result. Native
+composition4/31.271s passes; actual late pointer deletion refuses and rolls back
+both epoch tables while preserving caller work (1/9.470s). An extra native hook
+refuses at the inventory bound (corrected expectation1/10.282s); initial assertion
+failure remains retained. Astra prompted restoring wrapper snapshot-before-I/O.
+[Qualified factory evidence](evidence/catalog-source-factory-20261013/README.md)
+keeps source custody distinct from full authority/profile admission. Trace
+CONTRACT-063/STP-056 B01/B11/B12, US-056AC6/AC9/AC10 and US-057AC7 prerequisites;
+all132 original required cases remain unchanged.
+
+### Original named Subject installation — 2026-10-13
+
+The positive Subject fixture now consumes a private library installer for native
+role/Staff-key bindings, original packaged helpers, private map ownership and
+exact helper/map readback. Up to256 ordinary native login bindings construct;
+protected-reader admission remains its original single-caller scope. Initial
+seven cases pass45.842s; Astra prompted an effective owner-read check, verified
+with a global SELECT-default revoke. Final owner-read/second-login/TLS4/41.107s
+passes. Actual second session sees only its native Subject and cannot read the
+map directly. [Qualified construction evidence](evidence/catalog-subject-installation-20261013/README.md)
+retains source/review/wheel/external results. Complete issuer/role/handler lifetime
+and backend admission remain open; US-056AC2/AC9/AC10, US-057AC7 and
+CONTRACT-063/STP-056 B01/B11/B12 prerequisites only. All132 remain required.

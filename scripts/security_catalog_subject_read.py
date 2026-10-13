@@ -16,74 +16,16 @@ ROOT=Path(__file__).resolve().parent.parent
 
 
 def _verify_helpers(cursor,source):
-    cursor.execute("SELECT c.relowner::pg_catalog.text,r.rolcanlogin::pg_catalog.text,r.rolsuper::pg_catalog.text,r.rolbypassrls::pg_catalog.text FROM pg_catalog.pg_class c JOIN pg_catalog.pg_roles r ON r.oid OPERATOR(pg_catalog.=) c.relowner WHERE c.oid OPERATOR(pg_catalog.=) 'truss.object'::pg_catalog.regclass",prepare=False,binary=False)
-    if cursor.description is None or len(cursor.description)!=4 or any(d.type_code!=25 for d in cursor.description):raise ValueError('Exact native helper owner descriptors required')
-    owners=cursor.fetchmany(2)
-    if len(owners)!=1 or owners[0][1:]!=('false','false','false'):raise ValueError('Original non-login ordinary helper owner required')
-    owner=owners[0][0]
-    cursor.execute('SELECT oid::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) SESSION_USER',prepare=False,binary=False)
-    if cursor.description is None or len(cursor.description)!=1 or cursor.description[0].type_code!=25:
-        raise ValueError('Exact native helper caller role descriptor required')
-    callers=cursor.fetchmany(2)
-    if len(callers)!=1 or type(callers[0][0]) is not str:
-        raise ValueError('Original unique native helper caller role required')
-    caller=callers[0][0]
-    bodies=[part.split('$$;',1)[0] for part in source.split('AS $$')[1:]]
-    if len(bodies)!=2:raise ValueError('Exact original helper definitions required')
-    for name,language,return_oid,names,modes,types,body in (
-            ('catalog_subject_current','plpgsql','25',['actor','staff_id'],['i','t'],['25','25'],bodies[0]),
-            ('catalog_subject_context','sql','2249',['actor','installation_id','database_oid','role_oid'],['i','t','t','t'],['25']*4,bodies[1])):
-        cursor.execute("SELECT p.proowner::pg_catalog.text,l.lanname::pg_catalog.text,p.prokind::pg_catalog.text,p.pronargs::pg_catalog.text,p.proargtypes::pg_catalog.text,p.prorettype::pg_catalog.text,p.proretset::pg_catalog.text,p.proisstrict::pg_catalog.text,p.prosecdef::pg_catalog.text,p.provolatile::pg_catalog.text,p.proparallel::pg_catalog.text,p.proleakproof::pg_catalog.text,p.prosupport::pg_catalog.oid::pg_catalog.text,pg_catalog.to_jsonb(p.proconfig)::pg_catalog.text,p.prosrc,pg_catalog.to_jsonb(p.proargnames)::pg_catalog.text,pg_catalog.to_jsonb(p.proargmodes)::pg_catalog.text,pg_catalog.to_jsonb(p.proallargtypes)::pg_catalog.text,(p.prosqlbody IS NULL)::pg_catalog.text FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace JOIN pg_catalog.pg_language l ON l.oid OPERATOR(pg_catalog.=) p.prolang WHERE n.nspname OPERATOR(pg_catalog.=) 'truss' AND p.proname OPERATOR(pg_catalog.=) %s AND p.proargtypes OPERATOR(pg_catalog.=) '25'::pg_catalog.oidvector",(name,),prepare=False,binary=False)
-        if cursor.description is None or len(cursor.description)!=19 or any(d.type_code!=25 for d in cursor.description):raise ValueError('Exact native helper TEXT descriptors required')
-        expected=(owner,language,'f','1','25',return_oid,'true','false','true','v','u','false','0','["search_path=pg_catalog, pg_temp"]',body,json.dumps(names),json.dumps(modes),json.dumps(types),'true')
-        if cursor.fetchmany(2)!=[expected]:raise ValueError('Exact installed catalog subject helper snapshot required')
-        cursor.execute("SELECT a.grantee::pg_catalog.text,a.grantor::pg_catalog.text,a.privilege_type::pg_catalog.text,a.is_grantable::pg_catalog.text FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a WHERE n.nspname OPERATOR(pg_catalog.=) 'truss' AND p.proname OPERATOR(pg_catalog.=) %s AND p.proargtypes OPERATOR(pg_catalog.=) '25'::pg_catalog.oidvector ORDER BY a.grantee,a.grantor,a.privilege_type,a.is_grantable",(name,),prepare=False,binary=False)
-        if cursor.description is None or len(cursor.description)!=4 or any(d.type_code!=25 for d in cursor.description):
-            raise ValueError('Exact native helper ACL descriptors required')
-        expected_acl=sorted([(owner,owner,'EXECUTE','false'),(caller,owner,'EXECUTE','false')],key=lambda row:int(row[0]))
-        if caller==owner or cursor.fetchmany(3)!=expected_acl:
-            raise ValueError('Exact installed catalog subject helper ACL required')
+    from truss._security_catalog_subject_helpers import verify_catalog_subject_helpers_with_cursor
+    return verify_catalog_subject_helpers_with_cursor(cursor,source)
 
 
 
 def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject_source=None):
-    """Private byte/recipe binding packet; not an authenticated issuer artifact."""
-    from truss._psycopg_fact_cut import _prepare_fenced_fact_cut,_FactRelationComparison,_FactColumnComparison
-    if type(mapping) is not PreparedSecurityMapping:raise ValueError('Exact bounded catalog source binding bytes required')
-    request,assessment=mapping.original_request,mapping.accepted_catalog_assessment
-    if (type(request) is not bytes or not 1<=len(request)<=4000000
-            or type(assessment) is not bytes or not 1<=len(assessment)<=1048576):
-        raise ValueError('Exact bounded catalog source binding bytes required')
-    if (type(fact_relations) is not tuple or not 1<=len(fact_relations)<=32
-            or any(type(r) is not _FactRelationComparison or type(r.columns) is not tuple
-                   or len(r.columns)>1600 or any(type(c) is not _FactColumnComparison for c in r.columns) for r in fact_relations)):
-        raise ValueError('Exact bounded source fact recipe shapes required')
-    fact_relations=tuple(replace(r,columns=tuple(replace(c) for c in r.columns)) for r in fact_relations)
-    _prepare_fenced_fact_cut(fact_relations,lambda c:None,existing_locks=True)
-    from truss._psycopg_epoch_cut import _DDLBarrierComparison
-    if type(barrier) is not _DDLBarrierComparison:raise ValueError('Exact native source barrier binding required')
-    barrier=replace(barrier)
-    if (type(barrier) is not _DDLBarrierComparison or type(barrier.owner_oid) is not int
-            or not 1<=barrier.owner_oid<=4294967295 or type(barrier.function_oid) is not int
-            or not 1<=barrier.function_oid<=4294967295 or type(barrier.source) is not str
-            or not 1<=len(barrier.source.encode('utf8'))<=65536 or type(barrier.include_alter_routine) is not bool or type(barrier.include_schema_ddl) is not bool or type(barrier.include_database_ddl) is not bool):
-        raise ValueError('Exact native source barrier binding required')
+    from truss._security_catalog_source_binding import derive_catalog_source_epoch_profile as bind,_snapshot_source_binding
+    mapping,fact_relations,barrier=_snapshot_source_binding(mapping,fact_relations,barrier)
     if subject_source is None:subject_source=(ROOT/'scripts/security-catalog-subject.sql').read_bytes()
-    if type(subject_source) is not bytes or not 1<=len(subject_source)<=65536:
-        raise ValueError('Exact bounded Subject helper bytes required')
-    recipes=[]
-    for r in sorted(fact_relations,key=lambda r:r.oid):
-        columns=[(c.name,c.number,c.type_oid,c.type_modifier,c.not_null,c.collation_oid,c.generated,c.identity) for c in r.columns]
-        recipes.append({'schema':r.schema,'name':r.name,'oid':r.oid,'ownerOid':r.owner_oid,'guardSha256':hashlib.sha256(r.guard_source.encode('utf8')).hexdigest(),'columnsSha256':hashlib.sha256(json.dumps(columns,separators=(',',':'),ensure_ascii=False).encode('utf8')).hexdigest(),'columnCount':len(columns)})
-    packet={'interfaceVersion':'truss-owned-catalog-source-profile/0.3',
-            'requestSha256':hashlib.sha256(request).hexdigest(),
-            'acceptedCatalogSha256':hashlib.sha256(assessment).hexdigest(),
-            'subjectHelperSha256':hashlib.sha256(subject_source).hexdigest(),
-            'ddlBarrier':{'ownerOid':barrier.owner_oid,'functionOid':barrier.function_oid,'sourceSha256':hashlib.sha256(barrier.source.encode('utf8')).hexdigest(),'includeAlterRoutine':barrier.include_alter_routine,'includeSchemaDdl':barrier.include_schema_ddl,'includeDatabaseDdl':barrier.include_database_ddl},
-            'factCuts':recipes}
-    raw=json.dumps(packet,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf8')
-    if len(raw)>65536:raise ValueError('Bounded native catalog source profile required')
-    return raw
+    return bind(mapping,fact_relations,barrier,subject_source=subject_source)
 
 
 def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,*,fact_relations=None,publisher=None,source_cut=None):
@@ -135,6 +77,8 @@ def run_owned_native_catalog_resource_read(caller_host,caller_transaction,execut
                 raise ValueError('Exact source epoch installation TEXT descriptor required')
             if c.fetchmany(2)!=[(source_cut[0].installation,)]:
                 raise ValueError('Original source epoch installation correspondence required')
+            from truss._security_catalog_source_installation import verify_catalog_source_archive_with_cursor
+            verify_catalog_source_archive_with_cursor(c,mapping,source_cut[0].installation)
         result=_run_ddl_fenced_epoch_operation(executor_host,executor_transaction,*source_cut,audience)
         if not isinstance(result,Ok):raise ValueError('Original executor source epoch and DDL barrier refused')
     def execute(cursor,observed):

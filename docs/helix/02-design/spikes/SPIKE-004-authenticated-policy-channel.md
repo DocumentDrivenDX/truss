@@ -239,3 +239,41 @@ late changed generation refuses after successful evaluation (1/9.767s), and
 external guarded delivery/cleanup passes. This is comparison-only metadata;
 trusted fixture facts and complete installed-profile authority remain unresolved.
 No backend case is promoted. [Qualified controls](../../04-build/evidence/catalog-authority-generation-20261013/README.md).
+
+### Installed mapping source correspondence — 2026-10-13
+
+The selected epoch-backed producer now verifies the original installed mapping
+request, compiler handoff and dependency mapping alongside release/catalog
+sources before native Subject capture and again before publication. The archive
+SHARE cut survives delivery. This advances CH04's source binding; exact byte
+comparison does not authenticate the installer/compiler/issuer or establish
+complete authority. Older three-record archives refuse this path pending explicit
+migration. [Native source evidence](../../04-build/evidence/catalog-installed-mapping-20261013/README.md).
+
+### Original packaged epoch infrastructure — 2026-10-13
+
+Positive source setup now uses the versioned private installer rather than manual
+SQL loading. Its original packaged sources and exact selected native readback
+supply pending construction identity for CH04. Actual TLS publication/cleanup
+still passes. Direct superuser installation, excluded handler ownership and
+administrative quiescence remain premises; the result creates no protected
+caller authority. [Installer evidence](../../04-build/evidence/source-epoch-installation-20261013/README.md).
+
+### Initial source factory issuance — 2026-10-13
+
+The protected publication fixture now consumes one initial source factory result,
+which binds original marker/infrastructure, source archives and qualified facts
+to actual native issuer/pointer readback. Pure profile0.4 pins packaged source
+identity; pending construction does not authorize a caller. Actual post-issuance
+pointer deletion refuses before factory handoff and preserves prior caller work.
+[Factory evidence](../../04-build/evidence/catalog-source-factory-20261013/README.md)
+advances CH04 source composition while complete authority/lifetime remains open.
+
+### Installed native Subject helpers — 2026-10-13
+
+Positive source setup now registers original native role/Staff-key bindings and
+installs/readbacks helpers through the library. Native second-session observation
+confirms own Subject, wrong-actor refusal and private map exclusion. Effective
+helper-owner reads are required; an owner-only ACL is insufficient. TLS source
+factory publication still passes. [Construction evidence](../../04-build/evidence/catalog-subject-installation-20261013/README.md)
+advances CH02/CH04 without complete authority/lifetime or multi-role read admission.

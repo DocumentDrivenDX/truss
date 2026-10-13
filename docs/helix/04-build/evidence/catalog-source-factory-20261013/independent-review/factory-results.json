@@ -1,0 +1,172 @@
+{
+  "count": 41,
+  "passed": true,
+  "scope": "Actual factory with synthetic supported-host callback and native rows; structural recipe validation actual, native fact acquisition/archive/catalog verifier dependencies replaced by explicit seams. No native failure atomicity or issuer authentication claim.",
+  "controls": [
+    {
+      "name": "positive pending; captured manifest and exact ordering",
+      "passed": true
+    },
+    {
+      "name": "refuse settings:1 {'rows': [('180006', 'repeatable read', 'off', 'on')]}",
+      "passed": true
+    },
+    {
+      "name": "refuse settings:1 {'rows': [('180006', 'read committed', 'on', 'on')]}",
+      "passed": true
+    },
+    {
+      "name": "refuse settings:1 {'rows': [('180006', 'read committed', 'off', 'off')]}",
+      "passed": true
+    },
+    {
+      "name": "refuse installation:1 {'rows': [('foreign', 42)]}",
+      "passed": true
+    },
+    {
+      "name": "refuse release:1 {'rows': [('other', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')]}",
+      "passed": true
+    },
+    {
+      "name": "refuse target:1 {'rows': [('3', '2', 'db')]}",
+      "passed": true
+    },
+    {
+      "name": "refuse marker:1 {'rows': []}",
+      "passed": true
+    },
+    {
+      "name": "refuse counts:1 {'rows': [('0', '1')]}",
+      "passed": true
+    },
+    {
+      "name": "refuse guard:1 {'rows': [(b'review-installation', b'original-profile', 2)]}",
+      "passed": true
+    },
+    {
+      "name": "refuse guard:2 {'rows': [(b'review-installation', b'original-profile', 2)]}",
+      "passed": true
+    },
+    {
+      "name": "refuse guard:1 {'codes': [17, 17, 1700]}",
+      "passed": true
+    },
+    {
+      "name": "refuse guard:2 {'codes': [17, 17, 1700]}",
+      "passed": true
+    },
+    {
+      "name": "refuse guard:1 {'rows': [(b'review-installation', b'original-profile', True)]}",
+      "passed": true
+    },
+    {
+      "name": "refuse issue:1 {'codes': [19]}",
+      "passed": true
+    },
+    {
+      "name": "refuse issue:1 {'rows': []}",
+      "passed": true
+    },
+    {
+      "name": "refuse issue:1 {'rows': [('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',)]}",
+      "passed": true
+    },
+    {
+      "name": "refuse readback:1 {'rows': []}",
+      "passed": true
+    },
+    {
+      "name": "refuse restore:1 {'rows': [('wrong',)]}",
+      "passed": true
+    },
+    {
+      "name": "refuse archive:1 True",
+      "passed": true
+    },
+    {
+      "name": "refuse archive:2 True",
+      "passed": true
+    },
+    {
+      "name": "refuse catalog:1 True",
+      "passed": true
+    },
+    {
+      "name": "refuse catalog:2 True",
+      "passed": true
+    },
+    {
+      "name": "refuse verify:1 True",
+      "passed": true
+    },
+    {
+      "name": "refuse verify:2 True",
+      "passed": true
+    },
+    {
+      "name": "preflight mapping original_request bytearray",
+      "passed": true
+    },
+    {
+      "name": "preflight mapping original_request bytes",
+      "passed": true
+    },
+    {
+      "name": "preflight mapping original_response bytes",
+      "passed": true
+    },
+    {
+      "name": "preflight mapping accepted_catalog_assessment memoryview",
+      "passed": true
+    },
+    {
+      "name": "preflight mapping native_dependencies bytes",
+      "passed": true
+    },
+    {
+      "name": "preflight mapping native_guard tuple",
+      "passed": true
+    },
+    {
+      "name": "preflight mapping native_guard tuple",
+      "passed": true
+    },
+    {
+      "name": "preflight mapping native_guard tuple",
+      "passed": true
+    },
+    {
+      "name": "preflight marker status",
+      "passed": true
+    },
+    {
+      "name": "preflight marker security_ready",
+      "passed": true
+    },
+    {
+      "name": "preflight marker target_incarnation",
+      "passed": true
+    },
+    {
+      "name": "preflight fact_relations <class 'list'>",
+      "passed": true
+    },
+    {
+      "name": "preflight fact_relations <class 'tuple'>",
+      "passed": true
+    },
+    {
+      "name": "preflight subject_source <class 'bytearray'>",
+      "passed": true
+    },
+    {
+      "name": "preflight subject_source <class 'bytes'>",
+      "passed": true
+    },
+    {
+      "name": "host-entry replacement cannot rebind captured original inputs",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "6a9a680a4e87a43b09e13ac10ff07dec65fafeef217ce6e13be53c815de77698"
+}

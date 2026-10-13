@@ -2058,3 +2058,55 @@ late changed generation refuses after successful evaluation (1/9.767s), and
 external guarded delivery/cleanup passes. This is comparison-only metadata;
 trusted fixture facts and complete installed-profile authority remain unresolved.
 No backend case is promoted. [Qualified controls](../04-build/evidence/catalog-authority-generation-20261013/README.md).
+
+### Installed mapping source comparison — 2026-10-13
+
+`test_security_catalog_archive_native` adds native installed-request substitution
+refusal before Subject/evaluation, actual late handoff deletion refusal after
+private evaluation, and archive writer exclusion through delivery. The installer
+suite adds mutation of the original source object in a native callback, requiring
+all installed bytes to match the pre-I/O capture. Initial twelve native cases
+pass; the custody correction replay is retained separately in
+[evidence](../04-build/evidence/catalog-installed-mapping-20261013/README.md).
+These trace US-056AC6/AC9/AC10 and US-057AC7 prerequisites, not full backend admission.
+
+### Native epoch infrastructure construction — 2026-10-13
+
+`test_security_source_epoch_installation_native` covers original packaged/native
+inventory, no repair, missing original marker, ordinary caller refusal and outer
+rollback. Original TLS cases exercise actual positive installer consumption.
+Native6/40.967s pass; local wheel source/import and external peer cleanup pass.
+A native third-party default function grant control additionally requires atomic
+refusal without private routine/hook residue. [Evidence](../04-build/evidence/source-epoch-installation-20261013/README.md)
+qualifies US-056AC9/AC10 and SPIKE-004 CH04 prerequisites only. Full backend
+acceptance and authority lifetime remain open.
+
+The installer’s hostile-domain control reproduces the prior unqualified text
+cast executing a raising native CHECK, then verifies corrected installation and
+caller-path restoration. Counterexample/fix1/12.387s and fixed-source hostile
+path/TLS3/27.340s pass; default-grant refusal1/9.852s passes. Initial/final wheel
+and native receipts remain distinguished in the evidence directory.
+
+### Initial source factory native controls — 2026-10-13
+
+`test_security_catalog_source_factory_native` verifies exact initial issuance,
+no implicit transition/reuse, stale guard/foreign incarnation refusal, unexpected
+native hook rejection, outer rollback and actual post-issuance pointer deletion
+with exact registry/current rollback and prior caller work retention. Original
+TLS cases consume factory output; foreign/unrelated sources remain explicit
+negative-only administrative constructions. [Retained results](../04-build/evidence/catalog-source-factory-20261013/README.md)
+include the initial wrong negative error expectation, corrected case and final
+aggregate replay. These are US-056AC6/AC9/AC10 and US-057AC7 prerequisites, not
+complete backend B01/B11/B12 acceptance.
+
+### Native Subject construction — 2026-10-13
+
+`test_security_catalog_subject_installation_native` covers exact initial native
+registration/no repair, missing Staff refusal, multiple declared principal ACL,
+unsafe login-role rejection, outer rollback and original caller work, owner
+SELECT revoked through native defaults, and actual second SESSION_USER helper
+invocation/wrong-actor refusal/no direct map SELECT. Initial installer/TLS7cases
+pass45.842s and final owner-read/second-session/TLS4cases pass41.107s.
+[Evidence](../04-build/evidence/catalog-subject-installation-20261013/README.md)
+qualifies US-056AC2/AC9/AC10 and US-057AC7 prerequisites, retaining explicit
+multi-role protected admission and complete lifecycle gaps.

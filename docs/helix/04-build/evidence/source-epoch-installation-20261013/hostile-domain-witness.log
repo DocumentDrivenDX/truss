@@ -1,0 +1,7 @@
+test_hostile_text_domain_cannot_run_before_path_pin (test_security_source_epoch_installation_native.SourceEpochInstallationNativeTests.test_hostile_text_domain_cannot_run_before_path_pin)
+@covers US-056-AC9/AC10; pre-pin type resolution is native pg_catalog. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 12.387s
+
+OK

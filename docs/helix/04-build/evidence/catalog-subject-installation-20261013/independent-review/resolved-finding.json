@@ -1,0 +1,12 @@
+{
+  "priority": "P2",
+  "status": "fixed",
+  "location": "packages/python/src/truss/_security_catalog_subject_installation.py:107",
+  "before": "Private map ACL readback excluded other grantees but did not establish owner SELECT. Global default privileges can revoke ordinary owner SELECT while retaining owner-only ACL rows.",
+  "after": "Requires effective owner schema USAGE and SELECT on truss.object, catalog_subject_map, catalog_runtime_installation, type_def and prop_def before returning pending.",
+  "evidence": "Final native missing-owner-SELECT control reaches exact new refusal and verifies no map/helpers remain; prior code retained in installer-before.py. No pre-fix native successful installation is claimed.",
+  "primaryReferences": [
+    "https://www.postgresql.org/docs/18/sql-alterdefaultprivileges.html",
+    "https://www.postgresql.org/docs/18/sql-grant.html"
+  ]
+}

@@ -1,0 +1,11 @@
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+test_native_epoch_for_unrelated_semantic_profile_refuses_before_inspection (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_native_epoch_for_unrelated_semantic_profile_refuses_before_inspection) ... ok
+test_foreign_runtime_installation_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_foreign_runtime_installation_refuses_before_subject_and_delivery) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 31.271s
+
+OK
