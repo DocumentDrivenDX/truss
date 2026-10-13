@@ -1,0 +1,7 @@
+test_late_native_generation_drift_refuses_publication (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_late_native_generation_drift_refuses_publication)
+@covers US-056-AC9; @covers US-057-AC7; final native comparison. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 9.767s
+
+OK

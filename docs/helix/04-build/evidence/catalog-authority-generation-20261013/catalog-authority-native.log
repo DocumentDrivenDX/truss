@@ -1,0 +1,33 @@
+test_native_generation_drift_refuses_before_evaluator (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_native_generation_drift_refuses_before_evaluator)
+@covers US-056-AC9; @covers US-057-AC3; prerequisite only. ... FAIL
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+
+======================================================================
+FAIL: test_native_generation_drift_refuses_before_evaluator (test_security_catalog_authority_native.CatalogAuthorityNativeTests.test_native_generation_drift_refuses_before_evaluator)
+@covers US-056-AC9; @covers US-057-AC3; prerequisite only.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_authority_native.py", line 15, in test_native_generation_drift_refuses_before_evaluator
+    result=source.subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,delivered.append)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/scripts/security_catalog_subject_read.py", line 195, in publish_ddl_epoch_guarded_native_catalog_resource_read
+    return run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations=fact_relations,publisher=publisher,source_cut=source_cut)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/scripts/security_catalog_subject_read.py", line 128, in run_owned_native_catalog_resource_read
+    observe=_prepare_subject_operation(caller_host,selection,original_inspector,produce,(('read_committed','read_write'),))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py", line 58, in _prepare_subject_operation
+    raw=original_inspector(request,probe)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_subject_native.py", line 31, in inspector
+    self.assertEqual(result.returncode,0,result.stderr);return result.stdout.strip()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: <MagicMock name='run().returncode' id='4510388112'> != 0 : <MagicMock name='run().stderr' id='4510391376'>
+
+----------------------------------------------------------------------
+Ran 3 tests in 23.431s
+
+FAILED (failures=1)

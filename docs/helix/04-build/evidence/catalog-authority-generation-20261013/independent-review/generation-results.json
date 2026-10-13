@@ -1,0 +1,113 @@
+{
+  "scope": "Actual Bun evaluator over historical native captured cells; protocol grammar and selected original decisions only, no current native capture/authority proof.",
+  "sourceSha256": "ad46b94d14a62f0ff20b56a5a8f537441e37ec4bb95bc45e7d356bb3549ac0c1",
+  "captureSha256": "0cb4522789a1e281d8ffb3054e17f30f3207db5aea1f9d8d6885afb1547c75a9",
+  "passed": 21,
+  "controls": [
+    {
+      "control": "legacy-optional-absent",
+      "passed": true,
+      "returnCode": 0
+    },
+    {
+      "control": "accepted:1",
+      "passed": true,
+      "returnCode": 0
+    },
+    {
+      "control": "accepted:2",
+      "passed": true,
+      "returnCode": 0
+    },
+    {
+      "control": "accepted:9223372036854775807",
+      "passed": true,
+      "returnCode": 0
+    },
+    {
+      "control": "refused:0",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:True",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:None",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:{}",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:[]",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:0.5",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:''",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'0'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'01'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'-1'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'+1'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'1.0'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'1e0'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'9223372036854775808'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'11111111111111111111'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:'1\\n'",
+      "passed": true,
+      "returnCode": 1
+    },
+    {
+      "control": "refused:' 1'",
+      "passed": true,
+      "returnCode": 1
+    }
+  ]
+}

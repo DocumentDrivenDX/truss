@@ -1,0 +1,132 @@
+{
+  "scope": "Exact guard function extracted from source, synthetic cursor; no native SQL, loader-constructor, transaction, or authority proof.",
+  "sourceSha256": "83abb020e11520d2dd8f68911c16f2b105760edda854f5d24eb89fd8db9c09e1",
+  "passed": 25,
+  "controls": [
+    {
+      "control": "exact-native-triple",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "missing-description",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "descriptor-width:0",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "descriptor-width:1",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "descriptor-width:2",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "descriptor-width:4",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "descriptor-name:0",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-name-oid:0",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "descriptor-name:1",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-name-oid:1",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "descriptor-name:2",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "foreign-name-oid:2",
+      "passed": true,
+      "fetches": 0
+    },
+    {
+      "control": "zero-rows",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "two-rows",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "short-row",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "long-row",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "bool-generation",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "numeric-generation",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "bytearray-identity",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "bytearray-profile",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "identity-drift",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "profile-drift",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "generation-drift",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "exact-generation:2",
+      "passed": true,
+      "fetches": 1
+    },
+    {
+      "control": "exact-generation:9223372036854775807",
+      "passed": true,
+      "fetches": 1
+    }
+  ]
+}

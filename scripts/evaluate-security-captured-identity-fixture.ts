@@ -24,7 +24,11 @@ if(named){
 }
 const raw=await Bun.stdin.text();if(raw.length>1048576)throw Error('Bounded original captured fixture required');const input=JSON.parse(raw);const bound=typeof input==='object'&&input!==null&&!Array.isArray(input);
 const listing=bound&&input.resultMode==='resources';
-if(bound&&(JSON.stringify(Object.keys(input).sort())!==JSON.stringify(listing?['cells','resultMode','subjectKey']:['cells','subjectKey'])||!Array.isArray(input.subjectKey)))throw Error('Closed original caller fixture input required');
+const nativeGeneration=bound&&Object.hasOwn(input,'authorityGeneration');
+if(nativeGeneration&&(typeof input.authorityGeneration!=='string'||!/^[1-9][0-9]{0,18}$/.test(input.authorityGeneration)||BigInt(input.authorityGeneration)>9223372036854775807n))throw Error('Exact bounded native authority generation required');
+const inputKeys=listing?['cells','resultMode','subjectKey']:['cells','subjectKey'];if(nativeGeneration)inputKeys.push('authorityGeneration');
+if(bound&&(JSON.stringify(Object.keys(input).sort())!==JSON.stringify(inputKeys.sort())||!Array.isArray(input.subjectKey)))throw Error('Closed original caller fixture input required');
+const generation=nativeGeneration?'native-guard:'+input.authorityGeneration:'owned-identity-fixture';
 const cells=bound?input.cells:input;
 if(!Array.isArray(cells)||cells.length!==transport.records.length)throw Error('Complete selected record captures required');
 const id=(r:{documentId:string;moduleId:string;elementId:string})=>JSON.stringify([r.documentId,r.moduleId,r.elementId]);
@@ -74,7 +78,7 @@ if(bound){
 }
 const resources=groups.get(id(ref('Resource')))!;
 if(!listing&&resources.length!==1)throw Error('Selected fixture resource required');
-const cut:SecurityFactCut={trusted:true,generation:'owned-identity-fixture',expectedGeneration:'owned-identity-fixture',policyId:model.policy.id,policyRevision:model.policy.revision,ontologyDocumentId:model.resolution.ontology.documentId,ontologyRevision:model.resolution.ontology.revision,subjects:subject,facts:[...groups].filter(([key])=>key!==id(model.resolution.ontology.subject)&&key!==id(ref('Resource'))).flatMap(([,rows])=>rows),coverage,context:[],maxFacts:100,maxSteps:10000};
+const cut:SecurityFactCut={trusted:true,generation,expectedGeneration:generation,policyId:model.policy.id,policyRevision:model.policy.revision,ontologyDocumentId:model.resolution.ontology.documentId,ontologyRevision:model.resolution.ontology.revision,subjects:subject,facts:[...groups].filter(([key])=>key!==id(model.resolution.ontology.subject)&&key!==id(ref('Resource'))).flatMap(([,rows])=>rows),coverage,context:[],maxFacts:100,maxSteps:10000};
 if(listing){
  const collection=evaluateSecurityCollection(model.policy,model.resolution,cut,{action:'read',targets:[ref('Resource')],resources,output:[ref('salary')]});
  if(collection.status!=='evaluated')throw Error('Complete original resource collection required');

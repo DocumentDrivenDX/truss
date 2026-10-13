@@ -63,7 +63,7 @@ def run_owned_catalog_resource_read(host,transaction,mapping,subject_key,*,fact_
     if type(mapping) is not PreparedSecurityMapping:
         raise ValueError('Original accepted-catalog fixture mapping required')
     # Read each carrier once before source I/O or host callbacks.
-    original_request,assessment=mapping.original_request,mapping.accepted_catalog_assessment
+    original_request,assessment,expected_guard=mapping.original_request,mapping.accepted_catalog_assessment,mapping.native_guard
     if (type(assessment) is not bytes or not 1<=len(assessment)<=16777216
             or type(original_request) is not bytes or not 1<=len(original_request)<=4_000_000
             or type(subject_key) is not str):
@@ -77,19 +77,32 @@ def run_owned_catalog_resource_read(host,transaction,mapping,subject_key,*,fact_
     pins=prepared.pins+tuple((p,hashlib.sha256(p.read_bytes()).digest()) for p in extra)
     transport=decode_owner_evidence_json((BASE/'transport.json').read_bytes())
     document=json.loads(expected_request['modules'][0]['documentJson'])
+    if (type(expected_guard) is not tuple or len(expected_guard)!=3
+            or any(type(v) is not bytes or not 1<=len(v)<=32768 for v in expected_guard[:2])
+            or type(expected_guard[2]) is not int or not 1<=expected_guard[2]<=9223372036854775807):
+        raise ValueError('Original prepared native authority comparison required')
+    def guard(cursor):
+        cursor.execute('SELECT installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard WHERE singleton=1 FOR SHARE NOWAIT',prepare=False)
+        if (cursor.description is None or tuple(d.name for d in cursor.description)!=('installation_identity_bytes','policy_profile_bytes','generation') or tuple(d.type_code for d in cursor.description)!=(17,17,20)):
+            raise ValueError('Exact native authority guard descriptors required')
+        rows=cursor.fetchmany(2)
+        if (len(rows)!=1 or len(rows[0])!=3 or tuple(type(v) for v in rows[0])!=(bytes,bytes,int) or rows!=[expected_guard]):
+            raise ValueError('Original current native authority comparison required')
     def execute(cursor,observation):
         _pin_cursor(cursor)
+        guard(cursor)
         cursor.execute('LOCK TABLE ONLY truss.object IN SHARE MODE NOWAIT',prepare=False)
         if capture_accepted_catalog(cursor,original_request)!=assessment:raise ValueError('Original current accepted catalog correspondence required')
         recipes=_catalog_record_recipe(json.loads(assessment),transport,document)
         # The list is entirely source-assessed native positive integer IDs.
         ids=','.join(str(r[0]) for r in recipes)
         rows=_text_rows(cursor,'SELECT id::pg_catalog.text,type_id::pg_catalog.text,props::pg_catalog.text,(root_id IS NOT NULL)::pg_catalog.text FROM ONLY truss.object WHERE type_id IN ('+ids+') ORDER BY type_id,id',4)
-        payload=json.dumps({'cells':_catalog_record_cells(recipes,rows),'subjectKey':[{'string':subject_key}],'resultMode':'resources'})
+        payload=json.dumps({'cells':_catalog_record_cells(recipes,rows),'subjectKey':[{'string':subject_key}],'resultMode':'resources','authorityGeneration':str(expected_guard[2])})
         if len(payload.encode())>1048576:raise ValueError('Bounded original accepted-catalog evaluator input required')
         result=subprocess.run(['/opt/homebrew/bin/bun',str(prepared.tool),'--named-source'],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=4)
         if result.returncode or len(result.stdout.encode())>65536:raise ValueError('Original accepted-catalog UMF evaluation refused')
         _pin_cursor(cursor)
+        guard(cursor)
         if capture_accepted_catalog(cursor,original_request)!=assessment:raise ValueError('Accepted catalog changed during owned evaluation')
         if any(hashlib.sha256(p.read_bytes()).digest()!=pin for p,pin in pins):raise ValueError('Original accepted-catalog evaluator sources changed')
         return _read_owned_resource_receipt(result.stdout)
