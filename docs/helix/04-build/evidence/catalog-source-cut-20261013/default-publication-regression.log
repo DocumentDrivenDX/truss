@@ -1,0 +1,6 @@
+test_guarded_publication_after_native_completion_under_caller_lease (test_security_guarded_subject_native.GuardedSubjectTests.test_guarded_publication_after_native_completion_under_caller_lease) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 9.908s
+
+OK

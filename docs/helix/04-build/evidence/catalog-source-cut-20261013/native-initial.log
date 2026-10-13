@@ -1,0 +1,8 @@
+test_disabled_source_barrier_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_disabled_source_barrier_refuses_before_subject_and_delivery) ... ok
+test_source_cut_precedes_key_and_survives_receiver (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_source_cut_precedes_key_and_survives_receiver) ... ok
+test_stale_original_epoch_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_stale_original_epoch_refuses_before_subject_and_delivery) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 33.376s
+
+OK
