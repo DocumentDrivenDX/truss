@@ -12,7 +12,7 @@ from truss.contracts import MapValue, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
     RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -178,14 +178,19 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         if 'save' in step:
                             cursors[step['save']['cursor']] = rows.next_cursor
                     else:
-                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id']=='read.key-lookup-whole-entity' else None)), QueryRows)
+                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends') else None)), QueryRows)
                 expected = step['expect']
                 actual_rows = [{name: list(value) if type(value) is tuple else value for name, value in zip(rows.columns, row, strict=True)} for row in rows.rows]
-                if actual_rows != expected['rows'] or ('columns' in expected and list(rows.columns) != expected['columns']):
+                # The original consumer _check_rows requires equal row count and
+                # compares every authored expected field; whole-object expectations
+                # deliberately omit other returned fields. Never trim actual rows.
+                if len(actual_rows) != len(expected['rows']) or any(any(name not in actual or actual[name] != value for name, value in wanted.items()) for actual, wanted in zip(actual_rows,expected['rows'],strict=True)) or ('columns' in expected and list(rows.columns) != expected['columns']):
                     raise AssertionError(f'Original expected read differs: {case["id"]}; columns={rows.columns!r}; actual={actual_rows!r}; expected={expected!r}')
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
-    return {'scope': 'selected original authority read variants; not complete corpus or interchange',
+    return {'scope': 'selected original SQL/expected-output observations; not complete harness cases or interchange',
+        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence'],
+        'notChecked':['consumer answer position/time','consumer mandatory whole-object timestamps','replica'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,
         'interpretation':'partial; actions/placement/replica semantics unselected', 'observations': observations}
