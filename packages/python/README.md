@@ -794,6 +794,6 @@ Empty bytes remain a value. The new optional-equality capability is refused by
 the retained required-only backend0.4.24. No timestamp, ordering, grouping or
 null-parameter support is implied. Wire0.2.5 remains unchanged.
 
-## Decimal(18,2) candidate (v0.0.20)
+## Decimal(18,2) and field-name candidate (v0.0.21)
 
-Adds original decimal(18,2) facets alongside decimal(18,4) across catalog acceptance, writes/imports, reads, business keys and Weft queries/pages. Exact tokens are preserved, including redundant zeros. Maximum9999999999999999.99 is valid; excess precision or nonrepresentable scale refuses. Native56 upgrades55 transactionally and requires matching Weft0.4.21/backend0.4.26. Publication is pending the release workflow; the installation example above remains on the published release.
+Adds original decimal(18,2) facets alongside decimal(18,4) across catalog acceptance, writes/imports, reads, business keys and Weft queries/pages. Exact tokens are preserved, including redundant zeros. Maximum9999999999999999.99 is valid; excess precision or nonrepresentable scale refuses. Name-only Field evolution retains property/key identities. Native57 upgrades56 transactionally and requires matching Weft0.4.22/backend0.4.27. The unpublished20 candidate failed retained-extension checks;21 corrects that omission. Publication is pending the release workflow; the installation example above remains on the published release.
