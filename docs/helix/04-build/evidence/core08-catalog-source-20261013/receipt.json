@@ -53,5 +53,8 @@
     "packages/python/src/truss/_umf_core08/licenses/fast-deep-equal.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
     "packages/python/src/truss/_umf_core08/licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
     "packages/python/src/truss/_umf_core08/licenses/json-schema-traverse.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
-  }
+  },
+  "integrationRevision": "f71daed6ec3463db55341e11edea18607031fcf5",
+  "mergedMain": "3216f010d083f8ed2cb5e0ac2ef793e5cd2a0831",
+  "integrationQualification": "Concurrent changes touch examples, their test and documentation only; all reviewed factory/producer/package source hashes verified unchanged. Selected source and installed-wheel tests retained at matching source hashes."
 }
