@@ -1,0 +1,33 @@
+{
+  "originalSha256": "34c92fc000a65d4f419f342bac2e10b32affdbea7e3d4ab522e1fbe66a1eae7f",
+  "rollbackOnly": true,
+  "observations": [
+    {
+      "sourceVersion": "0.7.0",
+      "sourceSha256": "34c92fc000a65d4f419f342bac2e10b32affdbea7e3d4ab522e1fbe66a1eae7f",
+      "accept": "Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code='unsupported_profile'), status='error')"
+    },
+    {
+      "sourceVersion": "0.8.0",
+      "diagnosticOnly": true,
+      "sourceSha256": "8c3388cfd389a58b7e4db24148db6c224a7be1d67e0cb334cca96aac401f9d53",
+      "acceptType": "CatalogRegistration",
+      "facetAssertionEntries": [
+        {
+          "sourcePointer": "/modules/0/elements/2/facets",
+          "ruleName": "core.facets",
+          "enforcement": "none",
+          "reason": "unqualified"
+        },
+        {
+          "sourcePointer": "/modules/0/elements/3/facets",
+          "ruleName": "core.facets",
+          "enforcement": "none",
+          "reason": "unqualified"
+        }
+      ],
+      "signed64Validator": true,
+      "decimal18_4Validator": false
+    }
+  ]
+}

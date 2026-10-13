@@ -7329,3 +7329,14 @@ Private shared observation custody now accepts the fixed original key encoder be
 
 
 Astra Ultra independently replays ten composed and26 observer controls against the final bounded1–32 encoding selection. It verifies completed native11.734s handback controls and retained19-group observation regression evidence, separately from native replay. Source-pinned independent review and controls are retained beside the composition receipt; no actionable finding remains within the historical operation-local scope.
+
+## New adopter gap: connected numeric facets — 2026-10-13
+
+Ashlar's original0.7 signed64/decimal18,4 source prepares but the selected source
+profile refuses acceptance. A separate0.8 diagnostic accepts facet metadata,
+but decimal writes/reads and all faceted query sources remain unsupported.
+See `evidence/ashlar-numeric-facets-20261013.md` and its rollback-only native result.
+This is a concrete new adopter implementation item, not a preparation-only fix:
+connect authoritative facet admission, exact no-rounding enforcement and Weft
+query lowering on one versioned runtime with a basic create/read/query check.
+No source-version reinterpretation or compiler-invented facets is authorized.
