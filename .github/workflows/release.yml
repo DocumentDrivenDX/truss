@@ -57,11 +57,11 @@ jobs:
           path: dist
       - name: Install exact released compiler and verify its checksum
         run: |
-          python -m pip download --only-binary=:all: --no-deps --no-index --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.17 --dest /tmp/weft-wheels weft-sql==0.4.17
+          python -m pip download --only-binary=:all: --no-deps --no-index --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.18 --dest /tmp/weft-wheels weft-sql==0.4.18
           python - <<'PYTHON'
           import hashlib,pathlib,urllib.request
           root=pathlib.Path('/tmp/weft-wheels');wheels=list(root.glob('*.whl'));assert len(wheels)==1
-          text=urllib.request.urlopen('https://github.com/DocumentDrivenDX/weft/releases/download/v0.4.17/SHA256SUMS',timeout=30).read().decode()
+          text=urllib.request.urlopen('https://github.com/DocumentDrivenDX/weft/releases/download/v0.4.18/SHA256SUMS',timeout=30).read().decode()
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
@@ -74,7 +74,7 @@ jobs:
           import importlib.metadata,pathlib,tomllib,truss,weft
           expected=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['version']
           assert importlib.metadata.version('truss-toolkit')==expected
-          assert importlib.metadata.version('weft-sql')==weft.__version__=='0.4.17'
+          assert importlib.metadata.version('weft-sql')==weft.__version__=='0.4.18'
           assert not pathlib.Path(truss.__file__).resolve().is_relative_to(pathlib.Path('packages/python/src').resolve())
           PYTHON
           python packages/python/examples/adopter_workflow.py "$RUNNER_TEMP/truss-release-demo" --bun bun
@@ -153,6 +153,12 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
         run: python -m unittest test_parallel_edges_native
 
+      - name: Run installed relationship-name evolution workflows
+        env:
+          PYTHONPATH: packages/python/tests
+          TRUSS_BUN_EXECUTABLE: bun
+        run: python -m unittest test_relationship_names_native
+
   publish:
     if: github.ref_type == 'tag'
     needs: [package, native]
@@ -180,7 +186,7 @@ jobs:
           assert len(list(root.glob('*.whl')))==len(list(root.glob('*.tar.gz')))==1
           (root/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n' for p in assets))
           manifest=pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json');runtime=json.loads(manifest.read_bytes())
-          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v0.4.17','weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','bun':'1.4.2','nativePlatforms':['linux-x86_64','macos-arm64']}
+          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v0.4.18','weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','bun':'1.4.2','nativePlatforms':['linux-x86_64','macos-arm64']}
           (root/'release-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
           PYTHON
           if gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft > /tmp/release-draft; then

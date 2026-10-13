@@ -11,16 +11,16 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.15`,
-native runtime `0.52-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.22`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.16`,
+native runtime `0.53-candidate`, layout `1.0`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.23`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.15](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.15).
+The current release is [v0.0.16](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.16).
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
@@ -31,15 +31,15 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.15 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.17 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.16 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.18 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.15'
+  'truss-toolkit[local,native,query]==0.0.16'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
 publishes package checksums and source/runtime/backend pins. The Truss release
-workflow exercises the exact uploaded wheel with published Weft0.4.17 and verified
+workflow exercises the exact uploaded wheel with published Weft0.4.18 and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
@@ -156,7 +156,7 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.51 to the current runtime0.52. The trusted administrator must quiesce consumers and
+0.23 through 0.52 to the current runtime0.53. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -760,3 +760,15 @@ Layout1.0 removes the old unique endpoint index. Use the trusted administrative
 upgrade for populated layout0.16 installations. Genesis, original receipts and
 saved feed pages remain retained; new facts carry their producing transaction's
 configuration. Native0.52 pairs with Weft0.4.17/backend0.4.22.
+
+
+## Relationship presentation names (v0.0.16)
+
+Reaccept a document to rename an existing relationship `name` or an existing
+string `inverse` label. Stable document/module/relationship IDs, endpoints,
+keys, direction and lifecycle retain their guards. This tranche does not add or
+remove inverse labels. Current SQL uses the new forward/inverse labels; obtain
+a fresh relationship reference for mutations and traversal. Acceptance leaves
+edge IDs, versions and values unchanged. Original request replay and history
+retain the original meaning. Native0.53/layout1.0 pairs with
+Weft0.4.18/backend0.4.23 and upgrades0.52 additively.

@@ -9,7 +9,7 @@ import subprocess
 import sys
 import tarfile
 
-REVISION = '8fea6c692a7f1b406488b813379d7778a6c23d1c'
+REVISION = 'cadc252d4308fbab81b81fa47cc2348c2924f7eb'
 
 
 def main():
