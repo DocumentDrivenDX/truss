@@ -83,6 +83,11 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_numeric_facets_native.NumericFacetTests.test_public_accept_create_update_import_read_and_query test_numeric_facets_native.NumericFacet08Tests.test_public_accept_create_update_import_read_and_query
+      - name: Run both installed decimal scale2 workflows
+        env:
+          TRUSS_BUN_EXECUTABLE: bun
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_decimal_scale2_native.DecimalScale2Tests test_decimal_scale2_native.DecimalScale208Tests
       - name: Run both installed binary equality workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun
