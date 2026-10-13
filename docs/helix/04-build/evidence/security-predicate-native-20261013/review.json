@@ -1,0 +1,124 @@
+{
+  "review": "Independent Astra Ultra read-only runtime0.37 selected signed64 enforcement and additive036 upgrade review",
+  "head": "4e843375ba12a6733c13057a1e9c6ef57087d34b",
+  "workingTree": "uncommitted candidate at review",
+  "findings": [],
+  "resolvedFindings": [
+    {
+      "issue": "New helper omitted from private upgrade ACL audit",
+      "resolution": "valid_scalar_property included in final native owner/aclexplode audit; actual explicit default-grant refusal rolls back helper and preserves caller work/release; successful upgrade preserves existing routine identities/owners/ACLs"
+    },
+    {
+      "issue": "Overflow group outcome verification attempted unauthorized ordinary table read",
+      "resolution": "Committed outcome inspected through existing admin observer; no consumer privilege widened"
+    },
+    {
+      "issue": "Update regression lacked value-preservation assertions",
+      "resolution": "Public read after each valid/refused write and TEMP sentry checks; discovered read facet refusal fixed with exact helper; committed receipt replay checked"
+    }
+  ],
+  "independentChecks": {
+    "scope": "Read-only source review and actual Python release loader, source inventory/hash controls; lexical comparison independently translated to Python, not a PostgreSQL execution/refinement proof. No native database mutation.",
+    "head": "4e843375ba12a6733c13057a1e9c6ef57087d34b",
+    "releaseId": "truss-catalog-runtime/0.37-candidate",
+    "manifestDigest": "a8310e6af8bed761332eff7f6fb6670862397b761821e5f4d219341874f7486c",
+    "manifestFilesVerified": 41,
+    "original036ManifestExact": true,
+    "extractedReplacementCount": 120,
+    "translatedLexicalCases": 16018,
+    "sourceDigests": {
+      "packages/python/src/truss/catalog_runtime.py": "5576ae1e4a20b503350f3a882b015ed3b29652bf0811f7682efbffb5db799337",
+      "packages/python/src/truss/_catalog_runtime/manifest.json": "a8310e6af8bed761332eff7f6fb6670862397b761821e5f4d219341874f7486c",
+      "packages/python/src/truss/_catalog_runtime/upgrade-source-036.json": "4dd0e3b43bfe04541c5bbd63bc04eb8be698f2f82c722b2d9069dedb4adde3b8",
+      "packages/python/src/truss/_catalog_runtime/scalars.sql": "48877cb2562e8616d53a3f09f11afa59ee99d7ad33149ebe9b3932ec4db19906",
+      "packages/python/src/truss/_catalog_runtime/groups.sql": "665f698c43fe9f9cb8b856412b36553505cfe5c7c591a223e281a6b3d908d665",
+      "packages/python/src/truss/_catalog_runtime/operations.sql": "cbc2d913d53a9803dfaef89074c51f26e82fa560ec0d924e33bb73a6f72dd9f2",
+      "packages/python/src/truss/_catalog_runtime/read.sql": "aa809d274f541031907e6000ce6441142fc77c455eb57526529099de324cb2a9",
+      "packages/python/src/truss/_catalog_runtime/query.sql": "a13a7d19ffa5c32a07573fc8b4dc4f06df408bf0ed3589c6bb817b87b398878f",
+      "packages/python/src/truss/_catalog_runtime/migrations.sql": "7c375e68f2a2121c1f5897a179fb3dc716db91952e03a3510e0cc3cf1db6630e",
+      "packages/python/src/truss/_catalog_runtime/runtime.sql": "e5c650eaa15a4f1de8f187f0eac1ca991fc4793c26664533de5cd85e48740847",
+      "packages/python/tests/test_core08_catalog_native.py": "2bde86dfc1fc55b78a122655784e549a8985877adbc81bd87c0d266cec1d5394",
+      "packages/python/tests/test_security_predicate_native.py": "85d4c4366504c46a849780d28296f59de649c37a82a98f84b621f6707f0edf71"
+    }
+  },
+  "formalReplay": {
+    "z3": "4.15.4",
+    "scope": "19 canonical ASCII digits only; original lexical grammar, SQL collation, custody and execution remain separate premises",
+    "checks": [
+      {
+        "bound": "9223372036854775807",
+        "counterexample": "unsat"
+      },
+      {
+        "bound": "9223372036854775808",
+        "counterexample": "unsat"
+      }
+    ],
+    "positive_overflow_witness": "[value = 9223372036854775808]"
+  },
+  "sourceDigests": {
+    "packages/python/src/truss/catalog_runtime.py": "5576ae1e4a20b503350f3a882b015ed3b29652bf0811f7682efbffb5db799337",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "a8310e6af8bed761332eff7f6fb6670862397b761821e5f4d219341874f7486c",
+    "packages/python/src/truss/_catalog_runtime/upgrade-source-036.json": "4dd0e3b43bfe04541c5bbd63bc04eb8be698f2f82c722b2d9069dedb4adde3b8",
+    "packages/python/src/truss/_catalog_runtime/scalars.sql": "48877cb2562e8616d53a3f09f11afa59ee99d7ad33149ebe9b3932ec4db19906",
+    "packages/python/src/truss/_catalog_runtime/groups.sql": "665f698c43fe9f9cb8b856412b36553505cfe5c7c591a223e281a6b3d908d665",
+    "packages/python/src/truss/_catalog_runtime/operations.sql": "cbc2d913d53a9803dfaef89074c51f26e82fa560ec0d924e33bb73a6f72dd9f2",
+    "packages/python/src/truss/_catalog_runtime/read.sql": "aa809d274f541031907e6000ce6441142fc77c455eb57526529099de324cb2a9",
+    "packages/python/src/truss/_catalog_runtime/query.sql": "a13a7d19ffa5c32a07573fc8b4dc4f06df408bf0ed3589c6bb817b87b398878f",
+    "packages/python/src/truss/_catalog_runtime/migrations.sql": "7c375e68f2a2121c1f5897a179fb3dc716db91952e03a3510e0cc3cf1db6630e",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "e5c650eaa15a4f1de8f187f0eac1ca991fc4793c26664533de5cd85e48740847",
+    "packages/python/tests/test_core08_catalog_native.py": "2bde86dfc1fc55b78a122655784e549a8985877adbc81bd87c0d266cec1d5394",
+    "packages/python/tests/test_security_predicate_native.py": "85d4c4366504c46a849780d28296f59de649c37a82a98f84b621f6707f0edf71",
+    "docs/helix/04-build/evidence/security-predicate-native-20261013/signed64-proof.py": "9cec7d7694cbac218266b2fa0050de1b531a15b7140c0f16bba8b2247354dc6e",
+    "docs/helix/04-build/evidence/security-predicate-native-20261013/original-simulator-comparisons.json": "0697d0a6a5915c5cde47df44a33089b67dbfc8ac5d2e0be52dabf59a7acff5a2",
+    "docs/helix/04-build/evidence/security-predicate-native-20261013/native-truths.json": "cca68101af93beb868466353a6ecae4cda1db48da11de3c328c0598ea0095df8"
+  },
+  "parentNativeEvidence": [
+    {
+      "path": "/private/tmp/truss-runtime037-validation.log",
+      "sha256": "ed0dda54ec0ba8e399b3448f11d359291211c8a6509c4a4e99a6be907e6a855e",
+      "provenance": "Parent-run actual native controls; log inspected, not independently rerun"
+    },
+    {
+      "path": "/private/tmp/truss-runtime037-writer-boundaries-final.log",
+      "sha256": "1b5c6e09205812ec4bddf784721949328552ddecf1995fe1ec972ccac9bb73db",
+      "provenance": "Parent-run actual native controls; log inspected, not independently rerun"
+    },
+    {
+      "path": "/private/tmp/truss-original-simulator-native-final.log",
+      "sha256": "980f091a580a49fea3b2adcb65daa269a7ebc1eed53dbdc956f1169443cd42d7",
+      "provenance": "Parent-run actual native controls; log inspected, not independently rerun"
+    },
+    {
+      "path": "/private/tmp/truss-signed64-update-observed-native-final2.log",
+      "sha256": "d4d8600da3f5cf5071b615f547997fdc747454206ad3099925b9b131b903f470",
+      "provenance": "Parent-run actual native controls; log inspected, not independently rerun"
+    },
+    {
+      "path": "/private/tmp/truss-runtime037-hostile-grants.log",
+      "sha256": "5642290e6c809ae28e15dae862525c10047389bb86dcf704044043fd81b0b684",
+      "provenance": "Parent-run actual native controls; log inspected, not independently rerun"
+    },
+    {
+      "path": "/private/tmp/truss-runtime037-final-writer-replay.log",
+      "sha256": "92c7907e43c4f85b87b25dee5085ddb5211a55bb93546e73ce3727d629b80315",
+      "provenance": "Parent-run actual native controls; log inspected, not independently rerun"
+    }
+  ],
+  "scope": [
+    "Exact signed64 lexical bounds conditional on existing valid_scalar_cell grammar; original text retained",
+    "Create/update/direct-read selected exact integerWidth(64,signed) property handling",
+    "Original036 manifest byte retention, 120-routine additive inventory, existing OID/owner/ACL preservation and new private helper audit",
+    "Six retained original simulator/native membership comparisons checked for correspondence"
+  ],
+  "limitations": [
+    "No independent native database rerun or mutation",
+    "Python lexical translation is not SQL execution or refinement proof; Z3 lemma is conditional on 19 canonical ASCII digits and does not prove native grammar/collation/custody",
+    "query_objects still refuses nonempty facets; a Weft release-id compatibility amendment alone does not qualify compiled queries over new signed64 properties",
+    "Safe native search path and authentic helpers, originally valid complete fact domain, current truthful native mapping and declared keys remain predicate diagnostic premises",
+    "No production security backend admission, native issuer/principal authentication, complete source/writer barrier or acceptance-case promotion"
+  ],
+  "pendingParentIntegration": [
+    "Intended Weft0.37 existing-profile compatibility qualification remains separate"
+  ]
+}

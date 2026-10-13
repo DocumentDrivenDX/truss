@@ -46,3 +46,19 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.logical_scalar_cell(jsonb) FROM PUBLIC;
+
+-- Selected signed64 refinement; preserve original lexical bytes without casts.
+CREATE FUNCTION truss.valid_scalar_property(cell jsonb,family text,allow_null boolean,facets jsonb) RETURNS boolean
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE token text;limit_text text;
+BEGIN
+ IF truss.valid_scalar_cell(cell,family,allow_null) IS NOT TRUE THEN RETURN false;END IF;
+ IF facets IS NULL OR facets='{}'::jsonb THEN RETURN true;END IF;
+ IF family IS DISTINCT FROM 'integer' OR facets IS DISTINCT FROM '{"integerWidth":{"bits":64,"signed":true}}'::jsonb THEN RETURN false;END IF;
+ IF cell='{"kind":"null"}'::jsonb THEN RETURN allow_null;END IF;
+ token:=cell->>'text';limit_text:='9223372036854775807';
+ IF left(token,1)='-' THEN token:=substring(token,2);limit_text:='9223372036854775808';END IF;
+ RETURN length(token)<19 OR (length(token)=19 AND token COLLATE pg_catalog."C"<=limit_text COLLATE pg_catalog."C");
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.valid_scalar_property(jsonb,text,boolean,jsonb) FROM PUBLIC;

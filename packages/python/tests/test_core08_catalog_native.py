@@ -94,11 +94,23 @@ class Core08CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
   original_objects=self.admin.execute('SELECT id,type_id,props::text FROM truss.object ORDER BY id').fetchall();self.assertGreater(len(original_objects),0)
   original_reports=self.admin.execute('SELECT rev,report_bytes FROM truss.catalog_acceptance_report ORDER BY rev').fetchall()
   original_routines=self.admin.execute("SELECT p.oid,p.proowner,p.proacl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' ORDER BY p.oid").fetchall()
+  # Unexpected explicit default grants must refuse and unwind the new helper.
+  self.admin.execute('ALTER DEFAULT PRIVILEGES GRANT EXECUTE ON FUNCTIONS TO consumer')
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
+  self.admin.execute("CREATE TEMP TABLE upgrade_prior(value text);INSERT INTO upgrade_prior VALUES('kept')")
+  a=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
+  refused=a.upgrade_in_transaction(self.tx);self.assertIsInstance(refused,Error)
+  self.assertIn('Private owned migration objects required',str(self.host._custody.last_attempt.error))
+  self.assertEqual(self.admin.execute('TABLE upgrade_prior').fetchall(),[('kept',)])
+  self.assertEqual(self.admin.execute('SELECT release_id,release_sha256 FROM truss.runtime_current_installation()').fetchone(),original_release)
+  self.assertEqual(self.admin.execute("SELECT to_regprocedure('truss.valid_scalar_property(jsonb,text,boolean,jsonb)') IS NULL").fetchone(),(True,))
+  self.host.detach();self.admin.rollback()
+  self.admin.execute('ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM consumer')
   for commit in (False,True):
    self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
    a=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
    upgraded=a.upgrade_in_transaction(self.tx);self.assertIsInstance(upgraded,Ok,str(self.host._custody.last_attempt.error))
-   self.assertEqual(upgraded.value.previous_release_id,original_release[0]);self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.36-candidate')
+   self.assertEqual(upgraded.value.previous_release_id,original_release[0]);self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.37-candidate')
    self.assertEqual(self.admin.execute('SELECT id,type_id,props::text FROM truss.object ORDER BY id').fetchall(),original_objects)
    self.assertEqual(self.admin.execute('SELECT rev,report_bytes FROM truss.catalog_acceptance_report ORDER BY rev').fetchall(),original_reports)
    self.assertEqual([row for row in self.admin.execute("SELECT p.oid,p.proowner,p.proacl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' ORDER BY p.oid").fetchall() if row[0] in {old[0] for old in original_routines}],original_routines)
@@ -112,3 +124,11 @@ class Core08CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
   accepted=a.accept_in_transaction(t,prepared,request_key='after-upgrade08');self.assertIsInstance(accepted,Ok,str(h._custody.last_attempt.error));h.detach();c.commit()
   self.assertEqual(self.admin.execute("SELECT umf_version FROM truss.schema_doc WHERE doc_id='domain'").fetchall(),[('0.8.0',)])
   self.assertEqual(self.admin.execute('SELECT id,type_id,props::text FROM truss.object ORDER BY id').fetchall(),original_objects)
+
+ def test_native_signed64_exact_lexical_boundaries_and_private_helper(self):
+  self.install();self.host.detach();self.admin.commit()
+  facets={'integerWidth':{'bits':64,'signed':True}}
+  for text,expected in [('0',True),('-0',True),('9223372036854775807',True),('-9223372036854775808',True),('9223372036854775808',False),('-9223372036854775809',False),('9'*10000,False),('01',False),('1.0',False)]:
+   with self.subTest(text=text[:30]):
+    self.assertEqual(self.admin.execute('SELECT truss.valid_scalar_property(%s::jsonb,%s,%s,%s::jsonb)',(json.dumps({'kind':'integer','text':text}),'integer',False,json.dumps(facets))).fetchone(),(expected,))
+  self.assertEqual(self.admin.execute("SELECT has_function_privilege('consumer','truss.valid_scalar_property(jsonb,text,boolean,jsonb)','EXECUTE')").fetchone(),(False,))

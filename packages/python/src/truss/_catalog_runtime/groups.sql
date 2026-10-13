@@ -405,13 +405,13 @@ BEGIN
   FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
    IF coalesce(property.scalar_type,'') NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json'
     OR property.nullability NOT IN ('required','absent-allowed') OR property.item IS NOT NULL
-    OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb) THEN
+    OR (property.facets IS NOT NULL AND property.facets<>'{}'::jsonb AND NOT (property.scalar_type='integer' AND property.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb)) THEN
     RAISE EXCEPTION 'selected scalar property profile required' USING ERRCODE='0A000'; END IF;
    SELECT v.value->'value' INTO supplied_value FROM jsonb_array_elements(operation->'values') v WHERE v.value->>'name'=property.name;
    IF NOT FOUND THEN
     IF property.nullability='required' THEN RAISE EXCEPTION 'missing required value' USING ERRCODE='22023'; END IF;
    ELSE
-    IF truss.valid_scalar_cell(supplied_value,property.scalar_type,property.nullability='absent-allowed') IS NOT TRUE THEN
+    IF truss.valid_scalar_property(supplied_value,property.scalar_type,property.nullability='absent-allowed',property.facets) IS NOT TRUE THEN
      RAISE EXCEPTION 'exact property family and value required' USING ERRCODE='22023'; END IF;
     props:=props||jsonb_build_object(property.prop_id::text,supplied_value);
    END IF;

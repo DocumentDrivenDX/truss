@@ -1,0 +1,9 @@
+test_original_policy_membership_predicates_match_native_population (test_security_predicate_native.NativePredicateTests.test_original_policy_membership_predicates_match_native_population) ... ok
+test_signed64_boundaries_through_ordinary_writer (test_security_predicate_native.NativePredicateTests.test_signed64_boundaries_through_ordinary_writer) ... ok
+test_signed64_overflow_refuses_entire_original_group (test_security_predicate_native.NativePredicateTests.test_signed64_overflow_refuses_entire_original_group) ... ok
+test_signed64_underflow_refuses_entire_original_group (test_security_predicate_native.NativePredicateTests.test_signed64_underflow_refuses_entire_original_group) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 20.926s
+
+OK
