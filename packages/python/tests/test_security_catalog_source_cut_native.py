@@ -29,9 +29,9 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
   # Administrative marker seed is explicit; not the production bootstrap issuer.
   self.admin.execute("INSERT INTO truss.installation_marker VALUES(1,'truss-bootstrap-marker/0.1.0',%s,'fixture',sha256(decode('01','hex')),'fixture',sha256(decode('02','hex')),'fixture','truss',now(),now()::text)",(installation,))
   source=(ROOT/'packages/postgresql/native/source-epoch-routine-ddl-barrier.sql').read_text()
-  self.admin.execute(source);self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
+  self.admin.execute(source);self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-schema-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
   oid,owner=self.admin.execute("SELECT oid,proowner FROM pg_proc WHERE oid='truss.runtime_fence_routine_ddl_writer()'::regprocedure").fetchone()
-  barrier=_DDLBarrierComparison(owner,oid,source.split('AS $$',1)[1].split('$$;',1)[0],include_alter_routine=True)
+  barrier=_DDLBarrierComparison(owner,oid,source.split('AS $$',1)[1].split('$$;',1)[0],include_alter_routine=True,include_schema_ddl=True)
   profile=subject.derive_catalog_source_epoch_profile(mapping,relations,barrier) if profile_override is None else profile_override
   evidence=mapping.accepted_catalog_assessment if evidence_override is None else evidence_override
   epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,NULL,%s,%s,%s)',(installation,'catalog-fixture-target',profile,evidence)).fetchone()[0]
@@ -47,7 +47,7 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
   def publish(packet):
    shares()
    with psycopg.connect(self.info.connection_uri,autocommit=True) as writer:
-    for command in ('ALTER FUNCTION truss.catalog_subject_current(text) STABLE','ALTER ROUTINE truss.catalog_subject_current(text) STABLE'):
+    for command in ('ALTER FUNCTION truss.catalog_subject_current(text) STABLE','ALTER ROUTINE truss.catalog_subject_current(text) STABLE','CREATE SCHEMA source_cut_foreign','ALTER SCHEMA truss RENAME TO source_cut_foreign','DROP SCHEMA truss CASCADE'):
      with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(command)
    delivered.append(packet)
   for table in ('truss.source_epoch_current','truss.source_epoch_registry'):
@@ -108,3 +108,32 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
 
  def test_default_publication_without_source_binding_regression(self):
   guarded.GuardedSubjectTests.test_guarded_publication_after_native_completion_under_caller_lease(self)
+
+ def test_disabled_schema_barrier_refuses_before_subject_and_delivery(self):
+  """@covers US-056-AC9; selected schema writer exclusion prerequisite."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup()
+  self.admin.execute('ALTER EVENT TRIGGER truss_schema_ddl_writer_barrier DISABLE');delivered=[]
+  with patch.object(subject,'encode_literal_key_tuple') as encoder,patch.object(subject,'run_owned_catalog_resource_read') as evaluator:
+   result=subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,delivered.append)
+   encoder.assert_not_called();evaluator.assert_not_called()
+  self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
+  self.assertEqual(str(self.host._custody.last_attempt.error),'Exact original installed DDL barriers required')
+  self.assertEqual(h._custody.last_attempt.phase,'contained');self.assertIsNone(h._custody.last_attempt.cleanup_error)
+
+ def test_same_executor_schema_ddl_refuses_before_effect_in_receiver(self):
+  """@covers US-056-AC9; same-backend schema DDL exclusion prerequisite."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup();delivered=[];states=[]
+  def publish(packet):
+   for command in ('CREATE SCHEMA source_cut_local','ALTER SCHEMA truss RENAME TO source_cut_local','DROP SCHEMA truss CASCADE'):
+    self.admin.execute('SAVEPOINT schema_writer')
+    try:
+     with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState) as caught:self.admin.execute(command)
+     self.assertEqual(caught.exception.diag.message_primary,'selected epoch cut excludes routine DDL')
+     states.append(caught.exception.sqlstate)
+    finally:
+     self.admin.execute('ROLLBACK TO schema_writer');self.admin.execute('RELEASE schema_writer')
+   self.assertEqual(self.admin.execute("SELECT count(*) FROM pg_namespace WHERE nspname='source_cut_local'").fetchone(),(0,))
+   self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(10,))
+   delivered.append(packet)
+  result=subject.publish_ddl_epoch_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,publish)
+  self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(states,['55000']*3);self.assertEqual(delivered,[result.value])

@@ -1,0 +1,7 @@
+test_same_executor_schema_ddl_refuses_before_effect_in_receiver (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_same_executor_schema_ddl_refuses_before_effect_in_receiver)
+@covers US-056-AC9; same-backend schema DDL exclusion prerequisite. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 31.815s
+
+OK
