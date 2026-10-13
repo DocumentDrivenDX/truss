@@ -1,0 +1,40 @@
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... FAIL
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... FAIL
+
+======================================================================
+FAIL: test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_channel_native.py", line 37, in test_authenticated_wire_read_binds_original_native_subject_and_cuts
+    status,packet=request();self.assertEqual(status,200)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 403 != 200
+
+======================================================================
+FAIL: test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_channel_native.py", line 53, in test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry
+    self.assertEqual(request(),(503,b'{}'));encoder.assert_not_called()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (403, b'{}') != (503, b'{}')
+
+First differing element 0:
+403
+503
+
+- (403, b'{}')
+?  ^
+
++ (503, b'{}')
+?  ^
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 26.652s
+
+FAILED (failures=2)

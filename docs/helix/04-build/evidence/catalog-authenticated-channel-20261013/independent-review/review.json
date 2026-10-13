@@ -1,0 +1,19 @@
+{
+  "kind": "scoped-independent-review/0.1",
+  "reviewer": "Astra Ultra",
+  "status": "no_remaining_actionable_findings_in_reviewed_scope",
+  "scope": "Actual loopback bearer routing, strict request preflight, absolute admission deadline, single-use original operation and bounded immutable wire completion.",
+  "independentControls": {"actualLoopbackTotal": 35, "rawRequestControls": 22, "completionControls": 12, "absoluteDeadlineControl": 1, "nativeLifecycleRuns": 0},
+  "resolvedFindings": ["Idle timeout allowed progressing unauthenticated headers to starve the serial server and shutdown. Absolute admission timer closes the stalled peer; cancel/join and monotonic checks precede operation entry.", "Lenient standard parsing hid malformed/forbidden header fields and normalized a double-slash route. Parser defects and the exact original request line now refuse before dispatch."],
+  "beforeAfterEvidence": "Both prior defects are retained with exact predecessor source hashes. Final malformed/route inputs have zero calls; queued valid request succeeds after deadline, shutdown completes; native diagnostic text never enters observed wire bodies.",
+  "completionEvidence": "Generic503 before publication, exact1MiB boundary, invalid packet refusal, mismatched/absent completion and duplicate/exception after publication produce one original packet at most; every consumed operation refuses retry.",
+  "parentEvidence": {"finalNativeTests": 2, "nativeSeconds": 29.4, "finalUnitTests": 6, "unitSeconds": 5.13, "execution": "Parent-executed final suites; reviewer inspected source/logs/cleanup", "server": "PostgreSQL18.6", "cleanup": "runtime exit succeeded, status3, socket absent"},
+  "historicalEvidence": "Earlier independently replayed4-unit suite passed before admission fixes. Parent native2/43.347s and rejected initial header tests remain historical, not final-source evidence.",
+  "limits": ["Loopback bearer comparison assumes trusted private credential issuance/storage and original guarded operation. TLS, SQL/network/OS isolation, issuer/rotation and complete authority/source/role/handler lifetime remain open.", "HTTP200/flush is not remote acknowledgment or successful producer settlement. Trusted owner retains outcome/failure; later uncertainty closes without error append or retry.", "Unsupported methods may receive standard-library501 HTML; they do not dispatch or reveal native diagnostics. Header/time/CPU/heap and slow-peer resource profiles are not fully qualified.", "No protected profile activation, readiness or backend acceptance case promotion. Actual reviewer HTTP controls substitute native operations."],
+  "implementationSha256": "60ab72635821fe61d6856b67f967b8bb52a3ef53bca52b5f2a327c1eaf72b4f5",
+  "nativeTestSha256": "b3a00a29b4a4ab6a69fa5fb77df4bf019a05589c5e8009546f91530e76742ecb",
+  "nativeLogSha256": "55d0acd6e7f934a742ae45f029327b155814ecdc5e81efbf21b40da250cd94f6",
+  "wireDecisionSha256": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+  "sourcePins": "source-pins.json",
+  "sourcePinsSha256": "27068a4f4a42a0197b52af55903016f0388e6396c471449e46eb6b9e8e034dba"
+}
