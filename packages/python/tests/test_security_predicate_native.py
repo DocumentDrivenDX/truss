@@ -285,6 +285,30 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    self.assertEqual(disclosure_run.returncode,0,disclosure_run.stderr.decode())
    disclosed=json.loads(disclosure_run.stdout)['simulationDisclosures']
    self.assertEqual(disclosed,[[[ref('salary'),'withheld']]] if truth is True else [])
+   # Original owner evaluates scoped conditions rather than trusting native truth flags.
+   selection_request=deepcopy(request);selection_request['sql']='SELECT r.salary AS amount FROM Resource r';selection_request['parameters']={}
+   projection=next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']=='salary')
+   native_cell=self.admin.execute('SELECT ('+projection+') FROM truss.object r CROSS JOIN (SELECT %s::boolean q0,TRUE::boolean q1) q WHERE r.id=%s',(truth,rid)).fetchone()[0]
+   scoped={'version':'weft.security.scoped-facts/0.1.0','rows':[{'s0':by_id[rid]}]}
+   selection_probe={'target':ref('Resource'),'field':ref('salary'),'outputName':'amount','rows':[[native_cell if truth is True else {'outcomeId':'withheld','disposition':'withheld'}]],'factCut':cut,'scopedFacts':scoped}
+   selection_check=subprocess.run([binary],input=json.dumps({'request':selection_request,'assessment':assessment,'resultProbe':selection_probe}).encode(),capture_output=True,timeout=30)
+   if truth is True:
+    self.assertEqual(selection_check.returncode,0,selection_check.stderr.decode());self.assertTrue(json.loads(selection_check.stdout)['conditionalFactSelectionPassed'])
+    identity_request=deepcopy(selection_request);identity_request['sql']='SELECT r.resourceId AS amount FROM Resource r'
+    identity_projection=next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']=='resourceId')
+    identity_cell=self.admin.execute('SELECT ('+identity_projection+') FROM truss.object r CROSS JOIN (SELECT TRUE::boolean q0,TRUE::boolean q1) q WHERE r.id=%s',(rid,)).fetchone()[0]
+    identity_probe=deepcopy(selection_probe);identity_probe['field']=ref('resourceId');identity_probe['rows']=[[identity_cell]]
+    identity_check=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':identity_probe}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(identity_check.returncode,0,identity_check.stderr.decode())
+    forged_identity=deepcopy(identity_probe);forged_identity['rows'][0][0]['value']={'string':'different-valid-value'}
+    value_refusal=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':forged_identity}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(value_refusal.returncode,1);self.assertFalse(value_refusal.stdout)
+    incoherent=deepcopy(selection_probe);incoherent['scopedFacts']['rows'][0]['s0']['key']=[{'string':'forged'}]
+    refusal=subprocess.run([binary],input=json.dumps({'request':selection_request,'assessment':assessment,'resultProbe':incoherent}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(refusal.returncode,1);self.assertFalse(refusal.stdout)
+   else:
+    self.assertEqual(selection_check.returncode,1,selection_check.stdout.decode());self.assertFalse(selection_check.stdout)
+    self.assertEqual(json.loads(selection_check.stderr)['code'],'WFT-SECURITY-RESULT-SELECTION')
    comparisons.append({'subject':sid,'resource':rid,'nativeTruth':truth,'originalDecision':decision})
   directory=os.environ.get('TRUSS_PREDICATE_EVIDENCE_DIR')
   if directory:
