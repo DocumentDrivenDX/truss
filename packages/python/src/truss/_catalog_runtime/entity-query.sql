@@ -137,3 +137,28 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.query_object_attribution(jsonb,int,bigint) FROM PUBLIC;
+
+-- Convert only a proven complete bounded result; never discard truncation.
+CREATE FUNCTION truss.query_complete_related_keys(value jsonb,maximum int,key_arity int) RETURNS jsonb
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE result jsonb;item jsonb;
+BEGIN
+ IF maximum IS NULL OR maximum NOT BETWEEN 1 AND 100 OR key_arity IS NULL OR key_arity NOT BETWEEN 1 AND 128
+  OR value IS NULL OR jsonb_typeof(value) IS DISTINCT FROM 'object' OR value-ARRAY['items','truncated']<>'{}'::jsonb
+  OR jsonb_typeof(value->'items') IS DISTINCT FROM 'array' OR jsonb_typeof(value->'truncated') IS DISTINCT FROM 'boolean'
+ THEN RAISE EXCEPTION 'exact complete relationship result required' USING ERRCODE='22023';END IF;
+ IF value->'truncated'='true'::jsonb OR jsonb_array_length(value->'items')>maximum
+ THEN RAISE EXCEPTION 'complete relationship cardinality exceeds bound' USING ERRCODE='54000';END IF;
+ FOR item IN SELECT x.value FROM jsonb_array_elements(value->'items') x LOOP
+  IF jsonb_typeof(item) IS DISTINCT FROM 'array' OR jsonb_array_length(item)<>key_arity
+   OR EXISTS(SELECT 1 FROM jsonb_array_elements(item) component WHERE jsonb_typeof(component.value) IS DISTINCT FROM 'string')
+  THEN RAISE EXCEPTION 'exact authored string key tuple required' USING ERRCODE='22023';END IF;
+ END LOOP;
+ IF key_arity=1 THEN
+  SELECT coalesce(jsonb_agg(x.value->0 ORDER BY x.ordinality),'[]'::jsonb) INTO result
+   FROM jsonb_array_elements(value->'items') WITH ORDINALITY x(value,ordinality);
+ ELSE result:=value->'items';END IF;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_complete_related_keys(jsonb,int,int) FROM PUBLIC;
