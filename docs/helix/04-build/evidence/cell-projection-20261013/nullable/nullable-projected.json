@@ -1,0 +1,18 @@
+[
+  {
+    "value": null,
+    "outcomeId": "original",
+    "disposition": "original"
+  },
+  {
+    "outcomeId": "absent",
+    "disposition": "absent"
+  },
+  {
+    "value": {
+      "integerToken": "300"
+    },
+    "outcomeId": "original",
+    "disposition": "original"
+  }
+]

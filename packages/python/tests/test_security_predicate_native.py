@@ -6,7 +6,7 @@ Not protected SQL admission, caller authentication or complete writer closure.
 import json,os,subprocess,psycopg
 from pathlib import Path
 from truss import Ok,ModuleAccessGrant,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
-from truss.contracts import MapValue,TextValue,BooleanValue
+from truss.contracts import MapValue,TextValue,BooleanValue,NullValue
 from truss.groups import CreateObject,AuthoredValue,RootlessOwnership,RequestNone,GroupSuccess,GroupFailed,UpdateObject,StoredObjectReference,CommittedReceiptReplay
 import test_security_accepted_catalog_native as accepted
 class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
@@ -38,10 +38,25 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   self.population(salary=-9223372036854775809,refused=True)
  def test_signed64_updates_refuse_overflow_and_preserve_prior_update(self):
   self.population(update=True)
- def population(self,salary=100,second_salary=200,refused=False,update=False):
+ def test_nullable_and_absent_projection_from_original_writer(self):
+  self.population(nullable=True)
+ def test_binary_projection_round_trip_from_original_writer(self):
+  self.population(nullable=True,binary_carrier=True)
+ def population(self,salary=100,second_salary=200,refused=False,update=False,nullable=False,binary_carrier=False):
   binary=os.environ.get('TRUSS_PREDICATE_SPIKE_BINARY')
   if not binary:raise RuntimeError('Original Weft predicate spike binary required')
-  self.accepted();self.host.detach();self.admin.commit()
+  source=None
+  if nullable:
+   from hashlib import sha256
+   source=json.loads(accepted.mapping.FIXTURE.read_text());m=source['modules'][0];doc=json.loads(m['documentJson'])
+   salary_field=next(e for e in doc['modules'][0]['elements'] if e['id']=='salary');salary_field['nullability']='absent-allowed'
+   if binary_carrier:salary_field['scalarType']='binary';salary_field.pop('facets',None)
+   m['documentJson']=json.dumps(doc);m['pin']['sha256']=sha256(m['documentJson'].encode()).hexdigest()
+   policy=json.loads(source['policyJson']);policy['rules'][0]['disclosure'][0]['disposition']={'kind':'original'}
+   source['policyJson']=json.dumps(policy);profile=json.loads(source['queryProfileJson'])
+   source['sql']='SELECT a.\"resourceId\" FROM \"Resource\" a ORDER BY a.\"resourceId\"';source['parameters']={}
+   profile['modelPins']=[m['pin']];profile['policySha256']=sha256(source['policyJson'].encode()).hexdigest();source['queryProfileJson']=json.dumps(profile)
+  self.accepted(source=source);self.host.detach();self.admin.commit()
   self.admin.execute('CREATE ROLE predicate_reader;CREATE ROLE predicate_writer')
   for role in ('predicate_reader','predicate_writer'):self.addCleanup(self.admin.execute,'DROP OWNED BY '+role+';DROP ROLE '+role)
   self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
@@ -55,9 +70,12 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    ('Resource',{'resourceId':'ra','salary':salary}),('Resource',{'resourceId':'rb','salary':second_salary}),('Resource',{'resourceId':'orphan','salary':300}),
    ('Ownership',{'ownerId':'oa','ownerResource':'ra','ownerProject':'A'}),('Ownership',{'ownerId':'ob','ownerResource':'rb','ownerProject':'B'}),
    ('Assignment',{'assignmentId':'aa','assignmentStaff':'alice','assignmentProject':'A','active':True}),('Assignment',{'assignmentId':'ab','assignmentStaff':'alice','assignmentProject':'B','active':False}),('Assignment',{'assignmentId':'bb','assignmentStaff':'bob','assignmentProject':'B','active':True})]
+  if nullable:
+   rows[4][1]['salary']=None;rows[5][1].pop('salary')
+   if binary_carrier:rows[6][1]['salary']='AQI='
   operations=[]
   for index,(record,fields) in enumerate(rows):
-   values=tuple(AuthoredValue(name=k,value=BooleanValue(value=v) if type(v) is bool else TextValue(kind='integer' if type(v) is int else 'string',text=str(v))) for k,v in fields.items())
+   values=tuple(AuthoredValue(name=k,value=NullValue() if v is None else BooleanValue(value=v) if type(v) is bool else TextValue(kind='binary' if binary_carrier and k=='salary' else 'integer' if type(v) is int else 'string',text=str(v))) for k,v in fields.items())
    operations.append(CreateObject(type_definition_pin=types[record].definition_pin,values=values,ownership=RootlessOwnership(),alias='row'+str(index)))
   context=a.group_context_in_transaction(t).value
   from truss import CatalogDocument
@@ -94,6 +112,9 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
   # Only selected concurrent data exclusion, not authentication or same-txn closure.
   self.admin.execute('LOCK TABLE truss.object IN SHARE MODE NOWAIT')
+  if nullable:
+   owner_response=json.loads(self.original(self.reference.decode()))
+   self.assertEqual(owner_response['status'],'prepared',str(owner_response))
   mapped=self.prepare_accepted();self.assertIsInstance(mapped,Ok,str(self.host._custody.last_attempt.error))
   assessment=json.loads(mapped.value.accepted_catalog_assessment);payload={'request':request,'assessment':assessment}
   rendered=subprocess.run([binary],input=json.dumps(payload).encode(),capture_output=True,timeout=30)
@@ -115,8 +136,24 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   self.assertEqual([r[2] for r in eligibility],['permit','deny','deny','deny','permit','deny'])
   salary_state=next(d['stateExpression'] for d in selected['disclosure'] if d['field']['elementId']=='salary')
   identity_state=next(d['stateExpression'] for d in selected['disclosure'] if d['field']['elementId']=='resourceId')
+  if nullable:
+   projection=next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']=='salary')
+   projected=[r[0] for r in self.admin.execute('SELECT ('+projection+') FROM truss.object r CROSS JOIN (SELECT TRUE::boolean q0,TRUE::boolean q1) q WHERE r.type_id='+str(ids['Resource'])+' ORDER BY r.id').fetchall()]
+   self.assertEqual(projected,[{'outcomeId':'original','disposition':'original','value':None},{'outcomeId':'absent','disposition':'absent'},{'outcomeId':'original','disposition':'original','value':{'binaryHex':'0102'} if binary_carrier else {'integerToken':'300'}}])
+   directory=os.environ.get('TRUSS_PREDICATE_EVIDENCE_DIR')
+   if directory:
+    root=Path(directory)/('binary' if binary_carrier else 'nullable');root.mkdir(parents=True,exist_ok=True)
+    for name,value in (('nullable-request',request),('nullable-assessment',assessment),('nullable-rendered',output),('nullable-projected',projected)):(root/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
+   return
   for active,expected in ((True,'withheld'),(False,'not-applicable'),(None,'not-applicable')):
    self.assertEqual(self.admin.execute('SELECT ('+salary_state+'),('+identity_state+') FROM (SELECT %s::boolean AS q0,TRUE AS q1) q',(active,)).fetchone(),(expected,'original' if active is True else 'not-applicable'))
+  for element,expected_disposition in (('salary','withheld'),('resourceId','original')):
+   projection=next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']==element)
+   projected=self.admin.execute('SELECT ('+projection+') FROM truss.object r CROSS JOIN (SELECT TRUE::boolean q0,TRUE::boolean q1) q WHERE r.type_id='+str(ids['Resource'])+' ORDER BY r.id').fetchall()
+   self.assertEqual(len(projected),3)
+   for (cell,) in projected:
+    self.assertEqual(cell['disposition'],expected_disposition)
+    self.assertEqual(set(cell),{'outcomeId','disposition'} if expected_disposition=='withheld' else {'outcomeId','disposition','value'})
   # Exercise emitted composition with original reader/require truth positions.
   from itertools import product
   for permit,required in product((False,None,True),repeat=2):
@@ -174,6 +211,21 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    group=next(e for e in transformed_packet['eligibility'] if e['action']=='read')
    field=next(d for d in group['disclosure'] if d['field']['elementId']=='salary')
    self.assertEqual(len(field['transformations']),2)
+   self.assertEqual(transformed_packet['parameterTypes'],['jsonb','jsonb'])
+   self.admin.execute('PREPARE transformed_cell(jsonb,jsonb) AS SELECT ('+field['cellExpression']+') FROM truss.object r CROSS JOIN (SELECT TRUE::boolean q0,FALSE::boolean q1,FALSE::boolean q2) q WHERE r.type_id='+str(ids['Resource'])+' ORDER BY r.id LIMIT 1')
+   arguments=','.join(psycopg.sql.Literal(json.dumps(v)).as_string(self.admin)+'::jsonb' for v in transformed_packet['parameters'])
+   projected=self.admin.execute('EXECUTE transformed_cell('+arguments+')').fetchone()[0]
+   self.assertEqual(projected,{'outcomeId':'transform0','disposition':'transformed','value':{'integerToken':left}})
+   self.admin.execute('DEALLOCATE transformed_cell')
+   expected_ids=['transform0','transform1' if conflicting else 'transform0']
+   self.assertEqual([t['outcomeId'] for t in field['transformations']],expected_ids)
+   self.assertEqual([t['ruleId'] for t in field['transformations']],['left','right'])
+   self.admin.execute('PREPARE second_transformed_cell(jsonb,jsonb) AS SELECT ('+field['cellExpression']+') FROM truss.object r CROSS JOIN (SELECT FALSE::boolean q0,TRUE::boolean q1,FALSE::boolean q2) q WHERE r.type_id='+str(ids['Resource'])+' ORDER BY r.id LIMIT 1')
+   projected_second=self.admin.execute('EXECUTE second_transformed_cell('+arguments+')').fetchone()[0]
+   self.assertEqual(projected_second,{'outcomeId':expected_ids[1],'disposition':'transformed','value':{'integerToken':right}})
+   self.admin.execute('DEALLOCATE second_transformed_cell')
+
+
    for a,b,w in product((False,None,True),repeat=3):
     state,choice=self.admin.execute('SELECT ('+field['stateExpression']+'),('+field['transformationChoiceExpression']+') FROM (SELECT %s::boolean q0,%s::boolean q1,%s::boolean q2) q',(a,b,w)).fetchone()
     expected='not-applicable' if None in (a,b,w) or not(a or b or w) else 'withheld' if w else 'conflict' if a and b and conflicting else 'transformed'
