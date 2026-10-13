@@ -7849,3 +7849,9 @@ map directly. [Qualified construction evidence](evidence/catalog-subject-install
 retains source/review/wheel/external results. Complete issuer/role/handler lifetime
 and backend admission remain open; US-056AC2/AC9/AC10, US-057AC7 and
 CONTRACT-063/STP-056 B01/B11/B12 prerequisites only. All132 remain required.
+
+###2026-10-13: decimal(18,2) tranche and shared timestamp direction
+
+Reviewed decimal(18,2) implementation is committed to main: SDK0.0.20/native56 and Weft0.4.21/backend0.4.26. Basic original UMF0.7/0.8 public workflows, retained signed64/decimal(18,4) workflows and populated55→56 rollback/upgrade pass. Matching release workflows publish the tranche; publication remains pending. Original commerce preparation capacity and top-level document title admission remain separate integration gaps, with no complete-pack claim.
+
+Owner requests timestamp behavior shared across Ashlar, Truss and other systems. Next design uses a separately versioned RFC3339 exact-instant profile in UMF, consumed by Weft backends: canonical whole UTC seconds plus exact canonical fractional digits, retaining original tokens and local-offset knowledge. Equivalent offsets compare equal without PostgreSQL timestamp casts or precision truncation. RFC3339§4.3 treats -00:00 as a known UTC instant with unknown local offset; preserve that distinction in the carrier. UMF CONTRACT047 does not currently admit generic timestamp equality, so this is proposed work, not a released universal scalarType timestamp meaning or temporal business-key claim. Astra Ultra reviewed this direction.
