@@ -39,9 +39,10 @@ class SubjectObservationNativeTests(unittest.TestCase):
      base=_SubjectSelection(request,source,'m','Staff','pk','subject_alice','subject_diag','observe',('staff_id',))
      expected=admin.execute('SELECT key FROM subject_diag.staff').fetchone()[0]
      inspector=weft.inspect_security_mapping_subject_key_json
-     def operation(user='subject_alice',isolation='repeatable_read',readonly=True,selection=base,role=None):
+     def operation(user='subject_alice',isolation='repeatable_read',readonly=True,selection=base,role=None,loader=None):
       values=dict(params);values['user']=user;values['options']='-c statement_timeout=2000'
       connection=psycopg.connect(**values)
+      if loader:connection.adapters.register_loader(19,loader)
       try:
        connection.execute('BEGIN ISOLATION LEVEL '+isolation.replace('_',' ')+(' READ ONLY' if readonly else ' READ WRITE'))
        if role:connection.execute('SET ROLE '+role)
@@ -75,6 +76,14 @@ class SubjectObservationNativeTests(unittest.TestCase):
       connection,host,transaction,result=operation(**options)
       try:self.assertIsInstance(result,Error,name);cases.append(name)
       finally:host.detach();connection.close()
+     from psycopg.adapt import Loader
+     decoded=[]
+     class ForeignNameLoader(Loader):
+      def load(self,data):decoded.append(True);raise AssertionError('Foreign loader invoked')
+     connection,host,transaction,result=operation(selection=replace(base,routine='wrong_oid'),loader=ForeignNameLoader)
+     try:
+      self.assertIsInstance(result,Error);self.assertEqual(decoded,[]);cases.append('foreign loader refused before decode')
+     finally:host.detach();connection.close()
      for name,selection in [('non-subject Record',replace(base,record='Resource')),('wrong source',replace(base,original_document=source+b' ')),('wrong Key',replace(base,key='foreign'))]:
       connection,host,transaction,result=operation()
       try:

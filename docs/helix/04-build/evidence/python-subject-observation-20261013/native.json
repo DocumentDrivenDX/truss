@@ -12,6 +12,7 @@
     "null key",
     "multiple keys",
     "wrong columns",
+    "foreign loader refused before decode",
     "non-subject Record",
     "wrong source",
     "wrong Key",

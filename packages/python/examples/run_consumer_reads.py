@@ -9,12 +9,12 @@ from uuid import uuid4
 import psycopg
 from adopter_workflow import transaction, success, expect
 from truss import CatalogDocument, CapabilityAvailable, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument, ObjectFound, ObjectNotFound, ReaderCatalog
-from truss.contracts import MapValue, MapEntry, TextValue
-from truss.imports import ImportReported, ImportCreated, PendingBatch
+from truss.contracts import MapValue, MapEntry, TextValue, NullValue
+from truss.imports import ImportReported, ImportCreated, ImportSkipped, ImportRejected, PendingBatch
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
     RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created, Changed, UpdateObject, GroupFailed, PreconditionFailed)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.update-bumps-the-version-once', 'import.entities-before-relationships', 'action.dry-run-writes-nothing-and-keeps-the-key')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.update-bumps-the-version-once', 'import.entities-before-relationships', 'import.identity-skip-and-provenance', 'action.dry-run-writes-nothing-and-keeps-the-key')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -136,6 +136,54 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             tokens = {}
             invocations = {}
             for step in case['steps']:
+                if step['op']=='import' and case['id']=='import.identity-skip-and-provenance':
+                    first=[{'type':'UseCase','key':'uc-7','properties':{'name':'Old'},'original_author':'ann','original_at':None},
+                        {'type':'UseCase','key':'uc-1','properties':{'name':'overwritten?'}},
+                        {'type':'UseCase','key':'uc-6','properties':{}},
+                        {'relationship':'addresses','source':'ghost','target':'uc-7'}]
+                    repeated=[{'type':'UseCase','key':'uc-7','properties':{'name':'Old'}}]
+                    if set(step)!={'op','as','load_id','records','expect'} or step['as']!='erik' or step['load_id']!='L1' or step['records'] not in (first,repeated) or sha256(source).hexdigest()!='849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696':
+                        raise ValueError('Exact original mixed-import workflow required; no import attempted')
+                    host_rejections=[]
+                    with transaction(people[step['as']]) as (assembly,tx):
+                        capability=expect(assembly.imports(assembly.import_selection,documents=documents,bun_executable=bun),CapabilityAvailable).capability
+                        context=success(capability.import_context_in_transaction(tx))
+                        authored=next(e for e in module['elements'] if e['id']=='UseCase')
+                        primary=next(k for k in authored['keys'] if k.get('primary'))
+                        if len(primary['fields'])!=1:raise ValueError('Selected single-field original import key required')
+                        key_field=next(e for e in module['elements'] if e['id']==primary['fields'][0]['element'])
+                        inputs=[]
+                        for record in step['records'][:3]:
+                            values={key_field['name']:record['key'],**record['properties']}
+                            provenance=None
+                            if 'original_author' in record:
+                                provenance=MapValue(entries=(MapEntry(key='author',value=TextValue(kind='string',text=record['original_author'])),MapEntry(key='at',value=NullValue())))
+                            inputs.append(success(capability.object_import_record_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='UseCase',values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=value)) for name,value in values.items()),source=provenance)))
+                        native=expect(capability.import_in_transaction(tx,context.input(tuple(inputs),load_id=step['load_id'],asserted_origin=MapValue(entries=()))),ImportReported).report
+                        expected_types=(ImportCreated,ImportSkipped,ImportRejected) if step['records']==first else (ImportSkipped,)
+                        if native.status!='processed' or native.unprocessed_indices or len(native.outcomes)!=len(expected_types) or any(not isinstance(outcome,kind) or outcome.input_index!=str(index) for index,(outcome,kind) in enumerate(zip(native.outcomes,expected_types,strict=True))):
+                            raise AssertionError('Original mixed import requires complete native per-record results')
+                        if step['records']==first:
+                            found=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='UseCase',key_id=primary['id'],values=('uc-7',),original_document=source,bun_executable=bun)),ObjectFound).object
+                            if found.identity!=native.outcomes[0].identity:raise AssertionError('Imported original identity differs from own-transaction key read')
+                            solution=next(e for e in module['elements'] if e['id']=='Solution')
+                            solution_key=next(k for k in solution['keys'] if k.get('primary'))
+                            expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='Solution',key_id=solution_key['id'],values=('ghost',),original_document=source,bun_executable=bun)),ObjectNotFound)
+                            archived=expect(success(assembly.accepted_document_in_transaction(tx,document_id=document_id)),AcceptedDocument)
+                            catalog=expect(success(assembly.reader_catalog_in_transaction(tx)),ReaderCatalog)
+                            visible=next((m for m in catalog.modules if m['documentId']==document_id and m['moduleId']==module_id),None)
+                            current_type=next((t for t in visible['types'] if t['recordId']=='Solution' and t['kind']=='record' and not t['provisional']),None) if visible is not None else None
+                            if archived.content!=source or visible is None or visible['documentSha256']!=sha256(source).hexdigest() or current_type is None or not any(k['typeId']==current_type['typeId'] and k['keyId']==solution_key['id'] for k in visible['keys']):
+                                raise ValueError('Current authorized source/catalog/key required for host endpoint rejection')
+                            host_rejections.append((3,'relationship','missing_endpoint'))
+                    # The original consumer summary combines actual native results and
+                    # a separately identified host rejection, only after host commit.
+                    counts={'created':int(native.counts.created_pending),'skipped':int(native.counts.skipped),'rejected':int(native.counts.rejected)+len(host_rejections)}
+                    wanted=step['expect']['import']
+                    kinds=['entity' for result in native.outcomes if isinstance(result,ImportRejected)]+[kind for _,kind,_ in host_rejections]
+                    if any(counts[name]!=value for name,value in wanted.items() if name!='rejected_kinds') or 'rejected_kinds' in wanted and sorted(kinds)!=wanted['rejected_kinds']:
+                        raise AssertionError('Original mixed import summary differs')
+                    continue
                 if step['op']=='import':
                     if case['id']!='import.entities-before-relationships' or sha256(source).hexdigest()!='849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696' or set(step)!={'op','as','load_id','records','expect'}:
                         raise ValueError('Selected original import workflow required; no import attempted')
@@ -353,10 +401,10 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         if 'save' in step:
                             cursors[step['save']['cursor']] = rows.next_cursor
                     else:
-                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once','import.entities-before-relationships') else None)), QueryRows)
+                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once','import.entities-before-relationships','import.identity-skip-and-provenance') else None)), QueryRows)
                 if not isinstance(rows.as_of,QueryReadPosition) or not rows.as_of.value or rows.as_of.at.tzinfo is None or rows.as_of.at.utcoffset() is None or rows.as_of.semantics!='committed-lower-bound' or rows.as_of.caller_xid_assigned:
                     raise AssertionError('Original read answer needs an aware recorded position with declared semantics')
-                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once','import.entities-before-relationships'):
+                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once','import.entities-before-relationships','import.identity-skip-and-provenance'):
                     required={'_version','_created_by','_created_at','_updated_by','_updated_at'}
                     if not required <= set(rows.columns):
                         raise AssertionError('Original required whole-object metadata missing')
@@ -371,7 +419,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
     return {'scope': 'selected original SQL/action observations; not complete adapter/corpus or interchange',
-        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if any(name.startswith('action.') for name in case_ids) else []) + (['dry-run rollback and unconsumed request key','authenticated absent-target preview'] if dry_case in case_ids else []) + (['original edge-first import input mapped through object-first public calls in one caller transaction','original import counts and relationship readback'] if 'import.entities-before-relationships' in case_ids else []),
+        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if any(name.startswith('action.') for name in case_ids) else []) + (['dry-run rollback and unconsumed request key','authenticated absent-target preview'] if dry_case in case_ids else []) + (['original edge-first import input mapped through object-first public calls in one caller transaction','original import counts and relationship readback'] if 'import.entities-before-relationships' in case_ids else []) + (['native mixed-import created/skipped/rejected results','separately host-observed missing relationship endpoint','original import author and load provenance','repeated load invokes native import and skips'] if 'import.identity-skip-and-provenance' in case_ids else []),
         'notChecked':['replica','complete consumer adapter mapping'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,

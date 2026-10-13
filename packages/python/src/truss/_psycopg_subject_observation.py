@@ -80,10 +80,13 @@ def _observe_ordinary_subject(host, transaction, selection, original_inspector):
         principal()
         statement=sql.SQL('SELECT * FROM {}(SESSION_USER::pg_catalog.{})').format(
             sql.Identifier(selection.schema,selection.routine),sql.SQL(selection.actor_carrier))
-        cursor.execute(statement,prepare=False,binary=False);rows=cursor.fetchmany(2)
+        cursor.execute(statement,prepare=False,binary=False)
+        # Refuse foreign OIDs before fetch can invoke caller-installed loaders.
         if (cursor.description is None or tuple(d.name for d in cursor.description)!=selection.columns
-                or any(d.type_code!=25 for d in cursor.description) or len(rows)!=1
-                or len(rows[0])!=len(selection.columns) or any(type(v) is not str for v in rows[0])):
+                or any(d.type_code!=25 for d in cursor.description)):
+            raise ValueError('Exact original native TEXT descriptors required')
+        rows=cursor.fetchmany(2)
+        if (len(rows)!=1 or len(rows[0])!=len(selection.columns) or any(type(v) is not str for v in rows[0])):
             raise ValueError('Exact original native TEXT subject tuple required')
         values=tuple(rows[0]);encoded=tuple(v.encode('utf8',errors='strict') for v in values)
         if any(len(v)>65536 for v in encoded) or sum(map(len,encoded))>1048576:

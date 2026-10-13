@@ -5,13 +5,19 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: runtime `0.38-candidate`, layout `0.16`
+This is an experimental implementation: Python distribution `truss-toolkit==0.1.0.dev38`,
+native runtime `0.38-candidate`, layout `0.16`
 candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.8`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
+
+The Python distribution version is distinct from the native runtime and layout
+versions. Subsequent distributed package changes receive a new version even when
+the native runtime remains unchanged. This candidate is available from committed
+source; it has not been published to a Python package index.
 
 ## Run a real workflow
 
@@ -511,9 +517,11 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has twelve original read/action/import workflows
+must be supported. The original consumer corpus has thirteen original read/action/import workflows
 exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
-replica execution and the full consumer corpus remain unqualified.
+Mixed imports exercise native create/skip/reject results and provenance; a missing
+relationship endpoint is a separately identified host rejection after public
+source/catalog/key reads. Replica execution and the full consumer corpus remain unqualified.
 
 Select `read_profile="complete-entity"` for `alias.*` with complete relationship
 keys and `_version`, `_created_by`, `_created_at`, `_updated_by`, `_updated_at`, `_original_author` and

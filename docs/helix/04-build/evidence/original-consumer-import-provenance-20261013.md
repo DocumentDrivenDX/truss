@@ -1,0 +1,10 @@
+# Original consumer mixed import — 2026-10-13
+
+The unchanged `import.identity-skip-and-provenance` case passes through the public Python assembly. Three object inputs produce the actual native created, skipped and rejected outcomes. The imported uc-7 retains original author ann, explicit null original time and load L1; the existing uc-1 remains unchanged. Repeating L1 calls the native importer again and returns skipped, rather than replaying a host cache.
+
+The exact fixture host separately refuses the ghost relationship endpoint after public same-transaction key lookup returns ObjectNotFound and public accepted-source/catalog reads establish the authorized current model. It checks the new target identity against the actual ImportCreated identity. This host rejection is not a fabricated native ImportRejected or combined ImportReport. Consumer summary counts derive from native report counts plus the separately identified host rejection only after known outer commit. Unexpected native results, incomplete processing or source/catalog mismatches fail before commit.
+
+One basic installed-package test (`test_original_consumer_reads_native`) passes all thirteen selected original authority workflows in 31.223 seconds. Environment: clean CPython3.12.14 installation, Truss0.38/layout0.16 candidate, Weft0.4.8 from committed cb10d8e, DocumentDrivenDX pgserver-pg18==18.6.1/PostgreSQL18.6 and psycopg3.3.6. The original corpus/model bytes and expected values are unchanged. The grouped-count positional oracle discrepancy remains outside the passing aggregate. This is an exact trusted host example, not a general unresolved-reference importer or a full corpus/interchange claim.
+
+Astra Ultra approved the source with two fidelity corrections: preserve the original expected rejection-kind order while sorting actual kinds, and explicitly report the native/host split in the returned checked scope. Both corrections are applied.
+The same basic aggregate passes after both corrections in 30.865 seconds.

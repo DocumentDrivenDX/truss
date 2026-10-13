@@ -1,0 +1,7 @@
+# Versioned Python development package — 2026-10-13
+
+`truss-toolkit==0.1.0.dev38` identifies the current Python distribution separately from native runtime0.38-candidate, layout0.16 candidate and Weft runtime backend0.4.8. Earlier distributions remain historical0.0.1.dev0. Changed future distributions must receive another version even when native runtime SQL remains unchanged. No stable layout, full interchange or package-index publication is claimed.
+
+Built `truss_toolkit-0.1.0.dev38-py3-none-any.whl` from this source with setuptools79.0.1, using `pip wheel --no-deps --no-build-isolation`. Wheel SHA256: `c8f424942237c547efe6a8ed221252d33cdb63758c7a0da17efaa9b2822219ce`. Force-installed it in the clean CPython3.12.14 adopter environment; `importlib.metadata.version('truss-toolkit')` returns0.1.0.dev38 and the imported module is `/private/tmp/truss-clean-install-20261013/lib/python3.12/site-packages/truss/__init__.py`, rather than source checkout code.
+
+The installed wheel's basic public adopter workflow passes on DocumentDrivenDX pgserver-pg18==18.6.1/PostgreSQL18.6, psycopg3.3.6 and committed Weftcb10d8e runtime0.4.8: catalog accepted, mutation committed, durable replay committed, receipt included, relationship query read back, dry-run rolled back, import created, three committed feed transactions and committed ACK. No additional test campaign or runtime behavior change was introduced. The README source-install instructions remain the distribution route; the package is not on a Python index.

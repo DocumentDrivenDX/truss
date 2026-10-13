@@ -17,7 +17,7 @@ class OriginalConsumerReads(unittest.TestCase):
             '--bun','/opt/homebrew/bin/bun'],check=False,capture_output=True,text=True,env=dict(os.environ))
         self.assertEqual(result.returncode,0,result.stderr)
         report=json.loads(result.stdout)
-        self.assertEqual([v['id'] for v in report['observations']],['read.missing-key-is-no-rows','read.columns-and-filters','read.relationship-filter-both-directions','read.key-lookup-whole-entity','read.relationship-columns-follow-ends','read.paging-by-key','read.repeated-relationship-predicates-mean-both','action.applies-atomically-and-reads-back','action.idempotent-retry-returns-the-original','action.update-bumps-the-version-once','import.entities-before-relationships','action.dry-run-writes-nothing-and-keeps-the-key'])
+        self.assertEqual([v['id'] for v in report['observations']],['read.missing-key-is-no-rows','read.columns-and-filters','read.relationship-filter-both-directions','read.key-lookup-whole-entity','read.relationship-columns-follow-ends','read.paging-by-key','read.repeated-relationship-predicates-mean-both','action.applies-atomically-and-reads-back','action.idempotent-retry-returns-the-original','action.update-bumps-the-version-once','import.entities-before-relationships','import.identity-skip-and-provenance','action.dry-run-writes-nothing-and-keeps-the-key'])
         self.assertTrue(all(v['authority']=='passed' and v['replica']=='unavailable' for v in report['observations']))
         self.assertEqual(report['fixtureSync'],'committed original receipt included on authority')
         self.assertEqual(report['retainedExtensions'],4)
