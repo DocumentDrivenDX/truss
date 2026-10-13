@@ -66,3 +66,43 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         result=query.query_in_transaction(tx,sql='SELECT a."A-label" AS label,a.active AS active,a.note AS note FROM "A" a WHERE a.active = :active ORDER BY a."A-label"',document_ids=('adoc',),parameters={'active':True})
         if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+repr(host._custody.last_attempt.error))
         self.assertEqual(result.value.rows,(('absent',True,QueryAbsent()),('empty',True,''),('null',True,None)))
+
+    def test_exact_integer_decimal_projection_and_parameters(self):
+        from dataclasses import replace
+        from decimal import Decimal
+        from truss.contracts import TextValue
+        from truss.groups import AuthoredValue
+        def numeric_fields(source):
+            module=source['modules'][0]
+            for element in module['elements']:
+                if element['kind']=='record':element['name']=element['id']
+                if element['id']=='A':element['members'] += [{'module':'m','element':'A-units'},{'module':'m','element':'A-amount'},{'module':'m','element':'A-optional'}]
+            module['elements'] += [dict(id='A-units',name='units',kind='field',scalarType='integer',nullability='required',cardinality='one',extensions={}),
+                dict(id='A-amount',name='amount',kind='field',scalarType='decimal',nullability='required',cardinality='one',extensions={}),
+                dict(id='A-optional',name='optional_amount',kind='field',scalarType='decimal',nullability='absent-allowed',cardinality='one',extensions={})]
+        connection,host,assembly,tx=self.ready(numeric_fields)
+        integer=900719925474099312345678901234567890
+        decimal_token='9007199254740993.1234567890123456789000'
+        exponent_token='1.23456789012345678900e-20'
+        created=self.create()
+        values=created.values+(AuthoredValue(name='units',value=TextValue(kind='integer',text=str(integer))),
+            AuthoredValue(name='amount',value=TextValue(kind='decimal',text=decimal_token)),
+            AuthoredValue(name='optional_amount',value=TextValue(kind='decimal',text=exponent_token)))
+        self.assertIsInstance(self.run_group(assembly,tx,(replace(created,values=values),))[0],GroupSuccess)
+        query=assembly.compiled_execution(assembly.compiled_selection).capability
+        result=query.query_in_transaction(tx,sql='SELECT a.units,a.amount,a.optional_amount FROM "A" a WHERE a.units = :units AND a.amount = :amount',document_ids=('adoc',),parameters={'units':integer,'amount':Decimal(decimal_token)})
+        if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+repr(host._custody.last_attempt.error))
+        self.assertEqual(result.value.rows,((integer,Decimal(decimal_token),Decimal(exponent_token)),))
+        self.assertEqual(result.value.rows[0][1].as_tuple(),Decimal(decimal_token).as_tuple())
+        self.assertEqual(result.value.rows[0][2].as_tuple(),Decimal(exponent_token).as_tuple())
+        expanded=query.query_in_transaction(tx,sql='SELECT a.* FROM "A" a',document_ids=('adoc',))
+        self.assertIsInstance(expanded.value,QueryRows)
+        row=dict(zip(expanded.value.columns,expanded.value.rows[0],strict=True))
+        self.assertEqual(row['units'],integer);self.assertEqual(row['amount'].as_tuple(),Decimal(decimal_token).as_tuple())
+        refused=query.query_in_transaction(tx,sql='SELECT a.amount FROM "A" a WHERE a.amount = :amount',document_ids=('adoc',),parameters={'amount':Decimal('1e-20000')})
+        self.assertIsInstance(refused.value,QueryRefused);self.assertEqual(refused.value.code,'native_domain')
+
+        nonfinite=query.query_in_transaction(tx,sql='SELECT a.amount FROM "A" a WHERE a.amount = :amount',document_ids=('adoc',),parameters={'amount':Decimal('NaN')})
+        self.assertIsInstance(nonfinite.value,QueryRefused);self.assertEqual(nonfinite.value.code,'invalid_query')
+        expansion=query.query_in_transaction(tx,sql='SELECT a.amount FROM "A" a WHERE a.amount = :amount',document_ids=('adoc',),parameters={'amount':Decimal('1e-100000000')})
+        self.assertIsInstance(expansion.value,QueryRefused);self.assertEqual(expansion.value.code,'limits')

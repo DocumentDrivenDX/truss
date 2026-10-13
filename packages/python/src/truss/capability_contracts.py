@@ -5,6 +5,7 @@ or conformance to broader historical/verified-application interfaces.
 """
 from typing import Protocol, Literal, Mapping
 from .contracts import TypedIdentity, MapValue
+from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable
 from .execution import Outcome, TransactionHandle
 from .preparation import CatalogDocument, PreparedAcceptance
@@ -85,5 +86,5 @@ class NativeRuntimeOperations(Protocol):
 
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]: ...
 
-    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool] | None=None,
+    def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
                              maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]: ...

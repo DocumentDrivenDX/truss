@@ -13,7 +13,7 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
-    'query': {'dataclasses','typing'},
+    'query': {'decimal','dataclasses','typing'},
     '_query_runtime': {'hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
     '_umf_keys_release': set(),
     '_umf_key_tuples': {'decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release'},
@@ -22,8 +22,8 @@ ALLOWED = {
     '_import_runtime': {'base64','json','hashlib','uuid','truss.contracts','truss.execution','truss.imports','truss.groups','truss._group_runtime','truss._acceptance_json','truss._umf_key_tuples','truss.psycopg_host','truss.preparation','truss._catalog_report_semantics'},
     'import_runtime': {'truss.groups','truss.contracts','truss.imports','truss._group_runtime','dataclasses'},
     'catalog_results': {'dataclasses','typing'},
-    'capability_contracts': {'truss.query','truss.import_source','truss.history','typing','truss.contracts','truss.execution','truss.preparation','truss.catalog_view','truss.reader_catalog','truss.object_read','truss.edge_read','truss.imports','truss.import_runtime','truss.groups','truss.feed','truss.receipt_visibility','truss.catalog_results'},
-    'capabilities': {'truss.query','truss.import_source','truss.history','__future__','dataclasses','typing','truss.contracts','truss.execution','truss.preparation','truss.catalog_view','truss.reader_catalog','truss.object_read','truss.edge_read','truss.imports','truss.import_runtime','truss.groups','truss.feed','truss.receipt_visibility','truss.catalog_results','truss.capability_contracts'},
+    'capability_contracts': {'decimal','truss.query','truss.import_source','truss.history','typing','truss.contracts','truss.execution','truss.preparation','truss.catalog_view','truss.reader_catalog','truss.object_read','truss.edge_read','truss.imports','truss.import_runtime','truss.groups','truss.feed','truss.receipt_visibility','truss.catalog_results'},
+    'capabilities': {'decimal','truss.query','truss.import_source','truss.history','__future__','dataclasses','typing','truss.contracts','truss.execution','truss.preparation','truss.catalog_view','truss.reader_catalog','truss.object_read','truss.edge_read','truss.imports','truss.import_runtime','truss.groups','truss.feed','truss.receipt_visibility','truss.catalog_results','truss.capability_contracts'},
     'import_source': {'dataclasses','typing'},
     'history': {'dataclasses','typing'},
     'feed': {'dataclasses','typing'},
@@ -33,7 +33,7 @@ ALLOWED = {
     'catalog_view': {'dataclasses','typing','truss.contracts'},
     '_catalog_view_build': {'base64','dataclasses','hashlib','json','truss.contracts','truss.catalog_view','truss._catalog_definition_source','truss._owner_evidence_json'},
     'reader_catalog': {'dataclasses','typing'},
-    'catalog_runtime': {'truss.query','truss._query_runtime','truss.import_source','truss.history','truss.catalog_results','truss.capabilities','truss.feed','truss._import_runtime','truss.imports','truss.import_runtime','truss.receipt_visibility','truss._receipt_position','truss.edge_read','truss._umf_key_tuples','base64','truss.reader_catalog','typing','truss.groups','truss._group_runtime','truss.object_read','truss.catalog_view','truss.contracts','truss._catalog_view_build','__future__','dataclasses','hashlib','importlib.resources','json','re','uuid','threading','functools','psycopg','psycopg.types.string','psycopg.types.bool','psycopg.types.numeric','truss.assembly_contracts','truss.execution','truss.psycopg_host','truss.preparation','truss._catalog_support','truss._catalog_report_semantics','truss._installation_privileges','truss._acceptance_json','truss._owner_evidence_json'},
+    'catalog_runtime': {'decimal','truss.query','truss._query_runtime','truss.import_source','truss.history','truss.catalog_results','truss.capabilities','truss.feed','truss._import_runtime','truss.imports','truss.import_runtime','truss.receipt_visibility','truss._receipt_position','truss.edge_read','truss._umf_key_tuples','base64','truss.reader_catalog','typing','truss.groups','truss._group_runtime','truss.object_read','truss.catalog_view','truss.contracts','truss._catalog_view_build','__future__','dataclasses','hashlib','importlib.resources','json','re','uuid','threading','functools','psycopg','psycopg.types.string','psycopg.types.bool','psycopg.types.numeric','truss.assembly_contracts','truss.execution','truss.psycopg_host','truss.preparation','truss._catalog_support','truss._catalog_report_semantics','truss._installation_privileges','truss._acceptance_json','truss._owner_evidence_json'},
     '_installation_privileges': {'dataclasses','psycopg','truss.execution','truss.psycopg_host'},
     '_runtime_profile': {'json', 'importlib.resources'},
     'psycopg_host': {'truss._operation_ordinal', 'truss._runtime_profile', 'dataclasses', 'threading', 'time', 'uuid', 'weakref', 're', 'psycopg', 'psycopg.rows', 'psycopg.types.string', 'truss.execution'},

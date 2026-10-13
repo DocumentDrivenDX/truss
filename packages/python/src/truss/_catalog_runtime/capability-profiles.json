@@ -71,11 +71,11 @@
     },
     {
       "name": "weft_execution",
-      "definition": "Native Weft runtime query capability/0.1: actual accepted original documents and qualified native mappings; Weft application-read parser and typed IR; bounded complete rootless scalar string/boolean sources and exact integer COUNT results; equality filters/joins, counts, ordering/limits and complete logical record projection with absent/null distinction; native $n parameters and exact text decoding; caller read-only or read-write READ COMMITTED transaction; full original document module authority, selected release and catalog rechecks; no arbitrary SQL gateway, relationship lowering, page-key profile or internal retry.",
+      "definition": "Native Weft runtime query capability/0.2: actual accepted original documents and native mappings; explicit Weft-owned exact numeric preparation preserving original source/pins; bounded complete rootless scalar string/boolean/mathematical integer/decimal sources; equality filters/joins, counts, ordering/limits and alias expansion; original decimal tokens for all projections and exact Python int/Decimal results; validated finite stock-PostgreSQL numeric representability before predicates and parameters, with typed native-domain refusal rather than rounding; caller read-only or read-write READ COMMITTED transaction; complete document/module authority and current context checks; no relationship operators, structured properties, page-key profile, float carriers or internal retry.",
       "pin": {
         "identity": "truss-native-weft-runtime-query",
-        "version": "0.1",
-        "sha256": "e1eac1e5fd91c5c4debd87535468dcbe8da5aa7e9565f1907cdd8ba09cf54540"
+        "version": "0.2",
+        "sha256": "3881e7ae82fbf2246a8e669eff390771307c9927bbe324caba700213f8fea359"
       },
       "policyDefinition": "Native Weft runtime query policy/0.1: ordinary original authenticated session person; complete current reader/writer authority for every selected original document module and declaration owner; independently safe fixed source functions with exact native mappings; final same-person/catalog/release check; no raw table privilege.",
       "policyPin": {

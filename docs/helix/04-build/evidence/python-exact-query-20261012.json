@@ -1,0 +1,35 @@
+{
+  "scope": "Basic public exact numeric queries and additive runtime upgrade",
+  "runtimeRelease": "truss-catalog-runtime/0.27-candidate",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "localRuntime": "DocumentDrivenDX pgserver-pg18==18.6.1",
+  "weftBackendVersion": "0.2.0",
+  "trussWheelSha256": "a56e2730e0bd40017ba74652786ce464ec94bda462d30c166e532cd87409066b",
+  "nativeExtensionSha256": "83416d12bedd146db3ca60cca5d55895434a6dc5335dc3c3c1b0544c41cd8c28",
+  "tests": {
+    "publicQueryAndUpgradePassed": 4,
+    "seconds": 24.219,
+    "upgradeSource": "0.26",
+    "ownerSqlRoundtrips": 21,
+    "pythonBoundaryImports": 832,
+    "typingFixtures": 5,
+    "expectedNegativeTypingErrors": 20
+  },
+  "behaviors": [
+    "Public mutations followed by exact integer and Decimal parameter queries",
+    "37-digit integer and high precision decimal preserved",
+    "Original decimal scale and scientific exponent preserved in projections",
+    "Typed refusal for native numeric domain overflow",
+    "Nonfinite and excessive parameter expansion refused",
+    "Read-only queries and unauthorized document refusal",
+    "Additive upgrade preserves data, reports, receipts and feed"
+  ],
+  "review": "Astra Ultra approved source; basic native workflows passed",
+  "limits": [
+    "Finite PostgreSQL numeric domain",
+    "Facetless scalar numeric fields only",
+    "Relationship lowering and structured queries unfinished",
+    "No managed-service qualification"
+  ]
+}

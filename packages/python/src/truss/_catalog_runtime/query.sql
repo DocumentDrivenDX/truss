@@ -1,3 +1,31 @@
+-- Pure stock-PostgreSQL exact numeric input domain, never typmod coercion.
+CREATE FUNCTION truss.query_numeric_value(token text,family text) RETURNS boolean
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE mantissa text;exponent_text text;exponent_value int:=0;fraction_length int;coefficient text;scale_value int;magnitude int;
+BEGIN
+ IF token IS NULL OR family IS NULL OR octet_length(token)>1048576 THEN RETURN false;END IF;
+ IF family='integer' THEN
+  IF token !~ '^-?(0|[1-9][0-9]*)$' OR length(ltrim(ltrim(token,'-'),'0'))>131072 THEN RETURN false;END IF;
+ ELSIF family='decimal' THEN
+  IF token !~ '^-?(0|[1-9][0-9]*)([.][0-9]+)?([eE][+-]?[0-9]+)?$' THEN RETURN false;END IF;
+  exponent_text:=substring(token from '[eE]([+-]?[0-9]+)$');
+  IF exponent_text IS NOT NULL THEN
+   IF length(exponent_text)>7 THEN RETURN false;END IF;
+   exponent_value:=exponent_text::int;
+  END IF;
+  mantissa:=regexp_replace(ltrim(token,'-'),'[eE].*$','');
+  fraction_length:=length(split_part(mantissa,'.',2));
+  coefficient:=ltrim(replace(mantissa,'.',''),'0');
+  scale_value:=fraction_length-exponent_value;
+  magnitude:=length(coefficient)-scale_value;
+  IF greatest(scale_value,0)>16383 OR magnitude>131072 THEN RETURN false;END IF;
+ ELSE RETURN false;END IF;
+ -- The lexical bounds prevent any implicit scale reduction at native input.
+ RETURN pg_input_is_valid(token,'pg_catalog.numeric');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_numeric_value(text,text) FROM PUBLIC;
+
 -- Fixed, independently authorized query sources; no arbitrary SQL gateway.
 CREATE FUNCTION truss.query_scope(binding jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
@@ -5,10 +33,10 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_documen
 BEGIN
  PERFORM truss.runtime_person(false);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.1'
+ IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.2'
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.26-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.27-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'records') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'records') NOT BETWEEN 1 AND 1024 THEN
@@ -61,7 +89,7 @@ BEGIN
     'fields',(SELECT coalesce(jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',t.document_id,'revision',archived->>'documentRevision','module',p.declaration_module,'element',p.element),'propertyId',p.prop_id::text) ORDER BY p.prop_id),'[]') FROM truss.prop_def p WHERE p.type_id=t.type_id AND p.retired_rev IS NULL)) ORDER BY t.type_id)
     FROM truss.type_def t WHERE t.document_id=selected_document_id AND t.retired_rev IS NULL AND NOT t.provisional AND t.kind='record'),'[]');
  END LOOP;
- binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.1','schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
+ binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.2','schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
  'documents',pins,'records',records,'maximumScanRows',maximum_scan_rows,'maximumResultRows',maximum_result_rows,'maximumBytes',maximum_bytes);
  PERFORM truss.query_scope(binding);
  result:=convert_to(jsonb_build_object('binding',binding,'bindingJson',binding::text,'modules',modules,'actorOid',(SELECT oid::text FROM pg_roles WHERE rolname=session_user))::text,'UTF8');
@@ -79,7 +107,7 @@ BEGIN
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type AND t.retired_rev IS NULL;
  FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
-  IF property.scalar_type NOT IN ('string','boolean','integer') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.item IS NOT NULL
+  IF property.scalar_type NOT IN ('string','boolean','integer','decimal') OR property.cardinality IS DISTINCT FROM 'one' OR property.home<>'json' OR property.item IS NOT NULL
    OR coalesce(property.facets,'{}')<>'{}'::jsonb OR property.nullability NOT IN ('required','absent-allowed') THEN RAISE EXCEPTION 'query scalar profile unavailable' USING ERRCODE='0A000';END IF;
  END LOOP;
  FOR object_row IN SELECT * FROM truss.object o WHERE o.type_id=selected_type ORDER BY o.id LIMIT (binding->>'maximumScanRows')::int+1 LOOP
@@ -92,7 +120,7 @@ BEGIN
    cell:=object_row.props->property.prop_id::text;
    IF cell IS NULL THEN IF property.nullability='required' THEN RAISE EXCEPTION 'required query value missing' USING ERRCODE='55000';END IF;
    ELSIF truss.valid_scalar_cell(cell,property.scalar_type,property.nullability='absent-allowed') IS NOT TRUE THEN RAISE EXCEPTION 'malformed query scalar' USING ERRCODE='55000';
-   ELSIF property.scalar_type='integer' AND cell->>'kind'<>'null' AND NOT pg_input_is_valid(cell->>'text','numeric') THEN RAISE EXCEPTION 'exact native numeric domain unavailable' USING ERRCODE='0A000';END IF;
+   ELSIF property.scalar_type IN ('integer','decimal') AND cell->>'kind'<>'null' AND truss.query_numeric_value(cell->>'text',property.scalar_type) IS NOT TRUE THEN RAISE EXCEPTION 'exact native numeric domain unavailable' USING ERRCODE='22003';END IF;
   END LOOP;
   id:=object_row.id;props:=object_row.props;RETURN NEXT;
  END LOOP;
