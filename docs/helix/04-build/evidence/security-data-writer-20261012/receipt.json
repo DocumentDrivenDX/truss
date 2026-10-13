@@ -26,5 +26,6 @@
     "earlier triggers or external volatile effects not qualified"
   ],
   "review": "Astra Ultra final: no remaining actionable code findings; read-only review, native suite executed by primary agent",
-  "validation": "11 native tests passed; post-run change only corrects observation wording"
+  "validation": "11 native tests passed; post-run change only corrects observation wording",
+  "postmergeValidation": "11 native tests passed after concurrent main integration; exact final observation wording exercised"
 }
