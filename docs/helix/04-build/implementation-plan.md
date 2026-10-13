@@ -6957,3 +6957,22 @@ independent bidirectional interchange; those deliverables remain open.
 [Actual reentrant guard counterexample](evidence/security-reentrant-ddl-20261012/receipt.json) confirms that a protected data callback can reacquire its transaction's original FOR UPDATE guard, install a harmless routine-source comment during guarded DML, restore the source and pass endpoint checks. Outer rollback preserves original data/generation. Guard acquisition therefore does not imply inactive-only source mutation. An admitted lifetime protocol must additionally prevent or prove absence of same-transaction source mutation during protected use, as well as close competing mutation routes.
 
 Full11 native tests pass. The conditional model passes2UNSAT/4SAT; the added SAT query repeats the active mutation transition and is not a native lock-owner theorem. This remains a selected B11/L13 prerequisite/counterexample, with no changed authorization semantics demonstrated and no required case promoted.
+
+### Original consumer model registration gap — 2026-10-12
+
+An authority-only attempt at the unchanged original missing-key and scalar-filter
+cases refuses registration before fixture data or queries. The public error
+carries `catalog_code=unsupported_profile`; this is not a passing corpus run.
+[Diagnostic receipt](evidence/python-original-consumer-registration-gap-20261012.json)
+pins the actual original model/corpus, selected installed wheel and refusal.
+
+The current catalog profile requires empty vocabulary/extensions and a closed
+module-member set. The original model includes `umf.ddd`/`hohfeld.placement`
+metadata plus module `actions`; permitting extensions alone cannot admit it.
+Next, inspect UMF's actual retention/classification and add truthful retained/
+unenforced reporting under an explicit catalog profile. Do not strip source,
+invent extension/action semantics or bypass native original-source guards.
+The draft authority adapter remains unpromoted until the exact model registers
+and its original expectations execute. Replica variants and independent native
+interchange remain unqualified. This registration gap takes priority over adding
+a second implementation or broader test machinery.
