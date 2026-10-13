@@ -1,0 +1,10 @@
+test_helper_definition_drift_refuses_before_subject_and_executor (test_security_catalog_subject_native.NativeCatalogSubjectTests.test_helper_definition_drift_refuses_before_subject_and_executor) ... ok
+test_missing_role_subject_mapping_refuses_before_executor (test_security_catalog_subject_native.NativeCatalogSubjectTests.test_missing_role_subject_mapping_refuses_before_executor) ... ok
+test_native_subject_with_no_raw_graph_or_issuer_table_access (test_security_catalog_subject_native.NativeCatalogSubjectTests.test_native_subject_with_no_raw_graph_or_issuer_table_access)
+@covers US-056-AC2; @covers US-056-AC10; component prerequisites only. ... ok
+test_other_native_database_refuses_before_policy_evaluation (test_security_catalog_subject_native.NativeCatalogSubjectTests.test_other_native_database_refuses_before_policy_evaluation) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 24.524s
+
+OK

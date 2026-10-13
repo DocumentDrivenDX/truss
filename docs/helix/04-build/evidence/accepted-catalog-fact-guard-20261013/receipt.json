@@ -1,0 +1,36 @@
+{
+  "status": "component-passed",
+  "securityReady": false,
+  "nativeGuardGroups": 3,
+  "nativeGuardSeconds": 19.285,
+  "epochRegressionGroups": 3,
+  "epochRegressionSeconds": 4.199,
+  "formalQueries": 4,
+  "formalScope": "Conditional unbounded selected fact array stability and arbitrary pure fixed-context policy stability; no source/native refinement.",
+  "criteriaPrerequisites": [
+    "US-056-AC2",
+    "US-056-AC9"
+  ],
+  "backendCasePromotion": false,
+  "sourceDigests": {
+    "packages/python/src/truss/_psycopg_fact_cut.py": "7a38ff06147ce553ff1d2f8b104f89dd2122bebd08e8e83e66fb487e86159130",
+    "scripts/security_catalog_read.py": "c69720e742f039295101a9d29b5a3617b0d9c5ec97c5284f558e35728800db9a",
+    "packages/postgresql/native/authorization-fact-write-fence.sql": "66b1a93c5a16d0f0727f9f0b8b91e77df7b1a7e9a9116c221f2cec65e6455381",
+    "packages/python/tests/test_security_catalog_guard_native.py": "93ec74fc2562bbfdde422568852559f7af02de5c58fb3e5edadfbb1a721bf9b4",
+    "scripts/prove-selected-fact-write-exclusion.py": "17288a860e1df1856b9dd8ed81b9d9c96479879e0b793d3dc0ebcf847ced4531"
+  },
+  "versions": {
+    "python": "3.11.17",
+    "psycopg": "3.3.6",
+    "postgresql": "18.6",
+    "catalogRuntime": "0.42",
+    "z3": "4.15.4"
+  },
+  "limitations": [
+    "Original lock-only route is retained as independently scoped, not qualified same-backend closure.",
+    "Installed qualifier/lifetime, faithful atomic participating DML and held cuts are premises.",
+    "No DDL/role/ACL/handler/config/issuer/source lifetime, complete effect inventory, authenticated admission or protected release qualification.",
+    "Private administrative Subject fixture; native two-host caller path remains separately qualified.",
+    "No backend case promotion; all132 cases remain required."
+  ]
+}

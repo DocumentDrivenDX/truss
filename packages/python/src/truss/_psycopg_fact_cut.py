@@ -25,12 +25,14 @@ class _FactRelationComparison:
     columns: tuple = ()
 
 
-def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback, *, ddl_barrier=None):
-    """Reacquire declared plain-table cuts inside the original epoch scope.
+def _prepare_fenced_fact_cut(relations, callback, *, existing_locks=False):
+    """Copy/qualify selected table cuts; source/authority fencing is separate.
 
-    Independent admitted mapping/installed trigger closure is required. This
-    excludes table DML only, not roles, grants, config or other source changes.
+    Independent admitted mapping and installed-trigger lifetime are premises.
+    Excludes selected table DML only, not role/grant/config/source changes.
     """
+    if type(existing_locks) is not bool:
+        raise ValueError('Exact fact lock acquisition mode required')
     if type(relations) is not tuple or not 1 <= len(relations) <= 32:
         raise ValueError('Bounded exact fact relation tuple required')
     recipe=[]
@@ -71,7 +73,13 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
     def acquire(cursor):
         from psycopg import sql
         for schema,name,oid,owner,guard_source,columns in recipe:
-            cursor.execute(sql.SQL('LOCK TABLE ONLY {} IN SHARE MODE NOWAIT').format(sql.Identifier(schema,name)),prepare=False)
+            if existing_locks:
+                cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'relation' AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.database OPERATOR(pg_catalog.=) (SELECT d.oid FROM pg_catalog.pg_database d WHERE d.datname OPERATOR(pg_catalog.=) pg_catalog.current_database()) AND l.relation OPERATOR(pg_catalog.=) %s::pg_catalog.oid AND l.mode OPERATOR(pg_catalog.=) 'ShareLock' AND l.granted)::pg_catalog.text",(str(oid),),prepare=False,binary=False)
+                if cursor.description is None or len(cursor.description)!=1 or cursor.description[0].type_code!=25:
+                    raise ValueError('Exact existing fact cut TEXT descriptor required')
+                if cursor.fetchmany(2)!=[('true',)]:raise ValueError('Original continuously held fact ShareLock required')
+            else:
+                cursor.execute(sql.SQL('LOCK TABLE ONLY {} IN SHARE MODE NOWAIT').format(sql.Identifier(schema,name)),prepare=False)
             cursor.execute("SELECT c.oid::pg_catalog.text,c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,"
                            "EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text "
                            "FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) c.relnamespace WHERE n.nspname OPERATOR(pg_catalog.=) %s AND c.relname OPERATOR(pg_catalog.=) %s",
@@ -112,6 +120,12 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
                 if actual != [expected]:
                     raise ValueError('Original native field descriptor correspondence required')
         return callback(cursor)
+    return acquire
+
+
+def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback, *, ddl_barrier=None):
+    """Original epoch scope plus independently qualified per-table fact guards."""
+    acquire=_prepare_fenced_fact_cut(relations,callback)
     if ddl_barrier is not None:
         from ._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
         return _run_ddl_fenced_epoch_operation(host,transaction,epoch_comparison,ddl_barrier,acquire)

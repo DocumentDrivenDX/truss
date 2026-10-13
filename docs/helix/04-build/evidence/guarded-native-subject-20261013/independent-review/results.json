@@ -1,0 +1,336 @@
+{
+  "count": 69,
+  "controls": [
+    {
+      "name": "exact selected helper metadata accepted",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 0 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 1 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 2 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 3 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 4 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 5 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 6 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 7 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 8 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 9 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 10 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 11 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 12 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 13 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 14 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 15 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 16 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 17 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current field 18 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 0 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 1 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 2 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 3 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 4 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 5 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 6 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 7 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 8 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 9 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 10 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 11 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 12 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 13 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 14 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 15 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 16 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 17 drift refused",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context field 18 drift refused",
+      "passed": true
+    },
+    {
+      "name": "owner foreign descriptors refuse before fetch",
+      "passed": true
+    },
+    {
+      "name": "owner short descriptors refuse before fetch",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current foreign descriptors refuse before fetch",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current short descriptors refuse before fetch",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context foreign descriptors refuse before fetch",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context short descriptors refuse before fetch",
+      "passed": true
+    },
+    {
+      "name": "owner role flag 1 refuses",
+      "passed": true
+    },
+    {
+      "name": "owner role flag 2 refuses",
+      "passed": true
+    },
+    {
+      "name": "owner role flag 3 refuses",
+      "passed": true
+    },
+    {
+      "name": "owner missing rows refuse",
+      "passed": true
+    },
+    {
+      "name": "owner duplicate rows refuse",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current missing rows refuse",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_current duplicate rows refuse",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context missing rows refuse",
+      "passed": true
+    },
+    {
+      "name": "catalog_subject_context duplicate rows refuse",
+      "passed": true
+    },
+    {
+      "name": "genuine inspector and original key encoder complete both subject observations",
+      "passed": true
+    },
+    {
+      "name": "installation mismatch refuses before evaluator",
+      "passed": true
+    },
+    {
+      "name": "database mismatch refuses before evaluator",
+      "passed": true
+    },
+    {
+      "name": "context foreign descriptor refuses before fetch and evaluator",
+      "passed": true
+    },
+    {
+      "name": "environment foreign descriptor refuses before fetch and evaluator",
+      "passed": true
+    },
+    {
+      "name": "late helper body refuses after delegated evaluation",
+      "passed": true
+    },
+    {
+      "name": "late subject key refuses after delegated evaluation",
+      "passed": true
+    },
+    {
+      "name": "late principal refuses after delegated evaluation",
+      "passed": true
+    },
+    {
+      "name": "missing native subject refuses before executor",
+      "passed": true
+    },
+    {
+      "name": "duplicate native subject refuses before executor",
+      "passed": true
+    },
+    {
+      "name": "delegated refusal emits no outer result",
+      "passed": true
+    },
+    {
+      "name": "wrong routine refuses before host and inspection",
+      "passed": true
+    },
+    {
+      "name": "wrong record refuses before host and inspection",
+      "passed": true
+    },
+    {
+      "name": "mutable source refuses before host and inspection",
+      "passed": true
+    },
+    {
+      "name": "owner inspector refusal occurs before host",
+      "passed": true
+    }
+  ],
+  "scope": "Current helper metadata and composite orchestration with synthetic native rows, exact-type host shells and a synthetic delegated evaluator; actual original Weft subject inspector and original UMF tuple encoder execute. Does not prove native privileges, locks, host containment or complete authority. Those remain separately scoped parent native evidence.",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_subject_read.py",
+      "sha256": "cdc6c7a2e3635d5a576f84955f42c29683bfdb5c4b2ed14c08b37b08e8096831",
+      "bytes": 9083
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-catalog-subject.sql",
+      "sha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+      "bytes": 2670
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+      "bytes": 9078
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "b5b88fd89fe8e215396e31da62d925b698a15749d236d3dfbb47c57a415f23f9",
+      "bytes": 11649
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/legacy_check.py",
+      "sha256": "20f47859256bba1361e76ec2392333415ea6ca7966e2d36329090d0cc13f5c1d",
+      "bytes": 10529
+    },
+    {
+      "path": "/private/tmp/subject-consumer-python/weft.so",
+      "sha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+      "bytes": 14364352
+    }
+  ],
+  "retainedInputPins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/request.json",
+      "sha256": "359743a8140b8d88da17bc22ceb5a56b56402417411db63cbe7133f062a2cf8d",
+      "bytes": 9573
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/assessment.json",
+      "sha256": "33a940d78beb268eede6adcf82419df659d1d64f911ac4d351a3525da11cfe31",
+      "bytes": 10408
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/owner-response.json",
+      "sha256": "74fd70bc6ab9ede8d346b2adc1ef1f227c27412431c1498df650f55b6ecb5568",
+      "bytes": 6536
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/decision.json",
+      "sha256": "3966cf8f43266a70436f3cb7ca9ec3d0e1345f41d8f16f0259bc5429945a769f",
+      "bytes": 361
+    }
+  ]
+}

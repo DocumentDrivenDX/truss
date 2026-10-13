@@ -1,0 +1,6 @@
+test_each_catalog_stage_refuses_foreign_oid_before_fetch (test_fact_cut_descriptor_boundary.FactCutDescriptorBoundaryTests.test_each_catalog_stage_refuses_foreign_oid_before_fetch) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.077s
+
+OK

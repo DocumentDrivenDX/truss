@@ -1,0 +1,15 @@
+test_other_native_database_refuses_before_policy_evaluation (test_security_catalog_subject_native.NativeCatalogSubjectTests.test_other_native_database_refuses_before_policy_evaluation) ... FAIL
+
+======================================================================
+FAIL: test_other_native_database_refuses_before_policy_evaluation (test_security_catalog_subject_native.NativeCatalogSubjectTests.test_other_native_database_refuses_before_policy_evaluation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_subject_native.py", line 72, in test_other_native_database_refuses_before_policy_evaluation
+    adopted=executor.adopt_transaction();self.assertIsInstance(adopted,Ok,str(executor._custody.last_attempt.error));transaction=adopted.value
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Host statement_timeout must be 1..60000 milliseconds
+
+----------------------------------------------------------------------
+Ran 1 test in 8.139s
+
+FAILED (failures=1)

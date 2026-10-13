@@ -1,0 +1,176 @@
+{
+  "status": "no-actionable-findings-within-reviewed-scope",
+  "reviewer": "Independent Astra Ultra review",
+  "date": "2026-10-13",
+  "gitHead": "6d339a2e213706a013989b1ac9dab5e3f04bebfb",
+  "scope": "Existing fact qualifier/recipe extraction and epoch routing, opt-in exact accepted object guard before source/fact capture, and same-backend fixture countercontrol. No implementation edits or native mutations by reviewer.",
+  "findings": [],
+  "independentControls": {
+    "guardAndExtraction": 49,
+    "legacyAcceptedCatalog": 39,
+    "allPassed": true,
+    "extraction": "AST-identical validation, copied recipe and nested acquire body compared with original HEAD; original epoch/DDL delegation remains AST-identical.",
+    "checks": "Prepared recipe captures original immutable scalar values. Invalid bindings and all twelve guard-field drifts refuse. Foreign relation/guard/column descriptors refuse before fetch. Selected object guard precedes host observation, native catalog capture, row capture and evaluator. Disabled guard refuses before capture. None retains legacy behavior.",
+    "descriptorUnitTest": "Actual test_fact_cut_descriptor_boundary passed, covering three adverse stages.",
+    "qualification": "Native rows and host/capture shells are synthetic. Selected and legacy paths execute genuine original UMF evaluation on retained actual capture rows. No independently executed native lock/trigger/host-containment assertion."
+  },
+  "formalReplay": {
+    "solver": "4.15.4",
+    "queries": 4,
+    "unsat": 2,
+    "sat": 2,
+    "byteIdenticalToParent": true,
+    "method": "Exact script and pinned source copies executed in owned replica; emitted SMT also replayed. Original repository proof outputs unchanged.",
+    "scope": "Arbitrary-state one-step invariant over an unbounded fact array, conditional on continuously held conflicting cut, faithful atomic participating DML, installed before-effect guard, and fixed other policy inputs. Pure policy equality follows by congruence.",
+    "limits": "No native/source/trigger/driver/savepoint refinement, complete effect inventory, hook lifetime or original evaluator implementation theorem."
+  },
+  "parentNativeEvidenceInspected": {
+    "guardTests": 3,
+    "guardSeconds": 19.285,
+    "epochRegressionTests": 3,
+    "epochRegressionSeconds": 4.199,
+    "postgresql": "18.6",
+    "runtime": "0.42",
+    "countercontrol": "Original lock-only path changes active Assignment facts in its own backend after capture and still emits r1 from captured facts. This is uncommitted, not a successful commit or deferred-constraint claim.",
+    "guarded": "All four INSERT/UPDATE/DELETE/TRUNCATE probes raise55000 with the exact original fact-guard primary message. Ten Records and original r1/Withheld output survive. Disabled guard refuses before evaluator with exact contained error and no cleanup error.",
+    "cleanup": {
+      "runtimeExitSucceeded": true,
+      "statusExitCode": 3,
+      "socketAbsent": true,
+      "serverVersion": "18.6"
+    },
+    "epochCleanup": {
+      "stopExitCode": 0,
+      "statusExitCode": 3,
+      "socketAbsent": true
+    },
+    "notIndependentlyRerun": true
+  },
+  "reviewImprovement": "Added exact primary-message assertions to all four native write probes to distinguish this guard from unrelated55000 refusals; final native replay passes.",
+  "limits": [
+    "New selected table cut does not add a source epoch or complete authority fence; original epoch composition remains separate.",
+    "Installed original guard lifetime, faithful atomic participating DML and continuously held cuts are premises.",
+    "Legacy None remains explicitly unqualified for same-backend exclusion.",
+    "No complete native home/DDL/role/ACL/handler/config/callable source lifetime or ABA closure, issuer authentication, protected admission or final release theorem.",
+    "Private administrative Subject fixture; separate two-host ordinary-caller route is not conflated with this counterexample.",
+    "No backend-case promotion or completion of all132 required cases."
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "7a38ff06147ce553ff1d2f8b104f89dd2122bebd08e8e83e66fb487e86159130",
+      "bytes": 8414
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_read.py",
+      "sha256": "c69720e742f039295101a9d29b5a3617b0d9c5ec97c5284f558e35728800db9a",
+      "bytes": 8085
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/authorization-fact-write-fence.sql",
+      "sha256": "66b1a93c5a16d0f0727f9f0b8b91e77df7b1a7e9a9116c221f2cec65e6455381",
+      "bytes": 1067
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_guard_native.py",
+      "sha256": "93ec74fc2562bbfdde422568852559f7af02de5c58fb3e5edadfbb1a721bf9b4",
+      "bytes": 4403
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/prove-selected-fact-write-exclusion.py",
+      "sha256": "17288a860e1df1856b9dd8ed81b9d9c96479879e0b793d3dc0ebcf847ced4531",
+      "bytes": 2888
+    }
+  ],
+  "governedDocumentationPins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "244e2fbb8b0863a48ad8c823a9ec028ffa7754468d2c715148f1162f9c9bc880",
+      "bytes": 331067
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/03-test/test-plan.md",
+      "sha256": "ca9413d30f0517ccd942714886a3d906c2044ce2f22adb2a98bffaf677ad4fbd",
+      "bytes": 189094
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "90be18d7871dae33f61de31e5c6e1146b9b8022efba8c518e5274b80c78eaf46",
+      "bytes": 1097726
+    }
+  ],
+  "parentEvidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-fact-guard-20261013/receipt.json",
+      "sha256": "6a727a43b9367d217a845527fa04aa26abe22e68e6e99d85d48872517fc558da",
+      "bytes": 1799
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-fact-guard-20261013/native.log",
+      "sha256": "b2213f4de7356965cbfdca9f7d2436d473f4e70146f5eb1290e95b570a700bb2",
+      "bytes": 681
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-fact-guard-20261013/cleanup.json",
+      "sha256": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+      "bytes": 109
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-fact-guard-20261013/epoch-regression.log",
+      "sha256": "44b77a2f5e2e61fad7413103b5ea0c6bc2d5f7c83cc17e34cae692d191854442",
+      "bytes": 660
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-fact-guard-20261013/epoch-cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-fact-guard-20261013/formal/receipt.json",
+      "sha256": "9c8dbed13f3d339115ec6e731f069ee6d77de930cd589d972205ee68704a6a54",
+      "bytes": 2742
+    }
+  ],
+  "independentEvidencePins": [
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/check.py",
+      "sha256": "c53d1e4273e70475e829a9280a531247cdd89fef87e10a628823c50424bcc689",
+      "bytes": 9148
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/guard-results.json",
+      "sha256": "963f39f3ebb125afffea78f72c0f22ebdedf9bfb9e3d4237a72805b1235cb3be",
+      "bytes": 7084
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/legacy_check.py",
+      "sha256": "69216acd40211d87b2674c8c9b07cfa4c89d34e5cf69da8736ca6c282cabc32a",
+      "bytes": 8124
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/results.json",
+      "sha256": "0e2dc9d84290f54a584c382527b64984cc416ef66fd0803843360ed8d7ad4e6a",
+      "bytes": 5562
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/fact-cut-pre-extraction.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/descriptor.log",
+      "sha256": "11e66b28e3570c88122f4c2789d931b09a7544ff767cf81ca0e7e77dbf0c69c9",
+      "bytes": 285
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/retain_review.py",
+      "sha256": "e6c7d108d3ec98e57785fd8c7301dfc58c00df521c68f15f1e29ef0c517793fa",
+      "bytes": 6850
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/formal-replica/docs/helix/04-build/evidence/accepted-catalog-fact-guard-20261013/formal/receipt.json",
+      "sha256": "9c8dbed13f3d339115ec6e731f069ee6d77de930cd589d972205ee68704a6a54",
+      "bytes": 2742
+    }
+  ]
+}
