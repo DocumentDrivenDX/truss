@@ -21,8 +21,9 @@ ddx:
 
 ## Accepted owner amendment — Python release scope, 2026-10-13
 
-The owner selected finishing the Python release first and deferring a second
-implementation. Independent bidirectional interchange is not a Python release
+The owner selected Python as the first-release public interface, deferring a
+second implementation, TypeScript implementation maintenance and real-time
+bidirectional TypeScript/Python interchange qualification. Independent bidirectional interchange is not a Python release
 gate. Earlier mandatory interchange language below is superseded for this
 release; it remains a possible future compatibility exercise, not authorized
 work to build another implementation. Reconsider its value when a real second

@@ -1,5 +1,17 @@
 # Python consumer integration design
 
+## First-release scope — owner direction, 2026-10-13
+
+Python is the first-release public interface. Truss TypeScript implementation
+maintenance and full bidirectional TypeScript/Python interchange are deferred
+correctness/portability work, not first-release blocking gates. The accepted
+ADR-003 amendment governs earlier contrary sequencing in this artifact.
+Required Python behavioral cases, independently authored expectations, and
+native state/journal/transaction evidence retain their meaning. Deferral does
+not qualify interchange: an eventual claim still needs both real directions
+and their original independent expectations. UMF TypeScript dependencies and
+Weft's Rust compiler remain required where the Python API consumes them.
+
 ## Selected baseline and implementation order — 2026-10-11
 
 PY-01 implements stock psycopg 3 through supported APIs; pg8000 and custom frame/receive candidates are optional historical experiments. Select a pinned psycopg implementation/libpq build and supported execution mode, then qualify public connection adoption, exact text results, operation-local rollback, native failure, cancellation, unknown commit and safe connection disposal/reuse. The host owns credentials, pooling and outer commit/rollback. Lakebase TLS, person-token authentication and pool credential refresh require actual target evidence.
@@ -18,14 +30,15 @@ questions below are superseded. The initial Python3.11 runtime uses Rust Weft
 and the existing security-owner resolver with shared PostgreSQL protocols.
 Truss engineering owns the pgserver local runtime, installation and migration
 profile in the [execution plan](../04-build/local-runtime-installation-migration-plan.md).
-Complete corpus, public clean-package and committed interchange qualification
-remain delivery requirements; no alternative consumer-owned engine is selected.
+Required Python behavioral corpus and public clean-package qualification remain
+first-release obligations. Committed interchange qualification is deferred; no
+alternative consumer-owned engine is selected.
 
 ## Implementation boundary
 
-Ship the Truss-maintained Python 3.11 implementation of the Truss contracts from this repository, using the same fixed PostgreSQL layout and protected SQL/PLpgSQL routines as the TypeScript reference. Python owns host integration and protocol orchestration. Weft's Rust core owns logical SQL compilation. PostgreSQL owns transactions, persistence and qualified native enforcement. Authorization policy/resolver semantics and their compiled/native handoff belong to the active security workstream.
+Ship the Truss-maintained Python 3.11 implementation of the Truss contracts from this repository, using the fixed PostgreSQL layout and shared SQL/PLpgSQL protocols. Python owns host integration and protocol orchestration. Weft's Rust core owns logical SQL compilation. PostgreSQL owns transactions, persistence and qualified native enforcement. Authorization policy/resolver semantics and their compiled/native handoff belong to the active security workstream.
 
-This route needs no Rust port of Truss. It does require an independent Python adapter and exact codecs, shared callable database protocols, and a corpus that catches divergence from TypeScript. Shared native enforcement is intentional; language-neutral expected results remain independently authored. Performance evidence must determine whether any Python planning/resolution step needs a native implementation.
+This route needs no Rust port of Truss. It requires the Truss-owned Python adapter, exact value handling, shared callable database protocols, and required behavioral cases checked against independent expectations. Shared native enforcement is intentional; language-neutral expected results remain independently authored. Investigate native acceleration only for an observed workload deficiency.
 
 | Component | Python responsibility | Shared or owner-supplied dependency |
 | --- | --- | --- |

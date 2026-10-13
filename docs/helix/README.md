@@ -1,5 +1,17 @@
 # truss project documentation
 
+## First-release scope — owner direction, 2026-10-13
+
+Python is the first-release public interface. Truss TypeScript implementation
+maintenance and full bidirectional TypeScript/Python interchange are deferred
+correctness/portability work, not first-release blocking gates. The accepted
+ADR-003 amendment governs earlier contrary sequencing in this artifact.
+Required Python behavioral cases, independently authored expectations, and
+native state/journal/transaction evidence retain their meaning. Deferral does
+not qualify interchange: an eventual claim still needs both real directions
+and their original independent expectations. UMF TypeScript dependencies and
+Weft's Rust compiler remain required where the Python API consumes them.
+
 The [public Python runtime](../../packages/python/README.md) provides a concrete
 embeddable interface on Truss0.35/layout0.16 candidate, UMF0.7.0 and Weft0.4.8.
 The tested local tuple is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL18.6

@@ -19,6 +19,18 @@ ddx:
 
 # STP-028: Corpus and interchange
 
+## First-release scope — owner direction, 2026-10-13
+
+Python is the first-release public interface. Truss TypeScript implementation
+maintenance and full bidirectional TypeScript/Python interchange are deferred
+correctness/portability work, not first-release blocking gates. The accepted
+ADR-003 amendment governs earlier contrary sequencing in this artifact.
+Required Python behavioral cases, independently authored expectations, and
+native state/journal/transaction evidence retain their meaning. Deferral does
+not qualify interchange: an eventual claim still needs both real directions
+and their original independent expectations. UMF TypeScript dependencies and
+Weft's Rust compiler remain required where the Python API consumes them.
+
 ## Story Reference
 
 US-028, TD-028, SD-007, TP-001 and CONTRACT-004. Tests are planned; no second implementation is claimed.
@@ -49,7 +61,7 @@ Newer required corpus refuses full pass; selected host-extension exclusion is ex
 
 ## Build Handoff
 
-Select exact registered case-adapter/corpus manifest, original producer/custody/native environment/resource profiles; consume the authored runner result/divergence/receipt/assessment wires, write red tests, implement orchestration/native observers, then obtain independent bidirectional evidence. All criteria block full-profile closeout; unavailable second implementation remains unverified, not a skipped success.
+For eventual full interchange qualification, select exact registered case-adapter/corpus manifest, original producer/custody/native environment/resource profiles; consume the authored runner result/divergence/receipt/assessment wires, write red tests, implement orchestration/native observers, then obtain independent bidirectional evidence. AC1 and Python behavioral mismatch reporting remain first-release obligations. AC2 and cross-implementation checks block an eventual interchange claim, not the Python release; the unavailable second implementation is deferred, not a skipped success.
 
 ## Complete resource and interruption evidence
 
