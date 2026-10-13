@@ -1,0 +1,190 @@
+{
+  "status": "no-remaining-actionable-findings-within-reviewed-scope",
+  "reviewer": "Independent Astra Ultra review",
+  "date": "2026-10-13",
+  "gitHead": "1fcf62ca368469ec672b3d115b5c87953383de0f",
+  "scope": "Exact existing ShareLock observation, selected table metadata/guard qualification, copied caller/executor fact recipes, and original native-subject/key handoff. No implementation edits or native mutations by reviewer.",
+  "findings": [],
+  "resolvedFinding": {
+    "issue": "Wrapper iterated and cloned columns before exact carrier/type/count validation. Lists/generators became accepted tuples and a foreign dataclass constructor ran before refusal; an unbounded iterable could avoid the later1600 limit.",
+    "before": "Four bounded observations retained from exact captured pre-fix source: valid tuple control; list and finite generator reach preparation; foreign constructor called once before type refusal. No large or infinite allocation attempted.",
+    "fix": "Validate original columns are exact tuple, at most1600 elements, and each element is exact _FactColumnComparison before copying.",
+    "after": "Actual fixed wrapper refuses list, generator, foreign dataclass and1601 elements before original inspector/hosts; generator iteration count and foreign constructor count remain zero."
+  },
+  "independentControls": {
+    "guarded": 38,
+    "legacy": 69,
+    "allPassed": true,
+    "checks": [
+      "Default lock-acquisition and existing qualifier body remain AST-identical after accounting only for new explicit mode branch.",
+      "existing_locks requires exact bool; true checks current backend/database/relation OID, granted relation ShareLock, and exact TEXT descriptor before fetch; false retains acquisition.",
+      "Missing/false/NULL/nontext/extra existing-lock observations refuse before metadata/callback.",
+      "Both caller object and map qualify before both genuine original UMF key encodes.",
+      "Executor receives only a copied object recipe; original inspector mutation of input relation OIDs cannot replace captured caller/executor OIDs.",
+      "Missing/disabled initial cuts prevent codec and executor entry; late cut/guard refusal prevents second codec and output.",
+      "Explicit guarded None refuses without legacy delegation; malformed selected sets refuse before host and inspector."
+    ],
+    "qualification": "Current implementation and actual original Weft inspector/UMF encoder execute. Native rows, exact-type host shells and delegated evaluator are synthetic. No native privilege, locking, host-containment or lifetime theorem follows from these controls. Legacy harness retains original helper metadata and source/identity refusal coverage."
+  },
+  "parentNativeEvidenceInspected": {
+    "guardedTests": 5,
+    "guardedSeconds": 29.706,
+    "epochRegressionTests": 2,
+    "epochRegressionSeconds": 4.221,
+    "postgresql": "18.6",
+    "moduleImports": 932,
+    "cleanup": {
+      "runtimeExitSucceeded": true,
+      "statusExitCode": 3,
+      "socketAbsent": true,
+      "serverVersion": "18.6"
+    },
+    "notIndependentlyRerun": true,
+    "checks": "Actual consumer has no selected object/map SELECT or DML privileges. Helper-held native caller ShareLocks are observed at both key encoders; only object guard reaches actual private executor; r1/Withheld returned. Independently disabled object/map guard refuses before either encoder/evaluator with exact contained error/no cleanup error. Mandatory None and four invalid column carriers refuse before preparation/host entry."
+  },
+  "limits": [
+    "Original helper/issuer authenticity, trusted configured/runtime code, exclusive host use and cluster identity remain premises.",
+    "Existing-lock query is a current observation; continuous installed guard/cut lifetime and faithful participating writes remain premises, not authenticated by a row.",
+    "No new table privileges are issued by existing_locks mode; native helper obtains the separately qualified selected locks.",
+    "No complete DDL/role/ACL/handler/config/callable/source lifetime or ABA closure, principal issuance, protected endpoint, readiness or guarded release theorem.",
+    "No backend-case promotion or completion of all132 required cases."
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "2d82e3550463394dfe6dd1ebb3c31e7d83c8d34fdbc8723baf45b99503b0a537",
+      "bytes": 9453
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_subject_read.py",
+      "sha256": "cdc6c7a2e3635d5a576f84955f42c29683bfdb5c4b2ed14c08b37b08e8096831",
+      "bytes": 9083
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_read.py",
+      "sha256": "c69720e742f039295101a9d29b5a3617b0d9c5ec97c5284f558e35728800db9a",
+      "bytes": 8085
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-catalog-subject.sql",
+      "sha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+      "bytes": 2670
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_guarded_subject_native.py",
+      "sha256": "4d78cd8376310c7b9e3158b23b65e39084ec1f4736a4bb059bb50f4a72817902",
+      "bytes": 6006
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+      "bytes": 9078
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "b5b88fd89fe8e215396e31da62d925b698a15749d236d3dfbb47c57a415f23f9",
+      "bytes": 11649
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/authorization-fact-write-fence.sql",
+      "sha256": "66b1a93c5a16d0f0727f9f0b8b91e77df7b1a7e9a9116c221f2cec65e6455381",
+      "bytes": 1067
+    }
+  ],
+  "governedDocumentationPins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "ecf6abc4208af4c2585ee3702554e1a1d2770ac0728466421ae13d1849f46618",
+      "bytes": 332449
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/03-test/test-plan.md",
+      "sha256": "ebe4e318cfe688c645edb39aaaad4e37ac039d6d685fbee54af23961a15022d8",
+      "bytes": 190473
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "f81780194002915a6c69798f439850de1fcde568d4cdf5166b07f716d77136a2",
+      "bytes": 1099093
+    }
+  ],
+  "parentEvidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-native-subject-20261013/native-final.log",
+      "sha256": "dd3ca8fcfae6515e1bd77754c960d08cf2c63d0fc970e9c2c98842576d40fd97",
+      "bytes": 1111
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-native-subject-20261013/epoch-regression.log",
+      "sha256": "7cdb494e1634f33e522d3ca98d4c7467197727f873808145cf77bf444cff3cb5",
+      "bytes": 470
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-native-subject-20261013/cleanup.json",
+      "sha256": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+      "bytes": 109
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-native-subject-20261013/decision.json",
+      "sha256": "3966cf8f43266a70436f3cb7ca9ec3d0e1345f41d8f16f0259bc5429945a769f",
+      "bytes": 361
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-native-subject-20261013/module-boundaries.log",
+      "sha256": "efa0e232ab5c91146d6740d061769d3c05f4aa749fe187654b63b112bb189e3b",
+      "bytes": 83
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/guarded-native-subject-20261013/receipt.json",
+      "sha256": "ec0dd0be912b96eb52cb130f5fe458ae5bb6ea6abac021b45a5559354af0f86d",
+      "bytes": 1153
+    }
+  ],
+  "independentEvidencePins": [
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/check.py",
+      "sha256": "a4d6c95dbe148eb8f4aca5d22a7fb8690178911f973692ce5baea48e512222a8",
+      "bytes": 10804
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/guarded-results.json",
+      "sha256": "898b2dd8c35d73e5dacbfb34b2608c786a7e40fd7e6e3aba0db48d48653aafde",
+      "bytes": 5543
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/legacy_check.py",
+      "sha256": "20f47859256bba1361e76ec2392333415ea6ca7966e2d36329090d0cc13f5c1d",
+      "bytes": 10529
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/results.json",
+      "sha256": "03478117e498f00292f2888ba3eaf9c58c46e0feda89df7765bf97e0d319c0ba",
+      "bytes": 9544
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/copy_boundary.py",
+      "sha256": "a70a6c78272fabc3d9898f4193ad559f48a3fa4557a123aa30844df42190a2e8",
+      "bytes": 3157
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/copy-boundary-before.json",
+      "sha256": "ed750b2d714d5b9715d65fdda9342940c97b9f64de5966bc2d60ddcdb8dc2eb7",
+      "bytes": 1059
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/subject-pre-fix.py",
+      "sha256": "f9582faf2206d7ee5dd6c3ca6600aa8ed44dc968853c1d8850b547247fbc5305",
+      "bytes": 8802
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/fact-cut-before-existing-mode.py",
+      "sha256": "7a38ff06147ce553ff1d2f8b104f89dd2122bebd08e8e83e66fb487e86159130",
+      "bytes": 8414
+    }
+  ]
+}

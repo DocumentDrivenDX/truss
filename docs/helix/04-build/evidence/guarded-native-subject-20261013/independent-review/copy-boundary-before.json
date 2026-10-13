@@ -1,0 +1,28 @@
+{
+  "scope": "Captured actual pre-fix wrapper; valid original named source selection and exact-type host shells. Execution stops before inspector/host/native work. No infinite iterable or large allocation attempted.",
+  "sourceSha256": "f9582faf2206d7ee5dd6c3ca6600aa8ed44dc968853c1d8850b547247fbc5305",
+  "observations": [
+    {
+      "case": "valid tuple baseline",
+      "outcome": "input reached subject preparation",
+      "subjectPreparationEntries": 1
+    },
+    {
+      "case": "list coerced into accepted tuple",
+      "outcome": "input reached subject preparation",
+      "subjectPreparationEntries": 1
+    },
+    {
+      "case": "generator entered and coerced into accepted tuple",
+      "outcome": "input reached subject preparation",
+      "subjectPreparationEntries": 1
+    },
+    {
+      "case": "foreign column constructor executes before refusal",
+      "outcome": "ValueError: Exact native column comparison required",
+      "subjectPreparationEntries": 0
+    }
+  ],
+  "generatorIterations": 1,
+  "foreignConstructorCallsBeforeRefusal": 1
+}

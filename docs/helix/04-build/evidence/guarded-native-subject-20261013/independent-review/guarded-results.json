@@ -1,0 +1,190 @@
+{
+  "count": 38,
+  "controls": [
+    {
+      "name": "default acquisition and existing qualification body remain AST-identical",
+      "passed": true
+    },
+    {
+      "name": "default mode qualifies both homes before callback",
+      "passed": true
+    },
+    {
+      "name": "existing mode qualifies both homes before callback",
+      "passed": true
+    },
+    {
+      "name": "non-bool mode NoneType 3 refuses",
+      "passed": true
+    },
+    {
+      "name": "non-bool mode int 4 refuses",
+      "passed": true
+    },
+    {
+      "name": "non-bool mode int 5 refuses",
+      "passed": true
+    },
+    {
+      "name": "non-bool mode str 6 refuses",
+      "passed": true
+    },
+    {
+      "name": "non-bool mode list 7 refuses",
+      "passed": true
+    },
+    {
+      "name": "non-bool mode object 8 refuses",
+      "passed": true
+    },
+    {
+      "name": "existing lock foreign refuses before qualification/callback",
+      "passed": true
+    },
+    {
+      "name": "existing lock missing descriptor refuses before qualification/callback",
+      "passed": true
+    },
+    {
+      "name": "existing lock extra descriptor refuses before qualification/callback",
+      "passed": true
+    },
+    {
+      "name": "existing lock false refuses before qualification/callback",
+      "passed": true
+    },
+    {
+      "name": "existing lock NULL refuses before qualification/callback",
+      "passed": true
+    },
+    {
+      "name": "existing lock bool refuses before qualification/callback",
+      "passed": true
+    },
+    {
+      "name": "existing lock empty refuses before qualification/callback",
+      "passed": true
+    },
+    {
+      "name": "existing lock duplicate refuses before qualification/callback",
+      "passed": true
+    },
+    {
+      "name": "guarded composite executes genuine inspector and both original codecs",
+      "passed": true
+    },
+    {
+      "name": "both caller object and map qualified before both encodings",
+      "passed": true
+    },
+    {
+      "name": "executor receives only copied object guard",
+      "passed": true
+    },
+    {
+      "name": "inspector cannot replace original copied caller or executor guard OIDs",
+      "passed": true
+    },
+    {
+      "name": "10 held refuses before codec and executor",
+      "passed": true
+    },
+    {
+      "name": "10 guard refuses before codec and executor",
+      "passed": true
+    },
+    {
+      "name": "11 held refuses before codec and executor",
+      "passed": true
+    },
+    {
+      "name": "11 guard refuses before codec and executor",
+      "passed": true
+    },
+    {
+      "name": "late held refusal prevents second codec and result",
+      "passed": true
+    },
+    {
+      "name": "late guard refusal prevents second codec and result",
+      "passed": true
+    },
+    {
+      "name": "list selected set refuses before inspector and hosts",
+      "passed": true
+    },
+    {
+      "name": "empty selected set refuses before inspector and hosts",
+      "passed": true
+    },
+    {
+      "name": "one selected set refuses before inspector and hosts",
+      "passed": true
+    },
+    {
+      "name": "duplicate selected set refuses before inspector and hosts",
+      "passed": true
+    },
+    {
+      "name": "foreign selected set refuses before inspector and hosts",
+      "passed": true
+    },
+    {
+      "name": "mandatory None never delegates to legacy",
+      "passed": true
+    },
+    {
+      "name": "list columns refuse before inspector and host",
+      "passed": true
+    },
+    {
+      "name": "generator columns refuse before inspector and host",
+      "passed": true
+    },
+    {
+      "name": "foreign columns refuse before inspector and host",
+      "passed": true
+    },
+    {
+      "name": "oversize columns refuse before inspector and host",
+      "passed": true
+    },
+    {
+      "name": "non-tuple generator never iterated and foreign constructor never called",
+      "passed": true
+    }
+  ],
+  "scope": "Actual current lock qualifier and composite orchestration with synthetic native rows, exact-type host shells and delegated evaluator. Original Weft inspector and UMF key encoder execute. Lock SQL predicates and descriptor-before-fetch are inspected; no native lock/privilege/host-containment theorem.",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "2d82e3550463394dfe6dd1ebb3c31e7d83c8d34fdbc8723baf45b99503b0a537",
+      "bytes": 9453
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_subject_read.py",
+      "sha256": "cdc6c7a2e3635d5a576f84955f42c29683bfdb5c4b2ed14c08b37b08e8096831",
+      "bytes": 9083
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_read.py",
+      "sha256": "c69720e742f039295101a9d29b5a3617b0d9c5ec97c5284f558e35728800db9a",
+      "bytes": 8085
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-catalog-subject.sql",
+      "sha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+      "bytes": 2670
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/check.py",
+      "sha256": "a4d6c95dbe148eb8f4aca5d22a7fb8690178911f973692ce5baea48e512222a8",
+      "bytes": 10804
+    },
+    {
+      "path": "/private/tmp/guarded-native-subject-review-20261013/fact-cut-before-existing-mode.py",
+      "sha256": "7a38ff06147ce553ff1d2f8b104f89dd2122bebd08e8e83e66fb487e86159130",
+      "bytes": 8414
+    }
+  ]
+}
