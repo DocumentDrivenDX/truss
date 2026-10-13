@@ -283,6 +283,13 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    self.admin.execute('DEALLOCATE selected_cells')
    self.assertEqual([(sid,rid) for sid,rid,cell in native_rows],[(sid,rid) for sid,rid,truth in truths if truth is True])
    native_selected[element]={(sid,rid):cell for sid,rid,cell in native_rows}
+  combined_projection=','.join('('+next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']==element)+')' for element in ('resourceId','salary'))
+  combined_statement='SELECT q.sid,q.rid,'+combined_projection+' FROM truss.object r JOIN (SELECT s.id AS sid,r.id AS rid,'+projections+' FROM truss.object s CROSS JOIN truss.object r WHERE s.type_id='+str(ids['Staff'])+' AND r.type_id='+str(ids['Resource'])+') q ON r.id=q.rid WHERE ('+selected['decisionExpression']+")='permit' ORDER BY q.sid,q.rid"
+  self.admin.execute('PREPARE combined_cells(boolean) AS '+combined_statement)
+  combined_rows=self.admin.execute('EXECUTE combined_cells(true)').fetchall();self.admin.execute('DEALLOCATE combined_cells')
+  self.assertEqual([(row[0],row[1]) for row in combined_rows],[(sid,rid) for sid,rid,truth in truths if truth is True])
+  native_selection_sql['combined']=combined_statement
+  native_selected['combined']={(row[0],row[1]):list(row[2:]) for row in combined_rows}
   comparisons=[]
   for sid,rid,truth in truths:
    cut={'trusted':True,'generation':'fixture','expectedGeneration':'fixture','policyId':policy['id'],'policyRevision':policy['revision'],'ontologyDocumentId':ontology['documentId'],'ontologyRevision':ontology['revision'],'subjects':[by_id[sid]],'facts':facts,'coverage':coverage,'context':[],'maxFacts':100,'maxSteps':100000}
@@ -316,6 +323,18 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
     crossed_check=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':crossed}).encode(),capture_output=True,timeout=30)
     self.assertEqual(crossed_check.returncode,1);self.assertFalse(crossed_check.stdout)
     self.assertEqual(json.loads(crossed_check.stderr)['code'],'WFT-SECURITY-RESULT-SELECTION')
+    combined_request=deepcopy(selection_request);combined_request['sql']='SELECT r.resourceId AS id,r.salary AS amount FROM Resource r'
+    combined_probe={'columns':[{'target':ref('Resource'),'field':ref('resourceId'),'outputName':'id'},{'target':ref('Resource'),'field':ref('salary'),'outputName':'amount'}],'rows':[native_selected['combined'][(sid,rid)]],'factCut':cut,'scopedFacts':scoped}
+    combined_check=subprocess.run([binary],input=json.dumps({'request':combined_request,'assessment':assessment,'resultProbe':combined_probe}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(combined_check.returncode,0,combined_check.stderr.decode());self.assertTrue(json.loads(combined_check.stdout)['conditionalFactSelectionPassed'])
+    invalid_batches=[]
+    swapped=deepcopy(combined_probe);swapped['rows'][0].reverse();invalid_batches.append(swapped)
+    changed_order=deepcopy(combined_probe);changed_order['columns'].reverse();invalid_batches.append(changed_order)
+    missing_cell=deepcopy(combined_probe);missing_cell['rows'][0].pop();invalid_batches.append(missing_cell)
+    late_error=deepcopy(combined_probe);late_error['rows'].append(deepcopy(late_error['rows'][0]));late_error['scopedFacts']['rows'].append(deepcopy(scoped['rows'][0]));late_error['rows'][1][0]['value']={'string':'late-forged'};invalid_batches.append(late_error)
+    for invalid in invalid_batches:
+     rejected_batch=subprocess.run([binary],input=json.dumps({'request':combined_request,'assessment':assessment,'resultProbe':invalid}).encode(),capture_output=True,timeout=30)
+     self.assertEqual(rejected_batch.returncode,1);self.assertFalse(rejected_batch.stdout)
     forged_identity=deepcopy(identity_probe);forged_identity['rows'][0][0]['value']={'string':'different-valid-value'}
     value_refusal=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':forged_identity}).encode(),capture_output=True,timeout=30)
     self.assertEqual(value_refusal.returncode,1);self.assertFalse(value_refusal.stdout)
