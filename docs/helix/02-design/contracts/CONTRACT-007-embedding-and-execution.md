@@ -1170,3 +1170,8 @@ The original Python subject observation admits only repeatable-read/serializable
 
 
 The original fenced-epoch Python transport now requires all twelve exact ordered TEXT descriptors before fetching helper rows. Native foreign-NAME row decoding and callback invocation are refused; configured loader construction/runtime remain trusted. This transport correction does not authenticate installed source/helper code or resolve the incompatible transaction profiles.
+
+
+### Fresh source and declared fact-fenced subject component — 2026-10-13
+
+The separate private `_observe_fenced_subject_key` uses read-committed read-write only, through the original fenced epoch/fact operation. Original source selection is inspected before native work; native epoch correspondence and declared table/ALWAYS guard/column correspondence plus SHARE locks precede subject helper observation and original key encoding in that same original host operation. The earlier stable read-only API keeps its original guard. This component requires an independently qualified complete helper read-dependency declaration; omitted relations are not inferred or authenticated. Selected same-reader/external fact writers are excluded by existing native locks/guards, while role/helper/config writers and complete profile/deployment/issuer authority remain separate. Invocation privileges and direct-table bypass closure still need a complete protected installer; a fixture that grants invoker source-table rights is not a supported security profile. Output is historical correspondence, not protected execution admission.

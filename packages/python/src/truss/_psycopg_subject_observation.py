@@ -32,7 +32,7 @@ class _SubjectObservation:
     original_inspection: bytes
 
 
-def _run_subject_operation(host, transaction, selection, original_inspector, produce):
+def _prepare_subject_operation(host, selection, original_inspector, produce, profiles):
     """Reacquire original host custody; output is immutable historical evidence."""
     if type(host) is not PsycopgHost or type(selection) is not _SubjectSelection:
         raise ValueError('Original host and immutable selection required')
@@ -67,8 +67,8 @@ def _run_subject_operation(host, transaction, selection, original_inspector, pro
         raise ValueError('Original non-ready subject inspection required')
     def observe(cursor,observed):
         from psycopg import sql
-        if observed[0][2:] not in (('repeatable_read','read_only'),('serializable','read_only')):
-            raise ValueError('Stable native read-only transaction required')
+        if observed[0][2:] not in profiles:
+            raise ValueError('Original selected subject transaction profile required')
         def principal():
             cursor.execute("SELECT SESSION_USER::pg_catalog.text,CURRENT_USER::pg_catalog.text,"
                            "r.rolsuper::pg_catalog.text,r.rolbypassrls::pg_catalog.text,"
@@ -97,6 +97,11 @@ def _run_subject_operation(host, transaction, selection, original_inspector, pro
         result=produce(observation)
         principal()
         return result
+    return observe
+
+
+def _run_subject_operation(host,transaction,selection,original_inspector,produce):
+    observe=_prepare_subject_operation(host,selection,original_inspector,produce,(('repeatable_read','read_only'),('serializable','read_only')))
     return host._run_operation(transaction,observe)
 
 
@@ -123,3 +128,20 @@ def _observe_ordinary_subject_key(host,transaction,selection,original_inspector,
         key=encode_literal_key_tuple(selection.original_document,observation.identity,texts,bun_executable=bun_executable)
         return _ObservedSubjectKey(observation,key.original_receipt_bytes,key.tuple_bytes)
     return _run_subject_operation(host,transaction,selection,original_inspector,produce)
+
+
+def _observe_fenced_subject_key(host,transaction,selection,original_inspector,encodings,epoch_comparison,relations,*,bun_executable='bun'):
+    """Fresh epoch plus declared fact cuts, not complete protected admission."""
+    from ._psycopg_fact_cut import _run_fenced_fact_operation
+    if (type(selection) is not _SubjectSelection or type(encodings) is not tuple or not 1<=len(encodings)<=32
+            or len(encodings)!=len(selection.columns) or any(type(v) is not str or v not in ('string','core-literal-json') for v in encodings)):
+        raise ValueError('Exact ordered native-to-literal encoding selection required')
+    def produce(observation):
+        from ._umf_key_tuples import encode_literal_key_tuple
+        texts=tuple(json.dumps({'string':value}) if encoding=='string' else value
+                    for value,encoding in zip(observation.values,encodings))
+        key=encode_literal_key_tuple(selection.original_document,observation.identity,texts,bun_executable=bun_executable)
+        return _ObservedSubjectKey(observation,key.original_receipt_bytes,key.tuple_bytes)
+    observe=_prepare_subject_operation(host,selection,original_inspector,produce,(('read_committed','read_write'),))
+    def collected(cursor):return observe(cursor,host._observe(cursor))
+    return _run_fenced_fact_operation(host,transaction,epoch_comparison,relations,collected)

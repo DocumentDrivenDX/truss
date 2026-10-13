@@ -1,0 +1,177 @@
+{
+  "status": "passed",
+  "count": 8,
+  "results": [
+    {
+      "name": "match",
+      "passed": true,
+      "hostOperations": 1,
+      "encoded": 1,
+      "events": [
+        "execute1",
+        "fetch1",
+        "execute2",
+        "fetch2",
+        "execute3",
+        "execute4",
+        "fetch4",
+        "execute5",
+        "fetch5",
+        "execute6",
+        "fetch6",
+        "execute7",
+        "fetch7",
+        "execute8",
+        "fetch8",
+        "execute9",
+        "fetch9",
+        "execute10",
+        "fetch10",
+        "encode",
+        "execute11",
+        "fetch11"
+      ]
+    },
+    {
+      "name": "wrong-relation",
+      "passed": true,
+      "hostOperations": 1,
+      "encoded": 0,
+      "events": [
+        "execute1",
+        "fetch1",
+        "execute2",
+        "fetch2",
+        "execute3",
+        "execute4",
+        "fetch4"
+      ]
+    },
+    {
+      "name": "disabled-guard",
+      "passed": true,
+      "hostOperations": 1,
+      "encoded": 0,
+      "events": [
+        "execute1",
+        "fetch1",
+        "execute2",
+        "fetch2",
+        "execute3",
+        "execute4",
+        "fetch4",
+        "execute5",
+        "fetch5"
+      ]
+    },
+    {
+      "name": "wrong-column",
+      "passed": true,
+      "hostOperations": 1,
+      "encoded": 0,
+      "events": [
+        "execute1",
+        "fetch1",
+        "execute2",
+        "fetch2",
+        "execute3",
+        "execute4",
+        "fetch4",
+        "execute5",
+        "fetch5",
+        "execute6",
+        "fetch6"
+      ]
+    },
+    {
+      "name": "lock-refusal",
+      "passed": true,
+      "hostOperations": 1,
+      "encoded": 0,
+      "events": [
+        "execute1",
+        "fetch1",
+        "execute2",
+        "fetch2",
+        "execute3"
+      ]
+    },
+    {
+      "name": "read-only",
+      "passed": true,
+      "hostOperations": 1,
+      "encoded": 0,
+      "events": [
+        "execute1",
+        "fetch1",
+        "execute2",
+        "fetch2",
+        "execute3",
+        "execute4",
+        "fetch4",
+        "execute5",
+        "fetch5",
+        "execute6",
+        "fetch6",
+        "execute7",
+        "fetch7"
+      ]
+    },
+    {
+      "name": "wrong-subject-oid",
+      "passed": true,
+      "hostOperations": 1,
+      "encoded": 0,
+      "events": [
+        "execute1",
+        "fetch1",
+        "execute2",
+        "fetch2",
+        "execute3",
+        "execute4",
+        "fetch4",
+        "execute5",
+        "fetch5",
+        "execute6",
+        "fetch6",
+        "execute7",
+        "fetch7",
+        "execute8",
+        "fetch8",
+        "execute9"
+      ]
+    },
+    {
+      "name": "late-principal",
+      "passed": true,
+      "hostOperations": 1,
+      "encoded": 1,
+      "events": [
+        "execute1",
+        "fetch1",
+        "execute2",
+        "fetch2",
+        "execute3",
+        "execute4",
+        "fetch4",
+        "execute5",
+        "fetch5",
+        "execute6",
+        "fetch6",
+        "execute7",
+        "fetch7",
+        "execute8",
+        "fetch8",
+        "execute9",
+        "fetch9",
+        "execute10",
+        "fetch10",
+        "encode",
+        "execute11",
+        "fetch11"
+      ]
+    }
+  ],
+  "sourceSha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+  "scope": "Actual subject, fact and epoch composition plus genuine Weft/UMF; synthetic cursor and host-operation shell. Establishes code ordering/one-cursor delegation only; not native locking or guard/source authentication."
+}

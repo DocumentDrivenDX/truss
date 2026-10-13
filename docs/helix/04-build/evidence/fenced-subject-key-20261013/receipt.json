@@ -1,0 +1,35 @@
+{
+  "scope": "Experimental fresh source/declared fact-fenced subject key component, not protected backend profile admission",
+  "sources": {
+    "packages/python/src/truss/_psycopg_subject_observation.py": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+    "packages/python/src/truss/_psycopg_fact_cut.py": "0b22607862cd90a41f233ecc01faf6d56af78dc3f6ed141aca638d90aac96e8f",
+    "packages/python/tests/test_fenced_subject_key_native.py": "5f9ee024be1660b305e02ad5ba18649ef6ce2d8f34c594c058430ca86f2ba31b",
+    "tools/security/prove-subject-source-profile-compatibility.py": "468e18164f38d2271fe81fb50c64e3ad9a76f3e2fc4692f0f7adca6a6cb2b314",
+    "scripts/check-module-boundaries.py": "3e6c4e682516bb09cd7c4ce67d62a5c7511acc1298c638f6c5647d69e9e5e6a7"
+  },
+  "checks": {
+    "nativeCases": 7,
+    "originalObservationGroups": 19,
+    "proofUNSAT": 3,
+    "proofSAT": 4,
+    "boundaryControls": 16,
+    "originalOneOperationRegression": 1
+  },
+  "acceptanceTraceability": {
+    "US-056-AC2": "Original caller/subject/fresh source/declared fact operation composition prerequisite, not protected graph resource access",
+    "US-056-AC10": "Guard-compatible native profile and selected cut/codec correspondence, not complete semantic/native current authority refinement"
+  },
+  "missingGates": [
+    "bypass-safe native invocation grants/installation",
+    "authenticated complete helper read dependency declarations",
+    "source profile and original ontology/caller issuer correspondence",
+    "complete role/helper/config/other writer closure",
+    "subject existence/current graph identity qualification",
+    "protected compiler/query release"
+  ],
+  "fixtureWarning": "Ordinary fixture role has deliberately broad ALL source/fact table grants. Those grants would fail protected bypass criteria; this is not a production installation or a supported security profile. Native facts/source rows and helper are independently selected trusted fixture inputs.",
+  "versions": "PostgreSQL18.6,psycopg3.3.6 binary/libpq18.6,Core0.8 KeyTuple3/Bun1.4.2,Weft subject selection0.1",
+  "promotedBackendCases": 0,
+  "requiredBackendCases": 132,
+  "originalOneOperationRegressionSeconds": 5.303
+}

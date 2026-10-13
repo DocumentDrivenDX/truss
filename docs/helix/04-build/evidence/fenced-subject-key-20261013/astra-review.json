@@ -1,0 +1,174 @@
+{
+  "review": "experimental-fresh-declared-fact-fenced-subject-key",
+  "reviewer": "independent Astra Ultra agent",
+  "reviewedAtUtc": "2026-10-13T14:46:01.784182+00:00",
+  "status": "no_actionable_findings_within_explicit_component_scope",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "headDuringReview": "f1914f3269c0177c6e674f4a3475738eb95d0754",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+      "bytes": 9078
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "0b22607862cd90a41f233ecc01faf6d56af78dc3f6ed141aca638d90aac96e8f",
+      "bytes": 7928
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-fresh-lock.sql",
+      "sha256": "b9d48c570237cac5b69b959270b363862ec5f87d33ac5145cdd9d847e9640ebc",
+      "bytes": 2174
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-fenced-fresh-lock.sql",
+      "sha256": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+      "bytes": 1743
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/tools/security/prove-subject-source-profile-compatibility.py",
+      "sha256": "468e18164f38d2271fe81fb50c64e3ad9a76f3e2fc4692f0f7adca6a6cb2b314",
+      "bytes": 3136
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "b04f0d96ac360b4167bec32fe5f92c60fe2cfce8ab4748268bf7e0d98a7fcf86",
+      "bytes": 17930
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+      "bytes": 9931
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/authorization-fact-write-fence.sql",
+      "sha256": "66b1a93c5a16d0f0727f9f0b8b91e77df7b1a7e9a9116c221f2cec65e6455381",
+      "bytes": 1067
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_fenced_subject_key_native.py",
+      "sha256": "5f9ee024be1660b305e02ad5ba18649ef6ce2d8f34c594c058430ca86f2ba31b",
+      "bytes": 8092
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/check-module-boundaries.py",
+      "sha256": "3e6c4e682516bb09cd7c4ce67d62a5c7511acc1298c638f6c5647d69e9e5e6a7",
+      "bytes": 24784
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "acb65802e00ab2fd8ef7eb6f64308321c0dc4e2b6b57e5acdfca6b4e3708e38c",
+      "bytes": 302706
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "cda5afa185fbd84353fa41b37694d383efe113f66af74619c77855c912140cb5",
+      "bytes": 1068300
+    }
+  ],
+  "independentControls": {
+    "count": 8,
+    "allPassed": true,
+    "runner": {
+      "path": "/private/tmp/fenced-subject-review-20261013/check.py",
+      "sha256": "93d092fba2b396ce1f05828d81357113824f240fb89dde9ee79ec57bca123431",
+      "bytes": 5203
+    },
+    "results": {
+      "path": "/private/tmp/fenced-subject-review-20261013/results.json",
+      "sha256": "93855e13f20f96351aad1b9fa32160ce602fe80b62d6804104dcf499b9a16692",
+      "bytes": 3479
+    },
+    "scope": "Actual subject/fact/epoch functions, genuine Weft and UMF owners, synthetic cursor and host-operation shell. Checks one operation/cursor, acquisition and native descriptor checks before observation/encoding, late principal refusal and old/new mode restrictions from reviewed source; no native lock emulation claim."
+  },
+  "independentFormalReplay": {
+    "z3Version": "4.15.4",
+    "unsat": 3,
+    "sat": 4,
+    "exactParentResultCorrespondence": true,
+    "result": {
+      "path": "/private/tmp/fenced-subject-review-20261013/proof.json",
+      "sha256": "1400efd242bbf33ca304546c73cd630c6adddc84aebacc0143695e246fda4112",
+      "bytes": 6042
+    },
+    "retainedScript": {
+      "path": "/private/tmp/fenced-subject-review-20261013/retained-root/tools/security/prove-subject-source-profile-compatibility.py",
+      "sha256": "468e18164f38d2271fe81fb50c64e3ad9a76f3e2fc4692f0f7adca6a6cb2b314",
+      "bytes": 3136
+    },
+    "qualification": "Old stable subject profile incompatibility preserved. New SAT query establishes compatibility/nonvacuity of RC/RW plus asserted held declared-fact cuts and same-operation predicates; no claim these Boolean premises prove actual native exclusion or source refinement."
+  },
+  "parentEvidence": [
+    {
+      "path": "/private/tmp/fenced-subject-native.log",
+      "sha256": "99dc4eca29b01fddaa003ad95271cd68946bf20bbd72ddf6105a51b902a923da",
+      "bytes": 98
+    },
+    {
+      "path": "/private/tmp/fenced-subject-native.json",
+      "sha256": "71540f60e240a362860b07fcf84ca6ba8f2592c1d76fcdf799d891387773ac4e",
+      "bytes": 4518
+    },
+    {
+      "path": "/private/tmp/fenced-subject-observation-regression.log",
+      "sha256": "f13e4783d7317d0c93a2066af9355f36fd195c6f70b5d46b068df6c48227f207",
+      "bytes": 98
+    },
+    {
+      "path": "/private/tmp/fenced-subject-observation-regression.json",
+      "sha256": "1d9ac746a31ceb80d9b6e1f5061e64303616058af90489e00ae816de83516806",
+      "bytes": 810
+    },
+    {
+      "path": "/private/tmp/fenced-subject-composition-regression.log",
+      "sha256": "539cf2dc593be4d457bdb40b4d49f3b88f3d0efe8b48710ad7b12d3f4dd48e05",
+      "bytes": 98
+    },
+    {
+      "path": "/private/tmp/fenced-subject-composition-regression.json",
+      "sha256": "1355321ea2ec8b87aebcd1c006ea0a5198fbafb6d2810bfa2fb576a9fe4c61e0",
+      "bytes": 8201
+    },
+    {
+      "path": "/private/tmp/fenced-subject-boundaries.log",
+      "sha256": "a8a858205a33c821a3425e7a7091248908ca70eb45875cf16ccc00a672dff36b",
+      "bytes": 83
+    },
+    {
+      "path": "/private/tmp/fenced-subject-boundary-controls.log",
+      "sha256": "4e61183357964aa33002a0411dcfc9fa7d5cd99b698dc914c100d45818b0a38a",
+      "bytes": 18517
+    }
+  ],
+  "parentNativeQualification": {
+    "independentlyRerun": false,
+    "server": "PostgreSQL18.6",
+    "fencedControls": 7,
+    "fencedDurationSeconds": 3.532,
+    "originalObservationGroups": 19,
+    "originalObservationDurationSeconds": 3.531,
+    "originalCompositionDurationSeconds": 5.303,
+    "fixtureScope": "Ordinary role has deliberately broad ALL source/fact table grants; expressly not bypass-safe protected installation."
+  },
+  "cleanup": {
+    "path": "/private/tmp/fenced-subject-epoch-cleanup/cleanup.json",
+    "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+    "bytes": 71
+  },
+  "conclusion": "New path delegates to original fact/epoch acquisition before collecting fresh subject values and encoding. Original stable RR/SERIALIZABLE read-only wrapper remains guarded separately. Added declared read-committed/read-write component is consistent with stated operation-local historical correspondence and does not admit a protected profile. No remaining introduced correctness blocker found.",
+  "scopeLimitations": [
+    "Declared relation/column inventories are trusted complete helper dependency inputs; omitted dependencies are neither discovered nor authenticated.",
+    "Installed helper/trigger/source semantics, source-profile/ontology/issuer correspondence, complete role/helper/config and alternative writer routes remain unqualified.",
+    "Existing fact-cut checks and native guards cover the declared selected table events, not a complete deployment or privilege-bypass proof.",
+    "Native observations and returned key are historical data, not current-authority leases, subject existence assertions or release credentials.",
+    "Source/transport bounds are not total process-memory/CPU or native query-cost proofs.",
+    "No repository/native mutation, broader proof/API expansion or backend acceptance promotion by reviewer."
+  ],
+  "findings": []
+}

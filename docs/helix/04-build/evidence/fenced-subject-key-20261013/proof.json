@@ -1,0 +1,72 @@
+{
+  "z3Version": "4.15.4",
+  "scope": "Finite current isolation/access guard predicates; three UNSAT original-profile controls and four SAT original/new-component nonvacuity witnesses. Guards are transcribed/reviewed premises, not Python/SQL source refinement or proof of native installation/authority.",
+  "sourceSha256": {
+    "packages/python/src/truss/_psycopg_subject_observation.py": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+    "packages/python/src/truss/_psycopg_fact_cut.py": "0b22607862cd90a41f233ecc01faf6d56af78dc3f6ed141aca638d90aac96e8f",
+    "packages/postgresql/native/source-epoch-fresh-lock.sql": "b9d48c570237cac5b69b959270b363862ec5f87d33ac5145cdd9d847e9640ebc",
+    "packages/postgresql/native/source-epoch-fenced-fresh-lock.sql": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+    "tools/security/prove-subject-source-profile-compatibility.py": "468e18164f38d2271fe81fb50c64e3ad9a76f3e2fc4692f0f7adca6a6cb2b314"
+  },
+  "results": [
+    {
+      "name": "original stable subject and fresh source guards have no shared native transaction profile",
+      "expected": "unsat",
+      "actual": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun isolation () Int)\n(declare-fun read_only () Bool)\n(assert\n (let (($x12 (= isolation 2)))\n (let (($x10 (= isolation 1)))\n (let (($x8 (= isolation 0)))\n (or $x8 $x10 $x12)))))\n(assert\n (let (($x8 (= isolation 0)))\n(let (($x17 (and $x8 (not read_only))))\n(let (($x15 (and (or (= isolation 1) (= isolation 2)) read_only)))\n(and $x15 $x17)))))\n(check-sat)\n"
+    },
+    {
+      "name": "subject repeatable-read read-only is independently feasible",
+      "expected": "sat",
+      "actual": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun isolation () Int)\n(declare-fun read_only () Bool)\n(assert\n (let (($x12 (= isolation 2)))\n (let (($x10 (= isolation 1)))\n (let (($x8 (= isolation 0)))\n (or $x8 $x10 $x12)))))\n(assert\n (let (($x10 (= isolation 1)))\n(let (($x12 (= isolation 2)))\n(let (($x14 (or $x10 $x12)))\n(let (($x15 (and $x14 read_only)))\n(and $x15 $x10))))))\n(check-sat)\n",
+      "witness": {
+        "isolation": "repeatable_read",
+        "readOnly": true
+      }
+    },
+    {
+      "name": "subject serializable read-only is independently feasible",
+      "expected": "sat",
+      "actual": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun isolation () Int)\n(declare-fun read_only () Bool)\n(assert\n (let (($x12 (= isolation 2)))\n (let (($x10 (= isolation 1)))\n (let (($x8 (= isolation 0)))\n (or $x8 $x10 $x12)))))\n(assert\n (let (($x12 (= isolation 2)))\n(let (($x10 (= isolation 1)))\n(let (($x14 (or $x10 $x12)))\n(let (($x15 (and $x14 read_only)))\n(and $x15 $x12))))))\n(check-sat)\n",
+      "witness": {
+        "isolation": "serializable",
+        "readOnly": true
+      }
+    },
+    {
+      "name": "fresh fenced source read-committed read-write is independently feasible",
+      "expected": "sat",
+      "actual": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun isolation () Int)\n(declare-fun read_only () Bool)\n(assert\n (let (($x12 (= isolation 2)))\n (let (($x10 (= isolation 1)))\n (let (($x8 (= isolation 0)))\n (or $x8 $x10 $x12)))))\n(assert\n (let (($x16 (not read_only)))\n(let (($x8 (= isolation 0)))\n(and $x8 $x16))))\n(check-sat)\n",
+      "witness": {
+        "isolation": "read_committed",
+        "readOnly": false
+      }
+    },
+    {
+      "name": "changing only access mode cannot compose repeatable-read with fresh source",
+      "expected": "unsat",
+      "actual": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun isolation () Int)\n(declare-fun read_only () Bool)\n(assert\n (let (($x12 (= isolation 2)))\n (let (($x10 (= isolation 1)))\n (let (($x8 (= isolation 0)))\n (or $x8 $x10 $x12)))))\n(assert\n (let (($x10 (= isolation 1)))\n(let (($x16 (not read_only)))\n(let (($x8 (= isolation 0)))\n(let (($x17 (and $x8 $x16)))\n(and $x17 $x10))))))\n(check-sat)\n"
+    },
+    {
+      "name": "changing only isolation cannot compose read-only with fresh source",
+      "expected": "unsat",
+      "actual": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun isolation () Int)\n(declare-fun read_only () Bool)\n(assert\n (let (($x12 (= isolation 2)))\n (let (($x10 (= isolation 1)))\n (let (($x8 (= isolation 0)))\n (or $x8 $x10 $x12)))))\n(assert\n (let (($x8 (= isolation 0)))\n(let (($x17 (and $x8 (not read_only))))\n(and $x17 read_only))))\n(check-sat)\n"
+    },
+    {
+      "name": "fresh declared-fact fenced component has a compatible native profile",
+      "expected": "sat",
+      "actual": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun isolation () Int)\n(declare-fun same_original_host_operation () Bool)\n(declare-fun declared_fact_cuts_held () Bool)\n(declare-fun read_only () Bool)\n(assert\n (let (($x12 (= isolation 2)))\n (let (($x10 (= isolation 1)))\n (let (($x8 (= isolation 0)))\n (or $x8 $x10 $x12)))))\n(assert\n (let (($x16 (not read_only)))\n(let (($x8 (= isolation 0)))\n(let (($x17 (and $x8 $x16)))\n(let (($x20 (and $x17 declared_fact_cuts_held same_original_host_operation)))\n(and $x17 $x20))))))\n(check-sat)\n",
+      "witness": {
+        "isolation": "read_committed",
+        "readOnly": false
+      }
+    }
+  ],
+  "conclusion": "The original stable read-only and fresh-source profiles still cannot compose. The new declared-fact fenced component uses compatible RC/RW under asserted held cuts and same original operation. This proves guard eligibility only, not actual complete dependency declarations, native writer closure, bypass-safe invoker grants, installed helper/profile authentication or current authority; no protected profile is admitted."
+}
