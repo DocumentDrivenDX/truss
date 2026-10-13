@@ -7799,3 +7799,24 @@ retain initial/final results separately. This connects original installed source
 into the factory boundary; compiler/issuer authentication, complete authority and
 backend admission remain open. CONTRACT-063/STP-056 B01/B08/B11/B12 and US-056
 AC6/AC9/AC10, US-057AC7 prerequisites only; all132 required cases remain unchanged.
+
+### Native epoch/barrier installer — 2026-10-13
+
+The private source infrastructure installer replaces manual positive fixture SQL
+setup with a pinned packaged eleven-source manifest and native readback of seven
+routines, five DDL hooks and four table hooks. It requires the original installed
+release/source marker, direct superuser and fresh epochs; existing objects refuse.
+Native installer/TLS6/40.967s and actual external peer/cleanup pass. Local wheel
+source correspondence and isolated resource import pass. [Qualified installer
+receipts](evidence/source-epoch-installation-20261013/README.md) preserve exact
+versions and excluded administrator/handler ownership. Pending construction is
+not issuer authentication or full profile admission. CONTRACT-063/STP-056
+B01/B11/B12 and US-056AC9/AC10 prerequisites only; all132 remain required.
+
+Astra found and prompted correction of the initial pre-pin type cast. The exact
+previous query executes a hostile native text-domain CHECK; the corrected
+pg_catalog.text query permits safe installation. Native counterexample/fix
+1/12.387s and hostile-domain/TLS3/27.340s pass. Unsafe third-party defaults refuse
+atomically (1/9.852s). Final wheel receipts are separate from historical initial
+build/test results. No complete compiler/issuer/authority or backend admission
+claim follows from these construction controls.

@@ -2069,3 +2069,20 @@ all installed bytes to match the pre-I/O capture. Initial twelve native cases
 pass; the custody correction replay is retained separately in
 [evidence](../04-build/evidence/catalog-installed-mapping-20261013/README.md).
 These trace US-056AC6/AC9/AC10 and US-057AC7 prerequisites, not full backend admission.
+
+### Native epoch infrastructure construction — 2026-10-13
+
+`test_security_source_epoch_installation_native` covers original packaged/native
+inventory, no repair, missing original marker, ordinary caller refusal and outer
+rollback. Original TLS cases exercise actual positive installer consumption.
+Native6/40.967s pass; local wheel source/import and external peer cleanup pass.
+A native third-party default function grant control additionally requires atomic
+refusal without private routine/hook residue. [Evidence](../04-build/evidence/source-epoch-installation-20261013/README.md)
+qualifies US-056AC9/AC10 and SPIKE-004 CH04 prerequisites only. Full backend
+acceptance and authority lifetime remain open.
+
+The installer’s hostile-domain control reproduces the prior unqualified text
+cast executing a raising native CHECK, then verifies corrected installation and
+caller-path restoration. Counterexample/fix1/12.387s and fixed-source hostile
+path/TLS3/27.340s pass; default-grant refusal1/9.852s passes. Initial/final wheel
+and native receipts remain distinguished in the evidence directory.

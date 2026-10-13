@@ -249,3 +249,12 @@ SHARE cut survives delivery. This advances CH04's source binding; exact byte
 comparison does not authenticate the installer/compiler/issuer or establish
 complete authority. Older three-record archives refuse this path pending explicit
 migration. [Native source evidence](../../04-build/evidence/catalog-installed-mapping-20261013/README.md).
+
+### Original packaged epoch infrastructure — 2026-10-13
+
+Positive source setup now uses the versioned private installer rather than manual
+SQL loading. Its original packaged sources and exact selected native readback
+supply pending construction identity for CH04. Actual TLS publication/cleanup
+still passes. Direct superuser installation, excluded handler ownership and
+administrative quiescence remain premises; the result creates no protected
+caller authority. [Installer evidence](../../04-build/evidence/source-epoch-installation-20261013/README.md).

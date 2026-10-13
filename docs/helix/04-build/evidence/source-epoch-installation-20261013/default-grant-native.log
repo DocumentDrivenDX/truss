@@ -1,0 +1,7 @@
+test_third_party_default_routine_grant_refuses_atomically (test_security_source_epoch_installation_native.SourceEpochInstallationNativeTests.test_third_party_default_routine_grant_refuses_atomically)
+@covers US-056-AC9/AC10; unsafe native installer defaults refuse. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 9.852s
+
+OK

@@ -23,8 +23,9 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
  def source_setup(self,foreign_installation=False,profile_override=None,evidence_override=None):
   mapping,c,h,t,selection,inspector,relations=self.guarded_setup()
   self.host.detach();self.admin.commit()
-  for name in ('source-epoch-immutability','source-epoch-lock','source-epoch-issue','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock'):
-   self.admin.execute((ROOT/'packages/postgresql/native'/ (name+'.sql')).read_text())
+  if foreign_installation:
+   for name in ('source-epoch-immutability','source-epoch-lock','source-epoch-issue','source-epoch-fresh-lock','source-epoch-read-fence','source-epoch-fenced-fresh-lock'):
+    self.admin.execute((ROOT/'packages/postgresql/native'/ (name+'.sql')).read_text())
   installation=self.admin.execute('SELECT gen_random_uuid()::text').fetchone()[0] if foreign_installation else self.installation.installation_id
   incarnation='catalog-fixture-target'
   if foreign_installation:
@@ -40,10 +41,21 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
     incarnation=issued.value.target_incarnation.decode('utf8')
    finally:issuer.detach()
    self.admin.commit()
-  source=(ROOT/'packages/postgresql/native/source-epoch-routine-ddl-barrier.sql').read_text()
-  self.admin.execute(source);self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-schema-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-database-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
-  oid,owner=self.admin.execute("SELECT oid,proowner FROM pg_proc WHERE oid='truss.runtime_fence_routine_ddl_writer()'::regprocedure").fetchone()
-  barrier=_DDLBarrierComparison(owner,oid,source.split('AS $$',1)[1].split('$$;',1)[0],include_alter_routine=True,include_schema_ddl=True,include_database_ddl=True)
+  if foreign_installation:
+   # Excluded administrative foreign-marker negative control only.
+   source=(ROOT/'packages/postgresql/native/source-epoch-routine-ddl-barrier.sql').read_text()
+   self.admin.execute(source);self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-schema-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-database-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text());self.admin.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
+   oid,owner=self.admin.execute("SELECT oid,proowner FROM pg_proc WHERE oid='truss.runtime_fence_routine_ddl_writer()'::regprocedure").fetchone()
+   barrier=_DDLBarrierComparison(owner,oid,source.split('AS $$',1)[1].split('$$;',1)[0],include_alter_routine=True,include_schema_ddl=True,include_database_ddl=True)
+  else:
+   from truss._security_source_epoch_installation import bootstrap_source_epoch_infrastructure_in_transaction
+   self.admin.execute('BEGIN');installer=adopt_psycopg_host(self.admin)
+   try:
+    installed=bootstrap_source_epoch_infrastructure_in_transaction(installer,installer.adopt_transaction().value,installation_identity=installation.encode())
+    self.assertIsInstance(installed,Ok,str(installer._custody.last_attempt.error));self.assertFalse(installed.value.security_ready)
+    barrier=installed.value.barrier
+   finally:installer.detach()
+   self.admin.commit()
   profile=subject.derive_catalog_source_epoch_profile(mapping,relations,barrier) if profile_override is None else profile_override
   evidence=mapping.accepted_catalog_assessment if evidence_override is None else evidence_override
   epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,NULL,%s,%s,%s)',(installation,incarnation,profile,evidence)).fetchone()[0]
