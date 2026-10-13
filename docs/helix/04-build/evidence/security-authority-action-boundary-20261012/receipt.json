@@ -1,0 +1,32 @@
+{
+  "testedBaseCommit": "52f95f3151969b839af06b9153b34f1ed25566ab",
+  "focusedNativeTests": 1,
+  "focusedSeconds": 4.939,
+  "fullNativeTests": 9,
+  "fullSeconds": 25.45,
+  "result": "pass",
+  "command": "TRUSS_SECURITY_COMPONENT_EVIDENCE=/private/tmp/security-authority-boundary-r2-20261012.json PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages /private/tmp/truss-security-pg18-r2-20261011/bin/python packages/python/tests/test_security_public_ontology_native.py",
+  "acceptanceTraceability": [
+    {
+      "case": "truss.B05",
+      "covers": "US-056-AC5",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L11",
+      "covers": "US-057-AC7",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L12",
+      "covers": "US-057-AC8",
+      "caseClosed": false
+    }
+  ],
+  "scope": "Native PostgreSQL18.6/stock psycopg3.3.6 ordinary administrative denial and deferred-action containment on current runtime0.26. Actual consumer LOGIN connection, no SET ROLE from admin. Declared deferred callbacks do not execute; returned cold callbacks close and staged database work rolls back. Ordinary42501 preserves caller work. No logical action permission, authenticated issuer or full native/backend admission; original132 cases retained.",
+  "sourceSha256": {
+    "packages/python/tests/test_security_public_ontology_native.py": "ec9d3d3c454c076eb4dc647a26102ce1253df5faa8371831a43ad2e913471aaa",
+    "packages/python/src/truss/_security_authority_change.py": "51d037dbc875b452e8dbdb6bfebd3ec08ed34d942e1f5691301931d6022b1cb8",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "145fd167a0746c7845b1439822cd588359bea678dbfa7b77e4b20c24f8da9e81"
+  }
+}

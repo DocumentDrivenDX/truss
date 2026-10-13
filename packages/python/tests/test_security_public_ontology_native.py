@@ -48,6 +48,45 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.host.detach();self.admin.rollback()
   self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_generation_guard')").fetchone()[0])
   if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.authority.json').write_text(json.dumps({'observations':['unsettled original claim blocks before physical callback','settled tombstone permits advancement','physical action error rolls back effects and generation','late unsettled claim rolls back callback effects and inserted claim','complete action and exact native generation2 stage together','stale original generation refuses before callback','outer caller rollback removes staged installation homes'],'scope':'Private native authority effect coordination under trusted administrator. Physical temp-table effect only; no logical action permission, original policy issuer, complete participant closure or security-ready profile.'},indent=2)+'\n')
+ def test_private_authority_change_refuses_deferred_and_ordinary_actor(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  from truss._security_authority_change import change_authority_in_transaction
+  self.install();self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  identity=self.installation.installation_id.encode();profile=b'authority-deferred-fixture/0.1'
+  self.assertIsInstance(bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=identity,authored_profile=profile,max_retained=6),Ok)
+  self.admin.execute("CREATE TEMP TABLE authority_deferred_work(value text);INSERT INTO authority_deferred_work VALUES('kept')")
+  bodies=[];deferred=[]
+  async def declared_async(cursor):bodies.append('must not execute')
+  def declared_generator(cursor):
+   bodies.append('must not execute');yield None
+  for action in [declared_async,declared_generator]:
+   refused=change_authority_in_transaction(self.host,tx,installation_identity=identity,authored_profile=profile,expected_generation=1,action=action)
+   self.assertIsInstance(refused,Error)
+  for kind in ['generator','coroutine']:
+   def action(cursor):
+    cursor.execute("INSERT INTO authority_deferred_work VALUES('staged')")
+    def cold():bodies.append('must not execute');yield None
+    async def cold_async():bodies.append('must not execute')
+    value=cold() if kind=='generator' else cold_async();deferred.append(value);return value
+   refused=change_authority_in_transaction(self.host,tx,installation_identity=identity,authored_profile=profile,expected_generation=1,action=action)
+   self.assertIsInstance(refused,Error)
+   self.assertEqual(self.admin.execute('TABLE authority_deferred_work').fetchall(),[('kept',)])
+   self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(1,))
+  self.assertEqual(bodies,[]);self.assertIsNone(deferred[0].gi_frame);self.assertIsNone(deferred[1].cr_frame)
+  self.host.detach();self.admin.commit()
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer';calls=[]
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
+   ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=10000)
+   try:
+    ordinary_tx=ordinary_host.adopt_transaction().value
+    ordinary.execute("CREATE TEMP TABLE authority_ordinary_work(value text);INSERT INTO authority_ordinary_work VALUES('kept')")
+    denied=change_authority_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,expected_generation=1,action=lambda cursor:calls.append('must not execute'))
+    self.assertIsInstance(denied,Error);self.assertEqual(denied.error.sql_state,'42501');self.assertEqual(calls,[])
+    self.assertEqual(ordinary.execute('TABLE authority_ordinary_work').fetchall(),[('kept',)])
+   finally:ordinary_host.detach();ordinary.rollback()
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(1,))
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.authority-boundary.json').write_text(json.dumps({'observations':['declared async/generator actions refuse without body execution','returned cold generator/coroutine actions close and roll back staged physical effects','original generation1 and caller work retained','actual ordinary native consumer receives42501 before callback','ordinary caller transaction work survives refusal'],'scope':'Private native administrative/deferred boundary only; no logical action permission, authenticated issuer/source or full backend security admission.'},indent=2)+'\n')
  def test_supported_source_census_observes_bootstrap_and_body_drift(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction
