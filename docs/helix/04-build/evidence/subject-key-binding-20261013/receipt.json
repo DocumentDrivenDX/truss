@@ -1,0 +1,19 @@
+{
+  "scope": "Thin native observation to original UMF0.8/CoreKeyTuple3 semantic correspondence. Configured owner/host/helper authenticity and selected Record as ontology Subject remain independent premises; no issuer/current authority/record existence/protected release.",
+  "nativeGroups": 13,
+  "nativeSeconds": 2.575,
+  "ownerWireTests": 20,
+  "profile": "Bun1.4.2/PostgreSQL18.6 local native fixture-trusted helpers; originalUMFowner snapshot unchanged",
+  "sources": {
+    "packages/pg-runtime/src/subject-key.ts": "3b04265a1eed38455348e8bcd0de08a98f0df4a246c3ac676f3a4610e883083f",
+    "packages/pg-runtime/src/index.ts": "3c8623a7096131255fb956c74bacb492165e57f146709e5c1e7eb16b2b0650b4",
+    "packages/pg-runtime/dist/index.js": "a9228f1d039c5b751b30ca7d4ad708025d00a4c73e4b0bb850483ac52e5889f8",
+    "packages/pg-runtime/dist/index.d.ts": "0e2a59c80dd12b392fb84057170ea9f354988eebefc558c476d185c5b6c4ca08",
+    "packages/pg-runtime/dist/subject-key.d.ts": "04c2d8ec3f315088ff536059ec10cb9cf6dc6e8aa18912f8ec947f562a716c8e",
+    "tests/pg-subject-key.test.ts": "ce038c6e36a6afb12c6fc34066753b72d68c8c8af9d55fc345691be944cb6552",
+    "tests/pg-principal-native-runner.ts": "f92dcd3ef9de195eb0f792f5573d8232ca74e2b76f54b70e211f7d61f9f83094",
+    "packages/python/tests/test_pg_principal_runtime_native.py": "4c4e73f150247a9ebb87ab580db131301dd04840c79441a6241d7aa1468e6b28",
+    "packages/python/src/truss/_umf_keys08/manifest.json": "1db61eb244a0acf73992fb942ea52fd12ee1a4c9a41c5033b3d6c4db9d976b80",
+    "packages/python/src/truss/_umf_keys08/producer.js": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651"
+  }
+}

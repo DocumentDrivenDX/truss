@@ -1,0 +1,85 @@
+{
+  "scope": "Independent retained-packet/source consistency and current original renderer replay. Native SQL and crossed-subject tests were run by parent, not reviewer. Packets represent the final overwriting passing fixture, not independent archives for all8 cases.",
+  "passedControls": 15,
+  "cases": [
+    {
+      "case": "finalTestSourceParses",
+      "passed": true
+    },
+    {
+      "case": "modulePinsMatchOriginalBytes",
+      "passed": true
+    },
+    {
+      "case": "assessmentModelPinsMatchOriginalSources",
+      "passed": true
+    },
+    {
+      "case": "originalRendererPacketReplayed",
+      "passed": true
+    },
+    {
+      "case": "sixTruthPairsTwoPermits",
+      "passed": true
+    },
+    {
+      "case": "nativeDecisionMatchesEveryTruth",
+      "passed": true
+    },
+    {
+      "case": "originalSimulatorMatchesAllPairs",
+      "passed": true
+    },
+    {
+      "case": "salarySqlExactOriginalExpressionsAndJoin",
+      "passed": true
+    },
+    {
+      "case": "salarySelectedPairSequence",
+      "passed": true
+    },
+    {
+      "case": "salaryUniquePairCount",
+      "passed": true
+    },
+    {
+      "case": "resourceIdSqlExactOriginalExpressionsAndJoin",
+      "passed": true
+    },
+    {
+      "case": "resourceIdSelectedPairSequence",
+      "passed": true
+    },
+    {
+      "case": "resourceIdUniquePairCount",
+      "passed": true
+    },
+    {
+      "case": "withheldCellsContainNoValue",
+      "passed": true
+    },
+    {
+      "case": "originalIdentityCellsCorrespond",
+      "passed": true
+    }
+  ],
+  "binarySha256": "438e4b3507d7f12f7f9c66e26b7ffd2c3b23b12c4fd8cea3ab469059ab88aad3",
+  "packetDigests": {
+    "assessment.json": "2943aead714a97bfef224d73ac0dae5bcef03b32f932efb22999a0847dda686e",
+    "binary/nullable-assessment.json": "de3a41146e248288f60d84d4e3cb4e14774b91338a7d76920b7411086832e5fd",
+    "binary/nullable-projected.json": "5ed4cf7196efaf01d87f399feea95ff0ac8c77a965e4182391ad8febcd919bc6",
+    "binary/nullable-rendered.json": "dc18a6b7d4e9f1cac72fdb4f5b3daf6d966a9b5d10fd92a23f113543c3499376",
+    "binary/nullable-request.json": "549458495805a592757be67b22a92ca842cdd5a026ec52bf125d40278c22260c",
+    "native-eligibility.json": "d0b25ef8f5223f34fef730cdd90892dd7fda61fba399b1123ebac9597d5d30d3",
+    "native-selected-cells.json": "aca1f4985930d1aefa8f69871f76f5c716b7dde91db0d2542ecdd1b69d7fc639",
+    "native-selection-sql.json": "72b7487ee00a9be1ba392326fcb4d39573a6f7cdee4bb7ba5efcf4cc909deecc",
+    "native-truths.json": "cca68101af93beb868466353a6ecae4cda1db48da11de3c328c0598ea0095df8",
+    "nullable/nullable-assessment.json": "095be06cbcdd79f95234a27561771d35d5c1e535e1c39542db84f5cbc2d5146b",
+    "nullable/nullable-projected.json": "d143bb4e6e36067ca7088214ac200ac073100fc807defbf2809968dce46a7dcd",
+    "nullable/nullable-rendered.json": "ddbf3c6eebaa6543577e7a2065190de0d624024c5b4519dbe8ccd5591968b83a",
+    "nullable/nullable-request.json": "5ecccc2178766950cb087481b1b52c490ca5a80dd4332cd0242d5a41d7ff7dd6",
+    "original-simulator-comparisons.json": "0697d0a6a5915c5cde47df44a33089b67dbfc8ac5d2e0be52dabf59a7acff5a2",
+    "rendered.json": "ef3fae41ed1065eec391d979841851c29f5827173235ac1728f88e1198b79642",
+    "request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87"
+  }
+}

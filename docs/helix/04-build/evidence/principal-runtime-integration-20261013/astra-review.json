@@ -1,0 +1,120 @@
+{
+  "reviewer": "Independent Astra Ultra subagent",
+  "date": "2026-10-13",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "19a598ae5ee4456c41c932e8672fb3867aa49c50",
+  "status": "No remaining actionable findings in the reviewed experimental caller/subject protocol after fixes.",
+  "sourceDigests": {
+    "AGENTS.md": "e14c16024663721845beacf7bf2955b6ad70964cf870cc8a3c82feb22d1d3429",
+    "packages/pg-runtime/src/index.ts": "0e4c5d17751b25cf76a26ae02255f7abbd93fcb5fc5c243edd0cdddaed3c65cf",
+    "packages/pg-runtime/src/native-query.ts": "a404706f40228a3c43514da2447db19c2b0dd5a37f491f7cfa63bcf15cac4b76",
+    "packages/pg-runtime/src/wire.ts": "1a9cf79f5d1b700d7813ee24dabd6bcf3abc2f9a4eee134c7c223cd4dc5e0cd0",
+    "packages/pg-runtime/src/journal.ts": "83acc32f461371df5108df7a1dd5177d7edea5a749ea4a1f07b71ed4073d3be3",
+    "packages/pg-runtime/package.json": "958e5c9e451ec2d9c523c5c3dcafad3b259d8a2b4204c9397d4fb8ea1ef7a562",
+    "packages/pg-runtime/dist/index.js": "39348b41631eb2a76a267df997c624c85f5411c8b85c0fe983c76c1ffddd3f37",
+    "packages/pg-runtime/dist/index.d.ts": "45da4d779a16098daaee1c6495f1bcb0aad70672ae54c2ccb12b07b0062385e1",
+    "packages/pg-runtime/dist/native-query.d.ts": "f467937f54b3c1788641e991003032b06189051006ee8da6452b06a3d08d14f7",
+    "packages/pg-runtime/dist/build-evidence.json": "89e16b22c2f11156bf9d97f5b6ff539e97a5ceb859188c6e292c63269bb84e69",
+    "tests/pg-wire.test.ts": "43c1f9c1e7ce7a7f5668634fed396f349a50f98e3544134e9d26582c73cc29d5",
+    "tests/pg-principal-wire.test.ts": "c0b8d67a19c0db0c5a06105c06505bcffd90262436a15a1306980d036dfe3dad",
+    "tests/pg-principal-admission-race-runner.ts": "e28e978f8a3cf44b3d5d96a82d145f49f87dabf4ac77d33075856c663c665179",
+    "tests/pg-principal-native-runner.ts": "a6c21da5b8f3d7075cf37ce57caa807bfa5afce568f2b723a1da7f1cae492892",
+    "packages/python/tests/test_pg_principal_runtime_native.py": "c7434b9016ec078a906386d477036b185e00905e63c13e1ccad7ca3ee88409f6",
+    "/Users/erik/.codex/worktrees/security-main-integration/umf/docs/helix/02-design/contracts/CONTRACT-063-security-enforcement.md": "39856c3ed99114a2467ff4a5789bf68b5d779229eb3e28dc66f2a3a79661d2b9"
+  },
+  "fixedFindings": [
+    {
+      "priority": 1,
+      "finding": "Concurrent acquisition could publish a usable lease after another reset had closed admission.",
+      "reproduction": "admission-race.ts / admission-race.json preserve pre-fix deterministic actual-runtime escape.",
+      "resolution": "After resetPrincipal, synchronously recheck admissionClosed; retain pending checkout in quarantine and refuse publication. Fixed actual runtime and in-repo regression replayed.",
+      "currentFile": "packages/pg-runtime/src/index.ts",
+      "currentLines": [
+        102,
+        105
+      ]
+    },
+    {
+      "priority": 2,
+      "finding": "In-repository bare pg mock resolved to a different dependency and attempted real localhost connections.",
+      "resolution": "Mock exact Bun.resolveSync pg dependency from packages/pg-runtime/src; surface subprocess stderr. Independent final 15 tests pass.",
+      "historicalLog": "wire-tests-final.log"
+    },
+    {
+      "priority": 3,
+      "finding": "Source comment asserted password authentication despite configuration and fixture allowing trust authentication.",
+      "resolution": "Comment now accurately describes observed native session identity."
+    }
+  ],
+  "independentEvidence": {
+    "wireTests": {
+      "count": 15,
+      "failures": 0,
+      "log": "wire-tests-confirmed.log"
+    },
+    "syntheticActualRuntimeControls": {
+      "count": 23,
+      "results": "controls-final.json",
+      "harness": "controls.ts",
+      "covers": [
+        "direct and observer original typed carriers",
+        "original/effective principal reset identity",
+        "superuser/bypass/encoding/noncanonical boolean refusal",
+        "principal OID/multiple-row refusal",
+        "subject absent/multiple/wrong ordered name/OID/null/UTF8 refusal",
+        "exact 64KiB key accepted, one byte over refused",
+        "release reset failure quarantine",
+        "four overlapping operations refused during subject preflight without dispatch",
+        "pending execute rejects rollback overlap",
+        "selected 10ms response deadline destroys simulated transport and retains quarantine",
+        "original copied selection survives caller option mutations"
+      ],
+      "qualification": "Deterministic synthetic pg driver supplies native-format framed bytes to the actual unchanged originalQuery/ResponseIngress/runtime. This is not actual socket scheduling, server authentication or native helper qualification."
+    },
+    "fixedAdmissionRace": {
+      "independentOwnedReplay": "admission-race-fixed.ts / admission-race-fixed.json",
+      "repositoryReplay": "repo-admission-race-fixed.json",
+      "assertions": [
+        "pending and future acquisitions refuse after closure",
+        "both checkouts remain unreleased in quarantine",
+        "explicit shutdown closes both transports and releases each exactly once"
+      ]
+    },
+    "builtArtifactHashesMatchRetainedBuildEvidence": true
+  },
+  "parentEvidenceInspected": {
+    "nativeLog": "parent-native.log",
+    "nativeReceipt": "parent-native.json",
+    "nativeVersion": "PostgreSQL 18.6",
+    "nativeGroups": 10,
+    "elapsedSeconds": 4.009,
+    "executedByReviewer": false,
+    "buildLog": "parent-build.log"
+  },
+  "scope": [
+    "Experimental ordinary native session pin, reset and optional immutable deployment-qualified principal/subject observer protocol.",
+    "Ordered original text carriers and transaction completion required before use.",
+    "Subject preflight is only presence/shape observation in repeatable-read or serializable read-only transaction; typed key meaning and helper enforcement remain host premises.",
+    "No authenticated application deployment/issuer, credential attestation, source or authority lifetime closure, policy admission, native security readiness, or required backend acceptance case promotion.",
+    "Native fixture uses local trust authentication and explicitly trusted definer routines.",
+    "Wire/component and synthetic controls are bounded selected examples, not complete pool/socket/deadline/heap/concurrency proof.",
+    "No repository, primary checkout, or native database modifications were made by the reviewer. Only owned temporary evidence was written."
+  ],
+  "evidenceDigests": {
+    "parent-build.log": "81d1866f72122091dd91b14ac26561de43621f09f687774b974c0034116a757c",
+    "controls.json": "a7ccfc6c45307dbde946c2eb9211f545c39a56dd5f0a26d6e1bb0ddb9d4371be",
+    "wire-tests-confirmed.log": "1834bbc4c5769eaf92226228db9c41011d0fcf45e9e534ece78a61b84bd7d2a5",
+    "admission-race.json": "10ae597086fcd1d4240c4ce5339b50c05052b4bf3746721ed441330a4bb54baf",
+    "parent-native.log": "0eebd115d14035f146fe54fcbe393b3911b7ba242c80eae98e5199f72b16892c",
+    "repo-admission-race-fixed.json": "5e3ffb468c8b19efccba5983182f15bbb5bd6f7d38cd12116bf059e413fb409e",
+    "CONTRACT-063-security-enforcement.md": "39856c3ed99114a2467ff4a5789bf68b5d779229eb3e28dc66f2a3a79661d2b9",
+    "admission-race.ts": "fdb87b9e3026ce4d6e6b6c80c2bdb0be30e7e2b9bf8d946880a8c61f5087803a",
+    "admission-race-fixed.json": "5e3ffb468c8b19efccba5983182f15bbb5bd6f7d38cd12116bf059e413fb409e",
+    "parent-native.json": "9475dd26cee6e0713b9a195b386721af9ee8c0ed2f777b87ba8d8e9170aaa4a4",
+    "controls.ts": "cdbac743efd16b657b0c31c89936b852866573aca237b1a35db6722d16431a09",
+    "wire-tests-final.log": "8bc3d0e6833ba6d9cbf58f8bda4627e5c8d340fd3a826fb975f1be11c4531a90",
+    "admission-race-fixed.ts": "882c5753be11a7665ce39186f8ab99355a207216785e55d5bb844bc4ef39e082",
+    "controls-final.json": "45a579d3c3d36972e9377605fbcbe373b85940d6af018bb161227bea19c2ba3a",
+    "wire-tests.log": "0f8419abbad901b817967a1beb15f09ba342d51c49397b8c8cd91299cdf655fe"
+  }
+}

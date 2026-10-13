@@ -1,0 +1,20 @@
+{
+  "scope": "Integrates previously uncommitted experimental caller/subject host primitives. Native role observation/local fixture-trusted helpers only; no password authentication proof, installed-helper trust, policy issuer, complete writer/source custody or protected release. No required case promotion.",
+  "runtime": "PostgreSQL18.6; Bun1.4.2; pg8.16.3; host package experimental",
+  "wireTests": 15,
+  "nativeNamedGroups": 10,
+  "nativeSeconds": 4.009,
+  "origin": "Earlier three-file prototype ported after baseline match; independent review fixed pending-reset admission race. Original dirty checkout untouched.",
+  "sources": {
+    "packages/pg-runtime/src/index.ts": "0e4c5d17751b25cf76a26ae02255f7abbd93fcb5fc5c243edd0cdddaed3c65cf",
+    "packages/pg-runtime/src/native-query.ts": "a404706f40228a3c43514da2447db19c2b0dd5a37f491f7cfa63bcf15cac4b76",
+    "packages/pg-runtime/src/wire.ts": "1a9cf79f5d1b700d7813ee24dabd6bcf3abc2f9a4eee134c7c223cd4dc5e0cd0",
+    "packages/pg-runtime/dist/index.js": "39348b41631eb2a76a267df997c624c85f5411c8b85c0fe983c76c1ffddd3f37",
+    "packages/pg-runtime/dist/index.d.ts": "45da4d779a16098daaee1c6495f1bcb0aad70672ae54c2ccb12b07b0062385e1",
+    "tests/pg-principal-wire.test.ts": "c0b8d67a19c0db0c5a06105c06505bcffd90262436a15a1306980d036dfe3dad",
+    "tests/pg-principal-native-runner.ts": "a6c21da5b8f3d7075cf37ce57caa807bfa5afce568f2b723a1da7f1cae492892",
+    "packages/python/tests/test_pg_principal_runtime_native.py": "c7434b9016ec078a906386d477036b185e00905e63c13e1ccad7ca3ee88409f6",
+    "tests/pg-principal-admission-race-runner.ts": "e28e978f8a3cf44b3d5d96a82d145f49f87dabf4ac77d33075856c663c665179"
+  },
+  "raceScope": "Deterministic synthetic pg driver with actual original framed-response runtime; no native database race proof. Pending and future acquisitions refuse after closure; two quarantined checkouts retained until explicit shutdown."
+}

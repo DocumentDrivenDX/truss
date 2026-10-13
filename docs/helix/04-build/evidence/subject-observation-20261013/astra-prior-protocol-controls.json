@@ -1,0 +1,101 @@
+{
+  "scope": "Actual runtime plus original native frame decoder/query wrapper with deterministic synthetic pg driver; no native/authenticated deployment or real socket scheduling claim.",
+  "count": 23,
+  "results": [
+    {
+      "name": "direct principal and text subject",
+      "passed": true
+    },
+    {
+      "name": "observer NAME input and TEXT output",
+      "passed": true
+    },
+    {
+      "name": "wrong session",
+      "passed": true
+    },
+    {
+      "name": "superuser",
+      "passed": true
+    },
+    {
+      "name": "bypass",
+      "passed": true
+    },
+    {
+      "name": "encoding",
+      "passed": true
+    },
+    {
+      "name": "boolean spelling",
+      "passed": true
+    },
+    {
+      "name": "wrong principal OID",
+      "passed": true
+    },
+    {
+      "name": "multiple principal rows",
+      "passed": true
+    },
+    {
+      "name": "effective identity after reset",
+      "passed": true
+    },
+    {
+      "name": "subject absent",
+      "passed": true
+    },
+    {
+      "name": "subject duplicate",
+      "passed": true
+    },
+    {
+      "name": "subject wrong ordered name",
+      "passed": true
+    },
+    {
+      "name": "subject wrong OID",
+      "passed": true
+    },
+    {
+      "name": "subject null",
+      "passed": true
+    },
+    {
+      "name": "subject oversized",
+      "passed": true
+    },
+    {
+      "name": "subject invalid UTF8",
+      "passed": true
+    },
+    {
+      "name": "subject exact 64KiB",
+      "passed": true
+    },
+    {
+      "name": "release reset failure",
+      "passed": true
+    },
+    {
+      "name": "subject pending refuses four overlapping operations without dispatch",
+      "passed": true
+    },
+    {
+      "name": "execute pending refuses rollback without dispatch",
+      "passed": true
+    },
+    {
+      "name": "10ms selected deadline destroys transport and retains quarantine",
+      "passed": true,
+      "detail": {
+        "elapsedMs": 11.162958000000003
+      }
+    },
+    {
+      "name": "construction copies caller and selected routine/keys",
+      "passed": true
+    }
+  ]
+}

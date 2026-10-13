@@ -1,0 +1,54 @@
+[
+  {
+    "text": "{\"string\":\"\\ud800\"}",
+    "interpreted": {
+      "string": "\ud800"
+    },
+    "status": "refused",
+    "error": "UmfError: Unpaired high surrogate"
+  },
+  {
+    "text": "{\"string\":\"\\udfff\"}",
+    "interpreted": {
+      "string": "\udfff"
+    },
+    "status": "refused",
+    "error": "UmfError: Unpaired low surrogate"
+  },
+  {
+    "text": "{\"string\":\"\\ud800\\udfff\"}",
+    "interpreted": {
+      "string": "𐏿"
+    },
+    "status": "accepted",
+    "bytesHex": "554d464b31010404f0908fbf",
+    "retainedValue": {
+      "string": "𐏿"
+    },
+    "originalNativeText": "{\"string\":\"\\ud800\\udfff\"}"
+  },
+  {
+    "text": "{\"string\":\"�\"}",
+    "interpreted": {
+      "string": "�"
+    },
+    "status": "accepted",
+    "bytesHex": "554d464b31010403efbfbd",
+    "retainedValue": {
+      "string": "�"
+    },
+    "originalNativeText": "{\"string\":\"�\"}"
+  },
+  {
+    "text": "{\"string\":\"\\ufffd\"}",
+    "interpreted": {
+      "string": "�"
+    },
+    "status": "accepted",
+    "bytesHex": "554d464b31010403efbfbd",
+    "retainedValue": {
+      "string": "�"
+    },
+    "originalNativeText": "{\"string\":\"\\ufffd\"}"
+  }
+]

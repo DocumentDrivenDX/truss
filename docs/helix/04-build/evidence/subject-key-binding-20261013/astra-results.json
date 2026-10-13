@@ -1,0 +1,160 @@
+{
+  "scope": "Genuine pinned original UMF owner for semantic controls; frozen synthetic host observation. Last five explicitly marked owner-double controls only check wrapper output bounds. No native/helper/issuer authentication or record existence claim.",
+  "count": 33,
+  "results": [
+    {
+      "name": "original source whitespace changes raw hash but not semantic tuple",
+      "passed": true
+    },
+    {
+      "name": "string encoding preserves JSON-looking native text literally",
+      "passed": true
+    },
+    {
+      "name": "original owner refuses literal {\"string\":\"a\",\"string\":\"b\"}",
+      "passed": true,
+      "error": "UmfError: Map keys must be unique at line 1, column 15:\n\n{\"string\":\"a\",\"string\":\"b\"}\n              ^\n"
+    },
+    {
+      "name": "original owner refuses literal {\"string\":\"a\",\"\\u0073tring\":\"b\"}",
+      "passed": true,
+      "error": "UmfError: Map keys must be unique at line 1, column 15:\n\n{\"string\":\"a\",\"\\u0073tring\":\"b\"}\n              ^\n"
+    },
+    {
+      "name": "original owner refuses literal {\"string\":\"a\",\"unknown\":1}",
+      "passed": true,
+      "error": "UmfError: Value wrapper does not match key component"
+    },
+    {
+      "name": "original owner refuses literal {\"absent\":true}",
+      "passed": true,
+      "error": "UmfError: Key component must be present and typed"
+    },
+    {
+      "name": "original owner refuses literal null",
+      "passed": true,
+      "error": "UmfError: Key component must be present and typed"
+    },
+    {
+      "name": "original owner refuses literal [\"a\"]",
+      "passed": true,
+      "error": "UmfError: Key component must be present and typed"
+    },
+    {
+      "name": "original owner refuses literal {\"string\":9007199254740993}",
+      "passed": true,
+      "error": "UmfError: Integer exceeds exact JavaScript range"
+    },
+    {
+      "name": "original owner refuses literal {\"string\":\"\\ud800\"}",
+      "passed": true,
+      "error": "UmfError: Unpaired high surrogate"
+    },
+    {
+      "name": "original owner refuses literal {\"string\":\"\\udfff\"}",
+      "passed": true,
+      "error": "UmfError: Unpaired low surrogate"
+    },
+    {
+      "name": "escaped and literal valid scalar share meaning, retain distinct original bytes",
+      "passed": true
+    },
+    {
+      "name": "original normalized integer equivalence with raw observation retention",
+      "passed": true
+    },
+    {
+      "name": "original normalized decimal equivalence with raw observation retention",
+      "passed": true
+    },
+    {
+      "name": "original normalized binary equivalence with raw observation retention",
+      "passed": true
+    },
+    {
+      "name": "original decimal refuses undeclared rounding",
+      "passed": true,
+      "error": "UmfError: Value is not exactly representable at declared scale"
+    },
+    {
+      "name": "original integer refuses fractional value",
+      "passed": true,
+      "error": "UmfError: Value is not exactly representable at declared scale"
+    },
+    {
+      "name": "original binary refuses incomplete byte",
+      "passed": true,
+      "error": "UmfError: Binary input must be whole hexadecimal bytes"
+    },
+    {
+      "name": "original boolean refuses string coercion",
+      "passed": true,
+      "error": "UmfError: Expected boolean"
+    },
+    {
+      "name": "raw ill-formed source 55296",
+      "passed": true,
+      "error": "Error: Original subject key binding refused"
+    },
+    {
+      "name": "raw ill-formed source 57343",
+      "passed": true,
+      "error": "Error: Original subject key binding refused"
+    },
+    {
+      "name": "escaped source surrogates retain distinguishable bytes/hash under original owner",
+      "passed": true
+    },
+    {
+      "name": "exact 1MiB original source bytes admitted",
+      "passed": true
+    },
+    {
+      "name": "one byte over original source budget refuses",
+      "passed": true,
+      "error": "Error: Original subject key binding refused"
+    },
+    {
+      "name": "exact 1MiB aggregate of 16 native-sized TEXT values admitted",
+      "passed": true
+    },
+    {
+      "name": "one byte over native aggregate refuses before owner read",
+      "passed": true,
+      "error": "Error: Original subject key binding refused"
+    },
+    {
+      "name": "owner callback selection captured before later mutation",
+      "passed": true
+    },
+    {
+      "name": "genuine receipt reader refuses corrupted owner bytes",
+      "passed": true,
+      "error": "UmfError: Malformed encoding receipt"
+    },
+    {
+      "name": "wrapper double: tuple over 4MiB",
+      "passed": true,
+      "error": "Error: Original subject key binding refused"
+    },
+    {
+      "name": "wrapper double: non-byte tuple",
+      "passed": true,
+      "error": "Error: Original subject key binding refused"
+    },
+    {
+      "name": "wrapper double: mismatching tuple/receipt",
+      "passed": true,
+      "error": "Error: Original subject key binding refused"
+    },
+    {
+      "name": "wrapper double: receipt over 8MiB",
+      "passed": true,
+      "error": "Error: Original subject key binding refused"
+    },
+    {
+      "name": "wrapper double: exact 8MiB serialized receipt retained",
+      "passed": true
+    }
+  ]
+}

@@ -217,6 +217,28 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    projected=self.admin.execute('EXECUTE transformed_cell('+arguments+')').fetchone()[0]
    self.assertEqual(projected,{'outcomeId':'transform0','disposition':'transformed','value':{'integerToken':left}})
    self.admin.execute('DEALLOCATE transformed_cell')
+   # Exact original query/profile sources drive the owner's existing result checker.
+   from hashlib import sha256
+   inspection_request=deepcopy(variant);inspection_request['sql']='SELECT r.salary AS amount FROM Resource r';inspection_request['parameters']={}
+   inspection_profile=json.loads(inspection_request['queryProfileJson']);inspection_profile['policySha256']=sha256(inspection_request['policyJson'].encode()).hexdigest();inspection_request['queryProfileJson']=json.dumps(inspection_profile)
+   probe={'target':{'documentId':'domain','moduleId':'m','elementId':'Resource'},'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'outputName':'amount','rows':[[projected]]}
+   checked=subprocess.run([binary],input=json.dumps({'request':inspection_request,'assessment':assessment,'resultProbe':probe}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(checked.returncode,0,checked.stderr.decode());self.assertTrue(json.loads(checked.stdout)['resultCellInspectionPassed'])
+   forged=deepcopy(probe);forged['rows'][0][0]['value']={'integerToken':'9'}
+   rejected=subprocess.run([binary],input=json.dumps({'request':inspection_request,'assessment':assessment,'resultProbe':forged}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(rejected.returncode,1);self.assertFalse(rejected.stdout)
+   self.assertEqual(json.loads(rejected.stderr)['code'],'WFT-SECURITY-RESULT')
+   for mutation in ('unknown-outcome','extra-member','withheld-value','wrong-arity','wrong-column'):
+    malformed=deepcopy(probe)
+    if mutation=='unknown-outcome':malformed['rows'][0][0]['outcomeId']='unknown'
+    elif mutation=='extra-member':malformed['rows'][0][0]['extra']=True
+    elif mutation=='withheld-value':malformed['rows'][0][0].update(outcomeId='withheld',disposition='withheld')
+    elif mutation=='wrong-arity':malformed['rows'][0].append(deepcopy(projected))
+    else:malformed['outputName']='other'
+    refused_result=subprocess.run([binary],input=json.dumps({'request':inspection_request,'assessment':assessment,'resultProbe':malformed}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(refused_result.returncode,1,mutation);self.assertFalse(refused_result.stdout,mutation)
+
+
    expected_ids=['transform0','transform1' if conflicting else 'transform0']
    self.assertEqual([t['outcomeId'] for t in field['transformations']],expected_ids)
    self.assertEqual([t['ruleId'] for t in field['transformations']],['left','right'])
@@ -224,6 +246,10 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    projected_second=self.admin.execute('EXECUTE second_transformed_cell('+arguments+')').fetchone()[0]
    self.assertEqual(projected_second,{'outcomeId':expected_ids[1],'disposition':'transformed','value':{'integerToken':right}})
    self.admin.execute('DEALLOCATE second_transformed_cell')
+   second_probe=deepcopy(probe);second_probe['rows']=[[projected_second]]
+   second_checked=subprocess.run([binary],input=json.dumps({'request':inspection_request,'assessment':assessment,'resultProbe':second_probe}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(second_checked.returncode,0,second_checked.stderr.decode())
+
 
 
    for a,b,w in product((False,None,True),repeat=3):
@@ -246,6 +272,24 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    facts.append(fact);by_id[oid]=fact
   policy=json.loads(request['policyJson']);ontology=json.loads(request['ontologyJson'])
   coverage=[{'type':ref(t['element']),'complete':True,'fields':[ref(p['element']) for p in inventory['properties'] if p['type_id']==t['type_id']]} for t in inventory['types']]
+  # One actual native query combines owner-rendered conditions, filtering and cells.
+  native_selected={};native_selection_sql={}
+  for element in ('salary','resourceId'):
+   projection=next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']==element)
+   statement='SELECT q.sid,q.rid,('+projection+') FROM truss.object r JOIN (SELECT s.id AS sid,r.id AS rid,'+projections+' FROM truss.object s CROSS JOIN truss.object r WHERE s.type_id='+str(ids['Staff'])+' AND r.type_id='+str(ids['Resource'])+') q ON r.id=q.rid WHERE ('+selected['decisionExpression']+")='permit' ORDER BY q.sid,q.rid"
+   native_selection_sql[element]=statement
+   self.admin.execute('PREPARE selected_cells(boolean) AS '+statement)
+   native_rows=self.admin.execute('EXECUTE selected_cells(true)').fetchall()
+   self.admin.execute('DEALLOCATE selected_cells')
+   self.assertEqual([(sid,rid) for sid,rid,cell in native_rows],[(sid,rid) for sid,rid,truth in truths if truth is True])
+   native_selected[element]={(sid,rid):cell for sid,rid,cell in native_rows}
+  combined_projection=','.join('('+next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']==element)+')' for element in ('resourceId','salary'))
+  combined_statement='SELECT q.sid,q.rid,'+combined_projection+' FROM truss.object r JOIN (SELECT s.id AS sid,r.id AS rid,'+projections+' FROM truss.object s CROSS JOIN truss.object r WHERE s.type_id='+str(ids['Staff'])+' AND r.type_id='+str(ids['Resource'])+') q ON r.id=q.rid WHERE ('+selected['decisionExpression']+")='permit' ORDER BY q.sid,q.rid"
+  self.admin.execute('PREPARE combined_cells(boolean) AS '+combined_statement)
+  combined_rows=self.admin.execute('EXECUTE combined_cells(true)').fetchall();self.admin.execute('DEALLOCATE combined_cells')
+  self.assertEqual([(row[0],row[1]) for row in combined_rows],[(sid,rid) for sid,rid,truth in truths if truth is True])
+  native_selection_sql['combined']=combined_statement
+  native_selected['combined']={(row[0],row[1]):list(row[2:]) for row in combined_rows}
   comparisons=[]
   for sid,rid,truth in truths:
    cut={'trusted':True,'generation':'fixture','expectedGeneration':'fixture','policyId':policy['id'],'policyRevision':policy['revision'],'ontologyDocumentId':ontology['documentId'],'ontologyRevision':ontology['revision'],'subjects':[by_id[sid]],'facts':facts,'coverage':coverage,'context':[],'maxFacts':100,'maxSteps':100000}
@@ -259,8 +303,49 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    self.assertEqual(disclosure_run.returncode,0,disclosure_run.stderr.decode())
    disclosed=json.loads(disclosure_run.stdout)['simulationDisclosures']
    self.assertEqual(disclosed,[[[ref('salary'),'withheld']]] if truth is True else [])
+   # Original owner evaluates scoped conditions rather than trusting native truth flags.
+   selection_request=deepcopy(request);selection_request['sql']='SELECT r.salary AS amount FROM Resource r';selection_request['parameters']={}
+   native_cell=native_selected['salary'].get((sid,rid))
+   self.assertEqual(native_cell is not None,truth is True)
+   scoped={'version':'weft.security.scoped-facts/0.1.0','rows':[{'s0':by_id[rid]}]}
+   selection_probe={'target':ref('Resource'),'field':ref('salary'),'outputName':'amount','rows':[[native_cell if truth is True else {'outcomeId':'withheld','disposition':'withheld'}]],'factCut':cut,'scopedFacts':scoped}
+   selection_check=subprocess.run([binary],input=json.dumps({'request':selection_request,'assessment':assessment,'resultProbe':selection_probe}).encode(),capture_output=True,timeout=30)
+   if truth is True:
+    self.assertEqual(selection_check.returncode,0,selection_check.stderr.decode());self.assertTrue(json.loads(selection_check.stdout)['conditionalFactSelectionPassed'])
+    identity_request=deepcopy(selection_request);identity_request['sql']='SELECT r.resourceId AS amount FROM Resource r'
+    identity_cell=native_selected['resourceId'][(sid,rid)]
+    identity_probe=deepcopy(selection_probe);identity_probe['field']=ref('resourceId');identity_probe['rows']=[[identity_cell]]
+    identity_check=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':identity_probe}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(identity_check.returncode,0,identity_check.stderr.decode())
+    # Actual native cells cannot be reassigned to the other fixture principal.
+    other_subject=next(other for other in {row[0] for row in truths} if other!=sid)
+    crossed=deepcopy(identity_probe);crossed['factCut']['subjects']=[by_id[other_subject]]
+    crossed_check=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':crossed}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(crossed_check.returncode,1);self.assertFalse(crossed_check.stdout)
+    self.assertEqual(json.loads(crossed_check.stderr)['code'],'WFT-SECURITY-RESULT-SELECTION')
+    combined_request=deepcopy(selection_request);combined_request['sql']='SELECT r.resourceId AS id,r.salary AS amount FROM Resource r'
+    combined_probe={'columns':[{'target':ref('Resource'),'field':ref('resourceId'),'outputName':'id'},{'target':ref('Resource'),'field':ref('salary'),'outputName':'amount'}],'rows':[native_selected['combined'][(sid,rid)]],'factCut':cut,'scopedFacts':scoped}
+    combined_check=subprocess.run([binary],input=json.dumps({'request':combined_request,'assessment':assessment,'resultProbe':combined_probe}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(combined_check.returncode,0,combined_check.stderr.decode());self.assertTrue(json.loads(combined_check.stdout)['conditionalFactSelectionPassed'])
+    invalid_batches=[]
+    swapped=deepcopy(combined_probe);swapped['rows'][0].reverse();invalid_batches.append(swapped)
+    changed_order=deepcopy(combined_probe);changed_order['columns'].reverse();invalid_batches.append(changed_order)
+    missing_cell=deepcopy(combined_probe);missing_cell['rows'][0].pop();invalid_batches.append(missing_cell)
+    late_error=deepcopy(combined_probe);late_error['rows'].append(deepcopy(late_error['rows'][0]));late_error['scopedFacts']['rows'].append(deepcopy(scoped['rows'][0]));late_error['rows'][1][0]['value']={'string':'late-forged'};invalid_batches.append(late_error)
+    for invalid in invalid_batches:
+     rejected_batch=subprocess.run([binary],input=json.dumps({'request':combined_request,'assessment':assessment,'resultProbe':invalid}).encode(),capture_output=True,timeout=30)
+     self.assertEqual(rejected_batch.returncode,1);self.assertFalse(rejected_batch.stdout)
+    forged_identity=deepcopy(identity_probe);forged_identity['rows'][0][0]['value']={'string':'different-valid-value'}
+    value_refusal=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':forged_identity}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(value_refusal.returncode,1);self.assertFalse(value_refusal.stdout)
+    incoherent=deepcopy(selection_probe);incoherent['scopedFacts']['rows'][0]['s0']['key']=[{'string':'forged'}]
+    refusal=subprocess.run([binary],input=json.dumps({'request':selection_request,'assessment':assessment,'resultProbe':incoherent}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(refusal.returncode,1);self.assertFalse(refusal.stdout)
+   else:
+    self.assertEqual(selection_check.returncode,1,selection_check.stdout.decode());self.assertFalse(selection_check.stdout)
+    self.assertEqual(json.loads(selection_check.stderr)['code'],'WFT-SECURITY-RESULT-SELECTION')
    comparisons.append({'subject':sid,'resource':rid,'nativeTruth':truth,'originalDecision':decision})
   directory=os.environ.get('TRUSS_PREDICATE_EVIDENCE_DIR')
   if directory:
    root=Path(directory);root.mkdir(parents=True,exist_ok=True)
-   for name,value in (('request',request),('assessment',assessment),('rendered',output),('native-truths',truths),('native-eligibility',eligibility),('original-simulator-comparisons',comparisons)):(root/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
+   for name,value in (('request',request),('assessment',assessment),('rendered',output),('native-truths',truths),('native-eligibility',eligibility),('native-selection-sql',native_selection_sql),('native-selected-cells',{element:[{'subject':sid,'resource':rid,'cell':cell} for (sid,rid),cell in rows.items()] for element,rows in native_selected.items()}),('original-simulator-comparisons',comparisons)):(root/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')

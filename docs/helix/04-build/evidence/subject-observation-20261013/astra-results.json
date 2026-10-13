@@ -1,0 +1,109 @@
+{
+  "scope": "Actual current runtime and original framed-response parser under deterministic synthetic pg driver. No native server/authenticated deployment or live source authority claim.",
+  "count": 25,
+  "results": [
+    {
+      "name": "before begin",
+      "passed": true
+    },
+    {
+      "name": "foreign receiver object",
+      "passed": true
+    },
+    {
+      "name": "foreign receiver null",
+      "passed": true
+    },
+    {
+      "name": "foreign receiver undefined",
+      "passed": true
+    },
+    {
+      "name": "foreign receiver object",
+      "passed": true
+    },
+    {
+      "name": "foreign receiver object",
+      "passed": true
+    },
+    {
+      "name": "exact composite numeric/BOM/Unicode carriers, bytes/order, immutable nested arrays",
+      "passed": true
+    },
+    {
+      "name": "cross-host identity",
+      "passed": true
+    },
+    {
+      "name": "after confirmed commit",
+      "passed": true
+    },
+    {
+      "name": "new transaction recaptures snapshot; retained old snapshot unchanged",
+      "passed": true
+    },
+    {
+      "name": "after confirmed rollback",
+      "passed": true
+    },
+    {
+      "name": "after release",
+      "passed": true
+    },
+    {
+      "name": "after explicit quarantine",
+      "passed": true
+    },
+    {
+      "name": "after quarantined transport shutdown",
+      "passed": true
+    },
+    {
+      "name": "quarantine retains old observation only as immutable prior data",
+      "passed": true,
+      "detail": {
+        "before": "{\"version\":\"truss.native.subject-observation/0.1\",\"principal\":\"alice\",\"keyColumns\":[\"staff_id\",\"ordinal\",\"unicode\"],\"keyValues\":[\"alice\",\"9007199254740993\",\"﻿Δ🚀\"],\"keyHex\":[\"616c696365\",\"39303037313939323534373430393933\",\"efbbbfce94f09f9a80\"]}"
+      }
+    },
+    {
+      "name": "while begin pending",
+      "passed": true
+    },
+    {
+      "name": "while execute pending",
+      "passed": true
+    },
+    {
+      "name": "while commit pending",
+      "passed": true
+    },
+    {
+      "name": "after commit settles",
+      "passed": true
+    },
+    {
+      "name": "while rollback pending",
+      "passed": true
+    },
+    {
+      "name": "after rollback settles",
+      "passed": true
+    },
+    {
+      "name": "principal-only host has no invented subject",
+      "passed": true
+    },
+    {
+      "name": "classified rejected commit followed by confirmed rollback clears observation",
+      "passed": true
+    },
+    {
+      "name": "native failed-transaction response invalidates accessor",
+      "passed": true
+    },
+    {
+      "name": "new transaction recaptures changed original helper bytes without mutating retained prior observation",
+      "passed": true
+    }
+  ]
+}

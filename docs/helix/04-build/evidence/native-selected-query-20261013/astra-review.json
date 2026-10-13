@@ -1,0 +1,134 @@
+{
+  "review": "Independent Astra Ultra read-only native condition/filter/cell query fixture review",
+  "trussHead": "ccaedbc81ddaa7f6a5d42d9d3a4a4bd032147ebe",
+  "findings": [],
+  "resolvedDocumentationObservation": "Implementation-plan wording now states one prepared PostgreSQL statement per projected field; the loop executes separate salary and resourceId statements and does not qualify simultaneous multi-column output.",
+  "conclusion": "No actionable SQL correlation, fixture assertion or coverage blocker found for the stated finite admin fixture scope.",
+  "sourceDigests": {
+    "packages/python/tests/test_security_predicate_native.py": "4f5c1db4d80293d64984b7edfa9b46ba6be8ee13ab5afe931630dd14c5f06be4",
+    "docs/helix/04-build/implementation-plan.md": "7d63aef8d2ff7f642dd092772f1ef4eb2ae309cc1fa9b47f08dd8e68c913cf2b"
+  },
+  "reusedWeftSourceDigests": {
+    "crates/weft-postgresql/src/security_predicate_spike.rs": "fd6c710284030b88e32396e424bccaea53c840738e986794579143f0d888bb43",
+    "crates/weft-postgresql/examples/security_predicate_spike.rs": "4709dff9c6d70680094ccde81f4668fefb936a4bc05433f4abe2e119543d0a98",
+    "crates/weft-core/src/security_mapping_transport.rs": "5115d2de75bc18d59d972016197930e15d9ff07561c422ee806acf69049e592b",
+    "crates/weft-core/src/security_evaluation.rs": "735ceabac3d129c017e1d0ef16966d45c5b584667d538dfacb0e958ac95ec65d",
+    "crates/weft-core/src/security_result_selection.rs": "a9892f3a6bfe152624a81869c9d18b0f5086dcdba49e2d98648d4c072cd9b58f"
+  },
+  "independentControls": {
+    "scope": "Independent retained-packet/source consistency and current original renderer replay. Native SQL and crossed-subject tests were run by parent, not reviewer. Packets represent the final overwriting passing fixture, not independent archives for all8 cases.",
+    "passedControls": 15,
+    "cases": [
+      {
+        "case": "finalTestSourceParses",
+        "passed": true
+      },
+      {
+        "case": "modulePinsMatchOriginalBytes",
+        "passed": true
+      },
+      {
+        "case": "assessmentModelPinsMatchOriginalSources",
+        "passed": true
+      },
+      {
+        "case": "originalRendererPacketReplayed",
+        "passed": true
+      },
+      {
+        "case": "sixTruthPairsTwoPermits",
+        "passed": true
+      },
+      {
+        "case": "nativeDecisionMatchesEveryTruth",
+        "passed": true
+      },
+      {
+        "case": "originalSimulatorMatchesAllPairs",
+        "passed": true
+      },
+      {
+        "case": "salarySqlExactOriginalExpressionsAndJoin",
+        "passed": true
+      },
+      {
+        "case": "salarySelectedPairSequence",
+        "passed": true
+      },
+      {
+        "case": "salaryUniquePairCount",
+        "passed": true
+      },
+      {
+        "case": "resourceIdSqlExactOriginalExpressionsAndJoin",
+        "passed": true
+      },
+      {
+        "case": "resourceIdSelectedPairSequence",
+        "passed": true
+      },
+      {
+        "case": "resourceIdUniquePairCount",
+        "passed": true
+      },
+      {
+        "case": "withheldCellsContainNoValue",
+        "passed": true
+      },
+      {
+        "case": "originalIdentityCellsCorrespond",
+        "passed": true
+      }
+    ],
+    "binarySha256": "438e4b3507d7f12f7f9c66e26b7ffd2c3b23b12c4fd8cea3ab469059ab88aad3",
+    "packetDigests": {
+      "assessment.json": "2943aead714a97bfef224d73ac0dae5bcef03b32f932efb22999a0847dda686e",
+      "binary/nullable-assessment.json": "de3a41146e248288f60d84d4e3cb4e14774b91338a7d76920b7411086832e5fd",
+      "binary/nullable-projected.json": "5ed4cf7196efaf01d87f399feea95ff0ac8c77a965e4182391ad8febcd919bc6",
+      "binary/nullable-rendered.json": "dc18a6b7d4e9f1cac72fdb4f5b3daf6d966a9b5d10fd92a23f113543c3499376",
+      "binary/nullable-request.json": "549458495805a592757be67b22a92ca842cdd5a026ec52bf125d40278c22260c",
+      "native-eligibility.json": "d0b25ef8f5223f34fef730cdd90892dd7fda61fba399b1123ebac9597d5d30d3",
+      "native-selected-cells.json": "aca1f4985930d1aefa8f69871f76f5c716b7dde91db0d2542ecdd1b69d7fc639",
+      "native-selection-sql.json": "72b7487ee00a9be1ba392326fcb4d39573a6f7cdee4bb7ba5efcf4cc909deecc",
+      "native-truths.json": "cca68101af93beb868466353a6ecae4cda1db48da11de3c328c0598ea0095df8",
+      "nullable/nullable-assessment.json": "095be06cbcdd79f95234a27561771d35d5c1e535e1c39542db84f5cbc2d5146b",
+      "nullable/nullable-projected.json": "d143bb4e6e36067ca7088214ac200ac073100fc807defbf2809968dce46a7dcd",
+      "nullable/nullable-rendered.json": "ddbf3c6eebaa6543577e7a2065190de0d624024c5b4519dbe8ccd5591968b83a",
+      "nullable/nullable-request.json": "5ecccc2178766950cb087481b1b52c490ca5a80dd4332cd0242d5a41d7ff7dd6",
+      "original-simulator-comparisons.json": "0697d0a6a5915c5cde47df44a33089b67dbfc8ac5d2e0be52dabf59a7acff5a2",
+      "rendered.json": "ef3fae41ed1065eec391d979841851c29f5827173235ac1728f88e1198b79642",
+      "request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87"
+    }
+  },
+  "reviewControlDigests": {
+    "controls.py": "cede4fd101e0b0038015b4bb291f02d9024a090a93d7037250fb9660c78bbaa6",
+    "receipt.py": "3cfeda0c35e2b8733128ba8e4c75ae15a03a1ef3935fd14c632c99d0784fb17e"
+  },
+  "parentNativeEvidence": [
+    {
+      "path": "/private/tmp/native-selected-query.log",
+      "sha256": "20f9046ccb9e16a75eec89595cb79baa6fdf0127d3844d9204aada8ab9d7dda1",
+      "provenance": "Completed parent native log inspected; reviewer did not rerun or mutate PostgreSQL."
+    },
+    {
+      "path": "/private/tmp/native-selected-query-full.log",
+      "sha256": "2d8bf8be4cabcc9ddf0cfd90ab14e6172efbf6f3dc13bf0413f98b1e83f0a92c",
+      "provenance": "Completed parent native log inspected; reviewer did not rerun or mutate PostgreSQL."
+    }
+  ],
+  "reviewedCorrespondence": [
+    "The inner query binds actual Staff s and Resource r rows, computing the original renderer rule expressions as qN columns while retaining sid and rid. The outer resource r joins q.rid by global object identity before projecting cells, and the emitted permit decision references those same qN columns.",
+    "The exact ordered selected pair list is compared before dictionary materialization, preventing duplicate or omitted pairs from being hidden. The retained six pairs have exactly two permits(1,5)/(2,6) and four refusals.",
+    "The membership expression is separately executed as a native oracle for finite pair selection; it shares renderer source and is therefore not an independent lowering proof. The original owner simulator and scoped-fact inspector independently recompute policy semantics using captured native field/key facts.",
+    "Actual selected withheld and original resourceId cells are passed to scoped-fact inspection under each captured subject. Original values are checked against the scoped resource, and the other of the two coherent fixture subjects is rejected with WFT-SECURITY-RESULT-SELECTION.",
+    "15 independent source/artifact controls pass, including exact reconstruction of each retained prepared SQL statement from the original rendered packet, exact original source hashes, renderer replay, selected pair/order/uniqueness, no value in withheld cells and original ra/rb identity cells.",
+    "Existing SHARE table lock spans population capture and both selected-field queries, giving the stated cross-transaction fixture data barrier. No broader lock/source/authentication premise is inferred."
+  ],
+  "limitations": [
+    "Two single-field native statements are exercised; no multi-column result batch or general query compiler lineage qualification is established.",
+    "Subject identity, captured fact trust/completeness and generation remain explicit admin-fixture premises. There is no authenticated principal, issuer, complete source/writer closure, native SQL lineage or protected release authority.",
+    "The final artifact directory overwrites nonnullable packets on each passing population fixture. The review checks the final retained packet set and completed8-test log, not eight independently archived datasets.",
+    "Exact pair completeness is demonstrated only for the finite2-subject/3-resource fixture; no general native or production enumeration theorem is claimed.",
+    "No runtime/compiler source changed in this test increment and no backend acceptance case or security-ready status is promoted."
+  ]
+}

@@ -44,6 +44,8 @@ export function decodeResponseFrame(frame:Uint8Array,limits:WireLimits): {
      fields.push(Object.freeze({tag,value}));
    }
    if(!terminated||!tags.has('C'))fail();
+ }else if(kind==='S'){
+   if(limits.maxFields<1)fail();fields.push(Object.freeze({name:text(),value:text()}));
  }else if(kind==='Z'){
    if(offset+1!==frame.length)fail();const status=String.fromCharCode(frame[offset++]);if(!['I','T','E'].includes(status))fail();fields.push(Object.freeze({status}));
  }else fail();
@@ -71,7 +73,7 @@ export class ResponseIngress {
          if(this.#headerUsed<5)continue;
          let size=0n;for(let i=1;i<5;i++)size=size*256n+BigInt(this.#header[i]);
          if(size<4n||size+1n>BigInt(this.limits.maxFrameBytes)||this.#frames===this.limits.maxFrames)throw Error('pg-ingress:frame-limit');
-         if(![84,68,67,90,69,78,49,50,110].includes(this.#header[0]))throw Error('pg-ingress:unsupported-kind');
+         if(![84,68,67,90,69,78,83,49,50,110].includes(this.#header[0]))throw Error('pg-ingress:unsupported-kind');
          this.#frame=new Uint8Array(Number(size)+1);this.#frame.set(this.#header);this.#used=5;this.#headerUsed=0;
        }
        const take=Math.min(this.#frame.length-this.#used,chunk.length-at);this.#frame.set(chunk.subarray(at,at+take),this.#used);this.#used+=take;at+=take;
@@ -103,6 +105,10 @@ export class ResponseIngress {
          }else if(decoded.kind==='E'){
            if(this.#phase!=='start'&&this.#phase!=='rows')throw Error('pg-ingress:response-order');
            this.#phase='error';
+         }else if(decoded.kind==='S'){
+           // ParameterStatus preserves original context reports without advancing
+           // command/row completion. It cannot replace CommandComplete or Ready.
+           if(this.#phase==='ended')throw Error('pg-ingress:response-order');
          }else if(decoded.kind==='N'){
            if(this.#phase==='ended')throw Error('pg-ingress:response-order');
          }else if(decoded.kind==='Z'){

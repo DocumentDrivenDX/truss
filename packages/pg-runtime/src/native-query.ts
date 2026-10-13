@@ -3,7 +3,8 @@ import type {PoolClient} from 'pg';
 import type {Socket} from 'node:net';
 import {ResponseIngress,decodeResponseFrame} from './wire';
 import type {OriginalQueryJournal,LocalQueryCustody} from './journal';
-export async function originalQuery(client:PoolClient,text:string,values?:readonly (string|null)[],journal?:OriginalQueryJournal,custody?:LocalQueryCustody):Promise<readonly ReturnType<typeof decodeResponseFrame>[]> {
+export async function originalQuery(client:PoolClient,text:string,values?:readonly (string|null)[],journal?:OriginalQueryJournal,custody?:LocalQueryCustody,responseTimeoutMs=5000):Promise<readonly ReturnType<typeof decodeResponseFrame>[]> {
+ if(!Number.isInteger(responseTimeoutMs)||responseTimeoutMs<1||responseTimeoutMs>60000)throw Error('Unsupported original response deadline');
  const connection=(client as unknown as {connection:{stream:Socket}}).connection;
  const stream=connection?.stream;if(!stream)throw Error('Original transport unavailable');
  const handlers=stream.listeners('data');if(handlers.length!==1)throw Error('Unsupported original parser composition');
@@ -17,7 +18,7 @@ export async function originalQuery(client:PoolClient,text:string,values?:readon
  const ready=new Promise<void>((resolve,reject)=>{resolveReady=resolve;rejectReady=reject;});
  // Attach rejection handling before driver admission so original failure cannot escape the await.
  const observedReady=ready.then(()=>({ok:true as const}),error=>({ok:false as const,error}));
- const timeout=setTimeout(()=>{const error=Error('Original response deadline');rejectReady(error);stream.destroy(error);},5000);
+ const timeout=setTimeout(()=>{const error=Error('Original response deadline');rejectReady(error);stream.destroy(error);},responseTimeoutMs);
  const guarded=(chunk:Buffer)=>{
    try{ingress.feed(chunk,frame=>{
      const decoded=decodeResponseFrame(frame,limits);frames.push(decoded);

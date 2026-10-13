@@ -1,0 +1,76 @@
+{
+  "reviewer": "Independent Astra Ultra subagent",
+  "date": "2026-10-13",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "1f7fb4e8ed98bec5868551ec9348760ebb99aa24",
+  "status": "No actionable model or source-correspondence defects within the stated conditional event-order scope.",
+  "sourceDigests": {
+    "/private/tmp/truss-security-main-integration/tools/security/prove-principal-acquisition-order.py": "055f0e28ce39166d37dff46261c652802934981131b69a779c5a77fa6d9bb942",
+    "/private/tmp/truss-security-main-integration/packages/pg-runtime/src/index.ts": "0e4c5d17751b25cf76a26ae02255f7abbd93fcb5fc5c243edd0cdddaed3c65cf",
+    "/private/tmp/truss-security-main-integration/tests/pg-principal-admission-race-runner.ts": "e28e978f8a3cf44b3d5d96a82d145f49f87dabf4ac77d33075856c663c665179",
+    "/private/tmp/truss-security-main-integration/tests/pg-principal-wire.test.ts": "c0b8d67a19c0db0c5a06105c06505bcffd90262436a15a1306980d036dfe3dad",
+    "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/principal-acquisition-order-20261013/proof.json": "09fc554ac4c533a24f9ac32eb59715888af829c83b53ae64944250bbf6f3a77b",
+    "/private/tmp/principal-runtime-review-20261013/review.json": "6144e2d59fbe69ee618147bde54848f0d92c1f94cc1ee4dff04bf1da6f409dea",
+    "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/principal-acquisition-order-20261013/scope.md": "0050c542883f6fd4d0ef787ccc439ba93de1a29abaf371312c413e0519ddf4a5",
+    "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md": "5b29cb0faaae69fa09543cccfeeeba21fd51adbf8b6f08e5011cbaa70e015e9c",
+    "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md": "2cda2ace594d6583e242d4768ff915fa7fa7c7f0d8b27ea800152d8f826ac29d"
+  },
+  "independentReplay": {
+    "interpreter": "/private/tmp/umf-write-comparison-proof-env-20261013/bin/python",
+    "solver": "4.15.4",
+    "retainedExactScript": "retained-root/tools/security/prove-principal-acquisition-order.py",
+    "retainedExactRuntime": "retained-root/packages/pg-runtime/src/index.ts",
+    "output": "replay.json",
+    "matchesParentReceiptExactly": true,
+    "queries": 8,
+    "unsat": 5,
+    "sat": 3
+  },
+  "independentNonvacuity": {
+    "script": "check-premises.py",
+    "output": "premise-controls.json",
+    "satControls": 6,
+    "observations": [
+      "Refusal and quarantine during reset have consistent premises.",
+      "Closure after reset but before final gate also refuses/quarantines.",
+      "Failed-reset and future-closure premise sets are satisfiable.",
+      "Both counterexamples survive strictly separated event times; they do not rely on tie conventions."
+    ]
+  },
+  "modelReview": [
+    "Unbounded Int event variables make UNSAT negate existence of any permitted counterexample under the encoded ordering premises. This is conditional quantification over modeled event order, not a trace extraction from TypeScript.",
+    "One closure event encodes monotone closure; setting it after publication represents the open prefix. No reopening is modeled.",
+    "publish == final_gate denotes one indivisible synchronous segment, not measured wall-clock timestamp equality.",
+    "lease and quarantine are defined branch predicates. Their implications confirm the chosen abstraction; they do not independently establish actual helper success, native custody or runtime refinement.",
+    "The successful open SAT case prevents the principal safety result from depending on an always-refusing model. Supplemental premise SAT controls further check the other refusal branches."
+  ],
+  "sourceCorrespondence": {
+    "applicablePath": "ordinaryPrincipal-configured acquire() requiring original reset completion",
+    "finalGate": "packages/pg-runtime/src/index.ts:106",
+    "publication": "packages/pg-runtime/src/index.ts:160",
+    "inspection": "Between the final admissionClosed check and return, the code constructs a fresh ordinary object with deferred method bodies, constructs a local exclusive wrapper, and assigns own properties. There is no executed await or external callback/reentrant call in that segment under the trusted-runtime premise. The await expressions inside newly created method bodies do not execute during construction.",
+    "closure": "admissionClosed initializes false and is only changed to true; no reopening assignment exists in the inspected source.",
+    "publicationMeaning": "Local return/promise resolution of the lease; not the later continuation of a consumer awaiting it. Revocation of a lease published before closure is excluded."
+  },
+  "limitations": [
+    "No TypeScript, native pg driver, helper or SQL refinement theorem.",
+    "No proof of reset/helper authentication, complete source/authority/writer closure, native outcome settlement, crash recovery or protected release.",
+    "No revocation of previously published leases and no full backend acceptance or security-ready claim.",
+    "Trusted normal JavaScript runtime semantics and no external reentrancy in the final synchronous segment are premises."
+  ],
+  "priorActualRuntimeReview": "/private/tmp/principal-runtime-review-20261013/review.json",
+  "evidenceDigests": {
+    "premise-controls.json": "bd7a437beb60d802e292715a7a9e67c3f69f68e329530a5543228ee99aa26c19",
+    "parent-proof.json": "09fc554ac4c533a24f9ac32eb59715888af829c83b53ae64944250bbf6f3a77b",
+    "check-premises.py": "fb946f5d74506b05d1e7b5aeef17efc28e0ae20a5ca789f4238a2b39c86a7d68",
+    "replay.json": "09fc554ac4c533a24f9ac32eb59715888af829c83b53ae64944250bbf6f3a77b"
+  },
+  "finalRefresh": {
+    "modelChange": "Only output scope text changed to ordinaryPrincipal-configured acquisition. All proof constraints and runtime source unchanged.",
+    "replayedFinalModel": true,
+    "matchesFinalGovernedProofExactly": true,
+    "queryTotals": "5 UNSAT / 3 SAT",
+    "supplementalPremiseControls": "6 SAT",
+    "scopeReview": "Final scope.md explicitly qualifies candidate program events, successful-reset/final-closed quarantine predicate, local promise-resolution publication, native/refinement exclusions and unchanged acceptance status. Contract and implementation-plan append are consistent with that scope."
+  }
+}

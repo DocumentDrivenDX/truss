@@ -1,0 +1,25 @@
+bun test v1.4.2 (43848b5a7)
+
+tests/pg-principal-wire.test.ts:
+(pass) ParameterStatus preserves original UTF-8 name/value bytes [0.53ms]
+(pass) ParameterStatus cannot manufacture command or Ready completion [0.38ms]
+(pass) Fragmented ParameterStatus interleaves with confirmed reset without changing completion [0.20ms]
+(pass) Malformed, non-UTF8 and over-budget parameter reports refuse [0.07ms]
+(pass) pending reset cannot publish a lease after another reset closes admission [25.06ms]
+
+tests/pg-wire.test.ts:
+(pass) original command count text beyond host precision remains exact [0.20ms]
+(pass) raw data preserves NULL/empty/binary distinctions and frame boundaries [0.08ms]
+(pass) fragmented original frame forwards once only after full admission [0.12ms]
+(pass) oversized header refuses before body allocation or forwarding and remains closed [0.04ms]
+(pass) invalid text row refuses before forwarding to original parser [0.12ms]
+(pass) query completion requires original command then ready and matching SELECT rows [0.08ms]
+(pass) error response retains ordered fields and ends only on original ready [0.08ms]
+(pass) notice is retained without replacing original command completion [0.04ms]
+(pass) unnamed extended response requires parse/bind before no-data completion [0.12ms]
+(pass) matching command cannot conceal wrong original transaction status [0.09ms]
+
+ 15 pass
+ 0 fail
+ 52 expect() calls
+Ran 15 tests across 2 files. [406.00ms]

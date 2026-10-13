@@ -1,0 +1,169 @@
+{
+  "format": "truss.principal-acquisition-order-proof/0.1",
+  "solver": "4.15.4",
+  "scope": "One pending ordinaryPrincipal-configured acquisition and one monotone source closure in a single JavaScript isolate. Abstract event order only; no general native/driver/helper refinement or protected release proof.",
+  "premises": [
+    "closure does not reopen",
+    "no await or reentrant external call between final check and lease publication",
+    "successful original reset is required to reach publication",
+    "original executed runtime is trusted"
+  ],
+  "sourceSha256": "6b155e6feb5a9f907c763684250601e71660e7567929d39fed030949985fc043",
+  "modelSha256": "055f0e28ce39166d37dff46261c652802934981131b69a779c5a77fa6d9bb942",
+  "queries": [
+    {
+      "query": "pre-await-check-only-can-publish-after-closure",
+      "expected": "sat",
+      "observed": "sat",
+      "constraints": [
+        "initial_gate >= 0",
+        "reset_complete > initial_gate",
+        "final_gate >= reset_complete",
+        "closure >= 0",
+        "publish == final_gate",
+        "And(reset_ok, initial_gate < closure, True)",
+        "closure <= publish"
+      ],
+      "witness": {
+        "initial_gate": "0",
+        "reset_complete": "1",
+        "final_gate": "1",
+        "publish": "1",
+        "closure": "1",
+        "reset_ok": "True",
+        "And(reset_ok, initial_gate < closure, True)": "True",
+        "False": "False"
+      }
+    },
+    {
+      "query": "final-check-synchronous-publication-prevents-escape",
+      "expected": "unsat",
+      "observed": "unsat",
+      "constraints": [
+        "initial_gate >= 0",
+        "reset_complete > initial_gate",
+        "final_gate >= reset_complete",
+        "closure >= 0",
+        "publish == final_gate",
+        "And(reset_ok, initial_gate < closure, final_gate < closure)",
+        "closure <= publish"
+      ]
+    },
+    {
+      "query": "yield-after-final-check-reopens-race",
+      "expected": "sat",
+      "observed": "sat",
+      "constraints": [
+        "initial_gate >= 0",
+        "reset_complete > initial_gate",
+        "final_gate >= reset_complete",
+        "closure >= 0",
+        "publish > final_gate",
+        "And(reset_ok, initial_gate < closure, final_gate < closure)",
+        "closure <= publish"
+      ],
+      "witness": {
+        "initial_gate": "0",
+        "reset_complete": "1",
+        "final_gate": "1",
+        "publish": "2",
+        "closure": "2",
+        "reset_ok": "True",
+        "And(reset_ok, initial_gate < closure, final_gate < closure)": "True",
+        "And(reset_ok, initial_gate < closure, closure <= final_gate)": "False"
+      }
+    },
+    {
+      "query": "closure-during-successful-reset-refuses-publication",
+      "expected": "unsat",
+      "observed": "unsat",
+      "constraints": [
+        "initial_gate >= 0",
+        "reset_complete > initial_gate",
+        "final_gate >= reset_complete",
+        "closure >= 0",
+        "publish == final_gate",
+        "reset_ok",
+        "initial_gate < closure",
+        "closure <= reset_complete",
+        "And(reset_ok, initial_gate < closure, final_gate < closure)"
+      ]
+    },
+    {
+      "query": "pending-checkout-is-quarantined-after-closure",
+      "expected": "unsat",
+      "observed": "unsat",
+      "constraints": [
+        "initial_gate >= 0",
+        "reset_complete > initial_gate",
+        "final_gate >= reset_complete",
+        "closure >= 0",
+        "publish == final_gate",
+        "reset_ok",
+        "initial_gate < closure",
+        "closure <= reset_complete",
+        "Not(And(reset_ok,\n        initial_gate < closure,\n        closure <= final_gate))"
+      ]
+    },
+    {
+      "query": "failed-reset-never-publishes",
+      "expected": "unsat",
+      "observed": "unsat",
+      "constraints": [
+        "initial_gate >= 0",
+        "reset_complete > initial_gate",
+        "final_gate >= reset_complete",
+        "closure >= 0",
+        "publish == final_gate",
+        "Not(reset_ok)",
+        "And(reset_ok, initial_gate < closure, final_gate < closure)"
+      ]
+    },
+    {
+      "query": "future-acquisition-after-monotone-closure-refuses",
+      "expected": "unsat",
+      "observed": "unsat",
+      "constraints": [
+        "initial_gate >= 0",
+        "reset_complete > initial_gate",
+        "final_gate >= reset_complete",
+        "closure >= 0",
+        "publish == final_gate",
+        "closure <= initial_gate",
+        "And(reset_ok, initial_gate < closure, final_gate < closure)"
+      ]
+    },
+    {
+      "query": "open-successful-source-can-publish",
+      "expected": "sat",
+      "observed": "sat",
+      "constraints": [
+        "initial_gate >= 0",
+        "reset_complete > initial_gate",
+        "final_gate >= reset_complete",
+        "closure >= 0",
+        "publish == final_gate",
+        "And(reset_ok, initial_gate < closure, final_gate < closure)",
+        "publish < closure"
+      ],
+      "witness": {
+        "initial_gate": "0",
+        "reset_complete": "1",
+        "final_gate": "1",
+        "publish": "1",
+        "closure": "2",
+        "reset_ok": "True",
+        "And(reset_ok, initial_gate < closure, final_gate < closure)": "True",
+        "And(reset_ok, initial_gate < closure, closure <= final_gate)": "False"
+      }
+    }
+  ],
+  "excluded": [
+    "closure revocation of previously published leases",
+    "native or authenticated helper semantics",
+    "complete role/subject/writer authority",
+    "process/crash recovery",
+    "quarantine shutdown proves native outcome settlement",
+    "full security backend acceptance"
+  ]
+}
