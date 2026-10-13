@@ -27,11 +27,19 @@ class LocalInstallCliTests(unittest.TestCase):
         self.assertEqual(first['trussInstallation'], 'installed')
         self.assertEqual(first['serverVersion'], '18.6')
         self.assertEqual(first['installation']['action'], 'created')
+        self.assertEqual(first['installation']['releaseId'], 'truss-catalog-runtime/0.31-candidate')
+        self.assertRegex(first['installation']['releaseSha256'], r'^[0-9a-f]{64}$')
+        self.assertEqual(first['installation']['layoutProfile'], {
+            'identity': 'truss-layout', 'version': '0.16',
+            'sha256': '261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368'})
         self.assertTrue(first['installation']['ownerRole'])
         self.assertTrue(first['installation']['registrarRole'])
         self.assertEqual(second['installation']['action'], 'status_confirmed')
         self.assertEqual(second['installation']['installationId'], first['installation']['installationId'])
         self.assertEqual(second['installation']['catalogRevision'], 0)
+        self.assertEqual(second['installation']['releaseId'], first['installation']['releaseId'])
+        self.assertEqual(second['installation']['releaseSha256'], first['installation']['releaseSha256'])
+        self.assertEqual(second['installation']['layoutProfile'], first['installation']['layoutProfile'])
         self.assertNotIn('ownerRole', second['installation'])
         self.assertNotIn('registrarRole', second['installation'])
         unchanged = subprocess.run([sys.executable, '-m', 'truss.cli', '--data-dir', str(directory),
@@ -42,6 +50,7 @@ class LocalInstallCliTests(unittest.TestCase):
         self.assertEqual(report['installationId'], first['installation']['installationId'])
         self.assertEqual(report['previousReleaseId'], 'truss-catalog-runtime/0.31-candidate')
         self.assertEqual(report['releaseId'], report['previousReleaseId'])
+        self.assertEqual(report['layoutProfile'], first['installation']['layoutProfile'])
         self.assertFalse((directory / 'postmaster.pid').exists())
         # Preserve source data on subprocess/assertion failures; clean only success.
         shutil.rmtree(parent)
@@ -79,6 +88,8 @@ with LocalPostgres(sys.argv[1]) as runtime:
         self.assertEqual(after['installationId'], before['installationId'])
         self.assertEqual(after['previousReleaseId'], before['releaseId'])
         self.assertEqual(after['releaseId'], 'truss-catalog-runtime/0.31-candidate')
+        self.assertRegex(after['releaseSha256'], r'^[0-9a-f]{64}$')
+        self.assertEqual(after['layoutProfile']['version'], '0.16')
         self.assertEqual(after['catalogRevision'], 0)
         self.assertFalse((directory / 'postmaster.pid').exists())
         shutil.rmtree(parent)

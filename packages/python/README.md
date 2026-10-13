@@ -114,6 +114,15 @@ Call `install_in_transaction(tx)` on a fresh database without a `truss` schema,
 then commit the caller transaction. Inspect `status_in_transaction(tx)` rather
 than treating assembly construction as proof of installation.
 
+`CatalogRuntimeStatus` includes the observed `release_id`, `release_sha256` and
+`layout_profile` (`ProfilePin`) alongside installation ID, catalog revision and
+capabilities. All three are `None` when no installation exists. A mismatched
+installed release refuses instead of supplying substituted version facts.
+The local launcher's installation JSON exposes `releaseId`, `releaseSha256` and
+`layoutProfile` from a fresh post-commit status check. These are candidate marker
+facts; status does not certify the complete schema or security readiness. Existing
+installer/registrar status authorization remains unchanged.
+
 A direct trusted installer needs PostgreSQL `CREATEROLE` plus database
 `CREATE WITH GRANT OPTION` or database ownership. A PostgreSQL superuser is not
 required by the tested non-superuser installation path. Installation returns

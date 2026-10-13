@@ -34,7 +34,7 @@ from .receipt_visibility import ReceiptIncluded,ReceiptVisibilityUnavailable
 from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .object_read import ScalarObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
-from .contracts import CapabilitySelection, TypedIdentity
+from .contracts import CapabilitySelection, TypedIdentity, ProfilePin
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult, OrderKey
 from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable
@@ -72,6 +72,9 @@ class CatalogRuntimeStatus:
     installation_id: str | None = None
     revision: int | None = None
     capabilities: tuple[str,...] = ()
+    release_id: str | None = None
+    release_sha256: str | None = None
+    layout_profile: ProfilePin | None = None
 
 @dataclass(frozen=True,slots=True)
 class ModuleAccessGrant:
@@ -495,7 +498,8 @@ class CatalogReferenceAssembly:
             if row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 local_failure[0]='unsupported_profile'
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority','history:retained-native-groups','compiled_query:weft-scalar-runtime'))
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority','history:retained-native-groups','compiled_query:weft-scalar-runtime'),
+                release_id=row[1],release_sha256=row[2],layout_profile=ProfilePin(**json.loads(row[3])))
         return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:

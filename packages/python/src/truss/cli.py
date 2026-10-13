@@ -55,14 +55,21 @@ def _installation(connection_uri, *, upgrade=False):
                 confirmed = required(assembly.status_in_transaction(tx))
                 if type(confirmed) is not CatalogRuntimeStatus or confirmed.installed is not True or not identity or confirmed.installation_id != identity:
                     raise RuntimeError('Committed installation status did not confirm the original identity')
+                expected_release = upgraded.release_id if upgraded else pending.release_id if pending else before.release_id
+                if not confirmed.release_id or not confirmed.release_sha256 or confirmed.layout_profile is None or confirmed.release_id != expected_release:
+                    raise RuntimeError('Committed release status did not confirm the original target')
             finally:
                 host.detach()
         result = {'action': upgraded.outcome if upgraded else 'created' if pending else 'status_confirmed',
-                  'installationId': identity, 'catalogRevision': confirmed.revision}
+                  'installationId': identity, 'catalogRevision': confirmed.revision,
+                  'releaseId': confirmed.release_id, 'releaseSha256': confirmed.release_sha256,
+                  'layoutProfile': {'identity': confirmed.layout_profile.identity,
+                                    'version': confirmed.layout_profile.version,
+                                    'sha256': confirmed.layout_profile.sha256}}
         if pending:
             result.update(ownerRole=pending.owner_role, registrarRole=pending.registrar_role)
         if upgraded:
-            result.update(previousReleaseId=upgraded.previous_release_id, releaseId=upgraded.release_id)
+            result.update(previousReleaseId=upgraded.previous_release_id)
         return result
 
 
