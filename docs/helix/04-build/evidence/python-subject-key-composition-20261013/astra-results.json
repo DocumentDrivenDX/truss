@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "count": 10,
+  "results": [
+    {
+      "name": "one-original-operation-five-family-correspondence",
+      "passed": true
+    },
+    {
+      "name": "mixed-string-and-original-literal-json-correspondence",
+      "passed": true
+    },
+    {
+      "name": "all-string-domain-refusal",
+      "passed": true
+    },
+    {
+      "name": "postcodec-principal-refusal",
+      "passed": true
+    },
+    {
+      "name": "mutable-encoding-refusal",
+      "passed": true
+    },
+    {
+      "name": "encoding-arity-refusal",
+      "passed": true
+    },
+    {
+      "name": "unknown-encoding-refusal",
+      "passed": true
+    },
+    {
+      "name": "nonstring-encoding-refusal",
+      "passed": true
+    },
+    {
+      "name": "codec-exception-refusal",
+      "passed": true
+    },
+    {
+      "name": "frozen-composed-result",
+      "passed": true
+    }
+  ],
+  "scope": "Actual composed observer plus original compiled Weft and pinned UMF owner; synthetic host callback/cursor. Original-operation count and postcodec principal ordering only; native deadlines/savepoint/lease custody use separately retained parent native controls.",
+  "sourceSha256": "eefc32996474bc363de3429963fd23c79291fa50d5b735d7030041480072d053"
+}

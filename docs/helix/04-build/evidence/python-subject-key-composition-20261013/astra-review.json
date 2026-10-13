@@ -1,0 +1,165 @@
+{
+  "review": "private-python-one-operation-subject-key-composition",
+  "reviewer": "independent Astra Ultra agent",
+  "reviewedAtUtc": "2026-10-13T14:16:15.905811+00:00",
+  "status": "no_actionable_findings_within_qualified_scope",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "headDuringReview": "c5852ca4197adf962e962c369eca653f0b34d318",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "eefc32996474bc363de3429963fd23c79291fa50d5b735d7030041480072d053",
+      "bytes": 7498
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+      "bytes": 9931
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/preparation.py",
+      "sha256": "03f98cbcce659105967d9cd83eba542bfd56d03303619155563f2453f67f1c1d",
+      "bytes": 14903
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/execution.py",
+      "sha256": "6a9dc024bb0c31fcb5bbd2d07ce11c6795d9ae8afc8356a3ae7bf0ef42834c54",
+      "bytes": 3505
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_owner_evidence_json.py",
+      "sha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+      "bytes": 3271
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/bridge.mjs",
+      "sha256": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
+      "bytes": 1940
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/manifest.json",
+      "sha256": "3ce2df6a1abf84eef7d9a9f0586b09638939a06df9a261242d49cf58e772fad8",
+      "bytes": 1858
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/producer.js",
+      "sha256": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+      "bytes": 611721
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_literal_subject_key_native.py",
+      "sha256": "29a38351cde907334aa2968968231e9651c9bc4800b7f65bdf2c6735b82e8f8c",
+      "bytes": 9699
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_subject_observation_native.py",
+      "sha256": "8fadd838caaa6f911d56b0978f021f1d8b3191f141b19e9bad293a6c7dd203eb",
+      "bytes": 8198
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/check-module-boundaries.py",
+      "sha256": "2e2e5cfd4b0dddea912664bbde50cb14a463490928606d3964d14ca7772e329d",
+      "bytes": 24758
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "15268badec91e80972d67f7ced79a1523c272eceb714852ed79e6924a845b1ad",
+      "bytes": 300082
+    }
+  ],
+  "originalWeftModule": {
+    "path": "/private/tmp/subject-consumer-python/weft.so",
+    "sha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+    "bytes": 14364352
+  },
+  "independentEvidence": {
+    "composedControls": 10,
+    "observerRegressionControls": 26,
+    "allPassed": true,
+    "sourcesMatchFinalEncodingCountGuard": true,
+    "runner": {
+      "path": "/private/tmp/python-subject-composition-review-20261013/check.py",
+      "sha256": "a246e275d4254bcc9e28586e071b3a1bf901aad78e93d3d1731470111db99cae",
+      "bytes": 4362
+    },
+    "results": {
+      "path": "/private/tmp/python-subject-composition-review-20261013/results.json",
+      "sha256": "c6fcffaf6dddb3cf4ac4e548a8bdef4781cb71b4102acd2d895b4ce1c7ed38a8",
+      "bytes": 1234
+    },
+    "observerRunner": {
+      "path": "/private/tmp/python-subject-composition-review-20261013/observer-regression/check.py",
+      "sha256": "df490b9a35ec269b8b8d5ee5843b17b0d9f372c2ca0d6995f930e53ef9175bfa",
+      "bytes": 4714
+    },
+    "observerResults": {
+      "path": "/private/tmp/python-subject-composition-review-20261013/observer-regression/results.json",
+      "sha256": "52813fe2f0ba7677346ea330bd8e99276310109773f60b6a3f520a81748c1e35",
+      "bytes": 2105
+    },
+    "scope": "Actual observer/composition and genuine compiled Weft/pinned UMF owners with synthetic exact host callback/cursor. Checks single operation, encoding while active, mixed string/CoreLiteral mode, principal check after codec, shape/domain/exception refusals and immutable result. Does not simulate native lease/savepoint/deadline guarantees."
+  },
+  "parentNativeEvidence": {
+    "independentlyRerun": false,
+    "composedDurationSeconds": 11.734,
+    "observerDurationSeconds": 4.326,
+    "observerGroups": 19,
+    "server": "PostgreSQL18.6",
+    "controls": [
+      "exact original native five-family receipt/tuple correspondence",
+      "invalid4/33/unknown encoding requests refuse before inspector invocation",
+      "codec failure and subsequent usable operation",
+      "nested host operation lease refusal",
+      "postcodec local effective role change refuses/restores",
+      "deadline expiration after entered encoder yields no published result",
+      "replacement of original native transaction refuses/quarantines"
+    ]
+  },
+  "parentEvidence": [
+    {
+      "path": "/private/tmp/python-subject-composition-native.log",
+      "sha256": "0f1cae4e88188640472b9692d42c74912e7e8cd9cb6cce307cc7665c9cbe7b56",
+      "bytes": 99
+    },
+    {
+      "path": "/private/tmp/python-subject-composition-native.json",
+      "sha256": "1355321ea2ec8b87aebcd1c006ea0a5198fbafb6d2810bfa2fb576a9fe4c61e0",
+      "bytes": 8201
+    },
+    {
+      "path": "/private/tmp/python-subject-composition-observation.log",
+      "sha256": "3734284b90f8a5ab7e4ef33d45737bdd21f3da12e95cef00a6ae7f78c9c24734",
+      "bytes": 98
+    },
+    {
+      "path": "/private/tmp/python-subject-composition-observation.json",
+      "sha256": "1d9ac746a31ceb80d9b6e1f5061e64303616058af90489e00ae816de83516806",
+      "bytes": 810
+    },
+    {
+      "path": "/private/tmp/python-subject-composition-boundaries.log",
+      "sha256": "1b9f1d5287c8e465ff78f1578bb2d6ec438e7fa98b0af4bf27fd8da69e8731fe",
+      "bytes": 83
+    },
+    {
+      "path": "/private/tmp/python-subject-composition-boundary-controls.log",
+      "sha256": "a088bfa9f70112358646a89dfa6701341bc9067f8be2c9958187bb5d22b11dae",
+      "bytes": 18517
+    }
+  ],
+  "conclusion": "Fixed original encoding is called inside the original host callback; the same immutable observation/source/identity is used. A second principal check follows encoding, and existing host deadline/identity/savepoint restoration checks precede Ok. Final count/type checks precede encoding-selection iteration and original inspector invocation. No new defect found.",
+  "scopeLimitations": [
+    "Configured inspector/owner/helper/runtime/driver adapters remain trusted. Private internal producer hook is not a sandbox or public extension interface.",
+    "Role and source observations remain historical/snapshot evidence; no excluded-writer/current-authority lease, subject existence or binding authentication is established.",
+    "Deadline checks prevent publication after expiry; no instantaneous termination of external semantic work or total CPU/process-memory guarantee is claimed.",
+    "Original host/caller owns outer transaction; returned objects are immutable historical observations, not issuer credentials or protected-release permission.",
+    "Parent native tests intentionally violate trusted raw-alias premises for containment negative controls; they do not establish complete native route closure.",
+    "No native mutation/replay by reviewer and no backend acceptance case promotion."
+  ],
+  "findings": []
+}

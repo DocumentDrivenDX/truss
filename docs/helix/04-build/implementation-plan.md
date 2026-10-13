@@ -7321,3 +7321,11 @@ proving original semantic/token recovery when the receipt's writer transaction
 has no object-change events. One basic installed PG18 test passes; see
 `evidence/python-noop-only-receipt-20261013.md`. Prior same-transaction creation
 plus no-op evidence remains historical; no runtime or new test case was added.
+
+
+### Subject observation and original key encoding in one Python host operation — 2026-10-13
+
+Private shared observation custody now accepts the fixed original key encoder before original host handback. Ordered immutable encodings select native TEXT string or raw CoreLiteral JSON; no new domain parser is added. Principal is checked after helper and after encoding; the original host subsequently validates original transaction, deadline, timeout restoration and savepoint completion before returning a frozen observation/receipt/tuple. Actual native controls pass exact original owner correspondence, local codec-error containment, nested host refusal, post-codec role refusal/restoration, entered-codec deadline refusal and replaced transaction refusal/quarantine. Adverse codec patches deliberately violate trusted-code/alias premises to exercise handback, without owner authentication or full source refinement claims. Existing19 native observation groups and Python16 boundary controls pass. Evidence/source pins: `evidence/python-subject-key-composition-20261013/receipt.json`. Original output remains historical; issuer/existence/current excluded-writer authority, source/helper qualification and protected native execution remain open. No required backend case promotion; all132 stay required.
+
+
+Astra Ultra independently replays ten composed and26 observer controls against the final bounded1–32 encoding selection. It verifies completed native11.734s handback controls and retained19-group observation regression evidence, separately from native replay. Source-pinned independent review and controls are retained beside the composition receipt; no actionable finding remains within the historical operation-local scope.
