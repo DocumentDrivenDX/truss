@@ -1,0 +1,34 @@
+{
+  "profile": "native-public-writer/synchronous-receiver-drain-component",
+  "postgresql": "18.6",
+  "tests": 2,
+  "seconds": 21.398,
+  "criteria": [
+    "US-057-AC2",
+    "US-057-AC3",
+    "US-057-AC7"
+  ],
+  "observations": [
+    "Actual public versioned Assignment revoker begins in final immutable receiver callback.",
+    "Native caller blocking PID and ungranted object lock precede receiver completion or injected delivery uncertainty.",
+    "After receiver returns or fails and private executor settles, sole blocker is original caller; no revoker commit acknowledgment.",
+    "Caller COMMIT on success or explicit ROLLBACK on uncertainty permits public GroupSuccess/COMMIT/IDLE.",
+    "Independent native activefalse readback; fresh ordinary guarded read returns no rows.",
+    "Uncertain receiver is quarantined with retry none; fresh read uses a different connection and host."
+  ],
+  "bounds": "5s native barrier; writer statement10s/operation20s; worker join12s/cancel+2s fallback.",
+  "qualification": "Synchronous local fixture receiver and cooperative selected transaction cuts. Production authentication, original source/issuer and complete DDL/role/grant/config/endpoint/writer lifetime remain premises.",
+  "limits": [
+    "No proof of remote exactly-once delivery or acknowledged nondelivery after receiver effects.",
+    "No streaming/pages, cancellation/crash recovery, stale snapshots/history, clock expiry or full protected public endpoint.",
+    "No truss.L03/L05 promotion; complete132-case goal remains open."
+  ],
+  "pins": {
+    "receiver-drain.json": "0f3240abbe93384dc01e06233616f3bdff70b409021335c7c293982f814894e2",
+    "native-initial.log": "33aba93828d8884e5748e678ec873bd2344dec4b56568a16fec3187e458436b1",
+    "receiver-uncertain-drain.json": "6720b3870b3c93c2a98b134ab03c29a509ebc092ce60aa5ebe5e9d9266c8bc10",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "93c9dad14a8934055f94dbe8e2ee24bbf3965ec97bab67295aeb15914f435ed6"
+  }
+}

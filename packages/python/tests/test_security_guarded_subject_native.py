@@ -267,3 +267,86 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
   self.assertIsInstance(result,Error);self.assertEqual(len(delivered),1);self.assertTrue(h._custody.quarantined)
   self.assertEqual(result.error.retry_scope,'none');self.assertEqual(h._custody.last_attempt.phase,'released')
   self.assertEqual(str(h._custody.last_attempt.error),'Exact synchronous publisher completion required')
+
+ def _assert_receiver_drain(self,fail_receiver):
+  """@covers US-057-AC2; selected synchronous publication drain component."""
+  import psycopg,threading,time
+  from truss import adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration,CatalogDocument
+  from truss.groups import UpdateObject,StoredObjectReference,AuthoredValue,RequestNone,GroupSuccess
+  from truss.contracts import BooleanValue,MapValue
+  mapping,c,h,t,selection,inspector,relations=self.guarded_setup()
+  self.host.detach();self.admin.commit()
+  self.admin.execute('CREATE ROLE assignment_revoker LOGIN;GRANT catalog_fact_writer TO assignment_revoker WITH SET FALSE')
+  self.addCleanup(self.admin.execute,'DROP OWNED BY assignment_revoker;DROP ROLE assignment_revoker')
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='assignment_revoker'
+  writer=psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000');self.addCleanup(writer.close)
+  self.assertEqual(writer.execute('SELECT session_user,current_user,rolsuper,rolbypassrls FROM pg_roles WHERE rolname=current_user').fetchone(),('assignment_revoker','assignment_revoker',False,False))
+  writer.execute('BEGIN');wh=adopt_psycopg_host(writer,statement_timeout_ms=10000,operation_timeout_ms=20000);self.addCleanup(wh.detach)
+  wt=wh.adopt_transaction().value;assembly=create_reference_assembly(CatalogRuntimeConfiguration(),wh).value
+  found=assembly.lookup_key_in_transaction(wt,document_id='domain',module_id='m',record_id='Assignment',key_id='pk',values=('a1',),bun_executable='/opt/homebrew/bin/bun')
+  self.assertIsInstance(found,Ok,str(wh._custody.last_attempt.error))
+  operation=UpdateObject(target=StoredObjectReference(identity=found.value.object.identity),set=(AuthoredValue(name='active',value=BooleanValue(value=False)),),unset=(),expected_version='1')
+  context=assembly.group_context_in_transaction(wt).value;source=json.loads(mapping.original_request)
+  documents=tuple(CatalogDocument(m['pin']['documentId'],m['pin']['revision'],m['documentJson'].encode()) for m in source['modules'])
+  outcomes=[];errors=[];blocking=[];delivered=[]
+  def revoke():
+   try:
+    changed=assembly.apply_in_transaction(wt,context.input((operation,),MapValue(entries=())),RequestNone(),documents=documents,bun_executable='/opt/homebrew/bin/bun')
+    self.assertIsInstance(changed,Ok,str(wh._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess)
+    wh.detach();writer.commit();self.assertEqual(writer.info.transaction_status,psycopg.pq.TransactionStatus.IDLE)
+    outcomes.append('public-update-committed')
+   except BaseException as error:errors.append(error);wh.detach();writer.rollback()
+  worker=threading.Thread(target=revoke,daemon=True);pid=writer.info.backend_pid;holder=c.info.backend_pid
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
+  def publish(packet):
+   self.assertEqual(h._custody.last_attempt.phase,'released');self.assertIs(type(packet),bytes)
+   worker.start();deadline=time.monotonic()+5
+   while True:
+    row=self.admin.execute("SELECT pg_catalog.pg_blocking_pids(%s),EXISTS(SELECT 1 FROM pg_catalog.pg_locks WHERE pid=%s AND relation='truss.object'::regclass AND NOT granted)",(pid,pid)).fetchone()
+    if holder in row[0] and row[1]:blocking.append({'phase':'receiver','blockers':row[0],'writerPid':pid,'callerPid':holder,'ungrantedObjectLock':row[1]});break
+    if errors:raise errors[0]
+    if time.monotonic()>deadline:raise AssertionError('Public revoker did not block before receiver completion')
+    time.sleep(.01)
+   self.assertEqual(outcomes,[]);delivered.append(packet)
+   if fail_receiver:raise RuntimeError('injected receiver delivery uncertainty during revocation')
+  try:
+   result=subject.publish_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,publish)
+   if fail_receiver:
+    self.assertIsInstance(result,Error);self.assertEqual(result.error.retry_scope,'none');self.assertTrue(h._custody.quarantined)
+    self.assertEqual(str(h._custody.last_attempt.error),'injected receiver delivery uncertainty during revocation')
+    self.assertEqual(len(delivered),1)
+   else:
+    self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(delivered,[result.value])
+   decision=json.loads(delivered[0]);self.assertEqual([r['key'] for r in decision['rows']],[[{'string':'r1'}]])
+   self.assertEqual(decision['rows'][0]['output'][0]['disposition'],'withheld')
+   self.host.detach();self.admin.commit()
+   blockers=self.admin.execute('SELECT pg_catalog.pg_blocking_pids(%s)',(pid,)).fetchone()[0]
+   self.assertEqual(blockers,[holder]);self.assertEqual(outcomes,[])
+   blocking.append({'phase':'receiver-uncertain-executor-settled' if fail_receiver else 'receiver-complete-executor-settled','blockers':blockers})
+  finally:
+   h.detach()
+   if fail_receiver:c.rollback()
+   else:c.commit()
+   self.host.detach();self.admin.commit()
+   if worker.ident is not None:
+    worker.join(12)
+    if worker.is_alive():writer.cancel();worker.join(2)
+  self.assertFalse(worker.is_alive())
+  if errors:raise errors[0]
+  self.assertEqual(outcomes,['public-update-committed'])
+  inventory=json.loads(mapping.accepted_catalog_assessment)['inventory'];active=next(p['prop_id'] for p in inventory['properties'] if p['element']=='active')
+  self.assertEqual(self.admin.execute("SELECT props->%s->>'value' FROM truss.object WHERE id=%s",(str(active),int(found.value.object.identity.id))).fetchone(),('false',))
+  writer.close()
+  if fail_receiver:c,h,a,t=self.consumer()
+  else:
+   c.execute('BEGIN');h=adopt_psycopg_host(c);self.addCleanup(h.detach);t=h.adopt_transaction().value
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
+  fresh=subject.run_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations)
+  self.assertIsInstance(fresh,Ok,str(h._custody.last_attempt.error));self.assertEqual(fresh.value['rows'],[])
+  directory=os.environ.get('TRUSS_CATALOG_POLICY_READ_EVIDENCE')
+  if directory:(Path(directory)/('receiver-uncertain-drain.json' if fail_receiver else 'receiver-drain.json')).write_text(json.dumps({'receiverDelivery':'uncertain' if fail_receiver else 'completed','callerSettlement':'rollback' if fail_receiver else 'commit','packetObservedByReceiver':decision,'afterCommittedRevocation':fresh.value,'blocking':blocking,'outcomes':outcomes},indent=2)+'\n')
+
+ def test_public_revoker_waits_through_receiver_and_caller_settlement(self):
+  self._assert_receiver_drain(False)
+ def test_uncertain_receiver_keeps_revoker_blocked_until_caller_rollback(self):
+  self._assert_receiver_drain(True)

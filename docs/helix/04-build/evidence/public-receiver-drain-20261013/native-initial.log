@@ -1,0 +1,7 @@
+test_public_revoker_waits_through_receiver_and_caller_settlement (test_security_guarded_subject_native.GuardedSubjectTests.test_public_revoker_waits_through_receiver_and_caller_settlement)
+@covers US-057-AC2; selected synchronous publication drain component. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 17.616s
+
+OK

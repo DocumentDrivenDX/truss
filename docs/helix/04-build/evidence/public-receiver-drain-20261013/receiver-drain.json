@@ -1,0 +1,51 @@
+{
+  "receiverDelivery": "completed",
+  "callerSettlement": "commit",
+  "packetObservedByReceiver": {
+    "kind": "owned-resource-list-fixture/0.1",
+    "rows": [
+      {
+        "key": [
+          {
+            "string": "r1"
+          }
+        ],
+        "output": [
+          {
+            "field": {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "salary"
+            },
+            "disposition": "withheld"
+          }
+        ]
+      }
+    ]
+  },
+  "afterCommittedRevocation": {
+    "kind": "owned-resource-list-fixture/0.1",
+    "rows": []
+  },
+  "blocking": [
+    {
+      "phase": "receiver",
+      "blockers": [
+        15608,
+        15523
+      ],
+      "writerPid": 15609,
+      "callerPid": 15608,
+      "ungrantedObjectLock": true
+    },
+    {
+      "phase": "receiver-complete-executor-settled",
+      "blockers": [
+        15608
+      ]
+    }
+  ],
+  "outcomes": [
+    "public-update-committed"
+  ]
+}
