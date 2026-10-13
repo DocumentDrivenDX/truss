@@ -151,8 +151,8 @@ BEGIN
  THEN RAISE EXCEPTION 'complete relationship cardinality exceeds bound' USING ERRCODE='54000';END IF;
  FOR item IN SELECT x.value FROM jsonb_array_elements(value->'items') x LOOP
   IF jsonb_typeof(item) IS DISTINCT FROM 'array' OR jsonb_array_length(item)<>key_arity
-   OR EXISTS(SELECT 1 FROM jsonb_array_elements(item) component WHERE jsonb_typeof(component.value) IS DISTINCT FROM 'string')
-  THEN RAISE EXCEPTION 'exact authored string key tuple required' USING ERRCODE='22023';END IF;
+   OR EXISTS(SELECT 1 FROM jsonb_array_elements(item) component WHERE jsonb_typeof(component.value) NOT IN ('string','boolean'))
+  THEN RAISE EXCEPTION 'exact authored key tuple required' USING ERRCODE='22023';END IF;
  END LOOP;
  IF key_arity=1 THEN
   SELECT coalesce(jsonb_agg(x.value->0 ORDER BY x.ordinality),'[]'::jsonb) INTO result

@@ -11,14 +11,14 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.14',
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.15',
            'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.4'}
 
 
 def compiler():
     try:
         import weft
-        if weft.__version__ != '0.4.9':
+        if weft.__version__ != '0.4.10':
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
@@ -40,6 +40,20 @@ def _decode_scalar(value, family):
         result = int(Decimal(value))
         return result
     raise ValueError('Exact selected scalar result required')
+
+
+def _relationship_key_types(types):
+    if not types or len(types)>128:raise ValueError('Bounded complete key types required')
+    for t in types:
+        if t.get('nullable') is not False or set(t)!= {'family','facets','nullable'}:raise ValueError('Required key types required')
+        family,facets=t['family'],t['facets']
+        valid=(family in ('string','boolean') and facets=={} or family=='integer' and facets in ({},{'integerWidth':{'bits':64,'signed':True}}) or family=='decimal' and facets=={'precision':18,'scale':4})
+        if not valid:raise ValueError('Supported exact relationship key required')
+    return types
+
+def _decode_key_tuple(item,types):
+    if type(item) is not list or len(item)!=len(types):raise ValueError('Complete relationship key tuple required')
+    return tuple(_decode_scalar(value,t['family']) for value,t in zip(item,types,strict=True))
 
 
 def _decode_value(value, descriptor_id, descriptors):
@@ -121,31 +135,14 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
                         datetime.fromisoformat(exact)
                     decoded.append(exact)
             elif representation['kind'] == 'completeRelatedKeys':
-                value = json.loads(raw)
-                key = representation['key']
-                types = key['types']
-                bound = representation['bound']
-                if type(bound) is not int or not 1 <= bound <= 100 or not types or len(key['fields']) != len(types) or any(t != {'family': 'string', 'facets': {}, 'nullable': False} for t in types):
-                    raise ValueError('Exact complete string key metadata required')
-                if type(value) is not list or len(value) > bound:
-                    raise ValueError('Complete relationship list exceeds its bound')
-                if len(types) == 1:
-                    if any(type(item) is not str for item in value):
-                        raise ValueError('Exact complete scalar key list required')
-                    decoded.append(tuple(value))
-                else:
-                    if any(type(item) is not list or len(item) != len(types) or any(type(v) is not str for v in item) for item in value):
-                        raise ValueError('Exact complete key tuple list required')
-                    decoded.append(tuple(tuple(item) for item in value))
+                value=json.loads(raw);key=representation['key'];types=_relationship_key_types(key['types']);bound=representation['bound']
+                if type(bound) is not int or not 1<=bound<=100 or len(key['fields'])!=len(types) or type(value) is not list or len(value)>bound:raise ValueError('Complete relationship list required')
+                decoded.append(tuple(_decode_scalar(item,types[0]['family']) for item in value) if len(types)==1 else tuple(_decode_key_tuple(item,types) for item in value))
             elif representation['kind'] == 'relatedKeys':
-                value=json.loads(raw);key=representation['key'];bound=representation['bound'];types=key['types']
-                if type(bound) is not int or not 1<=bound<=1000 or not types or len(key['fields'])!=len(types) or any(t['family']!='string' or t['facets']!={} or t['nullable'] for t in types):
-                    raise ValueError('Original string relationship key metadata required')
-                if type(value) is not dict or set(value)!={'items','truncated'} or type(value['items']) is not list or type(value['truncated']) is not bool or len(value['items'])>bound or (value['truncated'] and len(value['items'])!=bound):
-                    raise ValueError('Exact bounded relationship key result required')
-                if any(type(item) is not list or len(item)!=len(types) or any(type(v) is not str for v in item) for item in value['items']):
-                    raise ValueError('Exact relationship key tuple required')
-                decoded.append(QueryRelatedKeys(items=tuple(tuple(item) for item in value['items']),truncated=value['truncated']))
+                value=json.loads(raw);key=representation['key'];bound=representation['bound'];types=_relationship_key_types(key['types'])
+                if type(bound) is not int or not 1<=bound<=1000 or len(key['fields'])!=len(types):raise ValueError('Exact bounded key metadata required')
+                if type(value) is not dict or set(value)!={'items','truncated'} or type(value['items']) is not list or type(value['truncated']) is not bool or len(value['items'])>bound or (value['truncated'] and len(value['items'])!=bound):raise ValueError('Exact bounded relationship key result required')
+                decoded.append(QueryRelatedKeys(items=tuple(_decode_key_tuple(item,types) for item in value['items']),truncated=value['truncated']))
             else:
                 raise ValueError('Unknown compiled representation refused')
         rows.append(tuple(decoded))
