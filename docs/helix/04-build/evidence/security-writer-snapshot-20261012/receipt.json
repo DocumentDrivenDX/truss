@@ -1,0 +1,21 @@
+{
+  "status": "counterexample-and-qualified-control",
+  "sources": {
+    "scripts/prove-security-writer-snapshot.py": "23e7b3bfc6fa2074ad44b9dbe24beab3a842f426f014f639ded192a5be98e07f",
+    "packages/python/tests/test_security_public_ontology_native.py": "baf19d978333da219f9b594fe4af7b807edcf04de6630194b65ed4de6fbb97e1",
+    "packages/postgresql/native/security-data-writer-guard-pg18.sql": "fbe485ee33c48e332ce4c0a5a62535e9036357f28c7d8adc6dab62e570114bb0"
+  },
+  "native": "PostgreSQL18.6 / psycopg3.3.6: full11 passed; final lock-order correction verified by focused native test",
+  "counterexample": "Original direct consumer DML starts before assignment revocation commits, blocks on BEFORE guard, then updates independent id2 using stale id1 active predicate. Native blocking PID observed; id1 false and id2 false confirmed.",
+  "control": "Original administrative connection locks head SHARE then guard UPDATE in separate commands before issuing fresh conditional DML; same revocation race affects zero rows, preserving id2 true. Credential/admission is not qualified.",
+  "formal": "Conditional event-order constraints1UNSAT2SAT, retained SMT replay; not native/source refinement.",
+  "traceability": [
+    {
+      "case": "truss.L13",
+      "scope": "counterexample to stale-decision invalidation by trigger guard alone; separate-command freshness prerequisite only",
+      "caseClosed": false
+    }
+  ],
+  "nextRequirement": "Supported coordinator must acquire original head/guard before issuing authorization-dependent SQL, keep them through all effects, authenticate issuer/caller and prove all native writer/routes; trigger guard alone cannot supply freshness.",
+  "review": "Astra Ultra: no actionable native/formal findings; independent1UNSAT2SAT replay byte-identical and source hashes match. Final head-before-guard correction applied."
+}
