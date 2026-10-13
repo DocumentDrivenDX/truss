@@ -503,7 +503,7 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has ten original read/action workflows
+must be supported. The original consumer corpus has eleven original read/action workflows
 exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
 replica execution and the full consumer corpus remain unqualified.
 
@@ -520,3 +520,5 @@ The original consumer AddSolution example is a trusted host handler bound to the
 The selected AddUseCase retry workflow maps its caller key directly to the group request ID, applies the original native KeyAbsent predicate, and retains the canonical input/request for retry. Every repeated step still calls Truss; the host cache supplies no result. The original committed token and semantic result are returned with replay disposition, and readback finds one object. The original AddSolution dry-run case now uses the public caller-rollback group workflow; other consumer action cases remain outside this example handler.
 
 Dry-run previews execute the actual create/link group and roll back the caller transaction before returning validation. They return no provisional identity or receipt token and retain no invocation cache. A later real write with the same caller key is admitted normally. Missing-target previews require an exact public ObjectNotFound plus current authorized source/catalog/type/key visibility in the known fixture; other results refuse. This is a host authority observation, not a general native key-exists predicate. The dry-run case uses its own fresh basic fixture; rolled-back sequence allocations may still leave gaps.
+
+The original CorrectSolution workflow now resolves the authored business key, applies an optimistic-version UpdateObject with the declared ObjectExists precondition, and recovers the committed native receipt using its original request. Complete-entity readback proves one version increment and preserves creation attribution while recording the connecting person as updater. This is a trusted host handler for the exact retained consumer document, not a general action interpreter.

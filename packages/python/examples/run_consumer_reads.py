@@ -11,9 +11,9 @@ from adopter_workflow import transaction, success, expect
 from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument, ObjectFound, ObjectNotFound, ReaderCatalog
 from truss.contracts import MapValue, MapEntry, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
-    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created, GroupFailed, PreconditionFailed)
+    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created, Changed, UpdateObject, GroupFailed, PreconditionFailed)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.dry-run-writes-nothing-and-keeps-the-key')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.update-bumps-the-version-once', 'action.dry-run-writes-nothing-and-keeps-the-key')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -136,7 +136,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             invocations = {}
             for step in case['steps']:
                 if step['op'] == 'apply':
-                    supported={'action.applies-atomically-and-reads-back':'catalog.AddSolution','action.idempotent-retry-returns-the-original':'catalog.AddUseCase','action.dry-run-writes-nothing-and-keeps-the-key':'catalog.AddSolution'}
+                    supported={'action.applies-atomically-and-reads-back':'catalog.AddSolution','action.idempotent-retry-returns-the-original':'catalog.AddUseCase','action.update-bumps-the-version-once':'catalog.CorrectSolution','action.dry-run-writes-nothing-and-keeps-the-key':'catalog.AddSolution'}
                     if case['id'] not in supported or step['action']!=supported[case['id']] or not {'op','as','action','inputs','expect'}<=set(step) or set(step)-{'op','as','action','inputs','expect','save','key','dry_run'}:
                         raise ValueError('Unsupported action case or controls; no action write attempted')
                     dry_run=step.get('dry_run',False)
@@ -145,13 +145,14 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                     if dry_run:
                         if set(step['expect'])!={'validation'} or set(step['expect']['validation'])-{'ok','effects','replay','failure_ids'}:
                             raise ValueError('Unsupported preview observations; no action write attempted')
-                    elif set(step['expect'])-{'receipt','refs'} or set(step['expect'].get('receipt',{}))-{'created','linked','replayed','token_is'}:
+                    elif set(step['expect'])-{'receipt','refs'} or set(step['expect'].get('receipt',{}))-{'created','linked','updated','replayed','token_is'}:
                         raise ValueError('Unsupported action observation; no action write attempted')
                     if sha256(source).hexdigest()!='849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696':
                         raise ValueError('Selected action handler requires the exact retained consumer document')
                     inputs=step['inputs'];case_actor=step['as']
-                    record_id='Solution' if step['action']=='catalog.AddSolution' else 'UseCase'
-                    required_inputs={'code','name','useCase'} if record_id=='Solution' else {'code','name'}
+                    updating=step['action']=='catalog.CorrectSolution'
+                    record_id='Solution' if step['action'] in ('catalog.AddSolution','catalog.CorrectSolution') else 'UseCase'
+                    required_inputs={'solution','level'} if updating else {'code','name','useCase'} if record_id=='Solution' else {'code','name'}
                     if set(inputs)!=required_inputs or any(type(value) is not str for value in inputs.values()):
                         raise ValueError('Selected action inputs are required strings')
                     invocation=(case_actor,step['key']) if 'key' in step else (case_actor,uuid4().hex)
@@ -164,8 +165,14 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                             applied=expect(success(assembly.apply_in_transaction(tx,case_input,case_request,documents=documents,bun_executable=bun)),GroupSuccess)
                     else:
                         with transaction(people[case_actor],commit=not dry_run) as (assembly,tx):
-                            operations=[CreateObject(type_definition_pin=types[record_id].definition_pin,values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=inputs[name])) for name in ('code','name')),ownership=RootlessOwnership(),alias='s')]
-                            if record_id=='Solution':
+                            operations=[] if updating else [CreateObject(type_definition_pin=types[record_id].definition_pin,values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=inputs[name])) for name in ('code','name')),ownership=RootlessOwnership(),alias='s')]
+                            if updating:
+                                record=next(e for e in module['elements'] if e['id']=='Solution')
+                                primary=next(k for k in record['keys'] if k.get('primary'))
+                                target=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='Solution',key_id=primary['id'],values=(inputs['solution'],),original_document=source,bun_executable=bun)),ObjectFound).object
+                                operations.append(UpdateObject(target=StoredObjectReference(identity=target.identity),set=(AuthoredValue(name='coverageLevel',value=TextValue(kind='string',text=inputs['level'])),),unset=(),expected_version=str(target.version)))
+                                preconditions=(ObjectExists(id='exists',reason='no such solution',target=target.identity),)
+                            elif record_id=='Solution':
                                 use_case=next(e for e in module['elements'] if e['id']=='UseCase')
                                 use_case_key=next(k for k in use_case['keys'] if k.get('primary'))
                                 target_result=success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='UseCase',key_id=use_case_key['id'],values=(inputs['useCase'],),original_document=source,bun_executable=bun))
@@ -213,13 +220,16 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         if committed.semantic!=applied.response.semantic:
                             raise AssertionError('Committed original action semantic result differs')
                     results=applied.response.semantic.results
-                    if len(results)!=(2 if record_id=='Solution' else 1) or any(not isinstance(result,Created) for result in results):
+                    if updating:
+                        if len(results)!=1 or not isinstance(results[0],Changed) or results[0].operation!='update_object':
+                            raise AssertionError('Original correction must change exactly one object')
+                    elif len(results)!=(2 if record_id=='Solution' else 1) or any(not isinstance(result,Created) for result in results):
                         raise AssertionError('Original action must create one object and one edge')
-                    receipt={'created':sum(r.operation=='create_object' for r in results),'linked':sum(r.operation=='create_edge' for r in results),'replayed':applied.response.disposition=='replayed'}
+                    receipt={'created':sum(r.operation=='create_object' for r in results),'linked':sum(r.operation=='create_edge' for r in results),'updated':sum(isinstance(r,Changed) and r.operation=='update_object' for r in results),'replayed':applied.response.disposition=='replayed'}
                     solution=next(e for e in module['elements'] if e['id']==record_id)
                     solution_key=next(k for k in solution['keys'] if k.get('primary'))
                     with transaction(people[case_actor],read_only=True) as (assembly,tx):
-                        found=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id=record_id,key_id=solution_key['id'],values=(inputs['code'],),original_document=source,bun_executable=bun)),ObjectFound).object
+                        found=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id=record_id,key_id=solution_key['id'],values=(inputs['solution'] if updating else inputs['code'],),original_document=source,bun_executable=bun)),ObjectFound).object
                         if found.identity!=results[0].identity:
                             raise AssertionError('Original created identity and business-key read differ')
                     if found.version!=int(results[0].version):
@@ -294,10 +304,10 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         if 'save' in step:
                             cursors[step['save']['cursor']] = rows.next_cursor
                     else:
-                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back') else None)), QueryRows)
+                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once') else None)), QueryRows)
                 if not isinstance(rows.as_of,QueryReadPosition) or not rows.as_of.value or rows.as_of.at.tzinfo is None or rows.as_of.at.utcoffset() is None or rows.as_of.semantics!='committed-lower-bound' or rows.as_of.caller_xid_assigned:
                     raise AssertionError('Original read answer needs an aware recorded position with declared semantics')
-                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back'):
+                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once'):
                     required={'_version','_created_by','_created_at','_updated_by','_updated_at'}
                     if not required <= set(rows.columns):
                         raise AssertionError('Original required whole-object metadata missing')

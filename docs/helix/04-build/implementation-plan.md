@@ -7053,3 +7053,7 @@ The original AddUseCase retry case passes native KeyAbsent/create, direct caller
 ### Original consumer dry-run adoption — 2026-10-13
 
 The original AddSolution preview executes the public group, rolls back, publishes only validation, and leaves k1 available for the real write. [Evidence](evidence/original-consumer-dry-run-20261013.md) covers ten original workflows with the dry-run case in a fresh original fixture. Missing-target validation is an authorized host key-read observation, not an invented native identity or general key-exists predicate. Full adapter/corpus/interchange and protected security activation remain open.
+
+## Original consumer correction through public Python — 2026-10-13
+
+Exercise the unchanged CorrectSolution update case through public business-key lookup, UpdateObject with the found native identity/version, and the original declared ObjectExists precondition. The host commits then retries the canonical original request for its durable receipt; a fresh key read and complete-entity query verify version and creation/update actor attribution. No general action interpreter or runtime profile change is introduced. See [evidence](evidence/original-consumer-update-20261013.md) for the basic installed-runtime result; full corpus/interchange remains open.

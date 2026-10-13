@@ -1,0 +1,9 @@
+# Original consumer correction — 2026-10-13
+
+The unchanged action.update-bumps-the-version-once case passes on the authority database: Wes calls catalog.CorrectSolution with sol-1/full; the original complete-entity query sees coverageLevel full, version2, updated_by wes and created_by erik. The exact document SHA849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696 binds the selected trusted host handler. No UMF action interpreter is introduced.
+
+The handler resolves the actual authored primary key through public lookup, uses the returned native identity and canonical version text for UpdateObject, and supplies the original ObjectExists exists/no such solution predicate. It requires one Changed/update_object result. The caller commits, then retries the original canonical input/request through Truss to obtain the actual committed receipt, requiring identical semantic results. Fresh read-only key lookup checks native identity/version before the original SQL checks attribution. No cached outcome, fabricated identity, administrative data write or SQL rewrite supplies an observation.
+
+One basic installed-runtime test passes all eleven selected original authority workflows in24.849seconds, using Truss0.34/layout0.16 candidate, Weft0.4.7, DocumentDrivenDX pgserver-pg18==18.6.1/PostgreSQL18.6 and psycopg3.3.6. The initial run passed the runner but loaded the prior expected test list while source edits were still completing; it failed the aggregate case-list assertion. The final run loaded the completed sources and passed. Diff check is clean. Astra Ultra approved the plan; final source review is recorded before commit.
+
+Full original consumer coverage, protected security activation, replica deployment and independent native interchange remain open. This increment changes the host example and basic functionality test, not the runtime contracts.
