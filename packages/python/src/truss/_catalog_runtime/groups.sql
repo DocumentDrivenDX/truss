@@ -57,7 +57,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
-'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-graph','version','0.1','sha256','1c337a6650a9b0cfe5eafc06f84ac6080dd75ed4e9cae4e26a42491cecb25114'),
+'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-graph','version','0.2','sha256','e2b24e52e1b374245d728db33ab34c63f6bea983e986064a4a444286d9d3c9b0'),
 'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.2','sha256','5e6a7f879e17066a8ffdeb8731da89906f0e5cb231e4b4357bd4fbea0158163f'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),
@@ -291,7 +291,7 @@ DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;
  source_pin record;actor_oid oid;writer xid8;group_uuid uuid:=gen_random_uuid();current_index int:=0;operation jsonb;operation_meta jsonb;
  selected_type truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;key_definition truss.key_def%ROWTYPE;
  supplied_value jsonb;props jsonb;retained jsonb;planned jsonb:='[]';planned_keys jsonb:='[]';key_plan jsonb;key_input jsonb;
- values_text text[];component record;namespace bytea;transport bytea;tuple_bytes bytea;owner_receipt jsonb;
+ values_text text[];values_cells jsonb;key_facets jsonb;component record;namespace bytea;transport bytea;tuple_bytes bytea;owner_receipt jsonb;
  route record;observed record;planned_row jsonb;actual_row jsonb;object_row truss.object%ROWTYPE;
  object_identity jsonb;properties_json jsonb;retained_json jsonb;after_record jsonb;event jsonb;event_bytes bytea;origin_bytes bytea;
  journal_row truss.journal%ROWTYPE;expected_journal jsonb;actual_journal jsonb;event_digest text;
@@ -421,24 +421,25 @@ BEGIN
     WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL AND p.name=v.value->>'name');
   planned:=planned||jsonb_build_array(jsonb_build_object('typeId',selected_type.type_id,'props',props,'retained',retained));
   FOR key_definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY key_num LOOP
-   values_text:=ARRAY[]::text[];
+   values_text:=ARRAY[]::text[];values_cells:='[]';key_facets:='[]';
    FOR component IN SELECT p.* FROM unnest(key_definition.prop_ids) WITH ORDINALITY i(prop_id,ord)
     JOIN truss.prop_def p ON p.type_id=selected_type.type_id AND p.prop_id=i.prop_id ORDER BY i.ord LOOP
-    IF component.scalar_type IS DISTINCT FROM 'string' OR component.nullability IS DISTINCT FROM 'required'
-     OR component.retired_rev IS NOT NULL OR props->component.prop_id::text->>'kind' IS DISTINCT FROM 'string' THEN
-     RAISE EXCEPTION 'required present string key component required' USING ERRCODE='0A000'; END IF;
-    values_text:=array_append(values_text,props->component.prop_id::text->>'text');
+    IF component.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR component.nullability IS DISTINCT FROM 'required'
+     OR component.retired_rev IS NOT NULL OR truss.valid_scalar_property(props->component.prop_id::text,component.scalar_type,false,component.facets) IS NOT TRUE THEN
+     RAISE EXCEPTION 'required present exact key component required' USING ERRCODE='0A000'; END IF;
+    values_cells:=values_cells||jsonb_build_array(props->component.prop_id::text);
+    key_facets:=key_facets||jsonb_build_array(coalesce(component.facets,'{}'::jsonb));
    END LOOP;
-   IF cardinality(values_text)<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete key components required' USING ERRCODE='55000'; END IF;
+   IF jsonb_array_length(values_cells)<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete key components required' USING ERRCODE='55000'; END IF;
    SELECT k.value INTO STRICT key_input FROM jsonb_array_elements(key_inputs) k WHERE k.value->>'operationIndex'=current_index::text
     AND k.value->>'keyNumber'=key_definition.key_num::text;
    tuple_bytes:=decode(key_input->>'tupleHex','hex');
-   IF NOT truss.verify_umf_string_key_tuple(tuple_bytes,values_text) THEN RAISE EXCEPTION 'original key values disagree' USING ERRCODE='22023'; END IF;
+   IF NOT truss.verify_umf_scalar_key_tuple(tuple_bytes,values_cells,key_facets) THEN RAISE EXCEPTION 'original key values disagree' USING ERRCODE='22023'; END IF;
    owner_receipt:=convert_from(decode(key_input->>'receiptBase64','base64'),'UTF8')::jsonb;
    IF owner_receipt->>'operation' IS DISTINCT FROM 'encode-core-key-tuple' OR owner_receipt->>'profile' IS DISTINCT FROM 'umf-key-tuple-v1'
     OR owner_receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex')
     OR owner_receipt->'identity' IS DISTINCT FROM jsonb_build_object('module',selected_type.module,'element',selected_type.element,'key',key_definition.key_id)
-    OR owner_receipt->'values' IS DISTINCT FROM (SELECT jsonb_agg(jsonb_build_object('string',v) ORDER BY n) FROM unnest(values_text) WITH ORDINALITY x(v,n))
+    OR owner_receipt->'values' IS DISTINCT FROM truss.umf_key_values(values_cells)
     OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.schema_doc d WHERE d.doc_id=selected_type.document_id ORDER BY d.rev DESC LIMIT 1) THEN
     RAISE EXCEPTION 'original owner key receipt required' USING ERRCODE='22023'; END IF;
    SELECT * INTO STRICT source_pin FROM truss.runtime_definition('key',selected_type.type_id,key_definition.key_num);

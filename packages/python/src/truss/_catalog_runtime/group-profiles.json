@@ -4,10 +4,10 @@
       "name": "mutationProfile",
       "pin": {
         "identity": "truss-rootless-scalar-graph",
-        "version": "0.1",
-        "sha256": "1c337a6650a9b0cfe5eafc06f84ac6080dd75ed4e9cae4e26a42491cecb25114"
+        "version": "0.2",
+        "sha256": "e2b24e52e1b374245d728db33ab34c63f6bea983e986064a4a444286d9d3c9b0"
       },
-      "definition": "truss-rootless-scalar-graph/0.1;128 ordered create/update/delete object operations;rootless JSON scalar values;stored targets and prior aliases;expected_version;exact representation no-op;one version per changed operation;UMF string keys with retired reservations;delete refuses edges and owned dependents;exact property and metadata journals;durable exact request replay before live target checks;caller settlement;current qualified module writers;feed unavailable;128 caller-ID/reason conditions on locked prestate;all failed predicates returned;exact typed property equality;missing distinct from null;key absence is live membership absence not reservation clearance;relationship absence/counts use qualified definitions and endpoint locks;original receipt before predicate reevaluation;failed predicates roll back setup;explicit unauthorized/invalid group failures;independent directed edge create/update/delete;relationship-qualified identities;object and edge alias categories;endpoint reader and relationship writer;all old/new endpoint locks;final batch multiplicities including zero-edge new objects;final maximum-one markers;exact retained edge scalars;edge metadata history;read-only edge identity and paired order-key/id pages"
+      "definition": "truss-rootless-scalar-graph/0.2;128 ordered create/update/delete object operations;rootless JSON scalar values;stored targets and prior aliases;expected_version;exact representation no-op;one version per changed operation;UMF original0.7/0.8 scalar keys: string,integer,decimal18/4,boolean,binary with retired reservations;exact native tuple correspondence;mathematical key equality preserves original value tokens;historical exact receipt replay before current-profile admission;delete refuses edges and owned dependents;exact property and metadata journals;durable exact request replay before live target checks;caller settlement;current qualified module writers;feed unavailable;128 caller-ID/reason conditions on locked prestate;all failed predicates returned;exact typed property equality;missing distinct from null;key absence is live membership absence not reservation clearance;relationship absence/counts use qualified definitions and endpoint locks;original receipt before predicate reevaluation;failed predicates roll back setup;explicit unauthorized/invalid group failures;independent directed edge create/update/delete;relationship-qualified identities;object and edge alias categories;endpoint reader and relationship writer;all old/new endpoint locks;final batch multiplicities including zero-edge new objects;final maximum-one markers;exact retained edge scalars;edge metadata history;read-only edge identity and paired order-key/id pages"
     },
     {
       "name": "valueProfile",
@@ -84,11 +84,11 @@
     {
       "name": "importKeyProfile",
       "pin": {
-        "identity": "truss-selected-umf-string-key",
-        "version": "0.1",
-        "sha256": "07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"
+        "identity": "truss-selected-umf-scalar-key",
+        "version": "0.2",
+        "sha256": "e4b325c5906c759776e7ffbb5b9c298caa23034339d90c4e2e7a9d74eb002708"
       },
-      "definition": "Bundled original UMF encode-core-key-tuple2.0.0 umf-key-tuple-v1;accepted original core0.7.0 source;declared primary key and exact ordered string components;original native definition pins;no alternative tuple/equality implementation"
+      "definition": "Bundled original UMF encode-core-key-tuple2.0.0/3.0.0 umf-key-tuple-v1;accepted original core0.7.0/0.8.0 source;declared primary key and exact ordered string,integer,decimal18/4,boolean,binary components;native property facets and original byte correspondence;legacy exact string-key profile remains valid for string-only records;original definition pins;no competing Python equality or tuple implementation"
     },
     {
       "name": "configurationProfile",
@@ -98,6 +98,24 @@
         "sha256": "502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"
       },
       "definition": "Immutable initial installed import policy generation1;engine journal;forbid object primary-key reuse and imported deleted edge identity reuse;ordinary edge recreation remains explicit;manifest release digest identifies protected installed producer source inventory;caller settlement"
+    },
+    {
+      "name": "historicalMutationProfile",
+      "pin": {
+        "identity": "truss-rootless-scalar-graph",
+        "version": "0.1",
+        "sha256": "1c337a6650a9b0cfe5eafc06f84ac6080dd75ed4e9cae4e26a42491cecb25114"
+      },
+      "definition": "truss-rootless-scalar-graph/0.1;128 ordered create/update/delete object operations;rootless JSON scalar values;stored targets and prior aliases;expected_version;exact representation no-op;one version per changed operation;UMF string keys with retired reservations;delete refuses edges and owned dependents;exact property and metadata journals;durable exact request replay before live target checks;caller settlement;current qualified module writers;feed unavailable;128 caller-ID/reason conditions on locked prestate;all failed predicates returned;exact typed property equality;missing distinct from null;key absence is live membership absence not reservation clearance;relationship absence/counts use qualified definitions and endpoint locks;original receipt before predicate reevaluation;failed predicates roll back setup;explicit unauthorized/invalid group failures;independent directed edge create/update/delete;relationship-qualified identities;object and edge alias categories;endpoint reader and relationship writer;all old/new endpoint locks;final batch multiplicities including zero-edge new objects;final maximum-one markers;exact retained edge scalars;edge metadata history;read-only edge identity and paired order-key/id pages"
+    },
+    {
+      "name": "historicalImportKeyProfile",
+      "pin": {
+        "identity": "truss-selected-umf-string-key",
+        "version": "0.1",
+        "sha256": "07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"
+      },
+      "definition": "Bundled original UMF encode-core-key-tuple2.0.0 umf-key-tuple-v1;accepted original core0.7.0 source;declared primary key and exact ordered string components;original native definition pins;no alternative tuple/equality implementation"
     }
   ]
 }

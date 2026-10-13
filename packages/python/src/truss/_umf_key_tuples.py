@@ -4,7 +4,9 @@ from decimal import Decimal
 from hashlib import sha256
 from importlib.resources import files
 import json
+import base64
 import shutil
+from .contracts import TextValue, BooleanValue
 from .preparation import _capture
 from ._owner_evidence_json import decode_owner_evidence_json
 from ._umf_keys_release import MANIFEST_SHA256
@@ -16,7 +18,7 @@ class KeyTupleRequest:
     module_id: str
     record_id: str
     key_id: str
-    values: tuple[str,...]
+    values: tuple[str | TextValue | BooleanValue,...]
 
 
 @dataclass(frozen=True,slots=True)
@@ -37,7 +39,34 @@ def _same_json_meaning(left,right):
     return left==right
 
 
+def key_value_from_cell(cell):
+    """Carry native exact cells to UMF without interpreting numeric tokens."""
+    if type(cell) is not dict:raise ValueError('Exact key cell required')
+    if set(cell)=={'kind','value'} and cell['kind']=='boolean' and type(cell['value']) is bool:
+        return BooleanValue(value=cell['value'])
+    if set(cell)=={'kind','text'} and cell['kind'] in ('string','integer','decimal','binary') and type(cell['text']) is str:
+        return TextValue(kind=cell['kind'],text=cell['text'])
+    raise ValueError('Admitted exact key family required')
+
+
+def _owner_key_value(value):
+    if type(value) is str:return {'string':value}
+    if type(value) is BooleanValue and type(value.value) is bool:return {'boolean':value.value}
+    if type(value) is TextValue and type(value.text) is str:
+        if value.kind=='string':return {'string':value.text}
+        if value.kind=='integer':return {'integerToken':value.text}
+        if value.kind=='decimal':return {'decimalToken':value.text}
+        if value.kind=='binary':return {'binaryHex':base64.b64decode(value.text,validate=True).hex()}
+    raise ValueError('Exact UMF key carrier required')
+
+
 def encode_string_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,...],*,bun_executable: str='bun') -> tuple[OriginalKeyTuple,...]:
+    if type(requests) is not tuple or any(type(r) is not KeyTupleRequest or type(r.values) is not tuple or any(type(v) is not str for v in r.values) for r in requests):
+        raise ValueError('Immutable string key requests required')
+    return encode_key_tuples(original_document,requests,bun_executable=bun_executable)
+
+
+def encode_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,...],*,bun_executable: str='bun') -> tuple[OriginalKeyTuple,...]:
     if type(original_document) is not bytes or not 0<len(original_document)<=1048576:
         raise ValueError('Bounded original accepted document bytes required')
     source=decode_owner_evidence_json(original_document)
@@ -48,13 +77,13 @@ def encode_string_key_tuples(original_document: bytes,requests: tuple[KeyTupleRe
     for request in requests:
         if type(request) is not KeyTupleRequest or type(request.values) is not tuple or not request.values:
             raise ValueError('Immutable string key request required')
-        for value in (request.module_id,request.record_id,request.key_id,*request.values):
+        for value in (request.module_id,request.record_id,request.key_id):
             if type(value) is not str:raise ValueError('Exact string key identities and values required')
             value.encode('utf-8')
         if not all((request.module_id,request.record_id,request.key_id)) or any('\0' in value for value in (request.module_id,request.record_id,request.key_id)):
             raise ValueError('Qualified Record/Key identity required')
         wire.append({'identity':{'module':request.module_id,'element':request.record_id,'key':request.key_id},
-            'values':[{'string':value} for value in request.values]})
+            'values':[_owner_key_value(value) for value in request.values]})
     payload=json.dumps({'sourceText':original_document.decode('utf-8'),'requests':wire},ensure_ascii=True,separators=(',',':')).encode()
     if len(payload)>1048576:raise ValueError('Aggregate key input budget exceeded')
     current=source['umf']=='0.8.0'

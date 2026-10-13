@@ -4,7 +4,7 @@ The protocol describes callable operations, not readiness, native authority,
 or conformance to broader historical/verified-application interfaces.
 """
 from typing import Protocol, Literal, Mapping
-from .contracts import TypedIdentity, MapValue
+from .contracts import TypedIdentity, MapValue, TextValue, BooleanValue
 from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor
 from .execution import Outcome, TransactionHandle
@@ -55,7 +55,7 @@ class NativeRuntimeOperations(Protocol):
                                       object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]: ...
 
     def lookup_key_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,key_id: str,
-                                      values: tuple[str,...],maximum_bytes: int=1048576,original_document: bytes | None=None,
+                                      values: tuple[str | TextValue | BooleanValue,...],maximum_bytes: int=1048576,original_document: bytes | None=None,
                                       bun_executable: str='bun') -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]: ...
 
     def page_objects_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,

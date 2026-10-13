@@ -6,7 +6,7 @@ Calls always return through the owning assembly's protected execution path.
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Mapping, Generic, Literal, TypeVar
-from .contracts import CapabilitySelection, CapabilityFamily, TypedIdentity, MapValue
+from .contracts import CapabilitySelection, CapabilityFamily, TypedIdentity, MapValue, TextValue, BooleanValue
 from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor
 from .execution import Outcome, TransactionHandle
@@ -82,7 +82,7 @@ class NativeDirectReadCapability(_NativeCapability[Literal['direct_read']]):
         return self._assembly.get_object_in_transaction(transaction,document_id=document_id,module_id=module_id,record_id=record_id,object_id=object_id,maximum_bytes=maximum_bytes)
 
     def lookup_key_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,key_id: str,
-                                  values: tuple[str,...],maximum_bytes: int=1048576,original_document: bytes | None=None,
+                                  values: tuple[str | TextValue | BooleanValue,...],maximum_bytes: int=1048576,original_document: bytes | None=None,
                                   bun_executable: str='bun') -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
         return self._assembly.lookup_key_in_transaction(transaction,document_id=document_id,module_id=module_id,record_id=record_id,key_id=key_id,
             values=values,maximum_bytes=maximum_bytes,original_document=original_document,bun_executable=bun_executable)

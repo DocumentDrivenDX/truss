@@ -594,3 +594,27 @@ unsupported. Enforcement is through runtime operations, not bare-table CHECKs.
 Existing installation upgrades preserve original reports and receipts.
 
 These capabilities were added after v0.0.1.
+
+### Next feature tranche: typed business keys
+
+Unpublished `0.0.3.dev0` / runtime `0.40-candidate` adds authored business-key
+writes, updates, lookup, imports and key-absence preconditions for strings,
+integers, decimal(18,4), booleans and binary. The matching compiler is Weft
+`0.4.5` / backend `0.4.10`. Use existing `TextValue` and `BooleanValue` key
+components; bare strings retain their previous meaning. For example:
+
+```python
+values = ('invoice', TextValue(kind='integer', text='9007199254740993'),
+          TextValue(kind='decimal', text='1.23000'), BooleanValue(value=True),
+          TextValue(kind='binary', text='AP8='))
+result = reads.lookup_key_in_transaction(
+    tx, document_id='orders', module_id='orders', record_id='Invoice',
+    key_id='primary', values=values, bun_executable='bun',
+)
+```
+
+Equal decimal spellings identify the same key without changing stored tokens.
+Updates preserve old reservations; imports skip reserved or live identities.
+Historical committed requests retain their original results across upgrade.
+Timestamp/float keys are refused. Weft pagination and relationship-key projections
+still require string keys. This tranche is separate from released v0.0.2.
