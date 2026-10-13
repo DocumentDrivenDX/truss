@@ -70,8 +70,19 @@ BEGIN
   candidate:=row||jsonb_build_object('type_id',assigned,'prop_id',(property_map->> (row->>'prop_id'))::int);
   IF old IS NOT NULL THEN
    IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;
-   IF (old->'_originalField')-'nullability' IS DISTINCT FROM (row->'_originalField')-'nullability'
-    OR old->>'nullability' IS DISTINCT FROM 'required' OR row->>'nullability' IS DISTINCT FROM 'absent-allowed'
+   -- Historical nullability-only folds keep their original admission. Actual
+   -- facet changes require both maps to belong to this explicit native subset.
+   IF coalesce(old->'_originalField'->'facets','{}'::jsonb) IS DISTINCT FROM coalesce(row->'_originalField'->'facets','{}'::jsonb) THEN
+    IF NOT ((coalesce(old->'_originalField'->'facets','{}'::jsonb)='{}'::jsonb
+      OR old->>'scalar_type'='integer' AND old->'_originalField'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
+      OR old->>'scalar_type'='decimal' AND old->'_originalField'->'facets'='{"precision":18,"scale":4}'::jsonb) IS TRUE)
+    OR NOT ((coalesce(row->'_originalField'->'facets','{}'::jsonb)='{}'::jsonb
+      OR row->>'scalar_type'='integer' AND row->'_originalField'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
+      OR row->>'scalar_type'='decimal' AND row->'_originalField'->'facets'='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN
+     RAISE EXCEPTION 'known native scalar facet transition required' USING ERRCODE='0A000';END IF;
+   END IF;
+   IF ((old->'_originalField')-ARRAY['nullability','facets']) IS DISTINCT FROM ((row->'_originalField')-ARRAY['nullability','facets'])
+    OR NOT (old->>'nullability'=row->>'nullability' OR old->>'nullability'='required' AND row->>'nullability'='absent-allowed')
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text AND k.value->'prop_ids' @> jsonb_build_array((old->>'prop_id')::int)) THEN
     RAISE EXCEPTION 'existing field change requires explicit evolution support' USING ERRCODE='0A000';END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');

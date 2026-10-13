@@ -1,7 +1,7 @@
--- Real-data validation prerequisite; compatible persistence remains unavailable.
+-- Real-data validation before compatible catalog publication.
 CREATE FUNCTION truss.catalog_scalar_violations(declarations_bytes bytea) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE rec jsonb;field jsonb;selected_type int;property_id int;missing_count bigint;family_count bigint;retained_count bigint;
+DECLARE rec jsonb;field jsonb;selected_type int;property_id int;missing_count bigint;family_count bigint;retained_count bigint;facet_count bigint;
  violations jsonb:='[]';scope jsonb;scopes jsonb:='[]';owner record;
 BEGIN
  -- The caller holds the exclusive head lock, excluding supported graph writers.
@@ -26,10 +26,16 @@ BEGIN
     count(*) FILTER (WHERE property_id IS NOT NULL AND o.props ? property_id::text
      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS NOT TRUE)
+    ,count(*) FILTER (WHERE property_id IS NOT NULL AND o.props ? property_id::text
+     AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
+     AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS TRUE
+     AND ((field->'declaration'->>'scalarType'='integer' AND field->'declaration'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (field->'declaration'->>'scalarType'='decimal' AND field->'declaration'->'facets'='{"precision":18,"scale":4}'::jsonb))
+     AND truss.valid_scalar_property(o.props->property_id::text,field->'declaration'->>'scalarType',true,field->'declaration'->'facets') IS NOT TRUE)
     ,count(*) FILTER (WHERE property_id IS NULL AND o.retained ? (field->'declaration'->>'name'))
-    INTO missing_count,family_count,retained_count FROM truss.object o WHERE o.type_id=selected_type;
+    INTO missing_count,family_count,facet_count,retained_count FROM truss.object o WHERE o.type_id=selected_type;
    IF missing_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.required','affectedObjectCount',missing_count::text));END IF;
    IF family_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.scalar_type','affectedObjectCount',family_count::text));END IF;
+   IF facet_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.facets','affectedObjectCount',facet_count::text));END IF;
    IF retained_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.retained_name_collision','affectedObjectCount',retained_count::text));END IF;
   END LOOP;
  END LOOP;
