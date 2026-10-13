@@ -22,5 +22,8 @@
   },
   "requiredBackendCases": 132,
   "promotedBackendCases": 0,
-  "limits": "Seven selected routine tags when opt-in is selected; event-trigger administration, cascade/other DDL, handlers/roles/config/issuer provenance and protected release remain open. Not a generic installer or protected backend admission."
+  "limits": "Seven selected routine tags when opt-in is selected; event-trigger administration, cascade/other DDL, handlers/roles/config/issuer provenance and protected release remain open. Not a generic installer or protected backend admission.",
+  "mergedMain": "d7647ccfb9c683f6c74ac39676541d3aadf30878",
+  "mergedNativeSeconds": 7.585,
+  "mergedQualification": "ALTER ROUTINE counterexample/extension and original composed subject read pass with concurrent v0.0.3 typed business-key changes; Python boundaries pass (922 imports). Scope unchanged."
 }
