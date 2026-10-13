@@ -1,0 +1,9 @@
+{
+  "revision": "4f398c3c08ab14155199b683dec49d5f0f3d4b33",
+  "mergedMain": "046266eb7bfbce4ff1e0e950cb0a019650308e41",
+  "selectedTests": 25,
+  "seconds": 40.795,
+  "exitCode": 0,
+  "pythonBoundaryEdges": 888,
+  "scope": "Source checkout regression after concurrent public read-position changes; original evidence qualifications and no acceptance case closure remain unchanged."
+}
