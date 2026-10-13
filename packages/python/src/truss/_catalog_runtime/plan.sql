@@ -69,12 +69,18 @@ BEGIN
   END IF;
   property_map:=property_map||jsonb_build_object(row->>'prop_id',CASE WHEN old IS NULL THEN property_next ELSE (old->>'prop_id')::int END);
   candidate:=row||jsonb_build_object('type_id',assigned,'prop_id',(property_map->> (row->>'prop_id'))::int);
+  IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'prop_def') p WHERE p.value->>'type_id'=assigned::text AND p.value->>'prop_id'<>candidate->>'prop_id' AND p.value->>'name'=candidate->>'name') THEN
+   RAISE EXCEPTION 'field name occupied in prior catalog' USING ERRCODE='0A000';END IF;
   IF old IS NOT NULL THEN
    IF old->>'cardinality' IN ('array','map') THEN
     IF old->'item'->'reference' IS DISTINCT FROM candidate->'item'->'reference' OR old->'item'->'declaration' IS DISTINCT FROM candidate->'item'->'declaration' THEN RAISE EXCEPTION 'container item evolution requires explicit support' USING ERRCODE='0A000';END IF;
     candidate:=candidate||jsonb_build_object('item',old->'item');
    END IF;
    IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;
+   -- Name-only changes retain storage and key identities.
+   IF ((old->'_originalField') - 'name') = ((row->'_originalField') - 'name') THEN
+    NULL; -- Storage meaning and retained key components are unchanged.
+   ELSE
    tightening:=(old->>'nullability'='absent-allowed' AND row->>'nullability'='required') IS TRUE;
    IF tightening THEN
     IF ((old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary') AND row->>'scalar_type'=old->>'scalar_type') OR (old->>'cardinality' IN ('array','map') AND row->>'cardinality'=old->>'cardinality' AND truss.valid_property_definition(jsonb_populate_record(NULL::truss.prop_def,candidate)) IS TRUE)) IS DISTINCT FROM TRUE THEN
@@ -99,6 +105,7 @@ BEGIN
     OR NOT (old->>'nullability'=row->>'nullability' OR old->>'nullability'='required' AND row->>'nullability'='absent-allowed' OR tightening)
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text AND k.value->'prop_ids' @> jsonb_build_array((old->>'prop_id')::int)) THEN
     RAISE EXCEPTION 'existing field change requires explicit evolution support' USING ERRCODE='0A000';END IF;
+   END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
    SELECT coalesce(jsonb_agg(v.value),'[]') INTO properties FROM jsonb_array_elements(properties) v WHERE v.value->>'prop_id'<>old->>'prop_id';
   END IF;

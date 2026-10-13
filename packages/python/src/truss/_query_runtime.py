@@ -11,14 +11,14 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.26',
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.27',
            'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.5'}
 
 
 def compiler():
     try:
         import weft
-        if weft.__version__ != '0.4.21':
+        if weft.__version__ != '0.4.22':
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
