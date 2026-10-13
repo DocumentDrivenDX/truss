@@ -1,0 +1,17 @@
+{
+  "genuine_weft_scan_inventory_reference_count": 61,
+  "scan_count": 2,
+  "native_authority_claim": false,
+  "old_archive_refused": "Original current accepted graph model bytes required",
+  "synthetic_basis_bytes": 664558,
+  "returned_view_bytes": 17524076,
+  "returned_view_exceeds_profile_limit": true,
+  "sourceDigests": {
+    "packages/python/src/truss/_security_graph_mapping.py": "b4458e49387a4fe9e38e879f4710b1e18d0cd3e382f285287fe38c17026f899d",
+    "packages/python/src/truss/_security_mapping.py": "f3b04c89acea4990dfe0b29538191bc112559e936c0624f713d8994963ef26ba",
+    "packages/python/src/truss/_catalog_view_build.py": "538b974fd6cb1e6fc753864e3a9727887cb996a46c85b1da3c2026b29eb85e8a",
+    "packages/python/src/truss/catalog_runtime.py": "618a425a9a37d880942e5ca39fa07ab6c655ed922796dfb7f264faa83cddad5f",
+    "packages/python/tests/test_security_graph_mapping_native.py": "baf55cf9e1d300b3c0ee47f2afd74f8be5de7d70d28b07f34cd0377f69a4fe59",
+    "scripts/check-module-boundaries.py": "f1b137d9b89291d4c81fd82e5830458118779226f7d2dd719d1dc05f44fdb105"
+  }
+}

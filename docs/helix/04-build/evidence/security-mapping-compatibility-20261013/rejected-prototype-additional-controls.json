@@ -1,0 +1,6 @@
+{
+  "missing_selected_property_refused": "Original graph definition unavailable",
+  "wrong_ordered_key_component_refused": "Original ordered native graph key required",
+  "retired_selected_type_refused": "Active defined graph mapping required",
+  "scope": "Synthetic constructed CatalogView only; genuine imported Weft response, not native source admission."
+}

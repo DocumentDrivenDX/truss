@@ -1,0 +1,43 @@
+{
+  "solver": "4.15.4",
+  "scope": "Conditional equality/Boolean gate intersection only. Integers7/8 are abstract version tags. Exact native producer version/actor premises come from separately retained source and native controls. No schema, SQL, driver, hash authentication, cross-context issuance, source cut, original0.8 native ingress or protected execution proof. SAT future controls establish logical possibility only.",
+  "results": [
+    {
+      "name": "current_original_source_versions_have_no_intersection",
+      "result": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun native_version () Int)\n(declare-fun compiler_version () Int)\n(declare-fun original_source_version () Int)\n(assert\n (= native_version 7))\n(assert\n (= compiler_version 8))\n(assert\n (= original_source_version native_version))\n(assert\n (= original_source_version compiler_version))\n(check-sat)\n",
+      "model": null
+    },
+    {
+      "name": "selected_original_actor_gates_have_no_intersection",
+      "result": "unsat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun original_createrole () Bool)\n(declare-fun original_superuser () Bool)\n(assert\n (or original_superuser original_createrole))\n(assert\n (not original_superuser))\n(assert\n (not original_createrole))\n(check-sat)\n",
+      "model": null
+    },
+    {
+      "name": "dropping_source_correspondence_can_relabel",
+      "result": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun original_source_version () Int)\n(declare-fun compiler_version () Int)\n(declare-fun rewritten_sha () String)\n(declare-fun original_sha () String)\n(assert\n (= original_source_version 7))\n(assert\n (= compiler_version 8))\n(assert\n (and (distinct original_sha rewritten_sha) true))\n(check-sat)\n",
+      "model": "[rewritten_sha = \"!1!\",\n original_sha = \"!0!\",\n compiler_version = 8,\n original_source_version = 7]"
+    },
+    {
+      "name": "future_common_original08_version_is_logically_feasible",
+      "result": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun native_version () Int)\n(declare-fun compiler_version () Int)\n(declare-fun original_source_version () Int)\n(assert\n (= native_version 8))\n(assert\n (= compiler_version 8))\n(assert\n (= original_source_version native_version))\n(assert\n (= original_source_version compiler_version))\n(check-sat)\n",
+      "model": "[compiler_version = 8,\n original_source_version = 8,\n native_version = 8]"
+    },
+    {
+      "name": "separate_producer_actors_are_logically_feasible",
+      "result": "sat",
+      "smt2": "; benchmark generated from python API\n(set-info :status unknown)\n(declare-fun original_createrole () Bool)\n(declare-fun original_superuser () Bool)\n(declare-fun producer_superuser () Bool)\n(declare-fun producer_createrole () Bool)\n(assert\n (or original_superuser original_createrole))\n(assert\n (not producer_superuser))\n(assert\n (not producer_createrole))\n(check-sat)\n",
+      "model": "[original_superuser = True,\n original_createrole = False,\n producer_superuser = False,\n producer_createrole = False]"
+    }
+  ],
+  "sourceDigests": {
+    "scripts/security/prove-mapping-compatibility.py": "c99c6b6bec4282177bfdfce568b7626360b67657e3249fbf5d617d6726a03b18",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/_catalog_support.py": "a6bb07c89a91bf9c1a50a254d9bd156d37e29d915af5b3390eadb4a6cdd4e4ab",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "a0b73e07359e4dcf86b5dfa9785158569fde839e88dd7332c46ac8413c71a1d3",
+    "packages/python/tests/test_security_mapping_compatibility_native.py": "d316bd3f8c262cf906b6b2333cd120520862dcc679445af5d217e8de9184b63b"
+  }
+}

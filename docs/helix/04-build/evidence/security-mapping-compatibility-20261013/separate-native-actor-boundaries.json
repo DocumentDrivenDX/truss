@@ -1,0 +1,13 @@
+{
+  "ordinaryCaller": [
+    "consumer",
+    "consumer"
+  ],
+  "ordinaryCatalogDefinitions": 11,
+  "installerCatalogBasisRefusal": "42501",
+  "ordinaryGuardRefusal": "execution_obligation",
+  "ordinaryGuardSqlState": "42501",
+  "ordinaryPriorWork": "kept",
+  "compilerCalls": 0,
+  "qualification": "Separate selected producer/guard gates; does not prove exhaustive roles or authenticated cross-context composition."
+}
