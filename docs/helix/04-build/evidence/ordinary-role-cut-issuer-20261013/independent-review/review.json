@@ -1,0 +1,11 @@
+{
+  "review": "Fixed SECURITY DEFINER shared-role catalog lock primitive",
+  "status": "No actionable findings within selected granted-caller fixture scope.",
+  "headAtReview": "3835cbfa486f8c2256dc8c703d4c2ab80e92bb32",
+  "sourceAssessment": "No arguments, dynamic SQL or catalog writes; explicit pg_catalog object names and pg_catalog/pg_temp search_path. Function takes only pg_authid/pg_auth_members SHARE NOWAIT; PUBLIC execution revoked. Native transaction owns lock lifetime.",
+  "nativeAssessment": "Parent-owned1/11.164s passed: ordinary caller lacks UPDATE on both catalogs, acquires both granted shared relation locks; opposing ALTER ROLE and membership GRANT refuse55P03; separate ungranted outsider refuses42501; caller rollback releases cut and ALTER ROLE succeeds.",
+  "validation": "Source/test/assertion and terminal native-log review only; no additional lifecycle or test campaign.",
+  "limits": "Ordinary grant exists only to demonstrate fixture feasibility. Production installation must separately qualify privileged owner, exact source/ACL and restrict execution to selected private executor. Global-lock availability, same-backend/admin mutation, all authority routes, callable closure, issuer/admitted profile and backend acceptance remain unqualified.",
+  "sourceDigests": {"packages/postgresql/native/registered-role-catalog-cut.sql":"91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb","packages/python/tests/test_security_registered_callers_native.py":"59145da7142648f77001da574d5226b62c416193f74ae3207a537e3792a6ab8c"},
+  "evidenceDigests": {"native.log":"96dabf4696c712e733842af66e2865d1060106fb3684479e169532d024d6375d"}
+}

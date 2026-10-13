@@ -7899,3 +7899,7 @@ The explicit publish_role_fenced_registered_catalog_resource_read acquires both 
 ### Role-fenced producer through external TLS — 2026-10-13
 
 The owned external composition now uses the explicit role-fenced registered producer. Immediately before wire publication, exact native two-lock readback and independent ALTER ROLE/GRANT55P03 controls pass. External peer receives r1 with salary withheld; wrong bearer/reuse/direct SQL refuse. PUBLIC helper grant produces generic refusal with zero encoding. Both runs remove all owned resources. [Evidence](evidence/role-fenced-external-20261013/receipt.json) qualifies single original consumer, service-private DB and privileged fixture executor; production issuer/callable closure, same-backend mutation, ABA and full backend acceptance remain open. No required-case promotion.
+
+### Fixed role-lock issuer for an ordinary caller — 2026-10-13
+
+Original native registered-role-catalog-cut.sql defines a no-input, pinned-path SECURITY DEFINER lock-only routine with PUBLIC revoked. One explicitly granted ordinary caller obtains both locks without catalog UPDATE rights; ungranted caller refuses42501 and independent ALTER ROLE/GRANT refuse55P03 until rollback. Native test passes1/11.164s. [Evidence](evidence/ordinary-role-lock-issuer-20261013/receipt.json) qualifies the trusted privileged fixture installer; production installation must pin owner/source/ACL and grant only private executor. Installer/lifetime and ordinary producer integration remain open, with no backend acceptance promotion.

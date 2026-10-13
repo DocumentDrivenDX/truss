@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "tests": 1,
+  "seconds": 11.164,
+  "covers": [
+    "US-056-AC9"
+  ],
+  "sourceDigests": {
+    "packages/postgresql/native/registered-role-catalog-cut.sql": "91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb",
+    "packages/python/tests/test_security_registered_callers_native.py": "59145da7142648f77001da574d5226b62c416193f74ae3207a537e3792a6ab8c"
+  },
+  "scope": "Original fixed no-argument SECURITY DEFINER role-lock primitive, trusted privileged installer owner and exact fixture EXECUTE grant. Ordinary caller receives both shared catalog locks without catalog UPDATE privileges; ungranted caller42501, opposing ALTER ROLE/GRANT55P03, rollback release. Not yet admitted installer/source/owner/ACL closure or integrated ordinary producer. Full132 inventory unchanged."
+}

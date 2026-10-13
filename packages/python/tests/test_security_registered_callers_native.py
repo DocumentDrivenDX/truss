@@ -123,3 +123,23 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
     self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
     self.assertIsInstance(self.host._custody.last_attempt.error,psycopg.errors.LockNotAvailable)
    finally:writer.execute('ROLLBACK')
+
+ def test_ordinary_caller_uses_fixed_role_lock_issuer_without_catalog_write(self):
+  """@covers US-056-AC9; original fixed definer lock issuer, not complete admission."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup()
+  self.admin.execute((source.ROOT/'packages/postgresql/native/registered-role-catalog-cut.sql').read_text())
+  self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_registered_role_catalog_cut() TO consumer')
+  self.host.detach();self.admin.commit()
+  self.assertEqual(c.execute("SELECT pg_catalog.has_table_privilege('pg_catalog.pg_authid','UPDATE'),pg_catalog.has_table_privilege('pg_catalog.pg_auth_members','UPDATE')").fetchone(),(False,False))
+  c.execute('SELECT truss.acquire_registered_role_catalog_cut()')
+  self.assertEqual(c.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND database=0 AND granted AND mode='ShareLock' AND relation IN ('pg_catalog.pg_authid'::pg_catalog.regclass,'pg_catalog.pg_auth_members'::pg_catalog.regclass)").fetchone(),(2,))
+  with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+   with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)))
+   with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('GRANT {} TO {}').format(sql.Identifier(self.installation.owner_role),sql.Identifier(self.bob)))
+  outsider=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);outsider['user']=self.outsider
+  with psycopg.connect(**outsider,autocommit=True) as denied:
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):denied.execute('SELECT truss.acquire_registered_role_catalog_cut()')
+  h.detach();c.rollback()
+  with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+   writer.execute(sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)))
+   writer.execute(sql.SQL('ALTER ROLE {} NOBYPASSRLS').format(sql.Identifier(self.bob)))
