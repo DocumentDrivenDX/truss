@@ -1,0 +1,53 @@
+{
+  "version": "PostgreSQL 18.6 on aarch64-apple-darwin23.6.0, compiled by Apple clang version 15.0.0 (clang-1500.3.9.4), 64-bit",
+  "observations": [
+    {
+      "catalog": "pg_authid",
+      "lock": "held",
+      "writer": "ALTER ROLE lock_probe BYPASSRLS",
+      "result": "refused",
+      "sqlstate": "55P03"
+    },
+    {
+      "catalog": "pg_authid",
+      "lock": "held",
+      "writer": "GRANT lock_bridge TO lock_probe",
+      "result": "committed",
+      "sqlstate": null
+    },
+    {
+      "catalog": "pg_auth_members",
+      "lock": "held",
+      "writer": "ALTER ROLE lock_probe BYPASSRLS",
+      "result": "committed",
+      "sqlstate": null
+    },
+    {
+      "catalog": "pg_auth_members",
+      "lock": "held",
+      "writer": "GRANT lock_bridge TO lock_probe",
+      "result": "refused",
+      "sqlstate": "55P03"
+    },
+    {
+      "catalog": "both",
+      "writer": "ALTER ROLE lock_probe BYPASSRLS",
+      "result": "refused",
+      "sqlstate": "55P03"
+    },
+    {
+      "catalog": "both",
+      "writer": "GRANT lock_bridge TO lock_probe",
+      "result": "refused",
+      "sqlstate": "55P03"
+    },
+    {
+      "afterRollback": "both writers committed with exact flag/membership readback"
+    },
+    {
+      "ordinaryLock": "refused",
+      "sqlstate": "42501"
+    }
+  ],
+  "scope": "Owned catalog lock feasibility only; no production role-custody or backend admission."
+}

@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "sourceSha256": "9fe85ff1e71d0e14ece1fd57209fb2ed0beba0468f4ceedf230d4640d4269bc8",
+  "resultSha256": "d91ffcd2f532c1ad689ec6f9ed0c9df8569d9eb626a671444a51afdfead1d6f8",
+  "covers": [
+    "US-056-AC9",
+    "US-056-AC10"
+  ],
+  "scope": "Physical feasibility of privileged cluster-wide shared catalog locks, not integrated authority/publication correctness or ordinary executor availability."
+}

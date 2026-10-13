@@ -7887,3 +7887,7 @@ The registered producer now rechecks all installed role OIDs for ordinary LOGIN 
 ### Committed registered role drift before final publication — 2026-10-13
 
 An independent autocommit connection changes Bob to BYPASSRLS after actual successful policy evaluation; its own flag readback confirms the committed change. The executor final registered-role comparison refuses and the publisher receives nothing. The native case passes17.045s and restores NOBYPASSRLS through an independent connection. [Evidence](evidence/registered-committed-role-drift-20261013/receipt.json) qualifies US-056AC9 detection for this schedule; continuous exclusion, the interval after final comparison, ABA and full backend admission remain open. No acceptance-case promotion.
+
+### Native role authority lock feasibility — 2026-10-13
+
+The owned PostgreSQL18.6 spike establishes that SHARE on both shared role catalogs blocks independent ALTER ROLE and membership GRANT; individual-lock omission controls allow the other writer. Rollback release permits both writes with exact readback. Ordinary callers refuse42501. [Retained source and native results](evidence/role-catalog-lock-20261013/README.md) resolve the feasibility unknown for the selected cluster-wide cut. Next integration must acquire both before role observation and hold through receiver/settlement via an isolated privileged issuer with admitted callable closure. The existing producer remains comparison-only; full authority/ABA/backend acceptance is not promoted.
