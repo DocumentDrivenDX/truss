@@ -1,18 +1,19 @@
-"""Run selected unchanged original consumer read cases on the authority database."""
+"""Run selected unchanged consumer read/action workflows on the authority database."""
 import argparse
 from contextlib import ExitStack
 from hashlib import sha256
 import json
 from pathlib import Path
+from uuid import uuid4
 
 import psycopg
 from adopter_workflow import transaction, success, expect
-from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument
-from truss.contracts import MapValue, TextValue
+from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument, ObjectFound
+from truss.contracts import MapValue, MapEntry, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
-    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference)
+    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, Created)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -120,7 +121,63 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
         for case in selected:
             case_input = case_request = case_actor = None
             cursors = {}
+            tokens = {}
             for step in case['steps']:
+                if step['op'] == 'apply':
+                    if case['id']!='action.applies-atomically-and-reads-back' or set(step)!={'op','as','action','inputs','expect','save'}:
+                        raise ValueError('Unsupported action case or controls; no action write attempted')
+                    # One trusted host handler, not a UMF action interpreter.
+                    if sha256(source).hexdigest()!='849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696':
+                        raise ValueError('Selected action handler requires the exact retained consumer document')
+                    if step['action']!='catalog.AddSolution' or set(step['inputs'])!={'code','name','useCase'}:
+                        raise ValueError('Only the selected consumer AddSolution handler is implemented')
+                    inputs=step['inputs'];case_actor=step['as']
+                    if any(type(value) is not str for value in inputs.values()):
+                        raise ValueError('Selected action inputs are required strings')
+                    use_case=next(e for e in module['elements'] if e['id']=='UseCase')
+                    use_case_key=next(k for k in use_case['keys'] if k.get('primary'))
+                    with transaction(people[case_actor]) as (assembly,tx):
+                        target=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='UseCase',key_id=use_case_key['id'],values=(inputs['useCase'],),original_document=source,bun_executable=bun)),ObjectFound).object
+                        relation=next(r for r in module['relationships'] if r['name']=='addresses')
+                        reference=success(assembly.get_relationship_reference_in_transaction(tx,document_id=document_id,module_id=module_id,relationship_id=relation['id']))
+                        context=success(assembly.group_context_in_transaction(tx))
+                        case_input=context.input((
+                            CreateObject(type_definition_pin=types['Solution'].definition_pin,values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=inputs[name])) for name in ('code','name')),ownership=RootlessOwnership(),alias='s'),
+                            CreateEdge(relationship_definition_pin=reference.definition_pin,source=AliasObjectReference(alias='s'),target=StoredObjectReference(identity=target.identity),values=(),order_key=NullOrderKey())),
+                            MapValue(entries=(MapEntry(key='x-action',value=TextValue(kind='string',text=step['action'])),)),
+                            preconditions=(ObjectExists(id='use_case_exists',reason='no such use case',target=target.identity),))
+                        case_request=context.request('consumer-action:'+uuid4().hex)
+                        applied=expect(success(assembly.groups(assembly.group_selection,documents=documents,bun_executable=bun).capability.apply_in_transaction(tx,case_input,case_request)),GroupSuccess)
+                    # Retain the original request: obtain a committed receipt by retrying
+                    # only after the caller's known successful outer commit.
+                    with transaction(people[case_actor]) as (assembly,tx):
+                        replay=expect(success(assembly.apply_in_transaction(tx,case_input,case_request,documents=documents,bun_executable=bun)),GroupSuccess)
+                        committed=expect(replay.response,CommittedReceiptReplay)
+                        if committed.semantic!=applied.response.semantic:
+                            raise AssertionError('Committed original action semantic result differs')
+                    results=applied.response.semantic.results
+                    if len(results)!=2 or any(not isinstance(result,Created) for result in results):
+                        raise AssertionError('Original action must create one object and one edge')
+                    receipt={'created':sum(r.operation=='create_object' for r in results),'linked':sum(r.operation=='create_edge' for r in results),'replayed':applied.response.disposition=='replayed'}
+                    solution=next(e for e in module['elements'] if e['id']=='Solution')
+                    solution_key=next(k for k in solution['keys'] if k.get('primary'))
+                    with transaction(people[case_actor],read_only=True) as (assembly,tx):
+                        found=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='Solution',key_id=solution_key['id'],values=(inputs['code'],),original_document=source,bun_executable=bun)),ObjectFound).object
+                        if found.identity!=results[0].identity:
+                            raise AssertionError('Original created identity and business-key read differ')
+                    if found.version!=int(results[0].version):
+                        raise AssertionError('Created native version and fresh business-key read differ')
+                    refs=[{'key':dict(found.values)['code'],'version':int(results[0].version)}]
+                    if receipt!=step['expect']['receipt'] or refs!=step['expect']['refs']:
+                        raise AssertionError('Original action receipt or references differ')
+                    tokens[step['save']['token']]=committed.receipt_token
+                    continue
+                if step['op']=='reached':
+                    with transaction(people[case_actor],read_only=True) as (assembly,tx):
+                        included=expect(success(assembly.reached_in_transaction(tx,tokens[step['token'][1:]])),ReceiptIncluded).included
+                    if included!=step['expect']['value']:
+                        raise AssertionError('Original action receipt visibility differs')
+                    continue
                 if step['op'] == 'seed':
                     case_actor = step['as']
                     with transaction(people[case_actor]) as (assembly, tx):
@@ -178,10 +235,10 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         if 'save' in step:
                             cursors[step['save']['cursor']] = rows.next_cursor
                     else:
-                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends') else None)), QueryRows)
+                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back') else None)), QueryRows)
                 if not isinstance(rows.as_of,QueryReadPosition) or not rows.as_of.value or rows.as_of.at.tzinfo is None or rows.as_of.at.utcoffset() is None or rows.as_of.semantics!='committed-lower-bound' or rows.as_of.caller_xid_assigned:
                     raise AssertionError('Original read answer needs an aware recorded position with declared semantics')
-                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends'):
+                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back'):
                     required={'_version','_created_by','_created_at','_updated_by','_updated_at'}
                     if not required <= set(rows.columns):
                         raise AssertionError('Original required whole-object metadata missing')
@@ -194,8 +251,8 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                     raise AssertionError(f'Original expected read differs: {case["id"]}; columns={rows.columns!r}; actual={actual_rows!r}; expected={expected!r}')
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
-    return {'scope': 'selected original SQL/expected-output observations; not complete harness cases or interchange',
-        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'],
+    return {'scope': 'selected original SQL/action observations; not complete adapter/corpus or interchange',
+        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if 'action.applies-atomically-and-reads-back' in case_ids else []),
         'notChecked':['replica','complete consumer adapter mapping'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,
