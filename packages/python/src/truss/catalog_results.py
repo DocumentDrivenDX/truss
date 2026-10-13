@@ -29,7 +29,7 @@ class CatalogCompatibilityViolation:
     record_id: str
     field_module_id: str
     field_id: str
-    rule: Literal['property.required','property.scalar_type','property.retained_name_collision']
+    rule: Literal['property.required','property.scalar_type','property.facets','property.retained_name_collision']
     affected_object_count: int
 
 @dataclass(frozen=True,slots=True)

@@ -589,8 +589,11 @@ and Weft `0.4.5` / backend `0.4.10`. Fresh UMF 0.7 and 0.8 catalogs can declare 
 imports, reads and compiled queries enforce these facets without float coercion
 or rounding. Decimal `1.2`, `1.2300` and `1.23000` are exact representable values;
 `1.23001` is refused. Direct reads preserve the authored token; Python queries
-return `int` and `Decimal`. Other facet combinations and facet evolution remain
-unsupported. Enforcement is through runtime operations, not bare-table CHECKs.
+return `int` and `Decimal`. Other facet combinations and key-facet evolution remain
+unsupported. Existing non-key properties may add/remove these known facets after
+native real-data validation. A narrowing that fails returns typed
+`property.facets` rules and affected counts; acceptance preserves object versions
+and original value tokens. Enforcement is through runtime operations, not bare-table CHECKs.
 Existing installation upgrades preserve original reports and receipts.
 
 These capabilities were added after v0.0.1.
