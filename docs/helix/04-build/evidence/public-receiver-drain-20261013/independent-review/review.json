@@ -1,0 +1,32 @@
+{
+  "review": "Independent bounded test-source and retained-native-evidence review",
+  "date": "2026-10-13",
+  "gitHead": "fc212eb04d19252311e346d90cd3aa62dddf3cbf",
+  "scope": "Both _assert_receiver_drain modes; test-only increment",
+  "status": "No actionable findings",
+  "checks": [
+    "Actual ordinary public writer identity and false superuser/bypass flags asserted; original public key lookup/update/documents retained.",
+    "Writer starts inside immutable-byte receiver after native host phase released; actual caller PID and ungranted object lock prove exclusion before receiver completion.",
+    "After receiver completion or delivery uncertainty and executor COMMIT, only original caller blocks the writer and no committed outcome is recorded.",
+    "Uncertain sink actually observes one packet then raises; exact primary, Error/retry none and quarantine required; fresh read uses a new consumer connection.",
+    "Caller COMMIT (success) or ROLLBACK (uncertainty) precedes worker GroupSuccess/COMMIT/IDLE, independent native false readback and fresh empty read.",
+    "Bounded join/cancel surfaces worker errors; retained packets independently checked against both selected mode entrypoints and expected blocker/result sequences."
+  ],
+  "nativeEvidence": "Parent-executed and independently inspected, not rerun: PostgreSQL18.6, 2 tests/21.398s; shutdown succeeded/status3/socket absent.",
+  "limits": [
+    "Selected synchronous receiver and caller-transaction drain with local fixture authentication and trusted configuration.",
+    "No protected public endpoint, external sink acknowledgment/exactly-once theorem, streaming/cache lifecycle or exhaustive writer qualification.",
+    "Source/issuer/role/DDL/grant lifetime remains a premise; no complete L03/L05 or other backend case promotion."
+  ],
+  "sha256": {
+    "packages/python/tests/test_security_guarded_subject_native.py": "f1df5e4bd16621f849af6778efdad45786c187d328528699a6f4e6a4e26869d8",
+    "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398",
+    "scripts/security_catalog_subject_read.py": "d69ace836cdb21580b9a3b47801492787cdc0f8e5f4cc50a8501df12ad1f40a7",
+    "docs/helix/04-build/evidence/public-receiver-drain-20261013/native.log": "93c9dad14a8934055f94dbe8e2ee24bbf3965ec97bab67295aeb15914f435ed6",
+    "docs/helix/04-build/evidence/public-receiver-drain-20261013/cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "docs/helix/04-build/evidence/public-receiver-drain-20261013/receiver-drain.json": "0f3240abbe93384dc01e06233616f3bdff70b409021335c7c293982f814894e2",
+    "docs/helix/04-build/evidence/public-receiver-drain-20261013/receiver-uncertain-drain.json": "6720b3870b3c93c2a98b134ab03c29a509ebc092ce60aa5ebe5e9d9266c8bc10",
+    "docs/helix/04-build/evidence/public-receiver-drain-20261013/module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "docs/helix/04-build/evidence/public-receiver-drain-20261013/receipt.json": "cdb0e51bcc8a807071107887ab49bee08868640030ecb2b3a1d1f3956c103d79"
+  }
+}

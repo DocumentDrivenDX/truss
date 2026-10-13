@@ -1,0 +1,7 @@
+test_public_revoker_waits_through_receiver_and_caller_settlement (test_security_guarded_subject_native.GuardedSubjectTests.test_public_revoker_waits_through_receiver_and_caller_settlement) ... ok
+test_uncertain_receiver_keeps_revoker_blocked_until_caller_rollback (test_security_guarded_subject_native.GuardedSubjectTests.test_uncertain_receiver_keeps_revoker_blocked_until_caller_rollback) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 21.398s
+
+OK
