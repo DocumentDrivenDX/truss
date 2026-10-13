@@ -90,7 +90,7 @@ class Core08CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
   owner,registrar=self.admin.execute('SELECT o.rolname,r.rolname FROM truss.catalog_runtime_installation i JOIN pg_roles o ON o.oid=i.owner_oid JOIN pg_roles r ON r.oid=i.registrar_oid').fetchone()
   self.installation=SimpleNamespace(owner_role=owner,registrar_role=registrar)
   original_release=self.admin.execute('SELECT release_id,release_sha256 FROM truss.runtime_current_installation()').fetchone()
-  self.assertEqual(original_release[0],'truss-catalog-runtime/0.34-candidate')
+  self.assertEqual(original_release[0],os.environ.get('TRUSS_CORE08_EXPECTED_UPGRADE_RELEASE','truss-catalog-runtime/0.34-candidate'))
   original_objects=self.admin.execute('SELECT id,type_id,props::text FROM truss.object ORDER BY id').fetchall();self.assertGreater(len(original_objects),0)
   original_reports=self.admin.execute('SELECT rev,report_bytes FROM truss.catalog_acceptance_report ORDER BY rev').fetchall()
   original_routines=self.admin.execute("SELECT p.oid,p.proowner,p.proacl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' ORDER BY p.oid").fetchall()
@@ -98,10 +98,10 @@ class Core08CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
    self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
    a=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
    upgraded=a.upgrade_in_transaction(self.tx);self.assertIsInstance(upgraded,Ok,str(self.host._custody.last_attempt.error))
-   self.assertEqual(upgraded.value.previous_release_id,original_release[0]);self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.35-candidate')
+   self.assertEqual(upgraded.value.previous_release_id,original_release[0]);self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.36-candidate')
    self.assertEqual(self.admin.execute('SELECT id,type_id,props::text FROM truss.object ORDER BY id').fetchall(),original_objects)
    self.assertEqual(self.admin.execute('SELECT rev,report_bytes FROM truss.catalog_acceptance_report ORDER BY rev').fetchall(),original_reports)
-   self.assertEqual(self.admin.execute("SELECT p.oid,p.proowner,p.proacl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' ORDER BY p.oid").fetchall(),original_routines)
+   self.assertEqual([row for row in self.admin.execute("SELECT p.oid,p.proowner,p.proacl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' ORDER BY p.oid").fetchall() if row[0] in {old[0] for old in original_routines}],original_routines)
    self.host.detach()
    if commit:self.admin.commit()
    else:

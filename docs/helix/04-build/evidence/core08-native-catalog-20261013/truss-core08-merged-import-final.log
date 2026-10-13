@@ -1,0 +1,17 @@
+test_import_load_and_ordinary_creation_in_public_sql (test_import_load_query_native.ImportLoadQueryTests.test_import_load_and_ordinary_creation_in_public_sql) ... FAIL
+
+======================================================================
+FAIL: test_import_load_and_ordinary_creation_in_public_sql (test_import_load_query_native.ImportLoadQueryTests.test_import_load_and_ordinary_creation_in_public_sql)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_import_load_query_native.py", line 29, in test_import_load_and_ordinary_creation_in_public_sql
+    pending=rows();self.assertEqual([r['_load_id'] for r in pending],[load,None])
+            ^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_import_load_query_native.py", line 27, in rows
+    self.assertIsInstance(result.value,QueryRows)
+AssertionError: QueryRefused(code='invalid_query', diagnostics=(QueryDiagnostic(code='WFT-BINDING', message='Selected runtime context or limits refused'),), outcome='refused') is not an instance of <class 'truss.query.QueryRows'>
+
+----------------------------------------------------------------------
+Ran 1 test in 7.222s
+
+FAILED (failures=1)
