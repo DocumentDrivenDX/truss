@@ -1,0 +1,56 @@
+{
+  "review": "Independent Astra Ultra read-only scoped review",
+  "reviewedAt": "2026-10-13T08:38:03.837961+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "baseHead": "b9ce30b965fa651d0f52cffc2e46b3a75a1a97fc",
+  "worktreeSourcePinsAuthoritative": true,
+  "conclusion": "No actionable findings in the reviewed source-qualified endpoint dependency metadata increment.",
+  "independentControls": {
+    "passed": 20,
+    "results": "results.json",
+    "genuineCompilerPositiveCases": [
+      "baseline",
+      "composite two-field Resource key with ordered Ownership source pair",
+      "two distinct Assignment roles targeting Staff",
+      "combined composite and repeated-target roles"
+    ],
+    "compatibility": "No-source v0.1 result byte-identical to reviewed 70ddb9dc helper",
+    "negativeCases": "15 selected source/role/arity/target/key/property/association/carrier refusals; mutated trusted packets are not claimed to satisfy original compiler closure."
+  },
+  "nativeEvidence": {
+    "origin": "Parent executes native suite; not independently run by reviewer",
+    "status": "Awaiting final parent native report at this receipt creation"
+  },
+  "scope": [
+    "The original genuine compiler and its ontology closure remain supplied premises.",
+    "Endpoint roles and ordered field/key IDs are correspondence metadata, not native edges or executable joins.",
+    "Scalar-domain compatibility is owned by the original Weft closure; mapper does not duplicate policy or literal interpretation.",
+    "No issuer authenticity, held source lifetime, exhaustive writer closure, physical operator enforcement, admission or required case promotion.",
+    "Carrier ceilings do not establish total CPU or native/process heap bounds."
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_mapping.py": "e2a32161a03850beb6ab5fe94660d33c0a264b520474b96d6d40139efaa1320b",
+    "packages/python/src/truss/_security_mapping.py": "b613475fb393e5002b58496376637b41ffca4005a02c9baa95e3f9ccb6fa6e80",
+    "packages/python/src/truss/_security_catalog_assessment.py": "b2d6864b7eb3ae7c56d6f678adb1a6005caf614fabf4708db5c2219f733096e2",
+    "packages/python/tests/test_security_accepted_catalog_native.py": "8f762852d14297825c07161da7a64142596d5a56ff2b86b1a63163bc248849dd",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "scripts/check-module-boundaries.py": "39c6fce1ff41b58308b2925ae07a8207649b460cfaa9e28df2c3cf5a8b2bf45b"
+  },
+  "reviewedOwnerSourceDigests": {
+    "crates/weft-core/src/security_ontology.rs": "a1e19a2605a2d247b6c58f252886d0ab45077cd2e3d53f0bffb995a2ae2a7d19",
+    "crates/weft-core/src/security_scan_obligations.rs": "4d9bf60f49ab0d16be173573f6d36349110d45b0a73e2513e70dfed21ca2b113",
+    "crates/weft-core/src/security_query_profile.rs": "6c360bf2c83c61d06245c07ad771f7de580b801f81f058cff7b6ff179d21f569"
+  },
+  "evidenceDigests": {
+    "compoundSelfTarget-request.json": "5559230f48c6b68091ac1ad546aff697f53d9a23d231b2ab9a0a446a9864a69c",
+    "controls.py": "14ef81e252f45dc75743d894471918326e92a266dc8332adaef6f0fa40e1669f",
+    "compound-response.json": "ca1ac27d471764b416d36da4aa15f2a8505e08982ea904adbed81e1b815358a2",
+    "results.json": "468a36705cd2b6bb3f775202a1c6d4f3b72806e144fc5b8bdab3f4a4af895204",
+    "baseline-response.json": "21bb34a36c54bd8234d72d0f77469b35ffe07aac6034693ce52f92432834786d",
+    "selfTarget-response.json": "b3e2fdd7a74057d42cec393be8830335bb832643a53b56fdd9bb9eea75c44922",
+    "compoundSelfTarget-response.json": "67692e697edbf271769d44ca9039632d56342834f4e098e7c3e98c0c147609f2",
+    "selfTarget-request.json": "903a5e0e61b434694182adb8a011351c0a4ee2a20ee480164c3c0776729dab2f",
+    "compound-request.json": "15ce396885114363c9bdbcd67d4244cd652b8494694947e9c44eb487294f77ed",
+    "baseline-request.json": "6dc429a02ddb9a7c4d59b703690096466a8e1aed6c3d457054db7ab8d645aff7"
+  }
+}

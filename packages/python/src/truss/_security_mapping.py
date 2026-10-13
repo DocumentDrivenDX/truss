@@ -166,7 +166,7 @@ def prepare_security_mapping_in_transaction(host,transaction,*,boundary,installa
         if require_accepted_catalog:
             if capture_accepted_catalog(cursor,original_request)!=assessment:raise ValueError('Accepted catalog changed during compiler preparation')
             from ._security_catalog_mapping import map_catalog_dependencies
-            dependencies=map_catalog_dependencies(assessment,result.original_response)
+            dependencies=map_catalog_dependencies(assessment,result.original_response,original_request)
             result=PreparedSecurityMapping(result.original_request,result.original_response,assessment,dependencies)
         if home()!=original_home:raise ValueError('Original mapping guard home changed')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)

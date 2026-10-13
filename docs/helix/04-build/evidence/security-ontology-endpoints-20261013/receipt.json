@@ -1,0 +1,27 @@
+{
+  "scope": "original compiler ontology Record association witness and endpoint-key native metadata correspondence only",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_catalog_mapping.py": "0a9740e62910b4684a1d50131e7291c2cd23cc908df586e68a91d7b9a705a57f",
+    "packages/python/src/truss/_security_mapping.py": "b613475fb393e5002b58496376637b41ffca4005a02c9baa95e3f9ccb6fa6e80",
+    "packages/python/tests/test_security_accepted_catalog_native.py": "993c5c4eea9c655905b2c7b78fba673bc09479946ba053d996810d13b57c8b58"
+  },
+  "nativeCasesPassed": 9,
+  "nativeFinalSeconds": 26.896,
+  "finalWitnessKeyReplay": {
+    "cases": 2,
+    "seconds": 9.624
+  },
+  "nativeOriginalPackets": "native/",
+  "formal": "abstract ordered-sequence mismatch UNSAT; weakened unordered swap SAT; not implementation refinement",
+  "independentReviewControls": 20,
+  "securityReady": false,
+  "backendCasesPromoted": 0,
+  "remaining": [
+    "native row predicate lowering and effects",
+    "native edge-backed relationship mapping",
+    "source and issuer authenticity",
+    "complete source/writer closure",
+    "authority lifetime and same-transaction ABA",
+    "full132 acceptance cases"
+  ]
+}

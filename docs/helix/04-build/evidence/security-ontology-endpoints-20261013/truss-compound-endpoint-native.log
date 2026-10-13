@@ -1,0 +1,6 @@
+test_genuine_compound_endpoint_key_preserves_native_position (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_genuine_compound_endpoint_key_preserves_native_position) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 6.282s
+
+OK

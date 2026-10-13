@@ -7098,3 +7098,8 @@ This is an accepted-source assessment prerequisite for US-056-AC2/6/9/10 and tru
 ### Original scan and dependency native homes — 2026-10-13
 
 Guarded accepted-model preparation now retains native dependency metadata mapping original Weft self-join scans, query uses, action dependencies, qualified fields and ordered keys to native IDs. Association Records keep object-table homes; no native edge is invented. Eight native controls and four native-derived correspondence substitutions pass. [Receipt](evidence/security-native-dependencies-20261013/receipt.json) records current pins and unproven physical endpoint/predicate/authority obligations. This advances US-056-AC2/6/9/10 prerequisites without closing required backend cases or activating protected SQL.
+
+
+### Original ontology endpoint and witness keys — 2026-10-13
+
+Dependency metadata0.2 binds original ontology bytes to the Weft handoff, then maps original association witness keys, named endpoint roles and ordered association-field/target-key-field pairs to accepted native homes. Genuine two-field Staff/Assignment key preparation now passes PostgreSQL18.6; distinct same-target roles remain separate. Nine native controls, final two-case witness-key replay,20 independent mapper controls and a qualified ordered-sequence proof retain evidence in [receipt](evidence/security-ontology-endpoints-20261013/receipt.json). Native predicate lowering, edge-backed association mapping and full authority/source/writer lifetime remain next. This advances US-056-AC2/6/9/10 prerequisites and does not promote required backend cases or enable protected SQL.

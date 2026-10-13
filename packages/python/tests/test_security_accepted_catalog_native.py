@@ -3,7 +3,9 @@
 @covers US-056-AC6
 @covers US-056-AC9
 """
-import json,copy
+import json,copy,os
+from pathlib import Path
+from hashlib import sha256
 from truss import Ok,Error,CatalogDocument,adopt_psycopg_host
 from truss._security_mapping import SecurityMappingBoundary,prepare_security_mapping_in_transaction
 from truss._security_home_installation import bootstrap_security_homes_in_transaction
@@ -11,8 +13,8 @@ import test_security_mapping_native as mapping
 
 class AcceptedCatalogMappingTests(mapping.MappingNativeTests):
  for name in tuple(n for n in dir(mapping.MappingNativeTests) if n.startswith('test_')):locals()[name]=None
- def accepted(self,second=False):
-  self.install();source=json.loads(mapping.FIXTURE.read_text());self.reference=mapping.encoded(source)
+ def accepted(self,second=False,source=None):
+  self.install();source=json.loads(mapping.FIXTURE.read_text()) if source is None else source;self.reference=mapping.encoded(source)
   c,h,a,t=self.consumer();m=source['modules'][0];p=m['pin']
   prepared=a.prepare_catalog((CatalogDocument(p['documentId'],p['revision'],m['documentJson'].encode()),),source_version='0.8.0',bun_executable='/opt/homebrew/bin/bun')
   result=a.accept_in_transaction(t,prepared,request_key='accepted-mapping08');self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error))
@@ -30,6 +32,12 @@ class AcceptedCatalogMappingTests(mapping.MappingNativeTests):
   self.boundary=SecurityMappingBoundary(original,self.reference);self.identity=self.installation.installation_id.encode()
   self.assertIsInstance(bootstrap_security_homes_in_transaction(self.host,self.tx,installation_identity=self.identity,authored_profile=self.boundary.original_profile,max_retained=8),Ok)
   self.admin.execute("CREATE TEMP TABLE accepted_prior(value text);INSERT INTO accepted_prior VALUES('kept')")
+ def retain_endpoint_packet(self,name,result):
+  directory=os.environ.get('TRUSS_ONTOLOGY_ENDPOINT_EVIDENCE_DIR')
+  if directory:
+   root=Path(directory);root.mkdir(parents=True,exist_ok=True)
+   for suffix,original in (('request',self.reference),('response',result.original_response),('assessment',result.accepted_catalog_assessment),('dependencies',result.native_dependencies)):
+    (root/(name+'-'+suffix+'.json')).write_bytes(original)
  def prepare_accepted(self):
   return prepare_security_mapping_in_transaction(self.host,self.tx,boundary=self.boundary,installation_identity=self.identity,expected_generation=1,original_request=self.reference,require_accepted_catalog=True)
  def test_original_accepted_model_and_native_inventory(self):
@@ -43,6 +51,13 @@ class AcceptedCatalogMappingTests(mapping.MappingNativeTests):
   self.assertEqual(len(dependencies['uses']),6)
   self.assertEqual({a['reference']['elementId'] for s in dependencies['scans'] for action in s['actions'] for a in action['associations']},{'Ownership','Assignment'})
   self.assertFalse(dependencies['securityReady'])
+  self.retain_endpoint_packet('baseline',result.value)
+  self.assertEqual(dependencies['version'],'truss.native-security-dependencies/0.2')
+  endpoints=[e for s in dependencies['scans'] for action in s['actions'] for a in action['associations'] for e in a['endpoints']]
+  self.assertEqual(len(endpoints),8)
+  self.assertTrue(all(a['key']['target']==a['reference'] for s in dependencies['scans'] for action in s['actions'] for a in action['associations']))
+  self.assertEqual({e['role'] for e in endpoints},{'resource','project','staff'})
+  self.assertTrue(all(len(e['pairs'])==1 for e in endpoints))
   from truss._security_catalog_mapping import map_catalog_dependencies
   for mutation in ('missing-property','duplicate-type','wrong-key-fields','missing-scan'):
    native=copy.deepcopy(assessment);response=json.loads(result.value.original_response)
@@ -93,3 +108,33 @@ class AcceptedCatalogMappingTests(mapping.MappingNativeTests):
   result=self.prepare_accepted();self.assertIsInstance(result,Error);self.assertEqual(self.calls,[])
   self.assertIn('Complete accepted revision receipt history required',str(self.host._custody.last_attempt.error))
   self.assertEqual(self.admin.execute('TABLE accepted_prior').fetchall(),[('kept',)])
+ def test_genuine_compound_endpoint_key_preserves_native_position(self):
+  source=json.loads(mapping.FIXTURE.read_text());module=source['modules'][0];document=json.loads(module['documentJson']);ontology=json.loads(source['ontologyJson'])
+  elements=document['modules'][0]['elements']
+  for record_name,field_name in (('Staff','staffCode'),('Assignment','assignmentStaffCode')):
+   record=next(e for e in elements if e['id']==record_name)
+   record['members'].append({'module':'m','element':field_name})
+   elements.append({'id':field_name,'kind':'field','name':field_name,'scalarType':'string','nullability':'required','cardinality':'one','extensions':{}})
+   declaration=next(e for e in ontology['entities']+ontology['associations'] if e['type']['elementId']==record_name)
+   declaration['fields'].append({'ref':{'documentId':'domain','moduleId':'m','elementId':field_name},'protection':'unprotected'})
+  next(e for e in elements if e['id']=='Staff')['keys'][0]['fields'].append({'module':'m','element':'staffCode'})
+  association=next(a for a in ontology['associations'] if a['type']['elementId']=='Assignment')
+  next(e for e in association['endpoints'] if e['role']=='staff')['fields'].append({'documentId':'domain','moduleId':'m','elementId':'assignmentStaffCode'})
+  module['documentJson']=json.dumps(document,separators=(',',':'));module['pin']['sha256']=sha256(module['documentJson'].encode()).hexdigest()
+  source['ontologyJson']=json.dumps(ontology,separators=(',',':'));profile=json.loads(source['queryProfileJson'])
+  profile['modelPins']=[m['pin'] for m in source['modules']];profile['ontologySha256']=sha256(source['ontologyJson'].encode()).hexdigest();source['queryProfileJson']=json.dumps(profile,separators=(',',':'))
+  self.accepted(source=source);result=self.prepare_accepted();self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error))
+  dependencies=json.loads(result.value.native_dependencies)
+  self.retain_endpoint_packet('compound',result.value)
+  endpoints=[e for s in dependencies['scans'] for a in s['actions'] for r in a['associations'] for e in r['endpoints'] if e['role']=='staff']
+  self.assertEqual(len(endpoints),2)
+  for endpoint in endpoints:
+   self.assertEqual([p['associationField']['reference']['elementId'] for p in endpoint['pairs']],['assignmentStaff','assignmentStaffCode'])
+   self.assertEqual([p['targetKeyField']['reference']['elementId'] for p in endpoint['pairs']],['staffId','staffCode'])
+  from truss._security_catalog_mapping import map_catalog_dependencies
+  response=json.loads(result.value.original_response)
+  for scan in response['handoff']['scans']:
+   for action in scan['actions']:
+    for key in action['keys']:
+     if key['target']['elementId']=='Staff':key['fields'].reverse()
+  with self.assertRaisesRegex(ValueError,'key field order'):map_catalog_dependencies(result.value.accepted_catalog_assessment,json.dumps(response).encode(),self.reference)

@@ -1,0 +1,141 @@
+{
+  "scope": "Genuine owner compiler positive source fixtures with synthetic native IDs; selected negative endpoint mapper controls deliberately mutate/refingerprint packets. No native database execution or complete closure/authenticity proof.",
+  "compiler": "/private/tmp/weft-security-mapping-native-20261013/weft.so",
+  "compilerSha256": "2c62713f8b0b2f06d8537267405cad027cf44db3d832faefbd37920ba958bc0f",
+  "controls": [
+    {
+      "case": "baseline",
+      "result": "accepted",
+      "evidence": "Genuine compiler with synthetic native IDs",
+      "endpointOccurrences": 8
+    },
+    {
+      "case": "compound",
+      "result": "accepted",
+      "evidence": "Genuine compiler with synthetic native IDs",
+      "endpointOccurrences": 8
+    },
+    {
+      "case": "selfTarget",
+      "result": "accepted",
+      "evidence": "Genuine compiler with synthetic native IDs",
+      "endpointOccurrences": 10
+    },
+    {
+      "case": "compoundSelfTarget",
+      "result": "accepted",
+      "evidence": "Genuine compiler with synthetic native IDs",
+      "endpointOccurrences": 10
+    },
+    {
+      "case": "legacyNoSourceByteIdentical",
+      "result": "accepted",
+      "evidence": "Exact comparison to reviewed 70ddb9dc helper"
+    },
+    {
+      "case": "sourceWhitespace",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Original compiler ontology bytes required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "duplicateRole",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Original unique endpoint role required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "emptyRole",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Original unique endpoint role required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "missingRole",
+      "result": "refused",
+      "errorType": "KeyError",
+      "reason": "'role'",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "wrongArity",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Original endpoint key arity required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "unknownTarget",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Unique active native dependency required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "missingTargetKey",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Unique active native dependency required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "wrongTargetKey",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Unique active native dependency required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "wrongSourceOwner",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Unique active native dependency required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "wrongSourceDocument",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Unique active native dependency required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "reversedNativeCompositeKey",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Exact original native key field order required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "missingAssociation",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Unique active native dependency required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "duplicateAssociation",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Unique active native dependency required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "mutableSource",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Bounded original ontology request required",
+      "evidence": "Selected mutated packet control"
+    },
+    {
+      "case": "oversizedSource",
+      "result": "refused",
+      "errorType": "ValueError",
+      "reason": "Bounded original ontology request required",
+      "evidence": "Selected mutated packet control"
+    }
+  ]
+}
