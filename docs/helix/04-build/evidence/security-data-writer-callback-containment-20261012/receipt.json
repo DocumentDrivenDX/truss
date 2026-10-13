@@ -1,0 +1,41 @@
+{
+  "status": "component-controls-passed",
+  "sources": {
+    "packages/python/tests/test_security_public_ontology_native.py": "164955372f3a3021038e69fc649752232b6b6350a89ae3390f77bda970108a9a",
+    "packages/python/src/truss/_security_data_writer.py": "f3102e8751c458381a47d05ca0b4682f6dc7e33bf8e50a1e931288bfe4df576e",
+    "packages/python/src/truss/psycopg_host.py": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4"
+  },
+  "runtimeChanges": false,
+  "profile": "Actual private coordinated writer on PostgreSQL18.6 / stock psycopg3.3.6; original host savepoint and trusted original installation-admin/qualified physical callback/native trigger premises",
+  "validation": "11 native tests pass; final focused test6.649s also verifies unchanged attempt identity for declared deferred preflight refusal",
+  "observations": [
+    "native division failure after DML returns22012 and original data/generation survive",
+    "started returned generator closes; cleanup changes id3 true to false; rollback restores true; KeyboardInterrupt propagates after contained phase and no cleanup_error",
+    "returned coroutine closes without body execution and prior DML rolls back",
+    "declared generator/coroutine/async-generator callback refuses without a new host operation attempt",
+    "caller prior TEMP work and original search_path survive; subsequent correct coordinated UPSERT still succeeds pending commit"
+  ],
+  "traceability": [
+    {
+      "case": "truss.L01",
+      "scope": "operation-refusal containment prerequisite only, no logical create/delete/update permission comparison",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L13",
+      "scope": "selected data/generation rollback prerequisite only, no full authority participant or decision invalidation proof",
+      "caseClosed": false
+    }
+  ],
+  "review": "Astra Ultra final read-only review: no actionable findings; native run by primary",
+  "testAuthoringCorrections": [
+    "host deliberately propagates BaseException after containment; first test incorrectly expected Error",
+    "id3 starts true after race bulk setup; corrected cleanup mutation/rollback expectation"
+  ],
+  "exclusions": [
+    "no logical authorization/compiler admission, ordinary write route or complete writer coverage",
+    "no nested/opaque/async cleanup qualification or external irreversible effects",
+    "no total process resource ceiling, final sink/release or distributed failure proof",
+    "no required acceptance case promoted; all132 remain in scope"
+  ]
+}

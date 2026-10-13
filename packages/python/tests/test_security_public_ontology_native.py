@@ -155,6 +155,40 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    def later():yield 1
    return later()
   self.assertIsInstance(coordinated(deferred),Error)
+  import inspect
+  original_path=self.admin.execute('SHOW search_path').fetchone()
+  def native_failure(cursor):
+   cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2');cursor.execute('SELECT 1/0')
+  failed=coordinated(native_failure);self.assertIsInstance(failed,Error);self.assertEqual(failed.error.sql_state,'22012')
+  deferred_handles=[];cleanup=[]
+  def started_deferred(cursor):
+   def later():
+    try:
+     cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2');yield None
+    finally:
+     cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=3');cleanup.append('closed');raise KeyboardInterrupt('fixture cleanup failure')
+   handle=later();next(handle);deferred_handles.append(handle);return handle
+  with self.assertRaisesRegex(KeyboardInterrupt,'fixture cleanup failure'):coordinated(started_deferred,count=2)
+  self.assertEqual(self.host._custody.last_attempt.phase,'contained');self.assertIsNone(self.host._custody.last_attempt.cleanup_error)
+  self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=3').fetchone(),(True,))
+  self.assertEqual(cleanup,['closed']);self.assertEqual(inspect.getgeneratorstate(deferred_handles[0]),'GEN_CLOSED')
+  async def later_coroutine():effects.append('unexpected coroutine body')
+  def returned_coroutine(cursor):
+   cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2');handle=later_coroutine();deferred_handles.append(handle);return handle
+  self.assertIsInstance(coordinated(returned_coroutine),Error);self.assertEqual(inspect.getcoroutinestate(deferred_handles[1]),'CORO_CLOSED');self.assertEqual(effects,[])
+  def declared_generator(cursor):
+   effects.append('unexpected generator body');yield None
+  async def declared_coroutine(cursor):effects.append('unexpected coroutine body')
+  async def declared_async_generator(cursor):
+   effects.append('unexpected async generator body');yield None
+  prior_attempt=self.host._custody.last_attempt
+  for callback in [declared_generator,declared_coroutine,declared_async_generator]:
+   self.assertIsInstance(coordinated(callback),Error);self.assertIs(self.host._custody.last_attempt,prior_attempt)
+  self.assertEqual(effects,[])
+  self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=2').fetchone(),(True,))
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(current,))
+  self.assertEqual(self.admin.execute('TABLE data_writer_prior_work').fetchall(),[('kept',)])
+  self.assertEqual(self.admin.execute('SHOW search_path').fetchone(),original_path)
   self.admin.execute('INSERT INTO truss.policy_publication_claim VALUES(%s,%s,%s,%s,false)',(b'coordinated-unsettled',identity,profile,current))
   self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected')),Error);self.assertEqual(effects,[])
   self.admin.execute('UPDATE truss.policy_publication_claim SET settled=true WHERE operation_identity_bytes=%s',(b'coordinated-unsettled',))
@@ -167,7 +201,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
    ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=30000);ordinary_adoption=ordinary_host.adopt_transaction();self.assertIsInstance(ordinary_adoption,Ok);ordinary_tx=ordinary_adoption.value
    refused=write_data_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,expected_generation=current,expected_event_count=1,action=lambda cursor:effects.append('unexpected'))
    self.assertIsInstance(refused,Error);self.assertEqual(effects,[]);ordinary_host.detach();ordinary.rollback()
-  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','actual private coordinated writer acquires original guard before DML, observes committed revocation and affects zero rows','wrong profile and pending claim refuse callback','no generation or wrong composite event count rolls back effects, preserves prior caller work','deferred returned callback refuses','exact two-event UPSERT returns pending commit; outer rollback preserves original data/generation','ordinary consumer coordinator access refuses before callback'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','actual private coordinated writer acquires original guard before DML, observes committed revocation and affects zero rows','wrong profile and pending claim refuse callback','no generation or wrong composite event count rolls back effects, preserves prior caller work','deferred returned callback refuses','exact two-event UPSERT returns pending commit; outer rollback preserves original data/generation','ordinary consumer coordinator access refuses before callback','native post-effect division failure rolls back data/generation','started generator cleanup writes and KeyboardInterrupt are contained, generator closed','returned coroutine is closed without executing body; prior DML rolls back','declared generator/coroutine/async-generator callbacks refuse before invocation','failure preserves prior caller work and search path'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
  def test_private_publication_registration_identity_capacity_and_rollback(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction
