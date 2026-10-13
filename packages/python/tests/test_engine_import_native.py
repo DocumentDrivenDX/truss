@@ -1,4 +1,5 @@
 """Basic public engine-owned import durability and interrupted progress."""
+import os
 from dataclasses import replace
 from unittest.mock import patch
 import psycopg
@@ -21,7 +22,7 @@ class EngineImportTests(base.ImportRuntimeTests):
         h.detach();c.rollback()
         return input,context,info
     def run_batches(self,input,info):
-        return run_import_batches(input,connection_info=info,documents=self.documents,bun_executable='/opt/homebrew/bin/bun',statement_timeout_ms=10000,operation_timeout_ms=30000)
+        return run_import_batches(input,connection_info=info,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'),statement_timeout_ms=10000,operation_timeout_ms=30000)
     def test_create_skip_reject_provenance_and_repeat(self):
         input,context,info=self.prepared_input(('one','bad'))
         first=input.records[0];duplicate=replace(first,payload=self.artifact(b'not a valid replacement'))

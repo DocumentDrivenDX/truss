@@ -1670,3 +1670,26 @@ US-056-AC1/AC2/AC10 tests must cover the full positive transaction and exact nat
 The existing `runtime_observe_catalog_generation` observes the actual `schema_head` row update: it increments effect_generation and resets phase/readiness/sealed/application state. The proposed protected finalizer must retain this observer. The pre-head recheck only authorizes the exact original head transition; it does not authorize commit. Under the same original exclusive head/caller/operation custody, write exactly the selected old-head→new-revision transition, independently observe the actual generation increment and reset state, then run a distinct complete post-head verifier. That verifier checks the exact new head, immutable report/input/binding, fully promoted definition/source inventory, journal/feed/non-row effects, complete authority and zero pending sources, and establishes readiness/sealing/application evidence at the actual resulting generation. Commit/public disclosure requires that generation to remain current. A further relevant effect invalidates it; arbitrary late mutations receive no exemption.
 
 For the formal selected single-head-row event, the head generation is the pre-head generation plus one. This correspondence is a declared native refinement obligation, not a universal assumption about a larger finalizer transaction: every additional observed journal/feed/catalog event must be completed and included before the post-head cut, with exact registered inventory/generation correspondence. The current `runtime_collect_new_core_catalog_inventory` rejects a head that has reached the candidate revision, so it cannot serve as this post-head verifier. The new finalization verifier and complete commit barrier must be implemented and qualified separately; the existing unconditional fail-closed barrier remains installed until that full replacement is ready. A phase flag or a report hash cannot substitute for it. Add native tests for the head-trigger reset, pre-head evidence reuse, an extra post-head effect, wrong old/new head, incomplete post-head journal/feed closure and failure after head update with full rollback.
+
+
+## Approved parallel-edge layout 1.0 — 2026-10-13
+
+The owner approved distinct independent edge IDs for the same relationship and
+source/target pair, including self-edges. Layout0.16 remains the historical
+unique-pair contract. Layout1.0 removes only `edge_out` uniqueness, preserving
+its lookup columns/include, edge-ID keys, typed foreign keys and maximum-one
+markers. Each live edge counts independently toward multiplicity. Reads/history
+preserve edge identities and relationship-key lists preserve duplicate
+occurrences; traversal still deduplicates terminal objects.
+
+Endpoint-only imports refuse multiple matching live edges before payload
+interpretation. A single live edge takes precedence over retained endpoint-pair
+tombstones. Tombstones reserve pairs; they do not enumerate deleted edge IDs.
+
+The supported populated conversion verifies the exact old index under the
+administrative fence, replaces it transactionally, verifies the new index and
+activates the retained release last. Genesis, original receipts and saved feed
+bytes retain their original meaning. New feed facts retain their producing
+transaction's release/layout/preparation/settings configuration. Historical and
+empty intervals retain the original genesis expression. Fresh writes use the
+active layout; original request recovery requires exact retained bytes.

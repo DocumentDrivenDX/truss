@@ -1,7 +1,7 @@
 {
   "owner": "DocumentDrivenDX/umf",
   "revision": "e24965aa3b7b806e6b5743015a1df5890213c3cf",
-  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.8.proposal.umf.json",
+  "model": "docs/helix/02-design/models/truss-layout-core-structural-0.10.proposal.umf.json",
   "assets": {
     "explorer.js": "7fb637fd72d5f26a1590d1b3e06c53d760f1e3ad8e34549ffb97978df571b274",
     "explorer.css": "5688d3926e748690013c8a61f30db326d05a869d18db6658469704077035f6e6",
@@ -68,18 +68,19 @@
     "chunk-0b7r2dfm.js": "72c5a19f42672540fc05e1c0f6e9b1c3c49be05baad82c6ed15f0fa23be551ea",
     "chunk-smbjr5pm.js": "71fad1ca8fbf30fcd790d24e3505ff7dc524f92939bfa37a2705f762935bb2e4",
     "chunk-xqjs3fxa.js": "8431c2eba3b725addfec86e06bfc6706c01fdc3aa3ef16ff325cb4da6a62e641",
-    "index.html": "11278272c543d0311f8333f79aaddf581030545b1dd4d5edb516e0f82f8f3be7",
-    "schema-catalog.json": "14fef0a6f8e062e9e936ae180dd6ae767fbcedf7b5a3e72d349874622e7ca7fd",
-    "truss-layout.umf.json": "1cf0c1eb94196d1aecb4e41240e92dcf3aff78ea6457b1e6cf29c97b1bf1ea6d",
-    "truss-layout.native.umf.json": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
+    "index.html": "ced402a79416317baed110ad0099f248d45b0f559ea74c5ec118dc8747d9ff3c",
+    "schema-catalog.json": "12310821ae862293e26fc462f93eeca7b7df3b5fca0c669587844b8b963f7234",
+    "truss-layout.umf.json": "d10cd3f436a7b611924c07e2d37edf03f7caf31f173e588a9225558f3b0c37b6",
+    "truss-layout.native.umf.json": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec",
     "truss-operation-configuration.native.umf.json": "5c94ccae459ee46925acf01ce797443fb4a236a1157fae189aa5d726c225b1b7",
+    "truss-catalog-custody.native.umf.json": "8b0b94c93ec5ede4cfc7e97be631b434fca6d4949e387b01d2b3cd32d70cb33b",
     "truss-layout-migration.native.umf.json": "45e1f57588c21e6b107031732cd6c135d759e4c8f7221e19642d053437e9bf79",
     "truss-capacity-reservation.native.umf.json": "2e9f9459d37994e4b1e10a5f35b59e916c04328f774282e50cc3b7c52bd9de3e",
     "truss-capacity-cache.native.umf.json": "779130093789b2a0639ab55b050a21f2e32195dd3617cd15de36b42592afdab3"
   },
   "scope": "Unmodified UMF browser JS/CSS; Truss HTML shell and exact current schema catalog. No production deployment.",
-  "coreProjection": "0.8",
-  "nativeBaseline": "0.16",
+  "coreProjection": "0.10",
+  "nativeBaseline": "1.0",
   "interpretationComplete": false,
   "installerReady": false
 }

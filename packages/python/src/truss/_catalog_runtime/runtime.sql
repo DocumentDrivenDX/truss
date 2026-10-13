@@ -272,7 +272,7 @@ DO $$ DECLARE table_name text;BEGIN
  END LOOP;
 END $$;
 
-CREATE FUNCTION truss.catalog_require_sources(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea) RETURNS void
+CREATE FUNCTION truss.catalog_check_source_correspondence(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea) RETURNS void
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE input jsonb; documents jsonb; declarations jsonb; doc jsonb; source jsonb; rec jsonb;
  source_record jsonb; field jsonb; source_field jsonb; rel jsonb; source_relation jsonb; ref jsonb;
@@ -280,13 +280,7 @@ DECLARE input jsonb; documents jsonb; declarations jsonb; doc jsonb; source json
 BEGIN
  input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
  declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
- IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR ((input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation()) AND (input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb) AND (input-'interfaceVersion'-'documents'-'supportProfile')=(SELECT preparation_configuration-'supportProfile' FROM truss.runtime_current_installation())) IS NOT TRUE)
-  OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.runtime_current_installation())
-  OR input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
-  OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512
-  OR jsonb_typeof(declarations) IS DISTINCT FROM 'array' OR jsonb_array_length(declarations)<>jsonb_array_length(documents)
-  OR jsonb_typeof(input->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'documents')<>jsonb_array_length(documents) THEN
-  RAISE EXCEPTION 'selected original catalog inputs required' USING ERRCODE='22023'; END IF;
+
  FOR doc IN SELECT value FROM jsonb_array_elements(documents) LOOP
   selected_doc:=input->'documents'->i;source:=(doc->>'originalText')::jsonb;
   IF selected_doc->>'documentId' IS DISTINCT FROM doc->>'documentId'
@@ -363,6 +357,22 @@ BEGIN
  END LOOP;
 END;
 $$;
+CREATE FUNCTION truss.catalog_require_sources(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea) RETURNS void
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE input jsonb;documents jsonb;declarations jsonb;
+BEGIN
+ input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
+ declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
+ IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR ((input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation()) AND (input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb) AND (input-'interfaceVersion'-'documents'-'supportProfile')=(SELECT preparation_configuration-'supportProfile' FROM truss.runtime_current_installation())) IS NOT TRUE)
+  OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.runtime_current_installation())
+  OR input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
+  OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512
+  OR jsonb_typeof(declarations) IS DISTINCT FROM 'array' OR jsonb_array_length(declarations)<>jsonb_array_length(documents)
+  OR jsonb_typeof(input->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'documents')<>jsonb_array_length(documents) THEN
+  RAISE EXCEPTION 'selected original catalog inputs required' USING ERRCODE='22023'; END IF;
+ PERFORM truss.catalog_check_source_correspondence(input_bytes,documents_bytes,declarations_bytes);
+END;
+$$;
 
 CREATE FUNCTION truss.catalog_accept(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,
  source_bytes bytea,origin_bytes bytea,request_key text)
@@ -377,7 +387,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.51-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.52-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;

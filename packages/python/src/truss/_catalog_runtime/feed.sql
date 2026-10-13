@@ -63,6 +63,44 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_feed_authorize(text,text,text) FROM PUBLIC;
 
+-- Parallel-layout transaction configuration capture; historical intervals are never backfilled.
+CREATE TABLE truss.runtime_feed_transaction_configuration (
+ writer_xid xid8 PRIMARY KEY, configuration jsonb NOT NULL CHECK(jsonb_typeof(configuration)='object'));
+CREATE TRIGGER runtime_feed_transaction_configuration_immutable BEFORE UPDATE OR DELETE OR TRUNCATE ON truss.runtime_feed_transaction_configuration
+ FOR EACH STATEMENT EXECUTE FUNCTION truss.catalog_immutable();
+ALTER TABLE truss.runtime_feed_transaction_configuration ENABLE ALWAYS TRIGGER runtime_feed_transaction_configuration_immutable;
+CREATE FUNCTION truss.runtime_capture_feed_configuration() RETURNS trigger
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE writer xid8;installation truss.catalog_runtime_installation%ROWTYPE;configuration jsonb;retained jsonb;
+BEGIN
+ writer:=(to_jsonb(NEW)->>TG_ARGV[0])::xid8;
+ IF writer IS DISTINCT FROM pg_current_xact_id() THEN RAISE EXCEPTION 'current feed fact writer required' USING ERRCODE='55000';END IF;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ configuration:=jsonb_build_object('releaseId',installation.release_id,'releaseSha256',installation.release_sha256,
+  'layoutProfile',installation.layout_profile,'preparationConfiguration',installation.preparation_configuration,
+  'settings',(SELECT jsonb_object_agg(key,value) FROM truss.setting));
+ SELECT t.configuration INTO retained FROM truss.runtime_feed_transaction_configuration t WHERE t.writer_xid=writer;
+ IF FOUND THEN
+  IF retained IS DISTINCT FROM configuration THEN RAISE EXCEPTION 'stable feed writer configuration required' USING ERRCODE='55000';END IF;
+ ELSE
+  INSERT INTO truss.runtime_feed_transaction_configuration VALUES(writer,configuration);
+  SELECT t.configuration INTO retained FROM truss.runtime_feed_transaction_configuration t WHERE t.writer_xid=writer;
+  IF NOT FOUND OR retained IS DISTINCT FROM configuration THEN RAISE EXCEPTION 'original feed writer configuration required' USING ERRCODE='55000';END IF;
+ END IF;
+ RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_capture_feed_configuration() FROM PUBLIC;
+CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.journal FOR EACH ROW EXECUTE FUNCTION truss.runtime_capture_feed_configuration('xid');
+CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.catalog_registration_request FOR EACH ROW EXECUTE FUNCTION truss.runtime_capture_feed_configuration('writer_xid');
+CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.runtime_import_source FOR EACH ROW EXECUTE FUNCTION truss.runtime_capture_feed_configuration('writer_xid');
+CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.runtime_feed_reservation FOR EACH ROW EXECUTE FUNCTION truss.runtime_capture_feed_configuration('writer_xid');
+ALTER TABLE truss.journal ENABLE ALWAYS TRIGGER runtime_capture_feed_configuration;
+ALTER TABLE truss.catalog_registration_request ENABLE ALWAYS TRIGGER runtime_capture_feed_configuration;
+ALTER TABLE truss.runtime_import_source ENABLE ALWAYS TRIGGER runtime_capture_feed_configuration;
+ALTER TABLE truss.runtime_feed_reservation ENABLE ALWAYS TRIGGER runtime_capture_feed_configuration;
+-- End parallel-layout transaction configuration capture.
+
 CREATE FUNCTION truss.runtime_feed_cursor(selected_consumer text,next_xid text) RETURNS bytea
 LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
  SELECT convert_to(jsonb_build_object('profile','truss-caller-asserted-feed/0.1',
@@ -127,10 +165,10 @@ BEGIN
  IF count_facts>maximum_facts THEN RAISE EXCEPTION 'whole feed prerequisites exceed fact limit' USING ERRCODE='54000';END IF;
  next_cursor:=truss.runtime_feed_cursor(selected_consumer,next_xid::text);
  payload:=convert_to(jsonb_build_object('interfaceVersion','truss-native-feed/0.1','prior',prior,'next',convert_from(next_cursor,'UTF8')::jsonb,
-  'writerXid',writer::text,'configuration',jsonb_build_object('releaseId',(SELECT release_id FROM truss.catalog_runtime_installation),
+  'writerXid',writer::text,'configuration',coalesce((SELECT t.configuration FROM truss.runtime_feed_transaction_configuration t WHERE t.writer_xid=writer),jsonb_build_object('releaseId',(SELECT release_id FROM truss.catalog_runtime_installation),
    'releaseSha256',(SELECT release_sha256 FROM truss.catalog_runtime_installation),
    'layoutProfile',(SELECT layout_profile FROM truss.catalog_runtime_installation),
-   'preparationConfiguration',(SELECT preparation_configuration FROM truss.catalog_runtime_installation),'settings',(SELECT original_settings FROM truss.runtime_feed_configuration)),
+   'preparationConfiguration',(SELECT preparation_configuration FROM truss.catalog_runtime_installation),'settings',(SELECT original_settings FROM truss.runtime_feed_configuration))),
   'catalogPrerequisites',prerequisites,'revisions',revisions,'changes',changes,'sources',sources,'reservations',reservations)::text,'UTF8');
  IF octet_length(payload)>maximum_bytes THEN RAISE EXCEPTION 'whole feed transaction exceeds byte limit' USING ERRCODE='54000';END IF;
  result:=convert_to(jsonb_build_object('outcome',CASE WHEN writer IS NULL THEN 'empty_interval' ELSE 'transaction' END,

@@ -43,8 +43,13 @@ try{
  const captureTable=await page.locator('table').innerText();
  for(const name of ['original_writer_xid','original_context_sha256','configuration_generation','admission_profile_bytes','installed_inventory_sha256'])if(!captureTable.includes(name))throw Error('Configuration capture column missing: '+name);
  const adjunctEvent=page.waitForEvent('download');await page.getByText('Download configuration adjunct source',{exact:true}).click();const adjunctDownload=await adjunctEvent;
- const adjunctBytes=new Uint8Array(await Bun.file((await adjunctDownload.path())!).arrayBuffer()),adjunctExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].additionalSourceModel).arrayBuffer());
+ const adjunctBytes=new Uint8Array(await Bun.file((await adjunctDownload.path())!).arrayBuffer()),adjunctExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].configurationSourceModel).arrayBuffer());
  if(adjunctBytes.length!==adjunctExpected.length||adjunctBytes.some((b,i)=>b!==adjunctExpected[i]))throw Error('Adjunct archive changed original bytes');
+ const custodyEvent=page.waitForEvent('download');await page.getByText('Download catalog custody adjunct source',{exact:true}).click();const custodyDownload=await custodyEvent;
+ const custodyBytes=new Uint8Array(await Bun.file((await custodyDownload.path())!).arrayBuffer()),custodyExpected=new Uint8Array(await Bun.file(structural.extensions['truss.layout.native'].additionalSourceModel).arrayBuffer());
+ if(custodyBytes.length!==custodyExpected.length||custodyBytes.some((b,i)=>b!==custodyExpected[i]))throw Error('Custody archive changed original bytes');
+ if(ownerManifest.coreProjection!=='0.10'||ownerManifest.nativeBaseline!=='1.0')throw Error('Current projection/layout labels required');
+
  await page.goto(base+'schema/#'+new URLSearchParams({schema:'truss-layout',definition:JSON.stringify(['truss-layout','layout_migration_receipt'])}));
  await page.locator('.definition-heading').filter({hasText:/layout[ _]migration[ _]receipt/i}).waitFor();
  const migrationTable=await page.locator('table').innerText();

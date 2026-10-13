@@ -198,7 +198,7 @@ REVOKE ALL ON FUNCTION truss.runtime_lock_edge_business_key(text) FROM PUBLIC;
 
 CREATE FUNCTION truss.import_edge_identity(original_identity bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE context jsonb;identity jsonb;relation truss.rel_def%ROWTYPE;source_definition truss.type_def%ROWTYPE;target_definition truss.type_def%ROWTYPE;key text;edge_row truss.edge%ROWTYPE;result jsonb;
+DECLARE context jsonb;identity jsonb;relation truss.rel_def%ROWTYPE;source_definition truss.type_def%ROWTYPE;target_definition truss.type_def%ROWTYPE;key text;edge_row truss.edge%ROWTYPE;result jsonb;matches int;
 BEGIN
  context:=convert_from(truss.import_context(expected_release,expected_digest),'UTF8')::jsonb;
  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 65536 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded exact edge import identity required' USING ERRCODE='22023';END IF;
@@ -211,6 +211,10 @@ BEGIN
  PERFORM 1 FROM truss.object WHERE id=(identity->'source'->>'id')::bigint AND type_id=source_definition.type_id FOR UPDATE NOWAIT;
  PERFORM 1 FROM truss.object WHERE id=(identity->'target'->>'id')::bigint AND type_id=target_definition.type_id FOR UPDATE NOWAIT;
  key:=truss.runtime_edge_business_key(relation.rel_type_id,identity->'source',identity->'target');PERFORM truss.runtime_lock_edge_business_key(key);
+ SELECT count(*) INTO matches FROM (SELECT 1 FROM truss.edge WHERE rel_type_id=relation.rel_type_id
+  AND source_id=(identity->'source'->>'id')::bigint AND source_type=source_definition.type_id
+  AND target_id=(identity->'target'->>'id')::bigint AND target_type=target_definition.type_id LIMIT 2) candidates;
+ IF matches>1 THEN RAISE EXCEPTION 'ambiguous endpoint-only edge import identity' USING ERRCODE='22023';END IF;
  SELECT * INTO edge_row FROM truss.edge WHERE rel_type_id=relation.rel_type_id AND source_id=(identity->'source'->>'id')::bigint AND source_type=source_definition.type_id AND target_id=(identity->'target'->>'id')::bigint AND target_type=target_definition.type_id FOR UPDATE NOWAIT;
  IF FOUND THEN result:=jsonb_build_object('state','skipped','reason','live_identity','identity',jsonb_build_object('id',edge_row.id::text,'typeId',relation.rel_type_id::text,'definitionPin',identity->>'relationshipDefinitionPin','owner',jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module)));
  ELSIF EXISTS(SELECT 1 FROM truss.key_tombstone WHERE entity_kind='e' AND type_id=relation.rel_type_id AND key_num=0 AND k=key) THEN result:=jsonb_build_object('state','skipped','reason','reserved_identity');
