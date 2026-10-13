@@ -1,0 +1,545 @@
+{
+  "scope": "Current fixture original-source correspondence countercheck, not integrated execution or backend admission",
+  "sources": {
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "docs/helix/04-build/evidence/security-identity-requirements/resolution.json": "de2fd0e79da6d2220619f0256d8038e3b115b8d3e4ba8509ded77332bbb52d5c",
+    "docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/check.py": "5a13b937279289990d3f8e052c80c62dac5b67280e3016197af9a3330e927093",
+    "docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/prove.py": "971b58c4b5ad12ce076ac207e13e912fe585d698b1c3917d37b1343036ff185d"
+  },
+  "documentObjectsEqual": false,
+  "changedElements": [
+    {
+      "element": "Assignment",
+      "selected": {
+        "id": "Assignment",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "assignmentId"
+          },
+          {
+            "module": "m",
+            "element": "assignmentStaff"
+          },
+          {
+            "module": "m",
+            "element": "assignmentProject"
+          },
+          {
+            "module": "m",
+            "element": "active"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "assignmentId"
+              }
+            ]
+          }
+        ],
+        "extensions": {},
+        "name": "Assignment"
+      },
+      "evaluated": {
+        "id": "Assignment",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "assignmentId"
+          },
+          {
+            "module": "m",
+            "element": "assignmentStaff"
+          },
+          {
+            "module": "m",
+            "element": "assignmentProject"
+          },
+          {
+            "module": "m",
+            "element": "active"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "assignmentId"
+              }
+            ]
+          }
+        ],
+        "extensions": {}
+      }
+    },
+    {
+      "element": "Ownership",
+      "selected": {
+        "id": "Ownership",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "ownerId"
+          },
+          {
+            "module": "m",
+            "element": "ownerResource"
+          },
+          {
+            "module": "m",
+            "element": "ownerProject"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "ownerId"
+              }
+            ]
+          }
+        ],
+        "extensions": {},
+        "name": "Ownership"
+      },
+      "evaluated": {
+        "id": "Ownership",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "ownerId"
+          },
+          {
+            "module": "m",
+            "element": "ownerResource"
+          },
+          {
+            "module": "m",
+            "element": "ownerProject"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "ownerId"
+              }
+            ]
+          }
+        ],
+        "extensions": {}
+      }
+    },
+    {
+      "element": "Project",
+      "selected": {
+        "id": "Project",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "projectId"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "projectId"
+              }
+            ]
+          }
+        ],
+        "extensions": {},
+        "name": "Project"
+      },
+      "evaluated": {
+        "id": "Project",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "projectId"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "projectId"
+              }
+            ]
+          }
+        ],
+        "extensions": {}
+      }
+    },
+    {
+      "element": "Resource",
+      "selected": {
+        "id": "Resource",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "resourceId"
+          },
+          {
+            "module": "m",
+            "element": "salary"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "resourceId"
+              }
+            ]
+          }
+        ],
+        "extensions": {},
+        "name": "Resource"
+      },
+      "evaluated": {
+        "id": "Resource",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "resourceId"
+          },
+          {
+            "module": "m",
+            "element": "salary"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "resourceId"
+              }
+            ]
+          }
+        ],
+        "extensions": {}
+      }
+    },
+    {
+      "element": "Staff",
+      "selected": {
+        "id": "Staff",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "staffId"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "staffId"
+              }
+            ]
+          }
+        ],
+        "extensions": {},
+        "name": "Staff"
+      },
+      "evaluated": {
+        "id": "Staff",
+        "kind": "record",
+        "members": [
+          {
+            "module": "m",
+            "element": "staffId"
+          }
+        ],
+        "keys": [
+          {
+            "id": "pk",
+            "name": "Key",
+            "fields": [
+              {
+                "module": "m",
+                "element": "staffId"
+              }
+            ]
+          }
+        ],
+        "extensions": {}
+      }
+    },
+    {
+      "element": "active",
+      "selected": {
+        "id": "active",
+        "kind": "field",
+        "scalarType": "boolean",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "active"
+      },
+      "evaluated": {
+        "id": "active",
+        "kind": "field",
+        "scalarType": "boolean",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "assignmentId",
+      "selected": {
+        "id": "assignmentId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "assignmentId"
+      },
+      "evaluated": {
+        "id": "assignmentId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "assignmentProject",
+      "selected": {
+        "id": "assignmentProject",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "assignmentProject"
+      },
+      "evaluated": {
+        "id": "assignmentProject",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "assignmentStaff",
+      "selected": {
+        "id": "assignmentStaff",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "assignmentStaff"
+      },
+      "evaluated": {
+        "id": "assignmentStaff",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "ownerId",
+      "selected": {
+        "id": "ownerId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "ownerId"
+      },
+      "evaluated": {
+        "id": "ownerId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "ownerProject",
+      "selected": {
+        "id": "ownerProject",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "ownerProject"
+      },
+      "evaluated": {
+        "id": "ownerProject",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "ownerResource",
+      "selected": {
+        "id": "ownerResource",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "ownerResource"
+      },
+      "evaluated": {
+        "id": "ownerResource",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "projectId",
+      "selected": {
+        "id": "projectId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "projectId"
+      },
+      "evaluated": {
+        "id": "projectId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "resourceId",
+      "selected": {
+        "id": "resourceId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "resourceId"
+      },
+      "evaluated": {
+        "id": "resourceId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "salary",
+      "selected": {
+        "id": "salary",
+        "kind": "field",
+        "scalarType": "integer",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "salary",
+        "facets": {
+          "integerWidth": {
+            "bits": 64,
+            "signed": true
+          }
+        }
+      },
+      "evaluated": {
+        "id": "salary",
+        "kind": "field",
+        "scalarType": "integer",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    },
+    {
+      "element": "staffId",
+      "selected": {
+        "id": "staffId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {},
+        "name": "staffId"
+      },
+      "evaluated": {
+        "id": "staffId",
+        "kind": "field",
+        "scalarType": "string",
+        "nullability": "required",
+        "cardinality": "one",
+        "extensions": {}
+      }
+    }
+  ],
+  "actualOwnerRefusal": "WFT-NAME-MISSING after matching both module and query-profile model SHA pins",
+  "firstProbeQualification": "Changing only module pin triggers WFT-SECURITY-QUERY-PROFILE; not a domain limitation proof",
+  "acceptanceTraceability": {
+    "US-056-AC10": "Exact original selected/evaluated model correspondence gap"
+  },
+  "nextImplementation": "Introduce one explicitly authored named source profile shared by original Weft selection, UMF dependency/evaluation sources and native subject capture; preserve legacy sources and their names/facets separately, with qualified physical domain limits.",
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "hypotheticalNamedDocument": "Explicitly added names, updated both pins: original Weft inspected with securityReady:false. Candidate only, not adopted/equal to original evaluator source; absence of salary facet is not a subject-selection blocker in this probe."
+}

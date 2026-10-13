@@ -1,0 +1,57 @@
+{
+  "extensionSha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+  "cases": [
+    {
+      "mode": "original",
+      "result": {
+        "interfaceVersion": "weft-security-subject-selection/0.1.0",
+        "securityReady": false,
+        "status": "inspected"
+      }
+    },
+    {
+      "mode": "module-pin-only",
+      "result": {
+        "diagnostics": [
+          {
+            "code": "WFT-SECURITY-QUERY-PROFILE",
+            "message": "Security query profile admission refused",
+            "phase": "model",
+            "severity": "error"
+          }
+        ],
+        "interfaceVersion": "weft-security-subject-selection/0.1.0",
+        "securityReady": false,
+        "status": "refused"
+      }
+    },
+    {
+      "mode": "both-model-pins",
+      "result": {
+        "diagnostics": [
+          {
+            "code": "WFT-NAME-MISSING",
+            "message": "No queryable record matches source",
+            "phase": "resolve",
+            "severity": "error",
+            "sourceSpan": {
+              "end": 62,
+              "start": 54
+            }
+          }
+        ],
+        "interfaceVersion": "weft-security-subject-selection/0.1.0",
+        "securityReady": false,
+        "status": "refused"
+      }
+    },
+    {
+      "mode": "hypothetical-named-document",
+      "result": {
+        "interfaceVersion": "weft-security-subject-selection/0.1.0",
+        "securityReady": false,
+        "status": "inspected"
+      }
+    }
+  ]
+}

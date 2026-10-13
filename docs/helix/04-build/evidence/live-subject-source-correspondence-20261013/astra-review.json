@@ -1,0 +1,151 @@
+{
+  "review": "Current subject-selection/evaluation original-source correspondence countercheck",
+  "reviewedAt": "2026-10-13T15:33:41.565655+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "2e8a2670cc8992d532f5070de005a664e6dc47e3",
+  "status": "no actionable correction to the final bounded countercheck; retained exact-source integration prerequisite is supported",
+  "findings": [],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/fixtures/security-mapping-request.json",
+      "sha256": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+      "bytes": 11439
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-identity-requirements/resolution.json",
+      "sha256": "de2fd0e79da6d2220619f0256d8038e3b115b8d3e4ba8509ded77332bbb52d5c",
+      "bytes": 5136
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "15155638712c78bf09e9ca4cf1b13bb9d02c147c8dee1f92a4d0b8ab1df0c6ba",
+      "bytes": 310084
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "1acf2a39cb9ba59b60266f869cd39f35a0952b7da8630b714089ac5de76a59ac",
+      "bytes": 1076923
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/actual-owner-controls.json",
+      "sha256": "8526349f53fa936e01cc9d8c63ac7bea1c561863628e1c637f936631f46761dc",
+      "bytes": 1480
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/aligned-pins-countercheck.json",
+      "sha256": "67f9ffd74bce75f08ecf9bace9166182249e2a4dec13ed5dd70ced8e9e260afb",
+      "bytes": 11675
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/module-pin-only-countercheck.json",
+      "sha256": "57500035f2be57f0b267b677e7fc089f62bf5b680905fdce3d080db4445346e4",
+      "bytes": 11611
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/named-candidate-countercheck.json",
+      "sha256": "5cdd31e55c7fb6c7de7a0eb62620288a918d0afc8f60783302b78496b0bdb5ea",
+      "bytes": 11902
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/proof.json",
+      "sha256": "4344d840605b0db2196fef0853b0febbc5fd527aeded6f830fc286003627982c",
+      "bytes": 41349
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/receipt.json",
+      "sha256": "c0e9cb2d5faa577832888551449a42bb238cb7c1e644ef37a1662578f37f5457",
+      "bytes": 13293
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/check.py",
+      "sha256": "5a13b937279289990d3f8e052c80c62dac5b67280e3016197af9a3330e927093",
+      "bytes": 2096
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/prove.py",
+      "sha256": "971b58c4b5ad12ce076ac207e13e912fe585d698b1c3917d37b1343036ff185d",
+      "bytes": 1828
+    },
+    {
+      "path": "/private/tmp/subject-consumer-python/weft.so",
+      "sha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+      "bytes": 14364352
+    }
+  ],
+  "independentEvidence": [
+    {
+      "path": "/private/tmp/live-subject-source-review-20261013/actual-owner-controls.stdout.json",
+      "sha256": "8526349f53fa936e01cc9d8c63ac7bea1c561863628e1c637f936631f46761dc",
+      "bytes": 1480
+    },
+    {
+      "path": "/private/tmp/live-subject-source-review-20261013/actual-owner-controls.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "/private/tmp/live-subject-source-review-20261013/actual-local-identity.json",
+      "sha256": "ce5a22eaff2c58e4ac415b1e729e6bd2ac1d46bd3f9933ccb5cac28d4c079427",
+      "bytes": 440
+    },
+    {
+      "path": "/private/tmp/live-subject-source-review-20261013/packet-correspondence.json",
+      "sha256": "2a415276a129791aab0d88156b7e54988830eee569b822744f4e7eee57ec3c6e",
+      "bytes": 336
+    },
+    {
+      "path": "/private/tmp/live-subject-source-review-20261013/replayroot/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/prove.py",
+      "sha256": "971b58c4b5ad12ce076ac207e13e912fe585d698b1c3917d37b1343036ff185d",
+      "bytes": 1828
+    },
+    {
+      "path": "/private/tmp/live-subject-source-review-20261013/replayroot/docs/helix/04-build/evidence/live-subject-source-correspondence-20261013/proof.json",
+      "sha256": "4344d840605b0db2196fef0853b0febbc5fd527aeded6f830fc286003627982c",
+      "bytes": 41349
+    },
+    {
+      "path": "/private/tmp/live-subject-source-review-20261013/final-proof-run.stdout.txt",
+      "sha256": "b02da921f071e16d2610b05d32f6b1f333179e6f5321dfba1d785c92fa67b30a",
+      "bytes": 40
+    },
+    {
+      "path": "/private/tmp/live-subject-source-review-20261013/final-proof-run.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "independentValidation": {
+    "ownerControls": 4,
+    "actualBinaryImport": "/private/tmp/subject-consumer-python/weft.so; exact resolved __file__ checked",
+    "originalOwnerResponses": "all four exactly match retained responses",
+    "packetCorrespondence": "all three substituted request/selection/result packets match final check.py reconstruction",
+    "formalReplay": "Final portable prove.py copied byte-for-byte into an owned mirror with exact original input bytes; output JSON exactly matches retained proof",
+    "solver": "4.15.4",
+    "results": [
+      "unsat",
+      "sat",
+      "sat"
+    ],
+    "additionalGroundCheck": "Actual selected/evaluated Staff type, key declaration and local domain/module identity match while complete documents differ."
+  },
+  "conclusions": [
+    "Module-only document/SHA replacement is refused by query-profile source binding; this says nothing about a scalar-domain limitation.",
+    "Aligning both module/query-profile model pins reaches the original resolver and refuses WFT-NAME-MISSING for the evaluator document.",
+    "Adding explicit names to a separately hypothetical copy and aligning both pins is inspected with securityReady false; absent salary facet is not a blocker for this selected interface/query probe.",
+    "The two original complete document objects differ, so earlier successful separate component fixtures do not establish one exact original-source profile.",
+    "The next implementation prerequisite is a separately authored immutable named source bundle shared byte-for-byte across original Weft selection, UMF dependency/evaluation inputs and native subject capture, with regenerated corresponding pins and independently qualified physical domain limits. Preserve both legacy sources rather than silently rewriting them."
+  ],
+  "proofReview": [
+    "The UNSAT query grounds two distinct concrete canonical strings and asks for equality; it is satisfiability of this finite fixture comparison, not quantified implementation correctness.",
+    "The first SAT control confirms the separately grounded documents are jointly consistent.",
+    "The local-subject-identity Boolean is an explicit premise, not a derived semantic identity theorem. Independent ground source inspection confirms the actual matching local key declaration.",
+    "Canonical JSON is used for this comparison only. No UMF semantic normalization, cryptographic authentication, native/source refinement or universal incompatibility conclusion follows."
+  ],
+  "limitations": [
+    "Hypothetical named document is not adopted and is not equal to either legacy source. Passing its selected original interface is not complete native domain or backend support.",
+    "No production API, native database, protected execution or release was exercised or modified.",
+    "Authenticated deployment, issuer, complete callable/role/configuration/dependency closure and final protected release remain open.",
+    "No backend promotion; all132 required cases remain required."
+  ],
+  "repositoryMutations": false
+}
