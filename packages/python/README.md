@@ -6,7 +6,7 @@ recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
 This is an experimental implementation: runtime `0.31-candidate`, layout `0.16`
-candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.3`. The tested local
+candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.4`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -17,7 +17,7 @@ ordinary-person/module boundaries.
 
 Python 3.11 or later, Bun 1.4.2, and the Weft Python extension built with the
 `truss-postgresql-pg18` feature are required. This feature must expose runtime
-backend `0.4.3`; the conformance-only backend is not the public integration.
+backend `0.4.4`; the conformance-only backend is not the public integration.
 Install the package from this repository:
 
 ```sh
@@ -33,13 +33,13 @@ dry-run, imports a Note and saves feed pages durably before source ACKs. It uses
 administrator SQL only for role setup. Data and sink files remain after the
 server stops; a failed run preserves source state for diagnosis.
 
-The [portable public preview](../../docs/helix/04-build/corpus/public-python/0.3/README.md)
+The [portable public preview](../../docs/helix/04-build/corpus/public-python/0.4/README.md)
 adds reader/outsider refusals and mixed created/skipped/rejected imports. Its
 JSON file supplies calls, transaction phases and semantic expectations:
 
 ```sh
 python packages/python/examples/run_corpus.py \
-  docs/helix/04-build/corpus/public-python/0.3/adopter-basic.json \
+  docs/helix/04-build/corpus/public-python/0.4/adopter-basic.json \
   /tmp/truss-public-preview --bun bun
 ```
 
@@ -284,9 +284,11 @@ supported independent directed relationships. Decimal parameters use Python
 `Decimal`; exact integer parameters use Python `int`. Binary floats refuse.
 Supported projections and counts can use records/documents containing timestamp
 and binary siblings. The complete original member mapping is retained, and every
-source cell is validated before filtering. Selecting timestamp/binary fields or
-`alias.*` that includes them still refuses; values are never omitted or cast to
-strings to manufacture a complete result. Direct reads preserve those exact values.
+source cell is validated before filtering. Timestamp and binary projections, including `alias.*`, return the existing
+`TextValue` carriers with their original exact text; optional fields preserve
+absence and explicit null. Timestamp/binary filters, ordering, grouping, keys and
+parameters remain unsupported. The selected compile/IR/backend interfaces are
+`0.2.1`, with the unchanged SQL dialect `0.2.0`.
 Compiled queries require complete read authority for all modules in each selected
 original document, including modules the SQL does not name.
 

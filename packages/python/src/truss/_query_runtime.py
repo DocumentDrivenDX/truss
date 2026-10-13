@@ -6,10 +6,11 @@ import json
 from types import MappingProxyType
 from typing import Mapping
 from .execution import Error, Ok, ExecutionFailure
+from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.3',
-           'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.0'}
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.4',
+           'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.1'}
 
 
 def compiler():
@@ -52,6 +53,11 @@ def _decode_value(value, descriptor_id, descriptors):
         value = value['value']
     if descriptor['kind'] == 'scalar':
         return _decode_scalar(value, descriptor['type']['family'])
+    if descriptor['kind'] == 'exactScalar':
+        kind = descriptor['scalarType']
+        if kind not in ('timestamp', 'binary') or type(value) is not str:
+            raise ValueError('Exact timestamp/binary token required')
+        return TextValue(kind=kind, text=value)
     if descriptor['kind'] == 'record':
         members = descriptor['members']
         if type(value) is not dict or set(value) != {m['name'] for m in members}:
@@ -143,7 +149,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         if binding != bundle['binding'] or binding['releaseId'] != manifest['releaseId'] or binding['releaseSha256'] != digest:
             raise ValueError('Exact installed query binding required')
         binding_sha = sha256(binding_json.encode('utf8')).hexdigest()
-        request = {'interfaceVersion': 'weft-compile/0.2.0', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
+        request = {'interfaceVersion': 'weft-compile/0.2.1', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
                    'modules': bundle['modules'], 'parameters': values, 'options': {'allowCandidate': True},
                    'target': {'backendId': BACKEND['backendId'], 'backendVersion': BACKEND['backendVersion'],
                               'targetProfile': BACKEND['targetProfile'], 'bindingJson': binding_json, 'bindingSha256': binding_sha}}
@@ -154,6 +160,8 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             diagnostics = tuple(QueryDiagnostic(code=d['code'], message=d['message']) for d in artifact.get('diagnostics', ()))
             unsupported = any(d.code in ('WFT-CAPABILITY', 'WFT-TYPE', 'WFT-PROFILE') for d in diagnostics)
             return QueryRefused(code='unsupported_query' if unsupported else 'invalid_query', diagnostics=diagnostics)
+        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.1':
+            raise ValueError('Exact selected compile/dialect/IR versions required')
         if artifact['backend'] != BACKEND or artifact['bindingSha256'] != binding_sha or artifact['modelPins'] != [m['pin'] for m in bundle['modules']]:
             raise ValueError('Original compiled binding/model/backend required')
         if not artifact['obligations'] or any(o['id'] != 'truss.runtime.context/0.1' or o['owner'] != 'host' for o in artifact['obligations']):

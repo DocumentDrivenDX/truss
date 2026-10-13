@@ -45,22 +45,26 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
     def test_supported_projection_on_mixed_scalar_catalog(self):
         from dataclasses import replace
         from truss import ObjectFound
-        from truss.contracts import TextValue
+        from truss.contracts import TextValue,NullValue
+        from truss import QueryAbsent
         from truss.groups import AuthoredValue
         def add_fields(source):
             module=source['modules'][0]
             for element in module['elements']:
                 if element['kind']=='record':element['name']=element['id']
-                if element['id']=='A':element['members'] += [{'module':'m','element':'A-at'},{'module':'m','element':'A-blob'}]
-            for name,family in [('at','timestamp'),('blob','binary')]:
+                if element['id']=='A':element['members'] += [{'module':'m','element':'A-'+name} for name in ('at','blob','optional_at','optional_blob')]
+            for name,family in [('at','timestamp'),('blob','binary'),('optional_at','timestamp'),('optional_blob','binary')]:
                 module['elements'].append(dict(id='A-'+name,name=name,kind='field',scalarType=family,
-                    nullability='required',cardinality='one',extensions={}))
+                    nullability='absent-allowed' if name.startswith('optional_') else 'required',cardinality='one',extensions={}))
         connection,host,assembly,tx=self.ready(add_fields)
         timestamp=TextValue(kind='timestamp',text='2024-02-29t23:59:59.12345678901234567890-00:00')
         binary=TextValue(kind='binary',text='AP8=')
         original=self.create(label='one',alias='first')
         original=replace(original,values=original.values+(AuthoredValue(name='at',value=timestamp),AuthoredValue(name='blob',value=binary)))
-        created,_,_=self.run_group(assembly,tx,(original,self.create(label='other',record='B',alias='other')))
+        original=replace(original,values=original.values+(AuthoredValue(name='optional_at',value=timestamp),AuthoredValue(name='optional_blob',value=binary)))
+        null=replace(self.create(label='null',alias='null'),values=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='null')),AuthoredValue(name='A-value',value=TextValue(kind='string',text='value')),AuthoredValue(name='at',value=timestamp),AuthoredValue(name='blob',value=binary),AuthoredValue(name='optional_at',value=NullValue()),AuthoredValue(name='optional_blob',value=NullValue())))
+        absent=replace(self.create(label='absent',alias='absent'),values=tuple(v for v in null.values if not v.name.startswith('optional_') and v.name!='A-label')+(AuthoredValue(name='A-label',value=TextValue(kind='string',text='absent')),))
+        created,_,_=self.run_group(assembly,tx,(original,null,absent,self.create(label='other',record='B',alias='other')))
         self.assertIsInstance(created,GroupSuccess)
         identity=created.response.semantic.results[0].identity
         host.detach();connection.commit()
@@ -78,11 +82,20 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         if not isinstance(projected,Ok) or not isinstance(projected.value,QueryRows):self.fail(repr(projected)+' '+repr(host._custody.last_attempt.error))
         self.assertEqual(projected.value.rows,(('one',),))
         counted=query.query_in_transaction(tx,sql='SELECT COUNT(*) FROM "A" a',document_ids=('adoc',))
-        self.assertIsInstance(counted.value,QueryRows);self.assertEqual(counted.value.rows,((1,),))
+        self.assertIsInstance(counted.value,QueryRows);self.assertEqual(counted.value.rows,((3,),))
         unrelated=query.query_in_transaction(tx,sql='SELECT b."B-label" FROM "B" b',document_ids=('adoc',))
         self.assertIsInstance(unrelated.value,QueryRows);self.assertEqual(unrelated.value.rows,(('other',),))
-        for sql in ('SELECT a.at FROM "A" a','SELECT a.blob FROM "A" a','SELECT a.* FROM "A" a'):
-            refused=query.query_in_transaction(tx,sql=sql,document_ids=('adoc',))
+        exact=query.query_in_transaction(tx,sql='SELECT a.at, a.blob FROM "A" a WHERE a."A-label" = :label',document_ids=('adoc',),parameters={'label':'one'})
+        self.assertIsInstance(exact.value,QueryRows);self.assertEqual(exact.value.rows,((timestamp,binary),))
+        entity=query.query_in_transaction(tx,sql='SELECT a.* FROM "A" a WHERE a."A-label" = :label',document_ids=('adoc',),parameters={'label':'one'})
+        self.assertIsInstance(entity.value,QueryRows)
+        self.assertEqual(dict(zip(entity.value.columns,entity.value.rows[0],strict=True)),{'A-label':'one','A-value':'value','at':timestamp,'blob':binary,'optional_at':timestamp,'optional_blob':binary})
+        optional=query.query_in_transaction(tx,sql='SELECT a.optional_at, a.optional_blob FROM "A" a ORDER BY a."A-label"',document_ids=('adoc',))
+        self.assertIsInstance(optional.value,QueryRows)
+        self.assertEqual(optional.value.rows,((QueryAbsent(),QueryAbsent()),(None,None),(timestamp,binary)))
+        for sql in ('SELECT a.at FROM "A" a WHERE a.at = :at','SELECT a.blob FROM "A" a ORDER BY a.blob ASC',
+                    'SELECT a.at, COUNT(*) FROM "A" a GROUP BY a.at'):
+            refused=query.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={'at':timestamp.text} if ':at' in sql else {})
             self.assertIsInstance(refused.value,QueryRefused);self.assertEqual(refused.value.code,'unsupported_query')
         self.assertIsNone(connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0])
 
