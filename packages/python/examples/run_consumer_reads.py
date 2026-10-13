@@ -179,6 +179,10 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                             cursors[step['save']['cursor']] = rows.next_cursor
                     else:
                         rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends') else None)), QueryRows)
+                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends'):
+                    required={'_version','_created_by','_created_at','_updated_by','_updated_at'}
+                    if not required <= set(rows.columns):
+                        raise AssertionError('Original required whole-object metadata missing')
                 expected = step['expect']
                 actual_rows = [{name: list(value) if type(value) is tuple else value for name, value in zip(rows.columns, row, strict=True)} for row in rows.rows]
                 # The original consumer _check_rows requires equal row count and
@@ -189,8 +193,8 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
     return {'scope': 'selected original SQL/expected-output observations; not complete harness cases or interchange',
-        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence'],
-        'notChecked':['consumer answer position/time','consumer mandatory whole-object timestamps','replica'],
+        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields'],
+        'notChecked':['consumer answer position/time','replica'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,
         'interpretation':'partial; actions/placement/replica semantics unselected', 'observations': observations}

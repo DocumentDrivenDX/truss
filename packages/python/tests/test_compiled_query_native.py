@@ -279,9 +279,17 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         created,_,_=self.run_group(assembly,tx,(self.create('one'),))
         identity=created.response.semantic.results[0].identity
         first=entity('one');self.assertEqual((first['_version'],first['_created_by'],first['_updated_by'],first['_original_author']),(1,'consumer','consumer',None))
+        direct=self.read(assembly,tx,identity).object
+        self.assertEqual((first['_created_at'],first['_updated_at']),(direct.created_at,direct.updated_at))
         changed,_,_=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=identity),set=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='changed')),),unset=()),))
         self.assertIsInstance(changed,GroupSuccess)
-        self.assertEqual(entity('changed')['_version'],2)
+        current=entity('changed');self.assertEqual(current['_version'],2)
+        direct=self.read(assembly,tx,identity).object
+        self.assertEqual((current['_created_at'],current['_updated_at']),(direct.created_at,direct.updated_at))
+        self.assertEqual(current['_created_at'],first['_created_at'])
+        noop,_,_=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=identity),set=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='changed')),),unset=()),))
+        self.assertIsInstance(noop,GroupSuccess)
+        self.assertEqual(entity('changed'),current)
         source=MapValue(entries=(MapEntry(key='author',value=TextValue(kind='string',text='historical')),MapEntry(key='at',value=TextValue(kind='string',text='2020-01-01'))))
         record=assembly.object_import_record_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',values=self.create('imported',value='imported').values,source=source).value
         context=assembly.import_context_in_transaction(tx).value

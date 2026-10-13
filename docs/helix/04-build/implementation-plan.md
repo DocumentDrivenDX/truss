@@ -7019,3 +7019,7 @@ The assembly and compiled-execution provider now expose query_page_in_transactio
 ### Consumer relationship-column observations and timestamp gap — 2026-10-13
 
 Seven original SQL/expected-output variants now pass together; [scoped evidence](evidence/original-consumer-relationship-columns-20261013.md) explicitly excludes the common consumer answer-position/time and required timestamp invariants. The runner now matches the original consumer expected-field comparison without removing actual fields. The additive query_object_times source is reviewed but uninstalled. Next activation adds exact object created/updated UTC text to whole-object results under a new entity profile, immutable Weft transport/IR/backend schemas and runtime0.34/backend0.4.7 selection, preserving current paging selection. Basic public create/update/no-op reads must agree with ScalarObject timestamps. Full corpus/interchange remains open.
+
+### Whole-object timestamps activated — 2026-10-13
+
+Runtime0.34/backend0.4.7 and entity profile0.2 expose exact _created_at/_updated_at; [evidence](evidence/public-entity-times-runtime-034-20261013.md) includes public reader agreement across create/update/no-op, read-only queries, populated .33 upgrade and existing preview workflows. Current preview0.8 preserves older datasets. Original common whole-object metadata field checks now run; answer-position/time, full corpus/interchange and protected security activation remain open. Astra Ultra approved the final source and corrected upgrade/schema coverage.
