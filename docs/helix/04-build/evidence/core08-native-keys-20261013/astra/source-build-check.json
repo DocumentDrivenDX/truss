@@ -1,0 +1,23 @@
+{
+  "scope": "Independent isolated owner build and file custody comparison; no source authentication/lifetime theorem",
+  "rebuiltDirectory": "/private/tmp/truss-umf-runtime-7ZqjVq",
+  "pinnedRevision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+  "archiveSha256": "d25f545ca0988b66b42aad32c1942f8d5fd04174a2f31f2d3b887c097c1ddad4",
+  "bundleRawEqual": false,
+  "bundleEqualAfterRemovingOnlyRandomTemporarySourcePathComments": true,
+  "packagedBundleSha256": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+  "rebuiltBundleSha256": "784e3c744311b9ef4c19965c87dcabd550579071485f71167e8548481885ebd4",
+  "normalizedBundleSha256": "9d27eed912d76939f59e7123744502687894c7608109cf9a884e5edf8a0b1de9",
+  "legacyFilesUnchanged": [
+    "packages/python/src/truss/_umf_keys/producer.js",
+    "packages/python/src/truss/_umf_keys/producer-manifest.json",
+    "packages/python/src/truss/_umf_keys/manifest.json",
+    "packages/python/src/truss/_umf_keys/bridge.mjs",
+    "packages/python/src/truss/_umf_keys/licenses/require-from-string.txt",
+    "packages/python/src/truss/_umf_keys/licenses/ajv.txt",
+    "packages/python/src/truss/_umf_keys/licenses/fast-uri.txt",
+    "packages/python/src/truss/_umf_keys/licenses/fast-deep-equal.txt",
+    "packages/python/src/truss/_umf_keys/licenses/yaml.txt",
+    "packages/python/src/truss/_umf_keys/licenses/json-schema-traverse.txt"
+  ]
+}

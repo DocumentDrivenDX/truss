@@ -13264,7 +13264,7 @@ function parseDocument(source, options = {}) {
   }
   return doc;
 }
-// ../truss-umf-runtime-fWZyIk/src/model/types.ts
+// ../truss-umf-runtime-cOgFWm/src/model/types.ts
 var SCALAR_TYPES = ["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"];
 var ELEMENT_KINDS = ["field", "record", "group"];
 var NULLABILITIES = ["required", "absent-allowed", "unspecified"];
@@ -13282,7 +13282,7 @@ class UmfError extends Error {
 }
 var pointer = (key) => key.replace(/~/g, "~0").replace(/\//g, "~1");
 
-// ../truss-umf-runtime-fWZyIk/src/model/json.ts
+// ../truss-umf-runtime-cOgFWm/src/model/json.ts
 var LIMITS = { maxDepth: 128, maxValues: 1e5, maxTextLength: 4000000 };
 function copyJson(input) {
   return copyJsonCharged(input);
@@ -13331,7 +13331,7 @@ function copyJsonCharged(input, charge) {
   return visit(input, "", 0);
 }
 
-// ../truss-umf-runtime-fWZyIk/src/model/serialization.ts
+// ../truss-umf-runtime-cOgFWm/src/model/serialization.ts
 function decimal(text) {
   const match = /^([+-]?)(\d*)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$/.exec(text);
   if (!match)
@@ -13403,7 +13403,7 @@ function readJsonValue(text, format = "yaml") {
   return convert(doc.contents, "", 0);
 }
 
-// ../truss-umf-runtime-fWZyIk/src/validation/internal-schema.ts
+// ../truss-umf-runtime-cOgFWm/src/validation/internal-schema.ts
 function snapshotSchema(input) {
   const value = JSON.parse(JSON.stringify(input));
   const freeze = (v) => {
@@ -13416,7 +13416,7 @@ function snapshotSchema(input) {
   freeze(value);
   return value;
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/schema-properties-document.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/schema-properties-document.schema.json
 var schema_properties_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.8.0",
@@ -14607,7 +14607,7 @@ var schema_properties_document_schema_default = {
   description: "Shared annotations, literal defaults and exact value/collection bounds; semantic validator required.",
   $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/relationship-document.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/relationship-document.schema.json
 var relationship_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.7.0",
@@ -15437,7 +15437,7 @@ var relationship_document_schema_default = {
   description: "Authored schema-level relationships between keyed Records; native enforcement and storage are not inferred. Unknown qualifiers are retained.",
   $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/key-document.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/key-document.schema.json
 var key_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.6.0",
@@ -16144,9 +16144,9 @@ var key_document_schema_default = {
   $comment: "Key membership resolution, unique ownership, key IDs/names/component sets, primary count and component domains require portable semantic validation. Native enforcement is not inferred."
 };
 
-// ../truss-umf-runtime-fWZyIk/src/validation/schema.ts
+// ../truss-umf-runtime-cOgFWm/src/validation/schema.ts
 var import__2020 = __toESM(require__2020(), 1);
-// ../truss-umf-runtime-fWZyIk/spec/core/schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/schema.json
 var schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.1.0",
@@ -16171,7 +16171,7 @@ var schema_default = {
     module: { type: "object", required: ["id", "namespace", "elements"], properties: { id: { $ref: "#/$defs/id" }, namespace: { type: "string" }, elements: { type: "array", items: { $ref: "#/$defs/element" } }, extensions: { $ref: "#/$defs/extensions" } } }
   }
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/field-document.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/field-document.schema.json
 var field_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.2.0",
@@ -16373,7 +16373,7 @@ var field_document_schema_default = {
   },
   description: "Opt-in field/record/group roles. No implicit upgrade from 0.1.0. Provenance, migration and binding evidence remain required."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/nullability-document.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/nullability-document.schema.json
 var nullability_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.3.0",
@@ -16607,7 +16607,7 @@ var nullability_document_schema_default = {
   },
   description: "Explicit ideal value availability on Fields. No implicit upgrade from older envelopes, native NULL mapping, or default execution."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/cardinality-document.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-document.schema.json
 var cardinality_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.4.0",
@@ -16941,7 +16941,7 @@ var cardinality_document_schema_default = {
   },
   description: "Explicit Field shape and optional array-item/map-value Field reference; no native repetition, dimension or physical encoding inference."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/facet-document.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/facet-document.schema.json
 var facet_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.5.0",
@@ -17546,7 +17546,7 @@ var facet_document_schema_default = {
   },
   description: "Candidate facet envelope: author-stated scalar bounds with explicit units. Requires semantic validation of scale <= precision, identities and references. Native enforcement, encoding and exactness require separate bindings."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/extension-package.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/extension-package.schema.json
 var extension_package_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:extension-package:0.1.0",
@@ -17575,7 +17575,7 @@ var extension_package_schema_default = {
   }
 };
 
-// ../truss-umf-runtime-fWZyIk/src/validation/schema.ts
+// ../truss-umf-runtime-cOgFWm/src/validation/schema.ts
 function canonical(value) {
   if (Array.isArray(value))
     return "a[" + value.map(canonical).join(",") + "]";
@@ -17603,7 +17603,7 @@ var checkPackage = ajv.compile(snapshotSchema(extension_package_schema_default))
 var checkCoreKeys = ajv.compile(snapshotSchema(key_document_schema_default));
 var checkCoreRelationships = ajv.compile(snapshotSchema(relationship_document_schema_default));
 
-// ../truss-umf-runtime-fWZyIk/src/registry/registry.ts
+// ../truss-umf-runtime-cOgFWm/src/registry/registry.ts
 function freeze(value) {
   if (value && typeof value === "object") {
     Object.freeze(value);
@@ -17639,7 +17639,7 @@ class Registry {
   }
 }
 
-// ../truss-umf-runtime-fWZyIk/src/model/schema-literals.ts
+// ../truss-umf-runtime-cOgFWm/src/model/schema-literals.ts
 var schemaPropertyNames = ["title", "aliases", "examples", "allowedValues", "default"];
 var newFacetNames = ["collectionSize", "range"];
 function schemaError(message, path = "") {
@@ -17821,7 +17821,7 @@ function evaluateSchemaLiteral(doc, field, value, refinements = true, depth = 0,
   }
 }
 
-// ../truss-umf-runtime-fWZyIk/src/validation/schema-properties.ts
+// ../truss-umf-runtime-cOgFWm/src/validation/schema-properties.ts
 var validator = createValidator();
 var checkSchemaProperties = validator.compile(snapshotSchema(schema_properties_document_schema_default));
 var checkCoreLiteral = validator.compile(snapshotSchema({ $defs: schema_properties_document_schema_default.$defs, $ref: "#/$defs/literal" }));
@@ -17991,7 +17991,7 @@ function validateSchemaPropertiesDocument(input, registry = new Registry) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-fWZyIk/src/validation/keys.ts
+// ../truss-umf-runtime-cOgFWm/src/validation/keys.ts
 var check = createValidator().compile(snapshotSchema(key_document_schema_default));
 var identity = (ref) => JSON.stringify([ref.module, ref.element]);
 function validateKeyCandidate(input, validateBase = true) {
@@ -18097,7 +18097,7 @@ function validateKeyCandidate(input, validateBase = true) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-fWZyIk/src/validation/relationships.ts
+// ../truss-umf-runtime-cOgFWm/src/validation/relationships.ts
 var check2 = createValidator().compile(snapshotSchema(relationship_document_schema_default));
 var identity2 = (ref) => JSON.stringify([ref.module, ref.element]);
 function validateRelationshipCandidate(input, validateBase = true) {
@@ -18200,7 +18200,7 @@ function validateRelationshipCandidate(input, validateBase = true) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-fWZyIk/src/validation/facets.ts
+// ../truss-umf-runtime-cOgFWm/src/validation/facets.ts
 var check3 = createValidator().compile({ $defs: facet_document_schema_default.$defs, $ref: "#/$defs/element" });
 function validateFacetElement(input, path = "") {
   const diagnostics = [];
@@ -18241,7 +18241,7 @@ function validateFacetElement(input, path = "") {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-fWZyIk/src/validation/document.ts
+// ../truss-umf-runtime-cOgFWm/src/validation/document.ts
 function validateDocument(input, registry = new Registry) {
   const diagnostics = [];
   const add = (code, path, message, severity = "error") => diagnostics.push({ code, path, message, severity });
@@ -18363,7 +18363,7 @@ function validateDocument(input, registry = new Registry) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-fWZyIk/src/model/document.ts
+// ../truss-umf-runtime-cOgFWm/src/model/document.ts
 function readDocument(text, format = "yaml") {
   const value = readJsonValue(text, format);
   const result = validateDocument(value);
@@ -18371,7 +18371,7 @@ function readDocument(text, format = "yaml") {
     throw new UmfError("INVALID_DOCUMENT", JSON.stringify(result.diagnostics));
   return value;
 }
-// ../truss-umf-runtime-fWZyIk/src/model/schema-properties.ts
+// ../truss-umf-runtime-cOgFWm/src/model/schema-properties.ts
 function locate(input, identityInput) {
   const source = copyJson(input), identity = copyJson(identityInput);
   const validation = validateDocument(source);
@@ -18405,7 +18405,7 @@ function inspectCoreSchemaProperties(input, identity) {
       properties[key] = copyJson(located.node[key]);
   return { operation: "inspect-core-schema-properties", version: "1.0.0", source: located.source, identity: located.identity, path: located.path, properties, diagnostics: located.validation.diagnostics, provenance: "unverified" };
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/key-operation-v3.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/key-operation-v3.schema.json
 var key_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:key-operation:3.0.0",
@@ -18725,7 +18725,7 @@ var key_operation_v3_schema_default = {
   ],
   description: "Structural validation does not prove author intent or native enforcement. Recompute receipts and validate their current source/target context before trusting operation results."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/key-operation-v2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/key-operation-v2.schema.json
 var key_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:key-operation:2.0.0",
@@ -19243,7 +19243,7 @@ var key_operation_v2_schema_default = {
   ],
   description: "Structural validation does not prove author intent or native enforcement. Recompute receipts and validate their current source/target context before trusting operation results."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/key-operation.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/key-operation.schema.json
 var key_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:key-operation:1.0.0",
@@ -19781,7 +19781,7 @@ var key_operation_schema_default = {
   description: "Structural validation does not prove author intent or native enforcement. Recompute receipts and validate their current source/target context before trusting operation results."
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/keys.ts
+// ../truss-umf-runtime-cOgFWm/src/model/keys.ts
 var validator2 = createValidator();
 for (const s of [schema_default, field_document_schema_default, nullability_document_schema_default, cardinality_document_schema_default, facet_document_schema_default, key_document_schema_default, relationship_document_schema_default, schema_properties_document_schema_default])
   validator2.addSchema(s);
@@ -19826,7 +19826,7 @@ function inspectCoreKeys(input, identity) {
     meaning = { state: "inapplicable" };
   return finish({ operation: "inspect-core-keys", version: l.source.umf === "0.8.0" ? "3.0.0" : l.source.umf === "0.7.0" ? "2.0.0" : "1.0.0", source: l.source, identity: l.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/relationship-operation-v2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/relationship-operation-v2.schema.json
 var relationship_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:relationship-operation:2.0.0",
@@ -20285,7 +20285,7 @@ var relationship_operation_v2_schema_default = {
   ],
   description: "Structure only. Verify retained operation and current context by recomputation; do not infer native enforcement or authenticated authorship."
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/relationship-operation.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/relationship-operation.schema.json
 var relationship_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:relationship-operation:1.0.0",
@@ -21051,7 +21051,7 @@ var relationship_operation_schema_default = {
   description: "Structure only. Verify retained operation and current context by recomputation; do not infer native enforcement or authenticated authorship."
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/relationships.ts
+// ../truss-umf-runtime-cOgFWm/src/model/relationships.ts
 var validator3 = createValidator();
 for (const s of [schema_default, field_document_schema_default, nullability_document_schema_default, cardinality_document_schema_default, facet_document_schema_default, key_document_schema_default, relationship_document_schema_default, schema_properties_document_schema_default])
   validator3.addSchema(s);
@@ -21095,7 +21095,7 @@ function inspectCoreRelationships(input, identity) {
   }
   return finish2({ operation: "inspect-core-relationships", version: l.source.umf === "0.8.0" ? "2.0.0" : "1.0.0", source: l.source, identity: l.identity, path: l.path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/kind-operation-v7.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v7.schema.json
 var kind_operation_v7_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:7.0.0",
@@ -21217,7 +21217,7 @@ var kind_operation_v7_schema_default = {
   },
   $ref: "#/$defs/lookup"
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/kind-operation-v6.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v6.schema.json
 var kind_operation_v6_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:6.0.0",
@@ -21410,7 +21410,7 @@ var kind_operation_v6_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/kind-operation-v5.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v5.schema.json
 var kind_operation_v5_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:5.0.0",
@@ -21603,7 +21603,7 @@ var kind_operation_v5_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/kind-operation-v4.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v4.schema.json
 var kind_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:4.0.0",
@@ -21796,7 +21796,7 @@ var kind_operation_v4_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/kind-operation.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation.schema.json
 var kind_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:1.0.0",
@@ -22010,7 +22010,7 @@ var kind_operation_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/kind-operation-v3.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v3.schema.json
 var kind_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:3.0.0",
@@ -22203,7 +22203,7 @@ var kind_operation_v3_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/kind-operation-v2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v2.schema.json
 var kind_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:2.0.0",
@@ -22397,7 +22397,7 @@ var kind_operation_v2_schema_default = {
   ]
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/field-kind.ts
+// ../truss-umf-runtime-cOgFWm/src/model/field-kind.ts
 var validator4 = createValidator();
 validator4.addSchema(schema_default);
 validator4.addSchema(field_document_schema_default);
@@ -22447,7 +22447,7 @@ function inspectCoreElementKind(input, identity) {
   }
   return finish3({ operation: "inspect-core-kind", version: source.umf === "0.8.0" ? "7.0.0" : source.umf === "0.7.0" ? "6.0.0" : source.umf === "0.6.0" ? "5.0.0" : source.umf === "0.5.0" ? "4.0.0" : source.umf === "0.4.0" ? "3.0.0" : source.umf === "0.3.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/nullability-operation-v6.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v6.schema.json
 var nullability_operation_v6_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:6.0.0",
@@ -22581,7 +22581,7 @@ var nullability_operation_v6_schema_default = {
   },
   $ref: "#/$defs/lookup"
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/nullability-operation-v5.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v5.schema.json
 var nullability_operation_v5_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:5.0.0",
@@ -22786,7 +22786,7 @@ var nullability_operation_v5_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/nullability-operation-v4.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v4.schema.json
 var nullability_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:4.0.0",
@@ -22991,7 +22991,7 @@ var nullability_operation_v4_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/nullability-operation-v3.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v3.schema.json
 var nullability_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:3.0.0",
@@ -23196,7 +23196,7 @@ var nullability_operation_v3_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/nullability-operation.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation.schema.json
 var nullability_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:1.0.0",
@@ -23425,7 +23425,7 @@ var nullability_operation_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/nullability-operation-v2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v2.schema.json
 var nullability_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:2.0.0",
@@ -23631,7 +23631,7 @@ var nullability_operation_v2_schema_default = {
   ]
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/nullability.ts
+// ../truss-umf-runtime-cOgFWm/src/model/nullability.ts
 var validator5 = createValidator();
 validator5.addSchema(schema_default);
 validator5.addSchema(field_document_schema_default);
@@ -23681,7 +23681,7 @@ function inspectCoreNullability(input, identity) {
     meaning = { state: "inapplicable" };
   return finish4({ operation: "inspect-core-nullability", version: source.umf === "0.8.0" ? "6.0.0" : source.umf === "0.7.0" ? "5.0.0" : source.umf === "0.6.0" ? "4.0.0" : source.umf === "0.5.0" ? "3.0.0" : source.umf === "0.4.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/cardinality-operation-v5.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation-v5.schema.json
 var cardinality_operation_v5_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:5.0.0",
@@ -23904,7 +23904,7 @@ var cardinality_operation_v5_schema_default = {
   },
   $ref: "#/$defs/lookup"
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/cardinality-operation-v4.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation-v4.schema.json
 var cardinality_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:4.0.0",
@@ -24202,7 +24202,7 @@ var cardinality_operation_v4_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/cardinality-operation-v3.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation-v3.schema.json
 var cardinality_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:3.0.0",
@@ -24500,7 +24500,7 @@ var cardinality_operation_v3_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/cardinality-operation-v2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation-v2.schema.json
 var cardinality_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:2.0.0",
@@ -24798,7 +24798,7 @@ var cardinality_operation_v2_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/cardinality-operation.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation.schema.json
 var cardinality_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:1.0.0",
@@ -25124,7 +25124,7 @@ var cardinality_operation_schema_default = {
   ]
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/cardinality.ts
+// ../truss-umf-runtime-cOgFWm/src/model/cardinality.ts
 var validator6 = createValidator();
 validator6.addSchema(schema_default);
 validator6.addSchema(field_document_schema_default);
@@ -25174,7 +25174,7 @@ function inspectCoreCardinality(input, identity) {
     meaning = { state: "inapplicable" };
   return finish5({ operation: "inspect-core-cardinality", version: source.umf === "0.8.0" ? "5.0.0" : source.umf === "0.7.0" ? "4.0.0" : source.umf === "0.6.0" ? "3.0.0" : source.umf === "0.5.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/facet-operation-v4.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/facet-operation-v4.schema.json
 var facet_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:facet-operation:4.0.0",
@@ -25480,7 +25480,7 @@ var facet_operation_v4_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/facet-operation-v3.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/facet-operation-v3.schema.json
 var facet_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:facet-operation:3.0.0",
@@ -25835,7 +25835,7 @@ var facet_operation_v3_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/facet-operation-v2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/facet-operation-v2.schema.json
 var facet_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:facet-operation:2.0.0",
@@ -26190,7 +26190,7 @@ var facet_operation_v2_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/facet-operation.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/facet-operation.schema.json
 var facet_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:facet-operation:1.0.0",
@@ -26576,7 +26576,7 @@ var facet_operation_schema_default = {
   ]
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/facets.ts
+// ../truss-umf-runtime-cOgFWm/src/model/facets.ts
 var validator7 = createValidator();
 for (const s of [schema_default, field_document_schema_default, nullability_document_schema_default, cardinality_document_schema_default, facet_document_schema_default, key_document_schema_default, relationship_document_schema_default, schema_properties_document_schema_default])
   validator7.addSchema(s);
@@ -26640,7 +26640,7 @@ function inspectCoreFacets(input, identity) {
     meaning = { state: "inapplicable" };
   return finish6({ operation: "inspect-core-facets", version: source.umf === "0.8.0" ? "4.0.0" : source.umf === "0.7.0" ? "3.0.0" : source.umf === "0.6.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/record-members-inspection-v0.2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/record-members-inspection-v0.2.schema.json
 var record_members_inspection_v0_2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:record-members-inspection:0.2.0",
@@ -26775,7 +26775,7 @@ var record_members_inspection_v0_2_schema_default = {
     }
   }
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/record-members-inspection.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/record-members-inspection.schema.json
 var record_members_inspection_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:record-members-inspection:0.1.0",
@@ -26911,7 +26911,7 @@ var record_members_inspection_schema_default = {
   }
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/record-members.ts
+// ../truss-umf-runtime-cOgFWm/src/model/record-members.ts
 var validator8 = createValidator();
 validator8.addSchema(relationship_document_schema_default);
 validator8.addSchema(schema_properties_document_schema_default);
@@ -26938,7 +26938,7 @@ function inspectCoreRecordMembers(input, identityInput) {
     throw new UmfError("CORE_RECORD_MEMBERS_RESULT", JSON.stringify(check.errors));
   return result;
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/scalar-type-inspection-v0.2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/scalar-type-inspection-v0.2.schema.json
 var scalar_type_inspection_v0_2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:scalar-type-inspection:0.2.0",
@@ -27079,7 +27079,7 @@ var scalar_type_inspection_v0_2_schema_default = {
     }
   }
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/scalar-type-inspection.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/scalar-type-inspection.schema.json
 var scalar_type_inspection_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:scalar-type-inspection:0.1.0",
@@ -27221,7 +27221,7 @@ var scalar_type_inspection_schema_default = {
   }
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/scalar-type.ts
+// ../truss-umf-runtime-cOgFWm/src/model/scalar-type.ts
 var validator9 = createValidator();
 validator9.addSchema(relationship_document_schema_default);
 validator9.addSchema(schema_properties_document_schema_default);
@@ -27247,7 +27247,7 @@ function inspectCoreScalarType(input, identityInput) {
     throw new UmfError("CORE_SCALAR_TYPE_RESULT", JSON.stringify(check.errors));
   return result;
 }
-// ../truss-umf-runtime-fWZyIk/spec/core/reference-links-inspection-v0.2.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/reference-links-inspection-v0.2.schema.json
 var reference_links_inspection_v0_2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:reference-links-inspection:0.2.0",
@@ -27402,7 +27402,7 @@ var reference_links_inspection_v0_2_schema_default = {
     }
   }
 };
-// ../truss-umf-runtime-fWZyIk/spec/core/reference-links-inspection.schema.json
+// ../truss-umf-runtime-cOgFWm/spec/core/reference-links-inspection.schema.json
 var reference_links_inspection_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:reference-links-inspection:0.1.0",
@@ -27558,7 +27558,7 @@ var reference_links_inspection_schema_default = {
   }
 };
 
-// ../truss-umf-runtime-fWZyIk/src/model/reference-links.ts
+// ../truss-umf-runtime-cOgFWm/src/model/reference-links.ts
 var validator10 = createValidator();
 validator10.addSchema(relationship_document_schema_default);
 validator10.addSchema(schema_properties_document_schema_default);
@@ -27598,5 +27598,6 @@ export {
   inspectCoreRelationships,
   inspectCoreScalarType,
   inspectCoreSchemaProperties,
-  readDocument
+  readDocument,
+  validateDocument
 };

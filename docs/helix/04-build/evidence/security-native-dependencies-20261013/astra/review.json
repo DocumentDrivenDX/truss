@@ -1,0 +1,66 @@
+{
+  "review": "Independent Astra Ultra read-only scoped review",
+  "reviewedAt": "2026-10-13T08:32:30.429190+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "70ddb9dc8200e30aa754e3d661877a9bbc15859a",
+  "conclusion": "No actionable findings within original compiler dependency to assessed native catalog correspondence scope.",
+  "independentControls": {
+    "passed": 21,
+    "results": "results.json",
+    "scope": "Actual mapper and genuine imported Weft response; synthetic native catalog IDs and selected mutated negative/compound-key packets. No native mutation or native acceptance claim.",
+    "replayedAfterIndexChange": true
+  },
+  "checked": [
+    "Qualified active unique type, property and key selection",
+    "Property owner type plus document/module/field qualification",
+    "Exact ordered native key property IDs",
+    "Distinct scan occurrence identity and use-to-scan target correspondence",
+    "Record association homes remain truss.object",
+    "Original uses/action/context metadata retained and securityReady false",
+    "Exact immutable bytes and 16MiB input/output carrier ceilings",
+    "Integration uses pre/post equal accepted assessment inside existing native guard operation",
+    "Once-built active native indices preserve duplicate-row refusal, with a separately validated scan-occurrence index"
+  ],
+  "nativeEvidence": {
+    "origin": "Parent-run retained logs inspected, not independently rerun",
+    "full": "8 tests passed in 26.583 seconds",
+    "focused": "Positive with 4 native-derived packet substitutions passed in 6.213 seconds",
+    "logs": [
+      "truss-native-dependencies-tests.log",
+      "truss-native-dependencies-substitutions.log",
+      "truss-native-dependencies-indexed.log"
+    ],
+    "finalIndexed": "Focused positive with 4 native-derived packet substitutions passed in 5.733 seconds"
+  },
+  "limits": [
+    "Original assessed native source and genuine compiler are premises; mapper does not authenticate them.",
+    "Synthetic negative inventories are not claimed to pass native catalog consistency.",
+    "No policy interpretation, SQL permit, physical operator qualification, writer/source lifetime closure or backend case promotion.",
+    "Carrier ceilings and indexed lookups do not establish total CPU or process/native heap bounds."
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_mapping.py": "06142ef12f7003f5e1ea664e566eee1c16cdffd46561fb5d739d68e73769fcc5",
+    "packages/python/src/truss/_security_mapping.py": "60fe1ccf939605ec1da3bc7e1943aa8344cca93b16f17018a50a4348a1777e3b",
+    "packages/python/src/truss/_security_catalog_assessment.py": "b2d6864b7eb3ae7c56d6f678adb1a6005caf614fabf4708db5c2219f733096e2",
+    "packages/python/src/truss/_catalog_runtime/plan.sql": "230e5e92612aef36d79a8cc7bb937ecfee554ed243d00def7e789e2788e03827",
+    "packages/python/tests/test_security_accepted_catalog_native.py": "6c4a75de658fd1dc32fff46138b1cc32d5b414c9282c515d8fca807c24c0f824",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "scripts/check-module-boundaries.py": "869ff4ecf4993315f54c7a0bab05d2d8820ea26a70e68eadf1ba9499ee3d17b7",
+    "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "5dfc66c0afc494259f5dd6e879368550123c110c5dec4d87e28a7c29d2b4067d",
+    "docs/helix/04-build/implementation-plan.md": "cc44736e6fa9e561ea3a70b1209998057db6b06a1076cffe5c52b1d402260f7f",
+    "docs/helix/04-build/evidence/security-native-dependencies-20261013/README.md": "dce438bbb1e7c7c4f998bb28f51418a5a4500efd0f90f0a3c5b127db3b3fa8c4",
+    "docs/helix/04-build/evidence/security-native-dependencies-20261013/receipt.json": "aca4461c2d563bd3c8b28ea91d85b1e6580f13732d37aa4b397750d10f0a1b1c"
+  },
+  "reviewedOwnerSourceDigests": {
+    "crates/weft-core/src/security_scan_obligations.rs": "4d9bf60f49ab0d16be173573f6d36349110d45b0a73e2513e70dfed21ca2b113",
+    "crates/weft-core/src/security_query_profile.rs": "6c360bf2c83c61d06245c07ad771f7de580b801f81f058cff7b6ff179d21f569"
+  },
+  "evidenceDigests": {
+    "controls.py": "0b4bfda2ed5ed86a75e29439a7a6c559216ec61d9aece24d9ae3363c03d0a0b8",
+    "results.json": "fbd5074fd878c4348fe4d35fd9268adeeecf951d7bb10d346a7715cd27ef4bdd",
+    "genuine-response.json": "21bb34a36c54bd8234d72d0f77469b35ffe07aac6034693ce52f92432834786d",
+    "truss-native-dependencies-tests.log": "82da7e281c4f7def5b6af576aa64124d840930e651de89c8084768aa2d907d0a",
+    "truss-native-dependencies-substitutions.log": "cb123efc864449df9174a6d45824571c33d392119b4ab3ba64a11928e79475e3",
+    "truss-native-dependencies-indexed.log": "ea7f2460c3d666210902b845d77de818c5d27c78791562e3332939839ab422ad"
+  }
+}

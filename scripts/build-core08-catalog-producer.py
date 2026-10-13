@@ -7,6 +7,8 @@ source=Path(built.stdout.strip());target=root/'packages/python/src/truss/_umf_co
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 for name in ('producer.js','producer-manifest.json'):shutil.copyfile(source/name,target/name)
 shutil.copytree(root/'packages/python/src/truss/_umf/licenses',target/'licenses',dirs_exist_ok=True)
+subprocess.run(['/opt/homebrew/bin/bun','build','packages/umf-bun/src/python-preparation-core08.ts','--target=bun','--format=esm','--outfile='+str(target/'preparation.mjs')],cwd=root,check=True,timeout=120,stdout=sys.stderr)
+(target/'acceptance-input-v0.1.schema.json').write_bytes((root/'docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json').read_bytes())
 paths=[p.relative_to(target).as_posix() for p in target.rglob('*') if p.is_file() and p.name!='manifest.json']
 manifest={'interfaceVersion':'truss-core08-catalog-producer/0.1.0','runtimeVersion':'1.4.2','owner':json.loads((target/'producer-manifest.json').read_text()),'files':{p:sha(target/p) for p in sorted(paths)},'scope':'Original core0.8 observation source only. No native ingress, report acceptance, migration, issuer authentication or protected execution.'}
 (target/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')

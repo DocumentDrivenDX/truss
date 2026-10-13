@@ -1,0 +1,24 @@
+{
+  "scope": "Read-only source review and actual Python release loader, source inventory/hash controls; lexical comparison independently translated to Python, not a PostgreSQL execution/refinement proof. No native database mutation.",
+  "head": "4e843375ba12a6733c13057a1e9c6ef57087d34b",
+  "releaseId": "truss-catalog-runtime/0.37-candidate",
+  "manifestDigest": "a8310e6af8bed761332eff7f6fb6670862397b761821e5f4d219341874f7486c",
+  "manifestFilesVerified": 41,
+  "original036ManifestExact": true,
+  "extractedReplacementCount": 120,
+  "translatedLexicalCases": 16018,
+  "sourceDigests": {
+    "packages/python/src/truss/catalog_runtime.py": "5576ae1e4a20b503350f3a882b015ed3b29652bf0811f7682efbffb5db799337",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "a8310e6af8bed761332eff7f6fb6670862397b761821e5f4d219341874f7486c",
+    "packages/python/src/truss/_catalog_runtime/upgrade-source-036.json": "4dd0e3b43bfe04541c5bbd63bc04eb8be698f2f82c722b2d9069dedb4adde3b8",
+    "packages/python/src/truss/_catalog_runtime/scalars.sql": "48877cb2562e8616d53a3f09f11afa59ee99d7ad33149ebe9b3932ec4db19906",
+    "packages/python/src/truss/_catalog_runtime/groups.sql": "665f698c43fe9f9cb8b856412b36553505cfe5c7c591a223e281a6b3d908d665",
+    "packages/python/src/truss/_catalog_runtime/operations.sql": "cbc2d913d53a9803dfaef89074c51f26e82fa560ec0d924e33bb73a6f72dd9f2",
+    "packages/python/src/truss/_catalog_runtime/read.sql": "aa809d274f541031907e6000ce6441142fc77c455eb57526529099de324cb2a9",
+    "packages/python/src/truss/_catalog_runtime/query.sql": "a13a7d19ffa5c32a07573fc8b4dc4f06df408bf0ed3589c6bb817b87b398878f",
+    "packages/python/src/truss/_catalog_runtime/migrations.sql": "7c375e68f2a2121c1f5897a179fb3dc716db91952e03a3510e0cc3cf1db6630e",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "e5c650eaa15a4f1de8f187f0eac1ca991fc4793c26664533de5cd85e48740847",
+    "packages/python/tests/test_core08_catalog_native.py": "2bde86dfc1fc55b78a122655784e549a8985877adbc81bd87c0d266cec1d5394",
+    "packages/python/tests/test_security_predicate_native.py": "85d4c4366504c46a849780d28296f59de649c37a82a98f84b621f6707f0edf71"
+  }
+}

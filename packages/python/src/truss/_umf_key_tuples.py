@@ -8,6 +8,7 @@ import shutil
 from .preparation import _capture
 from ._owner_evidence_json import decode_owner_evidence_json
 from ._umf_keys_release import MANIFEST_SHA256
+from ._umf_keys08_release import MANIFEST_SHA256 as CORE08_MANIFEST_SHA256
 
 
 @dataclass(frozen=True,slots=True)
@@ -40,7 +41,7 @@ def encode_string_key_tuples(original_document: bytes,requests: tuple[KeyTupleRe
     if type(original_document) is not bytes or not 0<len(original_document)<=1048576:
         raise ValueError('Bounded original accepted document bytes required')
     source=decode_owner_evidence_json(original_document)
-    if type(source) is not dict or source.get('umf')!='0.7.0':raise ValueError('Selected UMF 0.7 original source required')
+    if type(source) is not dict or source.get('umf') not in ('0.7.0','0.8.0'):raise ValueError('Selected UMF 0.7 or 0.8 original source required')
     if type(requests) is not tuple or not 1<=len(requests)<=512:raise ValueError('Bounded ordered key batch required')
     if len(original_document)*len(requests)>4194304:raise ValueError('Aggregate original source budget exceeded')
     wire=[]
@@ -56,8 +57,9 @@ def encode_string_key_tuples(original_document: bytes,requests: tuple[KeyTupleRe
             'values':[{'string':value} for value in request.values]})
     payload=json.dumps({'sourceText':original_document.decode('utf-8'),'requests':wire},ensure_ascii=True,separators=(',',':')).encode()
     if len(payload)>1048576:raise ValueError('Aggregate key input budget exceeded')
-    root=files('truss').joinpath('_umf_keys');manifest_bytes=root.joinpath('manifest.json').read_bytes()
-    if sha256(manifest_bytes).hexdigest()!=MANIFEST_SHA256:raise ValueError('Original key producer manifest required')
+    current=source['umf']=='0.8.0'
+    root=files('truss').joinpath('_umf_keys08' if current else '_umf_keys');manifest_bytes=root.joinpath('manifest.json').read_bytes()
+    if sha256(manifest_bytes).hexdigest()!=(CORE08_MANIFEST_SHA256 if current else MANIFEST_SHA256):raise ValueError('Original key producer manifest required')
     manifest=json.loads(manifest_bytes)
     for name,digest in manifest['files'].items():
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=digest:raise ValueError('Original key producer assets required')
@@ -77,7 +79,7 @@ def encode_string_key_tuples(original_document: bytes,requests: tuple[KeyTupleRe
         raw=text.encode('utf-8');receipt=decode_owner_evidence_json(raw)
         if type(receipt) is not dict or set(receipt)!={'operation','version','profile','source','identity','values','keyPath','bytesHex'}:
             raise ValueError('Complete original UMF key receipt required')
-        if receipt['operation']!='encode-core-key-tuple' or receipt['version']!='2.0.0' or receipt['profile']!='umf-key-tuple-v1':
+        if receipt['operation']!='encode-core-key-tuple' or receipt['version']!=('3.0.0' if current else '2.0.0') or receipt['profile']!='umf-key-tuple-v1':
             raise ValueError('Selected original UMF key receipt required')
         if receipt['identity']!=expected['identity'] or receipt['values']!=expected['values'] or not _same_json_meaning(receipt['source'],source):
             raise ValueError('Original source and ordered key correspondence required')

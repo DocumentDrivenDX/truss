@@ -1,0 +1,11 @@
+test_missing_null_and_wrong_profile_refuse_without_partial_registration (test_core08_catalog_native.Core08CatalogNativeTests.test_missing_null_and_wrong_profile_refuse_without_partial_registration) ... ok
+test_original08_default_and_allowed_values_correspondence (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_default_and_allowed_values_correspondence) ... ok
+test_original08_prepare_register_commit_report_and_view (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_prepare_register_commit_report_and_view) ... ok
+test_original08_registration_rollback_preserves_prior_work (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_registration_rollback_preserves_prior_work) ... ok
+test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines (test_core08_catalog_native.Core08CatalogNativeTests.test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines) ... ok
+test_public_install_commit_accept_commit_report_and_retry (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_install_commit_accept_commit_report_and_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 24.022s
+
+OK

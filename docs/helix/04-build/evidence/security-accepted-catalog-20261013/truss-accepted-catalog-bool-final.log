@@ -1,0 +1,13 @@
+test_head_mismatch_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_head_mismatch_refused_before_compiler) ... ok
+test_late_definition_change_contained_and_prior_work_preserved (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_late_definition_change_contained_and_prior_work_preserved) ... ok
+test_missing_historical_report_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_missing_historical_report_refused_before_compiler) ... ok
+test_missing_report_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_missing_report_refused_before_compiler) ... ok
+test_native_definition_substitution_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_native_definition_substitution_refused_before_compiler) ... ok
+test_original_accepted_model_and_native_inventory (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_original_accepted_model_and_native_inventory) ... ok
+test_stale_positive_head_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_stale_positive_head_refused_before_compiler) ... ok
+test_unaccepted_source_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_unaccepted_source_refused_before_compiler) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 25.861s
+
+OK

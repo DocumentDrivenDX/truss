@@ -1,0 +1,33 @@
+{
+  "scope": "Read-only retained native packets; original compiler replay and independent ordered endpoint/property/key correspondence checks, no database rerun or provenance authentication theorem.",
+  "results": [
+    {
+      "case": "baseline",
+      "endpointOccurrences": 8,
+      "orderedPairs": 8,
+      "originalCompilerResponseByteIdentical": true,
+      "mapperOutputByteIdentical": true,
+      "independentNativeIdAndOntologyCorrespondence": true,
+      "packetSha256": {
+        "request": "6dc429a02ddb9a7c4d59b703690096466a8e1aed6c3d457054db7ab8d645aff7",
+        "response": "21bb34a36c54bd8234d72d0f77469b35ffe07aac6034693ce52f92432834786d",
+        "assessment": "625d32cf95e1db070f6d891f147fd0a7c87bf6f091a7c42d987c164a385881f4",
+        "dependencies": "5a13dd0fb4af6177da65b443c186660ea6814c0e9a94ec82c0aa5c66c926d860"
+      }
+    },
+    {
+      "case": "compound",
+      "endpointOccurrences": 8,
+      "orderedPairs": 10,
+      "originalCompilerResponseByteIdentical": true,
+      "mapperOutputByteIdentical": true,
+      "independentNativeIdAndOntologyCorrespondence": true,
+      "packetSha256": {
+        "request": "a5782e258adc14e1614b9b4bd9a50e4a012738f5a23572140ec095777e59a9c0",
+        "response": "0f891ca6b56ee1c10d42b6effee6175627f0d6cdb8676514ac3cd20f1174066b",
+        "assessment": "f705daba29b21e332e4baa0215209af3deb2f6b3c6fdb0b30301e46a5bddd4ed",
+        "dependencies": "163d4d44117df4307e8b5b070adc87da3d2af4d0e57e7049bc97d9b4eda5e3f3"
+      }
+    }
+  ]
+}

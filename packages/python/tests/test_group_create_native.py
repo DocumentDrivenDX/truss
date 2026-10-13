@@ -24,7 +24,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
             source=relational_document();source['id']=identity
             if mutate_source is not None:mutate_source(source)
             documents.append(CatalogDocument(identity,'r1',json.dumps(source,indent=2,ensure_ascii=False).encode()))
-        prepared=assembly.prepare_catalog(tuple(documents),bun_executable='/opt/homebrew/bin/bun')
+        prepared=assembly.prepare_catalog(tuple(documents),source_version=json.loads(documents[0].content)['umf'],bun_executable='/opt/homebrew/bin/bun')
         self.documents=tuple(d.document for d in prepared.documents)
         registered=assembly.accept_in_transaction(tx,prepared,request_key='create-model')
         self.assertIsInstance(registered,Ok)

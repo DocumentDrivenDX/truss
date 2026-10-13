@@ -1,0 +1,8 @@
+test_original08_create_commit_read_and_durable_retry (test_core08_group_create_native.Core08GroupCreateTests.test_original08_create_commit_read_and_durable_retry) ... ok
+test_original08_native_single_and_compound_key_lookup (test_core08_group_create_native.Core08GroupCreateTests.test_original08_native_single_and_compound_key_lookup) ... ok
+test_create_commit_read_and_original_durable_replay (test_group_create_native.PublicCreateGroupTests.test_create_commit_read_and_original_durable_replay) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 16.202s
+
+OK

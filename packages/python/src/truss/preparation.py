@@ -16,6 +16,7 @@ import tempfile
 import time
 import weakref
 from ._umf_release import MANIFEST_SHA256
+from ._core08_catalog_release import MANIFEST_SHA256 as CORE08_MANIFEST_SHA256
 from ._acceptance_json import decode_acceptance_json
 
 MAX_INPUT=1048576
@@ -128,6 +129,26 @@ def _release():
         if isinstance(error,PreparationRejected):raise
         _reject('producer_unavailable')
 
+def _release_core08():
+    root=Path(__file__).parent/'_umf_core08'
+    try:
+        raw=(root/'manifest.json').read_bytes()
+        if sha256(raw).hexdigest()!=CORE08_MANIFEST_SHA256:_reject('producer_unavailable')
+        manifest=json.loads(raw)
+        for relative,digest in manifest['files'].items():
+            if sha256((root/relative).read_bytes()).hexdigest()!=digest:_reject('producer_unavailable')
+        _release() # Original isolated Ajv/runtime dependency closure remains pinned.
+        return root,manifest
+    except (OSError,KeyError,ValueError) as error:
+        if isinstance(error,PreparationRejected):raise
+        _reject('producer_unavailable')
+
+def _release_for_prepared(prepared):
+    _require_original_preparation(prepared)
+    if prepared.provenance.release_manifest_sha256==CORE08_MANIFEST_SHA256:return _release_core08()
+    if prepared.provenance.release_manifest_sha256==MANIFEST_SHA256:return _release()
+    _reject('producer_unavailable')
+
 def _capture(command,*,input_bytes=b'',limit,timeout,cwd=None):
     """Bound combined pipe capture while draining both streams under one deadline."""
     deadline=time.monotonic()+timeout
@@ -157,6 +178,13 @@ def _capture(command,*,input_bytes=b'',limit,timeout,cwd=None):
                     process.kill();process.wait()
 
 def prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun') -> PreparedAcceptance:
+    return _prepare_acceptance(documents,configuration,bun_executable=bun_executable,current=False)
+
+def prepare_core08_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun') -> PreparedAcceptance:
+    """Separate current original0.8 owner pipeline; no native acceptance authority."""
+    return _prepare_acceptance(documents,configuration,bun_executable=bun_executable,current=True)
+
+def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun',current:bool=False) -> PreparedAcceptance:
     """Prepare original native JSON UMF documents under explicit acceptance choices.
 
     configuration is the numeric-free AcceptanceInput JSON object without its
@@ -185,13 +213,14 @@ def prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byte
                                      'sha256':sha256(document.content).hexdigest()}})
     request=_json({'configurationHex':configuration.hex(),'documents':carriers})
     if len(request)>MAX_INPUT:_reject('resource')
-    root,manifest=_release()
+    root,manifest=(_release_core08() if current else _release())
+    release_digest=CORE08_MANIFEST_SHA256 if current else MANIFEST_SHA256
     executable=shutil.which(bun_executable)
     if executable is None:_reject('runtime_unavailable')
     try:
         runtime=_capture([executable,'--version'],limit=4096,timeout=5)
         if runtime.returncode or runtime.stdout.decode('ascii').strip()!=manifest['runtimeVersion']:_reject('runtime_unavailable')
-        completed=_capture([executable,str(root/'packages/umf-bun/src/bridge.js')],input_bytes=request,
+        completed=_capture([executable,str(root/'preparation.mjs' if current else root/'packages/umf-bun/src/bridge.js')],input_bytes=request,
                            limit=MAX_OUTPUT,timeout=10,cwd=root)
     except (OSError,subprocess.TimeoutExpired,UnicodeError):_reject('runtime_unavailable')
     if completed.returncode or len(completed.stdout)>MAX_OUTPUT:_reject('producer_unavailable')
@@ -226,10 +255,10 @@ def prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byte
         if (pin['identity'] != 'umf-record-interpretation'
                 or pin['version'] != manifest['owner']['revision']
                 or pin['sha256'] != manifest['owner']['bundleSha256']
-                or result['provenance']['schemaSha256'] != manifest['files']['docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json']):
+                or result['provenance']['schemaSha256'] != manifest['files']['acceptance-input-v0.1.schema.json' if current else 'docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json']):
             _reject('producer_unavailable')
         return _retain_original(PreparedAcceptance(original,evidence,_json(result['declarations']),_json(result['archiveDocuments']),
-            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],MANIFEST_SHA256,manifest['runtimeVersion']),_json(result['reportEvidence'])))
+            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],release_digest,manifest['runtimeVersion']),_json(result['reportEvidence'])))
     except (KeyError,ValueError,TypeError) as error:
         if isinstance(error,PreparationRejected):raise
         _reject('producer_unavailable')

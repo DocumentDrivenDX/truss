@@ -1,0 +1,7 @@
+test_missing_historical_report_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_missing_historical_report_refused_before_compiler) ... ok
+test_stale_positive_head_refused_before_compiler (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_stale_positive_head_refused_before_compiler) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 11.146s
+
+OK

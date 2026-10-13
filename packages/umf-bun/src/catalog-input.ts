@@ -1,7 +1,7 @@
 /** Original owner interpretation before native catalog effects. No acceptance authority. */
 import {preflightSourceJson} from '../../postgresql/src/acceptance-json';
 import {createAcceptanceInputInspector} from './acceptance-input';
-import {loadUmfProducer} from './index';
+import {loadUmfProducer,loadCore08CatalogOwners} from './index';
 import {collectCatalogDeclarations} from './catalog-declarations';
 import {requireOriginalAcceptanceProfileResolver,type createAcceptanceProfileResolver} from './acceptance-profiles';
 import type {ProfilePin} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
@@ -12,7 +12,13 @@ export function requireOriginalCatalogPreparation(prepared:object):void{
 }
 export async function createCatalogInputPreparation(directory:string,dependenciesPackage:string,profiles?:ReturnType<typeof createAcceptanceProfileResolver>){
  if(profiles!==undefined)requireOriginalAcceptanceProfileResolver(profiles);
- const inspector=await createAcceptanceInputInspector(dependenciesPackage);const owner=await loadUmfProducer(directory);
+ return createPreparation(directory,dependenciesPackage,profiles,false);
+}
+export async function createCore08CatalogInputPreparation(directory:string,dependenciesPackage:string,schemaUrl?:URL){
+ return createPreparation(directory,dependenciesPackage,undefined,true,schemaUrl);
+}
+async function createPreparation(directory:string,dependenciesPackage:string,profiles:Parameters<typeof createCatalogInputPreparation>[2],current:boolean,schemaUrl?:URL){
+ const inspector=await createAcceptanceInputInspector(dependenciesPackage,schemaUrl);const owner=current?(await loadCore08CatalogOwners(directory)).record:await loadUmfProducer(directory);
  const umfProfile=Object.freeze({identity:'umf-record-interpretation',version:owner.sourceRevision,sha256:owner.bundleSha256});
  const equal=(a:ProfilePin,b:ProfilePin)=>a.identity===b.identity&&a.version===b.version&&a.sha256===b.sha256;
  return Object.freeze({umfProfile,prepare(original:Uint8Array){

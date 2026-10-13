@@ -1,0 +1,105 @@
+{
+  "review": "Independent Astra Ultra read-only scoped review",
+  "reviewedAt": "2026-10-13T08:42:14.422193+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "baseHead": "b9ce30b965fa651d0f52cffc2e46b3a75a1a97fc",
+  "worktreeSourcePinsAuthoritative": true,
+  "conclusion": "No actionable findings in final original-ontology endpoint and association witness-key correspondence increment.",
+  "independentControls": {
+    "passed": 20,
+    "results": "results.json",
+    "genuineCompilerPositiveCases": [
+      "baseline",
+      "composite two-field Resource key with ordered Ownership source pair",
+      "two distinct Assignment roles targeting Staff",
+      "combined composite and repeated-target roles"
+    ],
+    "compatibility": "No-source v0.1 result byte-identical to reviewed 70ddb9dc helper",
+    "negativeCases": "15 selected source/role/arity/target/key/property/association/carrier refusals; mutated trusted packets are not claimed to satisfy original compiler closure.",
+    "replayedAfterWitnessKeyChange": true,
+    "associationWitnessKeyAsserted": true
+  },
+  "nativeEvidence": {
+    "origin": "Parent-run retained logs inspected; database tests not independently rerun",
+    "fullBeforeWitnessKeyAddition": "9 passed in 26.896 seconds",
+    "finalWitnessKeyFocused": "2 passed in 9.624 seconds",
+    "logs": [
+      "truss-ontology-endpoints-native-final.log",
+      "truss-ontology-witness-keys-native.log"
+    ]
+  },
+  "scope": [
+    "The original genuine compiler and its ontology closure remain supplied premises.",
+    "Endpoint roles and ordered field/key IDs are correspondence metadata, not native edges or executable joins.",
+    "Scalar-domain compatibility is owned by the original Weft closure; mapper does not duplicate policy or literal interpretation.",
+    "No issuer authenticity, held source lifetime, exhaustive writer closure, physical operator enforcement, admission or required case promotion.",
+    "Carrier ceilings do not establish total CPU or native/process heap bounds."
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_mapping.py": "0a9740e62910b4684a1d50131e7291c2cd23cc908df586e68a91d7b9a705a57f",
+    "packages/python/src/truss/_security_mapping.py": "b613475fb393e5002b58496376637b41ffca4005a02c9baa95e3f9ccb6fa6e80",
+    "packages/python/src/truss/_security_catalog_assessment.py": "b2d6864b7eb3ae7c56d6f678adb1a6005caf614fabf4708db5c2219f733096e2",
+    "packages/python/tests/test_security_accepted_catalog_native.py": "993c5c4eea9c655905b2c7b78fba673bc09479946ba053d996810d13b57c8b58",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "scripts/check-module-boundaries.py": "39c6fce1ff41b58308b2925ae07a8207649b460cfaa9e28df2c3cf5a8b2bf45b",
+    "docs/helix/04-build/evidence/security-ontology-endpoints-20261013/key_order_proof.py": "00660a414041442b1b0016545afc874f14ed84165da486d4ebe563aa1b70cc6a",
+    "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "3beaf9034759cf144276330081e7f6a9ca31386914a63c41137ffa2a84c4d36c",
+    "docs/helix/04-build/implementation-plan.md": "5432b8fe00356d52461ac415be4072d15594d4bcd0890a3d23b452072b2a84a7",
+    "docs/helix/04-build/evidence/security-ontology-endpoints-20261013/README.md": "d7610d88b10f1722ddefacfcab2734e9954b0bb1c4049f454b4bc6cddd24b279",
+    "docs/helix/04-build/evidence/security-ontology-endpoints-20261013/receipt.json": "f794fb74ff0c394ce95263d5d3648f59416f89ec9358881703c8441e4d261a25"
+  },
+  "reviewedOwnerSourceDigests": {
+    "crates/weft-core/src/security_ontology.rs": "a1e19a2605a2d247b6c58f252886d0ab45077cd2e3d53f0bffb995a2ae2a7d19",
+    "crates/weft-core/src/security_scan_obligations.rs": "4d9bf60f49ab0d16be173573f6d36349110d45b0a73e2513e70dfed21ca2b113",
+    "crates/weft-core/src/security_query_profile.rs": "6c360bf2c83c61d06245c07ad771f7de580b801f81f058cff7b6ff179d21f569"
+  },
+  "evidenceDigests": {
+    "compoundSelfTarget-request.json": "5559230f48c6b68091ac1ad546aff697f53d9a23d231b2ab9a0a446a9864a69c",
+    "controls.py": "feb84432674ba8750f280fde53c4a6c3e3046ebee1bd76bfe817b41aad75a66d",
+    "truss-ontology-witness-keys-native.log": "1b214e293f26b91a9446462bd585f44b10b7bf248a446a92ce1f2247afaa4a00",
+    "verify_native_packets.py": "742a2bc14922e4fcc8fc956abcaa7fa40c909c551414fbe6ce3075317f3a0614",
+    "compound-response.json": "ca1ac27d471764b416d36da4aa15f2a8505e08982ea904adbed81e1b815358a2",
+    "native-packet-results.json": "5d56acc7102720bed3184db5dd7c15d99450ad40f8001b83ef093ce8355b4576",
+    "native-baseline-request.json": "6dc429a02ddb9a7c4d59b703690096466a8e1aed6c3d457054db7ab8d645aff7",
+    "native-compound-request.json": "a5782e258adc14e1614b9b4bd9a50e4a012738f5a23572140ec095777e59a9c0",
+    "native-baseline-dependencies.json": "5a13dd0fb4af6177da65b443c186660ea6814c0e9a94ec82c0aa5c66c926d860",
+    "results.json": "468a36705cd2b6bb3f775202a1c6d4f3b72806e144fc5b8bdab3f4a4af895204",
+    "baseline-response.json": "21bb34a36c54bd8234d72d0f77469b35ffe07aac6034693ce52f92432834786d",
+    "selfTarget-response.json": "b3e2fdd7a74057d42cec393be8830335bb832643a53b56fdd9bb9eea75c44922",
+    "key_order_proof.py": "00660a414041442b1b0016545afc874f14ed84165da486d4ebe563aa1b70cc6a",
+    "review-before-native-packets.json": "9ca68c526542891ba9682a80615700f66ed6e852d3e4632b7d7b812673ebdd0a",
+    "native-compound-response.json": "0f891ca6b56ee1c10d42b6effee6175627f0d6cdb8676514ac3cd20f1174066b",
+    "key-order-replay.json": "eaec0453039d24a8992714c3c72a0f801ae06df761c5a3fd2194865bdd40826d",
+    "key-order-premise-check.json": "32330404e811a1f32bb5598fcd494ae300ba1e858ce42c7ea0fcaa86095fb1d3",
+    "compoundSelfTarget-response.json": "67692e697edbf271769d44ca9039632d56342834f4e098e7c3e98c0c147609f2",
+    "native-compound-dependencies.json": "163d4d44117df4307e8b5b070adc87da3d2af4d0e57e7049bc97d9b4eda5e3f3",
+    "truss-ontology-endpoints-native-final.log": "dca60f4c5b3983642ba51af081318a2b56df820cae3d6085fdab71f89397601f",
+    "native-baseline-response.json": "21bb34a36c54bd8234d72d0f77469b35ffe07aac6034693ce52f92432834786d",
+    "native-compound-assessment.json": "f705daba29b21e332e4baa0215209af3deb2f6b3c6fdb0b30301e46a5bddd4ed",
+    "selfTarget-request.json": "903a5e0e61b434694182adb8a011351c0a4ee2a20ee480164c3c0776729dab2f",
+    "compound-request.json": "15ce396885114363c9bdbcd67d4244cd652b8494694947e9c44eb487294f77ed",
+    "baseline-request.json": "6dc429a02ddb9a7c4d59b703690096466a8e1aed6c3d457054db7ab8d645aff7",
+    "native-baseline-assessment.json": "625d32cf95e1db070f6d891f147fd0a7c87bf6f091a7c42d987c164a385881f4"
+  },
+  "nativePacketVerification": {
+    "results": "native-packet-results.json",
+    "packets": 2,
+    "endpointOccurrences": 16,
+    "orderedEndpointPairs": 18,
+    "originalCompilerResponseAndMapperOutput": "Byte-identical in baseline and compound packets",
+    "independentChecks": "Original ontology roles/source fields, original action target and witness keys, native owner/property/key IDs, native composite order and occurrence identity",
+    "scope": "Read-only parent-retained packets; no issuer/provenance authentication theorem"
+  },
+  "formalReplay": {
+    "script": "key_order_proof.py",
+    "results": "key-order-replay.json",
+    "z3": "4.15.4",
+    "queries": {
+      "ordered_target_position_mismatch": "unsat",
+      "weakened_unordered_key_swap": "sat"
+    },
+    "premiseCheck": "key-order-premise-check.json",
+    "review": "Sound conditional equality lemma with satisfiable premises; full array equality assumes the correspondence the Python checks seek to establish. Does not prove source/Python/native refinement, source-side pair semantics, domain/key encoding, issuer, or admission."
+  },
+  "retainedGovernedEvidenceVerified": true
+}

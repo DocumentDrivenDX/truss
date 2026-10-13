@@ -1,0 +1,36 @@
+{
+  "interfaceVersion": "astra-weft-runtime036-review/0.1",
+  "createdAt": "2026-10-13T08:16:36.229110+00:00",
+  "repository": "/private/tmp/weft-security-main-integration",
+  "priorCommit": "35f6e9cadb26f4ad20c7bf1c5bb454dd36a81817",
+  "reviewedCommit": "873eea4ead8ae6ab2412fdbd8ebe5a2b3467e2b2",
+  "status": "No actionable finding in narrow amendment",
+  "scope": "Only import_loads runtime0.4.8 binding release-id predicate is widened to exact035 or exact036. Other profiles, original binding hash/shape checks, target identity checks, native authority and native SQL execution obligations are unchanged.",
+  "independentControls": {
+    "extracts": "original Rust old/new release predicate expressions from pinned commits, compiled with rustc1.90 standalone",
+    "results": {
+      "checked": 53760,
+      "newly_admitted": 256,
+      "scope": "extracted original Rust release predicate only"
+    },
+    "expectedDelta": "Exactly256 flag combinations (import_loads=true) acquire exact036; all other 53504 tested combinations remain identical. This is not a whole-compiler or native semantic equivalence proof."
+  },
+  "parentEvidence": {
+    "build": "Retained original parent build log successful",
+    "native": "Parent reports actual imported original module public import pending/commit query passed7.986 seconds; not independently rerun.",
+    "crateTests": "Blocked by pre-existing non-exhaustive Shape::ExactScalar match in cfg(test) property_definition.rs:2756; missing arm diagnostic points through2831. Same fixture exists at prior35f6e9c, separate from this one-line runtime amendment. No crate-test pass claimed."
+  },
+  "probeCorrection": "Initial dynamic HEAD extraction raced parent commit and extracted identical predicates; zero new cases exposed the mistake. Replayed against explicit prior35f6e9c and reviewed873eea4, additionally requiring exactly256 new admitted cases. Initial result retained as rejected probe evidence.",
+  "sourceSha256": {
+    "crates/weft-postgresql/src/truss_runtime.rs": "7519249a0a2bdee71a0b8604b3a6cfc08e112783d6ac96a5bce81d3ab92309fa",
+    "crates/weft-postgresql/src/property_definition.rs": "b0e9572d458ba9435622e00a63146ff53b2a743b66cee7a350b4c902a5b17b21"
+  },
+  "evidenceSha256": {
+    "initial-head-race.json": "71f615eac2bc05875d70f73138947e5e7d143ac5980c41fa279a06ad322cd244",
+    "release_predicate.rs": "fa792cf440376a9b1eb3d7301c57ee6cd9cf8cda7777d813bef3597ff513e70f",
+    "results.json": "ee85cb8fb10f3c854a39cec76523e65d45b483d9af9df92d7607c81a11ad55c2",
+    "weft-core08-036-tests-final.log": "ff7b95e627bd4b1a25f5e3395185f6fed81205036102432947142eef7fdcdc83",
+    "weft-core08-036-build.log": "9147d4f975c30ed0ebb713f8789c01cf923cb53debfa927964e96da0dd0f682d",
+    "source.diff": "9b251d00684f89aebf7c571136169431a49c51154a95e8a83599767ba5f6a5da"
+  }
+}

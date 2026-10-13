@@ -1,0 +1,5 @@
+{
+  "z3": "4.15.4",
+  "orderedLemmaPremisesSatisfiable": true,
+  "scope": "Checks the stated equality premises are consistent; does not establish implementation correspondence."
+}

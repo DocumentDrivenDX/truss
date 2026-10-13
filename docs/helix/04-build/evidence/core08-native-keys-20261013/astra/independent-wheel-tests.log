@@ -1,0 +1,15 @@
+Verified wheel import: /private/tmp/truss-core08-keys-astra-20261013/wheel/truss/__init__.py
+test_composite_component_order_and_ambiguous_concatenations (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_composite_component_order_and_ambiguous_concatenations) ... ok
+test_core08_compound_key_and_missing_component_refusal (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_core08_compound_key_and_missing_component_refusal) ... ok
+test_core08_original_owner_receipt_and_legacy_byte_vectors (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_core08_original_owner_receipt_and_legacy_byte_vectors) ... ok
+test_empty_strings_unicode_and_qualified_namespace (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_empty_strings_unicode_and_qualified_namespace) ... ok
+test_invalid_key_or_missing_component_refuses_entire_batch (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_invalid_key_or_missing_component_refuses_entire_batch) ... ok
+test_original_umf_string_byte_vectors (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_original_umf_string_byte_vectors) ... ok
+test_owner_numeric_normalization_and_full_supported_batch (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_owner_numeric_normalization_and_full_supported_batch) ... ok
+test_owner_parser_refuses_duplicate_source_and_aggregate_overflow (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_owner_parser_refuses_duplicate_source_and_aggregate_overflow) ... ok
+test_wrong_document_stale_source_and_boolean_substitution_refuse (test_umf_key_tuples.OriginalUmfKeyTupleTests.test_wrong_document_stale_source_and_boolean_substitution_refuse) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 3.950s
+
+OK

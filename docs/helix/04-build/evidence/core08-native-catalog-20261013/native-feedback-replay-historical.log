@@ -1,0 +1,19 @@
+test_missing_null_and_wrong_profile_refuse_without_partial_registration (test_core08_catalog_native.Core08CatalogNativeTests.test_missing_null_and_wrong_profile_refuse_without_partial_registration) ... ok
+test_original08_default_and_allowed_values_correspondence (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_default_and_allowed_values_correspondence) ... ERROR
+test_original08_prepare_register_commit_report_and_view (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_prepare_register_commit_report_and_view) ... ok
+test_original08_registration_rollback_preserves_prior_work (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_registration_rollback_preserves_prior_work) ... ok
+test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines (test_core08_catalog_native.Core08CatalogNativeTests.test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines) ... ok
+
+======================================================================
+ERROR: test_original08_default_and_allowed_values_correspondence (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_default_and_allowed_values_correspondence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_native.py", line 69, in test_original08_default_and_allowed_values_correspondence
+    document=CatalogDocument(original.document_id,original.revision,json.dumps(doc).encode())
+                                                  ^^^^^^^^^^^^^^^^^
+AttributeError: 'CatalogDocument' object has no attribute 'revision'
+
+----------------------------------------------------------------------
+Ran 5 tests in 15.244s
+
+FAILED (errors=1)

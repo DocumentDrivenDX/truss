@@ -1,0 +1,55 @@
+{
+  "parameters": [
+    true
+  ],
+  "prerequisites": [
+    "original_fact_domain_and_declared_key_validation",
+    "complete_fact_population",
+    "truthful_current_native_mapping",
+    "pg_catalog_pg_temp_search_path_and_authentic_native_helpers"
+  ],
+  "rules": [
+    {
+      "actions": [
+        "read"
+      ],
+      "effect": "permit",
+      "expression": "TRUE",
+      "id": "reader",
+      "target": {
+        "documentId": "domain",
+        "elementId": "Resource",
+        "moduleId": "m"
+      }
+    },
+    {
+      "actions": [
+        "read"
+      ],
+      "effect": "require",
+      "expression": "(SELECT CASE WHEN pg_catalog.bool_or(t.truth IS TRUE) THEN TRUE WHEN pg_catalog.bool_or(t.truth IS NULL) THEN NULL::pg_catalog.bool ELSE FALSE END FROM (SELECT ((CASE WHEN (truss.valid_scalar_cell(v0.props->'7','string',false) IS TRUE) AND (truss.valid_scalar_cell(r.props->'9','string',false) IS TRUE) THEN (((CASE WHEN v0.props->'7'->>'kind'='null' THEN NULL ELSE v0.props->'7'->>'text' END) COLLATE pg_catalog.\"C\") IS NOT DISTINCT FROM ((CASE WHEN r.props->'9'->>'kind'='null' THEN NULL ELSE r.props->'9'->>'text' END) COLLATE pg_catalog.\"C\")) ELSE NULL::pg_catalog.bool END) AND ((SELECT CASE WHEN pg_catalog.bool_or(t.truth IS TRUE) THEN TRUE WHEN pg_catalog.bool_or(t.truth IS NULL) THEN NULL::pg_catalog.bool ELSE FALSE END FROM (SELECT ((CASE WHEN (truss.valid_scalar_cell(v1.props->'4','string',false) IS TRUE) AND (truss.valid_scalar_cell(s.props->'11','string',false) IS TRUE) THEN (((CASE WHEN v1.props->'4'->>'kind'='null' THEN NULL ELSE v1.props->'4'->>'text' END) COLLATE pg_catalog.\"C\") IS NOT DISTINCT FROM ((CASE WHEN s.props->'11'->>'kind'='null' THEN NULL ELSE s.props->'11'->>'text' END) COLLATE pg_catalog.\"C\")) ELSE NULL::pg_catalog.bool END) AND (CASE WHEN (truss.valid_scalar_cell(v1.props->'3','string',false) IS TRUE) AND (truss.valid_scalar_cell(v0.props->'6','string',false) IS TRUE) THEN (((CASE WHEN v1.props->'3'->>'kind'='null' THEN NULL ELSE v1.props->'3'->>'text' END) COLLATE pg_catalog.\"C\") IS NOT DISTINCT FROM ((CASE WHEN v0.props->'6'->>'kind'='null' THEN NULL ELSE v0.props->'6'->>'text' END) COLLATE pg_catalog.\"C\")) ELSE NULL::pg_catalog.bool END) AND (CASE WHEN (truss.valid_scalar_cell(v1.props->'1','boolean',false) IS TRUE) AND (TRUE) THEN ((CASE WHEN v1.props->'1'->>'kind'='null' THEN NULL ELSE v1.props->'1'->'value' END) IS NOT DISTINCT FROM (pg_catalog.to_jsonb($1::pg_catalog.bool))) ELSE NULL::pg_catalog.bool END)) AS truth FROM truss.object AS v1 WHERE v1.type_id=1) AS t))) AS truth FROM truss.object AS v0 WHERE v0.type_id=2) AS t)",
+      "id": "membership",
+      "target": {
+        "documentId": "domain",
+        "elementId": "Resource",
+        "moduleId": "m"
+      }
+    },
+    {
+      "actions": [
+        "query-original"
+      ],
+      "effect": "permit",
+      "expression": "TRUE",
+      "id": "query-original",
+      "target": {
+        "documentId": "domain",
+        "elementId": "Resource",
+        "moduleId": "m"
+      }
+    }
+  ],
+  "scope": "conditional_rule_truths_on_originally_validated_string_boolean_record_facts_only",
+  "securityReady": false,
+  "version": "weft.truss.predicate-spike/0.1"
+}

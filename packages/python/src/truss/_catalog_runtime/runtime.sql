@@ -266,7 +266,7 @@ DECLARE input jsonb; documents jsonb; declarations jsonb; doc jsonb; source json
 BEGIN
  input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
  declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
- IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR (input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation())
+ IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR ((input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation()) AND (input->'supportProfile' IS NOT DISTINCT FROM '{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb AND (input-'interfaceVersion'-'documents'-'supportProfile')=(SELECT preparation_configuration-'supportProfile' FROM truss.runtime_current_installation())) IS NOT TRUE)
   OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.runtime_current_installation())
   OR input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
   OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512
@@ -279,9 +279,9 @@ BEGIN
    OR selected_doc->>'documentRevision' IS DISTINCT FROM doc->>'revision'
    OR selected_doc->'artifact'->>'sha256' IS DISTINCT FROM encode(sha256(convert_to(doc->>'originalText','UTF8')),'hex')
    OR decode(selected_doc->'artifact'->>'bytesBase64','base64') IS DISTINCT FROM convert_to(doc->>'originalText','UTF8')
-   OR source->>'id' IS DISTINCT FROM doc->>'documentId' OR source->>'umf' IS DISTINCT FROM '0.7.0'
+   OR source->>'id' IS DISTINCT FROM doc->>'documentId' OR source->>'umf' IS DISTINCT FROM (CASE WHEN input->'supportProfile'='{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb THEN '0.8.0' ELSE '0.7.0' END)
    OR doc->>'umfVersion' IS DISTINCT FROM source->>'umf'
-   OR (input->'supportProfile'->>'version'<>'0.6.0' AND (coalesce(source->'vocabularies','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb OR coalesce(source->'extensions','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb)) THEN
+   OR (input->'supportProfile'->>'version' NOT IN ('0.6.0','0.7.0') AND (coalesce(source->'vocabularies','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb OR coalesce(source->'extensions','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb)) THEN
    RAISE EXCEPTION 'original document correspondence required' USING ERRCODE='22023'; END IF;
   SELECT count(*) FILTER(WHERE e.value->>'kind'='record'),count(*) FILTER(WHERE e.value->>'kind'='field')
    INTO expected_records,expected_fields FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e;
@@ -309,7 +309,7 @@ BEGIN
     IF field->'reference' IS DISTINCT FROM jsonb_build_object('module',field->>'fieldModule','element',field->>'fieldId')
      OR field->'declaration' IS DISTINCT FROM source_field OR coalesce(source_field->>'scalarType','') NOT IN ('string','integer','decimal','boolean','timestamp','binary')
      OR source_field->>'cardinality' IS DISTINCT FROM 'one' OR source_field->>'nullability' NOT IN ('required','absent-allowed')
-     OR EXISTS(SELECT 1 FROM jsonb_object_keys(source_field) k WHERE k NOT IN ('id','kind','name','scalarType','cardinality','nullability','extensions'))
+     OR EXISTS(SELECT 1 FROM jsonb_object_keys(source_field) k WHERE k NOT IN ('id','kind','name','scalarType','cardinality','nullability','extensions') AND NOT (source->>'umf'='0.8.0' AND k IN ('facets','allowedValues','default','title','description','aliases','examples')))
      OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(source_record->'members') m WHERE m.value=field->'reference') THEN
      RAISE EXCEPTION 'selected original Field declaration required' USING ERRCODE='0A000'; END IF;
    END LOOP;
@@ -348,7 +348,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.35-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.37-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;

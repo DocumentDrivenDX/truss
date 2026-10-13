@@ -1,0 +1,6 @@
+test_signed64_updates_refuse_overflow_and_preserve_prior_update (test_security_predicate_native.NativePredicateTests.test_signed64_updates_refuse_overflow_and_preserve_prior_update) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 8.031s
+
+OK

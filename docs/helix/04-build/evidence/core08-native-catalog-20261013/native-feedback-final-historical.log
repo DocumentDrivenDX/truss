@@ -1,0 +1,33 @@
+test_missing_null_and_wrong_profile_refuse_without_partial_registration (test_core08_catalog_native.Core08CatalogNativeTests.test_missing_null_and_wrong_profile_refuse_without_partial_registration) ... ok
+test_original08_default_and_allowed_values_correspondence (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_default_and_allowed_values_correspondence) ... ERROR
+test_original08_prepare_register_commit_report_and_view (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_prepare_register_commit_report_and_view) ... ok
+test_original08_registration_rollback_preserves_prior_work (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_registration_rollback_preserves_prior_work) ... ok
+test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines (test_core08_catalog_native.Core08CatalogNativeTests.test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines) ... ok
+test_prepare_register_commit_report_retry (unittest.loader._FailedTest.test_prepare_register_commit_report_retry) ... ERROR
+
+======================================================================
+ERROR: test_original08_default_and_allowed_values_correspondence (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_default_and_allowed_values_correspondence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_native.py", line 70, in test_original08_default_and_allowed_values_correspondence
+    prepared=a.prepare_catalog((document,),source_version='0.8.0',bun_executable='/opt/homebrew/bin/bun')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/catalog_runtime.py", line 326, in prepare_catalog
+    prepared=producer(documents,canonical_numeric_free(configuration),bun_executable=bun_executable)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/preparation.py", line 185, in prepare_core08_acceptance
+    return _prepare_acceptance(documents,configuration,bun_executable=bun_executable,current=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/preparation.py", line 235, in _prepare_acceptance
+    raise PreparationRejected(reason,diagnostics=diagnostics)
+truss.preparation.PreparationRejected: Truss preparation refused: invalid_document
+
+======================================================================
+ERROR: test_prepare_register_commit_report_retry (unittest.loader._FailedTest.test_prepare_register_commit_report_retry)
+----------------------------------------------------------------------
+AttributeError: type object 'PublicCatalogRuntimeTests' has no attribute 'test_prepare_register_commit_report_retry'
+
+----------------------------------------------------------------------
+Ran 6 tests in 16.377s
+
+FAILED (errors=2)

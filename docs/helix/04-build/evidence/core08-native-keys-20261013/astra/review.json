@@ -1,0 +1,86 @@
+{
+  "review": "Independent Astra Ultra read-only core0.8 key producer review",
+  "reviewedAt": "2026-10-13T09:04:24.177836+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "baseHead": "db4c8ae7dcdbc0b08f98101167e39f0889fa0692",
+  "worktreeSourcePinsAuthoritative": true,
+  "conclusion": "No remaining actionable findings. Separate core0.8 package-data fix independently verified in the built wheel and pure wheel-import tests.",
+  "resolvedFinding": "New _umf_keys08 assets initially absent from wheel package-data; corrected patterns now verified with 145 Python/current key asset bytes and complete manifest asset checks.",
+  "independentEvidence": {
+    "unitReplay": "9 tests passed in 3.981 seconds",
+    "unitLog": "unit-replay.log",
+    "additionalControls": "16 passed: genuine original0.8 receipt, selected returned-packet substitutions, unsupported source versions before runtime",
+    "controls": "results.json",
+    "pinnedOwnerRebuild": "source-build-check.json",
+    "legacyFilesUnchanged": 10
+  },
+  "initialFailedAttempt": {
+    "status": "9-test run failed with 4 errors in 25.318 seconds while owner rebuild ran concurrently",
+    "cause": "Existing _capture timed out on Bun --version after 5 seconds in legacy vector/normalization tests; both new core0.8 tests passed. Sequential unchanged-source replay subsequently passed all 9.",
+    "qualification": "Not counted as passing evidence and not attributed to a source defect."
+  },
+  "nativeEvidence": {
+    "origin": "Parent-run installed-wheel native logs and exact test sources inspected; not rerun by reviewer",
+    "status": "3 tests passed in 16.202 seconds",
+    "log": "truss-core08-installed-native-final.log",
+    "cases": [
+      "core0.8 create/commit/read/durable retry",
+      "core0.8 single and ordered composite key lookup, reversed component nonmatch",
+      "legacy create/commit/read/durable retry"
+    ],
+    "testReview": "Actual authored composite key order is A-value then A-label; lookup(value,one) finds original object and lookup(one,value) returns not_found."
+  },
+  "remainingPremises": [
+    "Packaged pinned original producer execution remains the meaning owner; Python is not a competing key encoder.",
+    "Source/hash/receipt checks do not authenticate an adversarial executable or establish file/source lifetime.",
+    "String-key encoding is not native uniqueness, issuer authority, protected row policy evaluation, or full backend admission.",
+    "Original source0.7 retains encoder2.0.0 and unchanged assets; explicit original source0.8 selects encoder3.0.0."
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_umf_key_tuples.py": "0b5eb0adad7a729b8f407b65be9f19453f2743b683c300112999bc22d09b662a",
+    "packages/python/src/truss/_umf_keys08_release.py": "43594c397319fabb04a09fadcdd451dbb03578613c6925af762ce39d74b8d77b",
+    "packages/python/src/truss/_umf_keys_release.py": "f5810287041362626b0341a56aa9121a9cc801e9bf6513c9a3ed1293ab9f5129",
+    "packages/python/src/truss/_owner_evidence_json.py": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+    "packages/python/src/truss/preparation.py": "03f98cbcce659105967d9cd83eba542bfd56d03303619155563f2453f67f1c1d",
+    "packages/python/tests/test_umf_key_tuples.py": "91a394dbfed5dbe3fe73cc0ec84f58c6ab149068fd2415c6b9a14a5338af5e4a",
+    "packages/python/tests/test_core08_group_create_native.py": "600fadc6d22b4791e37ee8de8bddc6b6c0f7cea1899e4bd8f015ded036aed110",
+    "packages/python/tests/test_group_create_native.py": "1adb16281d4bf38214fadd7e3b80c57eb81e8874836417e4d7ec2be1d57e82ba",
+    "packages/python/pyproject.toml": "51701189354a7cc01943a9c23db6c7f77dce1d20267f2c309b5847462a60d91a",
+    "packages/umf-bun/src/python-keys.mjs": "b83d4e5cda8d76201759d3eaf85afe3ba91133fe0baa1d9c4b63ce5a7de3f133",
+    "scripts/build-python-umf-keys.ts": "b2d661c6f21fc1ab1a3a4c4f2cff86c00e5290244c6a624dd61c7e1b64d5a210",
+    "scripts/build-umf-runtime.ts": "b2cff5aef7c3f7b3aad041bdf34eba205a1719f373348b5d3f522b3b16130aca",
+    "scripts/check-module-boundaries.py": "acad7eefc2cc006b8905f19242c885166eeae503e1fe08e1228839c6225faf60",
+    "packages/python/src/truss/_umf_keys08/producer.js": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+    "packages/python/src/truss/_umf_keys08/producer-manifest.json": "f674dd05d79d42c22838c145db87897c3e7f19d95669a1f342a9811b236f8c31",
+    "packages/python/src/truss/_umf_keys08/manifest.json": "1db61eb244a0acf73992fb942ea52fd12ee1a4c9a41c5033b3d6c4db9d976b80",
+    "packages/python/src/truss/_umf_keys08/bridge.mjs": "b83d4e5cda8d76201759d3eaf85afe3ba91133fe0baa1d9c4b63ce5a7de3f133",
+    "packages/python/src/truss/_umf_keys08/licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "packages/python/src/truss/_umf_keys08/licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "packages/python/src/truss/_umf_keys08/licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "packages/python/src/truss/_umf_keys08/licenses/fast-deep-equal.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "packages/python/src/truss/_umf_keys08/licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "packages/python/src/truss/_umf_keys08/licenses/json-schema-traverse.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+  },
+  "evidenceDigests": {
+    "controls.py": "292c74e751b564d43a0137bc0e241fb696b3f9e010b9b74254c0657f29e545c1",
+    "review-before-wheel.json": "ddf0ce14e7836a6d86947b2c6de05a45546daed1a06bccd979891e2d63103af0",
+    "results.json": "fcf0613f6e7b184a6bec06f7609bffa4c5572ad11366ce54e5cd33b1af5dac85",
+    "source-build-check.json": "444a4491b025a334501931756a48b4fe050f2b44fe25b4f6125b2c3dcba49845",
+    "unit-replay.log": "595942ab270de3c949f21007633627f5335817028c9b70eeec9e3357de43d767",
+    "run_wheel_tests.py": "121c4752f2804cd480cb1f5f5115577919a3d7a8e54e736f264a3406d5ea46ef",
+    "truss-core08-installed-native-final.log": "0c23a3844959f40008ad74dcbf7cb4a39581a4814389ba8bde48fa7f714c41a6",
+    "original-receipt.json": "8694a3241bc86ff6599af647886b0a03a47c872e56f93a59f37f4434a3cddcc2",
+    "wheel-verification.json": "40a87c11146a9ebfae6292f1577fe77c744a4936464873437e519cae878c7ea0",
+    "independent-wheel-tests.log": "73623e053d946fe27d43c96d31080e18d5c309f50818fdc0fb9b5cfbd51f4fbd"
+  },
+  "sourceUpdateAfterPriorReview": "Only test_core08_group_create_native.py changed: native single/compound lookups and swapped component nonmatch. Production source hashes remain unchanged.",
+  "wheelEvidence": {
+    "wheel": "/private/tmp/truss-core08-key-wheels/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+    "wheelSha256": "a3416d785a0e605bbdfa24c943af1a041c324303eabc5b07b94b44acd2a06386",
+    "verifiedPythonAndCurrentKeyAssets": 145,
+    "extraPythonModules": [],
+    "bothLegacyAndCurrentManifestAssetsVerified": true,
+    "extractedForIndependentPureReplay": "/private/tmp/truss-core08-keys-astra-20261013/wheel",
+    "independentPureReplay": "9 tests passed; exact imported wheel __file__ asserted; see independent-wheel-tests.log"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "z3": "4.15.4",
+  "scope": "19 canonical ASCII digits only; original lexical grammar, SQL collation, custody and execution remain separate premises",
+  "checks": [
+    {
+      "bound": "9223372036854775807",
+      "counterexample": "unsat"
+    },
+    {
+      "bound": "9223372036854775808",
+      "counterexample": "unsat"
+    }
+  ],
+  "positive_overflow_witness": "[value = 9223372036854775808]"
+}

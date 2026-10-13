@@ -1,0 +1,9 @@
+# Native dependency correspondence
+
+The original source-bound Weft handoff owns scan occurrence, query operator, original action, rule/context, field/key/association dependencies. Truss maps its qualified references to unique active native Record types and type-scoped properties, verifies original ordered key fields against native prop_ids, and retains association Records as object-table homes. Both self-join occurrences remain independent despite sharing a native type. The mapper neither parses policy expressions nor invents physical edge relationships.
+
+This increment consumes the guarded accepted-catalog assessment and returns private metadata with securityReady false. Matching rows and hashes do not establish an authentic compiler issuer, complete writer/source barriers, full physical association endpoint mapping, native enforcement or an execution permit. The existing source assessment is rechecked after original compilation; same-transaction intermediate-change ABA remains open. Input/output carrier bounds are16MiB and do not prove total allocation bounds.
+
+The native eight-control suite passes26.583seconds. The additional native-derived mapping substitutions require missing salary property, duplicate Resource type, changed key prop_ids, and missing self-join scan to refuse. These are correspondence component checks; no required backend case closes. Next bind ontology endpoint roles and composite key occurrences, then qualify physical predicates and source/fact/authority lifetime under the unchanged132-case plan.
+
+Independent review exercised21 mapper controls with genuine original Weft output and synthetic native IDs, including compound key ordering. Native active inventories now use once-built address indices, preserving all duplicate occurrences for rejection; a focused native replay and four substitutions pass5.733seconds. Indices reduce repeated inventory searches but are not a total CPU/heap bound theorem.

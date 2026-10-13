@@ -1,0 +1,7 @@
+test_original_accepted_model_and_native_inventory (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_original_accepted_model_and_native_inventory) ... ok
+test_genuine_compound_endpoint_key_preserves_native_position (test_security_accepted_catalog_native.AcceptedCatalogMappingTests.test_genuine_compound_endpoint_key_preserves_native_position) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 9.624s
+
+OK

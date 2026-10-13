@@ -77,4 +77,25 @@ class OriginalUmfKeyTupleTests(unittest.TestCase):
         self.assertTrue(all(result.tuple_bytes==batch[0].tuple_bytes for result in batch))
 
 
+
+    def test_core08_original_owner_receipt_and_legacy_byte_vectors(self):
+        fixture=json.loads((Path(__file__).parent/'fixtures/security-mapping-request.json').read_bytes())
+        source=fixture['modules'][0]['documentJson'].encode()
+        for text in ('','é','e\u0301','a\0b'):
+            current=self.encode((KeyTupleRequest('m','Staff','pk',(text,)),),source)[0]
+            legacy=self.encode((KeyTupleRequest('m','A','z-alt',(text,)),))[0]
+            self.assertEqual(current.tuple_bytes,legacy.tuple_bytes)
+            self.assertEqual(json.loads(current.original_receipt_bytes)['version'],'3.0.0')
+            self.assertEqual(json.loads(current.original_receipt_bytes)['source']['umf'],'0.8.0')
+
+    def test_core08_compound_key_and_missing_component_refusal(self):
+        fixture=json.loads((Path(__file__).parent/'fixtures/security-mapping-request.json').read_bytes());source=json.loads(fixture['modules'][0]['documentJson'])
+        staff=next(e for e in source['modules'][0]['elements'] if e['id']=='Staff')
+        staff['members'].append({'module':'m','element':'staffCode'});staff['keys'][0]['fields'].append({'module':'m','element':'staffCode'})
+        source['modules'][0]['elements'].append({'id':'staffCode','kind':'field','name':'staffCode','scalarType':'string','nullability':'required','cardinality':'one','extensions':{}})
+        original=json.dumps(source).encode()
+        outputs=self.encode(tuple(KeyTupleRequest('m','Staff','pk',v) for v in (('ab','c'),('a','bc'),('c','ab'))),original)
+        self.assertEqual(len({r.tuple_bytes for r in outputs}),3)
+        with self.assertRaises(ValueError):self.encode((KeyTupleRequest('m','Staff','pk',('only',)),),original)
+
 if __name__=='__main__':unittest.main()

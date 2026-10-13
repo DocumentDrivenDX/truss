@@ -1,0 +1,6 @@
+test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines (test_core08_catalog_native.Core08CatalogNativeTests.test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 9.218s
+
+OK

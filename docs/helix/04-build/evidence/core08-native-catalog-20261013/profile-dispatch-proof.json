@@ -1,0 +1,1 @@
+{"scope": "abstract total exact-profile dispatch only; native implementation separately tested", "total_dispatch": "unsat", "missing_profile_acceptance": "unsat", "weakened_nullable_guard": "sat", "not_proven": ["whole SQL runtime", "issuer authentication", "protected backend enforcement", "concurrent source closure"]}

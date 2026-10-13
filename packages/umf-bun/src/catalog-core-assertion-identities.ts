@@ -15,10 +15,12 @@ type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation
 type Collection=ReturnType<typeof collectCatalogAssertionObservations>;
 export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collection:Collection){
  requireOriginalCatalogPreparation(prepared);requireOriginalCatalogObservationCollection(prepared,collection);
- const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/0.6.0',producers:{fields:collection.fieldProfile,scalar:collection.scalarProfile,members:collection.membersProfile,referenceLinks:collection.referenceLinksProfile,declarations:collection.profile},
+ const current=prepared.documents.every(d=>d.umfVersion==='0.8.0');
+ const identityVersion=current?'0.7.0':'0.6.0';
+ const manifestBytes=Buffer.from(JSON.stringify({interfaceVersion:'truss-core-assertion-source-identity/'+identityVersion,producers:{fields:collection.fieldProfile,scalar:collection.scalarProfile,members:collection.membersProfile,referenceLinks:collection.referenceLinksProfile,declarations:collection.profile},
   operations:['kind','nullability','cardinality','facets','scalarType','members','referenceLinks','keys','relationships','schema_properties'],basis:'original',referenceLinks:'generic_core_links_not_verified_type_assertions',schemaPropertyAssertions:['allowedValues','default','facets'],annotations:'retained separately; not constraint assertions',identity:'original document digest, qualified owner and exact owner-produced pointer',authored:'retain exact declaration ID with full original occurrence pointer',missing:'retained absence observation; no assertion invented',enforcement:'none/unqualified'}));
- const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/0.6.0',bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
- const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:'0.6.0',sha256:manifest.sha256});
+ const manifest=Object.freeze({identity:'truss.core-assertion-source-identity/'+identityVersion,bytesBase64:manifestBytes.toString('base64'),sha256:createHash('sha256').update(manifestBytes).digest('hex')});
+ const profile=Object.freeze({identity:'truss-core-assertion-source-identity',version:identityVersion,sha256:manifest.sha256});
  type Entry={assertion:{sourceKind:'umf_document';owner:{scope:'document';documentId:string}|{documentId:string;moduleId:string};definitionPin:string;sourcePointer:string;kind:'source'|'authored';sourceIdentityProfile?:typeof profile;authoredIdentity?:string};source:Prepared['original']['input']['documents'][number]['artifact'];ruleName:string;ruleNameOrigin:'profile_generated';enforcement:'none';reason:'unqualified';ownerEvidence:Collection['observations'][number]['evidence']};
  type LinkEvidence={documentId:string;owner:{moduleId:string;elementId:string};source:Entry['source'];sourcePointer:string;ownerProfile:NonNullable<Collection['referenceLinksProfile']>;ownerEvidence:Collection['observations'][number]['evidence'];originalMeaning:unknown;typeAssertion:'unverified';meaningCorrespondence:true;interpretationQualified:false;scope:'original_direct_core_reference_links_only'};
  const referenceLinks:LinkEvidence[]=[],referenceLinkDeclarations:LinkEvidence[]=[];
@@ -31,7 +33,7 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
    const di=prepared.documents.findIndex(d=>d.documentId===observed.documentId),document=prepared.documents[di],identity=observed.identity as any;
    if(!document||JSON.stringify(original.source)!==JSON.stringify(document.interpretation.source)||typeof original.path!=='string'||original.source.umf!=='0.8.0')throw Error('Original schema-property source required');
    const properties=original.properties;if(properties===null||typeof properties!=='object'||Array.isArray(properties))throw Error('Original owner property map required');
-   const selected=Object.keys(properties).filter(k=>['allowedValues','default','facets'].includes(k));
+   const selected=Object.keys(properties).filter(k=>(current?['allowedValues','default']:['allowedValues','default','facets']).includes(k));
    if(Object.keys(properties).length===0)absent.push(observed);
    if(Object.keys(properties).some(k=>!selected.includes(k)))deferred.push(observed);
    const owner=identity.scope==='document'?Object.freeze({scope:'document' as const,documentId:document.documentId}):Object.freeze({documentId:document.documentId,moduleId:identity.module as string});
@@ -47,7 +49,7 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
   }
   if(observed.operation==='referenceLinks'){
    const di=prepared.documents.findIndex(d=>d.documentId===observed.documentId),document=prepared.documents[di],requested=observed.identity as any;
-   if(!document||document.umfVersion!=='0.7.0'||!collection.referenceLinksProfile)throw Error('Original referenceLinks owner context correspondence required');
+   if(!document||!['0.7.0','0.8.0'].includes(document.umfVersion)||!collection.referenceLinksProfile)throw Error('Original referenceLinks owner context correspondence required');
    const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module),ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
    if(mi<0||ei<0)throw Error('Original referenceLinks owner context correspondence required');
    const element=source.modules[mi]!.elements[ei]!,path='/modules/'+mi+'/elements/'+ei+'/references';
@@ -57,7 +59,7 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
     const target=source.modules[ti]!.elements[te]!,at=path+'/'+index;
     return {index,path:at,reference,target:{identity:{module:reference.module,element:reference.element},path:'/modules/'+ti+'/elements/'+te,...(Object.hasOwn(target,'kind')?{kind:target.kind}:{})},uninterpretedPaths:document.interpretation.sourceValidation.diagnostics.filter((d:any)=>d.severity==='warning'&&d.code==='UNKNOWN_CORE_FIELD'&&(d.path===at||d.path.startsWith(at+'/'))).map((d:any)=>d.path),typeAssertion:'unverified'};
    })};
-   if(!sameOriginalMeaning(original,{operation:'inspect-core-reference-links',version:'0.1.0',source,identity:requested,path,meaning:expected,provenance:'unverified'}))throw Error('Original referenceLinks full result correspondence required');
+   if(!sameOriginalMeaning(original,{operation:'inspect-core-reference-links',version:document.umfVersion==='0.8.0'?'0.2.0':'0.1.0',source,identity:requested,path,meaning:expected,provenance:'unverified'}))throw Error('Original referenceLinks full result correspondence required');
    if(expected.state==='missing'){absent.push(observed);continue}
    const common={documentId:document.documentId,owner:Object.freeze({moduleId:requested.module as string,elementId:requested.element as string}),source:prepared.original.input.documents[di].artifact,ownerProfile:collection.referenceLinksProfile,ownerEvidence:observed.evidence,typeAssertion:'unverified' as const,meaningCorrespondence:true as const,interpretationQualified:false as const,scope:'original_direct_core_reference_links_only' as const};
    referenceLinkDeclarations.push(Object.freeze({...common,sourcePointer:path,originalMeaning:meaning}));
@@ -67,13 +69,13 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
   }
   if(observed.operation==='members'){
    const di=prepared.documents.findIndex(d=>d.documentId===observed.documentId),document=prepared.documents[di],requested=observed.identity as any;
-   if(!document||document.umfVersion!=='0.7.0'||!collection.membersProfile)throw Error('Original members owner context correspondence required');
+   if(!document||!['0.7.0','0.8.0'].includes(document.umfVersion)||!collection.membersProfile)throw Error('Original members owner context correspondence required');
    const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module),ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
    if(mi<0||ei<0)throw Error('Original members owner context correspondence required');
    const element=source.modules[mi]!.elements[ei]!,path='/modules/'+mi+'/elements/'+ei+'/members';
    const uninterpretedPaths=Object.freeze(document.interpretation.sourceValidation.diagnostics.filter((d:any)=>d.severity==='warning'&&d.code==='UNKNOWN_KEY_QUALIFIER'&&(d.path===path||d.path.startsWith(path+'/'))).map((d:any)=>d.path));
    const expected=element.kind!=='record'?{state:'inapplicable'}:!Object.hasOwn(element,'members')?{state:'missing'}:{state:uninterpretedPaths.length?'partial':'known',members:element.members,uninterpretedPaths};
-   if(!sameOriginalMeaning(original,{operation:'inspect-core-record-members',version:'0.1.0',source,identity:requested,path,meaning:expected,provenance:'unverified'}))throw Error('Original members full result correspondence required');
+   if(!sameOriginalMeaning(original,{operation:'inspect-core-record-members',version:document.umfVersion==='0.8.0'?'0.2.0':'0.1.0',source,identity:requested,path,meaning:expected,provenance:'unverified'}))throw Error('Original members full result correspondence required');
    if(expected.state==='missing'){absent.push(observed);continue}
    if(expected.state==='inapplicable'){deferred.push(observed);continue}
    const artifact=prepared.original.input.documents[di].artifact,owner=Object.freeze({documentId:document.documentId,moduleId:requested.module as string});
@@ -90,21 +92,21 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
   }
   if(observed.operation==='scalarType'){
    const document=prepared.documents.find(d=>d.documentId===observed.documentId),requested=observed.identity as any;
-   if(!document||document.umfVersion!=='0.7.0'||!collection.scalarProfile)throw Error('Original scalarType owner context correspondence required');
+   if(!document||!['0.7.0','0.8.0'].includes(document.umfVersion)||!collection.scalarProfile)throw Error('Original scalarType owner context correspondence required');
    const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module),ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
    if(mi<0||ei<0)throw Error('Original scalarType owner context correspondence required');
    const element=source.modules[mi]!.elements[ei]!,present=Object.hasOwn(element,'scalarType'),value=element.scalarType;
    const known=['boolean','integer','decimal','float','string','binary','date','time','timestamp'];
    const expected=element.kind!=='field'?{state:'inapplicable',...(present?{authoredScalarType:value}:{})}:!present?{state:'missing'}:known.includes(value!)?{state:'known',scalarType:value}:{state:'unknown',value};
-   if(!sameOriginalMeaning(original,{operation:'inspect-core-scalar-type',version:'0.1.0',source,identity:requested,path:'/modules/'+mi+'/elements/'+ei+'/scalarType',meaning:expected,provenance:'unverified'}))throw Error('Original scalarType full result correspondence required');
+   if(!sameOriginalMeaning(original,{operation:'inspect-core-scalar-type',version:document.umfVersion==='0.8.0'?'0.2.0':'0.1.0',source,identity:requested,path:'/modules/'+mi+'/elements/'+ei+'/scalarType',meaning:expected,provenance:'unverified'}))throw Error('Original scalarType full result correspondence required');
   }
   // Validate selected original 0.7 Field families before state filtering.
   // Opaque item-type qualifiers and optional-member presence remain significant.
   if(['kind','nullability','cardinality','facets'].includes(observed.operation)){
    const document=prepared.documents.find(d=>d.documentId===observed.documentId),requested=observed.identity as any;
-   if(document?.umfVersion==='0.7.0'){
+   if(document&&['0.7.0','0.8.0'].includes(document.umfVersion)){
     const family=observed.operation as 'kind'|'nullability'|'cardinality'|'facets';
-    const versions={kind:'6.0.0',nullability:'5.0.0',cardinality:'4.0.0',facets:'3.0.0'};
+    const versions=document.umfVersion==='0.8.0'?{kind:'7.0.0',nullability:'6.0.0',cardinality:'5.0.0',facets:'4.0.0'}:{kind:'6.0.0',nullability:'5.0.0',cardinality:'4.0.0',facets:'3.0.0'};
     const known={kind:['field','record','group'],nullability:['required','absent-allowed','unspecified'],cardinality:['one','array','map','unspecified'],facets:[] as string[]};
     const source=document.interpretation.source,mi=source.modules.findIndex((m:any)=>m.id===requested.module);
     const ei=mi<0?-1:source.modules[mi]!.elements.findIndex((e:any)=>e.id===requested.element);
@@ -117,14 +119,15 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
      {state:'unknown',value}):{state:family==='kind'?'unspecified':element.kind==='field'?'missing':'inapplicable'};
     if(family==='facets'&&present){
      const facets=value as any,interpreted:any={};
-     if(facets.length&&['unicode-scalar','byte'].includes(facets.length.unit))interpreted.length={max:facets.length.max,unit:facets.length.unit};
+     if(facets.length&&['unicode-scalar','byte'].includes(facets.length.unit))interpreted.length={...(facets.length.max!==undefined?{max:facets.length.max}:{}),...(document.umfVersion==='0.8.0'&&facets.length.min!==undefined?{min:facets.length.min}:{}),unit:facets.length.unit};
      if(facets.integerWidth)interpreted.integerWidth={bits:facets.integerWidth.bits,signed:facets.integerWidth.signed};
      if(facets.precision!==undefined){interpreted.precision=facets.precision;interpreted.scale=facets.scale}
+     if(document.umfVersion==='0.8.0')for(const group of ['collectionSize','range'])if(facets[group]){const selected:any={};for(const key of group==='range'?['min','max','minInclusive','maxInclusive']:['min','max'])if(Object.hasOwn(facets[group],key))selected[key]=facets[group][key];interpreted[group]=selected;}
      // Derive unknown paths from the separately captured original document
      // validator, not from this Field observation's own claimed classification.
      const path='/modules/'+mi+'/elements/'+ei+'/facets';
      const uninterpretedPaths=document.interpretation.sourceValidation.diagnostics.filter((d:any)=>
-      d.severity==='warning'&&['UNKNOWN_FACET','UNKNOWN_FACET_UNIT'].includes(d.code)&&(d.path===path||d.path.startsWith(path+'/'))).map((d:any)=>d.path);
+      d.severity==='warning'&&(document.umfVersion==='0.8.0'||['UNKNOWN_FACET','UNKNOWN_FACET_UNIT'].includes(d.code))&&(d.path===path||d.path.startsWith(path+'/'))).map((d:any)=>d.path);
      expected={state:uninterpretedPaths.length?'partial':'known',facets,interpreted,uninterpretedPaths};
     }
     if(!sameOriginalMeaning(meaning,expected))throw Error('Original '+family+' meaning correspondence required');
@@ -162,7 +165,7 @@ export function collectCatalogCoreAssertionIdentities(prepared:Prepared,collecti
    const entry=Object.freeze({assertion:Object.freeze({sourceKind:'umf_document' as const,owner,definitionPin:source.sha256,sourcePointer:pointer,...identity}),
     source,ruleName:'core.'+observed.operation,ruleNameOrigin:'profile_generated' as const,enforcement:'none' as const,reason:'unqualified' as const,ownerEvidence:observed.evidence});
    entries.push(entry);
-   if(['kind','nullability','cardinality','facets','scalarType'].includes(observed.operation)&&original.source.umf==='0.7.0')fieldMeanings.push(Object.freeze({assertion:entry,
+   if(['kind','nullability','cardinality','facets','scalarType'].includes(observed.operation)&&['0.7.0','0.8.0'].includes(original.source.umf))fieldMeanings.push(Object.freeze({assertion:entry,
     ownerProfile:(observed.operation==='scalarType'?collection.scalarProfile:collection.fieldProfile)!,ownerState:meaning.state as 'known'|'partial',originalMeaning:meaning,
     meaningCorrespondence:true as const,interpretationQualified:false as const,scope:`original_${observed.operation}_owner_meaning_only` as const}));
    if(declaration)declarationMeanings.push(Object.freeze({assertion:entry,ownerProfile:collection.profile,

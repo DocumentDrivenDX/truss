@@ -1,0 +1,37 @@
+test_missing_null_and_wrong_profile_refuse_without_partial_registration (test_core08_catalog_native.Core08CatalogNativeTests.test_missing_null_and_wrong_profile_refuse_without_partial_registration) ... ok
+test_original08_default_and_allowed_values_correspondence (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_default_and_allowed_values_correspondence) ... ok
+test_original08_prepare_register_commit_report_and_view (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_prepare_register_commit_report_and_view) ... ok
+test_original08_registration_rollback_preserves_prior_work (test_core08_catalog_native.Core08CatalogNativeTests.test_original08_registration_rollback_preserves_prior_work) ... ok
+test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines (test_core08_catalog_native.Core08CatalogNativeTests.test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines) ... FAIL
+test_public_install_commit_accept_commit_report_and_retry (test_catalog_runtime_native.PublicCatalogRuntimeTests.test_public_install_commit_accept_commit_report_and_retry) ... ok
+test_import_load_and_ordinary_creation_in_public_sql (test_import_load_query_native.ImportLoadQueryTests.test_import_load_and_ordinary_creation_in_public_sql) ... FAIL
+
+======================================================================
+FAIL: test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines (test_core08_catalog_native.Core08CatalogNativeTests.test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_native.py", line 104, in test_populated034_upgrade_rollback_preserves_original_reports_data_and_routines
+    self.assertEqual(self.admin.execute("SELECT p.oid,p.proowner,p.proacl FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' ORDER BY p.oid").fetchall(),original_routines)
+AssertionError: Lists differ: [(250[13199 chars]88']), (26290, 26101, ['truss_owner_0c22c97799[130 chars]8'])] != [(250[13199 chars]88'])]
+
+First list contains 1 additional elements.
+First extra element 118:
+(26290, 26101, ['truss_owner_0c22c97799924988=X/truss_owner_0c22c97799924988', 'group_reader=X/truss_owner_0c22c97799924988', 'group_writer=X/truss_owner_0c22c97799924988'])
+
+Diff is 15084 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_import_load_and_ordinary_creation_in_public_sql (test_import_load_query_native.ImportLoadQueryTests.test_import_load_and_ordinary_creation_in_public_sql)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_import_load_query_native.py", line 29, in test_import_load_and_ordinary_creation_in_public_sql
+    pending=rows();self.assertEqual([r['_load_id'] for r in pending],[load,None])
+            ^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_import_load_query_native.py", line 27, in rows
+    self.assertIsInstance(result.value,QueryRows)
+AssertionError: QueryUnavailable(reason='compiler', outcome='unavailable') is not an instance of <class 'truss.query.QueryRows'>
+
+----------------------------------------------------------------------
+Ran 7 tests in 28.143s
+
+FAILED (failures=2)

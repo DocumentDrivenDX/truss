@@ -1,0 +1,112 @@
+{
+  "interfaceVersion": "astra-core08-catalog-review/0.1",
+  "createdAt": "2026-10-13T08:12:22.192562+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "f2a74715f1412194b83bb5bad6a3e6406f614e36",
+  "mergeSource": "084b35027de0821278f2a2f40d88285b8a1f7c06",
+  "status": "No remaining actionable finding in reviewed production source; native replay owned by parent pending",
+  "scope": "Original core0.8 producer/preparation, selected catalog metadata support and report source fields, exact native profile/source-version gate, original034/035 additive migration sources and unchanged native caller gates. Scope remains metadata only: no protected-security readiness, authenticated source producer, guarded catalog actor composition, complete writer route or acceptance-case promotion.",
+  "resolvedFindings": [
+    {
+      "finding": "Valid default/allowedValues falsely refused by element-vs-property path comparison",
+      "resolution": "Exact named schema property path recognized; independently passed individual and combined valid controls."
+    },
+    {
+      "finding": "Missing supportProfile made new native exception predicate SQL NULL",
+      "resolution": "Total exception predicate IS NOT TRUE with IS NOT DISTINCT FROM selected exact pin; source verified. Native reproduction owned by parent."
+    }
+  ],
+  "remainingProductionFindings": [],
+  "testReviewNotes": [
+    "Replaced invalid source_bytes={} catalog_accept profile controls with direct catalog_require_sources control using actual legacy0.7 source, matching id and baseline success. This qualifies that native gate; consumer TEMP/sentry is on a separate connection, not tested-call containment.",
+    "Corrected positive property control to tagged string default/allowedValues and document_revision.",
+    "Inspected populated034 upgrade control covers preserved objects, original report bytes and routine OID/owner/ACL, caller rollback followed by commit, then new core08 registration. Native pass not independently claimed."
+  ],
+  "independentValidation": {
+    "pureExactClassSuite": {
+      "passed": 54,
+      "seconds": 54.052,
+      "phase": "before upstream runtime036 integration; unchanged pure semantics",
+      "log": "pure-suite-exact.log"
+    },
+    "selectedNewControls": {
+      "passed": 9,
+      "phase": "replayed on merged runtime036 sources",
+      "results": "pure-controls-final.json",
+      "log": "controls-merged.log",
+      "script": "controls.py"
+    },
+    "pythonBoundaryImports": 898,
+    "allNativeAndCore08ManifestPinsVerify": true,
+    "legacy07AssetsDiff": [],
+    "prior034ManifestExact": true,
+    "prior034ManifestSha256": "120f704e29652f2b10ea4d1e40cf4d5893056bfe4277f125a010880b167f9d81",
+    "priorUpstream035ManifestExact": true,
+    "priorUpstream035ManifestSha256": "b8356093debd2715a0b7332d1e73683137409ae542d9990dab35d55fd21f2869",
+    "nativeRoutineReplacementCount": 119,
+    "unchangedCallerGateBodies": [
+      "runtime_person",
+      "catalog_actor"
+    ],
+    "nativeManifestSha256": "4dd0e3b43bfe04541c5bbd63bc04eb8be698f2f82c722b2d9069dedb4adde3b8",
+    "core08ManifestSha256": "cff7dd91f17781f64b6954dc0baa370aad468704e6698ee93f50a434aac86c67"
+  },
+  "nativeValidation": {
+    "independentNativeReplay": false,
+    "parentRun": "14692 pending at review",
+    "note": "No independent native test body or database mutation ran. An initial broad unittest selection included CatalogSupportNativeTests; setup was blocked before server connection by cache lockfile sandbox permissions. Exact-class replay passed. Initial failed selection log retained."
+  },
+  "reviewProbeCorrections": [
+    "Initial independent script assumed top-level extensions existed; corrected temporary fixture to setdefault before capacity probe. Probe fixture error, not product defect; error log retained.",
+    "A source-check attempt overlapped parent merge markers and could not parse catalog_runtime.py; reran after parent resolution with selected source pins verified."
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_catalog_owner_evidence.py": "09722de0cf3629838266df2bb6172f773c9df72ed88b47eebd8ac6cf0d635e9e",
+    "packages/python/src/truss/_catalog_report.py": "beecc9de83a7d1a2f1a2b0de4a01af7c98605a08f2caf6d2e0f0e04575fb677b",
+    "packages/python/src/truss/_catalog_report_semantics.py": "1e3d023e1436435688dd74ab54ff5ef0710359ebf56ae9d8dcb7f7938ad30dfa",
+    "packages/python/src/truss/_catalog_runtime/entity-load.sql": "631bead36f8ec8f31c19abc9a1d58074977bbb7475b3806caab01e31d304ca7f",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "4dd0e3b43bfe04541c5bbd63bc04eb8be698f2f82c722b2d9069dedb4adde3b8",
+    "packages/python/src/truss/_catalog_runtime/migrations.sql": "7a29289b8c2d7f2c799c05f9a6a63fd6db25ec12023e3ce0086a5eda1ef5f4e7",
+    "packages/python/src/truss/_catalog_runtime/query.sql": "087cceda8873d732efec11d46d974ab46e65d0ad3b8acca9e0afd9ae1021a27a",
+    "packages/python/src/truss/_catalog_runtime/read.sql": "3d0c12989378e08ee6358e676f2fae88796907d3a1aa70776ac43208b5443dfc",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "e7768154cc226830c771541d4ad0b6f93888c8baa69d547739cbd83361e892d6",
+    "packages/python/src/truss/_catalog_runtime/upgrade-source-034.json": "120f704e29652f2b10ea4d1e40cf4d5893056bfe4277f125a010880b167f9d81",
+    "packages/python/src/truss/_catalog_runtime/upgrade-source-035.json": "b8356093debd2715a0b7332d1e73683137409ae542d9990dab35d55fd21f2869",
+    "packages/python/src/truss/_catalog_support.py": "4fcbfbcaeda6ae5cc7dda43ecfe3df56a5686d20a1d70a018210c60ed2d9919d",
+    "packages/python/src/truss/_core08_catalog_release.py": "0fe17de748fce43d9ddef8858a286543fc915cc73190b3207b41170ce8e8b980",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/_profiles/fresh-catalog-support-core08.json": "a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f",
+    "packages/python/src/truss/_query_runtime.py": "efd7163918d784404c7cf105bbce53af152000ae33577572f4d77acaefde72a1",
+    "packages/python/src/truss/_umf_core08/acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "packages/python/src/truss/_umf_core08/manifest.json": "cff7dd91f17781f64b6954dc0baa370aad468704e6698ee93f50a434aac86c67",
+    "packages/python/src/truss/_umf_core08/preparation.mjs": "2ccfce14207584cceb568069e5465efbd290617000466d8b04620274ff65099c",
+    "packages/python/src/truss/_umf_core08/producer-manifest.json": "3123647a3443894052b670de8444e6ba0197abd83f647819faaad01fcaaedc81",
+    "packages/python/src/truss/_umf_core08/producer.js": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
+    "packages/python/src/truss/catalog_runtime.py": "0f30b71f0128eb8a690541dc73504aed3d0606aca51190558a4716eba859f91e",
+    "packages/python/src/truss/preparation.py": "03f98cbcce659105967d9cd83eba542bfd56d03303619155563f2453f67f1c1d",
+    "packages/python/tests/test_core08_catalog_native.py": "fa63f22557e70e339edcb1e41eaf60e45962302c4e7fa6a8a8b709913347eafd",
+    "packages/umf-bun/src/acceptance-input.ts": "3eb282b2334f770df3659f13940e89f5581b1aea4ea0586f25882d7bb68c2e68",
+    "packages/umf-bun/src/catalog-assertion-observations.ts": "384973d41b3f225ccfa7012457a03e530ad4bfc13a54f626aba84326fd3e599f",
+    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "093488aa0fb1054d63f6d88e0ccd339f2a8674f7f4ef31126a74802b3954bc36",
+    "packages/umf-bun/src/catalog-input.ts": "88aba935e29117b436ed7386a06dace33183e739392fce7b2fa256c3022bb418",
+    "packages/umf-bun/src/catalog-observation-coverage.ts": "9b13981c5a8bd19178b31e68c8cbf3661ea045fcda8e4eba1dee75af8820ecc4",
+    "packages/umf-bun/src/index.ts": "b65d8e130d5e0fb42245e3e956fc421b4ad7c4107ca0d9a6c8192262ee70c5bb",
+    "packages/umf-bun/src/python-preparation-core08.ts": "c1f7ed6c18b0aa1ffcdd39b6a6a591b56875aef28e5f0751ad7cc40dde1c44d7",
+    "scripts/build-core08-catalog-producer.py": "c7fd82e6d85275485bb4921d0224f0c9bee6c86217634bf38aa9410e9ee44d1f",
+    "scripts/build-umf-runtime.ts": "13c574849128ca55d7871c5c966cf62c24dfe20be9fe0753c5fc2cd54da4c53e",
+    "scripts/check-module-boundaries.py": "27aa02bac8070c135886357ddf83786e45c2256e82808fe0a962f9d702332d18"
+  },
+  "evidenceSha256": {
+    "controls.log": "521b351b0807162219ecba43f225739492519d9646c0e0b5773611683747a236",
+    "pure-controls-final.json": "521b351b0807162219ecba43f225739492519d9646c0e0b5773611683747a236",
+    "controls.py": "7d992bf090673cbf9bd474257b2b723da7c1f52e3c21a7b22c0ea29f103037f5",
+    "controls-fixture-error.log": "5fb7427375249661f1cb5d3b4c494887d57d0e5a09051191b471bb0404f41b11",
+    "controls-merged.log": "521b351b0807162219ecba43f225739492519d9646c0e0b5773611683747a236",
+    "pure-suite.log": "ccf6d402e0ebf320445177d37d99cb2949b15b49bc7fa3e437c6704eb59c5030",
+    "pure-suite-exact.log": "f0ddec950f9f5d1bc30c7e53ef07bd8e22d7c07c2d1dc0398fbb0fe2320b9909",
+    "boundaries.log": "39e1416995fc3c62c1a63fc1b57547d20a0559a952a91d48ce6cd4ff4d043178",
+    "pure-controls-initial.json": "b6a51db598f6eb2945a0316b9a9e3a77b5aa87288c0ca35ecc66fa5bcd7bd2ac",
+    "source-checks.json": "6e43e58a9b423f11e6956d6f0076411789086addd6cc866f12f3bc651992c2ae",
+    "pure-controls-premerge.json": "521b351b0807162219ecba43f225739492519d9646c0e0b5773611683747a236"
+  }
+}

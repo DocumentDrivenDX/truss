@@ -1,0 +1,59 @@
+{
+  "review": "Independent Astra Ultra read-only scoped review",
+  "reviewedAt": "2026-10-13T08:27:07.233164+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "9d263c0f910d786bdca6429df8caf907f98ec9a1",
+  "implementationCommit": "a9aa5e09107a5f62e84c6c0de1ebe3d85052b75a",
+  "conclusion": "No remaining actionable findings within the reviewed accepted-source metadata assessment scope.",
+  "resolvedFindings": [
+    "Complete native receipt/schema history and exact current positive head checks close omitted historical reports and stale positive heads.",
+    "Stored-receipt budget now returns stock native bool and requires exact True, avoiding caller numeric loader dispatch.",
+    "Precise native refusal-cause assertions isolate historical report and stale head checks from later source mismatch."
+  ],
+  "independentControls": {
+    "count": 12,
+    "passed": 12,
+    "results": "results.json",
+    "scope": "Actual Python helper control flow with synthetic trusted native response tuples; no native source-validation or database execution proof."
+  },
+  "nativeEvidence": {
+    "origin": "Parent-run retained logs inspected, not independently rerun",
+    "full": "8 passed in 25.861 seconds",
+    "preciseHistory": "2 passed in 11.146 seconds",
+    "logs": [
+      "truss-accepted-catalog-bool-final.log",
+      "truss-accepted-catalog-precise-history.log"
+    ]
+  },
+  "remainingPremises": [
+    "Original native body and compiler/issuer custody are supplied premises.",
+    "Complete writer closure and source/hook lifetime, including same-transaction ABA, remain unproved.",
+    "No physical policy mapping, SQL execution, protected admission, or required backend case promotion.",
+    "Output and retained-size bounds are not total libpq/native/process memory accounting.",
+    "Synthetic baseline does not establish a successful native second-revision assessment; native negative controls assert exact early history refusal causes."
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_assessment.py": "b2d6864b7eb3ae7c56d6f678adb1a6005caf614fabf4708db5c2219f733096e2",
+    "packages/python/src/truss/_security_mapping.py": "7e4a3977a54168ccc47cfec1f029181ef9be06750bb5d07638808987f17cf8e4",
+    "packages/python/src/truss/catalog_runtime.py": "0f30b71f0128eb8a690541dc73504aed3d0606aca51190558a4716eba859f91e",
+    "packages/python/src/truss/psycopg_host.py": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/weft.py": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+    "packages/python/tests/test_security_accepted_catalog_native.py": "73d8e66948ab9d5e0a3134d6a1a06c9b2dff556d63156e1cd4096bf7ee1ed1b4",
+    "packages/python/tests/test_security_mapping_native.py": "5fd7ee0ca8f67df76e1f4c353af5e90b6faa8bbc244e6c60afcbb9cf7b11b2c9",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "4dd0e3b43bfe04541c5bbd63bc04eb8be698f2f82c722b2d9069dedb4adde3b8",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "e7768154cc226830c771541d4ad0b6f93888c8baa69d547739cbd83361e892d6",
+    "scripts/check-module-boundaries.py": "00c0a2ee5d8c14dd2d68cf3579af1515a761d568d4c4812856e5ad7d8e0e2235",
+    "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "53e87c9e05d7f3b31014915dcd28f24cbefb86923245b332b67f8485d8e090bd",
+    "docs/helix/04-build/implementation-plan.md": "3f522cccb18ba92719eadaef8fb868fafd8a57467ee339f680274f4418660089",
+    "docs/helix/04-build/evidence/security-accepted-catalog-20261013/README.md": "5107297d7dac7b114dc7c1e91afa625fdcf194c6faad80535d726aaaa94fcf42",
+    "docs/helix/04-build/evidence/security-accepted-catalog-20261013/receipt.json": "171c31b7dd29532b71ced04d7cdef52603dfd2da45de76307e0a7a7a3450f955"
+  },
+  "controlDigests": {
+    "controls.py": "2fe46708ecc5d4ee76fe9c221569514395842483798901f7ebe2ed5033841599",
+    "results.json": "c6c82f51bc1a638a2794c0b847dfd9b6c454eb6a81137130e0f7d98044b4cb9d",
+    "truss-accepted-catalog-bool-final.log": "0bdad5ddb1d862ee25315d28c0dc0ac925e8b98046a9bd94c70fa0e0ba68c03e",
+    "truss-accepted-catalog-precise-history.log": "eaa526db7c63d32e75e37a86458973ff5414ee01c3d66053aed77f93356e268f"
+  }
+}
