@@ -7,3 +7,5 @@ Astra Ultra reviewed the plan and completed source, including PostgreSQL express
 Corrected-wheel populated56→57 upgrade passed (1 test,7.438s), including caller rollback and continuation with original facts.
 
 The v0.0.20 macOS release check exposed an omitted decimal-policy allowlist in the retained-extension composer. Both policies were added without changing the native layout. Installed candidate21 original diagnostic/extension workflows passed (2 tests,17.094s), preserving exact accepted source bytes and unknown extension content through reports, writes, reads and queries. The failed20 tag is retained; no publication claim is made.
+
+Final native57/Weft27 UMF0.8 decimal(18,2) workflow passed (1 test,7.629s) after the extension correction. Matching Weft0.4.22 workflow38484676253 published all5 wheel platforms. Truss v0.0.20 workflow38484089855 failed and is not a published wheel release; corrected21 publication is pending.
