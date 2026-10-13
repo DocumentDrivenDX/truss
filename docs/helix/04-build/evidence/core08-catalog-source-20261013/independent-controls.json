@@ -1,0 +1,14 @@
+{
+  "complete_security_model_observations": 136,
+  "complete_security_model_response_bytes": 444233,
+  "exact_original_bytes_retained": true,
+  "all_owner_sources_equal": true,
+  "current_operations_result_version": "0.2.0",
+  "native_ready": false,
+  "constructor_native_ready_override_refused": true,
+  "replication_bound_accept_original_bytes": 130602,
+  "replication_bound_accept_response_bytes": 2749789,
+  "replication_bound_plus_one_refused": true,
+  "unsafe_raw_integer_refused": true,
+  "scope": "Pure original owner observations; no native ingress, report acceptance, source issuer, authority cut or backend qualification."
+}

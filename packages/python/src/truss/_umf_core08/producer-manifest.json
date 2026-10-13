@@ -1,0 +1,30 @@
+{
+  "revision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+  "producerMode": "core08-catalog",
+  "buildDependencies": {
+    "yaml": {
+      "version": "2.9.1",
+      "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+    },
+    "ajv": {
+      "version": "8.20.0",
+      "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+    }
+  },
+  "archiveSha256": "d25f545ca0988b66b42aad32c1942f8d5fd04174a2f31f2d3b887c097c1ddad4",
+  "bundleSha256": "7967767dd926d71733f4c24c4b4545ba7c87ff883900a7501aa92bae8beee064",
+  "operations": [
+    "readDocument",
+    "inspectCoreSchemaProperties",
+    "inspectCoreKeys",
+    "inspectCoreRelationships",
+    "inspectCoreElementKind",
+    "inspectCoreNullability",
+    "inspectCoreCardinality",
+    "inspectCoreFacets",
+    "inspectCoreRecordMembers",
+    "inspectCoreScalarType",
+    "inspectCoreReferenceLinks"
+  ],
+  "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+}

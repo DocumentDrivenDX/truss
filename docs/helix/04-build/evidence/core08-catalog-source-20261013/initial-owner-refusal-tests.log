@@ -1,0 +1,37 @@
+test_current_schema_properties_and_opaque_bytes_are_preserved (test_core08_catalog_source.Core08CatalogSourceTests.test_current_schema_properties_and_opaque_bytes_are_preserved) ... ERROR
+test_genuine_security_model_complete_current_owner_observations (test_core08_catalog_source.Core08CatalogSourceTests.test_genuine_security_model_complete_current_owner_observations) ... ERROR
+test_legacy_invalid_or_changed_identity_refuses_without_observation_artifact (test_core08_catalog_source.Core08CatalogSourceTests.test_legacy_invalid_or_changed_identity_refuses_without_observation_artifact) ... ok
+test_selected_source_replication_capacity_refuses (test_core08_catalog_source.Core08CatalogSourceTests.test_selected_source_replication_capacity_refuses) ... ok
+
+======================================================================
+ERROR: test_current_schema_properties_and_opaque_bytes_are_preserved (test_core08_catalog_source.Core08CatalogSourceTests.test_current_schema_properties_and_opaque_bytes_are_preserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_source.py", line 34, in test_current_schema_properties_and_opaque_bytes_are_preserved
+    source=json.dumps(model,ensure_ascii=False,indent=3).encode();result=prepare(source);response=json.loads(result.original_response)
+                                                                         ^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_source.py", line 11, in prepare
+    return prepare_core08_catalog_source(original() if source is None else source,document_id=identity,document_revision='schema-1',bun_executable='/opt/homebrew/bin/bun')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/_core08_catalog_source.py", line 48, in prepare_core08_catalog_source
+    raise CompileRefusal('core08_source','Complete original owner observations unavailable')
+truss.weft.CompileRefusal: Complete original owner observations unavailable
+
+======================================================================
+ERROR: test_genuine_security_model_complete_current_owner_observations (test_core08_catalog_source.Core08CatalogSourceTests.test_genuine_security_model_complete_current_owner_observations)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_source.py", line 14, in test_genuine_security_model_complete_current_owner_observations
+    result=prepare();self.assertEqual(result.original_document,original());self.assertFalse(result.native_ready)
+           ^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_source.py", line 11, in prepare
+    return prepare_core08_catalog_source(original() if source is None else source,document_id=identity,document_revision='schema-1',bun_executable='/opt/homebrew/bin/bun')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/_core08_catalog_source.py", line 48, in prepare_core08_catalog_source
+    raise CompileRefusal('core08_source','Complete original owner observations unavailable')
+truss.weft.CompileRefusal: Complete original owner observations unavailable
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.845s
+
+FAILED (errors=2)
