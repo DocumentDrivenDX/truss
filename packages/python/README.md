@@ -1754,3 +1754,15 @@ refuses this comparison. There is no wait or internal retry. The result compares
 caller-asserted source ACKs; it does not independently verify downstream application,
 replica freshness or another database's commit. The runnable adopter example
 checks false before delivery and true after its durable sink and ACK commits.
+
+
+## Versioned public preview corpus
+
+The [0.1 preview corpus](../../docs/helix/04-build/corpus/public-python/0.1/README.md)
+contains language-neutral JSON calls and expected semantic results. Run it with
+`examples/run_corpus.py`; it uses public APIs and returned identity/token bindings,
+with administrator SQL confined to role setup. The case covers ordinary writer,
+reader and outsider behavior, precondition refusal, commit/replay/dry-run, mixed
+per-item imports, exact journal facts through the feed and durable source ACKs.
+Success is explicitly `passed_preview`, with the case digest and selected profile versions. The
+full consumer corpus and independent TypeScript/native interchange remain open.

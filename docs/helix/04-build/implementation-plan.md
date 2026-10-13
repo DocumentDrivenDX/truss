@@ -6837,3 +6837,23 @@ same token as source-visible/feed-behind before ACK, then feed-included after
 its durable content-addressed sink and separate committed ACKs. This is source
 ACK evidence, not verified downstream application or full interchange closure.
 Evidence follows execution in `evidence/python-feed-reached-20261012.json`.
+
+### Portable public Python preview corpus — 2026-10-12
+
+`corpus/public-python/0.1` publishes a separately named/versioned JSON case and
+exact original UMF fixture. The installed-package runner translates its closed
+operation vocabulary to public APIs, with JSON-authoritative arguments, actors,
+caller transaction phases and expectations. Actual returned native identities,
+original request input/token and opaque cursors supply bindings. Explicit result
+and feed projections retain the limits of the assertion scope. Unknown or newer
+formats/profiles/operations/fields cannot pass; the report records the case SHA.
+
+One basic native test executes the exact portable case, including committed
+canonical state after mixed per-item import, reader/outsider/precondition/dry-run
+refusals without effects, full declared journal actors/properties/endpoints,
+import provenance, original catalog bytes, durable feed sink/ACK and consumer
+receipt comparison. This is `passed_preview` for one Python implementation, not
+US-028 complete required corpus or independent bidirectional interchange. The
+original 41-case corpus and TD/STP-028 remain unchanged/open; no old harness,
+accounting machinery or invented second engine is adopted. Evidence follows
+execution in `evidence/python-public-preview-corpus-20261012.json`.
