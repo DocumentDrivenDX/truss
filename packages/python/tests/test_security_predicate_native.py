@@ -272,6 +272,17 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    facts.append(fact);by_id[oid]=fact
   policy=json.loads(request['policyJson']);ontology=json.loads(request['ontologyJson'])
   coverage=[{'type':ref(t['element']),'complete':True,'fields':[ref(p['element']) for p in inventory['properties'] if p['type_id']==t['type_id']]} for t in inventory['types']]
+  # One actual native query combines owner-rendered conditions, filtering and cells.
+  native_selected={};native_selection_sql={}
+  for element in ('salary','resourceId'):
+   projection=next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']==element)
+   statement='SELECT q.sid,q.rid,('+projection+') FROM truss.object r JOIN (SELECT s.id AS sid,r.id AS rid,'+projections+' FROM truss.object s CROSS JOIN truss.object r WHERE s.type_id='+str(ids['Staff'])+' AND r.type_id='+str(ids['Resource'])+') q ON r.id=q.rid WHERE ('+selected['decisionExpression']+")='permit' ORDER BY q.sid,q.rid"
+   native_selection_sql[element]=statement
+   self.admin.execute('PREPARE selected_cells(boolean) AS '+statement)
+   native_rows=self.admin.execute('EXECUTE selected_cells(true)').fetchall()
+   self.admin.execute('DEALLOCATE selected_cells')
+   self.assertEqual([(sid,rid) for sid,rid,cell in native_rows],[(sid,rid) for sid,rid,truth in truths if truth is True])
+   native_selected[element]={(sid,rid):cell for sid,rid,cell in native_rows}
   comparisons=[]
   for sid,rid,truth in truths:
    cut={'trusted':True,'generation':'fixture','expectedGeneration':'fixture','policyId':policy['id'],'policyRevision':policy['revision'],'ontologyDocumentId':ontology['documentId'],'ontologyRevision':ontology['revision'],'subjects':[by_id[sid]],'facts':facts,'coverage':coverage,'context':[],'maxFacts':100,'maxSteps':100000}
@@ -287,19 +298,24 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    self.assertEqual(disclosed,[[[ref('salary'),'withheld']]] if truth is True else [])
    # Original owner evaluates scoped conditions rather than trusting native truth flags.
    selection_request=deepcopy(request);selection_request['sql']='SELECT r.salary AS amount FROM Resource r';selection_request['parameters']={}
-   projection=next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']=='salary')
-   native_cell=self.admin.execute('SELECT ('+projection+') FROM truss.object r CROSS JOIN (SELECT %s::boolean q0,TRUE::boolean q1) q WHERE r.id=%s',(truth,rid)).fetchone()[0]
+   native_cell=native_selected['salary'].get((sid,rid))
+   self.assertEqual(native_cell is not None,truth is True)
    scoped={'version':'weft.security.scoped-facts/0.1.0','rows':[{'s0':by_id[rid]}]}
    selection_probe={'target':ref('Resource'),'field':ref('salary'),'outputName':'amount','rows':[[native_cell if truth is True else {'outcomeId':'withheld','disposition':'withheld'}]],'factCut':cut,'scopedFacts':scoped}
    selection_check=subprocess.run([binary],input=json.dumps({'request':selection_request,'assessment':assessment,'resultProbe':selection_probe}).encode(),capture_output=True,timeout=30)
    if truth is True:
     self.assertEqual(selection_check.returncode,0,selection_check.stderr.decode());self.assertTrue(json.loads(selection_check.stdout)['conditionalFactSelectionPassed'])
     identity_request=deepcopy(selection_request);identity_request['sql']='SELECT r.resourceId AS amount FROM Resource r'
-    identity_projection=next(d['cellExpression'] for d in selected['disclosure'] if d['field']['elementId']=='resourceId')
-    identity_cell=self.admin.execute('SELECT ('+identity_projection+') FROM truss.object r CROSS JOIN (SELECT TRUE::boolean q0,TRUE::boolean q1) q WHERE r.id=%s',(rid,)).fetchone()[0]
+    identity_cell=native_selected['resourceId'][(sid,rid)]
     identity_probe=deepcopy(selection_probe);identity_probe['field']=ref('resourceId');identity_probe['rows']=[[identity_cell]]
     identity_check=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':identity_probe}).encode(),capture_output=True,timeout=30)
     self.assertEqual(identity_check.returncode,0,identity_check.stderr.decode())
+    # Actual native cells cannot be reassigned to the other fixture principal.
+    other_subject=next(other for other in {row[0] for row in truths} if other!=sid)
+    crossed=deepcopy(identity_probe);crossed['factCut']['subjects']=[by_id[other_subject]]
+    crossed_check=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':crossed}).encode(),capture_output=True,timeout=30)
+    self.assertEqual(crossed_check.returncode,1);self.assertFalse(crossed_check.stdout)
+    self.assertEqual(json.loads(crossed_check.stderr)['code'],'WFT-SECURITY-RESULT-SELECTION')
     forged_identity=deepcopy(identity_probe);forged_identity['rows'][0][0]['value']={'string':'different-valid-value'}
     value_refusal=subprocess.run([binary],input=json.dumps({'request':identity_request,'assessment':assessment,'resultProbe':forged_identity}).encode(),capture_output=True,timeout=30)
     self.assertEqual(value_refusal.returncode,1);self.assertFalse(value_refusal.stdout)
@@ -313,4 +329,4 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   directory=os.environ.get('TRUSS_PREDICATE_EVIDENCE_DIR')
   if directory:
    root=Path(directory);root.mkdir(parents=True,exist_ok=True)
-   for name,value in (('request',request),('assessment',assessment),('rendered',output),('native-truths',truths),('native-eligibility',eligibility),('original-simulator-comparisons',comparisons)):(root/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
+   for name,value in (('request',request),('assessment',assessment),('rendered',output),('native-truths',truths),('native-eligibility',eligibility),('native-selection-sql',native_selection_sql),('native-selected-cells',{element:[{'subject':sid,'resource':rid,'cell':cell} for (sid,rid),cell in rows.items()] for element,rows in native_selected.items()}),('original-simulator-comparisons',comparisons)):(root/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')

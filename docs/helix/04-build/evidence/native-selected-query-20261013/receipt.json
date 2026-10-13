@@ -1,0 +1,27 @@
+{
+  "scope": "Finite admin fixture actual native condition/filter/projection composition and original conditional fact/cell correspondence. Not authenticated caller, issuer, native original SQL lowering/lineage, complete production enumeration, native writer closure or guarded release. No required case promotion.",
+  "tests": 8,
+  "seconds": 42.161,
+  "engine": "PostgreSQL 18.6",
+  "runtime": "Truss 0.38",
+  "sourceMapper": "separately qualified original 0.37 source-mapping extension",
+  "artifactScope": "Retained top-level fixture artifacts are the last passing nonnullable fixture, overwritten per fixture; full suite log covers8 tests.",
+  "sources": {
+    "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_predicate_native.py": "4f5c1db4d80293d64984b7edfa9b46ba6be8ee13ab5afe931630dd14c5f06be4",
+    "/private/tmp/weft-security-main-integration/crates/weft-postgresql/src/security_predicate_spike.rs": "fd6c710284030b88e32396e424bccaea53c840738e986794579143f0d888bb43",
+    "/private/tmp/weft-security-main-integration/crates/weft-postgresql/examples/security_predicate_spike.rs": "4709dff9c6d70680094ccde81f4668fefb936a4bc05433f4abe2e119543d0a98",
+    "/private/tmp/weft-security-main-integration/crates/weft-core/src/security_mapping_transport.rs": "5115d2de75bc18d59d972016197930e15d9ff07561c422ee806acf69049e592b"
+  },
+  "diagnosticBinarySha256": "438e4b3507d7f12f7f9c66e26b7ffd2c3b23b12c4fd8cea3ab469059ab88aad3",
+  "artifacts": {
+    "request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "original-simulator-comparisons.json": "0697d0a6a5915c5cde47df44a33089b67dbfc8ac5d2e0be52dabf59a7acff5a2",
+    "assessment.json": "2943aead714a97bfef224d73ac0dae5bcef03b32f932efb22999a0847dda686e",
+    "native-eligibility.json": "d0b25ef8f5223f34fef730cdd90892dd7fda61fba399b1123ebac9597d5d30d3",
+    "native-truths.json": "cca68101af93beb868466353a6ecae4cda1db48da11de3c328c0598ea0095df8",
+    "native-selection-sql.json": "72b7487ee00a9be1ba392326fcb4d39573a6f7cdee4bb7ba5efcf4cc909deecc",
+    "native.log": "2d8bf8be4cabcc9ddf0cfd90ab14e6172efbf6f3dc13bf0413f98b1e83f0a92c",
+    "rendered.json": "ef3fae41ed1065eec391d979841851c29f5827173235ac1728f88e1198b79642",
+    "native-selected-cells.json": "aca1f4985930d1aefa8f69871f76f5c716b7dde91db0d2542ecdd1b69d7fc639"
+  }
+}
