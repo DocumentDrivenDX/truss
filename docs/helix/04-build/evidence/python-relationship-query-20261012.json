@@ -1,0 +1,49 @@
+{
+  "scope": "Basic installed public scalar/numeric/relationship workflows and actual predecessor upgrade",
+  "runtimeRelease": "truss-catalog-runtime/0.28-candidate",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "localRuntime": "DocumentDrivenDX pgserver-pg18==18.6.1",
+  "weftBackendVersion": "0.3.0",
+  "binding": "truss-runtime-binding/0.3",
+  "target": "truss-runtime-pg18.6/0.3",
+  "wheelSha256": "9f90f84d6a366dbc61d72800d56b6a0f78a9406a30de1681bd3c9b801eb79e08",
+  "nativeExtensionSha256": "a361fc530ed5a64f772f9a48d672546be1e6307b9fc298303b3771a488782952",
+  "tests": {
+    "publicQueryAndUpgradePassed": 5,
+    "seconds": 29.031,
+    "retainedUpgradeSource": "0.27",
+    "ownerSqlRoundtrips": 21,
+    "boundaryImports": 847,
+    "typingFixtures": 5,
+    "expectedNegativeTypingErrors": 20
+  },
+  "behaviors": [
+    "Public objects and edges produce queried data",
+    "Forward HAS_RELATED composite parameter key",
+    "Inverse HAS_RELATED uses authored opposite endpoint key",
+    "RELATED_KEYS preserves composite field order and C comparison",
+    "Bound+1 truncated result; no implicit DISTINCT",
+    "Read-only transaction without xid assignment",
+    "Public unlink updates query result",
+    "Existing string/boolean/exact integer/decimal workflows",
+    "Additive actual .27 upgrade preserves reports, data, receipts, tokens, feed and routine OIDs/owners/ACLs"
+  ],
+  "review": "Astra Ultra approved source and finite corrections",
+  "securityReady": false,
+  "remaining": [
+    "Multi-hop and owned/composed or association Record queries",
+    "Non-string relationship key components",
+    "Structured query values and pagination profiles",
+    "Broader import batches, archive/retention and managed-service qualification",
+    "Full shared corpus/native interchange closure"
+  ],
+  "mergedMain": {
+    "securitySourceHead": "26ec1874",
+    "wheelSha256": "ae364ca9c5ba5200fe2d1a60fa9cda013be51dc47886448491c0cd75cf846500",
+    "publicQueryAndUpgradePassed": 5,
+    "seconds": 30.697,
+    "boundaryImports": 854,
+    "securityReady": false
+  }
+}

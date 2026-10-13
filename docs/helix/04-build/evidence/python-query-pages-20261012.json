@@ -1,0 +1,53 @@
+{
+  "scope": "Basic public authored-key query pages plus existing query/adopter and predecessor-upgrade workflows",
+  "runtimeRelease": "truss-catalog-runtime/0.29-candidate",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "localRuntime": "DocumentDrivenDX pgserver-pg18==18.6.1",
+  "weftBackendVersion": "0.4.0",
+  "binding": "truss-runtime-binding/0.4",
+  "target": "truss-runtime-pg18.6/0.4",
+  "installedWheelSha256": "b4fda45233390f4542945d7362b47514ccdf9de6e895e667a4bc82d400c2a16d",
+  "nativeExtensionSha256": "c6fdb440812a93311225f3433e6594fd8438085456f64f67099978ebd441aa33",
+  "tests": {
+    "modules": [
+      "test_compiled_query_native",
+      "test_runtime_upgrade_native",
+      "test_adopter_workflow_native"
+    ],
+    "passed": 7,
+    "seconds": 39.407,
+    "retainedUpgradeSource": "0.28",
+    "ownerSqlRoundtrips": 21,
+    "boundaryImports": 854,
+    "typingFixtures": 5,
+    "expectedNegativeTypingErrors": 20
+  },
+  "behaviors": [
+    "Read-only composite authored key first/next/empty-tail pages",
+    "Explicit ungrouped count-summary",
+    "Related entity page with HAS_RELATED",
+    "Original native key/property component order and C comparison",
+    "Complete bounded validated source and duplicate-key refusal before WHERE/LIMIT",
+    "Actual .28 upgrade preserves data/reports/receipt/token/feed and five existing query routine identities/owners/ACLs",
+    "Existing exact scalar and forward/inverse relationship queries",
+    "Documented ordinary-person adopter workflow including durable feed ACK"
+  ],
+  "review": "Astra Ultra reviewed plan/source; early selected_type authorization fixed before native checks",
+  "securityReady": false,
+  "limits": [
+    "Live caller-managed continuation, no frozen snapshot/exactly-once enumeration",
+    "Required facetless string page keys only",
+    "No page joins, grouped summary or opaque cursors",
+    "Structured/multi-hop queries, broader imports and managed services remain unfinished",
+    "No full shared corpus/native interchange closure claimed"
+  ],
+  "mergedWeftMain": {
+    "securitySourceHead": "cd06efc",
+    "nativeExtensionSha256": "1fbb8454695e8d91b1f7834407c89fe4716d4857e3916487b8dcd8ce0bd65fcf",
+    "publicPageAndAdopterWorkflowsPassed": 2,
+    "seconds": 15.098,
+    "workspaceBoundaryPackages": 11,
+    "review": "Astra Ultra approved merge/inventory; two focused public workflows passed"
+  }
+}

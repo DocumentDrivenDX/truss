@@ -19,10 +19,10 @@
       "name": "direct_read",
       "pin": {
         "identity": "truss-native-direct-read-capability",
-        "version": "0.2",
-        "sha256": "f3750084da8a4a21da878fbf95c124ed3025048a953747f54e3026739f26da03"
+        "version": "0.3",
+        "sha256": "a42a6b9578e0ac13ce22f9dbcd34efa6ba951f939c078bd9b04baba95f302cbb"
       },
-      "definition": "Native direct read capability/0.2: rootless exact scalar object identity/key/live pages; independent directed edge identity/relationship pages; authority receipt visibility; committed native import provenance after deletion; current document-qualified module authority; read-only READ COMMITTED supported; no structured ownership, general historical records or compiler execution.",
+      "definition": "Native direct read capability/0.3: rootless exact scalar object identity/key/live pages; independent directed edge identity/relationship pages; authority receipt visibility; committed native import provenance after deletion; current document-qualified module authority; read-only READ COMMITTED supported; no structured ownership, general historical records or compiler execution. Optional registered feed-consumer reached comparison returns true/false only for valid authorized issued receipts against committed protected checkpoints, with separate comparison profile.",
       "policyDefinition": "Native direct-read policy/0.1: ordinary authenticated person; current document-qualified reader or writer for object, property, relationship and endpoint dependencies used by each supported read; no writer-only gate; READ COMMITTED and supported read-only transactions; exact installed release; no raw table privileges.",
       "policyPin": {
         "identity": "truss-native-direct-read-policy",
@@ -71,11 +71,11 @@
     },
     {
       "name": "weft_execution",
-      "definition": "Native Weft runtime query capability/0.2: actual accepted original documents and native mappings; explicit Weft-owned exact numeric preparation preserving original source/pins; bounded complete rootless scalar string/boolean/mathematical integer/decimal sources; equality filters/joins, counts, ordering/limits and alias expansion; original decimal tokens for all projections and exact Python int/Decimal results; validated finite stock-PostgreSQL numeric representability before predicates and parameters, with typed native-domain refusal rather than rounding; caller read-only or read-write READ COMMITTED transaction; complete document/module authority and current context checks; no relationship operators, structured properties, page-key profile, float carriers or internal retry.",
+      "definition": "Native Weft runtime query capability/0.4: actual accepted original documents and native mappings; explicit Weft-owned exact numeric preparation preserving original source/pins; bounded complete rootless scalar string/boolean/mathematical integer/decimal sources; equality filters/joins, counts, ordering/limits and alias expansion; original decimal tokens for all projections and exact Python int/Decimal results; validated finite stock-PostgreSQL numeric representability before predicates and parameters, with typed native-domain refusal rather than rounding; caller read-only or read-write READ COMMITTED transaction; complete document/module authority and current context checks; independent directed monomorphic HAS_RELATED/RELATED_KEYS forward and inverse with authored required string keys; exact bounded key tuples/truncation; entity-page and related-entity-page with ordered authored required string keys, complete bounded source uniqueness and caller-managed live continuation; ungrouped count-summary; no structured properties, grouped summary, float carriers or internal retry.",
       "pin": {
         "identity": "truss-native-weft-runtime-query",
-        "version": "0.2",
-        "sha256": "3881e7ae82fbf2246a8e669eff390771307c9927bbe324caba700213f8fea359"
+        "version": "0.4",
+        "sha256": "23b2a0a837130c802a9711f4e58835c484f9dea12d2c5e9343d7738c5fd13be3"
       },
       "policyDefinition": "Native Weft runtime query policy/0.1: ordinary original authenticated session person; complete current reader/writer authority for every selected original document module and declaration owner; independently safe fixed source functions with exact native mappings; final same-person/catalog/release check; no raw table privilege.",
       "policyPin": {
@@ -83,6 +83,15 @@
         "version": "0.1",
         "sha256": "2fb610647e0b25dbe3d0e094b4f2ad3745e09d5711106496d0eb4a844d275419"
       }
+    },
+    {
+      "name": "receipt_feed_comparison",
+      "pin": {
+        "identity": "truss-feed-receipt-visibility",
+        "version": "0.1",
+        "sha256": "576c7cdc116552fd72448c627e3cc313734ffb87865b268bd73e628784aafd25"
+      },
+      "definition": "truss-feed-receipt-visibility/0.1;stock PostgreSQL18.6 READ COMMITTED read-only unassigned caller transaction;original authority-issued committed receipt position retained unchanged;current original receipt operation readers and registered complete-source feed consumer authority;canonical protected same-installation/source-epoch/consumer-registration checkpoint;exclusive checkpoint nextXid greater than original writerXid;false only valid committed authorized receipt with consumer behind;current checkpoint/registration/receipt/authority recheck before either result;caller-asserted committed ACK is not independently verified downstream application;no waits or retries"
     }
   ]
 }

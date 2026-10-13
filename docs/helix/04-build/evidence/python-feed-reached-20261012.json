@@ -1,0 +1,49 @@
+{
+  "scope": "Basic public registered-consumer receipt comparison, existing queries/adopter and actual predecessor upgrade",
+  "runtimeRelease": "truss-catalog-runtime/0.30-candidate",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "localRuntime": "DocumentDrivenDX pgserver-pg18==18.6.1",
+  "weftBackendVersion": "0.4.1",
+  "binding": "truss-runtime-binding/0.4",
+  "target": "truss-runtime-pg18.6/0.4",
+  "installedWheelSha256": "c43bce69103d7a379b62cf823756b21f2c17b3b06769eebc6abb38ad514ff3ad",
+  "nativeExtensionSha256": "83c9692add502b71b20b19cd7a41070a5e116313ef92dd2323c7468a1b89214c",
+  "tests": {
+    "modules": [
+      "test_compiled_query_native",
+      "test_runtime_upgrade_native",
+      "test_adopter_workflow_native"
+    ],
+    "passed": 7,
+    "seconds": 39.056,
+    "retainedUpgradeSource": "0.29",
+    "ownerSqlRoundtrips": 21,
+    "boundaryImports": 854,
+    "typingFixtures": 5,
+    "expectedNegativeTypingErrors": 20
+  },
+  "behaviors": [
+    "Same actual issued receipt is source-visible and feed-behind before ACK",
+    "Separate comparison profile, original token bytes unchanged",
+    "Consumer included after content-addressed durable sink and committed source ACKs",
+    "Unassigned read-only transaction excludes caller-pending ACKs",
+    "Protected registration/installation/epoch/checkpoint correspondence and exclusive native xid frontier",
+    "Receipt and complete current feed authority rechecked before either boolean",
+    "Missing or unsafe evidence refuses without wait/retry",
+    "Actual .29 upgrade preserves six prior query routine identities/owners/ACLs, reports/data/receipt/token/feed",
+    "Existing scalar/numeric/relationship/page queries and host import/dry-run workflows"
+  ],
+  "sharedDeclarations": [
+    "Optional consumerId request carrier/schema matches Python consumer_id",
+    "invalid_consumer typed refusal consistent across Python/TS/JSON",
+    "CONTRACT-006 explicitly documents caller-asserted comparison limits"
+  ],
+  "review": "Astra Ultra approved plan, comparison logic and shared-declaration corrections",
+  "securityReady": false,
+  "limits": [
+    "Source ACK is caller-asserted, not independent downstream application proof",
+    "Primary PostgreSQL18.6 only; no replica/managed-service qualification",
+    "Archive/cleanup and full shared corpus/native interchange closure remain unfinished"
+  ]
+}

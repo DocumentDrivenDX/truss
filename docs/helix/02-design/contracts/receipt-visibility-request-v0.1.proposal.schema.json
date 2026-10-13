@@ -30,6 +30,13 @@
         "evidenceBytes"
       ],
       "additionalProperties": false
+    },
+    "consumerId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[^\\u0000]+$",
+      "description": "Optional actual registered source consumer; selected runtime enforces UTF-8 byte bounds and current full feed authority. Absence selects source receipt visibility."
     }
   },
   "required": [

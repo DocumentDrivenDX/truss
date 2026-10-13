@@ -28,6 +28,7 @@ def consume(assembly: CatalogReferenceAssembly, transaction: TransactionHandle,
             feed.capability.acknowledge_feed_in_transaction(transaction,page.value)
     reader=assembly.direct_reads(assembly.direct_read_selection)
     if isinstance(reader,CapabilityAvailable):
+        reader.capability.reached_in_transaction(transaction,'opaque-token',consumer_id='warehouse')
         reader.capability.lookup_import_source_in_transaction(transaction,entity=HistoryEntity(kind='object',document_id='orders',module_id='sales',definition_id='Order',id=1))
     operations.reader_catalog_in_transaction(transaction)
     history=assembly.history(assembly.history_selection)
@@ -38,7 +39,7 @@ def consume(assembly: CatalogReferenceAssembly, transaction: TransactionHandle,
     queries=assembly.compiled_execution(assembly.compiled_selection)
     if isinstance(queries,CapabilityAvailable):
         queries.capability.query_in_transaction(transaction,sql='SELECT COUNT(*) AS total FROM Order o',
-            document_ids=('orders',),parameters={'active':True})
+            document_ids=('orders',),parameters={'active':True},read_profile='count-summary')
 
         from decimal import Decimal
         queries.capability.query_in_transaction(transaction,sql='SELECT o.amount FROM Order o WHERE o.amount = :amount',

@@ -1,0 +1,43 @@
+{
+  "scope": "single Python shared-data preview; not full required corpus or independent interchange",
+  "outcome": "passed_preview",
+  "profile": {
+    "runtimeRelease": "truss-catalog-runtime/0.30-candidate",
+    "postgresql": "18.6",
+    "driver": "psycopg3.3.6",
+    "weftBackendVersion": "0.4.1",
+    "layout": {
+      "identity": "truss-layout",
+      "version": "0.16",
+      "sha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368"
+    }
+  },
+  "sourceBase": "0071ff0a",
+  "weftSource": "15eced4",
+  "securityReady": false,
+  "files": {
+    "packages/python/examples/run_corpus.py": "31d24d513c39ec44543f6626896a2a38d8561b18d01bc1374c5e96b98a5688fb",
+    "packages/python/tests/test_public_preview_corpus_native.py": "5cd7a83cafd3b29c60633a035aa3512c0f5c55523d70e031e39467be0b0acd46",
+    "docs/helix/04-build/corpus/public-python/0.1/adopter-basic.json": "b75fb846bb62395f454284cc78b4c8d2bd95cdca77ca0f380277f2c308ec7885",
+    "docs/helix/04-build/corpus/public-python/0.1/notes.umf.json": "2d12a4ee34d9e02ffb578e99fb0f69466bb11832db0eb49a235d23659931942b"
+  },
+  "installedArtifacts": {
+    "/private/tmp/truss-reached-030-r3-wheel/truss_toolkit-0.0.1.dev0-py3-none-any.whl": "c43bce69103d7a379b62cf823756b21f2c17b3b06769eebc6abb38ad514ff3ad",
+    "/private/tmp/weft-truss-pg18-python-module/weft.abi3.so": "83c9692add502b71b20b19cd7a41070a5e116313ef92dd2323c7468a1b89214c"
+  },
+  "validation": {
+    "command": "python -m unittest test_public_preview_corpus_native",
+    "tests": 1,
+    "seconds": 20.111,
+    "cases": 1,
+    "phases": 15,
+    "observations": 21,
+    "result": "OK",
+    "review": "Astra Ultra approved; JSON-kind comparison and nonfinite constant rejection applied"
+  },
+  "open": [
+    "Full original 41-case corpus and TD/STP-028",
+    "Independent bidirectional interchange and TypeScript engine",
+    "Stable layout and managed-service qualification"
+  ]
+}

@@ -43,7 +43,8 @@
             "retention",
             "observation_integrity",
             "resource",
-            "invalid_token"
+            "invalid_token",
+            "invalid_consumer"
           ]
         }
       },

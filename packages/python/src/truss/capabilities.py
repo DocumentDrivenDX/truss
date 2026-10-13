@@ -102,8 +102,8 @@ class NativeDirectReadCapability(_NativeCapability[Literal['direct_read']]):
             anchor=anchor,direction=direction,limit=limit,maximum_bytes=maximum_bytes,continuation=continuation)
 
     def reached_in_transaction(self,transaction: TransactionHandle,token: str,*,maximum_token_bytes: int=16384,
-                               maximum_evidence_bytes: int=1048576) -> Outcome[ReceiptIncluded | ReceiptVisibilityUnavailable]:
-        return self._assembly.reached_in_transaction(transaction,token,maximum_token_bytes=maximum_token_bytes,maximum_evidence_bytes=maximum_evidence_bytes)
+                               maximum_evidence_bytes: int=1048576,consumer_id: str | None=None) -> Outcome[ReceiptIncluded | ReceiptVisibilityUnavailable]:
+        return self._assembly.reached_in_transaction(transaction,token,maximum_token_bytes=maximum_token_bytes,maximum_evidence_bytes=maximum_evidence_bytes,consumer_id=consumer_id)
 
 
 @dataclass(frozen=True,slots=True,kw_only=True)
@@ -154,6 +154,7 @@ class NativeHistoryCapability(_NativeCapability[Literal['history']]):
 class NativeCompiledExecutionCapability(_NativeCapability[Literal['weft_execution']]):
     """Compile with Weft and execute authorized logical reads on the host transaction."""
     def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
-                             maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
+                             maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
+                             read_profile: Literal['entity-page','related-entity-page','count-summary'] | None=None) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
         return self._assembly.query_in_transaction(transaction,sql=sql,document_ids=document_ids,parameters=parameters,
-            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
+            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,read_profile=read_profile)

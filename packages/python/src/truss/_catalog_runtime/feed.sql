@@ -217,3 +217,32 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.reread_feed(text,bytea,bytea,text,int,int,text,text) FROM PUBLIC;
+
+
+CREATE FUNCTION truss.feed_reached(selected_consumer text,original_position bytea,maximum_evidence_bytes int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE proof jsonb;checkpoint bytea;registration uuid;position jsonb;locator jsonb;next_xid numeric;writer_xid numeric;included boolean;
+BEGIN
+ -- READ ONLY alone does not prove that an earlier local ACK has committed.
+ IF current_setting('transaction_read_only')<>'on' OR pg_current_xact_id_if_assigned() IS NOT NULL THEN RAISE EXCEPTION 'unassigned read-only feed comparison required' USING ERRCODE='0A000';END IF;
+ PERFORM truss.runtime_feed_authorize(selected_consumer,expected_release,expected_digest);
+ proof:=convert_from(truss.reached(original_position,maximum_evidence_bytes,expected_release,expected_digest),'UTF8')::jsonb;
+ IF proof->>'outcome'<>'available' THEN RETURN convert_to(proof::text,'UTF8');END IF;
+ SELECT checkpoint_bytes,registration_id INTO STRICT checkpoint,registration FROM truss.runtime_feed_consumer WHERE consumer_id=selected_consumer;
+ IF octet_length(checkpoint) NOT BETWEEN 1 AND 16384 OR (convert_from(checkpoint,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original checkpoint required' USING ERRCODE='55000';END IF;
+ position:=convert_from(checkpoint,'UTF8')::jsonb;locator:=convert_from(original_position,'UTF8')::jsonb;
+ IF jsonb_typeof(position->'nextXid') IS DISTINCT FROM 'string' OR position->>'nextXid' !~ '^(0|[1-9][0-9]{0,19})$' THEN RAISE EXCEPTION 'canonical checkpoint position required' USING ERRCODE='55000';END IF;
+ next_xid:=(position->>'nextXid')::numeric;writer_xid:=(locator->>'writerXid')::numeric;
+ IF next_xid>18446744073709551615 OR checkpoint IS DISTINCT FROM truss.runtime_feed_cursor(selected_consumer,next_xid::text)
+  OR position->>'registrationId' IS DISTINCT FROM registration::text THEN RAISE EXCEPTION 'current registered checkpoint required' USING ERRCODE='55000';END IF;
+ included:=next_xid>writer_xid;
+ -- Changed registration/checkpoint, missing evidence, or revoked authority refuses.
+ proof:=convert_from(truss.reached(original_position,maximum_evidence_bytes,expected_release,expected_digest),'UTF8')::jsonb;
+ IF proof->>'outcome'<>'available' THEN RETURN convert_to(proof::text,'UTF8');END IF;
+ PERFORM truss.runtime_feed_authorize(selected_consumer,expected_release,expected_digest);
+ IF NOT EXISTS(SELECT 1 FROM truss.runtime_feed_consumer c WHERE c.consumer_id=selected_consumer AND c.registration_id=registration AND c.checkpoint_bytes=checkpoint)
+  OR pg_current_xact_id_if_assigned() IS NOT NULL THEN RAISE EXCEPTION 'unchanged committed checkpoint required' USING ERRCODE='55P03';END IF;
+ RETURN convert_to(jsonb_build_object('outcome','available','included',included,'comparisonProfile','{"identity":"truss-feed-receipt-visibility","version":"0.1","sha256":"576c7cdc116552fd72448c627e3cc313734ffb87865b268bd73e628784aafd25"}'::jsonb)::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.feed_reached(text,bytea,int,text,text) FROM PUBLIC;

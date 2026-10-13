@@ -6754,6 +6754,25 @@ pgserver-pg18==18.6.1 and psycopg3.3.6, including retained0.26→0.27 data/recei
 preservation. Astra Ultra approved the implementation and security merge
 intersections. See `evidence/python-exact-query-20261012.json`.
 
+### Public relationship query increment — 2026-10-12
+
+Runtime0.28/backend0.3 connects existing Weft `HAS_RELATED` and `RELATED_KEYS`
+to actual independent directed monomorphic Truss edges, forward or by an authored
+inverse name. Original Catalog relationship identities and authored composite
+string keys drive lowering; fixed native sources validate full bounded edge bags
+and endpoint objects before correlation. Full selected document, relation,
+endpoint and property-owner authority remains required, including empty results.
+Python returns `QueryRelatedKeys` with exact ordered tuples and bound+1 truncation.
+No association Record, owned/composed relationship, multi-hop or numeric-key
+query support is claimed.
+
+Support policy0.5 adds only the inverse-name annotation; policies0.1–0.4 retain
+original bytes. Additive .27→.28 upgrades preserve previous routine identities,
+owners and ACLs along with data/receipts. Basic public workflows create/link,
+query both directions, read in a read-only transaction, and unlink; no manual
+row seed or consumer-authored storage mapping is used. Evidence is recorded in
+`evidence/python-relationship-query-20261012.json` after execution.
+
 
 ### Acceptance traceability correction — 2026-10-12
 
@@ -6765,3 +6784,82 @@ A direct comparison with UMF's required case assertions found that four recent c
 [Retained source and evidence](evidence/security-data-writer-20261012/receipt.json) exercise installer-bound BEFORE/AFTER statement triggers on raw assignment and shared graph object/edge relations. The guard serializes participating writes with original claim registration, checks fresh claims after lock waits, and advances per AFTER event, including zero-row events. Composite commands may advance multiple times. Outstanding or intervening claims and overflow roll back data and generation together.
 
 This remains a private PostgreSQL18.6 physical spike: no logical write authorization, fresh outer DML snapshot theorem, complete key/catalog/role/DDL/source writer closure, production installation, or release/sink qualification. Its automatic advances are not composed with the authority-change callback's exactly-one-generation CAS. Evidence supports only L03 coordination and selected L13 data-writer prerequisites; no required case is promoted and all132 remain in scope.
+### Runnable public adopter workflow — 2026-10-12
+
+`packages/python/examples/adopter_workflow.py` consumes exact `notes.umf.json`
+bytes through registration, mutation/key production and Weft compilation on the
+installed public Python package. It supplies its own synchronous psycopg host
+transactions, uses public installation/status/module configuration and a
+separate ordinary person for application calls, commits grouped object/edge
+writes, recovers the original receipt/token, reads by key and compiled relation,
+rolls back a dry-run, imports an object, and durably stores committed feed pages
+before separately committing ordinary-role ACKs. No data rows or accepted native
+identities are seeded administratively. Bun and the actual Weft .3 extension are
+required; there is no silent query skip.
+
+A single basic native test runs that exact program against the installed .28
+package and DocumentDrivenDX PostgreSQL18.6. This is integrated adopter evidence,
+not full shared corpus or native interchange qualification. README corrections
+remove superseded present-tense unavailable/fresh-only statements while retaining
+historical profile constraints. See `evidence/python-adopter-workflow-20261012.json`.
+
+### Public compiled authored-key pages — 2026-10-12
+
+Runtime0.29/backend0.4 exposes optional `read_profile` on the existing public
+query method. Established Weft application-read0.2 resolves entity-page,
+related-entity-page and ungrouped count-summary; the backend maps selected
+required-string authored keys to exact current native key IDs and ordered
+property IDs. A fixed protected page source validates/bounds all objects and
+checks C-collated tuple uniqueness before WHERE/LIMIT. Typed ROW continuation
+uses the same C comparison as ORDER BY. All old backend/binding shapes remain
+closed to the new key metadata member.
+
+Continuation is live and caller-managed; a per-call catalog revision does not
+freeze values or promise exactly-once enumeration. No non-string page keys,
+grouped summary, page joins or opaque cursor API is claimed. Additive .28→.29
+upgrades retain five prior query routine identities/owners/ACLs. Basic public
+first/next/empty-tail, read-only, related-page and count workflows run with the
+existing scalar/relationship/adopter workflows. Evidence follows execution in
+`evidence/python-query-pages-20261012.json`.
+
+### Public registered-feed receipt comparison — 2026-10-12
+
+Runtime0.30 adds optional `consumer_id` to the existing public reached method.
+The authority-only result and canonical issued token bytes are unchanged. Named
+consumers use a distinct pinned comparison: original committed receipt proof,
+actual registered installation/epoch/checkpoint bytes, complete current source
+and receipt authority, and lossless exclusive checkpoint next-xid comparison.
+Both true and false require final unchanged checkpoint/registration and receipt
+proof/authority; missing or unsafe evidence refuses. Read-only mode additionally
+requires an unassigned transaction ID to exclude caller-pending ACK writes.
+
+Python, shared proposal JSON request/result and TS carriers agree on optional
+consumer selection and typed invalid-consumer refusal. Existing enrollment and
+additive .29→.30 upgrades grant the new private-owned facade to registered feed
+readers, preserving old routine identities/ACLs and feed checkpoints. Weft0.4.1
+selects .30 explicitly; the .4 query grammar/binding/target remain unchanged and
+0.4.0 stays closed to .29. The documented public adopter workflow exercises the
+same token as source-visible/feed-behind before ACK, then feed-included after
+its durable content-addressed sink and separate committed ACKs. This is source
+ACK evidence, not verified downstream application or full interchange closure.
+Evidence follows execution in `evidence/python-feed-reached-20261012.json`.
+
+### Portable public Python preview corpus — 2026-10-12
+
+`corpus/public-python/0.1` publishes a separately named/versioned JSON case and
+exact original UMF fixture. The installed-package runner translates its closed
+operation vocabulary to public APIs, with JSON-authoritative arguments, actors,
+caller transaction phases and expectations. Actual returned native identities,
+original request input/token and opaque cursors supply bindings. Explicit result
+and feed projections retain the limits of the assertion scope. Unknown or newer
+formats/profiles/operations/fields cannot pass; the report records the case SHA.
+
+One basic native test executes the exact portable case, including committed
+canonical state after mixed per-item import, reader/outsider/precondition/dry-run
+refusals without effects, full declared journal actors/properties/endpoints,
+import provenance, original catalog bytes, durable feed sink/ACK and consumer
+receipt comparison. This is `passed_preview` for one Python implementation, not
+US-028 complete required corpus or independent bidirectional interchange. The
+original 41-case corpus and TD/STP-028 remain unchanged/open; no old harness,
+accounting machinery or invented second engine is adopted. Evidence follows
+execution in `evidence/python-public-preview-corpus-20261012.json`.
