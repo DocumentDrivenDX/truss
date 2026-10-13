@@ -3,7 +3,7 @@
 @covers US-056-AC6
 @covers US-056-AC9
 """
-import json
+import json,copy
 from truss import Ok,Error,CatalogDocument,adopt_psycopg_host
 from truss._security_mapping import SecurityMappingBoundary,prepare_security_mapping_in_transaction
 from truss._security_home_installation import bootstrap_security_homes_in_transaction
@@ -38,6 +38,20 @@ class AcceptedCatalogMappingTests(mapping.MappingNativeTests):
   self.assertEqual(assessment['revision'],'1');self.assertEqual(assessment['modelPins'],[m['pin'] for m in json.loads(self.reference)['modules']])
   self.assertEqual({t['element'] for t in assessment['inventory']['types']},{'Staff','Project','Resource','Ownership','Assignment'})
   self.assertEqual(len(json.loads(result.value.original_response)['handoff']['scans']),2)
+  dependencies=json.loads(result.value.native_dependencies)
+  self.assertEqual([s['scan'] for s in dependencies['scans']],['s0','s1'])
+  self.assertEqual(len(dependencies['uses']),6)
+  self.assertEqual({a['reference']['elementId'] for s in dependencies['scans'] for action in s['actions'] for a in action['associations']},{'Ownership','Assignment'})
+  self.assertFalse(dependencies['securityReady'])
+  from truss._security_catalog_mapping import map_catalog_dependencies
+  for mutation in ('missing-property','duplicate-type','wrong-key-fields','missing-scan'):
+   native=copy.deepcopy(assessment);response=json.loads(result.value.original_response)
+   if mutation=='missing-property':native['inventory']['properties']=[p for p in native['inventory']['properties'] if p['element']!='salary']
+   elif mutation=='duplicate-type':native['inventory']['types'].append(copy.deepcopy(next(t for t in native['inventory']['types'] if t['element']=='Resource')))
+   elif mutation=='wrong-key-fields':native['inventory']['keys'][0]['prop_ids']=[]
+   else:response['handoff']['scans']=response['handoff']['scans'][1:]
+   with self.subTest(mutation=mutation):
+    with self.assertRaises(ValueError):map_catalog_dependencies(json.dumps(native).encode(),json.dumps(response).encode())
   self.assertEqual(self.admin.execute('TABLE accepted_prior').fetchall(),[('kept',)])
  def test_unaccepted_source_refused_before_compiler(self):
   self.accepted();source=json.loads(self.reference);source['modules'][0]['pin']['revision']='substituted'
