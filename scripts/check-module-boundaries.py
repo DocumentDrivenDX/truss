@@ -13,6 +13,7 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_psycopg_subject_observation': {'dataclasses','hashlib','inspect','json','truss._owner_evidence_json','truss.psycopg_host','psycopg'},
     'query': {'datetime','truss.contracts','decimal','dataclasses','typing'},
     '_query_runtime': {'base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
     '_umf_keys_release': set(),

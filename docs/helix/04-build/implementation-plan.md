@@ -7261,6 +7261,11 @@ artifact IDs/frontmatter/traceability. This amendment controls historical contra
 release sequencing rather than deleting historical evidence or starting a second
 implementation. The practical clean-install path now succeeds separately.
 
+
+### Python original ordinary subject observation — 2026-10-13
+
+A private supported-psycopg operation composes the original Weft source selector with the existing original host containment/custody boundary. Pinned caller/effective caller and snapshot-visible false superuser/bypass flags plus UTF8 are observed outside the selected helper before/after one exact ordered nonnull native TEXT tuple. Immutable supported-driver strings and their UTF8 re-encoding are retained; no raw-wire claim is made. Native19 groups pass on PostgreSQL18.6, including text/name input, Unicode/BOM/exact beyond-2^53 text, unbound/wrong/elevated callers, wrong profiles/OID/null/cardinality/columns, source/Record/Key refusals, stale/foreign handles and deferred/forged response refusal. Python boundary controls16 pass. Retained source/owner hashes and logs: `evidence/python-subject-observation-20261013/receipt.json`. Installed helper authenticity, semantic tuple-domain encoding, subject existence/current binding, role/source writer exclusion, issuer authority and protected release remain open. Native flags are transaction-snapshot observations; concurrent role/helper changes are not excluded. All132 backend cases retain their scope without promotion.
+
 ## Original mixed import through the public Python interface — 2026-10-13
 
 Completed the retained consumer identity/skip/provenance workflow with genuine
@@ -7277,6 +7282,12 @@ The Python package now identifies itself as0.1.0.dev38 instead of reusing
 The built and installed wheel passes the basic public adopter workflow; see
 `evidence/public-python-dev38-package-20261013.md`. Source distribution remains
 the interim route; no index publication or stable-layout claim was made.
+
+
+Astra found wrong-OID helper rows were fetched before descriptor refusal. Exact ordered names/TEXT OIDs are now checked before fetch. A real caller-installed NAME loader receives zero `load` calls; all19 native groups replay successfully in4.327s after preserving three concurrent owner commits. Stock psycopg may still construct configured loaders during execute; this avoids foreign row decoding, without a configured-adapter sandbox or predecode claim. Driver adaptation/runtime code remains trusted. Python ownership baseline and all16 boundary controls pass on merged source.
+
+
+Astra Ultra independently replays26 bounded observation/source/custody controls; wrong-OID fetch count is zero after the correction. A separate real binary Transformer probe confirms constructor execution before row load, explicitly excluded from the row-decoding guarantee. It inspects parent native19-group and boundary16 results without claiming a native rerun. Final merged source/docs pins, controls and review are retained in `evidence/python-subject-observation-20261013/astra-review.json`; no remaining actionable finding in the qualified historical-observation scope.
 
 ## Public atomic batch example — 2026-10-13
 

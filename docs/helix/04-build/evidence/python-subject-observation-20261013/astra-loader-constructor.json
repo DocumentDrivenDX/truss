@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "callsBeforeAnyRowLoad": [
+    "constructor"
+  ],
+  "scope": "Actual supported binary Transformer loader factory; no SQL/native result execution. Constructor can execute before load; descriptor-first fetch refusal is not an adapter callback sandbox."
+}

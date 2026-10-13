@@ -1,0 +1,25 @@
+{
+  "scope": "Private original stock-psycopg native subject observation, no domain key encoding/issuer/existence/current authority/protected release",
+  "sourceSha256": {
+    "packages/python/src/truss/_psycopg_subject_observation.py": "1e7c81c0a73eab4277003a9ec712e17e203e4c8abe671821bad76a41506d959d",
+    "packages/python/src/truss/psycopg_host.py": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+    "packages/python/tests/test_psycopg_subject_observation_native.py": "8fadd838caaa6f911d56b0978f021f1d8b3191f141b19e9bad293a6c7dd203eb",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "scripts/check-module-boundaries.py": "b4aef033dad511425a906169b72e20974941ef38d28e921ba6aa9648d41a7ad3"
+  },
+  "originalOwnerModuleSha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+  "tests": {
+    "nativeObservationGroups": 19,
+    "pythonBoundaryControls": 16
+  },
+  "profile": "Python3.11, psycopg3.3.6 binary/libpq18.6, PostgreSQL18.6; original Weft subject selector0.1.0 on Core0.8 mapping source",
+  "qualification": "Fixture-trusted definer helper and local trust authentication. UTF8 strings/reencoding are supported-driver evidence, not raw-wire capture or whole-process memory bounds. Native role flags are transaction-snapshot observations; concurrent role/helper/config changes are not excluded. Callback/source/host code remain trusted. Original supported host owns deadline/savepoint/transaction matching. Returned frozen observations are historical, not held credentials. Source checkout evidence only; no new wheel/default-supported claim.",
+  "acceptanceTraceability": {
+    "US-056-AC2": "Native caller and source Subject/Record/Key observation prerequisite; no protected graph result admission",
+    "US-056-AC10": "Original source and original host transaction correspondence prerequisite; no complete semantic/native held release refinement"
+  },
+  "promotedBackendCases": 0,
+  "requiredBackendCases": 132,
+  "preservedOwnerMain": "8e041c77",
+  "descriptorGuard": "Exact native TEXT column names/OIDs checked before fetch: custom NAME Loader.load row decoding is not invoked. Stock driver may construct configured loaders during execute; driver adaptation code remains trusted, with no predecode sandbox claim."
+}

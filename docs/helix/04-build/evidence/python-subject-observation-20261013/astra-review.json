@@ -1,0 +1,132 @@
+{
+  "review": "private-psycopg-subject-observation",
+  "reviewer": "independent Astra Ultra agent",
+  "reviewedAtUtc": "2026-10-13T13:09:08.567696+00:00",
+  "status": "no_remaining_actionable_findings_in_qualified_scope",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "headDuringReview": "1a29a3133ca64593e080db46adc856c8c0af6218",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "1e7c81c0a73eab4277003a9ec712e17e203e4c8abe671821bad76a41506d959d",
+      "bytes": 5959
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_subject_observation_native.py",
+      "sha256": "8fadd838caaa6f911d56b0978f021f1d8b3191f141b19e9bad293a6c7dd203eb",
+      "bytes": 8198
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_owner_evidence_json.py",
+      "sha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+      "bytes": 3271
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/execution.py",
+      "sha256": "6a9dc024bb0c31fcb5bbd2d07ce11c6795d9ae8afc8356a3ae7bf0ef42834c54",
+      "bytes": 3505
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/fixtures/security-mapping-request.json",
+      "sha256": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+      "bytes": 11439
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/check-module-boundaries.py",
+      "sha256": "b4aef033dad511425a906169b72e20974941ef38d28e921ba6aa9648d41a7ad3",
+      "bytes": 24734
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "5a55e7bde8981607a4908ddcf3bbb59fcf4dccaf5563ae0ab052d9bd1ad78de5",
+      "bytes": 298017
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "72c7ba821df20218d131ddd965df7f7ec9045fc7f5548add1a893cc372243b0f",
+      "bytes": 1058974
+    }
+  ],
+  "originalInspectorModule": {
+    "path": "/private/tmp/subject-consumer-python/weft.so",
+    "sha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+    "bytes": 14364352
+  },
+  "independentControls": {
+    "count": 26,
+    "allPassed": true,
+    "scope": "Actual observer function with genuine compiled original Weft selector; synthetic exact PsycopgHost callback/cursor. Does not qualify native custody or SQL execution.",
+    "runner": {
+      "path": "/private/tmp/python-subject-review-20261013/check.py",
+      "sha256": "bff24e4f1a9bb081a4f6be9be6656f68e79c26f851f430ccc30001c7e5b825de",
+      "bytes": 4682
+    },
+    "results": {
+      "path": "/private/tmp/python-subject-review-20261013/results.json",
+      "sha256": "34c661c9d26ced7fbfd5b3a93de5e4a25d40e8f813f4e356f19117e2fa994b03",
+      "bytes": 2105
+    },
+    "wrongOidFetchesAfterFix": 0,
+    "separateAdapterConstructorControl": {
+      "path": "/private/tmp/python-subject-review-20261013/loader-constructor.json",
+      "sha256": "fde01098f39c7c57bc745389c5f3731143648dd7901ceaccbbeef7c604fb56c4",
+      "bytes": 275
+    },
+    "adapterConstructorRunner": {
+      "path": "/private/tmp/python-subject-review-20261013/loader-constructor.py",
+      "sha256": "51f143e58f912f8effcb8405f919d895db192288bc0b5cde7f9897c99bb2f076",
+      "bytes": 907
+    }
+  },
+  "resolvedFinding": {
+    "issue": "Helper rows were fetched before checking native descriptors, allowing foreign-OID row loaders to run before refusal.",
+    "beforeObservedHelperFetchCount": 1,
+    "fix": "Check exact ordered native names and TEXT OID25 before fetchmany; then check row count, nonnull exact strings and tuple limits.",
+    "afterObservedHelperFetchCount": 0,
+    "nativeRegression": "Parent native wrong-OID NAME19 custom Loader.load marker remains empty.",
+    "qualification": "Loader construction can precede descriptor access via stock execute/set_pgresult. This fix prevents foreign row load decoding, not all configured adapter code execution."
+  },
+  "parentNativeEvidence": {
+    "independentlyRerun": false,
+    "controls": 19,
+    "server": "PostgreSQL18.6",
+    "durationSeconds": 4.327,
+    "log": {
+      "path": "/private/tmp/python-subject-native.log",
+      "sha256": "918b00cd703c4d876254331eccace37e4634e1f1131127c981a2d0de6c9a81e3",
+      "bytes": 98
+    },
+    "results": {
+      "path": "/private/tmp/python-subject-native.json",
+      "sha256": "1d9ac746a31ceb80d9b6e1f5061e64303616058af90489e00ae816de83516806",
+      "bytes": 810
+    }
+  },
+  "parentBoundaryEvidence": [
+    {
+      "path": "/private/tmp/python-subject-boundaries.log",
+      "sha256": "c3d4f7c3da8b1b02e7518d83084bc6c4f91f4def1f162e060f7b0b91f731801e",
+      "bytes": 83
+    },
+    {
+      "path": "/private/tmp/python-subject-boundary-controls.log",
+      "sha256": "14bea14934e03557eb24eb76062f15a11eb18dfbef2daf5674bb9c456baad17b",
+      "bytes": 18517
+    }
+  ],
+  "scopeLimitations": [
+    "Original Weft inspector, configured native helper, driver/runtime and adapters remain trusted; no arbitrary callback sandbox.",
+    "ROLE superuser/bypass observations are snapshot evidence, not an authenticated held current-authority cut; helper/deployment/source changes are not excluded.",
+    "No native helper authentication, subject existence/current association, semantic domain encoding, issuer, protected release, readiness, or backend acceptance promotion.",
+    "Output is immutable historical supported-driver decoded TEXT plus UTF8 re-encoding, not raw native wire preservation or a reusable credential.",
+    "Tuple/source limits qualify retained observations, not total libpq/native heap or query cost.",
+    "No native mutation or replay by reviewer. Parent native and boundary evidence inspected separately."
+  ],
+  "findings": [],
+  "finalMergedDocsReview": "Final observer appendix and implementation-plan addendum qualify Loader.load refusal only, trusted constructors/code and historical snapshot role flags; current merged documents pinned. Implementation and native test unchanged since independent replay."
+}

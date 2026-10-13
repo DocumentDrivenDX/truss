@@ -1,0 +1,113 @@
+{
+  "status": "passed",
+  "count": 26,
+  "results": [
+    {
+      "name": "profile-repeatable_read",
+      "passed": true
+    },
+    {
+      "name": "profile-serializable",
+      "passed": true
+    },
+    {
+      "name": "profile-refusal-read_committed-read_only",
+      "passed": true
+    },
+    {
+      "name": "profile-refusal-repeatable_read-read_write",
+      "passed": true
+    },
+    {
+      "name": "principal-refusal-0",
+      "passed": true
+    },
+    {
+      "name": "principal-refusal-1",
+      "passed": true
+    },
+    {
+      "name": "principal-refusal-2",
+      "passed": true
+    },
+    {
+      "name": "principal-refusal-3",
+      "passed": true
+    },
+    {
+      "name": "principal-refusal-4",
+      "passed": true
+    },
+    {
+      "name": "wrong-oid",
+      "passed": true
+    },
+    {
+      "name": "wrong-name",
+      "passed": true
+    },
+    {
+      "name": "empty",
+      "passed": true
+    },
+    {
+      "name": "two",
+      "passed": true
+    },
+    {
+      "name": "null",
+      "passed": true
+    },
+    {
+      "name": "bytes",
+      "passed": true
+    },
+    {
+      "name": "over-cell",
+      "passed": true
+    },
+    {
+      "name": "exact-cell",
+      "passed": true
+    },
+    {
+      "name": "wrong-source",
+      "passed": true
+    },
+    {
+      "name": "non-subject",
+      "passed": true
+    },
+    {
+      "name": "wrong-key",
+      "passed": true
+    },
+    {
+      "name": "numeric-false",
+      "passed": true
+    },
+    {
+      "name": "extra",
+      "passed": true
+    },
+    {
+      "name": "duplicate",
+      "passed": true
+    },
+    {
+      "name": "declared-async-cold",
+      "passed": true
+    },
+    {
+      "name": "wrong-oid-refuses",
+      "passed": true
+    },
+    {
+      "name": "immutable-history-and-supported-driver-reencoding",
+      "passed": true
+    }
+  ],
+  "wrongOidHelperFetchCount": 0,
+  "sourceSha256": "1e7c81c0a73eab4277003a9ec712e17e203e4c8abe671821bad76a41506d959d",
+  "scope": "Actual module and genuine compiled Weft selector; synthetic exact PsycopgHost operation callback/cursor, not native custody or SQL execution."
+}
