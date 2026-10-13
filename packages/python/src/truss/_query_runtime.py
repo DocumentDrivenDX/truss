@@ -9,8 +9,8 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.6',
-           'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.2'}
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.7',
+           'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.3'}
 
 
 def compiler():
@@ -96,7 +96,7 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
                 metadata = representation['metadata']
                 family = 'integer' if metadata == 'version' else 'string'
                 nullable = metadata in ('originalAuthor', 'originalAt')
-                if metadata not in ('version', 'createdBy', 'updatedBy', 'originalAuthor', 'originalAt') or representation['logicalType'] != {'family': family, 'facets': {}, 'nullable': nullable} or representation['carrier'] != 'text' or representation['decoder'] != ('exact-integer' if family == 'integer' else 'text'):
+                if metadata not in ('version', 'createdBy', 'updatedBy', 'createdAt', 'updatedAt', 'originalAuthor', 'originalAt') or representation['logicalType'] != {'family': family, 'facets': {}, 'nullable': nullable} or representation['carrier'] != 'text' or representation['decoder'] != ('exact-integer' if family == 'integer' else 'text'):
                     raise ValueError('Exact native metadata descriptor required')
                 value = json.loads(raw)
                 if value is None:
@@ -107,6 +107,11 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
                     exact = _decode_scalar(value, family)
                     if metadata == 'version' and exact < 1:
                         raise ValueError('Positive exact record version required')
+                    if metadata in ('createdAt','updatedAt'):
+                        if not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}Z',exact):
+                            raise ValueError('Canonical native UTC timestamp required')
+                        from datetime import datetime
+                        datetime.fromisoformat(exact)
                     decoded.append(exact)
             elif representation['kind'] == 'completeRelatedKeys':
                 value = json.loads(raw)
@@ -201,11 +206,11 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         if binding != bundle['binding'] or binding['releaseId'] != manifest['releaseId'] or binding['releaseSha256'] != digest:
             raise ValueError('Exact installed query binding required')
         binding_sha = sha256(binding_json.encode('utf8')).hexdigest()
-        request = {'interfaceVersion': 'weft-compile/0.2.2', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
+        request = {'interfaceVersion': 'weft-compile/0.2.3', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
                    'modules': bundle['modules'], 'parameters': values, 'options': {'allowCandidate': True},
                    'target': {'backendId': BACKEND['backendId'], 'backendVersion': BACKEND['backendVersion'],
                               'targetProfile': BACKEND['targetProfile'], 'bindingJson': binding_json, 'bindingSha256': binding_sha}}
-        if read_profile is not None:request['readProfile']={'version':'weft-truss-entity-read/0.1.0' if read_profile=='complete-entity' else 'weft-application-read/0.2.0','subset':read_profile}
+        if read_profile is not None:request['readProfile']={'version':'weft-truss-entity-read/0.2.0' if read_profile=='complete-entity' else 'weft-application-read/0.2.0','subset':read_profile}
         page_metadata = None
         if page_size is not None:
             # Each page composes and reauthorizes the current accepted catalog.
@@ -227,7 +232,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             diagnostics = tuple(QueryDiagnostic(code=d['code'], message=d['message']) for d in artifact.get('diagnostics', ()))
             unsupported = any(d.code in ('WFT-CAPABILITY', 'WFT-TYPE', 'WFT-PROFILE') for d in diagnostics)
             return QueryRefused(code='unsupported_query' if unsupported else 'invalid_query', diagnostics=diagnostics)
-        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.2':
+        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.3':
             raise ValueError('Exact selected compile/dialect/IR versions required')
         if artifact['backend'] != BACKEND or artifact['bindingSha256'] != binding_sha or artifact['modelPins'] != [m['pin'] for m in bundle['modules']]:
             raise ValueError('Original compiled binding/model/backend required')

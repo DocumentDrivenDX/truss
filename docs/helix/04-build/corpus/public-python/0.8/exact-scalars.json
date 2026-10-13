@@ -1,0 +1,611 @@
+{
+  "format": "truss-public-python-preview/0.8",
+  "id": "public-exact-scalars",
+  "profile": {
+    "runtimeRelease": "truss-catalog-runtime/0.34-candidate",
+    "postgresql": "18.6",
+    "driver": "psycopg3.3.6",
+    "weftBackendVersion": "0.4.7",
+    "layout": {
+      "identity": "truss-layout",
+      "version": "0.16",
+      "sha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368"
+    }
+  },
+  "fixture": {
+    "path": "exact-scalars.umf.json",
+    "sha256": "2fbffab209e0952ecbb37c43d20fe09abffa6c924a506d4c1fe821ebec3ce8cd",
+    "documentId": "notes",
+    "revision": "r1"
+  },
+  "setup": {
+    "actors": {
+      "writer": "preview_writer",
+      "reader": "preview_reader",
+      "outsider": "preview_outsider"
+    },
+    "readerRole": "preview_readers",
+    "writerRole": "preview_writers",
+    "moduleId": "notes",
+    "consumerId": "preview-feed"
+  },
+  "phases": [
+    {
+      "actor": "admin",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "install",
+          "as": "installation",
+          "args": {
+            "registrarActor": "writer"
+          },
+          "expect": {
+            "status": "pending_commit",
+            "releaseId": "truss-catalog-runtime/0.34-candidate",
+            "installed": true
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "accept",
+          "as": "catalog",
+          "args": {
+            "requestKey": "preview-catalog"
+          },
+          "expect": {
+            "replayed": false,
+            "revision": "1"
+          }
+        }
+      ]
+    },
+    {
+      "actor": "admin",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "configure",
+          "as": "policy",
+          "args": {
+            "grants": [
+              {
+                "actor": "writer",
+                "permission": "read"
+              },
+              {
+                "actor": "writer",
+                "permission": "write"
+              },
+              {
+                "actor": "reader",
+                "permission": "read"
+              }
+            ],
+            "removeRegistrarActor": "writer"
+          },
+          "expect": {
+            "status": "pending_commit"
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "apply",
+          "as": "created",
+          "args": {
+            "operations": [
+              {
+                "op": "create-object",
+                "record": "Note",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "created"
+                    }
+                  },
+                  {
+                    "name": "units",
+                    "value": {
+                      "kind": "integer",
+                      "text": "9007199254740993"
+                    }
+                  },
+                  {
+                    "name": "amount",
+                    "value": {
+                      "kind": "decimal",
+                      "text": "1.2300"
+                    }
+                  },
+                  {
+                    "name": "enabled",
+                    "value": {
+                      "kind": "boolean",
+                      "value": true
+                    }
+                  },
+                  {
+                    "name": "at",
+                    "value": {
+                      "kind": "timestamp",
+                      "text": "2024-02-29t23:59:59.12345678901234567890-00:00"
+                    }
+                  },
+                  {
+                    "name": "blob",
+                    "value": {
+                      "kind": "binary",
+                      "text": "AP8="
+                    }
+                  }
+                ],
+                "alias": "created"
+              }
+            ],
+            "requestKey": "exact-create",
+            "preconditions": []
+          },
+          "expect": {
+            "outcome": "success",
+            "disposition": "applied",
+            "durability": "pending",
+            "results": [
+              "created"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "reader",
+      "readOnly": true,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "lookup",
+          "as": "lookup-created",
+          "args": {
+            "record": "Note",
+            "key": "title-key",
+            "values": [
+              "created"
+            ]
+          },
+          "expect": {
+            "outcome": "found",
+            "values": {
+              "title": {
+                "kind": "string",
+                "text": "created"
+              },
+              "units": {
+                "kind": "integer",
+                "text": "9007199254740993"
+              },
+              "amount": {
+                "kind": "decimal",
+                "text": "1.2300"
+              },
+              "enabled": {
+                "kind": "boolean",
+                "value": true
+              },
+              "at": {
+                "kind": "timestamp",
+                "text": "2024-02-29t23:59:59.12345678901234567890-00:00"
+              },
+              "blob": {
+                "kind": "binary",
+                "text": "AP8="
+              }
+            }
+          }
+        },
+        {
+          "op": "query",
+          "as": "created-exact",
+          "args": {
+            "sql": "SELECT n.* FROM Note n ORDER BY n.title",
+            "parameters": {},
+            "readProfile": null
+          },
+          "expect": {
+            "outcome": "rows",
+            "columns": [
+              "title",
+              "units",
+              "amount",
+              "enabled",
+              "at",
+              "blob",
+              "note"
+            ],
+            "rows": [
+              [
+                {
+                  "kind": "string",
+                  "text": "created"
+                },
+                {
+                  "kind": "integer",
+                  "text": "9007199254740993"
+                },
+                {
+                  "kind": "decimal",
+                  "text": "1.2300"
+                },
+                {
+                  "kind": "boolean",
+                  "value": true
+                },
+                {
+                  "kind": "timestamp",
+                  "text": "2024-02-29t23:59:59.12345678901234567890-00:00"
+                },
+                {
+                  "kind": "binary",
+                  "text": "AP8="
+                },
+                {
+                  "kind": "absent"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "writer",
+      "readOnly": false,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "import",
+          "as": "imported",
+          "args": {
+            "record": "Note",
+            "loadId": "exact-load",
+            "records": [
+              {
+                "as": "imported",
+                "values": [
+                  {
+                    "name": "title",
+                    "value": {
+                      "kind": "string",
+                      "text": "imported"
+                    }
+                  },
+                  {
+                    "name": "units",
+                    "value": {
+                      "kind": "integer",
+                      "text": "-9007199254740993"
+                    }
+                  },
+                  {
+                    "name": "amount",
+                    "value": {
+                      "kind": "decimal",
+                      "text": "2.3400"
+                    }
+                  },
+                  {
+                    "name": "enabled",
+                    "value": {
+                      "kind": "boolean",
+                      "value": false
+                    }
+                  },
+                  {
+                    "name": "at",
+                    "value": {
+                      "kind": "timestamp",
+                      "text": "2024-02-29t23:59:59.12345678901234567890-00:00"
+                    }
+                  },
+                  {
+                    "name": "blob",
+                    "value": {
+                      "kind": "binary",
+                      "text": "AP8="
+                    }
+                  },
+                  {
+                    "name": "note",
+                    "value": {
+                      "kind": "null"
+                    }
+                  }
+                ],
+                "payloadValues": null,
+                "source": {
+                  "row": "exact-row"
+                }
+              }
+            ]
+          },
+          "expect": {
+            "status": "processed",
+            "execution": "host_adopted",
+            "outcomes": [
+              {
+                "index": "0",
+                "outcome": "created",
+                "disposition": "pending"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "actor": "reader",
+      "readOnly": true,
+      "settle": "commit",
+      "steps": [
+        {
+          "op": "lookup",
+          "as": "lookup-created",
+          "args": {
+            "record": "Note",
+            "key": "title-key",
+            "values": [
+              "created"
+            ]
+          },
+          "expect": {
+            "outcome": "found",
+            "values": {
+              "title": {
+                "kind": "string",
+                "text": "created"
+              },
+              "units": {
+                "kind": "integer",
+                "text": "9007199254740993"
+              },
+              "amount": {
+                "kind": "decimal",
+                "text": "1.2300"
+              },
+              "enabled": {
+                "kind": "boolean",
+                "value": true
+              },
+              "at": {
+                "kind": "timestamp",
+                "text": "2024-02-29t23:59:59.12345678901234567890-00:00"
+              },
+              "blob": {
+                "kind": "binary",
+                "text": "AP8="
+              }
+            }
+          }
+        },
+        {
+          "op": "lookup",
+          "as": "lookup-imported",
+          "args": {
+            "record": "Note",
+            "key": "title-key",
+            "values": [
+              "imported"
+            ]
+          },
+          "expect": {
+            "outcome": "found",
+            "values": {
+              "title": {
+                "kind": "string",
+                "text": "imported"
+              },
+              "units": {
+                "kind": "integer",
+                "text": "-9007199254740993"
+              },
+              "amount": {
+                "kind": "decimal",
+                "text": "2.3400"
+              },
+              "enabled": {
+                "kind": "boolean",
+                "value": false
+              },
+              "at": {
+                "kind": "timestamp",
+                "text": "2024-02-29t23:59:59.12345678901234567890-00:00"
+              },
+              "blob": {
+                "kind": "binary",
+                "text": "AP8="
+              },
+              "note": {
+                "kind": "null"
+              }
+            }
+          }
+        },
+        {
+          "op": "query",
+          "as": "both-exact",
+          "args": {
+            "sql": "SELECT n.* FROM Note n ORDER BY n.title",
+            "parameters": {},
+            "readProfile": null
+          },
+          "expect": {
+            "outcome": "rows",
+            "columns": [
+              "title",
+              "units",
+              "amount",
+              "enabled",
+              "at",
+              "blob",
+              "note"
+            ],
+            "rows": [
+              [
+                {
+                  "kind": "string",
+                  "text": "created"
+                },
+                {
+                  "kind": "integer",
+                  "text": "9007199254740993"
+                },
+                {
+                  "kind": "decimal",
+                  "text": "1.2300"
+                },
+                {
+                  "kind": "boolean",
+                  "value": true
+                },
+                {
+                  "kind": "timestamp",
+                  "text": "2024-02-29t23:59:59.12345678901234567890-00:00"
+                },
+                {
+                  "kind": "binary",
+                  "text": "AP8="
+                },
+                {
+                  "kind": "absent"
+                }
+              ],
+              [
+                {
+                  "kind": "string",
+                  "text": "imported"
+                },
+                {
+                  "kind": "integer",
+                  "text": "-9007199254740993"
+                },
+                {
+                  "kind": "decimal",
+                  "text": "2.3400"
+                },
+                {
+                  "kind": "boolean",
+                  "value": false
+                },
+                {
+                  "kind": "timestamp",
+                  "text": "2024-02-29t23:59:59.12345678901234567890-00:00"
+                },
+                {
+                  "kind": "binary",
+                  "text": "AP8="
+                },
+                {
+                  "kind": "null"
+                }
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "feedProjection": {
+    "journal": [
+      "entity",
+      "kind",
+      "operation",
+      "version",
+      "properties",
+      "actor",
+      "source",
+      "target",
+      "orderKey"
+    ],
+    "importSources": [
+      "entity",
+      "loadId",
+      "source"
+    ],
+    "catalog": [
+      "originalDocumentSha256"
+    ],
+    "retainedButNotCompared": [
+      "native timestamps",
+      "native xid/seq",
+      "opaque cursor bytes",
+      "physical reservations",
+      "remaining catalog metadata"
+    ]
+  },
+  "scope": "single Python preview; not full conformance or interchange",
+  "resultProjection": {
+    "install": [
+      "status",
+      "releaseId",
+      "installed"
+    ],
+    "accept": [
+      "replayed",
+      "revision"
+    ],
+    "configure": [
+      "status"
+    ],
+    "apply/replay": [
+      "outcome",
+      "disposition",
+      "durability",
+      "results",
+      "failure code/condition IDs"
+    ],
+    "lookup": [
+      "outcome",
+      "values"
+    ],
+    "query": [
+      "outcome",
+      "columns",
+      "rows",
+      "refusal code"
+    ],
+    "reached": [
+      "outcome",
+      "included",
+      "comparison identity"
+    ],
+    "import": [
+      "status",
+      "execution",
+      "per-item index/outcome/disposition/reason/code"
+    ],
+    "drain-feed": [
+      "declared feedProjection",
+      "committed ACK"
+    ],
+    "retainedButNotCompared": [
+      "catalog report metadata",
+      "full group receipt/replay evidence",
+      "diagnostic prose",
+      "import batch IDs/containment evidence"
+    ]
+  }
+}

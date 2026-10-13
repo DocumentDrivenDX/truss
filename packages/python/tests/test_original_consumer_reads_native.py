@@ -21,5 +21,5 @@ class OriginalConsumerReads(unittest.TestCase):
         self.assertTrue(all(v['authority']=='passed' and v['replica']=='unavailable' for v in report['observations']))
         self.assertEqual(report['fixtureSync'],'committed original receipt included on authority')
         self.assertEqual(report['retainedExtensions'],4)
-        self.assertIn('consumer mandatory whole-object timestamps',report['notChecked'])
+        self.assertIn('required whole-object metadata fields',report['checked'])
         shutil.rmtree(directory)

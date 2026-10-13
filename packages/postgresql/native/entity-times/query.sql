@@ -1,4 +1,4 @@
--- Additive source for the next installed runtime; not active in runtime 0.33.
+-- Additive timestamp projection for installed runtime 0.34.
 -- Object timestamps belong to the verified current after-image, not journal.at.
 CREATE FUNCTION truss.query_object_times(binding jsonb,selected_type int,selected_id bigint)
 RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER
