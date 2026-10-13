@@ -7742,3 +7742,17 @@ retry and all-three owned cleanup are confirmed. Positive external read still
 passes. This is US-056AC9/US-057AC7 and SPIKE-004 CH04/CH05/CH08 prerequisite
 coverage only, not truss.B11 or a new native refinement claim.
 [Inputs, setup failure and outcomes](evidence/helper-definition-drift-20261013/README.md).
+
+
+### Full acceptance reconciliation and next implementation dependency — 2026-10-13
+
+The current-main132-case gate executes26 commands and accepts25.106 command
+bindings are missing; S12's default solver environment failed, while a separately
+qualified verified-Z3 replay passes. All30 Truss and30 Ashlar commands remain
+missing. The next implementation work is the installed protected-profile factory
+owning source/issuer/authority/caller/inventory/cuts/publication, beginning with
+an actual truss.B01 vertical slice. More isolated helper mutations do not connect
+these components to backend admission. General B03/B08 requires registered Weft
+lowering; Ashlar requires its own native policy adapter. Preserve the remaining
+query/write/history/recovery requirements and all132 cases.
+[Gate, proof replay and dependency audit](evidence/security-full-gate-20261013/README.md).
