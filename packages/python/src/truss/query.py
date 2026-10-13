@@ -13,7 +13,7 @@ class QueryRelatedKeys:
     items: tuple[tuple[str, ...], ...]
     truncated: bool
 
-QueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | Mapping[str, 'QueryValue']
+QueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | tuple['QueryValue', ...] | Mapping[str, 'QueryValue']
 
 @dataclass(frozen=True, slots=True)
 class QueryRows:

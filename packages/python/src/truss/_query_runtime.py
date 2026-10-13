@@ -92,6 +92,39 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
                 decoded.append(_decode_scalar(value, family))
             elif representation['kind'] == 'value':
                 decoded.append(_decode_value(json.loads(raw), representation['descriptor'], graph))
+            elif representation['kind'] == 'nativeMetadata':
+                metadata = representation['metadata']
+                family = 'integer' if metadata == 'version' else 'string'
+                nullable = metadata in ('originalAuthor', 'originalAt')
+                if metadata not in ('version', 'createdBy', 'updatedBy', 'originalAuthor', 'originalAt') or representation['logicalType'] != {'family': family, 'facets': {}, 'nullable': nullable} or representation['carrier'] != 'text' or representation['decoder'] != ('exact-integer' if family == 'integer' else 'text'):
+                    raise ValueError('Exact native metadata descriptor required')
+                value = json.loads(raw)
+                if value is None:
+                    if not nullable:
+                        raise ValueError('Required native metadata missing')
+                    decoded.append(None)
+                else:
+                    exact = _decode_scalar(value, family)
+                    if metadata == 'version' and exact < 1:
+                        raise ValueError('Positive exact record version required')
+                    decoded.append(exact)
+            elif representation['kind'] == 'completeRelatedKeys':
+                value = json.loads(raw)
+                key = representation['key']
+                types = key['types']
+                bound = representation['bound']
+                if type(bound) is not int or not 1 <= bound <= 100 or not types or len(key['fields']) != len(types) or any(t != {'family': 'string', 'facets': {}, 'nullable': False} for t in types):
+                    raise ValueError('Exact complete string key metadata required')
+                if type(value) is not list or len(value) > bound:
+                    raise ValueError('Complete relationship list exceeds its bound')
+                if len(types) == 1:
+                    if any(type(item) is not str for item in value):
+                        raise ValueError('Exact complete scalar key list required')
+                    decoded.append(tuple(value))
+                else:
+                    if any(type(item) is not list or len(item) != len(types) or any(type(v) is not str for v in item) for item in value):
+                        raise ValueError('Exact complete key tuple list required')
+                    decoded.append(tuple(tuple(item) for item in value))
             elif representation['kind'] == 'relatedKeys':
                 value=json.loads(raw);key=representation['key'];bound=representation['bound'];types=key['types']
                 if type(bound) is not int or not 1<=bound<=1000 or not types or len(key['fields'])!=len(types) or any(t['family']!='string' or t['facets']!={} or t['nullable'] for t in types):
