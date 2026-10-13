@@ -1,0 +1,36 @@
+{
+  "profile": "private-guarded-native-decision-publication",
+  "postgresql": "18.6",
+  "nativeTests": 5,
+  "seconds": 62.098,
+  "hostRegressionTests": 4,
+  "hostRegressionSeconds": 8.889,
+  "moduleImports": 933,
+  "criteria": [
+    "US-056-AC10",
+    "US-057-AC2",
+    "US-057-AC7"
+  ],
+  "mechanism": "Original safe decision is serialized to immutable UTF8 bytes. Private host publisher runs after final native observation, timeout restoration, savepoint RELEASE, deadline shutdown and cursor close, while caller lease and original transaction cuts remain held.",
+  "controls": [
+    "native caller object/map ShareLocks present at sink; foreign object UPDATE blocked; nested host entry refused",
+    "final native observation failure: no sink call, exact contained primary",
+    "sink delivers then raises: session quarantined, retry none, no second delivery",
+    "declared coroutine/generator/async callable refused before preparation/host access",
+    "non-None sink completion: quarantined, never marked published"
+  ],
+  "reviewFix": "Astra found deferred return falsely marked published. Declared deferred shapes reject; completion must be None; returned coroutine/generator is closed before uncertain refusal. inspect standard-library allowance is scoped to psycopg_host only.",
+  "limits": [
+    "Trusted synchronous bounded sink and original source/issuer/current-cut lifetime remain premises. A None return is not authenticated remote delivery.",
+    "Sinks run after operation timer shutdown; independent sink bounds and complete native role/DDL/grant/config/source/writer closure remain unqualified.",
+    "No remote transport acknowledgment, cancellation/stream/page contract, whole publication recovery, protected public endpoint or backend-case promotion."
+  ],
+  "pins": {
+    "native-initial.log": "f768c488a16db96914ad9795e4da5333d8988df2f7d85640f5f0eeac53f825f0",
+    "published-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "aee46e7baf89244b355de2a4f0d7de7abe1e8916823905a50a3db3bb2795de2f",
+    "host-regression.log": "3d8a40e2652625d7b3560db4da21a32f85a98943bf86c2c6bc4d66106bb4749c"
+  }
+}

@@ -207,3 +207,63 @@ class GuardedSubjectTests(native.NativeCatalogSubjectTests):
   self.assertIsInstance(fresh,Ok,str(h._custody.last_attempt.error));self.assertEqual(fresh.value['rows'],[])
   directory=os.environ.get('TRUSS_CATALOG_POLICY_READ_EVIDENCE')
   if directory:(Path(directory)/'drain-decisions.json').write_text(json.dumps({'before':first.value,'afterCommittedPublicUpdate':fresh.value,'writer':'assignment_revoker','blocking':blocking,'outcomes':outcomes,'authentication':'owned local fixture authentication; not production credential qualification'},indent=2)+'\n')
+
+ def test_guarded_publication_after_native_completion_under_caller_lease(self):
+  import psycopg
+  mapping,c,h,t,selection,inspector,relations=self.guarded_setup();delivered=[]
+  def publish(packet):
+   self.assertIs(type(packet),bytes);self.assertEqual(h._custody.last_attempt.phase,'released')
+   self.assertFalse(h._custody.lease.acquire(blocking=False))
+   nested=[];refused=h._run_operation(t,lambda *a:nested.append(True))
+   self.assertIsInstance(refused,Error);self.assertEqual(nested,[])
+   for r in relations:
+    self.assertEqual(self.admin.execute("SELECT EXISTS(SELECT 1 FROM pg_locks WHERE pid=%s AND relation=%s AND mode='ShareLock' AND granted)",(c.info.backend_pid,r.oid)).fetchone(),(True,))
+   with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+    with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('UPDATE truss.object SET props=props')
+   delivered.append(packet)
+  result=subject.publish_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,publish)
+  self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(delivered,[result.value])
+  decision=json.loads(result.value);self.assertEqual([r['key'] for r in decision['rows']],[[{'string':'r1'}]])
+  self.assertEqual(decision['rows'][0]['output'][0]['disposition'],'withheld')
+  self.assertEqual(h._custody.last_attempt.phase,'published');self.assertIsNone(h._custody.pending)
+  directory=os.environ.get('TRUSS_CATALOG_POLICY_READ_EVIDENCE')
+  if directory:(Path(directory)/'published-decision.json').write_bytes(result.value)
+ def test_late_host_observation_failure_never_publishes(self):
+  mapping,c,h,t,selection,inspector,relations=self.guarded_setup();delivered=[]
+  original=type(h)._observe
+  def observe(host,cursor):
+   if host is h and host._custody.last_attempt.phase=='command_returned':raise ValueError('injected final publication observation failure')
+   return original(host,cursor)
+  with patch.object(type(h),'_observe',observe):
+   result=subject.publish_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,delivered.append)
+  self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
+  self.assertEqual(str(h._custody.last_attempt.error),'injected final publication observation failure')
+  self.assertEqual(h._custody.last_attempt.phase,'contained');self.assertIsNone(h._custody.last_attempt.cleanup_error)
+ def test_uncertain_receiver_delivery_quarantines_without_retry(self):
+  mapping,c,h,t,selection,inspector,relations=self.guarded_setup();delivered=[]
+  def publish(packet):delivered.append(packet);raise RuntimeError('injected uncertain receiver delivery')
+  result=subject.publish_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,publish)
+  self.assertIsInstance(result,Error);self.assertEqual(len(delivered),1)
+  self.assertEqual(result.error.code,'transaction_unusable');self.assertEqual(result.error.retry_scope,'none')
+  self.assertTrue(h._custody.quarantined);self.assertEqual(str(h._custody.last_attempt.error),'injected uncertain receiver delivery')
+  retry=subject.publish_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,publish)
+  self.assertIsInstance(retry,Error);self.assertEqual(len(delivered),1)
+
+ def test_deferred_publishers_refuse_before_inspector_and_hosts(self):
+  mapping,c,h,t,selection,inspector,relations=self.guarded_setup()
+  async def asynchronous(packet):pass
+  def generator(packet):yield packet
+  class AsyncCallable:
+   async def __call__(self,packet):pass
+  for sink in (asynchronous,generator,AsyncCallable()):
+   with patch.object(type(h),'_run_operation') as operation,patch.object(subject,'_prepare_subject_operation') as prepare:
+    with self.assertRaisesRegex(ValueError,'Original synchronous private publisher required'):
+     subject.publish_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,sink)
+    operation.assert_not_called();prepare.assert_not_called()
+ def test_non_none_receiver_completion_never_claims_published(self):
+  mapping,c,h,t,selection,inspector,relations=self.guarded_setup();delivered=[]
+  def sink(packet):delivered.append(packet);return True
+  result=subject.publish_guarded_native_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,sink)
+  self.assertIsInstance(result,Error);self.assertEqual(len(delivered),1);self.assertTrue(h._custody.quarantined)
+  self.assertEqual(result.error.retry_scope,'none');self.assertEqual(h._custody.last_attempt.phase,'released')
+  self.assertEqual(str(h._custody.last_attempt.error),'Exact synchronous publisher completion required')

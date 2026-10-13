@@ -1,0 +1,12 @@
+{
+  "scope": "unchanged default guarded read regression after adding publication path",
+  "tests": 1,
+  "seconds": 16.516,
+  "result": "r1/Withheld, native caller object/map cuts and zero raw privileges preserved",
+  "pins": {
+    "docs/helix/04-build/evidence/guarded-publication-20261013/default-read-regression.log": "5f6ec61151dcef2f8fe3d94abe9c84d022c2c3959617946d2af99bac17e12a08",
+    "docs/helix/04-build/evidence/guarded-publication-20261013/decision.json": "3966cf8f43266a70436f3cb7ca9ec3d0e1345f41d8f16f0259bc5429945a769f",
+    "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398",
+    "scripts/security_catalog_subject_read.py": "d69ace836cdb21580b9a3b47801492787cdc0f8e5f4cc50a8501df12ad1f40a7"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "scope": "Actual private host methods with synthetic connection/cursor/deadline and manually registered synthetic custody; not native qualification",
+  "controls": [
+    {
+      "name": "synchronous publication after cursor close under lease",
+      "passed": true
+    },
+    {
+      "name": "ordinary sink failure quarantines without repeat",
+      "passed": true
+    },
+    {
+      "name": "BaseException sink failure quarantines and preserves original",
+      "passed": true
+    },
+    {
+      "name": "late observation refusal gives zero delivery and containment",
+      "passed": true
+    },
+    {
+      "name": "cursor close failure gives zero delivery and quarantine",
+      "passed": true
+    }
+  ],
+  "deferredObservations": [
+    {
+      "kind": "coroutine",
+      "result": "ok",
+      "phase": "published",
+      "bodyCalls": 0,
+      "quarantined": false
+    },
+    {
+      "kind": "generator",
+      "result": "ok",
+      "phase": "published",
+      "bodyCalls": 0,
+      "quarantined": false
+    }
+  ],
+  "hostSha256": "eb2847745bc621c50548d7d17a10bddb537ac4c740d2c736a9a60f68f07b6880"
+}

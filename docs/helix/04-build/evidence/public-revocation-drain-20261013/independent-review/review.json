@@ -23,7 +23,8 @@
   "limits": [
     "Selected cooperative object-lock/current-state component with local fixture authentication.",
     "No protected public endpoint, exhaustive publication/drain lifecycle, or complete truss.L03 acceptance claim.",
-    "Issuer/source/role/DDL/grant lifetime, old snapshots, caches and streaming remain unqualified."
+    "Issuer/source/role/DDL/grant lifetime, old snapshots, caches and streaming remain unqualified.",
+    "Initial output already returned before the transaction-held drain barrier; no buffered/final protected or stream drain, and no L03/L05 promotion."
   ],
   "sha256": {
     "packages/python/tests/test_security_guarded_subject_native.py": "afbb425408f56ebb1a8cd634917e61d68d5cbb7aa3601ebe22ef6c676bbd653b",

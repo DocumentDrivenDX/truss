@@ -1,0 +1,94 @@
+{
+  "scope": "Actual private host methods with synthetic connection/cursor/deadline and manually registered synthetic custody; not native qualification",
+  "controls": [
+    {
+      "name": "synchronous publication after cursor close under lease",
+      "passed": true
+    },
+    {
+      "name": "ordinary sink failure quarantines without repeat",
+      "passed": true
+    },
+    {
+      "name": "BaseException sink failure quarantines and preserves original",
+      "passed": true
+    },
+    {
+      "name": "late observation refusal gives zero delivery and containment",
+      "passed": true
+    },
+    {
+      "name": "cursor close failure gives zero delivery and quarantine",
+      "passed": true
+    },
+    {
+      "name": "returned coroutine closes cold and quarantines",
+      "passed": true
+    },
+    {
+      "name": "returned generator closes cold and quarantines",
+      "passed": true
+    },
+    {
+      "name": "declared deferred sink refuses before host work: function",
+      "passed": true
+    },
+    {
+      "name": "declared deferred sink refuses before host work: function",
+      "passed": true
+    },
+    {
+      "name": "declared deferred sink refuses before host work: function",
+      "passed": true
+    },
+    {
+      "name": "declared deferred sink refuses before host work: A",
+      "passed": true
+    },
+    {
+      "name": "declared deferred sink refuses before host work: G",
+      "passed": true
+    },
+    {
+      "name": "declared deferred sink refuses before host work: AG",
+      "passed": true
+    },
+    {
+      "name": "non-None bool completion quarantines",
+      "passed": true
+    },
+    {
+      "name": "non-None int completion quarantines",
+      "passed": true
+    },
+    {
+      "name": "non-None bytes completion quarantines",
+      "passed": true
+    },
+    {
+      "name": "non-None object completion quarantines",
+      "passed": true
+    },
+    {
+      "name": "started generator close remains under lease and preserves BaseException",
+      "passed": true
+    }
+  ],
+  "deferredObservations": [
+    {
+      "kind": "coroutine",
+      "result": "error",
+      "phase": "released",
+      "bodyCalls": 0,
+      "quarantined": true
+    },
+    {
+      "kind": "generator",
+      "result": "error",
+      "phase": "released",
+      "bodyCalls": 0,
+      "quarantined": true
+    }
+  ],
+  "hostSha256": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398"
+}

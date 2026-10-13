@@ -1,0 +1,9 @@
+test_uncertain_release_completion_quarantines_across_detach (test_psycopg_host_native.PsycopgHostNativeTests.test_uncertain_release_completion_quarantines_across_detach) ... ok
+test_success_path_join_failure_never_returns_success (test_psycopg_host_native.PsycopgHostNativeTests.test_success_path_join_failure_never_returns_success) ... ok
+test_success_path_join_interrupt_remains_primary_and_stops_once (test_psycopg_host_native.PsycopgHostNativeTests.test_success_path_join_interrupt_remains_primary_and_stops_once) ... ok
+test_copied_host_cannot_borrow_attachment_or_invalidate_original_handles (test_psycopg_host_native.PsycopgHostNativeTests.test_copied_host_cannot_borrow_attachment_or_invalidate_original_handles) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 8.889s
+
+OK

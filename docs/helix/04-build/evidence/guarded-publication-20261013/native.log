@@ -1,0 +1,10 @@
+test_guarded_publication_after_native_completion_under_caller_lease (test_security_guarded_subject_native.GuardedSubjectTests.test_guarded_publication_after_native_completion_under_caller_lease) ... ok
+test_late_host_observation_failure_never_publishes (test_security_guarded_subject_native.GuardedSubjectTests.test_late_host_observation_failure_never_publishes) ... ok
+test_uncertain_receiver_delivery_quarantines_without_retry (test_security_guarded_subject_native.GuardedSubjectTests.test_uncertain_receiver_delivery_quarantines_without_retry) ... ok
+test_deferred_publishers_refuse_before_inspector_and_hosts (test_security_guarded_subject_native.GuardedSubjectTests.test_deferred_publishers_refuse_before_inspector_and_hosts) ... ok
+test_non_none_receiver_completion_never_claims_published (test_security_guarded_subject_native.GuardedSubjectTests.test_non_none_receiver_completion_never_claims_published) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 62.098s
+
+OK

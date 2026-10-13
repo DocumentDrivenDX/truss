@@ -145,6 +145,21 @@ def _failure(code, message, sql_state=None, retry_scope='none'):
     return Error(ExecutionFailure(code, message, sql_state=sql_state, retry_scope=retry_scope))
 
 
+def _prepare_synchronous_publisher(publisher):
+    """Trusted sink shape/completion check, never delivery authentication."""
+    import inspect
+    call = getattr(publisher, '__call__', None)
+    if (not callable(publisher) or any(check(value) for value in (publisher,call)
+            for check in (inspect.iscoroutinefunction,inspect.isgeneratorfunction,inspect.isasyncgenfunction))):
+        raise ValueError('Original synchronous private publisher required')
+    def publish(value):
+        completion=publisher(value)
+        if completion is not None:
+            if inspect.iscoroutine(completion) or inspect.isgenerator(completion):completion.close()
+            raise ValueError('Exact synchronous publisher completion required')
+    return publish
+
+
 class PsycopgHost:
     """Borrow a selected live connection without changing its ownership.
 
@@ -474,6 +489,21 @@ class PsycopgHost:
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         return self._attempt(callback, custody)
+
+    def _run_published_operation(self, transaction, callback, publisher):
+        """Private trusted receiver hook after native completion, under lease.
+
+        Receiver side effects cannot be rolled back. A receiver failure therefore
+        quarantines the original session; no delivery/retry authority is issued.
+        The receiver must be bounded by its separately admitted sink contract.
+        """
+        publisher=_prepare_synchronous_publisher(publisher)
+        custody = (self._transactions.get(transaction._key)
+                   if type(transaction) is TransactionHandle and transaction._issuer is self._issuer else None)
+        if (custody is None or custody.handle is not transaction
+                or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
+            return _failure('invalid_transaction', 'Original issued transaction handle required')
+        return self._attempt(callback, custody, publish=publisher)
 
     def _run_semantic_operation(self, transaction, callback, *, parameter_producer=None):
         """Reserve a nonrewinding ordinal before SQL on the shared connection.
