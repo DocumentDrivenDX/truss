@@ -1,0 +1,149 @@
+{
+  "status": "no-actionable-findings-within-reviewed-scope",
+  "reviewer": "Independent Astra Ultra review",
+  "date": "2026-10-13",
+  "gitHead": "45e06d501058cbb6e36b1901812ccdbf796de790",
+  "scope": "Private fixed native ordinary-subject observation through the original Weft subject inspector and UMF key encoder, delegated to the private accepted-catalog policy fixture. Source/metadata/identity correspondence and refusal paths only; no implementation edits or native mutation by reviewer.",
+  "findings": [],
+  "independentControls": {
+    "count": 69,
+    "passed": true,
+    "actualOwnerExecutions": "Original imported Weft inspect_security_mapping_subject_key_json and original UMF encode_literal_key_tuple are executed for handoff controls.",
+    "syntheticBoundaries": "Native metadata/principal/helper/context rows, exact-type PsycopgHost shells and delegated evaluator are synthetic. This does not establish native privileges, locking, actual host containment, or current authority.",
+    "checks": [
+      "Exact helper owner and nineteen native routine fields for both functions; every routine field drift refused.",
+      "Foreign/short descriptors refuse before fetch; owner login/superuser/bypass flags and missing/duplicate metadata refuse.",
+      "Baseline ordinary subject observed and encoded twice, with only its selected key forwarded to evaluator.",
+      "Installation UUID or native database OID mismatch refuses before evaluator entry.",
+      "Foreign context/environment descriptors refuse before fetch and evaluation.",
+      "Late helper body, key or principal drift refuses after delegated evaluation without an outer result.",
+      "Missing/duplicate subject, delegated Error, malformed selection and owner inspector refusal fail closed."
+    ],
+    "inputProvenance": "Previously retained exact named request/owner response and historical runtime0.41 assessment/decision supply the synthetic handoff input. The current parent native suite separately establishes actual runtime0.42 composition; the harness does not pass its historical assessment through actual native0.42 recapture."
+  },
+  "parentNativeEvidenceInspected": {
+    "tests": 4,
+    "seconds": 24.524,
+    "postgresql": "18.6",
+    "runtimeRelease": "truss-catalog-runtime/0.42-candidate",
+    "checks": [
+      "Actual ordinary consumer has no SELECT/INSERT/UPDATE/DELETE/TRUNCATE privileges on object or issuer map and no catalog_fact_writer membership; direct TABLE access denies.",
+      "Native mapped existing Staff key s1 drives the actual private accepted-source policy result r1 with salary Withheld.",
+      "Caller-held object/map locks still block separate native UPDATE after delegated success.",
+      "Missing role mapping and helper search_path drift refuse before evaluator with exact contained errors and no cleanup error.",
+      "A separate native UTF8 database with copied installation UUID refuses before evaluator because native database identity differs."
+    ],
+    "cleanup": {
+      "runtimeExitSucceeded": true,
+      "statusExitCode": 3,
+      "socketAbsent": true,
+      "serverVersion": "18.6"
+    },
+    "notIndependentlyRerun": true,
+    "setupCorrection": "Earlier added other-database control failed before observation because statement_timeout was zero. Final source explicitly configures10000ms and asserts original adoption Ok; final four-test run establishes the intended refusal."
+  },
+  "reviewDrivenEvidenceImprovement": "Expanded native privilege checks to all five selected table privileges on both homes and explicit absence of writer-role membership; no bypass was identified.",
+  "limits": [
+    "Administrative issuer-map/helper authenticity, trusted owner/runtime code, exclusive host use and cluster uniqueness remain premises.",
+    "Helper/native principal/key checks are endpoint observations; no complete source/role/DDL/config/callable lifetime or ABA closure.",
+    "Caller-held fixed table SHARE locks are selected cross-transaction exclusions, not complete protected writer admission.",
+    "Same-transaction mutation, global callable/ACL closure, authenticated endpoint deployment, principal issuance and guarded protected release remain unqualified.",
+    "No new public API, readiness, backend-case promotion, source/native refinement theorem or completion of all132 required cases."
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_subject_read.py",
+      "sha256": "9a844c4391647193bee60489b3581a98343ac798ac10a5d36b93bfee29c1e014",
+      "bytes": 7157
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-catalog-subject.sql",
+      "sha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+      "bytes": 2670
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_subject_native.py",
+      "sha256": "9465d2b0a176ed712c3f6b8014430f514f0bef202953c84484f3a4e2c000c15b",
+      "bytes": 7572
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_read.py",
+      "sha256": "e64a0eed50eb7317d1e67ba045085f1e6feda02cfbcc1521f4d232213fa037f5",
+      "bytes": 7442
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "a81227203e5f8ad1b74e739e1586d3a3887b27dfa6e67ee85ba9b181fdc80962",
+      "bytes": 21602
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+      "bytes": 9078
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "b5b88fd89fe8e215396e31da62d925b698a15749d236d3dfbb47c57a415f23f9",
+      "bytes": 11649
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_security_mapping.py",
+      "sha256": "b613475fb393e5002b58496376637b41ffca4005a02c9baa95e3f9ccb6fa6e80",
+      "bytes": 12540
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_security_catalog_assessment.py",
+      "sha256": "b2d6864b7eb3ae7c56d6f678adb1a6005caf614fabf4708db5c2219f733096e2",
+      "bytes": 6175
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/catalog_runtime.py",
+      "sha256": "55c014a26a5ffa34c8b169396f8240600672fd2022e8cb565db9bcadd57b480a",
+      "bytes": 127986
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_catalog_runtime/manifest.json",
+      "sha256": "0af4092bed931affbd076f323ee0cc3c51cf255b6be0e20473f1bf51469dfb24",
+      "bytes": 4802
+    }
+  ],
+  "nativeEvidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/native-catalog-subject-20261013/native.log",
+      "sha256": "dc97db235c327a674009db2efe6a2af3e1e48c705f72cf0022db155887c1e393",
+      "bytes": 946
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/native-catalog-subject-20261013/cleanup.json",
+      "sha256": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+      "bytes": 109
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/native-catalog-subject-20261013/decision.json",
+      "sha256": "3966cf8f43266a70436f3cb7ca9ec3d0e1345f41d8f16f0259bc5429945a769f",
+      "bytes": 361
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/native-catalog-subject-20261013/database-control.log",
+      "sha256": "e8aee35b3b0d81aa0c7cf0226e65d375641209308e83af8f786a5601e40e3bea",
+      "bytes": 1435
+    }
+  ],
+  "independentEvidencePins": [
+    {
+      "path": "/private/tmp/native-catalog-subject-review-20261013/check.py",
+      "sha256": "20f47859256bba1361e76ec2392333415ea6ca7966e2d36329090d0cc13f5c1d",
+      "bytes": 10529
+    },
+    {
+      "path": "/private/tmp/native-catalog-subject-review-20261013/results.json",
+      "sha256": "a5a37758c776ba9e134e7eb5742fcced945c9dbd16c044a218f21678f877e934",
+      "bytes": 9537
+    }
+  ]
+}
