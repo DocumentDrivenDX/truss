@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "truss-toolkit"
-version = "0.0.9.dev0"
+version = "0.0.9"
 description = "Experimental Truss Python embedding components"
 requires-python = ">=3.11"
 dependencies = ["jsonschema==4.26.0", "referencing==0.37.0"]
