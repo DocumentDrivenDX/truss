@@ -1,0 +1,17 @@
+test_original08_create_commit_read_and_durable_retry (test_core08_group_create_native.Core08GroupCreateTests.test_original08_create_commit_read_and_durable_retry) ... ok
+test_original08_native_single_and_compound_key_lookup (test_core08_group_create_native.Core08GroupCreateTests.test_original08_native_single_and_compound_key_lookup) ... ERROR
+test_create_commit_read_and_original_durable_replay (test_group_create_native.PublicCreateGroupTests.test_create_commit_read_and_original_durable_replay) ... ok
+
+======================================================================
+ERROR: test_original08_native_single_and_compound_key_lookup (test_core08_group_create_native.Core08GroupCreateTests.test_original08_native_single_and_compound_key_lookup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_group_create_native.py", line 19, in test_original08_native_single_and_compound_key_lookup
+    result=a.lookup_string_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id=key,values=values,bun_executable='/opt/homebrew/bin/bun')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'CatalogReferenceAssembly' object has no attribute 'lookup_string_key_in_transaction'
+
+----------------------------------------------------------------------
+Ran 3 tests in 13.129s
+
+FAILED (errors=1)

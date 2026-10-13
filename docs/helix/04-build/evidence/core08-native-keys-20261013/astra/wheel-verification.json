@@ -1,0 +1,8 @@
+{
+  "wheel": "/private/tmp/truss-core08-key-wheels/truss_toolkit-0.0.1.dev0-py3-none-any.whl",
+  "wheelSha256": "a3416d785a0e605bbdfa24c943af1a041c324303eabc5b07b94b44acd2a06386",
+  "verifiedPythonAndCurrentKeyAssets": 145,
+  "extraPythonModules": [],
+  "bothLegacyAndCurrentManifestAssetsVerified": true,
+  "extractedForIndependentPureReplay": "/private/tmp/truss-core08-keys-astra-20261013/wheel"
+}

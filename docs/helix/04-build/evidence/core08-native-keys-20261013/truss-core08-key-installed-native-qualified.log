@@ -1,0 +1,17 @@
+test_original08_create_commit_read_and_durable_retry (test_core08_group_create_native.Core08GroupCreateTests.test_original08_create_commit_read_and_durable_retry) ... ok
+test_original08_native_single_and_compound_key_lookup (test_core08_group_create_native.Core08GroupCreateTests.test_original08_native_single_and_compound_key_lookup) ... FAIL
+test_create_commit_read_and_original_durable_replay (test_group_create_native.PublicCreateGroupTests.test_create_commit_read_and_original_durable_replay) ... ok
+
+======================================================================
+FAIL: test_original08_native_single_and_compound_key_lookup (test_core08_group_create_native.Core08GroupCreateTests.test_original08_native_single_and_compound_key_lookup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_group_create_native.py", line 20, in test_original08_native_single_and_compound_key_lookup
+    self.assertIsInstance(result,groups.Ok);self.assertIsInstance(result.value,groups.ObjectFound,str(a._host._custody.last_attempt.error))
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ObjectNotFound(outcome='not_found') is not an instance of <class 'truss.object_read.ObjectFound'> : None
+
+----------------------------------------------------------------------
+Ran 3 tests in 13.508s
+
+FAILED (failures=1)

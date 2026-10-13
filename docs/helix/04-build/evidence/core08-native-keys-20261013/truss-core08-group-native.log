@@ -1,0 +1,6 @@
+test_original08_create_commit_read_and_durable_retry (test_core08_group_create_native.Core08GroupCreateTests.test_original08_create_commit_read_and_durable_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 6.927s
+
+OK

@@ -1,0 +1,29 @@
+{
+  "scope": "Original core0.8 string-key production and native graph data prerequisites; not protected policy enforcement",
+  "sourceSha256": {
+    "packages/python/src/truss/_umf_key_tuples.py": "0b5eb0adad7a729b8f407b65be9f19453f2743b683c300112999bc22d09b662a",
+    "packages/python/src/truss/_umf_keys08_release.py": "43594c397319fabb04a09fadcdd451dbb03578613c6925af762ce39d74b8d77b",
+    "packages/python/src/truss/_umf_keys08/manifest.json": "1db61eb244a0acf73992fb942ea52fd12ee1a4c9a41c5033b3d6c4db9d976b80",
+    "packages/python/pyproject.toml": "51701189354a7cc01943a9c23db6c7f77dce1d20267f2c309b5847462a60d91a",
+    "packages/python/tests/test_core08_group_create_native.py": "600fadc6d22b4791e37ee8de8bddc6b6c0f7cea1899e4bd8f015ded036aed110",
+    "scripts/build-python-umf-keys.ts": "b2d661c6f21fc1ab1a3a4c4f2cff86c00e5290244c6a624dd61c7e1b64d5a210",
+    "scripts/build-umf-runtime.ts": "b2cff5aef7c3f7b3aad041bdf34eba205a1719f373348b5d3f522b3b16130aca"
+  },
+  "ownerRevision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+  "currentReceiptVersion": "3.0.0",
+  "legacyReceiptVersion": "2.0.0",
+  "tupleProfile": "umf-key-tuple-v1",
+  "unitCasesPassed": 9,
+  "installedUnitCasesPassed": 9,
+  "installedNativeCasesPassed": 3,
+  "installedNativeSeconds": 16.202,
+  "wheelVerification": {
+    "wheelSha256": "a3416d785a0e605bbdfa24c943af1a041c324303eabc5b07b94b44acd2a06386",
+    "verifiedPythonAndCurrentKeyAssets": 145,
+    "stalePythonModules": []
+  },
+  "originalLegacyAssetsUnchanged": true,
+  "securityReady": false,
+  "backendCasesPromoted": 0,
+  "next": "original logical predicate lowering against real accepted/populated native graph under qualified authority/source gates"
+}

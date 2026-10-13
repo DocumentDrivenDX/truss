@@ -1,0 +1,89 @@
+{
+  "scope": "Genuine packaged core0.8 owner receipt plus selected synthetic returned-packet refusals; not authentication of substituted runtime or general encoder theorem.",
+  "controls": [
+    {
+      "case": "genuineOriginal08Receipt",
+      "passed": true,
+      "originalDocumentDigestRetained": true
+    },
+    {
+      "case": "legacyReceiptVersion",
+      "passed": true,
+      "refused": "Selected original UMF key receipt required"
+    },
+    {
+      "case": "unknownReceiptVersion",
+      "passed": true,
+      "refused": "Selected original UMF key receipt required"
+    },
+    {
+      "case": "changedSourceVersion",
+      "passed": true,
+      "refused": "Original source and ordered key correspondence required"
+    },
+    {
+      "case": "changedSourceIdentity",
+      "passed": true,
+      "refused": "Original source and ordered key correspondence required"
+    },
+    {
+      "case": "changedValue",
+      "passed": true,
+      "refused": "Original source and ordered key correspondence required"
+    },
+    {
+      "case": "changedKeyIdentity",
+      "passed": true,
+      "refused": "Original source and ordered key correspondence required"
+    },
+    {
+      "case": "uppercaseBytes",
+      "passed": true,
+      "refused": "Exact original tuple byte carrier required"
+    },
+    {
+      "case": "unknownReceiptField",
+      "passed": true,
+      "refused": "Complete original UMF key receipt required"
+    },
+    {
+      "case": "missingReceipt",
+      "passed": true,
+      "refused": "UMF key tuple refused"
+    },
+    {
+      "case": "unknownEnvelopeField",
+      "passed": true,
+      "refused": "UMF key tuple refused"
+    },
+    {
+      "case": "refusedEnvelope",
+      "passed": true,
+      "refused": "UMF key tuple refused"
+    },
+    {
+      "case": "unsupportedSourceVersion",
+      "version": "0.6.0",
+      "passed": true,
+      "beforeRuntime": true
+    },
+    {
+      "case": "unsupportedSourceVersion",
+      "version": "0.9.0",
+      "passed": true,
+      "beforeRuntime": true
+    },
+    {
+      "case": "unsupportedSourceVersion",
+      "version": "0.8",
+      "passed": true,
+      "beforeRuntime": true
+    },
+    {
+      "case": "unsupportedSourceVersion",
+      "version": true,
+      "passed": true,
+      "beforeRuntime": true
+    }
+  ]
+}
