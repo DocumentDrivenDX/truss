@@ -1,0 +1,110 @@
+{
+  "scope": "Genuine imported owner Weft response with synthetic native catalog IDs; mutated negative and compound-key packets exercise mapper only, not native acceptance or whole compiler equivalence.",
+  "compilerFile": "/private/tmp/weft-security-mapping-native-20261013/weft.so",
+  "compilerSha256": "2c62713f8b0b2f06d8537267405cad027cf44db3d832faefbd37920ba958bc0f",
+  "controls": [
+    {
+      "case": "baseline",
+      "result": "accepted as expected"
+    },
+    {
+      "case": "missingType",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "duplicateType",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "retiredType",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "nonRecord",
+      "result": "refused as expected",
+      "reason": "Original native Record home required"
+    },
+    {
+      "case": "missingProperty",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "duplicateProperty",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "wrongPropertyOwner",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "wrongPropertyDocument",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "wrongPropertyModule",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "retiredProperty",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "missingKey",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "duplicateKey",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "retiredKey",
+      "result": "refused as expected",
+      "reason": "Unique active native dependency required"
+    },
+    {
+      "case": "compoundKey",
+      "result": "accepted as expected"
+    },
+    {
+      "case": "reversedKey",
+      "result": "refused as expected",
+      "reason": "Exact original native key field order required"
+    },
+    {
+      "case": "duplicateScan",
+      "result": "refused as expected",
+      "reason": "Unique original scan occurrence required"
+    },
+    {
+      "case": "unknownUseScan",
+      "result": "refused as expected",
+      "reason": "Original use scan occurrence required"
+    },
+    {
+      "case": "wrongUseTarget",
+      "result": "refused as expected",
+      "reason": "Original use/scan target correspondence required"
+    },
+    {
+      "case": "mutableInput",
+      "result": "refused as expected",
+      "reason": "Bounded original mapping carriers required"
+    },
+    {
+      "case": "oversizedInput",
+      "result": "refused as expected",
+      "reason": "Bounded original mapping carriers required"
+    }
+  ]
+}
