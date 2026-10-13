@@ -207,3 +207,5 @@ export function createPgConnectionSource(config:PoolConfig,options:{journal?:Ori
 export {decodeResponseFrame} from './wire';
 export type {WireLimits} from './wire';
 export {ResponseIngress} from './wire';
+
+export {createOrdinarySubjectKeyBinding,type OriginalSubjectKeyOwner,type SubjectKeyBindingOptions,type ObservedSubjectKey} from './subject-key';

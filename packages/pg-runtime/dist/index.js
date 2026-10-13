@@ -475,6 +475,48 @@ function requireOriginalCompletion(frames, status, command) {
 // packages/pg-runtime/src/index.ts
 import { randomUUID as randomUUID2 } from "crypto";
 import { Pool, DatabaseError } from "pg";
+
+// packages/pg-runtime/src/subject-key.ts
+import { createHash } from "crypto";
+function createOrdinarySubjectKeyBinding(options) {
+  const refuse = () => {
+    throw Error("Original subject key binding refused");
+  };
+  const sourceText = options.sourceText;
+  if (typeof sourceText !== "string" || !sourceText.length || Buffer.byteLength(sourceText) > 1048576 || Buffer.from(sourceText, "utf8").toString("utf8") !== sourceText)
+    return refuse();
+  const identity = Object.freeze({ ...options.identity });
+  if (Object.keys(identity).sort().join(",") !== "element,key,module" || Object.values(identity).some((v) => typeof v !== "string" || !v.length || v.includes("\x00") || Buffer.byteLength(v) > 4096))
+    return refuse();
+  const columns = Object.freeze([...options.keyColumns]), encodings = Object.freeze([...options.encodings]);
+  if (!columns.length || columns.length > 32 || columns.length !== encodings.length || new Set(columns).size !== columns.length || columns.some((c) => typeof c !== "string" || !c.length || Buffer.byteLength(c) > 63) || encodings.some((e) => e !== "string" && e !== "core-literal-json"))
+    return refuse();
+  const observe = options.host.observeOrdinarySubject.bind(options.host);
+  const read = options.owner.readJsonValue.bind(options.owner), encode = options.owner.encodeCoreKeyTuple.bind(options.owner), bytes = options.owner.readCoreKeyTupleBytes.bind(options.owner);
+  const sourceSha256 = createHash("sha256").update(sourceText).digest("hex");
+  return Object.freeze({ encode(connection) {
+    const observation = observe(connection);
+    if (JSON.stringify(observation.keyColumns) !== JSON.stringify(columns) || observation.keyValues.length !== encodings.length)
+      return refuse();
+    if (observation.keyValues.reduce((n, v) => n + Buffer.byteLength(v), 0) > 1048576)
+      return refuse();
+    const values = observation.keyValues.map((text, i) => encodings[i] === "string" ? { string: text } : read(text, "json"));
+    const source = read(sourceText, "json");
+    const receipt = encode(source, identity, values), tuple = bytes(receipt, source);
+    if (!(tuple instanceof Uint8Array) || tuple.length > 4194304)
+      return refuse();
+    const originalReceiptText = JSON.stringify(receipt);
+    if (typeof originalReceiptText !== "string" || Buffer.byteLength(originalReceiptText) > 8388608)
+      return refuse();
+    const value = receipt;
+    const bytesHex = Buffer.from(tuple).toString("hex");
+    if (value?.bytesHex !== bytesHex)
+      return refuse();
+    return Object.freeze({ principal: observation.principal, sourceSha256, identity, observation, bytesHex, originalReceiptText });
+  } });
+}
+
+// packages/pg-runtime/src/index.ts
 function createPgConnectionSource(config, options = {}) {
   const responseTimeout = options.originalResponseTimeoutMs === undefined ? 5000 : options.originalResponseTimeoutMs;
   if (typeof responseTimeout !== "number" || !Number.isInteger(responseTimeout) || responseTimeout < 1 || responseTimeout > 60000)
@@ -778,6 +820,7 @@ function createPgConnectionSource(config, options = {}) {
 export {
   ResponseIngress,
   createFileQueryJournal,
+  createOrdinarySubjectKeyBinding,
   createPgConnectionSource,
   decodeResponseFrame,
   inspectOriginalQueryFile

@@ -1,5 +1,7 @@
 /** Dedicated disposable native fixture; no installed-policy authority. */
-import {createPgConnectionSource} from '../packages/pg-runtime/src/index';
+import {createPgConnectionSource,createOrdinarySubjectKeyBinding} from '../packages/pg-runtime/src/index';
+import * as owner from '../packages/python/src/truss/_umf_keys08/producer.js';
+const originalSourceText=JSON.parse(await Bun.file(import.meta.dir+'/../packages/python/tests/fixtures/security-mapping-request.json').text()).modules[0].documentJson;
 const config=JSON.parse(await Bun.stdin.text());const cases:string[]=[];
 const refuses=(fn:()=>unknown)=>{let refused=false;try{fn();}catch{refused=true;}if(!refused)throw Error('Observation lifecycle did not refuse');};
 const transaction={isolation:'repeatable_read' as const,accessMode:'read_only' as const};
@@ -12,6 +14,13 @@ async function check(name:string,user:string,options:any,positive:boolean,expect
    const observed=host.observeOrdinarySubject(connection);
    if(observed.principal!==user||JSON.stringify(observed.keyColumns)!==JSON.stringify(options.ordinarySubject.keyColumns)||observed.keyValues[0]!=='alice'||observed.keyHex[0]!==Buffer.from('alice').toString('hex'))throw Error('Native subject bytes lost');
    if(!Object.isFrozen(observed)||!Object.isFrozen(observed.keyValues)||!Object.isFrozen(observed.keyHex)||!Object.isFrozen(observed.keyColumns))throw Error('Subject observation mutable');
+   if(observed.keyValues.length===1){
+    const binder=createOrdinarySubjectKeyBinding({host,owner,sourceText:originalSourceText,identity:{module:'m',element:'Staff',key:'pk'},keyColumns:['staff_id'],encodings:['string']});
+    const encoded=binder.encode(connection);
+    const expected=owner.encodeCoreKeyTuple(owner.readJsonValue(originalSourceText,'json'),{module:'m',element:'Staff',key:'pk'},[{string:'alice'}]);
+    if(encoded.bytesHex!==expected.bytesHex||encoded.observation!==observed)throw Error('Original semantic subject key mismatch');
+    refuses(()=>binder.encode({...connection}));
+   }
    if(observed.keyValues.length===2&&observed.keyValues[1]!=='9007199254740993')throw Error('Subject key rounded');
   }else refuses(()=>host.observeOrdinarySubject(connection));
   const result=await connection.execute({sql:'SELECT SESSION_USER::pg_catalog.text AS actor,CURRENT_USER::pg_catalog.text AS effective',parameters:[]});
@@ -31,6 +40,15 @@ await check('unbound native subject','principal_bob',{ordinaryPrincipal:'princip
 await check('wrong subject columns','principal_alice',{ordinaryPrincipal:'principal_alice',ordinarySubject:{...subject,keyColumns:['different']}},false,'Original subject binding unavailable');
 await check('wrong subject output OID','principal_alice',{ordinaryPrincipal:'principal_alice',ordinarySubject:{...subject,routine:'subject_wrong_type'}},false,'Original subject binding unavailable');
 await check('native superuser refused',config.user,{ordinaryPrincipal:config.user},false,'Pinned ordinary principal unavailable');
+const typedHost=createPgConnectionSource({...config,user:'principal_alice',max:1},{ordinaryPrincipal:'principal_alice',ordinarySubject:{schema:'principal_diag',routine:'subject_typed',keyColumns:['k0','k1','k2','k3','k4']}});
+const typedConnection=await typedHost.source.acquire();await typedConnection.begin(transaction);
+const typedSource=JSON.parse(originalSourceText);const kinds=['string','boolean','integer','decimal','binary'];
+typedSource.modules[0].elements=[{id:'Staff',kind:'record',name:'Staff',members:kinds.map((_,i)=>({module:'m',element:'k'+i})),keys:[{id:'pk',name:'Key',fields:kinds.map((_,i)=>({module:'m',element:'k'+i}))}],extensions:{}},...kinds.map((kind,i)=>({id:'k'+i,name:'k'+i,kind:'field',scalarType:kind,cardinality:'one',nullability:'required',extensions:{},...(kind==='decimal'?{facets:{precision:30,scale:4}}:{})}))];
+const typedBinding=createOrdinarySubjectKeyBinding({host:typedHost,owner,sourceText:JSON.stringify(typedSource),identity:{module:'m',element:'Staff',key:'pk'},keyColumns:['k0','k1','k2','k3','k4'],encodings:kinds.map(()=> 'core-literal-json')});
+const nativeTypedKey=typedBinding.encode(typedConnection);
+const expectedTypedKey=owner.encodeCoreKeyTuple(typedSource,{module:'m',element:'Staff',key:'pk'},[{string:'Δ\uFEFF'},{boolean:true},{integerToken:'9007199254740993'},{decimalToken:'9007199254740993.0000'},{binaryHex:'0001'}]);
+if(nativeTypedKey.bytesHex!==expectedTypedKey.bytesHex)throw Error('Native typed subject semantic mismatch');
+await typedConnection.commit();refuses(()=>typedBinding.encode(typedConnection));await typedConnection.release();await typedHost.close();cases.push('native five-family CoreLiteral JSON binds original semantic key');
 const failedTransaction=createPgConnectionSource({...config,user:'principal_alice',max:1},{ordinaryPrincipal:'principal_alice',ordinarySubject:subject});
 const failedConnection=await failedTransaction.source.acquire();await failedConnection.begin(transaction);
 const priorObservation=failedTransaction.observeOrdinarySubject(failedConnection);

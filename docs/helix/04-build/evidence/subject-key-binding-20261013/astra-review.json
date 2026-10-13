@@ -1,0 +1,102 @@
+{
+  "reviewer": "Independent Astra Ultra subagent",
+  "date": "2026-10-13",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "0735301ca2d6243651106194ff2c43e8f289e531",
+  "status": "No remaining semantic or source-custody findings after source UTF-8 fidelity fix; new generated declaration must be retained for clean-checkout package type resolution.",
+  "sourceDigests": {
+    "packages/pg-runtime/src/subject-key.ts": "3b04265a1eed38455348e8bcd0de08a98f0df4a246c3ac676f3a4610e883083f",
+    "packages/pg-runtime/src/index.ts": "3c8623a7096131255fb956c74bacb492165e57f146709e5c1e7eb16b2b0650b4",
+    "packages/pg-runtime/src/native-query.ts": "a404706f40228a3c43514da2447db19c2b0dd5a37f491f7cfa63bcf15cac4b76",
+    "packages/pg-runtime/src/wire.ts": "1a9cf79f5d1b700d7813ee24dabd6bcf3abc2f9a4eee134c7c223cd4dc5e0cd0",
+    "packages/pg-runtime/package.json": "958e5c9e451ec2d9c523c5c3dcafad3b259d8a2b4204c9397d4fb8ea1ef7a562",
+    "packages/pg-runtime/dist/index.js": "a9228f1d039c5b751b30ca7d4ad708025d00a4c73e4b0bb850483ac52e5889f8",
+    "packages/pg-runtime/dist/index.d.ts": "0e2a59c80dd12b392fb84057170ea9f354988eebefc558c476d185c5b6c4ca08",
+    "packages/pg-runtime/dist/subject-key.d.ts": "04c2d8ec3f315088ff536059ec10cb9cf6dc6e8aa18912f8ec947f562a716c8e",
+    "packages/pg-runtime/dist/build-evidence.json": "c7c0a6de91fbf8e496230fda786ec36622720ddb0516bcb307429cbe0209e210",
+    "tests/pg-subject-key.test.ts": "ce038c6e36a6afb12c6fc34066753b72d68c8c8af9d55fc345691be944cb6552",
+    "tests/pg-principal-native-runner.ts": "f92dcd3ef9de195eb0f792f5573d8232ca74e2b76f54b70e211f7d61f9f83094",
+    "packages/python/tests/test_pg_principal_runtime_native.py": "4c4e73f150247a9ebb87ab580db131301dd04840c79441a6241d7aa1468e6b28",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "packages/python/src/truss/_umf_keys08/producer.js": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+    "packages/python/src/truss/_umf_keys08/manifest.json": "1db61eb244a0acf73992fb942ea52fd12ee1a4c9a41c5033b3d6c4db9d976b80",
+    "packages/python/src/truss/_umf_keys08/producer-manifest.json": "f674dd05d79d42c22838c145db87897c3e7f19d95669a1f342a9811b236f8c31"
+  },
+  "independentEvidence": {
+    "controls": {
+      "count": 33,
+      "harness": "controls.ts",
+      "results": "results.json",
+      "qualification": "28 genuine-original-owner/host-selection controls and 5 deliberate owner-double output-bound controls. Synthetic host observation does not establish host/helper authenticity."
+    },
+    "ownerWireTests": {
+      "passed": 20,
+      "failed": 0,
+      "log": "owner-wire-tests-final.log"
+    },
+    "sourceEncodingRegression": {
+      "before": "source-unicode.json",
+      "after": "source-unicode-fixed.json",
+      "script": "source-unicode.ts"
+    },
+    "literalEncodingControls": {
+      "count": 5,
+      "results": "literal-unicode.json",
+      "script": "literal-unicode.ts"
+    },
+    "builtArtifactHashesMatch": true,
+    "originalOwnerManifestAndBundleHashMatch": true
+  },
+  "parentNativeEvidenceInspected": {
+    "version": "PostgreSQL 18.6",
+    "groups": 13,
+    "elapsedSeconds": 2.575,
+    "receipt": "parent-native.json",
+    "log": "parent-native.log",
+    "executedByReviewer": false,
+    "scope": "Includes real original TEXT subject -> genuine original UMF string key and five scalar-family CoreLiteral JSON tuple, with local trust authentication and fixture-trusted helper/source/mapping premises."
+  },
+  "resolvedFinding": {
+    "priority": 2,
+    "finding": "Raw lone UTF-16 surrogates in owner-accepted sourceText were replaced during implicit UTF-8 hashing, so distinct original sources shared sourceSha256 despite distinct retained owner receipt data.",
+    "witness": "Raw U+D800, U+DFFF and U+FFFD in Staff.name all initially returned 65da1f273d84df4614c4122acf0a87447b4c4c88b86c1dc1cf01479e39ab0184. This was lossy encoding, not a SHA collision.",
+    "resolution": "Before hashing, bounded sourceText must round-trip through UTF-8 unchanged. Raw unpaired surrogates refuse; escaped JSON representations remain distinct, valid original source byte sequences interpreted by the owner."
+  },
+  "packaging": {
+    "newDependency": "packages/pg-runtime/dist/index.d.ts reexports ./subject-key",
+    "requiredCompanion": "packages/pg-runtime/dist/subject-key.d.ts",
+    "trackedOrStagedAtReceipt": false,
+    "note": "The directory is ignored by default; parent was notified to retain the new companion declaration explicitly with generated artifacts."
+  },
+  "sourceReview": [
+    "Source text, selected identity, ordered column mapping, encoding labels and original owner function references are captured before use. Mutable configuration changes do not substitute later selected callbacks or mappings in tested controls.",
+    "The actual host accessor enforces connection lifecycle and private host identity. This bridge retains its original frozen observation, including raw native TEXT/hex, alongside interpreted tuple evidence.",
+    "Only string wrapping is local. core-literal-json parsing, domains, arity, key selection/order, numeric/binary normalization and receipt recomputation remain with original pinned UMF functions.",
+    "Duplicate literal object members, escaped duplicate names, malformed wrappers, absent/null keys, domain mismatches and invalid scalar payloads are refused by original owner semantics.",
+    "Original reader preserves decoded lone surrogates; the key codec then rejects them before key byte encoding. No second semantic parser or decoded-literal normalization was introduced.",
+    "Semantically equivalent spellings intentionally share tuple bytes while raw observation differs. Raw source whitespace likewise changes source hash while preserving owner semantic tuple meaning.",
+    "Exact 1MiB source and 1MiB aggregate native input controls pass; one byte over refuses. Tuple/serialized-receipt output caps are checked, but serialization scratch and owner computation are not a total CPU/heap bound.",
+    "Source/owner/host authenticity and correspondence are trusted configuration premises. Callable interface shape alone cannot establish those facts."
+  ],
+  "scope": [
+    "Observed semantic tuple evidence only, not authenticated subject issuance, credentials, record existence, current held authority, native policy permission or protected release.",
+    "Selected original Record/Key identity is host configuration; it does not automatically establish that the record is the ontology Subject. Helper key existence and current subject binding remain unqualified.",
+    "No native-profile/security readiness or required backend acceptance promotion.",
+    "Returned immutable prior observations remain data; downstream users must qualify deployment, source, semantics and authority independently.",
+    "Reviewer changed only owned temporary evidence; no implementation/native mutation or primary checkout edits."
+  ],
+  "evidenceDigests": {
+    "parent-build.log": "81d1866f72122091dd91b14ac26561de43621f09f687774b974c0034116a757c",
+    "source-unicode.json": "8bbc3a50c46674e78248b293269b766f18c9e187f333aaeaebab0f3bc414a9f9",
+    "owner-wire-tests-final.log": "d86b8397ec2c62b6140dd2e0cc70b63b0441fca1c3b1a72bc23fc63a9b2174e8",
+    "parent-native.log": "445ac1929e12709d1f6897186e11cb1c35fd6a61b7a3b16823ce517a7a30fbae",
+    "results.json": "db325c4ff89a6aad53a7ac2e8b3ea716d3607a749b7b88f2a3c360852fa5ab31",
+    "owner-wire-tests.log": "b1c581856da3c04fefa648f9f7ad3dcc65766cb9b0c837b6702f8d96a5eaf4bb",
+    "literal-unicode.json": "33cc977ec2c891badbac951c85295b6dcefcf78723a73273b66c23fefd5d5e27",
+    "literal-unicode.ts": "b4882bf026695ba06d7972b96a848429f904bb54ca0013157d6aed3abcb6ca7e",
+    "source-unicode-fixed.json": "3f3a43a49474d708419896a6c396df2874961948704ea14e37d258d1f21452ca",
+    "parent-native.json": "a3abaa5ae45a27d70a8d8b2e20c75d525a71a9a12fa1a8786d77e83aec117d25",
+    "controls.ts": "f9da8d6c22e449bbb5575fb8808d1a6bbe5120631ca905bf7f1093cea3c6e684",
+    "source-unicode.ts": "61f24f8915efef1d9e9c847a6c67bd2a2136e27f11510ce3922308af363b4f6c"
+  }
+}

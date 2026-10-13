@@ -48,3 +48,4 @@ export declare function createPgConnectionSource(config: PoolConfig, options?: {
 export { decodeResponseFrame } from './wire';
 export type { WireLimits } from './wire';
 export { ResponseIngress } from './wire';
+export { createOrdinarySubjectKeyBinding, type OriginalSubjectKeyOwner, type SubjectKeyBindingOptions, type ObservedSubjectKey } from './subject-key';

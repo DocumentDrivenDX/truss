@@ -1,0 +1,20 @@
+[
+  {
+    "scalarCode": 55296,
+    "status": "accepted",
+    "sourceSha256": "65da1f273d84df4614c4122acf0a87447b4c4c88b86c1dc1cf01479e39ab0184",
+    "retainedScalarCode": 55296
+  },
+  {
+    "scalarCode": 57343,
+    "status": "accepted",
+    "sourceSha256": "65da1f273d84df4614c4122acf0a87447b4c4c88b86c1dc1cf01479e39ab0184",
+    "retainedScalarCode": 57343
+  },
+  {
+    "scalarCode": 65533,
+    "status": "accepted",
+    "sourceSha256": "65da1f273d84df4614c4122acf0a87447b4c4c88b86c1dc1cf01479e39ab0184",
+    "retainedScalarCode": 65533
+  }
+]
