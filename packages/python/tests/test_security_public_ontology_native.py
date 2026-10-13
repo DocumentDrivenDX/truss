@@ -19,6 +19,28 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_private_publication_registration_identity_capacity_and_rollback(self):
+  from truss import Error,adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  from truss._security_publication_registration import register_publication_in_transaction
+  self.install();self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  identity=self.installation.installation_id.encode();profile=b'publication-registration-fixture/0.1'
+  self.assertIsInstance(bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=identity,authored_profile=profile,max_retained=2),Ok)
+  self.admin.execute("CREATE TEMP TABLE registration_prior_work(value text);INSERT INTO registration_prior_work VALUES('kept')")
+  def register(token,selected=profile):return register_publication_in_transaction(self.host,tx,operation_identity=token,installation_identity=identity,authored_profile=selected,expected_generation=1)
+  self.assertIsInstance(register(b'foreign',b'wrong-profile'),Error)
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(0,))
+  original=register(b'original-one');self.assertIsInstance(original,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(original.value.publication_allowed)
+  duplicate=register(b'original-one');self.assertIsInstance(duplicate,Error);self.assertEqual(duplicate.error.sql_state,'23505')
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(1,))
+  self.assertIsInstance(register(b'original-two'),Ok)
+  self.admin.execute('UPDATE truss.policy_publication_claim SET settled=true')
+  self.assertIsInstance(register(b'original-overflow'),Error)
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim').fetchone(),(2,))
+  self.assertEqual(self.admin.execute('TABLE registration_prior_work').fetchall(),[('kept',)])
+  self.host.detach();self.admin.rollback()
+  self.assertIsNone(self.admin.execute("SELECT pg_catalog.to_regclass('truss.policy_publication_claim')").fetchone()[0])
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.registration.json').write_text(json.dumps({'observations':['wrong original profile refuses without insertion','original registration returns pending commit and no release grant','duplicate original identity23505 retains first claim','second original identity takes last slot','settled tombstones retain capacity and exhaustion refuses','caller prior work survives refusals','outer rollback removes staged homes and claims'],'scope':'Private trusted-administrator registration only; no authentic operation issuer, original sink/recovery or admitted policy.'},indent=2)+'\n')
  def test_private_authority_change_claim_gate_and_atomic_effects(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction
@@ -695,8 +717,16 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   observations.append({'id':'ordinary-native-capacity-profile-change-refuses','observed':'42501'})
   from security_commit_loss_proxy import CommitResponseDropProxy
   commit_proxy=CommitResponseDropProxy(psycopg.conninfo.conninfo_to_dict(self.info.connection_uri));self.addCleanup(commit_proxy.close)
-  uncertain_owner=psycopg.connect(self.info.connection_uri,host='127.0.0.1',port=commit_proxy.port,sslmode='disable',gssencmode='disable',autocommit=True);self._track_owned_connection(uncertain_owner)
-  uncertain_owner.execute('BEGIN');uncertain_owner.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');uncertain_owner.execute(acquire).fetchall();uncertain_owner.execute(capacity_lock);self.assertEqual(profile_execute(uncertain_owner,(b'original-commit-ack-loss',installation_bytes,profile_bytes,5)).fetchall(),[(b'original-commit-ack-loss'.hex(),)]);commit_proxy.armed.set()
+  uncertain_owner=psycopg.connect(self.info.connection_uri,host='127.0.0.1',port=commit_proxy.port,sslmode='disable',gssencmode='disable',autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(uncertain_owner)
+  from truss._security_publication_registration import register_publication_in_transaction
+  uncertain_owner.execute('BEGIN');registration_host=adopt_psycopg_host(uncertain_owner,statement_timeout_ms=10000,operation_timeout_ms=30000)
+  try:
+   registration_tx=registration_host.adopt_transaction().value
+   registered=register_publication_in_transaction(registration_host,registration_tx,operation_identity=b'original-commit-ack-loss',installation_identity=installation_bytes,authored_profile=profile_bytes,expected_generation=5)
+   self.assertIsInstance(registered,Ok,str(registration_host._custody.last_attempt.error));self.assertFalse(registered.value.publication_allowed)
+  finally:registration_host.detach()
+  observations.append({'id':'original-commit-loss-uses-private-registration-operation','observed':{'generation':5,'publicationAllowed':False},'qualification':'pending original caller commit; no authenticated operation issuer or release grant'})
+  commit_proxy.armed.set()
   with self.assertRaises(psycopg.OperationalError) as ack_loss:uncertain_owner.execute('COMMIT')
   self.assertIsNone(ack_loss.exception.sqlstate);self.assertTrue(commit_proxy.dropped.wait(2));commit_proxy.close();self.assertEqual(commit_proxy.errors,[]);observations.append({'id':'original-registration-native-commit-response-dropped','observed':{'nativeCommand':'COMMIT','sqlState':ack_loss.exception.sqlstate},'qualification':'stock driver transport failure; no manufactured native SQLSTATE'})
   observe_claim=claim_sql('installation-publication-claim-observe-v0.1.proposal.sql',1)
