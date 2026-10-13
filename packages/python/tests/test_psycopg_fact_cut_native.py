@@ -1001,9 +1001,14 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         base=ROOT/'docs/helix/04-build/evidence/security-named-source-profile'
         raw=(base/'requirements.json').read_bytes()
         sources=_OriginalFactSources((base/'policy.json').read_bytes(),(base/'resolution.json').read_bytes())
-        self.connection.execute("CREATE FUNCTION truss.named_subject_current(actor text) RETURNS TABLE(staff_id text) LANGUAGE sql SET search_path=pg_catalog AS $$ SELECT s.staff_id FROM truss.sec_staff s WHERE actor=SESSION_USER::text AND actor='fact_cut_actor' AND s.staff_id='s1' $$;INSERT INTO truss.sec_staff VALUES('s2')")
+        self.connection.execute((ROOT/'scripts/security-named-subject.sql').read_text());self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
         try:
-            for expected_subject in ('s1','s2'):
+            for expected_subject,drift in [('s1',None),('s2',None),('s1','definer'),('s1','body'),('s1','path')]:
+                self.connection.execute('DROP FUNCTION truss.named_subject_current(text)')
+                self.connection.execute((ROOT/'scripts/security-named-subject.sql').read_text())
+                if drift=='definer':self.connection.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY DEFINER')
+                if drift=='path':self.connection.execute('ALTER FUNCTION truss.named_subject_current(text) SET search_path=pg_temp,pg_catalog')
+                if drift=='body':self.connection.execute("CREATE OR REPLACE FUNCTION truss.named_subject_current(actor text) RETURNS TABLE(staff_id text) LANGUAGE sql SET search_path=pg_catalog AS $$ SELECT 's1'::text $$")
                 def operation(host,t,original,connection):
                     _,profile,_=self.source_bound_profile();value=json.loads(profile)
                     roles=connection.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
@@ -1021,7 +1026,14 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                         return encode_literal_key_tuple(*args,**kwargs)
                     with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=fenced_encoder):
                         result=run_named_subject_resource_read(host,t,comparison,raw,sources,selection,weft.inspect_security_mapping_subject_key_json)
-                    self.assertEqual(encoded,[True,True])
+                    if drift is not None:
+                        self.assertEqual(encoded,[])
+                        self.assertIsInstance(result,Error)
+                        self.assertEqual(str(host._custody.last_attempt.error),'Exact installed named subject helper snapshot required')
+                        self.assertEqual(host._custody.last_attempt.phase,'contained')
+                        self.assertIsNone(host._custody.last_attempt.cleanup_error)
+                        return
+                    self.assertEqual(encoded,[True,True],str(host._custody.last_attempt.error))
                     if expected_subject=='s1':
                         self.assertEqual(result,Ok({'kind':'owned-resource-list-fixture/0.1','rows':[{'key':[{'string':'r1'}],'output':[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}]}]}))
                     else:
