@@ -30,9 +30,9 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.assignment(id int PRIMARY KEY,active boolean NOT NULL);INSERT INTO relational_fixture.assignment VALUES(1,true)')
   source=(Path(__file__).resolve().parents[3]/'packages/postgresql/native/security-data-writer-guard-pg18.sql').read_text()
   self.admin.execute(psycopg.sql.SQL('SET LOCAL ROLE {}').format(psycopg.sql.Identifier(self.installation.owner_role)));self.admin.execute(source);self.admin.execute('RESET ROLE')
-  homes=[('truss','object'),('truss','edge'),('relational_fixture','assignment')]
+  homes=[('truss','object'),('truss','edge'),('relational_fixture','assignment')];home_oids=[]
   for schema,table in homes:
-   oid=self.admin.execute('SELECT pg_catalog.to_regclass(%s)::oid',(schema+'.'+table,)).fetchone()[0]
+   oid=self.admin.execute('SELECT pg_catalog.to_regclass(%s)::oid',(schema+'.'+table,)).fetchone()[0];home_oids.append(oid)
    for when,name in [('BEFORE','aa_security_data_gate'),('AFTER','zz_security_data_advance')]:
     self.admin.execute(psycopg.sql.SQL('CREATE TRIGGER {} {} INSERT OR UPDATE OR DELETE OR TRUNCATE ON {}.{} FOR EACH STATEMENT EXECUTE FUNCTION truss.security_data_writer_guard({},{},{})').format(psycopg.sql.Identifier(name),psycopg.sql.SQL(when),psycopg.sql.Identifier(schema),psycopg.sql.Identifier(table),psycopg.sql.Literal(identity.hex()),psycopg.sql.Literal(profile.hex()),psycopg.sql.Literal(str(oid))))
     self.admin.execute(psycopg.sql.SQL('ALTER TABLE {}.{} ENABLE ALWAYS TRIGGER {}').format(psycopg.sql.Identifier(schema),psycopg.sql.Identifier(table),psycopg.sql.Identifier(name)))
@@ -115,7 +115,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
       def effect(cursor):
        cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2 AND EXISTS(SELECT 1 FROM relational_fixture.assignment WHERE id=1 AND active)');results.append(cursor.rowcount)
       try:
-       outcome=write_data_in_transaction(coordinated,coordinated_tx,installation_identity=identity,authored_profile=profile,expected_generation=expected,expected_event_count=1,action=effect)
+       outcome=write_data_in_transaction(coordinated,coordinated_tx,installation_identity=identity,authored_profile=profile,expected_generation=expected,expected_event_count=1,home_oids=tuple(home_oids),action=effect)
        if not isinstance(outcome,Ok):results.append(str(coordinated._custody.last_attempt.error))
       finally:coordinated.detach()
      else:
@@ -143,8 +143,41 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   current=self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone()[0]
   self.admin.execute("CREATE TEMP TABLE data_writer_prior_work(value text);INSERT INTO data_writer_prior_work VALUES('kept')")
   effects=[]
-  def coordinated(action,count=1,selected=profile):return write_data_in_transaction(self.host,tx,installation_identity=identity,authored_profile=selected,expected_generation=current,expected_event_count=count,action=action)
+  def coordinated(action,count=1,selected=profile):return write_data_in_transaction(self.host,tx,installation_identity=identity,authored_profile=selected,expected_generation=current,expected_event_count=count,home_oids=tuple(home_oids),action=action)
   def upsert(cursor):cursor.execute('INSERT INTO relational_fixture.assignment VALUES(4,true) ON CONFLICT(id) DO UPDATE SET active=excluded.active')
+  for mutate,restore in [('ALTER TABLE relational_fixture.assignment DISABLE TRIGGER aa_security_data_gate','ALTER TABLE relational_fixture.assignment ENABLE ALWAYS TRIGGER aa_security_data_gate'),('ALTER FUNCTION truss.security_data_writer_guard() STABLE','ALTER FUNCTION truss.security_data_writer_guard() VOLATILE'),('GRANT EXECUTE ON FUNCTION truss.security_data_writer_guard() TO consumer','REVOKE EXECUTE ON FUNCTION truss.security_data_writer_guard() FROM consumer')]:
+   self.admin.execute(mutate);self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected')),Error);self.assertEqual(effects,[]);self.admin.execute(restore)
+  replace_source=source.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION',1)
+  self.admin.execute(replace_source.replace('RETURN NULL;','RETURN NULL; -- fixture source drift'))
+  self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected')),Error);self.assertEqual(effects,[]);self.admin.execute(replace_source)
+  def rebind_after(selected):
+   self.admin.execute('DROP TRIGGER zz_security_data_advance ON relational_fixture.assignment')
+   self.admin.execute(psycopg.sql.SQL('CREATE TRIGGER zz_security_data_advance AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE ON relational_fixture.assignment FOR EACH STATEMENT EXECUTE FUNCTION truss.security_data_writer_guard({},{},{})').format(psycopg.sql.Literal(identity.hex()),psycopg.sql.Literal(selected.hex()),psycopg.sql.Literal(str(home_oids[2]))))
+   self.admin.execute('ALTER TABLE relational_fixture.assignment ENABLE ALWAYS TRIGGER zz_security_data_advance')
+  rebind_after(b'foreign-original-profile');self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected')),Error);self.assertEqual(effects,[]);rebind_after(profile)
+  from psycopg.adapt import Loader
+  from psycopg.pq import Format
+  array_loads=[]
+  class ForgedConfigArrayLoader(Loader):
+   format=Format.TEXT
+   def load(self,data):array_loads.append('used');return ['search_path=pg_catalog, pg_temp']
+  original_loader=self.admin.adapters.get_loader(1009,Format.TEXT)
+  self.admin.adapters.register_loader(1009,ForgedConfigArrayLoader)
+  try:
+   self.admin.execute('ALTER FUNCTION truss.security_data_writer_guard() SET search_path=hostile,pg_catalog')
+   self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected')),Error);self.assertEqual(effects,[]);self.assertEqual(array_loads,[])
+  finally:
+   self.admin.adapters.register_loader(1009,original_loader);self.admin.execute('ALTER FUNCTION truss.security_data_writer_guard() SET search_path=pg_catalog,pg_temp')
+  self.admin.execute(psycopg.sql.SQL('CREATE TRIGGER mm_security_extra BEFORE UPDATE ON relational_fixture.assignment FOR EACH STATEMENT EXECUTE FUNCTION truss.security_data_writer_guard({},{},{})').format(psycopg.sql.Literal('0'*131093),psycopg.sql.Literal(profile.hex()),psycopg.sql.Literal(str(home_oids[2]))))
+  self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected')),Error);self.assertEqual(effects,[])
+  self.admin.execute('DROP TRIGGER mm_security_extra ON relational_fixture.assignment')
+  def late_metadata_drift(cursor):
+   cursor.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=2');cursor.execute('ALTER FUNCTION truss.security_data_writer_guard() STABLE')
+  self.assertIsInstance(coordinated(late_metadata_drift),Error)
+  self.assertEqual(self.admin.execute("SELECT provolatile::text FROM pg_catalog.pg_proc WHERE oid='truss.security_data_writer_guard()'::regprocedure").fetchone(),('v',))
+  self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=2').fetchone(),(True,))
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(current,))
+
   self.assertIsInstance(coordinated(lambda cursor:effects.append('unexpected'),selected=b'wrong-profile'),Error);self.assertEqual(effects,[])
   self.assertIsInstance(coordinated(upsert,count=True),Error)
   self.assertIsInstance(coordinated(lambda cursor:None),Error)
@@ -199,9 +232,9 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   self.assertEqual(self.admin.execute('SELECT count(*) FROM relational_fixture.assignment WHERE id=4').fetchone(),(0,))
   with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as ordinary:
    ordinary.execute('BEGIN');ordinary_host=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=30000);ordinary_adoption=ordinary_host.adopt_transaction();self.assertIsInstance(ordinary_adoption,Ok);ordinary_tx=ordinary_adoption.value
-   refused=write_data_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,expected_generation=current,expected_event_count=1,action=lambda cursor:effects.append('unexpected'))
+   refused=write_data_in_transaction(ordinary_host,ordinary_tx,installation_identity=identity,authored_profile=profile,expected_generation=current,expected_event_count=1,home_oids=tuple(home_oids),action=lambda cursor:effects.append('unexpected'))
    self.assertIsInstance(refused,Error);self.assertEqual(effects,[]);ordinary_host.detach();ordinary.rollback()
-  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','actual private coordinated writer acquires original guard before DML, observes committed revocation and affects zero rows','wrong profile and pending claim refuse callback','no generation or wrong composite event count rolls back effects, preserves prior caller work','deferred returned callback refuses','exact two-event UPSERT returns pending commit; outer rollback preserves original data/generation','ordinary consumer coordinator access refuses before callback','native post-effect division failure rolls back data/generation','started generator cleanup writes and KeyboardInterrupt are contained, generator closed','returned coroutine is closed without executing body; prior DML rolls back','declared generator/coroutine/async-generator callbacks refuse before invocation','failure preserves prior caller work and search path'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events','counterexample: trigger guard wait retains stale outer DML predicate','actual private coordinated writer acquires original guard before DML, observes committed revocation and affects zero rows','wrong profile and pending claim refuse callback','no generation or wrong composite event count rolls back effects, preserves prior caller work','deferred returned callback refuses','exact two-event UPSERT returns pending commit; outer rollback preserves original data/generation','ordinary consumer coordinator access refuses before callback','native post-effect division failure rolls back data/generation','started generator cleanup writes and KeyboardInterrupt are contained, generator closed','returned coroutine is closed without executing body; prior DML rolls back','declared generator/coroutine/async-generator callbacks refuse before invocation','failure preserves prior caller work and search path','original selected function/body/ACL/always-trigger metadata checked before callback','disabled trigger, routine attribute/body, extra execute grant and wrong trigger profile refuse before callback','post-effect metadata drift refuses and rolls back data/generation/DDL','forged array loader cannot hide actual function configuration drift; no array loads','oversized extra trigger stays in cardinality check and refuses before callback'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
  def test_private_publication_registration_identity_capacity_and_rollback(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction
