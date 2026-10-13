@@ -1,0 +1,7 @@
+test_committed_late_acl_drift_refuses_publication (test_security_helper_acl_native.HelperAclNativeTests.test_committed_late_acl_drift_refuses_publication)
+@covers US-056-AC9; excluded administrator bypass, final comparison. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 11.700s
+
+OK

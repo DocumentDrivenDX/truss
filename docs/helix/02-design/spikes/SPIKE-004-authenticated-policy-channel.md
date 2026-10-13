@@ -178,3 +178,34 @@ All three owned resources are confirmed absent. The original positive composed
 read also passes. This is US-056AC9/US-057AC7 and SPIKE-004 CH04/CH05/CH08
 prerequisite evidence, not truss.B11 or backend admission. Other native authority
 changes remain required. [Inputs, outcomes and scope](../../04-build/evidence/external-peer-drift-20261013/README.md).
+
+
+### Exact direct helper ACL admission — 2026-10-13
+
+Committed PUBLIC EXECUTE drift passed the previous helper snapshot comparison.
+The private native verifier now requires the complete exact owner/caller direct
+ACL on both helpers before Subject encoding and again before publication. Five
+committed ACL mutations plus two original TLS cases pass (7/77.081s); a separate
+late excluded-administrator committed grant is refused before publication
+(1/11.700s). The external TLS peer sees generic denial, zero encoding and no
+retry; positive read still passes, with owned cleanup confirmed. Conditional Z3
+ACL equality has3UNSAT/2SAT, without native/effective-role refinement. US-056AC9,
+US-057AC7 and SPIKE-004 prerequisites only, no truss.B11/case promotion.
+[Counterexample, controls and limitations](../../04-build/evidence/helper-acl-drift-20261013/README.md).
+
+Concurrent relationship-name/runtime0.53 owner work is preserved. Six native
+ACL controls plus both TLS cases pass together (8/50.388s); positive and denial
+external-peer paths pass with complete owned cleanup. Separate runtime053
+evidence qualifies this merged replay; the earlier0.52 evidence is historical.
+
+
+### Committed helper owner/definition drift — 2026-10-13
+
+Four actual committed owner/SECURITY INVOKER/search_path/volatility mutations
+refuse at the exact helper snapshot gate before encoding/publication (4/24.831s)
+with event_triggers on and fresh executor custody. The external TLS peer also
+observes the committed owner mismatch as generic denial; zero encoding, no
+retry and all-three owned cleanup are confirmed. Positive external read still
+passes. This is US-056AC9/US-057AC7 and SPIKE-004 CH04/CH05/CH08 prerequisite
+coverage only, not truss.B11 or a new native refinement claim.
+[Inputs, setup failure and outcomes](../../04-build/evidence/helper-definition-drift-20261013/README.md).

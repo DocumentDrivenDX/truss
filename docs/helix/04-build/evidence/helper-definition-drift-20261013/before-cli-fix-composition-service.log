@@ -1,0 +1,4 @@
+  File "/app/truss/scripts/security_channel_composition_service.py", line 72
+    serve(refuse_event_triggers=sys.argv[1:]==['--refuse-event-triggers'],refuse_helper_public_grant=sys.argv[1:]==['--refuse-helper-public-grant'],['--refuse-helper-owner'])
+                                                                                                                                                                             ^
+SyntaxError: positional argument follows keyword argument

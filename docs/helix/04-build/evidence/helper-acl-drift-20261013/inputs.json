@@ -1,0 +1,12 @@
+{
+  "trussBaseRevision": "2010d1da935d4875429acf0e20bfd6b517457848",
+  "runtime": "0.52-candidate",
+  "sourceSha256": {
+    "scripts/security_catalog_subject_read.py": "5563fc3ce9ab9736c1d64132ae35683575455e182c4a380727e2dbec80423979",
+    "scripts/security_channel_composition_service.py": "14082e0b1a68ac5e35e17ac39a2d8652e768a9e5b650aa93ce6ae4e2fc1877a7",
+    "scripts/prove-security-helper-acl.py": "5912cbe1c652812c9d29dece51ad8473d04459ee6c5cdfbd119fc5b824d671d5",
+    "packages/python/tests/test_security_helper_acl_native.py": "7ab3ceea5b25abd77196dcd187ce6380f472cc4db4a147e209b53723094c699c"
+  },
+  "runtimeInputs": "../linux-guarded-channel-20261013/inputs.json",
+  "baselineMethod": "Actual previous _verify_helpers AST extracted from retained git2010d1da source; replaces only that method in the baseline process"
+}

@@ -1,0 +1,162 @@
+{
+  "scope": "Original service function admission and unchanged original CLI AST blocks; no native operation or external peer independently run",
+  "passed": 38,
+  "controls": [
+    {
+      "control": "refuse_event_triggers:nonbool:0",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:1",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:2",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:3",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:4",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:5",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:6",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:7",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:8",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:9",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:10",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:11",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:12",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:13",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:14",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:15",
+      "passed": true
+    },
+    {
+      "control": "boolean_pair:(False, False)",
+      "passed": true
+    },
+    {
+      "control": "boolean_pair:(True, False)",
+      "passed": true
+    },
+    {
+      "control": "boolean_pair:(False, True)",
+      "passed": true
+    },
+    {
+      "control": "boolean_pair:(True, True)",
+      "passed": true
+    },
+    {
+      "control": "service_cli:[]",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:[]",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['bad']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['bad']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-event-triggers', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-event-triggers', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-public-grant', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-public-grant', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-event-triggers', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-event-triggers', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-public-grant', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-public-grant', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-public-grant=true']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-public-grant=true']",
+      "passed": true
+    }
+  ],
+  "sourcePins": {
+    "/private/tmp/truss-security-main-integration/scripts/security_channel_composition_service.py": "14082e0b1a68ac5e35e17ac39a2d8652e768a9e5b650aa93ce6ae4e2fc1877a7",
+    "/private/tmp/truss-security-linux-composition/compose.py": "bfe0e52e94f1bc3513347e0386256402ebaa85c2740e089fea86d624f2824690"
+  }
+}
