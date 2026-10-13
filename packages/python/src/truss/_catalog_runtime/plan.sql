@@ -69,18 +69,24 @@ BEGIN
   END IF;
   property_map:=property_map||jsonb_build_object(row->>'prop_id',CASE WHEN old IS NULL THEN property_next ELSE (old->>'prop_id')::int END);
   candidate:=row||jsonb_build_object('type_id',assigned,'prop_id',(property_map->> (row->>'prop_id'))::int);
+  IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'prop_def') p WHERE p.value->>'type_id'=assigned::text AND p.value->>'prop_id'<>candidate->>'prop_id' AND p.value->>'name'=candidate->>'name') THEN
+   RAISE EXCEPTION 'field name occupied in prior catalog' USING ERRCODE='0A000';END IF;
   IF old IS NOT NULL THEN
    IF old->>'cardinality' IN ('array','map') THEN
     IF old->'item'->'reference' IS DISTINCT FROM candidate->'item'->'reference' OR old->'item'->'declaration' IS DISTINCT FROM candidate->'item'->'declaration' THEN RAISE EXCEPTION 'container item evolution requires explicit support' USING ERRCODE='0A000';END IF;
     candidate:=candidate||jsonb_build_object('item',old->'item');
    END IF;
    IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;
+   -- Name-only changes retain storage and key identities.
+   IF ((old->'_originalField') - 'name') = ((row->'_originalField') - 'name') THEN
+    NULL; -- Storage meaning and retained key components are unchanged.
+   ELSE
    tightening:=(old->>'nullability'='absent-allowed' AND row->>'nullability'='required') IS TRUE;
    IF tightening THEN
     IF ((old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary') AND row->>'scalar_type'=old->>'scalar_type') OR (old->>'cardinality' IN ('array','map') AND row->>'cardinality'=old->>'cardinality' AND truss.valid_property_definition(jsonb_populate_record(NULL::truss.prop_def,candidate)) IS TRUE)) IS DISTINCT FROM TRUE THEN
      RAISE EXCEPTION 'required tightening requires a supported retained scalar or flat container' USING ERRCODE='0A000';END IF;
     FOREACH facet_map IN ARRAY ARRAY[coalesce(old->'_originalField'->'facets','{}'::jsonb),coalesce(row->'_originalField'->'facets','{}'::jsonb)] LOOP
-     IF NOT ((facet_map='{}'::jsonb OR old->>'scalar_type'='integer' AND facet_map='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR old->>'scalar_type'='decimal' AND facet_map='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN
+     IF NOT ((facet_map='{}'::jsonb OR old->>'scalar_type'='integer' AND facet_map='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR old->>'scalar_type'='decimal' AND facet_map IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE) THEN
       RAISE EXCEPTION 'required tightening needs known scalar facets' USING ERRCODE='0A000';END IF;
     END LOOP;
    END IF;
@@ -89,16 +95,17 @@ BEGIN
    IF coalesce(old->'_originalField'->'facets','{}'::jsonb) IS DISTINCT FROM coalesce(row->'_originalField'->'facets','{}'::jsonb) THEN
     IF NOT ((coalesce(old->'_originalField'->'facets','{}'::jsonb)='{}'::jsonb
       OR old->>'scalar_type'='integer' AND old->'_originalField'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-      OR old->>'scalar_type'='decimal' AND old->'_originalField'->'facets'='{"precision":18,"scale":4}'::jsonb) IS TRUE)
+      OR old->>'scalar_type'='decimal' AND old->'_originalField'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE)
     OR NOT ((coalesce(row->'_originalField'->'facets','{}'::jsonb)='{}'::jsonb
       OR row->>'scalar_type'='integer' AND row->'_originalField'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-      OR row->>'scalar_type'='decimal' AND row->'_originalField'->'facets'='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN
+      OR row->>'scalar_type'='decimal' AND row->'_originalField'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE) THEN
      RAISE EXCEPTION 'known native scalar facet transition required' USING ERRCODE='0A000';END IF;
    END IF;
    IF ((old->'_originalField')-ARRAY['nullability','facets']) IS DISTINCT FROM ((row->'_originalField')-ARRAY['nullability','facets'])
     OR NOT (old->>'nullability'=row->>'nullability' OR old->>'nullability'='required' AND row->>'nullability'='absent-allowed' OR tightening)
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text AND k.value->'prop_ids' @> jsonb_build_array((old->>'prop_id')::int)) THEN
     RAISE EXCEPTION 'existing field change requires explicit evolution support' USING ERRCODE='0A000';END IF;
+   END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
    SELECT coalesce(jsonb_agg(v.value),'[]') INTO properties FROM jsonb_array_elements(properties) v WHERE v.value->>'prop_id'<>old->>'prop_id';
   END IF;

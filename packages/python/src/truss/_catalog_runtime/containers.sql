@@ -43,7 +43,7 @@ BEGIN
  item:=property.item->'declaration';family:=item->>'scalarType';facets:=item->'facets';
  IF item->>'kind' IS DISTINCT FROM 'field' OR item->>'cardinality' IS DISTINCT FROM 'one' OR item->>'nullability' IS DISTINCT FROM 'required'
   OR family IS NULL OR family NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR item ? 'itemType'
-  OR NOT ((coalesce(facets,'{}')='{}'::jsonb OR family='integer' AND facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR family='decimal' AND facets='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN RETURN false;END IF;
+  OR NOT ((coalesce(facets,'{}')='{}'::jsonb OR family='integer' AND facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR family='decimal' AND facets IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE) THEN RETURN false;END IF;
  IF cell='{"kind":"null"}'::jsonb THEN RETURN property.nullability='absent-allowed';END IF;
  IF truss.valid_flat_cell(cell) IS NOT TRUE OR cell->>'kind' IS DISTINCT FROM (CASE property.cardinality WHEN 'array' THEN 'sequence' ELSE 'map' END) THEN RETURN false;END IF;
  FOR member IN SELECT CASE property.cardinality WHEN 'array' THEN value ELSE value->'value' END FROM jsonb_array_elements(CASE property.cardinality WHEN 'array' THEN cell->'items' ELSE cell->'entries' END) LOOP
@@ -77,7 +77,7 @@ BEGIN
  declaration:=fragment::jsonb;
  IF declaration->>'kind' IS DISTINCT FROM 'field' OR declaration->>'cardinality' IS DISTINCT FROM 'one' OR declaration->>'nullability' IS DISTINCT FROM 'required'
   OR coalesce(declaration->>'scalarType','') NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR declaration ? 'itemType'
-  OR NOT ((coalesce(declaration->'facets','{}'::jsonb)='{}'::jsonb OR declaration->>'scalarType'='integer' AND declaration->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR declaration->>'scalarType'='decimal' AND declaration->'facets'='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN RAISE EXCEPTION 'required singular exact scalar item Field required' USING ERRCODE='0A000';END IF;
+  OR NOT ((coalesce(declaration->'facets','{}'::jsonb)='{}'::jsonb OR declaration->>'scalarType'='integer' AND declaration->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR declaration->>'scalarType'='decimal' AND declaration->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE) THEN RAISE EXCEPTION 'required singular exact scalar item Field required' USING ERRCODE='0A000';END IF;
  pointer:='/modules/'||module_index||'/elements/'||element_index;original:=convert_to(fragment::text,'UTF8');source_digest:=encode(sha256(convert_to(original_text,'UTF8')),'hex');
  pin_input:='['||selected_revision||','||selected_ordinal||',"'||source_digest||'","'||pointer
   ||'",{"identity":"truss-original-json-definition","sha256":"08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d","version":"0.1"},"'||encode(sha256(original),'hex')||'"]';

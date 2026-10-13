@@ -20,7 +20,7 @@ server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.16](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.16).
+The current release is [v0.0.19](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.19).
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
@@ -31,15 +31,15 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.16 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.18 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.19 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.20 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.16'
+  'truss-toolkit[local,native,query]==0.0.19'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
 publishes package checksums and source/runtime/backend pins. The Truss release
-workflow exercises the exact uploaded wheel with published Weft0.4.18 and verified
+workflow exercises the exact uploaded wheel with published Weft0.4.20 and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
@@ -793,3 +793,7 @@ SQL UNKNOWN in equality predicates; neither matches an ordinary binary value.
 Empty bytes remain a value. The new optional-equality capability is refused by
 the retained required-only backend0.4.24. No timestamp, ordering, grouping or
 null-parameter support is implied. Wire0.2.5 remains unchanged.
+
+## Decimal(18,2) candidate (v0.0.20)
+
+Adds original decimal(18,2) facets alongside decimal(18,4) across catalog acceptance, writes/imports, reads, business keys and Weft queries/pages. Exact tokens are preserved, including redundant zeros. Maximum9999999999999999.99 is valid; excess precision or nonrepresentable scale refuses. Native56 upgrades55 transactionally and requires matching Weft0.4.21/backend0.4.26. Publication is pending the release workflow; the installation example above remains on the published release.

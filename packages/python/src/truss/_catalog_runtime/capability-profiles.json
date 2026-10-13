@@ -4,10 +4,10 @@
       "name": "catalog",
       "pin": {
         "identity": "truss-native-catalog-capability",
-        "version": "0.2",
-        "sha256": "f3102127982cc6bc4fc9d25b2ad764cec3070cccfc6969a6d83328226dde37b3"
+        "version": "0.4",
+        "sha256": "ec57ecfb32789fe6a36642aad43a8bee5d2ec71fb37b3f7bfdaa8b465a3714bd"
       },
-      "definition": "Native catalog capability/0.2: explicit original UMF preparation; current compatible acceptance and unchanged/historical retry; exact original reports; complete native catalog view; person-scoped module/source reads; caller-owned transaction; no administrative installation or module grants. Compatible non-key scalar refinement admits unfaceted to/from supported signed64 or decimal(18,4) facets with native existing-value validation and exact typed property.facets refusal counts; key facet evolution remains unsupported.",
+      "definition": "Native catalog capability/0.4: explicit original UMF preparation; current compatible acceptance and unchanged/historical retry; exact original reports; complete native catalog view; person-scoped module/source reads; caller-owned transaction; no administrative installation or module grants. Compatible non-key scalar refinement admits unfaceted to/from supported signed64 or decimal(18,4) or decimal(18,2) facets with native existing-value validation and exact typed property.facets refusal counts; key facet evolution remains unsupported. Name-only Field presentation changes retain property and business-key identities; occupied prior names and retained-value collisions refuse.",
       "policyDefinition": "Native catalog policy/0.1: ordinary authenticated person; registrar membership for acceptance, original reports and complete catalog view; current module reader or writer for person-scoped catalog and accepted document reads; exact installed release; READ COMMITTED; no installation administration authority.",
       "policyPin": {
         "identity": "truss-native-catalog-policy",
@@ -103,6 +103,36 @@
         "sha256": "0de480b1fddd1385548394a395fd044c9aa97ff84f2afc97908905249c463456"
       },
       "definition": "Native host-adopted import capability/0.2: immutable explicit original source documents; context and primary identity construction; per-record scalar object/independent edge import dispositions; original provenance and reservations; pending caller settlement; no engine-owned batches or verified commit. Rootless object payloads additionally admit bounded one-level scalar arrays/maps with original item definitions and current item-module readers; edge payload/provenance remains scalar."
+    },
+    {
+      "name": "catalog",
+      "pin": {
+        "identity": "truss-native-catalog-capability",
+        "version": "0.2",
+        "sha256": "f3102127982cc6bc4fc9d25b2ad764cec3070cccfc6969a6d83328226dde37b3"
+      },
+      "definition": "Native catalog capability/0.2: explicit original UMF preparation; current compatible acceptance and unchanged/historical retry; exact original reports; complete native catalog view; person-scoped module/source reads; caller-owned transaction; no administrative installation or module grants. Compatible non-key scalar refinement admits unfaceted to/from supported signed64 or decimal(18,4) facets with native existing-value validation and exact typed property.facets refusal counts; key facet evolution remains unsupported.",
+      "policyDefinition": "Native catalog policy/0.1: ordinary authenticated person; registrar membership for acceptance, original reports and complete catalog view; current module reader or writer for person-scoped catalog and accepted document reads; exact installed release; READ COMMITTED; no installation administration authority.",
+      "policyPin": {
+        "identity": "truss-native-catalog-policy",
+        "version": "0.1",
+        "sha256": "179811eea96539288c0540b22386c0b5e0d645fe5b2a048d083a82d8a6717388"
+      }
+    },
+    {
+      "name": "catalog",
+      "pin": {
+        "identity": "truss-native-catalog-capability",
+        "version": "0.3",
+        "sha256": "926ec94ea077c1473d0014c047042a9596a73866e5fbd1f9b7c923d2a1f75092"
+      },
+      "definition": "Native catalog capability/0.3: explicit original UMF preparation; current compatible acceptance and unchanged/historical retry; exact original reports; complete native catalog view; person-scoped module/source reads; caller-owned transaction; no administrative installation or module grants. Compatible non-key scalar refinement admits unfaceted to/from supported signed64 or decimal(18,4) or decimal(18,2) facets with native existing-value validation and exact typed property.facets refusal counts; key facet evolution remains unsupported.",
+      "policyDefinition": "Native catalog policy/0.1: ordinary authenticated person; registrar membership for acceptance, original reports and complete catalog view; current module reader or writer for person-scoped catalog and accepted document reads; exact installed release; READ COMMITTED; no installation administration authority.",
+      "policyPin": {
+        "identity": "truss-native-catalog-policy",
+        "version": "0.1",
+        "sha256": "179811eea96539288c0540b22386c0b5e0d645fe5b2a048d083a82d8a6717388"
+      }
     }
   ]
 }
