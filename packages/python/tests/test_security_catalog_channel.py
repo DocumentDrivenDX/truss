@@ -110,3 +110,31 @@ class TlsChannelTests(unittest.TestCase):
    client.join(9);self.assertFalse(client.is_alive());self.assertEqual(outcome,[(200,b'{"rows":[]}')])
    self.assertLess(time.monotonic()-started,9);self.assertEqual(self.calls,[True])
   finally:attacker.close();client.join(3)
+
+class ListenerAdmissionTests(unittest.TestCase):
+ def test_external_plaintext_and_ambiguous_addresses_refuse_before_bind(self):
+  from unittest.mock import patch
+  credential=bytes(32)
+  with patch('security_catalog_channel.HTTPServer.__init__') as bind:
+   for address in [('0.0.0.0',0),('192.0.2.1',443),('localhost',0),('::1',0),('127.0.0.1',True),('127.0.0.1',-1),('127.0.0.1',65536),['127.0.0.1',0]]:
+    with self.assertRaises(ValueError):AuthenticatedReadChannel(credential,lambda publish:None,bind_address=address)
+   bind.assert_not_called()
+
+ def test_wildcard_listener_requires_verified_tls_and_retains_one_operation(self):
+  from security_channel_tls_fixture import owned_tls
+  server_context,client_context=owned_tls(self);credential=secrets.token_bytes(32);calls=[]
+  def operation(publish):
+   calls.append(True);packet=b'{"rows":[]}';publish(packet);return Ok(packet)
+  server=AuthenticatedReadChannel(credential,operation,tls_context=server_context,bind_address=('0.0.0.0',0))
+  worker=threading.Thread(target=server.serve_forever,kwargs={'poll_interval':0.01});worker.start()
+  try:
+   self.assertEqual(server.server_address[0],'0.0.0.0')
+   raw=socket.create_connection(('127.0.0.1',server.server_address[1]),timeout=10)
+   with client_context.wrap_socket(raw,server_hostname='127.0.0.1') as wire:
+    self.assertEqual(wire.version(),'TLSv1.3')
+    wire.sendall(b'POST '+ROUTE.encode()+b' HTTP/1.1\r\nHost: original\r\nAuthorization: Bearer '+credential.hex().encode()+b'\r\nContent-Type: application/json\r\nContent-Length: '+str(len(REQUEST)).encode()+b'\r\n\r\n'+REQUEST)
+    response=http.client.HTTPResponse(wire);response.begin()
+    self.assertEqual((response.status,response.read()),(200,b'{"rows":[]}'))
+   self.assertEqual(calls,[True]);self.assertTrue(server._consumed)
+  finally:
+   server.shutdown();server.server_close();worker.join(5);self.assertFalse(worker.is_alive())

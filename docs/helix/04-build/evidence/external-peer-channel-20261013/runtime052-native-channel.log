@@ -1,0 +1,9 @@
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 12.452s
+
+OK
