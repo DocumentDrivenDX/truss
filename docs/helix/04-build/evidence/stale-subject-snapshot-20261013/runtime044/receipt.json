@@ -1,0 +1,18 @@
+{
+  "scope": "post-merge stale snapshot refusal regression only",
+  "integrationCommit": "eb8d3b9ceec620eb0d59e6969fba6cfe3e03a569",
+  "runtime": "truss-catalog-runtime/0.44-candidate",
+  "preservedOwnerMain": "7e3fb654",
+  "tests": 2,
+  "seconds": 20.573,
+  "qualification": "Current0.44 snapshot refusal plus fresh RC behavior pass. Prior0.43 evidence/review remain historical. No container-query security support or backend promotion.",
+  "pins": {
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "serializable.json": "e9b346fecb2f7f27af0ab82c290c6420ec6530d8618aab2de00196c838f5aa82",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "0c88489f80584dca8ac7366109ac636991e9f3e42eab55714f0b107f2627f7fe",
+    "repeatable_read.json": "64d94fd87e708c3dfe0fe77de7c27aa2fe0f8cb9aa8ac2258b355bc59ad49cb3",
+    "runtime-manifest.json": "07e6ce1f9985d3ea918f00451dff8d0ec08736bebd7e0b39081f0d1398c87443"
+  },
+  "testSha256": "f904cbf09b2fc92025fba199f2114c548c14e71b215a25b3460956beffd5248a"
+}
