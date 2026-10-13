@@ -1,0 +1,34 @@
+{
+  "implementation": "Private exact original unsettled-to-settled tombstone operation in caller host savepoint; native row confirmation; pending_commit/publication_allowed false. Trusted original coordinator and conclusive completion are premises; no automatic retry or token reuse.",
+  "validation": {
+    "nativeTests": 10,
+    "seconds": 35.055,
+    "boundaries": "850 imports pass",
+    "wheelSha256": "5e11ce75f618058651e8c12323ca71ba58441d141d6c3990f5f88613f0716b23",
+    "moduleAndSql": "exact wheel bytes",
+    "result": "pass"
+  },
+  "review": {
+    "model": "gpt-6-astra",
+    "reasoning": "ultra",
+    "result": "Timeout and missing-import fixture findings fixed; final readonly review no remaining actionable findings."
+  },
+  "acceptanceTraceability": [
+    {
+      "case": "truss.L03",
+      "covers": "US-057-AC2",
+      "relationship": "component-prerequisite-only",
+      "qualification": "Original tombstone settlement and unknown-ack reconciliation are coordination prerequisites. Fixture completion is a premise; final release and authenticated recovery owner remain unqualified.",
+      "caseClosed": false
+    }
+  ],
+  "scope": "PostgreSQL18.6/psycopg3.3.6. Actual native COMMIT response dropped after implemented settlement; fixture reconciles exact original settled tombstone. Wrong original fields, missing token and repeated settlement refuse while caller work retained. No production completion/issuer authentication, final sink, source/writer closure or ready security service. Original132 required cases unchanged.",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_publication_settlement.py": "4dfd1ebf553bce839eeafeab12ad257ef2d7e3b6d0124c234b573976b49eded6",
+    "packages/python/src/truss/_security_bootstrap/settle.sql": "3671425cba05dd5baf1d604f5a775d67fcdefaa1ce7d8e5e67e57d282118fd78",
+    "packages/python/tests/test_security_public_ontology_native.py": "e95959ba7e126c6ab8c38047e74265b361308d05747a0f604c0dcc5b57e7d354",
+    "scripts/check-module-boundaries.py": "a678d53cf758237ae149b590d29553d4277e2759a515701178a1686d36095fc1",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "145fd167a0746c7845b1439822cd588359bea678dbfa7b77e4b20c24f8da9e81"
+  },
+  "traceabilityCorrection": "2026-10-12: direct assertion audit removed unsupported missing-custody/activation-rollback links. Execution/source evidence unchanged; no required case promoted."
+}

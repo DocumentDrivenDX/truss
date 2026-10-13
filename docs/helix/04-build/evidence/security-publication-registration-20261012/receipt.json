@@ -18,16 +18,8 @@
     {
       "case": "truss.L03",
       "covers": "US-057-AC2",
-      "caseClosed": false
-    },
-    {
-      "case": "truss.L11",
-      "covers": "US-057-AC7",
-      "caseClosed": false
-    },
-    {
-      "case": "truss.L12",
-      "covers": "US-057-AC8",
+      "relationship": "component-prerequisite-only",
+      "qualification": "Durable original registration and serialized retained capacity are coordination prerequisites. Final release, complete participation and acknowledgment are not qualified.",
       "caseClosed": false
     }
   ],
@@ -39,5 +31,6 @@
     "packages/python/tests/test_security_public_ontology_native.py": "a09f2c3e04266175322fdb3428e523728ced41b7dd07c9cdc35465efc304ed23",
     "scripts/check-module-boundaries.py": "d6f6e357077ccc61cee7bd1a8a43359d500b3c22ff365929c11e2f5ac6e4336b",
     "packages/python/src/truss/_catalog_runtime/manifest.json": "145fd167a0746c7845b1439822cd588359bea678dbfa7b77e4b20c24f8da9e81"
-  }
+  },
+  "traceabilityCorrection": "2026-10-12: direct assertion audit removed unsupported missing-custody/activation-rollback links. Execution/source evidence unchanged; no required case promoted."
 }
