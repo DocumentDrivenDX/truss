@@ -1,0 +1,36 @@
+{
+  "solver": "4.15.4",
+  "queries": [
+    {
+      "id": "changed-original-sources-cannot-compile",
+      "result": "unsat",
+      "model": null
+    },
+    {
+      "id": "mismatched-native-profile-cannot-compile",
+      "result": "unsat",
+      "model": null
+    },
+    {
+      "id": "participating-writer-cannot-advance-while-held",
+      "result": "unsat",
+      "model": null
+    },
+    {
+      "id": "settlement-allows-writer-then-old-epoch-refuses",
+      "result": "sat",
+      "model": "[expected_epoch = 1,\n native_epoch = 1,\n outer_settled = True,\n original_share_held = False]"
+    },
+    {
+      "id": "source-profile-match-without-authenticity",
+      "result": "sat",
+      "model": "[expected_epoch = 1,\n original_source_signature = \"\",\n supplied_source_signature = \"\",\n issuer_authenticated = False,\n outer_settled = False,\n original_share_held = True,\n native_epoch = 1,\n original_profile = \"\",\n native_profile = \"\"]"
+    }
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_mapping.py": "e48cadd5c53301fb681b393fa01955a8d8f34febc61d17f115b902326825e659",
+    "packages/python/tests/test_security_mapping_native.py": "5fd7ee0ca8f67df76e1f4c353af5e90b6faa8bbc244e6c60afcbb9cf7b11b2c9",
+    "scripts/security/prove-mapping-guard.py": "7cf43ca8a52bdc96ca8abf79fc5a0913093d7d42d1d4bb2fe253819a44abe541"
+  },
+  "scope": "Unbounded symbolic exact source signatures/profile strings and bounded positive int8 epochs, under stated row-lock/participating-writer transition premises. No Python signature/SQL/driver/source/native lock refinement, identity/issuer authenticity, effect/role/private-fact permission, complete writer closure, own-transaction ABA, or native release proof."
+}
