@@ -46,6 +46,24 @@ python packages/python/examples/run_corpus.py \
 This is one implementation's `passed_preview`, not completion of the full
 consumer corpus or independent native interchange.
 
+For a local server with an installed Truss candidate, use the explicit launcher
+option after installing the `[local,native]` extras:
+
+```sh
+truss-local-postgres --data-dir /tmp/truss-local --install
+```
+
+Add `--probe` to install, confirm committed status and stop while retaining data.
+The launcher installs only when public status reports no Truss namespace. On a
+current retained installation it confirms status and preserves the installation
+ID. Unsupported or corrupt installations refuse; this option never upgrades or
+repairs them. The JSON output follows commit and a fresh status observation.
+Fresh owner/registrar role names come from the installation result; save them
+for access setup. A restart reports confirmed status without inventing those
+names. Ordinary-person registration and module access still require the role
+configuration described below. Without `--install`, the launcher only starts
+PostgreSQL. Confirmed candidate status does not establish full security readiness.
+
 ## Embed in your host
 
 Use an ordinary authenticated person's connection for business operations.
@@ -118,6 +136,20 @@ settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
 modified installations and downgrade routes are unsupported.
+
+The local launcher exposes that same explicit migration operation:
+
+```sh
+truss-local-postgres --data-dir /tmp/truss-local --upgrade --probe
+```
+
+`--upgrade` and `--install` are mutually exclusive. A missing installation or
+unsupported source refuses without falling back to installation. The output
+reports `upgraded` or `unchanged`, with actual previous/current release IDs, only
+after commit and fresh status confirmation of the same installation identity.
+An explicit upgrade of the current candidate is unchanged. Keep application
+connections quiescent for the migration; ordinary launch and `--install` never
+perform upgrades.
 
 ## Public operations
 

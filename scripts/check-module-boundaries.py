@@ -135,7 +135,7 @@ ALLOWED = {
     '_operation_ordinal': {'dataclasses', 'threading'},
     '_query_execution': {'dataclasses', 'inspect', 'threading', 'types', 'weakref', 'truss.weft'},
     '_receipt_position': {'base64', 'binascii', 'dataclasses', 'json', 're', 'truss._acceptance_json'},
-    'cli': {'argparse', 'json', 'pathlib', 'signal', 'threading', 'truss'},
+    'cli': {'argparse', 'json', 'pathlib', 'signal', 'threading', 'truss', 'psycopg'},
     'local_runtime': {'truss._runtime_profile', 'dataclasses', 'importlib.metadata', 'importlib.resources', 'pathlib',
                       'subprocess', 'threading', 'pgserver', 'fasteners'},
     'migration_planning': {'dataclasses', 're', 'typing', 'truss._acceptance_json'},
