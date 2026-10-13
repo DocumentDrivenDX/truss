@@ -1,20 +1,24 @@
 # truss project documentation
 
-The [Python catalog runtime](../../packages/python/README.md#public-catalog-workflow)
-now provides caller-owned installation, fresh registration, report/retry and
-complete accepted catalog views. The 0.2 candidate exposes exact archived
-definition slices and native document-qualified identities on PostgreSQL18.6.
-The public Python assembly now provides exact scalar object/key/page reads,
-grouped object and independent edge mutations, atomic caller preconditions,
-relationship pages and committed receipt visibility on PostgreSQL18.6.
-Caller-owned imports, retained import provenance after deletion, and compatible catalog evolution are implemented within
-the documented scalar and independent-relationship subset. Object reads return
-identities usable directly for updates and links. Concrete catalog/read/group/
-host-import/feed/history providers are selected through the runtime assembly.
-Retained history reconstructs actual committed scalar/edge versions after deletion. Caller-asserted committed
-feed/ACK and read-only reproduction of saved deliveries after ACK are available on the authority database. Compiled query execution,
-non-superuser installation and exact .23/.24-to-.25 additive upgrades are implemented; actual managed-service qualification, broader migrations and verified downstream application remain unfinished. Older private component evidence below
-does not qualify those public operations.
+The [public Python runtime](../../packages/python/README.md) provides a concrete
+embeddable interface on Truss0.31/layout0.16 candidate, UMF0.7.0 and Weft0.4.4.
+The tested local tuple is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL18.6
+and psycopg3.3.6 binary/libpq18.6. The host supplies its authenticated connection
+and owns outer transactions; Bun1.4.2 remains required for UMF preparation/keys.
+
+Available operations include installation/status and additive .23–.30→.31
+upgrades, accepted catalogs/reports/original source, compatible scalar evolution,
+exact object/key/edge reads, atomic groups/preconditions/dry-run/durable replay,
+caller-owned imports, Weft queries, receipt visibility, committed feed/ACK and
+retained scalar/edge history. Complete SQL projections preserve all six scalar
+families and absent/null distinctions. [Consumer handoff](04-build/consumer-readiness-handoff.md)
+and [portable preview0.5](04-build/corpus/public-python/0.5/README.md) describe the
+actual basic workflows and limits.
+
+Full required corpus and independent interchange, stable layout, broader value/
+query domains and actual managed-service qualification remain open. The separate
+protected security profile is not activated by these ordinary-role workflows.
+Historical component checkpoints below keep their original narrower claims.
 
 [Query and execution ownership](01-frame/prd.md#query-and-execution-ownership--owner-direction-2026-10-11): Truss exposes the full Weft query surface. Weft owns evolving SQL coverage; Truss owns table layout, query execution, actions and other executions. Direct read/traversal APIs are convenience operations, not SQL coverage limits.
 
@@ -23,7 +27,7 @@ does not qualify those public operations.
 [ADR-003](02-design/adr/ADR-003-conforming-implementations-and-shared-contracts.md#accepted-owner-amendment--python-driver-baseline-2026-10-11) selects maintained stock psycopg 3 through supported APIs as the Python baseline. [The PRD](01-frame/prd.md#owner-decision--proportional-resource-controls-2026-10-11) requires practical workload limits and transaction safety; strict transport allocation accounting is optional and cannot block baseline release. Custom PostgreSQL wire/private-hook/fork/replacement work requires hard documented proof of a necessary deficiency and an owner-approved ADR. Historical pg8000/strict-parser receipts remain scoped experiments. Driver/package/Lakebase qualification remains pending.
 
 Current embedded target (owner direction2026-10-11): **PostgreSQL18.6**, using
-reusable `pgserver-pg18==18.6.0` wheels from
+reusable `pgserver-pg18==18.6.1` wheels from
 [DocumentDrivenDX/pgserver](https://github.com/DocumentDrivenDX/pgserver).
 Truss shares Unix-socket workers across ordinary psycopg and pg8000 tests, with
 fresh databases/roles and isolated lifecycle tests. See the

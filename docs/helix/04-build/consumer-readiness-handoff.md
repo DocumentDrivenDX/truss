@@ -1,4 +1,48 @@
-# Consumer readiness handoff — 2026-10-10
+# Consumer readiness handoff
+
+## Current public Python checkpoint — 2026-10-12
+
+Use the [public Python guide](../../../packages/python/README.md) for the callable
+interface and installation instructions. The current ordinary-role candidate is
+Truss runtime0.31, layout0.16, UMF core0.7.0 and Weft backend0.4.4. Its tested local
+tuple is DocumentDrivenDX `pgserver-pg18==18.6.1` / PostgreSQL18.6 /
+psycopg3.3.6 binary with libpq18.6; UMF preparation and key production require Bun1.4.2.
+The host supplies its person-authenticated connection and owns outer settlement.
+
+| Consumer need | Available public implementation |
+| --- | --- |
+| Start, install, inspect and migrate | LocalPostgres/CLI, explicit caller-transaction install/status and additive .23–.30→.31 upgrades; installation does not require superuser but does require the documented setup privileges |
+| Catalog and source | Actual accepted document-qualified identities, reports, reader-scoped catalog, original document bytes and compatible scalar catalog evolution |
+| Atomic actions and retries | Object/independent-edge create/update/delete, groups/batches, Truss-evaluated preconditions, typed failures, caller rollback for dry-run and durable original-request replay |
+| Reads and queries | Object/key/edge pages and Weft filters/joins/counts/relationships; exact six-family scalar projections and complete `alias.*` |
+| Imports | Public object/edge record builders, caller-transaction batches, created/skipped/rejected outcomes and retained load/source/actor provenance |
+| Receipt, feed and history | Committed opaque receipt tokens/reached, ordinary-role feed delivery and caller-asserted durable ACK, retained scalar/edge reconstruction |
+
+These are concrete providers returned by `CatalogRuntimeConfiguration()` through
+`create_reference_assembly`; broad draft protocols are not additional implemented
+profiles. [Portable preview0.5](corpus/public-python/0.5/README.md) supplies two basic
+adopter cases: the22-observation workflow and10-observation exact scalar case.
+[Query evidence](evidence/python-exact-query-projections-20261012.json) and
+[portable case evidence](evidence/python-scalar-preview-20261012.json) qualify those
+actual installed-package workflows on the selected PG18 tuple.
+
+Remaining limits include rootless scalar homes, required-string business keys,
+selected independent relationships, bounded query subsets and caller-owned
+imports. Structured/owned values, engine-owned import batches, full required
+corpus and independent bidirectional interchange remain open. The layout remains
+a candidate; actual Aurora/Lakebase support and the separate protected security
+profile are not qualified by these ordinary-role workflows.
+
+## Historical checkpoints through 2026-10-11
+
+The sections below retain original checkpoint and producer evidence. Their
+unavailable-operation tables, PG16 launch command and private driver profiles do
+not describe the current public API. Strict allocation/copy/work accounting and
+elaborate readiness-bundle machinery are superseded for the owner-selected
+stock-PostgreSQL baseline; they are not prerequisites for trying the documented
+Python interface. Retained evidence does not promote protected security or a
+managed target, and the remaining full corpus/interchange scope stays explicit.
+
 
 ## Baseline release profile update — 2026-10-11
 
