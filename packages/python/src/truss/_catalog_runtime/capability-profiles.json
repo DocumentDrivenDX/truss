@@ -71,11 +71,11 @@
     },
     {
       "name": "weft_execution",
-      "definition": "Native Weft runtime query capability/0.2: actual accepted original documents and native mappings; explicit Weft-owned exact numeric preparation preserving original source/pins; bounded complete rootless scalar string/boolean/mathematical integer/decimal sources; equality filters/joins, counts, ordering/limits and alias expansion; original decimal tokens for all projections and exact Python int/Decimal results; validated finite stock-PostgreSQL numeric representability before predicates and parameters, with typed native-domain refusal rather than rounding; caller read-only or read-write READ COMMITTED transaction; complete document/module authority and current context checks; no relationship operators, structured properties, page-key profile, float carriers or internal retry.",
+      "definition": "Native Weft runtime query capability/0.3: actual accepted original documents and native mappings; explicit Weft-owned exact numeric preparation preserving original source/pins; bounded complete rootless scalar string/boolean/mathematical integer/decimal sources; equality filters/joins, counts, ordering/limits and alias expansion; original decimal tokens for all projections and exact Python int/Decimal results; validated finite stock-PostgreSQL numeric representability before predicates and parameters, with typed native-domain refusal rather than rounding; caller read-only or read-write READ COMMITTED transaction; complete document/module authority and current context checks; independent directed monomorphic HAS_RELATED/RELATED_KEYS forward and inverse with authored required string keys; exact bounded key tuples/truncation; no structured properties, page-key profile, float carriers or internal retry.",
       "pin": {
         "identity": "truss-native-weft-runtime-query",
-        "version": "0.2",
-        "sha256": "3881e7ae82fbf2246a8e669eff390771307c9927bbe324caba700213f8fea359"
+        "version": "0.3",
+        "sha256": "f330985a036034cfb108f69709aaf6c610af055d5deecf9a776b0718da0c5857"
       },
       "policyDefinition": "Native Weft runtime query policy/0.1: ordinary original authenticated session person; complete current reader/writer authority for every selected original document module and declaration owner; independently safe fixed source functions with exact native mappings; final same-person/catalog/release check; no raw table privilege.",
       "policyPin": {

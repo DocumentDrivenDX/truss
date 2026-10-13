@@ -15,6 +15,8 @@ SCALAR_PROFILE={'identity':'truss-fresh-catalog-support','version':'0.3.0','sha2
 
 NAMED_SCALAR_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.4.0', 'sha256': '82934e8b77e9c2fabf1095a119429842a5a38dd90e47ea8cf85867cb27b1952d'}
 
+NAMED_RELATIONSHIP_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.5.0', 'sha256': '8358f0e885a88231bcad1bd6952efcbcfec8ba970c983a5e63e5ea4873757213'}
+
 def evaluate_catalog_support(prepared):
     """Evaluate only the exact selected policy before native catalog effects.
 
@@ -24,12 +26,13 @@ def evaluate_catalog_support(prepared):
     _require_original_preparation(prepared)
     choices=prepared.input()
     selected=choices['supportProfile']
-    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE):
+    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE):
         return {'state':'unavailable','reason':'unregistered_support_policy'}
-    named=selected==NAMED_SCALAR_PROFILE
-    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE)
-    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE)
-    policy=files('truss').joinpath('_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
+    inverse=selected==NAMED_RELATIONSHIP_PROFILE
+    named=selected in (NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE)
+    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE)
+    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE)
+    policy=files('truss').joinpath('_profiles/fresh-catalog-support-named-relationships.json' if inverse else '_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=selected['sha256']:
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
@@ -96,14 +99,14 @@ def evaluate_catalog_support(prepared):
             'observationCoverage':coverage,'assertionInventoryComplete':False,
             'enforcementQualified':False,'supportSemanticsQualified':False,
             'acceptedReportQualified':False,
-            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named)}
+            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named,inverse=inverse)}
 
     if len(json.dumps(decision,ensure_ascii=True,separators=(',',':')).encode('utf8'))>4194304:
         raise ValueError('Selected catalog support decision capacity exceeded')
     return decision
 
 
-def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False):
+def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False):
     """Complete source occurrence inventory for explicit scalar string Records.
 
     Profile 0.2 additionally covers known authored Keys and Relationships.
@@ -173,12 +176,13 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                 if type(values) is not list:return unavailable
                 declaration_values[(document.document.document_id,'relationships',module['id'],None)]=values
                 for ri,relation in enumerate(values):
-                    if (type(relation) is not dict or set(relation)-{'id','name','source','target','sourceMultiplicity','targetMultiplicity','targetLifecycle','directed'}
+                    if (type(relation) is not dict or set(relation)-({'id','name','source','target','sourceMultiplicity','targetMultiplicity','targetLifecycle','directed'}|({'inverse'} if inverse else set()))
                         or not {'id','name','source','target','sourceMultiplicity','targetMultiplicity','targetLifecycle','directed'}<=set(relation)
                         or type(relation['id']) is not str or type(relation['name']) is not str
                         or type(relation['directed']) is not bool
                         or relation['targetLifecycle'] not in ('owned','independent','unspecified')):
                         return unavailable
+                    if 'inverse' in relation and (type(relation['inverse']) is not str or not 1<=len(relation['inverse'].encode('utf8'))<=4096):return unavailable
                     for side in ('source','target'):
                         refs=relation[side];multiplicity=relation[side+'Multiplicity']
                         if (type(refs) is not list or any(type(ref) is not dict or set(ref)!=({'module','element'} if side=='source' else {'module','element','key'}) for ref in refs)

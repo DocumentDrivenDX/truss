@@ -6747,3 +6747,22 @@ Four installed-wheel public query/upgrade tests pass on DocumentDrivenDX
 pgserver-pg18==18.6.1 and psycopg3.3.6, including retained0.26→0.27 data/receipt
 preservation. Astra Ultra approved the implementation and security merge
 intersections. See `evidence/python-exact-query-20261012.json`.
+
+### Public relationship query increment — 2026-10-12
+
+Runtime0.28/backend0.3 connects existing Weft `HAS_RELATED` and `RELATED_KEYS`
+to actual independent directed monomorphic Truss edges, forward or by an authored
+inverse name. Original Catalog relationship identities and authored composite
+string keys drive lowering; fixed native sources validate full bounded edge bags
+and endpoint objects before correlation. Full selected document, relation,
+endpoint and property-owner authority remains required, including empty results.
+Python returns `QueryRelatedKeys` with exact ordered tuples and bound+1 truncation.
+No association Record, owned/composed relationship, multi-hop or numeric-key
+query support is claimed.
+
+Support policy0.5 adds only the inverse-name annotation; policies0.1–0.4 retain
+original bytes. Additive .27→.28 upgrades preserve previous routine identities,
+owners and ACLs along with data/receipts. Basic public workflows create/link,
+query both directions, read in a read-only transaction, and unlink; no manual
+row seed or consumer-authored storage mapping is used. Evidence is recorded in
+`evidence/python-relationship-query-20261012.json` after execution.

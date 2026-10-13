@@ -6,10 +6,10 @@ import json
 from types import MappingProxyType
 from typing import Mapping
 from .execution import Error, Ok, ExecutionFailure
-from .query import QueryAbsent, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable
+from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.2.0',
-           'targetProfile': 'truss-runtime-pg18.6/0.2', 'interfaceVersion': 'weft-backend/0.2.0'}
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.3.0',
+           'targetProfile': 'truss-runtime-pg18.6/0.3', 'interfaceVersion': 'weft-backend/0.2.0'}
 
 
 def compiler():
@@ -86,6 +86,15 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
                 decoded.append(_decode_scalar(value, family))
             elif representation['kind'] == 'value':
                 decoded.append(_decode_value(json.loads(raw), representation['descriptor'], graph))
+            elif representation['kind'] == 'relatedKeys':
+                value=json.loads(raw);key=representation['key'];bound=representation['bound'];types=key['types']
+                if type(bound) is not int or not 1<=bound<=1000 or not types or len(key['fields'])!=len(types) or any(t['family']!='string' or t['facets']!={} or t['nullable'] for t in types):
+                    raise ValueError('Original string relationship key metadata required')
+                if type(value) is not dict or set(value)!={'items','truncated'} or type(value['items']) is not list or type(value['truncated']) is not bool or len(value['items'])>bound or (value['truncated'] and len(value['items'])!=bound):
+                    raise ValueError('Exact bounded relationship key result required')
+                if any(type(item) is not list or len(item)!=len(types) or any(type(v) is not str for v in item) for item in value['items']):
+                    raise ValueError('Exact relationship key tuple required')
+                decoded.append(QueryRelatedKeys(items=tuple(tuple(item) for item in value['items']),truncated=value['truncated']))
             else:
                 raise ValueError('Unknown compiled representation refused')
         rows.append(tuple(decoded))

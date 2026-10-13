@@ -106,3 +106,39 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         self.assertIsInstance(nonfinite.value,QueryRefused);self.assertEqual(nonfinite.value.code,'invalid_query')
         expansion=query.query_in_transaction(tx,sql='SELECT a.amount FROM "A" a WHERE a.amount = :amount',document_ids=('adoc',),parameters={'amount':Decimal('1e-100000000')})
         self.assertIsInstance(expansion.value,QueryRefused);self.assertEqual(expansion.value.code,'limits')
+
+    def test_public_links_forward_inverse_bounded_keys_readonly_and_unlink(self):
+        from truss import QueryRelatedKeys
+        from truss.groups import CreateEdge,AliasObjectReference,NullOrderKey,Delete,StoredObjectReference
+        def named_relationship(source):
+            for element in source['modules'][0]['elements']:
+                if element['kind']=='record':element['name']=element['id']
+            source['modules'][0]['relationships'][0]['inverse']='B-A'
+        connection,host,assembly,tx=self.ready(named_relationship)
+        pin=assembly.get_relationship_reference_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
+        def link(target,alias):
+            return CreateEdge(relationship_definition_pin=pin,source=AliasObjectReference(alias='first'),target=AliasObjectReference(alias=target),values=(),order_key=NullOrderKey(),alias=alias)
+        created,_,_=self.run_group(assembly,tx,(self.create('one',alias='first'),self.create('two',alias='second',record='B'),self.create('three',alias='third',record='B'),link('second','edge1'),link('third','edge2')))
+        self.assertIsInstance(created,GroupSuccess)
+        edge=created.response.semantic.results[3].identity
+        query=assembly.compiled_execution(assembly.compiled_selection).capability
+        def run(sql,parameters=None):
+            result=query.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={} if parameters is None else parameters)
+            if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+repr(host._custody.last_attempt.error))
+            return result.value
+        forward='SELECT a."A-label" FROM "A" a WHERE HAS_RELATED(a."A-B",KEY(:value,:label))'
+        self.assertEqual(run(forward,{'value':'value','label':'two'}).rows,(('one',),))
+        self.assertEqual(run('SELECT b."B-label" FROM "B" b WHERE HAS_RELATED(b."B-A",KEY(:value,:label)) ORDER BY b."B-label"',{'value':'value','label':'one'}).rows,(('three',),('two',)))
+        bounded='SELECT RELATED_KEYS(a."A-B",1) AS related FROM "A" a'
+        self.assertEqual(run(bounded).rows,((QueryRelatedKeys(items=(('value','three'),),truncated=True),),))
+        self.assertEqual(run('SELECT b."B-label",RELATED_KEYS(b."B-A",2) AS related FROM "B" b ORDER BY b."B-label"').rows,(('three',QueryRelatedKeys(items=(('value','one'),),truncated=False)),('two',QueryRelatedKeys(items=(('value','one'),),truncated=False))))
+        host.detach();connection.commit();connection.execute('BEGIN READ ONLY;SET LOCAL statement_timeout=10000')
+        host=adopt_psycopg_host(connection);tx=host.adopt_transaction(access_mode='read_only').value
+        assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value;query=assembly.compiled_execution(assembly.compiled_selection).capability
+        self.assertEqual(run(bounded).rows,((QueryRelatedKeys(items=(('value','three'),),truncated=True),),))
+        self.assertIsNone(connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0])
+        host.detach();connection.rollback();connection,host,assembly,tx=self.consumer();query=assembly.compiled_execution(assembly.compiled_selection).capability
+        deleted,_,_=self.run_group(assembly,tx,(Delete(operation='delete_edge',target=StoredObjectReference(identity=edge)),))
+        self.assertIsInstance(deleted,GroupSuccess)
+        self.assertEqual(run(forward,{'value':'value','label':'two'}).rows,())
+        self.assertEqual(run(bounded).rows,((QueryRelatedKeys(items=(('value','three'),),truncated=False),),))

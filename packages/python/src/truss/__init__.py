@@ -96,7 +96,7 @@ __all__ += ["ImportSourceFound","ImportSourceAbsent","ImportSourceUnavailable"]
 from .catalog_runtime import PendingRuntimeUpgrade
 __all__ += ["PendingRuntimeUpgrade"]
 
-from .query import QueryRows,QueryRefused,QueryUnavailable,QueryAbsent,QueryDiagnostic,QueryValue
+from .query import QueryRelatedKeys,QueryRows,QueryRefused,QueryUnavailable,QueryAbsent,QueryDiagnostic,QueryValue
 from .capabilities import NativeCompiledExecutionCapability
 
-__all__ += ['QueryRows','QueryRefused','QueryUnavailable','QueryAbsent','QueryDiagnostic','QueryValue','NativeCompiledExecutionCapability']
+__all__ += ['QueryRelatedKeys','QueryRows','QueryRefused','QueryUnavailable','QueryAbsent','QueryDiagnostic','QueryValue','NativeCompiledExecutionCapability']

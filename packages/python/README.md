@@ -6,11 +6,11 @@ independent edge writes/reads, business-key lookup, preconditions, idempotent
 receipts, host-owned imports, retained history, committed feeds and acknowledgements.
 The caller owns its connection and transaction settlement.
 
-Runtime 0.27 provides public Weft compilation and query execution for string, boolean,
+Runtime 0.28 provides public Weft compilation and query execution for string, boolean,
 integer and decimal records, including equality filters/joins, counts, ordering/limits and `alias.*`.
 Integer COUNT results remain Python integers; optional values distinguish absence,
 null and empty strings. Read-only READ COMMITTED transactions are supported.
-Relationship operators, structured properties,
+Multi-hop relationship operators, structured properties,
 page-key profiles and engine-owned import batches remain unfinished.
 
 The supported driver baseline is stock psycopg3.3.6 binary/libpq18.6 on PostgreSQL18.6. The initial
@@ -1578,10 +1578,10 @@ retaining genesis, original reports, receipts and feed evidence as described abo
 
 ## Public compiled queries
 
-Install a Weft Python extension supporting runtime backend version `0.2.0`,
+Install a Weft Python extension supporting runtime backend version `0.3.0`,
 built with `truss-postgresql-pg18`, providing
 `compile_truss_runtime_json`. Generic or conformance-only Weft builds do not enable
-this capability. The selected Truss runtime is 0.27 on DocumentDrivenDX
+this capability. The selected Truss runtime is 0.28 on DocumentDrivenDX
 `pgserver-pg18==18.6.1` (PostgreSQL18.6); remote managed services remain unqualified.
 
 ```python
@@ -1616,8 +1616,8 @@ emitted obligations, buffers exact results and rechecks current context. Ordinar
 input/source/output limits and deadlines apply, without custom instrumentation or
 internal retry loops.
 
-Record-name annotations select support policy0.4.0. Runtime upgrades from exact
-0.23/0.24/0.25/0.26 profiles preserve immutable genesis, original accepted sources, rows,
+Record-name and inverse-name annotations select support policy0.5.0. Runtime upgrades from exact
+0.23/0.24/0.25/0.26/0.27 profiles preserve immutable genesis, original accepted sources, rows,
 receipts and feed deliveries. The active runtime configuration selects the new
 policy without changing historical preparation or report pins.
 
@@ -1627,3 +1627,29 @@ decimal tokens retain their original scale and exponent in projected values. Pas
 finite PostgreSQL numeric domain return `QueryRefused(code="native_domain")`
 before predicates can hide them. Decimal parameters expand to bounded exact
 fixed-point tokens; binary floating-point parameters are unsupported.
+
+
+Independent directed relationships with one source/target Record and required
+string business keys support Weft's `HAS_RELATED` and `RELATED_KEYS`, including
+an authored inverse name:
+
+```python
+from truss import QueryRelatedKeys
+
+result = selected.capability.query_in_transaction(
+    transaction,
+    sql='SELECT n.title, RELATED_KEYS(n.tags, 20) AS tags '
+        'FROM Note n WHERE HAS_RELATED(n.tags, KEY(:tag))',
+    document_ids=('notes',),
+    parameters={'tag': 'planning'},
+)
+```
+
+Each related-key value is `QueryRelatedKeys(items=(('planning',), ...),
+truncated=False)`. Tuple components follow the authored target key field order;
+keys use `C` string ordering and retain edge multiplicity. `truncated=True` means
+another matching edge exists beyond the requested bound. Bounds are1–1000.
+Inverse queries use the opposite Record's authored key. Association Records,
+owned/composed relationships and non-string key components are currently refused.
+The complete bounded edge and object sources are checked before correlation;
+read-only transactions use the same public method.

@@ -7,7 +7,12 @@ from typing import Literal, Mapping, TypeAlias
 class QueryAbsent:
     state: Literal['absent'] = field(default='absent', init=False)
 
-QueryValue: TypeAlias = str | bool | int | Decimal | None | QueryAbsent | Mapping[str, 'QueryValue']
+@dataclass(frozen=True, slots=True)
+class QueryRelatedKeys:
+    items: tuple[tuple[str, ...], ...]
+    truncated: bool
+
+QueryValue: TypeAlias = str | bool | int | Decimal | None | QueryAbsent | QueryRelatedKeys | Mapping[str, 'QueryValue']
 
 @dataclass(frozen=True, slots=True)
 class QueryRows:
