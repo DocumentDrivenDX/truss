@@ -5,8 +5,8 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: runtime `0.34-candidate`, layout `0.16`
-candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.7`. The tested local
+This is an experimental implementation: runtime `0.35-candidate`, layout `0.16`
+candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.8`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -17,7 +17,7 @@ ordinary-person/module boundaries.
 
 Python 3.11 or later, Bun 1.4.2, and the Weft Python extension built with the
 `truss-postgresql-pg18` feature are required. This feature must expose runtime
-backend `0.4.7`; the conformance-only backend is not the public integration.
+backend `0.4.8`; the conformance-only backend is not the public integration.
 Install the package from this repository:
 
 ```sh
@@ -39,7 +39,7 @@ JSON file supplies calls, transaction phases and semantic expectations:
 
 ```sh
 python packages/python/examples/run_corpus.py \
-  docs/helix/04-build/corpus/public-python/0.8/adopter-basic.json \
+  docs/helix/04-build/corpus/public-python/0.9/adopter-basic.json \
   /tmp/truss-public-preview --bun bun
 ```
 
@@ -143,7 +143,7 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.33 to 0.34. The trusted administrator must quiesce consumers and
+0.23 through 0.34 to 0.35. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -291,7 +291,7 @@ source cell is validated before filtering. Timestamp and binary projections, inc
 `TextValue` carriers with their original exact text; optional fields preserve
 absence and explicit null. Timestamp/binary filters, ordering, grouping, keys and
 parameters remain unsupported. The selected compile/IR/backend interfaces are
-`0.2.3`, with the unchanged SQL dialect `0.2.0`.
+`0.2.4`, with the unchanged SQL dialect `0.2.0`.
 Successful native `QueryRows` and `QueryPage` results carry `as_of: QueryReadPosition`. Its opaque `value` identifies a conservative committed lower bound captured immediately before the data query; `at` is the database capture time as a timezone-aware UTC `datetime`. The following READ COMMITTED statement can include newer commits. `caller_xid_assigned` reports only whether the caller already had a transaction ID; it does not prove writes or commitment. Constructors retain an optional default for compatibility, while this provider fills the position on every successful result, including empty rows.
 
 Read-position values use their own namespace and are not receipt tokens. Do not pass them to `reached`, infer ordering from their strings or timestamps, or treat them as exact snapshots. An adapter may publish this position only with the stated lower-bound semantics. Current authority/context checks must pass before the result and position are returned.
@@ -509,7 +509,7 @@ replica execution and the full consumer corpus remain unqualified.
 
 Select `read_profile="complete-entity"` for `alias.*` with complete relationship
 keys and `_version`, `_created_by`, `_created_at`, `_updated_by`, `_updated_at`, `_original_author` and
-`_original_at`. Truss derives attribution from original native mutation/import
+`_original_at` and `_load_id`. Truss derives attribution from original native mutation/import
 evidence. Missing evidence, output-name collisions or more than100 related keys
 refuse the query. Single-component relationship keys are immutable scalar tuples;
 composite keys retain nested tuples. Ordinary projections keep their authored
