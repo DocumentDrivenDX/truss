@@ -11,9 +11,9 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.16`,
-native runtime `0.53-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.23`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.17`,
+native runtime `0.54-candidate`, layout `1.0`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.24`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -311,9 +311,12 @@ Supported projections and counts can use records/documents containing timestamp
 and binary siblings. The complete original member mapping is retained, and every
 source cell is validated before filtering. Timestamp and binary projections, including `alias.*`, return the existing
 `TextValue` carriers with their original exact text; optional fields preserve
-absence and explicit null. Timestamp/binary filters, ordering, grouping, keys and
-parameters remain unsupported. The selected compile/IR/backend interfaces are
-`0.2.4`, with the unchanged SQL dialect `0.2.0`.
+absence and explicit null. Required singular binary fields support byte equality
+with canonical base64 SQL literals, another binary field, or
+`TextValue(kind="binary", text="AP8=")` parameters. Ordinary `str` parameters
+remain strings. Binary ordering/grouping and timestamp comparison/parameters
+remain unsupported. The selected compile/IR/backend interfaces are
+`0.2.5`, with the unchanged SQL dialect `0.2.0`.
 Successful native `QueryRows` and `QueryPage` results carry `as_of: QueryReadPosition`. Its opaque `value` identifies a conservative committed lower bound captured immediately before the data query; `at` is the database capture time as a timezone-aware UTC `datetime`. The following READ COMMITTED statement can include newer commits. `caller_xid_assigned` reports only whether the caller already had a transaction ID; it does not prove writes or commitment. Constructors retain an optional default for compatibility, while this provider fills the position on every successful result, including empty rows.
 
 Read-position values use their own namespace and are not receipt tokens. Do not pass them to `reached`, infer ordering from their strings or timestamps, or treat them as exact snapshots. An adapter may publish this position only with the stated lower-bound semantics. Current authority/context checks must pass before the result and position are returned.
@@ -772,3 +775,12 @@ a fresh relationship reference for mutations and traversal. Acceptance leaves
 edge IDs, versions and values unchanged. Original request replay and history
 retain the original meaning. Native0.53/layout1.0 pairs with
 Weft0.4.18/backend0.4.23 and upgrades0.52 additively.
+
+## Binary byte equality (SDK0.0.17 source tranche)
+
+Native0.54 and Weft0.4.19/backend0.4.24 add required singular binary equality to
+filters and INNER joins. Query-page filters retain the same exact parameter map
+in their cursor context. Canonical base64 is checked independently in Python
+and Weft; SQL compares decoded bytes while projections preserve source text.
+Empty binary values are valid. Timestamp semantics remain projection-only.
+The native upgrade from0.53 retains existing data, receipts and feed custody.

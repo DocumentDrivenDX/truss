@@ -11,14 +11,14 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.23',
-           'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.4'}
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.24',
+           'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.5'}
 
 
 def compiler():
     try:
         import weft
-        if weft.__version__ != '0.4.18':
+        if weft.__version__ != '0.4.19':
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
@@ -167,7 +167,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         valid = valid and type(document_ids) is tuple and 1 <= len(document_ids) <= 32 and len(set(document_ids)) == len(document_ids)
         valid = valid and all(type(d) is str and 1 <= len(d.encode('utf8')) <= 4096 and '\0' not in d for d in document_ids)
         valid = valid and isinstance(parameters, Mapping) and len(parameters) <= 1024
-        valid = valid and all(type(k) is str and 1 <= len(k.encode('utf8')) <= 4096 and '\0' not in k and type(v) in (str, int, bool, Decimal) for k, v in parameters.items())
+        valid = valid and all(type(k) is str and 1 <= len(k.encode('utf8')) <= 4096 and '\0' not in k and type(v) in (str, int, bool, Decimal, TextValue) for k, v in parameters.items())
         valid = valid and all(type(v) is not str or len(v.encode('utf8')) <= 1048576 and '\0' not in v for v in parameters.values())
     except (UnicodeError, TypeError, ValueError):
         valid = False
@@ -199,7 +199,19 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         except (ImportError, AttributeError):
             return Ok(QueryUnavailable(reason='compiler'))
     values={}
+    exact_values={}
     for name,value in parameters.items():
+        if type(value) is TextValue:
+            if value.kind != 'binary' or type(value.text) is not str or len(value.text) > 1048576:
+                return Ok(QueryRefused(code='invalid_query'))
+            try:
+                decoded = base64.b64decode(value.text, validate=True)
+                if base64.b64encode(decoded).decode('ascii') != value.text:
+                    return Ok(QueryRefused(code='invalid_query'))
+            except (ValueError, UnicodeError):
+                return Ok(QueryRefused(code='invalid_query'))
+            exact_values[name]={'scalarType':'binary','value':value.text}
+            continue
         if type(value) is Decimal:
             if not value.is_finite():return Ok(QueryRefused(code='invalid_query'))
             parts=value.as_tuple();exponent=parts.exponent;digits=len(parts.digits)
@@ -221,15 +233,15 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         if binding != bundle['binding'] or binding['releaseId'] != manifest['releaseId'] or binding['releaseSha256'] != digest:
             raise ValueError('Exact installed query binding required')
         binding_sha = sha256(binding_json.encode('utf8')).hexdigest()
-        request = {'interfaceVersion': 'weft-compile/0.2.4', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
-                   'modules': bundle['modules'], 'parameters': values, 'options': {'allowCandidate': True},
+        request = {'interfaceVersion': 'weft-compile/0.2.5', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
+                   'modules': bundle['modules'], 'parameters': values, 'exactParameters': exact_values, 'options': {'allowCandidate': True},
                    'target': {'backendId': BACKEND['backendId'], 'backendVersion': BACKEND['backendVersion'],
                               'targetProfile': BACKEND['targetProfile'], 'bindingJson': binding_json, 'bindingSha256': binding_sha}}
         if read_profile is not None:request['readProfile']={'version':'weft-truss-entity-read/0.3.0' if read_profile=='complete-entity' else 'weft-application-read/0.2.0','subset':read_profile}
         page_metadata = None
         if page_size is not None:
             # Each page composes and reauthorizes the current accepted catalog.
-            context = sha256(json.dumps({'sql':sql,'parameters':values,'documents':document_ids,
+            context = sha256(json.dumps({'sql':sql,'parameters':values,'exactParameters':exact_values,'documents':document_ids,
                 'binding':binding,'actorOid':bundle['actorOid'],'pageSize':page_size},sort_keys=True,ensure_ascii=False,separators=(',',':')).encode('utf8')).hexdigest()
             if page_state is not None and page_state['context'] != context:
                 return QueryRefused(code='stale_context')
@@ -247,7 +259,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             diagnostics = tuple(QueryDiagnostic(code=d['code'], message=d['message']) for d in artifact.get('diagnostics', ()))
             unsupported = any(d.code in ('WFT-CAPABILITY', 'WFT-TYPE', 'WFT-PROFILE') for d in diagnostics)
             return QueryRefused(code='unsupported_query' if unsupported else 'invalid_query', diagnostics=diagnostics)
-        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.4':
+        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.5':
             raise ValueError('Exact selected compile/dialect/IR versions required')
         if artifact['backend'] != BACKEND or artifact['bindingSha256'] != binding_sha or artifact['modelPins'] != [m['pin'] for m in bundle['modules']]:
             raise ValueError('Original compiled binding/model/backend required')
@@ -262,7 +274,15 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         # Fixed context handler and source functions independently recheck all owners.
         cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
         for slot in slots:
-            family=slot['logicalType']['family']
+            logical_type=slot['logicalType']
+            if logical_type == {'kind':'exactScalar','scalarType':'binary'}:
+                token=slot['value']
+                if len(token)>1048576 or base64.b64encode(base64.b64decode(token,validate=True)).decode('ascii')!=token:
+                    raise ValueError('Canonical binary parameter slot required')
+                continue
+            if type(logical_type) is not dict or set(logical_type)!={'family','facets','nullable'}:
+                raise ValueError('Closed atomic or exact binary parameter type required')
+            family=logical_type['family']
             if family in ('integer','decimal'):
                 cursor.execute('SELECT truss.query_numeric_value(%s,%s)',(slot['value'],family),prepare=False)
                 if cursor.fetchone()!=(True,):
