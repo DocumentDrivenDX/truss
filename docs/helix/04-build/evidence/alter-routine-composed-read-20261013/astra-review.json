@@ -1,0 +1,139 @@
+{
+  "status": "No actionable findings in test-only composed ALTER ROUTINE integration",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "1feecc0291b5eb49a48913853cf0227762f995b3",
+  "findings": [],
+  "reviewedScope": "Changes in shared named-subject native test only; existing production barrier/subject/dependency/fact/codec/policy implementation unchanged.",
+  "conclusions": [
+    "Explicit dataclasses.replace(original, include_alter_routine=True) precedes both read calls and is passed through the actual existing wrapper; all other original owner/source/transaction arguments are identical across pending and retry calls.",
+    "Supplemental ALWAYS hook is installed once for shared named fixture. Both original encoder entry probes and original evaluator subprocess-entry probe execute ALTER ROUTINE on the selected native helper.",
+    "Pending ALTER ROUTINE begins and executes before acquisition. First refusal is actual psycopg LockNotAvailable, contained/no cleanup error and zero codec/evaluator entries; only the writer is settled before retry of the same caller transaction.",
+    "Committed drift reaches exact helper-snapshot refusal before encoding. Abort yields two original encodings and exact r1/withheld receipt. Existing original s2 key mismatch, definer/body/search_path drift and disabled base-hook checks remain.",
+    "Pending writer closes in inner finally. Outer named-test finally drops supplemental hook before helper cleanup; subsequent standalone legacy-gap native case passed, providing a concrete isolation cross-check that the supplemental hook was removed.",
+    "Final docs correctly describe encoder/evaluator entry-point probes rather than continuous subprocess observation."
+  ],
+  "independentChecks": {
+    "count": 21,
+    "allPassed": true,
+    "scope": "Static AST/control-flow and byte-pin checks, not independent execution of PostgreSQL or test branches. Native execution is parent evidence separately inspected.",
+    "artifact": "/private/tmp/alter-routine-composed-review-20261013/checks.json"
+  },
+  "nativeEvidenceInspected": {
+    "execution": "Parent run inspected; not independently rerun",
+    "groups": 2,
+    "seconds": 6.036,
+    "outcome": "OK",
+    "log": {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/alter-routine-composed-read-20261013/native.log",
+      "sha256": "45f83a22a86973a7c28e1f903a278c2dd7972e7b8ac77882c2c79deaf419401e",
+      "bytes": 653
+    },
+    "cleanup": {
+      "stopExitCode": 0,
+      "statusExitCode": 3,
+      "socketAbsent": true
+    },
+    "expandedNamedVariants": 8,
+    "additionalGroup": "Standalone legacy ALTER ROUTINE gap, opt-in exclusion, missing/disabled supplemental hook controls"
+  },
+  "limits": [
+    "Seven selected cooperating routine tags plus three table tags, conditional on intact cooperative hooks.",
+    "No complete event-trigger administration/other DDL/cascade/handler/role/config/issuer/dependency closure, generic installation or protected release.",
+    "Broad ordinary fixture grants remain unsafe; no authenticated authority or admitted backend claim.",
+    "Static checks establish source wiring and unchanged implementation pins; native behavior is parent-run evidence."
+  ],
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "f42a0ec1e66a57c102023ef7c20866c915b9afe635597372cba69cee471d6573",
+      "bytes": 167961
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "9c14d45fbeb02e3d9ecd0571b166b8aa367a0c0390e23402f8efb7e14e94576e",
+      "bytes": 18502
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_dependency_fact_cut.py",
+      "sha256": "23c3171a3dcf19518cc09e32e51bf343e3c3a6f70e3aed335d63da344663b59c",
+      "bytes": 15727
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "a81227203e5f8ad1b74e739e1586d3a3887b27dfa6e67ee85ba9b181fdc80962",
+      "bytes": 21602
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-subject.sql",
+      "sha256": "1048120c8500e5fcbae5c5c7ecd838755a85bfad3806be81ba1b1a779873fd77",
+      "bytes": 330
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-routine-ddl-barrier.sql",
+      "sha256": "93d0740578df55803370f15e7de9d325baa6f465426bf3a3bcac48c217e68413",
+      "bytes": 2531
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-table-ddl-barrier.sql",
+      "sha256": "9fdcd6823aafb1106597e1f9e003994df96748686b54b68b34adbea2ed198de4",
+      "bytes": 637
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql",
+      "sha256": "c3fc4f3228d49cc67ff93009f70f0e08eb627a0dd7cbc3a43fb7db4feeb35720",
+      "bytes": 384
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "25167759fc09f08bf2b8adc4761a68932f0f13e1cae9bb8b458f1d6074208cea",
+      "bytes": 319202
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "9188b6de0368cf9ee512571022e55527dea8b5b46a4f53c5082bee8117a2e9b3",
+      "bytes": 1085951
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/alter-routine-composed-read-20261013/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/alter-routine-composed-read-20261013/native.log",
+      "sha256": "45f83a22a86973a7c28e1f903a278c2dd7972e7b8ac77882c2c79deaf419401e",
+      "bytes": 653
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/alter-routine-composed-read-20261013/receipt.json",
+      "sha256": "4a3d27e8cf40dbb0a0afb217e0729651196721ae5f85011cda4609f171d6cb22",
+      "bytes": 1717
+    }
+  ],
+  "independentArtifactPins": [
+    {
+      "path": "/private/tmp/alter-routine-composed-review-20261013/check.py",
+      "sha256": "81c93d617167e715a2d55565037cb1622e9760b2e54ba908942528885b33d120",
+      "bytes": 4749
+    },
+    {
+      "path": "/private/tmp/alter-routine-composed-review-20261013/checks.json",
+      "sha256": "44c157d8580deeb4a37ce8e8f250055f17a71fbd9fb339aa66bbf276a43357d5",
+      "bytes": 3061
+    }
+  ],
+  "previousReview": {
+    "path": "/private/tmp/alter-routine-review-20261013/review.json",
+    "sha256": "c1117ce28c14c1d3aeab2136a3c116510305a6de8004dd8c22a118021e3bf20f",
+    "bytes": 9700
+  },
+  "repositoryMutations": "None by reviewer; only owned temporary review artifacts written."
+}
