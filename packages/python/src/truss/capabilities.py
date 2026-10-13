@@ -18,7 +18,7 @@ from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
 from .imports import ImportInput, ObjectImportRecord, EdgeImportRecord, ImportExecutionResult
 from .import_runtime import ImportRuntimeContext
 from .groups import AuthoredValue, OrderKey
-from .feed import FeedPage, FeedAcknowledged, FeedUnavailable
+from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage, FeedAcknowledged, FeedUnavailable
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
@@ -140,6 +140,12 @@ class NativeFeedCapability(_NativeCapability[Literal['feed']]):
     def reread_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,maximum_facts: int=4096,
                                    maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]:
         return self._assembly.reread_feed_in_transaction(transaction,page,maximum_facts=maximum_facts,maximum_bytes=maximum_bytes)
+
+    def acknowledge_feed_with_receipt_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,destination_id: str,request_sha256: str,publication_id: str,receipt_bytes: bytes) -> Outcome[FeedReceiptAcknowledged | FeedUnavailable]:
+        return self._assembly.acknowledge_feed_with_receipt_in_transaction(transaction,page,destination_id=destination_id,request_sha256=request_sha256,publication_id=publication_id,receipt_bytes=receipt_bytes)
+
+    def reconcile_feed_ack_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,destination_id: str,request_sha256: str,publication_id: str,receipt_bytes: bytes) -> Outcome[FeedAckReconciled | FeedUnavailable]:
+        return self._assembly.reconcile_feed_ack_in_transaction(transaction,page,destination_id=destination_id,request_sha256=request_sha256,publication_id=publication_id,receipt_bytes=receipt_bytes)
 
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]:
         return self._assembly.acknowledge_feed_in_transaction(transaction,page)

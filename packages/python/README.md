@@ -5,7 +5,7 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: runtime `0.35-candidate`, layout `0.16`
+This is an experimental implementation: runtime `0.38-candidate`, layout `0.16`
 candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.8`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
@@ -143,7 +143,7 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.34 to 0.35. The trusted administrator must quiesce consumers and
+0.23 through 0.37 to 0.38. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -526,3 +526,41 @@ The original CorrectSolution workflow now resolves the authored business key, ap
 The original `read.count-group-by` case is runnable with `--case`, including its record seed through public groups. Counts are exact integers, but the unchanged case currently fails its positional row oracle: the SQL has no `ORDER BY` and PostgreSQL returns the correct groups in another order. It is excluded from the passing aggregate pending a consumer-owned ordering expectation correction.
 
 The original edge-first import workflow is exercised by a trusted host mapping: import objects, resolve both authored business keys through public reads, then import relationships within the same caller transaction. The two native reports stay unchanged and pending as returned; the host publishes aggregate consumer counts only after its outer commit. This supports the selected consumer flow without inventing endpoint identities, a combined ImportReport or a commit token. General unresolved-reference batch ingestion remains outside the low-level typed-identity API.
+
+
+### Destination receipt retention and ACK recovery (runtime0.38)
+
+The ordinary feed provider exposes these methods, also available on CatalogReferenceAssembly:
+
+```python
+pending = feed.acknowledge_feed_with_receipt_in_transaction(
+    tx, page, destination_id="ashlar-delta", request_sha256=request_digest,
+    publication_id=publication_id, receipt_bytes=exact_destination_receipt,
+)
+# The host commits its PostgreSQL transaction.
+observed = feed.reconcile_feed_ack_in_transaction(
+    fresh_read_only_tx, page, destination_id="ashlar-delta",
+    request_sha256=request_digest, publication_id=publication_id,
+    receipt_bytes=exact_destination_receipt,
+)
+```
+
+Both calls return Outcome. A successful write carries FeedReceiptAcknowledged
+with pending durability and advanced/equal disposition. A successful read carries
+FeedAckReconciled with matched/missing/conflicting, the observed checkpoint and
+an authorized retained FeedAckReceipt (None only for missing). The receipt binds
+installation/source epoch, consumer/registration, exact prior/next cursors and
+feed digest to destination identity, request digest, publication identity and
+exact opaque bytes. Receipt bytes are limited to1MiB; destination/publication IDs
+to1024/4096 UTF-8 bytes. Hashes never replace exact-byte comparison.
+
+Reconciliation assigns no transaction ID and performs no ACK write. Use a fresh
+read-only transaction after an uncertain COMMIT; an earlier matching receipt
+remains matched after later checkpoint advances. Missing means no committed
+receipt is visible in this observation, not proof of rollback or permission to
+republish. Conflicting evidence refuses a write without checkpoint movement.
+Plain ACK has no receipt evidence and cannot be backfilled after its advance.
+First receipt creation refuses a zero-width interval. Receipts remain retained;
+there is no cleanup API. The destination consumer verifies its own publication
+before ACK. Truss confirms source retention and checkpoint inclusion and does
+not verify another database's commit or grant history-deletion authority.

@@ -1,12 +1,11 @@
 # Destination receipt retention with source ACK
 
-Implementation direction for CONTRACT-006 and the public Python feed capability,
-2026-10-13. Requested by the Ashlar consumer; not a callable export in runtime0.35.
+Public candidate API for CONTRACT-006 and the Python feed capability,
+2026-10-13. Runtime0.38 implements this addition on PostgreSQL18.6/psycopg3.3.6.
 
 Current `acknowledge_feed_in_transaction` retains the consumer's last prior/next
 cursor and feed digest. It retains no destination receipt. `reread_feed` proves
-source delivery reproducibility, not source-side receipt persistence. Current
-APIs cannot satisfy exact downstream receipt reconciliation after an uncertain
+source delivery reproducibility, not source-side receipt persistence. Plain ACK and reread APIs alone cannot satisfy exact downstream receipt reconciliation after an uncertain
 source COMMIT.
 
 Add two ordinary authorized feed operations:
@@ -21,7 +20,8 @@ reconcile_feed_ack_in_transaction(
 )
 ```
 
-Names and Python carriers are implementation proposals. The write returns a
+The exported carriers are FeedAckReceipt, FeedReceiptAcknowledged and
+FeedAckReconciled. The write returns a
 pending source receipt with advanced/equal disposition; the host owns settlement.
 The read returns matched, missing or conflicting plus the observed checkpoint.
 Authorization/context/resource failures remain explicit unavailable/execution
@@ -62,12 +62,15 @@ retained receipt with different immutable destination facts. Matched confirms
 source-side retention and checkpoint inclusion only. Ashlar verifies its own
 complete publication before asking for ACK.
 
-Implement an additive table and two native routines, owner-only table access,
+The runtime includes an additive table, private binding helper and two entrypoint
+routines, owner-only table access,
 ordinary feed-role routine grants, public result carriers/provider methods,
-and a runtime upgrade preserving original data/routine identities/ACLs. A small
-native workflow must cover atomic rollback, committed fresh read-only matching,
+and an additive runtime upgrade preserving original data/routine identities/ACLs.
+The focused native workflow covers atomic rollback, committed fresh read-only matching,
 exact equal retry, conflicting payload refusal, missing legacy receipt and
 matching an earlier receipt after a later advance. No external database,
 tracing, metrics, performance campaign or new retry loop is introduced.
 
 Astra Ultra reviewed the implementation direction and these semantic boundaries.
+Final implementation review and installed workflow evidence are recorded in
+../../04-build/evidence/public-feed-ack-receipts-038-20261013.md.
