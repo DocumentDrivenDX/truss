@@ -1,0 +1,46 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "queries": [
+    {
+      "id": "selected_guard_preserves_all_rows_and_pure_decision",
+      "expected": "unsat",
+      "observed": "unsat",
+      "replay": "unsat",
+      "model": null
+    },
+    {
+      "id": "foreign_writer_conflict_preserves_rows_without_own_guard",
+      "expected": "unsat",
+      "observed": "unsat",
+      "replay": "unsat",
+      "model": null
+    },
+    {
+      "id": "missing_same_backend_guard_allows_fact_and_decision_change",
+      "expected": "sat",
+      "observed": "sat",
+      "replay": "sat",
+      "model": "[value = SelectedFactRow!val!0,\n before = Store(K(Int, SelectedFactRow!val!2),\n                2,\n                SelectedFactRow!val!1),\n key = 2,\n operation = 1,\n installed_before_effect_guard = False,\n continuously_held_cut = True,\n same_backend = True,\n k!0 = [2 -> SelectedFactRow!val!1,\n        else -> SelectedFactRow!val!2],\n Ext = [else -> 2],\n fixed_source_caller_context_pure_policy = [as-array ->\n                                        False,\n                                        else -> True]]"
+    },
+    {
+      "id": "released_cut_allows_foreign_fact_change",
+      "expected": "sat",
+      "observed": "sat",
+      "replay": "sat",
+      "model": "[value = SelectedFactRow!val!0,\n before = Store(K(Int, SelectedFactRow!val!2),\n                2,\n                SelectedFactRow!val!1),\n key = 2,\n operation = 1,\n continuously_held_cut = False,\n same_backend = False,\n Ext = [else -> 2]]"
+    }
+  ],
+  "scope": "Conditional selected-fact stability, not SQL/trigger/native refinement.\n\nReader continuously holds a conflicting table cut, foreign writes participate,\nand an exact installed before-effect guard excludes same-backend writes. Other\nsource/caller/context inputs stay fixed. DML transitions are faithful and atomic.\n",
+  "limits": [
+    "No source/native/trigger/savepoint/driver refinement or complete statement effect inventory proof.",
+    "No source/caller/issuer authenticity, RLS/role/ACL/DDL lifetime or protected final release theorem.",
+    "Pure policy is uninterpreted with fixed non-fact inputs; no original evaluator implementation theorem."
+  ],
+  "sourceDigests": {
+    "scripts/prove-selected-fact-write-exclusion.py": "17288a860e1df1856b9dd8ed81b9d9c96479879e0b793d3dc0ebcf847ced4531",
+    "packages/postgresql/native/authorization-fact-write-fence.sql": "66b1a93c5a16d0f0727f9f0b8b91e77df7b1a7e9a9116c221f2cec65e6455381",
+    "packages/python/src/truss/_psycopg_fact_cut.py": "7a38ff06147ce553ff1d2f8b104f89dd2122bebd08e8e83e66fb487e86159130",
+    "scripts/security_catalog_read.py": "c69720e742f039295101a9d29b5a3617b0d9c5ec97c5284f558e35728800db9a"
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "count": 49,
+  "controls": [
+    {
+      "name": "extracted qualifier recipe and acquire body are AST-identical",
+      "passed": true
+    },
+    {
+      "name": "original wrapper routing remains AST-identical",
+      "passed": true
+    },
+    {
+      "name": "direct prepared cut validates lock relation guard and columns before callback",
+      "passed": true
+    },
+    {
+      "name": "relation foreign refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "relation missing refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "relation short refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "relation duplicate refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "relation changed refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "guard foreign refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "guard missing refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "guard short refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "guard duplicate refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "guard changed refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "column foreign refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "column missing refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "column short refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "column duplicate refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "column changed refuses before callback",
+      "passed": true
+    },
+    {
+      "name": "guard field 0 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 1 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 2 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 3 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 4 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 5 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 6 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 7 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 8 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 9 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 10 refuses",
+      "passed": true
+    },
+    {
+      "name": "guard field 11 refuses",
+      "passed": true
+    },
+    {
+      "name": "list input refuses at preparation",
+      "passed": true
+    },
+    {
+      "name": "empty input refuses at preparation",
+      "passed": true
+    },
+    {
+      "name": "oversize input refuses at preparation",
+      "passed": true
+    },
+    {
+      "name": "duplicate input refuses at preparation",
+      "passed": true
+    },
+    {
+      "name": "wrong oid input refuses at preparation",
+      "passed": true
+    },
+    {
+      "name": "wrong columns input refuses at preparation",
+      "passed": true
+    },
+    {
+      "name": "duplicate column input refuses at preparation",
+      "passed": true
+    },
+    {
+      "name": "empty body input refuses at preparation",
+      "passed": true
+    },
+    {
+      "name": "prepared recipe retains originally copied relation and column fields",
+      "passed": true
+    },
+    {
+      "name": "legacy wrapper forwards original identity and executes same prepared callback",
+      "passed": true
+    },
+    {
+      "name": "DDL wrapper forwards original identity and executes same prepared callback",
+      "passed": true
+    },
+    {
+      "name": "selected object guard completes genuine original evaluation after qualifying cut",
+      "passed": true
+    },
+    {
+      "name": "disabled selected guard refuses before native catalog capture and evaluator",
+      "passed": true
+    },
+    {
+      "name": "list selected binding refuses before host",
+      "passed": true
+    },
+    {
+      "name": "empty selected binding refuses before host",
+      "passed": true
+    },
+    {
+      "name": "other home selected binding refuses before host",
+      "passed": true
+    },
+    {
+      "name": "extra home selected binding refuses before host",
+      "passed": true
+    },
+    {
+      "name": "wrong type selected binding refuses before host",
+      "passed": true
+    },
+    {
+      "name": "explicit legacy None avoids guard factory and preserves original result",
+      "passed": true
+    }
+  ],
+  "scope": "AST extraction/routing equivalence and actual current qualifier/guarded orchestrator with synthetic native rows and host/capture shells. New selected and legacy paths execute genuine original UMF evaluator on retained actual capture rows. No independently executed native lock/trigger or host containment assertion.",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "7a38ff06147ce553ff1d2f8b104f89dd2122bebd08e8e83e66fb487e86159130",
+      "bytes": 8414
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_catalog_read.py",
+      "sha256": "c69720e742f039295101a9d29b5a3617b0d9c5ec97c5284f558e35728800db9a",
+      "bytes": 8085
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/authorization-fact-write-fence.sql",
+      "sha256": "66b1a93c5a16d0f0727f9f0b8b91e77df7b1a7e9a9116c221f2cec65e6455381",
+      "bytes": 1067
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/check.py",
+      "sha256": "c53d1e4273e70475e829a9280a531247cdd89fef87e10a628823c50424bcc689",
+      "bytes": 9148
+    },
+    {
+      "path": "/private/tmp/accepted-catalog-fact-guard-review-20261013/fact-cut-pre-extraction.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    }
+  ],
+  "inputPins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/request.json",
+      "sha256": "359743a8140b8d88da17bc22ceb5a56b56402417411db63cbe7133f062a2cf8d",
+      "bytes": 9573
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/assessment.json",
+      "sha256": "33a940d78beb268eede6adcf82419df659d1d64f911ac4d351a3525da11cfe31",
+      "bytes": 10408
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/capture.json",
+      "sha256": "0cb4522789a1e281d8ffb3054e17f30f3207db5aea1f9d8d6885afb1547c75a9",
+      "bytes": 4814
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/accepted-catalog-policy-read-20261013/decision.json",
+      "sha256": "3966cf8f43266a70436f3cb7ca9ec3d0e1345f41d8f16f0259bc5429945a769f",
+      "bytes": 361
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+test_disabled_guard_refuses_before_evaluator (test_security_catalog_guard_native.CatalogFactGuardTests.test_disabled_guard_refuses_before_evaluator) ... ok
+test_lock_only_allows_uncommitted_same_backend_fact_change (test_security_catalog_guard_native.CatalogFactGuardTests.test_lock_only_allows_uncommitted_same_backend_fact_change) ... ok
+test_selected_guard_refuses_all_events_before_effect (test_security_catalog_guard_native.CatalogFactGuardTests.test_selected_guard_refuses_all_events_before_effect)
+@covers US-056-AC2; @covers US-056-AC9; component prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 19.285s
+
+OK

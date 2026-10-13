@@ -1,0 +1,8 @@
+test_same_writer_all_four_events_refuse_before_effect (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_same_writer_all_four_events_refuse_before_effect) ... ok
+test_complete_dependency_cut_excludes_same_writer_active_revocation (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_complete_dependency_cut_excludes_same_writer_active_revocation) ... ok
+test_changed_original_relation_binding_refuses_before_callback (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_changed_original_relation_binding_refuses_before_callback) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 4.199s
+
+OK

@@ -25,11 +25,11 @@ class _FactRelationComparison:
     columns: tuple = ()
 
 
-def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback, *, ddl_barrier=None):
-    """Reacquire declared plain-table cuts inside the original epoch scope.
+def _prepare_fenced_fact_cut(relations, callback):
+    """Copy/qualify selected table cuts; source/authority fencing is separate.
 
-    Independent admitted mapping/installed trigger closure is required. This
-    excludes table DML only, not roles, grants, config or other source changes.
+    Independent admitted mapping and installed-trigger lifetime are premises.
+    Excludes selected table DML only, not role/grant/config/source changes.
     """
     if type(relations) is not tuple or not 1 <= len(relations) <= 32:
         raise ValueError('Bounded exact fact relation tuple required')
@@ -112,6 +112,12 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
                 if actual != [expected]:
                     raise ValueError('Original native field descriptor correspondence required')
         return callback(cursor)
+    return acquire
+
+
+def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, callback, *, ddl_barrier=None):
+    """Original epoch scope plus independently qualified per-table fact guards."""
+    acquire=_prepare_fenced_fact_cut(relations,callback)
     if ddl_barrier is not None:
         from ._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
         return _run_ddl_fenced_epoch_operation(host,transaction,epoch_comparison,ddl_barrier,acquire)

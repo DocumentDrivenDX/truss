@@ -58,7 +58,7 @@ def _catalog_record_cells(recipes,rows):
     return list(groups.values())
 
 
-def run_owned_catalog_resource_read(host,transaction,mapping,subject_key):
+def run_owned_catalog_resource_read(host,transaction,mapping,subject_key,*,fact_relations=None):
     """Historical accepted-source decision; no authority from a retained mapping."""
     if type(mapping) is not PreparedSecurityMapping:
         raise ValueError('Original accepted-catalog fixture mapping required')
@@ -93,4 +93,14 @@ def run_owned_catalog_resource_read(host,transaction,mapping,subject_key):
         if capture_accepted_catalog(cursor,original_request)!=assessment:raise ValueError('Accepted catalog changed during owned evaluation')
         if any(hashlib.sha256(p.read_bytes()).digest()!=pin for p,pin in pins):raise ValueError('Original accepted-catalog evaluator sources changed')
         return _read_owned_resource_receipt(result.stdout)
-    return host._run_operation(transaction,execute)
+    if fact_relations is None:return host._run_operation(transaction,execute)
+    from truss._psycopg_fact_cut import _FactRelationComparison,_prepare_fenced_fact_cut
+    if (type(fact_relations) is not tuple or len(fact_relations)!=1
+            or type(fact_relations[0]) is not _FactRelationComparison
+            or (fact_relations[0].schema,fact_relations[0].name)!=('truss','object')):
+        raise ValueError('Exact accepted object fact cut required')
+    acquire=_prepare_fenced_fact_cut(fact_relations,lambda c:execute(c,host._observe(c)))
+    def guarded(c,o):
+        _pin_cursor(c)
+        return acquire(c)
+    return host._run_operation(transaction,guarded)
