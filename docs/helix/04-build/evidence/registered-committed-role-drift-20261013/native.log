@@ -1,0 +1,7 @@
+test_committed_role_drift_during_evaluation_refuses_publication (test_security_registered_callers_native.RegisteredCallersNativeTests.test_committed_role_drift_during_evaluation_refuses_publication)
+@covers US-056-AC9; independent committed drift before final comparison. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 17.045s
+
+OK

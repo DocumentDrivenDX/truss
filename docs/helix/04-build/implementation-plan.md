@@ -7883,3 +7883,7 @@ Original commerce top-level title admission remains a separate policy change. Va
 ### Registered principal current privilege comparison — 2026-10-13
 
 The registered producer now rechecks all installed role OIDs for ordinary LOGIN flags and helper-owner MEMBER reachability before Subject and after evaluation. A same-executor-transaction BYPASSRLS alteration of Bob refuses Alice before key encoding/evaluation. Five native cases pass66.956s; module boundaries pass1003 imports. Astra Ultra found no actionable source issue. [Retained receipt](evidence/registered-role-drift-20261013/receipt.json) ties the selected drift check to US-056AC9 and positive population to AC2; concurrent committed role visibility, continuous role exclusion, OID reuse and full backend acceptance remain open. No required-case promotion.
+
+### Committed registered role drift before final publication — 2026-10-13
+
+An independent autocommit connection changes Bob to BYPASSRLS after actual successful policy evaluation; its own flag readback confirms the committed change. The executor final registered-role comparison refuses and the publisher receives nothing. The native case passes17.045s and restores NOBYPASSRLS through an independent connection. [Evidence](evidence/registered-committed-role-drift-20261013/receipt.json) qualifies US-056AC9 detection for this schedule; continuous exclusion, the interval after final comparison, ABA and full backend admission remain open. No acceptance-case promotion.

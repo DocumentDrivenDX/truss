@@ -72,3 +72,24 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
    encoder.assert_not_called();evaluator.assert_not_called()
   self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
   self.assertEqual(str(self.host._custody.last_attempt.error),'Original ordinary registered Subject principals required')
+
+ def test_committed_role_drift_during_evaluation_refuses_publication(self):
+  """@covers US-056-AC9; independent committed drift before final comparison."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup();delivered=[];changed=[]
+  original=source.subject.run_owned_catalog_resource_read
+  def drift(*args,**kwargs):
+   result=original(*args,**kwargs)
+   self.assertIsInstance(result,Ok)
+   with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=1000') as writer:
+    writer.execute(sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)))
+    self.assertEqual(writer.execute('SELECT rolbypassrls FROM pg_catalog.pg_roles WHERE rolname=%s',(self.bob,)).fetchone(),(True,))
+   changed.append(True)
+   return result
+  try:
+   with patch.object(source.subject,'run_owned_catalog_resource_read',drift):
+    result=self.publish(h,t,mapping,selection,inspector,relations,cut,self.registered_subjects,delivered)
+   self.assertEqual(changed,[True]);self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
+   self.assertEqual(str(self.host._custody.last_attempt.error),'Original ordinary registered Subject principals required')
+  finally:
+   with psycopg.connect(self.info.connection_uri,autocommit=True) as writer:
+    writer.execute(sql.SQL('ALTER ROLE {} NOBYPASSRLS').format(sql.Identifier(self.bob)))
