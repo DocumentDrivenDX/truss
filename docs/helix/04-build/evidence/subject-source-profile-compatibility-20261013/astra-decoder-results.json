@@ -1,0 +1,55 @@
+{
+  "scope": "Actual epoch helper callback decoder with synthetic cursor/host operation; not native SQL or custody qualification.",
+  "count": 8,
+  "results": [
+    {
+      "case": "match",
+      "passed": true,
+      "helperRowFetches": 1,
+      "callbackInvocations": 1
+    },
+    {
+      "case": "wrong-oid",
+      "passed": true,
+      "helperRowFetches": 0,
+      "callbackInvocations": 0
+    },
+    {
+      "case": "wrong-name",
+      "passed": true,
+      "helperRowFetches": 0,
+      "callbackInvocations": 0
+    },
+    {
+      "case": "extra-descriptor",
+      "passed": true,
+      "helperRowFetches": 0,
+      "callbackInvocations": 0
+    },
+    {
+      "case": "missing-descriptors",
+      "passed": true,
+      "helperRowFetches": 0,
+      "callbackInvocations": 0
+    },
+    {
+      "case": "wrong-value",
+      "passed": true,
+      "helperRowFetches": 1,
+      "callbackInvocations": 0
+    },
+    {
+      "case": "no-rows",
+      "passed": true,
+      "helperRowFetches": 1,
+      "callbackInvocations": 0
+    },
+    {
+      "case": "two-rows",
+      "passed": true,
+      "helperRowFetches": 1,
+      "callbackInvocations": 0
+    }
+  ],
+  "sourceSha256": "b04f0d96ac360b4167bec32fe5f92c60fe2cfce8ab4748268bf7e0d98a7fcf86"
+}

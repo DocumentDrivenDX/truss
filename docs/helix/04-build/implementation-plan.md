@@ -7340,3 +7340,11 @@ This is a concrete new adopter implementation item, not a preparation-only fix:
 connect authoritative facet admission, exact no-rounding enforcement and Weft
 query lowering on one versioned runtime with a basic create/read/query check.
 No source-version reinterpretation or compiler-invented facets is authorized.
+
+
+### Subject/source transaction profile incompatibility — 2026-10-13
+
+Current original subject and fresh source guards are mutually exclusive: subject needs RR/SERIALIZABLE read-only, fresh source needs READ COMMITTED read-write. Z34.15.4 executes three UNSAT compatibility/one-dimension controls and three SAT nonvacuity witnesses, with complete constraints and current source hashes retained in `evidence/subject-source-profile-compatibility-20261013/proof.json`. This contradicts any claim that the existing separately passing components already compose into a protected operation. No guard is relaxed. The next implementation must explicitly admit an integrated fresh fenced read profile with complete declared facts/source/authority exclusions, or qualify a fresh stronger-isolation source producer; then native ordinary-caller end-to-end cases must exercise that exact profile. US-056-AC2/AC10 gain a concrete missing-integration countercheck only. All132 cases remain required without promotion.
+
+
+The fenced source helper previously fetched rows before validating their twelve names/TEXT OIDs. The guard now precedes fetch. All13 PostgreSQL18.6 epoch tests pass6.451s, including a fake NAME-OID helper inside caller rollback containment with zero foreign row loads/callbacks; owned server stop/status/socket cleanup is exact. Astra independently replays the3UNSAT/3SAT proof byte-identically and passes eight decoder controls. Source-pinned review, native logs and cleanup are retained beside the compatibility proof. No actionable finding remains within the qualified transport/finite-guard scope, and no integrated native profile is admitted.

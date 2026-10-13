@@ -1,0 +1,23 @@
+F
+======================================================================
+FAIL: test_foreign_epoch_oid_refuses_before_custom_row_loader (test_psycopg_epoch_cut_native.PsycopgEpochCutNativeTests.test_foreign_epoch_oid_refuses_before_custom_row_loader)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py", line 117, in test_foreign_epoch_oid_refuses_before_custom_row_loader
+    self.assertIsInstance(result,Error);self.assertEqual(loaded,[]);self.assertEqual(called,[])
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [True] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+True
+
+- [True]
++ []
+
+----------------------------------------------------------------------
+Ran 1 test in 4.330s
+
+FAILED (failures=1)
+
+Confirmed historical foreign Loader.load invocation before descriptor refusal

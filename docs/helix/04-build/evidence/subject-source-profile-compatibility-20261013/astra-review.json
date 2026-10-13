@@ -1,0 +1,123 @@
+{
+  "review": "current-subject-source-profile-frontier-and-epoch-descriptor-order",
+  "reviewer": "independent Astra Ultra agent",
+  "reviewedAtUtc": "2026-10-13T14:29:21.575512+00:00",
+  "status": "no_actionable_findings_in_reviewed_scope",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "headDuringReview": "514c5d1ca960588f3afae0f21dd7c48400445e30",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "eefc32996474bc363de3429963fd23c79291fa50d5b735d7030041480072d053",
+      "bytes": 7498
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-fresh-lock.sql",
+      "sha256": "b9d48c570237cac5b69b959270b363862ec5f87d33ac5145cdd9d847e9640ebc",
+      "bytes": 2174
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-fenced-fresh-lock.sql",
+      "sha256": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+      "bytes": 1743
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/tools/security/prove-subject-source-profile-compatibility.py",
+      "sha256": "f0c528d534320bd264474ca12bc791cfa51cb886a4c967ab5caa74b0a37e315f",
+      "bytes": 2605
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "b04f0d96ac360b4167bec32fe5f92c60fe2cfce8ab4748268bf7e0d98a7fcf86",
+      "bytes": 17930
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/psycopg_host.py",
+      "sha256": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+      "bytes": 27765
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py",
+      "sha256": "ca9ecf1ef9273f382093bb5af7a6086b6ffe1b35a66b1e055c27d529d239ab63",
+      "bytes": 13291
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py",
+      "sha256": "6b08fd001a6f41c81104226431c45dddc4deb7f90c4c36787a02324c48b9e4c1",
+      "bytes": 20158
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "c48d60755be4e9362df344378f751ee8bd6c1f74b7e734c5f6264c39356ba1a3",
+      "bytes": 301200
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "cbe7c78e67c85733beecea8c252d087b82f48cf94488b333451c25f8115e8886",
+      "bytes": 1066316
+    }
+  ],
+  "independentFormalReplay": {
+    "z3Version": "4.15.4",
+    "unsat": 3,
+    "sat": 3,
+    "sameCompleteJsonAsGovernedResult": true,
+    "sourceDigestsMatchCurrentFiles": true,
+    "retainedScript": {
+      "path": "/private/tmp/subject-source-profile-review-20261013/retained-root/tools/security/prove-subject-source-profile-compatibility.py",
+      "sha256": "f0c528d534320bd264474ca12bc791cfa51cb886a4c967ab5caa74b0a37e315f",
+      "bytes": 2605
+    },
+    "result": {
+      "path": "/private/tmp/subject-source-profile-review-20261013/proof.json",
+      "sha256": "6f9c219228560880a13c7b3f3105a142e38718dff3a5fd8f400579eb37c2eeca",
+      "bytes": 4908
+    },
+    "qualification": "Finite transcribed current guard predicates only. Subject accepted union RR/SERIALIZABLE RO and source RC RW have empty intersection; independent accepted-profile witnesses prevent accidental contradictory-domain vacuity. Not source refinement, installation authentication or native authority theorem."
+  },
+  "independentDecoderControls": {
+    "count": 8,
+    "allPassed": true,
+    "runner": {
+      "path": "/private/tmp/subject-source-profile-review-20261013/check.py",
+      "sha256": "eb989d1cc53dc6f325ffb8cd367afd58fb6ac9455d6c8c782e62d0bcdd9edbb9",
+      "bytes": 2999
+    },
+    "results": {
+      "path": "/private/tmp/subject-source-profile-review-20261013/decoder-results.json",
+      "sha256": "cad00f9c46893903894a5097a1b36fa2152dd6d97e7ad505503fde6775d7fe7a",
+      "bytes": 1241
+    },
+    "qualification": "Actual epoch callback decoder with synthetic exact host/cursor, not native SQL/custody. Exact positive plus wrongOID/name/arity/missing descriptors and malformed row population; bad descriptors cause zero helper fetches and zero callback invocations."
+  },
+  "parentNativeEvidence": {
+    "independentlyRerun": false,
+    "tests": 13,
+    "durationSeconds": 6.451,
+    "log": {
+      "path": "/private/tmp/epoch-profile-native.log",
+      "sha256": "0439ea94a11275b840f7a1003c2a839914453a63cb05e94e6fb56cdfe18ef2d1",
+      "bytes": 112
+    },
+    "cleanup": {
+      "path": "/private/tmp/epoch-profile-native-evidence/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    "boundary": {
+      "path": "/private/tmp/epoch-profile-boundaries.log",
+      "sha256": "1b9f1d5287c8e465ff78f1578bb2d6ec438e7fa98b0af4bf27fd8da69e8731fe",
+      "bytes": 83
+    },
+    "fixtureCorrection": "Final regression changes helper inside original caller transaction; shared host test teardown rolls back, so fake helper replacement does not persist into other tests. First failed fixture run is not treated as final evidence."
+  },
+  "conclusion": "Current original profiles do not compose in one original transaction. Documentation accurately preserves this missing integration prerequisite without relaxing guards or promoting acceptance. Epoch descriptor validation now precedes row fetching; selected native regression is transactional and parent final suite/cleanup succeeds.",
+  "scopeLimitations": [
+    "Current profile predicates are reviewed source premises, not mechanically extracted or proved refined implementation. Other native/helper/caller prerequisites remain separate.",
+    "A future integrated profile or stronger-isolation fresh producer is a design obligation, not an admitted implementation.",
+    "Descriptor ordering avoids foreign Loader.load row decoding; stock driver may construct configured loaders before descriptor access and remains trusted.",
+    "No complete writer/source/role lifetime, current-authority cut, issuer, protected release, readiness or132-case promotion.",
+    "No native mutation, generic API change or broad formal expansion by reviewer."
+  ],
+  "findings": []
+}
