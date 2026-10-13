@@ -238,6 +238,13 @@ endpoint aliases, edge retargeting and final-state multiplicity checks. Obtain
 actual type/relationship references through the public methods. Caller rollback
 of a successful group is the dry-run path.
 
+For an idempotent atomic batch, submit one group containing every operation,
+with one request key and one committed receipt token after commit recovery. Retain the original semantic input and request
+for retries. The consumer example exercises two creates, committed replay and
+a failed batch precondition leaving no partial object; native unique condition
+IDs are explicitly mapped to the authored action labels. Independent per-item
+batches are host orchestration with separate groups and caller transactions.
+
 `context.input(..., preconditions=(...))` evaluates `ObjectExists`, `KeyAbsent`,
 `PropertyEquals`, `RelationshipAbsent` and `RelationshipCount` against locked
 prestate. Failed conditions return their caller IDs/reasons in order with no
@@ -517,7 +524,7 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has thirteen original read/action/import workflows
+must be supported. The original consumer corpus has fourteen original read/action/import workflows
 exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
 Mixed imports exercise native create/skip/reject results and provenance; a missing
 relationship endpoint is a separately identified host rejection after public
