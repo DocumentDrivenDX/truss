@@ -31,5 +31,8 @@
   "versions": "PostgreSQL18.6,psycopg3.3.6 binary/libpq18.6,Core0.8 KeyTuple3/Bun1.4.2,Weft subject selection0.1",
   "promotedBackendCases": 0,
   "requiredBackendCases": 132,
-  "originalOneOperationRegressionSeconds": 5.303
+  "originalOneOperationRegressionSeconds": 5.303,
+  "preservedOwnerMain": "963a9f83",
+  "mergedNativeReplaySeconds": 4.488,
+  "mergedQualification": "Native7-case component and Python ownership checks pass with owner v0.0.1 sources. No wheel/public installation or protected admission claim."
 }

@@ -7356,3 +7356,14 @@ A separate private read-committed/read-write path acquires the existing fresh ep
 
 
 Astra Ultra independently passes eight ordering/composition controls using genuine original Weft/UMF owners with a synthetic original host/cursor, and replays the final3UNSAT/4SAT proof byte-identically with exact source pins. It verifies parent native7-case, original19-group and prior one-operation regression packets plus exact server cleanup without claiming native replay. No actionable finding remains in the declared-cut experimental scope; broad fixture grants and every missing protected deployment/authority gate remain explicit. Source-pinned review and independent controls are retained alongside the receipt.
+
+## Initial GitHub release — owner request, 2026-10-13
+
+Ship Trussv0.0.1 from the committed0.38 candidate before continuing0.39 numeric
+facet work. Publish the pure Python wheel/source archive with checksums and
+runtime/dependency pins after basic installed native checks on Linuxx86_64 and
+macOSarm64. Publish Weftv0.4.3 PG18 compiler wheels through its own tag workflow;
+keep distribution/crate versions aligned and preserve original platform tags.
+Only the final tag-triggered job can write a draft release; finalize after every
+asset is uploaded. Existing runtime CI discovers its built wheel dynamically.
+No stable-layout, managed-service, protected-engine or facet support claim follows.

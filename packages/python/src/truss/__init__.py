@@ -1,4 +1,4 @@
-"""Experimental Python components; complete Truss engine APIs are unfinished."""
+"""Embeddable experimental Truss Python interface; see the declared runtime profile."""
 from .execution import ExecutionFailure, Ok, Error, Outcome, TransactionHandle, Isolation, AccessMode
 from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedCursor, FeedPage, FeedConsumer, FeedAcknowledged, FeedUnavailable
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
