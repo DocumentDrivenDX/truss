@@ -77,8 +77,8 @@ BEGIN
    IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;
    tightening:=(old->>'nullability'='absent-allowed' AND row->>'nullability'='required') IS TRUE;
    IF tightening THEN
-    IF (old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary') AND row->>'scalar_type'=old->>'scalar_type') IS DISTINCT FROM TRUE THEN
-     RAISE EXCEPTION 'required tightening requires a retained singular scalar' USING ERRCODE='0A000';END IF;
+    IF ((old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary') AND row->>'scalar_type'=old->>'scalar_type') OR (old->>'cardinality' IN ('array','map') AND row->>'cardinality'=old->>'cardinality' AND truss.valid_property_definition(jsonb_populate_record(NULL::truss.prop_def,candidate)) IS TRUE)) IS DISTINCT FROM TRUE THEN
+     RAISE EXCEPTION 'required tightening requires a supported retained scalar or flat container' USING ERRCODE='0A000';END IF;
     FOREACH facet_map IN ARRAY ARRAY[coalesce(old->'_originalField'->'facets','{}'::jsonb),coalesce(row->'_originalField'->'facets','{}'::jsonb)] LOOP
      IF NOT ((facet_map='{}'::jsonb OR old->>'scalar_type'='integer' AND facet_map='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR old->>'scalar_type'='decimal' AND facet_map='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN
       RAISE EXCEPTION 'required tightening needs known scalar facets' USING ERRCODE='0A000';END IF;
@@ -118,7 +118,7 @@ BEGIN
    keys:=keys||jsonb_build_array(row||jsonb_build_object('type_id',assigned,'prop_ids',remapped));
   END IF;
  END LOOP;
- -- Relationship IDs and lineage remain stable; only independent widening is admitted.
+ -- Relationship IDs and lineage remain stable; independent multiplicity evolution retains endpoints.
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'rel_def') LOOP
   SELECT v.value INTO old FROM jsonb_array_elements(relations) v WHERE v.value->>'document_id'=row->>'document_id' AND v.value->>'module'=row->>'module' AND v.value->>'rel_id'=row->>'rel_id';
   IF old IS NULL THEN relationship_next:=relationship_next+1;assigned:=relationship_next;ELSE assigned:=(old->>'rel_type_id')::int;END IF;
@@ -131,14 +131,15 @@ BEGIN
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'source') x WHERE NOT (new_source->'source') @> jsonb_build_array(x.value))
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'target') x WHERE NOT (new_source->'target') @> jsonb_build_array(x.value)) THEN
     RAISE EXCEPTION 'relationship source meaning must be retained' USING ERRCODE='0A000';END IF;
+   IF ((candidate->>'source_min')::int>(old->>'source_min')::int OR (candidate->>'target_min')::int>(old->>'target_min')::int
+    OR candidate->'source_max'<>'null'::jsonb AND (old->'source_max'='null'::jsonb OR (candidate->>'source_max')::int<(old->>'source_max')::int)
+    OR candidate->'target_max'<>'null'::jsonb AND (old->'target_max'='null'::jsonb OR (candidate->>'target_max')::int<(old->>'target_max')::int))
+    AND (old_source->'source' IS DISTINCT FROM new_source->'source' OR old_source->'target' IS DISTINCT FROM new_source->'target') THEN
+    RAISE EXCEPTION 'tightening requires unchanged endpoint declarations' USING ERRCODE='0A000';END IF;
    IF old->>'lifecycle' IS DISTINCT FROM 'independent' OR candidate->>'lifecycle' IS DISTINCT FROM 'independent'
     OR (old-ARRAY['source_min','source_max','target_min','target_max','definition_rev','definition_doc_ord','definition_document_id','doc_ord','since_rev']) IS DISTINCT FROM (candidate-ARRAY['source_min','source_max','target_min','target_max','definition_rev','definition_doc_ord','definition_document_id','doc_ord','since_rev'])
-    OR (candidate->>'source_min')::int>(old->>'source_min')::int OR (candidate->>'target_min')::int>(old->>'target_min')::int
-    OR old->'source_max'='null'::jsonb AND candidate->'source_max'<>'null'::jsonb
-    OR old->'target_max'='null'::jsonb AND candidate->'target_max'<>'null'::jsonb
-    OR candidate->'source_max'<>'null'::jsonb AND (candidate->>'source_max')::int<(old->>'source_max')::int
-    OR candidate->'target_max'<>'null'::jsonb AND (candidate->>'target_max')::int<(old->>'target_max')::int THEN
-    RAISE EXCEPTION 'relationship change must be independent widening' USING ERRCODE='0A000';END IF;
+ THEN
+    RAISE EXCEPTION 'relationship change requires unchanged independent endpoints and meaning' USING ERRCODE='0A000';END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
    SELECT coalesce(jsonb_agg(v.value),'[]') INTO relations FROM jsonb_array_elements(relations) v WHERE v.value->>'rel_type_id'<>assigned::text;
   END IF;

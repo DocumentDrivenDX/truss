@@ -62,7 +62,7 @@ class RuntimeUpgradeTests(unittest.TestCase):
                         self.assertEqual(admin.execute("SELECT oid,relowner,relacl FROM pg_class WHERE oid='truss.runtime_feed_ack_receipt'::regclass").fetchone(),original_receipt_table)
                         self.assertEqual(admin.execute('SELECT to_jsonb(r) FROM truss.runtime_feed_ack_receipt r ORDER BY registration_id,prior_sha256,target_sha256').fetchall(),original_receipts)
                     self.assertEqual(admin.execute('SELECT release_id FROM truss.catalog_runtime_installation').fetchone()[0],genesis_release)
-                    self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.48-candidate')
+                    self.assertEqual(admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],'truss-catalog-runtime/0.50-candidate')
                     from truss._security_home_installation import bootstrap_security_homes_in_transaction
                     admin.execute('BEGIN');bootstrap_host=adopt_psycopg_host(admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
                     try:
