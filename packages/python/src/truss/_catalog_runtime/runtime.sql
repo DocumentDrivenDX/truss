@@ -377,7 +377,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.50-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.51-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -440,6 +440,12 @@ BEGIN
   FOR doc IN SELECT value FROM jsonb_array_elements(original_docs) LOOP
    SELECT value INTO STRICT selected_doc FROM jsonb_array_elements(original_input->'documents') d WHERE d.value->>'documentId'=doc->>'documentId';
    original:=(doc->>'originalText')::jsonb;
+   IF selected_doc->'umfProfile'='{"identity":"umf-record-interpretation","version":"7c0f0c98beee2cc1a5a407992b5c53cc2616da8e","sha256":"88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3"}'::jsonb THEN
+    validation_profile:='{"identity":"truss-umf-validation-evidence","version":"0.1.0","sha256":"ec2880b96e17af8a4a4bef74d4aad3da21ca177599c16c9d6070c2ec7d91e972"}'::jsonb;
+   ELSIF selected_doc->'umfProfile'='{"identity":"umf-record-interpretation","version":"c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3","sha256":"db1d813cafd6f48cb20549ea7e847aca754b53c21bbc624ff88aa963d917c90b"}'::jsonb THEN
+    validation_profile:='{"identity":"truss-umf-validation-evidence","version":"0.1.0","sha256":"668f717089e9d5fbb097429c93c31b36ad2ebb562a6a76c5971c7725e7002c97"}'::jsonb;
+   ELSE RAISE EXCEPTION 'original selected diagnostic producer required' USING ERRCODE='22023';END IF;
+
    IF EXISTS(SELECT 1 FROM jsonb_object_keys(original) k WHERE k NOT IN ('umf','id','modules','vocabularies','extensions')) THEN
     RAISE EXCEPTION 'selected original document members required' USING ERRCODE='0A000'; END IF;
    SELECT value INTO STRICT interpretation FROM jsonb_array_elements(metadata_source->'documentInterpretations') i WHERE i.value->>'documentId'=doc->>'documentId';
@@ -524,7 +530,7 @@ BEGIN
     OR encode(sha256(decoded_raw),'hex') IS DISTINCT FROM artifact->'diagnostic'->>'sha256'
     OR artifact->>'classification' IS DISTINCT FROM 'upstream_validation'
     OR artifact->'source' IS DISTINCT FROM jsonb_build_object('kind','document','artifact',selected_doc->'artifact','sourcePointer','')
-    OR artifact->'diagnosticProfile' IS DISTINCT FROM validation_profile THEN
+    OR artifact->'diagnosticProfile' IS DISTINCT FROM expected_diagnostics->ni->'profile' THEN
     RAISE EXCEPTION 'complete original diagnostic correspondence required' USING ERRCODE='22023'; END IF;
    ni:=ni+1;
   END LOOP;

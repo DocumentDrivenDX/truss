@@ -1,5 +1,6 @@
 """Host-owned imports through the existing protected group and source producers."""
 import base64,json
+from contextlib import nullcontext
 from hashlib import sha256
 from uuid import uuid4
 from .contracts import (SequenceValue,ABSENT,ProfilePin,SelectedMutationConfiguration,MapValue,MapEntry,TextValue,NullValue,BooleanValue)
@@ -62,7 +63,7 @@ def _payload(record,metadata):
         target=StoredObjectReference(identity=record.identity.target),values=values,order_key=order_key)
 
 
-def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun_executable='bun'):
+def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_engine=None):
     if type(input) is not ImportInput or type(documents) is not tuple or any(type(d) is not CatalogDocument for d in documents) or any(type(r) not in (ObjectImportRecord,EdgeImportRecord) for r in input.records):
         return ImportInvalid(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"shape"}'))
     try:
@@ -79,36 +80,54 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
         return ImportInvalid(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"envelope"}'))
     attempt_id=uuid4().hex;outcomes=[];batches=[];visited=set();configuration=None;context=None
     def report(status='processed'):
+        committed={b.batch_id for b in batches if b.disposition=='committed'}
+        unknown={b.batch_id for b in batches if b.disposition=='commit_unknown'}
         pending={b.batch_id for b in batches if b.disposition=='pending'}
         rolled={b.batch_id for b in batches if b.disposition=='rolled_back'}
         unresolved={b.batch_id for b in batches if b.disposition=='transaction_unresolved'}
-        counts=ImportCounts(created_committed='0',created_pending=str(sum(type(o) is ImportCreated and o.batch_id in pending for o in outcomes)),
-            created_rolled_back=str(sum(type(o) is ImportCreated and o.batch_id in rolled for o in outcomes)),created_commit_unknown='0',
+        counts=ImportCounts(created_committed=str(sum(type(o) is ImportCreated and o.batch_id in committed for o in outcomes)),created_pending=str(sum(type(o) is ImportCreated and o.batch_id in pending for o in outcomes)),
+            created_rolled_back=str(sum(type(o) is ImportCreated and o.batch_id in rolled for o in outcomes)),created_commit_unknown=str(sum(type(o) is ImportCreated and o.batch_id in unknown for o in outcomes)),
             created_transaction_unresolved=str(sum(type(o) is ImportCreated and o.batch_id in unresolved for o in outcomes)),attempt_unknown=str(sum(type(o) is ImportAttemptUnknown for o in outcomes)),
             skipped=str(sum(type(o) is ImportSkipped for o in outcomes)),rejected=str(sum(type(o) is ImportRejected for o in outcomes)),unprocessed=str(len(input.records)-len(visited)))
         return ImportReport(attempt_id=attempt_id,input_count=str(len(input.records)),executed_catalog_revision=context['catalog']['revision'],import_profile=input.import_profile,
-            selected_configuration=configuration,input_sha256=sha256(b'truss-canonical/0.1.0\ntruss-import-input/0.1.0\n'+original).hexdigest(),execution='host_adopted',status=status,
+            selected_configuration=configuration,input_sha256=sha256(b'truss-canonical/0.1.0\ntruss-import-input/0.1.0\n'+original).hexdigest(),execution='host_adopted' if _engine is None else 'engine_owned',status=status,
             outcomes=tuple(sorted(outcomes,key=lambda o:int(o.input_index))),batches=tuple(batches),unprocessed_indices=tuple(str(i) for i in range(len(input.records)) if i not in visited),counts=counts)
     def release_report(cursor,observed):
         pin_cursor(cursor)
+        def original_scope():
+            cursor.execute('SELECT truss.group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            native=json.loads(bytes(cursor.fetchone()[0]))
+            if any(native[k]!=context[k] for k in ('installationId','sourceEpoch','authorizedScopeIdentity')):
+                raise ValueError('Original engine import disclosure context required')
+        if _engine is not None:original_scope()
         for outcome in outcomes:
             if type(outcome) not in (ImportCreated,ImportSkipped):continue
             record=input.records[int(outcome.input_index)]
             cursor.execute('SELECT truss.import_report_record_authority(%s,%s,%s,%s)',(_bytes(_wire(record.identity)),record.kind,manifest['releaseId'],digest),prepare=False);cursor.fetchone()
+        if _engine is not None:original_scope()
         return True
     def interrupted(error):
+        nonlocal host,transaction
+        if _engine is not None:
+            if batches and batches[-1].disposition in ('pending','rolled_back','transaction_unresolved'):
+                batches[-1],settlement_error=_engine.settle(batches[-1],commit=False)
+                if settlement_error is not None:return ImportExecutionFailed(error=settlement_error,report=None)
+            try:
+                if batches and batches[-1].disposition=='commit_unknown':_engine.close()
+                host,transaction=_engine.begin()
+            except Exception:return ImportExecutionFailed(error=error,report=None)
         custody=host._transactions.get(transaction._key)
         if context is None or host._custody.quarantined or custody is None or not custody.usable:
             return ImportExecutionFailed(error=error,report=None)
         admitted=host._run_operation(transaction,release_report)
         if isinstance(admitted,Error):
             recovery=admitted.error
-            if recovery.code=='transaction_unusable' or recovery.retry_scope=='whole_transaction':error=recovery
+            if error.code!='commit_unknown' and (recovery.code=='transaction_unusable' or recovery.retry_scope=='whole_transaction'):error=recovery
             return ImportExecutionFailed(error=error,report=None)
         retained_report=report('interrupted')
         return ImportExecutionFailed(error=error,report=retained_report if len(_bytes(_wire(retained_report)))<=8388608 else None)
     try:
-        with _HostOperationReservation(host):
+        with _HostOperationReservation(host) if _engine is None else nullcontext():
             def admit(cursor,observed):
                 pin_cursor(cursor);cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
                 native=json.loads(bytes(cursor.fetchone()[0]))
@@ -117,6 +136,17 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
                 if any(_wire(r.payload_profile)!=native['importPayloadProfile'] for r in input.records):raise ValueError('Selected import payload profile required')
                 cursor.execute('SELECT pg_current_xact_id()::text',prepare=False);native['hostTransactionId']='truss-pending-transaction:'+native['sourceEpoch']+':'+cursor.fetchone()[0]
                 return native
+            def advance():
+                nonlocal host,transaction,context
+                try:host,transaction=_engine.begin()
+                except Exception:return ExecutionFailure('transaction_unusable','Engine import context unavailable')
+                admitted=host._run_operation(transaction,admit)
+                if isinstance(admitted,Error):return admitted.error
+                new_context=admitted.value
+                if {k:v for k,v in new_context.items() if k!='hostTransactionId'}!={k:v for k,v in context.items() if k!='hostTransactionId'}:
+                    return ExecutionFailure('execution_obligation','Engine import catalog or configuration changed')
+                context=new_context
+                return None
             admitted=host._run_operation(transaction,admit)
             if isinstance(admitted,Error):return ImportExecutionFailed(error=admitted.error,report=None)
             context=admitted.value;selected=context['selectedConfiguration']
@@ -154,7 +184,13 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
                 result=host._run_operation(transaction,execute)
                 if isinstance(result,Ok):
                     visited.add(index)
-                    outcomes.append(result.value);batches.append(PendingBatch(batch_id=batch_id,input_indices=(str(index),),host_transaction_id=context['hostTransactionId']));continue
+                    outcomes.append(result.value);batches.append(PendingBatch(batch_id=batch_id,input_indices=(str(index),),host_transaction_id=context['hostTransactionId']))
+                    if _engine is not None:
+                        batches[-1],settlement_error=_engine.settle(batches[-1],commit=True)
+                        if settlement_error is not None:return interrupted(settlement_error)
+                        restart_error=advance()
+                        if restart_error is not None:return interrupted(restart_error)
+                    continue
                 failure=result.error
                 native_attempt=host._custody.last_attempt if host._custody.last_attempt is not before_attempt else None
                 contained=native_attempt is not None and native_attempt.phase=='contained' and not host._custody.quarantined
@@ -167,7 +203,13 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
                 rejected=known[0] or {'22023':'invalid','23505':'conflict','42501':'unauthorized','0A000':'unsupported_profile','P1004':'missing_endpoint','P1005':'dependencies'}.get(failure.sql_state)
                 if contained and failure.code=='execution_obligation' and failure.retry_scope=='none' and rejected is not None:
                     visited.add(index);outcomes.append(ImportRejected(input_index=str(index),batch_id=batch_id,code=rejected))
-                    batches.append(RolledBackBatch(batch_id=batch_id,input_indices=(str(index),),rollback_evidence_sha256=sha256(proof).hexdigest()));continue
+                    batches.append(RolledBackBatch(batch_id=batch_id,input_indices=(str(index),),rollback_evidence_sha256=sha256(proof).hexdigest()))
+                    if _engine is not None:
+                        batches[-1],settlement_error=_engine.settle(batches[-1],commit=False)
+                        if settlement_error is not None:return interrupted(settlement_error)
+                        restart_error=advance()
+                        if restart_error is not None:return interrupted(restart_error)
+                    continue
                 if entered[0]:
                     visited.add(index)
                     if type(observed) in (ImportCreated,ImportSkipped):outcomes.append(observed)

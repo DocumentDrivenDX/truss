@@ -1,6 +1,6 @@
 CREATE FUNCTION truss.runtime_import_profiles() RETURNS jsonb
 LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
- SELECT '{"importProfile":{"identity":"truss-host-scalar-import","version":"0.2","sha256":"993731fae1997a344819f56b9618c689080deedaf7627a4d82948d01972eec1c"},"importPayloadProfile":{"identity":"truss-scalar-import-payload","version":"0.2","sha256":"45180a79836394b3c3c945cfe908b67e3a45ab3c81362f052b12ae45e7042281"},"importKeyProfile":{"identity":"truss-selected-umf-scalar-key","version":"0.2","sha256":"e4b325c5906c759776e7ffbb5b9c298caa23034339d90c4e2e7a9d74eb002708"},"configurationProfile":{"identity":"truss-installed-engine-forbid","version":"0.1","sha256":"502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"}}'::jsonb;
+ SELECT '{"importProfile":{"identity":"truss-scalar-import","version":"0.3","sha256":"f6bd20e9e82cbf0f6e8884ac07083dfee6dc8f67c4aa2c486b561db873dfd572"},"importPayloadProfile":{"identity":"truss-scalar-import-payload","version":"0.2","sha256":"45180a79836394b3c3c945cfe908b67e3a45ab3c81362f052b12ae45e7042281"},"importKeyProfile":{"identity":"truss-selected-umf-scalar-key","version":"0.2","sha256":"e4b325c5906c759776e7ffbb5b9c298caa23034339d90c4e2e7a9d74eb002708"},"configurationProfile":{"identity":"truss-installed-engine-forbid","version":"0.1","sha256":"502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"}}'::jsonb;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_import_profiles() FROM PUBLIC;
 

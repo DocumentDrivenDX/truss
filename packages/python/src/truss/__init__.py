@@ -111,3 +111,6 @@ __all__ += ["FeedAckReceipt", "FeedReceiptAcknowledged", "FeedAckReconciled"]
 
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 __all__ += ["TraversalHop", "TraversalComplete", "TraversalLimited"]
+
+from .engine_import import run_import_batches
+__all__ += ["run_import_batches"]

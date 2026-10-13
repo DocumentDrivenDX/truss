@@ -66,11 +66,11 @@
     {
       "name": "importProfile",
       "pin": {
-        "identity": "truss-host-scalar-import",
-        "version": "0.2",
-        "sha256": "993731fae1997a344819f56b9618c689080deedaf7627a4d82948d01972eec1c"
+        "identity": "truss-scalar-import",
+        "version": "0.3",
+        "sha256": "f6bd20e9e82cbf0f6e8884ac07083dfee6dc8f67c4aa2c486b561db873dfd572"
       },
-      "definition": "Host-adopted scalar imports;objects before edges preserving submitted indices;explicit admitted primary-key/typed endpoint identity;live/reserved skips before replacement payload decode;eligible-only creates via native group provider;per-record standalone final invariants;immutable load/source provenance;pending caller settlement;finite record/input/report byte limits;no internal retry;object payload values may contain bounded one-level scalar arrays/maps under current value profile;edge values and provenance remain scalar;exact legacy payload profile admitted only for scalar object/edge values"
+      "definition": "Ownership-aware scalar imports/0.3;caller-adopted effects pending host settlement;standalone run_import_batches owns private psycopg connection and one-record READ COMMITTED transactions;whole-input digest and attempt;objects before edges retaining global indices;identity-first live/reserved skip and eligible-only creates;original payload/key/provenance semantics;current catalog/configuration re-admission per transaction;confirmed COMMIT before cleanup;confirmed rollback distinct from commit_unknown and transaction_unresolved;no automatic writer retry;earlier committed batches retained after later failure;current complete disclosure authority;empty input has no artificial batch/commit;bounded records/input/report and ordinary deadlines;command witness SHA256 frames truss-engine-import-command/0.1 newline plus canonical Python JSON of command,batch,backendPid;witness records supported psycopg command acknowledgement, not a transferable receipt or exact report recovery"
     },
     {
       "name": "importPayloadProfile",
@@ -161,6 +161,17 @@
         "sha256": "bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"
       },
       "definition": "truss-import-payload/0.1.0 numeric-free duplicate-free UTF8 JSON;rootless object values or independent directed edge values/order;exact scalar cells;optional exact map source;known author/at/system string or null;identity-bearing payload fields must agree;decode only after eligible identity"
+    }
+  ],
+  "retainedProfiles": [
+    {
+      "name": "importProfile",
+      "pin": {
+        "identity": "truss-host-scalar-import",
+        "version": "0.2",
+        "sha256": "993731fae1997a344819f56b9618c689080deedaf7627a4d82948d01972eec1c"
+      },
+      "definition": "Host-adopted scalar imports;objects before edges preserving submitted indices;explicit admitted primary-key/typed endpoint identity;live/reserved skips before replacement payload decode;eligible-only creates via native group provider;per-record standalone final invariants;immutable load/source provenance;pending caller settlement;finite record/input/report byte limits;no internal retry;object payload values may contain bounded one-level scalar arrays/maps under current value profile;edge values and provenance remain scalar;exact legacy payload profile admitted only for scalar object/edge values"
     }
   ]
 }

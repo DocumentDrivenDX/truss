@@ -33,11 +33,11 @@
     {
       "name": "import",
       "pin": {
-        "identity": "truss-native-host-import-capability",
-        "version": "0.2",
-        "sha256": "0de480b1fddd1385548394a395fd044c9aa97ff84f2afc97908905249c463456"
+        "identity": "truss-native-import-capability",
+        "version": "0.3",
+        "sha256": "f704df76b4b31e49c37394f54e3dabb08636acaf62fca0a6ad2b72e730c23554"
       },
-      "definition": "Native host-adopted import capability/0.2: immutable explicit original source documents; context and primary identity construction; per-record scalar object/independent edge import dispositions; original provenance and reservations; pending caller settlement; no engine-owned batches or verified commit. Rootless object payloads additionally admit bounded one-level scalar arrays/maps with original item definitions and current item-module readers; edge payload/provenance remains scalar."
+      "definition": "Native import capability/0.3: caller-adopted imports stay pending under caller settlement;standalone engine runner privately owns its connection and one-record bounded transactions with confirmed durability;shared identity-first native object/independent edge executor and original source documents;scalar/flat-container payloads and current item readers;whole-input indices and objects-before-edges;confirmed prior commits preserved after interruption;no writer retries or original report replay;normal logical bounds and deadlines"
     },
     {
       "name": "feed",
@@ -92,6 +92,17 @@
         "sha256": "576c7cdc116552fd72448c627e3cc313734ffb87865b268bd73e628784aafd25"
       },
       "definition": "truss-feed-receipt-visibility/0.1;stock PostgreSQL18.6 READ COMMITTED read-only unassigned caller transaction;original authority-issued committed receipt position retained unchanged;current original receipt operation readers and registered complete-source feed consumer authority;canonical protected same-installation/source-epoch/consumer-registration checkpoint;exclusive checkpoint nextXid greater than original writerXid;false only valid committed authorized receipt with consumer behind;current checkpoint/registration/receipt/authority recheck before either result;caller-asserted committed ACK is not independently verified downstream application;no waits or retries"
+    }
+  ],
+  "retainedProfiles": [
+    {
+      "name": "import",
+      "pin": {
+        "identity": "truss-native-host-import-capability",
+        "version": "0.2",
+        "sha256": "0de480b1fddd1385548394a395fd044c9aa97ff84f2afc97908905249c463456"
+      },
+      "definition": "Native host-adopted import capability/0.2: immutable explicit original source documents; context and primary identity construction; per-record scalar object/independent edge import dispositions; original provenance and reservations; pending caller settlement; no engine-owned batches or verified commit. Rootless object payloads additionally admit bounded one-level scalar arrays/maps with original item definitions and current item-module readers; edge payload/provenance remains scalar."
     }
   ]
 }
