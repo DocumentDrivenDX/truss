@@ -5,7 +5,7 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.1.0.dev38`,
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.1`,
 native runtime `0.38-candidate`, layout `0.16`
 candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.8`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
@@ -14,55 +14,47 @@ server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The Python distribution version is distinct from the native runtime and layout
-versions. Subsequent distributed package changes receive a new version even when
-the native runtime remains unchanged. This candidate is available from committed
-source; it has not been published to a Python package index.
+The initial release is [v0.0.1](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.1).
+The Python distribution version is distinct from native runtime/layout versions;
+future distributed changes receive a new package version.
+
+## Install the release
+
+Use a fresh Python3.11+ environment on the declared Linuxx86_64/macOSarm64
+PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
+
+```sh
+python -m pip install --only-binary=:all: \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.1 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.3 \
+  --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
+  'truss-toolkit[local,native,query]==0.0.1'
+```
+
+Bun1.4.2 is still required for UMF preparation and key production. Each release
+publishes package checksums and source/runtime/backend pins. The Truss release
+workflow exercises the exact uploaded wheel with published Weft0.4.3 and verified
+PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Python 3.11 or later, Bun 1.4.2, and a Rust/Cargo toolchain are required for
-this source-install path. The Weft wheel must include `truss-postgresql-pg18`
-and runtime backend `0.4.8` with Truss0.38 compatibility. The old conformance
-build helper does not build this runtime. In a fresh Python virtual environment,
-from the Truss repository root:
+Check out the v0.0.1 tag to obtain the examples, then run with a new directory:
 
 ```sh
-python -m pip install maturin==1.9.6
-git clone https://github.com/DocumentDrivenDX/weft.git ../weft
-python scripts/build-weft-runtime-python.py ../weft /tmp/truss-weft-build
-python -m pip install --force-reinstall --no-deps /tmp/truss-weft-build/wheels/*.whl
-python -m pip install --find-links \
-  https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  './packages/python[local,native]'
+git clone --branch v0.0.1 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```
 
-The PG18 wheel is distributed through the owner GitHub release rather than the
-configured Python package index; `--find-links` lets pip select the matching
-Python/platform wheel.
+The [example](examples/adopter_workflow.py) installs the runtime, registers the
+[original UMF document](examples/notes.umf.json), configures ordinary-person access,
+commits Notes and a link, recovers the original request, reads by key, compiles a
+relationship query, rolls back a dry-run, imports a Note and durably saves feed
+pages before source ACKs. Administrator SQL sets up roles only.
 
-Reuse an existing Weft clone if available. The helper builds committed source
-`cb10d8e6fbf60c43c0daa0c2e7422375fd1e13e5`, independent of the clone's working
-files. Normal builds may download Cargo dependencies; add `--offline` only when
-they are cached. Force-reinstall matters because older conformance wheels also
-use package version0.1.0. The helper uses maturin from the caller's Python environment and builds for
-that same interpreter.
-
-Use a new or empty directory. The [example](examples/adopter_workflow.py) installs
-the runtime, registers the [original UMF document](examples/notes.umf.json),
-configures ordinary-person access, commits two Notes and a link, replays the
-original request, reads by key, compiles a relationship query, rolls back a
-dry-run, imports a Note and saves feed pages durably before source ACKs. It uses
-administrator SQL only for role setup. Data and sink files remain after the
-server stops; a failed run preserves source state for diagnosis.
-
-The [portable public preview0.10](../../docs/helix/04-build/corpus/public-python/0.10/README.md)
-provides two JSON-driven basic and exact-scalar examples for this current runtime.
-They retain22 and10 observations respectively, with explicit caller transaction
-phases. Run them using the installed package and a new directory as documented
-there. Prior0.9 retains its original runtime0.35 pins and needs its historical
-runner/package; neither preview claims full cross-language interchange.
+The [portable preview0.10](../../docs/helix/04-build/corpus/public-python/0.10/README.md)
+retains22 basic and10 exact-scalar observations for runtime0.38. Earlier previews
+retain their historical pins; none claims independent interchange.
 
 For a local server with an installed Truss candidate, use the explicit launcher
 option after installing the `[local,native]` extras:

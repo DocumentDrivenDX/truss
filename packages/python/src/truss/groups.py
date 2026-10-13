@@ -1,4 +1,4 @@
-"""Public draft grouped-operation contracts, not callable mutation support.
+"""Public grouped-operation contracts; select providers through the reference assembly.
 
 All facade calls are synchronous. The host transaction owns durability; creating
 these values never proves application, namespace authority, replay or commit.

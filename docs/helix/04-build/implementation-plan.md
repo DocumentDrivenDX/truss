@@ -7332,3 +7332,14 @@ This is a concrete new adopter implementation item, not a preparation-only fix:
 connect authoritative facet admission, exact no-rounding enforcement and Weft
 query lowering on one versioned runtime with a basic create/read/query check.
 No source-version reinterpretation or compiler-invented facets is authorized.
+
+## Initial GitHub release — owner request, 2026-10-13
+
+Ship Trussv0.0.1 from the committed0.38 candidate before continuing0.39 numeric
+facet work. Publish the pure Python wheel/source archive with checksums and
+runtime/dependency pins after basic installed native checks on Linuxx86_64 and
+macOSarm64. Publish Weftv0.4.3 PG18 compiler wheels through its own tag workflow;
+keep distribution/crate versions aligned and preserve original platform tags.
+Only the final tag-triggered job can write a draft release; finalize after every
+asset is uploaded. Existing runtime CI discovers its built wheel dynamically.
+No stable-layout, managed-service, protected-engine or facet support claim follows.

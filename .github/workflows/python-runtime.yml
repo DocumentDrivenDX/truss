@@ -23,13 +23,13 @@ jobs:
       - name: Build the pure Python Truss wheel
         run: python -m pip wheel --no-deps packages/python --wheel-dir /tmp/truss-wheels
       - name: Install checksum-verified released PostgreSQL wheels
-        run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel /tmp/truss-wheels/truss_toolkit-0.0.1.dev0-py3-none-any.whl
+        run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find /tmp/truss-wheels -maxdepth 1 -name 'truss_toolkit-*.whl' -print -quit)"
       - name: Run focused installed runtime checks
         shell: bash
         run: |
           runtime_wheel=$(find /tmp/runtime-wheels -maxdepth 1 -name '*.whl' -print -quit)
           test -n "$runtime_wheel"
-          python scripts/check-local-runtime-smoke.py "$runtime_wheel" /tmp/truss-wheels/truss_toolkit-0.0.1.dev0-py3-none-any.whl --run-id "ci-release-${{ github.run_id }}-${{ github.run_attempt }}"
+          python scripts/check-local-runtime-smoke.py "$runtime_wheel" "$(find /tmp/truss-wheels -maxdepth 1 -name 'truss_toolkit-*.whl' -print -quit)" --run-id "ci-release-${{ github.run_id }}-${{ github.run_attempt }}"
       - name: Retain native checks and cleanup evidence
         if: always()
         uses: actions/upload-artifact@v4
