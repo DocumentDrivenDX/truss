@@ -49,9 +49,9 @@ BEGIN
   IF old IS NOT NULL THEN
    old_source:=truss.catalog_plan_source(prior,old);new_source:=truss.catalog_plan_source(fresh,row);
    IF old_source=new_source THEN CONTINUE;END IF;
-   IF old_source-'members' IS DISTINCT FROM new_source-'members'
-    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'members') WITH ORDINALITY m(value,n) WHERE new_source->'members'->(m.n::int-1) IS DISTINCT FROM m.value) THEN
-    RAISE EXCEPTION 'existing record keys, names and retained members require explicit evolution support' USING ERRCODE='0A000';END IF;
+   IF old_source-ARRAY['members','name'] IS DISTINCT FROM new_source-ARRAY['members','name']
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'members') m GROUP BY m.value HAVING count(*)>(SELECT count(*) FROM jsonb_array_elements(new_source->'members') n WHERE n.value=m.value)) THEN
+    RAISE EXCEPTION 'existing record keys, meaning and retained members require explicit evolution support' USING ERRCODE='0A000';END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
    SELECT coalesce(jsonb_agg(v.value),'[]') INTO types FROM jsonb_array_elements(types) v WHERE v.value->>'type_id'<>assigned::text;
   END IF;
