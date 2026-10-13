@@ -6984,3 +6984,12 @@ The draft authority adapter remains unpromoted until the exact model registers
 and its original expectations execute. Replica variants and independent native
 interchange remain unqualified. This registration gap takes priority over adding
 a second implementation or broader test machinery.
+
+
+### Private selected routine-hook binding — 2026-10-13
+
+[Explicit hook-bound writer and retained native controls](evidence/security-routine-hook-binding-20261013/receipt.json) add a private entry point that checks the provided original native superuser hook owner, original routine function metadata/body/ACL, two exact ALWAYS hooks/events, all3 selected function tags and active PostgreSQL event_triggers=on before and after callback execution inside the original guard. The independent routine source epoch remains required. The legacy private epoch-only entry point remains unattested and returns no security-ready result.
+
+Astra identified that exact enabled metadata alone missed the global event_triggers=off setting; native pre-off and measured late-off controls now refuse and preserve caller state. Missing/disabled/origin-only/dropped/extra/wrong-tag/wrong-function/wrong-owner hooks refuse before callback; late hook disable rolls back data/epochs/metadata. Existing native source epoch/race controls use the stricter entry point. The existing source census already included full pg_event_trigger metadata: a new native control verifies disabling changes only that section, exact native row metadata agrees, and rollback restores the image. No census SQL extension was needed.
+
+Full11 native tests,873 import boundaries and exact bytes of both Python wheel modules pass. The unchanged conditional3UNSAT/2SAT epoch arithmetic has refreshed source custody, not a new source-refinement theorem. Endpoint checks do not exclude transient hook/GUC/source disable-and-restore or establish complete mutation/lifetime closure. Original owner/administrator/callback premises, other DDL/role/procedure/extension/handler/library routes, production activation and final release/sink remain unqualified. These are B11/L13 prerequisites only; no required case is promoted and all132 remain in scope.

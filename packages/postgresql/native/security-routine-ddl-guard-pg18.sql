@@ -45,3 +45,6 @@ CREATE EVENT TRIGGER truss_security_routine_ddl_start ON ddl_command_start
 CREATE EVENT TRIGGER truss_security_routine_ddl_end ON ddl_command_end
  WHEN TAG IN ('CREATE FUNCTION','ALTER FUNCTION','DROP FUNCTION')
  EXECUTE FUNCTION truss.security_routine_ddl_guard();
+
+ALTER EVENT TRIGGER truss_security_routine_ddl_start ENABLE ALWAYS;
+ALTER EVENT TRIGGER truss_security_routine_ddl_end ENABLE ALWAYS;

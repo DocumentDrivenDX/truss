@@ -1,0 +1,7 @@
+{
+  "wheelSha256": "327dec3c968efb00757e78e6e5339935cfbe2f8c08d0f5525ad0c4828f62587f",
+  "exactModules": [
+    "_security_data_writer.py",
+    "_security_data_writer_binding.py"
+  ]
+}

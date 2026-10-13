@@ -14,7 +14,7 @@ from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
 from .catalog_runtime import _pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
-from ._security_data_writer_binding import require_data_writer_homes
+from ._security_data_writer_binding import require_data_writer_homes, require_routine_source_hooks
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,8 +26,8 @@ class PendingDataWriterGeneration:
     security_ready: bool = False
 
 
-def write_data_in_transaction(host, transaction, *, installation_identity,
-                              authored_profile, expected_generation, expected_event_count, home_oids, action):
+def _write_data_in_transaction(host, transaction, *, installation_identity,
+                              authored_profile, expected_generation, expected_event_count, home_oids, action, hook_owner_oid=None):
     if (type(host) is not PsycopgHost or type(installation_identity) is not bytes
             or not 1<=len(installation_identity)<=32768 or type(authored_profile) is not bytes
             or not 1<=len(authored_profile)<=32768 or type(expected_generation) is not int
@@ -70,6 +70,7 @@ def write_data_in_transaction(host, transaction, *, installation_identity,
             if len(rows)!=1 or type(rows[0][0]) is not int or not 0<=rows[0][0]<=9223372036854775807:
                 raise ValueError('Original bounded routine source epoch required')
             return rows[0][0]
+        if hook_owner_oid is not None:require_routine_source_hooks(cursor,original[0][1],hook_owner_oid)
         original_source_epoch=source_epoch()
         # Issue callback DML only after the separate guard/claim commands.
         result=action(cursor)
@@ -77,6 +78,7 @@ def write_data_in_transaction(host, transaction, *, installation_identity,
             result.close();raise ValueError('Original data writer action must complete synchronously')
         if result is not None:raise ValueError('Original data writer action must complete or raise')
         if source_epoch()!=original_source_epoch:raise ValueError('Original routine source epoch changed during data writer')
+        if hook_owner_oid is not None:require_routine_source_hooks(cursor,original[0][1],hook_owner_oid)
         require_data_writer_homes(cursor,original[0][1],installation_identity,authored_profile,home_oids)
         cursor.execute('SELECT installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard WHERE singleton=1',prepare=False)
         if cursor.fetchmany(2)!=[(installation_identity,authored_profile,expected_generation+expected_event_count)]:
@@ -87,3 +89,19 @@ def write_data_in_transaction(host, transaction, *, installation_identity,
         if cursor.fetchone()!=(original_path,):raise ValueError('Original data writer caller path restoration required')
         return PendingDataWriterGeneration(installation_identity,authored_profile,expected_generation+expected_event_count)
     return host._run_operation(transaction,write)
+
+
+def write_data_in_transaction(host, transaction, *, installation_identity, authored_profile,
+                              expected_generation, expected_event_count, home_oids, action):
+    """Legacy private epoch-only spike; does not attest routine hook installation."""
+    return _write_data_in_transaction(host,transaction,installation_identity=installation_identity,authored_profile=authored_profile,
+        expected_generation=expected_generation,expected_event_count=expected_event_count,home_oids=home_oids,action=action)
+
+
+def write_data_with_routine_hooks_in_transaction(host, transaction, *, installation_identity, authored_profile,
+                                               expected_generation, expected_event_count, home_oids, hook_owner_oid, action):
+    """Private selected hook-bound spike; original hook owner input is a custody premise."""
+    if type(hook_owner_oid) is not int or not 1<=hook_owner_oid<=4294967295:
+        return Error(ExecutionFailure('execution_obligation','Original bounded routine hook owner required'))
+    return _write_data_in_transaction(host,transaction,installation_identity=installation_identity,authored_profile=authored_profile,
+        expected_generation=expected_generation,expected_event_count=expected_event_count,home_oids=home_oids,action=action,hook_owner_oid=hook_owner_oid)

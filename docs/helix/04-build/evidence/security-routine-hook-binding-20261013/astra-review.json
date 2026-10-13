@@ -1,0 +1,17 @@
+{
+  "status": "read-only-review-no-remaining-actionable-findings",
+  "sourceDigests": {
+    "packages/python/src/truss/_security_data_writer.py": "007b21091cc79823eeb215284f5dc00a18dcb3dcee836f82e85df1c0e7ad35a6",
+    "packages/python/src/truss/_security_data_writer_binding.py": "74e6925d9623ebaccfd3bf9b2d4b988a27c91c9ebe9835bbe0cae8c7990eb735",
+    "packages/postgresql/native/security-routine-ddl-guard-pg18.sql": "04ec378e45b6e23b153230a663d7e3abf5bf9e1b13174541d8ecbc139dc1235f",
+    "packages/python/tests/test_security_public_ontology_native.py": "2cc99e366c046583a115ac2d833bb2109041060ffab992f7a7a3a53893842358"
+  },
+  "checks": {
+    "pythonAst": "passed",
+    "routineFunctionBodyHashMatches": true,
+    "boundaries": "Python module boundaries passed (873 imports); TypeScript/native gates remain open"
+  },
+  "resolvedFinding": "Both endpoint checks now require native event_triggers=on before qualifying exact always-enabled hooks. Pre-off refusal and post-DML late-off rollback controls added. Missing tags, wrong function, actual alternate-superuser owner and provided alternate-superuser owner negatives present.",
+  "nativeTests": "Inspected controls only; parent owns native replay. No reviewer database mutation.",
+  "scope": "Qualified original owner input, selected routine hooks and endpoint checks only. No interval hook/source custody, complete mutator routes, source refinement, issuer, publication sink or admitted profile."
+}
