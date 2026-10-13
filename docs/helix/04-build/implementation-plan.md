@@ -6913,6 +6913,12 @@ Astra found two custody/selection gaps during review: native arrays bypassed sca
 
 These are B11 selected routine/trigger drift and L13 profile consistency prerequisites only. Endpoint equality does not establish DDL lifetime or ABA exclusion, complete writer/role/source coverage, callback effect inventory, caller/subject/issuer authentication or final release. No required case is promoted; all132 remain in scope.
 
+
+### Native source-byte lifetime and coordinated DDL — 2026-10-12
+
+[Retained paired controls and conditional induction](evidence/security-ddl-lifetime-20261012/receipt.json) demonstrate that selected routine source-byte endpoint checks can accept a competing administrator changing and restoring a harmless comment during the actual guarded data callback. This establishes a source-byte ABA limitation, not changed authorization semantics. The actual authority-change helper waits on the original data guard, starts its callback only after release, and advances the generation after the data transaction commits.
+
+The abstract source-state model passes2UNSAT/3SAT, independently replayed by Astra Ultra. Its lifetime invariant requires every source change to occur while no protected operation is active. Native reentrant locking alone does not establish that premise. Complete DDL/source participation, same-transaction reentrant mutation exclusion, handler/library closure and Python/SQL refinement remain unproved. Full11 native tests and871 import boundaries pass. These are selected B11 lifetime and L13 generation coordination prerequisites only; no required case is promoted and all132 remain in scope.
 ### Exact timestamp/binary SQL projections — 2026-10-12
 
 Public Python queries now return all six scalar families, including complete
@@ -6944,3 +6950,10 @@ reviewed the plan and actual runner/data; [receipt](evidence/python-scalar-previ
 records case/fixture/source digests and the basic test result. Original0.1–0.4
 cases remain unchanged. This is one Python preview, not full required corpus or
 independent bidirectional interchange; those deliverables remain open.
+
+
+### Native same-transaction source mutation — 2026-10-12
+
+[Actual reentrant guard counterexample](evidence/security-reentrant-ddl-20261012/receipt.json) confirms that a protected data callback can reacquire its transaction's original FOR UPDATE guard, install a harmless routine-source comment during guarded DML, restore the source and pass endpoint checks. Outer rollback preserves original data/generation. Guard acquisition therefore does not imply inactive-only source mutation. An admitted lifetime protocol must additionally prevent or prove absence of same-transaction source mutation during protected use, as well as close competing mutation routes.
+
+Full11 native tests pass. The conditional model passes2UNSAT/4SAT; the added SAT query repeats the active mutation transition and is not a native lock-owner theorem. This remains a selected B11/L13 prerequisite/counterexample, with no changed authorization semantics demonstrated and no required case promoted.
