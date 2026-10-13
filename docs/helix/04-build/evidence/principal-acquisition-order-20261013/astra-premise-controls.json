@@ -1,0 +1,97 @@
+{
+  "solver": "4.15.4",
+  "count": 6,
+  "scope": "Independent satisfiability checks for nonvacuity and event-equality independence in the retained abstract model; no runtime refinement.",
+  "controls": [
+    {
+      "name": "during-reset refusal premises are satisfiable",
+      "expected": "sat",
+      "observed": "sat",
+      "witness": {
+        "initial_gate": "0",
+        "reset_complete": "2",
+        "final_gate": "2",
+        "publish": "2",
+        "closure": "1",
+        "reset_ok": "True"
+      },
+      "lease": "False",
+      "quarantine": "True"
+    },
+    {
+      "name": "closure after reset but before gate also quarantines",
+      "expected": "sat",
+      "observed": "sat",
+      "witness": {
+        "initial_gate": "0",
+        "reset_complete": "1",
+        "final_gate": "3",
+        "publish": "3",
+        "closure": "2",
+        "reset_ok": "True"
+      },
+      "lease": "False",
+      "quarantine": "True"
+    },
+    {
+      "name": "failed-reset premise is satisfiable",
+      "expected": "sat",
+      "observed": "sat",
+      "witness": {
+        "initial_gate": "0",
+        "reset_complete": "1",
+        "final_gate": "1",
+        "publish": "1",
+        "closure": "2",
+        "reset_ok": "False"
+      },
+      "lease": "False",
+      "quarantine": "False"
+    },
+    {
+      "name": "future-closed-acquisition premise is satisfiable",
+      "expected": "sat",
+      "observed": "sat",
+      "witness": {
+        "initial_gate": "1",
+        "reset_complete": "2",
+        "final_gate": "2",
+        "publish": "2",
+        "closure": "0",
+        "reset_ok": "True"
+      },
+      "lease": "False",
+      "quarantine": "False"
+    },
+    {
+      "name": "old escape survives strictly separated closure/reset/gate",
+      "expected": "sat",
+      "observed": "sat",
+      "witness": {
+        "initial_gate": "0",
+        "reset_complete": "2",
+        "final_gate": "3",
+        "publish": "3",
+        "closure": "1",
+        "reset_ok": "True"
+      },
+      "lease": "True",
+      "quarantine": "False"
+    },
+    {
+      "name": "inserted-yield escape has closure strictly inside gap",
+      "expected": "sat",
+      "observed": "sat",
+      "witness": {
+        "initial_gate": "0",
+        "reset_complete": "1",
+        "final_gate": "1",
+        "publish": "3",
+        "closure": "2",
+        "reset_ok": "True"
+      },
+      "lease": "True",
+      "quarantine": "False"
+    }
+  ]
+}
