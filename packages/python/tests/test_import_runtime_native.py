@@ -5,7 +5,7 @@ from hashlib import sha256
 from truss import (Ok,HistoryEntity,ImportSourceFound,ImportSourceAbsent,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration)
 from truss.contracts import MapValue,MapEntry,TextValue,NullValue,ExactArtifact
 from truss.groups import GroupSuccess,Delete,StoredObjectReference,NullOrderKey
-from truss.imports import ImportReported,ImportCreated,ImportSkipped,ImportRejected,EdgeImportRecord,EdgeImportIdentity
+from truss.imports import ImportReported,ImportCreated,ImportSkipped,ImportRejected,EdgeImportRecord
 import test_object_mutations_native as mutation_tests
 
 class ImportRuntimeTests(mutation_tests.ObjectMutationTests):
@@ -67,7 +67,12 @@ class ImportRuntimeTests(mutation_tests.ObjectMutationTests):
         a,b=(r.identity for r in created.response.semantic.results)
         pin=assembly.get_relationship_reference_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer();context=assembly.import_context_in_transaction(tx).value
-        edge=EdgeImportRecord(identity=EdgeImportIdentity(relationship_definition_pin=pin,source=a,target=b),payload=context.edge_payload((),NullOrderKey()),payload_profile=context.payload_profile)
+        imports=assembly.imports(assembly.import_selection,documents=self.documents,bun_executable='/opt/homebrew/bin/bun').capability
+        built=imports.edge_import_record_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B',
+            source_endpoint=a,target_endpoint=b,values=(),order_key=NullOrderKey())
+        self.assertIsInstance(built,Ok);edge=built.value
+        self.assertIsInstance(edge,EdgeImportRecord);self.assertEqual(edge.identity.relationship_definition_pin,pin)
+        self.assertIs(edge.identity.source,a);self.assertIs(edge.identity.target,b)
         object_record=self.record(assembly,tx,label='third',record='B')
         report=self.execute(assembly,tx,context,(edge,object_record));self.assertTrue(all(isinstance(v,ImportCreated) for v in report.outcomes))
         self.assertGreater(int(report.outcomes[0].identity.id),int(report.outcomes[1].identity.id))

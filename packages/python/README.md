@@ -134,7 +134,7 @@ broader draft protocol does not imply that every declared profile is implemented
 | Object IDs and business keys | `get_object_in_transaction`, `lookup_key_in_transaction` |
 | Object and relationship pages | `page_objects_in_transaction`, `get_edge_in_transaction`, `page_edges_in_transaction` |
 | Build and apply groups | `group_context_in_transaction`, `get_type_reference_in_transaction`, `get_relationship_reference_in_transaction`, `apply_in_transaction` |
-| Imports and provenance | `import_context_in_transaction`, `object_import_record_in_transaction`, `import_in_transaction`, `lookup_import_source_in_transaction` |
+| Imports and provenance | `import_context_in_transaction`, `object_import_record_in_transaction`, `edge_import_record_in_transaction`, `import_in_transaction`, `lookup_import_source_in_transaction` |
 | Retained history | `page_history_in_transaction`, `reconstruct_in_transaction` |
 | Weft queries | `query_in_transaction`, or `compiled_execution(assembly.compiled_selection)` |
 | Receipt visibility | `reached_in_transaction` |
@@ -206,6 +206,24 @@ the general outer `Ok`/`Error` wrapper. Host-owned imports return per-item creat
 dispositions. Retain the load ID, authenticated actor and immutable source
 provenance. Rejected items do not imply that other items in a caller-committed
 batch failed. Engine-owned transaction batches are not implemented.
+
+Build relationship import records through the same selected import provider:
+
+```python
+from truss.groups import NullOrderKey
+
+record = imports.edge_import_record_in_transaction(
+    tx, document_id='notes', module_id='notes', relationship_id='references',
+    source_endpoint=first_identity, target_endpoint=second_identity,
+    values=(), order_key=NullOrderKey(),
+)
+```
+
+The builder returns `Outcome[EdgeImportRecord]` with the actual accepted
+relationship pin and exactly the supplied endpoint identities. Optional `source`
+carries immutable import provenance, as it does for object records. Construction
+does not establish live endpoints or authorize a write: `import_in_transaction`
+validates current endpoint types, access, reservations and payload semantics.
 
 ## Values, reads and query limits
 
