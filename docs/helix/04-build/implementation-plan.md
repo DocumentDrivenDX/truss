@@ -7049,3 +7049,7 @@ The original AddSolution action workflow passes public business-key resolution, 
 ### Original consumer idempotent action retry — 2026-10-13
 
 The original AddUseCase retry case passes native KeyAbsent/create, direct caller-key request selection, canonical-input retention, repeated native apply, identical committed token and one-object readback. [Evidence](evidence/original-consumer-action-retry-20261013.md) covers nine original read/action workflows together. The cache retains inputs only, not outcomes. Consumer dry-run/other handler mappings, full corpus/interchange and protected security activation remain open; no runtime or action-language contract was broadened.
+
+### Original consumer dry-run adoption — 2026-10-13
+
+The original AddSolution preview executes the public group, rolls back, publishes only validation, and leaves k1 available for the real write. [Evidence](evidence/original-consumer-dry-run-20261013.md) covers ten original workflows with the dry-run case in a fresh original fixture. Missing-target validation is an authorized host key-read observation, not an invented native identity or general key-exists predicate. Full adapter/corpus/interchange and protected security activation remain open.

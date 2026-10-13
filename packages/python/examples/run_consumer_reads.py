@@ -8,15 +8,26 @@ from uuid import uuid4
 
 import psycopg
 from adopter_workflow import transaction, success, expect
-from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument, ObjectFound
+from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument, ObjectFound, ObjectNotFound, ReaderCatalog
 from truss.contracts import MapValue, MapEntry, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
-    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created)
+    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created, GroupFailed, PreconditionFailed)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.dry-run-writes-nothing-and-keeps-the-key')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
+    dry_case='action.dry-run-writes-nothing-and-keeps-the-key'
+    if dry_case in case_ids and len(case_ids)>1:
+        directory=Path(directory).resolve()
+        if directory.exists() and any(directory.iterdir()):raise ValueError('New or empty runtime directory required')
+        other=run_reads(corpus_path,directory/'primary',bun=bun,case_ids=tuple(name for name in case_ids if name!=dry_case))
+        preview=run_reads(corpus_path,directory/'dry-run',bun=bun,case_ids=(dry_case,))
+        if (other['corpusSha256'],other['modelSha256'])!=(preview['corpusSha256'],preview['modelSha256']):
+            raise AssertionError('Original corpus/model changed between isolated workflows')
+        return {**other,'observations':other['observations']+preview['observations'],
+            'checked':list(dict.fromkeys(other['checked']+preview['checked'])),
+            'caseIsolation':'dry-run uses a fresh original basic fixture'}
     corpus_path = Path(corpus_path).resolve()
     original = corpus_path.read_bytes()
     corpus = json.loads(original)
@@ -125,10 +136,16 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             invocations = {}
             for step in case['steps']:
                 if step['op'] == 'apply':
-                    supported={'action.applies-atomically-and-reads-back':'catalog.AddSolution','action.idempotent-retry-returns-the-original':'catalog.AddUseCase'}
-                    if case['id'] not in supported or step['action']!=supported[case['id']] or not {'op','as','action','inputs','expect'}<=set(step) or set(step)-{'op','as','action','inputs','expect','save','key'}:
+                    supported={'action.applies-atomically-and-reads-back':'catalog.AddSolution','action.idempotent-retry-returns-the-original':'catalog.AddUseCase','action.dry-run-writes-nothing-and-keeps-the-key':'catalog.AddSolution'}
+                    if case['id'] not in supported or step['action']!=supported[case['id']] or not {'op','as','action','inputs','expect'}<=set(step) or set(step)-{'op','as','action','inputs','expect','save','key','dry_run'}:
                         raise ValueError('Unsupported action case or controls; no action write attempted')
-                    if set(step['expect'])-{'receipt','refs'} or set(step['expect'].get('receipt',{}))-{'created','linked','replayed','token_is'}:
+                    dry_run=step.get('dry_run',False)
+                    if type(dry_run) is not bool or 'dry_run' in step and case['id']!=dry_case:
+                        raise ValueError('Unsupported dry-run controls; no action write attempted')
+                    if dry_run:
+                        if set(step['expect'])!={'validation'} or set(step['expect']['validation'])-{'ok','effects','replay','failure_ids'}:
+                            raise ValueError('Unsupported preview observations; no action write attempted')
+                    elif set(step['expect'])-{'receipt','refs'} or set(step['expect'].get('receipt',{}))-{'created','linked','replayed','token_is'}:
                         raise ValueError('Unsupported action observation; no action write attempted')
                     if sha256(source).hexdigest()!='849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696':
                         raise ValueError('Selected action handler requires the exact retained consumer document')
@@ -138,6 +155,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                     if set(inputs)!=required_inputs or any(type(value) is not str for value in inputs.values()):
                         raise ValueError('Selected action inputs are required strings')
                     invocation=(case_actor,step['key']) if 'key' in step else (case_actor,uuid4().hex)
+                    if dry_run and invocation in invocations:raise ValueError('Committed-key preview is outside this selected workflow')
                     if invocation in invocations:
                         action,original_inputs,case_input,case_request=invocations[invocation]
                         if action!=step['action'] or original_inputs!=inputs:
@@ -145,12 +163,23 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         with transaction(people[case_actor]) as (assembly,tx):
                             applied=expect(success(assembly.apply_in_transaction(tx,case_input,case_request,documents=documents,bun_executable=bun)),GroupSuccess)
                     else:
-                        with transaction(people[case_actor]) as (assembly,tx):
+                        with transaction(people[case_actor],commit=not dry_run) as (assembly,tx):
                             operations=[CreateObject(type_definition_pin=types[record_id].definition_pin,values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=inputs[name])) for name in ('code','name')),ownership=RootlessOwnership(),alias='s')]
                             if record_id=='Solution':
                                 use_case=next(e for e in module['elements'] if e['id']=='UseCase')
                                 use_case_key=next(k for k in use_case['keys'] if k.get('primary'))
-                                target=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='UseCase',key_id=use_case_key['id'],values=(inputs['useCase'],),original_document=source,bun_executable=bun)),ObjectFound).object
+                                target_result=success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='UseCase',key_id=use_case_key['id'],values=(inputs['useCase'],),original_document=source,bun_executable=bun))
+                                if dry_run and isinstance(target_result,ObjectNotFound):
+                                    archived=expect(success(assembly.accepted_document_in_transaction(tx,document_id=document_id)),AcceptedDocument)
+                                    catalog=expect(success(assembly.reader_catalog_in_transaction(tx)),ReaderCatalog)
+                                    visible=next((m for m in catalog.modules if m['documentId']==document_id and m['moduleId']==module_id),None)
+                                    current_type=next((t for t in visible['types'] if t['recordId']=='UseCase' and t['kind']=='record' and not t['provisional']),None) if visible is not None else None
+                                    if archived.content!=source or visible is None or visible['documentSha256']!=sha256(source).hexdigest() or current_type is None or not any(k['typeId']==current_type['typeId'] and k['keyId']==use_case_key['id'] for k in visible['keys']):
+                                        raise ValueError('Current authorized fixture/key required for absence observation')
+                                    validation={'ok':False,'failure_ids':['use_case_exists']}
+                                    if validation!=step['expect']['validation']:raise AssertionError('Original absent-target preview differs')
+                                    continue
+                                target=expect(target_result,ObjectFound).object
                                 relation=next(r for r in module['relationships'] if r['name']=='addresses')
                                 reference=success(assembly.get_relationship_reference_in_transaction(tx,document_id=document_id,module_id=module_id,relationship_id=relation['id']))
                                 operations.append(CreateEdge(relationship_definition_pin=reference.definition_pin,source=AliasObjectReference(alias='s'),target=StoredObjectReference(identity=target.identity),values=(),order_key=NullOrderKey()))
@@ -162,7 +191,19 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                             context=success(assembly.group_context_in_transaction(tx))
                             case_input=context.input(tuple(operations),MapValue(entries=(MapEntry(key='x-action',value=TextValue(kind='string',text=step['action'])),)),preconditions=preconditions)
                             case_request=context.request(step['key'] if 'key' in step else 'consumer-action:'+invocation[1])
-                            applied=expect(success(assembly.groups(assembly.group_selection,documents=documents,bun_executable=bun).capability.apply_in_transaction(tx,case_input,case_request)),GroupSuccess)
+                            outcome=success(assembly.groups(assembly.group_selection,documents=documents,bun_executable=bun).capability.apply_in_transaction(tx,case_input,case_request))
+                            if dry_run and isinstance(outcome,GroupFailed) and isinstance(outcome.failure,PreconditionFailed):
+                                validation={'ok':False,'failure_ids':[f.condition_id for f in outcome.failure.failures]}
+                            else:
+                                applied=expect(outcome,GroupSuccess)
+                                if dry_run:
+                                    kinds={'create_object':'Create','create_edge':'Link'}
+                                    if any(not isinstance(r,Created) or r.operation not in kinds for r in applied.response.semantic.results):
+                                        raise AssertionError('Unexpected native preview effect result')
+                                    validation={'ok':True,'effects':[kinds[r.operation] for r in applied.response.semantic.results],'replay':applied.response.disposition=='replayed'}
+                        if dry_run:
+                            if validation!=step['expect']['validation']:raise AssertionError('Original rollback preview differs')
+                            continue
                         invocations[invocation]=(step['action'],dict(inputs),case_input,case_request)
                     # Retain the original request: obtain a committed receipt by retrying
                     # only after the caller's known successful outer commit.
@@ -271,7 +312,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
     return {'scope': 'selected original SQL/action observations; not complete adapter/corpus or interchange',
-        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if any(name.startswith('action.') for name in case_ids) else []),
+        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if any(name.startswith('action.') for name in case_ids) else []) + (['dry-run rollback and unconsumed request key','authenticated absent-target preview'] if dry_case in case_ids else []),
         'notChecked':['replica','complete consumer adapter mapping'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,

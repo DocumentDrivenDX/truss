@@ -503,7 +503,7 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has nine original read/action workflows
+must be supported. The original consumer corpus has ten original read/action workflows
 exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
 replica execution and the full consumer corpus remain unqualified.
 
@@ -517,4 +517,6 @@ member shape. Whole-object timestamps use exact six-fraction UTC strings from th
 
 The original consumer AddSolution example is a trusted host handler bound to the exact retained fixture document. It resolves a target by public business-key lookup, submits one create/link group with a native ObjectExists precondition and x-action origin, retains the invocation's original request for committed recovery, and reads the result through the public API. It does not interpret arbitrary UMF action declarations. Counts, initial disposition and versions come from native semantic results; the committed token is attached only after verified replay following the host's known commit.
 
-The selected AddUseCase retry workflow maps its caller key directly to the group request ID, applies the original native KeyAbsent predicate, and retains the canonical input/request for retry. Every repeated step still calls Truss; the host cache supplies no result. The original committed token and semantic result are returned with replay disposition, and readback finds one object. Dry-run and other consumer action cases remain explicitly outside this example handler; the underlying public group API's caller-rollback workflow is available separately.
+The selected AddUseCase retry workflow maps its caller key directly to the group request ID, applies the original native KeyAbsent predicate, and retains the canonical input/request for retry. Every repeated step still calls Truss; the host cache supplies no result. The original committed token and semantic result are returned with replay disposition, and readback finds one object. The original AddSolution dry-run case now uses the public caller-rollback group workflow; other consumer action cases remain outside this example handler.
+
+Dry-run previews execute the actual create/link group and roll back the caller transaction before returning validation. They return no provisional identity or receipt token and retain no invocation cache. A later real write with the same caller key is admitted normally. Missing-target previews require an exact public ObjectNotFound plus current authorized source/catalog/type/key visibility in the known fixture; other results refuse. This is a host authority observation, not a general native key-exists predicate. The dry-run case uses its own fresh basic fixture; rolled-back sequence allocations may still leave gaps.
