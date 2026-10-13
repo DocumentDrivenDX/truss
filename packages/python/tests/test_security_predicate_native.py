@@ -3,7 +3,7 @@ Not protected SQL admission, caller authentication or complete writer closure.
 @covers US-056-AC2
 @covers US-056-AC6
 """
-import json,os,subprocess
+import json,os,subprocess,psycopg
 from pathlib import Path
 from truss import Ok,ModuleAccessGrant,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
 from truss.contracts import MapValue,TextValue,BooleanValue
@@ -92,6 +92,8 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
    self.assertEqual(replay.value.response.semantic,changed.value.response.semantic)
    h.detach();c.commit()
   self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
+  # Only selected concurrent data exclusion, not authentication or same-txn closure.
+  self.admin.execute('LOCK TABLE truss.object IN SHARE MODE NOWAIT')
   mapped=self.prepare_accepted();self.assertIsInstance(mapped,Ok,str(self.host._custody.last_attempt.error))
   assessment=json.loads(mapped.value.accepted_catalog_assessment);payload={'request':request,'assessment':assessment}
   rendered=subprocess.run([binary],input=json.dumps(payload).encode(),capture_output=True,timeout=30)
@@ -103,6 +105,8 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   self.admin.execute('SET LOCAL standard_conforming_strings TO on')
   self.admin.execute('PREPARE membership_predicate(boolean) AS SELECT s.id,r.id,('+rule['expression']+') FROM truss.object s CROSS JOIN truss.object r WHERE s.type_id='+str(ids['Staff'])+' AND r.type_id='+str(ids['Resource'])+' ORDER BY s.id,r.id')
   truths=self.admin.execute('EXECUTE membership_predicate(true)').fetchall()
+  with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as writer:
+   with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('UPDATE truss.object SET props=props')
   self.assertEqual([row[2] for row in truths],[True,False,False,False,True,False])
   # Convert captured native cells, not authored expected rows, to original facts.
   def ref(element):return {'documentId':'domain','moduleId':'m','elementId':element}
