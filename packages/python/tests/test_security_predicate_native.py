@@ -108,6 +108,37 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=150ms -c statement_timeout=1500') as writer:
    with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('UPDATE truss.object SET props=props')
   self.assertEqual([row[2] for row in truths],[True,False,False,False,True,False])
+  selected=next(e for e in output['eligibility'] if e['action']=='read' and e['target']['elementId']=='Resource')
+  projections=','.join('('+r['expression']+') AS '+r['truthColumn'] for r in output['rules'] if r['target']['elementId']=='Resource')
+  self.admin.execute('PREPARE eligibility_predicate(boolean) AS SELECT sid,rid,('+selected['decisionExpression']+') FROM (SELECT s.id AS sid,r.id AS rid,'+projections+' FROM truss.object s CROSS JOIN truss.object r WHERE s.type_id='+str(ids['Staff'])+' AND r.type_id='+str(ids['Resource'])+') q ORDER BY sid,rid')
+  eligibility=self.admin.execute('EXECUTE eligibility_predicate(true)').fetchall()
+  self.assertEqual([r[2] for r in eligibility],['permit','deny','deny','deny','permit','deny'])
+  # Exercise emitted composition with original reader/require truth positions.
+  from itertools import product
+  for permit,required in product((False,None,True),repeat=2):
+   observed=self.admin.execute('SELECT ('+selected['decisionExpression']+') FROM (SELECT %s::boolean AS q0,%s::boolean AS q1) q',(permit,required)).fetchone()[0]
+   expected='indeterminate' if permit is None or required is None else 'permit' if permit and required else 'deny'
+   self.assertEqual(observed,expected)
+
+
+  # Separate selected-group composition controls, not fact/authentication tests.
+  from copy import deepcopy
+  for reverse in (False,True):
+   variant=deepcopy(request);policy_variant=json.loads(variant['policyJson'])
+   template=deepcopy(policy_variant['rules'][0]);policy_variant['rules']=[]
+   for effect in ('permit','require','forbid'):
+    rule_variant=deepcopy(template);rule_variant['id']=effect;rule_variant['effect']=effect
+    rule_variant.pop('disclosure',None);policy_variant['rules'].append(rule_variant)
+   if reverse:policy_variant['rules'].reverse()
+   variant['policyJson']=json.dumps(policy_variant)
+   composed=subprocess.run([binary],input=json.dumps({'request':variant,'assessment':assessment}).encode(),capture_output=True,timeout=30)
+   self.assertEqual(composed.returncode,0,composed.stderr.decode());packet=json.loads(composed.stdout)
+   decision_expression=next(e['decisionExpression'] for e in packet['eligibility'] if e['action']=='read')
+   columns={r['id']:r['truthColumn'] for r in packet['rules']}
+   for permit,required,forbidden in product((False,None,True),repeat=3):
+    actual=self.admin.execute('SELECT ('+decision_expression+') FROM (SELECT %s::boolean AS '+columns['permit']+',%s::boolean AS '+columns['require']+',%s::boolean AS '+columns['forbid']+') q',(permit,required,forbidden)).fetchone()[0]
+    expected='indeterminate' if None in (permit,required,forbidden) else 'permit' if permit and required and not forbidden else 'deny'
+    self.assertEqual(actual,expected)
   # Convert captured native cells, not authored expected rows, to original facts.
   def ref(element):return {'documentId':'domain','moduleId':'m','elementId':element}
   facts=[];by_id={};inventory=assessment['inventory']
@@ -136,4 +167,4 @@ class NativePredicateTests(accepted.AcceptedCatalogMappingTests):
   directory=os.environ.get('TRUSS_PREDICATE_EVIDENCE_DIR')
   if directory:
    root=Path(directory);root.mkdir(parents=True,exist_ok=True)
-   for name,value in (('request',request),('assessment',assessment),('rendered',output),('native-truths',truths),('original-simulator-comparisons',comparisons)):(root/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
+   for name,value in (('request',request),('assessment',assessment),('rendered',output),('native-truths',truths),('native-eligibility',eligibility),('original-simulator-comparisons',comparisons)):(root/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
