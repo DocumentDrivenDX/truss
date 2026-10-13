@@ -5,16 +5,16 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.2`,
-native runtime `0.39-candidate`, layout `0.16`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.9`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.3`,
+native runtime `0.40-candidate`, layout `0.16`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.10`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The numeric release is [v0.0.2](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.2).
+The current release is [v0.0.3](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.3).
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
@@ -25,23 +25,23 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.2 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.4 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.3 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.5 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.2'
+  'truss-toolkit[local,native,query]==0.0.3'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
 publishes package checksums and source/runtime/backend pins. The Truss release
-workflow exercises the exact uploaded wheel with published Weft0.4.4 and verified
+workflow exercises the exact uploaded wheel with published Weft0.4.5 and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.2 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.3 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.2 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.3 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```
@@ -150,7 +150,7 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.38 to 0.39 for published v0.0.2. The trusted administrator must quiesce consumers and
+0.23 through 0.39 to 0.40 for published v0.0.3. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -292,8 +292,8 @@ through floating point or lossy date conversions. Structured values, ownership
 and composed graphs remain unsupported. Retained history can reconstruct stored
 scalar images after updates/deletion; archival/offload and cleanup are unfinished.
 
-Business-key lookup and query pages currently require authored required-string
-keys. Direct object/edge pages have explicit live continuations. Query results
+Business-key lookup supports authored required string/integer/decimal18,4/boolean/binary
+keys. Query pages currently require authored required-string keys. Direct object/edge pages have explicit live continuations. Query results
 preserve absence versus null versus empty strings. Supported Weft queries include
 string/boolean/integer/decimal projection, filters, property joins, counts,
 ordering/limits, `alias.*`, and forward/inverse `HAS_RELATED`/`RELATED_KEYS` for
@@ -581,10 +581,10 @@ there is no cleanup API. The destination consumer verifies its own publication
 before ACK. Truss confirms source retention and checkpoint inclusion and does
 not verify another database's commit or grant history-deletion authority.
 
-### Exact numeric facets (v0.0.2)
+### Exact numeric facets (v0.0.3)
 
-The `0.0.2` package uses runtime `0.39-candidate` and Weft
-`0.4.4` / backend `0.4.9`. Fresh UMF 0.7 and 0.8 catalogs can declare signed
+Numeric support began in v0.0.2 and is retained by runtime `0.40-candidate`
+and Weft `0.4.5` / backend `0.4.10`. Fresh UMF 0.7 and 0.8 catalogs can declare signed
 64-bit integers and decimal precision 18, scale 4. Public creates, updates,
 imports, reads and compiled queries enforce these facets without float coercion
 or rounding. Decimal `1.2`, `1.2300` and `1.23000` are exact representable values;
@@ -595,9 +595,9 @@ Existing installation upgrades preserve original reports and receipts.
 
 These capabilities were added after v0.0.1.
 
-### Next feature tranche: typed business keys
+### Typed business keys (v0.0.3)
 
-Unpublished `0.0.3.dev0` / runtime `0.40-candidate` adds authored business-key
+The `0.0.3` package / runtime `0.40-candidate` adds authored business-key
 writes, updates, lookup, imports and key-absence preconditions for strings,
 integers, decimal(18,4), booleans and binary. The matching compiler is Weft
 `0.4.5` / backend `0.4.10`. Use existing `TextValue` and `BooleanValue` key
@@ -617,4 +617,4 @@ Equal decimal spellings identify the same key without changing stored tokens.
 Updates preserve old reservations; imports skip reserved or live identities.
 Historical committed requests retain their original results across upgrade.
 Timestamp/float keys are refused. Weft pagination and relationship-key projections
-still require string keys. This tranche is separate from released v0.0.2.
+still require string keys. This tranche was added after v0.0.2.
