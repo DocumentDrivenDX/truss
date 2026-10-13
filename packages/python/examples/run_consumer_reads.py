@@ -12,9 +12,9 @@ from truss import CatalogDocument, CapabilityAvailable, LocalPostgres, ModuleAcc
 from truss.contracts import MapValue, MapEntry, TextValue, NullValue
 from truss.imports import ImportReported, ImportCreated, ImportSkipped, ImportRejected, PendingBatch
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
-    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created, Changed, UpdateObject, GroupFailed, PreconditionFailed)
+    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created, Changed, UpdateObject, GroupFailed, PreconditionFailed, RequestNone)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.update-bumps-the-version-once', 'import.entities-before-relationships', 'import.identity-skip-and-provenance', 'action.dry-run-writes-nothing-and-keeps-the-key')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.update-bumps-the-version-once', 'import.entities-before-relationships', 'import.identity-skip-and-provenance', 'action.atomic-batch-is-all-or-nothing', 'action.dry-run-writes-nothing-and-keeps-the-key')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -135,7 +135,57 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             cursors = {}
             tokens = {}
             invocations = {}
+            batches = {}
             for step in case['steps']:
+                if step['op']=='apply_batch':
+                    if case['id']!='action.atomic-batch-is-all-or-nothing' or step['action']!='catalog.AddUseCase' or step['atomic'] is not True or step['as']!='erik' or set(step)-{'op','as','action','atomic','key','items','expect'} or sha256(source).hexdigest()!='849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696':
+                        raise ValueError('Exact original atomic AddUseCase batch required')
+                    items=step['items']
+                    if len(items)!=2 or any(set(item)!={'code','name'} or any(type(v) is not str for v in item.values()) for item in items):
+                        raise ValueError('Selected two-item string batch required')
+                    original_items=tuple((item['code'],item['name']) for item in items)
+                    saved=batches.get(step.get('key')) if 'key' in step else None
+                    with transaction(people[step['as']]) as (assembly,tx):
+                        if saved is not None:
+                            prior_items,batch_input,batch_request,prior_semantic,prior_token=saved
+                            if original_items!=prior_items:raise ValueError('Changed-input batch retry is outside this workflow')
+                        else:
+                            record=next(e for e in module['elements'] if e['id']=='UseCase')
+                            primary=next(k for k in record['keys'] if k.get('primary'))
+                            context=success(assembly.group_context_in_transaction(tx))
+                            condition_ids={f'batch:{index}:fresh':'fresh' for index in range(len(items))}
+                            conditions=tuple(KeyAbsent(id=identity,reason='a use case with that code exists',type_definition_pin=types['UseCase'].definition_pin,key_id=primary['id'],values=(TextValue(kind='string',text=items[index]['code']),)) for index,identity in enumerate(condition_ids))
+                            operations=tuple(CreateObject(type_definition_pin=types['UseCase'].definition_pin,values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=item[name])) for name in ('code','name')),ownership=RootlessOwnership(),alias=f'batch:{index}') for index,item in enumerate(items))
+                            batch_input=context.input(operations,MapValue(entries=(MapEntry(key='x-action',value=TextValue(kind='string',text=step['action'])),)),preconditions=conditions)
+                            batch_request=context.request(step['key']) if 'key' in step else RequestNone()
+                        outcome=success(assembly.apply_in_transaction(tx,batch_input,batch_request,documents=documents,bun_executable=bun))
+                        if 'error' in step['expect']:
+                            failed=expect(expect(outcome,GroupFailed).failure,PreconditionFailed)
+                            if any(f.condition_id not in condition_ids for f in failed.failures):raise AssertionError('Unknown native batch condition ID')
+                            if step['expect']!={'error':'PreconditionFailed','failure_ids':[condition_ids[f.condition_id] for f in failed.failures]}:
+                                raise AssertionError('Original atomic batch failure differs')
+                        else:
+                            applied=expect(outcome,GroupSuccess)
+                            results=applied.response.semantic.results
+                            if len(results)!=len(items) or any(not isinstance(result,Created) or result.operation!='create_object' or result.alias!=f'batch:{index}' for index,result in enumerate(results)):
+                                raise AssertionError('Atomic batch requires two actual native object creations')
+                    # Counts/tokens are exposed only after the caller's known commit.
+                    if 'error' in step['expect']:continue
+                    if saved is not None:
+                        committed=expect(applied.response,CommittedReceiptReplay)
+                        if committed.semantic!=prior_semantic or committed.receipt_token!=prior_token:
+                            raise AssertionError('Atomic batch original semantic result/token differs')
+                    else:
+                        with transaction(people[step['as']]) as (assembly,tx):
+                            committed=expect(expect(success(assembly.apply_in_transaction(tx,batch_input,batch_request,documents=documents,bun_executable=bun)),GroupSuccess).response,CommittedReceiptReplay)
+                        if committed.semantic!=applied.response.semantic or not committed.receipt_token:
+                            raise AssertionError('Atomic batch committed recovery differs')
+                        batches[step['key']]=(original_items,batch_input,batch_request,committed.semantic,committed.receipt_token)
+                    summary={'succeeded':len(results),'failed':0,'one_token':bool(committed.receipt_token),'replayed':list(range(len(results))) if applied.response.disposition=='replayed' else []}
+                    if any(summary[name]!=value for name,value in step['expect']['batch'].items()):raise AssertionError('Original atomic batch summary differs')
+                    with transaction(people[step['as']],read_only=True) as (assembly,tx):
+                        if not expect(success(assembly.reached_in_transaction(tx,committed.receipt_token)),ReceiptIncluded).included:raise AssertionError('Atomic batch receipt not included')
+                    continue
                 if step['op']=='import' and case['id']=='import.identity-skip-and-provenance':
                     first=[{'type':'UseCase','key':'uc-7','properties':{'name':'Old'},'original_author':'ann','original_at':None},
                         {'type':'UseCase','key':'uc-1','properties':{'name':'overwritten?'}},
@@ -420,6 +470,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
     return {'scope': 'selected original SQL/action observations; not complete adapter/corpus or interchange',
         'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if any(name.startswith('action.') for name in case_ids) else []) + (['dry-run rollback and unconsumed request key','authenticated absent-target preview'] if dry_case in case_ids else []) + (['original edge-first import input mapped through object-first public calls in one caller transaction','original import counts and relationship readback'] if 'import.entities-before-relationships' in case_ids else []) + (['native mixed-import created/skipped/rejected results','separately host-observed missing relationship endpoint','original import author and load provenance','repeated load invokes native import and skips'] if 'import.identity-skip-and-provenance' in case_ids else []),
+        'batchScope':'one native atomic group; unique condition IDs mapped to authored labels; original committed semantic/token replay' if 'action.atomic-batch-is-all-or-nothing' in case_ids else None,
         'notChecked':['replica','complete consumer adapter mapping'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,

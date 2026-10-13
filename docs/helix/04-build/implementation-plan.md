@@ -7288,3 +7288,12 @@ Astra found wrong-OID helper rows were fetched before descriptor refusal. Exact 
 
 
 Astra Ultra independently replays26 bounded observation/source/custody controls; wrong-OID fetch count is zero after the correction. A separate real binary Transformer probe confirms constructor execution before row load, explicitly excluded from the row-decoding guarantee. It inspects parent native19-group and boundary16 results without claiming a native rerun. Final merged source/docs pins, controls and review are retained in `evidence/python-subject-observation-20261013/astra-review.json`; no remaining actionable finding in the qualified historical-observation scope.
+
+## Public atomic batch example — 2026-10-13
+
+The original consumer two-create atomic batch now executes as one public group,
+recovers its original committed result/token and exposes a genuine failed key
+precondition without a partial object. Explicit native-to-authored condition-ID
+mapping preserves original labels. One basic installed PG18 test passes fourteen
+selected workflows; see `evidence/original-consumer-atomic-batch-20261013.md`.
+No runtime change, general action planner or broader test campaign was added.
