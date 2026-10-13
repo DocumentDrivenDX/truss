@@ -1,0 +1,18 @@
+[
+  {
+    "value": null,
+    "outcomeId": "original",
+    "disposition": "original"
+  },
+  {
+    "outcomeId": "absent",
+    "disposition": "absent"
+  },
+  {
+    "value": {
+      "binaryHex": "0102"
+    },
+    "outcomeId": "original",
+    "disposition": "original"
+  }
+]
