@@ -1764,3 +1764,14 @@ STP-056 B11/B12/L11 and US-056 AC9/AC10 prerequisites. C01/C02 credentials,
 original caller/issuer/mapping/target and C04–C07 source/publication/recovery/full
 qualification remain open. No public endpoint or backend binding; full goal
 active at26/132 with106 unbound required cases.
+
+
+### Native graph facts through the shared original policy — 2026-10-13
+
+A separately authored fixed graph mapping projects actual truss.object/truss.edge rows into the same named UMF record captures as the flat adapter. Typed native IDs locate endpoints; Staff/Project/Resource semantic string keys come from selected property cells, and edge endpoints are reconstructed through those keys. Missing/mistyped endpoints, nested nodes and malformed selected scalar cells refuse before evaluation. Native whole-table object/edge cuts and installed ALWAYS guards remain held through original key encoding, collection/access evaluation and validated Withheld disclosure. The subject is an administrative fixture selection, not authenticated graph Subject authority.
+
+Five PostgreSQL18.6 graph controls pass5.291s: active p1 permits r1; inactive p2, ownerless r3 and sibling-unassigned p3/r4 are excluded; activating p2 permits r1/r2 under the same original policy; original codecs reject duplicate Resource keys; malformed keys and missing guards refuse before evaluator invocation with exact contained errors/clean cleanup. Native independent object/edge writers refuse at evaluator entry; same-transaction writers refuse before effects. One pure projection test checks native ID/business-key separation plus missing/type/root adverse cases. Two original flat/native-subject regression groups pass10.108s, including a new duplicate Resource control. Both native server cleanups are exact.
+
+The initial graph test found duplicate Resource identities emitted twice. The shared capture adapter now rejects duplicate per-record bytesHex values returned by original UMF encodeCoreKeyTuple before evaluating policy. Z34.15.4 retains1 UNSAT conditional typed-key membership correspondence and2 SAT duplicate-key/omitted-project controls. This theorem assumes faithful complete projection and injectivity on compared pairs; it is not original codec/evaluator/native refinement or global uniqueness proof. A globally quantified SAT attempt returned unknown and is explicitly retained as unproved.
+
+Trace CONTRACT-063/STP-056 B01/B02/B03/B07 prerequisites and US-056 AC1/AC2/AC6. Fixed property/type recipes are not accepted catalog mappings; broad administrative fixture grants, authenticated source/issuer/Subject provenance, complete writer/callable/ACL closure, generic installer/lowering, fine-grained graph-scope composition and protected release remain open. No backend case promotion; all132 remain required. Evidence: `../04-build/evidence/graph-policy-read-20261013/receipt.json`.

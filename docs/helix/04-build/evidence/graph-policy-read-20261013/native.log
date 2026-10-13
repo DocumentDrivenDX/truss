@@ -1,0 +1,11 @@
+test_changed_assignment_uses_same_ontology_policy (test_security_graph_read_native.SecurityGraphReadNativeTests.test_changed_assignment_uses_same_ontology_policy) ... ok
+test_duplicate_semantic_identity_refuses_entire_read (test_security_graph_read_native.SecurityGraphReadNativeTests.test_duplicate_semantic_identity_refuses_entire_read) ... ok
+test_graph_business_keys_and_shared_policy_under_native_cut (test_security_graph_read_native.SecurityGraphReadNativeTests.test_graph_business_keys_and_shared_policy_under_native_cut)
+@covers US-056-AC2; @covers US-056-AC6; component prerequisites only. ... ok
+test_malformed_business_key_refuses_before_evaluator (test_security_graph_read_native.SecurityGraphReadNativeTests.test_malformed_business_key_refuses_before_evaluator) ... ok
+test_missing_graph_guard_refuses_before_evaluator (test_security_graph_read_native.SecurityGraphReadNativeTests.test_missing_graph_guard_refuses_before_evaluator) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 5.291s
+
+OK

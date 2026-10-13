@@ -39,6 +39,7 @@ for(const record of transport.records){
  const associated=model.resolution.ontology.associations.some(a=>id(a.type)===id(record.type));
  if(JSON.stringify(g.associations)!==JSON.stringify(associated?[[record.type.documentId,record.type.moduleId,record.type.elementId]]:[]))throw Error('Original association presence binding required');
  const names=g.fields.map((c:any)=>JSON.stringify(c[0]));if(new Set(names).size!==names.length)throw Error('Repeated original field capture');
+ const seenKeys=new Set<string>();
  const facts:SecurityFact[]=g.rows.map((row:any)=>{
   if(!Array.isArray(row)||row.length!==g.fields.length)throw Error('Original captured row width required');
   const fields=owned.map(field=>{
@@ -56,6 +57,8 @@ for(const record of transport.records){
   const key=record.keyFields.map(ref=>fields.find(f=>id(f.field)===id(ref))!.value);
   const doc=model.resolution.documents.find(d=>d.document.id===record.type.documentId)!.document;
   const originalKey=encodeCoreKeyTuple(doc,{module:record.type.moduleId,element:record.type.elementId,key:record.keyId},key as CoreKeyTupleValue[]);
+  if(seenKeys.has(originalKey.bytesHex))throw Error('Unique original captured semantic identity required');
+  seenKeys.add(originalKey.bytesHex);
   return {type:record.type,key:originalKey.values,fields,absent:[]};
  });
  groups.set(id(record.type),facts);coverage.push({type:record.type,complete:true,fields:owned});

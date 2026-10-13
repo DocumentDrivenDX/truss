@@ -1,0 +1,306 @@
+{
+  "count": 29,
+  "controls": [
+    {
+      "name": "valid empty initial scope completes once",
+      "passed": true
+    },
+    {
+      "name": "valid existing scope union completes once",
+      "passed": true
+    },
+    {
+      "name": [
+        "identity",
+        "oid",
+        0
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "oid",
+        1
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "oid",
+        2
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "oid",
+        3
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "oid",
+        4
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "oid",
+        5
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "oid",
+        6
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "none"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "short"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "identity",
+        "long"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "before",
+        "oid",
+        0
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "before",
+        "oid",
+        1
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "before",
+        "oid",
+        2
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "before",
+        "none"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "before",
+        "short"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "before",
+        "long"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "registration",
+        "oid",
+        0
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "registration",
+        "none"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "registration",
+        "short"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "registration",
+        "long"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "registration",
+        "name"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "after",
+        "oid",
+        0
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "after",
+        "oid",
+        1
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "after",
+        "oid",
+        2
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "after",
+        "none"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "after",
+        "short"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    },
+    {
+      "name": [
+        "after",
+        "long"
+      ],
+      "passed": true,
+      "refusalAtSelectedPhase": true,
+      "targetFetches": 0
+    }
+  ],
+  "prechangeReproductions": [
+    {
+      "phase": "identity",
+      "foreignFetchBeforeRefusal": true
+    },
+    {
+      "phase": "before",
+      "foreignFetchBeforeRefusal": true
+    },
+    {
+      "phase": "registration",
+      "foreignFetchBeforeRefusal": true
+    },
+    {
+      "phase": "after",
+      "foreignFetchBeforeRefusal": true
+    }
+  ],
+  "scope": "Actual graph scope acquisition logic, synthetic driver descriptors/rows and replaced native epoch envelope. Includes valid initial-empty/initial-existing scopes and exact target-phase assertions. No native database mutation or driver constructor/callback sandbox qualification.",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_graph_scope.py",
+      "sha256": "da7ad8288c2c6654323eaeb85c1d3730e14b13700eec6f16d49d41088aa96165",
+      "bytes": 5460
+    },
+    {
+      "path": "/private/tmp/graph-scope-metadata-review-20261013/check.py",
+      "sha256": "c1346bb279f15c449d3059e8e23dc49cefbfd5bf3ee789a0005db92b8407175e",
+      "bytes": 4512
+    },
+    {
+      "path": "/private/tmp/graph-scope-metadata-review-20261013/prechange.py",
+      "sha256": "a004effe64f22ad3a6d395806b421728015a5a20780b84e78908f52951168747",
+      "bytes": 5215
+    }
+  ]
+}
