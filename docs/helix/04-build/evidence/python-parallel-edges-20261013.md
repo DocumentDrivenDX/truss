@@ -26,3 +26,10 @@ Astra Ultra reviewed plans/source. Python950 imports and Weft11 package boundari
 pass. Hugo and Chromium153.0.8010.12 schema checks pass with exact owner assets,
 source downloads and mobile navigation. Managed environments are unavailable;
 there is no Aurora/Lakebase qualification or broad conformance claim.
+
+The strengthened predecessor test explicitly checks the first new feed page's
+layout1.0/native0.52 configuration while retaining old page bytes;1/7.244s passes.
+Engine import regression with `bun` resolved from PATH passes2/14.619s. The
+v0.0.14 tagged workflow38467966624 failed both new import fixtures because their
+Bun path was local-only; no v0.0.14 wheel was published. SDK0.0.15 includes the
+fixture portability correction and will publish through its successor workflow.

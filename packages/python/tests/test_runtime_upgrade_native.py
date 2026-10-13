@@ -1,5 +1,5 @@
 """One real installed candidate upgrade workflow, including caller rollback."""
-import os,pickle,subprocess,sys,tempfile,unittest
+import json,os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path
 import psycopg
 from truss import (LocalPostgres,Ok,adopt_psycopg_host,create_reference_assembly,
@@ -94,4 +94,10 @@ class RuntimeUpgradeTests(unittest.TestCase):
                     self.assertIsInstance(assembly.reached_in_transaction(tx,token).value,ReceiptIncluded)
                     reread=assembly.feed(assembly.feed_selection).capability.reread_feed_in_transaction(tx,page)
                     self.assertIsInstance(reread.value,FeedPage);self.assertEqual(reread.value.content,page.content)
+                    current=assembly.read_feed_in_transaction(tx,consumer_id=page.consumer_id)
+                    self.assertIsInstance(current.value,FeedPage)
+                    configuration=json.loads(current.value.content)['configuration']
+                    self.assertEqual(configuration['layoutProfile']['version'],'1.0')
+                    self.assertEqual(configuration['releaseId'],'truss-catalog-runtime/0.52-candidate')
+
                     host.detach();self.assertIsNone(consumer.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0]);consumer.rollback()
