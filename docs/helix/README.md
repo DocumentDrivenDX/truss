@@ -1,18 +1,18 @@
 # truss project documentation
 
 The [public Python runtime](../../packages/python/README.md) provides a concrete
-embeddable interface on Truss0.31/layout0.16 candidate, UMF0.7.0 and Weft0.4.4.
+embeddable interface on Truss0.33/layout0.16 candidate, UMF0.7.0 and Weft0.4.6.
 The tested local tuple is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL18.6
 and psycopg3.3.6 binary/libpq18.6. The host supplies its authenticated connection
 and owns outer transactions; Bun1.4.2 remains required for UMF preparation/keys.
 
-Available operations include installation/status and additive .23–.30→.31
+Available operations include installation/status and additive .23–.32→.33
 upgrades, accepted catalogs/reports/original source, compatible scalar evolution,
 exact object/key/edge reads, atomic groups/preconditions/dry-run/durable replay,
 caller-owned imports, Weft queries, receipt visibility, committed feed/ACK and
 retained scalar/edge history. Complete SQL projections preserve all six scalar
 families and absent/null distinctions. [Consumer handoff](04-build/consumer-readiness-handoff.md)
-and [portable preview0.5](04-build/corpus/public-python/0.5/README.md) describe the
+and [portable preview0.7](04-build/corpus/public-python/0.7/README.md) describe the
 actual basic workflows and limits.
 
 Full required corpus and independent interchange, stable layout, broader value/

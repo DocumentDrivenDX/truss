@@ -13,7 +13,7 @@ class QueryRelatedKeys:
     items: tuple[tuple[str, ...], ...]
     truncated: bool
 
-QueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | Mapping[str, 'QueryValue']
+QueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | tuple['QueryValue', ...] | Mapping[str, 'QueryValue']
 
 @dataclass(frozen=True, slots=True)
 class QueryRows:
@@ -37,3 +37,15 @@ class QueryRefused:
 class QueryUnavailable:
     reason: Literal['compiler', 'installation', 'resource', 'observation']
     outcome: Literal['unavailable'] = field(default='unavailable', init=False)
+
+@dataclass(frozen=True, slots=True)
+class QueryPageCursor:
+    original_bytes: bytes
+
+@dataclass(frozen=True, slots=True)
+class QueryPage:
+    columns: tuple[str, ...]
+    rows: tuple[tuple[QueryValue, ...], ...]
+    catalog_revision: int
+    next_cursor: QueryPageCursor | None
+    outcome: Literal['page'] = field(default='page', init=False)

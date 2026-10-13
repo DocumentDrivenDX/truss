@@ -6,7 +6,7 @@ or conformance to broader historical/verified-application interfaces.
 from typing import Protocol, Literal, Mapping
 from .contracts import TypedIdentity, MapValue
 from decimal import Decimal
-from .query import QueryRows,QueryRefused,QueryUnavailable
+from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor
 from .execution import Outcome, TransactionHandle
 from .preparation import CatalogDocument, PreparedAcceptance
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
@@ -92,4 +92,7 @@ class NativeRuntimeOperations(Protocol):
 
     def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
                              maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
-                             read_profile: Literal['entity-page','related-entity-page','count-summary'] | None=None) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]: ...
+                             read_profile: Literal['entity-page','related-entity-page','count-summary','complete-entity'] | None=None) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]: ...
+
+    def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal] | None=None,
+                                  limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]: ...

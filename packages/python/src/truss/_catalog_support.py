@@ -17,6 +17,8 @@ NAMED_SCALAR_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.4
 
 NAMED_RELATIONSHIP_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.5.0', 'sha256': '8358f0e885a88231bcad1bd6952efcbcfec8ba970c983a5e63e5ea4873757213'}
 
+RETAINED_METADATA_PROFILE={'identity':'truss-fresh-catalog-support','version':'0.6.0','sha256':'c188429e07667bd1ba6a13da5d89f9c584e517163b948e9ec4cf02810b420369'}
+
 def evaluate_catalog_support(prepared):
     """Evaluate only the exact selected policy before native catalog effects.
 
@@ -26,13 +28,14 @@ def evaluate_catalog_support(prepared):
     _require_original_preparation(prepared)
     choices=prepared.input()
     selected=choices['supportProfile']
-    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE):
+    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE):
         return {'state':'unavailable','reason':'unregistered_support_policy'}
-    inverse=selected==NAMED_RELATIONSHIP_PROFILE
-    named=selected in (NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE)
-    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE)
-    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE)
-    policy=files('truss').joinpath('_profiles/fresh-catalog-support-named-relationships.json' if inverse else '_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
+    metadata=selected==RETAINED_METADATA_PROFILE
+    inverse=selected in (NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE)
+    named=selected in (NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE)
+    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE)
+    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE)
+    policy=files('truss').joinpath('_profiles/fresh-catalog-support-retained-metadata.json' if metadata else '_profiles/fresh-catalog-support-named-relationships.json' if inverse else '_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=selected['sha256']:
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
@@ -99,14 +102,14 @@ def evaluate_catalog_support(prepared):
             'observationCoverage':coverage,'assertionInventoryComplete':False,
             'enforcementQualified':False,'supportSemanticsQualified':False,
             'acceptedReportQualified':False,
-            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named,inverse=inverse)}
+            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named,inverse=inverse,metadata=metadata)}
 
     if len(json.dumps(decision,ensure_ascii=True,separators=(',',':')).encode('utf8'))>4194304:
         raise ValueError('Selected catalog support decision capacity exceeded')
     return decision
 
 
-def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False):
+def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False,metadata=False):
     """Complete source occurrence inventory for explicit scalar string Records.
 
     Profile 0.2 additionally covers known authored Keys and Relationships.
@@ -114,6 +117,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
     Broader preparation remains intact and explicitly outside this branch.
     """
     unavailable={'state':'unavailable','reason':'outside_closed_scalar_record_subset'}
+    if metadata: verified_retained_metadata(prepared)
     expected={}
     kinds={}
     authored={}
@@ -123,11 +127,11 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
         source=document.observation()['source']
         if source['umf']!='0.7.0' or set(source)-{'umf','id','modules','vocabularies','extensions'}:
             return unavailable
-        if source.get('vocabularies',{})!={} or source.get('extensions',{})!={}:
+        if not metadata and (source.get('vocabularies',{})!={} or source.get('extensions',{})!={}):
             return unavailable
         fields=set();owned=set()
         for mi,module in enumerate(source['modules']):
-            if set(module)-({'id','namespace','elements','extensions','relationships'} if relational else {'id','namespace','elements','extensions'}) or module.get('extensions',{})!={}:
+            if set(module)-(({'id','namespace','elements','extensions','relationships'} if relational else {'id','namespace','elements','extensions'}) | ({'actions'} if metadata else set())) or (not metadata and module.get('extensions',{})!={}):
                 return unavailable
             for ei,element in enumerate(module['elements']):
                 pointer=f'/modules/{mi}/elements/{ei}'
@@ -135,7 +139,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                 kinds[(document.document.document_id,module['id'],element['id'])]=kind
                 allowed=((({'id','kind','members','extensions','keys'} if relational else {'id','kind','members','extensions'}) | ({'name'} if named else set())) if kind=='record' else
                          {'id','kind','name','scalarType','nullability','cardinality','extensions'})
-                if kind not in ('record','field') or set(element)-allowed or element.get('extensions',{})!={}:
+                if kind not in ('record','field') or set(element)-allowed or (not metadata and element.get('extensions',{})!={}):
                     return unavailable
                 operations=['kind']
                 if kind=='record':
@@ -258,3 +262,52 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
             'assertionOccurrenceCoverageComplete':True,'entries':entries,'extensions':[],
             'observationClassifications':classifications,
             'enforcementQualified':False,'acceptedReportQualified':False}
+
+
+def verified_retained_metadata(prepared):
+    _require_original_preparation(prepared)
+    evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
+    documents={d['documentId']:d['artifact'] for d in prepared.input()['documents']}
+    profiles={d['documentId']:d['umfProfile'] for d in prepared.input()['documents']}
+    sources={d.document.document_id:d.observation()['source'] for d in prepared.documents}
+    def read(artifact):
+        raw=base64.b64decode(artifact['bytesBase64'],validate=True)
+        if sha256(raw).hexdigest()!=artifact['sha256']:raise ValueError('Original retained artifact hash required')
+        return decode_owner_evidence_json(raw)
+    diagnostics={}
+    for wrapper in evidence['validation']['diagnostics']:
+        value=read(wrapper['diagnostic'])
+        doc=value['documentId']
+        if value['contentSha256']!=documents[doc]['sha256'] or wrapper['source']['artifact']!=documents[doc] or value['profile']!=wrapper['diagnosticProfile'] or value['producer']!=profiles[doc]:
+            raise ValueError('Original diagnostic/source correspondence required')
+        if value['basis']=='original':
+            diagnostic=value['diagnostic']
+            diagnostics[(doc,diagnostic['code'],diagnostic['path'])]=diagnostic
+    expected={}
+    escape=lambda value:value.replace('~','~0').replace('/','~1')
+    for doc,source in sources.items():
+        def add(node,path,owner,scope):
+            for name,payload in node.get('extensions',{}).items():
+                expected[(doc,path+'/extensions/'+escape(name))]={'owner':owner,'scope':scope,
+                    'sourcePointer':path+'/extensions/'+escape(name),'extensionId':name,
+                    'vocabulary':source['vocabularies'][name],'payload':payload,'source':documents[doc]}
+        add(source,'',{'scope':'document','documentId':doc},'document')
+        for mi,module in enumerate(source['modules']):
+            owner={'documentId':doc,'moduleId':module['id']};path=f'/modules/{mi}'
+            if 'actions' in module:
+                warning=diagnostics.get((doc,'UNKNOWN_CORE_FIELD',path+'/actions'))
+                if warning is None or warning.get('severity')!='warning':
+                    raise ValueError('Original owner-uninterpreted module actions diagnostic required')
+            add(module,path,owner,'module')
+            for ei,element in enumerate(module['elements']):add(element,path+f'/elements/{ei}',owner,'element')
+    artifacts=evidence['retainedExtensions']['extensions'];seen=set()
+    for artifact in artifacts:
+        value=read(artifact);source=value['source'];doc=next((d for d,a in documents.items() if a==source),None)
+        key=(doc,value['sourcePointer'])
+        if key in seen or key not in expected or set(value)!={'interfaceVersion','interpretation',*expected[key]} or value['interfaceVersion']!='truss-original-extension-occurrence/0.1.0' or value['interpretation']!='retained_uninterpreted':
+            raise ValueError('Original extension occurrence bijection required')
+        if not same_owner_evidence({k:value[k] for k in expected[key]},expected[key]):
+            raise ValueError('Original extension payload/source correspondence required')
+        seen.add(key)
+    if seen!=set(expected):raise ValueError('Complete retained extension inventory required')
+    return artifacts

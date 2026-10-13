@@ -1,0 +1,9 @@
+# Original relationship-column observations — 2026-10-13
+
+The unchanged consumer read.relationship-columns-follow-ends SQL and expected forward relationship key list pass using the public complete-entity profile. Seven original SQL/expected-output variants pass together (one native basic workflow, 11.046 seconds) through installed Truss/Weft Python packages on DocumentDrivenDX PostgreSQL18.6. This extends the basic workflow without altering the original corpus or UMF document.
+
+The runner compares exact row count and every authored expected field, matching the original consumer `_check_rows` in src/hohfeld/conformance/__init__.py lines166–174. Extra actual fields remain intact; expected whole-object fragments intentionally omit other fields. Explicit expected columns/cursor presence still compare exactly.
+
+This is not seven complete consumer harness cases: common answer position/time invariants and mandatory whole-object _created_at/_updated_at are still pending, and replicas remain unavailable. The report now explicitly lists checked and unchecked observations. Astra Ultra reviewed the comparison and scoped claim; no additional test campaign was required.
+
+The original harness check_answer lines442–455 identifies the timestamp gap. Prepared additive native source at packages/postgresql/native/entity-times/query.sql verifies current attribution/current after-image in the same STABLE statement snapshot, validates finite year1–9999 object timestamps, and formats exact six-fraction UTC strings. It uses the object timestamps, not journal insertion time. Astra reviewed the source under the additive migration constraint. It is uninstalled: runtime0.33 still omits these fields. Runtime0.34 ownership/grants, expanded versioned Weft metadata/profile/schema selection and basic create/update/no-op comparison remain the next activation work.

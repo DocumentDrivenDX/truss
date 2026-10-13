@@ -100,3 +100,6 @@ from .query import QueryRelatedKeys,QueryRows,QueryRefused,QueryUnavailable,Quer
 from .capabilities import NativeCompiledExecutionCapability
 
 __all__ += ['QueryRelatedKeys','QueryRows','QueryRefused','QueryUnavailable','QueryAbsent','QueryDiagnostic','QueryValue','NativeCompiledExecutionCapability']
+
+from .query import QueryPage,QueryPageCursor
+__all__ += ['QueryPage','QueryPageCursor']

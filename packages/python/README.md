@@ -5,8 +5,8 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: runtime `0.31-candidate`, layout `0.16`
-candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.4`. The tested local
+This is an experimental implementation: runtime `0.33-candidate`, layout `0.16`
+candidate, UMF core `0.7.0`, and Weft runtime backend `0.4.6`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -17,7 +17,7 @@ ordinary-person/module boundaries.
 
 Python 3.11 or later, Bun 1.4.2, and the Weft Python extension built with the
 `truss-postgresql-pg18` feature are required. This feature must expose runtime
-backend `0.4.4`; the conformance-only backend is not the public integration.
+backend `0.4.6`; the conformance-only backend is not the public integration.
 Install the package from this repository:
 
 ```sh
@@ -39,7 +39,7 @@ JSON file supplies calls, transaction phases and semantic expectations:
 
 ```sh
 python packages/python/examples/run_corpus.py \
-  docs/helix/04-build/corpus/public-python/0.5/adopter-basic.json \
+  docs/helix/04-build/corpus/public-python/0.7/adopter-basic.json \
   /tmp/truss-public-preview --bun bun
 ```
 
@@ -143,7 +143,7 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.30 to 0.31. The trusted administrator must quiesce consumers and
+0.23 through 0.32 to 0.33. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -291,9 +291,13 @@ source cell is validated before filtering. Timestamp and binary projections, inc
 `TextValue` carriers with their original exact text; optional fields preserve
 absence and explicit null. Timestamp/binary filters, ordering, grouping, keys and
 parameters remain unsupported. The selected compile/IR/backend interfaces are
-`0.2.1`, with the unchanged SQL dialect `0.2.0`.
+`0.2.2`, with the unchanged SQL dialect `0.2.0`.
 Compiled queries require complete read authority for all modules in each selected
 original document, including modules the SQL does not name.
+
+`query_page_in_transaction(tx, sql=sql, document_ids=(document_id,), limit=100, cursor=None)` returns `QueryPage(columns, rows, catalog_revision, next_cursor)`. Pass `next_cursor` back to continue; `None` means the last page. The same call is available through the compiled-execution capability. Weft resolves the authored primary key, adds key ordering and continuation, and supplies hidden key outputs that Truss removes. The original SQL need not project the key or contain `ORDER BY`.
+
+This public page call initially supports one nonaggregated source with a complete required-string primary key. Caller `ORDER BY`/`LIMIT`, joins and relationship predicates refuse. Cursors bind the original SQL, exact parameters, document selection, connecting person, catalog/installation/release context, limit and resource budgets. Keep those inputs unchanged for continuation. Each page rechecks current authority in the caller's transaction; pages are live, so concurrent changes can affect traversal.
 
 `entity-page` and `related-entity-page` query profiles require complete authored
 keys in `ORDER BY`, an explicit limit and caller-supplied continuation predicates.
@@ -490,3 +494,19 @@ These links retain earlier README section addresses.
 <a id="versioned-public-preview-corpus"></a>
 
 [Versioned public preview corpus](docs/runtime-history.md#versioned-public-preview-corpus) — historical release notes.
+
+Catalog registration also retains original vocabulary and extension artifacts and
+owner-reported module actions as uninterpreted metadata. It preserves the original
+validation diagnostics and partial interpretation; it does not execute actions or
+interpret placement, DDD or security annotations. Required core semantics still
+must be supported. The original consumer corpus has five authority read cases
+exercised through public registration, mutation, replay and read-only queries;
+replica execution and the full consumer corpus remain unqualified.
+
+Select `read_profile="complete-entity"` for `alias.*` with complete relationship
+keys and `_version`, `_created_by`, `_updated_by`, `_original_author` and
+`_original_at`. Truss derives attribution from original native mutation/import
+evidence. Missing evidence, output-name collisions or more than100 related keys
+refuse the query. Single-component relationship keys are immutable scalar tuples;
+composite keys retain nested tuples. Ordinary projections keep their authored
+member shape. The original whole-entity authority case passes on the pinned tuple.

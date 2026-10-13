@@ -215,6 +215,10 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
             result=query.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={} if parameters is None else parameters)
             if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+repr(host._custody.last_attempt.error))
             return result.value
+        self.assertEqual(run("SELECT a.\"A-label\" FROM \"A\" a WHERE a.\"A-label\" = 'one'").rows,(('one',),))
+        shorthand=query.query_in_transaction(tx,sql='SELECT a."A-label" FROM "A" a WHERE a."A-B" = :key',document_ids=('adoc',),parameters={'key':'two'})
+        self.assertIsInstance(shorthand.value,QueryRefused)
+        self.assertTrue(any('single-component key' in d.message for d in shorthand.value.diagnostics))
         forward='SELECT a."A-label" FROM "A" a WHERE HAS_RELATED(a."A-B",KEY(:value,:label))'
         self.assertEqual(run(forward,{'value':'value','label':'two'}).rows,(('one',),))
         self.assertEqual(run('SELECT b."B-label" FROM "B" b WHERE HAS_RELATED(b."B-A",KEY(:value,:label)) ORDER BY b."B-label"',{'value':'value','label':'one'}).rows,(('three',),('two',)))
@@ -258,3 +262,35 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         self.assertEqual(page('SELECT COUNT(*) AS total FROM "A" a',profile='count-summary').rows,((3,),))
         self.assertEqual(first.catalog_revision,second.catalog_revision)
         self.assertIsNone(connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0])
+
+    def test_complete_entity_pending_update_import_and_readonly(self):
+        from truss.imports import ImportReported
+        from truss.contracts import MapValue,MapEntry,TextValue
+        from truss.groups import UpdateObject,StoredObjectReference,AuthoredValue
+        def names(source):
+            for element in source['modules'][0]['elements']:
+                if element['kind']=='record':element['name']=element['id']
+        connection,host,assembly,tx=self.ready(names)
+        def entity(label):
+            result=assembly.query_in_transaction(tx,sql='SELECT a.* FROM "A" a WHERE a."A-label" = :label',document_ids=('adoc',),parameters={'label':label},read_profile='complete-entity')
+            if not isinstance(result,Ok) or not isinstance(result.value,QueryRows):self.fail(repr(result)+' '+str(host._custody.last_attempt.error))
+            self.assertEqual(len(result.value.rows),1)
+            return dict(zip(result.value.columns,result.value.rows[0],strict=True))
+        created,_,_=self.run_group(assembly,tx,(self.create('one'),))
+        identity=created.response.semantic.results[0].identity
+        first=entity('one');self.assertEqual((first['_version'],first['_created_by'],first['_updated_by'],first['_original_author']),(1,'consumer','consumer',None))
+        changed,_,_=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=identity),set=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='changed')),),unset=()),))
+        self.assertIsInstance(changed,GroupSuccess)
+        self.assertEqual(entity('changed')['_version'],2)
+        source=MapValue(entries=(MapEntry(key='author',value=TextValue(kind='string',text='historical')),MapEntry(key='at',value=TextValue(kind='string',text='2020-01-01'))))
+        record=assembly.object_import_record_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',values=self.create('imported',value='imported').values,source=source).value
+        context=assembly.import_context_in_transaction(tx).value
+        report=assembly.import_in_transaction(tx,context.input((record,),load_id='entity-import',asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        self.assertIsInstance(report,ImportReported)
+        imported=entity('imported');self.assertEqual((imported['_created_by'],imported['_original_author'],imported['_original_at']),('consumer','historical','2020-01-01'))
+        host.detach();connection.commit();connection.execute('BEGIN READ ONLY')
+        host=adopt_psycopg_host(connection);tx=host.adopt_transaction(access_mode='read_only').value
+        assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value
+        self.assertEqual(entity('changed')['_version'],2)
+        self.assertEqual(entity('imported')['_original_author'],'historical')
+        host.detach();self.assertIsNone(connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0]);connection.rollback()
