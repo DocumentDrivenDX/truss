@@ -7297,3 +7297,11 @@ precondition without a partial object. Explicit native-to-authored condition-ID
 mapping preserves original labels. One basic installed PG18 test passes fourteen
 selected workflows; see `evidence/original-consumer-atomic-batch-20261013.md`.
 No runtime change, general action planner or broader test campaign was added.
+
+
+### Python original literal-key encoding — 2026-10-13
+
+The Core0.8 bridge now passes raw ordered CoreLiteral JSON text components through original owner parsing/key encoding/receipt byte verification. Python retains raw texts, exact original source and receipt beside tuple bytes; no Python scalar parser or numeric conversion is added. The owner bundle and all Core0.7 assets remain unchanged; canonical/Core0.8 bridge bytes and their manifest/release pin are updated. All13 semantic/legacy tests pass9.527s, including ten original independently-authored byte vectors, four owner refusal vectors, all five admitted key families, exact beyond-2^53 values, Unicode/BOM and leading-zero binary. Actual PostgreSQL18.6 produces all five native JSON texts; original source observation/UMF encoding match independently authored values and refuse wrong-family/noncanonical integer/nonrepresentable decimal substitutions. One native composition test passes; Python ownership/16 boundary controls pass. Evidence: `evidence/python-literal-subject-key-20261013/receipt.json`. This is historical native observation plus semantic encoding; original code/helper authenticity, existence/current subject binding, issuer/held authority and guarded protected execution remain required. No backend case is promoted; all132 stay required.
+
+
+Astra Ultra independently passes13 semantic/legacy tests and ten actual producer controls, replayed after final arity/keyPath structural guards. It verifies every manifest asset, canonical/packaged bridge equality, unchanged original owner/Core0.7 files and byte-vector/refusal provenance against committed UMF7c0f. It reencodes the retained native packet to byte-identical original receipt/tuple, separately from native replay. Final native composition passes3.949s. Source-pinned independent review/controls are retained with the evidence; no actionable finding or native authority/acceptance promotion follows.

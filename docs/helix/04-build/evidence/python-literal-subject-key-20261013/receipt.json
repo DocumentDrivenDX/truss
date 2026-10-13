@@ -1,0 +1,31 @@
+{
+  "scope": "Original Core0.8 literal key codec and historical native observation composition; no subject issuance/currentauthority/protected execution",
+  "sources": {
+    "packages/python/src/truss/_umf_key_tuples.py": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+    "packages/umf-bun/src/python-keys.mjs": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
+    "packages/python/src/truss/_umf_keys08/bridge.mjs": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
+    "packages/python/src/truss/_umf_keys08/manifest.json": "3ce2df6a1abf84eef7d9a9f0586b09638939a06df9a261242d49cf58e772fad8",
+    "packages/python/src/truss/_umf_keys08_release.py": "f58231062f722639dd9f21f4e74cef718489d8eab426c9cc422d10835a6fd75e",
+    "packages/python/tests/test_umf_literal_key_tuples.py": "a731ad6efb7105e9a84d965b2db36428fd9f496361093451e79eb273e3c79a4f",
+    "packages/python/tests/test_psycopg_literal_subject_key_native.py": "bc7129b1afd057010207fedb83213b05892068c14389b7cb074bb3894a70c306",
+    "packages/python/tests/fixtures/umf-literal-key-vectors.json": "3e23278aaf0822bc830be767672663c5bc1ad6a3328f7ffe1259ead175c77e4c"
+  },
+  "originalOwnerBundleSha256": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+  "ownerBundleUnchanged": true,
+  "core07AssetsChanged": false,
+  "semanticTests": 13,
+  "originalByteVectors": 10,
+  "originalRefusalVectors": 4,
+  "nativeIntegrationGroups": 1,
+  "nativeDomainRefusals": 3,
+  "pythonBoundaryControls": 16,
+  "versions": "Core0.8/CoreKeyTuple3; Bun1.4.2; PostgreSQL18.6,psycopg3.3.6 binary/libpq18.6",
+  "acceptanceTraceability": {
+    "US-056-AC2": "Original semantic key encoding of native observed graph-subject input prerequisite; native graph admission not proved",
+    "US-056-AC10": "Original source/literal/receipt byte correspondence prerequisite; no complete held native execution refinement"
+  },
+  "qualifiedLimits": "1MiB source/combined transport input,32 rawliteraltexts,65536 bytes each/1MiB aggregate text,8MiB combined subprocess output,4MiB decoded tuple; subprocess deadlines. No whole-process memory or native allocation guarantee.",
+  "trust": "Original bundled owner/host/helper/runtime code and filesystem remain trusted. Native role flags are historical snapshot observations. The codec operates on supplied historical rawtexts, without validating native origin/existence/current binding. Original owner performs literal parsing/domains/facets/receipt verification; Python validates transport/source metadata only.",
+  "promotedBackendCases": 0,
+  "requiredBackendCases": 132
+}

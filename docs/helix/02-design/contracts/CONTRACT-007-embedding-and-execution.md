@@ -1152,3 +1152,8 @@ A private psycopg observation operation uses original `PsycopgHost._run_operatio
 
 
 The Python observation checks helper descriptors before fetching rows, avoiding custom foreign-OID `Loader.load` decoding. Supported psycopg may construct configured loaders before descriptors are exposed; adaptation/runtime code remains trusted, and no predecode sandbox is claimed. Role flags are native transaction-snapshot observations, without concurrent role/helper writer exclusion or held-current-authority proof.
+
+
+### Python original literal-key producer — 2026-10-13
+
+A private Core0.8 key producer accepts immutable original source/Record/Key identity and an ordered tuple of raw CoreLiteral JSON texts. The bounded Bun bridge passes each raw text through original UMF `readJsonValue`, then original `encodeCoreKeyTuple` and `readCoreKeyTupleBytes`; Python does not interpret literal families or convert numeric values. The pinned original owner bundle is unchanged; only the thin bridge and its manifest pin change. Source and raw texts remain retained beside the original receipt/tuple bytes. Original owner enforces key arity/order/domains/facets and its admitted five scalar key families; unsupported domains refuse. This is semantic key encoding of supplied historical values, not native observation authentication, subject existence/current binding, issuer custody or protected execution. Source1MiB,32 text components/1MiB aggregate and selected transport/response/tuple limits bound controlled work; no process-memory/CPU proof follows.

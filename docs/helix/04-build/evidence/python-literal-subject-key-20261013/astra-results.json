@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "count": 10,
+  "results": [
+    {
+      "name": "retained-native-five-family-replay",
+      "passed": true
+    },
+    {
+      "name": "exact-literal-65536",
+      "passed": true
+    },
+    {
+      "name": "over-literal-65536",
+      "passed": true
+    },
+    {
+      "name": "duplicate-literal-owner-refusal",
+      "passed": true
+    },
+    {
+      "name": "original-version07-refusal",
+      "passed": true
+    },
+    {
+      "name": "mutable-source-refusal",
+      "passed": true
+    },
+    {
+      "name": "mutable-literal-sequence-refusal",
+      "passed": true
+    },
+    {
+      "name": "mutable-identity-refusal",
+      "passed": true
+    },
+    {
+      "name": "exact32-components",
+      "passed": true
+    },
+    {
+      "name": "over32-components",
+      "passed": true
+    }
+  ],
+  "allManifestFilesVerified": true,
+  "originalBundleUnchangedFromHEAD": true,
+  "legacyAssetsUnchangedFromHEAD": true,
+  "canonicalBridgeMatchesPackagedBridge": true,
+  "vectorsMatchOriginalCommittedOwner": {
+    "revision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+    "path": "fixtures/key/tuple-encoding-v1.json",
+    "sha256": "160310faa99e5337157cab9f77afedfb3385c937f3f2683d8a15e2c5d906b80b",
+    "vectors": 10,
+    "refusals": 4
+  },
+  "nativePacketReencodedByOriginalOwner": true,
+  "scope": "Actual pinned original producer, no native database execution; immutable native evidence correspondence only."
+}

@@ -1,0 +1,177 @@
+{
+  "review": "private-python-original-literal-key-producer",
+  "reviewer": "independent Astra Ultra agent",
+  "reviewedAtUtc": "2026-10-13T13:21:37.536529+00:00",
+  "status": "no_actionable_findings_in_reviewed_scope",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "headDuringReview": "db66622b3dd93de86dedf9e06fb7d9db550ea88d",
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+      "bytes": 9931
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/bridge.mjs",
+      "sha256": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
+      "bytes": 1940
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/manifest.json",
+      "sha256": "3ce2df6a1abf84eef7d9a9f0586b09638939a06df9a261242d49cf58e772fad8",
+      "bytes": 1858
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08_release.py",
+      "sha256": "f58231062f722639dd9f21f4e74cef718489d8eab426c9cc422d10835a6fd75e",
+      "bytes": 155
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/producer.js",
+      "sha256": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+      "bytes": 611721
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys08/producer-manifest.json",
+      "sha256": "f674dd05d79d42c22838c145db87897c3e7f19d95669a1f342a9811b236f8c31",
+      "bytes": 800
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys/manifest.json",
+      "sha256": "4e90f95322267ed1e7297a3eb2850f47ff86cdbba107c6859ea70a93b88b6537",
+      "bytes": 1850
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_keys_release.py",
+      "sha256": "f5810287041362626b0341a56aa9121a9cc801e9bf6513c9a3ed1293ab9f5129",
+      "bytes": 155
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/umf-bun/src/python-keys.mjs",
+      "sha256": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
+      "bytes": 1940
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_owner_evidence_json.py",
+      "sha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+      "bytes": 3271
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/preparation.py",
+      "sha256": "03f98cbcce659105967d9cd83eba542bfd56d03303619155563f2453f67f1c1d",
+      "bytes": 14903
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_umf_literal_key_tuples.py",
+      "sha256": "a731ad6efb7105e9a84d965b2db36428fd9f496361093451e79eb273e3c79a4f",
+      "bytes": 4113
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_umf_key_tuples.py",
+      "sha256": "91a394dbfed5dbe3fe73cc0ec84f58c6ab149068fd2415c6b9a14a5338af5e4a",
+      "bytes": 6455
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_literal_subject_key_native.py",
+      "sha256": "bc7129b1afd057010207fedb83213b05892068c14389b7cb074bb3894a70c306",
+      "bytes": 5739
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/fixtures/umf-literal-key-vectors.json",
+      "sha256": "3e23278aaf0822bc830be767672663c5bc1ad6a3328f7ffe1259ead175c77e4c",
+      "bytes": 4934
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "e0978c19f593b9c6ef4ffd26977e3c50d9dcee87b3b2214b98b9cd3416e6d208",
+      "bytes": 299054
+    }
+  ],
+  "independentEvidence": {
+    "actualOwnerUnitTests": 13,
+    "unitTestsPassed": true,
+    "unitLog": {
+      "path": "/private/tmp/python-literal-key-review-20261013/owner-tests.log",
+      "sha256": "0be0ff3676ef62c00941c8ab1b715c9c95ca7b0c439558e21e78725751668548",
+      "bytes": 112
+    },
+    "unitRunQualification": "Independent13 test replay preceded final two structural receipt checks; all10 independent actual producer controls reran after those checks. Parent final13/native replays separately retained.",
+    "additionalActualProducerControls": 10,
+    "results": {
+      "path": "/private/tmp/python-literal-key-review-20261013/results.json",
+      "sha256": "ad2eea47fc0c3302f4736a6f7994165ddda0b1530e32a0967e2a44123812e25c",
+      "bytes": 1437
+    },
+    "runner": {
+      "path": "/private/tmp/python-literal-key-review-20261013/check.py",
+      "sha256": "65dc68f3f63f1944168c7e31756e8379cb57f7ce3274d8d8ea74f44a8b5932e4",
+      "bytes": 4363
+    },
+    "assetAndVectorVerification": {
+      "allManifestFilesVerified": true,
+      "originalProducerUnchanged": true,
+      "core07AssetsUnchanged": true,
+      "canonicalBridgeMatchesPackaged": true,
+      "vectorsMatchOriginalCommittedOwner": {
+        "revision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+        "path": "fixtures/key/tuple-encoding-v1.json",
+        "sha256": "160310faa99e5337157cab9f77afedfb3385c937f3f2683d8a15e2c5d906b80b",
+        "vectors": 10,
+        "refusals": 4
+      }
+    },
+    "retainedNativePacketReencodedExactly": true
+  },
+  "parentEvidence": [
+    {
+      "path": "/private/tmp/python-literal-key.log",
+      "sha256": "f75580f10ad37b39ecfa763ad91f25fc6c2eaa47d821375127ba786ea9632b41",
+      "bytes": 102
+    },
+    {
+      "path": "/private/tmp/python-literal-key-regression.log",
+      "sha256": "0e45696c3ed6f7a7a46e74e2936c8c41c79cf0a5c5a2d12c55732d0e2340e7d5",
+      "bytes": 107
+    },
+    {
+      "path": "/private/tmp/python-literal-subject-native.log",
+      "sha256": "8f5e584c35b5a68b6041d49acd1fffa4da903585c36121f15e20914e8c47e7f5",
+      "bytes": 98
+    },
+    {
+      "path": "/private/tmp/python-literal-subject-native.json",
+      "sha256": "2e51c962c75ebf24b578a7ecd7e431eaf00e059347c2945cccd9b9be3199bea2",
+      "bytes": 7877
+    },
+    {
+      "path": "/private/tmp/python-literal-key-combined.log",
+      "sha256": "d8b82c821d50f7aca8e5b78ed3e03cd1cc43e6d35f924478c4b69ca0a18df8c4",
+      "bytes": 112
+    },
+    {
+      "path": "/private/tmp/python-literal-key-boundaries.log",
+      "sha256": "c3d4f7c3da8b1b02e7518d83084bc6c4f91f4def1f162e060f7b0b91f731801e",
+      "bytes": 83
+    },
+    {
+      "path": "/private/tmp/python-literal-key-boundary-controls.log",
+      "sha256": "e713a585a9deb0445a211ca55b73b8b9b14d6d4dd040ed7797ed55a8204d1529",
+      "bytes": 18517
+    }
+  ],
+  "nativeQualification": {
+    "independentlyRerun": false,
+    "finalParentDurationSeconds": 3.949,
+    "server": "PostgreSQL18.6",
+    "scope": "Five original native CoreLiteral TEXT families, exact large integer/decimal UnicodeBOM and leading-zero binary, three domain refusals; observer/source owner/helper trust premises retained."
+  },
+  "conclusion": "Raw literal strings pass unchanged to the pinned original UMF reader and tuple encoder/verifier. Python performs transport/source/receipt-shape checks without a competing scalar parser. Version3.0.0/source/identity/arity/byte correspondence and immutable retention are consistent with the stated private semantic component. No remaining correctness/pinning blocker found.",
+  "limitations": [
+    "Original bundled owner/bridge and selected Bun/runtime executable remain trusted. Receipt value/keyPath semantic verification is performed by the original owner inside the pinned bridge, not independently reinterpreted by Python.",
+    "Input/output limits do not establish total process heap/CPU bounds.",
+    "Encoder consumes supplied historical inputs; it does not authenticate native observations, current subject binding, key existence, issuance, permission or protected release.",
+    "No native mutation or replay by reviewer; parent final native evidence inspected and native packet reencoded through actual original owner.",
+    "No public protected API or backend acceptance promotion."
+  ],
+  "findings": []
+}
