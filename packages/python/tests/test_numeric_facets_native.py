@@ -2,6 +2,7 @@
 from decimal import Decimal
 import psycopg
 import json
+import os
 from truss import Ok,ObjectFound,QueryRows,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
 from truss.contracts import TextValue,MapValue
 from truss.groups import AuthoredValue,CreateObject,RootlessOwnership,GroupSuccess,GroupFailed,UpdateObject,StoredObjectReference
@@ -40,10 +41,10 @@ class NumericFacetTests(groups.PublicCreateGroupTests):
             bad=CreateObject(type_definition_pin=create.type_definition_pin,values=self.values('bad',quantity,amount),ownership=RootlessOwnership())
             context=a.group_context_in_transaction(t).value
             from truss.groups import RequestNone
-            self.assertIsInstance(a.apply_in_transaction(t,context.input((bad,),MapValue(entries=())),RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun').value,GroupFailed)
+            self.assertIsInstance(a.apply_in_transaction(t,context.input((bad,),MapValue(entries=())),RequestNone(),documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun')).value,GroupFailed)
         built=a.object_import_record_in_transaction(t,document_id='adoc',module_id='m',record_id='A',values=self.values('imported','-9223372036854775808','1.2'))
         self.assertIsInstance(built,Ok);context=a.import_context_in_transaction(t).value
-        imported=a.import_in_transaction(t,context.input((built.value,),load_id='facets',asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        imported=a.import_in_transaction(t,context.input((built.value,),load_id='facets',asserted_origin=MapValue(entries=())),documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.assertIsInstance(imported,ImportReported);self.assertIsInstance(imported.report.outcomes[0],ImportCreated)
         h.detach();c.commit();c,h,a,t=self.consumer();h.detach();c.execute('SET TRANSACTION READ ONLY')
         h=adopt_psycopg_host(c);self.addCleanup(h.detach);a=create_reference_assembly(CatalogRuntimeConfiguration(),h).value;t=h.adopt_transaction(access_mode='read_only').value

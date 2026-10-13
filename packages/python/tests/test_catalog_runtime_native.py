@@ -11,7 +11,7 @@ from test_catalog_relational_support import relational_document
 class PublicCatalogRuntimeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.root=Path(tempfile.mkdtemp(prefix='truss-public-catalog-',dir='/private/tmp'))
+        cls.root=Path(tempfile.mkdtemp(prefix='truss-public-catalog-'))
         cls.runtime=LocalPostgres(cls.root/'data')
         cls.addClassCleanup(cls.cleanup)
         cls.runtime.__enter__();cls.info=cls.runtime.info

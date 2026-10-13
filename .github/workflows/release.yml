@@ -78,6 +78,11 @@ jobs:
           assert not pathlib.Path(truss.__file__).resolve().is_relative_to(pathlib.Path('packages/python/src').resolve())
           PYTHON
           python packages/python/examples/adopter_workflow.py "$RUNNER_TEMP/truss-release-demo" --bun bun
+      - name: Run both installed numeric facet workflows
+        env:
+          TRUSS_BUN_EXECUTABLE: bun
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_numeric_facets_native.NumericFacetTests.test_public_accept_create_update_import_read_and_query test_numeric_facets_native.NumericFacet08Tests.test_public_accept_create_update_import_read_and_query
   publish:
     if: github.ref_type == 'tag'
     needs: [package, native]
