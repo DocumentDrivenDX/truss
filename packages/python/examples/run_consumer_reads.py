@@ -11,9 +11,9 @@ from adopter_workflow import transaction, success, expect
 from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument, ObjectFound
 from truss.contracts import MapValue, MapEntry, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
-    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, Created)
+    RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -122,32 +122,48 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             case_input = case_request = case_actor = None
             cursors = {}
             tokens = {}
+            invocations = {}
             for step in case['steps']:
                 if step['op'] == 'apply':
-                    if case['id']!='action.applies-atomically-and-reads-back' or set(step)!={'op','as','action','inputs','expect','save'}:
+                    supported={'action.applies-atomically-and-reads-back':'catalog.AddSolution','action.idempotent-retry-returns-the-original':'catalog.AddUseCase'}
+                    if case['id'] not in supported or step['action']!=supported[case['id']] or not {'op','as','action','inputs','expect'}<=set(step) or set(step)-{'op','as','action','inputs','expect','save','key'}:
                         raise ValueError('Unsupported action case or controls; no action write attempted')
-                    # One trusted host handler, not a UMF action interpreter.
+                    if set(step['expect'])-{'receipt','refs'} or set(step['expect'].get('receipt',{}))-{'created','linked','replayed','token_is'}:
+                        raise ValueError('Unsupported action observation; no action write attempted')
                     if sha256(source).hexdigest()!='849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696':
                         raise ValueError('Selected action handler requires the exact retained consumer document')
-                    if step['action']!='catalog.AddSolution' or set(step['inputs'])!={'code','name','useCase'}:
-                        raise ValueError('Only the selected consumer AddSolution handler is implemented')
                     inputs=step['inputs'];case_actor=step['as']
-                    if any(type(value) is not str for value in inputs.values()):
+                    record_id='Solution' if step['action']=='catalog.AddSolution' else 'UseCase'
+                    required_inputs={'code','name','useCase'} if record_id=='Solution' else {'code','name'}
+                    if set(inputs)!=required_inputs or any(type(value) is not str for value in inputs.values()):
                         raise ValueError('Selected action inputs are required strings')
-                    use_case=next(e for e in module['elements'] if e['id']=='UseCase')
-                    use_case_key=next(k for k in use_case['keys'] if k.get('primary'))
-                    with transaction(people[case_actor]) as (assembly,tx):
-                        target=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='UseCase',key_id=use_case_key['id'],values=(inputs['useCase'],),original_document=source,bun_executable=bun)),ObjectFound).object
-                        relation=next(r for r in module['relationships'] if r['name']=='addresses')
-                        reference=success(assembly.get_relationship_reference_in_transaction(tx,document_id=document_id,module_id=module_id,relationship_id=relation['id']))
-                        context=success(assembly.group_context_in_transaction(tx))
-                        case_input=context.input((
-                            CreateObject(type_definition_pin=types['Solution'].definition_pin,values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=inputs[name])) for name in ('code','name')),ownership=RootlessOwnership(),alias='s'),
-                            CreateEdge(relationship_definition_pin=reference.definition_pin,source=AliasObjectReference(alias='s'),target=StoredObjectReference(identity=target.identity),values=(),order_key=NullOrderKey())),
-                            MapValue(entries=(MapEntry(key='x-action',value=TextValue(kind='string',text=step['action'])),)),
-                            preconditions=(ObjectExists(id='use_case_exists',reason='no such use case',target=target.identity),))
-                        case_request=context.request('consumer-action:'+uuid4().hex)
-                        applied=expect(success(assembly.groups(assembly.group_selection,documents=documents,bun_executable=bun).capability.apply_in_transaction(tx,case_input,case_request)),GroupSuccess)
+                    invocation=(case_actor,step['key']) if 'key' in step else (case_actor,uuid4().hex)
+                    if invocation in invocations:
+                        action,original_inputs,case_input,case_request=invocations[invocation]
+                        if action!=step['action'] or original_inputs!=inputs:
+                            raise ValueError('Changed-input retry is outside this selected workflow')
+                        with transaction(people[case_actor]) as (assembly,tx):
+                            applied=expect(success(assembly.apply_in_transaction(tx,case_input,case_request,documents=documents,bun_executable=bun)),GroupSuccess)
+                    else:
+                        with transaction(people[case_actor]) as (assembly,tx):
+                            operations=[CreateObject(type_definition_pin=types[record_id].definition_pin,values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=inputs[name])) for name in ('code','name')),ownership=RootlessOwnership(),alias='s')]
+                            if record_id=='Solution':
+                                use_case=next(e for e in module['elements'] if e['id']=='UseCase')
+                                use_case_key=next(k for k in use_case['keys'] if k.get('primary'))
+                                target=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='UseCase',key_id=use_case_key['id'],values=(inputs['useCase'],),original_document=source,bun_executable=bun)),ObjectFound).object
+                                relation=next(r for r in module['relationships'] if r['name']=='addresses')
+                                reference=success(assembly.get_relationship_reference_in_transaction(tx,document_id=document_id,module_id=module_id,relationship_id=relation['id']))
+                                operations.append(CreateEdge(relationship_definition_pin=reference.definition_pin,source=AliasObjectReference(alias='s'),target=StoredObjectReference(identity=target.identity),values=(),order_key=NullOrderKey()))
+                                preconditions=(ObjectExists(id='use_case_exists',reason='no such use case',target=target.identity),)
+                            else:
+                                record=next(e for e in module['elements'] if e['id']==record_id)
+                                primary=next(k for k in record['keys'] if k.get('primary'))
+                                preconditions=(KeyAbsent(id='fresh',reason='a use case with that code exists',type_definition_pin=types[record_id].definition_pin,key_id=primary['id'],values=(TextValue(kind='string',text=inputs['code']),)),)
+                            context=success(assembly.group_context_in_transaction(tx))
+                            case_input=context.input(tuple(operations),MapValue(entries=(MapEntry(key='x-action',value=TextValue(kind='string',text=step['action'])),)),preconditions=preconditions)
+                            case_request=context.request(step['key'] if 'key' in step else 'consumer-action:'+invocation[1])
+                            applied=expect(success(assembly.groups(assembly.group_selection,documents=documents,bun_executable=bun).capability.apply_in_transaction(tx,case_input,case_request)),GroupSuccess)
+                        invocations[invocation]=(step['action'],dict(inputs),case_input,case_request)
                     # Retain the original request: obtain a committed receipt by retrying
                     # only after the caller's known successful outer commit.
                     with transaction(people[case_actor]) as (assembly,tx):
@@ -156,21 +172,23 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         if committed.semantic!=applied.response.semantic:
                             raise AssertionError('Committed original action semantic result differs')
                     results=applied.response.semantic.results
-                    if len(results)!=2 or any(not isinstance(result,Created) for result in results):
+                    if len(results)!=(2 if record_id=='Solution' else 1) or any(not isinstance(result,Created) for result in results):
                         raise AssertionError('Original action must create one object and one edge')
                     receipt={'created':sum(r.operation=='create_object' for r in results),'linked':sum(r.operation=='create_edge' for r in results),'replayed':applied.response.disposition=='replayed'}
-                    solution=next(e for e in module['elements'] if e['id']=='Solution')
+                    solution=next(e for e in module['elements'] if e['id']==record_id)
                     solution_key=next(k for k in solution['keys'] if k.get('primary'))
                     with transaction(people[case_actor],read_only=True) as (assembly,tx):
-                        found=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id='Solution',key_id=solution_key['id'],values=(inputs['code'],),original_document=source,bun_executable=bun)),ObjectFound).object
+                        found=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id=record_id,key_id=solution_key['id'],values=(inputs['code'],),original_document=source,bun_executable=bun)),ObjectFound).object
                         if found.identity!=results[0].identity:
                             raise AssertionError('Original created identity and business-key read differ')
                     if found.version!=int(results[0].version):
                         raise AssertionError('Created native version and fresh business-key read differ')
                     refs=[{'key':dict(found.values)['code'],'version':int(results[0].version)}]
-                    if receipt!=step['expect']['receipt'] or refs!=step['expect']['refs']:
+                    expected_receipt=step['expect']['receipt']
+                    receipt_matches=all(committed.receipt_token==tokens[want[1:]] if name=='token_is' else receipt[name]==want for name,want in expected_receipt.items())
+                    if not receipt_matches or 'refs' in step['expect'] and refs!=step['expect']['refs']:
                         raise AssertionError('Original action receipt or references differ')
-                    tokens[step['save']['token']]=committed.receipt_token
+                    if 'save' in step:tokens[step['save']['token']]=committed.receipt_token
                     continue
                 if step['op']=='reached':
                     with transaction(people[case_actor],read_only=True) as (assembly,tx):
@@ -247,12 +265,13 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                 # The original consumer _check_rows requires equal row count and
                 # compares every authored expected field; whole-object expectations
                 # deliberately omit other returned fields. Never trim actual rows.
-                if len(actual_rows) != len(expected['rows']) or any(any(name not in actual or actual[name] != value for name, value in wanted.items()) for actual, wanted in zip(actual_rows,expected['rows'],strict=True)) or ('columns' in expected and list(rows.columns) != expected['columns']):
+                row_match='rows' not in expected or len(actual_rows)==len(expected['rows']) and all(all(name in actual and actual[name]==value for name,value in wanted.items()) for actual,wanted in zip(actual_rows,expected['rows'],strict=True))
+                if not row_match or ('row_count' in expected and len(actual_rows)!=expected['row_count']) or ('columns' in expected and list(rows.columns) != expected['columns']):
                     raise AssertionError(f'Original expected read differs: {case["id"]}; columns={rows.columns!r}; actual={actual_rows!r}; expected={expected!r}')
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
     return {'scope': 'selected original SQL/action observations; not complete adapter/corpus or interchange',
-        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if 'action.applies-atomically-and-reads-back' in case_ids else []),
+        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if any(name.startswith('action.') for name in case_ids) else []),
         'notChecked':['replica','complete consumer adapter mapping'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,

@@ -503,7 +503,7 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has eight original read/action workflows
+must be supported. The original consumer corpus has nine original read/action workflows
 exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
 replica execution and the full consumer corpus remain unqualified.
 
@@ -516,3 +516,5 @@ composite keys retain nested tuples. Ordinary projections keep their authored
 member shape. Whole-object timestamps use exact six-fraction UTC strings from the verified object image. The original whole-entity SQL/output observations pass on the pinned tuple; position/time shape checks use the declared committed lower-bound semantics, while complete consumer-adapter and harness qualification remain open.
 
 The original consumer AddSolution example is a trusted host handler bound to the exact retained fixture document. It resolves a target by public business-key lookup, submits one create/link group with a native ObjectExists precondition and x-action origin, retains the invocation's original request for committed recovery, and reads the result through the public API. It does not interpret arbitrary UMF action declarations. Counts, initial disposition and versions come from native semantic results; the committed token is attached only after verified replay following the host's known commit.
+
+The selected AddUseCase retry workflow maps its caller key directly to the group request ID, applies the original native KeyAbsent predicate, and retains the canonical input/request for retry. Every repeated step still calls Truss; the host cache supplies no result. The original committed token and semantic result are returned with replay disposition, and readback finds one object. Dry-run and other consumer action cases remain explicitly outside this example handler; the underlying public group API's caller-rollback workflow is available separately.

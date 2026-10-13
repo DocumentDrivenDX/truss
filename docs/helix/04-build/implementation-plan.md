@@ -7039,3 +7039,7 @@ Successful public queries/pages now include QueryReadPosition, an explicitly dec
 ### Original consumer atomic create/link adoption — 2026-10-13
 
 The original AddSolution action workflow passes public business-key resolution, one grouped create/link with native precondition, known outer commit, original-request replay, receipt visibility and whole-object readback. [Evidence](evidence/original-consumer-atomic-action-20261013.md) covers eight original read/action variants together. The selected trusted host handler is exact-fixture-bound and does not adopt a provisional UMF action interpreter. Other handlers, full consumer mapping/corpus, protected security activation and independent interchange remain open.
+
+### Original consumer idempotent action retry — 2026-10-13
+
+The original AddUseCase retry case passes native KeyAbsent/create, direct caller-key request selection, canonical-input retention, repeated native apply, identical committed token and one-object readback. [Evidence](evidence/original-consumer-action-retry-20261013.md) covers nine original read/action workflows together. The cache retains inputs only, not outcomes. Consumer dry-run/other handler mappings, full corpus/interchange and protected security activation remain open; no runtime or action-language contract was broadened.
