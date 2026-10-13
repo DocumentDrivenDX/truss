@@ -6733,3 +6733,10 @@ structured/composed records, page-key profiles, archive/retention operations,
 engine-owned import batches and managed-service qualification. The full Python
 interface goal remains active; this is a working public increment, not closure
 of the complete shared corpus or broader security compiler.
+
+
+### Private original publication settlement — 2026-10-12
+
+The private caller-transaction settlement adapter now consumes pinned v0.2 tombstone SQL, checks original installation/profile/generation under head and guard SHARE, confirms exactly one native update and exact stored settled row, and returns pending commit with no release grant. Trusted coordinator identity and conclusively completed/withheld publication remain premises; this is not an authenticated completion service.
+
+[Retained evidence](evidence/security-publication-settlement-20261012/receipt.json) records ten passing native tests, real dropped settlement COMMIT acknowledgment followed by original-token reconciliation, wrong/missing original-field and repeated-settlement refusal preserving caller work, exact wheel sources, and Astra Ultra review. This partially exercises truss.L11/L12 (US-057-AC7/8); no required case is promoted and all132 remain in scope.
