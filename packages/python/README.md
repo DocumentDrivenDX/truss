@@ -11,9 +11,9 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.17`,
-native runtime `0.54-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.24`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.18`,
+native runtime `0.55-candidate`, layout `1.0`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.25`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
@@ -311,7 +311,7 @@ Supported projections and counts can use records/documents containing timestamp
 and binary siblings. The complete original member mapping is retained, and every
 source cell is validated before filtering. Timestamp and binary projections, including `alias.*`, return the existing
 `TextValue` carriers with their original exact text; optional fields preserve
-absence and explicit null. Required singular binary fields support byte equality
+absence and explicit null. Required or absent-allowed singular binary fields support byte equality
 with canonical base64 SQL literals, another binary field, or
 `TextValue(kind="binary", text="AP8=")` parameters. Ordinary `str` parameters
 remain strings. Binary ordering/grouping and timestamp comparison/parameters
@@ -784,3 +784,12 @@ in their cursor context. Canonical base64 is checked independently in Python
 and Weft; SQL compares decoded bytes while projections preserve source text.
 Empty binary values are valid. Timestamp semantics remain projection-only.
 The native upgrade from0.53 retains existing data, receipts and feed custody.
+
+## Optional binary equality (SDK0.0.18 source tranche)
+
+Native0.55 and Weft0.4.20/backend0.4.25 extend byte equality to optional
+binary fields. Absent and explicit null retain distinct projections and yield
+SQL UNKNOWN in equality predicates; neither matches an ordinary binary value.
+Empty bytes remain a value. The new optional-equality capability is refused by
+the retained required-only backend0.4.24. No timestamp, ordering, grouping or
+null-parameter support is implied. Wire0.2.5 remains unchanged.
