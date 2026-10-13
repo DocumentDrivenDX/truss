@@ -1,0 +1,30 @@
+{
+  "status": "component-only",
+  "sources": {
+    "packages/postgresql/native/security-data-writer-guard-pg18.sql": "193121353be3036f8d6dacb3e14be2ab5494d5a24e1bea02bdf9c0d1b3a550e3",
+    "packages/python/tests/test_security_public_ontology_native.py": "b7914cd3c9c82aed0680f04dc75fb7095d4ab1ed91be784799950c2379601e8c"
+  },
+  "profile": "PostgreSQL18.6 READ COMMITTED read-write; original installer-bound identity/profile/relation OIDs; trusted function/trigger ownership",
+  "advancement": "per AFTER trigger event; UPSERT two and MERGE three; zero-row events advance conservatively",
+  "traceability": [
+    {
+      "case": "truss.L03",
+      "scope": "coordination prerequisite only",
+      "caseClosed": false
+    },
+    {
+      "case": "truss.L13",
+      "scope": "selected raw/object/edge data writer participation only",
+      "caseClosed": false
+    }
+  ],
+  "limitations": [
+    "no logical write authorization or fresh outer DML old/new snapshot theorem",
+    "no complete key/catalog/role/DDL/source participant closure",
+    "no production installer or backend admission",
+    "not composable with authority-change callback exactly-one-generation CAS; separate spike profile",
+    "earlier triggers or external volatile effects not qualified"
+  ],
+  "review": "Astra Ultra final: no remaining actionable code findings; read-only review, native suite executed by primary agent",
+  "validation": "11 native tests passed; post-run change only corrects observation wording"
+}
