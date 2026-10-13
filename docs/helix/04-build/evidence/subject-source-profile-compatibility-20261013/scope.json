@@ -1,0 +1,18 @@
+{
+  "scope": "Guard-level transaction incompatibility and native source-helper descriptor refusal correction; no complete source refinement/currentauthority/nativeadmission",
+  "tests": {
+    "z3UNSAT": 3,
+    "z3SAT": 3,
+    "nativeEpoch": 13,
+    "independentDecoderControls": 8
+  },
+  "acceptanceTraceability": {
+    "US-056-AC2": "Missing same-operation subject/source native profile integration explicitly retained",
+    "US-056-AC10": "Conditional profile incompatibility proof and descriptor-first transport prerequisite"
+  },
+  "requiredBackendCases": 132,
+  "promotedCases": 0,
+  "qualification": "Native epoch suite is an administrative fixture on PostgreSQL18.6/stock psycopg3.3.6 binary/libpq18.6. Descriptor guard avoids foreign Loader.load row decoding; stock driver loader constructors and runtime adaptation remain trusted. Native snapshots/cut scopes/issuer/source validity do not follow from profile predicates or metadata shape.",
+  "historicalCounterexample": "Original committed epoch adapter with its original comparison class invokes foreign NAME Loader.load once; the new native assertion fails as expected, and the control driver verifies that precise failure. Historical module is loaded separately; checkout not reverted. Final corrected native13 suite separately passes.",
+  "historicalSourceSha256": "dd9ba78a0832435e3c5d7b029322ffb5930784e90f7245b24175ca071f38f238"
+}

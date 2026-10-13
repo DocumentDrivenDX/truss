@@ -1,0 +1,29 @@
+{
+  "scope": "Observation and original semantic encoding inside one original supported host operation; outputhistorical notissuer/currentauthority/protectedrelease",
+  "sourceSha256": {
+    "packages/python/src/truss/_psycopg_subject_observation.py": "eefc32996474bc363de3429963fd23c79291fa50d5b735d7030041480072d053",
+    "packages/python/src/truss/psycopg_host.py": "f6ea9287a1b4723d1a17de8e16457e36f1904155c34ad90dbe07cc7837e436d4",
+    "packages/python/src/truss/_umf_key_tuples.py": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+    "packages/python/tests/test_psycopg_literal_subject_key_native.py": "29a38351cde907334aa2968968231e9651c9bc4800b7f65bdf2c6735b82e8f8c",
+    "scripts/check-module-boundaries.py": "2e2e5cfd4b0dddea912664bbde50cb14a463490928606d3964d14ca7772e329d"
+  },
+  "profile": "PostgreSQL18.6,psycopg3.3.6 binary/libpq18.6,Core0.8 KeyTuple3/Bun1.4.2,originalWeft selector0.1.0",
+  "nativeChecks": [
+    "one-operation tuple/receipt correspondence",
+    "codec refusal contained",
+    "nested host operation refused",
+    "post-codec effective role change refused/restored",
+    "deadline after entered encoding refuses publication",
+    "replaced native transaction refuses and quarantines"
+  ],
+  "observationRegressionGroups": 19,
+  "boundaryControls": 16,
+  "testMethod": "Actual native successful encoding uses original source/UMF owner. Adverse encoder monkeypatches deliberately violate trusted-code/raw-alias coordination premises to exercise native handback guards; not production owner authenticity or complete source refinement. Deadline control proves refusal after entered encoding, not preemption of subprocess/CPU work. Replaced transaction quarantines and is explicitly closed; no outcome settlement/reuse claim.",
+  "acceptanceTraceability": {
+    "US-056-AC2": "Native subject observation/semantic encoding correspondence prerequisite, not protected graph results",
+    "US-056-AC10": "Original host operation/transaction/deadline handback prerequisite, not complete held native authority or compiler refinement"
+  },
+  "trust": "Host/owner/helper/runtime/driver/adapters and source code remain trusted. Snapshot-visible roleflags are historical, not excluded-writer current authority. Native UTF8 strings/reencoding are supported-driver results, not raw-wire capture. No existence/key uniqueness/policy issuer/current source guards or protected execution credential.",
+  "promotedBackendCases": 0,
+  "requiredBackendCases": 132
+}

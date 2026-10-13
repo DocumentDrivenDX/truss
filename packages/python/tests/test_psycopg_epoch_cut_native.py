@@ -98,6 +98,24 @@ class PsycopgEpochCutNativeTests(unittest.TestCase):
         result=self.run_cut(t,lambda c:c.execute('CREATE OR REPLACE FUNCTION truss.psy_subject() RETURNS integer LANGUAGE sql AS $$ SELECT 444 $$'))
         self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000');self.assertEqual(self.shares(),0)
         self.assertEqual(self.connection.execute('SELECT truss.psy_subject()').fetchone(),(333,))
+    def test_foreign_epoch_oid_refuses_before_custom_row_loader(self):
+        from psycopg.adapt import Loader
+        loaded=[];called=[]
+        class ForeignNameLoader(Loader):
+            def load(self,data):loaded.append(True);return 'fixture'
+        self.connection.adapters.register_loader(19,ForeignNameLoader)
+        t=self.begin()
+        self.connection.execute('DROP FUNCTION truss.runtime_lock_fenced_fresh_source_epoch(text,text,text)')
+        self.connection.execute("""CREATE FUNCTION truss.runtime_lock_fenced_fresh_source_epoch(text,text,text)
+            RETURNS TABLE(installation_id name,source_epoch text,target_incarnation text,profile_hex text,
+            evidence_hex text,evidence_sha256 text,actual_writer_xid text,actual_database_oid text,
+            actual_backend_pid text,original_actor text,effective_actor text,cut_scope text)
+            LANGUAGE sql AS $$ SELECT 'fixture'::name,'foreign'::text,'target'::text,'01'::text,'02'::text,
+            'foreign'::text,'foreign'::text,'foreign'::text,'foreign'::text,'foreign'::text,'foreign'::text,
+            'transaction_epoch_state_fence_only'::text $$""")
+        result=self.run_cut(t,lambda c:called.append(True))
+        self.assertIsInstance(result,Error);self.assertEqual(loaded,[]);self.assertEqual(called,[])
+
     def test_wrong_profile_refuses_before_callback(self):
         t=self.begin();called=[]
         result=self.run_cut(t,lambda c:called.append(True),_EpochComparison('fixture',self.epoch,'target',b'wrong',b'\x02'))

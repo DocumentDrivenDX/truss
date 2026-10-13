@@ -7322,6 +7322,14 @@ has no object-change events. One basic installed PG18 test passes; see
 `evidence/python-noop-only-receipt-20261013.md`. Prior same-transaction creation
 plus no-op evidence remains historical; no runtime or new test case was added.
 
+
+### Subject observation and original key encoding in one Python host operation — 2026-10-13
+
+Private shared observation custody now accepts the fixed original key encoder before original host handback. Ordered immutable encodings select native TEXT string or raw CoreLiteral JSON; no new domain parser is added. Principal is checked after helper and after encoding; the original host subsequently validates original transaction, deadline, timeout restoration and savepoint completion before returning a frozen observation/receipt/tuple. Actual native controls pass exact original owner correspondence, local codec-error containment, nested host refusal, post-codec role refusal/restoration, entered-codec deadline refusal and replaced transaction refusal/quarantine. Adverse codec patches deliberately violate trusted-code/alias premises to exercise handback, without owner authentication or full source refinement claims. Existing19 native observation groups and Python16 boundary controls pass. Evidence/source pins: `evidence/python-subject-key-composition-20261013/receipt.json`. Original output remains historical; issuer/existence/current excluded-writer authority, source/helper qualification and protected native execution remain open. No required backend case promotion; all132 stay required.
+
+
+Astra Ultra independently replays ten composed and26 observer controls against the final bounded1–32 encoding selection. It verifies completed native11.734s handback controls and retained19-group observation regression evidence, separately from native replay. Source-pinned independent review and controls are retained beside the composition receipt; no actionable finding remains within the historical operation-local scope.
+
 ## New adopter gap: connected numeric facets — 2026-10-13
 
 Ashlar's original0.7 signed64/decimal18,4 source prepares but the selected source
@@ -7332,6 +7340,14 @@ This is a concrete new adopter implementation item, not a preparation-only fix:
 connect authoritative facet admission, exact no-rounding enforcement and Weft
 query lowering on one versioned runtime with a basic create/read/query check.
 No source-version reinterpretation or compiler-invented facets is authorized.
+
+
+### Subject/source transaction profile incompatibility — 2026-10-13
+
+Current original subject and fresh source guards are mutually exclusive: subject needs RR/SERIALIZABLE read-only, fresh source needs READ COMMITTED read-write. Z34.15.4 executes three UNSAT compatibility/one-dimension controls and three SAT nonvacuity witnesses, with complete constraints and current source hashes retained in `evidence/subject-source-profile-compatibility-20261013/proof.json`. This contradicts any claim that the existing separately passing components already compose into a protected operation. No guard is relaxed. The next implementation must explicitly admit an integrated fresh fenced read profile with complete declared facts/source/authority exclusions, or qualify a fresh stronger-isolation source producer; then native ordinary-caller end-to-end cases must exercise that exact profile. US-056-AC2/AC10 gain a concrete missing-integration countercheck only. All132 cases remain required without promotion.
+
+
+The fenced source helper previously fetched rows before validating their twelve names/TEXT OIDs. The guard now precedes fetch. All13 PostgreSQL18.6 epoch tests pass6.451s, including a fake NAME-OID helper inside caller rollback containment with zero foreign row loads/callbacks; owned server stop/status/socket cleanup is exact. Astra independently replays the3UNSAT/3SAT proof byte-identically and passes eight decoder controls. Source-pinned review, native logs and cleanup are retained beside the compatibility proof. No actionable finding remains within the qualified transport/finite-guard scope, and no integrated native profile is admitted.
 
 ## Initial GitHub release — owner request, 2026-10-13
 

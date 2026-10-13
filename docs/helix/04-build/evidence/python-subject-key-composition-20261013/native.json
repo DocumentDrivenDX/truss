@@ -1,0 +1,76 @@
+{
+  "serverVersion": "18.6",
+  "originalRequest": {
+    "interfaceVersion": "weft-security-mapping/0.1.0",
+    "modules": [
+      {
+        "documentJson": "{\"umf\": \"0.8.0\", \"id\": \"domain\", \"vocabularies\": {}, \"modules\": [{\"id\": \"m\", \"namespace\": \"\", \"elements\": [{\"id\": \"Staff\", \"kind\": \"record\", \"name\": \"Staff\", \"members\": [{\"module\": \"m\", \"element\": \"k0\"}, {\"module\": \"m\", \"element\": \"k1\"}, {\"module\": \"m\", \"element\": \"k2\"}, {\"module\": \"m\", \"element\": \"k3\"}, {\"module\": \"m\", \"element\": \"k4\"}], \"keys\": [{\"id\": \"pk\", \"name\": \"Key\", \"fields\": [{\"module\": \"m\", \"element\": \"k0\"}, {\"module\": \"m\", \"element\": \"k1\"}, {\"module\": \"m\", \"element\": \"k2\"}, {\"module\": \"m\", \"element\": \"k3\"}, {\"module\": \"m\", \"element\": \"k4\"}]}], \"extensions\": {}}, {\"id\": \"k0\", \"kind\": \"field\", \"name\": \"k0\", \"scalarType\": \"string\", \"cardinality\": \"one\", \"nullability\": \"required\", \"extensions\": {}}, {\"id\": \"k1\", \"kind\": \"field\", \"name\": \"k1\", \"scalarType\": \"boolean\", \"cardinality\": \"one\", \"nullability\": \"required\", \"extensions\": {}}, {\"id\": \"k2\", \"kind\": \"field\", \"name\": \"k2\", \"scalarType\": \"integer\", \"cardinality\": \"one\", \"nullability\": \"required\", \"extensions\": {}}, {\"id\": \"k3\", \"kind\": \"field\", \"name\": \"k3\", \"scalarType\": \"decimal\", \"cardinality\": \"one\", \"nullability\": \"required\", \"extensions\": {}, \"facets\": {\"precision\": 30, \"scale\": 4}}, {\"id\": \"k4\", \"kind\": \"field\", \"name\": \"k4\", \"scalarType\": \"binary\", \"cardinality\": \"one\", \"nullability\": \"required\", \"extensions\": {}}]}]}",
+        "pin": {
+          "documentId": "domain",
+          "revision": "schema-1",
+          "umfVersion": "0.8.0",
+          "sha256": "fa42f476cabdc4335fd4f5623cbfdd35e033d66068f55d2f340a025563345aab"
+        },
+        "selectedModuleIds": [
+          "m"
+        ]
+      }
+    ],
+    "policyJson": "{\"vocabulary\": \"umf.security\", \"version\": \"0.1.0\", \"id\": \"project-access\", \"revision\": \"policy-1\", \"ontology\": {\"documentId\": \"domain\", \"revision\": \"ontology-1\"}, \"rules\": [{\"id\": \"allow\", \"effect\": \"permit\", \"actions\": [\"read\"], \"target\": [{\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"Staff\"}], \"condition\": {\"op\": \"literal\", \"value\": true}}]}",
+    "ontologyJson": "{\"version\": \"0.1.0\", \"documentId\": \"domain\", \"revision\": \"ontology-1\", \"documents\": [{\"documentId\": \"domain\", \"revision\": \"schema-1\"}], \"subject\": {\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"Staff\"}, \"entities\": [{\"type\": {\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"Staff\"}, \"keyId\": \"pk\", \"fields\": [{\"ref\": {\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"k0\"}, \"protection\": \"unprotected\"}, {\"ref\": {\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"k1\"}, \"protection\": \"unprotected\"}, {\"ref\": {\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"k2\"}, \"protection\": \"unprotected\"}, {\"ref\": {\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"k3\"}, \"protection\": \"unprotected\"}, {\"ref\": {\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"k4\"}, \"protection\": \"unprotected\"}]}], \"associations\": [], \"context\": [], \"actions\": [\"read\", \"update\", \"query-original\"]}",
+    "queryProfileJson": "{\"version\": \"weft.security.query-profile/0.1.0\", \"id\": \"fixture-profile\", \"revision\": \"p1\", \"action\": \"read\", \"modelPins\": [{\"documentId\": \"domain\", \"revision\": \"schema-1\", \"umfVersion\": \"0.8.0\", \"sha256\": \"fa42f476cabdc4335fd4f5623cbfdd35e033d66068f55d2f340a025563345aab\"}], \"policySha256\": \"9d7ebd83662ef7b4be4e04acc54e2d345e8801a25ee8437e85a7d399c573bcc5\", \"ontologySha256\": \"0c06f33406d5ea2f0d9e7e6b167c58f6251941a90b425b5d60b67276520c78f0\", \"binding\": {\"backendId\": \"truss.postgresql\", \"backendVersion\": \"unqualified\", \"targetProfile\": \"fixture-only\", \"sha256\": \"47f9f7eca0d35353ba8d0bcca077c1f9365d45f78623d3a93ab521dc640ba6e6\"}, \"targets\": [{\"documentId\": \"domain\", \"moduleId\": \"m\", \"elementId\": \"Staff\"}], \"bindings\": []}",
+    "bindingJson": "{\"version\":\"fixture-only\",\"layout\":\"opaque-unqualified-storage\"}",
+    "backendId": "truss.postgresql",
+    "backendVersion": "unqualified",
+    "targetProfile": "fixture-only",
+    "sql": "SELECT r.k0 FROM Staff r",
+    "parameters": {}
+  },
+  "nativeText": [
+    "{\"string\": \"\u0394\ufeff\"}",
+    "{\"boolean\": true}",
+    "{\"integerToken\": \"9007199254740993\"}",
+    "{\"decimalToken\": \"9007199254740993.0000\"}",
+    "{\"binaryHex\": \"0001\"}"
+  ],
+  "nativeUtf8Hex": [
+    "7b22737472696e67223a2022ce94efbbbf227d",
+    "7b22626f6f6c65616e223a20747275657d",
+    "7b22696e7465676572546f6b656e223a202239303037313939323534373430393933227d",
+    "7b22646563696d616c546f6b656e223a2022393030373139393235343734303939332e30303030227d",
+    "7b2262696e617279486578223a202230303031227d"
+  ],
+  "originalReceipt": "{\"operation\":\"encode-core-key-tuple\",\"version\":\"3.0.0\",\"profile\":\"umf-key-tuple-v1\",\"source\":{\"umf\":\"0.8.0\",\"id\":\"domain\",\"vocabularies\":{},\"modules\":[{\"id\":\"m\",\"namespace\":\"\",\"elements\":[{\"id\":\"Staff\",\"kind\":\"record\",\"name\":\"Staff\",\"members\":[{\"module\":\"m\",\"element\":\"k0\"},{\"module\":\"m\",\"element\":\"k1\"},{\"module\":\"m\",\"element\":\"k2\"},{\"module\":\"m\",\"element\":\"k3\"},{\"module\":\"m\",\"element\":\"k4\"}],\"keys\":[{\"id\":\"pk\",\"name\":\"Key\",\"fields\":[{\"module\":\"m\",\"element\":\"k0\"},{\"module\":\"m\",\"element\":\"k1\"},{\"module\":\"m\",\"element\":\"k2\"},{\"module\":\"m\",\"element\":\"k3\"},{\"module\":\"m\",\"element\":\"k4\"}]}],\"extensions\":{}},{\"id\":\"k0\",\"kind\":\"field\",\"name\":\"k0\",\"scalarType\":\"string\",\"cardinality\":\"one\",\"nullability\":\"required\",\"extensions\":{}},{\"id\":\"k1\",\"kind\":\"field\",\"name\":\"k1\",\"scalarType\":\"boolean\",\"cardinality\":\"one\",\"nullability\":\"required\",\"extensions\":{}},{\"id\":\"k2\",\"kind\":\"field\",\"name\":\"k2\",\"scalarType\":\"integer\",\"cardinality\":\"one\",\"nullability\":\"required\",\"extensions\":{}},{\"id\":\"k3\",\"kind\":\"field\",\"name\":\"k3\",\"scalarType\":\"decimal\",\"cardinality\":\"one\",\"nullability\":\"required\",\"extensions\":{},\"facets\":{\"precision\":30,\"scale\":4}},{\"id\":\"k4\",\"kind\":\"field\",\"name\":\"k4\",\"scalarType\":\"binary\",\"cardinality\":\"one\",\"nullability\":\"required\",\"extensions\":{}}]}]},\"identity\":{\"module\":\"m\",\"element\":\"Staff\",\"key\":\"pk\"},\"values\":[{\"string\":\"\u0394\ufeff\"},{\"boolean\":true},{\"integerToken\":\"9007199254740993\"},{\"decimalToken\":\"9007199254740993.0000\"},{\"binaryHex\":\"0001\"}],\"keyPath\":\"/modules/0/elements/0/keys/0\",\"bytesHex\":\"554d464b31050405ce94efbbbf010101021039303037313939323534373430393933031504393030373139393235343734303939333030303005020001\"}",
+  "tupleHex": "554d464b31050405ce94efbbbf010101021039303037313939323534373430393933031504393030373139393235343734303939333030303005020001",
+  "expectedValues": [
+    {
+      "string": "\u0394\ufeff"
+    },
+    {
+      "boolean": true
+    },
+    {
+      "integerToken": "9007199254740993"
+    },
+    {
+      "decimalToken": "9007199254740993.0000"
+    },
+    {
+      "binaryHex": "0001"
+    }
+  ],
+  "negativeCases": [
+    "wrong scalar family",
+    "noncanonical integer",
+    "nonrepresentable decimal"
+  ],
+  "compositionControls": [
+    "one-operation tuple/receipt correspondence",
+    "codec refusal contained",
+    "nested host operation refused",
+    "post-codec effective role change refused/restored",
+    "deadline after entered encoding refuses publication",
+    "replaced native transaction refuses and quarantines"
+  ],
+  "scope": "Historical native observation/semantic encoding only; original helper/host/code trusted; no existence/current authority/key issuance/protected release"
+}

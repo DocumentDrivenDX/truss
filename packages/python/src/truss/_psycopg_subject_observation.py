@@ -32,7 +32,7 @@ class _SubjectObservation:
     original_inspection: bytes
 
 
-def _observe_ordinary_subject(host, transaction, selection, original_inspector):
+def _run_subject_operation(host, transaction, selection, original_inspector, produce):
     """Reacquire original host custody; output is immutable historical evidence."""
     if type(host) is not PsycopgHost or type(selection) is not _SubjectSelection:
         raise ValueError('Original host and immutable selection required')
@@ -92,6 +92,34 @@ def _observe_ordinary_subject(host, transaction, selection, original_inspector):
         if any(len(v)>65536 for v in encoded) or sum(map(len,encoded))>1048576:
             raise ValueError('Native subject tuple budget exceeded')
         principal()
-        return _SubjectObservation(selection.principal,digest,(selection.module,selection.record,selection.key),
+        observation=_SubjectObservation(selection.principal,digest,(selection.module,selection.record,selection.key),
                                    selection.columns,values,tuple(v.hex() for v in encoded),original)
+        result=produce(observation)
+        principal()
+        return result
     return host._run_operation(transaction,observe)
+
+
+def _observe_ordinary_subject(host, transaction, selection, original_inspector):
+    return _run_subject_operation(host,transaction,selection,original_inspector,lambda observation:observation)
+
+
+@dataclass(frozen=True,slots=True)
+class _ObservedSubjectKey:
+    observation: _SubjectObservation
+    original_receipt_bytes: bytes
+    tuple_bytes: bytes
+
+
+def _observe_ordinary_subject_key(host,transaction,selection,original_inspector,encodings,*,bun_executable='bun'):
+    """Original encoding inside native host custody, without issuing authority."""
+    if (type(selection) is not _SubjectSelection or type(encodings) is not tuple or not 1<=len(encodings)<=32 or len(encodings)!=len(selection.columns)
+            or any(type(v) is not str or v not in ('string','core-literal-json') for v in encodings)):
+        raise ValueError('Exact ordered native-to-literal encoding selection required')
+    def produce(observation):
+        from ._umf_key_tuples import encode_literal_key_tuple
+        texts=tuple(json.dumps({'string':value}) if encoding=='string' else value
+                    for value,encoding in zip(observation.values,encodings))
+        key=encode_literal_key_tuple(selection.original_document,observation.identity,texts,bun_executable=bun_executable)
+        return _ObservedSubjectKey(observation,key.original_receipt_bytes,key.tuple_bytes)
+    return _run_subject_operation(host,transaction,selection,original_inspector,produce)

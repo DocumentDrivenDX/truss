@@ -57,10 +57,13 @@ def _run_fenced_epoch_operation(host, transaction, comparison, callback):
         cursor.execute('SELECT * FROM truss.runtime_lock_fenced_fresh_source_epoch(%s,%s,%s)',
                        (installation, epoch, incarnation),
                        prepare=False, binary=False)
-        rows = cursor.fetchmany(2)
         names = ('installation_id','source_epoch','target_incarnation','profile_hex',
                  'evidence_hex','evidence_sha256','actual_writer_xid','actual_database_oid',
                  'actual_backend_pid','original_actor','effective_actor','cut_scope')
+        if (cursor.description is None or tuple(d.name for d in cursor.description)!=names
+                or any(d.type_code!=25 for d in cursor.description)):
+            raise ValueError('Exact original fenced epoch TEXT descriptors required')
+        rows = cursor.fetchmany(2)
         expected = (installation, epoch, incarnation, profile.hex(), evidence.hex(),
                     sha256(evidence).hexdigest(), *identity[0],
                     'transaction_epoch_state_fence_only')
