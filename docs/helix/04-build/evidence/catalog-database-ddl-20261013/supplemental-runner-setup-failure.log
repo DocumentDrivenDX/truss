@@ -1,0 +1,25 @@
+test_session_event_trigger_drift_refuses_final_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_session_event_trigger_drift_refuses_final_delivery)
+@covers US-056-AC9; late execution-setting drift prevents publication. ... ok
+setUpClass (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py", line 19, in setUpClass
+    epoch_tests.PsycopgEpochCutNativeTests.setUpClass.__func__(cls)
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_epoch_cut_native.py", line 16, in setUpClass
+    host_tests.PsycopgHostNativeTests.setUpClass.__func__(cls)
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 34, in setUpClass
+    cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_host_native.py", line 17, in postgres_bin_for_profile
+    return Path(os.environ[variable])
+                ~~~~~~~~~~^^^^^^^^^^
+  File "<frozen os>", line 679, in __getitem__
+KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+
+----------------------------------------------------------------------
+Ran 1 test in 28.520s
+
+FAILED (errors=1)

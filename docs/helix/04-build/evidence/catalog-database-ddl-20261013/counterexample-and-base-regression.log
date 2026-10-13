@@ -1,0 +1,12 @@
+test_session_event_trigger_drift_refuses_final_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_session_event_trigger_drift_refuses_final_delivery)
+@covers US-056-AC9; late execution-setting drift prevents publication. ... ok
+test_original_installed_ddl_barriers_readback_passes (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_original_installed_ddl_barriers_readback_passes) ... ok
+test_missing_installed_table_barrier_refuses_before_callback (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_missing_installed_table_barrier_refuses_before_callback) ... ok
+test_alter_routine_native_tag_boundary_probe (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_alter_routine_native_tag_boundary_probe) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 17.662s
+
+OK
+{"alterRoutineProbe": [{"outcome": "not-excluded", "definer": true}]}
+{"alterRoutineExtended": [{"outcome": "excluded", "definer": false}]}

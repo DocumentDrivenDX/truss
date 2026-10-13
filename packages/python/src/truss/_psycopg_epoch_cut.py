@@ -85,12 +85,13 @@ class _DDLBarrierComparison:
     source: str
     include_alter_routine: bool = False
     include_schema_ddl: bool = False
+    include_database_ddl: bool = False
 
 
 def _run_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, callback):
     """Private original installed barrier readback; no authority capability.
 
-    Covers two base tag sets plus optional ALTER ROUTINE and schema DDL. Event-trigger administration, shared
+    Covers two base tag sets plus optional ALTER ROUTINE, schema and unfiltered database DDL. Event-trigger administration, shared
     roles/ACL/config lifetime and dependency closure remain external premises.
     """
     if type(barrier) is not _DDLBarrierComparison or not callable(callback):
@@ -100,11 +101,18 @@ def _run_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, call
     extended=barrier.include_alter_routine
     if type(barrier.include_schema_ddl) is not bool:raise ValueError('Exact schema DDL barrier selection required')
     schemas=barrier.include_schema_ddl
+    if type(barrier.include_database_ddl) is not bool:raise ValueError('Exact database DDL barrier selection required')
+    database_ddl=barrier.include_database_ddl
     if (type(owner) is not int or type(function) is not int
             or not 0 < owner <= 4294967295 or not 0 < function <= 4294967295
             or type(source) is not str or not 1 <= len(source.encode('utf8')) <= 65536):
         raise ValueError('Bounded original native barrier identity required')
     def qualify(cursor):
+        cursor.execute("SELECT pg_catalog.current_setting('event_triggers')::pg_catalog.text",prepare=False,binary=False)
+        if (cursor.description is None or len(cursor.description)!=1 or cursor.description[0].type_code!=25):
+            raise ValueError('Exact native event trigger setting descriptor required')
+        if cursor.fetchmany(2)!=[('on',)]:
+            raise ValueError('Original native event trigger execution required')
         cursor.execute("SELECT e.evtname::pg_catalog.text,e.evtevent::pg_catalog.text,e.evtenabled::pg_catalog.text,"
                        "e.evtowner::pg_catalog.text,pg_catalog.to_jsonb(e.evttags)::pg_catalog.text,"
                        "p.oid::pg_catalog.text,p.proowner::pg_catalog.text,n.nspname::pg_catalog.text,p.proname::pg_catalog.text,"
@@ -117,12 +125,12 @@ def _run_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, call
                        "FROM pg_catalog.pg_event_trigger e JOIN pg_catalog.pg_proc p ON p.oid OPERATOR(pg_catalog.=) e.evtfoid "
                        "JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace "
                        "JOIN pg_catalog.pg_language l ON l.oid OPERATOR(pg_catalog.=) p.prolang "
-                       "WHERE (e.evtname IN ('truss_routine_ddl_writer_barrier','truss_table_ddl_writer_barrier') OR ("+("true" if extended else "false")+" AND e.evtname='truss_z_routine_ddl_writer_barrier') OR ("+("true" if schemas else "false")+" AND e.evtname='truss_schema_ddl_writer_barrier')) "
+                       "WHERE (e.evtname IN ('truss_routine_ddl_writer_barrier','truss_table_ddl_writer_barrier') OR ("+("true" if extended else "false")+" AND e.evtname='truss_z_routine_ddl_writer_barrier') OR ("+("true" if schemas else "false")+" AND e.evtname='truss_schema_ddl_writer_barrier') OR ("+("true" if database_ddl else "false")+" AND e.evtname='truss_database_ddl_writer_barrier')) "
                        "ORDER BY e.evtname",prepare=False,binary=False)
         if (cursor.description is None or len(cursor.description)!=19
                 or any(d.type_code!=25 for d in cursor.description)):
             raise ValueError('Exact original DDL barrier TEXT descriptors required')
-        rows=cursor.fetchmany(3+int(extended)+int(schemas))
+        rows=cursor.fetchmany(3+int(extended)+int(schemas)+int(database_ddl))
         suffix=(str(function),str(owner),'truss','runtime_fence_routine_ddl_writer','plpgsql','f','0',
                 'true','false','false','v','["search_path=pg_catalog, pg_temp"]',source,'false')
         expected=[('truss_routine_ddl_writer_barrier','ddl_command_start','A',str(owner),
@@ -131,6 +139,7 @@ def _run_ddl_fenced_epoch_operation(host, transaction, comparison, barrier, call
                    '["CREATE TABLE", "ALTER TABLE", "DROP TABLE"]',*suffix)]
         if extended:expected.append(('truss_z_routine_ddl_writer_barrier','ddl_command_start','A',str(owner),'["ALTER ROUTINE"]',*suffix))
         if schemas:expected.append(('truss_schema_ddl_writer_barrier','ddl_command_start','A',str(owner),'["CREATE SCHEMA", "ALTER SCHEMA", "DROP SCHEMA"]',*suffix))
+        if database_ddl:expected.append(('truss_database_ddl_writer_barrier','ddl_command_start','A',str(owner),None,*suffix))
         expected.sort(key=lambda row:row[0])
         if rows!=expected:
             raise ValueError('Exact original installed DDL barriers required')

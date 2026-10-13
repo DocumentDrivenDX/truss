@@ -1,0 +1,23 @@
+{
+  "packages/python/src/truss/_psycopg_epoch_cut.py": "592768644000c29dc52187d8e9d9e7f6b6f738c4ee9b7a22ac3a186fdd4244e5",
+  "scripts/security_catalog_subject_read.py": "c38289d6a75f2c605e38f2fd61d81a60056a42de2d4c33ce338476305b572963",
+  "packages/postgresql/native/source-epoch-database-ddl-barrier.sql": "4593c5d5b2caec37077a9d9b0f1631ffc8bbea9a045a3e17e8c66ac677ba7da3",
+  "packages/python/tests/test_security_catalog_source_cut_native.py": "951c01f51fc2905c10ed0bfe7261e7095dcc6fcc2f42efb81dc49ba0746a508d",
+  "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398",
+  "packages/postgresql/native/source-epoch-routine-ddl-barrier.sql": "93d0740578df55803370f15e7de9d325baa6f465426bf3a3bcac48c217e68413",
+  "packages/python/tests/test_psycopg_fact_cut_native.py": "ba09d73dbe74d6238151daaf60ea68fa113d759a1e6523632efe2a3078a0b21f",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/event-trigger-disabled-counterexample.json": "f6a07040b39b0f8e459c64ccc9ae8532cecc36f1d3daf68b5c7833f9ffb2e984",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/published-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/native.log": "ee5d8bef797989bd11c7f04a0a901a7ee79bf7d47e805103e722361d28873b86",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/counterexample-and-base-regression.log": "72fa53ba8b6e7767e51def2adfe2a4531aad3c8edde7cacbf500976ea933fbc7",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/supplemental-runner-setup-failure.log": "1c7582015171db17693af8ef14229eb4ff05ea8cd53dd0aee038fa17c8b1b0a6",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/receipt.json": "47dc640d03655c0385e931a53ee4dab183a21418c063ac1e16f69cde2dea4346",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/base-regression/cleanup-PsycopgFactCutNativeTests.json": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/base-regression/cleanup.json": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/independent-review/check.py": "a09574d66c5fe2618351e41d5ba75091f5c373d24f6a0f3c35c17cb98b93b9f7",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/independent-review/results.json": "df52815f2c8625a4e02cea8f6c1ece2308e4668cb291ee1d4d0ca33c9dcd1dce",
+  "docs/helix/04-build/evidence/catalog-database-ddl-20261013/independent-review/results-before-counterexample.json": "501c22695fdfa7901e146d28021b8f920cf170737b50b9372ad66dbc9cff9082"
+}

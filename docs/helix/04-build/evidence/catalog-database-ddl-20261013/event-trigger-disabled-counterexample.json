@@ -1,0 +1,9 @@
+{
+  "always": "A",
+  "tags": null,
+  "setting": "off",
+  "sourceShareLocks": 2,
+  "publicExecuteBefore": false,
+  "publicExecuteAfter": true,
+  "scope": "excluded administrative same-session bypass; final publication must refuse"
+}

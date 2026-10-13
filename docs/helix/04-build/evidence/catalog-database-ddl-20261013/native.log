@@ -1,0 +1,22 @@
+test_default_publication_without_source_binding_regression (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_default_publication_without_source_binding_regression) ... ok
+test_disabled_schema_barrier_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_disabled_schema_barrier_refuses_before_subject_and_delivery)
+@covers US-056-AC9; selected schema writer exclusion prerequisite. ... ok
+test_disabled_session_event_triggers_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_disabled_session_event_triggers_refuses_before_subject_and_delivery)
+@covers US-056-AC9; ALWAYS installation does not override event_triggers=off. ... ok
+test_disabled_source_barrier_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_disabled_source_barrier_refuses_before_subject_and_delivery) ... ok
+test_disabled_unfiltered_barrier_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_disabled_unfiltered_barrier_refuses_before_subject_and_delivery)
+@covers US-056-AC9; database DDL participation prerequisite. ... ok
+test_foreign_runtime_installation_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_foreign_runtime_installation_refuses_before_subject_and_delivery) ... ok
+test_native_epoch_for_unrelated_catalog_evidence_refuses_before_inspection (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_native_epoch_for_unrelated_catalog_evidence_refuses_before_inspection) ... ok
+test_native_epoch_for_unrelated_semantic_profile_refuses_before_inspection (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_native_epoch_for_unrelated_semantic_profile_refuses_before_inspection) ... ok
+test_same_executor_schema_ddl_refuses_before_effect_in_receiver (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_same_executor_schema_ddl_refuses_before_effect_in_receiver)
+@covers US-056-AC9; same-backend schema DDL exclusion prerequisite. ... ok
+test_session_event_trigger_drift_refuses_final_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_session_event_trigger_drift_refuses_final_delivery)
+@covers US-056-AC9; late execution-setting drift prevents publication. ... ok
+test_source_cut_precedes_key_and_survives_receiver (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_source_cut_precedes_key_and_survives_receiver) ... ok
+test_stale_original_epoch_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_stale_original_epoch_refuses_before_subject_and_delivery) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 122.697s
+
+OK

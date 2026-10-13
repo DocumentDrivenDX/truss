@@ -52,7 +52,7 @@ def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject
     if (type(barrier) is not _DDLBarrierComparison or type(barrier.owner_oid) is not int
             or not 1<=barrier.owner_oid<=4294967295 or type(barrier.function_oid) is not int
             or not 1<=barrier.function_oid<=4294967295 or type(barrier.source) is not str
-            or not 1<=len(barrier.source.encode('utf8'))<=65536 or type(barrier.include_alter_routine) is not bool or type(barrier.include_schema_ddl) is not bool):
+            or not 1<=len(barrier.source.encode('utf8'))<=65536 or type(barrier.include_alter_routine) is not bool or type(barrier.include_schema_ddl) is not bool or type(barrier.include_database_ddl) is not bool):
         raise ValueError('Exact native source barrier binding required')
     if subject_source is None:subject_source=(ROOT/'scripts/security-catalog-subject.sql').read_bytes()
     if type(subject_source) is not bytes or not 1<=len(subject_source)<=65536:
@@ -61,11 +61,11 @@ def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject
     for r in sorted(fact_relations,key=lambda r:r.oid):
         columns=[(c.name,c.number,c.type_oid,c.type_modifier,c.not_null,c.collation_oid,c.generated,c.identity) for c in r.columns]
         recipes.append({'schema':r.schema,'name':r.name,'oid':r.oid,'ownerOid':r.owner_oid,'guardSha256':hashlib.sha256(r.guard_source.encode('utf8')).hexdigest(),'columnsSha256':hashlib.sha256(json.dumps(columns,separators=(',',':'),ensure_ascii=False).encode('utf8')).hexdigest(),'columnCount':len(columns)})
-    packet={'interfaceVersion':'truss-owned-catalog-source-profile/0.2',
+    packet={'interfaceVersion':'truss-owned-catalog-source-profile/0.3',
             'requestSha256':hashlib.sha256(request).hexdigest(),
             'acceptedCatalogSha256':hashlib.sha256(assessment).hexdigest(),
             'subjectHelperSha256':hashlib.sha256(subject_source).hexdigest(),
-            'ddlBarrier':{'ownerOid':barrier.owner_oid,'functionOid':barrier.function_oid,'sourceSha256':hashlib.sha256(barrier.source.encode('utf8')).hexdigest(),'includeAlterRoutine':barrier.include_alter_routine,'includeSchemaDdl':barrier.include_schema_ddl},
+            'ddlBarrier':{'ownerOid':barrier.owner_oid,'functionOid':barrier.function_oid,'sourceSha256':hashlib.sha256(barrier.source.encode('utf8')).hexdigest(),'includeAlterRoutine':barrier.include_alter_routine,'includeSchemaDdl':barrier.include_schema_ddl,'includeDatabaseDdl':barrier.include_database_ddl},
             'factCuts':recipes}
     raw=json.dumps(packet,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf8')
     if len(raw)>65536:raise ValueError('Bounded native catalog source profile required')
