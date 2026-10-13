@@ -7150,3 +7150,11 @@ The row-permit gate and association lookup corrections pass all six native contr
 The native original/withheld precedence control passes9.627s with18 emitted field-state vectors across both rule orders. Active withheld dominates original; unknown/nonpermit rows return not-applicable. Original simulator output withholding remains consistent. No actual masked value projection or transformed value support is claimed.
 
 Astra's separate emitted-state corpus passes117 controls/164 evaluations (in-memory SQLite, not an independent PostgreSQL oracle). Native initial/full/gated/final-work and18 precedence vectors are retained separately. Reviewed fixes and tests are directly integrated to main; no full mask/transform/authentication or required backend-case completion is claimed.
+
+### Transformation state/choice correspondence in progress — 2026-10-13
+
+The original typed Weft0.4 diagnostic now delegates transformed literal equivalence/conflict to the original composer. Native54 state/choice vectors pass9.046s:0/-0equivalence,1/2conflict, withheld dominance and nonpermit/unknown gating. Choices retain original disposition metadata and are only applicable for transformed states; indeterminate/conflict fields must make projection refuse. No SQL transformed value projection, original-use gate, authenticated caller/source or protected execution is implemented by these diagnostic vectors. Review/final-source replay remain pending before direct-main integration; no acceptance-case promotion.
+
+All six native transformation/eligibility/disclosure/K3/data-writer/receipt controls pass26.791s. Final rebuilt-source replay and independent review remain pending. No transform value projection or native output-domain admission is established by state/choice selection alone.
+
+Independent Astra renderer checks pass875 controls/1,026 state-choice evaluations; that oracle uses in-memory SQLite for emitted CASE with typed-NULL spelling translated, separately from native PostgreSQL54-vector and full-suite evidence. No actionable component source blocker remains. Integration to main does not promote required backend cases or establish actual transformed value projection/authenticated protected execution.
