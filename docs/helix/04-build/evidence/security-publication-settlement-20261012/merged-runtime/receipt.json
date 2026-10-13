@@ -1,0 +1,9 @@
+{
+  "nativeTests": 10,
+  "seconds": 25.054,
+  "result": "pass",
+  "boundaries": "854 imports pass",
+  "runtime": "0.27",
+  "runtimeManifestSha256": "29d6963f879016c823f14cd7ae1152c3572bef9d1e4253df660de9d9c452484d",
+  "scope": "Post-merge native replay preserving concurrent runtime0.27; no full security admission or case promotion. Premerge wheel exact module/SQL evidence remains separately scoped."
+}
