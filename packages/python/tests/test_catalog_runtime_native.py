@@ -54,7 +54,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
         connection=psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000')
         self.addCleanup(connection.close);connection.execute('BEGIN')
-        host=adopt_psycopg_host(connection);self.addCleanup(host.detach)
+        host=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);self.addCleanup(host.detach)
         self.consumer_connections.append((connection,host))
         assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value
         return connection,host,assembly,host.adopt_transaction().value
