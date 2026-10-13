@@ -137,6 +137,20 @@ there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
 modified installations and downgrade routes are unsupported.
 
+The local launcher exposes that same explicit migration operation:
+
+```sh
+truss-local-postgres --data-dir /tmp/truss-local --upgrade --probe
+```
+
+`--upgrade` and `--install` are mutually exclusive. A missing installation or
+unsupported source refuses without falling back to installation. The output
+reports `upgraded` or `unchanged`, with actual previous/current release IDs, only
+after commit and fresh status confirmation of the same installation identity.
+An explicit upgrade of the current candidate is unchanged. Keep application
+connections quiescent for the migration; ordinary launch and `--install` never
+perform upgrades.
+
 ## Public operations
 
 The concrete `CatalogReferenceAssembly` returned for
