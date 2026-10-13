@@ -19,10 +19,10 @@
       "name": "direct_read",
       "pin": {
         "identity": "truss-native-direct-read-capability",
-        "version": "0.3",
-        "sha256": "a42a6b9578e0ac13ce22f9dbcd34efa6ba951f939c078bd9b04baba95f302cbb"
+        "version": "0.4",
+        "sha256": "41ad3d915fb28acd4bc23a7a9fb3617be21ab7001bc97f114bf3c4a79ec3ee24"
       },
-      "definition": "Native direct read capability/0.3: rootless exact scalar object identity/key/live pages; independent directed edge identity/relationship pages; authority receipt visibility; committed native import provenance after deletion; current document-qualified module authority; read-only READ COMMITTED supported; no structured ownership, general historical records or compiler execution. Optional registered feed-consumer reached comparison returns true/false only for valid authorized issued receipts against committed protected checkpoints, with separate comparison profile.",
+      "definition": "Native direct read capability/0.4: rootless exact scalar object identity/key/live pages; independent directed edge identity/relationship pages; authority receipt visibility; committed native import provenance after deletion; current document-qualified module authority; read-only READ COMMITTED supported; no structured ownership, general historical records or compiler execution. Optional registered feed-consumer reached comparison returns true/false only for valid authorized issued receipts against committed protected checkpoints, with separate comparison profile. One-call live 1\u20133 qualified independent directed relationship hops return unique numeric-ordered terminal scalar objects with path-local cycle exclusion, or limited/not-established with no records and restart. Logical attempted-state/result/byte limits and ordinary deadlines; no exact backend allocation guarantee or staged snapshot resume.",
       "policyDefinition": "Native direct-read policy/0.1: ordinary authenticated person; current document-qualified reader or writer for object, property, relationship and endpoint dependencies used by each supported read; no writer-only gate; READ COMMITTED and supported read-only transactions; exact installed release; no raw table privileges.",
       "policyPin": {
         "identity": "truss-native-direct-read-policy",

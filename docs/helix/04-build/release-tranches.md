@@ -37,3 +37,5 @@ continue other admitted key/value work. Actual Aurora/Lakebase environments
 must be available before managed-service support can be claimed. Independent
 second implementation/interchange remains deferred by accepted ADR-003; this
 new goal does not revive superseded mandatory first-release gates.
+
+2026-10-13: typed business keys released in0.0.3 with Weft0.4.5. One-call live traversal and declaration-owner read correction now pass basic PG18 workflows and exact0.40 additive upgrade checks; preparing0.0.4 with Weft0.4.6. Staged traversal remains in the interface tranche.

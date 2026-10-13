@@ -13,6 +13,7 @@ from .execution import Outcome, TransactionHandle
 from .preparation import CatalogDocument, PreparedAcceptance
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogInvalid, CatalogRefused, CatalogUnavailable
+from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 from .object_read import ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
 from .imports import ImportInput, ObjectImportRecord, EdgeImportRecord, ImportExecutionResult
@@ -76,6 +77,9 @@ class NativeDirectReadCapability(_NativeCapability[Literal['direct_read']]):
     def lookup_import_source_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,
                                             maximum_bytes: int=1048576) -> Outcome[ImportSourceFound | ImportSourceAbsent | ImportSourceUnavailable]:
         return self._assembly.lookup_import_source_in_transaction(transaction,entity=entity,maximum_bytes=maximum_bytes)
+
+    def traverse_in_transaction(self,transaction: TransactionHandle,*,start: TypedIdentity,hops: tuple[TraversalHop,...],maximum_objects: int=100,maximum_path_states: int=10000,maximum_bytes: int=1048576) -> Outcome[TraversalComplete | TraversalLimited | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+        return self._assembly.traverse_in_transaction(transaction,start=start,hops=hops,maximum_objects=maximum_objects,maximum_path_states=maximum_path_states,maximum_bytes=maximum_bytes)
 
     def get_object_in_transaction(self, transaction: TransactionHandle, *, document_id: str,module_id: str,record_id: str,
                                   object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:

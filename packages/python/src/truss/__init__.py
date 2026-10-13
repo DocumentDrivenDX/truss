@@ -108,3 +108,6 @@ from .query import QueryReadPosition
 __all__ += ['QueryReadPosition']
 
 __all__ += ["FeedAckReceipt", "FeedReceiptAcknowledged", "FeedAckReconciled"]
+
+from .traversal import TraversalHop, TraversalComplete, TraversalLimited
+__all__ += ["TraversalHop", "TraversalComplete", "TraversalLimited"]
