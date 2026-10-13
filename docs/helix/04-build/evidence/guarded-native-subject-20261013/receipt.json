@@ -1,0 +1,23 @@
+{
+  "profile": "guarded-native-subject-component",
+  "server": "PostgreSQL18.6",
+  "nativeTests": 5,
+  "nativeSeconds": 29.706,
+  "epochRegressionTests": 2,
+  "epochRegressionSeconds": 4.221,
+  "moduleImports": 932,
+  "acceptanceCriteria": [
+    "US-056-AC2",
+    "US-056-AC9",
+    "US-056-AC10"
+  ],
+  "qualification": "Component prerequisites only; no backend case promotion or securityReady claim. Continuous custody, original source and issuer authenticity remain premises. Complete role/DDL/handler/grant lifetime, alternate endpoint closure and protected release remain open.",
+  "evidence": {
+    "epoch-regression.log": "7cdb494e1634f33e522d3ca98d4c7467197727f873808145cf77bf444cff3cb5",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "efa0e232ab5c91146d6740d061769d3c05f4aa749fe187654b63b112bb189e3b",
+    "native.log": "f16702ffa0c6d0e322844b9d29e15d8d9ffbefc2ce81a419f7716cd8caed1530",
+    "decision.json": "3966cf8f43266a70436f3cb7ca9ec3d0e1345f41d8f16f0259bc5429945a769f",
+    "native-final.log": "dd3ca8fcfae6515e1bd77754c960d08cf2c63d0fc970e9c2c98842576d40fd97"
+  }
+}

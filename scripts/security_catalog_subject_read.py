@@ -32,19 +32,34 @@ def _verify_helpers(cursor,source):
         if cursor.fetchmany(2)!=[expected]:raise ValueError('Exact installed catalog subject helper snapshot required')
 
 
-def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector):
+def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,*,fact_relations=None):
     if (type(mapping) is not PreparedSecurityMapping or type(selection) is not _SubjectSelection
             or type(caller_host) is not PsycopgHost or type(executor_host) is not PsycopgHost):raise ValueError('Exact native caller and accepted mapping required')
     mapping=replace(mapping);selection=replace(selection)
     if (selection.original_request!=mapping.original_request or selection.original_document!=(BASE/'document.json').read_bytes()
             or (selection.module,selection.record,selection.key,selection.schema,selection.routine,selection.columns,selection.actor_carrier)!=('m','Staff','pk','truss','catalog_subject_current',('staff_id',),'text')):
         raise ValueError('Exact shared named catalog Subject selection required')
+    qualify=None;executor_relations=None;subject_cursor=[None]
+    if fact_relations is not None:
+        from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison,_prepare_fenced_fact_cut
+        if (type(fact_relations) is not tuple or len(fact_relations)!=2
+                or any(type(r) is not _FactRelationComparison for r in fact_relations)
+                or {(r.schema,r.name) for r in fact_relations}!={('truss','object'),('truss','catalog_subject_map')}):
+            raise ValueError('Exact caller object and Subject map fact cuts required')
+        if any(type(r.columns) is not tuple or len(r.columns)>1600
+                or any(type(c) is not _FactColumnComparison for c in r.columns) for r in fact_relations):
+            raise ValueError('Exact bounded caller fact column comparisons required')
+        fact_relations=tuple(replace(r,columns=tuple(replace(c) for c in r.columns)) for r in fact_relations)
+        qualify=_prepare_fenced_fact_cut(fact_relations,lambda c:None,existing_locks=True)
+        executor_relations=tuple(r for r in fact_relations if r.name=='object')
     source_path=ROOT/'scripts/security-catalog-subject.sql';source_bytes=source_path.read_bytes();source=source_bytes.decode();source_pin=hashlib.sha256(source_bytes).digest()
     def produce(observed):
+        if qualify is not None:qualify(subject_cursor[0])
         key=encode_literal_key_tuple(selection.original_document,observed.identity,tuple(json.dumps({'string':v}) for v in observed.values),bun_executable='/opt/homebrew/bin/bun')
         return observed.values[0],key.tuple_bytes
     observe=_prepare_subject_operation(caller_host,selection,original_inspector,produce,(('read_committed','read_write'),))
     def execute(cursor,observed):
+        subject_cursor[0]=cursor
         _pin_cursor(cursor);_verify_helpers(cursor,source)
         subject,key=observe(cursor,observed)
         cursor.execute('SELECT * FROM truss.catalog_subject_context(SESSION_USER::pg_catalog.text)',prepare=False,binary=False)
@@ -58,10 +73,17 @@ def run_owned_native_catalog_resource_read(caller_host,caller_transaction,execut
             if c.fetchmany(2)!=[context[0][:2]]:raise ValueError('Original caller/executor installation correspondence required')
         qualified=executor_host._run_operation(executor_transaction,environment)
         if not isinstance(qualified,Ok):raise ValueError('Original caller/executor installation correspondence required')
-        result=run_owned_catalog_resource_read(executor_host,executor_transaction,mapping,subject)
+        if executor_relations is None:result=run_owned_catalog_resource_read(executor_host,executor_transaction,mapping,subject)
+        else:result=run_owned_catalog_resource_read(executor_host,executor_transaction,mapping,subject,fact_relations=executor_relations)
         if not isinstance(result,Ok):raise ValueError('Original native Subject catalog evaluation refused')
         _pin_cursor(cursor);_verify_helpers(cursor,source)
         if observe(cursor,caller_host._observe(cursor))!=(subject,key):raise ValueError('Original native Subject changed during delegated evaluation')
         if hashlib.sha256(source_path.read_bytes()).digest()!=source_pin:raise ValueError('Original catalog Subject source changed')
         return result.value
     return caller_host._run_operation(caller_transaction,execute)
+
+
+def run_guarded_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations):
+    """Explicit guarded fixture; omitted guard never downgrades to legacy mode."""
+    if fact_relations is None:raise ValueError('Mandatory native caller fact cuts required')
+    return run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations=fact_relations)
