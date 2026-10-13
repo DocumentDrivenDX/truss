@@ -12,7 +12,7 @@ from truss.contracts import MapValue, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
     RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -142,9 +142,9 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                 with transaction(people[step['as']], read_only=True) as (assembly, tx):
                     archived=expect(success(assembly.accepted_document_in_transaction(tx,document_id=document_id)),AcceptedDocument)
                     if archived.content!=source:raise AssertionError('Original consumer document bytes differ')
-                    rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,))), QueryRows)
+                    rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id']=='read.key-lookup-whole-entity' else None)), QueryRows)
                 expected = step['expect']
-                actual_rows = [dict(zip(rows.columns, row, strict=True)) for row in rows.rows]
+                actual_rows = [{name: list(value) if type(value) is tuple else value for name, value in zip(rows.columns, row, strict=True)} for row in rows.rows]
                 if actual_rows != expected['rows'] or ('columns' in expected and list(rows.columns) != expected['columns']):
                     raise AssertionError(f'Original expected read differs: {case["id"]}; columns={rows.columns!r}; actual={actual_rows!r}; expected={expected!r}')
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],

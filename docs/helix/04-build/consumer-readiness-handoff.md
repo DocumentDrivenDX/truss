@@ -4,31 +4,32 @@
 
 Use the [public Python guide](../../../packages/python/README.md) for the callable
 interface and installation instructions. The current ordinary-role candidate is
-Truss runtime0.32, layout0.16, UMF core0.7.0 and Weft backend0.4.5. Its tested local
+Truss runtime0.33, layout0.16, UMF core0.7.0 and Weft backend0.4.6. Its tested local
 tuple is DocumentDrivenDX `pgserver-pg18==18.6.1` / PostgreSQL18.6 /
 psycopg3.3.6 binary with libpq18.6; UMF preparation and key production require Bun1.4.2.
 The host supplies its person-authenticated connection and owns outer settlement.
 
 | Consumer need | Available public implementation |
 | --- | --- |
-| Start, install, inspect and migrate | LocalPostgres/CLI, explicit caller-transaction install/status and additive .23–.31→.32 upgrades; installation does not require superuser but does require the documented setup privileges |
+| Start, install, inspect and migrate | LocalPostgres/CLI, explicit caller-transaction install/status and additive .23–.32→.33 upgrades; installation does not require superuser but does require the documented setup privileges |
 | Catalog and source | Actual accepted document-qualified identities, reports, reader-scoped catalog, original document bytes and compatible scalar catalog evolution |
 | Atomic actions and retries | Object/independent-edge create/update/delete, groups/batches, Truss-evaluated preconditions, typed failures, caller rollback for dry-run and durable original-request replay |
-| Reads and queries | Object/key/edge pages and Weft filters/joins/counts/relationships; exact six-family scalar projections and complete `alias.*` |
+| Reads and queries | Object/key/edge pages and Weft filters/joins/counts/relationships; exact six-family scalar projections; opt-in complete `alias.*` with `read_profile="complete-entity"` |
 | Imports | Public object/edge record builders, caller-transaction batches, created/skipped/rejected outcomes and retained load/source/actor provenance |
 | Receipt, feed and history | Committed opaque receipt tokens/reached, ordinary-role feed delivery and caller-asserted durable ACK, retained scalar/edge reconstruction |
 
 These are concrete providers returned by `CatalogRuntimeConfiguration()` through
 `create_reference_assembly`; broad draft protocols are not additional implemented
-profiles. [Portable preview0.6](corpus/public-python/0.6/README.md) supplies two basic
+profiles. [Portable preview0.7](corpus/public-python/0.7/README.md) supplies two basic
 adopter cases: the22-observation workflow and10-observation exact scalar case.
 [Query evidence](evidence/python-exact-query-projections-20261012.json) and
 [portable case evidence](evidence/python-scalar-preview-20261012.json) qualify those
 actual installed-package workflows on the selected PG18 tuple.
 
 The original consumer model now registers with its original extension artifacts,
-diagnostics and partially interpreted actions retained. Three unchanged authority
-read cases pass, including forward/inverse relationship equality and an absent
+diagnostics and partially interpreted actions retained. Four unchanged authority
+read cases pass, including complete entity values with native attribution,
+forward/inverse relationship equality and an absent
 related key. Weft resolves this single-key shorthand through its existing
 HAS_RELATED semantics. Composite keys still require explicit tuples.
 
