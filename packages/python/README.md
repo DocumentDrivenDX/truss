@@ -5,7 +5,7 @@ mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles every transaction.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.3`,
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.4`,
 native runtime `0.40-candidate`, layout `0.16`
 candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.10`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
@@ -14,7 +14,7 @@ server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.3](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.3).
+The current release is [v0.0.4](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.4).
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
@@ -25,23 +25,23 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.3 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.5 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.4 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.6 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.3'
+  'truss-toolkit[local,native,query]==0.0.4'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
 publishes package checksums and source/runtime/backend pins. The Truss release
-workflow exercises the exact uploaded wheel with published Weft0.4.5 and verified
+workflow exercises the exact uploaded wheel with published Weft0.4.6 and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.3 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.4 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.3 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.4 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```
@@ -150,7 +150,7 @@ the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
 `upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.39 to 0.40 for published v0.0.3. The trusted administrator must quiesce consumers and
+0.23 through 0.39 to 0.40 for published v0.0.4. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
@@ -581,7 +581,7 @@ there is no cleanup API. The destination consumer verifies its own publication
 before ACK. Truss confirms source retention and checkpoint inclusion and does
 not verify another database's commit or grant history-deletion authority.
 
-### Exact numeric facets (v0.0.3)
+### Exact numeric facets (v0.0.4)
 
 Numeric support began in v0.0.2 and is retained by runtime `0.40-candidate`
 and Weft `0.4.5` / backend `0.4.10`. Fresh UMF 0.7 and 0.8 catalogs can declare signed
@@ -595,7 +595,7 @@ Existing installation upgrades preserve original reports and receipts.
 
 These capabilities were added after v0.0.1.
 
-### Typed business keys (v0.0.3)
+### Typed business keys (v0.0.4)
 
 The `0.0.3` package / runtime `0.40-candidate` adds authored business-key
 writes, updates, lookup, imports and key-absence preconditions for strings,
@@ -618,3 +618,26 @@ Updates preserve old reservations; imports skip reserved or live identities.
 Historical committed requests retain their original results across upgrade.
 Timestamp/float keys are refused. Weft pagination and relationship-key projections
 still require string keys. This tranche was added after v0.0.2.
+
+## One-call graph traversal
+
+After obtaining a current typed object identity and relationship reference:
+
+```python
+from truss import TraversalHop, TraversalComplete, TraversalLimited
+relationship = assembly.get_relationship_reference_in_transaction(
+    tx, document_id="notes", module_id="notes", relationship_id="related").value
+result = assembly.traverse_in_transaction(
+    tx, start=note.identity, hops=(TraversalHop(relationship=relationship),),
+    maximum_objects=100, maximum_path_states=10000)
+```
+
+One to three ordered hops support outgoing, incoming or both directions over
+independent directed relationships. Complete results contain all unique terminal
+objects in numeric type/id order. Paths cannot repeat a typed object, including
+the start. Read-only READ COMMITTED transactions work. All selected relationship,
+endpoint and property declaration modules require current read access.
+
+A limited result contains no objects and requires restart. Bounds cover logical
+attempted states and output; use ordinary PostgreSQL deadlines too. Membership is
+live per call; no cursor, held snapshot, resume or exact backend allocation claim.
