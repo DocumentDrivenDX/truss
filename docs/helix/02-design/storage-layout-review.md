@@ -26,8 +26,8 @@ ddx:
 
 # Storage Layout Review: generic catalog storage against graph-storage practice
 
-**Updated 2026-10-13** against `main` at `097bd38c` (v0.0.2); see the
-update section first.
+**Updated 2026-10-13** against `main` at `097bd38c` (v0.0.2), rechecked at
+`e948dee5` (v0.0.3); see the update section first.
 
 Design input for [ADR-002](adr/ADR-002-storage-strategy.md), accepted on
 2026-10-03 with provisional points. The review evaluates the draft storage
@@ -55,7 +55,13 @@ adopted.
 ## Update 2026-10-13: vision, specifications and the v0.0.2 implementation
 
 This update reviews `main` at `097bd38c` (tag v0.0.2), where the Python reference
-implementation now exists. The sections after it are the original review of
+implementation now exists. It was rechecked against v0.0.3 (`e948dee5`), released
+the same day. That release adds exact typed business keys (integer, decimal,
+Boolean and binary key components), which settles concern 6. It leaves
+`layout.sql` unchanged and does not affect the other findings: key buckets
+still have no unique index, object rows are still locked `FOR UPDATE NOWAIT`,
+the catalog replay remains, and the report still forces `unqualified`. The
+probes below ran on v0.0.2. The sections after it are the original review of
 2026-10-03, kept for its reasoning.
 
 The update compares three things:
@@ -178,7 +184,7 @@ The gaps are elsewhere:
 | 3 | Shared table and type count | Settled by SPIKE-003, with one object table |
 | 4 | Canonical store | Object row is canonical; the journal changed shape (ADR-007) |
 | 5 | Property identity across revisions | Settled: definition pins appear in every event |
-| 6 | Numeric kinds colliding in keys | Settled for string keys; numeric key components are not implemented |
+| 6 | Numeric kinds colliding in keys | Settled in v0.0.3: typed key components, and decimal-equivalent tokens identify the same key |
 | 7 | `jsonb_set` NULL | Settled (`props NOT NULL`) |
 | 8 | Endpoint types enforced by the database | Settled; foreign keys observed refusing a raw insert |
 | 9 | Edge properties | Open; typed edge properties are refused |
