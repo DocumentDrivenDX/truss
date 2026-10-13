@@ -31,3 +31,11 @@ Role/AuthorityProfile. Complete role/ACL/native handler lifetime, mutation
 coverage and installed backend admission remain required. No truss.B01/L05
 promotion or change to the original132-case scope. Trace US-056AC9,
 US-057AC3/AC7 and SPIKE-004 CH04/CH05 prerequisites.
+
+Direct-main integration replay: concurrent main fed147786e959bb1988fc163fad532b987e0ca3d
+introduced catalog runtime 0.55-candidate. Merge source
+37ab24075ca5d7e8e9b725a2272275104b5925f8 passed all four authority cases and
+both original TLS cases (6/52.662s), and the actual external Linux peer passed
+with all three owned resources removed. Receipts: merged-main-native.log and
+merged-main-peer.json/.log. Python module boundaries passed (960 imports).
+These are prerequisite regressions; the full backend acceptance inventory remains open.
