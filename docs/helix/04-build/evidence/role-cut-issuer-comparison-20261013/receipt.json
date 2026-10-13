@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "tests": 1,
+  "seconds": 19.388,
+  "covers": [
+    "US-056-AC9"
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "65e3ece19aabb54c218fd4add5311bafd3e5aad327ad04975ff927a050a02d6e",
+    "packages/python/src/truss/_security_bootstrap/registered-role-catalog-cut.sql": "91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb",
+    "packages/postgresql/native/registered-role-catalog-cut.sql": "91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb",
+    "packages/python/tests/test_security_registered_callers_native.py": "189dd39ef7a6b2cd14a4a58fc3f6f32014fcc214724916f713307af4b470ce6b"
+  },
+  "scope": "Source-pinned native issuer definition/owner/config/directACL comparison. Original positive and PUBLIC/INVOKER/path/volatility mutation controls. Supplied expected OIDs are trusted custody inputs; caller must hold source/DDL cut. No authenticated installer/OID issuer identity, owner lifetime, ordinary producer integration or full backend admission;132 required inventory retained."
+}

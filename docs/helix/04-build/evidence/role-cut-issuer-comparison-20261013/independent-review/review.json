@@ -1,0 +1,10 @@
+{
+  "review": "Original role-cut issuer comparison source review",
+  "status": "No actionable findings within selected comparison scope.",
+  "head": "5210a392c64bc639e38155bf6bd7cf92ad32dc9a",
+  "assessment": "Exact bounded distinct owner/caller OIDs; pinned bundled SQL equals original native asset. Qualified catalog lookup compares selected16 routine values and exact body/config before superuser-owner check. Exact two direct EXECUTE grants require owner grantor, no grant option and only owner/caller. Native TEXT descriptors precede bounded fetches; no issuer invocation occurs in verifier.",
+  "native": "Parent-owned1/19.388s passed: baseline and restored definition pass; PUBLIC EXECUTE, SECURITY INVOKER, search_path and IMMUTABLE changes each refuse. Source/log assertions inspected; no new campaign.",
+  "limits": "Expected OIDs and original packaged code are trusted inputs; caller must hold source/DDL custody. No issuer identity authentication, continuous privileged-owner/language-handler lifetime, effective membership closure, integrated ordinary producer, backend admission or132-case promotion.",
+  "sourceDigests": {"packages/python/src/truss/_security_catalog_subject_installation.py":"65e3ece19aabb54c218fd4add5311bafd3e5aad327ad04975ff927a050a02d6e","packages/python/src/truss/_security_bootstrap/registered-role-catalog-cut.sql":"91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb","packages/postgresql/native/registered-role-catalog-cut.sql":"91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb","packages/python/tests/test_security_registered_callers_native.py":"189dd39ef7a6b2cd14a4a58fc3f6f32014fcc214724916f713307af4b470ce6b"},
+  "evidenceDigests": {"receipt.json":"ee6c31b62727f6aae208914075c1cc7494a664ecdbc0964e60a11b0c69c4756b","native.log":"2e168f3cfafef1f7135ec6f6053fbc61232676ec91cf1ff4211234d672f88f3d"}
+}

@@ -7903,3 +7903,7 @@ The owned external composition now uses the explicit role-fenced registered prod
 ### Fixed role-lock issuer for an ordinary caller — 2026-10-13
 
 Original native registered-role-catalog-cut.sql defines a no-input, pinned-path SECURITY DEFINER lock-only routine with PUBLIC revoked. One explicitly granted ordinary caller obtains both locks without catalog UPDATE rights; ungranted caller refuses42501 and independent ALTER ROLE/GRANT refuse55P03 until rollback. Native test passes1/11.164s. [Evidence](evidence/ordinary-role-lock-issuer-20261013/receipt.json) qualifies the trusted privileged fixture installer; production installation must pin owner/source/ACL and grant only private executor. Installer/lifetime and ordinary producer integration remain open, with no backend acceptance promotion.
+
+### Source-pinned role issuer native comparison — 2026-10-13
+
+The Python package now carries byte-identical original role-cut SQL. verify_role_catalog_cut_issuer_with_cursor checks its SHA, distinct bounded expected OIDs, exact native routine attributes/body/config, privileged owner and exact two direct EXECUTE ACL rows. Original positive and PUBLIC/INVOKER/path/volatility drift controls pass1/19.388s. [Evidence](evidence/role-cut-issuer-comparison-20261013/receipt.json) qualifies trusted expected identity custody and held DDL/source cut as premises; authenticated installer, owner lifetime and ordinary producer integration remain open. No required backend case is promoted.

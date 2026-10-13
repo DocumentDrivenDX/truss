@@ -143,3 +143,20 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
   with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
    writer.execute(sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)))
    writer.execute(sql.SQL('ALTER ROLE {} NOBYPASSRLS').format(sql.Identifier(self.bob)))
+
+ def test_role_cut_issuer_definition_and_acl_drift_refuse_before_call(self):
+  """@covers US-056-AC9; installed original issuer comparison."""
+  from truss._security_catalog_subject_installation import verify_role_catalog_cut_issuer_with_cursor
+  self.source_setup()
+  self.admin.execute((source.ROOT/'packages/postgresql/native/registered-role-catalog-cut.sql').read_text())
+  self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_registered_role_catalog_cut() TO consumer')
+  owner,caller=self.admin.execute("SELECT (SELECT oid FROM pg_catalog.pg_roles WHERE rolname=CURRENT_USER),(SELECT oid FROM pg_catalog.pg_roles WHERE rolname='consumer')").fetchone()
+  with self.admin.cursor() as cursor:
+   verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner,caller_oid=caller)
+   for mutation in ('GRANT EXECUTE ON FUNCTION truss.acquire_registered_role_catalog_cut() TO PUBLIC','ALTER FUNCTION truss.acquire_registered_role_catalog_cut() SECURITY INVOKER','ALTER FUNCTION truss.acquire_registered_role_catalog_cut() SET search_path=public','ALTER FUNCTION truss.acquire_registered_role_catalog_cut() IMMUTABLE'):
+    self.admin.execute('SAVEPOINT issuer_drift')
+    try:
+     self.admin.execute(mutation)
+     with self.assertRaises(ValueError):verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner,caller_oid=caller)
+    finally:self.admin.execute('ROLLBACK TO SAVEPOINT issuer_drift');self.admin.execute('RELEASE SAVEPOINT issuer_drift')
+   verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner,caller_oid=caller)
