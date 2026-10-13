@@ -1,0 +1,12 @@
+{
+  "ownerMode": "refuse-helper-owner",
+  "scope": "Owned external peer TLS publication; database stays in service-private local runtime, not a separate network database",
+  "controls": {},
+  "cleanup": {
+    "truss-channel-85404b441244-peer": true,
+    "truss-channel-85404b441244-service": true,
+    "truss-channel-85404b441244": true
+  },
+  "status": "failed",
+  "failureType": "RuntimeError"
+}

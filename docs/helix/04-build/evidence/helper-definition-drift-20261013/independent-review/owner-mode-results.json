@@ -1,0 +1,318 @@
+{
+  "scope": "Original source AST owner-mode/CLI gates and recorded mutation/commit/re-adoption ordering; no native/Docker/network operation or production proof",
+  "passed": 77,
+  "controls": [
+    {
+      "control": "refuse_event_triggers:nonbool:0",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:1",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:2",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:3",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:4",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:5",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:6",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:7",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:8",
+      "passed": true
+    },
+    {
+      "control": "refuse_event_triggers:nonbool:9",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:10",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:11",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:12",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:13",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:14",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:15",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:16",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:17",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:18",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_public_grant:nonbool:19",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:20",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:21",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:22",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:23",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:24",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:25",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:26",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:27",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:28",
+      "passed": true
+    },
+    {
+      "control": "refuse_helper_owner:nonbool:29",
+      "passed": true
+    },
+    {
+      "control": "boolean_flags:(False, False, False)",
+      "passed": true
+    },
+    {
+      "control": "boolean_flags:(False, False, True)",
+      "passed": true
+    },
+    {
+      "control": "boolean_flags:(False, True, False)",
+      "passed": true
+    },
+    {
+      "control": "boolean_flags:(False, True, True)",
+      "passed": true
+    },
+    {
+      "control": "boolean_flags:(True, False, False)",
+      "passed": true
+    },
+    {
+      "control": "boolean_flags:(True, False, True)",
+      "passed": true
+    },
+    {
+      "control": "boolean_flags:(True, True, False)",
+      "passed": true
+    },
+    {
+      "control": "boolean_flags:(True, True, True)",
+      "passed": true
+    },
+    {
+      "control": "service_cli:[]",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:[]",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-event-triggers', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-event-triggers', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-event-triggers', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-event-triggers', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-event-triggers', '--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-event-triggers', '--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-public-grant', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-public-grant', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-public-grant', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-public-grant', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-public-grant', '--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-public-grant', '--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-owner', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-owner', '--refuse-event-triggers']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-owner', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-owner', '--refuse-helper-public-grant']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-owner', '--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-owner', '--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-event-triggers', '--refuse-helper-public-grant', '--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-event-triggers', '--refuse-helper-public-grant', '--refuse-helper-owner']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['bad']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['bad']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-owner=true']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-owner=true']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--refuse-helper-owner', 'false']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--refuse-helper-owner', 'false']",
+      "passed": true
+    },
+    {
+      "control": "service_cli:['--']",
+      "passed": true
+    },
+    {
+      "control": "orchestrator_cli:['--']",
+      "passed": true
+    },
+    {
+      "control": "mutation_commit_order:(False, False)",
+      "passed": true
+    },
+    {
+      "control": "mutation_commit_order:(False, True)",
+      "passed": true
+    },
+    {
+      "control": "mutation_commit_order:(True, False)",
+      "passed": true
+    }
+  ],
+  "sourceSha256": {
+    "/private/tmp/truss-security-main-integration/scripts/security_channel_composition_service.py": "215b05d5b57153deaeabe3960bb66356775ad751ad86f4b8fff06e307b236852",
+    "/private/tmp/truss-security-linux-composition/compose.py": "8e50ce7bfca17cafc7db708ae9ef7847caad62e7c01d8facd2072d9bcefbbb07"
+  }
+}

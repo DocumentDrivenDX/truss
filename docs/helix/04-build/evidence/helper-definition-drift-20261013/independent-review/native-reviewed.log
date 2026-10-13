@@ -1,0 +1,9 @@
+test_context_resolution_replacement_refuses (test_security_helper_definition_native.HelperDefinitionNativeTests.test_context_resolution_replacement_refuses) ... ok
+test_helper_invoker_replacement_refuses (test_security_helper_definition_native.HelperDefinitionNativeTests.test_helper_invoker_replacement_refuses) ... ok
+test_helper_owner_replacement_refuses (test_security_helper_definition_native.HelperDefinitionNativeTests.test_helper_owner_replacement_refuses) ... ok
+test_helper_volatility_replacement_refuses (test_security_helper_definition_native.HelperDefinitionNativeTests.test_helper_volatility_replacement_refuses) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 24.831s
+
+OK

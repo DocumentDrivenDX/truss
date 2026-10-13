@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-linux-composition/compose.py", line 87, in <module>
+    if failure is not None:raise failure
+  File "/private/tmp/truss-security-linux-composition/compose.py", line 26, in <module>
+    descriptor=json.loads(line())
+  File "/private/tmp/truss-security-linux-composition/compose.py", line 16, in line
+    if not chunk:raise RuntimeError('Original service terminated before response')
+RuntimeError: Original service terminated before response

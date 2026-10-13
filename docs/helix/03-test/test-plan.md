@@ -2016,3 +2016,15 @@ Concurrent relationship-name/runtime0.53 owner work is preserved. Six native
 ACL controls plus both TLS cases pass together (8/50.388s); positive and denial
 external-peer paths pass with complete owned cleanup. Separate runtime053
 evidence qualifies this merged replay; the earlier0.52 evidence is historical.
+
+
+### Committed helper owner/definition drift — 2026-10-13
+
+Four actual committed owner/SECURITY INVOKER/search_path/volatility mutations
+refuse at the exact helper snapshot gate before encoding/publication (4/24.831s)
+with event_triggers on and fresh executor custody. The external TLS peer also
+observes the committed owner mismatch as generic denial; zero encoding, no
+retry and all-three owned cleanup are confirmed. Positive external read still
+passes. This is US-056AC9/US-057AC7 and SPIKE-004 CH04/CH05/CH08 prerequisite
+coverage only, not truss.B11 or a new native refinement claim.
+[Inputs, setup failure and outcomes](../04-build/evidence/helper-definition-drift-20261013/README.md).
