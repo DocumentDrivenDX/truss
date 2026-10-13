@@ -7786,3 +7786,16 @@ late changed generation refuses after successful evaluation (1/9.767s), and
 external guarded delivery/cleanup passes. This is comparison-only metadata;
 trusted fixture facts and complete installed-profile authority remain unresolved.
 No backend case is promoted. [Qualified controls](evidence/catalog-authority-generation-20261013/README.md).
+
+### Installed original mapping source archive — 2026-10-13
+
+The native source initializer now archives the original request, Weft handoff and
+native dependency mapping alongside release/catalog sources. Selected source-epoch
+publication verifies those exact installed sources before Subject capture and again
+before release, holding an archive SHARE lock. Initial twelve native cases pass;
+Astra identified and prompted a pre-I/O immutable carrier snapshot correction.
+[Source custody and qualified evidence](evidence/catalog-installed-mapping-20261013/README.md)
+retain initial/final results separately. This connects original installed sources
+into the factory boundary; compiler/issuer authentication, complete authority and
+backend admission remain open. CONTRACT-063/STP-056 B01/B08/B11/B12 and US-056
+AC6/AC9/AC10, US-057AC7 prerequisites only; all132 required cases remain unchanged.

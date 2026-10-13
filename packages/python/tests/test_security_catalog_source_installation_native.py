@@ -12,9 +12,9 @@ class CatalogSourceInstallationTests(subject.NativeCatalogSubjectTests):
   result=bootstrap_catalog_source_marker_in_transaction(self.host,self.tx,mapping)
   self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(result.value.security_ready)
   self.assertEqual(result.value.installation_id,self.installation.installation_id)
-  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.installation_archive').fetchone(),(3,))
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.installation_archive').fetchone(),(6,))
   self.assertIsInstance(bootstrap_catalog_source_marker_in_transaction(self.host,self.tx,mapping),Error)
-  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.installation_archive').fetchone(),(3,))
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.installation_archive').fetchone(),(6,))
  def test_substituted_catalog_has_no_marker_effect(self):
   mapping,*_=self.setup_subject()
   bad=replace(mapping,accepted_catalog_assessment=mapping.accepted_catalog_assessment+b' ')
@@ -65,5 +65,23 @@ class CatalogSourceInstallationTests(subject.NativeCatalogSubjectTests):
   self.host.detach();self.admin.commit();self.admin.execute('BEGIN')
   self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
   observed=self.admin.execute('SELECT artifact_identity,artifact_bytes,artifact_sha256 FROM truss.installation_archive ORDER BY artifact_identity COLLATE pg_catalog."C"').fetchall()
-  expected=[('catalog:original-accepted-assessment',mapping.accepted_catalog_assessment),('catalog:original-release-manifest',original),('catalog:recaptured-accepted-assessment',mapping.accepted_catalog_assessment)]
+  expected=[('catalog:original-accepted-assessment',mapping.accepted_catalog_assessment),('catalog:original-release-manifest',original),('catalog:recaptured-accepted-assessment',mapping.accepted_catalog_assessment),('catalog:original-mapping-request',mapping.original_request),('catalog:original-compiler-handoff',mapping.original_response),('catalog:original-native-dependencies',mapping.native_dependencies)]
+  expected.sort(key=lambda row:row[0])
   self.assertEqual(observed,[(name,raw,sha256(raw).digest()) for name,raw in expected])
+
+ def test_original_carriers_are_captured_before_native_callbacks(self):
+  """@covers US-056-AC6/AC9; source custody before host callback."""
+  from unittest.mock import patch
+  import truss._security_catalog_source_installation as installation
+  mapping,*_=self.setup_subject()
+  original=(mapping.original_request,mapping.original_response,mapping.accepted_catalog_assessment,mapping.native_dependencies)
+  release=installation._release
+  def mutate():
+   for name,raw in zip(('original_request','original_response','accepted_catalog_assessment','native_dependencies'),original):
+    object.__setattr__(mapping,name,raw+b' ')
+   return release()
+  with patch.object(installation,'_release',mutate):
+   result=bootstrap_catalog_source_marker_in_transaction(self.host,self.tx,mapping)
+  self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error))
+  for identity,raw in zip(('catalog:original-mapping-request','catalog:original-compiler-handoff','catalog:original-accepted-assessment','catalog:original-native-dependencies'),original):
+   self.assertEqual(self.admin.execute('SELECT artifact_bytes FROM truss.installation_archive WHERE artifact_identity=%s',(identity,)).fetchall(),[(raw,)])

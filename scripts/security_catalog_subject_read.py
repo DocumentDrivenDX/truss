@@ -135,6 +135,8 @@ def run_owned_native_catalog_resource_read(caller_host,caller_transaction,execut
                 raise ValueError('Exact source epoch installation TEXT descriptor required')
             if c.fetchmany(2)!=[(source_cut[0].installation,)]:
                 raise ValueError('Original source epoch installation correspondence required')
+            from truss._security_catalog_source_installation import verify_catalog_source_archive_with_cursor
+            verify_catalog_source_archive_with_cursor(c,mapping,source_cut[0].installation)
         result=_run_ddl_fenced_epoch_operation(executor_host,executor_transaction,*source_cut,audience)
         if not isinstance(result,Ok):raise ValueError('Original executor source epoch and DDL barrier refused')
     def execute(cursor,observed):

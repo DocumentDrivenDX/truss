@@ -239,3 +239,13 @@ late changed generation refuses after successful evaluation (1/9.767s), and
 external guarded delivery/cleanup passes. This is comparison-only metadata;
 trusted fixture facts and complete installed-profile authority remain unresolved.
 No backend case is promoted. [Qualified controls](../../04-build/evidence/catalog-authority-generation-20261013/README.md).
+
+### Installed mapping source correspondence — 2026-10-13
+
+The selected epoch-backed producer now verifies the original installed mapping
+request, compiler handoff and dependency mapping alongside release/catalog
+sources before native Subject capture and again before publication. The archive
+SHARE cut survives delivery. This advances CH04's source binding; exact byte
+comparison does not authenticate the installer/compiler/issuer or establish
+complete authority. Older three-record archives refuse this path pending explicit
+migration. [Native source evidence](../../04-build/evidence/catalog-installed-mapping-20261013/README.md).

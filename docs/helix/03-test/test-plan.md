@@ -2058,3 +2058,14 @@ late changed generation refuses after successful evaluation (1/9.767s), and
 external guarded delivery/cleanup passes. This is comparison-only metadata;
 trusted fixture facts and complete installed-profile authority remain unresolved.
 No backend case is promoted. [Qualified controls](../04-build/evidence/catalog-authority-generation-20261013/README.md).
+
+### Installed mapping source comparison — 2026-10-13
+
+`test_security_catalog_archive_native` adds native installed-request substitution
+refusal before Subject/evaluation, actual late handoff deletion refusal after
+private evaluation, and archive writer exclusion through delivery. The installer
+suite adds mutation of the original source object in a native callback, requiring
+all installed bytes to match the pre-I/O capture. Initial twelve native cases
+pass; the custody correction replay is retained separately in
+[evidence](../04-build/evidence/catalog-installed-mapping-20261013/README.md).
+These trace US-056AC6/AC9/AC10 and US-057AC7 prerequisites, not full backend admission.
