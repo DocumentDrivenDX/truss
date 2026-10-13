@@ -44,6 +44,8 @@ ALLOWED = {
     '_security_publication_registration': {'dataclasses','hashlib','importlib.resources','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges'},
     '_security_publication_settlement': {'dataclasses','hashlib','importlib.resources','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges'},
     '_security_data_writer_binding': {'hashlib'},
+    '_core08_catalog_release': set(),
+    '_core08_catalog_source': {'dataclasses','hashlib','importlib.resources','json','shutil','subprocess','truss._core08_catalog_release','truss.preparation','truss.weft'},
     '_security_mapping': {'dataclasses','hashlib','inspect','truss.weft','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges'},
     '_security_data_writer': {'dataclasses','inspect','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_data_writer_binding'},
     '_security_authority_change': {'dataclasses','hashlib','importlib.resources','inspect','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges'},

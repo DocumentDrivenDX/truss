@@ -1,0 +1,27 @@
+test_current_schema_properties_and_opaque_bytes_are_preserved (test_core08_catalog_source.Core08CatalogSourceTests.test_current_schema_properties_and_opaque_bytes_are_preserved) ... ERROR
+test_genuine_security_model_complete_current_owner_observations (test_core08_catalog_source.Core08CatalogSourceTests.test_genuine_security_model_complete_current_owner_observations) ... ok
+test_legacy_invalid_or_changed_identity_refuses_without_observation_artifact (test_core08_catalog_source.Core08CatalogSourceTests.test_legacy_invalid_or_changed_identity_refuses_without_observation_artifact) ... ok
+test_selected_source_replication_capacity_refuses (test_core08_catalog_source.Core08CatalogSourceTests.test_selected_source_replication_capacity_refuses) ... ok
+
+======================================================================
+ERROR: test_current_schema_properties_and_opaque_bytes_are_preserved (test_core08_catalog_source.Core08CatalogSourceTests.test_current_schema_properties_and_opaque_bytes_are_preserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_source.py", line 34, in test_current_schema_properties_and_opaque_bytes_are_preserved
+    source=json.dumps(model,ensure_ascii=False,indent=3).encode();result=prepare(source);response=json.loads(result.original_response)
+                                                                         ^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_core08_catalog_source.py", line 11, in prepare
+    return prepare_core08_catalog_source(original() if source is None else source,document_id=identity,document_revision='schema-1',bun_executable='/opt/homebrew/bin/bun')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/_core08_catalog_source.py", line 34, in prepare_core08_catalog_source
+    runtime=_capture([executable,'--version'],limit=4096,timeout=5)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/src/truss/preparation.py", line 144, in _capture
+    if remaining<=0:raise subprocess.TimeoutExpired(command,timeout)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+subprocess.TimeoutExpired: Command '['/opt/homebrew/bin/bun', '--version']' timed out after 5 seconds
+
+----------------------------------------------------------------------
+Ran 4 tests in 8.034s
+
+FAILED (errors=1)

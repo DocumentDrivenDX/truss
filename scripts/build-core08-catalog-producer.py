@@ -1,0 +1,14 @@
+"""Build the separate original core0.8 catalog observer from committed UMF."""
+from pathlib import Path
+import hashlib,json,shutil,subprocess,sys
+repository=sys.argv[1];root=Path(__file__).resolve().parents[1]
+built=subprocess.run(['/opt/homebrew/bin/bun','scripts/build-umf-runtime.ts',repository,'core08-catalog'],cwd=root,text=True,capture_output=True,check=True,timeout=120)
+source=Path(built.stdout.strip());target=root/'packages/python/src/truss/_umf_core08'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+for name in ('producer.js','producer-manifest.json'):shutil.copyfile(source/name,target/name)
+shutil.copytree(root/'packages/python/src/truss/_umf/licenses',target/'licenses',dirs_exist_ok=True)
+paths=[p.relative_to(target).as_posix() for p in target.rglob('*') if p.is_file() and p.name!='manifest.json']
+manifest={'interfaceVersion':'truss-core08-catalog-producer/0.1.0','runtimeVersion':'1.4.2','owner':json.loads((target/'producer-manifest.json').read_text()),'files':{p:sha(target/p) for p in sorted(paths)},'scope':'Original core0.8 observation source only. No native ingress, report acceptance, migration, issuer authentication or protected execution.'}
+(target/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+(root/'packages/python/src/truss/_core08_catalog_release.py').write_text('"""Generated original core0.8 producer pin; no native admission authority."""\nMANIFEST_SHA256 = '+repr(sha(target/'manifest.json'))+'\n')
+print(json.dumps({'manifestSha256':sha(target/'manifest.json'),'ownerBundleSha256':manifest['owner']['bundleSha256'],'ownerRevision':manifest['owner']['revision']}))

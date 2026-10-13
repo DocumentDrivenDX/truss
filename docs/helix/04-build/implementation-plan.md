@@ -7046,6 +7046,13 @@ A proposed catalog mapper was removed after these controls showed no common orig
 
 The original AddSolution action workflow passes public business-key resolution, one grouped create/link with native precondition, known outer commit, original-request replay, receipt visibility and whole-object readback. [Evidence](evidence/original-consumer-atomic-action-20261013.md) covers eight original read/action variants together. The selected trusted host handler is exact-fixture-bound and does not adopt a provisional UMF action interpreter. Other handlers, full consumer mapping/corpus, protected security activation and independent interchange remain open.
 
+
+### Original core0.8 catalog source producer foundation — 2026-10-13
+
+[Evidence](evidence/core08-catalog-source-20261013/receipt.json) retains a separate producer pinned to committed UMF7c0f0c98. The original security model yields136 complete current owner observations, each matching Chromium153.33 source regressions and six fresh installed-wheel tests pass;897 Python import edges pass. Source, transport, replication/output and child deadlines have explicit limits and refusal controls. Original0.7 bundles and native runtime/caller gates are unchanged.
+
+This foundation does not perform native0.8 ingress. The next functional work is to compose the original observations with exact catalog declarations/assertion occurrences/report preparation, implement a versioned native consistency/registration path with additive migration and rollback evidence, and supply the guarded assessment producer before original compiler/native mapping and protected result/effect integration. Core08CatalogSource cannot be substituted for PreparedAcceptance. All132 original cases remain required; none is promoted by this metadata component.
+
 ### Original consumer idempotent action retry — 2026-10-13
 
 The original AddUseCase retry case passes native KeyAbsent/create, direct caller-key request selection, canonical-input retention, repeated native apply, identical committed token and one-object readback. [Evidence](evidence/original-consumer-action-retry-20261013.md) covers nine original read/action workflows together. The cache retains inputs only, not outcomes. Consumer dry-run/other handler mappings, full corpus/interchange and protected security activation remain open; no runtime or action-language contract was broadened.

@@ -1,0 +1,60 @@
+{
+  "parentRevision": "6705e3235ddba94d53b7a34f11eac33ef1831c9e",
+  "scope": "Separate original core0.8 source-observation foundation. Native ingress/report/migration/guarded assessment/physical mapping remain unimplemented. No native policy activation or backend acceptance promotion.",
+  "ownerRevision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+  "validation": {
+    "sourceTests": 33,
+    "newSourceTests": 6,
+    "sourceSeconds": 18.277,
+    "installedWheelTests": 6,
+    "installedWheelSeconds": 3.818,
+    "nativeTests": 0,
+    "ownerObservations": 136,
+    "browser": "153.0.8010.12",
+    "browserCorrespondence": 136,
+    "boundaryEdges": 897,
+    "independentReview": "Astra Ultra; all11 retained source hashes match"
+  },
+  "limits": {
+    "sourceBytes": 4000000,
+    "requestBytes": 8000000,
+    "responseBytes": 16000000,
+    "scheduledCalls": 4096,
+    "runtimeCaptureSeconds": 5,
+    "ownerCaptureSeconds": 30,
+    "scope": "Selected replication preflight and actual transport/output limits; no total heap/CPU or authenticated runtime claim."
+  },
+  "compatibility": {
+    "legacyBundles": "unchanged",
+    "nativeRuntimeAndGates": "unchanged",
+    "artifact": "Core08CatalogSource; not PreparedAcceptance; native_readyFalse init=False"
+  },
+  "acceptance": {
+    "newCasesClosed": 0,
+    "requiredCases": 132,
+    "previousQualifiedCheckpoint": 26,
+    "qualification": "No full gate rerun; original acceptance scope unchanged."
+  },
+  "sourceDigests": {
+    "scripts/build-umf-runtime.ts": "fafec648203ea37191041dd056e190e7da47c6f01f8e7eae0d9f77714c2d812d",
+    "scripts/build-core08-catalog-producer.py": "dd4464453a5ac700a3abdf748cc68b5faf91d8a8f755f578b38a936b1b963cb5",
+    "scripts/check-module-boundaries.py": "41c5e29d2b87f54b4459d0a831de4aa280de0fab0a4a6b751c60113e9c60e7a8",
+    "packages/python/pyproject.toml": "12ba217a0076e907ec6c454adc868b7630c4fea095bc48c775086b97cd3a1c57",
+    "packages/python/src/truss/_core08_catalog_source.py": "986288156ea27216549401993e55ebc51646f38ea487bb6b2385daf781148a2e",
+    "packages/python/src/truss/_core08_catalog_release.py": "22bdfd8397d1fadea2da5042406b66e145147ae1b03ff5f909e9552758a62179",
+    "packages/python/tests/test_core08_catalog_source.py": "5d0ebc98016e7d4a72dcb3900b927af1af817f1290d2671da685db19fe2c8a47",
+    "packages/python/src/truss/_umf_core08/producer.js": "7967767dd926d71733f4c24c4b4545ba7c87ff883900a7501aa92bae8beee064",
+    "packages/python/src/truss/_umf_core08/producer-manifest.json": "2bb798f3deddcbbb7d1b4634b73f2b2a3b791725a5d43c5b0a46ed109053fc41",
+    "packages/python/src/truss/_umf_core08/manifest.json": "af9f8b4a4e1d58c4afb49e8f7a3f37c5dd4213bbb19ef03112c64fcdc7c87ebf",
+    "packages/python/src/truss/_umf_core08/receiver.mjs": "08d0ca7d3122374505287a016c66c47b864c0feb17a45d5c2c9687afb8994443",
+    "packages/python/src/truss/_umf_core08/licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "packages/python/src/truss/_umf_core08/licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "packages/python/src/truss/_umf_core08/licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "packages/python/src/truss/_umf_core08/licenses/fast-deep-equal.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "packages/python/src/truss/_umf_core08/licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "packages/python/src/truss/_umf_core08/licenses/json-schema-traverse.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+  },
+  "integrationRevision": "f71daed6ec3463db55341e11edea18607031fcf5",
+  "mergedMain": "3216f010d083f8ed2cb5e0ac2ef793e5cd2a0831",
+  "integrationQualification": "Concurrent changes touch examples, their test and documentation only; all reviewed factory/producer/package source hashes verified unchanged. Selected source and installed-wheel tests retained at matching source hashes."
+}

@@ -1,0 +1,42 @@
+{
+  "status": "clean-reviewed-source-observation-foundation",
+  "actionableFindings": [],
+  "head": "6705e3235ddba94d53b7a34f11eac33ef1831c9e",
+  "ownerRevision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+  "manifestSha256": "af9f8b4a4e1d58c4afb49e8f7a3f37c5dd4213bbb19ef03112c64fcdc7c87ebf",
+  "sourceDigests": {
+    "scripts/build-umf-runtime.ts": "fafec648203ea37191041dd056e190e7da47c6f01f8e7eae0d9f77714c2d812d",
+    "scripts/build-core08-catalog-producer.py": "dd4464453a5ac700a3abdf748cc68b5faf91d8a8f755f578b38a936b1b963cb5",
+    "scripts/check-module-boundaries.py": "41c5e29d2b87f54b4459d0a831de4aa280de0fab0a4a6b751c60113e9c60e7a8",
+    "packages/python/pyproject.toml": "12ba217a0076e907ec6c454adc868b7630c4fea095bc48c775086b97cd3a1c57",
+    "packages/python/src/truss/_core08_catalog_source.py": "986288156ea27216549401993e55ebc51646f38ea487bb6b2385daf781148a2e",
+    "packages/python/src/truss/_core08_catalog_release.py": "22bdfd8397d1fadea2da5042406b66e145147ae1b03ff5f909e9552758a62179",
+    "packages/python/src/truss/_umf_core08/manifest.json": "af9f8b4a4e1d58c4afb49e8f7a3f37c5dd4213bbb19ef03112c64fcdc7c87ebf",
+    "packages/python/src/truss/_umf_core08/producer-manifest.json": "2bb798f3deddcbbb7d1b4634b73f2b2a3b791725a5d43c5b0a46ed109053fc41",
+    "packages/python/src/truss/_umf_core08/producer.js": "7967767dd926d71733f4c24c4b4545ba7c87ff883900a7501aa92bae8beee064",
+    "packages/python/src/truss/_umf_core08/receiver.mjs": "08d0ca7d3122374505287a016c66c47b864c0feb17a45d5c2c9687afb8994443",
+    "packages/python/tests/test_core08_catalog_source.py": "5d0ebc98016e7d4a72dcb3900b927af1af817f1290d2671da685db19fe2c8a47"
+  },
+  "independentChecks": {
+    "packagedUnitTests": 5,
+    "completeOwnerObservations": 136,
+    "responseBytes": 444233,
+    "versionedOwnerOperations": "0.2.0 for original0.8 source",
+    "sourceReplicationBoundary": "130602 bytes prepared / 130603 bytes refused with20 scheduled observations",
+    "unsafeRawInteger": "9007199254740993 refused",
+    "constructorReadyOverride": "refused",
+    "packageManifestAndAssetHashes": "exact",
+    "independentBuild": "same committed archive/dependency metadata; complete code equals after normalizing generated temporary-root comment prefixes only",
+    "boundary": "Python module boundaries passed (897 imports); TypeScript/native gates remain open",
+    "legacyNativeAndBundles": "no diff",
+    "reviewerNativeDatabaseRuns": 0
+  },
+  "scope": "Original owner source observations only. No PreparedAcceptance, native ingress/report/migration, source issuer, current authority, source cut, physical mapping, backend acceptance or production readiness claim. Post-construction response ceiling does not prove total heap/CPU control.",
+  "evidence": {
+    "controls": "/private/tmp/truss-core08-producer-final-astra-20261013-jxst5h75/controls.json",
+    "unitTests": "/private/tmp/truss-core08-producer-final-astra-20261013-jxst5h75/unit-tests.log",
+    "independentBuild": "/private/tmp/truss-umf-runtime-mlZsz7",
+    "parent32Tests": "/private/tmp/truss-core08-catalog-replay-tests.log"
+  },
+  "correctedReviewerProbe": "Initial small-bound probe omitted required element extensions and properly refused; final exact-bound probe includes valid source and passes."
+}

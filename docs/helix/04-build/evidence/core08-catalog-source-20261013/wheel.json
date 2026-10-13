@@ -1,0 +1,10 @@
+{
+  "wheelSha256": "71e2e8ec41c1ee4d2bed6131c33ce1130e2b0504b0c95d27a49c5c4bf7b1d756",
+  "verifiedFiles": 142,
+  "extraPythonModules": [],
+  "installedTests": 6,
+  "installedTestSeconds": 3.818,
+  "installedTestExitCode": 0,
+  "verifiedImportedPackage": "/private/tmp/truss-core08-catalog-installed-20261013/truss/__init__.py",
+  "scope": "Fresh installed wheel current-source tests from outside checkout; no native database or protected security admission."
+}
