@@ -47,5 +47,10 @@
     "Do not compose DDL hook increments with existing exactly-one manual authority CAS",
     "Raw fixture claim insertion is not authenticated publication, final sink or release proof",
     "No ready profile/case promotion; all132 required cases remain in scope"
-  ]
+  ],
+  "postmerge": {
+    "testedSourcesUnchanged": true,
+    "upstreamCommit": "7b4dd909",
+    "upstreamScope": "consumer registration-gap evidence and implementation-plan append only; both entries preserved"
+  }
 }

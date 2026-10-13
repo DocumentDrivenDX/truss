@@ -6966,3 +6966,21 @@ Full11 native tests pass. The conditional model passes2UNSAT/4SAT; the added SAT
 Controls independently assert both epochs for every selected tag, both ceilings, missing/mistyped epoch refusal before callback, rollback of same-transaction source ABA with correct and misleading event counts, competing plain-DDL guard waits and immediate/post-wait claim refusal. Full11 native tests,873 import boundaries and exact Python wheel module bytes pass. The3UNSAT/2SAT arithmetic model proves conditional separate-epoch detectability, while its SAT shared-count control retains the correct inventory limitation. No SQL/Python source refinement is claimed.
 
 The epoch column alone does not prove original hook custody or complete mutation coverage. These assets require a native superuser hook installer and original trusted function owner; they cover only the selected function tags. Admin hook bypass, direct counter reset and other DDL/role/procedure/extension/handler/library routes remain unclosed. Source bytes can temporarily change before refusal; callback rollback safety remains a premise. The general home bootstrap does not install this spike, and its increments must not be composed with the existing exactly-one manual authority CAS. Raw fixture claims supply no authenticated publication/release/sink evidence. These are B11/L13 prerequisites only; no required case is promoted and all132 remain in scope.
+### Original consumer model registration gap — 2026-10-12
+
+An authority-only attempt at the unchanged original missing-key and scalar-filter
+cases refuses registration before fixture data or queries. The public error
+carries `catalog_code=unsupported_profile`; this is not a passing corpus run.
+[Diagnostic receipt](evidence/python-original-consumer-registration-gap-20261012.json)
+pins the actual original model/corpus, selected installed wheel and refusal.
+
+The current catalog profile requires empty vocabulary/extensions and a closed
+module-member set. The original model includes `umf.ddd`/`hohfeld.placement`
+metadata plus module `actions`; permitting extensions alone cannot admit it.
+Next, inspect UMF's actual retention/classification and add truthful retained/
+unenforced reporting under an explicit catalog profile. Do not strip source,
+invent extension/action semantics or bypass native original-source guards.
+The draft authority adapter remains unpromoted until the exact model registers
+and its original expectations execute. Replica variants and independent native
+interchange remain unqualified. This registration gap takes priority over adding
+a second implementation or broader test machinery.

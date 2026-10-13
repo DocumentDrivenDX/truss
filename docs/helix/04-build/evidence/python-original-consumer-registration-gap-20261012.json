@@ -1,0 +1,42 @@
+{
+  "scope": "Original consumer registration refusal discovered before authority read cases; no passing corpus or interchange claim",
+  "runtime": "truss-catalog-runtime/0.31-candidate",
+  "selectedEnvironment": "DocumentDrivenDX pgserver-pg18==18.6.1 / PostgreSQL18.6 / psycopg3.3.6 binary libpq18.6 / Bun1.4.2",
+  "wheelSha256": "a9e8346c2f8fe66c2e4a73eb8037089918aafcbf358f39cd2d6f786e7dcda0f9",
+  "corpusSha256": "e2229d554f3e9e7aa64a60e1a03d06e6a4d5ae4540d8b50e9ddfe92d3e6473bc",
+  "modelSha256": "849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696",
+  "attemptedCases": [
+    "read.missing-key-is-no-rows",
+    "read.columns-and-filters"
+  ],
+  "observed": {
+    "registration": "Error",
+    "executionCode": "invalid_transaction",
+    "catalogCode": "unsupported_profile",
+    "sqlState": null,
+    "caseQueries": "not_run"
+  },
+  "sourceGaps": [
+    "Nonempty source vocabularies rejected by current profile",
+    "Nonempty module and Record extensions rejected by current profile",
+    "Original module.actions is outside the closed module-member set; extension retention alone cannot admit it"
+  ],
+  "originalVocabularyNames": [
+    "umf.ddd",
+    "hohfeld.placement"
+  ],
+  "originalModuleKeys": [
+    "id",
+    "namespace",
+    "extensions",
+    "elements",
+    "relationships",
+    "actions"
+  ],
+  "guardSources": {
+    "packages/python/src/truss/_catalog_support.py": "5ad1b4be2f46e535bee2e88324edb9ecfadfad9ce6bd5d95ceab6c9fdee5655e",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "98c7df5304578563204315a457fe89a6c84cff16ba17fdeb2b6a53d9136a396e"
+  },
+  "next": "Inspect UMF owner classification/retention for vocabulary, extension and unknown module actions; implement truthful retained/unenforced reporting under an explicit new catalog profile without dropping or interpreting unsupported meaning",
+  "review": "Astra Ultra reviewed selected-case plan and identified additional module.actions admission gap; no pass promoted"
+}
