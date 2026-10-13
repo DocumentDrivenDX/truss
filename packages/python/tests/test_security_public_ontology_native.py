@@ -19,6 +19,86 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
  def _close_owned_connections(self):
   for connection in reversed(self._security_connections):
    if not connection.closed:connection.close()
+ def test_native_statement_data_writer_guard_coordinates_raw_and_graph_homes(self):
+  from truss import adopt_psycopg_host
+  from truss._security_home_installation import bootstrap_security_homes_in_transaction
+  connection,seed_host,assembly,seed_tx=self.ready();seed_input,seed_request=self.input(assembly,seed_tx);self.apply(assembly,seed_tx,seed_input,seed_request);seed_host.detach();connection.commit()
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(1,))
+  self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);tx=self.host.adopt_transaction().value
+  identity=self.installation.installation_id.encode();profile=b'native-data-writer-spike/0.1'
+  self.assertIsInstance(bootstrap_security_homes_in_transaction(self.host,tx,installation_identity=identity,authored_profile=profile,max_retained=8),Ok)
+  self.admin.execute('CREATE SCHEMA relational_fixture;CREATE TABLE relational_fixture.assignment(id int PRIMARY KEY,active boolean NOT NULL);INSERT INTO relational_fixture.assignment VALUES(1,true)')
+  source=(Path(__file__).resolve().parents[3]/'packages/postgresql/native/security-data-writer-guard-pg18.sql').read_text()
+  self.admin.execute(psycopg.sql.SQL('SET LOCAL ROLE {}').format(psycopg.sql.Identifier(self.installation.owner_role)));self.admin.execute(source);self.admin.execute('RESET ROLE')
+  homes=[('truss','object'),('truss','edge'),('relational_fixture','assignment')]
+  for schema,table in homes:
+   oid=self.admin.execute('SELECT pg_catalog.to_regclass(%s)::oid',(schema+'.'+table,)).fetchone()[0]
+   for when,name in [('BEFORE','aa_security_data_gate'),('AFTER','zz_security_data_advance')]:
+    self.admin.execute(psycopg.sql.SQL('CREATE TRIGGER {} {} INSERT OR UPDATE OR DELETE OR TRUNCATE ON {}.{} FOR EACH STATEMENT EXECUTE FUNCTION truss.security_data_writer_guard({},{},{})').format(psycopg.sql.Identifier(name),psycopg.sql.SQL(when),psycopg.sql.Identifier(schema),psycopg.sql.Identifier(table),psycopg.sql.Literal(identity.hex()),psycopg.sql.Literal(profile.hex()),psycopg.sql.Literal(str(oid))))
+    self.admin.execute(psycopg.sql.SQL('ALTER TABLE {}.{} ENABLE ALWAYS TRIGGER {}').format(psycopg.sql.Identifier(schema),psycopg.sql.Identifier(table),psycopg.sql.Identifier(name)))
+  self.admin.execute('GRANT USAGE ON SCHEMA relational_fixture TO consumer;GRANT SELECT,INSERT,UPDATE,DELETE,TRUNCATE ON relational_fixture.assignment TO consumer')
+  self.host.detach();self.admin.commit()
+  params=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);params['user']='consumer'
+  with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as writer:
+   writer.execute('BEGIN');writer.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=1')
+   self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=1').fetchone(),(True,))
+   writer.rollback();self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(1,))
+   writer.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=1')
+   self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(2,))
+   self.admin.execute('INSERT INTO truss.policy_publication_claim VALUES(%s,%s,%s,2,false)',(b'original-active',identity,profile))
+   for statement in ['UPDATE relational_fixture.assignment SET active=true','INSERT INTO relational_fixture.assignment VALUES(2,true)','DELETE FROM relational_fixture.assignment','TRUNCATE relational_fixture.assignment']:
+    with self.assertRaises(psycopg.errors.InsufficientPrivilege):writer.execute(statement)
+    self.assertEqual(self.admin.execute('TABLE relational_fixture.assignment').fetchall(),[(1,False)])
+    self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(2,))
+   self.admin.execute('UPDATE truss.policy_publication_claim SET settled=true')
+   writer.execute('UPDATE relational_fixture.assignment SET active=true');self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(3,))
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):writer.execute('ALTER TABLE relational_fixture.assignment DISABLE TRIGGER aa_security_data_gate')
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):writer.execute("SET session_replication_role='replica'")
+  for statement,generation in [('UPDATE truss.object SET props=props',4),('DELETE FROM truss.edge WHERE false',5)]:
+   self.admin.execute(statement);self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(generation,))
+  # Each zero-row trigger event conservatively advances too.
+  self.admin.execute('BEGIN');self.admin.execute('UPDATE truss.object SET props=props');self.admin.execute('ROLLBACK')
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(5,))
+  import threading,time
+  self.admin.execute('BEGIN');self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE');self.admin.execute('SELECT generation FROM truss.policy_generation_guard WHERE singleton=1 FOR SHARE')
+  self.admin.execute('INSERT INTO truss.policy_publication_claim VALUES(%s,%s,%s,5,false)',(b'pending-native-original',identity,profile))
+  pending=psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000');self._track_owned_connection(pending);pid=pending.info.backend_pid;outcomes=[]
+  def update_after_guard():
+   try:pending.execute('UPDATE relational_fixture.assignment SET active=false');outcomes.append('incorrect success')
+   except psycopg.Error as error:outcomes.append(error.sqlstate)
+  task=threading.Thread(target=update_after_guard);task.start();deadline=time.monotonic()+5;blocked=False
+  try:
+   while time.monotonic()<deadline:
+    if self.admin.info.backend_pid in self.admin.execute('SELECT pg_catalog.pg_blocking_pids(%s)',(pid,)).fetchone()[0]:blocked=True;break
+    time.sleep(.01)
+   self.assertTrue(blocked);self.assertTrue(task.is_alive());self.admin.commit()
+  finally:
+   self.admin.rollback();task.join(11)
+  self.assertFalse(task.is_alive());self.assertEqual(outcomes,['42501'])
+  self.assertEqual(self.admin.execute('TABLE relational_fixture.assignment').fetchall(),[(1,True)]);self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(5,))
+  with psycopg.connect(**params,autocommit=True) as old_snapshot:
+   old_snapshot.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):old_snapshot.execute('UPDATE relational_fixture.assignment SET active=false')
+   old_snapshot.rollback()
+  self.admin.execute('UPDATE truss.policy_publication_claim SET settled=true')
+  with psycopg.connect(**params,autocommit=True) as composite:
+   composite.execute('INSERT INTO relational_fixture.assignment VALUES(2,false) ON CONFLICT(id) DO UPDATE SET active=excluded.active')
+   self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(7,))
+   composite.execute('MERGE INTO relational_fixture.assignment t USING (VALUES(2,true),(3,false)) s(id,active) ON t.id=s.id WHEN MATCHED AND s.active THEN UPDATE SET active=s.active WHEN MATCHED THEN DELETE WHEN NOT MATCHED THEN INSERT VALUES(s.id,s.active)')
+   self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(10,))
+  self.admin.execute(psycopg.sql.SQL("CREATE FUNCTION relational_fixture.late_claim() RETURNS trigger LANGUAGE plpgsql AS $body$ BEGIN INSERT INTO truss.policy_publication_claim VALUES({}, {}, {}, 10, false); RETURN NULL; END $body$").format(psycopg.sql.Literal(b'late-after-effect'),psycopg.sql.Literal(identity),psycopg.sql.Literal(profile)))
+  self.admin.execute('CREATE TRIGGER mm_late_claim AFTER UPDATE ON relational_fixture.assignment FOR EACH STATEMENT EXECUTE FUNCTION relational_fixture.late_claim()')
+  with self.assertRaises(psycopg.errors.InsufficientPrivilege):self.admin.execute('UPDATE relational_fixture.assignment SET active=false WHERE id=1')
+  self.assertEqual(self.admin.execute('SELECT active FROM relational_fixture.assignment WHERE id=1').fetchone(),(True,))
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.policy_publication_claim WHERE operation_identity_bytes=%s',(b'late-after-effect',)).fetchone(),(0,))
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(10,))
+  self.admin.execute('DROP TRIGGER mm_late_claim ON relational_fixture.assignment')
+  self.admin.execute('UPDATE truss.policy_generation_guard SET generation=9223372036854775806')
+  with psycopg.connect(**params,autocommit=True) as overflow:
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):overflow.execute('INSERT INTO relational_fixture.assignment VALUES(4,false) ON CONFLICT(id) DO UPDATE SET active=excluded.active')
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM relational_fixture.assignment WHERE id=4').fetchone(),(0,))
+  self.assertEqual(self.admin.execute('SELECT generation FROM truss.policy_generation_guard').fetchone(),(9223372036854775806,))
+  if os.environ.get('TRUSS_SECURITY_COMPONENT_EVIDENCE'):Path(os.environ['TRUSS_SECURITY_COMPONENT_EVIDENCE']+'.data-writer.json').write_text(json.dumps({'observations':['ordinary raw writer guard and data effects commit atomically','outer rollback preserves data and generation','all four DML/TRUNCATE families refuse outstanding claim before effects','settled tombstone permits subsequent update','ordinary trigger disabling/replica bypass denied','graph object and zero-row edge events advance conservatively','graph rollback preserves generation','original native guard wait drains pending registrant; fresh post-wait claim check refuses','repeatable-read writer scope refuses before effects','UPSERT advances two events and MERGE three including zero-row events','late intervening claim rolls back data and claim','composite overflow refuses and rolls back all events'],'scope':'Native physical statement coordination only, original installer-bound bytes/OIDs and trusted native function/trigger ownership. No logical write permissions, all key/catalog/role/source writer closure, fresh protected query/old-new snapshot, final sink or backend admission.'},indent=2)+'\n')
  def test_private_publication_registration_identity_capacity_and_rollback(self):
   from truss import Error,adopt_psycopg_host
   from truss._security_home_installation import bootstrap_security_homes_in_transaction

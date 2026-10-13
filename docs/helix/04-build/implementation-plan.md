@@ -6778,6 +6778,12 @@ row seed or consumer-authored storage mapping is used. Evidence is recorded in
 
 A direct comparison with UMF's required case assertions found that four recent component receipts linked transaction helper controls to missing-custody and activation-rollback cases without exercising their required behavior. [The correction ledger](evidence/security-acceptance-traceability-audit-20261012/corrections.json) retains prior receipt hashes and links. Receipt mappings now distinguish component prerequisites from complete case execution: durable registration/settlement and authority claim gating support L03 coordination; participating role-change generation advances support only part of L13; ordinary administrative denial supports only part of B05. None proves complete release, full writer participation, activation rollback, retained-owner deletion, or pool reset. Native logs and tested source archives remain unchanged. All132 required cases remain in scope; no case is promoted. Historical component links elsewhere are not comprehensively audited by this correction.
 
+
+### Native data writer coordination spike — 2026-10-12
+
+[Retained source and evidence](evidence/security-data-writer-20261012/receipt.json) exercise installer-bound BEFORE/AFTER statement triggers on raw assignment and shared graph object/edge relations. The guard serializes participating writes with original claim registration, checks fresh claims after lock waits, and advances per AFTER event, including zero-row events. Composite commands may advance multiple times. Outstanding or intervening claims and overflow roll back data and generation together.
+
+This remains a private PostgreSQL18.6 physical spike: no logical write authorization, fresh outer DML snapshot theorem, complete key/catalog/role/DDL/source writer closure, production installation, or release/sink qualification. Its automatic advances are not composed with the authority-change callback's exactly-one-generation CAS. Evidence supports only L03 coordination and selected L13 data-writer prerequisites; no required case is promoted and all132 remain in scope.
 ### Runnable public adopter workflow — 2026-10-12
 
 `packages/python/examples/adopter_workflow.py` consumes exact `notes.umf.json`
