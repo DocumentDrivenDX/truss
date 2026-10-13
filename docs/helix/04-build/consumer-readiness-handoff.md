@@ -1,5 +1,15 @@
 # Consumer readiness handoff
 
+## Current owner release scope — 2026-10-13
+
+Finish the Python release without building an independent second implementation.
+Full bidirectional interchange is deferred and is not a release blocker.
+Historical gates below that require it are superseded by the accepted ADR-003
+amendment. Prioritize usable APIs, basic PostgreSQL/adopter workflows and
+reproducible installation; qualify only the versions and capabilities actually
+advertised. Broader verification work needs a concrete consumer need or defect.
+
+
 ## Current public Python checkpoint — 2026-10-13
 
 Use the [public Python guide](../../../packages/python/README.md) for the callable

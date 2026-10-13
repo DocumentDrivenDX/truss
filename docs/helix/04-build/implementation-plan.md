@@ -7180,3 +7180,16 @@ All8 native regressions pass40.314s. Independent renderer review covers22 cases/
 ## Public durable ACK receipt implementation — 2026-10-13
 
 Runtime0.38 implements the reviewed source-owned receipt API with immutable exact interval/destination binding, atomic checkpoint/receipt persistence, and fresh read-only matched/missing/conflicting reconciliation. Plain ACK remains caller-asserted and cannot acquire retroactive proof. Earlier receipts survive later advances; foreign publication verification remains the consumer responsibility. The [API contract](../02-design/contracts/feed-ack-destination-receipt.proposal.md) and [basic evidence](evidence/public-feed-ack-receipts-038-20261013.md) identify the usable SDK and .37 additive upgrade. No new proof/test inventory or protected security claim is introduced.
+
+## Owner queue correction — 2026-10-13
+
+The owner defers the independent second implementation and removes full
+interchange from the Python release gates; ADR-003 records the amendment.
+Do not build a second engine to finish this release. Finish the adopter-facing
+Python package, dependency/install instructions and basic public workflows;
+resolve concrete consumer gaps and defects. Formal/performance/exhaustive
+verification expansions and historical evidence inventories are deferred
+unless they establish a specific support claim the release actually makes.
+Review remaining work against this rule before starting it. Existing protected
+security work stays scoped to its owner and must not block ordinary API release
+through claims of capabilities the Python release does not advertise.
