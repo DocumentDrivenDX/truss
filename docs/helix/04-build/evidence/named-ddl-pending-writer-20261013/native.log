@@ -1,0 +1,7 @@
+test_shared_named_source_native_subject_and_resource_evaluation (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_shared_named_source_native_subject_and_resource_evaluation)
+@covers US-056-AC1; @covers US-056-AC10; fixture prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 10.442s
+
+OK

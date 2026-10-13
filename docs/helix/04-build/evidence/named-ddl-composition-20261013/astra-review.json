@@ -1,0 +1,166 @@
+{
+  "reviewer": "Independent authorized Astra review",
+  "status": "No actionable findings within the stated cooperative selected-tag composition scope",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "305ed4651f59f14e9c0db5a2bc22396bec5f69fa",
+  "findings": [],
+  "sourceReview": [
+    "Exact required SubjectSelection and DDLBarrierComparison prevent None downgrade before preparation or host access.",
+    "Legacy None retains the positional delegation path. The selected barrier is forwarded unchanged to existing fact and DDL epoch wrappers.",
+    "Original native epoch operation encloses DDL descriptor/metadata qualification, declared fact lock/descriptor checks, helper snapshot, subject observation, both original encodings, native capture and original evaluator on the original callback cursor.",
+    "All 19 DDL TEXT OIDs and width are now checked before fetchmany; retained actual HEAD predecessor confirms a foreign row was fetched before the old refusal.",
+    "Native test disabled-hook and helper-drift errors are exact and contained with zero encoders; final native receipt pins match current sources.",
+    "Formal UNSAT conclusion is a propositional consequence of explicitly asserted current-hook, participating-writer and conflicting-mode premises; disabled/uncovered/released-cut SAT cases preserve scope."
+  ],
+  "independentControls": {
+    "count": 92,
+    "allPassed": true,
+    "results": "/private/tmp/named-ddl-review-20261013/results.json",
+    "scope": "Actual validators, original coverage and dependency/fact/DDL routing with synthetic native descriptors/rows and replaced epoch host shell. No native mutation or native driver/transaction/lifetime qualification.",
+    "nativeRerun": false
+  },
+  "independentProof": {
+    "passed": true,
+    "queries": 4,
+    "unsat": 1,
+    "sat": 3,
+    "solver": "4.15.4",
+    "stdout": "1 UNSAT; 3 SAT; conditional selected-tag model only\n",
+    "originalScriptSha256": "c4e779b9dd9508969349e671527b4388d0a7df330eccc8ed8dcc61fbcb12a504",
+    "replicaScriptSha256": "c4e779b9dd9508969349e671527b4388d0a7df330eccc8ed8dcc61fbcb12a504",
+    "fullOutputIdentical": true,
+    "scope": "Exact script and cited source byte copies in owned replica; no repository files modified; propositional mutex premises only."
+  },
+  "nativeEvidenceInspected": {
+    "groups": 4,
+    "seconds": 8.294,
+    "status": "OK",
+    "log": {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-composition-20261013/native.log",
+      "sha256": "10d53932fc9b4277f0e4d688da70c0026cd6a3c9dcabdb855ab7f8cbc7ed7f78",
+      "bytes": 994
+    },
+    "cleanup": {
+      "stopExitCode": 0,
+      "statusExitCode": 3,
+      "socketAbsent": true
+    },
+    "scope": "Parent execution inspected, not independently rerun. Owned PostgreSQL18.6 native fixture; 6 named subcases inside the shared-source test plus installed/missing-barrier and legacy resource-list groups."
+  },
+  "evidenceWordingQualification": "The ALTER FUNCTION probe at evaluator entry is immediately before launching the original subprocess, not a concurrent mid-body probe. Final contract/plan explicitly retain this entry-point qualification; no continuous subprocess observation is claimed.",
+  "limitations": [
+    "Existing six routine tags and three table tags only, with current cooperative hook/participation premise. No complete mutator closure, event-trigger administration, uncovered ALTER ROUTINE/cascade, language handler, role/grant/config lifetime or authenticated helper/dependency/issuer qualification.",
+    "Exact catalog descriptor checks prevent foreign Loader.load row decoding, not trusted driver loader-constructor execution or arbitrary configured code.",
+    "Synthetic independent controls do not prove native lock semantics, host savepoint/deadline/custody behavior or complete runtime refinement; native parent controls cover their selected fixture cases.",
+    "Ordinary fixture broad ALL table grants remain unsafe. No protected deployment, ready profile, permit/release authority or backend case promotion."
+  ],
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_dependency_fact_cut.py",
+      "sha256": "23c3171a3dcf19518cc09e32e51bf343e3c3a6f70e3aed335d63da344663b59c",
+      "bytes": 15727
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "6199c1624d13ded791ef94b684f0231dca83cc4767d66f65007e700c9a600322",
+      "bytes": 18024
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "a81227203e5f8ad1b74e739e1586d3a3887b27dfa6e67ee85ba9b181fdc80962",
+      "bytes": 21602
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-subject.sql",
+      "sha256": "1048120c8500e5fcbae5c5c7ecd838755a85bfad3806be81ba1b1a779873fd77",
+      "bytes": 330
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "aa7827f4144427fba21717c850f9d9ea3a857b38bfde601c42f7b6d3e624aa35",
+      "bytes": 162718
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-routine-ddl-barrier.sql",
+      "sha256": "93d0740578df55803370f15e7de9d325baa6f465426bf3a3bcac48c217e68413",
+      "bytes": 2531
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/postgresql/native/source-epoch-table-ddl-barrier.sql",
+      "sha256": "9fdcd6823aafb1106597e1f9e003994df96748686b54b68b34adbea2ed198de4",
+      "bytes": 637
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "ff4a3c146fb4698d32aa634326d2cfce28a13eca7f578a839d7c4dd305bb1195",
+      "bytes": 315524
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "3bcb5e966f803a01f55678d39e228b2c8f7ed489c7781e9b9efad3c7007f7822",
+      "bytes": 1082318
+    }
+  ],
+  "evidencePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-composition-20261013/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-composition-20261013/native.log",
+      "sha256": "10d53932fc9b4277f0e4d688da70c0026cd6a3c9dcabdb855ab7f8cbc7ed7f78",
+      "bytes": 994
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-composition-20261013/proof.json",
+      "sha256": "d4c21d9af19762746fbd299beef78b635d4be4cc548b81bce3a99d487014227f",
+      "bytes": 3898
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-composition-20261013/prove.py",
+      "sha256": "c4e779b9dd9508969349e671527b4388d0a7df330eccc8ed8dcc61fbcb12a504",
+      "bytes": 1959
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/named-ddl-composition-20261013/receipt.json",
+      "sha256": "07724c37671c97dcf8ec980a31e93fd54156c2b7f4e7fb2a77e22dfb5b5f16e2",
+      "bytes": 2299
+    }
+  ],
+  "independentArtifactPins": [
+    {
+      "path": "/private/tmp/named-ddl-review-20261013/check.py",
+      "sha256": "9045f72e51c0e0bac9080861b7662aeb092e015926ac2bb7e3c83b8b7d33e0ad",
+      "bytes": 9433
+    },
+    {
+      "path": "/private/tmp/named-ddl-review-20261013/results.json",
+      "sha256": "1f53694a125b8608b8fd5c85416628edb73232cb946b090e5f543e8d55f088f8",
+      "bytes": 10210
+    },
+    {
+      "path": "/private/tmp/named-ddl-review-20261013/prechange.py",
+      "sha256": "b04f0d96ac360b4167bec32fe5f92c60fe2cfce8ab4748268bf7e0d98a7fcf86",
+      "bytes": 17930
+    },
+    {
+      "path": "/private/tmp/named-ddl-review-20261013/replay_proof.py",
+      "sha256": "6cb86ada06fefda4663a6a4dc5ae9ab0a11f82114f3da77ffea81dbbd50cb282",
+      "bytes": 1428
+    },
+    {
+      "path": "/private/tmp/named-ddl-review-20261013/proof-replay.json",
+      "sha256": "e414946d8cd5e6d18aeec9cf3f852a48ca398d1718a6de008c69e9b940e85bbd",
+      "bytes": 511
+    }
+  ],
+  "repositoryMutations": "None by reviewer. Only owned review directory and copied proof replica written."
+}

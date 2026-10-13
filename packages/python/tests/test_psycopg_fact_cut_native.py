@@ -993,17 +993,24 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         module_dir=os.environ['TRUSS_SUBJECT_OWNER_MODULE_DIR'];sys.path.insert(0,module_dir)
         import weft
         self.assertEqual(Path(weft.__file__).resolve(),(Path(module_dir)/'weft.so').resolve())
-        from security_owned_read import run_named_subject_resource_read
+        from security_owned_read import run_named_subject_resource_read,run_ddl_fenced_named_subject_resource_read
         with self.assertRaisesRegex(ValueError,'Required exact native subject selection'):
             run_named_subject_resource_read(None,None,None,None,None,None,None)
+        with self.assertRaisesRegex(ValueError,'Required exact subject selection and DDL barrier'):
+            run_ddl_fenced_named_subject_resource_read(None,None,None,None,None,None,None,None)
         from truss._psycopg_dependency_fact_cut import _OriginalFactSources
         from truss._psycopg_subject_observation import _SubjectSelection
         base=ROOT/'docs/helix/04-build/evidence/security-named-source-profile'
         raw=(base/'requirements.json').read_bytes()
         sources=_OriginalFactSources((base/'policy.json').read_bytes(),(base/'resolution.json').read_bytes())
-        self.connection.execute("CREATE FUNCTION truss.named_subject_current(actor text) RETURNS TABLE(staff_id text) LANGUAGE sql SET search_path=pg_catalog AS $$ SELECT s.staff_id FROM truss.sec_staff s WHERE actor=SESSION_USER::text AND actor='fact_cut_actor' AND s.staff_id='s1' $$;INSERT INTO truss.sec_staff VALUES('s2')")
+        self.connection.execute((ROOT/'scripts/security-named-subject.sql').read_text());self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
         try:
-            for expected_subject in ('s1','s2'):
+            for expected_subject,drift in [('s1',None),('s2',None),('s1','definer'),('s1','body'),('s1','path'),('s1','disabled_barrier'),('s1','pending_commit'),('s1','pending_abort')]:
+                self.connection.execute('DROP FUNCTION truss.named_subject_current(text)')
+                self.connection.execute((ROOT/'scripts/security-named-subject.sql').read_text())
+                if drift=='definer':self.connection.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY DEFINER')
+                if drift=='path':self.connection.execute('ALTER FUNCTION truss.named_subject_current(text) SET search_path=pg_temp,pg_catalog')
+                if drift=='body':self.connection.execute("CREATE OR REPLACE FUNCTION truss.named_subject_current(actor text) RETURNS TABLE(staff_id text) LANGUAGE sql SET search_path=pg_catalog AS $$ SELECT 's1'::text $$")
                 def operation(host,t,original,connection):
                     _,profile,_=self.source_bound_profile();value=json.loads(profile)
                     roles=connection.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
@@ -1017,12 +1024,46 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     def fenced_encoder(*args,**kwargs):
                         with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c lock_timeout=100ms -c statement_timeout=1500') as writer:
                             with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute("UPDATE truss.sec_staff SET staff_id=staff_id")
+                            with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY DEFINER')
                         encoded.append(True)
                         return encode_literal_key_tuple(*args,**kwargs)
-                    with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=fenced_encoder):
-                        result=run_named_subject_resource_read(host,t,comparison,raw,sources,selection,weft.inspect_security_mapping_subject_key_json)
-                    self.assertEqual(encoded,[True,True])
+                    import security_owned_read as tool
+                    original_run=tool.subprocess.run
+                    evaluated=[]
+                    def during_evaluation(command,*args,**kwargs):
+                        if len(command)>1 and str(command[1]).endswith('evaluate-security-captured-identity-fixture.ts'):
+                            with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c lock_timeout=100ms -c statement_timeout=1500') as writer:
+                                with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY DEFINER')
+                            evaluated.append(True)
+                        return original_run(command,*args,**kwargs)
+                    effective_drift=drift
+                    pending_writer=None
+                    if drift=='disabled_barrier':self.connection.execute('ALTER EVENT TRIGGER truss_routine_ddl_writer_barrier DISABLE')
+                    try:
+                        with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=fenced_encoder),patch.object(tool.subprocess,'run',during_evaluation):
+                            if drift in ('pending_commit','pending_abort'):
+                                pending_writer=psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=1500')
+                                pending_writer.execute('BEGIN');pending_writer.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY DEFINER')
+                                first=run_ddl_fenced_named_subject_resource_read(host,t,comparison,raw,sources,selection,weft.inspect_security_mapping_subject_key_json,original)
+                                self.assertIsInstance(first,Error);self.assertEqual(encoded,[]);self.assertEqual(evaluated,[])
+                                self.assertIsInstance(host._custody.last_attempt.error,psycopg.errors.LockNotAvailable)
+                                self.assertEqual(host._custody.last_attempt.phase,'contained');self.assertIsNone(host._custody.last_attempt.cleanup_error)
+                                pending_writer.execute('COMMIT' if drift=='pending_commit' else 'ROLLBACK')
+                                if drift=='pending_abort':effective_drift=None
+                            result=run_ddl_fenced_named_subject_resource_read(host,t,comparison,raw,sources,selection,weft.inspect_security_mapping_subject_key_json,original)
+                    finally:
+                        if pending_writer is not None:pending_writer.close()
+                        if drift=='disabled_barrier':self.connection.execute('ALTER EVENT TRIGGER truss_routine_ddl_writer_barrier ENABLE ALWAYS')
+                    if effective_drift is not None:
+                        self.assertEqual(encoded,[])
+                        self.assertIsInstance(result,Error)
+                        self.assertEqual(str(host._custody.last_attempt.error),'Exact original installed DDL barriers required' if drift=='disabled_barrier' else 'Exact installed named subject helper snapshot required')
+                        self.assertEqual(host._custody.last_attempt.phase,'contained')
+                        self.assertIsNone(host._custody.last_attempt.cleanup_error)
+                        return
+                    self.assertEqual(encoded,[True,True],str(host._custody.last_attempt.error))
                     if expected_subject=='s1':
+                        self.assertEqual(evaluated,[True])
                         self.assertEqual(result,Ok({'kind':'owned-resource-list-fixture/0.1','rows':[{'key':[{'string':'r1'}],'output':[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}]}]}))
                     else:
                         self.assertIsInstance(result,Error)

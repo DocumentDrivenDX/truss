@@ -1,0 +1,280 @@
+{
+  "count": 36,
+  "controls": [
+    {
+      "name": "exact original producer packet document",
+      "passed": true
+    },
+    {
+      "name": "exact original producer packet policy",
+      "passed": true
+    },
+    {
+      "name": "exact original producer packet resolution",
+      "passed": true
+    },
+    {
+      "name": "exact original producer packet transport",
+      "passed": true
+    },
+    {
+      "name": "exact original producer packet requirements",
+      "passed": true
+    },
+    {
+      "name": "exact original producer packet mapping-request",
+      "passed": true
+    },
+    {
+      "name": "selected source bytes exactly document packet",
+      "passed": true
+    },
+    {
+      "name": "original resolution contains same whole document object",
+      "passed": true
+    },
+    {
+      "name": "minimal Resource identity query has no broader bindings",
+      "passed": true
+    },
+    {
+      "name": "genuine Weft shared named subject inspected",
+      "passed": true
+    },
+    {
+      "name": "actual composition positive",
+      "passed": true
+    },
+    {
+      "name": "synthetic guards precede helper; both original encodings precede capture",
+      "passed": true
+    },
+    {
+      "name": "live/profile key mismatch refuses before capture",
+      "passed": true
+    },
+    {
+      "name": "None selection refuses before inspector or cut",
+      "passed": true
+    },
+    {
+      "name": "reconstructed prior wrapper demonstrates missing-live-subject downgrade",
+      "passed": true
+    },
+    {
+      "name": "wrong record refuses before inspection/cut",
+      "passed": true
+    },
+    {
+      "name": "legacy document refuses before inspection/cut",
+      "passed": true
+    },
+    {
+      "name": "legacy request refuses before inspection/cut",
+      "passed": true
+    },
+    {
+      "name": "wrong columns refuses before inspection/cut",
+      "passed": true
+    },
+    {
+      "name": "legacy policy/resolution refuses selected named mode",
+      "passed": true
+    },
+    {
+      "name": "wrong native principal refuses before helper",
+      "passed": true
+    },
+    {
+      "name": "foreign subject OID refuses before helper fetch/codec",
+      "passed": true
+    },
+    {
+      "name": "null subject refuses before codec",
+      "passed": true
+    },
+    {
+      "name": "selection snapshot survives original carrier mutation during inspection",
+      "passed": true
+    },
+    {
+      "name": "malformed inspector refuses before cut",
+      "passed": true
+    },
+    {
+      "name": "legacy mode CLI",
+      "passed": true
+    },
+    {
+      "name": "named mode CLI",
+      "passed": true
+    },
+    {
+      "name": "unknown mode CLI",
+      "passed": true
+    },
+    {
+      "name": "extra mode CLI",
+      "passed": true
+    },
+    {
+      "name": "late caller OID drift refuses at checkpoint 2",
+      "passed": true
+    },
+    {
+      "name": "late caller OID drift refuses at checkpoint 3",
+      "passed": true
+    },
+    {
+      "name": "snapshot occurs inside cut before subject helper",
+      "passed": true
+    },
+    {
+      "name": "fixed schema selection refuses before inspector",
+      "passed": true
+    },
+    {
+      "name": "fixed routine selection refuses before inspector",
+      "passed": true
+    },
+    {
+      "name": "fixed actor carrier selection refuses before inspector",
+      "passed": true
+    },
+    {
+      "name": "drifted helper snapshot refuses before helper or encoders",
+      "passed": true
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security_owned_read.py",
+      "sha256": "363d938734fd528fdd0b0580687939d7e50730a9d81daefea14eb3054973ccbb",
+      "bytes": 20690
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-source-fixture.ts",
+      "sha256": "bcf5e800cb0fce712db993128673499c601d92c33a169b211bd32a270430c481",
+      "bytes": 1387
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/produce-security-named-source.ts",
+      "sha256": "9d1759918491d983c44d45451c6279b6adaef8677ab988604d46a8d8daf2506e",
+      "bytes": 2099
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts",
+      "sha256": "116057c09071c25284e82e9d68fc044cf06c69e123f356567010cc3ad0af0441",
+      "bytes": 8752
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_subject_observation.py",
+      "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+      "bytes": 9078
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_umf_key_tuples.py",
+      "sha256": "9a84f9f7462c058e109d27cd27c2cb4ad3f51cfed6463b5f1e81ce1f6fb6fc6e",
+      "bytes": 9931
+    },
+    {
+      "path": "/private/tmp/subject-consumer-python/weft.so",
+      "sha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+      "bytes": 14364352
+    },
+    {
+      "path": "/private/tmp/named-helper-review-20261013/composition_checks.py",
+      "sha256": "2d2652186fc1d8b9335c22481b1278ed13597425d6bce546de9d8217e837c042",
+      "bytes": 13477
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-subject.sql",
+      "sha256": "1048120c8500e5fcbae5c5c7ecd838755a85bfad3806be81ba1b1a779873fd77",
+      "bytes": 330
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/astra-packet-results.json",
+      "sha256": "dd5f763ff142b52dd32998254bdd0dc0d15ce83240dea9024320e1d2229338cf",
+      "bytes": 3779
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/astra-results.json",
+      "sha256": "2bf84e0e65a708bb563d429c490645724d5d339d21cf60682a3bd26b6d7320d2",
+      "bytes": 7679
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/astra-review.json",
+      "sha256": "60cf53701c6dd2b35b9aac80fa6ef9cfcb4b88520f506613cfa4899107536962",
+      "bytes": 12687
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/cleanup.json",
+      "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+      "bytes": 71
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/document.json",
+      "sha256": "1eb64de9c3cdf8fcde1c1d37325136330508686cca70b6550c780df7d74085e8",
+      "bytes": 2857
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json",
+      "sha256": "723e7855b33d46843837a55eb426a23df661bfa8ca2e62a20362491a6caaaa53",
+      "bytes": 9574
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/original-selection.json",
+      "sha256": "ca0fb71ec748549da1e14b8345f3a1110a5dc921ca08d210294c91c21f618ef8",
+      "bytes": 104
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/policy.json",
+      "sha256": "ac1dc5841de60f64b8c268417124818c089ef247549fa75a621f1785f0b6ec97",
+      "bytes": 1472
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/receipt.json",
+      "sha256": "aacf76d39252a3c5b92efd8c6f187ebbb09951371ba77bd200016148c7fb9298",
+      "bytes": 3932
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/requirements.json",
+      "sha256": "c3195b19bd31aa7b3913effb814004a45198eecbc2af000a1d2be23b3f893748",
+      "bytes": 1044
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/resolution.json",
+      "sha256": "d6591a68b48b4f4a56b1631fce26dd66ac99a9d4f1f60c02c77c178bb3636e74",
+      "bytes": 5467
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/transport.json",
+      "sha256": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+      "bytes": 2903
+    }
+  ],
+  "positiveEvents": [
+    "inspector",
+    "held-cuts",
+    "caller",
+    "fetch",
+    "helper-snapshot",
+    "fetch",
+    "principal",
+    "fetch",
+    "helper",
+    "fetch",
+    "principal",
+    "fetch",
+    "encode",
+    "principal",
+    "fetch",
+    "encode",
+    "caller",
+    "fetch",
+    "capture",
+    "caller",
+    "fetch"
+  ],
+  "scope": "Actual original Weft/UMF source, codec and evaluator; actual composed Python preparation/observer/execute logic, with synthetic host observation, native cursor rows and enclosing native-cut shell. No native privilege/locking proof. Missing-selection predecessor is a faithful reconstruction via current unchanged internal helper, not a replay of an archived whole file."
+}

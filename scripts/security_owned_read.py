@@ -21,7 +21,7 @@ def _pin_owned_evaluator_sources():
     """Private administrative source snapshot, never an authority capability."""
     tool=ROOT/'scripts/evaluate-security-captured-identity-fixture.ts'
     owner=Path('/Users/erik/.codex/worktrees/security-main-integration/umf')
-    paths=[tool,ROOT/'scripts/security-named-source-fixture.ts',ROOT/'docs/helix/04-build/evidence/security-named-source-profile/document.json',ROOT/'docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json']+[ROOT/'docs/helix/04-build/evidence'/base/(name+'.json') for base in ('security-identity-requirements','security-named-source-profile') for name in ('policy','resolution','transport')]+[p for p in (owner/'src').rglob('*') if p.is_file() and p.suffix in ('.ts','.json')]+[owner/'tests/security/fixture.ts']
+    paths=[tool,ROOT/'scripts/security-named-source-fixture.ts',ROOT/'scripts/security-named-subject.sql',ROOT/'docs/helix/04-build/evidence/security-named-source-profile/document.json',ROOT/'docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json']+[ROOT/'docs/helix/04-build/evidence'/base/(name+'.json') for base in ('security-identity-requirements','security-named-source-profile') for name in ('policy','resolution','transport')]+[p for p in (owner/'src').rglob('*') if p.is_file() and p.suffix in ('.ts','.json')]+[owner/'tests/security/fixture.ts']
     return _OwnedEvaluatorSourcePins(tool,tuple((p,hashlib.sha256(p.read_bytes()).digest()) for p in paths))
 
 
@@ -56,7 +56,7 @@ def _read_owned_evaluator_receipt(text):
     return decision
 
 
-def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None, *, resource_list=False, source_profile='legacy', native_subject=None, original_inspector=None):
+def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None, *, resource_list=False, source_profile='legacy', native_subject=None, original_inspector=None, ddl_barrier=None):
     if type(source_profile) is not str or source_profile not in ('legacy','named'):raise ValueError('Exact original fixture source profile required')
     if type(sources) is not _OriginalFactSources:raise ValueError('Original fixture sources required')
     sources=_OriginalFactSources(sources.policy,sources.resolution)
@@ -84,6 +84,7 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
     if type(prepared) is not _OwnedEvaluatorSourcePins:raise ValueError('Original private evaluator preparation required')
     tool,pins=prepared.tool,dict(prepared.pins)
     observe_subject=None
+    subject_source=None
     if native_subject is not None:
         from dataclasses import replace
         from truss._psycopg_subject_observation import _SubjectSelection,_prepare_subject_operation
@@ -91,9 +92,13 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
         if (source_profile!='named' or profile['kind']!='truss-flat-fact-provider-fixture/0.3' or delegated or type(native_subject) is not _SubjectSelection
                 or native_subject.original_document!=(base/'document.json').read_bytes()
                 or native_subject.original_request!=(base/'mapping-request.json').read_bytes()
-                or (native_subject.module,native_subject.record,native_subject.key,native_subject.columns)!=('m','Staff','pk',('staff_id',))):
+                or (native_subject.module,native_subject.record,native_subject.key,native_subject.columns,native_subject.schema,native_subject.routine,native_subject.actor_carrier)!=('m','Staff','pk',('staff_id',),'truss','named_subject_current','text')):
             raise ValueError('Exact shared named fixture subject source required')
         native_subject=replace(native_subject)
+        sql_path=ROOT/'scripts/security-named-subject.sql'
+        sql_bytes=sql_path.read_bytes()
+        if hashlib.sha256(sql_bytes).digest()!=pins[sql_path]:raise ValueError('Prepared named subject SQL changed')
+        subject_source=sql_bytes.decode('utf8').split('AS $$',1)[1].split('$$;',1)[0]
         def produce_subject(observation):
             texts=tuple(json.dumps({'string':value}) for value in observation.values)
             return encode_literal_key_tuple(native_subject.original_document,observation.identity,texts,bun_executable='/opt/homebrew/bin/bun')
@@ -106,6 +111,7 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
                 raise ValueError('Original caller/executor database correspondence required')
         _verify_native_profile_caller(cursor,json.dumps({'caller':profile['executor']}).encode() if delegated else selected.profile)
         if observe_subject is not None:
+            _verify_named_subject_helper(cursor,providers,expected_source=subject_source)
             # This cursor already holds the selected source and complete declared fact cuts.
             observed_key=observe_subject(cursor,host._observe(cursor))
             selected_key=encode_literal_key_tuple(native_subject.original_document,('m','Staff','pk'),
@@ -129,7 +135,36 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
         # No raw cells, private fact identities or evaluator diagnostics leave
         # this owned operation. Dispositions remain original UMF output.
         return decision
-    return _run_dependency_fact_operation(host,transaction,selected,requirements,digest,providers,execute)
+    if ddl_barrier is None:return _run_dependency_fact_operation(host,transaction,selected,requirements,digest,providers,execute)
+    return _run_dependency_fact_operation(host,transaction,selected,requirements,digest,providers,execute,ddl_barrier=ddl_barrier)
+
+
+def _verify_named_subject_helper(cursor,providers,*,expected_source=None):
+    """Exact selected native definition snapshot; no DDL/handler/role lifetime proof."""
+    staff=[p for p in providers if p.kind=='field' and p.reference==('domain','m','staffId')]
+    if (len(staff)!=1 or (staff[0].relation.schema,staff[0].relation.name)!=('truss','sec_staff')
+            or staff[0].column is None or (staff[0].column.name,staff[0].column.type_oid)!=('staff_id',25)):
+        raise ValueError('Declared named subject read home required')
+    source=expected_source if expected_source is not None else (ROOT/'scripts/security-named-subject.sql').read_text().split('AS $$',1)[1].split('$$;',1)[0]
+    if type(source) is not str or not 1<=len(source.encode('utf8'))<=65536:
+        raise ValueError('Bounded selected named subject source required')
+    cursor.execute("SELECT p.proowner::pg_catalog.text,l.lanname::pg_catalog.text,p.prokind::pg_catalog.text,"
+        "p.pronargs::pg_catalog.text,p.proargtypes::pg_catalog.text,p.prorettype::pg_catalog.text,"
+        "p.proretset::pg_catalog.text,p.proisstrict::pg_catalog.text,p.prosecdef::pg_catalog.text,"
+        "p.provolatile::pg_catalog.text,p.proparallel::pg_catalog.text,p.proleakproof::pg_catalog.text,"
+        "p.prosupport::pg_catalog.oid::pg_catalog.text,pg_catalog.to_jsonb(p.proconfig)::pg_catalog.text,p.prosrc,"
+        "pg_catalog.to_jsonb(p.proargnames)::pg_catalog.text,pg_catalog.to_jsonb(p.proargmodes)::pg_catalog.text,"
+        "pg_catalog.to_jsonb(p.proallargtypes)::pg_catalog.text,(p.prosqlbody IS NULL)::pg_catalog.text "
+        "FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace "
+        "JOIN pg_catalog.pg_language l ON l.oid OPERATOR(pg_catalog.=) p.prolang "
+        "WHERE n.nspname OPERATOR(pg_catalog.=) 'truss' AND p.proname OPERATOR(pg_catalog.=) 'named_subject_current' AND p.proargtypes OPERATOR(pg_catalog.=) '25'::pg_catalog.oidvector",
+        prepare=False,binary=False)
+    if cursor.description is None or len(cursor.description)!=19 or any(d.type_code!=25 for d in cursor.description):
+        raise ValueError('Exact named subject helper TEXT descriptors required')
+    expected=(str(staff[0].relation.owner_oid),'sql','f','1','25','25','true','false','false','v','u','false','0',
+        '["search_path=pg_catalog"]',source,'["actor", "staff_id"]','["i", "t"]','["25", "25"]','true')
+    actual=cursor.fetchmany(2)
+    if actual!=[expected]:raise ValueError('Exact installed named subject helper snapshot required')
 
 
 def _read_owned_resource_receipt(text):
@@ -160,6 +195,16 @@ def run_named_subject_resource_read(host, transaction, epoch, requirements, sour
         raise ValueError('Required exact native subject selection')
     return _run_owned_identity_read(host,transaction,epoch,requirements,sources,resource_list=True,
         source_profile='named',native_subject=selection,original_inspector=original_inspector)
+
+
+def run_ddl_fenced_named_subject_resource_read(host, transaction, epoch, requirements, sources, selection, original_inspector, barrier):
+    """Selected cooperative table/routine DDL exclusion; not complete closure."""
+    from truss._psycopg_subject_observation import _SubjectSelection
+    from truss._psycopg_epoch_cut import _DDLBarrierComparison
+    if type(selection) is not _SubjectSelection or type(barrier) is not _DDLBarrierComparison:
+        raise ValueError('Required exact subject selection and DDL barrier')
+    return _run_owned_identity_read(host,transaction,epoch,requirements,sources,resource_list=True,
+        source_profile='named',native_subject=selection,original_inspector=original_inspector,ddl_barrier=barrier)
 
 
 def run_owned_identity_read(host, transaction, epoch, requirements, sources):

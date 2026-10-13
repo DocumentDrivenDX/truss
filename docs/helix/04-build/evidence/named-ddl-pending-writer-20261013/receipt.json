@@ -1,0 +1,22 @@
+{
+  "scope": "Selected cooperating helper DDL pending commit/abort retry controls; no complete writer closure",
+  "sources": {
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "1146c21f0a51d32364be84692d24956d9691841fcf573d5d80d5a2a0b24fc2d3"
+  },
+  "nativeGroups": 1,
+  "nativeSeconds": 10.442,
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17; Bun1.4.2; original UMF Core0.8/security0.1/KeyTuple3; Weft subject selection0.1",
+  "controls": [
+    "pending helper DDL refuses with native LockNotAvailable, contained/no cleanup error, zero codecs/evaluator",
+    "committed helper drift retry refuses at exact helper snapshot before encoding",
+    "aborted helper drift retry in same caller transaction permits original r1/Withheld",
+    "existing writer/body/config and subject controls remain passing"
+  ],
+  "acceptanceTraceability": {
+    "US-056-AC9": "Selected pending helper writer and fresh retry prerequisites",
+    "US-056-AC10": "Native original transaction/containment correspondence prerequisites"
+  },
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "limits": "Cooperative selected tags only; broad unsafe fixture grants, complete administration/role/config/handler/issuer closure and protected release remain open"
+}
