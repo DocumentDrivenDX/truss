@@ -16,7 +16,7 @@ from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
 from .imports import ImportInput, ObjectImportRecord, EdgeImportRecord, ImportExecutionResult
 from .import_runtime import ImportRuntimeContext
 from .groups import AuthoredValue, OrderKey
-from .feed import FeedPage, FeedAcknowledged, FeedUnavailable
+from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage, FeedAcknowledged, FeedUnavailable
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
@@ -87,6 +87,12 @@ class NativeRuntimeOperations(Protocol):
 
     def reread_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,maximum_facts: int=4096,
                                    maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]: ...
+
+    def acknowledge_feed_with_receipt_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,destination_id: str,request_sha256: str,publication_id: str,receipt_bytes: bytes) -> Outcome[FeedReceiptAcknowledged | FeedUnavailable]:
+        ...
+
+    def reconcile_feed_ack_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,destination_id: str,request_sha256: str,publication_id: str,receipt_bytes: bytes) -> Outcome[FeedAckReconciled | FeedUnavailable]:
+        ...
 
     def acknowledge_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage) -> Outcome[FeedAcknowledged | FeedUnavailable]: ...
 

@@ -1,6 +1,6 @@
 """Experimental Python components; complete Truss engine APIs are unfinished."""
 from .execution import ExecutionFailure, Ok, Error, Outcome, TransactionHandle, Isolation, AccessMode
-from .feed import FeedCursor, FeedPage, FeedConsumer, FeedAcknowledged, FeedUnavailable
+from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedCursor, FeedPage, FeedConsumer, FeedAcknowledged, FeedUnavailable
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability)
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
@@ -106,3 +106,5 @@ __all__ += ['QueryPage','QueryPageCursor']
 
 from .query import QueryReadPosition
 __all__ += ['QueryReadPosition']
+
+__all__ += ["FeedAckReceipt", "FeedReceiptAcknowledged", "FeedAckReconciled"]
