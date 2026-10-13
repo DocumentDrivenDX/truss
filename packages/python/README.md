@@ -46,6 +46,24 @@ python packages/python/examples/run_corpus.py \
 This is one implementation's `passed_preview`, not completion of the full
 consumer corpus or independent native interchange.
 
+For a local server with an installed Truss candidate, use the explicit launcher
+option after installing the `[local,native]` extras:
+
+```sh
+truss-local-postgres --data-dir /tmp/truss-local --install
+```
+
+Add `--probe` to install, confirm committed status and stop while retaining data.
+The launcher installs only when public status reports no Truss namespace. On a
+current retained installation it confirms status and preserves the installation
+ID. Unsupported or corrupt installations refuse; this option never upgrades or
+repairs them. The JSON output follows commit and a fresh status observation.
+Fresh owner/registrar role names come from the installation result; save them
+for access setup. A restart reports confirmed status without inventing those
+names. Ordinary-person registration and module access still require the role
+configuration described below. Without `--install`, the launcher only starts
+PostgreSQL. Confirmed candidate status does not establish full security readiness.
+
 ## Embed in your host
 
 Use an ordinary authenticated person's connection for business operations.
