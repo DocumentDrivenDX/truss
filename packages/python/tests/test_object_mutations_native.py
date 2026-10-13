@@ -1,4 +1,5 @@
 """Basic adopter workflows for the public object mutation interface."""
+import os
 from truss import Ok,ObjectFound,ObjectNotFound
 from truss.contracts import MapValue,TextValue
 from truss.groups import (UpdateObject,Delete,StoredObjectReference,AliasObjectReference,AuthoredValue,
@@ -13,7 +14,7 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         context=assembly.group_context_in_transaction(tx).value
         input=context.input(operations,MapValue(entries=()))
         request=RequestNone() if request_id is None else context.request(request_id)
-        result=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        result=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         if not isinstance(result,Ok):self.fail(repr(result)+" "+str(assembly._host._custody.last_attempt.error))
         return result.value,input,request
 
@@ -33,7 +34,7 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         self.assertEqual(result.response.semantic.results[0].version,'2')
         self.assertEqual(dict(self.read(assembly,tx,identity).object.values)['A-label'],'two')
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
-        replay=assembly.apply_in_transaction(tx,update_input,update_request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun').value
+        replay=assembly.apply_in_transaction(tx,update_input,update_request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun')).value
         self.assertIsInstance(replay.response,CommittedReceiptReplay);self.assertEqual(replay.response.semantic,result.response.semantic)
         noop=UpdateObject(target=StoredObjectReference(identity=identity),set=update.set,unset=(),expected_version='2')
         before=self.read(assembly,tx,identity).object
@@ -51,7 +52,7 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         self.assertIsInstance(result.response.semantic.results[0],Deleted);self.assertIsInstance(self.read(assembly,tx,identity),ObjectNotFound)
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
         for original_input,request in ((delete_input,delete_request),(update_input,update_request)):
-            replay=assembly.apply_in_transaction(tx,original_input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+            replay=assembly.apply_in_transaction(tx,original_input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
             self.assertIsInstance(replay,Ok);self.assertIsInstance(replay.value.response,CommittedReceiptReplay)
         self.assertIsInstance(self.read(assembly,tx,identity),ObjectNotFound)
         host.detach();connection.rollback()

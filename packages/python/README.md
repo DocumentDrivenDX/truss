@@ -11,7 +11,7 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.18`,
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.19`,
 native runtime `0.55-candidate`, layout `1.0`
 candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.25`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
