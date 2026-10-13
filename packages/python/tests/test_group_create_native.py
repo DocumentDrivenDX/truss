@@ -3,6 +3,7 @@ import base64
 from dataclasses import replace
 import hashlib
 import json
+import os
 import psycopg
 from truss import (Ok,Error,ModuleAccessGrant,CatalogRuntimeConfiguration,create_reference_assembly,
     adopt_psycopg_host,ObjectFound)
@@ -24,7 +25,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
             source=relational_document();source['id']=identity
             if mutate_source is not None:mutate_source(source)
             documents.append(CatalogDocument(identity,'r1',json.dumps(source,indent=2,ensure_ascii=False).encode()))
-        prepared=assembly.prepare_catalog(tuple(documents),source_version=json.loads(documents[0].content)['umf'],bun_executable='/opt/homebrew/bin/bun')
+        prepared=assembly.prepare_catalog(tuple(documents),source_version=json.loads(documents[0].content)['umf'],bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.documents=tuple(d.document for d in prepared.documents)
         registered=assembly.accept_in_transaction(tx,prepared,request_key='create-model')
         self.assertIsInstance(registered,Ok)
@@ -53,7 +54,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
             MapValue(entries=(MapEntry(key='x-action',value=TextValue(kind='string',text=action)),)))
         return input,context.value.request('stable-request')
     def apply(self,assembly,tx,input,request):
-        result=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        result=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         if isinstance(result,Error):self.fail(repr(result.error)+' '+str(assembly._host._custody.last_attempt.error))
         return result.value
     def test_create_commit_read_and_original_durable_replay(self):
@@ -130,7 +131,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         host.detach();connection.commit()
         self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE');self.admin.execute('REVOKE group_writer FROM consumer')
         connection,host,assembly,tx=self.consumer()
-        refused=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        refused=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(1,))
     def test_raw_facade_rejects_missing_values_and_duplicate_json(self):
@@ -211,7 +212,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertIsInstance(assembly.group_context_in_transaction(tx),Ok)
     def test_selected_group_provider_is_callable_and_disposal_closes_it(self):
         connection,host,assembly,tx=self.ready();input,request=self.input(assembly,tx)
-        provider=assembly.groups(assembly.group_selection,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        provider=assembly.groups(assembly.group_selection,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.assertEqual(provider.status,'ok')
         self.assertEqual(provider.capability.selection,assembly.group_selection)
         result=provider.capability.apply_in_transaction(tx,input,request)
@@ -228,7 +229,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         for state in ('40001','40P01'):
             self.admin.execute(psycopg.sql.SQL("CREATE FUNCTION public.force_retry() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'retry control' USING ERRCODE={}; END $$").format(psycopg.sql.Literal(state)))
             self.admin.execute('CREATE TRIGGER force_retry BEFORE INSERT ON truss.object FOR EACH ROW EXECUTE FUNCTION public.force_retry()')
-            result=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+            result=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
             self.assertIsInstance(result,Error);self.assertEqual(result.error.code,'retry');self.assertEqual(result.error.sql_state,state)
             self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
             self.admin.execute('DROP TRIGGER force_retry ON truss.object');self.admin.execute('DROP FUNCTION public.force_retry()')
@@ -239,7 +240,7 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         input=replace(input,asserted_origin=MapValue(entries=(MapEntry(key='x-actor',value=TextValue(kind='string',text='group_writer')),)))
         connection.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
         self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE');self.admin.execute('REVOKE group_writer FROM consumer')
-        refused=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        refused=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
         self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
         for table in ('object','runtime_create_group','request_receipt','journal'):
