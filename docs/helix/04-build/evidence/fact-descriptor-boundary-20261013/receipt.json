@@ -1,0 +1,29 @@
+{
+  "scope": "Catalog descriptor validation before foreign row decoding; no complete protected backend admission",
+  "sources": {
+    "packages/python/src/truss/_psycopg_fact_cut.py": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+    "packages/python/tests/test_fact_cut_descriptor_boundary.py": "f95b9c69b46e55ff8dd79a39433da1f1cd8772be9aa0a51b6ea31705146c6df6"
+  },
+  "adverseStages": [
+    "relation",
+    "ALWAYS guard",
+    "column"
+  ],
+  "foreignFetches": 0,
+  "callbacks": 0,
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17",
+  "acceptanceTraceability": {
+    "US-056-AC10": "Native transport correspondence prerequisite only"
+  },
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "limitations": [
+    "driver may construct loaders during execute; trusted adapters remain a premise",
+    "complete authority/helper/config writer closure and protected query release remain open"
+  ],
+  "finalNativeTests": 4,
+  "finalNativeSeconds": 5.126,
+  "priorSubjectCompositionControls": 7,
+  "priorSubjectCompositionSeconds": 10.27,
+  "qualification": "Final-source native flat/graph, valid column, wrong column and pending writer checks pass. Subject composition replay preceded removal of redundant post-fetch descriptor checks."
+}

@@ -1,0 +1,117 @@
+{
+  "review": "Fact-cut descriptor-before-fetch boundary",
+  "reviewedAt": "2026-10-13T15:09:24.892689+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "head": "10f59db238aff9c448c8ad7140a7075970fa6e5e",
+  "status": "no actionable findings within the decoder-ordering scope",
+  "findings": [],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "b04f0d96ac360b4167bec32fe5f92c60fe2cfce8ab4748268bf7e0d98a7fcf86",
+      "bytes": 17930
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_fact_cut_descriptor_boundary.py",
+      "sha256": "f95b9c69b46e55ff8dd79a39433da1f1cd8772be9aa0a51b6ea31705146c6df6",
+      "bytes": 2326
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_psycopg_fact_cut_native.py",
+      "sha256": "5965ae835d1099740a24e47d0452df6f6ae8e4ee516622f69a2c603908bea161",
+      "bytes": 151897
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/tests/test_fenced_subject_key_native.py",
+      "sha256": "5f9ee024be1660b305e02ad5ba18649ef6ce2d8f34c594c058430ca86f2ba31b",
+      "bytes": 8092
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md",
+      "sha256": "8bfdd23bd3ac97c65d1be87965a436538762286195aeecfa9ac6186814685581",
+      "bytes": 304801
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/implementation-plan.md",
+      "sha256": "48805bdc767758f087134781352148bcbac07d77c833ce7e6f8ce484cb691804",
+      "bytes": 1071685
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/fact-descriptor-boundary-20261013/receipt.json",
+      "sha256": "bdcadf85523d9d6d0e658c041850f97f3a47f7060a05f5122413a36472303d88",
+      "bytes": 1294
+    }
+  ],
+  "independentEvidence": [
+    {
+      "path": "/private/tmp/fact-descriptor-review-20261013/check.py",
+      "sha256": "1762558269192926d27c3df8b3761523e231544f20680c38e62c1174e5a14800",
+      "bytes": 4539
+    },
+    {
+      "path": "/private/tmp/fact-descriptor-review-20261013/results.json",
+      "sha256": "a00d5030aea0a69b3c829b15aad8bb24f353f4b2dd03231a91721fd856208245",
+      "bytes": 11719
+    },
+    {
+      "path": "/private/tmp/fact-descriptor-review-20261013/prechange.py",
+      "sha256": "0b22607862cd90a41f233ecc01faf6d56af78dc3f6ed141aca638d90aac96e8f",
+      "bytes": 7928
+    }
+  ],
+  "independentValidation": {
+    "focusedRepositoryTest": "1 unittest with relation/guard/column NAME-OID subtests passed in 0.026s",
+    "actualFactAcquireSyntheticEnvelopeControls": 94,
+    "scope": "Actual final fact-cut acquire code with synthetic cursor descriptors/rows and patched enclosing epoch/DDL shells. Covers both dispatch branches, every descriptor position, absent/short/long descriptors, absent/duplicate/wrong rows and positive exact rows. Bad descriptors cause zero fetches at the rejected stage and no callback.",
+    "prechangeReproductions": 3,
+    "prechangeResult": "Each of relation/guard/column stages reached the foreign fetch before descriptor validation in the current HEAD baseline."
+  },
+  "parentNativeEvidence": {
+    "execution": "Parent-executed retained artifacts inspected; no independent native rerun",
+    "finalFactTests": 4,
+    "finalSeconds": 5.126,
+    "priorSubjectControls": 7,
+    "priorSubjectSeconds": 10.27,
+    "qualification": "The seven subject controls preceded removal of redundant post-fetch descriptor checks; four native fact tests cover final source.",
+    "cleanup": "passed",
+    "pins": [
+      {
+        "path": "/private/tmp/fact-descriptor-final-native.log",
+        "sha256": "0dbd79ab2b1f87e6ff6f57459b83998f8e29033f5b56d004ed60f6b7a474ac9d",
+        "bytes": 790
+      },
+      {
+        "path": "/private/tmp/fact-descriptor-cleanup/cleanup-PsycopgFactCutNativeTests.json",
+        "sha256": "25ff0a121333c98ce99cdd66a283f9a33b33cafdb1dbc863c0df7857df65b9e6",
+        "bytes": 71
+      },
+      {
+        "path": "/private/tmp/fact-descriptor-native.log",
+        "sha256": "1a4f93298e5e09cef3b71b775bb1b02bf10784f2e8710318af7ae73002b769f7",
+        "bytes": 306
+      },
+      {
+        "path": "/private/tmp/fact-descriptor-native.json",
+        "sha256": "71540f60e240a362860b07fcf84ca6ba8f2592c1d76fcdf799d891387773ac4e",
+        "bytes": 4518
+      }
+    ]
+  },
+  "sourceReview": [
+    "All three catalog SELECT sites now validate descriptor presence, width and every native OID before fetchmany(2).",
+    "Existing exact row counts and relation, guard and field value comparisons remain enforced after fetching.",
+    "Both ordinary epoch and optional DDL-fenced dispatch share the same corrected acquire closure.",
+    "Removal of redundant post-fetch descriptor reads does not weaken the supported stock cursor path; no external callback intervenes between validation and fetch."
+  ],
+  "limitations": [
+    "This guards row decoding, not loader constructor execution during psycopg execute/set_pgresult; trusted driver and adaptation remain premises.",
+    "Synthetic independent controls do not establish native lock, role, transaction, descriptor authenticity or complete driver containment.",
+    "No backend admission, authenticated authority, complete helper/configuration/writer closure, protected release or readiness established; 132 required backend cases remain unpromoted."
+  ],
+  "repositoryMutations": false
+}

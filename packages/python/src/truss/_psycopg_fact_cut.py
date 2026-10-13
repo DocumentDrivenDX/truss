@@ -76,10 +76,11 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
                            "EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text "
                            "FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) c.relnamespace WHERE n.nspname OPERATOR(pg_catalog.=) %s AND c.relname OPERATOR(pg_catalog.=) %s",
                            (schema,name),prepare=False,binary=False)
-            rows=cursor.fetchmany(2)
             if (cursor.description is None or len(cursor.description)!=7
-                    or any(d.type_code!=25 for d in cursor.description)
-                    or rows != [(str(oid),str(owner),'r','p','false','false','false')]):
+                    or any(d.type_code!=25 for d in cursor.description)):
+                raise ValueError('Exact native TEXT relation descriptors required')
+            rows=cursor.fetchmany(2)
+            if rows != [(str(oid),str(owner),'r','p','false','false','false')]:
                 raise ValueError('Exact permanent non-inherited unfiltered fact table required')
             cursor.execute("SELECT t.tgenabled::pg_catalog.text,t.tgtype::pg_catalog.text,t.tgnargs::pg_catalog.text,pg_catalog.encode(t.tgargs,'hex'),"
                            "t.tgisinternal::pg_catalog.text,(t.tgqual IS NULL)::pg_catalog.text,p.proowner::pg_catalog.text,p.prosecdef::pg_catalog.text,"
@@ -88,11 +89,13 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
                            "FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_proc p ON p.oid OPERATOR(pg_catalog.=) t.tgfoid WHERE t.tgrelid OPERATOR(pg_catalog.=) %s::pg_catalog.oid "
                            "AND t.tgname OPERATOR(pg_catalog.=) 'fact_write_fence' AND p.oid OPERATOR(pg_catalog.=) 'truss.runtime_fence_authorization_fact_write()'::pg_catalog.regprocedure",
                            (str(oid),),prepare=False,binary=False)
+            if (cursor.description is None or len(cursor.description)!=12
+                    or any(d.type_code!=25 for d in cursor.description)):
+                raise ValueError('Exact native TEXT guard descriptors required')
             guards=cursor.fetchmany(2)
             expected=('A','62','0','','false','true',str(owner),'false','v',
                       '["search_path=pg_catalog, pg_temp"]',guard_source,'false')
-            if (cursor.description is None or len(cursor.description)!=12
-                    or any(d.type_code!=25 for d in cursor.description) or guards != [expected]):
+            if guards != [expected]:
                 raise ValueError('Exact installed ALWAYS fact guard required')
             for n,a,t,m,nn,c,g,i in columns:
                 cursor.execute("SELECT attname::pg_catalog.text,attnum::pg_catalog.text,atttypid::pg_catalog.text,"
@@ -101,10 +104,12 @@ def _run_fenced_fact_operation(host, transaction, epoch_comparison, relations, c
                                "FROM pg_catalog.pg_attribute WHERE attrelid OPERATOR(pg_catalog.=) %s::pg_catalog.oid "
                                "AND attnum OPERATOR(pg_catalog.=) %s::pg_catalog.int2",
                                (str(oid),str(a)),prepare=False,binary=False)
+                if (cursor.description is None or len(cursor.description)!=9
+                        or any(d.type_code!=25 for d in cursor.description)):
+                    raise ValueError('Exact native TEXT column descriptors required')
                 actual=cursor.fetchmany(2)
                 expected=(n,str(a),str(t),str(m),'true' if nn else 'false',str(c),g,i,'false')
-                if (cursor.description is None or len(cursor.description)!=9
-                        or any(d.type_code!=25 for d in cursor.description) or actual != [expected]):
+                if actual != [expected]:
                     raise ValueError('Original native field descriptor correspondence required')
         return callback(cursor)
     if ddl_barrier is not None:

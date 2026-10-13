@@ -1,0 +1,9 @@
+test_flat_and_native_graph_membership_under_joint_cut (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_flat_and_native_graph_membership_under_joint_cut) ... ok
+test_original_active_column_descriptor_passes_under_cut (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_original_active_column_descriptor_passes_under_cut) ... ok
+test_valid_wrong_column_descriptor_refuses_before_callback (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_valid_wrong_column_descriptor_refuses_before_callback) ... ok
+test_pending_fact_writer_refuses_before_callback (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_pending_fact_writer_refuses_before_callback) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 5.126s
+
+OK

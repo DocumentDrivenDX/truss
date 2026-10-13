@@ -1,0 +1,839 @@
+{
+  "currentControls": [
+    {
+      "route": "epoch",
+      "case": "positive exact descriptors and rows",
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "oid",
+        0
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "oid",
+        1
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "oid",
+        2
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "oid",
+        3
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "oid",
+        4
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "oid",
+        5
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "oid",
+        6
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "none"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "short"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "long"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "empty"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "duplicate"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        1,
+        "wrong"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        0
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        1
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        2
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        3
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        4
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        5
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        6
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        7
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        8
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        9
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        10
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "oid",
+        11
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "none"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "short"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "long"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "empty"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "duplicate"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        2,
+        "wrong"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        0
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        1
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        2
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        3
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        4
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        5
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        6
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        7
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "oid",
+        8
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "none"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "short"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "long"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "empty"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "duplicate"
+      ],
+      "pass": true
+    },
+    {
+      "route": "epoch",
+      "case": [
+        3,
+        "wrong"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": "positive exact descriptors and rows",
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "oid",
+        0
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "oid",
+        1
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "oid",
+        2
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "oid",
+        3
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "oid",
+        4
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "oid",
+        5
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "oid",
+        6
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "none"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "short"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "long"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "empty"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "duplicate"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        1,
+        "wrong"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        0
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        1
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        2
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        3
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        4
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        5
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        6
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        7
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        8
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        9
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        10
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "oid",
+        11
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "none"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "short"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "long"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "empty"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "duplicate"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        2,
+        "wrong"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        0
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        1
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        2
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        3
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        4
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        5
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        6
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        7
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "oid",
+        8
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "none"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "short"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "long"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "empty"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "duplicate"
+      ],
+      "pass": true
+    },
+    {
+      "route": "ddl",
+      "case": [
+        3,
+        "wrong"
+      ],
+      "pass": true
+    }
+  ],
+  "count": 94,
+  "prechangeReproductions": [
+    {
+      "stage": 1,
+      "foreignFetchBeforeRefusal": true
+    },
+    {
+      "stage": 2,
+      "foreignFetchBeforeRefusal": true
+    },
+    {
+      "stage": 3,
+      "foreignFetchBeforeRefusal": true
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_fact_cut.py",
+      "sha256": "24aa08f3bdc0570b46d8565fac79a83b5283de14848d0177d7a5d1bc30a17637",
+      "bytes": 8202
+    },
+    {
+      "path": "/private/tmp/fact-descriptor-review-20261013/check.py",
+      "sha256": "1762558269192926d27c3df8b3761523e231544f20680c38e62c1174e5a14800",
+      "bytes": 4539
+    },
+    {
+      "path": "/private/tmp/fact-descriptor-review-20261013/prechange.py",
+      "sha256": "0b22607862cd90a41f233ecc01faf6d56af78dc3f6ed141aca638d90aac96e8f",
+      "bytes": 7928
+    }
+  ],
+  "scope": "Actual fact-cut acquire logic with synthetic descriptors/rows and replaced epoch/DDL host shells; verifies descriptor-before-fetch and callback ordering only, not native adaptation or transaction custody."
+}
