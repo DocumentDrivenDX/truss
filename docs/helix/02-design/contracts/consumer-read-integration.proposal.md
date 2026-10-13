@@ -420,3 +420,11 @@ outputs and owns its installed composition. It does not invent a replacement
 security registry, normalize unknown parameters or accept an unfinished gate.
 The reviewed source gate and these authored controls provide no native authority,
 passed integration case or installer readiness.
+
+## Public Python query read position — 2026-10-13
+
+The stock-PG authority provider returns QueryReadPosition on successful QueryRows/QueryPage.as_of. Its value is domain-separated from ReceiptToken and identifies a conservative committed lower bound: all committed top-level transactions strictly below the captured snapshot xmin were already visible before the following READ COMMITTED query. The subsequent query can include newer commits and the caller's own changes. The native capture uses pg_snapshot_xmin(pg_current_snapshot()), clock_timestamp() and the nonallocating pg_current_xact_id_if_assigned(). It does not rewrite Weft SQL, retain a new ledger or instrument native execution.
+
+The at field is a timezone-aware UTC datetime recording capture time, not commit/data time. caller_xid_assigned proves only allocation. The value binds the original installation/release/catalog/document pins and connecting actor; it provides no cross-source comparison or reached operation. It is returned only after final query authority, actor and caller-context checks succeed. Public constructors retain an optional field default; the actual provider fills it even for empty data results.
+
+This meets the original consumer's Position shape only under the issuing adapter's explicit lower-bound interpretation. It does not claim an exact read snapshot, at-least receipt semantics, replica position or complete consumer adapter mapping. [PostgreSQL18 snapshot documentation](https://www.postgresql.org/docs/18/functions-info.html) is the source for the visibility bound; an exact same-statement snapshot, if required later, must be lowered by Weft rather than by rewriting SQL in Truss.

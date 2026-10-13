@@ -1,13 +1,15 @@
 """Truss-owned catalog composition/execution; Weft owns all SQL interpretation."""
 from decimal import Decimal
 import re
+import base64
+from datetime import datetime, timezone
 from hashlib import sha256
 import json
 from types import MappingProxyType
 from typing import Mapping
 from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
-from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor
+from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition
 
 BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.7',
            'targetProfile': 'truss-runtime-pg18.6/0.4', 'interfaceVersion': 'weft-backend/0.2.3'}
@@ -110,7 +112,6 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
                     if metadata in ('createdAt','updatedAt'):
                         if not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}Z',exact):
                             raise ValueError('Canonical native UTC timestamp required')
-                        from datetime import datetime
                         datetime.fromisoformat(exact)
                     decoded.append(exact)
             elif representation['kind'] == 'completeRelatedKeys':
@@ -255,6 +256,24 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                     cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
                     if cursor.fetchone()!=(original_path,):raise ValueError('Caller path restoration required')
                     return QueryRefused(code='native_domain')
+        # The following READ COMMITTED query can include newer commits. This is
+        # a captured lower bound, never its exact snapshot or a receipt token.
+        cursor.execute('SELECT pg_catalog.pg_snapshot_xmin(pg_catalog.pg_current_snapshot())::pg_catalog.text,pg_catalog.to_char(pg_catalog.clock_timestamp() AT TIME ZONE \'UTC\',\'YYYY-MM-DD"T"HH24:MI:SS.US"Z"\'),pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text',prepare=False)
+        lower_bound, captured_at, caller_xid = cursor.fetchone()
+        if type(lower_bound) is not str or not re.fullmatch(r'[1-9][0-9]{0,19}',lower_bound) or int(lower_bound)>18446744073709551615 or type(captured_at) is not str or not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}Z',captured_at) or caller_xid is not None and (type(caller_xid) is not str or not re.fullmatch(r'[1-9][0-9]{0,19}',caller_xid) or int(caller_xid)>18446744073709551615):
+            raise ValueError('Exact native read-bound observation required')
+        captured_at = datetime.fromisoformat(captured_at).astimezone(timezone.utc)
+        position_data = {'profile':'truss-query-read-position/0.1','installationId':binding['installationId'],
+            'releaseSha256':binding['releaseSha256'],'catalogRevision':binding['catalogRevision'],
+            'actorOid':bundle['actorOid'],'documents':binding['documents'],'completedBeforeXid':lower_bound,
+            'at':captured_at.isoformat(timespec='microseconds'),'callerXidAssigned':caller_xid is not None}
+        position_bytes=json.dumps(position_data,ensure_ascii=False,separators=(',',':')).encode('utf8')
+        if len(position_bytes)>65536:
+            cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)',(binding_json,),prepare=False)
+            cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
+            if cursor.fetchone()!=(original_path,):raise ValueError('Caller path restoration required')
+            return QueryRefused(code='limits')
+        position=QueryReadPosition(value='truss-read-position-v1:'+base64.urlsafe_b64encode(position_bytes).decode('ascii').rstrip('='),at=captured_at,caller_xid_assigned=caller_xid is not None)
         from psycopg import RawCursor
         from psycopg.rows import tuple_row
         from .psycopg_host import _GuardedCursor
@@ -286,9 +305,9 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                 token = json.dumps({'profile':'truss-query-page/0.1','context':context,'after':[retained[-1][index] for index in keys]},ensure_ascii=False,separators=(',',':')).encode('utf8')
                 if len(token)>65536:return QueryRefused(code='limits')
                 next_cursor = QueryPageCursor(original_bytes=token)
-            return QueryPage(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=binding['catalogRevision'],next_cursor=next_cursor)
+            return QueryPage(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=binding['catalogRevision'],next_cursor=next_cursor,as_of=position)
         if isinstance(result, QueryRows):
-            return QueryRows(columns=result.columns, rows=result.rows, catalog_revision=binding['catalogRevision'])
+            return QueryRows(columns=result.columns, rows=result.rows, catalog_revision=binding['catalogRevision'],as_of=position)
         return result
     result = host._run_operation(transaction, execute)
     if isinstance(result, Error) and result.error.code=='execution_obligation':

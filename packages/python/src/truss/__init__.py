@@ -103,3 +103,6 @@ __all__ += ['QueryRelatedKeys','QueryRows','QueryRefused','QueryUnavailable','Qu
 
 from .query import QueryPage,QueryPageCursor
 __all__ += ['QueryPage','QueryPageCursor']
+
+from .query import QueryReadPosition
+__all__ += ['QueryReadPosition']

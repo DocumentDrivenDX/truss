@@ -7,7 +7,7 @@ from pathlib import Path
 
 import psycopg
 from adopter_workflow import transaction, success, expect
-from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, ReceiptIncluded, AcceptedDocument
+from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument
 from truss.contracts import MapValue, TextValue
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
     RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference)
@@ -179,6 +179,8 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                             cursors[step['save']['cursor']] = rows.next_cursor
                     else:
                         rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends') else None)), QueryRows)
+                if not isinstance(rows.as_of,QueryReadPosition) or not rows.as_of.value or rows.as_of.at.tzinfo is None or rows.as_of.at.utcoffset() is None or rows.as_of.semantics!='committed-lower-bound' or rows.as_of.caller_xid_assigned:
+                    raise AssertionError('Original read answer needs an aware recorded position with declared semantics')
                 if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends'):
                     required={'_version','_created_by','_created_at','_updated_by','_updated_at'}
                     if not required <= set(rows.columns):
@@ -193,8 +195,8 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
     return {'scope': 'selected original SQL/expected-output observations; not complete harness cases or interchange',
-        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields'],
-        'notChecked':['consumer answer position/time','replica'],
+        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'],
+        'notChecked':['replica','complete consumer adapter mapping'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,
         'interpretation':'partial; actions/placement/replica semantics unselected', 'observations': observations}
