@@ -1381,3 +1381,10 @@ Trace US-056 AC2/AC9/AC10 and US-057 AC7/CONTRACT-063/STP-056 prerequisites. Adm
 
 
 Concurrent owner mainb47bf431 adds typed relationship keys/runtime0.45/package0.0.8. Both histories were merged without conflict. Unchanged source-cut controls replay4/31.295s on0.45 with exact cleanup and933 imports. Earlier0.44 native/default and synthetic review remain historical; no new relationship/security semantic scope or backend promotion. Current pins: `../../04-build/evidence/catalog-source-cut-20261013/runtime045/receipt.json`.
+
+
+### Selected catalog source semantic byte binding — 2026-10-13
+
+Original request, accepted catalog evidence, captured Subject helper and complete ordered fact-column/DDL recipes now bind the selected native epoch profile. One helper capture supplies profile, verifier and final pin; exact inputs are copied before helper I/O. Six PostgreSQL18.6 controls pass113.038s; default publication regression1 passes52.830s; Astra Ultra85 independent controls pass after two custody fixes. Exact cleanup and933 imports pass. Test consumer explicitly uses10s statement/30s operation bounds; product defaults are unchanged. Earlier5s public seed deadlines are retained as setup failures.
+
+Trace US-056 AC2/AC6/AC9/AC10 and US-057 AC7/CONTRACT-063/STP-056 prerequisites. This compares declared input bytes, with1MiB evidence/64KiB profile bounds and digest collision-resistance premise. It does not authenticate issuer or prove complete native dependency, authority, handler/config/DDL/writer lifetime or protected endpoint closure. No backend case promotion;26 implemented/105 not-run/1 counterexample-found remains. Evidence: `docs/helix/04-build/evidence/catalog-source-binding-20261013/receipt.json`.

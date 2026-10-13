@@ -1,0 +1,49 @@
+{
+  "scope": "Selected catalog source byte correspondence; not authenticated issuer admission",
+  "runtime": "0.45-candidate",
+  "nativeTests": 6,
+  "seconds": 113.038,
+  "defaultRegression": {
+    "tests": 1,
+    "seconds": 52.83
+  },
+  "independentControls": 85,
+  "imports": 933,
+  "acceptancePrerequisites": [
+    "US-056 AC2/AC6/AC9/AC10",
+    "US-057 AC7",
+    "CONTRACT-063",
+    "STP-056"
+  ],
+  "fixtureTimeouts": {
+    "statementMs": 10000,
+    "operationMs": 30000
+  },
+  "qualification": "Complete request/catalog/helper bytes and ordered fact-column/DDL recipes are bound with single helper capture and pre-I/O input snapshots. Evidence cap 1MiB; profile cap64KiB; digests assume collision resistance. Earlier default5s seed deadline failures retained, not binding coverage. No issuer authentication, full dependency/lifetime closure, backend promotion or readiness. Inventory26 implemented/105 not-run/1 counterexample-found remains unchanged.",
+  "pins": {
+    "native-before-custody-fix.log": "65ca9c9407c542291e30fa6ee10387aff172d3d0256c140456b3588d7248b8ae",
+    "native-before-producer-copy-fix.log": "e367555ff88d9d726b3fbbf0089368f176d6dd9daaab793b2b2c9e699b3bc62d",
+    "native-setup-deadline-failure.log": "c843ea1cfec67bed5ea3e872dd5565930e67a453741ce29e8acd589f91d8eb20",
+    "published-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "8a93ed0427208e002a4d0fff85e409c5796dc8e9fbaa8ccae5ee4dab44369381",
+    "default-regression.log": "de3457aa22462219d389a2257e9879e3a809ba0a657aa871d0ddc6dcf961106c",
+    "decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "default-seed-deadline-failure.log": "cb03494bf4434fac71d74d624f2ee0926576900137211de5fe3125fdf1460819",
+    "independent-review/subject-after-helper-fix.py": "9e4e8fe4173cea54e585a2c739a57bb23b2c44bac62c91150eacca1d05dc6084",
+    "independent-review/source-pins.json": "28537c84bf20e1b9612491b321797ab2a3d1a0838fad74539e809be22f46c132",
+    "independent-review/helper-reread-before.json": "a8cb09dde3f17fcf6665f4f22a18c7c7a0e0fc662bc91d58dd1cd05e688e176f",
+    "independent-review/orchestration-results.json": "eb3f9c832d016f8927b0fd03f73fbb22c30f026b65d79ef5c0618821c92a2444",
+    "independent-review/orchestration.py": "95f25affece16eae709d0dba9809141bb787108a3cd568c94ece729c958b8d7c",
+    "independent-review/subject-before.py": "185a0cf3768cab9d0ae090e4c3b9ac0c224ba68429d86d198dafda3535b6588e",
+    "independent-review/helper-reread-after.json": "3b5d74bf9e2e98a4c6dfc61cc81c54aa028ff02a9ec226ebadd0ef09c530f44c",
+    "independent-review/binding-results.json": "d93e67b9358be9ab81c516d132c20935ad1df34a35a8790c3b1b7b195055a55c",
+    "independent-review/producer-mutation-before.json": "970ad84df23d1a5f107b65d1eeb76583fb6e239cfb90c489656fd36cac5ee156",
+    "independent-review/producer-mutation-after.json": "9b8fed0a48ff424e9e23a2decae041ba04c0a03b8bbcbf6e88c8f774c3d4b245",
+    "independent-review/review.json": "bcefe84e1489e5255ed97a7ce6024d11372d90d66a3395621a12df6b187e8af5",
+    "independent-review/binding.py": "268e2a8c8d86d94c7c3070fa4c80dda580b0bb97031068a3a627c39427eaac9b",
+    "independent-review/producer-mutation.py": "feef5387ef8855e3ee0d11c7f6bfff3ae05de485501e819e851148134696443c",
+    "independent-review/helper-reread.py": "427bca84d4b1fbd9ca166ca4485c366980724a594d8ed3645e05e0cc8a9f398a"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "scope": "Actual standalone producer; deterministic input replacement during helper file read; no native execution",
+  "equalOriginalPacket": false,
+  "acceptedRequestHash": "7c49f13536c6e32cc3437ccaa7b686647d99ef6e15650efbf0b307e1aaaa64dc",
+  "matchesInvalidMutableReplacement": true,
+  "factOid": true,
+  "barrierFunctionOid": false,
+  "sourceSha256": "9e4e8fe4173cea54e585a2c739a57bb23b2c44bac62c91150eacca1d05dc6084"
+}

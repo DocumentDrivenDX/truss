@@ -1,0 +1,215 @@
+{
+  "scope": "Actual deterministic profile producer and preflight structural validators, no native or authenticated source claim",
+  "count": 52,
+  "controls": [
+    {
+      "name": "exact canonical bounded bytes",
+      "passed": true
+    },
+    {
+      "name": "source hashes are exact original bytes",
+      "passed": true
+    },
+    {
+      "name": "relation input order canonicalized",
+      "passed": true
+    },
+    {
+      "name": "column order retained",
+      "passed": true
+    },
+    {
+      "name": "column count retained",
+      "passed": true
+    },
+    {
+      "name": "exact original_request mutation changes packet",
+      "passed": true
+    },
+    {
+      "name": "exact accepted_catalog_assessment mutation changes packet",
+      "passed": true
+    },
+    {
+      "name": "helper byte mutation changes packet",
+      "passed": true
+    },
+    {
+      "name": "barrier owner_oid bound",
+      "passed": true
+    },
+    {
+      "name": "barrier function_oid bound",
+      "passed": true
+    },
+    {
+      "name": "barrier source bound",
+      "passed": true
+    },
+    {
+      "name": "barrier include_alter_routine bound",
+      "passed": true
+    },
+    {
+      "name": "fact schema bound",
+      "passed": true
+    },
+    {
+      "name": "fact name bound",
+      "passed": true
+    },
+    {
+      "name": "fact oid bound",
+      "passed": true
+    },
+    {
+      "name": "fact owner_oid bound",
+      "passed": true
+    },
+    {
+      "name": "fact guard_source bound",
+      "passed": true
+    },
+    {
+      "name": "column name bound",
+      "passed": true
+    },
+    {
+      "name": "column number bound",
+      "passed": true
+    },
+    {
+      "name": "column type_oid bound",
+      "passed": true
+    },
+    {
+      "name": "column type_modifier bound",
+      "passed": true
+    },
+    {
+      "name": "column not_null bound",
+      "passed": true
+    },
+    {
+      "name": "column collation_oid bound",
+      "passed": true
+    },
+    {
+      "name": "column generated bound",
+      "passed": true
+    },
+    {
+      "name": "column identity bound",
+      "passed": true
+    },
+    {
+      "name": "mapping original_request bytes 0 refuses",
+      "passed": true
+    },
+    {
+      "name": "mapping original_request bytearray 1 refuses",
+      "passed": true
+    },
+    {
+      "name": "mapping original_request bytes 4000001 refuses",
+      "passed": true
+    },
+    {
+      "name": "mapping accepted_catalog_assessment bytes 0 refuses",
+      "passed": true
+    },
+    {
+      "name": "mapping accepted_catalog_assessment memoryview 1 refuses",
+      "passed": true
+    },
+    {
+      "name": "mapping accepted_catalog_assessment bytes 1048577 refuses",
+      "passed": true
+    },
+    {
+      "name": "helper bytes 0 refuses",
+      "passed": true
+    },
+    {
+      "name": "helper bytearray 1 refuses",
+      "passed": true
+    },
+    {
+      "name": "helper bytes 65537 refuses",
+      "passed": true
+    },
+    {
+      "name": "barrier owner_oid invalid refuses",
+      "passed": true
+    },
+    {
+      "name": "barrier owner_oid invalid refuses",
+      "passed": true
+    },
+    {
+      "name": "barrier function_oid invalid refuses",
+      "passed": true
+    },
+    {
+      "name": "barrier source invalid refuses",
+      "passed": true
+    },
+    {
+      "name": "barrier source invalid refuses",
+      "passed": true
+    },
+    {
+      "name": "barrier include_alter_routine invalid refuses",
+      "passed": true
+    },
+    {
+      "name": "recipe list refuses",
+      "passed": true
+    },
+    {
+      "name": "recipe empty refuses",
+      "passed": true
+    },
+    {
+      "name": "recipe duplicate refuses",
+      "passed": true
+    },
+    {
+      "name": "recipe foreign refuses",
+      "passed": true
+    },
+    {
+      "name": "recipe column list refuses",
+      "passed": true
+    },
+    {
+      "name": "recipe column duplicate refuses",
+      "passed": true
+    },
+    {
+      "name": "recipe column 1601 refuses",
+      "passed": true
+    },
+    {
+      "name": "request and assessment exact upper byte limits accepted",
+      "passed": true
+    },
+    {
+      "name": "helper and barrier source exact upper byte limits accepted",
+      "passed": true
+    },
+    {
+      "name": "1600 distinct ordered descriptors accepted",
+      "passed": true
+    },
+    {
+      "name": "32 selected recipes accepted within packet ceiling",
+      "passed": true
+    },
+    {
+      "name": "33 selected recipes refuse",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "cece0dc3e83ad66eb70ddee2a0bc7187b660900991b2d6bb9a00c89b8c58dbb0"
+}

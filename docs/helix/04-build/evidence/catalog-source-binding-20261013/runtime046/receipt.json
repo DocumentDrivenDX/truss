@@ -1,0 +1,21 @@
+{
+  "scope": "Post-merge runtime0.46 selected source binding and default publication regression",
+  "integrationCommit": "3ff45904dac41fe4d75aa0b4467a8b98462c1c09",
+  "nativeTests": 7,
+  "seconds": 85.057,
+  "imports": 933,
+  "qualification": "All seven native controls pass with exact owned cleanup. Earlier native6/default1 and Astra85 remain historical. No authenticated issuer, complete dependency/lifetime closure or backend case promotion.",
+  "sourcePins": {
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "899422a4ec840f83e7631728d92ff8f4bffa8e06c853e4c0016c3956a819f601",
+    "scripts/security_catalog_subject_read.py": "cece0dc3e83ad66eb70ddee2a0bc7187b660900991b2d6bb9a00c89b8c58dbb0",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "86d5f8fe11383c0f852927778df84de6ff573e5ee8c3af6fe011a6587e63df90"
+  },
+  "evidencePins": {
+    "published-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "81330ecb94794f4d3d280453f26fc16e98729ce2eb5924302377b907be69463f",
+    "runtime-manifest.json": "899422a4ec840f83e7631728d92ff8f4bffa8e06c853e4c0016c3956a819f601",
+    "decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143"
+  }
+}
