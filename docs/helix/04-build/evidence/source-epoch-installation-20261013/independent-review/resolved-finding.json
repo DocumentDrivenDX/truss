@@ -1,0 +1,9 @@
+{
+  "status": "resolved",
+  "priority": "P1",
+  "location": "packages/python/src/truss/_security_source_epoch_installation.py:96",
+  "before": "SELECT pg_catalog.current_setting('search_path')::text",
+  "after": "SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",
+  "risk": "Caller path could select a hostile text domain whose CHECK ran before the safe search path was installed.",
+  "evidence": "The retained native hostile-domain test executes the exact previous expression, asserts its original error, and then succeeds through the fixed installer. Independent review did not start a native process."
+}

@@ -1,0 +1,573 @@
+{
+  "scope": "Actual Python source/readback helpers with synthetic native-row observations; original source and wheel byte comparisons only. No native lifecycle replay or complete catalog inventory/refinement claim.",
+  "count": 141,
+  "passed": true,
+  "sourceSha256": "992152cc9c10b0dedc5cfea82b40493bb874cc1f546f16fe187dadfe4ff28907",
+  "wheelSha256": "c4547e1c0af6a697b566877adfc37c2056dc552ff7bd2e467e697d1027204f60",
+  "controls": [
+    {
+      "name": "exact eleven captured original sources",
+      "passed": true
+    },
+    {
+      "name": "original native bytes immutability.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes lock.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes issue.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes fresh-lock.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes read-fence.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes fenced-fresh-lock.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes routine-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes schema-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes database-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes table-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "original native bytes alter-routine-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses manifest.json",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses immutability.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses lock.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses issue.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses fresh-lock.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses read-fence.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses fenced-fresh-lock.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses routine-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses schema-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses database-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses table-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "package substitution refuses alter-routine-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "foreign descriptors before fetch None",
+      "passed": true
+    },
+    {
+      "name": "foreign descriptors before fetch [19]",
+      "passed": true
+    },
+    {
+      "name": "foreign descriptors before fetch [25, 19]",
+      "passed": true
+    },
+    {
+      "name": "exact text/null rows",
+      "passed": true
+    },
+    {
+      "name": "foreign carrier refuses bytes",
+      "passed": true
+    },
+    {
+      "name": "foreign carrier refuses int",
+      "passed": true
+    },
+    {
+      "name": "foreign carrier refuses bool",
+      "passed": true
+    },
+    {
+      "name": "foreign carrier refuses bytearray",
+      "passed": true
+    },
+    {
+      "name": "row excess refuses",
+      "passed": true
+    },
+    {
+      "name": "exact selected inventory returns all-three-options barrier",
+      "passed": true
+    },
+    {
+      "name": "runtime_immutable_source_epoch changed owner",
+      "passed": true
+    },
+    {
+      "name": "runtime_immutable_source_epoch changed definer",
+      "passed": true
+    },
+    {
+      "name": "runtime_immutable_source_epoch changed path",
+      "passed": true
+    },
+    {
+      "name": "runtime_immutable_source_epoch changed body",
+      "passed": true
+    },
+    {
+      "name": "runtime_immutable_source_epoch ACL public",
+      "passed": true
+    },
+    {
+      "name": "runtime_immutable_source_epoch ACL grantor",
+      "passed": true
+    },
+    {
+      "name": "runtime_immutable_source_epoch ACL grantable",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_source_epoch changed owner",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_source_epoch changed definer",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_source_epoch changed path",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_source_epoch changed body",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_source_epoch ACL public",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_source_epoch ACL grantor",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_source_epoch ACL grantable",
+      "passed": true
+    },
+    {
+      "name": "runtime_issue_source_epoch changed owner",
+      "passed": true
+    },
+    {
+      "name": "runtime_issue_source_epoch changed definer",
+      "passed": true
+    },
+    {
+      "name": "runtime_issue_source_epoch changed path",
+      "passed": true
+    },
+    {
+      "name": "runtime_issue_source_epoch changed body",
+      "passed": true
+    },
+    {
+      "name": "runtime_issue_source_epoch ACL public",
+      "passed": true
+    },
+    {
+      "name": "runtime_issue_source_epoch ACL grantor",
+      "passed": true
+    },
+    {
+      "name": "runtime_issue_source_epoch ACL grantable",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fresh_source_epoch changed owner",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fresh_source_epoch changed definer",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fresh_source_epoch changed path",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fresh_source_epoch changed body",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fresh_source_epoch ACL public",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fresh_source_epoch ACL grantor",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fresh_source_epoch ACL grantable",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_selected_epoch_writes changed owner",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_selected_epoch_writes changed definer",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_selected_epoch_writes changed path",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_selected_epoch_writes changed body",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_selected_epoch_writes ACL public",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_selected_epoch_writes ACL grantor",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_selected_epoch_writes ACL grantable",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fenced_fresh_source_epoch changed owner",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fenced_fresh_source_epoch changed definer",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fenced_fresh_source_epoch changed path",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fenced_fresh_source_epoch changed body",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fenced_fresh_source_epoch ACL public",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fenced_fresh_source_epoch ACL grantor",
+      "passed": true
+    },
+    {
+      "name": "runtime_lock_fenced_fresh_source_epoch ACL grantable",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_routine_ddl_writer changed owner",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_routine_ddl_writer changed definer",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_routine_ddl_writer changed path",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_routine_ddl_writer changed body",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_routine_ddl_writer ACL public",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_routine_ddl_writer ACL grantor",
+      "passed": true
+    },
+    {
+      "name": "runtime_fence_routine_ddl_writer ACL grantable",
+      "passed": true
+    },
+    {
+      "name": "truss_database_ddl_writer_barrier not ALWAYS",
+      "passed": true
+    },
+    {
+      "name": "truss_database_ddl_writer_barrier owner",
+      "passed": true
+    },
+    {
+      "name": "truss_database_ddl_writer_barrier function",
+      "passed": true
+    },
+    {
+      "name": "truss_database_ddl_writer_barrier wrong tags",
+      "passed": true
+    },
+    {
+      "name": "truss_routine_ddl_writer_barrier not ALWAYS",
+      "passed": true
+    },
+    {
+      "name": "truss_routine_ddl_writer_barrier owner",
+      "passed": true
+    },
+    {
+      "name": "truss_routine_ddl_writer_barrier function",
+      "passed": true
+    },
+    {
+      "name": "truss_routine_ddl_writer_barrier wrong tags",
+      "passed": true
+    },
+    {
+      "name": "truss_schema_ddl_writer_barrier not ALWAYS",
+      "passed": true
+    },
+    {
+      "name": "truss_schema_ddl_writer_barrier owner",
+      "passed": true
+    },
+    {
+      "name": "truss_schema_ddl_writer_barrier function",
+      "passed": true
+    },
+    {
+      "name": "truss_schema_ddl_writer_barrier wrong tags",
+      "passed": true
+    },
+    {
+      "name": "truss_table_ddl_writer_barrier not ALWAYS",
+      "passed": true
+    },
+    {
+      "name": "truss_table_ddl_writer_barrier owner",
+      "passed": true
+    },
+    {
+      "name": "truss_table_ddl_writer_barrier function",
+      "passed": true
+    },
+    {
+      "name": "truss_table_ddl_writer_barrier wrong tags",
+      "passed": true
+    },
+    {
+      "name": "truss_z_routine_ddl_writer_barrier not ALWAYS",
+      "passed": true
+    },
+    {
+      "name": "truss_z_routine_ddl_writer_barrier owner",
+      "passed": true
+    },
+    {
+      "name": "truss_z_routine_ddl_writer_barrier function",
+      "passed": true
+    },
+    {
+      "name": "truss_z_routine_ddl_writer_barrier wrong tags",
+      "passed": true
+    },
+    {
+      "name": "runtime_selected_epoch_write_fence source_epoch_current disabled",
+      "passed": true
+    },
+    {
+      "name": "runtime_selected_epoch_write_fence source_epoch_current wrong mask",
+      "passed": true
+    },
+    {
+      "name": "runtime_selected_epoch_write_fence source_epoch_current arguments",
+      "passed": true
+    },
+    {
+      "name": "runtime_selected_epoch_write_fence source_epoch_current condition",
+      "passed": true
+    },
+    {
+      "name": "runtime_selected_epoch_write_fence source_epoch_registry disabled",
+      "passed": true
+    },
+    {
+      "name": "runtime_selected_epoch_write_fence source_epoch_registry wrong mask",
+      "passed": true
+    },
+    {
+      "name": "runtime_selected_epoch_write_fence source_epoch_registry arguments",
+      "passed": true
+    },
+    {
+      "name": "runtime_selected_epoch_write_fence source_epoch_registry condition",
+      "passed": true
+    },
+    {
+      "name": "runtime_source_epoch_immutable source_epoch_registry disabled",
+      "passed": true
+    },
+    {
+      "name": "runtime_source_epoch_immutable source_epoch_registry wrong mask",
+      "passed": true
+    },
+    {
+      "name": "runtime_source_epoch_immutable source_epoch_registry arguments",
+      "passed": true
+    },
+    {
+      "name": "runtime_source_epoch_immutable source_epoch_registry condition",
+      "passed": true
+    },
+    {
+      "name": "runtime_source_epoch_no_truncate source_epoch_registry disabled",
+      "passed": true
+    },
+    {
+      "name": "runtime_source_epoch_no_truncate source_epoch_registry wrong mask",
+      "passed": true
+    },
+    {
+      "name": "runtime_source_epoch_no_truncate source_epoch_registry arguments",
+      "passed": true
+    },
+    {
+      "name": "runtime_source_epoch_no_truncate source_epoch_registry condition",
+      "passed": true
+    },
+    {
+      "name": "events missing",
+      "passed": true
+    },
+    {
+      "name": "events extra",
+      "passed": true
+    },
+    {
+      "name": "triggers missing",
+      "passed": true
+    },
+    {
+      "name": "triggers extra",
+      "passed": true
+    },
+    {
+      "name": "routine:runtime_issue_source_epoch missing",
+      "passed": true
+    },
+    {
+      "name": "routine:runtime_issue_source_epoch extra",
+      "passed": true
+    },
+    {
+      "name": "acl:702 missing",
+      "passed": true
+    },
+    {
+      "name": "acl:702 extra",
+      "passed": true
+    },
+    {
+      "name": "pre-pin path cast exact pg_catalog.text",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch_installation.py",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/manifest.json",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/immutability.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/lock.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/issue.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/fresh-lock.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/read-fence.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/fenced-fresh-lock.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/routine-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/schema-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/database-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/table-ddl-barrier.sql",
+      "passed": true
+    },
+    {
+      "name": "wheel exact truss/_security_source_epoch/alter-routine-ddl-barrier.sql",
+      "passed": true
+    }
+  ]
+}
