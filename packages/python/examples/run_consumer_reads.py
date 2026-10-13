@@ -8,12 +8,13 @@ from uuid import uuid4
 
 import psycopg
 from adopter_workflow import transaction, success, expect
-from truss import CatalogDocument, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument, ObjectFound, ObjectNotFound, ReaderCatalog
+from truss import CatalogDocument, CapabilityAvailable, LocalPostgres, ModuleAccessGrant, QueryRows, QueryPage, QueryReadPosition, ReceiptIncluded, AcceptedDocument, ObjectFound, ObjectNotFound, ReaderCatalog
 from truss.contracts import MapValue, MapEntry, TextValue
+from truss.imports import ImportReported, ImportCreated, PendingBatch
 from truss.groups import (CreateObject, CreateEdge, AuthoredValue, AliasObjectReference,
     RootlessOwnership, NullOrderKey, GroupSuccess, CommittedReceiptReplay, StoredObjectReference, ObjectExists, KeyAbsent, Created, Changed, UpdateObject, GroupFailed, PreconditionFailed)
 
-CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.update-bumps-the-version-once', 'action.dry-run-writes-nothing-and-keeps-the-key')
+CASES = ('read.missing-key-is-no-rows', 'read.columns-and-filters', 'read.relationship-filter-both-directions', 'read.key-lookup-whole-entity', 'read.relationship-columns-follow-ends', 'read.paging-by-key', 'read.repeated-relationship-predicates-mean-both', 'action.applies-atomically-and-reads-back', 'action.idempotent-retry-returns-the-original', 'action.update-bumps-the-version-once', 'import.entities-before-relationships', 'action.dry-run-writes-nothing-and-keeps-the-key')
 
 
 def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
@@ -135,6 +136,45 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             tokens = {}
             invocations = {}
             for step in case['steps']:
+                if step['op']=='import':
+                    if case['id']!='import.entities-before-relationships' or sha256(source).hexdigest()!='849a4fc0ec421110f08ffa24ff366e2b6d9b69d221373357f1bea926c9a25696' or set(step)!={'op','as','load_id','records','expect'}:
+                        raise ValueError('Selected original import workflow required; no import attempted')
+                    if step['records']!=[{'relationship':'addresses','source':'sol-9','target':'uc-1'},{'type':'Solution','key':'sol-9','properties':{'name':'late'}}] or step['load_id']!='L2' or step['as']!='erik':
+                        raise ValueError('Exact original import inputs required; no import attempted')
+                    reports=[]
+                    with transaction(people[step['as']]) as (assembly,tx):
+                        capability=expect(assembly.imports(assembly.import_selection,documents=documents,bun_executable=bun),CapabilityAvailable).capability
+                        context=success(capability.import_context_in_transaction(tx))
+                        record=step['records'][1]
+                        authored=next(e for e in module['elements'] if e['id']==record['type'])
+                        primary=next(k for k in authored['keys'] if k.get('primary'))
+                        if len(primary['fields'])!=1:raise ValueError('Selected single-field original import key required')
+                        key_field=next(e for e in module['elements'] if e['id']==primary['fields'][0]['element'])
+                        values={key_field['name']:record['key'],**record['properties']}
+                        built=success(capability.object_import_record_in_transaction(tx,document_id=document_id,module_id=module_id,record_id=record['type'],values=tuple(AuthoredValue(name=name,value=TextValue(kind='string',text=value)) for name,value in values.items())))
+                        origin=MapValue(entries=())
+                        object_report=expect(capability.import_in_transaction(tx,context.input((built,),load_id=step['load_id'],asserted_origin=origin)),ImportReported).report
+                        if object_report.status!='processed' or object_report.unprocessed_indices or len(object_report.outcomes)!=1 or not isinstance(object_report.outcomes[0],ImportCreated) or len(object_report.batches)!=1 or not isinstance(object_report.batches[0],PendingBatch):
+                            raise AssertionError('Selected object import must complete with one pending created result')
+                        reports.append(object_report)
+                        endpoints=[]
+                        for record_id,key in (('Solution',step['records'][0]['source']),('UseCase',step['records'][0]['target'])):
+                            authored=next(e for e in module['elements'] if e['id']==record_id)
+                            primary=next(k for k in authored['keys'] if k.get('primary'))
+                            found=expect(success(assembly.lookup_key_in_transaction(tx,document_id=document_id,module_id=module_id,record_id=record_id,key_id=primary['id'],values=(key,),original_document=source,bun_executable=bun)),ObjectFound).object
+                            endpoints.append(found.identity)
+                        if endpoints[0]!=object_report.outcomes[0].identity:raise AssertionError('Imported identity differs from own-transaction key read')
+                        relation=next(r for r in module['relationships'] if r['name']==step['records'][0]['relationship'])
+                        built=success(capability.edge_import_record_in_transaction(tx,document_id=document_id,module_id=module_id,relationship_id=relation['id'],source_endpoint=endpoints[0],target_endpoint=endpoints[1],values=(),order_key=NullOrderKey()))
+                        edge_report=expect(capability.import_in_transaction(tx,context.input((built,),load_id=step['load_id'],asserted_origin=origin)),ImportReported).report
+                        if edge_report.status!='processed' or edge_report.unprocessed_indices or len(edge_report.outcomes)!=1 or not isinstance(edge_report.outcomes[0],ImportCreated) or len(edge_report.batches)!=1 or not isinstance(edge_report.batches[0],PendingBatch):
+                            raise AssertionError('Selected edge import must complete with one pending created result')
+                        reports.append(edge_report)
+                    # Keep native reports pending as returned; only the host knows its
+                    # outer commit. No combined report, commit evidence or token is invented.
+                    imported={'created':sum(int(report.counts.created_pending) for report in reports),'skipped':sum(int(report.counts.skipped) for report in reports),'rejected':sum(int(report.counts.rejected) for report in reports)}
+                    if imported!=step['expect']['import']:raise AssertionError('Original import counts differ')
+                    continue
                 if step['op'] == 'apply':
                     supported={'action.applies-atomically-and-reads-back':'catalog.AddSolution','action.idempotent-retry-returns-the-original':'catalog.AddUseCase','action.update-bumps-the-version-once':'catalog.CorrectSolution','action.dry-run-writes-nothing-and-keeps-the-key':'catalog.AddSolution'}
                     if case['id'] not in supported or step['action']!=supported[case['id']] or not {'op','as','action','inputs','expect'}<=set(step) or set(step)-{'op','as','action','inputs','expect','save','key','dry_run'}:
@@ -313,10 +353,10 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
                         if 'save' in step:
                             cursors[step['save']['cursor']] = rows.next_cursor
                     else:
-                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once') else None)), QueryRows)
+                        rows = expect(success(assembly.query_in_transaction(tx, sql=step['sql'], document_ids=(document_id,), read_profile='complete-entity' if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once','import.entities-before-relationships') else None)), QueryRows)
                 if not isinstance(rows.as_of,QueryReadPosition) or not rows.as_of.value or rows.as_of.at.tzinfo is None or rows.as_of.at.utcoffset() is None or rows.as_of.semantics!='committed-lower-bound' or rows.as_of.caller_xid_assigned:
                     raise AssertionError('Original read answer needs an aware recorded position with declared semantics')
-                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once'):
+                if case['id'] in ('read.key-lookup-whole-entity','read.relationship-columns-follow-ends','action.applies-atomically-and-reads-back','action.update-bumps-the-version-once','import.entities-before-relationships'):
                     required={'_version','_created_by','_created_at','_updated_by','_updated_at'}
                     if not required <= set(rows.columns):
                         raise AssertionError('Original required whole-object metadata missing')
@@ -331,7 +371,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
             observations.append({'id': case['id'], 'requires': [s.get('requires') for s in case['steps']],
                 'authority': 'passed', 'replica': 'unavailable', 'replicaReason': 'no qualified replica deployment'})
     return {'scope': 'selected original SQL/action observations; not complete adapter/corpus or interchange',
-        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if any(name.startswith('action.') for name in case_ids) else []) + (['dry-run rollback and unconsumed request key','authenticated absent-target preview'] if dry_case in case_ids else []),
+        'checked':['original SQL','expected row count and fields','expected columns','expected cursor presence','required whole-object metadata fields','answer position/time (committed lower bound)'] + (['selected action receipt and native references','committed original-request recovery','receipt reached'] if any(name.startswith('action.') for name in case_ids) else []) + (['dry-run rollback and unconsumed request key','authenticated absent-target preview'] if dry_case in case_ids else []) + (['original edge-first import input mapped through object-first public calls in one caller transaction','original import counts and relationship readback'] if 'import.entities-before-relationships' in case_ids else []),
         'notChecked':['replica','complete consumer adapter mapping'],
         'corpusSha256': sha256(original).hexdigest(), 'modelSha256': sha256(source).hexdigest(),
         'fixtureSync': 'committed original receipt included on authority', 'retainedExtensions':retained_extensions,

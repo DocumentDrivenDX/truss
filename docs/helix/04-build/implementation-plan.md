@@ -7061,3 +7061,7 @@ Exercise the unchanged CorrectSolution update case through public business-key l
 ## Original grouped-count expectation discrepancy — 2026-10-13
 
 The unchanged consumer grouped-count SQL executes through the default Weft profile and returns the correct exact integer groups through public Python. Its positional oracle requires an order absent from the SQL; observed order differs, so the original case remains failing and is excluded from the passing aggregate. [Evidence](evidence/original-consumer-count-20261013.md) records the actual result and consumer correction needed (unordered comparison or authored ORDER BY). Do not rewrite SQL or sort results to qualify this original case.
+
+## Original consumer edge-first import workflow — 2026-10-13
+
+Map the original import.entities-before-relationships input through two public imports inside one host transaction: create the object, resolve actual endpoint business keys, then import the edge. Require complete one-record native reports with pending created results, retain their original form, and publish only consumer counts after known host commit. Failed preparation/execution escapes the context and rolls back the outer transaction. The unchanged complete-entity query verifies the imported relationship. [Evidence](evidence/original-consumer-import-order-20261013.md) records the exact installed tuple/basic result; no general unresolved-reference importer or combined receipt is claimed.
