@@ -1,0 +1,93 @@
+{
+  "scope": "Synthetic Docker response fault injection into actual qualifier; no Docker/container/network lifecycle invoked",
+  "sourceSha256": "4f5dcbef01ff4646eecc6f8966fc9d5aeff4fec22742ea95a70f23053da0c892",
+  "controls": [
+    {
+      "control": "baseline",
+      "status": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "receiptWritten": true,
+      "remainingResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "cleanup_daemon_error",
+      "status": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "receiptWritten": true,
+      "remainingResources": 5,
+      "removed": []
+    },
+    {
+      "control": "first_remove_error",
+      "status": null,
+      "cleanup": null,
+      "exception": "RuntimeError: Owned Docker fixture operation refused",
+      "receiptWritten": false,
+      "remainingResources": 5,
+      "removed": []
+    },
+    {
+      "control": "auth_negative",
+      "status": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "receiptWritten": true,
+      "remainingResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    },
+    {
+      "control": "exec_negative",
+      "status": "pass",
+      "cleanup": {
+        "peer": true,
+        "service": true,
+        "database": true,
+        "front": true,
+        "back": true
+      },
+      "exception": null,
+      "receiptWritten": true,
+      "remainingResources": 0,
+      "removed": [
+        "peer",
+        "service",
+        "database",
+        "front",
+        "back"
+      ]
+    }
+  ]
+}

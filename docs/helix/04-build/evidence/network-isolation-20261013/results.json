@@ -1,0 +1,68 @@
+{
+  "scope": "Owned native TCP network isolation only; not TLS/guarded-policy composition or backend readiness",
+  "image": "postgres@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336",
+  "nonce": "14158a628d2a4055a4f3a45675538e25",
+  "controls": {
+    "trustedServiceNativeSql": {
+      "exitCode": 0,
+      "stdout": "service_reader|f|f|180006|1",
+      "stderr": ""
+    },
+    "peerPrivateDns": {
+      "exitCode": 2,
+      "stdout": "",
+      "stderr": "psql: error: could not translate host name \"database\" to address: Temporary failure in name resolution"
+    },
+    "peerKnownDatabaseIp": {
+      "exitCode": 2,
+      "stdout": "",
+      "stderr": "psql: error: connection to server at \"192.168.166.2\", port 5432 failed: Network is unreachable\n\tIs the server running on that host and accepting TCP/IP connections?"
+    },
+    "peerServiceFrontSql": {
+      "exitCode": 2,
+      "stdout": "",
+      "stderr": "psql: error: connection to server at \"192.168.165.2\", port 5432 failed: Connection refused\n\tIs the server running on that host and accepting TCP/IP connections?"
+    },
+    "peerServiceBackSql": {
+      "exitCode": 2,
+      "stdout": "",
+      "stderr": "psql: error: connection to server at \"192.168.166.3\", port 5432 failed: Network is unreachable\n\tIs the server running on that host and accepting TCP/IP connections?"
+    },
+    "excludedTopologyAdminAttach": {
+      "exitCode": 0,
+      "stdout": "service_reader|f|f|180006|1",
+      "stderr": ""
+    },
+    "peerIsolationRestored": {
+      "exitCode": 2,
+      "stdout": "",
+      "stderr": "psql: error: connection to server at \"192.168.166.2\", port 5432 failed: Network is unreachable\n\tIs the server running on that host and accepting TCP/IP connections?"
+    }
+  },
+  "cleanup": {
+    "peer": true,
+    "service": true,
+    "database": true,
+    "front": true,
+    "back": true
+  },
+  "dockerVersion": "29.4.0",
+  "topology": {
+    "databaseNetworks": [
+      "truss-security-net-14158a628d2a-back"
+    ],
+    "serviceNetworks": [
+      "truss-security-net-14158a628d2a-back",
+      "truss-security-net-14158a628d2a-front"
+    ],
+    "peerNetworks": [
+      "truss-security-net-14158a628d2a-front"
+    ],
+    "noPublishedPorts": true,
+    "peerNoPrivateDatabaseMount": true,
+    "peerNoDockerSocket": true,
+    "peerNoDeclaredSqlCredential": true,
+    "peerAndServiceCapsDropped": true
+  },
+  "status": "pass"
+}

@@ -1,0 +1,31 @@
+{
+  "status": "actionable findings sent; fixes pending",
+  "scope": "Read-only source review and five actual-qualifier controls using synthetic Docker subprocess responses; no container or native lifecycle invoked",
+  "sourcePins": {
+    "scripts/security_network_isolation.py": "4f5dcbef01ff4646eecc6f8966fc9d5aeff4fec22742ea95a70f23053da0c892",
+    "docs/helix/04-build/evidence/network-isolation-20261013/results.json": "4ac04cb3b495a703ca35e158877eed8c945b0ca53ce373d23f88cda09ef214c8"
+  },
+  "findings": [
+    {
+      "priority": 1,
+      "lines": "16-18,64-70",
+      "summary": "Docker daemon inspection failure counted as absence; synthetic pass with all five resources still present."
+    },
+    {
+      "priority": 2,
+      "lines": "62-73",
+      "summary": "First cleanup failure skips other resources and receipt persistence."
+    },
+    {
+      "priority": 2,
+      "lines": "50,56",
+      "summary": "Authentication and Docker-exec failures count as network-denial passes."
+    }
+  ],
+  "nativeEvidence": "Inspected original results: seven controls and five resources reported absent; negative stderr shows actual DNS/network-unreachable/connection-refused failures. Not independently rerun.",
+  "limits": [
+    "Selected owned Docker topology only; service is a sleep container, not composed TLS/guarded producer.",
+    "Excluded topology administrator deliberately reconnects peer and succeeds.",
+    "No credential issuer, TLS/network composition, OS route closure, or backend admission claim."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "solver": "4.15.4",
+  "scope": "Exact abstract network memberships and trusted service capability; native route/firewall/namespace/lifetime/credential/transport assumptions are not proven. Reachable application relay counterexample is abstract, not an observed service escape.",
+  "results": [
+    {
+      "name": "direct_private_sql_unreachable_even_with_credential",
+      "result": "unsat",
+      "model": null
+    },
+    {
+      "name": "trusted_service_private_sql_reachable",
+      "result": "sat",
+      "model": "[service_front = True,\n service_back = True,\n db_front = False,\n db_back = True,\n peer_front = True,\n peer_back = False]"
+    },
+    {
+      "name": "excluded_admin_membership_change_allows_direct_sql",
+      "result": "sat",
+      "model": "[service_front = True,\n service_back = True,\n db_front = False,\n db_back = True,\n credential = True,\n peer_front = True,\n peer_back = True]"
+    },
+    {
+      "name": "unqualified_proxy_can_relay_private_facts_without_peer_sql_credential",
+      "result": "sat",
+      "model": "[service_front = True,\n arbitrary_private_fact_forwarder = True,\n service_back = True,\n db_front = False,\n db_back = True,\n credential = False,\n peer_front = True,\n peer_back = False]"
+    }
+  ]
+}

@@ -1435,3 +1435,31 @@ prerequisites. Production issuer/key/rotation/revocation, SQL/network/OS/diagnos
 isolation and complete authority/handler/config lifetime remain open. No native
 or cryptographic refinement theorem, backend readiness or case promotion.
 Evidence: `docs/helix/04-build/evidence/catalog-tls-channel-20261013/receipt.json`.
+
+
+### Owned private SQL network domain — 2026-10-13
+
+SPIKE-004 CH08 has a selected IPv4 topology prerequisite: exact PostgreSQL18.6
+image on an internal backend network, peer on a separate internal frontend, and
+trusted service domain on both. Native service_reader is non-super/non-bypass and
+reads the independently seeded private fact count1. Peer DNS, known DB address
+and selected service-facing/back-facing SQL addresses deny even with deliberately
+compromised valid SQL credentials. Excluded Docker administrator attachment makes
+the same peer/credential read succeed; detachment restores denial. Seven native
+controls pass with all five owned resources confirmed absent after cleanup.
+
+Astra23 independent harness controls pass after fixes: daemon/access inspection
+failure is unknown rather than absent; every cleanup is attempted and recorded
+without replacing the primary failure; auth/SQL/exec failures cannot qualify as
+network denial. Exact nonce-labeled resource IDs are removed; shared resources
+are not touched. Z3 4.15.4 yields one UNSAT and three SAT over an explicit network
+membership model: direct private SQL exclusion is conditional, excluded topology
+change restores access, and an arbitrary application relay can disclose private
+facts despite direct network separation. This is not Docker/kernel refinement.
+
+Trace CH08 and US-056 AC5/AC8/AC10/UMF CONTRACT-063/STP-056 prerequisites. The
+service fixture is sleep plus trusted psql probes, not the composed TLS/guarded
+producer. Credential/issuer nonexposure, app route inventory, daemon/OS/IPv6 and
+continuous topology/authority lifetime remain open. No backend promotion; the
+original132 cases remain required. Evidence:
+`docs/helix/04-build/evidence/network-isolation-20261013/receipt.json`.
