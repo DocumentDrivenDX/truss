@@ -6903,3 +6903,12 @@ consumer on the rebuilt owner extension. Evidence: [native receipt](evidence/pyt
 The original required corpus/interchange and protected security activation remain
 open. This does not adopt the private coordinated writer or qualify a new security
 profile; preview0.1/0.2 and original consumer cases stay unchanged.
+
+
+### Native selected writer-home metadata — 2026-10-12
+
+The [private coordinated writer](evidence/security-native-writer-homes-20261012/receipt.json) now requires a bounded immutable original home_oids tuple and verifies selected persistent ordinary relations plus native function owner/language/flags/body SHA, restricted EXECUTE ACL, exact always-on statement triggers and original arguments before and after callback execution. It adds no logical policy SQL compiler or ready-profile issuer.
+
+Astra found two custody/selection gaps during review: native arrays bypassed scalar loader pinning, and filtering oversized trigger arguments hid an extra relevant trigger. Both are repaired using native scalar metadata booleans and bounded argument projection without row removal. Actual native controls verify callback refusal for hostile configuration under a forged array decoder, oversized extra triggers and routine/trigger drift; late drift rolls back data, generation and DDL. Eleven native tests pass,871 imports pass boundaries, and wheel coordinator bytes match source.
+
+These are B11 selected routine/trigger drift and L13 profile consistency prerequisites only. Endpoint equality does not establish DDL lifetime or ABA exclusion, complete writer/role/source coverage, callback effect inventory, caller/subject/issuer authentication or final release. No required case is promoted; all132 remain in scope.

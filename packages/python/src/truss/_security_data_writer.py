@@ -1,9 +1,10 @@
 """Private prelocked trigger-coordinated data mutation; no permission/profile issuer.
 
 Trusted direct installation administrator and independently qualified physical
-mutation callback are premises. Trigger installation/lifetime, exact declared
-event count, native source parity and complete participant coverage remain
-separate admission. No count proves which individual effects participated. Caller settles the transaction.
+mutation callback are premises. Selected persistent ordinary homes and original
+function/body/ACL/trigger metadata are checked before and after the callback.
+DDL lifetime/ABA closure, exact event inventory and complete participant coverage
+remain separate admission. No count proves which individual effects participated. Caller settles the transaction.
 """
 from dataclasses import dataclass
 import inspect
@@ -11,6 +12,7 @@ from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
 from .catalog_runtime import _pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
+from ._security_data_writer_binding import require_data_writer_homes
 
 
 @dataclass(frozen=True, slots=True)
@@ -23,13 +25,16 @@ class PendingDataWriterGeneration:
 
 
 def write_data_in_transaction(host, transaction, *, installation_identity,
-                              authored_profile, expected_generation, expected_event_count, action):
+                              authored_profile, expected_generation, expected_event_count, home_oids, action):
     if (type(host) is not PsycopgHost or type(installation_identity) is not bytes
             or not 1<=len(installation_identity)<=32768 or type(authored_profile) is not bytes
             or not 1<=len(authored_profile)<=32768 or type(expected_generation) is not int
             or not 1<=expected_generation<9223372036854775807
             or type(expected_event_count) is not int
             or not 1<=expected_event_count<=9223372036854775807-expected_generation
+            or type(home_oids) is not tuple or not 1<=len(home_oids)<=128
+            or any(type(oid) is not int or not 1<=oid<=4294967295 for oid in home_oids)
+            or len(set(home_oids))!=len(home_oids)
             or not callable(action)
             or any(check(candidate) for candidate in (action,getattr(action,'__call__',None))
                    for check in (inspect.iscoroutinefunction,inspect.isasyncgenfunction,inspect.isgeneratorfunction))):
@@ -53,11 +58,13 @@ def write_data_in_transaction(host, transaction, *, installation_identity,
         # Separate fresh statement after draining original guard-share holders.
         cursor.execute('SELECT 1 FROM truss.policy_publication_claim WHERE NOT settled LIMIT 1',prepare=False)
         if cursor.fetchall():raise ValueError('Original publication operations remain unsettled')
+        require_data_writer_homes(cursor,original[0][1],installation_identity,authored_profile,home_oids)
         # Issue callback DML only after the separate guard/claim commands.
         result=action(cursor)
         if inspect.isgenerator(result) or inspect.iscoroutine(result):
             result.close();raise ValueError('Original data writer action must complete synchronously')
         if result is not None:raise ValueError('Original data writer action must complete or raise')
+        require_data_writer_homes(cursor,original[0][1],installation_identity,authored_profile,home_oids)
         cursor.execute('SELECT installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard WHERE singleton=1',prepare=False)
         if cursor.fetchmany(2)!=[(installation_identity,authored_profile,expected_generation+expected_event_count)]:
             raise ValueError('Original stored data writer generation required')
