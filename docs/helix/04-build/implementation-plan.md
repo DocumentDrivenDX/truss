@@ -7255,3 +7255,12 @@ observations remain required; no omitted check is relabeled passing. Preserve
 artifact IDs/frontmatter/traceability. This amendment controls historical contrary
 release sequencing rather than deleting historical evidence or starting a second
 implementation. The practical clean-install path now succeeds separately.
+
+## Original mixed import through the public Python interface — 2026-10-13
+
+Completed the retained consumer identity/skip/provenance workflow with genuine
+native import results and public same-transaction key/catalog/source reads.
+Missing-endpoint rejection remains explicit host orchestration, not a fabricated
+native report. One basic installed PG18 test passes thirteen selected workflows;
+see `evidence/original-consumer-import-provenance-20261013.md`. No runtime API,
+second implementation or extra conformance campaign was added.

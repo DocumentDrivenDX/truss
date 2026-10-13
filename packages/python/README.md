@@ -511,9 +511,11 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has twelve original read/action/import workflows
+must be supported. The original consumer corpus has thirteen original read/action/import workflows
 exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
-replica execution and the full consumer corpus remain unqualified.
+Mixed imports exercise native create/skip/reject results and provenance; a missing
+relationship endpoint is a separately identified host rejection after public
+source/catalog/key reads. Replica execution and the full consumer corpus remain unqualified.
 
 Select `read_profile="complete-entity"` for `alias.*` with complete relationship
 keys and `_version`, `_created_by`, `_created_at`, `_updated_by`, `_updated_at`, `_original_author` and
