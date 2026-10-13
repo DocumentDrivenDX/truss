@@ -6912,3 +6912,20 @@ The [private coordinated writer](evidence/security-native-writer-homes-20261012/
 Astra found two custody/selection gaps during review: native arrays bypassed scalar loader pinning, and filtering oversized trigger arguments hid an extra relevant trigger. Both are repaired using native scalar metadata booleans and bounded argument projection without row removal. Actual native controls verify callback refusal for hostile configuration under a forged array decoder, oversized extra triggers and routine/trigger drift; late drift rolls back data, generation and DDL. Eleven native tests pass,871 imports pass boundaries, and wheel coordinator bytes match source.
 
 These are B11 selected routine/trigger drift and L13 profile consistency prerequisites only. Endpoint equality does not establish DDL lifetime or ABA exclusion, complete writer/role/source coverage, callback effect inventory, caller/subject/issuer authentication or final release. No required case is promoted; all132 remain in scope.
+
+### Exact timestamp/binary SQL projections — 2026-10-12
+
+Public Python queries now return all six scalar families, including complete
+`alias.*` selections and optional timestamp/binary absent/null/value states.
+Weft backend0.4.4 uses explicit compile/IR/backend interfaces0.2.1 and the
+unchanged SQL dialect0.2.0. Timestamp/binary use existing exact `TextValue`
+carriers; comparisons, ordering, grouping, keys and parameters remain refused.
+Runtime0.31 and layout0.16 are unchanged, so this needs no migration.
+
+The merged installed packages pass the mixed public write→commit→read-only query
+workflow and preview0.4 (two tests). An original installed backend0.4.3 consumer
+also passes on the rebuilt Weft extension. Older schemas and preview0.1–0.3 are
+preserved. [Receipt](evidence/python-exact-query-projections-20261012.json) records
+actual package digests and basic typing/module checks. Astra Ultra reviewed the
+plan, implementation and security-owner merges. Complete corpus/interchange,
+protected security activation and additional deployment profiles remain open.
