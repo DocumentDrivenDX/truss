@@ -1,0 +1,52 @@
+test_model_source_substitution_refuses_before_compiler (test_security_graph_mapping_native.GraphMappingNativeTests.test_model_source_substitution_refuses_before_compiler) ... FAIL
+test_native_catalog_and_archive_drift_refuse_before_compiler (test_security_graph_mapping_native.GraphMappingNativeTests.test_native_catalog_and_archive_drift_refuse_before_compiler) ... FAIL
+test_original_registered_sources_and_complete_scan_mapping (test_security_graph_mapping_native.GraphMappingNativeTests.test_original_registered_sources_and_complete_scan_mapping) ... FAIL
+test_unregistered_model_does_not_gain_mapping_from_profile_cell (test_security_graph_mapping_native.GraphMappingNativeTests.test_unregistered_model_does_not_gain_mapping_from_profile_cell) ... ok
+test_malformed_handoff_and_changed_path_cleanup (test_security_mapping_native.MappingNativeTests.test_malformed_handoff_and_changed_path_cleanup) ... ok
+test_native_guard_writer_waits_through_outer_settlement (test_security_mapping_native.MappingNativeTests.test_native_guard_writer_waits_through_outer_settlement) ... ok
+test_native_profile_generation_missing_guard_and_acl_refuse (test_security_mapping_native.MappingNativeTests.test_native_profile_generation_missing_guard_and_acl_refuse) ... ok
+test_ordinary_connection_cannot_invoke_administrative_mapping_guard (test_security_mapping_native.MappingNativeTests.test_ordinary_connection_cannot_invoke_administrative_mapping_guard) ... ok
+test_original_native_profile_and_compiler_handoff (test_security_mapping_native.MappingNativeTests.test_original_native_profile_and_compiler_handoff) ... ok
+test_response_substitution_and_late_native_generation_roll_back (test_security_mapping_native.MappingNativeTests.test_response_substitution_and_late_native_generation_roll_back) ... ok
+test_source_substitutions_refuse_before_compiler (test_security_mapping_native.MappingNativeTests.test_source_substitutions_refuse_before_compiler) ... ok
+test_started_deferred_cleanup_contains_native_effects (test_security_mapping_native.MappingNativeTests.test_started_deferred_cleanup_contains_native_effects) ... ok
+
+======================================================================
+FAIL: test_model_source_substitution_refuses_before_compiler (test_security_graph_mapping_native.GraphMappingNativeTests.test_model_source_substitution_refuses_before_compiler)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_graph_mapping_native.py", line 48, in test_model_source_substitution_refuses_before_compiler
+    source=self.ready_graph()
+           ^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_graph_mapping_native.py", line 21, in ready_graph
+    self.assertIsInstance(accepted,Ok,str(h._custody.last_attempt.error));h.detach();c.commit()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Unselected catalog support source
+
+======================================================================
+FAIL: test_native_catalog_and_archive_drift_refuse_before_compiler (test_security_graph_mapping_native.GraphMappingNativeTests.test_native_catalog_and_archive_drift_refuse_before_compiler)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_graph_mapping_native.py", line 54, in test_native_catalog_and_archive_drift_refuse_before_compiler
+    self.ready_graph()
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_graph_mapping_native.py", line 21, in ready_graph
+    self.assertIsInstance(accepted,Ok,str(h._custody.last_attempt.error));h.detach();c.commit()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Unselected catalog support source
+
+======================================================================
+FAIL: test_original_registered_sources_and_complete_scan_mapping (test_security_graph_mapping_native.GraphMappingNativeTests.test_original_registered_sources_and_complete_scan_mapping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_graph_mapping_native.py", line 34, in test_original_registered_sources_and_complete_scan_mapping
+    self.ready_graph();before=self.admin.execute('SHOW search_path').fetchone()
+    ^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_graph_mapping_native.py", line 21, in ready_graph
+    self.assertIsInstance(accepted,Ok,str(h._custody.last_attempt.error));h.detach();c.commit()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Unselected catalog support source
+
+----------------------------------------------------------------------
+Ran 12 tests in 21.255s
+
+FAILED (failures=3)

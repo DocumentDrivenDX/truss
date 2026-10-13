@@ -1,0 +1,75 @@
+{
+  "status": "clean-source-disposition",
+  "actionable_findings": [],
+  "head": "9a03b790f04847a8a32791a03652a087af053d45",
+  "sourceDigests": {
+    "scripts/security/prove-mapping-compatibility.py": "c99c6b6bec4282177bfdfce568b7626360b67657e3249fbf5d617d6726a03b18",
+    "packages/python/tests/test_security_mapping_compatibility_native.py": "d316bd3f8c262cf906b6b2333cd120520862dcc679445af5d217e8de9184b63b",
+    "packages/python/src/truss/_security_mapping.py": "e48cadd5c53301fb681b393fa01955a8d8f34febc61d17f115b902326825e659",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/_catalog_support.py": "a6bb07c89a91bf9c1a50a254d9bd156d37e29d915af5b3390eadb4a6cdd4e4ab",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "a0b73e07359e4dcf86b5dfa9785158569fde839e88dd7332c46ac8413c71a1d3",
+    "packages/python/src/truss/_catalog_runtime/view.sql": "2f4a3ad7854575c209326f99441dfbcde74d26897422e24a9477630e678ace46",
+    "packages/python/src/truss/_catalog_view_build.py": "538b974fd6cb1e6fc753864e3a9727887cb996a46c85b1da3c2026b29eb85e8a",
+    "scripts/check-module-boundaries.py": "d1ffbd0929341b5bb81262fa59fe7a805da27067d0da570e8209f76e04529c4c",
+    "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "1eb63563aaf2bc2853e60bf9a6561ed5ef1d57b5697251319fb085a7bf487bfe",
+    "docs/helix/04-build/implementation-plan.md": "b618fd4074018764193d992cb08ac683d5c5effcb688f8cbafd039b4844dfa60"
+  },
+  "externalPremiseSourceDigests": {
+    "/private/tmp/weft-security-main-integration/crates/weft-core/src/model.rs": "6427b32fe0008c6df70757b7296e79d0e936825938f8b3dc6827d7610537c4b2",
+    "/private/tmp/weft-security-main-integration/crates/weft-core/src/security_source.rs": "04656ce56aa905217e9217afac55d61a7748cb1ba3e2f8ddfbcffae613a8df41",
+    "/private/tmp/weft-security-main-integration/docs/helix/02-design/contracts/security-mapping-request-v0.1.schema.json": "fde090ebfdb09b5997970f48b74c7df24cb6dd1c6504185ee85a35b716fdd20c",
+    "/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/policy.ts": "111ff9253f8cba446a9d40cc6321050e2d4a7399c074e32cff288a5a343d253c",
+    "/Users/erik/.codex/worktrees/security-main-integration/umf/docs/helix/02-design/contracts/CONTRACT-062-security-semantics.md": "f599067c99a35a29b6c3ce050beefcef208b262c891cc06b4567fc071caa4b6f"
+  },
+  "proof": {
+    "path": "/private/tmp/truss-mapping-compatibility-astra-20261013-l0_3d3ue/formal.json",
+    "solver": "4.15.4",
+    "results": [
+      {
+        "name": "current_original_source_versions_have_no_intersection",
+        "result": "unsat"
+      },
+      {
+        "name": "selected_original_actor_gates_have_no_intersection",
+        "result": "unsat"
+      },
+      {
+        "name": "dropping_source_correspondence_can_relabel",
+        "result": "sat"
+      },
+      {
+        "name": "future_common_original08_version_is_logically_feasible",
+        "result": "sat"
+      },
+      {
+        "name": "separate_producer_actors_are_logically_feasible",
+        "result": "sat"
+      }
+    ],
+    "scope": "Conditional equality/Boolean gate intersection only. Integers7/8 are abstract version tags. Exact native producer version/actor premises come from separately retained source and native controls. No schema, SQL, driver, hash authentication, cross-context issuance, source cut, original0.8 native ingress or protected execution proof. SAT future controls establish logical possibility only."
+  },
+  "boundary": "Python module boundaries passed (888 imports); TypeScript/native gates remain open",
+  "checks": [
+    "Removed prototype module; existing security mapping module and boundary map equal current HEAD exactly.",
+    "Original0.8 refusal now commits usable consumer transaction before independent admin archive/head checks.",
+    "Ordinary private guard refusal now asserts native SQLSTATE42501, zero compiler calls and same-transaction prior-work preservation.",
+    "Actually accepted0.7 compiler refusal is explicitly schema-level, without policy/model equivalence claim.",
+    "Contract and implementation plan retain original source and actor separation, missing native0.8/guarded-producer positive, and no backend case promotion."
+  ],
+  "historicalRejectedPrototypeEvidence": "/private/tmp/truss-graph-mapping-astra-20261013-_dup_ws_/results.json",
+  "reviewerNativeDatabaseRuns": 0,
+  "parentNativeLog": "/private/tmp/truss-security-mapping-compatibility-final-tests.log",
+  "parentNativeStatusAtReview": "terminal success observed: 11 tests in18.199s, OK; parent-run, not independently rerun",
+  "noClaims": [
+    "native source/compiler meaning refinement",
+    "hash or issuer authentication",
+    "held body/source-lock closure",
+    "complete writer/authority/fact cut",
+    "native protected graph mapping",
+    "backend acceptance or production readiness"
+  ],
+  "priorReviewedHead": "0f313cfe8b6a008602934923b682f7b6aae234d2",
+  "parentNativeLogSha256": "67bc6a8a4ddac8341a47aff438de17643ce64fcc37e651b0216f577c67ca8c5a",
+  "integrationRefresh": "Only implementation-plan pin changed among reviewed files; selected production/test/proof sources unchanged. No duplicate native execution."
+}

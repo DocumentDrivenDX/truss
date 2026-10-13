@@ -1,0 +1,8 @@
+test_actual_accepted07_original_bytes_refused_by_compiler_transport (test_security_mapping_compatibility_native.MappingCompatibilityNativeTests.test_actual_accepted07_original_bytes_refused_by_compiler_transport) ... ok
+test_original08_compiler_source_refused_by_actual_native_ingress (test_security_mapping_compatibility_native.MappingCompatibilityNativeTests.test_original08_compiler_source_refused_by_actual_native_ingress) ... ok
+test_original_catalog_producer_and_guard_have_separate_actor_boundaries (test_security_mapping_compatibility_native.MappingCompatibilityNativeTests.test_original_catalog_producer_and_guard_have_separate_actor_boundaries) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 11.901s
+
+OK

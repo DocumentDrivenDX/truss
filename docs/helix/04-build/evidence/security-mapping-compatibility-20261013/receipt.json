@@ -1,0 +1,66 @@
+{
+  "revision": "9a03b790f04847a8a32791a03652a087af053d45",
+  "date": "2026-10-13",
+  "scope": "Original compiler/native catalog source and selected caller incompatibility diagnostics. No production code changes; proposed mapper removed.",
+  "runtime": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6",
+    "python": "3.11",
+    "trussRuntime": "0.34",
+    "weftMappingInterface": "weft-security-mapping/0.1.0",
+    "weftBinarySha256": "2c62713f8b0b2f06d8537267405cad027cf44db3d832faefbd37920ba958bc0f"
+  },
+  "validation": {
+    "selectedTests": 11,
+    "newNativeDiagnostics": 3,
+    "existingNativeMappingTests": 8,
+    "seconds": 18.199,
+    "exitCode": 0,
+    "nativeTestsUse": "source checkout with original imported Rust extension",
+    "pythonBoundaryEdges": 888,
+    "formal": {
+      "z3": "4.15.4",
+      "unsat": 2,
+      "sat": 3,
+      "scope": "Conditional version/equal-source and Boolean selected-gate intersection, not native/schema/driver/issuer/cut refinement."
+    }
+  },
+  "findings": [
+    "Original core0.8 compiler preparation succeeds; native0.7 profile refuses the exact source. Usable caller transaction committed before checking absence of accepted effects.",
+    "Actual accepted core0.7 bytes/native view are retained; original mapping0.1 schema refuses that model version before semantic equivalence evaluation.",
+    "Ordinary public catalog production and excluded administrative mapping guard have deliberately separate native permissions. No gate is weakened."
+  ],
+  "nextRequiredImplementation": [
+    "Versioned original core0.8 Truss catalog preparation/native consistency/report composition and qualified additive migration.",
+    "Original owner-provided catalog assessment producer under the guarded context with separate original ordinary caller and private credential/issuer custody.",
+    "Original compiler scan/property/key/edge mapping plus source/writer closure, effects/result/final-release qualification."
+  ],
+  "acceptance": {
+    "closedNewBackendCases": 0,
+    "requiredCases": 132,
+    "previousQualifiedCheckpoint": 26,
+    "missingBindings": 106,
+    "scope": "Historical full gate unchanged; this diagnostic is not a rerun or promotion."
+  },
+  "rejectedPrototype": {
+    "shipped": false,
+    "historyOnly": true,
+    "basisBytes": 664558,
+    "expandedViewBytes": 17524076,
+    "viewLimit": 16777216,
+    "qualification": "Synthetic source/basis probe with genuine compiler; prototype source not fully retained, so probe alone cannot replay deleted mapper. No native mapping support inferred."
+  },
+  "sourceDigests": {
+    "packages/python/tests/test_security_mapping_compatibility_native.py": "d316bd3f8c262cf906b6b2333cd120520862dcc679445af5d217e8de9184b63b",
+    "scripts/security/prove-mapping-compatibility.py": "c99c6b6bec4282177bfdfce568b7626360b67657e3249fbf5d617d6726a03b18",
+    "packages/python/src/truss/_security_mapping.py": "e48cadd5c53301fb681b393fa01955a8d8f34febc61d17f115b902326825e659",
+    "packages/python/src/truss/_installation_privileges.py": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "packages/python/src/truss/_catalog_support.py": "a6bb07c89a91bf9c1a50a254d9bd156d37e29d915af5b3390eadb4a6cdd4e4ab",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "a0b73e07359e4dcf86b5dfa9785158569fde839e88dd7332c46ac8413c71a1d3",
+    "packages/python/src/truss/_catalog_runtime/view.sql": "2f4a3ad7854575c209326f99441dfbcde74d26897422e24a9477630e678ace46",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "120f704e29652f2b10ea4d1e40cf4d5893056bfe4277f125a010880b167f9d81",
+    "packages/python/src/truss/_catalog_view_build.py": "538b974fd6cb1e6fc753864e3a9727887cb996a46c85b1da3c2026b29eb85e8a",
+    "packages/python/tests/fixtures/security-mapping-request.json": "daf8c9310e0a2c4b8c1bb436cb37df855c95b6592acfe2134d7ac80d064dad87",
+    "packages/python/src/truss/_profiles/fresh-catalog-support-retained-metadata.json": "c188429e07667bd1ba6a13da5d89f9c584e517163b948e9ec4cf02810b420369"
+  }
+}

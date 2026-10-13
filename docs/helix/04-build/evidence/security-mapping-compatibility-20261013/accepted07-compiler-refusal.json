@@ -1,0 +1,667 @@
+{
+  "originalRequest": {
+    "interfaceVersion": "weft-security-mapping/0.1.0",
+    "modules": [
+      {
+        "documentJson": "{\n  \"umf\": \"0.7.0\",\n  \"id\": \"domain\",\n  \"vocabularies\": {},\n  \"extensions\": {},\n  \"modules\": [\n    {\n      \"id\": \"m\",\n      \"namespace\": \"m\",\n      \"extensions\": {},\n      \"elements\": [\n        {\n          \"id\": \"A\",\n          \"kind\": \"record\",\n          \"members\": [\n            {\n              \"module\": \"m\",\n              \"element\": \"A-label\"\n            },\n            {\n              \"module\": \"m\",\n              \"element\": \"A-value\"\n            }\n          ],\n          \"keys\": [\n            {\n              \"id\": \"z-alt\",\n              \"name\": \"alt\",\n              \"fields\": [\n                {\n                  \"module\": \"m\",\n                  \"element\": \"A-label\"\n                }\n              ]\n            },\n            {\n              \"id\": \"a-primary\",\n              \"name\": \"primary\",\n              \"primary\": true,\n              \"fields\": [\n                {\n                  \"module\": \"m\",\n                  \"element\": \"A-value\"\n                },\n                {\n                  \"module\": \"m\",\n                  \"element\": \"A-label\"\n                }\n              ]\n            }\n          ],\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"B\",\n          \"kind\": \"record\",\n          \"members\": [\n            {\n              \"module\": \"m\",\n              \"element\": \"B-label\"\n            },\n            {\n              \"module\": \"m\",\n              \"element\": \"B-value\"\n            }\n          ],\n          \"keys\": [\n            {\n              \"id\": \"z-alt\",\n              \"name\": \"alt\",\n              \"fields\": [\n                {\n                  \"module\": \"m\",\n                  \"element\": \"B-label\"\n                }\n              ]\n            },\n            {\n              \"id\": \"a-primary\",\n              \"name\": \"primary\",\n              \"primary\": true,\n              \"fields\": [\n                {\n                  \"module\": \"m\",\n                  \"element\": \"B-value\"\n                },\n                {\n                  \"module\": \"m\",\n                  \"element\": \"B-label\"\n                }\n              ]\n            }\n          ],\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"A-label\",\n          \"name\": \"A-label\",\n          \"kind\": \"field\",\n          \"scalarType\": \"string\",\n          \"nullability\": \"required\",\n          \"cardinality\": \"one\",\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"A-value\",\n          \"name\": \"A-value\",\n          \"kind\": \"field\",\n          \"scalarType\": \"string\",\n          \"nullability\": \"required\",\n          \"cardinality\": \"one\",\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"B-label\",\n          \"name\": \"B-label\",\n          \"kind\": \"field\",\n          \"scalarType\": \"string\",\n          \"nullability\": \"required\",\n          \"cardinality\": \"one\",\n          \"extensions\": {}\n        },\n        {\n          \"id\": \"B-value\",\n          \"name\": \"B-value\",\n          \"kind\": \"field\",\n          \"scalarType\": \"string\",\n          \"nullability\": \"required\",\n          \"cardinality\": \"one\",\n          \"extensions\": {}\n        }\n      ],\n      \"relationships\": [\n        {\n          \"id\": \"A-B\",\n          \"name\": \"A-B\",\n          \"source\": [\n            {\n              \"module\": \"m\",\n              \"element\": \"A\"\n            }\n          ],\n          \"target\": [\n            {\n              \"module\": \"m\",\n              \"element\": \"B\",\n              \"key\": \"a-primary\"\n            }\n          ],\n          \"sourceMultiplicity\": {\n            \"min\": 0,\n            \"max\": 1\n          },\n          \"targetMultiplicity\": {\n            \"min\": 0,\n            \"max\": 2\n          },\n          \"targetLifecycle\": \"independent\",\n          \"directed\": true\n        }\n      ]\n    }\n  ]\n}",
+        "pin": {
+          "documentId": "domain",
+          "revision": "schema-1",
+          "umfVersion": "0.7.0",
+          "sha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3"
+        },
+        "selectedModuleIds": [
+          "m"
+        ]
+      }
+    ],
+    "policyJson": "{\"vocabulary\":\"umf.security\",\"version\":\"0.1.0\",\"id\":\"project-access\",\"revision\":\"policy-1\",\"ontology\":{\"documentId\":\"domain\",\"revision\":\"ontology-1\"},\"rules\":[{\"id\":\"reader\",\"effect\":\"permit\",\"actions\":[\"read\"],\"target\":[{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"}],\"condition\":{\"op\":\"literal\",\"value\":true},\"disclosure\":[{\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"salary\"},\"disposition\":{\"kind\":\"withheld\"}}]},{\"id\":\"membership\",\"effect\":\"require\",\"actions\":[\"read\"],\"target\":[{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"}],\"condition\":{\"op\":\"exists\",\"association\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Ownership\"},\"as\":\"o\",\"where\":{\"op\":\"and\",\"args\":[{\"op\":\"eq\",\"left\":{\"kind\":\"variable\",\"name\":\"o\",\"endpoint\":\"resource\"},\"right\":{\"kind\":\"resource\",\"identity\":true}},{\"op\":\"exists\",\"association\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Assignment\"},\"as\":\"a\",\"where\":{\"op\":\"and\",\"args\":[{\"op\":\"eq\",\"left\":{\"kind\":\"variable\",\"name\":\"a\",\"endpoint\":\"staff\"},\"right\":{\"kind\":\"subject\",\"identity\":true}},{\"op\":\"eq\",\"left\":{\"kind\":\"variable\",\"name\":\"a\",\"endpoint\":\"project\"},\"right\":{\"kind\":\"variable\",\"name\":\"o\",\"endpoint\":\"project\"}},{\"op\":\"eq\",\"left\":{\"kind\":\"variable\",\"name\":\"a\",\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"active\"}},\"right\":{\"kind\":\"constant\",\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"active\"},\"value\":{\"boolean\":true}}}]}}]}}},{\"id\":\"query-original\",\"effect\":\"permit\",\"actions\":[\"query-original\"],\"target\":[{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"}],\"condition\":{\"op\":\"literal\",\"value\":true}}]}",
+    "ontologyJson": "{\"version\":\"0.1.0\",\"documentId\":\"domain\",\"revision\":\"ontology-1\",\"documents\":[{\"documentId\":\"domain\",\"revision\":\"schema-1\"}],\"subject\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Staff\"},\"entities\":[{\"type\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Staff\"},\"keyId\":\"pk\",\"fields\":[{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"staffId\"},\"protection\":\"unprotected\"}]},{\"type\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Project\"},\"keyId\":\"pk\",\"fields\":[{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"projectId\"},\"protection\":\"unprotected\"}]},{\"type\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"},\"keyId\":\"pk\",\"fields\":[{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"resourceId\"},\"protection\":\"unprotected\"},{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"salary\"},\"protection\":\"protected\",\"queryUse\":{\"predicate\":\"original-authorized\",\"order\":\"original-authorized\",\"group\":\"original-authorized\",\"join\":\"original-authorized\",\"aggregate\":\"original-authorized\"}}]}],\"associations\":[{\"type\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Ownership\"},\"keyId\":\"pk\",\"fields\":[{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"ownerId\"},\"protection\":\"unprotected\"},{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"ownerResource\"},\"protection\":\"unprotected\"},{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"ownerProject\"},\"protection\":\"unprotected\"}],\"endpoints\":[{\"role\":\"resource\",\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"},\"fields\":[{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"ownerResource\"}]},{\"role\":\"project\",\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Project\"},\"fields\":[{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"ownerProject\"}]}]},{\"type\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Assignment\"},\"keyId\":\"pk\",\"fields\":[{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"assignmentId\"},\"protection\":\"unprotected\"},{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"assignmentStaff\"},\"protection\":\"unprotected\"},{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"assignmentProject\"},\"protection\":\"unprotected\"},{\"ref\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"active\"},\"protection\":\"unprotected\"}],\"endpoints\":[{\"role\":\"staff\",\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Staff\"},\"fields\":[{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"assignmentStaff\"}]},{\"role\":\"project\",\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Project\"},\"fields\":[{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"assignmentProject\"}]}]}],\"context\":[],\"actions\":[\"read\",\"update\",\"query-original\"]}",
+    "queryProfileJson": "{\"version\":\"weft.security.query-profile/0.1.0\",\"id\":\"fixture-profile\",\"revision\":\"p1\",\"action\":\"read\",\"modelPins\":[{\"documentId\":\"domain\",\"revision\":\"schema-1\",\"umfVersion\":\"0.8.0\",\"sha256\":\"005db769cca65703cad146f6805ddf2ef1a074dfeb8840e49e9cec96828709fb\"}],\"policySha256\":\"f274bfb3ab441188d0a47e286f75c8d9a991ca84290695efad4d9cb561adc428\",\"ontologySha256\":\"8b99af02a91439ec6d204aad3a02d8d9629d79a194821caef8d98a3d14793f9f\",\"binding\":{\"backendId\":\"truss.postgresql\",\"backendVersion\":\"unqualified\",\"targetProfile\":\"fixture-only\",\"sha256\":\"47f9f7eca0d35353ba8d0bcca077c1f9365d45f78623d3a93ab521dc640ba6e6\"},\"targets\":[{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"}],\"bindings\":[{\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"},\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"salary\"},\"operator\":\"predicate\",\"originalAction\":\"query-original\"},{\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"},\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"salary\"},\"operator\":\"order\",\"originalAction\":\"query-original\"},{\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"},\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"salary\"},\"operator\":\"group\",\"originalAction\":\"query-original\"},{\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"},\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"salary\"},\"operator\":\"join\",\"originalAction\":\"query-original\"},{\"target\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"Resource\"},\"field\":{\"documentId\":\"domain\",\"moduleId\":\"m\",\"elementId\":\"salary\"},\"operator\":\"aggregate\",\"originalAction\":\"query-original\"}]}",
+    "bindingJson": "{\"version\":\"fixture-only\",\"layout\":\"opaque-unqualified-storage\"}",
+    "backendId": "truss.postgresql",
+    "backendVersion": "unqualified",
+    "targetProfile": "fixture-only",
+    "sql": "SELECT r.salary AS amount,SUM(r.salary) AS total FROM Resource r JOIN Resource s ON r.salary=s.salary WHERE r.salary=100 GROUP BY r.salary ORDER BY r.salary",
+    "parameters": {}
+  },
+  "originalCompilerResponse": {
+    "diagnostics": [
+      {
+        "code": "WFT-SECURITY-MAPPING-TRANSPORT",
+        "message": "Security mapping transport refused",
+        "phase": "input",
+        "severity": "error"
+      }
+    ],
+    "interfaceVersion": "weft-security-mapping/0.1.0",
+    "securityReady": false,
+    "status": "refused"
+  },
+  "nativeArchiveSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+  "nativeView": {
+    "catalogRevision": "1",
+    "consistencyEvidenceSha256": "c1359e615a05e05d3d0f69bd9a2041c1d27d459acbe2eeef66d67871a0513528",
+    "definitions": [
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgImlkIjogIkEiLAogICAgICAgICAgImtpbmQiOiAicmVjb3JkIiwKICAgICAgICAgICJtZW1iZXJzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJBLWxhYmVsIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJBLXZhbHVlIgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImtleXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiei1hbHQiLAogICAgICAgICAgICAgICJuYW1lIjogImFsdCIsCiAgICAgICAgICAgICAgImZpZWxkcyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQS1sYWJlbCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICBdCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiYS1wcmltYXJ5IiwKICAgICAgICAgICAgICAibmFtZSI6ICJwcmltYXJ5IiwKICAgICAgICAgICAgICAicHJpbWFyeSI6IHRydWUsCiAgICAgICAgICAgICAgImZpZWxkcyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQS12YWx1ZSIKICAgICAgICAgICAgICAgIH0sCiAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICJtb2R1bGUiOiAibSIsCiAgICAgICAgICAgICAgICAgICJlbGVtZW50IjogIkEtbGFiZWwiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgXQogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0=",
+          "identity": "4b63ae644c657a49acfea2cecdc0ed4975ab52131d71f7e325ef71671ddd0c31",
+          "sha256": "4d379f49d643c87567fd17f2aefa5ba5079a33fb85d17724815417b4e433f1c5"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "A-label",
+            "definitionPin": "13eb46ca9cd942ed9f220b03da19a4fc3796558a9c2cfddb985b8adb32c9a230",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "1",
+            "typeId": "1"
+          },
+          {
+            "authoredIdentity": "A-value",
+            "definitionPin": "b26f7c11a330e722addba2ccbdb070d37f291654884e05cb5cf30159ba56fbd6",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "2",
+            "typeId": "1"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/0",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "A",
+          "definitionPin": "4b63ae644c657a49acfea2cecdc0ed4975ab52131d71f7e325ef71671ddd0c31",
+          "kind": "type",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "typeId": "1"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgImlkIjogIkIiLAogICAgICAgICAgImtpbmQiOiAicmVjb3JkIiwKICAgICAgICAgICJtZW1iZXJzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJCLWxhYmVsIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJCLXZhbHVlIgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImtleXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiei1hbHQiLAogICAgICAgICAgICAgICJuYW1lIjogImFsdCIsCiAgICAgICAgICAgICAgImZpZWxkcyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQi1sYWJlbCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICBdCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiYS1wcmltYXJ5IiwKICAgICAgICAgICAgICAibmFtZSI6ICJwcmltYXJ5IiwKICAgICAgICAgICAgICAicHJpbWFyeSI6IHRydWUsCiAgICAgICAgICAgICAgImZpZWxkcyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQi12YWx1ZSIKICAgICAgICAgICAgICAgIH0sCiAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICJtb2R1bGUiOiAibSIsCiAgICAgICAgICAgICAgICAgICJlbGVtZW50IjogIkItbGFiZWwiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgXQogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0=",
+          "identity": "fffa3e5829516fbd0891fe4d45764fb78a564b14ff091fd6b64c12f26e255139",
+          "sha256": "c5eacd9eab1c6511c5bc9b2b2502f483f58e91bb4eac35dd0b6bcc4109d3d261"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "B-label",
+            "definitionPin": "51065f76c905f2e817a10bfb03fc7eb6a7e7365d3bdb55632812cd0a5659aeb3",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "3",
+            "typeId": "2"
+          },
+          {
+            "authoredIdentity": "B-value",
+            "definitionPin": "090059083774c42c7b670bec4fc0b36a72b6544965244d740ab56709f8036984",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "4",
+            "typeId": "2"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/1",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "B",
+          "definitionPin": "fffa3e5829516fbd0891fe4d45764fb78a564b14ff091fd6b64c12f26e255139",
+          "kind": "type",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "typeId": "2"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgImlkIjogIkEtbGFiZWwiLAogICAgICAgICAgIm5hbWUiOiAiQS1sYWJlbCIsCiAgICAgICAgICAia2luZCI6ICJmaWVsZCIsCiAgICAgICAgICAic2NhbGFyVHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgIm51bGxhYmlsaXR5IjogInJlcXVpcmVkIiwKICAgICAgICAgICJjYXJkaW5hbGl0eSI6ICJvbmUiLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0=",
+          "identity": "13eb46ca9cd942ed9f220b03da19a4fc3796558a9c2cfddb985b8adb32c9a230",
+          "sha256": "7680c80d7d324bc1eac46b669648fcefac4c6dd05d6b84b820a29269b5650f04"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "A",
+            "definitionPin": "4b63ae644c657a49acfea2cecdc0ed4975ab52131d71f7e325ef71671ddd0c31",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "1"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/2",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "A-label",
+          "definitionPin": "13eb46ca9cd942ed9f220b03da19a4fc3796558a9c2cfddb985b8adb32c9a230",
+          "kind": "property",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "propertyId": "1",
+          "typeId": "1"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgImlkIjogIkEtdmFsdWUiLAogICAgICAgICAgIm5hbWUiOiAiQS12YWx1ZSIsCiAgICAgICAgICAia2luZCI6ICJmaWVsZCIsCiAgICAgICAgICAic2NhbGFyVHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgIm51bGxhYmlsaXR5IjogInJlcXVpcmVkIiwKICAgICAgICAgICJjYXJkaW5hbGl0eSI6ICJvbmUiLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0=",
+          "identity": "b26f7c11a330e722addba2ccbdb070d37f291654884e05cb5cf30159ba56fbd6",
+          "sha256": "9e33819fd72a66ed3f0781754feb7ce8c043ee702dc99ee850a8d39c1605596c"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "A",
+            "definitionPin": "4b63ae644c657a49acfea2cecdc0ed4975ab52131d71f7e325ef71671ddd0c31",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "1"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/3",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "A-value",
+          "definitionPin": "b26f7c11a330e722addba2ccbdb070d37f291654884e05cb5cf30159ba56fbd6",
+          "kind": "property",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "propertyId": "2",
+          "typeId": "1"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgImlkIjogIkItbGFiZWwiLAogICAgICAgICAgIm5hbWUiOiAiQi1sYWJlbCIsCiAgICAgICAgICAia2luZCI6ICJmaWVsZCIsCiAgICAgICAgICAic2NhbGFyVHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgIm51bGxhYmlsaXR5IjogInJlcXVpcmVkIiwKICAgICAgICAgICJjYXJkaW5hbGl0eSI6ICJvbmUiLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0=",
+          "identity": "51065f76c905f2e817a10bfb03fc7eb6a7e7365d3bdb55632812cd0a5659aeb3",
+          "sha256": "4d82f8236c738fc5dd58782cc63eeec2a272ab1b236124d90cd6360eaef75210"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "B",
+            "definitionPin": "fffa3e5829516fbd0891fe4d45764fb78a564b14ff091fd6b64c12f26e255139",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "2"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/4",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "B-label",
+          "definitionPin": "51065f76c905f2e817a10bfb03fc7eb6a7e7365d3bdb55632812cd0a5659aeb3",
+          "kind": "property",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "propertyId": "3",
+          "typeId": "2"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgImlkIjogIkItdmFsdWUiLAogICAgICAgICAgIm5hbWUiOiAiQi12YWx1ZSIsCiAgICAgICAgICAia2luZCI6ICJmaWVsZCIsCiAgICAgICAgICAic2NhbGFyVHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgIm51bGxhYmlsaXR5IjogInJlcXVpcmVkIiwKICAgICAgICAgICJjYXJkaW5hbGl0eSI6ICJvbmUiLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0=",
+          "identity": "090059083774c42c7b670bec4fc0b36a72b6544965244d740ab56709f8036984",
+          "sha256": "74d4f3aaacdff5446c491ca581c77e2eef4cea5d0d377a78a0367d9bd520ce89"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "B",
+            "definitionPin": "fffa3e5829516fbd0891fe4d45764fb78a564b14ff091fd6b64c12f26e255139",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "2"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/5",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "B-value",
+          "definitionPin": "090059083774c42c7b670bec4fc0b36a72b6544965244d740ab56709f8036984",
+          "kind": "property",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "propertyId": "4",
+          "typeId": "2"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgICAgICJpZCI6ICJhLXByaW1hcnkiLAogICAgICAgICAgICAgICJuYW1lIjogInByaW1hcnkiLAogICAgICAgICAgICAgICJwcmltYXJ5IjogdHJ1ZSwKICAgICAgICAgICAgICAiZmllbGRzIjogWwogICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICAgICAiZWxlbWVudCI6ICJBLXZhbHVlIgogICAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQS1sYWJlbCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICBdCiAgICAgICAgICAgIH0=",
+          "identity": "4cc144c7a7ab7b0298819aa1f51408dc9e8dd0608019c49fdf65a0f17412de56",
+          "sha256": "0ae672d688667ec3e07f126e080aa0fadd16211bff3ee463670570580f4e8353"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "A",
+            "definitionPin": "4b63ae644c657a49acfea2cecdc0ed4975ab52131d71f7e325ef71671ddd0c31",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "1"
+          },
+          {
+            "authoredIdentity": "A-value",
+            "definitionPin": "b26f7c11a330e722addba2ccbdb070d37f291654884e05cb5cf30159ba56fbd6",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "2",
+            "typeId": "1"
+          },
+          {
+            "authoredIdentity": "A-label",
+            "definitionPin": "13eb46ca9cd942ed9f220b03da19a4fc3796558a9c2cfddb985b8adb32c9a230",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "1",
+            "typeId": "1"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/0/keys/1",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "a-primary",
+          "definitionPin": "4cc144c7a7ab7b0298819aa1f51408dc9e8dd0608019c49fdf65a0f17412de56",
+          "keyNumber": "1",
+          "kind": "key",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "typeId": "1"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgICAgICJpZCI6ICJ6LWFsdCIsCiAgICAgICAgICAgICAgIm5hbWUiOiAiYWx0IiwKICAgICAgICAgICAgICAiZmllbGRzIjogWwogICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICAgICAiZWxlbWVudCI6ICJBLWxhYmVsIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIF0KICAgICAgICAgICAgfQ==",
+          "identity": "7e2854c0c18ada66d9ec7c99b28bbb0ff6ef78e307c91bfb7c38bb83908c3495",
+          "sha256": "47e47c33547169b2c4e5f6448a251f9aba1f9b4e236f67399004260af91eb50c"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "A",
+            "definitionPin": "4b63ae644c657a49acfea2cecdc0ed4975ab52131d71f7e325ef71671ddd0c31",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "1"
+          },
+          {
+            "authoredIdentity": "A-label",
+            "definitionPin": "13eb46ca9cd942ed9f220b03da19a4fc3796558a9c2cfddb985b8adb32c9a230",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "1",
+            "typeId": "1"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/0/keys/0",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "z-alt",
+          "definitionPin": "7e2854c0c18ada66d9ec7c99b28bbb0ff6ef78e307c91bfb7c38bb83908c3495",
+          "keyNumber": "2",
+          "kind": "key",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "typeId": "1"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgICAgICJpZCI6ICJhLXByaW1hcnkiLAogICAgICAgICAgICAgICJuYW1lIjogInByaW1hcnkiLAogICAgICAgICAgICAgICJwcmltYXJ5IjogdHJ1ZSwKICAgICAgICAgICAgICAiZmllbGRzIjogWwogICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICAgICAiZWxlbWVudCI6ICJCLXZhbHVlIgogICAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQi1sYWJlbCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICBdCiAgICAgICAgICAgIH0=",
+          "identity": "a09f405412bc4cf41aee43ef5af2391c9c7b45bb267a613bd30522ba70eff42f",
+          "sha256": "c5fbe8efb202396d4c5800505d069938d67448387d594597f2acfbb904371706"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "B",
+            "definitionPin": "fffa3e5829516fbd0891fe4d45764fb78a564b14ff091fd6b64c12f26e255139",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "2"
+          },
+          {
+            "authoredIdentity": "B-value",
+            "definitionPin": "090059083774c42c7b670bec4fc0b36a72b6544965244d740ab56709f8036984",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "4",
+            "typeId": "2"
+          },
+          {
+            "authoredIdentity": "B-label",
+            "definitionPin": "51065f76c905f2e817a10bfb03fc7eb6a7e7365d3bdb55632812cd0a5659aeb3",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "3",
+            "typeId": "2"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/1/keys/1",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "a-primary",
+          "definitionPin": "a09f405412bc4cf41aee43ef5af2391c9c7b45bb267a613bd30522ba70eff42f",
+          "keyNumber": "1",
+          "kind": "key",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "typeId": "2"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgICAgICJpZCI6ICJ6LWFsdCIsCiAgICAgICAgICAgICAgIm5hbWUiOiAiYWx0IiwKICAgICAgICAgICAgICAiZmllbGRzIjogWwogICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICAgICAiZWxlbWVudCI6ICJCLWxhYmVsIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIF0KICAgICAgICAgICAgfQ==",
+          "identity": "e4f2df80c72bc93d70109114f6070dc72e74153205b748d60eacd1b23885d9a7",
+          "sha256": "81a6df1c89589005ec31e64c7a5c2ad466144fb7bdffaae2a16fbe7498099934"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "B",
+            "definitionPin": "fffa3e5829516fbd0891fe4d45764fb78a564b14ff091fd6b64c12f26e255139",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "2"
+          },
+          {
+            "authoredIdentity": "B-label",
+            "definitionPin": "51065f76c905f2e817a10bfb03fc7eb6a7e7365d3bdb55632812cd0a5659aeb3",
+            "kind": "property",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "propertyId": "3",
+            "typeId": "2"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/elements/1/keys/0",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "z-alt",
+          "definitionPin": "e4f2df80c72bc93d70109114f6070dc72e74153205b748d60eacd1b23885d9a7",
+          "keyNumber": "2",
+          "kind": "key",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "typeId": "2"
+        },
+        "resolution": "defined"
+      },
+      {
+        "definition": {
+          "bytesBase64": "ewogICAgICAgICAgImlkIjogIkEtQiIsCiAgICAgICAgICAibmFtZSI6ICJBLUIiLAogICAgICAgICAgInNvdXJjZSI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICJtb2R1bGUiOiAibSIsCiAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQSIKICAgICAgICAgICAgfQogICAgICAgICAgXSwKICAgICAgICAgICJ0YXJnZXQiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICJlbGVtZW50IjogIkIiLAogICAgICAgICAgICAgICJrZXkiOiAiYS1wcmltYXJ5IgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgInNvdXJjZU11bHRpcGxpY2l0eSI6IHsKICAgICAgICAgICAgIm1pbiI6IDAsCiAgICAgICAgICAgICJtYXgiOiAxCiAgICAgICAgICB9LAogICAgICAgICAgInRhcmdldE11bHRpcGxpY2l0eSI6IHsKICAgICAgICAgICAgIm1pbiI6IDAsCiAgICAgICAgICAgICJtYXgiOiAyCiAgICAgICAgICB9LAogICAgICAgICAgInRhcmdldExpZmVjeWNsZSI6ICJpbmRlcGVuZGVudCIsCiAgICAgICAgICAiZGlyZWN0ZWQiOiB0cnVlCiAgICAgICAgfQ==",
+          "identity": "5e6f5dc762f8e1205d30e70d954ef1196c97e9ae089ed67fc0a8cea9014a2355",
+          "sha256": "d8a1c40eab8331110732d8be26a44684b68a07a9307976a1799e5c839fb58e17"
+        },
+        "dependencies": [
+          {
+            "authoredIdentity": "A",
+            "definitionPin": "4b63ae644c657a49acfea2cecdc0ed4975ab52131d71f7e325ef71671ddd0c31",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "1"
+          },
+          {
+            "authoredIdentity": "B",
+            "definitionPin": "fffa3e5829516fbd0891fe4d45764fb78a564b14ff091fd6b64c12f26e255139",
+            "kind": "type",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "2"
+          },
+          {
+            "authoredIdentity": "a-primary",
+            "definitionPin": "a09f405412bc4cf41aee43ef5af2391c9c7b45bb267a613bd30522ba70eff42f",
+            "keyNumber": "1",
+            "kind": "key",
+            "owner": {
+              "documentId": "domain",
+              "moduleId": "m"
+            },
+            "typeId": "2"
+          }
+        ],
+        "lifecycle": "active",
+        "provenance": {
+          "acceptedCatalogRevision": "1",
+          "acceptedDocumentSha256": "03bfd6984a7ab9826b7cc2235934358e211981f55d6ce9fdc8e9ce41a59704d3",
+          "authoredPointer": "/modules/0/relationships/0",
+          "documentOrdinal": "0",
+          "documentRevision": "schema-1",
+          "extractionProfile": {
+            "identity": "truss-original-json-definition",
+            "sha256": "08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d",
+            "version": "0.1"
+          },
+          "kind": "accepted_document"
+        },
+        "reference": {
+          "authoredIdentity": "A-B",
+          "definitionPin": "5e6f5dc762f8e1205d30e70d954ef1196c97e9ae089ed67fc0a8cea9014a2355",
+          "kind": "relationship",
+          "owner": {
+            "documentId": "domain",
+            "moduleId": "m"
+          },
+          "relationshipId": "1"
+        },
+        "resolution": "defined"
+      }
+    ],
+    "interfaceVersion": "truss-catalog-view/0.1.0",
+    "inventorySha256": "72e6f560aa3dadfce7dce552622836ab5f41118886e407ed307931476900bc00",
+    "layoutProfile": {
+      "identity": "truss-layout",
+      "sha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368",
+      "version": "0.16"
+    },
+    "scope": {
+      "kind": "complete"
+    },
+    "viewProfile": {
+      "identity": "truss-complete-catalog-view",
+      "sha256": "1b864e8c1e86e97cfb0f27fd5742464f0627b018f8b8aa3cc7b4e0ea990a48e5",
+      "version": "0.3"
+    }
+  },
+  "qualification": "Schema-level original0.7 transport refusal; policy/model equivalence is not evaluated or claimed."
+}
