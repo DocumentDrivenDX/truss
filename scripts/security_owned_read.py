@@ -21,7 +21,7 @@ def _pin_owned_evaluator_sources():
     """Private administrative source snapshot, never an authority capability."""
     tool=ROOT/'scripts/evaluate-security-captured-identity-fixture.ts'
     owner=Path('/Users/erik/.codex/worktrees/security-main-integration/umf')
-    paths=[tool]+[p for p in (owner/'src').rglob('*') if p.is_file() and p.suffix in ('.ts','.json')]+[owner/'tests/security/fixture.ts']
+    paths=[tool,ROOT/'scripts/security-named-source-fixture.ts',ROOT/'docs/helix/04-build/evidence/security-named-source-profile/document.json',ROOT/'docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json']+[ROOT/'docs/helix/04-build/evidence'/base/(name+'.json') for base in ('security-identity-requirements','security-named-source-profile') for name in ('policy','resolution','transport')]+[p for p in (owner/'src').rglob('*') if p.is_file() and p.suffix in ('.ts','.json')]+[owner/'tests/security/fixture.ts']
     return _OwnedEvaluatorSourcePins(tool,tuple((p,hashlib.sha256(p.read_bytes()).digest()) for p in paths))
 
 
@@ -56,9 +56,13 @@ def _read_owned_evaluator_receipt(text):
     return decision
 
 
-def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None, *, resource_list=False):
+def _run_owned_identity_read(host, transaction, epoch, requirements, sources, delegated=False, caller_database=None, evaluator_sources=None, *, resource_list=False, source_profile='legacy', native_subject=None, original_inspector=None):
+    if type(source_profile) is not str or source_profile not in ('legacy','named'):raise ValueError('Exact original fixture source profile required')
     if type(sources) is not _OriginalFactSources:raise ValueError('Original fixture sources required')
     sources=_OriginalFactSources(sources.policy,sources.resolution)
+    base=ROOT/'docs/helix/04-build/evidence'/('security-named-source-profile' if source_profile=='named' else 'security-identity-requirements')
+    if sources.policy!=(base/'policy.json').read_bytes() or sources.resolution!=(base/'resolution.json').read_bytes():
+        raise ValueError('Exact selected original fixture source bytes required')
     digest=hashlib.sha256(requirements).hexdigest()
     _inspect_original_fact_sources(requirements,digest,sources)
     selected,providers=_epoch_dependency_recipe(epoch,digest,sources)
@@ -79,6 +83,21 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
     prepared=_pin_owned_evaluator_sources() if evaluator_sources is None else evaluator_sources
     if type(prepared) is not _OwnedEvaluatorSourcePins:raise ValueError('Original private evaluator preparation required')
     tool,pins=prepared.tool,dict(prepared.pins)
+    observe_subject=None
+    if native_subject is not None:
+        from dataclasses import replace
+        from truss._psycopg_subject_observation import _SubjectSelection,_prepare_subject_operation
+        from truss._umf_key_tuples import encode_literal_key_tuple
+        if (source_profile!='named' or profile['kind']!='truss-flat-fact-provider-fixture/0.3' or delegated or type(native_subject) is not _SubjectSelection
+                or native_subject.original_document!=(base/'document.json').read_bytes()
+                or native_subject.original_request!=(base/'mapping-request.json').read_bytes()
+                or (native_subject.module,native_subject.record,native_subject.key,native_subject.columns)!=('m','Staff','pk',('staff_id',))):
+            raise ValueError('Exact shared named fixture subject source required')
+        native_subject=replace(native_subject)
+        def produce_subject(observation):
+            texts=tuple(json.dumps({'string':value}) for value in observation.values)
+            return encode_literal_key_tuple(native_subject.original_document,observation.identity,texts,bun_executable='/opt/homebrew/bin/bun')
+        observe_subject=_prepare_subject_operation(host,native_subject,original_inspector,produce_subject,(('read_committed','read_write'),))
     def execute(cursor):
         caller=profile.get('caller')
         if caller_database is not None:
@@ -86,17 +105,26 @@ def _run_owned_identity_read(host, transaction, epoch, requirements, sources, de
             if cursor.description is None or len(cursor.description)!=1 or cursor.description[0].type_code!=25 or cursor.fetchmany(2)!=[caller_database]:
                 raise ValueError('Original caller/executor database correspondence required')
         _verify_native_profile_caller(cursor,json.dumps({'caller':profile['executor']}).encode() if delegated else selected.profile)
+        if observe_subject is not None:
+            # This cursor already holds the selected source and complete declared fact cuts.
+            observed_key=observe_subject(cursor,host._observe(cursor))
+            selected_key=encode_literal_key_tuple(native_subject.original_document,('m','Staff','pk'),
+                tuple(json.dumps(value) for value in caller['subjectKey']),bun_executable='/opt/homebrew/bin/bun')
+            if observed_key.tuple_bytes!=selected_key.tuple_bytes:
+                raise ValueError('Original native subject/profile key correspondence required')
+            _verify_native_profile_caller(cursor,selected.profile)
         cells=_capture_dependency_relation_cells(cursor,groups)
         captured=[asdict(c) for c in cells]
         if resource_list and caller is None:raise ValueError('Original bound subject required for resource listing')
         payload=json.dumps({'cells':captured,'subjectKey':caller['subjectKey'],'resultMode':'resources'} if resource_list else (captured if caller is None else {'cells':captured,'subjectKey':caller['subjectKey']}))
         if len(payload.encode('utf8'))>1048576:raise ValueError('Bounded semantic fixture input required')
         try:
-            result=subprocess.run(['/opt/homebrew/bin/bun',str(tool)],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=4)
+            result=subprocess.run(['/opt/homebrew/bin/bun',str(tool)]+(['--named-source'] if source_profile=='named' else []),cwd=ROOT,input=payload,capture_output=True,text=True,timeout=4)
         except subprocess.TimeoutExpired:
             raise TimeoutError('Original evaluator deadline expired') from None
         if result.returncode or len(result.stdout.encode('utf8'))>65536:raise ValueError('Original UMF fixture evaluation refused')
         if any(hashlib.sha256(p.read_bytes()).digest()!=h for p,h in pins.items()):raise ValueError('Original evaluator sources changed')
+        if observe_subject is not None:_verify_native_profile_caller(cursor,selected.profile)
         decision=_read_owned_resource_receipt(result.stdout) if resource_list else _read_owned_evaluator_receipt(result.stdout)
         # No raw cells, private fact identities or evaluator diagnostics leave
         # this owned operation. Dispositions remain original UMF output.
@@ -120,9 +148,18 @@ def _read_owned_resource_receipt(text):
     return receipt
 
 
-def run_owned_resource_read(host, transaction, epoch, requirements, sources):
+def run_owned_resource_read(host, transaction, epoch, requirements, sources, *, source_profile='legacy'):
     """Fixed-source multi-resource fixture; no generic compiler/native admission."""
-    return _run_owned_identity_read(host,transaction,epoch,requirements,sources,resource_list=True)
+    return _run_owned_identity_read(host,transaction,epoch,requirements,sources,resource_list=True,source_profile=source_profile)
+
+
+def run_named_subject_resource_read(host, transaction, epoch, requirements, sources, selection, original_inspector):
+    """Fresh native subject + original encoding/evaluation fixture, not authority."""
+    from truss._psycopg_subject_observation import _SubjectSelection
+    if type(selection) is not _SubjectSelection:
+        raise ValueError('Required exact native subject selection')
+    return _run_owned_identity_read(host,transaction,epoch,requirements,sources,resource_list=True,
+        source_profile='named',native_subject=selection,original_inspector=original_inspector)
 
 
 def run_owned_identity_read(host, transaction, epoch, requirements, sources):

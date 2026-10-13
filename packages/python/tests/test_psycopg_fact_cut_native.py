@@ -985,6 +985,51 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
             self.with_unprivileged_actor(operation)
         finally:
             self.connection.execute("DELETE FROM truss.sec_assignment WHERE assignment_id='a2';UPDATE truss.sec_assignment SET active=true WHERE assignment_id='a1';DELETE FROM truss.sec_ownership WHERE owner_id IN ('o2','o3');DELETE FROM truss.sec_resource WHERE resource_id IN ('r2','r3','r4');DELETE FROM truss.sec_project WHERE project_id IN ('p2','p3');INSERT INTO truss.sec_resource(resource_id,salary) SELECT 'r1',100 WHERE NOT EXISTS(SELECT 1 FROM truss.sec_resource WHERE resource_id='r1')")
+
+    def test_shared_named_source_native_subject_and_resource_evaluation(self):
+        """@covers US-056-AC1; @covers US-056-AC10; fixture prerequisites only."""
+        import os,sys
+        if str(ROOT/'scripts') not in sys.path:sys.path.insert(0,str(ROOT/'scripts'))
+        module_dir=os.environ['TRUSS_SUBJECT_OWNER_MODULE_DIR'];sys.path.insert(0,module_dir)
+        import weft
+        self.assertEqual(Path(weft.__file__).resolve(),(Path(module_dir)/'weft.so').resolve())
+        from security_owned_read import run_named_subject_resource_read
+        with self.assertRaisesRegex(ValueError,'Required exact native subject selection'):
+            run_named_subject_resource_read(None,None,None,None,None,None,None)
+        from truss._psycopg_dependency_fact_cut import _OriginalFactSources
+        from truss._psycopg_subject_observation import _SubjectSelection
+        base=ROOT/'docs/helix/04-build/evidence/security-named-source-profile'
+        raw=(base/'requirements.json').read_bytes()
+        sources=_OriginalFactSources((base/'policy.json').read_bytes(),(base/'resolution.json').read_bytes())
+        self.connection.execute("CREATE FUNCTION truss.named_subject_current(actor text) RETURNS TABLE(staff_id text) LANGUAGE sql SET search_path=pg_catalog AS $$ SELECT s.staff_id FROM truss.sec_staff s WHERE actor=SESSION_USER::text AND actor='fact_cut_actor' AND s.staff_id='s1' $$;INSERT INTO truss.sec_staff VALUES('s2')")
+        try:
+            for expected_subject in ('s1','s2'):
+                def operation(host,t,original,connection):
+                    _,profile,_=self.source_bound_profile();value=json.loads(profile)
+                    roles=connection.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
+                    value.update(kind='truss-flat-fact-provider-fixture/0.3',requirementsSha256=hashlib.sha256(raw).hexdigest(),policyUtf8=sources.policy.decode(),resolutionUtf8=sources.resolution.decode(),caller={'sessionRoleOid':roles[0],'effectiveRoleOid':roles[1],'subjectKey':[{'string':expected_subject}]})
+                    comparison=self.issue_bound_profile(json.dumps(value,sort_keys=True,separators=(',',':')).encode())
+                    self._caller_generation_pending=comparison.epoch
+                    selection=_SubjectSelection((base/'mapping-request.json').read_bytes(),(base/'document.json').read_bytes(),'m','Staff','pk','fact_cut_actor','truss','named_subject_current',('staff_id',))
+                    from unittest.mock import patch
+                    from truss._umf_key_tuples import encode_literal_key_tuple
+                    encoded=[]
+                    def fenced_encoder(*args,**kwargs):
+                        with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c lock_timeout=100ms -c statement_timeout=1500') as writer:
+                            with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute("UPDATE truss.sec_staff SET staff_id=staff_id")
+                        encoded.append(True)
+                        return encode_literal_key_tuple(*args,**kwargs)
+                    with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=fenced_encoder):
+                        result=run_named_subject_resource_read(host,t,comparison,raw,sources,selection,weft.inspect_security_mapping_subject_key_json)
+                    self.assertEqual(encoded,[True,True])
+                    if expected_subject=='s1':
+                        self.assertEqual(result,Ok({'kind':'owned-resource-list-fixture/0.1','rows':[{'key':[{'string':'r1'}],'output':[{'field':{'documentId':'domain','moduleId':'m','elementId':'salary'},'disposition':'withheld'}]}]}))
+                    else:
+                        self.assertIsInstance(result,Error)
+                        self.assertEqual(str(host._custody.last_attempt.error),'Original native subject/profile key correspondence required')
+                        self.assertEqual(host._custody.last_attempt.phase,'contained')
+                self.with_unprivileged_actor(operation)
+        finally:self.connection.execute("DROP FUNCTION truss.named_subject_current(text);DELETE FROM truss.sec_staff WHERE staff_id='s2'")
     def test_native_caller_bound_unassigned_staff_denies(self):
         self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
         try:

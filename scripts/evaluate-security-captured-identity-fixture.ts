@@ -1,16 +1,27 @@
 /** Flat table-per-record fixture reconstruction from fixed captured identity cells.
  * No authority is issued; trusted=true is an owned administrative fixture premise.
  */
+import {namedSecurityFixture} from './security-named-source-fixture';
 import {securityFixture,ref} from '/Users/erik/.codex/worktrees/security-main-integration/umf/tests/security/fixture';
 import {securityIdentityTransportDependencies} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/dependencies';
 import {evaluateSecurityAccess,evaluateSecurityCollection,type SecurityFact,type SecurityFactCut} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/evaluate';
 import {checkSchemaLiteral,type CoreLiteral} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/schema-literals';
 import {encodeCoreKeyTuple,type CoreKeyTupleValue} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/key-tuple';
 import {validateSecurityDisclosure} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/disclosure';
-const model=securityFixture(),transport=securityIdentityTransportDependencies(model.policy,model.resolution);
-const base='docs/helix/04-build/evidence/security-identity-requirements';
+if(Bun.argv.length>3||(Bun.argv[2]!==undefined&&Bun.argv[2]!=='--named-source'))throw Error('Exact fixture source profile required');
+const named=Bun.argv[2]==='--named-source';
+const model=named?namedSecurityFixture():securityFixture(),transport=securityIdentityTransportDependencies(model.policy,model.resolution);
+const base=named?'docs/helix/04-build/evidence/security-named-source-profile':'docs/helix/04-build/evidence/security-identity-requirements';
 for(const [name,value] of [['policy',model.policy],['resolution',model.resolution],['transport',transport]] as const)
  if(await Bun.file(base+'/'+name+'.json').text()!==JSON.stringify(value)+'\n')throw Error('Original identity source correspondence required');
+if(named){
+ const document=JSON.stringify(model.resolution.documents[0]!.document)+'\n';
+ if(await Bun.file(base+'/document.json').text()!==document)throw Error('Original named document correspondence required');
+ const mapping=await Bun.file(base+'/mapping-request.json').json();
+ if(mapping.modules.length!==1||mapping.modules[0].documentJson!==document
+  ||mapping.policyJson!==JSON.stringify(model.policy)+'\n'
+  ||mapping.ontologyJson!==JSON.stringify(model.resolution.ontology)+'\n')throw Error('Original named mapping source correspondence required');
+}
 const raw=await Bun.stdin.text();if(raw.length>1048576)throw Error('Bounded original captured fixture required');const input=JSON.parse(raw);const bound=typeof input==='object'&&input!==null&&!Array.isArray(input);
 const listing=bound&&input.resultMode==='resources';
 if(bound&&(JSON.stringify(Object.keys(input).sort())!==JSON.stringify(listing?['cells','resultMode','subjectKey']:['cells','subjectKey'])||!Array.isArray(input.subjectKey)))throw Error('Closed original caller fixture input required');

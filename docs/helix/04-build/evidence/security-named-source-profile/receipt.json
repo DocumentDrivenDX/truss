@@ -1,0 +1,51 @@
+{
+  "scope": "Shared named original source and live subject/codec/resource evaluation fixture; no protected backend admission",
+  "sources": {
+    "scripts/security-named-source-fixture.ts": "bcf5e800cb0fce712db993128673499c601d92c33a169b211bd32a270430c481",
+    "scripts/produce-security-named-source.ts": "9d1759918491d983c44d45451c6279b6adaef8677ab988604d46a8d8daf2506e",
+    "scripts/evaluate-security-captured-identity-fixture.ts": "116057c09071c25284e82e9d68fc044cf06c69e123f356567010cc3ad0af0441",
+    "scripts/security_owned_read.py": "9ab4250932f3aa9214e63a9a382b40f83be870c73b61ce04824a95513ea86c46",
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "5f2de1c4c03d9e5543a9426da07f8e05fc804336aefe0a780c0e4ed1496ed62f",
+    "docs/helix/04-build/evidence/security-named-source-profile/document.json": "1eb64de9c3cdf8fcde1c1d37325136330508686cca70b6550c780df7d74085e8",
+    "docs/helix/04-build/evidence/security-named-source-profile/policy.json": "ac1dc5841de60f64b8c268417124818c089ef247549fa75a621f1785f0b6ec97",
+    "docs/helix/04-build/evidence/security-named-source-profile/resolution.json": "d6591a68b48b4f4a56b1631fce26dd66ac99a9d4f1f60c02c77c178bb3636e74",
+    "docs/helix/04-build/evidence/security-named-source-profile/transport.json": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+    "docs/helix/04-build/evidence/security-named-source-profile/requirements.json": "c3195b19bd31aa7b3913effb814004a45198eecbc2af000a1d2be23b3f893748",
+    "docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json": "723e7855b33d46843837a55eb426a23df661bfa8ca2e62a20362491a6caaaa53"
+  },
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17; Bun1.4.2; original UMF Core0.8/security0.1 and KeyTuple3; Weft subject selection0.1.0",
+  "umfSourceCommit": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+  "weftExtensionSha256": "1c00e384e7d20211809f10514943f5bcc8b8c32d6f3ab7f29c70f845cbfd6d7c",
+  "nativeGroups": 3,
+  "nativeSeconds": 9.503,
+  "controls": [
+    "distinct authored names and schema/ontology/policy revisions; legacy source packets unchanged",
+    "original Weft accepts exact shared named source with securityReady:false",
+    "original UMF dependency/evaluation source matches document/mapping packet",
+    "fresh native caller-bound subject observation and original key encoding within declared source/fact host operation",
+    "actual s1 subject permits original r1 key with salary Withheld",
+    "selected profile s2 contradicts actual subject and refuses before resource capture",
+    "native Staff writer refused at both original encoder calls",
+    "required selection None refuses before host operation",
+    "caller OIDs rechecked after codecs and after original evaluator"
+  ],
+  "acceptanceTraceability": {
+    "US-056-AC1": "Native flat-table ontology resource filtering prerequisite",
+    "US-056-AC6": "Original validated withholding remains",
+    "US-056-AC10": "Shared original source and native subject/profile key correspondence prerequisite"
+  },
+  "physicalDomainQualification": "Read-only captured TEXT/boolean/bigint values in this fixture; no arbitrary-width integer storage/write admission follows from absent salary facet. Subject key is original Staff string pk.",
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "missingGates": [
+    "bypass-safe ordinary grants and generic raw/graph installer",
+    "authenticated complete subject-helper dependency/native definition qualification",
+    "source/issuer provenance and complete role/helper/config writer closure",
+    "generic query lowering and final protected release",
+    "graph and other backend admission"
+  ],
+  "fixtureWarning": "Ordinary native fact fixture grants broad ALL table rights; no supported protected installation follows.",
+  "delegatedRegressionTests": 2,
+  "delegatedRegressionSeconds": 3.732,
+  "independentReviewControls": 41
+}

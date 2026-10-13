@@ -1,0 +1,106 @@
+{
+  "count": 10,
+  "controls": [
+    {
+      "name": "byte-exact copied source/packets positive",
+      "passed": true,
+      "successful": true
+    },
+    {
+      "name": "document byte drift refuses no stdout",
+      "passed": true,
+      "successful": false
+    },
+    {
+      "name": "module document drift refuses no stdout",
+      "passed": true,
+      "successful": false
+    },
+    {
+      "name": "policy drift refuses no stdout",
+      "passed": true,
+      "successful": false
+    },
+    {
+      "name": "ontology drift refuses no stdout",
+      "passed": true,
+      "successful": false
+    },
+    {
+      "name": "extra module drift refuses no stdout",
+      "passed": true,
+      "successful": false
+    },
+    {
+      "name": "empty modules drift refuses no stdout",
+      "passed": true,
+      "successful": false
+    },
+    {
+      "name": "exact restoration positive",
+      "passed": true,
+      "successful": true
+    },
+    {
+      "name": "new named document preserves every legacy field/assertion plus explicit names",
+      "passed": true
+    },
+    {
+      "name": "new authored revisions are distinct",
+      "passed": true
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/evaluate-security-captured-identity-fixture.ts",
+      "sha256": "116057c09071c25284e82e9d68fc044cf06c69e123f356567010cc3ad0af0441",
+      "bytes": 8752
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/scripts/security-named-source-fixture.ts",
+      "sha256": "bcf5e800cb0fce712db993128673499c601d92c33a169b211bd32a270430c481",
+      "bytes": 1387
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/requirements.json",
+      "sha256": "c3195b19bd31aa7b3913effb814004a45198eecbc2af000a1d2be23b3f893748",
+      "bytes": 1044
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/policy.json",
+      "sha256": "ac1dc5841de60f64b8c268417124818c089ef247549fa75a621f1785f0b6ec97",
+      "bytes": 1472
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/original-selection.json",
+      "sha256": "ca0fb71ec748549da1e14b8345f3a1110a5dc921ca08d210294c91c21f618ef8",
+      "bytes": 104
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/resolution.json",
+      "sha256": "d6591a68b48b4f4a56b1631fce26dd66ac99a9d4f1f60c02c77c178bb3636e74",
+      "bytes": 5467
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/document.json",
+      "sha256": "1eb64de9c3cdf8fcde1c1d37325136330508686cca70b6550c780df7d74085e8",
+      "bytes": 2857
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/transport.json",
+      "sha256": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+      "bytes": 2903
+    },
+    {
+      "path": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-named-source-profile/mapping-request.json",
+      "sha256": "723e7855b33d46843837a55eb426a23df661bfa8ca2e62a20362491a6caaaa53",
+      "bytes": 9574
+    },
+    {
+      "path": "/private/tmp/named-source-review-20261013/packet_checks.py",
+      "sha256": "4c055fab63f83206d2e228d01b6d7528ba5c95fcd100011689038fd4578af7f4",
+      "bytes": 3081
+    }
+  ],
+  "scope": "Actual unchanged fixture evaluator and named helper copied into an owned mirror; only owned packet copies mutated. No repository or native mutation."
+}
