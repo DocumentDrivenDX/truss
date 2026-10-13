@@ -387,3 +387,19 @@ The [0.12 source-review packet](../../04-build/evidence/weft-source-binding012/R
 ## Accepted catalog producer handoff
 
 The [accepted catalog producer](weft-accepted-catalog-producer.proposal.md) specifies native input/output custody for the implemented serializer, complete original basis/definition composition, transaction/cache lifetime and WCB-01–10 independent acceptance scenarios. It reuses the compiler-owned binding grammar. Positive revisions and matching hashes are insufficient without actual protected acceptance and installed profile correspondence; fixture-qualified compilation remains separate.
+
+## Public exact projection extension — 2026-10-12
+
+The runtime0.31/backend0.4.4 public Python path selects Weft compile/IR/backend
+interfaces0.2.1 with SQL dialect0.2.0. Weft owns the projection-only `exactScalar`
+descriptor and versioned schemas in its CONTRACT-004. Truss supplies the original
+accepted document/member/native-ID mapping, validates every source cell before
+filters and decodes timestamp/binary tokens into the existing `TextValue` carrier.
+Optional projections distinguish absent, explicit null and exact value.
+
+This includes all six scalar families in `alias.*`; no member is omitted to make
+an unsupported model appear complete. Timestamp/binary comparison, ordering,
+grouping, parameters and keys remain unsupported. Existing native layout0.16 and
+runtime0.31 do not change. Whole-document read authority and original catalog,
+release and module checks remain required. This ordinary path does not activate
+the private protected security profile or qualify other database deployments.

@@ -2,6 +2,7 @@
 from decimal import Decimal
 from dataclasses import dataclass, field
 from typing import Literal, Mapping, TypeAlias
+from .contracts import TextValue
 
 @dataclass(frozen=True, slots=True)
 class QueryAbsent:
@@ -12,7 +13,7 @@ class QueryRelatedKeys:
     items: tuple[tuple[str, ...], ...]
     truncated: bool
 
-QueryValue: TypeAlias = str | bool | int | Decimal | None | QueryAbsent | QueryRelatedKeys | Mapping[str, 'QueryValue']
+QueryValue: TypeAlias = str | bool | int | Decimal | TextValue | None | QueryAbsent | QueryRelatedKeys | Mapping[str, 'QueryValue']
 
 @dataclass(frozen=True, slots=True)
 class QueryRows:

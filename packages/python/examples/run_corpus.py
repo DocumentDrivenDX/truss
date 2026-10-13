@@ -1,6 +1,7 @@
 """Run the separately versioned public Python preview corpus using public APIs."""
 import argparse
 import base64
+from decimal import Decimal
 from dataclasses import replace
 from hashlib import sha256
 import json
@@ -11,20 +12,20 @@ from contextlib import ExitStack
 import psycopg
 from adopter_workflow import transaction, success, expect, sync_directory
 from truss import (CatalogDocument, CapabilityAvailable, LocalPostgres, ModuleAccessGrant,
-    ObjectFound, ObjectNotFound, QueryRows, QueryRelatedKeys, QueryRefused,
+    ObjectFound, ObjectNotFound, QueryAbsent, QueryRows, QueryRelatedKeys, QueryRefused,
     ReceiptIncluded, FeedPage, FeedAcknowledged)
-from truss.contracts import MapValue, MapEntry, TextValue
+from truss.contracts import MapValue, MapEntry, TextValue, BooleanValue, NullValue
 from truss.groups import (CreateObject, CreateEdge, UpdateObject, AuthoredValue,
     AliasObjectReference, StoredObjectReference, RootlessOwnership, NullOrderKey,
     RequestNone, GroupSuccess, GroupFailed, PropertyEquals)
 from truss.imports import ImportReported, ImportCreated, ImportSkipped, ImportRejected
 
-FORMAT = 'truss-public-python-preview/0.3'
+FORMAT = 'truss-public-python-preview/0.5'
 SCOPE = 'single Python preview; not full conformance or interchange'
 OPS = {'install', 'accept', 'configure', 'apply', 'replay', 'lookup', 'query',
        'reached', 'import', 'drain-feed'}
 PROFILE = {'runtimeRelease': 'truss-catalog-runtime/0.31-candidate',
-    'postgresql': '18.6', 'driver': 'psycopg3.3.6', 'weftBackendVersion': '0.4.3',
+    'postgresql': '18.6', 'driver': 'psycopg3.3.6', 'weftBackendVersion': '0.4.4',
     'layout': {'identity': 'truss-layout', 'version': '0.16',
         'sha256': '261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368'}}
 
@@ -46,6 +47,10 @@ def typed(value):
     if isinstance(value, QueryRelatedKeys):
         return {'kind': 'related-keys', 'items': [list(v) for v in value.items],
                 'truncated': value.truncated}
+    if isinstance(value, Decimal):
+        return {'kind': 'decimal', 'text': str(value)}
+    if isinstance(value, QueryAbsent):
+        return {'kind': 'absent'}
     if isinstance(value, TextValue):
         return {'kind': value.kind, 'text': value.text}
     raise ValueError('Unsupported preview result value')
@@ -55,10 +60,26 @@ def authored(entries):
     result = []
     for entry in entries:
         closed(entry, ('name', 'value'))
-        closed(entry['value'], ('kind', 'text'))
-        if entry['value']['kind'] != 'string':
-            raise ValueError('This preview admits explicit string values only')
-        result.append(AuthoredValue(name=entry['name'], value=TextValue(**entry['value'])))
+        source = entry['value']
+        if type(source) is not dict:
+            raise ValueError('Explicit scalar carrier required')
+        kind = source.get('kind')
+        if kind in ('string', 'integer', 'decimal', 'timestamp', 'binary'):
+            closed(source, ('kind', 'text'))
+            if type(source['text']) is not str:
+                raise ValueError('Exact text scalar required')
+            value = TextValue(kind=kind, text=source['text'])
+        elif kind == 'boolean':
+            closed(source, ('kind', 'value'))
+            if type(source['value']) is not bool:
+                raise ValueError('Exact boolean scalar required')
+            value = BooleanValue(value=source['value'])
+        elif kind == 'null':
+            closed(source, ('kind',))
+            value = NullValue()
+        else:
+            raise ValueError('Unsupported preview scalar kind')
+        result.append(AuthoredValue(name=entry['name'], value=value))
     return tuple(result)
 
 

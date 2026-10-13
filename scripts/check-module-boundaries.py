@@ -13,8 +13,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
-    'query': {'decimal','dataclasses','typing'},
-    '_query_runtime': {'hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
+    'query': {'truss.contracts','decimal','dataclasses','typing'},
+    '_query_runtime': {'truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
     '_umf_keys_release': set(),
     '_umf_key_tuples': {'decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},

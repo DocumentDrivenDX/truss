@@ -6919,3 +6919,34 @@ These are B11 selected routine/trigger drift and L13 profile consistency prerequ
 [Retained paired controls and conditional induction](evidence/security-ddl-lifetime-20261012/receipt.json) demonstrate that selected routine source-byte endpoint checks can accept a competing administrator changing and restoring a harmless comment during the actual guarded data callback. This establishes a source-byte ABA limitation, not changed authorization semantics. The actual authority-change helper waits on the original data guard, starts its callback only after release, and advances the generation after the data transaction commits.
 
 The abstract source-state model passes2UNSAT/3SAT, independently replayed by Astra Ultra. Its lifetime invariant requires every source change to occur while no protected operation is active. Native reentrant locking alone does not establish that premise. Complete DDL/source participation, same-transaction reentrant mutation exclusion, handler/library closure and Python/SQL refinement remain unproved. Full11 native tests and871 import boundaries pass. These are selected B11 lifetime and L13 generation coordination prerequisites only; no required case is promoted and all132 remain in scope.
+### Exact timestamp/binary SQL projections — 2026-10-12
+
+Public Python queries now return all six scalar families, including complete
+`alias.*` selections and optional timestamp/binary absent/null/value states.
+Weft backend0.4.4 uses explicit compile/IR/backend interfaces0.2.1 and the
+unchanged SQL dialect0.2.0. Timestamp/binary use existing exact `TextValue`
+carriers; comparisons, ordering, grouping, keys and parameters remain refused.
+Runtime0.31 and layout0.16 are unchanged, so this needs no migration.
+
+The merged installed packages pass the mixed public write→commit→read-only query
+workflow and preview0.4 (two tests). An original installed backend0.4.3 consumer
+also passes on the rebuilt Weft extension. Older schemas and preview0.1–0.3 are
+preserved. [Receipt](evidence/python-exact-query-projections-20261012.json) records
+actual package digests and basic typing/module checks. Astra Ultra reviewed the
+plan, implementation and security-owner merges. Complete corpus/interchange,
+protected security activation and additional deployment profiles remain open.
+
+### Portable exact scalar adopter case — 2026-10-12
+
+Preview0.5 retains the basic22-observation case and adds one10-observation exact
+scalar case. The runner uses existing public scalar carriers with closed JSON
+shapes, never float conversions. Public create/import each commit before a
+read-only key lookup and complete SQL observation of every scalar property.
+Large integers, decimal text, boolean, timestamp precision, binary and optional
+absence/null survive the native boundary. No runtime or public API is added.
+
+Both installed-package cases pass on the selected PG18 tuple. Astra Ultra
+reviewed the plan and actual runner/data; [receipt](evidence/python-scalar-preview-20261012.json)
+records case/fixture/source digests and the basic test result. Original0.1–0.4
+cases remain unchanged. This is one Python preview, not full required corpus or
+independent bidirectional interchange; those deliverables remain open.
