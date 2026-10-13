@@ -1,0 +1,346 @@
+{
+  "count": 82,
+  "controls": [
+    {
+      "name": "new field default is exact False",
+      "passed": true
+    },
+    {
+      "name": "legacy two rows accept default",
+      "passed": true
+    },
+    {
+      "name": "explicit True requires and accepts third original hook",
+      "passed": true
+    },
+    {
+      "name": "optin missing third hook refuses",
+      "passed": true
+    },
+    {
+      "name": "optin extra returned hook refuses",
+      "passed": true
+    },
+    {
+      "name": "optin wrong row order refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 0 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 1 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 2 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 3 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 4 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 5 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 6 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 7 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 8 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 9 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 10 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 11 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 12 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 13 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 14 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 15 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 16 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 17 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "supplementary hook exact field 18 drift refuses",
+      "passed": true
+    },
+    {
+      "name": "nonbool selection refuses before host None",
+      "passed": true
+    },
+    {
+      "name": "nonbool host not entered 26",
+      "passed": true
+    },
+    {
+      "name": "nonbool selection refuses before host 0",
+      "passed": true
+    },
+    {
+      "name": "nonbool host not entered 28",
+      "passed": true
+    },
+    {
+      "name": "nonbool selection refuses before host 1",
+      "passed": true
+    },
+    {
+      "name": "nonbool host not entered 30",
+      "passed": true
+    },
+    {
+      "name": "nonbool selection refuses before host 'true'",
+      "passed": true
+    },
+    {
+      "name": "nonbool host not entered 32",
+      "passed": true
+    },
+    {
+      "name": "nonbool selection refuses before host []",
+      "passed": true
+    },
+    {
+      "name": "nonbool host not entered 34",
+      "passed": true
+    },
+    {
+      "name": "nonbool selection refuses before host <object object at 0x103734b90>",
+      "passed": true
+    },
+    {
+      "name": "nonbool host not entered 36",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 0",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 1",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 2",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 3",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 4",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 5",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 6",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 7",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 8",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 9",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 10",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 11",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 12",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 13",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 14",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 15",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 16",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 17",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor False 18",
+      "passed": true
+    },
+    {
+      "name": "missing descriptor False",
+      "passed": true
+    },
+    {
+      "name": "short descriptor False",
+      "passed": true
+    },
+    {
+      "name": "long descriptor False",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 0",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 1",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 2",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 3",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 4",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 5",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 6",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 7",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 8",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 9",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 10",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 11",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 12",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 13",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 14",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 15",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 16",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 17",
+      "passed": true
+    },
+    {
+      "name": "before-fetch foreign descriptor True 18",
+      "passed": true
+    },
+    {
+      "name": "missing descriptor True",
+      "passed": true
+    },
+    {
+      "name": "short descriptor True",
+      "passed": true
+    },
+    {
+      "name": "long descriptor True",
+      "passed": true
+    },
+    {
+      "name": "selected bool captured before host entry mutation",
+      "passed": true
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "/private/tmp/truss-security-main-integration/packages/python/src/truss/_psycopg_epoch_cut.py",
+      "sha256": "9c14d45fbeb02e3d9ecd0571b166b8aa367a0c0390e23402f8efb7e14e94576e",
+      "bytes": 18502
+    },
+    {
+      "path": "/private/tmp/alter-routine-review-20261013/check.py",
+      "sha256": "ac21930bd0164f271919940b7d93963ce04ae1b66ebed6127a57cf303bde832d",
+      "bytes": 4359
+    }
+  ],
+  "scope": "Actual qualification function with synthetic native epoch host and catalog descriptor/row carriers; no native effects or independent DDL event semantics."
+}

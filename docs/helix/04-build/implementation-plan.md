@@ -7436,3 +7436,24 @@ Scope remains the existing six routine and three table tags. Event-trigger admin
 Native named-read controls now stage a separate helper ALTER FUNCTION transaction before acquisition. Both pending commit/abort paths refuse at native LockNotAvailable with exact contained phase, no cleanup error and zero codecs/evaluator calls. After writer abort the same original caller transaction retries successfully with original r1/Withheld. After writer commit, retry sees the changed helper and refuses at the exact helper snapshot before encoding. One expanded native group passes10.442s and owned server cleanup is exact.
 
 US-056-AC9/AC10 gain pending-writer/fresh-retry prerequisite evidence only. Existing selected-tag/cooperating-writer limits, broad unsafe ordinary fixture grants, complete administration/role/config/handler/issuer closure and protected release remain open. No backend case promotion; all132 remain required. Evidence: `evidence/named-ddl-pending-writer-20261013/receipt.json`.
+
+
+### Optional ALTER ROUTINE writer participation — 2026-10-13
+
+A PostgreSQL18.6 probe confirms the legacy six-tag hook permits ALTER ROUTINE SECURITY DEFINER while a qualified epoch/DDL cut is held, changing the native flag to true. A separate opt-in ALWAYS supplemental trigger covers ALTER ROUTINE using the same selected routine-writer function. Exact Boolean comparison selection defaults false; when true, native readback requires the exact third trigger, singleton tag, owner/function/body and flags. Legacy two-trigger qualification remains unchanged.
+
+Two native groups pass3.669s: legacy gap, opt-in exclusion with unchanged false flag, disabled/missing supplemental trigger refusal before callback with exact contained error/no cleanup error, and legacy readback. A caller bool dumper that raises is never invoked in either mode; trusted static SQL selection replaces the initially introduced Boolean parameter. Server cleanup is exact. This adds one cooperating tag only; complete event-trigger administration/cascade/other DDL/handler/role/config and issuer closure, generic installation and protected release remain open. US-056-AC9/AC10 gain prerequisites; no backend case promotion and all132 remain required. Evidence/source pins: `evidence/alter-routine-extension-20261013/receipt.json`.
+
+
+### ALTER ROUTINE extension in original subject/policy read — 2026-10-13
+
+The native named-read fixture now explicitly selects include_alter_routine=true and installs the supplemental hook. The original epoch/DDL/dependency/fact/helper/key/policy chain verifies all three triggers before subject work. Native ALTER ROUTINE writers refuse at both encoder entry points and evaluator entry. Pending ALTER ROUTINE transactions refuse with exact native lock error, clean containment and zero codecs/evaluator; abort permits retry in the same original caller transaction, while commit causes exact helper-snapshot refusal before encoding. Existing source/helper drift and disabled base barrier controls remain intact.
+
+Two native groups pass6.036s, including standalone legacy gap and optional missing/disabled trigger controls; cleanup is exact. Probes witness selected entry points, not continuous subprocess observation. US-056-AC9/AC10 gain integration prerequisites only. Seven cooperating routine tags are selected for this fixture; complete event-trigger administration/other DDL/cascade/role/config/handler/issuer closure, bypass-safe installation and protected release remain open. Broad ordinary grants stay unsafe. No backend case promotion; all132 remain required. Evidence: `evidence/alter-routine-composed-read-20261013/receipt.json`.
+
+
+### Graph scope metadata before decoding — 2026-10-13
+
+The private graph scope gateway now checks exact TEXT descriptors before fetching native caller identity, prior scope, registration result and final scope. Thirteen adverse metadata subcases refuse before row decoding and never invoke the callback. All16 PostgreSQL18.6 native graph controls pass3.774s; exact server cleanup passes. Python module boundaries pass922 imports. The existing qualified graph projection proof replays11 expected SAT/UNSAT queries with Z34.15.4, retaining its original premises and refinement exclusions.
+
+This verifies the selected association guard component only. Native graph IDs have not been mapped to original semantic business keys or integrated with ontology policy evaluation. Authenticated dependency/source/issuer provenance, complete writer/ACL closure, protected release and other backend implementations remain open. US-056 receives component evidence only; no backend case promotion and all132 remain required. Evidence: `evidence/graph-scope-metadata-20261013/receipt.json`.

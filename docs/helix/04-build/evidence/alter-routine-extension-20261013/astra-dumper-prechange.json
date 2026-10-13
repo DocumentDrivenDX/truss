@@ -1,0 +1,18 @@
+[
+  {
+    "source": "HEAD legacy",
+    "result": "ok",
+    "callback": [
+      true
+    ],
+    "dumperCalls": []
+  },
+  {
+    "source": "current defaultFalse",
+    "result": "Caller bool adaptation invoked",
+    "callback": [],
+    "dumperCalls": [
+      false
+    ]
+  }
+]

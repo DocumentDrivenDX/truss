@@ -1,0 +1,31 @@
+{
+  "scope": "Opt-in ALTER ROUTINE barrier in fixed named source native subject/key/policy read; no protected admission",
+  "sources": {
+    "packages/python/tests/test_psycopg_fact_cut_native.py": "f42a0ec1e66a57c102023ef7c20866c915b9afe635597372cba69cee471d6573"
+  },
+  "versions": "PostgreSQL18.6; psycopg3.3.6 binary/libpq18.6; Python3.11.17; Bun1.4.2; original Core0.8/security0.1/KeyTuple3; Weft subject selection0.1",
+  "nativeGroups": 2,
+  "nativeSeconds": 6.036,
+  "controls": [
+    "supplemental installed barrier qualified through original dependency/fact custody",
+    "ALTER ROUTINE writer exclusion at both encoder entries and evaluator entry",
+    "pending ALTER ROUTINE commit/abort exact lock refusal, no codecs/evaluator",
+    "abort same-transaction retry permits r1/Withheld",
+    "commit retry refuses exact helper snapshot before encoding",
+    "original source/helper drift and disabled base barrier remain refusing",
+    "standalone legacy counterexample and supplemental missing/disabled gates remain passing"
+  ],
+  "acceptanceTraceability": {
+    "US-056-AC9": "Selected extended cooperative writer exclusion/fresh retry prerequisites",
+    "US-056-AC10": "Actual installed optional barrier through original native/semantic composition prerequisites"
+  },
+  "requiredBackendCases": 132,
+  "promotedBackendCases": 0,
+  "remainingGates": [
+    "event-trigger administration and other DDL/cascade coverage",
+    "role/config/handler/issuer and complete writer closure",
+    "bypass-safe native grants and generic raw/graph installation",
+    "protected compiler/query release"
+  ],
+  "fixtureWarning": "Broad ordinary ALL table grants remain unsafe; no supported protected profile follows."
+}

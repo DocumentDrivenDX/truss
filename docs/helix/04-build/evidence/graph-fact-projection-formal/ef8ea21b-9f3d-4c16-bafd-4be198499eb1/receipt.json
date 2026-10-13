@@ -1,0 +1,104 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceDigests": {
+    "packages/python/src/truss/_psycopg_graph_scope.py": "da7ad8288c2c6654323eaeb85c1d3730e14b13700eec6f16d49d41088aa96165",
+    "scripts/prove-graph-fact-projection.py": "4d068a06a76c60a6193c6d04d1527c370d30be5b0a6da846322489815da290a1",
+    "packages/postgresql/native/authorization-graph-fact-scope.sql": "a49e59481bf27ef0c01aaa6ccc213d68c67ac45188e0ff94c6e69340af487101",
+    "packages/postgresql/native/authorization-graph-fact-scope-storage.sql": "d892cfb61cae06d895dbbdaa54ef0a95f158de7933da57cb577bc0b7fe4f1d61",
+    "packages/postgresql/native/authorization-fact-write-fence.sql": "66b1a93c5a16d0f0727f9f0b8b91e77df7b1a7e9a9116c221f2cec65e6455381",
+    "packages/python/tests/test_psycopg_graph_projection_native.py": "5d71093947005a903e95aca5cad0442b074126094f8864e4fbee948a3914faec",
+    "docs/helix/04-build/evidence/authorization-graph-fact-scope.owner-export.sql": "21f1df783bd272230e156291dee0c0a2ef74c26742cacc872158e6045658b709"
+  },
+  "queries": [
+    {
+      "id": "complete_row_guards_preserve_required_projection",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "cda5a620a2970a9ba6da252b49c75d5dad54a377c15c90b8e646dd57f09b6c69",
+      "model": null
+    },
+    {
+      "id": "unrelated_business_row_can_change",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "1ef5f5593cd58506197a58bad811ea09aaaeb3052c20b6a2b6745a16522ee2a0",
+      "model": "[required_scope = Store(K(Int, False), 100, True),\n before = K(Int, absent),\n native_scope = Store(Store(K(Int, True), 0, False),\n                      101,\n                      False),\n op = 0,\n new_guard = True,\n known = True,\n new = edge(101, 1, 1, 7),\n old_guard = True,\n witness = 0,\n key = 0,\n write = True,\n after = Store(K(Int, absent), 0, edge(101, 1, 1, 7)),\n held = True,\n rel = [edge(101, 1, 1, 7) -> 101, else -> 0],\n k!1 = [0 -> False, 101 -> False, else -> True],\n k!2 = [100 -> True, else -> False],\n Ext = [(as-array, as-array) -> 2, else -> 0]]"
+    },
+    {
+      "id": "omitted_old_guard_allows_selected_delete",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "2f0d2088fbce917a90b3765e8e7877efdd98e5ac89e4af31b3b73ae9aed2a4f0",
+      "model": "[required_scope = Store(Store(K(Int, True), 6, False),\n                        1,\n                        False),\n witness = 0,\n new = absent,\n before = Store(K(Int, absent), 0, edge(2, 3, 4, 5)),\n native_scope = Store(K(Int, True), 1, False),\n op = 2,\n new_guard = True,\n known = True,\n old_guard = False,\n key = 0,\n write = True,\n after = K(Int, absent),\n held = True,\n k!7 = [1 -> False, else -> True],\n rel = [absent -> 1, edge(2, 3, 4, 5) -> 2, else -> 0],\n k!6 = [6 -> False, 1 -> False, else -> True],\n Ext = [(as-array, as-array) -> 6, else -> 0]]"
+    },
+    {
+      "id": "omitted_old_guard_allows_reclassification_out",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "3effbba2cd607ccb0b36a9c82507e2f3477168c884226cdbcb8a7989c14a08c1",
+      "model": "[required_scope = Store(K(Int, False), 4, True),\n new = edge(0, 1, 2, 3),\n before = K(Int, edge(4, 5, 6, 7)),\n native_scope = Store(Store(K(Int, False), 4, True),\n                      8,\n                      True),\n op = 1,\n new_guard = True,\n known = True,\n old_guard = False,\n witness = 0,\n key = 0,\n write = True,\n after = Store(K(Int, edge(4, 5, 6, 7)),\n               0,\n               edge(0, 1, 2, 3)),\n held = True,\n k!15 = [4 -> True, else -> False],\n k!16 = [4 -> True, 8 -> True, else -> False],\n Ext = [(as-array, as-array) -> 8, else -> 0]]"
+    },
+    {
+      "id": "omitted_new_guard_allows_reclassification_in",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "366b7e27999cf874a57344cd92b00542bc897cbbfd9216efcae69a2d47b0c72e",
+      "model": "[required_scope = Store(K(Int, False), 4, True),\n new = edge(4, 5, 6, 7),\n before = K(Int, edge(0, 1, 2, 3)),\n native_scope = Store(K(Int, True), 0, False),\n op = 1,\n new_guard = False,\n known = True,\n old_guard = True,\n witness = 0,\n key = 0,\n write = True,\n after = Store(K(Int, edge(0, 1, 2, 3)),\n               0,\n               edge(4, 5, 6, 7)),\n held = True,\n k!20 = [0 -> False, else -> True],\n k!21 = [4 -> True, else -> False],\n Ext = [(as-array, as-array) -> 8, else -> 0]]"
+    },
+    {
+      "id": "omitted_required_association_allows_fact_change",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "31bcdf0a70035be628572d390c31119a7c2e8fde01ba2f2c2b79b8045588a974",
+      "model": "[required_scope = Store(K(Int, False), 4, True),\n witness = 2,\n new = absent,\n before = K(Int, edge(4, 5, 6, 7)),\n native_scope = K(Int, False),\n op = 2,\n new_guard = True,\n known = True,\n old_guard = True,\n key = 2,\n write = True,\n after = Store(K(Int, edge(4, 5, 6, 7)), 2, absent),\n held = True,\n rel = [edge(4, 5, 6, 7) -> 4, else -> 3]]"
+    },
+    {
+      "id": "missing_original_scope_refuses_write",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "ea423b82f856903336426900abea722e55a17e630717933af959a83f9f5f9019",
+      "model": null
+    },
+    {
+      "id": "selected_truncate_guard_preserves_projection",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "1c89dbbc5daf72159c5e3fc24f45e4ced7645fd05ec10caf9994857020e3a6dc",
+      "model": null
+    },
+    {
+      "id": "omitted_truncate_guard_changes_projection",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "b315f886db8e226b8ff7462fa42c834f2280d482b144ae2a27275c50c1ed5557",
+      "model": "[required_scope = K(Int, True),\n before = K(Int, edge(2, 3, 4, 5)),\n truncated = K(Int, absent),\n truncate_guard = False,\n held = True]"
+    },
+    {
+      "id": "monotonic_scope_extension_preserves_required_coverage",
+      "expected": "unsat",
+      "observed": "unsat",
+      "freshContextReplay": "unsat",
+      "smt2Sha256": "81e1d3f64cbcfc094b47c79e5fbcd584ff7a8cc0883167c81a7decb7aefce1fd",
+      "model": null
+    },
+    {
+      "id": "shrunk_scope_loses_required_coverage",
+      "expected": "sat",
+      "observed": "sat",
+      "freshContextReplay": "sat",
+      "smt2Sha256": "1ffcc4f077fa23c645128ac1bcdd666294c83c84e124887f0f7b091715c98ea5",
+      "model": "[required_scope = Store(K(Int, True), 1, False),\n witness = 0,\n later_scope = K(Int, False),\n native_scope = K(Int, True),\n k!31 = [1 -> False, else -> True],\n k!32 = [else -> True],\n Ext = [(as-array, as-array) -> 1, else -> 0]]"
+    }
+  ],
+  "scope": "Unbounded symbolic edge IDs/typed rows and required/native relation-type sets. Complete native scope superset, actual old/new-row correspondence, continuously held cut and faithful one-row transitions imply arbitrary one-step required-projection preservation; stable-scope finite-history induction assumes those premises at every step. Monotonic extension preserves earlier required coverage, not earlier baseline equality for newly added facts. Truncate has a separate statement guard. Does not derive SQL/trigger/savepoint/driver refinement, original authenticated dependency membership, installed source/ACL closure, whole authorization, business-write authorization, complete atomic effects or final disclosure."
+}

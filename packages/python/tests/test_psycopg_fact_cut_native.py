@@ -479,6 +479,48 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         original=self.ddl_comparison();t=self.begin();called=[]
         result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),original,lambda c:called.append(True))
         self.assertIsInstance(result,Error);self.assertIsNone(result.error.sql_state);self.assertEqual(called,[]);self.assertEqual(self.fact_shares(),0)
+
+    def test_alter_routine_native_tag_boundary_probe(self):
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        self.connection.execute((ROOT/'scripts/security-named-subject.sql').read_text())
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
+        try:
+            from psycopg.types.bool import BoolDumper
+            bool_calls=[]
+            class ForbiddenBoolDumper(BoolDumper):
+                def dump(self,value):bool_calls.append(value);raise AssertionError('caller bool adaptation entered')
+            self.connection.adapters.register_dumper(bool,ForbiddenBoolDumper)
+            barrier=self.ddl_comparison();t=self.begin();observed=[]
+            def probe(cursor):
+                with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c lock_timeout=100ms -c statement_timeout=1500') as writer:
+                    try:writer.execute('ALTER ROUTINE truss.named_subject_current(text) SECURITY DEFINER')
+                    except psycopg.errors.LockNotAvailable:outcome='excluded'
+                    else:outcome='not-excluded'
+                    flag=writer.execute("SELECT prosecdef FROM pg_proc WHERE oid='truss.named_subject_current(text)'::regprocedure").fetchone()[0]
+                    observed.append({'outcome':outcome,'definer':flag})
+                return observed
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),barrier,probe)
+            self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error))
+            print(json.dumps({'alterRoutineProbe':observed}))
+            self.assertEqual(observed,[{'outcome':'not-excluded','definer':True}])
+            self.connection.execute('ROLLBACK');self.connection.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY INVOKER')
+            self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
+            from dataclasses import replace
+            extended=replace(barrier,include_alter_routine=True);observed.clear();t=self.begin()
+            result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),extended,probe)
+            self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error))
+            self.assertEqual(observed,[{'outcome':'excluded','definer':False}])
+            self.assertEqual(bool_calls,[])
+            print(json.dumps({'alterRoutineExtended':observed}))
+            for change in ('ALTER EVENT TRIGGER truss_z_routine_ddl_writer_barrier DISABLE','DROP EVENT TRIGGER truss_z_routine_ddl_writer_barrier'):
+                self.connection.execute('ROLLBACK');self.connection.execute(change);observed.clear();t=self.begin()
+                result=_run_ddl_fenced_epoch_operation(self.host,t,self.comparison(),extended,probe)
+                self.assertIsInstance(result,Error);self.assertEqual(observed,[])
+                self.assertEqual(str(self.host._custody.last_attempt.error),'Exact original installed DDL barriers required')
+                self.assertEqual(self.host._custody.last_attempt.phase,'contained');self.assertIsNone(self.host._custody.last_attempt.cleanup_error)
+        finally:
+            self.connection.execute('ROLLBACK')
+            self.connection.execute('DROP EVENT TRIGGER IF EXISTS truss_z_routine_ddl_writer_barrier;DROP FUNCTION truss.named_subject_current(text);DROP EVENT TRIGGER truss_table_ddl_writer_barrier')
     def test_disabled_installed_table_barrier_refuses_before_callback(self):
         from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
         self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-table-ddl-barrier.sql').read_text())
@@ -1004,6 +1046,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
         raw=(base/'requirements.json').read_bytes()
         sources=_OriginalFactSources((base/'policy.json').read_bytes(),(base/'resolution.json').read_bytes())
         self.connection.execute((ROOT/'scripts/security-named-subject.sql').read_text());self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
+        self.connection.execute((ROOT/'packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql').read_text())
         try:
             for expected_subject,drift in [('s1',None),('s2',None),('s1','definer'),('s1','body'),('s1','path'),('s1','disabled_barrier'),('s1','pending_commit'),('s1','pending_abort')]:
                 self.connection.execute('DROP FUNCTION truss.named_subject_current(text)')
@@ -1012,6 +1055,8 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                 if drift=='path':self.connection.execute('ALTER FUNCTION truss.named_subject_current(text) SET search_path=pg_temp,pg_catalog')
                 if drift=='body':self.connection.execute("CREATE OR REPLACE FUNCTION truss.named_subject_current(actor text) RETURNS TABLE(staff_id text) LANGUAGE sql SET search_path=pg_catalog AS $$ SELECT 's1'::text $$")
                 def operation(host,t,original,connection):
+                    from dataclasses import replace
+                    original=replace(original,include_alter_routine=True)
                     _,profile,_=self.source_bound_profile();value=json.loads(profile)
                     roles=connection.execute("SELECT s.oid::text,c.oid::text FROM pg_roles s CROSS JOIN pg_roles c WHERE s.rolname=session_user AND c.rolname=current_user").fetchone()
                     value.update(kind='truss-flat-fact-provider-fixture/0.3',requirementsSha256=hashlib.sha256(raw).hexdigest(),policyUtf8=sources.policy.decode(),resolutionUtf8=sources.resolution.decode(),caller={'sessionRoleOid':roles[0],'effectiveRoleOid':roles[1],'subjectKey':[{'string':expected_subject}]})
@@ -1024,7 +1069,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     def fenced_encoder(*args,**kwargs):
                         with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c lock_timeout=100ms -c statement_timeout=1500') as writer:
                             with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute("UPDATE truss.sec_staff SET staff_id=staff_id")
-                            with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY DEFINER')
+                            with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('ALTER ROUTINE truss.named_subject_current(text) SECURITY DEFINER')
                         encoded.append(True)
                         return encode_literal_key_tuple(*args,**kwargs)
                     import security_owned_read as tool
@@ -1033,7 +1078,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                     def during_evaluation(command,*args,**kwargs):
                         if len(command)>1 and str(command[1]).endswith('evaluate-security-captured-identity-fixture.ts'):
                             with psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c lock_timeout=100ms -c statement_timeout=1500') as writer:
-                                with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY DEFINER')
+                                with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('ALTER ROUTINE truss.named_subject_current(text) SECURITY DEFINER')
                             evaluated.append(True)
                         return original_run(command,*args,**kwargs)
                     effective_drift=drift
@@ -1043,7 +1088,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                         with patch('truss._umf_key_tuples.encode_literal_key_tuple',side_effect=fenced_encoder),patch.object(tool.subprocess,'run',during_evaluation):
                             if drift in ('pending_commit','pending_abort'):
                                 pending_writer=psycopg.connect(host=str(self.socket),user='postgres',dbname=self.database,autocommit=True,options='-c statement_timeout=1500')
-                                pending_writer.execute('BEGIN');pending_writer.execute('ALTER FUNCTION truss.named_subject_current(text) SECURITY DEFINER')
+                                pending_writer.execute('BEGIN');pending_writer.execute('ALTER ROUTINE truss.named_subject_current(text) SECURITY DEFINER')
                                 first=run_ddl_fenced_named_subject_resource_read(host,t,comparison,raw,sources,selection,weft.inspect_security_mapping_subject_key_json,original)
                                 self.assertIsInstance(first,Error);self.assertEqual(encoded,[]);self.assertEqual(evaluated,[])
                                 self.assertIsInstance(host._custody.last_attempt.error,psycopg.errors.LockNotAvailable)
@@ -1070,7 +1115,7 @@ class PsycopgFactCutNativeTests(unittest.TestCase):
                         self.assertEqual(str(host._custody.last_attempt.error),'Original native subject/profile key correspondence required')
                         self.assertEqual(host._custody.last_attempt.phase,'contained')
                 self.with_unprivileged_actor(operation)
-        finally:self.connection.execute("DROP FUNCTION truss.named_subject_current(text);DELETE FROM truss.sec_staff WHERE staff_id='s2'")
+        finally:self.connection.execute("DROP EVENT TRIGGER truss_z_routine_ddl_writer_barrier;DROP FUNCTION truss.named_subject_current(text);DELETE FROM truss.sec_staff WHERE staff_id='s2'")
     def test_native_caller_bound_unassigned_staff_denies(self):
         self.connection.execute("INSERT INTO truss.sec_staff VALUES('s2')")
         try:

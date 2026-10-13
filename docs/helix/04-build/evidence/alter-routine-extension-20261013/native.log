@@ -1,0 +1,9 @@
+test_alter_routine_native_tag_boundary_probe (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_alter_routine_native_tag_boundary_probe) ... ok
+test_original_installed_ddl_barriers_readback_passes (test_psycopg_fact_cut_native.PsycopgFactCutNativeTests.test_original_installed_ddl_barriers_readback_passes) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 3.669s
+
+OK
+{"alterRoutineProbe": [{"outcome": "not-excluded", "definer": true}]}
+{"alterRoutineExtended": [{"outcome": "excluded", "definer": false}]}
