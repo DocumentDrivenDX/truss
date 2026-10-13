@@ -1,7 +1,8 @@
 """Basic public scalar array/map workflows using original UMF item Fields."""
 import json,os
+from decimal import Decimal
 from truss import (Ok,ObjectFound,ObjectNotFound,ModuleAccessGrant,HistoryEntity,HistoricalRecord,
-    CatalogRuntimeConfiguration,adopt_psycopg_host,create_reference_assembly,QueryRefused)
+    CatalogRuntimeConfiguration,adopt_psycopg_host,create_reference_assembly,QueryRefused,QueryRows,QueryAbsent)
 from truss.contracts import TextValue,NullValue,SequenceValue,MapValue,MapEntry
 from truss.groups import (AuthoredValue,CreateObject,RootlessOwnership,UpdateObject,StoredObjectReference,
     PropertyEquals,GroupSuccess,GroupFailed,Unchanged,CommittedReceiptReplay,UnauthorizedPerson)
@@ -62,15 +63,26 @@ class ScalarContainerTests(create_tests.PublicCreateGroupTests):
         assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value;tx=host.adopt_transaction(access_mode='read_only').value
         readonly=assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id))
         self.assertIsInstance(readonly.value,ObjectFound);self.assertEqual(dict(readonly.value.object.values)['amounts'],self.amounts())
-        query=assembly.query_in_transaction(tx,sql='SELECT a.label FROM "A" a',document_ids=('adoc',))
-        self.assertIsInstance(query,Ok);self.assertIsInstance(query.value,QueryRefused);self.assertEqual(query.value.code,'unsupported_query')
+        query=assembly.query_in_transaction(tx,sql='SELECT a.tags, a.amounts, a.quantities FROM "A" a WHERE a."A-label" = :label',document_ids=('adoc',),parameters={'label':'one'})
+        self.assertIsInstance(query,Ok);self.assertIsInstance(query.value,QueryRows,repr(query.value))
+        self.assertEqual(query.value.rows,((('x','x'),{'a':Decimal('1.23000'),'b':Decimal('0.0000')},(9007199254740993,)),))
+        self.assertEqual(str(query.value.rows[0][1]['a']),'1.23000')
+        complete=assembly.query_in_transaction(tx,sql='SELECT a.* FROM "A" a WHERE a."A-label" = :label',document_ids=('adoc',),parameters={'label':'one'})
+        self.assertIsInstance(complete.value,QueryRows,repr(complete.value))
+        entity=dict(zip(complete.value.columns,complete.value.rows[0],strict=True));self.assertEqual(entity['tags'],('x','x'));self.assertEqual(entity['amounts'],query.value.rows[0][1])
+        def projected():
+            result=assembly.query_in_transaction(tx,sql='SELECT a.tags, a.amounts FROM "A" a WHERE a."A-label" = :label',document_ids=('adoc',),parameters={'label':'one'})
+            self.assertIsInstance(result.value,QueryRows,repr(result.value));return result.value.rows[0]
         host.detach();connection.rollback();connection,host,assembly,tx=self.consumer()
         nulls,_,_=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=identity),set=(AuthoredValue(name='tags',value=NullValue()),),unset=()),),'null-container');self.assertIsInstance(nulls,GroupSuccess)
         self.assertIsNone(dict(assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id)).value.object.values)['tags'])
+        self.assertIsNone(projected()[0])
         empty,_,_=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=identity),set=(AuthoredValue(name='tags',value=SequenceValue(items=())),AuthoredValue(name='amounts',value=MapValue(entries=()))),unset=()),),'empty-containers');self.assertIsInstance(empty,GroupSuccess)
         values=dict(assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id)).value.object.values);self.assertEqual(values['tags'],SequenceValue(items=()));self.assertEqual(values['amounts'],MapValue(entries=()))
+        self.assertEqual(projected(),((),{}))
         absent,_,_=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=identity),set=(),unset=('tags',)),),'absent-container');self.assertIsInstance(absent,GroupSuccess)
         self.assertNotIn('tags',dict(assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id)).value.object.values))
+        self.assertIsInstance(projected()[0],QueryAbsent)
         host.detach();connection.rollback()
         connection,host,assembly,tx=self.consumer()
         self.assertEqual(dict(assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id)).value.object.values)['tags'],operation.values[-3].value)
