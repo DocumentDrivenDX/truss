@@ -1,0 +1,20 @@
+test_disabled_source_barrier_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_disabled_source_barrier_refuses_before_subject_and_delivery) ... ok
+test_foreign_runtime_installation_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_foreign_runtime_installation_refuses_before_subject_and_delivery) ... ERROR
+test_source_cut_precedes_key_and_survives_receiver (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_source_cut_precedes_key_and_survives_receiver) ... ok
+test_stale_original_epoch_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_stale_original_epoch_refuses_before_subject_and_delivery) ... ok
+
+======================================================================
+ERROR: test_foreign_runtime_installation_refuses_before_subject_and_delivery (test_security_catalog_source_cut_native.CatalogSourceCutTests.test_foreign_runtime_installation_refuses_before_subject_and_delivery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_catalog_source_cut_native.py", line 78, in test_foreign_runtime_installation_refuses_before_subject_and_delivery
+    self.admin.execute('UPDATE truss.catalog_runtime_installation SET installation_id=gen_random_uuid()')
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.ForeignKeyViolation: update or delete on table "catalog_runtime_installation" violates foreign key constraint "catalog_registration_request_installation_id_fkey" on table "catalog_registration_request"
+DETAIL:  Key (installation_id)=(2da7796a-62b7-46ad-9f5d-5e9f745de88e) is still referenced from table "catalog_registration_request".
+
+----------------------------------------------------------------------
+Ran 4 tests in 25.558s
+
+FAILED (errors=1)

@@ -1,0 +1,125 @@
+{
+  "scope": "Actual new orchestration and shape checks with synthetic native epoch, helper, inspector, key producer, evaluator and host shells; no native or semantic refinement claim",
+  "controls": [
+    {
+      "name": "source acquisition precedes helper/subject and requalification precedes publication",
+      "passed": true
+    },
+    {
+      "name": "source cut copies retain exact original values and native qualifier identity",
+      "passed": true
+    },
+    {
+      "name": "publisher receives exact immutable serialized decision",
+      "passed": true
+    },
+    {
+      "name": "inspector mutation of caller-owned comparisons cannot replace copied cuts",
+      "passed": true
+    },
+    {
+      "name": "source qualification 1 refusal prevents sink",
+      "passed": true
+    },
+    {
+      "name": "source qualification 1 expected downstream work",
+      "passed": true
+    },
+    {
+      "name": "source qualification 2 refusal prevents sink",
+      "passed": true
+    },
+    {
+      "name": "source qualification 2 expected downstream work",
+      "passed": true
+    },
+    {
+      "name": "None source cut refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "list source cut refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "empty source cut refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "one source cut refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "reversed source cut refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "foreign source cut refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "mandatory missing fact guard never downgrades",
+      "passed": true
+    },
+    {
+      "name": "audience missing descriptor at qualification 1 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience missing descriptor at qualification 2 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience wrong OID at qualification 1 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience wrong OID at qualification 2 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience extra descriptor at qualification 1 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience extra descriptor at qualification 2 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience wrong installation at qualification 1 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience wrong installation at qualification 2 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience empty row at qualification 1 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience empty row at qualification 2 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience duplicate row at qualification 1 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience duplicate row at qualification 2 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience null at qualification 1 refuses with no sink",
+      "passed": true
+    },
+    {
+      "name": "audience null at qualification 2 refuses with no sink",
+      "passed": true
+    }
+  ],
+  "sha256": {
+    "scripts/security_catalog_subject_read.py": "da0d6b907fd0af542b0b1a3b64524388724a7c64871f19ab5893e0be419a1614",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "9c14d45fbeb02e3d9ecd0571b166b8aa367a0c0390e23402f8efb7e14e94576e"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "review": "Independent bounded composition/source review",
+  "date": "2026-10-13",
+  "gitHead": "45d07c3d2ebb7a7f6d53a67111259fcd915c16b0",
+  "status": "No actionable findings within reviewed scope",
+  "independentControls": "29 pass: actual orchestration with synthetic native/owner/host producers; copied inputs, ordering, mandatory shapes, both epoch failures, both installation-audience descriptor/row boundaries.",
+  "sourceConclusion": "Initial executor epoch/DDL cut precedes helper/Subject/key work; final qualification precedes publication. Original comparison copies precede inspector; exact native installation TEXT audience binds selected epoch installation. Missing source/fact cut never downgrades explicit entry.",
+  "nativeEvidence": "Parent-executed and independently inspected, not rerun: PostgreSQL18.6, final4/26.085s, exact shutdown/status3/socket absent. Both key encodes and sink observe executor ShareLocks; selected foreign ALTER FUNCTION/ALTER ROUTINE refuse; stale epoch, disabled barrier and distinct valid native epoch audience refuse before codec/evaluator/sink.",
+  "fixtureCorrection": "Earlier audience tamper attempts failed on immutable guard/FK before component dispatch. Final control issues a valid epoch for a different marker UUID without altering real catalog identity or its guards.",
+  "limits": [
+    "Native marker/profile/evidence seed is administrative fixture input; UUID audience comparison does not authenticate source/profile/issuer provenance.",
+    "Trusted exclusive executor and continued outer transaction/cut/barrier lifetime remain premises; endpoint rechecks do not establish full lifetime or ABA exclusion.",
+    "Selected routine/table/ALTER ROUTINE tags only; shared role/config/admin/handler/cascade and complete writer closure remain open.",
+    "No protected public endpoint, whole source/authority admission, security readiness or backend case promotion."
+  ],
+  "sha256": {
+    "scripts/security_catalog_subject_read.py": "da0d6b907fd0af542b0b1a3b64524388724a7c64871f19ab5893e0be419a1614",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "9c14d45fbeb02e3d9ecd0571b166b8aa367a0c0390e23402f8efb7e14e94576e",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "6eb14681a99193603ce6c7cd9b094584f6c3b0bf1c5810557bd1c913ab3df6ef",
+    "packages/postgresql/native/source-epoch-routine-ddl-barrier.sql": "93d0740578df55803370f15e7de9d325baa6f465426bf3a3bcac48c217e68413",
+    "packages/postgresql/native/source-epoch-table-ddl-barrier.sql": "9fdcd6823aafb1106597e1f9e003994df96748686b54b68b34adbea2ed198de4",
+    "packages/postgresql/native/source-epoch-alter-routine-ddl-barrier.sql": "c3fc4f3228d49cc67ff93009f70f0e08eb627a0dd7cbc3a43fb7db4feeb35720",
+    "docs/helix/04-build/evidence/catalog-source-cut-20261013/native.log": "4e197e0285f7497ca1502401aeb7458399f76bcf88b59b66dbe83d02f1ce3db6",
+    "docs/helix/04-build/evidence/catalog-source-cut-20261013/cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "docs/helix/04-build/evidence/catalog-source-cut-20261013/decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "docs/helix/04-build/evidence/catalog-source-cut-20261013/module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "docs/helix/04-build/evidence/catalog-source-cut-20261013/native-audience-fixture-failure.log": "69f18082bc31171dd4e4290a346a77700a23d21f0f1c5556109a0b93ad09a08c",
+    "docs/helix/04-build/evidence/catalog-source-cut-20261013/independent-review/check.py": "a1d5bfca31e0cab7be5fb2db2ca2e3fb1294d529847cd2b5e6e767d84cf0da3a",
+    "docs/helix/04-build/evidence/catalog-source-cut-20261013/independent-review/results.json": "5508100a6122f3ff52a43d317918733cd553ec10cb95dd184423444f9558291b"
+  }
+}

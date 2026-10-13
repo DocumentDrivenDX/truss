@@ -32,7 +32,7 @@ def _verify_helpers(cursor,source):
         if cursor.fetchmany(2)!=[expected]:raise ValueError('Exact installed catalog subject helper snapshot required')
 
 
-def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,*,fact_relations=None,publisher=None):
+def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,*,fact_relations=None,publisher=None,source_cut=None):
     if (type(mapping) is not PreparedSecurityMapping or type(selection) is not _SubjectSelection
             or type(caller_host) is not PsycopgHost or type(executor_host) is not PsycopgHost):raise ValueError('Exact native caller and accepted mapping required')
     if publisher is not None and (not callable(publisher) or fact_relations is None):
@@ -42,6 +42,12 @@ def run_owned_native_catalog_resource_read(caller_host,caller_transaction,execut
     if (selection.original_request!=mapping.original_request or selection.original_document!=(BASE/'document.json').read_bytes()
             or (selection.module,selection.record,selection.key,selection.schema,selection.routine,selection.columns,selection.actor_carrier)!=('m','Staff','pk','truss','catalog_subject_current',('staff_id',),'text')):
         raise ValueError('Exact shared named catalog Subject selection required')
+    if source_cut is not None:
+        from truss._psycopg_epoch_cut import _EpochComparison,_DDLBarrierComparison
+        if (fact_relations is None or type(source_cut) is not tuple or len(source_cut)!=2
+                or type(source_cut[0]) is not _EpochComparison or type(source_cut[1]) is not _DDLBarrierComparison):
+            raise ValueError('Exact guarded source epoch and DDL barrier required')
+        source_cut=(replace(source_cut[0]),replace(source_cut[1]))
     qualify=None;executor_relations=None;subject_cursor=[None]
     if fact_relations is not None:
         from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison,_prepare_fenced_fact_cut
@@ -61,7 +67,19 @@ def run_owned_native_catalog_resource_read(caller_host,caller_transaction,execut
         key=encode_literal_key_tuple(selection.original_document,observed.identity,tuple(json.dumps({'string':v}) for v in observed.values),bun_executable='/opt/homebrew/bin/bun')
         return observed.values[0],key.tuple_bytes
     observe=_prepare_subject_operation(caller_host,selection,original_inspector,produce,(('read_committed','read_write'),))
+    def qualify_source():
+        from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
+        def audience(c):
+            _pin_cursor(c)
+            c.execute('SELECT installation_id::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton',prepare=False,binary=False)
+            if c.description is None or len(c.description)!=1 or c.description[0].type_code!=25:
+                raise ValueError('Exact source epoch installation TEXT descriptor required')
+            if c.fetchmany(2)!=[(source_cut[0].installation,)]:
+                raise ValueError('Original source epoch installation correspondence required')
+        result=_run_ddl_fenced_epoch_operation(executor_host,executor_transaction,*source_cut,audience)
+        if not isinstance(result,Ok):raise ValueError('Original executor source epoch and DDL barrier refused')
     def execute(cursor,observed):
+        if source_cut is not None:qualify_source()
         subject_cursor[0]=cursor
         _pin_cursor(cursor);_verify_helpers(cursor,source)
         subject,key=observe(cursor,observed)
@@ -81,6 +99,7 @@ def run_owned_native_catalog_resource_read(caller_host,caller_transaction,execut
         if not isinstance(result,Ok):raise ValueError('Original native Subject catalog evaluation refused')
         _pin_cursor(cursor);_verify_helpers(cursor,source)
         if observe(cursor,caller_host._observe(cursor))!=(subject,key):raise ValueError('Original native Subject changed during delegated evaluation')
+        if source_cut is not None:qualify_source()
         if hashlib.sha256(source_path.read_bytes()).digest()!=source_pin:raise ValueError('Original catalog Subject source changed')
         if publisher is not None:return json.dumps(result.value,separators=(',',':'),ensure_ascii=False).encode('utf8')
         return result.value
@@ -103,3 +122,15 @@ def publish_guarded_native_catalog_resource_read(caller_host,caller_transaction,
     if fact_relations is None or not callable(publisher):
         raise ValueError('Mandatory guarded publication context required')
     return run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations=fact_relations,publisher=publisher)
+
+
+def publish_ddl_epoch_guarded_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations,source_cut,publisher):
+    """Private selected DDL/epoch composition, not complete source admission.
+
+    Independently installed issuer/barrier lifetime and trusted private executor
+    remain premises. Selected epoch cuts survive through receiver completion in
+    the executor's outer transaction. Shared roles/config/admin bypass are open.
+    """
+    if fact_relations is None or source_cut is None or not callable(publisher):
+        raise ValueError('Mandatory source-guarded publication context required')
+    return run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations=fact_relations,publisher=publisher,source_cut=source_cut)

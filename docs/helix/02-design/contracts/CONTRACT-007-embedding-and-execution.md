@@ -1369,3 +1369,15 @@ Two PostgreSQL18.6 tests pass21.721s on runtime0.43 with exact owned cleanup and
 
 
 Concurrent owner main7e3fb654 adds container query projections/runtime0.44/package0.0.7. Both histories were preserved; unchanged stale-snapshot controls replay2/20.573s on0.44 with exact cleanup and933 imports. Earlier0.43 evidence/review remain historical. No additional semantic scope or backend case promotion. Evidence: `../../04-build/evidence/stale-subject-snapshot-20261013/runtime044/receipt.json`.
+
+
+### Native source epoch and selected DDL barriers precede Subject use — 2026-10-13
+
+A separate source-guarded publication entry captures exact original epoch/barrier comparisons before inspection. The private executor acquires the original native epoch/ALWAYS DDL barrier cut before caller helper/key observation, binds its installation to the actual runtime UUID using TEXT descriptors checked before fetch, and requalifies before immutable publication. Selected source cuts remain in the executor outer transaction through receiver completion; no new source-table privileges are granted to the ordinary caller. Original six routine tags, three table tags and ALTER ROUTINE are selected; original fact cuts remain independent.
+
+Four PostgreSQL18.6 native controls pass26.085s on runtime0.44. Epoch ShareLocks are present at both key encoders and sink, where foreign ALTER FUNCTION and ALTER ROUTINE refuse. Disabled barrier, stale epoch and a valid native epoch for a distinct fixture marker refuse before key codec/evaluator/sink with exact containment. The actual runtime remains unaltered in the audience control. Two earlier tamper setups were stopped by catalog immutability/FKs before dispatch and are retained as failed setup, not audience coverage. Default publication regression1 passes9.908s; exact cleanup and933 imports pass. Astra's29 orchestration controls are separately synthetic native/owner/host components, not native semantic refinement.
+
+Trace US-056 AC2/AC9/AC10 and US-057 AC7/CONTRACT-063/STP-056 prerequisites. Administrative marker/issuer seed, selected handler/trigger lifetime, private executor and original source provenance remain premises. Epoch evidence is compared, not independently authenticated against every accepted source. Complete role/grant/schema/cascade/extension/config/executable/writer closure and protected public admission remain open. No backend case promotion. Evidence: `../../04-build/evidence/catalog-source-cut-20261013/receipt.json`.
+
+
+Concurrent owner mainb47bf431 adds typed relationship keys/runtime0.45/package0.0.8. Both histories were merged without conflict. Unchanged source-cut controls replay4/31.295s on0.45 with exact cleanup and933 imports. Earlier0.44 native/default and synthetic review remain historical; no new relationship/security semantic scope or backend promotion. Current pins: `../../04-build/evidence/catalog-source-cut-20261013/runtime045/receipt.json`.

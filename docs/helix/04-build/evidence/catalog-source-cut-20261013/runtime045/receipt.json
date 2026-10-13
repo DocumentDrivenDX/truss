@@ -1,0 +1,23 @@
+{
+  "scope": "post-merge selected source epoch/DDL composition regression",
+  "integrationCommit": "d38f919f1bc4f8a9935ebc33a537f62fc9f0d2e6",
+  "runtime": "truss-catalog-runtime/0.45-candidate",
+  "preservedOwnerMain": "b47bf431",
+  "nativeTests": 4,
+  "seconds": 31.295,
+  "imports": 933,
+  "qualification": "Current0.45 native4 passes with exact cleanup. Earlier0.44 native/default/synthetic review remain historical. No typed-relationship-key security qualification or backend case promotion.",
+  "sourcePins": {
+    "scripts/security_catalog_subject_read.py": "da0d6b907fd0af542b0b1a3b64524388724a7c64871f19ab5893e0be419a1614",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "6eb14681a99193603ce6c7cd9b094584f6c3b0bf1c5810557bd1c913ab3df6ef",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "9c14d45fbeb02e3d9ecd0571b166b8aa367a0c0390e23402f8efb7e14e94576e",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "740d6f4ee51229ce1d29406cf82afbd4f498687d59b300bf480c4511eea6ca0a"
+  },
+  "evidencePins": {
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "66379a71241039d658a6d6c2ebe8f6596cee3cc662fbe9962050b3e591578b92",
+    "runtime-manifest.json": "740d6f4ee51229ce1d29406cf82afbd4f498687d59b300bf480c4511eea6ca0a",
+    "decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143"
+  }
+}
