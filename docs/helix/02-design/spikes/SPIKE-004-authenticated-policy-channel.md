@@ -258,3 +258,13 @@ supply pending construction identity for CH04. Actual TLS publication/cleanup
 still passes. Direct superuser installation, excluded handler ownership and
 administrative quiescence remain premises; the result creates no protected
 caller authority. [Installer evidence](../../04-build/evidence/source-epoch-installation-20261013/README.md).
+
+### Initial source factory issuance — 2026-10-13
+
+The protected publication fixture now consumes one initial source factory result,
+which binds original marker/infrastructure, source archives and qualified facts
+to actual native issuer/pointer readback. Pure profile0.4 pins packaged source
+identity; pending construction does not authorize a caller. Actual post-issuance
+pointer deletion refuses before factory handoff and preserves prior caller work.
+[Factory evidence](../../04-build/evidence/catalog-source-factory-20261013/README.md)
+advances CH04 source composition while complete authority/lifetime remains open.

@@ -1,0 +1,7 @@
+test_unexpected_native_pointer_trigger_refuses_before_issuance (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests.test_unexpected_native_pointer_trigger_refuses_before_issuance)
+@covers US-056-AC9; unexpected native pointer hook refuses before issuance. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 10.282s
+
+OK

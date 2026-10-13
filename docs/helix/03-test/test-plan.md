@@ -2086,3 +2086,15 @@ cast executing a raising native CHECK, then verifies corrected installation and
 caller-path restoration. Counterexample/fix1/12.387s and fixed-source hostile
 path/TLS3/27.340s pass; default-grant refusal1/9.852s passes. Initial/final wheel
 and native receipts remain distinguished in the evidence directory.
+
+### Initial source factory native controls — 2026-10-13
+
+`test_security_catalog_source_factory_native` verifies exact initial issuance,
+no implicit transition/reuse, stale guard/foreign incarnation refusal, unexpected
+native hook rejection, outer rollback and actual post-issuance pointer deletion
+with exact registry/current rollback and prior caller work retention. Original
+TLS cases consume factory output; foreign/unrelated sources remain explicit
+negative-only administrative constructions. [Retained results](../04-build/evidence/catalog-source-factory-20261013/README.md)
+include the initial wrong negative error expectation, corrected case and final
+aggregate replay. These are US-056AC6/AC9/AC10 and US-057AC7 prerequisites, not
+complete backend B01/B11/B12 acceptance.

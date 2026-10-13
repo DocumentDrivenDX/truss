@@ -13,6 +13,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_security_catalog_source_binding': {'dataclasses','hashlib','json','truss._security_mapping','truss._security_source_epoch_installation','truss._psycopg_fact_cut','truss._psycopg_epoch_cut'},
+    '_security_catalog_source_epoch': {'dataclasses','hashlib','json','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_source_installation','truss._security_catalog_assessment','truss._security_source_epoch_installation','truss._security_catalog_source_binding','truss._psycopg_epoch_cut','truss._psycopg_fact_cut'},
     '_security_source_epoch_installation': {'dataclasses','hashlib','importlib.resources','json','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._psycopg_epoch_cut'},
     '_psycopg_subject_observation': {'dataclasses','hashlib','inspect','json','truss._owner_evidence_json','truss.psycopg_host','psycopg','truss._umf_key_tuples','truss._psycopg_fact_cut'},
     'query': {'datetime','truss.contracts','decimal','dataclasses','typing'},

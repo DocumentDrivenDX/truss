@@ -1,0 +1,7 @@
+test_actual_pointer_removed_after_issuance_is_detected_and_contained (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests.test_actual_pointer_removed_after_issuance_is_detected_and_contained)
+@covers US-056-AC9; native issued token alone cannot prove publication state. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 9.470s
+
+OK

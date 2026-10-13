@@ -1,0 +1,18 @@
+test_actual_pointer_removed_after_issuance_is_detected_and_contained (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests.test_actual_pointer_removed_after_issuance_is_detected_and_contained)
+@covers US-056-AC9; native issued token alone cannot prove publication state. ... ok
+test_original_factory_issues_exact_initial_profile_and_refuses_reuse (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests.test_original_factory_issues_exact_initial_profile_and_refuses_reuse)
+@covers US-056-AC6/AC9/AC10; source construction, not protected admission. ... ok
+test_original_marker_incarnation_substitution_refuses (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests.test_original_marker_incarnation_substitution_refuses) ... ok
+test_outer_rollback_removes_epoch_retains_original_installation (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests.test_outer_rollback_removes_epoch_retains_original_installation) ... ok
+test_stale_generation_refuses_before_epoch_effect (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests.test_stale_generation_refuses_before_epoch_effect) ... ok
+test_unexpected_native_pointer_trigger_refuses_before_issuance (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests.test_unexpected_native_pointer_trigger_refuses_before_issuance)
+@covers US-056-AC9; unexpected native pointer hook refuses before issuance. ... ok
+test_authenticated_wire_read_binds_original_native_subject_and_cuts (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_authenticated_wire_read_binds_original_native_subject_and_cuts)
+@covers US-056-AC2; @covers US-056-AC8; @covers US-057-AC7; prerequisites only. ... ok
+test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry (test_security_catalog_channel_native.AuthenticatedCatalogChannelTests.test_original_native_refusal_exposes_no_diagnostic_and_cannot_retry)
+@covers US-056-AC9; @covers US-057-AC7; prerequisites only. ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 57.902s
+
+OK

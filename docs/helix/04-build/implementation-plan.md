@@ -7820,3 +7820,18 @@ pg_catalog.text query permits safe installation. Native counterexample/fix
 atomically (1/9.852s). Final wheel receipts are separate from historical initial
 build/test results. No complete compiler/issuer/authority or backend admission
 claim follows from these construction controls.
+
+### Initial catalog source factory composition — 2026-10-13
+
+A private original factory now connects marker/infrastructure outputs, accepted
+mapping and qualified fact recipes to native initial epoch issuance/readback.
+Binding moved into the library; profile0.4 pins the infrastructure manifest.
+Positive guarded source setup consumes the pending factory result. Native
+composition4/31.271s passes; actual late pointer deletion refuses and rolls back
+both epoch tables while preserving caller work (1/9.470s). An extra native hook
+refuses at the inventory bound (corrected expectation1/10.282s); initial assertion
+failure remains retained. Astra prompted restoring wrapper snapshot-before-I/O.
+[Qualified factory evidence](evidence/catalog-source-factory-20261013/README.md)
+keeps source custody distinct from full authority/profile admission. Trace
+CONTRACT-063/STP-056 B01/B11/B12, US-056AC6/AC9/AC10 and US-057AC7 prerequisites;
+all132 original required cases remain unchanged.

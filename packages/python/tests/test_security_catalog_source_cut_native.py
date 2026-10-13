@@ -58,8 +58,20 @@ class CatalogSourceCutTests(guarded.GuardedSubjectTests):
    self.admin.commit()
   profile=subject.derive_catalog_source_epoch_profile(mapping,relations,barrier) if profile_override is None else profile_override
   evidence=mapping.accepted_catalog_assessment if evidence_override is None else evidence_override
-  epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,NULL,%s,%s,%s)',(installation,incarnation,profile,evidence)).fetchone()[0]
-  cut=(_EpochComparison(installation,epoch,incarnation,profile,evidence),barrier)
+  if foreign_installation or profile_override is not None or evidence_override is not None:
+   # Explicit excluded administrative negative controls bypass factory source binding.
+   epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,NULL,%s,%s,%s)',(installation,incarnation,profile,evidence)).fetchone()[0]
+   cut=(_EpochComparison(installation,epoch,incarnation,profile,evidence),barrier)
+  else:
+   from truss._security_catalog_source_epoch import issue_initial_catalog_source_epoch_in_transaction
+   self.admin.execute('BEGIN');factory=adopt_psycopg_host(self.admin)
+   try:
+    minted=issue_initial_catalog_source_epoch_in_transaction(factory,factory.adopt_transaction().value,mapping=mapping,marker=issued.value,infrastructure=installed.value,fact_relations=relations,subject_source=(ROOT/'scripts/security-catalog-subject.sql').read_bytes())
+    self.assertIsInstance(minted,Ok,str(factory._custody.last_attempt.error));self.assertFalse(minted.value.security_ready)
+    self.assertEqual(minted.value.comparison.profile,profile)
+    cut=(minted.value.comparison,minted.value.barrier)
+   finally:factory.detach()
+   self.admin.commit()
   self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
   return mapping,c,h,t,selection,inspector,relations,cut
  def test_source_cut_precedes_key_and_survives_receiver(self):

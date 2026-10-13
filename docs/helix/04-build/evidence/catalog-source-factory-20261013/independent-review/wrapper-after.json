@@ -1,0 +1,8 @@
+{
+  "scope": "Deterministic replacement during helper file I/O; reconstructed observed pre-fix wrapper body when filename says reconstructed, otherwise actual fixed wrapper. No native process",
+  "sourceSha256": "5d52ab2b3cb785b974a3870c1a466164f0db5caebb7ef9a0e88205ce1704a59f",
+  "sameAsPreIOPacket": true,
+  "usedReplacementRequest": false,
+  "factOid": 10,
+  "functionOid": 13
+}
