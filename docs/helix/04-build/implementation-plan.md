@@ -7725,3 +7725,8 @@ retry; positive read still passes, with owned cleanup confirmed. Conditional Z3
 ACL equality has3UNSAT/2SAT, without native/effective-role refinement. US-056AC9,
 US-057AC7 and SPIKE-004 prerequisites only, no truss.B11/case promotion.
 [Counterexample, controls and limitations](evidence/helper-acl-drift-20261013/README.md).
+
+Concurrent relationship-name/runtime0.53 owner work is preserved. Six native
+ACL controls plus both TLS cases pass together (8/50.388s); positive and denial
+external-peer paths pass with complete owned cleanup. Separate runtime053
+evidence qualifies this merged replay; the earlier0.52 evidence is historical.

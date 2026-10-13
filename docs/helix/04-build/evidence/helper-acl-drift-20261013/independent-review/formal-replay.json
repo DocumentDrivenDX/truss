@@ -1,0 +1,26 @@
+{
+  "scope": "Conditional exact direct ACL set equality only; no SQL/catalog/role-membership/continuous-lifetime/native refinement proof",
+  "z3Version": "4.15.4",
+  "cases": {
+    "unexpected_direct_acl_row": {
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    "missing_caller_execute": {
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    "public_execute": {
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    "positive_exact_two_direct_grants": {
+      "expected": "sat",
+      "actual": "sat"
+    },
+    "uncompared_public_grant_counterexample": {
+      "expected": "sat",
+      "actual": "sat"
+    }
+  }
+}

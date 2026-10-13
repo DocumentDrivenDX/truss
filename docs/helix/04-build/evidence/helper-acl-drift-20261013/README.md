@@ -45,3 +45,12 @@ Trace US-056AC9/US-057AC7, SPIKE-004 CH04/CH05/CH08. This closes a selected help
 snapshot gap, not truss.B11 or the remaining132-case admission gate. Complete
 owner/grant/membership/routine/policy/column mapping drift, inherited authority,
 DDL/admin lifetime and other backend cases remain required.
+
+## Merged runtime0.53 replay
+
+Owner main0c11ed6b adds relationship presentation-name evolution and runtime
+0.53-candidate. Mergeef631b86 preserves that work. All six ACL drift controls
+and two original native TLS tests pass together:8/50.388 seconds. Actual
+external-helper denial and positive publication also pass; each confirms all
+three owned resources absent. Separate runtime053-* records retain the replay
+without replacing the historical0.52 before/after qualification.
